@@ -189,7 +189,7 @@ function getFilteredRefinements(results, state, attributeNames, onlyListedAttrib
   if (onlyListedAttributes && !isEmpty(attributeNames)) {
     refinements = filter(refinements, refinement => attributeNames.indexOf(refinement.attributeName) !== -1);
   }
-  return refinements;
+  return refinements.map(computeLabel);
 }
 
 function clearRefinementFromState(state, refinement) {
@@ -213,4 +213,15 @@ function clearRefinementFromState(state, refinement) {
 
 function clearRefinement(helper, refinement) {
   helper.setState(clearRefinementFromState(helper.state, refinement)).search();
+}
+
+function computeLabel(value) {
+  if (value.hasOwnProperty('operator') && typeof value.operator === 'string') {
+    let displayedOperator = value.operator;
+    if (value.operator === '>=') displayedOperator = '≥';
+    if (value.operator === '<=') displayedOperator = '≤';
+    value.labelWithOperator = `${displayedOperator} ${value.name}`;
+  }
+
+  return value;
 }

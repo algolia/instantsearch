@@ -46,17 +46,8 @@ const renderFn = ({
     // ---------------------------
     const list = refinements
       .map(value => {
-        if (value.hasOwnProperty('operator') && typeof value.operator === 'string') {
-          let displayedOperator = value.operator;
-          if (value.operator === '>=') displayedOperator = '&ge;';
-          if (value.operator === '<=') displayedOperator = '&le;';
-          value.name = `${displayedOperator} ${value.name}`;
-        }
-
-        return value;
-      })
-      .map(value => {
-        const {name, count} = value;
+        const {labelWithOperator, count} = value;
+        const name = labelWithOperator || value.name;
 
         const afterCount = count ?
           `<span class="pull-right facet-count">${count}</span>`

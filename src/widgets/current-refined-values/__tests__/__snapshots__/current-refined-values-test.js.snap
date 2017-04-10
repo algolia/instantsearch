@@ -114,6 +114,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -121,6 +122,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -128,6 +130,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -135,6 +138,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -290,6 +294,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -297,6 +302,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -304,6 +310,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -311,6 +318,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -480,6 +488,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -487,6 +496,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -494,6 +504,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -501,6 +512,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -656,6 +668,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -663,6 +676,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -670,6 +684,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -677,6 +692,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -832,6 +848,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -839,6 +856,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -846,6 +864,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -853,6 +872,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -1144,6 +1164,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -1151,6 +1172,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -1158,6 +1180,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -1165,6 +1188,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -1335,6 +1359,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -1342,6 +1367,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -1349,6 +1375,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -1356,6 +1383,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -1526,6 +1554,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -1533,6 +1562,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -1540,6 +1570,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -1547,6 +1578,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -1859,6 +1891,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -1866,6 +1899,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -1873,6 +1907,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -1880,6 +1915,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2050,6 +2086,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2057,6 +2094,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2064,6 +2102,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2071,6 +2110,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2241,6 +2281,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2248,6 +2289,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2255,6 +2297,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2262,6 +2305,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2432,6 +2476,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2439,6 +2484,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2446,6 +2492,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2453,6 +2500,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2623,6 +2671,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2630,6 +2679,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2637,6 +2687,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2644,6 +2695,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2814,6 +2866,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2821,6 +2874,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2828,6 +2882,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2835,6 +2890,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -3005,6 +3061,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -3012,6 +3069,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -3019,6 +3077,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -3026,6 +3085,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -3196,6 +3256,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -3203,6 +3264,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -3210,6 +3272,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -3217,6 +3280,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -3381,6 +3445,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -3388,6 +3453,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "numericFacet",
+        "labelWithOperator": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -3395,6 +3461,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -3402,6 +3469,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "labelWithOperator": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
