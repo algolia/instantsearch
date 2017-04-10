@@ -24,7 +24,7 @@ describe('Clear component', () => {
     searchStore.activeRefinements = ['whatever'];
   });
 
-  test('Can clear the search query and the facets at the same time', () => {
+  test('can clear the search query and the facets at the same time', () => {
     const vm = new Component({
       propsData: { searchStore }
     });
@@ -36,7 +36,7 @@ describe('Clear component', () => {
     expect(start).toHaveBeenCalledTimes(1);
   });
 
-  test('Can disable query clearing', () => {
+  test('can disable query clearing', () => {
     searchStore.query = 'whatever';
     const vm = new Component({
       propsData: { searchStore, clearQuery: false }
@@ -48,7 +48,7 @@ describe('Clear component', () => {
     expect(start).toHaveBeenCalledTimes(1);
   });
 
-  test('Can disable facets clearing', () => {
+  test('can disable facets clearing', () => {
     searchStore.query = 'whatever';
     const vm = new Component({
       propsData: { searchStore, clearFacets: false }
@@ -60,7 +60,7 @@ describe('Clear component', () => {
     expect(start).toHaveBeenCalledTimes(1);
   });
 
-  test('Has proper HTML rendering', () => {
+  test('has proper HTML rendering', () => {
     const vm = new Component({
       propsData: { searchStore }
     });
@@ -69,7 +69,7 @@ describe('Clear component', () => {
     expect(vm.$el.outerHTML).toMatchSnapshot();
   });
 
-  test('Has proper HTML rendering when disabled', () => {
+  test('has proper HTML rendering when disabled', () => {
     searchStore.query = '';
     searchStore.activeRefinements = [];
     const vm = new Component({
