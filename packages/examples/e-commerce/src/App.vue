@@ -8,7 +8,9 @@
           </h1>
         </div>
         <div class="col-md-10 col-sm-9">
-          <ais-input placeholder="Search product by name or reference..." />
+          <ais-input placeholder="Search product by name or reference..." :classNames="{
+            'ais-input': 'form-control'
+            }"/>
 
           <ais-clear>
             <i class="fa fa-times-circle" aria-hidden="true"></i>
@@ -18,44 +20,57 @@
 
       <div class="row">
         <div class="col-md-2 col-sm-3">
-          <ais-tree-menu :attributes="['category', 'sub_category']">
+          <ais-tree-menu :attributes="['category', 'sub_category']" :classNames="{
+            'ais-tree-menu__list': 'list-unstyled',
+            'ais-tree-menu__count': 'badge'
+            }">
             <h3 slot="header">Browse by</h3>
           </ais-tree-menu>
 
-          <ais-price-range attribute-name="price">
+
+          <ais-price-range attribute-name="price" :classNames="{
+            'ais-price-range__input': 'form-control'
+            }">
             <h3 slot="header">Price</h3>
           </ais-price-range>
 
-          <ais-refinement-list attribute-name="materials">
+
+          <ais-refinement-list attribute-name="materials" :classNames="{
+            'ais-refinement-list__count': 'badge',
+            'ais-refinement-list__item': 'checkbox'
+            }">
             <h3 slot="header">Material</h3>
           </ais-refinement-list>
 
-          <ais-refinement-list attribute-name="colors">
+          <ais-refinement-list attribute-name="colors" :classNames="{
+            'ais-refinement-list__count': 'badge',
+            'ais-refinement-list__item': 'checkbox'
+            }">
             <h3 slot="header">Color</h3>
           </ais-refinement-list>
 
-          <ais-rating attribute-name="rating">
+          <ais-rating attribute-name="rating" :classNames="{
+            'ais-rating__count': 'badge'
+            }">
             <h3 slot="header">Rating</h3>
           </ais-rating>
 
         </div>
         <div class="col-md-10 col-sm-9">
-          <div class="search-controls">
-
-
+          <div class="search-controls form-inline">
             <ais-sort-by-selector :indices="[
                 {name: 'ikea', label: 'Relevance'},
                 {name: 'ikea_price_asc', label: 'Lowest price'},
                 {name: 'ikea_price_desc', label: 'Highest price'}
                 ]"
+                :classNames="{'ais-sort-by-selector': 'form-control' }"
             />
 
-            <ais-results-per-page-selector :options="[12, 24, 48]"/>
+            <ais-results-per-page-selector :options="[12, 24, 48]" :classNames="{'ais-results-per-page-selector': 'form-control' }"/>
 
             <ais-powered-by />
 
             <ais-stats/>
-
           </div>
 
           <ais-results>
@@ -84,7 +99,12 @@
 
           <ais-no-results/>
 
-          <ais-pagination class="pagination"/>
+          <ais-pagination class="pagination" :classNames="{
+            'ais-pagination': 'pagination',
+            'ais-pagination__item--active': 'active',
+            'ais-pagination__item--disabled': 'disabled'
+
+            }"/>
 
         </div>
       </div>
@@ -103,29 +123,18 @@
 
 <style lang="scss" rel="stylesheet/scss">
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-    width: 1400px;
-    margin: auto;
+    padding-top: 20px;
   }
 
-  .ais-input {
-    width: 100%;
-    outline: none;
-    font-size: 15px;
-    padding: 7px;
-    box-sizing: border-box;
-    border: 2px solid lightgrey;
-    border-radius: 2px;
-    margin: 20px 0;
-    margin-right: 5%;
+  .head-title {
+    margin-top: 0;
   }
 
   .ais-powered-by {
     float: right;
-    margin-right: 10px;
+
+    line-height: 26px;
     svg {
       vertical-align: bottom;
     }
@@ -133,6 +142,16 @@
 
   .search-controls {
     padding-bottom: 20px;
+  }
+
+  .ais-stats {
+    line-height: 36px;
+  }
+
+  .ais-results:after {
+    content: " ";
+    display: block;
+    clear: both;
   }
 
   .search-result {
@@ -146,7 +165,6 @@
     border-radius: 3px;
     min-width: 220px;
     background: #FFF;
-
     display: inline;
     float: left;
     transition: all .5s;
@@ -169,13 +187,13 @@
     font-weight: bold;
   }
 
-  .result__name em, .result__type em {
+  .result__name mark, .result__type mark {
     font-style: normal;
     background: rgba(143, 187, 237, .1);
     box-shadow: inset 0 -1px 0 0 rgba(69, 142, 225, .8);
   }
 
-  .result__type em {
+  .result__type mark {
     background: rgba(143, 187, 237, .1);
     border-radius: 0;
     box-shadow: inset 0 -1px 0 0 rgba(69, 142, 225, .8);
@@ -214,6 +232,12 @@
   }
 
   /* Sort by selector */
+  .search-controls {
+    .form-control {
+      float: right;
+      margin-left: 10px;
+    }
+  }
   .ais-sort-by-selector {
     float: right;
   }
@@ -228,7 +252,7 @@
     background: none;
     border: none;
     position: absolute;
-    top: 25px;
+    top: 3px;
     right: 25px;
     cursor: pointer;
 
@@ -243,13 +267,9 @@
     }
   }
 
-  /* Ranged Pagination */
-  .ais-pagination li label{
-    padding: 10px;
-  }
-
-  /* Search Facet */
-  .ais-refinement-list label input {
-    margin-right: 5px;
+  /* Price Range */
+  .ais-price-range__input--from, .ais-price-range__input--to {
+    width: 65px;
+    display: inline-block;
   }
 </style>
