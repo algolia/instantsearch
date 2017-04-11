@@ -2,16 +2,16 @@ import sinon from 'sinon';
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectHitsPerPageSelector from '../connectHitsPerPageSelector.js';
+import connectHitsPerPage from '../connectHitsPerPage.js';
 
 const fakeClient = {addAlgoliaAgent: () => {}};
 
-describe('connectHitsPerPageSelector', () => {
+describe('connectHitsPerPage', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
-    const makeWidget = connectHitsPerPageSelector(rendering);
+    const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
         {value: 3, label: '3 items per page'},
@@ -67,7 +67,7 @@ describe('connectHitsPerPageSelector', () => {
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectHitsPerPageSelector(rendering);
+    const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
         {value: 3, label: '3 items per page'},
@@ -112,7 +112,7 @@ describe('connectHitsPerPageSelector', () => {
 
   it('provides the current hitsPerPage value', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectHitsPerPageSelector(rendering);
+    const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
         {value: 3, label: '3 items per page'},
@@ -150,7 +150,7 @@ describe('connectHitsPerPageSelector', () => {
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectHitsPerPageSelector(rendering);
+    const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
         {value: 3, label: '3 items per page'},

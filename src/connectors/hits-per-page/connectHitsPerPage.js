@@ -3,7 +3,7 @@ import some from 'lodash/some';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
-var customHitsPerPage = connectHitsPerPageSelector(function render(params, isFirstRendering) {
+var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
   // params = {
   //   items,
   //   refine,
@@ -20,7 +20,7 @@ search.addWidget(
     ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHitsPerPageSelector.html
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHitsPerPage.html
 `;
 
 /**
@@ -47,7 +47,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn function that renders the hits widget, the boolean indicates if the current call is the first one / the one before the first search.
  * @return {function(HitsPerPageWidgetOptions)} a custom HitsPerPage widget factory
  */
-export default function connectHitsPerPageSelector(renderFn) {
+export default function connectHitsPerPage(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {

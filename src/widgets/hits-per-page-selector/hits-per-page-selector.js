@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
-import connectHitsPerPageSelector from '../../connectors/hits-per-page-selector/connectHitsPerPageSelector.js';
+import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
 
 import {
   bemHelper,
@@ -82,7 +82,7 @@ export default function hitsPerPageSelector({
   });
 
   try {
-    const makeHitsPerPageSelector = connectHitsPerPageSelector(specializedRenderer);
+    const makeHitsPerPageSelector = connectHitsPerPage(specializedRenderer);
     return makeHitsPerPageSelector({items});
   } catch (e) {
     throw new Error(usage);

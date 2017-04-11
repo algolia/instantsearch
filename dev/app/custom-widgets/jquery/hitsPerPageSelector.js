@@ -30,4 +30,4 @@ const renderFn = ({
     .on('change', e => { refine(e.target.value); });
 };
 
-export default instantsearch.connectors.connectHitsPerPageSelector(renderFn);
+export default instantsearch.connectors.connectHitsPerPage(renderFn);
