@@ -1,8 +1,8 @@
 <template>
   <div :class="bem()">
-    <a href="https://algolia.com">
+    <a :href="algoliaUrl">
       <svg width="130" viewBox="0 0 130 18" xmlns="http://www.w3.org/2000/svg">
-        <title>search by Algolia</title>
+        <title>Search by Algolia</title>
         <defs>
           <linearGradient x1="-36.868%" y1="134.936%" x2="129.432%" y2="-27.7%" id="a">
             <stop stop-color="#00AEFF" offset="0%"/>
@@ -21,13 +21,22 @@
 </template>
 
 <script>
-  import algoliaComponent from 'vue-instantsearch-component'
-  export default {
-    mixins: [algoliaComponent],
-    data () {
-      return {
-        blockClassName: 'ais-powered-by'
-      }
+import algoliaComponent from 'vue-instantsearch-component';
+export default {
+  mixins: [algoliaComponent],
+  data() {
+    return {
+      blockClassName: 'ais-powered-by'
+    };
+  },
+  computed: {
+    algoliaUrl() {
+      return 'https://www.algolia.com/?' +
+        'utm_source=vue-instantsearch&' +
+        'utm_medium=website&' +
+        `utm_content=${location.hostname}&` +
+        'utm_campaign=poweredby';
     }
   }
+};
 </script>
