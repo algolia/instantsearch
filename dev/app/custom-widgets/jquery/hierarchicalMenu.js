@@ -67,7 +67,6 @@ const renderFn = ({
   if (items && items.length > 0) {
     // replace markup with items
     const menuItems = items
-      .map(item => item.isRefined ? {...item, data: currentRefinement.data} : item)
       .map(formatMenuEntry(createURL))
       .join('');
 
