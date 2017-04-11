@@ -17,17 +17,18 @@ const renderer = ({
   cssClasses,
   autoHideContainer,
 }) => ({
-  currentRefinement,
   items,
   refine,
   hasNoResults,
 }, isFirstRendering) => {
   if (isFirstRendering) return;
 
+  const {value: currentValue} = items.find(({isRefined}) => isRefined) || {};
+
   ReactDOM.render(
     <Selector
       cssClasses={cssClasses}
-      currentValue={currentRefinement}
+      currentValue={currentValue}
       options={items}
       setValue={refine}
       shouldAutoHideContainer={autoHideContainer && hasNoResults}

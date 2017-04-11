@@ -3,7 +3,6 @@ import instantsearch from '../../../../index.js';
 
 const renderFn = ({
   items,
-  currentRefinement,
   refine,
   widgetParams: {containerNode},
 }, isFirstRendering) => {
@@ -12,10 +11,10 @@ const renderFn = ({
     containerNode.append(markup);
   }
 
-  const itemsHTML = items.map(({value, label}) => `
+  const itemsHTML = items.map(({value, label, isRefined}) => `
     <option
       value="${value}"
-      ${currentRefinement === value ? 'selected' : ''}
+      ${isRefined ? 'selected' : ''}
     >
       ${label}
     </option>

@@ -6,7 +6,6 @@ const usage = `Usage:
 var customHitsPerPage = connectHitsPerPageSelector(function render(params, isFirstRendering) {
   // params = {
   //   items,
-  //   currentRefinement,
   //   refine,
   //   hasNoResults,
   //   instantSearchInstance,
@@ -29,7 +28,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object[]} items Array of objects defining the different values and labels
  * @property {number} items[0].value number of hits to display per page
  * @property {string} items[0].label Label to display in the option
- * @property {number} currentRefinement the currently selected value of hitsPerPage
+ * @property {boolean} items[0].isRefined boolean to indicate current refined value
  * @property {function(number)} refine sets the number of hits per page and trigger a search
  * @property {boolean} hasNoResults true if there were no results in the last search
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
@@ -85,15 +84,12 @@ export default function connectHitsPerPageSelector(renderFn) {
           items = [{value: undefined, label: ''}, ...items];
         }
 
-        const currentRefinement = state.hitsPerPage;
-
         this.setHitsPerPage = value => helper
           .setQueryParameter('hitsPerPage', value)
           .search();
 
         renderFn({
-          currentRefinement,
-          items,
+          items: this._transformItems(state),
           refine: this.setHitsPerPage,
           hasNoResults: true,
           widgetParams,
@@ -102,17 +98,20 @@ export default function connectHitsPerPageSelector(renderFn) {
       },
 
       render({state, results, instantSearchInstance}) {
-        const currentRefinement = state.hitsPerPage;
         const hasNoResults = results.nbHits === 0;
 
         renderFn({
-          currentRefinement,
-          items,
+          items: this._transformItems(state),
           refine: this.setHitsPerPage,
           hasNoResults,
           widgetParams,
           instantSearchInstance,
         }, false);
+      },
+
+      _transformItems({hitsPerPage}) {
+        return items.map(item =>
+          ({...item, isRefined: Number(item.value) === Number(hitsPerPage)}));
       },
     };
   };
