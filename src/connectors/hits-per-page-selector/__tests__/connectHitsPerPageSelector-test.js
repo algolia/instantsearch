@@ -13,7 +13,7 @@ describe('connectHitsPerPageSelector', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      options: [
+      items: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
       ],
@@ -41,7 +41,7 @@ describe('connectHitsPerPageSelector', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      options: [
+      items: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
       ],
@@ -58,7 +58,7 @@ describe('connectHitsPerPageSelector', () => {
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      options: [
+      items: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
       ],
@@ -69,7 +69,7 @@ describe('connectHitsPerPageSelector', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      options: [
+      items: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
         {value: 11, label: ''},
@@ -114,7 +114,7 @@ describe('connectHitsPerPageSelector', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      options: [
+      items: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
         {value: 7, label: ''},
@@ -152,7 +152,7 @@ describe('connectHitsPerPageSelector', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      options: [
+      items: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
       ],
@@ -171,8 +171,8 @@ describe('connectHitsPerPageSelector', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.options.length).toBe(3);
-    firstRenderingOptions.refine(firstRenderingOptions.options[0].value);
+    expect(firstRenderingOptions.items.length).toBe(3);
+    firstRenderingOptions.refine(firstRenderingOptions.items[0].value);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
 
     // Reset the hitsPerPage to an actual value
@@ -186,8 +186,8 @@ describe('connectHitsPerPageSelector', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.options.length).toBe(3);
-    secondRenderingOptions.refine(secondRenderingOptions.options[0].value);
+    expect(secondRenderingOptions.items.length).toBe(3);
+    secondRenderingOptions.refine(secondRenderingOptions.items[0].value);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
   });
 });

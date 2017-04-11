@@ -2,7 +2,7 @@
 import instantsearch from '../../../../index.js';
 
 const renderFn = ({
-  options,
+  items,
   currentRefinement,
   refine,
   widgetParams: {containerNode},
@@ -12,7 +12,7 @@ const renderFn = ({
     containerNode.append(markup);
   }
 
-  const optionsHTML = options.map(({value, label}) => `
+  const itemsHTML = items.map(({value, label}) => `
     <option
       value="${value}"
       ${currentRefinement === value ? 'selected' : ''}
@@ -23,7 +23,7 @@ const renderFn = ({
 
   containerNode
     .find('select')
-    .html(optionsHTML);
+    .html(itemsHTML);
 
   containerNode
     .find('select')
