@@ -36,8 +36,8 @@ const renderer = ({
   attributes,
   clearAllClick,
   clearAllURL,
-  clearRefinementClicks,
-  clearRefinementURLs,
+  clearRefinement,
+  createURL,
   refinements,
   instantSearchInstance,
 }, isFirstRendering) => {
@@ -52,6 +52,9 @@ const renderer = ({
   }
 
   const shouldAutoHideContainer = autoHideContainer && refinements && refinements.length === 0;
+
+  const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, refinement));
+  const clearRefinementURLs = refinements.map(refinement => createURL(refinement));
 
   ReactDOM.render(
     <CurrentRefinedValuesWithHOCs

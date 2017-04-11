@@ -55,7 +55,7 @@ describe('connectCurrentRefinedValues', () => {
     });
   });
 
-  it('Provide a function to clear the refinements at each step', () => {
+  it('Provide a function to clear the refinement', () => {
     // For each refinements we get a function that we can call
     // for removing a single refinement
     const helper = jsHelper({addAlgoliaAgent: () => {}}, '', {
@@ -76,11 +76,10 @@ describe('connectCurrentRefinedValues', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const clearFunctions = firstRenderingOptions.clearRefinementClicks;
     const refinements = firstRenderingOptions.refinements;
-    expect(clearFunctions.length).toBe(1);
+    expect(typeof firstRenderingOptions.clearRefinement).toBe('function');
     expect(refinements.length).toBe(1);
-    clearFunctions[0]();
+    firstRenderingOptions.clearRefinement(refinements[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
 
     helper.addFacetRefinement('myFacet', 'value');
@@ -93,11 +92,10 @@ describe('connectCurrentRefinedValues', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const otherClearFunctions = secondRenderingOptions.clearRefinementClicks;
     const otherRefinements = secondRenderingOptions.refinements;
-    expect(otherClearFunctions.length).toBe(1);
+    expect(typeof secondRenderingOptions.clearRefinement).toBe('function');
     expect(otherRefinements.length).toBe(1);
-    otherClearFunctions[0]();
+    secondRenderingOptions.clearRefinement(refinements[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
   });
 });

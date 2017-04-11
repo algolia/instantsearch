@@ -24,8 +24,8 @@ var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(p
   //   clearAllClick,
   //   clearAllPosition,
   //   clearAllURL,
-  //   clearRefinementClicks,
-  //   clearRefinementURLs,
+  //   clearRefinement,
+  //   createURL,
   //   refinements,
   //   instantSearchInstance,
   //   widgetParams,
@@ -46,8 +46,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} clearAllClick function to trigger the clear of all the currently refined values
  * @property {string} clearAllPosition position of the 'clear all' button
  * @property {function} clearAllURL url which leads to a state where all the refinements have been cleared
- * @property {function[]} clearRefinementClicks individual clearing function per refinement
- * @property {string[]} clearRefinementURLs individual url where a single refinement is cleared
+ * @property {function(item)} clearRefinement clearing function for a refinement
+ * @property {function(item)} createURL create an individual url where a single refinement is cleared
  * @property {Refinements[]} refinements all the current refinements
  * @property {InstantsSearch} instantSearchInstance the instance of instantsearch.js
  * @property {Object} widgetParams all original options forwarded to rendering
@@ -112,42 +112,43 @@ export default function connectCurrentRefinedValues(renderFn) {
     }, {});
 
     return {
+
       init({helper, createURL, instantSearchInstance}) {
         this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
 
         const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo));
 
         const refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes);
-        const clearRefinementURLs =
-          refinements.map(refinement => createURL(clearRefinementFromState(helper.state, refinement)));
-        const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
+
+        const _createURL = refinement => createURL(clearRefinementFromState(helper.state, refinement));
+        const _clearRefinement = refinement => clearRefinement(helper, refinement);
 
         renderFn({
           attributes: attributesObj,
           clearAllClick: this._clearRefinementsAndSearch,
           clearAllURL,
-          clearRefinementClicks,
-          clearRefinementURLs,
+          clearRefinement: _clearRefinement,
+          createURL: _createURL,
           refinements,
           instantSearchInstance,
           widgetParams,
         }, true);
       },
+
       render({results, helper, state, createURL, instantSearchInstance}) {
         const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
 
         const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
-        const clearRefinementURLs = refinements
-          .map(refinement => createURL(clearRefinementFromState(state, refinement)));
-        const clearRefinementClicks = refinements
-          .map(refinement => clearRefinement.bind(null, helper, refinement));
+
+        const _createURL = refinement => createURL(clearRefinementFromState(helper.state, refinement));
+        const _clearRefinement = refinement => clearRefinement(helper, refinement);
 
         renderFn({
           attributes: attributesObj,
           clearAllClick: this._clearRefinementsAndSearch,
           clearAllURL,
-          clearRefinementClicks,
-          clearRefinementURLs,
+          clearRefinement: _clearRefinement,
+          createURL: _createURL,
           refinements,
           instantSearchInstance,
           widgetParams,

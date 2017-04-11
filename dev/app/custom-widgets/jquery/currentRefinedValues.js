@@ -4,8 +4,8 @@ import instantsearch from '../../../../index.js';
 const renderFn = ({
   clearAllClick,
   clearAllURL,
-  clearRefinementURLs,
-  clearRefinementClicks,
+  createURL,
+  clearRefinement,
   refinements,
   widgetParams: {containerNode},
 }, isFirstRendering) => {
@@ -70,7 +70,7 @@ const renderFn = ({
       .map((content, index) => `
         <li>
           <a
-            href="${clearRefinementURLs[index]}"
+            href="${createURL(refinements[index])}"
             class="facet-value facet-value-removable clearfix"
           >
             ${content}
@@ -89,7 +89,7 @@ const renderFn = ({
           .off('click')
           .on('click', e => {
             e.preventDefault();
-            clearRefinementClicks[index]();
+            clearRefinement(refinements[index]);
           });
       });
 
