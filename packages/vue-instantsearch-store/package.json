@@ -15,14 +15,10 @@
     "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
   },
   "dependencies": {
-    "instantsearch-store": "*"
+    "instantsearch-store": "*",
+    "vue-instantsearch-component": "*"
   },
   "peerDependencies": {
     "vue": "^2.2.2"
   }
 }
-
-
-
-
-
