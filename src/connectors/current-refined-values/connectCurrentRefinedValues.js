@@ -119,7 +119,7 @@ export default function connectCurrentRefinedValues(renderFn) {
       init({helper, createURL, instantSearchInstance}) {
         this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo, clearsQuery);
 
-        const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo));
+        const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo, clearsQuery));
 
         const refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes);
 
@@ -139,7 +139,7 @@ export default function connectCurrentRefinedValues(renderFn) {
       },
 
       render({results, helper, state, createURL, instantSearchInstance}) {
-        const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
+        const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo, clearsQuery));
 
         const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
 

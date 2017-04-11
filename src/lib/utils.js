@@ -216,8 +216,12 @@ function getRefinements(results, state) {
   return res;
 }
 
-function clearRefinementsFromState(inputState, attributeNames) {
+function clearRefinementsFromState(inputState, attributeNames, clearsQuery = false) {
   let state = inputState;
+
+  if (clearsQuery) {
+    state = state.setQuery('');
+  }
 
   if (isEmpty(attributeNames)) {
     state = state.clearTags();
