@@ -68,14 +68,14 @@ export default function connectHitsPerPage(renderFn) {
         if (!isCurrentInOptions) {
           if (state.hitsPerPage === undefined) {
             if (window.console) {
-              window.console.log(
+              window.console.warn(
   `[Warning][hitsPerPageSelector] hitsPerPage not defined.
   You should probably use a \`hits\` widget or set the value \`hitsPerPage\`
   using the searchParameters attribute of the instantsearch constructor.`
               );
             }
           } else if (window.console) {
-            window.console.log(
+            window.console.warn(
   `[Warning][hitsPerPageSelector] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
             );

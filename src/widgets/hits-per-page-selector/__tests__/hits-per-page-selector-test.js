@@ -21,14 +21,14 @@ describe('hitsPerPageSelector()', () => {
   let widget;
   let helper;
   let results;
-  let consoleLog;
+  let consoleWarn;
   let state;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
 
     hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
-    consoleLog = sinon.stub(window.console, 'log');
+    consoleWarn = sinon.stub(window.console, 'warn');
 
     container = document.createElement('div');
     items = [
@@ -79,8 +79,8 @@ describe('hitsPerPageSelector()', () => {
     items.length = 0;
     items.push({label: 'Label without a value'});
     widget.init({state: helper.state, helper});
-    expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
-    expect(consoleLog.firstCall.args[0]).
+    expect(consoleWarn.calledOnce).toBe(true, 'console.warn called once');
+    expect(consoleWarn.firstCall.args[0]).
       toEqual(
 `[Warning][hitsPerPageSelector] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: 20)`
@@ -90,8 +90,8 @@ describe('hitsPerPageSelector()', () => {
   it('must include the current hitsPerPage at initialization time', () => {
     helper.state.hitsPerPage = -1;
     widget.init({state: helper.state, helper});
-    expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
-    expect(consoleLog.firstCall.args[0]).
+    expect(consoleWarn.calledOnce).toBe(true, 'console.warn called once');
+    expect(consoleWarn.firstCall.args[0]).
       toEqual(
 `[Warning][hitsPerPageSelector] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: -1)`
@@ -107,6 +107,6 @@ describe('hitsPerPageSelector()', () => {
 
   afterEach(() => {
     hitsPerPageSelector.__ResetDependency__('ReactDOM');
-    consoleLog.restore();
+    consoleWarn.restore();
   });
 });
