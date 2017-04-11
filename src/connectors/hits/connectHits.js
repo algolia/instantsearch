@@ -9,18 +9,9 @@ var customHits = connectHits(function render(params, isFirstRendering) {
   //   widgetParams,
   // }
 });
-search.addWidget(
-  customHits({
-    [ hitsPerPage = 20 ]
-  })
-);
+search.addWidget(customHits());
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHits.html
 `;
-
-/**
- * @typedef {Object} CustomHitsWidgetOptions
- * @param {number} [hitsPerPage = 20] The number of hits to display per page
- */
 
 /**
  * @typedef HitsRenderingOptions
@@ -30,39 +21,31 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object} widgetParams all original options forwarded to rendering
  */
 
- /**
-  * Connects a rendering function with the hits business logic.
-  * @param {function(HitsRenderingOptions, boolean)} renderFn function that renders the hits widget
-  * @return {function(CustomHitsWidgetOptions)} a widget factory for hits widget
-  */
+/**
+ * Connects a rendering function with the hits business logic.
+ * @param {function(HitsRenderingOptions, boolean)} renderFn function that renders the hits widget
+ * @return {function} a widget factory for hits widget
+ */
 export default function connectHits(renderFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const {hitsPerPage = 20} = widgetParams;
+  return (widgetParams = {}) => ({
+    init({instantSearchInstance}) {
+      renderFn({
+        hits: [],
+        results: undefined,
+        instantSearchInstance,
+        widgetParams,
+      }, true);
+    },
 
-    return {
-      getConfiguration() {
-        return {hitsPerPage};
-      },
-
-      init({instantSearchInstance}) {
-        renderFn({
-          hits: [],
-          results: undefined,
-          instantSearchInstance,
-          widgetParams,
-        }, true);
-      },
-
-      render({results, instantSearchInstance}) {
-        renderFn({
-          hits: results.hits,
-          results,
-          instantSearchInstance,
-          widgetParams,
-        }, false);
-      },
-    };
-  };
+    render({results, instantSearchInstance}) {
+      renderFn({
+        hits: results.hits,
+        results,
+        instantSearchInstance,
+        widgetParams,
+      }, false);
+    },
+  });
 }

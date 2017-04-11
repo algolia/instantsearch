@@ -53,14 +53,12 @@ hits({
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty, allItems} ],
   [ transformData.{empty,item} | transformData.{empty, allItems} ],
-  [ hitsPerPage=20 ]
 })`;
 
 /**
  * Display the list of results (hits) from the current search
  * @function hits
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {number} [$0.hitsPerPage=20] The number of hits to display per page [*]
  * @param  {Object} [$0.templates] Templates to use for the widget
  * @param  {string|Function} [$0.templates.empty=''] Template to use when there are no results.
  * @param  {string|Function} [$0.templates.item=''] Template to use for each result. This template will receive an object containing a single record.
@@ -80,7 +78,6 @@ export default function hits({
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   transformData,
-  hitsPerPage = 20,
 }) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -107,7 +104,7 @@ export default function hits({
 
   try {
     const makeHits = connectHits(specializedRenderer);
-    return makeHits({hitsPerPage});
+    return makeHits();
   } catch (e) {
     throw new Error(usage);
   }
