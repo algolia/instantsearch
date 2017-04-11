@@ -2,20 +2,20 @@
 import throttle from 'lodash/throttle';
 import instantsearch from '../../../../index.js';
 
-const handleChange = ({query, search, inputNode}) => () => {
+const handleChange = ({query, refine, inputNode}) => () => {
   const inputValue = inputNode.val();
-  if (inputValue !== query) search(inputValue);
+  if (inputValue !== query) refine(inputValue);
 };
 
 const renderFn = ({
   query,
   onHistoryChange,
-  search,
+  refine,
   widgetParams: {inputNode},
 }, isFirstRendering) => {
   if (isFirstRendering) {
     const throttledSearch = throttle(
-      handleChange({query, search, inputNode}),
+      handleChange({query, refine, inputNode}),
       300
     );
 

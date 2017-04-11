@@ -5,7 +5,7 @@ function render(
   {
     query,
     onHistoryChange,
-    search,
+    refine,
     widgetParams,
   },
   isFirstRendering,
@@ -13,7 +13,7 @@ function render(
   const {node} = widgetParams;
   if (isFirstRendering) {
     node.placeholder = widgetParams.placeholder;
-    node.addEventListener('input', e => search(e.target.value));
+    node.addEventListener('input', e => refine(e.target.value));
   }
 }
 

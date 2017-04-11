@@ -5,7 +5,7 @@ function render(
   {
     query,
     onHistoryChange,
-    search,
+    refine,
     widgetParams,
   },
   isFirstRendering,
@@ -21,7 +21,7 @@ function render(
 
     containingForm.addEventListener('submit', e => {
       e.preventDefault();
-      search(node.value);
+      refine(node.value);
     });
   }
 }
