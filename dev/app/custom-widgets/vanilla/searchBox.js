@@ -11,10 +11,9 @@ function render(
   isFirstRendering,
 ) {
   const {node} = widgetParams;
-  node.search = search;
   if (isFirstRendering) {
     node.placeholder = widgetParams.placeholder;
-    node.addEventListener('input', e => node.search(e.target.value));
+    node.addEventListener('input', e => search(e.target.value));
   }
 }
 
