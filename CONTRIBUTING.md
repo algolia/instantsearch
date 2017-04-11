@@ -43,14 +43,6 @@ Files are automatically formatted with prettier.
 npm run release
 ```
 
-### Beta release
-
-```sh
-npm run release -- -b # or --beta
-```
-
-Append `-beta.x` where x is a number to the version for beta, so 4.0.0-beta.2 for example.
-
 ## Update docs
 
 Documentation website is automatically updated by Travis when master is merged.
