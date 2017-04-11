@@ -98,4 +98,32 @@ describe('connectCurrentRefinedValues', () => {
     secondRenderingOptions.clearRefinement(refinements[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
   });
+
+  it('should clear also the search query', () => {
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', {});
+    helper.search = jest.fn();
+
+    const rendering = jest.fn();
+    const makeWidget = connectCurrentRefinedValues(rendering);
+    const widget = makeWidget({clearsQuery: true});
+
+    helper.setQuery('foobar');
+    expect(helper.state.query).toBe('foobar');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // clear current refined values + query
+    expect(rendering).toBeCalled();
+
+    const [{clearAllClick}] = rendering.mock.calls[0];
+    clearAllClick();
+
+    expect(helper.search).toBeCalled();
+    expect(helper.state.query).toBe('');
+  });
 });

@@ -35,6 +35,7 @@ search.addWidget(
   customCurrentRefinedValues({
     [ attributes = [] ],
     [ onlyListedAttributes = false ],
+    [ clearsQuery = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectCurrentRefinedValues.html
@@ -65,6 +66,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} CurrentRefinedValuesWidgetOptions
  * @property {CurrentRefinedValuesAttributes[]} attributes specification for the display of refinements per attribute
  * @property {boolean} onlyListedAttributes limit the displayed refinement to the list specified
+ * @property {boolean} clearsQuery also clears the active search query
  */
 
 /**
@@ -80,6 +82,7 @@ export default function connectCurrentRefinedValues(renderFn) {
     const {
       attributes = [],
       onlyListedAttributes = false,
+      clearsQuery = false,
     } = widgetParams;
 
     const attributesOK = isArray(attributes) &&
@@ -114,7 +117,7 @@ export default function connectCurrentRefinedValues(renderFn) {
     return {
 
       init({helper, createURL, instantSearchInstance}) {
-        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
+        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo, clearsQuery);
 
         const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo));
 
