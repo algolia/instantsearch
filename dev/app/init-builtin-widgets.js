@@ -76,7 +76,7 @@ export default search => {
   search.addWidget(
     instantsearch.widgets.hitsPerPageSelector({
       container: '#hits-per-page-selector',
-      options: [
+      items: [
         {value: 6, label: '6 per page'},
         {value: 12, label: '12 per page'},
         {value: 24, label: '24 per page'},
