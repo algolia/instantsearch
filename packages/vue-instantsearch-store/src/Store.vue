@@ -1,78 +1,89 @@
 <template>
-  <div class="ais-store">
+  <div :class="bem()">
     <slot></slot>
   </div>
 </template>
 
 <script>
-  import {createFromAlgoliaCredentials} from 'instantsearch-store'
+import { createFromAlgoliaCredentials } from 'instantsearch-store';
+import algoliaComponent from 'vue-instantsearch-component';
 
-  export default {
-    inject: ['_searchStore'],
-    props: {
-      apiKey: {
-        type: String,
-        default () {
-          // Todo: add validator callback in case no search store is injected
-          if (this._searchStore) {
-            return this._searchStore.algoliaApiKey
-          }
-
-          return
+export default {
+  mixins: [algoliaComponent],
+  props: {
+    apiKey: {
+      type: String,
+      default() {
+        // Todo: add validator callback in case no search store is injected
+        if (this._searchStore) {
+          return this._searchStore.algoliaApiKey;
         }
-      },
-      appId: {
-        type: String,
-        default () {
-          // Todo: add validator callback in case no search store is injected
-          if (this._searchStore) {
-            return this._searchStore.algoliaAppId
-          }
 
-          return
-        }
-      },
-      indexName: {
-        type: String,
-        default () {
-          // Todo: add validator callback in case no search store is injected
-          if (this._searchStore) {
-            return this._searchStore.indexName
-          }
-
-          return
-        }
-      },
-      query: {
-        type: String,
-        default: ""
+        return;
       }
     },
-    provide () {
-      this._localSearchStore = createFromAlgoliaCredentials(this.appId, this.apiKey)
-      if (this.indexName) {
-        this._localSearchStore.indexName = this.indexName
-      }
+    appId: {
+      type: String,
+      default() {
+        // Todo: add validator callback in case no search store is injected
+        if (this._searchStore) {
+          return this._searchStore.algoliaAppId;
+        }
 
-      if(this.query) {
-        this._localSearchStore.query = this.query
-      }
-      // Todo: add user agent
-
-      return {
-        _searchStore: this._localSearchStore
+        return;
       }
     },
-    mounted () {
-      this._localSearchStore.start()
-    },
-    watch: {
-      indexName () {
-        this._localSearchStore.index = this.indexName
-      },
-      query () {
-        this._localSearchStore.query = this.query
+    indexName: {
+      type: String,
+      default() {
+        // Todo: add validator callback in case no search store is injected
+        if (this._searchStore) {
+          return this._searchStore.indexName;
+        }
+
+        return;
       }
+    },
+    query: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      blockClassName: 'ais-store'
+    }
+  },
+  provide() {
+    if (!this.searchStore) {
+      this._localSearchStore = createFromAlgoliaCredentials(this.appId, this.apiKey);
+    } else {
+      this._localSearchStore = this.searchStore;
+      // Todo: check if is started and stop it.
+    }
+
+    if (this.indexName) {
+      this._localSearchStore.indexName = this.indexName;
+    }
+
+    if (this.query) {
+      this._localSearchStore.query = this.query;
+    }
+
+    return {
+      _searchStore: this._localSearchStore
+    };
+  },
+  mounted() {
+    this._localSearchStore.start();
+  },
+  watch: {
+    indexName() {
+      this._localSearchStore.indexName = this.indexName;
+    },
+    query() {
+      this._localSearchStore.query = this.query;
     }
   }
+};
 </script>
