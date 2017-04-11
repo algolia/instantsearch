@@ -77,7 +77,7 @@ describe('connectClearAll', () => {
     const initClearMethod = rendering.lastCall.args[0].clearAll;
     initClearMethod();
 
-    expect(helper.hasRefinements('myFacet')).toBe(true);
+    expect(helper.hasRefinements('myFacet')).toBe(false);
 
     helper.toggleRefinement('myFacet', 'someOtherValue');
 
