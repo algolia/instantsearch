@@ -29,8 +29,7 @@ exports[`menu snapshot 1`] = `
       },
     ]
   }
-  limitMax={10}
-  limitMin={10}
+  isShowingMore={false}
   shouldAutoHideContainer={false}
   showMore={false}
   templateProps={
@@ -50,5 +49,6 @@ exports[`menu snapshot 1`] = `
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
