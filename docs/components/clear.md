@@ -24,21 +24,21 @@ Overriding the default content:
 Only clear the search query:
 
 ```html
-<ais-clear :clearsFacets="false"></ais-clear>
+<ais-clear :clearFacets="false"></ais-clear>
 ```
 
 Only clear the facet refinements:
 
 ```html
-<ais-clear :clearsQuery="false"></ais-clear>
+<ais-clear :clearQuery="false"></ais-clear>
 ```
 
 ## Props
 
-| Name         | Type    | Default | Description                                                                       |
-|:-------------|:--------|:--------|:----------------------------------------------------------------------------------|
-| clearsQuery  | boolean | `true`  | If `true`, when the button is clicked, the `query` will be emptied.               |
-| clearsFacets | boolean | `true`  | If `true`, when the button is clicked, all the facet refinements will be removed. |
+| Name        | Type    | Default | Description                                                                       |
+|:------------|:--------|:--------|:----------------------------------------------------------------------------------|
+| clearQuery  | boolean | `true`  | If `true`, when the button is clicked, the `query` will be emptied.               |
+| clearFacets | boolean | `true`  | If `true`, when the button is clicked, all the facet refinements will be removed. |
 
 ## Slots
 
