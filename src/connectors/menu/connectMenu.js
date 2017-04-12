@@ -18,7 +18,7 @@ search.addWidget(
   customMenu({
     attributeName,
     [ limit ],
-    [ showMoreLimit = 0 ]
+    [ showMoreLimit ]
     [ sortBy = ['isRefined', 'count:desc'] ]
   })
 );
@@ -29,7 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} CustomMenuWidgetOptions
  * @param {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
  * @param {number} [limit = 10] How many facets values to retrieve [*]
- * @param {number} [showMoreLimit = 0] How many facets values to retrieve when `toggleShowMore` is called
+ * @param {number} [showMoreLimit] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option
  * @param {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
  */
@@ -60,10 +60,13 @@ export default function connectMenu(renderFn) {
       attributeName,
       limit = 10,
       sortBy = ['isRefined', 'count:desc'],
-      showMoreLimit = 0,
+      showMoreLimit,
     } = widgetParams;
 
-    if (!attributeName) {
+    if (
+      !attributeName ||
+      !isNaN(showMoreLimit) && showMoreLimit < limit
+    ) {
       throw new Error(usage);
     }
 
@@ -83,9 +86,7 @@ export default function connectMenu(renderFn) {
       },
 
       getLimit() {
-        return showMoreLimit > limit && this.isShowingMore
-          ? showMoreLimit
-          : limit;
+        return this.isShowingMore ? showMoreLimit : limit;
       },
 
       getConfiguration(configuration) {
