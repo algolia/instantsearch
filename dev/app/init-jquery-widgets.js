@@ -150,4 +150,13 @@ export default search => {
       hitsPerPage: 3,
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.showMoreMenu({
+      containerNode: window.$('#categories'),
+      attributeName: 'categories',
+      limit: 3,
+      showMoreLimit: 10,
+    })
+  );
 };

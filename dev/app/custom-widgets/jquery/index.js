@@ -15,3 +15,4 @@ export {default as starRating} from './starRating';
 export {default as stats} from './stats';
 export {default as toggle} from './toggle';
 export {default as infiniteHits} from './infiniteHits';
+export {default as showMoreMenu} from './showMoreMenu';
