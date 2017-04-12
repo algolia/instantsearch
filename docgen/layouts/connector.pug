@@ -43,9 +43,9 @@ block content
             +description(r.description)
   h2#structure Options details
     a.anchor(href=`${navPath}#return`)
-    each t in jsdoc.relatedTypes
-      if t
-        +struct(t)
+  each t in jsdoc.relatedTypes
+    if t
+      +struct(t)
   if jsdoc.examples
     h2#example Example
       a.anchor(href=`${navPath}#example`)

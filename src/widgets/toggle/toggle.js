@@ -69,7 +69,7 @@ toggle({
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
- * @function toggle
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string} $0.attributeName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {string} $0.label Human-readable name of the filter (eg. "Free Shipping")

@@ -55,7 +55,7 @@ const renderer = ({
 
 /**
  * Instantiate a list of refinements based on a facet
- * @function numericRefinementList
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string} $0.attributeName Name of the attribute for filtering
  * @param  {Object[]} $0.options List of all the options

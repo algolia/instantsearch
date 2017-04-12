@@ -46,7 +46,7 @@ const usage = `Usage: numericSelector({
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
- * @function numericSelector
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string} $0.attributeName Name of the numeric attribute to use
  * @param  {Array} $0.options Array of objects defining the different values and labels

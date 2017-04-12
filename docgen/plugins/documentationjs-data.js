@@ -11,7 +11,8 @@ export default function({rootJSFile}) {
       else {
         console.log('after documentationjs');
 
-        mapConnectors(filterConnectors(symbols), symbols, files),
+        mapConnectors(filterSymbolsByType('Connector', symbols), symbols, files),
+        mapWidgets(filterSymbolsByType('WidgetFactory', symbols), symbols, files),
 
         done();
       }
@@ -19,13 +20,12 @@ export default function({rootJSFile}) {
   };
 }
 
-function filterConnectors(symbols) {
+function filterSymbolsByType(type, symbols) {
   return filter(symbols, (s) => {
-    const index = findIndex(s.tags, t => t.title === 'type' && t.type.name === 'Connector');
+    const index = findIndex(s.tags, t => t.title === 'type' && t.type.name === type);
     return index !== -1;
   });
 }
-function filterWidgets(symbols) {}
 
 function mapConnectors(connectors, symbols, files) {
   return forEach(connectors, symbol => {
@@ -40,28 +40,58 @@ function mapConnectors(connectors, symbols, files) {
     files[fileName] = {
       mode: '0764',
       contents: '',
-      // stats: fileFromMetalsmith && fileFromMetalsmith.stats,
-      // filename: fileFromMetalsmith && fileFromMetalsmith.filename,
       title: symbol.name,
       mainTitle: `connectors`, //
       withHeadings: false,
       layout: `connector.pug`,
-      category: symbol.kind,
-      navWeight: symbol.name === 'InstantSearch' ? 1000 : 0,
+      category: 'Connector',
+      navWeight: symbol.name,
       jsdoc: symbolWithRelatedType,
     };
   });
 }
-function mapWidgets(widgets, symbols) {}
+
+function mapWidgets(widgets, symbols, files) {
+  return forEach(widgets, symbol => {
+    console.log(symbol.name);
+    const fileName = `widgets/${symbol.name}.html`;
+
+    const symbolWithRelatedType = {
+      ...symbol,
+      relatedTypes: findRelatedTypes(symbol, symbols),
+    };
+
+    files[fileName] = {
+      mode: '0764',
+      contents: '',
+      title: symbol.name,
+      mainTitle: `widgets`,
+      withHeadings: false,
+      layout: `widget.pug`,
+      category: 'WidgetFactory',
+      navWeight: symbol.name,
+      jsdoc: symbolWithRelatedType,
+    };
+  });
+}
 
 function findRelatedTypes(functionSymbol, symbols) {
   let types = [];
   if(!functionSymbol) return types;
 
   const findParamsTypes = p => {
+    if (!p) return;
     const currentParamType = p.type.type;
     if (currentParamType === 'FunctionType') {
       types = [...types, ...findRelatedTypes(p.type, symbols)]
+    } else if (currentParamType === 'UnionType') {
+      forEach(p.type.elements, e => { findParamsTypes({name: e.name, type: e}); });
+    } else if (currentParamType === 'OptionalType') {
+      findParamsTypes({name: p.type.expression.name, type: p.type.expression});
+    } else if (p.name === '$0') {
+      const unnamedParameterType = p.type.name;
+      const typeSymbol = find(symbols, {name: unnamedParameterType});
+      types = [...types, typeSymbol, ...findRelatedTypes(typeSymbol, symbols)]
     } else {
       const currentTypeName = p.name;
       const isCustomType = currentTypeName && currentTypeName !== 'Object' && currentTypeName[0] === currentTypeName[0].toUpperCase();
@@ -74,69 +104,7 @@ function findRelatedTypes(functionSymbol, symbols) {
 
   forEach(functionSymbol.params, findParamsTypes);
   forEach(functionSymbol.returns, findParamsTypes);
+  forEach(functionSymbol.properties, findParamsTypes);
 
   return types;
-}
-
-/**
- * This regexp aims to parse the following kind of jsdoc tag values:
- *  1 - `{boolean} [showMore=false] - description`
- *  2 - `{boolean} showMore - description`
- * The groups output for 1/ are:
- * [
- *   '{boolean} [showMore=false] - description',
- *   'boolean',
- *   '[',
- *   'showMore',
- *   'false',
- *   'description'
- * ]
- * the first square bracket is  matched in order to detect optional parameter
- */
-const typeNameValueDescription = /\{(.+)\} (?:(\[?)(\S+?)(?:=(\S+?))?]? - )?(.+)/;
-function parseTypeNameValueDescription(v) {
-  const parsed = typeNameValueDescription.exec(v);
-  if (!parsed) return null;
-  return {
-    type: parsed[1],
-    isOptional: parsed[2] === '[',
-    name: parsed[3],
-    defaultValue: parsed[4],
-    description: parsed[5],
-  };
-}
-
-/**
- * This regexp aims to parse simple key description tag values. Example
- *  showMore - container for the show more button
- */
-const keyDescription = /(?:(\S+) - )?(.+)/;
-function parseKeyDescription(v) {
-  const parsed = keyDescription.exec(v);
-  if (!parsed) return null;
-  return {
-    key: parsed[1],
-    description: parsed[2],
-  };
-}
-
-const customTagParsers = {
-  proptype: parseTypeNameValueDescription,
-  providedproptype: parseTypeNameValueDescription,
-  themekey: parseKeyDescription,
-  translationkey: parseKeyDescription,
-};
-
-function parseCustomTags(customTagObjects) {
-  if (!customTagObjects) return {};
-
-  const res = {};
-  customTagObjects.forEach(({tag, value}) => {
-    const tagValueParser = customTagParsers[tag];
-    if (!tagValueParser) return;
-    res[tag] = res[tag] || [];
-    res[tag].push(tagValueParser(value));
-  });
-
-  return res;
 }

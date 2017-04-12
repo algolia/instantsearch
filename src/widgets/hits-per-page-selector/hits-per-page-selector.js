@@ -46,7 +46,7 @@ hitsPerPageSelector({
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
- * @function hitsPerPageSelector
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {Object[]} $0.options Array of objects defining the different values and labels
  * @param  {number} $0.options[0].value number of hits to display per page

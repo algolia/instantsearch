@@ -115,7 +115,7 @@ searchBox({
 
 /**
  * Instantiate a searchbox
- * @function searchBox
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string} [$0.placeholder] Input's placeholder [*]
  * @param  {boolean|Object} [$0.poweredBy=false] Define if a "powered by Algolia" link should be added near the input

@@ -68,7 +68,7 @@ priceRanges({
 
 /**
  * Instantiate a price ranges on a numerical facet
- * @function priceRanges
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container Valid CSS Selector as a string or DOMElement
  * @param  {string} $0.attributeName Name of the attribute for faceting
  * @param  {Object} [$0.templates] Templates to use for the widget
