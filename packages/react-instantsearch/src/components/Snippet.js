@@ -10,4 +10,5 @@ Snippet.propTypes = {
   hit: React.PropTypes.object.isRequired,
   attributeName: React.PropTypes.string.isRequired,
   highlight: React.PropTypes.func.isRequired,
+  tagName: React.PropTypes.string,
 };

@@ -9,6 +9,7 @@ import SnippetComponent from '../components/Snippet.js';
  * @kind widget
  * @propType {string} attributeName - the location of the highlighted snippet attribute in the hit
  * @propType {object} hit - the hit object containing the highlighted snippet attribute
+ * @propType {string} [tagName='em'] - the tag to be used for highlighted parts of the attribute
  * @example
  * import React from 'react';
  *
