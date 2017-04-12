@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function Highlighter(
-  { hit, attributeName, highlight, highlightProperty }
+  { hit, attributeName, highlight, highlightProperty, tagName }
 ) {
   const parsedHighlightedValue = highlight({
     hit,
@@ -17,7 +17,12 @@ export default function Highlighter(
         </span>
       );
     }
-    return <em key={key} className="ais-Highlight__highlighted">{v.value}</em>;
+    const HighlightedTag = tagName ? tagName : 'em';
+    return (
+      <HighlightedTag key={key} className="ais-Highlight__highlighted">
+        {v.value}
+      </HighlightedTag>
+    );
   });
   return <span className="ais-Highlight">{reactHighlighted}</span>;
 }
@@ -27,4 +32,5 @@ Highlighter.propTypes = {
   attributeName: React.PropTypes.string.isRequired,
   highlight: React.PropTypes.func.isRequired,
   highlightProperty: React.PropTypes.string.isRequired,
+  tagName: React.PropTypes.string,
 };

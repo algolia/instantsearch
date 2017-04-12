@@ -9,6 +9,7 @@ import HighlightComponent from '../components/Highlight.js';
  * @kind widget
  * @propType {string} attributeName - the location of the highlighted attribute in the hit
  * @propType {object} hit - the hit object containing the highlighted attribute
+ * @propType {string} [tagName='em'] - the tag to be used for highlighted parts of the hit
  * @example
  * import React from 'react';
  *

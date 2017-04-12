@@ -31,3 +31,35 @@ exports[`Highlight parses an highlighted attribute of hit object 1`] = `
   </span>
 </span>
 `;
+
+exports[`Highlight renders a hit with a custom tag correctly 1`] = `
+<span
+  className="ais-Highlight"
+>
+  <span
+    className="ais-Highlight__nonHighlighted"
+  >
+    awesome 
+  </span>
+  <marquee
+    className="ais-Highlight__highlighted"
+  >
+    hi
+  </marquee>
+  <span
+    className="ais-Highlight__nonHighlighted"
+  >
+    ghlighted 
+  </span>
+  <marquee
+    className="ais-Highlight__highlighted"
+  >
+    hi
+  </marquee>
+  <span
+    className="ais-Highlight__nonHighlighted"
+  >
+    t!
+  </span>
+</span>
+`;

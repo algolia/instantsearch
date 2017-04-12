@@ -31,6 +31,10 @@ to use the Highlighter. The Highlight and the Snippet widgets takes two props:
 Here is an example in which we create a custom Hit widget for results that have a
 `description` field that is highlighted.
 
+In these examples we use the [`mark`](https://developer.mozilla.org/en/docs/Web/HTML/Element/mark)
+tag to highlight. This is a tag specifically made for highlighting pieces of text. The default
+tag is `em`, mostly for legacy reasons.
+
 ```jsx
 import React from 'react';
 
@@ -38,7 +42,7 @@ import {InstantSearch, Hits, Highlight} from 'InstantSearch';
 
 const Hit = ({hit}) =>
 <p>
-  <Highlight attributeName="description" hit={hit}/>
+  <Highlight attributeName="description" hit={hit} tagName="mark"/>
 </p>;
 
 export default function App() {
@@ -72,7 +76,7 @@ way as the [widgets](guide/Highlighting_results.html#highlight-and-snippet-widge
 const CustomHighlight = connectHighlight(({highlight, attributeName, hit}) => {
   const parsedHit = highlight({attributeName, hit, highlightProperty: 'highlightProperty'});
   return parsedHit.map(part => {
-    if(part.isHighlighted) return <em>{part.value}</em>;
+    if(part.isHighlighted) return <mark>{part.value}</mark>;
     return part.value;
   });
 });
