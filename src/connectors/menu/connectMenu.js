@@ -98,7 +98,7 @@ export default function connectMenu(renderFn) {
         };
 
         const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-        widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit, showMoreLimit);
+        widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, showMoreLimit || limit);
 
         return widgetConfiguration;
       },
