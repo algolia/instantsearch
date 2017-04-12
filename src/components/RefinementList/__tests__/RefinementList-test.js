@@ -166,70 +166,6 @@ describe('RefinementList', () => {
   });
 
   describe('showMore', () => {
-    it('displays a number of items equal to the limit when showMore: false', () => {
-      // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
-          {name: 'baz', isRefined: false},
-        ],
-        showMore: false,
-        limitMin: 2,
-      };
-
-      // When
-      const actual = shallowRender(props).find(RefinementListItem);
-
-      // Then
-      expect(actual.length).toEqual(2);
-    });
-
-    it('displays a number of items equal to the limit when showMore: true but not enabled', () => {
-      // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
-          {name: 'baz', isRefined: false},
-        ],
-        showMore: true,
-        limitMin: 2,
-        limitMax: 3,
-      };
-
-      // When
-      const actual = shallowRender(props).find(RefinementListItem);
-
-      // Then
-      expect(actual.length).toEqual(2);
-    });
-
-    it('displays a number of items equal to the showMore limit when showMore: true and enabled', () => {
-      // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
-          {name: 'baz', isRefined: false},
-        ],
-        limitMin: 2,
-        limitMax: 3,
-        showMore: true,
-      };
-
-      // When
-      const root = shallowRender(props);
-      root.setState({isShowMoreOpen: true});
-      const actual = root.find(RefinementListItem);
-
-      // Then
-      expect(actual.length).toEqual(3);
-    });
-
     it('adds a showMore link when the feature is enabled', () => {
       // Given
       const props = {
@@ -240,8 +176,7 @@ describe('RefinementList', () => {
           {name: 'baz', isRefined: false},
         ],
         showMore: true,
-        limitMin: 2,
-        limitMax: 3,
+        isShowingMore: false,
       };
 
       // When
@@ -262,8 +197,7 @@ describe('RefinementList', () => {
           {name: 'baz', isRefined: false},
         ],
         showMore: false,
-        limitMin: 2,
-        limitMax: 3,
+        isShowingMore: false,
       };
 
       // When
@@ -274,7 +208,7 @@ describe('RefinementList', () => {
       expect(actual.length).toEqual(0);
     });
 
-    it('no showMore when: state = open -> values change -> values <= limitMin ', () => {
+    it('should displays showLess', () => {
       // Given
       const props = {
         ...defaultProps,
@@ -284,68 +218,15 @@ describe('RefinementList', () => {
           {name: 'baz', isRefined: false},
         ],
         showMore: true,
-        limitMin: 2,
-        limitMax: 5,
+        isShowingMore: true,
       };
 
       // When
       const root = shallowRender(props);
-      root.instance().handleClickShowMore();
-      root.setProps({facetValues: props.facetValues.slice(2)});
+      const actual = root.find('[templateKey="show-more-active"]');
 
       // Then
-      expect(root.find({templateKey: 'show-more-active'}).length).toEqual(0);
-    });
-
-    it('does not add a showMore link when the facet values length is equal to the minLimit', () => {
-      // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
-          {name: 'baz', isRefined: false},
-        ],
-        showMore: true,
-        limitMin: 3,
-        limitMax: 4,
-      };
-
-      // When
-      const root = shallowRender(props);
-      const actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
-
-      // Then
-      expect(actual.length).toEqual(0);
-    });
-
-    it('changing the state will toggle the number of items displayed', () => {
-      // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
-          {name: 'baz', isRefined: false},
-        ],
-        limitMin: 2,
-        limitMax: 3,
-        showMore: true,
-      };
-
-      // When
-      const root = shallowRender(props);
-
-      // Then: Not opened, initial number displayed
-      expect(root.find(RefinementListItem).length).toEqual(2);
-
-      // Then: Toggling the state, display the limitMax
-      root.setState({isShowMoreOpen: true});
-      expect(root.find(RefinementListItem).length).toEqual(3);
-
-      // Then: Toggling the state again, back to the limitMin
-      root.setState({isShowMoreOpen: false});
-      expect(root.find(RefinementListItem).length).toEqual(2);
+      expect(actual.length).toEqual(1);
     });
   });
 
