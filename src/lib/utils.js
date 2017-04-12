@@ -241,10 +241,7 @@ function clearRefinementsFromState(inputState, attributeNames, clearsQuery = fal
 }
 
 function clearRefinementsAndSearch(helper, attributeNames, clearsQuery = false) {
-  helper
-    .setState(clearRefinementsFromState(helper.state, attributeNames))
-    .setQuery(clearsQuery ? '' : helper.state.query)
-    .search();
+  helper.setState(clearRefinementsFromState(helper.state, attributeNames, clearsQuery)).search();
 }
 
 function prefixKeys(prefix, obj) {
