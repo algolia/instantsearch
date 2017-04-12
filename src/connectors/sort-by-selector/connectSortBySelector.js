@@ -19,9 +19,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomSortBySelectorWidgetOptions
- * @param {Object[]} indices Array of objects defining the different indices to choose from.
- * @param {string} indices[].name Name of the index to target
- * @param {string} indices[].label Label displayed in the dropdown
+ * @property {Object[]} indices Array of objects defining the different indices to choose from.
+ * @property {string} indices[].name Name of the index to target
+ * @property {string} indices[].label Label displayed in the dropdown
  */
 
 /**
@@ -36,6 +36,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the sort by selector business logic.
+  * @type {Connector}
   * @param {function(SortBySelectorRenderingOptions, boolean)} renderFn function that renders the sort by selector widget
   * @return {function(CustomSortBySelectorWidgetOptions)} a widget factory for sort by selector widget
   */

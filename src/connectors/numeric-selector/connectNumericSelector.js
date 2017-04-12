@@ -23,11 +23,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomNumericSelectorWidgetOptions
- * @param {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
- * @param  {Array} options Array of objects defining the different values and labels
- * @param  {number} options[i].value The numerical value to refine with
- * @param  {string} options[i].label Label to display in the option
- * @param  {string} [ operator='=' ] The operator to use to refine
+ * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
+ * @property  {Array} options Array of objects defining the different values and labels
+ * @property  {number} options[i].value The numerical value to refine with
+ * @property  {string} options[i].label Label to display in the option
+ * @property  {string} [ operator='=' ] The operator to use to refine
  */
 
 /**
@@ -42,6 +42,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the numeric selector business logic.
+  * @type {Connector}
   * @param {function(NumericSelectorRenderingOptions, boolean)} renderFn function that renders the numeric selector widget
   * @return {function(CustomNumericSelectorWidgetOptions)} a widget factory for numeric selector widget
   */

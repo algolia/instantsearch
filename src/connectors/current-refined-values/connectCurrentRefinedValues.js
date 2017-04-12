@@ -69,7 +69,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * Creactes a currentRefinedValues widget with a custom rendering.
- * @function connectCurrentRefinedValues
+ * @type {Connector}
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn the custom rendering function
  * @return {function(CurrentRefinedValuesWidgetOptions): CurrentRefinedValuesWidget} a function that creates CurrentRefinedValues widget
  */

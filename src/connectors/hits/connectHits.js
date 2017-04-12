@@ -19,11 +19,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomHitsWidgetOptions
- * @param {number} [hitsPerPage = 20] The number of hits to display per page
+ * @property {number} [hitsPerPage = 20] The number of hits to display per page
  */
 
 /**
- * @typedef HitsRenderingOptions
+ * @typedef {Object} HitsRenderingOptions
  * @property {Object[]} hits the hits contained in the last results from Algolia
  * @property {Object} results the complete results from Algolia
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
@@ -32,6 +32,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the hits business logic.
+  * @type {Connector}
   * @param {function(HitsRenderingOptions, boolean)} renderFn function that renders the hits widget
   * @return {function(CustomHitsWidgetOptions)} a widget factory for hits widget
   */

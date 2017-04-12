@@ -1,0 +1,4 @@
+mixin description(description)
+  for paragraph in description.children
+    for text in paragraph.children
+      | !{text.value}

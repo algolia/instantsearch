@@ -39,7 +39,7 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @property {string} attributeName the attribute in the records that are used by the widget
  * @property {string} operator how the filters are combined together
  * @property {number} limit the max number of items displayed
- * @param {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  */
 
 /**
@@ -57,8 +57,7 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
 
 /**
  * Creates a custom widget for a refinement list.
- *
- * @function connectRefinementList
+ * @type {Connector}
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn function that renders the refinement list widget
  * @returns {function(RefinementListWidgetOptions)} a custom refinement list widget factory
  */

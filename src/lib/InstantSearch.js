@@ -16,7 +16,6 @@ function defaultCreateURL() { return '#'; }
 const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) => defaultAlgoliasearch(appId, apiKey);
 
 /**
- * @function instantsearch
  * @param  {string} options.appId The Algolia application ID
  * @param  {string} options.apiKey The Algolia search-only API key
  * @param  {string} options.indexName The name of the main index

@@ -24,10 +24,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomRangeSliderWidgetOptions
- * @param {string} attributeName Name of the attribute for faceting.
- * @param {number} [min] Minimal slider value, default to automatically computed from the result set
- * @param {number} [max] Maximal slider value, defaults to automatically computed from the result set
- * @param {number} [precision = 2] Number of digits after decimal point to display.
+ * @property {string} attributeName Name of the attribute for faceting.
+ * @property {number} [min] Minimal slider value, default to automatically computed from the result set
+ * @property {number} [max] Maximal slider value, defaults to automatically computed from the result set
+ * @property {number} [precision = 2] Number of digits after decimal point to display.
  */
 
 /**
@@ -42,6 +42,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the range slider business logic.
+  * @type {Connector}
   * @param {function(RangeSliderRenderingOptions, boolean)} renderFn function that renders the range slider widget
   * @return {function(CustomRangeSliderWidgetOptions)} a widget factory for range slider widget
   */

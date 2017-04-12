@@ -21,7 +21,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef CustomPaginationWidgetOptions
- * @param {number} [maxPages] The max number of pages to browse
+ * @property {number} [maxPages] The max number of pages to browse
  */
 
 /**
@@ -37,6 +37,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the pagination business logic.
+  * @type {Connector}
   * @param {function(PaginationRenderingOptions, boolean)} renderFn function that renders the pagination widget
   * @return {function(CustomPaginationWidgetOptions)} a widget factory for pagination widget
   */

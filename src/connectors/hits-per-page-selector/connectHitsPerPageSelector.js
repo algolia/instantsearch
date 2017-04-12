@@ -45,6 +45,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * Creates a custom HitsPerPage widget factory.
+ * @type {Connector}
  * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn function that renders the hits widget, the boolean indicates if the current call is the first one / the one before the first search.
  * @return {function(HitsPerPageWidgetOptions)} a custom HitsPerPage widget factory
  */

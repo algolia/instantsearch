@@ -2,7 +2,6 @@
 
 set -ev # exit when error
 
-cd docs && bundle install && bundle exec guard &
-cd docs && bundle exec jekyll serve --verbose &
+cd docgen && yarn && yarn start &
 npm run dev &
 wait

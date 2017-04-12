@@ -18,18 +18,19 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} StatsRenderingOptions
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
- * @property {number} hitsPerPage the number of hits per page
- * @property {number} nbHits the number of hits returned by the last search results
- * @property {number} nbPages the numbers of pages of results
+ * @property {number} hitsPerPage the maximum number of hits per page returned by Algolia
+ * @property {number} nbHits the number of hits in the result set
+ * @property {number} nbPages the number of pages computed for the result set
  * @property {number} page the current page
- * @property {number} processingTimeMS the time taken in the Algolia engine to compute the results
- * @property {string} query the last query used
- * @property {Object} widgetParams all original options forwarded to rendering
+ * @property {number} processingTimeMS the time taken to compute the results inside the Algolia engine
+ * @property {string} query the query used for the current search
+ * @property {object} widgetParams all widget options forwarded to rendering
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
 /**
  * Connects a rendering function with the stats business logic.
+ * @type {Connector}
  * @param {function(StatsRenderingOptions, boolean)} renderFn function that renders the stats widget
  * @return {function} a widget factory for stats widget
  */
