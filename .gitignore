@@ -5,3 +5,9 @@ lerna-debug.log
 npm-debug.log
 node_modules
 coverage
+
+# Output of documentation
+_book
+book.pdf
+book.epub
+book.mobi
