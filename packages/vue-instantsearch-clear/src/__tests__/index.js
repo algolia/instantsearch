@@ -39,7 +39,7 @@ describe('Clear component', () => {
   test('can disable query clearing', () => {
     searchStore.query = 'whatever';
     const vm = new Component({
-      propsData: { searchStore, clearQuery: false }
+      propsData: { searchStore, clearsQuery: false }
     });
     vm.clear();
     expect(searchStore.query).toEqual('whatever');
@@ -51,7 +51,7 @@ describe('Clear component', () => {
   test('can disable facets clearing', () => {
     searchStore.query = 'whatever';
     const vm = new Component({
-      propsData: { searchStore, clearFacets: false }
+      propsData: { searchStore, clearsFacets: false }
     });
     vm.clear();
     expect(searchStore.query).toEqual('');
