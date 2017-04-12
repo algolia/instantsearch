@@ -9,7 +9,6 @@ var customMenu = connectMenu(function render(params, isFirstRendering) {
   //   instantSearchInstance,
   //   canRefine,
   //   widgetParams,
-  //   currentRefinement,
   //   isShowingMore,
   //   toggleShowMore
   // }
@@ -42,7 +41,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {boolean} canRefine true if refinement can be applied
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
- * @property {Object} currentRefinement the refinement currently applied
  * @property {boolean} isShowingMore is displaying all the results
  * @property {function} toggleShowMore switch between show less and more
  */
@@ -122,7 +120,6 @@ export default function connectMenu(renderFn) {
           instantSearchInstance,
           canRefine: false,
           widgetParams,
-          currentRefinement: null,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
         }, true);
@@ -141,7 +138,6 @@ export default function connectMenu(renderFn) {
           instantSearchInstance,
           canRefine: items.length > 0,
           widgetParams,
-          currentRefinement: items.find(({isRefined}) => isRefined),
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
         }, false);
