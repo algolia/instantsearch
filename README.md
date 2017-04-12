@@ -1,3 +1,13 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [InstantSearch.js](#instantsearchjs)
+- [Documentation](#documentation)
+- [Contributing, dev, release](#contributing-dev-release)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 [![InstantSearch.js logo][logo]][website]
 
 InstantSearch projects: **InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github].
