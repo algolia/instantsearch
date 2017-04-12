@@ -1,4 +1,3 @@
-import take from 'lodash/take';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -130,10 +129,12 @@ export default function connectMenu(renderFn) {
 
       render({results, instantSearchInstance}) {
         const items = results.getFacetValues(attributeName, {sortBy}).data || [];
+        const itemsWithLimit = items.slice(0, this.getLimit());
+
         this.toggleShowMore = this.createToggleShowMore({results, instantSearchInstance});
 
         renderFn({
-          items: take(items, this.getLimit()),
+          items: itemsWithLimit,
           createURL: this._createURL,
           refine: this._refine,
           instantSearchInstance,
