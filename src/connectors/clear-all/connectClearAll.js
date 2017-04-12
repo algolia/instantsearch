@@ -17,21 +17,23 @@ var customClearAll = connectClearAll(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customClearAll({
-    [ excludeAttributes = [] ]
+    [ excludeAttributes = [] ],
+    [ clearsQuery = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectClearAll.html
 `;
 
-const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
+const clearAll = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () => {
   if (hasRefinements) {
-    clearRefinementsAndSearch(helper, clearAttributes);
+    clearRefinementsAndSearch(helper, clearAttributes, clearsQuery);
   }
 };
 
 /**
  * @typedef {Object} CustomClearAllWidgetOptions
  * @param {string[]} excludeAttributes - all the attributes that should not be displayed
+ * @param {boolean} [clearsQuery = false] also clears the active search query
  */
 
 /**
@@ -53,7 +55,7 @@ export default function connectClearAll(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {excludeAttributes = []} = widgetParams;
+    const {excludeAttributes = [], clearsQuery = false} = widgetParams;
 
     return {
       _clearAll() {},
@@ -67,9 +69,9 @@ export default function connectClearAll(renderFn) {
           .filter(one => excludeAttributes.indexOf(one) === -1);
 
         const hasRefinements = clearAttributes.length !== 0;
-        const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state));
+        const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
 
-        this._clearAll = clearAll({helper, clearAttributes, hasRefinements});
+        this._clearAll = clearAll({helper, clearAttributes, hasRefinements, clearsQuery});
 
         renderFn({
           clearAll: this._cachedClearAll,
@@ -86,9 +88,9 @@ export default function connectClearAll(renderFn) {
           .filter(one => excludeAttributes.indexOf(one) === -1);
 
         const hasRefinements = clearAttributes.length !== 0;
-        const preparedCreateURL = () => createURL(clearRefinementsFromState(state));
+        const preparedCreateURL = () => createURL(clearRefinementsFromState(state, [], clearsQuery));
 
-        this._clearAll = clearAll({helper, clearAttributes, hasRefinements});
+        this._clearAll = clearAll({helper, clearAttributes, hasRefinements, clearsQuery});
 
         renderFn({
           clearAll: this._cachedClearAll,
