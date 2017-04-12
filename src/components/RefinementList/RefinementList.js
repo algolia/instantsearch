@@ -14,11 +14,7 @@ import headerFooterHOC from '../../decorators/headerFooter.js';
 export class RawRefinementList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isShowMoreOpen: false,
-    };
     this.handleItemClick = this.handleItemClick.bind(this);
-    this.handleClickShowMore = this.handleClickShowMore.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -121,11 +117,6 @@ export class RawRefinementList extends React.Component {
     this.refine(facetValueToRefine, isRefined);
   }
 
-  handleClickShowMore() {
-    const isShowMoreOpen = !this.state.isShowMoreOpen;
-    this.setState({isShowMoreOpen});
-  }
-
   componentWillReceiveProps(nextProps) {
     if (this.searchbox && !nextProps.isFromSearch) {
       this.searchbox.clearInput();
@@ -147,18 +138,10 @@ export class RawRefinementList extends React.Component {
       cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
     }
 
-    const limit = this.state.isShowMoreOpen ? this.props.limitMax : this.props.limitMin;
-    const displayedFacetValues = this.props.facetValues.slice(0, limit);
-    const displayShowMore = this.props.showMore === true &&
-      // "Show more"
-      this.props.facetValues.length > displayedFacetValues.length ||
-      // "Show less", but hide it if the result set changed
-      this.state.isShowMoreOpen && displayedFacetValues.length > this.props.limitMin;
-
-    const showMoreBtn = displayShowMore ?
+    const showMoreBtn = this.props.showMore === true ?
         <Template
-          rootProps={{onClick: this.handleClickShowMore}}
-          templateKey={`show-more-${this.state.isShowMoreOpen ? 'active' : 'inactive'}`}
+          rootProps={{onClick: this.props.toggleShowMore}}
+          templateKey={`show-more-${this.props.isShowingMore ? 'active' : 'inactive'}`}
           {...this.props.templateProps}
         /> :
         undefined;
@@ -180,7 +163,7 @@ export class RawRefinementList extends React.Component {
     return (
       <div className={cx(cssClassList)}>
         {searchInput}
-        {displayedFacetValues.map(this._generateFacetItem, this)}
+        {this.props.facetValues.map(this._generateFacetItem, this)}
         {noResults}
         {showMoreBtn}
       </div>
@@ -200,14 +183,14 @@ RawRefinementList.propTypes = {
   }),
   depth: React.PropTypes.number,
   facetValues: React.PropTypes.array,
-  limitMax: React.PropTypes.number,
-  limitMin: React.PropTypes.number,
   showMore: React.PropTypes.bool,
   templateProps: React.PropTypes.object.isRequired,
   toggleRefinement: React.PropTypes.func.isRequired,
   searchFacetValues: React.PropTypes.func,
   searchPlaceholder: React.PropTypes.string,
   isFromSearch: React.PropTypes.bool,
+  toggleShowMore: React.PropTypes.func,
+  isShowingMore: React.PropTypes.bool,
 };
 
 RawRefinementList.defaultProps = {
