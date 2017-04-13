@@ -232,14 +232,14 @@ describe('connectRefinementList', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.items).toEqual([
       {
-        name: 'Decoration',
+        label: 'Decoration',
         value: 'Decoration',
         highlighted: 'Decoration',
         count: 880,
         isRefined: true,
       },
       {
-        name: 'Outdoor',
+        label: 'Outdoor',
         value: 'Outdoor',
         highlighted: 'Outdoor',
         count: 47,

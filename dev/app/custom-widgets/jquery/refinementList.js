@@ -29,7 +29,7 @@ const renderFn = ({
         <label style="display: block;">
           <input
             type="checkbox"
-            value="${item.name}"
+            value="${item.value}"
             ${item.isRefined ? 'checked' : ''}
           />
 
@@ -38,8 +38,8 @@ const renderFn = ({
             style="text-decoration: none; color: #000;"
           >
             ${item.isRefined
-              ? `<strong>${item.name}</strong>`
-              : item.name}
+              ? `<strong>${item.label}</strong>`
+              : item.label}
           </a>
 
           <span class="facet-count pull-right">

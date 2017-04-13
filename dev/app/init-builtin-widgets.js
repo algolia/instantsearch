@@ -294,7 +294,7 @@ export default search => {
         header: 'Price ranges',
       },
       transformData(data) {
-        data.name = data.name.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
+        data.label = data.label.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
         return data;
       },
     })

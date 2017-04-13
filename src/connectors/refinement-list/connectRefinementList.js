@@ -73,6 +73,9 @@ export default function connectRefinementList(renderFn) {
 
     checkUsage({attributeName, operator, usage});
 
+    const formatItems = ({name: label, ...item}) =>
+      ({...item, label, value: label, highlighted: label});
+
     const render = ({items, state, createURL,
                     helperSpecializedSearchFacetValues,
                     refine, isFromSearch, isFirstSearch, instantSearchInstance}) => {
@@ -123,10 +126,8 @@ export default function connectRefinementList(renderFn) {
           });
         } else {
           helper.searchForFacetValues(attributeName, query).then(results => {
-            const facetValues = results.facetHits.map(h => {
-              h.name = h.value;
-              return h;
-            });
+            const facetValues = results.facetHits.map(formatItems);
+
             render({
               items: facetValues,
               state,
@@ -175,7 +176,7 @@ export default function connectRefinementList(renderFn) {
       render({results, state, createURL, instantSearchInstance}) {
         const items = results
           .getFacetValues(attributeName, {sortBy})
-          .map(item => ({...item, highlighted: item.name, value: item.name}));
+          .map(formatItems);
 
         lastResultsFromMainSearch = items;
 
