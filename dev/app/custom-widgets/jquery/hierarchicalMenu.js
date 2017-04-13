@@ -20,7 +20,7 @@ const formatMenuEntry = (createURL, lvl = 0) => item => {
           class="facet-value clearfix"
           data-refine-value="${item.value}"
         >
-          <strong>${item.name}</strong> ${countHTML}
+          <strong>${item.label}</strong> ${countHTML}
         </a>
         <div class="hierarchical-categories-list ais-hierarchical-menu--list__lvl${lvl + 1}">
           ${item.data.map(formatMenuEntry(createURL, lvl + 1)).join('')}
@@ -37,8 +37,8 @@ const formatMenuEntry = (createURL, lvl = 0) => item => {
         data-refine-value="${item.value}"
       >
         ${item.isRefined
-          ? `<strong>${item.name}</strong>`
-          : item.name} ${countHTML}
+          ? `<strong>${item.label}</strong>`
+          : item.label} ${countHTML}
       </a>
     </div>
   `;
