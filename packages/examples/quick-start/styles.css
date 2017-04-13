@@ -17,7 +17,28 @@
     border-radius: 2px;
     margin: 20px 0;
     margin-right: 5%;
+    padding-left: 40px;
 }
+
+.ais-search-box__submit, .ais-clear {
+  background: none;
+  border: none;
+  position: absolute;
+  z-index: 30;
+  top: 30px;
+}
+
+.ais-search-box__submit {
+  left: 25px;
+}
+.ais-clear {
+  right: 30px;
+}
+.ais-clear--disabled {
+  display: none;
+}
+
+
 
 .ais-powered-by {
     float: right;
@@ -34,7 +55,7 @@
     width: 25%;
     border: solid 1px #EEE;
     box-shadow: 0 0 3px #f6f6f6;
-    
+
     position: relative;
     border-radius: 3px;
     min-width: 220px;

@@ -8,7 +8,7 @@
           </h1>
         </div>
         <div class="col-md-10 col-sm-9">
-          <ais-search-form>
+          <ais-search-box>
             <div class="input-group">
               <ais-input
               placeholder="Search product by name or reference..."
@@ -27,7 +27,7 @@
               </span>
             </div><!-- /input-group -->
 
-          </ais-search-form>
+          </ais-search-box>
 
 
 
