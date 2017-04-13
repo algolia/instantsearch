@@ -40,7 +40,7 @@ stories
     </WrapWithHits>
   ))
   .add('with panel', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="CurrentRefinements">
       <Panel title="Current Refinements">
         <CurrentRefinements />
         <div style={{ display: 'none' }}>
@@ -53,7 +53,7 @@ stories
     </WrapWithHits>
   ))
   .add('with panel but no refinement', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="CurrentRefinements">
       <Panel title="Current Refinements">
         <CurrentRefinements />
       </Panel>

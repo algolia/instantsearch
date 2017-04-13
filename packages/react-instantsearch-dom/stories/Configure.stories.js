@@ -12,13 +12,15 @@ class ConfigureExample extends React.Component {
     super();
     this.state = { hitsPerPage: 3 };
   }
+
   onClick() {
     const hitsPerPage = this.state.hitsPerPage === 3 ? 1 : 3;
     this.setState({ hitsPerPage });
   }
+
   render() {
     return (
-      <WrapWithHits>
+      <WrapWithHits linkedStoryGroup="Configure">
         <Configure hitsPerPage={this.state.hitsPerPage} />
         <button onClick={this.onClick.bind(this)}>Toggle HitsPerPage</button>
       </WrapWithHits>

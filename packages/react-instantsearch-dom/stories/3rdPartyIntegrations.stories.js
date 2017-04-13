@@ -7,7 +7,7 @@ import Rheostat from 'rheostat';
 const stories = storiesOf('Integration With Other Libraries', module);
 
 stories.add('Airbnb Rheostat', () => (
-  <WrapWithHits>
+  <WrapWithHits linkedStoryGroup="3rdPartyIntegrations">
     <ConnectedRange attributeName="price" />
   </WrapWithHits>
 ));

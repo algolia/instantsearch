@@ -20,14 +20,14 @@ stories
     </WrapWithHits>
   ))
   .add('with panel', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="StarRating">
       <Panel title="Ratings">
         <StarRating attributeName="rating" max={6} min={1} />
       </Panel>
     </WrapWithHits>
   ))
   .add('with some unavailable refinements', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="StarRating">
       <Configure filters="rating>=4" />
       <Panel title="Ratings">
         <StarRating attributeName="rating" max={6} min={1} />
@@ -35,7 +35,11 @@ stories
     </WrapWithHits>
   ))
   .add('with panel but no refinement', () => (
-    <WrapWithHits searchBox={false}>
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="StarRating"
+    >
       <Panel title="Ratings">
         <StarRating attributeName="rating" max={6} min={1} />
         <div style={{ display: 'none' }}>
@@ -51,7 +55,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="StarRating">
       <StarRating
         attributeName="rating"
         max={number('max', 6)}

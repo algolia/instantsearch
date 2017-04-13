@@ -26,7 +26,7 @@ stories
     </WrapWithHits>
   ))
   .add('with default selected item', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
       <HierarchicalMenu
         attributes={['category', 'sub_category', 'sub_sub_category']}
         defaultRefinement="Eating"
@@ -34,7 +34,7 @@ stories
     </WrapWithHits>
   ))
   .add('with show more', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
       <HierarchicalMenu
         attributes={['category', 'sub_category', 'sub_sub_category']}
         limitMin={2}
@@ -44,7 +44,7 @@ stories
     </WrapWithHits>
   ))
   .add('with panel', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
       <Panel title="Category">
         <HierarchicalMenu
           attributes={['category', 'sub_category', 'sub_sub_category']}
@@ -53,7 +53,11 @@ stories
     </WrapWithHits>
   ))
   .add('with panel but no refinement', () => (
-    <WrapWithHits searchBox={false}>
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="HierarchicalMenu"
+    >
       <Panel title="Category">
         <HierarchicalMenu
           attributes={['category', 'sub_category', 'sub_sub_category']}
@@ -65,7 +69,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="HierarchicalMenu">
       <HierarchicalMenu
         attributes={['category', 'sub_category', 'sub_sub_category']}
         defaultRefinement={text('defaultSelectedItem', 'Bathroom')}

@@ -21,12 +21,12 @@ stories
     </WrapWithHits>
   ))
   .add('with default selected item', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu attributeName="category" defaultRefinement="Eating" />
     </WrapWithHits>
   ))
   .add('with show more', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu
         attributeName="category"
         limitMin={2}
@@ -36,7 +36,7 @@ stories
     </WrapWithHits>
   ))
   .add('with search inside items', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu
         attributeName="category"
         withSearchBox
@@ -50,7 +50,7 @@ stories
     </WrapWithHits>
   ))
   .add('with the sort strategy changed', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu
         attributeName="category"
         transformItems={items =>
@@ -59,14 +59,18 @@ stories
     </WrapWithHits>
   ))
   .add('with panel', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Panel title="Category">
         <Menu attributeName="category" />
       </Panel>
     </WrapWithHits>
   ))
   .add('with panel but no available refinement', () => (
-    <WrapWithHits searchBox={false}>
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="Menu"
+    >
       <Panel title="Category">
         <Menu attributeName="category" />
         <div style={{ display: 'none' }}>
@@ -76,7 +80,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="Menu">
       <Menu
         attributeName="category"
         defaultRefinement={text('defaultSelectedItem', 'Bathroom')}
