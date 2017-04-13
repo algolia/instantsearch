@@ -75,18 +75,16 @@ export default function connectNumericRefinementList(renderFn) {
         };
 
         this._createURL = state => facetValue => createURL(refine(state, attributeName, options, facetValue));
-
-        const items = options.map(facetValue =>
-          ({
-            ...facetValue,
-            isRefined: isRefined(helper.state, attributeName, facetValue),
-            attributeName,
-          })
-        );
+        this._prepareItems = state => options.map(option => ({
+          ...option,
+          value: option.name,
+          isRefined: isRefined(state, attributeName, option),
+          attributeName,
+        }));
 
         renderFn({
           createURL: this._createURL(helper.state),
-          items,
+          items: this._prepareItems(helper.state),
           hasNoResults: true,
           refine: this._refine,
           instantSearchInstance,
@@ -95,17 +93,9 @@ export default function connectNumericRefinementList(renderFn) {
       },
 
       render({results, state, instantSearchInstance}) {
-        const items = options.map(facetValue =>
-          ({
-            ...facetValue,
-            isRefined: isRefined(state, attributeName, facetValue),
-            attributeName,
-          })
-        );
-
         renderFn({
           createURL: this._createURL(state),
-          items,
+          items: this._prepareItems(state),
           hasNoResults: results.nbHits === 0,
           refine: this._refine,
           instantSearchInstance,

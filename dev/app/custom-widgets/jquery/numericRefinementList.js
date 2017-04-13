@@ -21,13 +21,13 @@ const renderFn = ({
 
   // remove event listeners if any before attachign new ones
   containerNode
-    .find('li')
+    .find('li[data-refine-value]')
     .each(function() { window.$(this).off(); });
 
   const list = items.map(item => `
     <li
       class="facet-value clearfix"
-      data-facet-name="${item.name}"
+      data-refine-value="${item.value}"
     >
       <label
         style="display: block;"
@@ -48,13 +48,13 @@ const renderFn = ({
     .html(list);
 
   containerNode
-    .find('li')
-    .each(function(index) {
+    .find('li[data-refine-value]')
+    .each(function() {
       window.$(this).on('click', e => {
         e.preventDefault();
         e.stopPropagation();
 
-        refine(items[index].name);
+        refine(window.$(this).data('refine-value'));
       });
     });
 };
