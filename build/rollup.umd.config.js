@@ -5,6 +5,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import uglify from 'rollup-plugin-uglify';
 import replace from 'rollup-plugin-replace';
+import json from 'rollup-plugin-json';
 import camelize from 'camelize';
 import fs from 'fs';
 const pkg = JSON.parse(fs.readFileSync('package.json'));
@@ -16,6 +17,7 @@ export default {
   moduleName: moduleName,
   plugins: [
     vue({compileTemplate: true, css: true}),
+    json(),
     resolve({
       browser: true,
       preferBuiltins: false
