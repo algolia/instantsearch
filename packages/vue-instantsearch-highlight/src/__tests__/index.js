@@ -6,9 +6,9 @@ test('renders proper HTML', () => {
   const result = {
     _highlightResult: {
       attr: {
-        value: `con${HIGHLIGHT_PRE_TAG}ten${HIGHLIGHT_POST_TAG}t`
-      }
-    }
+        value: `con${HIGHLIGHT_PRE_TAG}ten${HIGHLIGHT_POST_TAG}t`,
+      },
+    },
   };
 
   const vm = new Vue({
@@ -17,13 +17,13 @@ test('renders proper HTML', () => {
       return h('highlight', {
         props: {
           attributeName: 'attr',
-          result: result
-        }
+          result: result,
+        },
       });
     },
     components: {
-      Highlight
-    }
+      Highlight,
+    },
   }).$mount();
 
   expect(vm.$el.outerHTML).toMatchSnapshot();
@@ -33,9 +33,9 @@ test('accepts custom highlighting tag', () => {
   const result = {
     _highlightResult: {
       attr: {
-        value: `con${HIGHLIGHT_PRE_TAG}ten${HIGHLIGHT_POST_TAG}t`
-      }
-    }
+        value: `con${HIGHLIGHT_PRE_TAG}ten${HIGHLIGHT_POST_TAG}t`,
+      },
+    },
   };
 
   const vm = new Vue({
@@ -45,13 +45,13 @@ test('accepts custom highlighting tag', () => {
         props: {
           attributeName: 'attr',
           result: result,
-          tagName: 'em'
-        }
+          tagName: 'em',
+        },
       });
     },
     components: {
-      Highlight
-    }
+      Highlight,
+    },
   }).$mount();
 
   expect(vm.$el.outerHTML).toMatchSnapshot();
@@ -61,36 +61,9 @@ test('protects against XSS', () => {
   const result = {
     _highlightResult: {
       attr: {
-        value: "<script>alert('test');</script>"
-      }
-    }
-  };
-
-  const vm = new Vue({
-    template: '<highlight attributeName="attr" :result="result">',
-    render(h) {
-      return h('highlight', {
-        props: {
-          attributeName: 'attr',
-          result: result
-        }
-      });
+        value: "<script>alert('test');</script>",
+      },
     },
-    components: {
-      Highlight
-    }
-  }).$mount();
-
-  expect(vm.$el.outerHTML).toMatchSnapshot();
-});
-
-test('allows unsafe output', () => {
-  const result = {
-    _highlightResult: {
-      attr: {
-        value: '<strong>un-escaped output</strong>'
-      }
-    }
   };
 
   const vm = new Vue({
@@ -100,21 +73,24 @@ test('allows unsafe output', () => {
         props: {
           attributeName: 'attr',
           result: result,
-          escapeHtml: false
-        }
+        },
       });
     },
     components: {
-      Highlight
-    }
+      Highlight,
+    },
   }).$mount();
 
   expect(vm.$el.outerHTML).toMatchSnapshot();
 });
 
-test('should render an empty string if attribute is not highlighted', () => {
+test('allows unsafe output', () => {
   const result = {
-    _highlightResult: {}
+    _highlightResult: {
+      attr: {
+        value: '<strong>un-escaped output</strong>',
+      },
+    },
   };
 
   const vm = new Vue({
@@ -123,15 +99,38 @@ test('should render an empty string if attribute is not highlighted', () => {
       return h('highlight', {
         props: {
           attributeName: 'attr',
-          result: result
-        }
+          result: result,
+          escapeHtml: false,
+        },
       });
     },
     components: {
-      Highlight
-    }
+      Highlight,
+    },
   }).$mount();
 
+  expect(vm.$el.outerHTML).toMatchSnapshot();
+});
+
+test('should render an empty string if attribute is not highlighted', () => {
+  const result = {
+    _highlightResult: {},
+  };
+
+  const vm = new Vue({
+    template: '<highlight attributeName="attr" :result="result">',
+    render(h) {
+      return h('highlight', {
+        props: {
+          attributeName: 'attr',
+          result: result,
+        },
+      });
+    },
+    components: {
+      Highlight,
+    },
+  }).$mount();
 
   expect(vm.$el.outerHTML).toMatchSnapshot();
 });

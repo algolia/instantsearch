@@ -1,1 +1,1 @@
-export {default} from './TreeMenu.vue'
+export { default } from './TreeMenu.vue';

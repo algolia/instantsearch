@@ -13,14 +13,14 @@ const router = new VueRouter({
       name: 'search',
       path: '/search',
       component: Search,
-      props: route => ({ query: route.query.q })
+      props: route => ({ query: route.query.q }),
     },
-    { path: '/', redirect: '/search' }
-  ]
+    { path: '/', redirect: '/search' },
+  ],
 });
 
 new Vue({
   el: '#app',
   render: h => h(App),
-  router
+  router,
 });

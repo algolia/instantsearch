@@ -7,7 +7,7 @@ import {
   assertValidFacetType,
   createFromAlgoliaCredentials,
   createFromAlgoliaClient,
-  Store
+  Store,
 } from 'instantsearch-store';
 
 import algoliaClient from 'algoliasearch';
@@ -121,11 +121,11 @@ describe('Store', () => {
   test('should add "vue-instantsearch" User Agent to the client with the current version', () => {
     const addAlgoliaAgent = jest.fn();
     const client = {
-      addAlgoliaAgent
+      addAlgoliaAgent,
     };
 
     const helper = algoliaHelper(client);
-    const store = new Store(helper);
+    new Store(helper);
     const version = require('../../package.json').version;
     expect(addAlgoliaAgent).toBeCalledWith(`vue-instantsearch ${version}`);
   });

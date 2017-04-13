@@ -1,18 +1,19 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
-    },
+    "extends": [
+      "eslint:recommended"
+    ],
     "parserOptions": {
+        "ecmaVersion": 6,
         "sourceType": "module"
     },
+    "env": {
+        "browser": true,
+        "jest": true
+    },
+    "plugins": [
+        "prettier"
+    ],
     "rules": {
-        "no-const-assign": "warn",
-        "no-this-before-super": "warn",
-        "no-undef": "warn",
-        "no-unreachable": "warn",
-        "no-unused-vars": "warn",
-        "constructor-super": "warn",
-        "valid-typeof": "warn"
+        "prettier/prettier": ["error", {"trailingComma": "es5", "singleQuote": true, "bracketSpacing": true}]
     }
 }
