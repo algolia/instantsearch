@@ -3,7 +3,7 @@ import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
 import highlightTags from './highlightTags.js';
-import { omit } from 'lodash';
+import { omit, isEmpty } from 'lodash';
 
 /**
  * Creates a new instance of the InstantSearchManager which controls the widgets and
@@ -130,8 +130,12 @@ export default function createInstantSearchManager(
 
   function handleSearchSuccess(content) {
     const state = store.getState();
-    const results = state.results ? state.results : [];
-    results[indexMapping[content.index]] = content;
+    let results = state.results ? state.results : [];
+    if (!isEmpty(derivedHelpers)) {
+      results[indexMapping[content.index]] = content;
+    } else {
+      results = content;
+    }
 
     const nextState = omit(
       {

@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import { getIndex } from '../core/indexUtils';
+import { getIndex, getResults } from '../core/indexUtils';
 
 /**
  * connectHits connector provides the logic to create connected
@@ -18,9 +18,8 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const index = getIndex(this.context);
-    const hits = searchResults.results && searchResults.results[index]
-      ? searchResults.results[index].hits
-      : [];
+    const results = getResults(searchResults, this.context);
+    const hits = results ? results.hits : [];
 
     return { hits };
   },

@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import { getIndex } from '../core/indexUtils';
+import { getIndex, getResults } from '../core/indexUtils';
 
 /**
  * connectStats connector provides the logic to build a widget that will
@@ -14,12 +14,14 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const index = getIndex(this.context);
-    if (!searchResults.results || !searchResults.results[index]) {
+    const results = getResults(searchResults, this.context);
+
+    if (!results) {
       return null;
     }
     return {
-      nbHits: searchResults.results[index].nbHits,
-      processingTimeMS: searchResults.results[index].processingTimeMS,
+      nbHits: results.nbHits,
+      processingTimeMS: results.processingTimeMS,
     };
   },
 });

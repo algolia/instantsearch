@@ -4,6 +4,7 @@ import {
   getIndex,
   refineValue,
   getCurrentRefinementValue,
+  getResults,
 } from '../core/indexUtils';
 
 import createConnector from '../core/createConnector';
@@ -88,16 +89,17 @@ export default createConnector({
     const hasMax = typeof max !== 'undefined';
 
     const index = getIndex(this.context);
+    const results = getResults(searchResults, this.context);
 
     if (!hasMin || !hasMax) {
-      if (!searchResults.results || !searchResults.results[index]) {
+      if (!results) {
         return {
           canRefine: false,
         };
       }
 
-      const stats = searchResults.results[index].getFacetByName(attributeName)
-        ? searchResults.results[index].getFacetStats(attributeName)
+      const stats = results.getFacetByName(attributeName)
+        ? results.getFacetStats(attributeName)
         : null;
       if (!stats) {
         return {
@@ -113,12 +115,10 @@ export default createConnector({
       }
     }
 
-    const count = searchResults.results && searchResults.results[index]
-      ? searchResults.results[index].getFacetValues(attributeName).map(v => ({
+    const count = results ? results.getFacetValues(attributeName).map(v => ({
           value: v.name,
           count: v.count,
-        }))
-      : [];
+        })) : [];
 
     const {
       min: valueMin = min,

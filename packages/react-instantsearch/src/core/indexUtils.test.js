@@ -4,6 +4,7 @@ import {
   refineValue,
   getCurrentRefinementValue,
   cleanUpValue,
+  getResults,
 } from './indexUtils';
 
 describe('utility method for manipulating the search state', () => {
@@ -186,6 +187,13 @@ describe('utility method for manipulating the search state', () => {
         another: 'another',
         namespace: {},
       });
+    });
+    it('get results', () => {
+      const searchResults = { results: { some: 'results' } };
+
+      const results = getResults(searchResults, context);
+
+      expect(results).toEqual({ some: 'results' });
     });
   });
   describe('when there are multiple index', () => {
@@ -374,6 +382,14 @@ describe('utility method for manipulating the search state', () => {
         page: 1,
         indices: { first: { namespace: {} } },
       });
+    });
+
+    it('get results', () => {
+      const searchResults = { results: { first: { some: 'results' } } };
+
+      const results = getResults(searchResults, context);
+
+      expect(results).toEqual({ some: 'results' });
     });
   });
 });

@@ -7,6 +7,7 @@ import {
   getIndex,
   refineValue,
   getCurrentRefinementValue,
+  getResults,
 } from '../core/indexUtils';
 
 const namespace = 'menu';
@@ -96,14 +97,13 @@ export default createConnector({
     meta,
     searchForFacetValuesResults
   ) {
-    const { results } = searchResults;
     const { attributeName, showMore, limitMin, limitMax } = props;
     const limit = showMore ? limitMax : limitMin;
     const index = getIndex(this.context);
+    const results = getResults(searchResults, this.context);
 
     const canRefine = Boolean(results) &&
-      Boolean(results[index]) &&
-      Boolean(results[index].getFacetByName(attributeName));
+      Boolean(results.getFacetByName(attributeName));
 
     const isFromSearch = Boolean(
       searchForFacetValuesResults &&
@@ -148,7 +148,7 @@ export default createConnector({
           count: v.count,
           isRefined: v.isRefined,
         }))
-      : results[index].getFacetValues(attributeName, { sortBy }).map(v => ({
+      : results.getFacetValues(attributeName, { sortBy }).map(v => ({
           label: v.name,
           value: getValue(v.name, props, searchState, this.context),
           count: v.count,

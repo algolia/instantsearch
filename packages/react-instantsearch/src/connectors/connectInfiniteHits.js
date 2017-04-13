@@ -3,6 +3,7 @@ import {
   getIndex,
   getCurrentRefinementValue,
   refineValue,
+  getResults,
 } from '../core/indexUtils';
 
 function getId() {
@@ -42,7 +43,9 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const index = getIndex(this.context);
-    if (!searchResults.results || !searchResults.results[index]) {
+    const results = getResults(searchResults, this.context);
+
+    if (!results) {
       this._allResults = [];
       return {
         hits: this._allResults,
@@ -50,7 +53,7 @@ export default createConnector({
       };
     }
 
-    const { hits, page, nbPages, hitsPerPage } = searchResults.results[index];
+    const { hits, page, nbPages, hitsPerPage } = results;
 
     if (page === 0) {
       this._allResults = hits;

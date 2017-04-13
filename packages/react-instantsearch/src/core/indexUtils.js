@@ -6,6 +6,16 @@ export function getIndex(context) {
     : context.ais.mainTargetedIndex;
 }
 
+export function getResults(searchResults, context) {
+  if (hasMultipleIndex(context)) {
+    return searchResults.results && searchResults.results[getIndex(context)]
+      ? searchResults.results[getIndex(context)]
+      : null;
+  } else {
+    return searchResults.results ? searchResults.results : null;
+  }
+}
+
 export function hasMultipleIndex(context) {
   return context && context.multiIndexContext;
 }

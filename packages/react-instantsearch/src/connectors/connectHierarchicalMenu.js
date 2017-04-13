@@ -6,6 +6,7 @@ import {
   getIndex,
   refineValue,
   getCurrentRefinementValue,
+  getResults,
 } from '../core/indexUtils';
 
 export const getId = props => props.attributes[0];
@@ -171,12 +172,11 @@ export default createConnector({
   getProvidedProps(props, searchState, searchResults) {
     const { showMore, limitMin, limitMax } = props;
     const id = getId(props);
-    const { results } = searchResults;
     const index = getIndex(this.context);
+    const results = getResults(searchResults, this.context);
 
     const isFacetPresent = Boolean(results) &&
-      Boolean(results[index]) &&
-      Boolean(results[index].getFacetByName(id));
+      Boolean(results.getFacetByName(id));
 
     if (!isFacetPresent) {
       return {
@@ -191,7 +191,7 @@ export default createConnector({
     }
 
     const limit = showMore ? limitMax : limitMin;
-    const value = results[index].getFacetValues(id, { sortBy });
+    const value = results.getFacetValues(id, { sortBy });
     const items = value.data
       ? transformValue(value.data, limit, props, searchState, this.context)
       : [];

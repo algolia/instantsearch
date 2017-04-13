@@ -21,10 +21,8 @@ describe('connectRefinementList', () => {
     const cleanUp = connect.cleanUp.bind(context);
 
     const results = {
-      index: {
-        getFacetValues: jest.fn(() => []),
-        getFacetByName: () => true,
-      },
+      getFacetValues: jest.fn(() => []),
+      getFacetByName: () => true,
     };
 
     it('provides the correct props to the component', () => {
@@ -95,8 +93,8 @@ describe('connectRefinementList', () => {
         withSearchBox: true,
       });
 
-      results.index.getFacetValues.mockClear();
-      results.index.getFacetValues.mockImplementation(() => [
+      results.getFacetValues.mockClear();
+      results.getFacetValues.mockImplementation(() => [
         {
           name: 'wat',
           isRefined: true,

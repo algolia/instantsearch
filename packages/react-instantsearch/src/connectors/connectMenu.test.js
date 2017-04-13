@@ -22,10 +22,8 @@ describe('connectMenu', () => {
 
     it('provides the correct props to the component', () => {
       const results = {
-        index: {
-          getFacetValues: jest.fn(() => []),
-          getFacetByName: () => true,
-        },
+        getFacetValues: jest.fn(() => []),
+        getFacetByName: () => true,
       };
 
       props = getProvidedProps({ attributeName: 'ok' }, {}, {});
@@ -85,8 +83,8 @@ describe('connectMenu', () => {
         searchForItems: undefined,
       });
 
-      results.index.getFacetValues.mockClear();
-      results.index.getFacetValues.mockImplementation(() => [
+      results.getFacetValues.mockClear();
+      results.getFacetValues.mockImplementation(() => [
         {
           name: 'wat',
           isRefined: true,
@@ -210,12 +208,10 @@ describe('connectMenu', () => {
 
     it('if an item is equal to the currentRefinement, its value should be an empty string', () => {
       const results = {
-        index: {
-          getFacetValues: jest.fn(() => []),
-          getFacetByName: () => true,
-        },
+        getFacetValues: jest.fn(() => []),
+        getFacetByName: () => true,
       };
-      results.index.getFacetValues.mockImplementation(() => [
+      results.getFacetValues.mockImplementation(() => [
         {
           name: 'wat',
           isRefined: true,
@@ -385,13 +381,11 @@ describe('connectMenu', () => {
 
     it('when search for facets values is activated order the item by isRefined first', () => {
       const results = {
-        index: {
-          getFacetValues: jest.fn(() => []),
-          getFacetByName: () => true,
-        },
+        getFacetValues: jest.fn(() => []),
+        getFacetByName: () => true,
       };
-      results.index.getFacetValues.mockClear();
-      results.index.getFacetValues.mockImplementation(() => [
+      results.getFacetValues.mockClear();
+      results.getFacetValues.mockImplementation(() => [
         {
           name: 'wat',
           isRefined: false,

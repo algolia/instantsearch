@@ -5,6 +5,7 @@ import {
   getIndex,
   refineValue,
   getCurrentRefinementValue,
+  getResults,
 } from '../core/indexUtils';
 
 import createConnector from '../core/createConnector';
@@ -125,21 +126,22 @@ export default createConnector({
       this.context
     );
     const index = getIndex(this.context);
+    const results = getResults(searchResults, this.context);
+
     const items = props.items.map(item => {
       const value = stringifyItem(item);
       return {
         label: item.label,
         value,
         isRefined: value === currentRefinement,
-        noRefinement: searchResults.results && searchResults.results[index]
-          ? itemHasRefinement(getId(props), searchResults.results[index], value)
+        noRefinement: results
+          ? itemHasRefinement(getId(props), results, value)
           : false,
       };
     });
 
-    const stats = has(searchResults, `results.${index}`) &&
-      searchResults.results[index].getFacetByName(attributeName)
-      ? searchResults.results[index].getFacetStats(attributeName)
+    const stats = results && results.getFacetByName(attributeName)
+      ? results.getFacetStats(attributeName)
       : null;
     const refinedItem = find(items, item => item.isRefined === true);
     if (!items.some(item => item.value === '')) {

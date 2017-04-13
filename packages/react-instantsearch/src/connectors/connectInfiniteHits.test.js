@@ -11,7 +11,7 @@ describe('connectInfiniteHits', () => {
     it('provides the current hits to the component', () => {
       const hits = [{}];
       const props = getProvidedProps(null, null, {
-        results: { index: { hits, page: 0, hitsPerPage: 2, nbPages: 3 } },
+        results: { hits, page: 0, hitsPerPage: 2, nbPages: 3 },
       });
       expect(props).toEqual({ hits, hasMore: true });
     });
@@ -20,13 +20,16 @@ describe('connectInfiniteHits', () => {
       const hits = [{}, {}];
       const hits2 = [{}, {}];
       const res1 = getProvidedProps(null, null, {
-        results: { index: { hits, page: 0, hitsPerPage: 2, nbPages: 3 } },
+        results: { hits, page: 0, hitsPerPage: 2, nbPages: 3 },
       });
       expect(res1.hits).toEqual(hits);
       expect(res1.hasMore).toBe(true);
       const res2 = getProvidedProps(null, null, {
         results: {
-          index: { hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3 },
+          hits: hits2,
+          page: 1,
+          hitsPerPage: 2,
+          nbPages: 3,
         },
       });
       expect(res2.hits).toEqual([...hits, ...hits2]);
@@ -42,12 +45,10 @@ describe('connectInfiniteHits', () => {
         allHits = [...allHits, ...hits];
         const res = getProvidedProps(null, null, {
           results: {
-            index: {
-              hits,
-              page,
-              hitsPerPage: hits.length,
-              nbPages,
-            },
+            hits,
+            page,
+            hitsPerPage: hits.length,
+            nbPages,
           },
         });
         expect(res.hits).toEqual(allHits);
@@ -59,12 +60,10 @@ describe('connectInfiniteHits', () => {
       allHits = [...allHits, ...hits];
       const res = getProvidedProps(null, null, {
         results: {
-          index: {
-            hits,
-            page: nbPages - 1,
-            hitsPerPage: hits.length,
-            nbPages,
-          },
+          hits,
+          page: nbPages - 1,
+          hitsPerPage: hits.length,
+          nbPages,
         },
       });
       expect(res.hits.length).toEqual(nbPages * 2);
@@ -77,16 +76,22 @@ describe('connectInfiniteHits', () => {
       const hits2 = [{}, {}];
       const hits3 = [{}];
       getProvidedProps(null, null, {
-        results: { index: { hits, page: 0, hitsPerPage: 2, nbPages: 3 } },
+        results: { hits, page: 0, hitsPerPage: 2, nbPages: 3 },
       });
       getProvidedProps(null, null, {
         results: {
-          index: { hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3 },
+          hits: hits2,
+          page: 1,
+          hitsPerPage: 2,
+          nbPages: 3,
         },
       });
       const props = getProvidedProps(null, null, {
         results: {
-          index: { hits: hits3, page: 2, hitsPerPage: 2, nbPages: 3 },
+          hits: hits3,
+          page: 2,
+          hitsPerPage: 2,
+          nbPages: 3,
         },
       });
       expect(props.hits).toEqual([...hits, ...hits2, ...hits3]);

@@ -18,10 +18,8 @@ describe('connectMultiRange', () => {
     const cleanUp = connect.cleanUp.bind(context);
 
     const results = {
-      index: {
-        getFacetStats: () => ({ min: 0, max: 300 }),
-        getFacetByName: () => true,
-      },
+      getFacetStats: () => ({ min: 0, max: 300 }),
+      getFacetByName: () => true,
     };
 
     it('provides the correct props to the component', () => {
