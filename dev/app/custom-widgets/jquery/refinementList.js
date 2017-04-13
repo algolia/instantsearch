@@ -23,7 +23,7 @@ const renderFn = ({
   if (canRefine) {
     const list = items.map(item => `
       <li
-        data-refine-value="${item.name}"
+        data-refine-value="${item.value}"
         class="facet-value checkbox clearfix"
       >
         <label style="display: block;">
@@ -34,7 +34,7 @@ const renderFn = ({
           />
 
           <a
-            href="${createURL(item)}"
+            href="${createURL(item.value)}"
             style="text-decoration: none; color: #000;"
           >
             ${item.isRefined

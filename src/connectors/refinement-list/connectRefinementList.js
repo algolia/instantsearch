@@ -173,17 +173,14 @@ export default function connectRefinementList(renderFn) {
         });
       },
       render({results, state, createURL, instantSearchInstance}) {
-        const facetValues = results
+        const items = results
           .getFacetValues(attributeName, {sortBy})
-          .map(h => {
-            h.highlighted = h.name;
-            return h;
-          });
+          .map(item => ({...item, highlighted: item.name, value: item.name}));
 
-        lastResultsFromMainSearch = facetValues;
+        lastResultsFromMainSearch = items;
 
         render({
-          items: facetValues,
+          items,
           state,
           createURL,
           helperSpecializedSearchFacetValues: searchForFacetValues,
