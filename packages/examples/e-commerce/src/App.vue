@@ -8,13 +8,29 @@
           </h1>
         </div>
         <div class="col-md-10 col-sm-9">
-          <ais-input placeholder="Search product by name or reference..." :classNames="{
-            'ais-input': 'form-control'
-            }"/>
+          <ais-search-form>
+            <div class="input-group">
+              <ais-input
+              placeholder="Search product by name or reference..."
+              :classNames="{
+                'ais-input': 'form-control'
+                }"
+              />
 
-          <ais-clear>
-            <i class="fa fa-times-circle" aria-hidden="true"></i>
-          </ais-clear>
+              <span class="input-group-btn">
+                <ais-clear :classNames="{'ais-clear': 'btn btn-default'}">
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </ais-clear>
+                <button class="btn btn-default" type="submit">
+                  <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+              </span>
+            </div><!-- /input-group -->
+
+          </ais-search-form>
+
+
+
         </div>
       </div>
 
@@ -114,10 +130,9 @@
 </template>
 
 <script>
-
-  export default {
-    name: 'app',
-  }
+export default {
+  name: 'app'
+};
 </script>
 
 
@@ -248,23 +263,8 @@
   }
 
   /* Clear Search */
-  .ais-clear {
-    background: none;
-    border: none;
-    position: absolute;
-    top: 3px;
-    right: 25px;
-    cursor: pointer;
-
-    .fa-times-circle {
-      color: lightgrey;
-      font-size: 25px;
-      vertical-align: middle;
-    }
-
-    &.ais-clear--disabled {
-      display: none;
-    }
+  .ais-clear--disabled {
+    display: none;
   }
 
   /* Price Range */
