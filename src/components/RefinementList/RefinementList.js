@@ -39,14 +39,14 @@ export class RawRefinementList extends React.Component {
                 />;
     }
 
-    const url = this.props.createURL(facetValue[this.props.attributeNameKey]);
+    const url = this.props.createURL(facetValue.value);
     const templateData = {...facetValue, url, cssClasses: this.props.cssClasses};
 
     const cssClassItem = cx(this.props.cssClasses.item, {
       [this.props.cssClasses.active]: facetValue.isRefined,
     });
 
-    let key = facetValue[this.props.attributeNameKey];
+    let {value: key} = facetValue;
     if (facetValue.isRefined !== undefined) {
       key += `/${facetValue.isRefined}`;
     }
@@ -57,7 +57,7 @@ export class RawRefinementList extends React.Component {
 
     return (
       <RefinementListItem
-        facetValueToRefine={facetValue[this.props.attributeNameKey]}
+        facetValueToRefine={facetValue.value}
         handleClick={this.handleItemClick}
         isRefined={facetValue.isRefined}
         itemClassName={cssClassItem}
@@ -126,7 +126,7 @@ export class RawRefinementList extends React.Component {
   refineFirstValue() {
     const firstValue = this.props.facetValues[0];
     if (firstValue) {
-      const actualValue = firstValue[this.props.attributeNameKey];
+      const actualValue = firstValue.value;
       this.props.toggleRefinement(actualValue);
     }
   }
@@ -173,7 +173,6 @@ export class RawRefinementList extends React.Component {
 
 RawRefinementList.propTypes = {
   Template: React.PropTypes.func,
-  attributeNameKey: React.PropTypes.string,
   createURL: React.PropTypes.func,
   cssClasses: React.PropTypes.shape({
     active: React.PropTypes.string,
@@ -196,7 +195,6 @@ RawRefinementList.propTypes = {
 RawRefinementList.defaultProps = {
   cssClasses: {},
   depth: 0,
-  attributeNameKey: 'name',
 };
 
 export default autoHideContainerHOC(headerFooterHOC(RawRefinementList));

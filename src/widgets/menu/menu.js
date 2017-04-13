@@ -49,7 +49,6 @@ const renderer = ({
 
   ReactDOM.render(
     <RefinementList
-      attributeNameKey="value"
       collapsible={ collapsible }
       createURL={ createURL }
       cssClasses={ cssClasses }
