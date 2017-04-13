@@ -7,8 +7,7 @@ ghpages.clean();
 
 let config = {
   silent: true,
-  logger: msg => console.log(msg),
-  only: ['**/*', '!react/**/*', '!react']
+  logger: msg => console.log(msg)
 };
 
 if (process.env.CI === 'true') {

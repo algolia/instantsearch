@@ -1,3 +1,13 @@
+<a name="1.11.5"></a>
+## [1.11.5](https://github.com/algolia/instantsearch.js/compare/v1.11.4...v1.11.5) (2017-04-12)
+
+
+### Bug Fixes
+
+* **url-sync:** sync url on search (#2108) ([7f33ffb](https://github.com/algolia/instantsearch.js/commit/7f33ffb))
+
+
+
 <a name="1.11.4"></a>
 ## [1.11.4](https://github.com/algolia/instantsearch.js/compare/v1.11.3...v1.11.4) (2017-03-29)
 

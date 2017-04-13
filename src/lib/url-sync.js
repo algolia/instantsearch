@@ -126,7 +126,7 @@ class URLSync {
     if (firstRender) {
       firstRender = false;
       this.onHistoryChange(this.onPopState.bind(this, helper));
-      helper.on('change', state => this.renderURLFromState(state));
+      helper.on('search', state => this.renderURLFromState(state));
     }
   }
 
