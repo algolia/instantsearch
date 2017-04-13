@@ -25,6 +25,7 @@
     "vue-instantsearch-results-per-page-selector": "*",
     "vue-instantsearch-tree-menu": "*",
     "vue-instantsearch-sort-by-selector": "*",
+    "vue-instantsearch-search-form": "*",
     "vue-instantsearch-clear": "*",
     "vue-instantsearch-rating": "*",
     "vue-instantsearch-no-results": "*",
