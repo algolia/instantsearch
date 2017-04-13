@@ -67,7 +67,9 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
           type="submit"
         >
           <svg
+            height="1em"
             role="img"
+            width="1em"
           >
             <use
               xlinkHref="#sbx-icon-search-13"
@@ -81,7 +83,9 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
           type="reset"
         >
           <svg
+            height="1em"
             role="img"
+            width="1em"
           >
             <use
               xlinkHref="#sbx-icon-clear-3"
@@ -228,7 +232,9 @@ exports[`Menu Menu with search inside items with search results 1`] = `
           type="submit"
         >
           <svg
+            height="1em"
             role="img"
+            width="1em"
           >
             <use
               xlinkHref="#sbx-icon-search-13"
@@ -242,7 +248,9 @@ exports[`Menu Menu with search inside items with search results 1`] = `
           type="reset"
         >
           <svg
+            height="1em"
             role="img"
+            width="1em"
           >
             <use
               xlinkHref="#sbx-icon-clear-3"
@@ -345,7 +353,9 @@ exports[`Menu applies translations 1`] = `
           type="submit"
         >
           <svg
+            height="1em"
             role="img"
+            width="1em"
           >
             <use
               xlinkHref="#sbx-icon-search-13"
@@ -359,7 +369,9 @@ exports[`Menu applies translations 1`] = `
           type="reset"
         >
           <svg
+            height="1em"
             role="img"
+            width="1em"
           >
             <use
               xlinkHref="#sbx-icon-clear-3"

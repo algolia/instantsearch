@@ -68,7 +68,9 @@ exports[`RefinementList applies translations 1`] = `
             type="submit"
           >
             <svg
+              height="1em"
               role="img"
+              width="1em"
             >
               <use
                 xlinkHref="#sbx-icon-search-13"
@@ -82,7 +84,9 @@ exports[`RefinementList applies translations 1`] = `
             type="reset"
           >
             <svg
+              height="1em"
               role="img"
+              width="1em"
             >
               <use
                 xlinkHref="#sbx-icon-clear-3"
@@ -318,7 +322,9 @@ exports[`RefinementList refinement list with search inside items but no search r
             type="submit"
           >
             <svg
+              height="1em"
               role="img"
+              width="1em"
             >
               <use
                 xlinkHref="#sbx-icon-search-13"
@@ -332,7 +338,9 @@ exports[`RefinementList refinement list with search inside items but no search r
             type="reset"
           >
             <svg
+              height="1em"
               role="img"
+              width="1em"
             >
               <use
                 xlinkHref="#sbx-icon-clear-3"
@@ -496,7 +504,9 @@ exports[`RefinementList refinement list with search inside items with search res
             type="submit"
           >
             <svg
+              height="1em"
               role="img"
+              width="1em"
             >
               <use
                 xlinkHref="#sbx-icon-search-13"
@@ -510,7 +520,9 @@ exports[`RefinementList refinement list with search inside items with search res
             type="reset"
           >
             <svg
+              height="1em"
               role="img"
+              width="1em"
             >
               <use
                 xlinkHref="#sbx-icon-clear-3"

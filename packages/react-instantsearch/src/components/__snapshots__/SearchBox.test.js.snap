@@ -61,7 +61,9 @@ exports[`SearchBox applies its default props 1`] = `
       type="submit"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-search-13"
@@ -75,7 +77,9 @@ exports[`SearchBox applies its default props 1`] = `
       type="reset"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-clear-3"
@@ -147,7 +151,9 @@ exports[`SearchBox lets you customize its theme 1`] = `
       type="submit"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-search-13"
@@ -161,7 +167,9 @@ exports[`SearchBox lets you customize its theme 1`] = `
       type="reset"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-clear-3"
@@ -233,7 +241,9 @@ exports[`SearchBox lets you customize its translations 1`] = `
       type="submit"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-search-13"
@@ -247,7 +257,9 @@ exports[`SearchBox lets you customize its translations 1`] = `
       type="reset"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-clear-3"
@@ -401,7 +413,9 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       type="submit"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-search-13"
@@ -415,7 +429,9 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       type="reset"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-clear-3"
@@ -487,7 +503,9 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
       type="submit"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-search-13"
@@ -501,7 +519,9 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
       type="reset"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-clear-3"
@@ -573,7 +593,9 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
       type="submit"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-search-13"
@@ -587,7 +609,9 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
       type="reset"
     >
       <svg
+        height="1em"
         role="img"
+        width="1em"
       >
         <use
           xlinkHref="#sbx-icon-clear-3"
