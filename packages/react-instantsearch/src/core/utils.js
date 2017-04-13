@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { isEmpty, isPlainObject } from 'lodash';
 
 // From https://github.com/reactjs/react-redux/blob/master/src/utils/shallowEqual.js
 export function shallowEqual(objA, objB) {
@@ -64,14 +64,13 @@ export const defer = f => {
 };
 
 export function removeEmptyKey(obj) {
-  Object.keys(obj).forEach(
-    key =>
-      (obj[key] &&
-        typeof obj[key] === 'object' &&
-        !isEmpty(obj[key]) &&
-        removeEmptyKey(obj[key])) ||
-      obj[key] === undefined ||
-      (isEmpty(obj[key]) && delete obj[key])
-  );
+  Object.keys(obj).forEach(key => {
+    const value = obj[key];
+    if (isEmpty(value) && isPlainObject(value)) {
+      delete obj[key];
+    } else if (isPlainObject(value)) {
+      removeEmptyKey(value);
+    }
+  });
   return obj;
 }
