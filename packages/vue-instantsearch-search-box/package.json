@@ -1,13 +1,13 @@
 {
-  "name": "vue-instantsearch-input",
+  "name": "vue-instantsearch-search-box",
   "version": "0.0.0",
   "files": [
     "dist"
   ],
-  "main": "dist/vue-instantsearch-input.common.js",
-  "module": "dist/vue-instantsearch-input.esm.js",
-  "jsnext:main": "dist/vue-instantsearch-input.esm.js",
-  "unpkg": "dist/vue-instantsearch-input.js",
+  "main": "dist/vue-instantsearch-search-box.common.js",
+  "module": "dist/vue-instantsearch-search-box.esm.js",
+  "jsnext:main": "dist/vue-instantsearch-search-box.esm.js",
+  "unpkg": "dist/vue-instantsearch-search-box.js",
   "scripts": {
     "build": "npm run build:umd && npm run build:es && npm run build:cjs",
     "build:umd": "rollup -c ../../build/rollup.umd.config.js",
@@ -15,7 +15,9 @@
     "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
   },
   "dependencies": {
-    "vue-instantsearch-component": "*"
+    "vue-instantsearch-component": "*",
+    "vue-instantsearch-input": "*",
+    "vue-instantsearch-clear": "*"
   },
   "peerDependencies": {
     "vue": "^2.2.2"

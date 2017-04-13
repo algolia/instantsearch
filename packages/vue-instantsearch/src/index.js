@@ -1,55 +1,58 @@
-import AisStore from 'vue-instantsearch-store'
-import AisHighlight from 'vue-instantsearch-highlight'
-import AisSnippet from 'vue-instantsearch-snippet'
-import AisInput from 'vue-instantsearch-input'
-import AisResults from 'vue-instantsearch-results'
-import AisStats from 'vue-instantsearch-stats'
-import AisPagination from 'vue-instantsearch-pagination'
-import AisResultsPerPageSelector from 'vue-instantsearch-results-per-page-selector'
-import AisTreeMenu from 'vue-instantsearch-tree-menu'
-import AisSortBySelector from 'vue-instantsearch-sort-by-selector'
-import AisClear from 'vue-instantsearch-clear'
-import AisRating from 'vue-instantsearch-rating'
-import AisNoResults from 'vue-instantsearch-no-results'
-import AisRefinementList from 'vue-instantsearch-refinement-list'
-import AisPriceRange from 'vue-instantsearch-price-range'
-import AisPoweredBy from 'vue-instantsearch-powered-by'
+import Store from 'vue-instantsearch-store'
+import Highlight from 'vue-instantsearch-highlight'
+import Snippet from 'vue-instantsearch-snippet'
+import Input from 'vue-instantsearch-input'
+import Results from 'vue-instantsearch-results'
+import Stats from 'vue-instantsearch-stats'
+import Pagination from 'vue-instantsearch-pagination'
+import ResultsPerPageSelector from 'vue-instantsearch-results-per-page-selector'
+import TreeMenu from 'vue-instantsearch-tree-menu'
+import SortBySelector from 'vue-instantsearch-sort-by-selector'
+import SearchBox from 'vue-instantsearch-search-box'
+import Clear from 'vue-instantsearch-clear'
+import Rating from 'vue-instantsearch-rating'
+import NoResults from 'vue-instantsearch-no-results'
+import RefinementList from 'vue-instantsearch-refinement-list'
+import PriceRange from 'vue-instantsearch-price-range'
+import PoweredBy from 'vue-instantsearch-powered-by'
 
 const InstantSearch = {
-  AisStore,
-  AisHighlight,
-  AisSnippet,
-  AisInput,
-  AisResults,
-  AisStats,
-  AisPagination,
-  AisResultsPerPageSelector,
-  AisTreeMenu,
-  AisSortBySelector,
-  AisClear,
-  AisRating,
-  AisNoResults,
-  AisRefinementList,
-  AisPriceRange,
-  AisPoweredBy,
+  Store,
+  Highlight,
+  Snippet,
+  Input,
+  Results,
+  Stats,
+  Pagination,
+  ResultsPerPageSelector,
+  TreeMenu,
+  SortBySelector,
+  SearchBox,
+  Clear,
+  Rating,
+  NoResults,
+  RefinementList,
+  PriceRange,
+  PoweredBy,
 
   install (Vue) {
-    Vue.component('ais-store', AisStore)
-    Vue.component('ais-highlight', AisHighlight)
-    Vue.component('ais-snippet', AisSnippet)
-    Vue.component('ais-input', AisInput)
-    Vue.component('ais-results', AisResults)
-    Vue.component('ais-stats', AisStats)
-    Vue.component('ais-pagination', AisPagination)
-    Vue.component('ais-results-per-page-selector', AisResultsPerPageSelector)
-    Vue.component('ais-tree-menu', AisTreeMenu)
-    Vue.component('ais-sort-by-selector', AisSortBySelector)
-    Vue.component('ais-clear', AisClear)
-    Vue.component('ais-rating', AisRating)
-    Vue.component('ais-no-results', AisNoResults)
-    Vue.component('ais-refinement-list', AisRefinementList)
-    Vue.component('ais-price-range', AisPriceRange)
-    Vue.component('ais-powered-by', AisPoweredBy)
+    Vue.component('ais-store', Store)
+    Vue.component('ais-highlight', Highlight)
+    Vue.component('ais-snippet', Snippet)
+    Vue.component('ais-input', Input)
+    Vue.component('ais-results', Results)
+    Vue.component('ais-stats', Stats)
+    Vue.component('ais-pagination', Pagination)
+    Vue.component('ais-results-per-page-selector', ResultsPerPageSelector)
+    Vue.component('ais-tree-menu', TreeMenu)
+    Vue.component('ais-sort-by-selector', SortBySelector)
+    Vue.component('ais-search-box', SearchBox)
+    Vue.component('ais-clear', Clear)
+    Vue.component('ais-rating', Rating)
+    Vue.component('ais-no-results', NoResults)
+    Vue.component('ais-refinement-list', RefinementList)
+    Vue.component('ais-price-range', PriceRange)
+    Vue.component('ais-powered-by', PoweredBy)
   }
 
 }
@@ -62,20 +65,21 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default InstantSearch
 
 export {
-  AisStore,
-  AisHighlight,
-  AisSnippet,
-  AisInput,
-  AisResults,
-  AisStats,
-  AisPagination,
-  AisResultsPerPageSelector,
-  AisTreeMenu,
-  AisSortBySelector,
-  AisClear,
-  AisRating,
-  AisNoResults,
-  AisRefinementList,
-  AisPriceRange,
-  AisPoweredBy
+  Store,
+  Highlight,
+  Snippet,
+  Input,
+  Results,
+  Stats,
+  Pagination,
+  ResultsPerPageSelector,
+  TreeMenu,
+  SortBySelector,
+  SearchBox,
+  Clear,
+  Rating,
+  NoResults,
+  RefinementList,
+  PriceRange,
+  PoweredBy
 }

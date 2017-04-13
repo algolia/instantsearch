@@ -19,6 +19,7 @@ test('Should register all components when installed', () => {
   );
   expect(component).toBeCalledWith('ais-tree-menu', expect.any(Object));
   expect(component).toBeCalledWith('ais-sort-by-selector', expect.any(Object));
+  expect(component).toBeCalledWith('ais-search-box', expect.any(Object));
   expect(component).toBeCalledWith('ais-clear', expect.any(Object));
   expect(component).toBeCalledWith('ais-rating', expect.any(Object));
   expect(component).toBeCalledWith('ais-no-results', expect.any(Object));
@@ -26,5 +27,5 @@ test('Should register all components when installed', () => {
   expect(component).toBeCalledWith('ais-price-range', expect.any(Object));
   expect(component).toBeCalledWith('ais-powered-by', expect.any(Object));
 
-  expect(component).toHaveBeenCalledTimes(16);
+  expect(component).toHaveBeenCalledTimes(17);
 });
