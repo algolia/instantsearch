@@ -19,7 +19,7 @@ test('Should register all components when installed', () => {
   );
   expect(component).toBeCalledWith('ais-tree-menu', expect.any(Object));
   expect(component).toBeCalledWith('ais-sort-by-selector', expect.any(Object));
-  expect(component).toBeCalledWith('ais-search-form', expect.any(Object));
+  expect(component).toBeCalledWith('ais-search-box', expect.any(Object));
   expect(component).toBeCalledWith('ais-clear', expect.any(Object));
   expect(component).toBeCalledWith('ais-rating', expect.any(Object));
   expect(component).toBeCalledWith('ais-no-results', expect.any(Object));

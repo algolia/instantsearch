@@ -8,7 +8,7 @@ import Pagination from 'vue-instantsearch-pagination'
 import ResultsPerPageSelector from 'vue-instantsearch-results-per-page-selector'
 import TreeMenu from 'vue-instantsearch-tree-menu'
 import SortBySelector from 'vue-instantsearch-sort-by-selector'
-import SearchForm from 'vue-instantsearch-search-form'
+import SearchBox from 'vue-instantsearch-search-box'
 import Clear from 'vue-instantsearch-clear'
 import Rating from 'vue-instantsearch-rating'
 import NoResults from 'vue-instantsearch-no-results'
@@ -27,7 +27,7 @@ const InstantSearch = {
   ResultsPerPageSelector,
   TreeMenu,
   SortBySelector,
-  SearchForm,
+  SearchBox,
   Clear,
   Rating,
   NoResults,
@@ -46,7 +46,7 @@ const InstantSearch = {
     Vue.component('ais-results-per-page-selector', ResultsPerPageSelector)
     Vue.component('ais-tree-menu', TreeMenu)
     Vue.component('ais-sort-by-selector', SortBySelector)
-    Vue.component('ais-search-form', SearchForm)
+    Vue.component('ais-search-box', SearchBox)
     Vue.component('ais-clear', Clear)
     Vue.component('ais-rating', Rating)
     Vue.component('ais-no-results', NoResults)
@@ -75,7 +75,7 @@ export {
   ResultsPerPageSelector,
   TreeMenu,
   SortBySelector,
-  SearchForm,
+  SearchBox,
   Clear,
   Rating,
   NoResults,
