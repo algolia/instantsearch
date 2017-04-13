@@ -20,14 +20,14 @@ exports[`menu snapshot 1`] = `
   facetValues={
     Array [
       Object {
-        "name": "foo",
+        "label": "foo",
         "url": "#",
-        "value": "foo",
+        "value": undefined,
       },
       Object {
-        "name": "bar",
+        "label": "bar",
         "url": "#",
-        "value": "bar",
+        "value": undefined,
       },
     ]
   }
@@ -39,7 +39,7 @@ exports[`menu snapshot 1`] = `
       "templates": Object {
         "footer": "",
         "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{name}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,

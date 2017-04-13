@@ -215,16 +215,14 @@ describe('connectMenu', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.items).toEqual([
       {
-        name: 'Decoration',
-        path: 'Decoration',
+        label: 'Decoration',
         value: 'Decoration',
         count: 880,
         isRefined: true,
         data: null,
       },
       {
-        name: 'Outdoor',
-        path: 'Outdoor',
+        label: 'Outdoor',
         value: 'Outdoor',
         count: 47,
         isRefined: false,

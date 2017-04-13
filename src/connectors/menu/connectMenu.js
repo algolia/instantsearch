@@ -128,7 +128,7 @@ export default function connectMenu(renderFn) {
       render({results, instantSearchInstance}) {
         const items = (results.getFacetValues(attributeName, {sortBy}).data || [])
           .slice(0, this.getLimit())
-          .map(item => ({...item, value: item.name}));
+          .map(({name: label, path: value, ...item}) => ({...item, label, value}));
 
         this.toggleShowMore = this.createToggleShowMore({results, instantSearchInstance});
 

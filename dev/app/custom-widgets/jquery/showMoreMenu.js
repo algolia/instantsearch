@@ -33,7 +33,7 @@ const renderFn = ({
   const itemsHTML = items.map(item => `
     <li data-refine-value="${item.value}">
       <a href="${createURL(item.value)}" class="facet-value clearfix">
-        ${item.isRefined ? `<strong>${item.name}</strong>` : item.name}
+        ${item.isRefined ? `<strong>${item.label}</strong>` : item.label}
         <span class="facet-count pull-right">${item.count}</span>
       </a>
     </li>
