@@ -32,14 +32,12 @@ describe('connectRange', () => {
       });
 
       const results = {
-        index: {
-          getFacetStats: () => ({ min: 5, max: 10 }),
-          getFacetValues: () => [
-            { name: '5', count: 10 },
-            { name: '2', count: 20 },
-          ],
-          getFacetByName: () => true,
-        },
+        getFacetStats: () => ({ min: 5, max: 10 }),
+        getFacetValues: () => [
+          { name: '5', count: 10 },
+          { name: '2', count: 20 },
+        ],
+        getFacetByName: () => true,
       };
       props = getProvidedProps({ attributeName: 'ok' }, {}, { results });
       expect(props).toEqual({

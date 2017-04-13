@@ -3,6 +3,7 @@ import {
   getIndex,
   refineValue,
   getCurrentRefinementValue,
+  getResults,
 } from '../core/indexUtils';
 
 import createConnector from '../core/createConnector';
@@ -57,11 +58,13 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const index = getIndex(this.context);
-    if (!searchResults.results || !searchResults.results[index]) {
+    const results = getResults(searchResults, this.context);
+
+    if (!results) {
       return null;
     }
 
-    const nbPages = searchResults.results[index].nbPages;
+    const nbPages = results.nbPages;
     return {
       nbPages,
       currentRefinement: getCurrentRefinement(props, searchState, this.context),

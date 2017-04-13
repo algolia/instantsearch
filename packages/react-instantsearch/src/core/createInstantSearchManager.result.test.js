@@ -12,7 +12,7 @@ jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
     'algoliasearch-helper/src/algoliasearch.helper.js'
   );
   Helper.prototype._dispatchAlgoliaResponse = function(state) {
-    this.emit('result', { count: count++, index: 'index' }, state);
+    this.emit('result', { count: count++ }, state);
   };
   Helper.prototype.searchForFacetValues = () =>
     Promise.resolve({ facetHits: 'results' });
@@ -49,11 +49,7 @@ describe('createInstantSearchManager', () => {
         });
 
         ism.widgetsManager.registerWidget({
-          getSearchParameters: params => {
-            params.setQuery('search');
-            params.setIndex('index');
-            return params;
-          },
+          getSearchParameters: params => params.setQuery('search'),
         });
 
         expect(ism.store.getState().results).toBe(null);
@@ -62,7 +58,7 @@ describe('createInstantSearchManager', () => {
           jest.runAllTimers();
 
           const store = ism.store.getState();
-          expect(store.results.index).toEqual({ count: 0, index: 'index' });
+          expect(store.results).toEqual({ count: 0 });
           expect(store.error).toBe(null);
 
           ism.widgetsManager.update();
@@ -71,7 +67,7 @@ describe('createInstantSearchManager', () => {
             jest.runAllTimers();
 
             const store1 = ism.store.getState();
-            expect(store.results.index).toEqual({ count: 1, index: 'index' });
+            expect(store1.results).toEqual({ count: 1 });
             expect(store1.error).toBe(null);
           });
         });
@@ -82,7 +78,7 @@ describe('createInstantSearchManager', () => {
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},
-          searchParameters: { index: 'index' },
+          searchParameters: {},
           algoliaClient: client,
         });
 
@@ -93,7 +89,7 @@ describe('createInstantSearchManager', () => {
         jest.runAllTimers();
 
         const store = ism.store.getState();
-        expect(store.results.index).toEqual({ count: 2, index: 'index' });
+        expect(store.results).toEqual({ count: 2 });
         expect(store.error).toBe(null);
       });
     });
@@ -102,7 +98,7 @@ describe('createInstantSearchManager', () => {
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},
-          searchParameters: { index: 'index' },
+          searchParameters: {},
           algoliaClient: client,
         });
 

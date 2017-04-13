@@ -19,13 +19,11 @@ describe('connectHierarchicalMenu', () => {
 
     it('provides the correct props to the component', () => {
       const results = {
-        index: {
-          getFacetValues: jest.fn(),
-          getFacetByName: () => true,
-        },
+        getFacetValues: jest.fn(),
+        getFacetByName: () => true,
       };
 
-      results.index.getFacetValues.mockImplementationOnce(() => ({}));
+      results.getFacetValues.mockImplementationOnce(() => ({}));
       props = getProvidedProps(
         { attributes: ['ok'] },
         { hierarchicalMenu: { ok: 'wat' } },
@@ -44,8 +42,8 @@ describe('connectHierarchicalMenu', () => {
         items: [],
       });
 
-      results.index.getFacetValues.mockClear();
-      results.index.getFacetValues.mockImplementation(() => ({
+      results.getFacetValues.mockClear();
+      results.getFacetValues.mockImplementation(() => ({
         data: [
           {
             name: 'wat',
