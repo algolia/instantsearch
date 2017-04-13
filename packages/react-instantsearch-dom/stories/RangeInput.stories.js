@@ -14,13 +14,12 @@ stories.addDecorator(withKnobs);
 
 stories
   .add('default', () => (
-    <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeInput">
+    <WrapWithHits linkedStoryGroup="RangeInput">
       <RangeInput attributeName="price" />
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits>
-
+    <WrapWithHits linkedStoryGroup="RangeInput">
       <RangeInput
         attributeName="price"
         min={number('max', 0)}
@@ -33,14 +32,14 @@ stories
     </WrapWithHits>
   ))
   .add('with panel', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="RangeInput">
       <Panel title="Price">
         <RangeInput attributeName="price" />
       </Panel>
     </WrapWithHits>
   ))
   .add('with panel but no refinement', () => (
-    <WrapWithHits searchBox={false}>
+    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput">
       <Panel title="Price">
         <RangeInput attributeName="price" />
         <div style={{ display: 'none' }}>

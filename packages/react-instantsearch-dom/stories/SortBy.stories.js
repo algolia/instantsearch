@@ -10,7 +10,7 @@ stories.addDecorator(withKnobs);
 
 stories
   .add('default', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="SortBy">
       <SortBy
         items={[
           { value: 'ikea', label: 'Featured' },
@@ -22,7 +22,7 @@ stories
     </WrapWithHits>
   ))
   .add('without label', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="SortBy">
       <SortBy
         items={[
           { value: 'ikea' },

@@ -22,7 +22,7 @@ stories
       return <div>{content}</div>;
     });
     return (
-      <WrapWithHits>
+      <WrapWithHits linkedStoryGroup="Conditional">
         <Content />
       </WrapWithHits>
     );
@@ -40,7 +40,7 @@ stories
       return <div>{content}</div>;
     });
     return (
-      <WrapWithHits>
+      <WrapWithHits linkedStoryGroup="Conditional">
         <Content />
       </WrapWithHits>
     );

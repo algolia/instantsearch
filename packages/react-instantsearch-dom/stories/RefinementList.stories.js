@@ -22,16 +22,15 @@ stories
   .add('default', () => (
     <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList attributeName="category" />
-
     </WrapWithHits>
   ))
   .add('with selected item', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList attributeName="category" defaultRefinement={['Dining']} />
     </WrapWithHits>
   ))
   .add('with show more', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList
         attributeName="category"
         limitMin={2}
@@ -41,12 +40,12 @@ stories
     </WrapWithHits>
   ))
   .add('with search inside items', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList attributeName="category" withSearchBox />
     </WrapWithHits>
   ))
   .add('with the sort strategy changed', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList
         attributeName="category"
         transformItems={items =>
@@ -55,14 +54,18 @@ stories
     </WrapWithHits>
   ))
   .add('with panel', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <Panel title="Category">
         <RefinementList attributeName="category" />
       </Panel>
     </WrapWithHits>
   ))
   .add('with panel but no refinement', () => (
-    <WrapWithHits searchBox={false}>
+    <WrapWithHits
+      searchBox={false}
+      linkedStoryGroup="RefinementList"
+      hasPlayground={true}
+    >
       <Panel title="Category">
         <RefinementList attributeName="category" />
         <div style={{ display: 'none' }}>
@@ -72,7 +75,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="RefinementList">
       <RefinementList
         attributeName="category"
         defaultRefinement={array('defaultSelectedItem', [

@@ -19,7 +19,7 @@ stories
     </WrapWithHits>
   ))
   .add('with all props', () => (
-    <WrapWithHits>
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
       <Pagination
         showFirst={true}
         showLast={true}
@@ -30,8 +30,29 @@ stories
       />
     </WrapWithHits>
   ))
+  .add('with panel', () => (
+    <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
+      <Panel title="Pages">
+        <Pagination />
+      </Panel>
+    </WrapWithHits>
+  ))
+  .add('with panel but no refinement', () => (
+    <WrapWithHits
+      searchBox={false}
+      hasPlayground={true}
+      linkedStoryGroup="Pagination"
+    >
+      <Panel title="Pages">
+        <Pagination />
+        <div style={{ display: 'none' }}>
+          <SearchBox defaultRefinement="ds" />
+        </div>
+      </Panel>
+    </WrapWithHits>
+  ))
   .add('playground', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="Pagination">
       <Pagination
         showFirst={boolean('show First', true)}
         showLast={boolean('show Last', true)}
@@ -40,22 +61,5 @@ stories
         pagesPadding={number('pages Padding', 2)}
         maxPages={number('max Pages', 3)}
       />
-    </WrapWithHits>
-  ))
-  .add('with panel', () => (
-    <WrapWithHits>
-      <Panel title="Pages">
-        <Pagination />
-      </Panel>
-    </WrapWithHits>
-  ))
-  .add('with panel but no refinement', () => (
-    <WrapWithHits searchBox={false}>
-      <Panel title="Pages">
-        <Pagination />
-        <div style={{ display: 'none' }}>
-          <SearchBox defaultRefinement="ds" />
-        </div>
-      </Panel>
     </WrapWithHits>
   ));

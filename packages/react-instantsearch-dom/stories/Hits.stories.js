@@ -15,7 +15,7 @@ stories.add('default', () => (
 ));
 
 stories.add('with custom rendering', () => (
-  <WrapWithHits>
+  <WrapWithHits linkedStoryGroup="Hits">
     <Hits hitComponent={Product} />
   </WrapWithHits>
 ));

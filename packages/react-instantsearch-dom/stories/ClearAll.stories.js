@@ -8,32 +8,31 @@ const stories = storiesOf('ClearAll', module);
 
 stories.addDecorator(withKnobs);
 
-stories.add('with refinements to clear', () => (
-  <WrapWithHits linkedStoryGroup="ClearAll">
-    <div>
-      <ClearAll />
-      <div style={{ display: 'none' }}>
-        <RefinementList
-          attributeName="category"
-          defaultRefinement={['Dining']}
-        />
+stories
+  .add('with refinements to clear', () => (
+    <WrapWithHits linkedStoryGroup="ClearAll">
+      <div>
+        <ClearAll />
+        <div style={{ display: 'none' }}>
+          <RefinementList
+            attributeName="category"
+            defaultRefinement={['Dining']}
+          />
+        </div>
       </div>
-    </div>
-  </WrapWithHits>
-));
-
-stories.add('nothing to clear', () => (
-  <WrapWithHits linkedStoryGroup="ClearAll">
-    <ClearAll />
-  </WrapWithHits>
-));
-
-stories.add('clear all refinements and the query', () => (
-  <WrapWithHits linkedStoryGroup="ClearAll">
-    <ClearAll
-      clearsQuery
-      translations={{ reset: 'Clear refinements and query' }}
-    />
-    <RefinementList attributeName="category" defaultRefinement={['Dining']} />
-  </WrapWithHits>
-));
+    </WrapWithHits>
+  ))
+  .add('nothing to clear', () => (
+    <WrapWithHits linkedStoryGroup="ClearAll">
+      <ClearAll />
+    </WrapWithHits>
+  ))
+  .add('clear all refinements and the query', () => (
+    <WrapWithHits linkedStoryGroup="ClearAll">
+      <ClearAll
+        clearsQuery
+        translations={{ reset: 'Clear refinements and query' }}
+      />
+      <RefinementList attributeName="category" defaultRefinement={['Dining']} />
+    </WrapWithHits>
+  ));

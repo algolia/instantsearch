@@ -27,7 +27,7 @@ stories
     </WrapWithHits>
   ))
   .add('with a default range selected', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="MultiRange">
       <MultiRange
         attributeName="price"
         items={[
@@ -41,7 +41,7 @@ stories
     </WrapWithHits>
   ))
   .add('with some non selectable ranges', () => (
-    <WrapWithHits searchBox={false}>
+    <WrapWithHits searchBox={false} linkedStoryGroup="MultiRange">
       <MultiRange
         attributeName="price"
         items={[
@@ -54,7 +54,7 @@ stories
     </WrapWithHits>
   ))
   .add('with panel', () => (
-    <WrapWithHits>
+    <WrapWithHits linkedStoryGroup="MultiRange">
       <Panel title="Price">
         <MultiRange
           attributeName="price"
@@ -69,7 +69,7 @@ stories
     </WrapWithHits>
   ))
   .add('with panel but no available refinements', () => (
-    <WrapWithHits searchBox={false}>
+    <WrapWithHits searchBox={false} linkedStoryGroup="MultiRange">
       <Panel title="Price">
         <Configure filters="price>200000" />
         <MultiRange

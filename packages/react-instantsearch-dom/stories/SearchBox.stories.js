@@ -46,7 +46,7 @@ stories
     </WrapWithHits>
   ))
   .add('playground', () => (
-    <WrapWithHits searchBox={false}>
+    <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
       <SearchBox
         focusShortcuts={['s']}
         searchAsYouType={true}
@@ -109,7 +109,7 @@ class SearchBoxContainer extends Component {
       <WrapWithHits
         searchBox={false}
         hasPlayground={true}
-        linkedStoryGroup="searchBox"
+        linkedStoryGroup="SearchBox"
       >
         <div
           style={{
