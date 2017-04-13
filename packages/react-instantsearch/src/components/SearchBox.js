@@ -160,13 +160,13 @@ class SearchBox extends Component {
 
     const submitComponent = this.props.submitComponent
       ? this.props.submitComponent
-      : <svg role="img">
+      : <svg role="img" width="1em" height="1em">
           <use xlinkHref="#sbx-icon-search-13" />
         </svg>;
 
     const resetComponent = this.props.resetComponent
       ? this.props.resetComponent
-      : <svg role="img">
+      : <svg role="img" width="1em" height="1em">
           <use xlinkHref="#sbx-icon-clear-3" />
         </svg>;
 
