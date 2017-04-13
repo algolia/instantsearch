@@ -1,1 +1,1 @@
-export {default} from './Snippet.vue'
+export { default } from './Snippet.vue';

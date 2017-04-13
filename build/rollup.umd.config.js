@@ -16,23 +16,21 @@ export default {
   entry: 'src/index.js',
   moduleName: moduleName,
   plugins: [
-    vue({compileTemplate: true, css: true}),
+    vue({ compileTemplate: true, css: true }),
     json(),
     resolve({
       browser: true,
-      preferBuiltins: false
+      preferBuiltins: false,
     }),
     buble(),
     commonjs(),
     replace({
       'process.env': JSON.stringify({
-        'NODE_ENV': 'production'
-      })
+        NODE_ENV: 'production',
+      }),
     }),
     uglify(),
-    filesize()
+    filesize(),
   ],
-  targets: [
-    { dest: `dist/${pkg.name}.js`, format: 'umd' },
-  ]
+  targets: [{ dest: `dist/${pkg.name}.js`, format: 'umd' }],
 };

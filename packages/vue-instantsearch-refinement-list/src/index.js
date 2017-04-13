@@ -1,1 +1,1 @@
-export {default} from './RefinementList.vue'
+export { default } from './RefinementList.vue';

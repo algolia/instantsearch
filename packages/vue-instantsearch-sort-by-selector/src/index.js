@@ -1,1 +1,1 @@
-export {default} from './SortBySelector.vue'
+export { default } from './SortBySelector.vue';

@@ -4,7 +4,7 @@ import Vue from 'vue';
 describe('PoweredBy component', () => {
   test('includes the hostname in the URL', () => {
     Object.defineProperty(location, 'hostname', {
-      value: 'example.com'
+      value: 'example.com',
     });
 
     const vm = new Vue(PoweredBy);

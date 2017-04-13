@@ -1,1 +1,1 @@
-export {default} from './PoweredBy.vue'
+export { default } from './PoweredBy.vue';

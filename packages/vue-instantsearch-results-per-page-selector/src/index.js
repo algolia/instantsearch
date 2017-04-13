@@ -1,1 +1,1 @@
-export {default} from './ResultsPerPageSelector.vue'
+export { default } from './ResultsPerPageSelector.vue';

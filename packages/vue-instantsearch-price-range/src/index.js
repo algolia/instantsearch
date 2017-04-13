@@ -1,1 +1,1 @@
-export {default} from './PriceRange.vue'
+export { default } from './PriceRange.vue';

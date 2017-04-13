@@ -10,12 +10,10 @@ export default {
   entry: 'src/index.js',
   external: dependencies,
   plugins: [
-    vue({compileTemplate: true, css: true}),
+    vue({ compileTemplate: true, css: true }),
     json(),
     buble(),
-    filesize()
+    filesize(),
   ],
-  targets: [
-    { dest: `dist/${pkg.name}.esm.js`, format: 'es' },
-  ]
+  targets: [{ dest: `dist/${pkg.name}.esm.js`, format: 'es' }],
 };

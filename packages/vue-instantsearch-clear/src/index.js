@@ -1,1 +1,1 @@
-export {default} from './Clear.vue'
+export { default } from './Clear.vue';

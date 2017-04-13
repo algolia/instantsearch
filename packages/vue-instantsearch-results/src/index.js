@@ -1,3 +1,3 @@
-import SearchResults from './Results.vue'
+import SearchResults from './Results.vue';
 
-export default SearchResults
+export default SearchResults;
