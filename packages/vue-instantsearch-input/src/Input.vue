@@ -1,16 +1,12 @@
 <template>
-  <form role="search" action="" @submit.prevent="onFormSubmit">
-    <input type="search"
-           autocorrect="off"
-           autocapitalize="off"
-           autocomplete="off"
-           spellcheck="false"
-           :class="bem()"
-           v-model="query"
-           ref="input"
-           :placeholder="placeholder"
-    >
-  </form>
+  <input type="search"
+         autocorrect="off"
+         autocapitalize="off"
+         autocomplete="off"
+         spellcheck="false"
+         :class="bem()"
+         v-model="query"
+  >
 </template>
 
 <script>
@@ -18,12 +14,6 @@ import algoliaComponent from 'vue-instantsearch-component';
 
 export default {
   mixins: [algoliaComponent],
-  props: {
-    placeholder: {
-      type: String,
-      default: ''
-    }
-  },
   data() {
     return {
       blockClassName: 'ais-input'
@@ -45,11 +35,6 @@ export default {
           this.searchStore.start();
         });
       }
-    }
-  },
-  methods: {
-    onFormSubmit() {
-      this.$refs.input.blur();
     }
   }
 };
