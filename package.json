@@ -120,7 +120,7 @@
     "node": "^6.x.x || ^7.x.x"
   },
   "jest": {
-    "notify": true
+    "notify": false
   },
   "license": "MIT",
   "author": {
