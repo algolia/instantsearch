@@ -217,6 +217,7 @@ describe('connectMenu', () => {
       {
         name: 'Decoration',
         path: 'Decoration',
+        value: 'Decoration',
         count: 880,
         isRefined: true,
         data: null,
@@ -224,6 +225,7 @@ describe('connectMenu', () => {
       {
         name: 'Outdoor',
         path: 'Outdoor',
+        value: 'Outdoor',
         count: 47,
         isRefined: false,
         data: null,

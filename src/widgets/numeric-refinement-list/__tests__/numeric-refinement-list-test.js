@@ -44,10 +44,10 @@ describe('numericRefinementList()', () => {
 
     options = [
       {name: 'All'},
-      {end: 4, name: 'less than 4'},
-      {start: 4, end: 4, name: '4'},
-      {start: 5, end: 10, name: 'between 5 and 10'},
-      {start: 10, name: 'more than 10'},
+      {end: 4, name: 'less than 4', value: 'less than 4'},
+      {start: 4, end: 4, name: '4', value: '4'},
+      {start: 5, end: 10, name: 'between 5 and 10', value: 'between 5 and 10'},
+      {start: 10, name: 'more than 10', value: 'more than 10'},
     ];
 
     container = document.createElement('div');
@@ -99,11 +99,18 @@ describe('numericRefinementList()', () => {
       collapsible: false,
       createURL() {},
       facetValues: [
-        {attributeName: 'price', isRefined: true, name: 'All'},
-        {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4'},
-        {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4},
-        {attributeName: 'price', end: 10, isRefined: false, name: 'between 5 and 10', start: 5},
-        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10},
+        {attributeName: 'price', isRefined: true, name: 'All', value: 'All'},
+        {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4', value: 'less than 4'},
+        {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4, value: '4'},
+        {
+          attributeName: 'price',
+          end: 10,
+          isRefined: false,
+          name: 'between 5 and 10',
+          start: 5,
+          value: 'between 5 and 10',
+        },
+        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10, value: 'more than 10'},
       ],
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,

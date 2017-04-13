@@ -49,7 +49,7 @@ describe('RefinementList', () => {
           item: 'item',
         },
         facetValues: [
-          {name: 'foo', isRefined: true},
+          {value: 'foo', isRefined: true},
         ],
       };
 
@@ -68,8 +68,8 @@ describe('RefinementList', () => {
           active: 'active',
         },
         facetValues: [
-          {name: 'foo', isRefined: true},
-          {name: 'bar', isRefined: false},
+          {value: 'foo', isRefined: true},
+          {value: 'bar', isRefined: false},
         ],
       };
 
@@ -89,8 +89,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: false},
         ],
       };
 
@@ -104,31 +104,13 @@ describe('RefinementList', () => {
       expect(secondItem.props().facetValueToRefine).toEqual('bar');
     });
 
-    it('understands attributeNameKey', () => {
-      // Given
-      const props = {
-        ...defaultProps,
-        facetValues: [{name: 'no', youpiName: 'hello', isRefined: false}],
-        attributeNameKey: 'youpiName',
-      };
-
-      // When
-      const items = shallowRender(props).find(RefinementListItem);
-      const item = items.at(0);
-
-      // Then
-      expect(item.props().facetValueToRefine).toEqual('hello');
-      expect(createURL.calledOnce).toBe(true);
-      expect(createURL.args[0][0]).toBe('hello');
-    });
-
     it('should correctly set if refined or not', () => {
       // Given
       const props = {
         ...defaultProps,
         facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: true},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: true},
         ],
       };
 
@@ -149,8 +131,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {name: 'foo', count: 42, isRefined: false},
-          {name: 'bar', count: 16, isRefined: false},
+          {value: 'foo', count: 42, isRefined: false},
+          {value: 'bar', count: 16, isRefined: false},
         ],
       };
 
@@ -171,9 +153,9 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
-          {name: 'baz', isRefined: false},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: false},
+          {value: 'baz', isRefined: false},
         ],
         showMore: true,
         isShowingMore: false,
@@ -192,9 +174,9 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
-          {name: 'baz', isRefined: false},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: false},
+          {value: 'baz', isRefined: false},
         ],
         showMore: false,
         isShowingMore: false,
@@ -213,9 +195,9 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
-          {name: 'baz', isRefined: false},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: false},
+          {value: 'baz', isRefined: false},
         ],
         showMore: true,
         isShowingMore: true,
@@ -237,10 +219,10 @@ describe('RefinementList', () => {
         ...defaultProps,
         facetValues: [
           {
-            name: 'foo',
+            value: 'foo',
             data: [
-              {name: 'bar', isRefined: false},
-              {name: 'baz', isRefined: false},
+              {value: 'bar', isRefined: false},
+              {value: 'baz', isRefined: false},
             ],
             isRefined: false,
           },
@@ -268,10 +250,10 @@ describe('RefinementList', () => {
         },
         facetValues: [
           {
-            name: 'foo',
+            value: 'foo',
             data: [
-              {name: 'bar', isRefined: false},
-              {name: 'baz', isRefined: false},
+              {value: 'bar', isRefined: false},
+              {value: 'baz', isRefined: false},
             ],
             isRefined: false,
           },

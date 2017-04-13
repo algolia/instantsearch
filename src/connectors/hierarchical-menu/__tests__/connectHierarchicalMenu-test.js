@@ -161,12 +161,14 @@ describe('connectHierarchicalMenu', () => {
       {
         name: 'Decoration',
         path: 'Decoration',
+        value: 'Decoration',
         count: 880,
         isRefined: true,
         data: [
           {
             name: 'Candle holders & candles',
             path: 'Decoration > Candle holders & candles',
+            value: 'Decoration > Candle holders & candles',
             count: 193,
             isRefined: false,
             data: null,
@@ -174,6 +176,7 @@ describe('connectHierarchicalMenu', () => {
           {
             name: 'Frames & pictures',
             path: 'Decoration > Frames & pictures',
+            value: 'Decoration > Frames & pictures',
             count: 173,
             isRefined: false,
             data: null,
@@ -183,6 +186,7 @@ describe('connectHierarchicalMenu', () => {
       {
         name: 'Outdoor',
         path: 'Outdoor',
+        value: 'Outdoor',
         count: 47,
         isRefined: false,
         data: null,
@@ -244,12 +248,14 @@ describe('connectHierarchicalMenu', () => {
     expect(secondRenderingOptions.currentRefinement).toEqual({
       name: 'Decoration',
       path: 'Decoration',
+      value: 'Decoration',
       count: 880,
       isRefined: true,
       data: [
         {
           name: 'Candle holders & candles',
           path: 'Decoration > Candle holders & candles',
+          value: 'Decoration > Candle holders & candles',
           count: 193,
           isRefined: false,
           data: null,
@@ -257,6 +263,7 @@ describe('connectHierarchicalMenu', () => {
         {
           name: 'Frames & pictures',
           path: 'Decoration > Frames & pictures',
+          value: 'Decoration > Frames & pictures',
           count: 173,
           isRefined: false,
           data: null,

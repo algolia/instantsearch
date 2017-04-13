@@ -2,7 +2,6 @@
 
 exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -23,9 +22,11 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
     Array [
       Object {
         "name": "foo",
+        "value": undefined,
       },
       Object {
         "name": "bar",
+        "value": undefined,
       },
     ]
   }
@@ -52,7 +53,6 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
 
 exports[`hierarchicalMenu() render has a templates option 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -73,9 +73,11 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
     Array [
       Object {
         "name": "foo",
+        "value": undefined,
       },
       Object {
         "name": "bar",
+        "value": undefined,
       },
     ]
   }
@@ -102,7 +104,6 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
 
 exports[`hierarchicalMenu() render sets facetValues to empty array when no results 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -143,7 +144,6 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
 
 exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no results 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -184,7 +184,6 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
 
 exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -205,9 +204,11 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
     Array [
       Object {
         "name": "foo",
+        "value": undefined,
       },
       Object {
         "name": "bar",
+        "value": undefined,
       },
     ]
   }

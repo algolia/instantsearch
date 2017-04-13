@@ -151,9 +151,9 @@ describe('connectNumericRefinementList', () => {
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.items).toEqual([
-      {name: 'below 10', end: 10, isRefined: false, attributeName: 'numerics'},
-      {name: '10 - 20', start: 10, end: 20, isRefined: false, attributeName: 'numerics'},
-      {name: 'more than 20', start: 20, isRefined: false, attributeName: 'numerics'},
+      {name: 'below 10', value: 'below 10', end: 10, isRefined: false, attributeName: 'numerics'},
+      {name: '10 - 20', value: '10 - 20', start: 10, end: 20, isRefined: false, attributeName: 'numerics'},
+      {name: 'more than 20', value: 'more than 20', start: 20, isRefined: false, attributeName: 'numerics'},
     ]);
 
     widget.render({
@@ -165,9 +165,9 @@ describe('connectNumericRefinementList', () => {
 
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.items).toEqual([
-      {name: 'below 10', end: 10, isRefined: false, attributeName: 'numerics'},
-      {name: '10 - 20', start: 10, end: 20, isRefined: false, attributeName: 'numerics'},
-      {name: 'more than 20', start: 20, isRefined: false, attributeName: 'numerics'},
+      {name: 'below 10', value: 'below 10', end: 10, isRefined: false, attributeName: 'numerics'},
+      {name: '10 - 20', value: '10 - 20', start: 10, end: 20, isRefined: false, attributeName: 'numerics'},
+      {name: 'more than 20', value: 'more than 20', start: 20, isRefined: false, attributeName: 'numerics'},
     ]);
   });
 
@@ -210,7 +210,8 @@ describe('connectNumericRefinementList', () => {
 
       // The current option should be the one selected
       // First we copy and set the default added values
-      const expectedResults = [...listOptions].map(o => ({...o, isRefined: false, attributeName: 'numerics'}));
+      const expectedResults = [...listOptions]
+        .map(o => ({...o, value: o.name, isRefined: false, attributeName: 'numerics'}));
       // Then we modify the isRefined value of the one that is supposed to be refined
       expectedResults[i].isRefined = true;
 
@@ -258,7 +259,8 @@ describe('connectNumericRefinementList', () => {
     });
 
     // No option should be selected
-    const expectedResults0 = [...listOptions].map(o => ({...o, isRefined: false, attributeName: 'numerics'}));
+    const expectedResults0 = [...listOptions]
+      .map(o => ({...o, value: o.name, isRefined: false, attributeName: 'numerics'}));
     expectedResults0[0].isRefined = true;
 
     const renderingParameters0 = rendering.lastCall.args[0];
@@ -275,7 +277,8 @@ describe('connectNumericRefinementList', () => {
     });
 
     // No option should be selected
-    const expectedResults1 = [...listOptions].map(o => ({...o, isRefined: false, attributeName: 'numerics'}));
+    const expectedResults1 = [...listOptions]
+      .map(o => ({...o, value: o.name, isRefined: false, attributeName: 'numerics'}));
     expectedResults1[4].isRefined = true;
 
     const renderingParameters1 = rendering.lastCall.args[0];

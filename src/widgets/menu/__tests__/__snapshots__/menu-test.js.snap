@@ -22,10 +22,12 @@ exports[`menu snapshot 1`] = `
       Object {
         "name": "foo",
         "url": "#",
+        "value": "foo",
       },
       Object {
         "name": "bar",
         "url": "#",
+        "value": "bar",
       },
     ]
   }

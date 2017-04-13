@@ -233,12 +233,14 @@ describe('connectRefinementList', () => {
     expect(secondRenderingOptions.items).toEqual([
       {
         name: 'Decoration',
+        value: 'Decoration',
         highlighted: 'Decoration',
         count: 880,
         isRefined: true,
       },
       {
         name: 'Outdoor',
+        value: 'Outdoor',
         highlighted: 'Outdoor',
         count: 47,
         isRefined: false,

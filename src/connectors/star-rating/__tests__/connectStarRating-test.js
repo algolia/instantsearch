@@ -65,19 +65,19 @@ describe('connectStarRating', () => {
       const {items} = rendering.lastCall.args[0];
       expect(items).toEqual([
         {
-          count: 1000, isRefined: false, name: '4',
+          count: 1000, isRefined: false, name: '4', value: '4',
           stars: [true, true, true, true, false],
         },
         {
-          count: 1050, isRefined: false, name: '3',
+          count: 1050, isRefined: false, name: '3', value: '3',
           stars: [true, true, true, false, false],
         },
         {
-          count: 1070, isRefined: false, name: '2',
+          count: 1070, isRefined: false, name: '2', value: '2',
           stars: [true, true, false, false, false],
         },
         {
-          count: 1080, isRefined: false, name: '1',
+          count: 1080, isRefined: false, name: '1', value: '1',
           stars: [true, false, false, false, false],
         },
       ]);
@@ -139,19 +139,19 @@ describe('connectStarRating', () => {
       const {refine, items} = renderOptions;
       expect(items).toEqual([
         {
-          count: 1000, isRefined: false, name: '4',
+          count: 1000, isRefined: false, name: '4', value: '4',
           stars: [true, true, true, true, false],
         },
         {
-          count: 1050, isRefined: true, name: '3',
+          count: 1050, isRefined: true, name: '3', value: '3',
           stars: [true, true, true, false, false],
         },
         {
-          count: 1070, isRefined: false, name: '2',
+          count: 1070, isRefined: false, name: '2', value: '2',
           stars: [true, true, false, false, false],
         },
         {
-          count: 1080, isRefined: false, name: '1',
+          count: 1080, isRefined: false, name: '1', value: '1',
           stars: [true, false, false, false, false],
         },
       ]);
