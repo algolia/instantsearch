@@ -20,12 +20,14 @@ const renderFn = ({
   }
 
   containerNode
-    .find('li')
+    .find('li[data-refine-value]')
     .each(function() { window.$(this).off('click'); });
 
   const list = items.map(item => `
-    <li ${item.isRefined ? 'style="font-weight: bold;"' : ''}>
-      <a href="${createURL(item)}">
+    <li data-refine-value="${item.value}"
+      ${item.isRefined ? 'style="font-weight: bold;"' : ''}
+    >
+      <a href="${createURL(item.value)}">
         ${item.stars
             .map(star => `<span class="ais-star-rating--star${star === false ? '__empty' : ''}"></span>`)
             .join('')}
@@ -40,13 +42,13 @@ const renderFn = ({
     .html(list);
 
   containerNode
-    .find('li')
-    .each(function(index) {
+    .find('li[data-refine-value]')
+    .each(function() {
       window.$(this).on('click', e => {
         e.preventDefault();
         e.stopPropagation();
 
-        refine(items[index].name);
+        refine(window.$(this).data('refine-value'));
       });
     });
 };

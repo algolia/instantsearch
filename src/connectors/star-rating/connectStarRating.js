@@ -103,6 +103,7 @@ export default function connectStarRating(renderFn) {
           facetValues.push({
             stars,
             name: String(star),
+            value: String(star),
             count,
             isRefined: refinedStar === star,
           });
