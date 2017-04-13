@@ -1,80 +1,76 @@
-import algolia from 'algoliasearch'
-import algoliaHelper from 'algoliasearch-helper'
-import { version } from '../package.json'
+import algolia from 'algoliasearch';
+import algoliaHelper from 'algoliasearch-helper';
+import { version } from '../package.json';
 
+export const FACET_AND = 'and';
+export const FACET_OR = 'or';
+export const FACET_TREE = 'tree';
 
+export const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
+export const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
 
-export const FACET_AND = 'and'
-export const FACET_OR = 'or'
-export const FACET_TREE = 'tree'
+export const assertValidFacetType = function(type) {
+  if (type === FACET_AND) return;
+  if (type === FACET_OR) return;
+  if (type === FACET_TREE) return;
 
-export const HIGHLIGHT_PRE_TAG = '__ais-highlight__'
-export const HIGHLIGHT_POST_TAG = '__/ais-highlight__'
-
-export const assertValidFacetType = function (type) {
-  if (type === FACET_AND) return
-  if (type === FACET_OR) return
-  if (type === FACET_TREE) return
-
-  throw new Error(`Invalid facet type ${type}.`)
-}
+  throw new Error(`Invalid facet type ${type}.`);
+};
 
 export const createFromAlgoliaCredentials = (appID, apiKey) => {
-  const client = algolia(appID, apiKey)
-  const helper = algoliaHelper(client)
+  const client = algolia(appID, apiKey);
+  const helper = algoliaHelper(client);
 
-  return new Store(helper)
-}
+  return new Store(helper);
+};
 
-export const createFromAlgoliaClient = (client) => {
-  const helper = algoliaHelper(client)
+export const createFromAlgoliaClient = client => {
+  const helper = algoliaHelper(client);
 
-  return new Store(helper)
-}
+  return new Store(helper);
+};
 
-const onHelperChange =  function () {
+const onHelperChange = function() {
   if (this._stoppedCounter === 0) {
-    this.refresh()
+    this.refresh();
   }
-}
+};
 
 export class Store {
   constructor(algoliaHelper) {
     // We require one start() call to execute the first search query.
     // Allows every widget to alter the state at initialization
     // without trigger multiple queries.
-    this._stoppedCounter = 1
+    this._stoppedCounter = 1;
 
-    this.algoliaHelper = algoliaHelper
+    this.algoliaHelper = algoliaHelper;
   }
 
   set algoliaHelper(algoliaHelper) {
-
-    if(this._helper) {
-      this._helper.removeListener('change', onHelperChange)
+    if (this._helper) {
+      this._helper.removeListener('change', onHelperChange);
     }
 
-    this._helper = algoliaHelper
+    this._helper = algoliaHelper;
 
     // Here we enforce custom highlight tags for handling XSS protection.
     // We also make sure that we keep the current page as this operation resets it.
-    const page = this._helper.getPage()
-    this._helper.setQueryParameter('highlightPreTag', HIGHLIGHT_PRE_TAG)
-    this._helper.setQueryParameter('highlightPostTag', HIGHLIGHT_POST_TAG)
-    this._helper.setPage(page)
+    const page = this._helper.getPage();
+    this._helper.setQueryParameter('highlightPreTag', HIGHLIGHT_PRE_TAG);
+    this._helper.setQueryParameter('highlightPostTag', HIGHLIGHT_POST_TAG);
+    this._helper.setPage(page);
 
+    this._helper.on('change', onHelperChange.bind(this));
 
-    this._helper.on('change', onHelperChange.bind(this))
-
-    this._helper.getClient().addAlgoliaAgent(`vue-instantsearch ${version}`)
+    this._helper.getClient().addAlgoliaAgent(`vue-instantsearch ${version}`);
   }
 
   get highlightPreTag() {
-    return this._helper.getQueryParameter('highlightPreTag')
+    return this._helper.getQueryParameter('highlightPreTag');
   }
 
   get highlightPostTag() {
-    return this._helper.getQueryParameter('highlightPostTag')
+    return this._helper.getQueryParameter('highlightPostTag');
   }
 
   get algoliaHelper() {
@@ -82,212 +78,212 @@ export class Store {
   }
 
   set algoliaClient(algoliaClient) {
-    this._helper.setClient(algoliaClient)
+    this._helper.setClient(algoliaClient);
 
     // Manually trigger the change given the helper doesn't emit a change event
     // when a new client is set.
-    onHelperChange()
+    onHelperChange();
   }
 
   get algoliaClient() {
-    return this._helper.getClient()
+    return this._helper.getClient();
   }
 
   get algoliaApiKey() {
-    return this.algoliaClient.apiKey
+    return this.algoliaClient.apiKey;
   }
 
   get algoliaAppId() {
-    return this.algoliaClient.applicationID
+    return this.algoliaClient.applicationID;
   }
 
   // Todo: maybe freeze / unfreeze, pause / resume are better names
   start() {
     if (this._stoppedCounter < 1) {
-      this._stoppedCounter = 0
+      this._stoppedCounter = 0;
     } else {
-      this._stoppedCounter--
+      this._stoppedCounter--;
     }
 
     if (this._stoppedCounter === 0) {
-      this.refresh()
+      this.refresh();
     }
   }
 
   stop() {
-    this._stoppedCounter++
+    this._stoppedCounter++;
   }
 
   set indexName(index) {
-    this._helper.setIndex(index)
+    this._helper.setIndex(index);
   }
 
   get indexName() {
-    return this._helper.getIndex()
+    return this._helper.getIndex();
   }
 
   set resultsPerPage(count) {
-    this._helper.setQueryParameter('hitsPerPage', count)
+    this._helper.setQueryParameter('hitsPerPage', count);
   }
 
   get resultsPerPage() {
-    let resultsPerPage = this._helper.getQueryParameter('hitsPerPage')
+    let resultsPerPage = this._helper.getQueryParameter('hitsPerPage');
 
-    if(resultsPerPage) {
-      return resultsPerPage
+    if (resultsPerPage) {
+      return resultsPerPage;
     }
 
-    return this._helper.lastResults ? this._helper.lastResults.hitsPerPage : 0
+    return this._helper.lastResults ? this._helper.lastResults.hitsPerPage : 0;
   }
 
   get results() {
     if (!this._helper.lastResults) {
-      return []
+      return [];
     }
 
-    return this._helper.lastResults.hits
+    return this._helper.lastResults.hits;
   }
 
   get page() {
-    return this._helper.getPage() + 1
+    return this._helper.getPage() + 1;
   }
 
   set page(page) {
-    this._helper.setPage(page - 1)
+    this._helper.setPage(page - 1);
   }
 
   get totalPages() {
     if (!this._helper.lastResults) {
-      return 0
+      return 0;
     }
 
-    return this._helper.lastResults.nbPages
+    return this._helper.lastResults.nbPages;
   }
 
   get totalResults() {
     if (!this._helper.lastResults) {
-      return 0
+      return 0;
     }
 
-    return this._helper.lastResults.nbHits
+    return this._helper.lastResults.nbHits;
   }
 
   get processingTimeMS() {
     if (!this._helper.lastResults) {
-      return 0
+      return 0;
     }
 
-    return this._helper.lastResults.processingTimeMS
+    return this._helper.lastResults.processingTimeMS;
   }
 
   goTofirstPage() {
-    this.page = 0
+    this.page = 0;
   }
 
   goToPreviousPage() {
-    this._helper.previousPage()
+    this._helper.previousPage();
   }
 
   goToNextPage() {
-    this._helper.nextPage()
+    this._helper.nextPage();
   }
 
   goToLastPage() {
-    this.page = this.nbPages - 1
+    this.page = this.nbPages - 1;
   }
 
   addFacet(attribute, type = FACET_AND) {
-    assertValidFacetType(type)
+    assertValidFacetType(type);
 
-    this.stop()
-    this.removeFacet(attribute)
+    this.stop();
+    this.removeFacet(attribute);
 
-    let state = null
+    let state = null;
     if (type === FACET_AND) {
-      state = this._helper.state.addFacet(attribute)
+      state = this._helper.state.addFacet(attribute);
     } else if (type === FACET_OR) {
-      state = this._helper.state.addDisjunctiveFacet(attribute)
+      state = this._helper.state.addDisjunctiveFacet(attribute);
     } else if (type === FACET_TREE) {
-      state = this._helper.state.addHierarchicalFacet(attribute)
+      state = this._helper.state.addHierarchicalFacet(attribute);
     }
 
-    this._helper.setState(state)
-    this.start()
+    this._helper.setState(state);
+    this.start();
   }
 
   removeFacet(attribute) {
     if (this._helper.state.isConjunctiveFacet(attribute)) {
-      this._helper.state.removeFacet(attribute)
+      this._helper.state.removeFacet(attribute);
     } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
-      this._helper.state.removeDisjunctiveFacet(attribute)
+      this._helper.state.removeDisjunctiveFacet(attribute);
     } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
-      this._helper.state.removeHierarchicalFacet(attribute)
+      this._helper.state.removeHierarchicalFacet(attribute);
     }
   }
 
   addFacetRefinement(attribute, value) {
     if (this._helper.state.isConjunctiveFacet(attribute)) {
-      this._helper.addFacetRefinement(attribute, value)
+      this._helper.addFacetRefinement(attribute, value);
     } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
-      this._helper.addDisjunctiveFacetRefinement(attribute, value)
+      this._helper.addDisjunctiveFacetRefinement(attribute, value);
     } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
-      this._helper.addHierarchicalFacetRefinement(attribute, value)
+      this._helper.addHierarchicalFacetRefinement(attribute, value);
     }
   }
 
   toggleFacetRefinement(facet, value) {
-    this._helper.toggleRefinement(facet, value)
+    this._helper.toggleRefinement(facet, value);
   }
 
   clearRefinements(attribute) {
-    this._helper.clearRefinements(attribute)
+    this._helper.clearRefinements(attribute);
   }
 
   getFacetValues(attribute, sortBy, limit = -1) {
     if (!this._helper.lastResults) {
-      return []
+      return [];
     }
 
     // Todo: make sure the attribute is already added.
     // Todo: Not sure this should be here because will make it very hard to debug I suppose.
 
-    let values = this._helper.lastResults.getFacetValues(attribute, {sortBy})
+    let values = this._helper.lastResults.getFacetValues(attribute, { sortBy });
     if (limit === -1) {
-      return values
+      return values;
     }
 
-    return values.slice(0, limit)
+    return values.slice(0, limit);
   }
 
   get activeRefinements() {
     if (!this._helper.lastResults) {
-      return []
+      return [];
     }
 
-    return this._helper.lastResults.getRefinements()
+    return this._helper.lastResults.getRefinements();
   }
 
   addNumericRefinement(attribute, operator, value) {
-    this._helper.addNumericRefinement(attribute, operator, value)
+    this._helper.addNumericRefinement(attribute, operator, value);
   }
 
   removeNumericRefinement(attribute, operator, value) {
-    this._helper.removeNumericRefinement(attribute, operator, value)
+    this._helper.removeNumericRefinement(attribute, operator, value);
   }
 
   set query(query) {
     if (this._helper.state.query === query) {
-      return
+      return;
     }
-    this._helper.setQuery(query)
+    this._helper.setQuery(query);
   }
 
   get query() {
-    return this._helper.state.query
+    return this._helper.state.query;
   }
 
   // Todo: find a better name for this function.
   refresh() {
-    this._helper.search()
+    this._helper.search();
   }
 }
