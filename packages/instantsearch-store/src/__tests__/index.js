@@ -34,35 +34,42 @@ test('HIGHLIGHT_POST_TAG should be "__/ais-highlight__"', () => {
 });
 
 test('can assert that a facet type is valid', () => {
-  expect( () => { assertValidFacetType(FACET_AND) } ).not.toThrow()
-  expect( () => { assertValidFacetType(FACET_OR) } ).not.toThrow()
-  expect( () => { assertValidFacetType(FACET_TREE) } ).not.toThrow()
-  expect( () => { assertValidFacetType('unknown') } ).toThrow()
+  expect(() => {
+    assertValidFacetType(FACET_AND);
+  }).not.toThrow();
+  expect(() => {
+    assertValidFacetType(FACET_OR);
+  }).not.toThrow();
+  expect(() => {
+    assertValidFacetType(FACET_TREE);
+  }).not.toThrow();
+  expect(() => {
+    assertValidFacetType('unknown');
+  }).toThrow();
 });
 
 test('can create a Store instance from algolia credentials', () => {
   const store = createFromAlgoliaCredentials('app_id', 'api_key');
-  expect(store).toBeInstanceOf(Store)
-  expect(store.algoliaApiKey).toBe('api_key')
-  expect(store.algoliaAppId).toBe('app_id')
-})
+  expect(store).toBeInstanceOf(Store);
+  expect(store.algoliaApiKey).toBe('api_key');
+  expect(store.algoliaAppId).toBe('app_id');
+});
 
 test('can create a Store instance from an algolia client', () => {
   const client = algoliaClient('app_id', 'api_key');
   const store = createFromAlgoliaClient(client);
-  expect(store).toBeInstanceOf(Store)
-  expect(store.algoliaClient).toBe(client)
-})
+  expect(store).toBeInstanceOf(Store);
+  expect(store.algoliaClient).toBe(client);
+});
 
 describe('Store', () => {
-
   test('should be constructed with a helper instance', () => {
     const client = algoliaClient('app_id', 'api_key');
     const helper = algoliaHelper(client);
     const store = new Store(helper);
 
     expect(store.algoliaHelper).toBe(helper);
-  })
+  });
 
   test('should always use custom highlighting tags', () => {
     const client = algoliaClient('app_id', 'api_key');
@@ -71,7 +78,7 @@ describe('Store', () => {
 
     expect(store.highlightPreTag).toEqual(HIGHLIGHT_PRE_TAG);
     expect(store.highlightPostTag).toEqual(HIGHLIGHT_POST_TAG);
-  })
+  });
 
   test('can retrieve index name', () => {
     const client = algoliaClient('app_id', 'api_key');
@@ -79,7 +86,7 @@ describe('Store', () => {
     const store = new Store(helper);
 
     expect(store.indexName).toEqual('my_index');
-  })
+  });
 
   test('can set index name', () => {
     const client = algoliaClient('app_id', 'api_key');
@@ -89,7 +96,7 @@ describe('Store', () => {
     store.indexName = 'custom_index_name';
 
     expect(store.indexName).toEqual('custom_index_name');
-  })
+  });
 
   test('can retrieve the current page', () => {
     const client = algoliaClient('app_id', 'api_key');
@@ -98,7 +105,7 @@ describe('Store', () => {
     const store = new Store(helper);
 
     expect(store.page).toEqual(2);
-  })
+  });
 
   test('can change the current page', () => {
     const client = algoliaClient('app_id', 'api_key');
@@ -109,6 +116,17 @@ describe('Store', () => {
 
     expect(helper.getPage()).toEqual(1);
     expect(store.page).toEqual(2);
-  })
+  });
 
+  test('should add "vue-instantsearch" User Agent to the client with the current version', () => {
+    const addAlgoliaAgent = jest.fn();
+    const client = {
+      addAlgoliaAgent
+    };
+
+    const helper = algoliaHelper(client);
+    const store = new Store(helper);
+    const version = require('../../package.json').version;
+    expect(addAlgoliaAgent).toBeCalledWith(`vue-instantsearch ${version}`);
+  });
 });

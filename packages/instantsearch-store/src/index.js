@@ -1,5 +1,8 @@
 import algolia from 'algoliasearch'
 import algoliaHelper from 'algoliasearch-helper'
+import { version } from '../package.json'
+
+
 
 export const FACET_AND = 'and'
 export const FACET_OR = 'or'
@@ -63,8 +66,7 @@ export class Store {
 
     this._helper.on('change', onHelperChange.bind(this))
 
-    // Todo: fetch the version somehow.
-    this._helper.getClient().addAlgoliaAgent('Store (x.x.x)')
+    this._helper.getClient().addAlgoliaAgent(`vue-instantsearch ${version}`)
   }
 
   get highlightPreTag() {
