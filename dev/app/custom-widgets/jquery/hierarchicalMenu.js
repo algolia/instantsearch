@@ -16,9 +16,9 @@ const formatMenuEntry = (createURL, lvl = 0) => item => {
     return `
       <div ${lvl === 0 ? 'class="hierarchical-categories-list"' : ''}>
         <a
-          href="${createURL(item)}"
+          href="${createURL(item.value)}"
           class="facet-value clearfix"
-          data-refine-path="${item.path}"
+          data-refine-value="${item.value}"
         >
           <strong>${item.name}</strong> ${countHTML}
         </a>
@@ -32,9 +32,9 @@ const formatMenuEntry = (createURL, lvl = 0) => item => {
   return `
     <div>
       <a
-        href="${createURL(item)}"
+        href="${createURL(item.value)}"
         class="facet-value clearfix"
-        data-refine-path="${item.path}"
+        data-refine-value="${item.value}"
       >
         ${item.isRefined
           ? `<strong>${item.name}</strong>`
@@ -61,7 +61,7 @@ const renderFn = ({
 
   // remove event listeners before replacing markup
   containerNode
-    .find('a[data-refine-path]')
+    .find('a[data-refine-value]')
     .each(function() { window.$(this).off('click'); });
 
   if (items && items.length > 0) {
@@ -74,13 +74,13 @@ const renderFn = ({
       .find('#custom-hierarchical-menu__container')
       .html(menuItems);
 
-    // bind links with `data-refine-path`
+    // bind links with `data-refine-value`
     containerNode
-      .find('a[data-refine-path]')
+      .find('a[data-refine-value]')
       .each(function() {
         window.$(this).on('click', e => {
           e.preventDefault();
-          refine(window.$(this).data('refine-path'));
+          refine(window.$(this).data('refine-value'));
         });
       });
   }

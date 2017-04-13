@@ -114,7 +114,7 @@ export default function connectHierarchicalMenu(renderFn) {
               subValue.data = this._prepareFacetValues(subValue.data, state);
             }
 
-            return subValue;
+            return {...subValue, value: subValue.path};
           });
       },
 
