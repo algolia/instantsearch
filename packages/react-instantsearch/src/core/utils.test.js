@@ -8,6 +8,7 @@ import {
   assertFacetDefined,
   getDisplayName,
   defer,
+  removeEmptyKey,
 } from './utils';
 
 import { SearchParameters, SearchResults } from 'algoliasearch-helper';
@@ -107,6 +108,67 @@ describe('utils', () => {
 
       return Promise.resolve().then(() => {
         expect(count).toEqual(1);
+      });
+    });
+  });
+  describe('remove empty key', () => {
+    it('empty key should be removed', () => {
+      const state = {
+        query: '',
+        page: 2,
+        sortBy: 'mostPopular',
+        range: {
+          price: {
+            min: 20,
+            max: 3000,
+          },
+        },
+        refinementList: {},
+        indices: {
+          index1: {
+            configure: {
+              hitsPerPage: 3,
+              refinementList: {},
+            },
+          },
+          index2: {
+            configure: {
+              hitsPerPage: 10,
+            },
+            refinementList: {
+              fruits: ['lemon', 'orange'],
+            },
+          },
+        },
+      };
+
+      const newState = removeEmptyKey(state);
+
+      expect(newState).toEqual({
+        query: '',
+        page: 2,
+        sortBy: 'mostPopular',
+        range: {
+          price: {
+            min: 20,
+            max: 3000,
+          },
+        },
+        indices: {
+          index1: {
+            configure: {
+              hitsPerPage: 3,
+            },
+          },
+          index2: {
+            configure: {
+              hitsPerPage: 10,
+            },
+            refinementList: {
+              fruits: ['lemon', 'orange'],
+            },
+          },
+        },
       });
     });
   });
