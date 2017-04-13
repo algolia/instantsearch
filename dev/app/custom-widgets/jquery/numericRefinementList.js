@@ -38,7 +38,7 @@ const renderFn = ({
           name="${attributeName}"
           ${item.isRefined ? 'checked' : ''}
         />
-        ${item.name}
+        ${item.label}
       </label>
     </li>
   `);

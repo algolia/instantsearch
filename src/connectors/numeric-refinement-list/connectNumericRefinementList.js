@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import includes from 'lodash/includes';
 
 import {checkRendering} from '../../lib/utils.js';
@@ -75,11 +74,10 @@ export default function connectNumericRefinementList(renderFn) {
         };
 
         this._createURL = state => facetValue => createURL(refine(state, attributeName, options, facetValue));
-        this._prepareItems = state => options.map(option => ({
-          ...option,
-          value: option.name,
-          isRefined: isRefined(state, attributeName, option),
-          attributeName,
+        this._prepareItems = state => options.map(({start, end, name: label}) => ({
+          label,
+          value: window.encodeURI(JSON.stringify({start, end})),
+          isRefined: isRefined(state, attributeName, {start, end}),
         }));
 
         renderFn({
@@ -133,7 +131,7 @@ function isRefined(state, attributeName, option) {
 function refine(state, attributeName, options, facetValue) {
   let resolvedState = state;
 
-  const refinedOption = find(options, {name: facetValue});
+  const refinedOption = JSON.parse(window.decodeURI(facetValue));
 
   const currentRefinements = resolvedState.getNumericRefinements(attributeName);
 
