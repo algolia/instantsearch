@@ -23,7 +23,7 @@ const renderFn = ({
 
   // remove event listeners before re-render
   containerNode
-    .find('li')
+    .find('li[data-refine-value]')
     .each(function() { window.$(this).off('click'); });
 
   containerNode
@@ -31,8 +31,8 @@ const renderFn = ({
     .text(isShowingMore ? 'Show less' : 'Show more');
 
   const itemsHTML = items.map(item => `
-    <li>
-      <a href="${createURL(item)}" class="facet-value clearfix">
+    <li data-refine-value="${item.value}">
+      <a href="${createURL(item.value)}" class="facet-value clearfix">
         ${item.isRefined ? `<strong>${item.name}</strong>` : item.name}
         <span class="facet-count pull-right">${item.count}</span>
       </a>
@@ -44,12 +44,12 @@ const renderFn = ({
     .html(itemsHTML);
 
   containerNode
-    .find('li')
-    .each(function(index) {
+    .find('li[data-refine-value]')
+    .each(function() {
       window.$(this).on('click', e => {
         e.preventDefault();
         e.stopPropagation();
-        refine(items[index].name);
+        refine(window.$(this).data('refine-value'));
       });
     });
 };

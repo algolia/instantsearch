@@ -126,13 +126,14 @@ export default function connectMenu(renderFn) {
       },
 
       render({results, instantSearchInstance}) {
-        const items = results.getFacetValues(attributeName, {sortBy}).data || [];
-        const itemsWithLimit = items.slice(0, this.getLimit());
+        const items = (results.getFacetValues(attributeName, {sortBy}).data || [])
+          .slice(0, this.getLimit())
+          .map(item => ({...item, value: item.name}));
 
         this.toggleShowMore = this.createToggleShowMore({results, instantSearchInstance});
 
         renderFn({
-          items: itemsWithLimit,
+          items,
           createURL: this._createURL,
           refine: this._refine,
           instantSearchInstance,
