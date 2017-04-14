@@ -8,7 +8,7 @@ import {
 const usage = `Usage:
 var customClearAll = connectClearAll(function render(params, isFirstRendering) {
   // params = {
-  //   clearAll,
+  //   refine,
   //   hasRefinements,
   //   createURL,
   //   instantSearchInstance,
@@ -24,7 +24,7 @@ search.addWidget(
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectClearAll.html
 `;
 
-const clearAll = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () => {
+const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () => {
   if (hasRefinements) {
     clearRefinementsAndSearch(helper, clearAttributes, clearsQuery);
   }
@@ -38,7 +38,7 @@ const clearAll = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () 
 
 /**
  * @typedef {Object} ClearAllRenderingOptions
- * @property {function} clearAll function to trigger the clear of all the currently refined values
+ * @property {function} refine function to trigger the clear of all the currently refined values
  * @property {boolean} hasRefinements boolean to indicate if search state is refined
  * @property {function} createURL function that create a url for the next state
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
@@ -58,11 +58,11 @@ export default function connectClearAll(renderFn) {
     const {excludeAttributes = [], clearsQuery = false} = widgetParams;
 
     return {
-      _clearAll() {},
-      _cachedClearAll() { this._clearAll(); },
+      _refine() {},
+      _cachedRefine() { this._refine(); },
 
       init({helper, instantSearchInstance, createURL}) {
-        this._cachedClearAll = this._cachedClearAll.bind(this);
+        this._cachedRefine = this._cachedRefine.bind(this);
 
         const clearAttributes = getRefinements({}, helper.state)
           .map(one => one.attributeName)
@@ -71,10 +71,10 @@ export default function connectClearAll(renderFn) {
         const hasRefinements = clearAttributes.length !== 0;
         const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
 
-        this._clearAll = clearAll({helper, clearAttributes, hasRefinements, clearsQuery});
+        this._refine = refine({helper, clearAttributes, hasRefinements, clearsQuery});
 
         renderFn({
-          clearAll: this._cachedClearAll,
+          refine: this._cachedRefine,
           hasRefinements,
           createURL: preparedCreateURL,
           instantSearchInstance,
@@ -90,10 +90,10 @@ export default function connectClearAll(renderFn) {
         const hasRefinements = clearAttributes.length !== 0;
         const preparedCreateURL = () => createURL(clearRefinementsFromState(state, [], clearsQuery));
 
-        this._clearAll = clearAll({helper, clearAttributes, hasRefinements, clearsQuery});
+        this._refine = refine({helper, clearAttributes, hasRefinements, clearsQuery});
 
         renderFn({
-          clearAll: this._cachedClearAll,
+          refine: this._cachedRefine,
           hasRefinements,
           createURL: preparedCreateURL,
           instantSearchInstance,

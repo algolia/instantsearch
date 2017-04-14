@@ -2,7 +2,7 @@
 import instantsearch from '../../../../index.js';
 
 const renderFn = ({
-  clearAll,
+  refine,
   hasRefinements,
   createURL,
   widgetParams: {containerNode},
@@ -10,14 +10,11 @@ const renderFn = ({
   if (isFirstRendering) {
     const markup = window.$('<button id="custom-clear-all">Clear All</button>');
     containerNode.append(markup);
+
+    markup
+      .on('click', e => hasRefinements ? refine() : e.preventDefault());
   }
-
   const clearAllCTA = containerNode.find('#custom-clear-all');
-
-  // bind click event
-  clearAllCTA
-    .off('click')
-    .on('click', e => hasRefinements ? clearAll() : e.preventDefault());
 
   // disable button
   clearAllCTA.attr('disabled', !hasRefinements);

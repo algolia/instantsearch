@@ -5,7 +5,7 @@ export default instantsearch.connectors.connectClearAll(render);
 
 function render(
   {
-    clearAll,
+    refine,
     widgetParams,
   },
   isFirstRendering,
@@ -15,6 +15,6 @@ function render(
     button = document.createElement('button');
     button.innerText = 'clear';
     widgetParams.containerNode.appendChild(button);
-    button.addEventListener('click', () => clearAll());
+    button.addEventListener('click', () => refine());
   }
 }

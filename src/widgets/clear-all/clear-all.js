@@ -16,7 +16,7 @@ import defaultTemplates from './defaultTemplates.js';
 const bem = bemHelper('ais-clear-all');
 
 const renderer = ({containerNode, cssClasses, collapsible, autoHideContainer, renderState, templates}) => ({
-  clearAll, // eslint-disable-line
+  refine,
   hasRefinements,
   createURL,
   instantSearchInstance,
@@ -34,7 +34,7 @@ const renderer = ({containerNode, cssClasses, collapsible, autoHideContainer, re
 
   ReactDOM.render(
     <ClearAllWithHOCs
-      clearAll={clearAll}
+      refine={refine}
       collapsible={collapsible}
       cssClasses={cssClasses}
       hasRefinements={hasRefinements}
