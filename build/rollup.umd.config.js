@@ -22,7 +22,11 @@ export default {
       browser: true,
       preferBuiltins: false,
     }),
-    buble(),
+    buble({
+      transforms: {
+        dangerousForOf: true,
+      },
+    }),
     commonjs(),
     replace({
       'process.env': JSON.stringify({
