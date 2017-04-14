@@ -11,7 +11,8 @@
         "jest": true
     },
     "plugins": [
-        "prettier"
+        "prettier",
+        "html"
     ],
     "rules": {
         "prettier/prettier": ["error", {"trailingComma": "es5", "singleQuote": true, "bracketSpacing": true}]
