@@ -7,22 +7,22 @@
 </template>
 
 <script>
-  import algoliaComponent from 'vue-instantsearch-component'
+import algoliaComponent from 'vue-instantsearch-component';
 
-  export default {
-    mixins: [algoliaComponent],
-    data () {
-      return {
-        blockClassName: 'ais-no-results'
-      }
+export default {
+  mixins: [algoliaComponent],
+  data() {
+    return {
+      blockClassName: 'ais-no-results',
+    };
+  },
+  computed: {
+    totalResults() {
+      return this.searchStore.totalResults;
     },
-    computed: {
-      totalResults () {
-        return this.searchStore.totalResults
-      },
-      query () {
-        return this.searchStore.query
-      }
-    }
-  }
+    query() {
+      return this.searchStore.query;
+    },
+  },
+};
 </script>

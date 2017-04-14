@@ -24,63 +24,70 @@
 </template>
 
 <script>
-  import {FACET_OR, FACET_AND} from 'instantsearch-store'
-  import algoliaComponent from 'vue-instantsearch-component'
+import { FACET_OR, FACET_AND } from 'instantsearch-store';
+import algoliaComponent from 'vue-instantsearch-component';
 
-  export default {
-    mixins: [algoliaComponent],
-    props: {
-      attributeName: {
-        type: String,
-        required: true
-      },
-      operator: {
-        type: String,
-        default: FACET_OR,
-        validator (value) {
-          value = value.toLowerCase()
+export default {
+  mixins: [algoliaComponent],
+  props: {
+    attributeName: {
+      type: String,
+      required: true,
+    },
+    operator: {
+      type: String,
+      default: FACET_OR,
+      validator(value) {
+        value = value.toLowerCase();
 
-          return value === FACET_OR || value === FACET_AND;
-        }
+        return value === FACET_OR || value === FACET_AND;
       },
-      limit: {
-        type: Number,
-        default: 10
+    },
+    limit: {
+      type: Number,
+      default: 10,
+    },
+    sortBy: {
+      default() {
+        return ['isRefined:desc', 'count:desc', 'name:asc'];
       },
-      sortBy: {
-        default () {
-          return ['isRefined:desc', 'count:desc', 'name:asc']
-        }
-      }
     },
-    data () {
-      return {
-        blockClassName: 'ais-refinement-list'
-      }
+  },
+  data() {
+    return {
+      blockClassName: 'ais-refinement-list',
+    };
+  },
+  mounted() {
+    this.searchStore.addFacet(this.attributeName, this.operator);
+  },
+  destroyed() {
+    this.searchStore.removeFacet(this.attributeName);
+  },
+  computed: {
+    facetValues() {
+      return this.searchStore.getFacetValues(
+        this.attributeName,
+        this.sortBy,
+        this.limit
+      );
     },
-    mounted () {
-      this.searchStore.addFacet(this.attributeName, this.operator)
+    show() {
+      return this.facetValues.length > 0;
     },
-    destroyed () {
-      this.searchStore.removeFacet(this.attributeName)
+  },
+  methods: {
+    toggleRefinement: function(value) {
+      return this.searchStore.toggleFacetRefinement(
+        this.attributeName,
+        value.name
+      );
     },
-    computed: {
-      facetValues () {
-        return this.searchStore.getFacetValues(this.attributeName, this.sortBy, this.limit)
-      },
-      show () {
-        return this.facetValues.length > 0
-      }
+  },
+  watch: {
+    operator() {
+      this.searchStore.addFacet(this.attributeName, this.operator);
     },
-    methods: {
-      toggleRefinement: function (value) {
-        return this.searchStore.toggleFacetRefinement(this.attributeName, value.name)
-      }
-    },
-    watch: {
-      operator (value) {
-        this.searchStore.addFacet(this.attributeName, this.operator)
-      }
-    }
-  }
+  },
+};
 </script>

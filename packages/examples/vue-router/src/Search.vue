@@ -19,21 +19,21 @@ export default {
   props: {
     query: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
   data() {
     return {
-      searchStore
+      searchStore,
     };
   },
   watch: {
     'searchStore.query'(value) {
       this.$router.push({
         name: 'search',
-        query: { q: value }
+        query: { q: value },
       });
-    }
-  }
+    },
+  },
 };
 </script>

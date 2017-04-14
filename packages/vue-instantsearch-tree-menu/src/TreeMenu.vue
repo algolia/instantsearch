@@ -35,65 +35,68 @@
 </template>
 
 <script>
-  import {FACET_TREE} from 'instantsearch-store'
-  import algoliaComponent from 'vue-instantsearch-component'
+import { FACET_TREE } from 'instantsearch-store';
+import algoliaComponent from 'vue-instantsearch-component';
 
-  export default {
-    mixins: [algoliaComponent],
-    props: {
-      attribute: {
-        type: String,
-        required: false,
-        default: 'tree'
-      },
-      attributes: {
-        type: Array,
-        required: true
-      },
-      separator: {
-        type: String,
-        required: false,
-        default: ' > '
-      },
-      limit: {
-        type: Number,
-        default: 10
-      },
-      sortBy: {
-        default () {
-          return ['name:asc']
-        }
-      }
+export default {
+  mixins: [algoliaComponent],
+  props: {
+    attribute: {
+      type: String,
+      required: false,
+      default: 'tree',
     },
-    data () {
-      return {
-        blockClassName: 'ais-tree-menu'
-      }
+    attributes: {
+      type: Array,
+      required: true,
     },
-    mounted () {
-      this.searchStore.addFacet({
+    separator: {
+      type: String,
+      required: false,
+      default: ' > ',
+    },
+    limit: {
+      type: Number,
+      default: 10,
+    },
+    sortBy: {
+      default() {
+        return ['name:asc'];
+      },
+    },
+  },
+  data() {
+    return {
+      blockClassName: 'ais-tree-menu',
+    };
+  },
+  mounted() {
+    this.searchStore.addFacet(
+      {
         name: this.attribute,
         attributes: this.attributes,
-        separator: this.separator
-      }, FACET_TREE)
-    },
-    destroyed () {
-      this.searchStore.removeFacet(this.attribute)
-    },
-    computed: {
-      facetValues () {
-        let values = this.searchStore.getFacetValues(this.attribute, this.sortBy)
-
-        return values.data || []
+        separator: this.separator,
       },
-      show () {
-        return this.facetValues.length > 0
-      }
+      FACET_TREE
+    );
+  },
+  destroyed() {
+    this.searchStore.removeFacet(this.attribute);
+  },
+  computed: {
+    facetValues() {
+      let values = this.searchStore.getFacetValues(this.attribute, this.sortBy);
+
+      return values.data || [];
     },
-    methods: {
-      toggleRefinement (value) {
-        return this.searchStore.toggleFacetRefinement(this.attribute, value.path)
-      }
-    }
-  }
+    show() {
+      return this.facetValues.length > 0;
+    },
+  },
+  methods: {
+    toggleRefinement(value) {
+      return this.searchStore.toggleFacetRefinement(this.attribute, value.path);
+    },
+  },
+};
 </script>

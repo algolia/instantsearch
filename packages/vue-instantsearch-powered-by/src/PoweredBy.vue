@@ -26,7 +26,7 @@ export default {
   mixins: [algoliaComponent],
   data() {
     return {
-      blockClassName: 'ais-powered-by'
+      blockClassName: 'ais-powered-by',
     };
   },
   computed: {
@@ -36,7 +36,7 @@ export default {
         'utm_medium=website&' +
         `utm_content=${location.hostname}&` +
         'utm_campaign=poweredby';
-    }
-  }
+    },
+  },
 };
 </script>

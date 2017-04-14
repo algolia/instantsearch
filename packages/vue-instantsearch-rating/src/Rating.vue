@@ -28,117 +28,121 @@
 </template>
 
 <script>
-  import {FACET_OR} from 'instantsearch-store'
-  import algoliaComponent from 'vue-instantsearch-component'
+import { FACET_OR } from 'instantsearch-store';
+import algoliaComponent from 'vue-instantsearch-component';
 
-  export default {
-    mixins: [algoliaComponent],
-    props: {
-      attributeName: {
-        type: String,
-        required: true
-      },
-      min: {
-        type: Number,
-        default: 1
-      },
-      max: {
-        type: Number,
-        default: 5
-      }
+export default {
+  mixins: [algoliaComponent],
+  props: {
+    attributeName: {
+      type: String,
+      required: true,
     },
-    data () {
-      return {
-        blockClassName: 'ais-rating'
-      }
+    min: {
+      type: Number,
+      default: 1,
     },
-    mounted () {
-      this.searchStore.addFacet(this.attributeName, FACET_OR)
+    max: {
+      type: Number,
+      default: 5,
     },
-    destroyed () {
-      this.searchStore.removeFacet(this.attributeName)
-    },
-    computed: {
-      show () {
-        for (let value in this.facetValues) {
-          if (this.facetValues[value].count > 0) {
-            return true
-          }
+  },
+  data() {
+    return {
+      blockClassName: 'ais-rating',
+    };
+  },
+  mounted() {
+    this.searchStore.addFacet(this.attributeName, FACET_OR);
+  },
+  destroyed() {
+    this.searchStore.removeFacet(this.attributeName);
+  },
+  computed: {
+    show() {
+      for (let value in this.facetValues) {
+        if (this.facetValues[value].count > 0) {
+          return true;
         }
-        return false
-      },
-      facetValues () {
-        const values = this.searchStore.getFacetValues(this.attributeName, ['name:asc'], this.max + 1)
+      }
+      return false;
+    },
+    facetValues() {
+      const values = this.searchStore.getFacetValues(
+        this.attributeName,
+        ['name:asc'],
+        this.max + 1
+      );
 
-        let stars = []
-        let isRefined = false
+      let stars = [];
+      let isRefined = false;
 
-        for (let i = 0; i <= this.max; i++) {
-          let name = i.toString()
-          let star = {
-            count: 0,
-            isRefined: false,
-            name: name,
-            value: i
-          }
+      for (let i = 0; i <= this.max; i++) {
+        let name = i.toString();
+        let star = {
+          count: 0,
+          isRefined: false,
+          name: name,
+          value: i,
+        };
 
-          for (let value in values) {
-            if (values[value].name === name) {
-              if (!isRefined && values[value].isRefined) {
-                isRefined = true
-                star.isRefined = true
-              }
-            }
-          }
-
-          stars.push(star)
-        }
-
-        stars = stars.reverse()
-
-        let count = 0
-        for (let index in stars) {
-          stars[index].count = count
-          for (let value in values) {
-            if (values[value].name === stars[index].name) {
-              count += values[value].count
-              stars[index].count = count
+        for (let value in values) {
+          if (values[value].name === name) {
+            if (!isRefined && values[value].isRefined) {
+              isRefined = true;
+              star.isRefined = true;
             }
           }
         }
 
-        return stars.slice(this.min, this.max)
-      },
-      currentValue () {
-        for (let value in this.facetValues) {
-          if (this.facetValues[value].isRefined) {
-            return this.facetValues[value].value
+        stars.push(star);
+      }
+
+      stars = stars.reverse();
+
+      let count = 0;
+      for (let index in stars) {
+        stars[index].count = count;
+        for (let value in values) {
+          if (values[value].name === stars[index].name) {
+            count += values[value].count;
+            stars[index].count = count;
           }
         }
-
-        return
       }
+
+      return stars.slice(this.min, this.max);
     },
-    methods: {
-      toggleRefinement (facet) {
-        if (facet.isRefined) {
-          return this.searchStore.clearRefinements(this.attributeName)
+    currentValue() {
+      for (let value in this.facetValues) {
+        if (this.facetValues[value].isRefined) {
+          return this.facetValues[value].value;
         }
-
-        if (facet.count === 0) {
-          return
-        }
-
-        this.searchStore.stop()
-        this.searchStore.clearRefinements(this.attributeName)
-        for (let val = Number(facet.name); val <= this.max; ++val) {
-          this.searchStore.addFacetRefinement(this.attributeName, val);
-        }
-        this.searchStore.start()
-      },
-      clear () {
-        this.searchStore.clearRefinements(this.attributeName)
       }
-    }
-  }
+
+      return;
+    },
+  },
+  methods: {
+    toggleRefinement(facet) {
+      if (facet.isRefined) {
+        return this.searchStore.clearRefinements(this.attributeName);
+      }
+
+      if (facet.count === 0) {
+        return;
+      }
+
+      this.searchStore.stop();
+      this.searchStore.clearRefinements(this.attributeName);
+      for (let val = Number(facet.name); val <= this.max; ++val) {
+        this.searchStore.addFacetRefinement(this.attributeName, val);
+      }
+      this.searchStore.start();
+    },
+    clear() {
+      this.searchStore.clearRefinements(this.attributeName);
+    },
+  },
+};
 </script>

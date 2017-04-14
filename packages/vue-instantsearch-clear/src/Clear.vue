@@ -19,17 +19,17 @@ export default {
     clearsQuery: {
       type: Boolean,
       required: false,
-      default: true
+      default: true,
     },
     clearsFacets: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
-      blockClassName: 'ais-clear'
+      blockClassName: 'ais-clear',
     };
   },
   computed: {
@@ -43,7 +43,7 @@ export default {
       }
 
       return true;
-    }
+    },
   },
   methods: {
     clear: function() {
@@ -56,7 +56,7 @@ export default {
         this.searchStore.clearRefinements();
       }
       this.searchStore.start();
-    }
-  }
+    },
+  },
 };
 </script>

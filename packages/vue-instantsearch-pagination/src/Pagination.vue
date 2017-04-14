@@ -31,78 +31,78 @@
 </template>
 
 <script>
-  import algoliaComponent from 'vue-instantsearch-component'
+import algoliaComponent from 'vue-instantsearch-component';
 
-  export default {
-    mixins: [algoliaComponent],
-    props: {
-      padding: {
-        type: Number,
-        default: 3,
-        validator (value) {
-          return value > 0
-        }
-      }
-    },
-    data () {
-      return {
-        blockClassName: 'ais-pagination'
-      }
-    },
-    computed: {
-      page () {
-        return this.searchStore.page
+export default {
+  mixins: [algoliaComponent],
+  props: {
+    padding: {
+      type: Number,
+      default: 3,
+      validator(value) {
+        return value > 0;
       },
-      totalPages () {
-        return this.searchStore.totalPages
-      },
-      pages () {
-        let maxPages = this.padding * 2
-        if (this.totalPages - 1 < maxPages) {
-          maxPages = this.totalPages - 1
-        }
+    },
+  },
+  data() {
+    return {
+      blockClassName: 'ais-pagination',
+    };
+  },
+  computed: {
+    page() {
+      return this.searchStore.page;
+    },
+    totalPages() {
+      return this.searchStore.totalPages;
+    },
+    pages() {
+      let maxPages = this.padding * 2;
+      if (this.totalPages - 1 < maxPages) {
+        maxPages = this.totalPages - 1;
+      }
 
-        let pages = [this.page]
-        let even = false
-        let lastPage = this.page
-        let firstPage = this.page
-        while (pages.length <= maxPages) {
-          even = !even
-          if (even) {
-            if (firstPage <= 1) {
-              continue
-            }
-            firstPage--
-            pages.unshift(firstPage)
-          } else {
-            if (lastPage >= this.totalPages) {
-              continue
-            }
-            lastPage++
-            pages.push(lastPage)
+      let pages = [this.page];
+      let even = false;
+      let lastPage = this.page;
+      let firstPage = this.page;
+      while (pages.length <= maxPages) {
+        even = !even;
+        if (even) {
+          if (firstPage <= 1) {
+            continue;
           }
+          firstPage--;
+          pages.unshift(firstPage);
+        } else {
+          if (lastPage >= this.totalPages) {
+            continue;
+          }
+          lastPage++;
+          pages.push(lastPage);
         }
+      }
 
-        return pages
-      }
+      return pages;
     },
-    methods: {
-      goToPage (page) {
-        page = Math.min(this.totalPages, page)
-        this.searchStore.page = page
-      },
-      goToFirstPage () {
-        this.goToPage(1)
-      },
-      goToPreviousPage () {
-        this.goToPage(this.page - 1)
-      },
-      goToNextPage () {
-        this.goToPage(this.page + 1)
-      },
-      goToLastPage () {
-        this.goToPage(this.totalPages)
-      }
-    }
-  }
+  },
+  methods: {
+    goToPage(page) {
+      page = Math.min(this.totalPages, page);
+      this.searchStore.page = page;
+    },
+    goToFirstPage() {
+      this.goToPage(1);
+    },
+    goToPreviousPage() {
+      this.goToPage(this.page - 1);
+    },
+    goToNextPage() {
+      this.goToPage(this.page + 1);
+    },
+    goToLastPage() {
+      this.goToPage(this.totalPages);
+    },
+  },
+};
 </script>

@@ -16,7 +16,7 @@ export default {
   mixins: [algoliaComponent],
   data() {
     return {
-      blockClassName: 'ais-input'
+      blockClassName: 'ais-input',
     };
   },
   computed: {
@@ -34,8 +34,8 @@ export default {
         this.$nextTick(function() {
           this.searchStore.start();
         });
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
