@@ -7,7 +7,6 @@ export default {
   props: {
     attribute: {
       type: String,
-      required: false,
       default: 'tree',
     },
     attributes: {
@@ -16,7 +15,6 @@ export default {
     },
     separator: {
       type: String,
-      required: false,
       default: ' > ',
     },
     limit: {
