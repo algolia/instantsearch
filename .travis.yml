@@ -2,8 +2,8 @@ language: node_js
 node_js: stable
 before_script:
   - yarn boot
-branches:		
-  only:		
+branches:
+  only:
     - master
 cache:
   yarn: true
