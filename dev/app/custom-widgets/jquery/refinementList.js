@@ -17,7 +17,7 @@ const renderFn = ({
     containerNode.append(markup);
   }
 
-  // remove event listeners if any before attachign new ones
+  // remove event listeners if any before attaching new ones
   window.$('li[data-refine-value]').each(function() { window.$(this).off(); });
 
   if (canRefine) {
