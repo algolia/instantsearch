@@ -7,7 +7,7 @@ export default {
   props: {
     attribute: {
       type: String,
-      default: 'tree',
+      default: 'tree-menu',
     },
     attributes: {
       type: Array,
