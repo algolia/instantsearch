@@ -1,39 +1,3 @@
-<template>
-  <div :class="bem()" v-if="show">
-
-    <slot name="header"></slot>
-
-    <ul :class="bem('list')" v-if="facetValues.length > 0">
-      <li v-for="facet in facetValues" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']" >
-
-        <a href="#" @click.prevent="toggleRefinement(facet)">
-          <slot :value="facet.name" :count="facet.count" :active="facet.isRefined">
-            <span :class="bem('value')">{{ facet.name }}</span>
-            <span :class="bem('count')">{{ facet.count }}</span>
-          </slot>
-        </a>
-
-        <template v-if="facet.isRefined && facet.data.length > 0">
-          <ul>
-            <li v-for="subfacet in facet.data" :class="[bem('item'), subfacet.isRefined ? bem('item', 'active') : '']">
-              <a href="#" @click.prevent="toggleRefinement(subfacet)">
-                <slot :value="subfacet.name" :count="subfacet.count" :active="subfacet.isRefined">
-                  <span :class="bem('value')">{{ subfacet.name }}</span>
-                  <span :class="bem('count')">{{ subfacet.count }}</span>
-                </slot>
-              </a>
-            </li>
-          </ul>
-        </template>
-
-      </li>
-    </ul>
-
-    <slot name="footer"></slot>
-
-  </div>
-</template>
-
 <script>
 import { FACET_TREE } from 'instantsearch-store';
 import algoliaComponent from 'vue-instantsearch-component';
@@ -97,6 +61,107 @@ export default {
     toggleRefinement(value) {
       return this.searchStore.toggleFacetRefinement(this.attribute, value.path);
     },
+    _renderList(h, facetValues, isRoot = true) {
+      const listItems = [];
+      for (let facet of facetValues) {
+        let listItemLabel = [];
+
+        if (this.$scopedSlots.default) {
+          listItemLabel.push(
+            this.$scopedSlots.default({
+              value: facet.name,
+              count: facet.count,
+              active: facet.isRefined,
+            })
+          );
+        } else {
+          listItemLabel.push(
+            h(
+              'span',
+              {
+                class: this.bem('value'),
+              },
+              facet.name
+            ),
+            h(
+              'span',
+              {
+                class: this.bem('count'),
+              },
+              facet.count
+            )
+          );
+        }
+
+        let listItemChildren = [
+          h(
+            'a',
+            {
+              domProps: {
+                href: '#',
+              },
+              on: {
+                click: event => {
+                  event.preventDefault();
+                  this.toggleRefinement(facet);
+                },
+              },
+            },
+            listItemLabel
+          ),
+        ];
+
+        if (facet.isRefined && facet.data && facet.data.length > 0) {
+          listItemChildren.push(this._renderList(h, facet.data, false));
+        }
+
+        listItems.push(
+          h(
+            'li',
+            {
+              class: [
+                this.bem('item'),
+                facet.isRefined ? this.bem('item', 'active') : '',
+              ],
+            },
+            listItemChildren
+          )
+        );
+      }
+
+      return h(
+        'ul',
+        {
+          class: isRoot ? this.bem('list') : '',
+        },
+        listItems
+      );
+    },
+  },
+  render(h) {
+    if (!this.show) {
+      return;
+    }
+
+    const children = [];
+
+    if (this.$slots.header) {
+      children.push(this.$slots.header);
+    }
+
+    children.push(this._renderList(h, this.facetValues));
+
+    if (this.$slots.footer) {
+      children.push(this.$slots.footer);
+    }
+
+    return h(
+      'div',
+      {
+        class: this.bem(),
+      },
+      children
+    );
   },
 };
 </script>
