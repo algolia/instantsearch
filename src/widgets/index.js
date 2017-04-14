@@ -1,3 +1,5 @@
+/** @module module:instantsearch.widgets */
+
 export {default as clearAll} from '../widgets/clear-all/clear-all.js';
 export {default as currentRefinedValues} from '../widgets/current-refined-values/current-refined-values.js';
 export {default as hierarchicalMenu} from '../widgets/hierarchical-menu/hierarchical-menu.js';

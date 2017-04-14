@@ -53,7 +53,7 @@ const common = [
     // otherwise, keep file
     return false;
   }),
-  documentationjs({rootJSFile: rootPath('index.js')}),
+  documentationjs({rootJSFile: rootPath('src/lib/main.js')}),
   markdown,
   headings('h2'),
   nav(),

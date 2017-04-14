@@ -98,8 +98,9 @@ stats({
 /**
  * Display various stats about the current search state
  * @type {WidgetFactory}
+ * @memberof instantsearch.widgets
  * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatories: `container`, 
- * @return {Object} widget
+ * @return {Widget} A new stats widget instance
  */
 export default function stats({
   container,
