@@ -137,7 +137,7 @@ export default {
     },
   },
   render(h) {
-    if (!this.show) {
+    if (this.show === false) {
       return;
     }
 
