@@ -5,22 +5,22 @@
 </template>
 
 <script>
-  import algoliaComponent from 'vue-instantsearch-component'
+import algoliaComponent from 'vue-instantsearch-component';
 
-  export default {
-    mixins: [algoliaComponent],
-    data () {
-      return {
-        blockClassName: 'ais-stats'
-      }
+export default {
+  mixins: [algoliaComponent],
+  data() {
+    return {
+      blockClassName: 'ais-stats',
+    };
+  },
+  computed: {
+    totalResults() {
+      return this.searchStore.totalResults;
     },
-    computed: {
-      totalResults () {
-        return this.searchStore.totalResults
-      },
-      processingTimeMS () {
-        return this.searchStore.processingTimeMS
-      }
-    }
-  }
+    processingTimeMS() {
+      return this.searchStore.processingTimeMS;
+    },
+  },
+};
 </script>

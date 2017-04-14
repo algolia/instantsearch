@@ -20,7 +20,7 @@ export default {
         }
 
         return;
-      }
+      },
     },
     appId: {
       type: String,
@@ -31,7 +31,7 @@ export default {
         }
 
         return;
-      }
+      },
     },
     indexName: {
       type: String,
@@ -42,21 +42,24 @@ export default {
         }
 
         return;
-      }
+      },
     },
     query: {
       type: String,
-      default: ''
-    }
+      default: '',
+    },
   },
-  data () {
+  data() {
     return {
-      blockClassName: 'ais-store'
-    }
+      blockClassName: 'ais-store',
+    };
   },
   provide() {
     if (!this.searchStore) {
-      this._localSearchStore = createFromAlgoliaCredentials(this.appId, this.apiKey);
+      this._localSearchStore = createFromAlgoliaCredentials(
+        this.appId,
+        this.apiKey
+      );
     } else {
       this._localSearchStore = this.searchStore;
       // Todo: check if is started and stop it.
@@ -71,7 +74,7 @@ export default {
     }
 
     return {
-      _searchStore: this._localSearchStore
+      _searchStore: this._localSearchStore,
     };
   },
   mounted() {
@@ -83,7 +86,7 @@ export default {
     },
     query() {
       this._localSearchStore.query = this.query;
-    }
-  }
+    },
+  },
 };
 </script>

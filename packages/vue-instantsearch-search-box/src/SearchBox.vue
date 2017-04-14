@@ -34,31 +34,31 @@ export default {
   props: {
     placeholder: {
       type: String,
-      default: ''
+      default: '',
     },
     submitTitle: {
       type: String,
-      default: 'search'
+      default: 'search',
     },
     clearTitle: {
       type: String,
-      default: 'clear'
+      default: 'clear',
     },
   },
   data() {
     return {
-      blockClassName: 'ais-search-box'
+      blockClassName: 'ais-search-box',
     };
   },
   methods: {
     onFormSubmit() {
       const input = this.$el.querySelector('input[type=search]');
       input.blur();
-    }
+    },
   },
   components: {
     AisInput,
-    AisClear
-  }
+    AisClear,
+  },
 };
 </script>

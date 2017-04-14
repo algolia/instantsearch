@@ -88,14 +88,14 @@
 </template>
 
 <script>
-  export default {
-    name: 'app',
-    data () {
-      return {
-        query: ''
-      }
-    }
-  }
+export default {
+  name: 'app',
+  data() {
+    return {
+      query: '',
+    };
+  },
+};
 </script>
 
 <style lang="scss" rel="stylesheet/scss">

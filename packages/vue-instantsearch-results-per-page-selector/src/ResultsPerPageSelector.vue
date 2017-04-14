@@ -7,37 +7,37 @@
 </template>
 
 <script>
-  import algoliaComponent from 'vue-instantsearch-component'
+import algoliaComponent from 'vue-instantsearch-component';
 
-  export default {
-    mixins: [algoliaComponent],
-    props: {
-      options: {
-        type: Array,
-        default: function () {
-          return [6, 12, 24]
-        }
+export default {
+  mixins: [algoliaComponent],
+  props: {
+    options: {
+      type: Array,
+      default: function() {
+        return [6, 12, 24];
       },
     },
-    data () {
-      return {
-        blockClassName: 'ais-results-per-page-selector'
-      }
+  },
+  data() {
+    return {
+      blockClassName: 'ais-results-per-page-selector',
+    };
+  },
+  computed: {
+    resultsPerPage: {
+      get() {
+        return this.searchStore.resultsPerPage;
+      },
+      set(value) {
+        this.searchStore.resultsPerPage = Number(value);
+      },
     },
-    computed: {
-      resultsPerPage:{
-        get () {
-          return this.searchStore.resultsPerPage
-        },
-        set (value) {
-          this.searchStore.resultsPerPage = Number(value)
-        }
-      }
-    },
-    mounted: function () {
-      if (this.options.indexOf(this.searchStore.resultsPerPage) === -1) {
-        this.searchStore.resultsPerPage = this.options[0]
-      }
+  },
+  mounted: function() {
+    if (this.options.indexOf(this.searchStore.resultsPerPage) === -1) {
+      this.searchStore.resultsPerPage = this.options[0];
     }
-  }
+  },
+};
 </script>
