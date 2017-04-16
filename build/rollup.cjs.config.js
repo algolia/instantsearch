@@ -12,7 +12,11 @@ export default {
   plugins: [
     vue({ compileTemplate: true, css: true }),
     json(),
-    buble(),
+    buble({
+      transforms: {
+        dangerousForOf: true,
+      },
+    }),
     filesize(),
   ],
   targets: [{ dest: `dist/${pkg.name}.common.js`, format: 'cjs' }],
