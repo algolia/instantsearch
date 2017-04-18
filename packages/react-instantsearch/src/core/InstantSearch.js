@@ -50,8 +50,8 @@ class InstantSearch extends Component {
     super(props);
 
     this.isControlled = Boolean(props.searchState);
-
     const initialState = this.isControlled ? props.searchState : {};
+    this.isUnmounting = false;
 
     this.aisManager = createInstantSearchManager({
       indexName: props.indexName,
@@ -71,6 +71,11 @@ class InstantSearch extends Component {
     if (this.isControlled) {
       this.aisManager.onExternalStateUpdate(nextProps.searchState);
     }
+  }
+
+  componentWillUnmount() {
+    this.isUnmounting = true;
+    this.aisManager.skipSearch();
   }
 
   getChildContext() {
@@ -115,7 +120,7 @@ class InstantSearch extends Component {
   }
 
   onSearchStateChange(searchState) {
-    if (this.props.onSearchStateChange) {
+    if (this.props.onSearchStateChange && !this.isUnmounting) {
       this.props.onSearchStateChange(searchState);
     }
   }

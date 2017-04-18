@@ -479,7 +479,7 @@ describe('createConnector', () => {
       })(() => null);
       const unregister = jest.fn();
       const setState = jest.fn();
-      const onInternalStateUpdate = jest.fn();
+      const onSearchStateChange = jest.fn();
       it('unregisters itself on unmount', () => {
         const wrapper = mount(<Connected />, {
           context: {
@@ -492,23 +492,23 @@ describe('createConnector', () => {
               widgetsManager: {
                 registerWidget: () => unregister,
               },
-              onInternalStateUpdate,
+              onSearchStateChange,
             },
           },
         });
         expect(unregister.mock.calls.length).toBe(0);
         expect(setState.mock.calls.length).toBe(0);
-        expect(onInternalStateUpdate.mock.calls.length).toBe(0);
+        expect(onSearchStateChange.mock.calls.length).toBe(0);
 
         wrapper.unmount();
 
         expect(unregister.mock.calls.length).toBe(1);
         expect(setState.mock.calls.length).toBe(1);
-        expect(onInternalStateUpdate.mock.calls.length).toBe(1);
+        expect(onSearchStateChange.mock.calls.length).toBe(1);
         expect(setState.mock.calls[0][0]).toEqual({
           widgets: { another: { state: 'state' } },
         });
-        expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({
+        expect(onSearchStateChange.mock.calls[0][0]).toEqual({
           another: { state: 'state' },
         });
       });
@@ -524,13 +524,13 @@ describe('createConnector', () => {
               widgetsManager: {
                 registerWidget: () => unregister,
               },
-              onInternalStateUpdate,
+              onSearchStateChange,
             },
           },
         });
         wrapper.unmount();
 
-        expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({
+        expect(onSearchStateChange.mock.calls[0][0]).toEqual({
           another: { state: 'state' },
         });
       });
