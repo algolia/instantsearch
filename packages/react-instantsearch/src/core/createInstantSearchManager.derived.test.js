@@ -12,7 +12,11 @@ jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
   );
   Helper.prototype._dispatchAlgoliaResponse = function(state) {
     state.forEach(s => {
-      this.emit('result', { query: s.state.query, index: s.state.index }, s);
+      this.emit(
+        'result',
+        { query: s.state.query, page: s.state.page, index: s.state.index },
+        s
+      );
     });
   };
   Helper.prototype.searchForFacetValues = () =>
@@ -58,6 +62,11 @@ describe('createInstantSearchManager', () => {
           multiIndexContext: { targetedIndex: 'second' },
         });
 
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setPage(3),
+          multiIndexContext: { targetedIndex: 'first' },
+        });
+
         expect(ism.store.getState().results).toBe(null);
 
         return Promise.resolve().then(() => {
@@ -66,10 +75,12 @@ describe('createInstantSearchManager', () => {
           const store = ism.store.getState();
           expect(store.results.first).toEqual({
             query: 'first query 1',
+            page: 3,
             index: 'first',
           });
           expect(store.results.second).toEqual({
             query: 'second query 1',
+            page: 0,
             index: 'second',
           });
           expect(store.error).toBe(null);
@@ -87,10 +98,12 @@ describe('createInstantSearchManager', () => {
             const store1 = ism.store.getState();
             expect(store.results.first).toEqual({
               query: 'first query 2',
+              page: 3,
               index: 'first',
             });
             expect(store.results.second).toEqual({
               query: 'second query 2',
+              page: 0,
               index: 'second',
             });
             expect(store1.error).toBe(null);
@@ -114,6 +127,10 @@ describe('createInstantSearchManager', () => {
           getSearchParameters: params => params.setQuery('second query 1'),
           multiIndexContext: { targetedIndex: 'second' },
         });
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setPage(3),
+          multiIndexContext: { targetedIndex: 'first' },
+        });
 
         ism.onExternalStateUpdate({});
 
@@ -124,10 +141,12 @@ describe('createInstantSearchManager', () => {
         const store = ism.store.getState();
         expect(store.results.first).toEqual({
           query: 'first query 1',
+          page: 3,
           index: 'first',
         });
         expect(store.results.second).toEqual({
           query: 'second query 1',
+          page: 0,
           index: 'second',
         });
         expect(store.error).toBe(null);

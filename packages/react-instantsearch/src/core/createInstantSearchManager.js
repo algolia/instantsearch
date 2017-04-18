@@ -60,20 +60,15 @@ export default function createInstantSearchManager(
 
   function getSearchParameters() {
     indexMapping = {};
-    const mainParameters = widgetsManager
+    const sharedParameters = widgetsManager
       .getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(
-        widget =>
-          !widget.multiIndexContext ||
-          (widget.multiIndexContext &&
-            widget.multiIndexContext.targetedIndex === indexName)
-      )
+      .filter(widget => !widget.multiIndexContext)
       .reduce(
         (res, widget) => widget.getSearchParameters(res),
         initialSearchParameters
       );
-    indexMapping[mainParameters.index] = indexName;
+    indexMapping[sharedParameters.index] = indexName;
 
     const derivatedWidgets = widgetsManager
       .getWidgets()
@@ -97,25 +92,40 @@ export default function createInstantSearchManager(
         []
       );
 
-    return { mainParameters, derivatedWidgets };
+    const mainIndexParameters = widgetsManager
+      .getWidgets()
+      .filter(widget => Boolean(widget.getSearchParameters))
+      .filter(
+        widget =>
+          widget.multiIndexContext &&
+          widget.multiIndexContext.targetedIndex === indexName
+      )
+      .reduce(
+        (res, widget) => widget.getSearchParameters(res),
+        sharedParameters
+      );
+
+    return { sharedParameters, mainIndexParameters, derivatedWidgets };
   }
 
   function search() {
-    const { mainParameters, derivatedWidgets } = getSearchParameters(
-      helper.state
-    );
+    const {
+      sharedParameters,
+      mainIndexParameters,
+      derivatedWidgets,
+    } = getSearchParameters(helper.state);
 
     Object.values(derivedHelpers).forEach(d => d.detach());
     derivedHelpers = {};
 
-    helper.setState(mainParameters);
+    helper.setState(sharedParameters);
 
     derivatedWidgets.forEach(derivatedSearchParameters => {
       const index = derivatedSearchParameters.targetedIndex;
-      const derivedHelper = helper.derive(sp => {
+      const derivedHelper = helper.derive(() => {
         const parameters = derivatedSearchParameters.widgets.reduce(
           (res, widget) => widget.getSearchParameters(res),
-          sp.setIndex(index)
+          sharedParameters.setIndex(index)
         );
         indexMapping[parameters.index] = index;
         return parameters;
@@ -124,6 +134,8 @@ export default function createInstantSearchManager(
       derivedHelper.on('error', handleSearchError);
       derivedHelpers[index] = derivedHelper;
     });
+
+    helper.setState(mainIndexParameters);
 
     helper.search();
   }
