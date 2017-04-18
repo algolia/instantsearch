@@ -13,7 +13,7 @@
     "release": "./scripts/release.sh",
     "lint": "if [ \"$CI\" = \"true\" ]; then eslint .; else eslint . --cache; fi",
     "docs:doctoc": "doctoc --maxlevel 1 README.md",
-    "test": "jest && yarn lint && NODE_ENV=production yarn test:build",
+    "test": "./scripts/test.sh",
     "test:build": "./scripts/test:build.sh",
     "dev": "jest --watch --bail",
     "docs:storybook-start": "NODE_ENV=development start-storybook -p 6006 -c ./storybook -s ./storybook/public",
