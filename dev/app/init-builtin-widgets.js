@@ -383,6 +383,26 @@ export default search => {
   );
 
   search.addWidget(
+    instantsearch.widgets.rangeSlider2({
+      container: '#price2',
+      attributeName: 'price',
+      max: 500,
+      step: 10,
+      cssClasses: {
+        header: 'facet-title',
+      },
+      templates: {
+        header: 'Price 2',
+      },
+      tooltips: {
+        format(rawValue) {
+          return `$${Math.round(rawValue).toLocaleString()}`;
+        },
+      },
+    })
+  );
+
+  search.addWidget(
     instantsearch.widgets.hierarchicalMenu({
       container: '#hierarchical-categories',
       attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
