@@ -46,6 +46,12 @@ export default function createInstantSearchManager(
     searching: false,
   });
 
+  let skip = false;
+
+  function skipSearch() {
+    skip = true;
+  }
+
   function updateClient(client) {
     helper.setClient(client);
     search();
@@ -109,35 +115,37 @@ export default function createInstantSearchManager(
   }
 
   function search() {
-    const {
-      sharedParameters,
-      mainIndexParameters,
-      derivatedWidgets,
-    } = getSearchParameters(helper.state);
+    if (!skip) {
+      const {
+        sharedParameters,
+        mainIndexParameters,
+        derivatedWidgets,
+      } = getSearchParameters(helper.state);
 
-    Object.values(derivedHelpers).forEach(d => d.detach());
-    derivedHelpers = {};
+      Object.values(derivedHelpers).forEach(d => d.detach());
+      derivedHelpers = {};
 
-    helper.setState(sharedParameters);
+      helper.setState(sharedParameters);
 
-    derivatedWidgets.forEach(derivatedSearchParameters => {
-      const index = derivatedSearchParameters.targetedIndex;
-      const derivedHelper = helper.derive(() => {
-        const parameters = derivatedSearchParameters.widgets.reduce(
-          (res, widget) => widget.getSearchParameters(res),
-          sharedParameters.setIndex(index)
-        );
-        indexMapping[parameters.index] = index;
-        return parameters;
+      derivatedWidgets.forEach(derivatedSearchParameters => {
+        const index = derivatedSearchParameters.targetedIndex;
+        const derivedHelper = helper.derive(() => {
+          const parameters = derivatedSearchParameters.widgets.reduce(
+            (res, widget) => widget.getSearchParameters(res),
+            sharedParameters.setIndex(index)
+          );
+          indexMapping[parameters.index] = index;
+          return parameters;
+        });
+        derivedHelper.on('result', handleSearchSuccess);
+        derivedHelper.on('error', handleSearchError);
+        derivedHelpers[index] = derivedHelper;
       });
-      derivedHelper.on('result', handleSearchSuccess);
-      derivedHelper.on('error', handleSearchError);
-      derivedHelpers[index] = derivedHelper;
-    });
 
-    helper.setState(mainIndexParameters);
+      helper.setState(mainIndexParameters);
 
-    helper.search();
+      helper.search();
+    }
   }
 
   function handleSearchSuccess(content) {
@@ -274,5 +282,6 @@ export default function createInstantSearchManager(
     onSearchForFacetValues,
     updateClient,
     updateIndex,
+    skipSearch,
   };
 }

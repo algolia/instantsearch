@@ -175,6 +175,27 @@ describe('createInstantSearchManager', () => {
         expect(client1.search).toHaveBeenCalledTimes(1);
       });
     });
+    it('should not be called when the search is skipped', () => {
+      const client0 = makeClient(defaultResponse);
+      expect(client0.search).toHaveBeenCalledTimes(0);
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        initialState: {},
+        searchParameters: {},
+        algoliaClient: client0,
+      });
+
+      ism.skipSearch();
+
+      ism.widgetsManager.registerWidget({
+        getMetadata: () => {},
+        transitionState: () => {},
+      });
+
+      return Promise.resolve().then(() => {
+        expect(client0.search).toHaveBeenCalledTimes(0);
+      });
+    });
   });
 });
 
