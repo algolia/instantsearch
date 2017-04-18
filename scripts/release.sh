@@ -16,13 +16,13 @@ if [ $# -gt 0 ]; then
 fi
 
 # npm owner add and npm whoami cannot be moved to yarn yet
-if [[ -n $(cd packages/react-instantsearch && npm owner add "$(npm whoami)") ]]; then
-  printf "Release: Not an owner of the npm repo, ask for it\n"
+if [[ $(cd packages/react-instantsearch && npm owner ls) != *"$(npm whoami)"* ]]; then
+  printf "Release: Not an owner of the npm ris repo, ask for it\n"
   exit 1
 fi
-
-if [[ -n $(cd packages/react-instantsearch-theme-algolia && npm owner add "$(npm whoami)") ]]; then
-  printf "Release: Not an owner of the npm repo, ask for it\n"
+ 
+if [[ $(cd packages/react-instantsearch-theme-algolia && npm owner ls) != *"$(npm whoami)"* ]]; then
+  printf "Release: Not an owner of the npm theme repo, ask for it\n"
   exit 1
 fi
 
