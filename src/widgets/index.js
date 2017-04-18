@@ -12,6 +12,7 @@ export {default as pagination} from '../widgets/pagination/pagination.js';
 export {default as priceRanges} from '../widgets/price-ranges/price-ranges.js';
 export {default as searchBox} from '../widgets/search-box/search-box.js';
 export {default as rangeSlider} from '../widgets/range-slider/range-slider.js';
+export {default as rangeSlider2} from '../widgets/range-slider2/range-slider2.js';
 export {default as sortBySelector} from '../widgets/sort-by-selector/sort-by-selector.js';
 export {default as starRating} from '../widgets/star-rating/star-rating.js';
 export {default as stats} from '../widgets/stats/stats.js';
