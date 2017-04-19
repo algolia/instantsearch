@@ -79,7 +79,7 @@ describe('clearAll()', () => {
       widget.render({results, helper, state: helper.state, createURL, instantSearchInstance: {}});
 
       expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-      //expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<ClearAll {...getProps()} />);
+      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<ClearAll {...getProps()} />);
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
       expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<ClearAll {...getProps()} />);
       expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
