@@ -15,7 +15,7 @@ This repository holds the code for the Vue InstantSearch project.
 
 ## Documentation
 
-There's a dedicated documentation available at <https://community.algolia.com/vue-instantsearch/>.
+There's a dedicated documentation available at [community.algolia.com/vue-instantsearch][website].
 
 ## Installation
 
