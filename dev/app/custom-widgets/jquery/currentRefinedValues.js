@@ -5,7 +5,7 @@ const renderFn = ({
   clearAllClick,
   clearAllURL,
   createURL,
-  clearRefinement,
+  refine,
   refinements,
   widgetParams: {containerNode},
 }, isFirstRendering) => {
@@ -89,7 +89,7 @@ const renderFn = ({
           .off('click')
           .on('click', e => {
             e.preventDefault();
-            clearRefinement(refinements[index]);
+            refine(refinements[index]);
           });
       });
 

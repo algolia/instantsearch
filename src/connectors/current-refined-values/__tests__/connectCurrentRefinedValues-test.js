@@ -77,9 +77,9 @@ describe('connectCurrentRefinedValues', () => {
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     const refinements = firstRenderingOptions.refinements;
-    expect(typeof firstRenderingOptions.clearRefinement).toBe('function');
+    expect(typeof firstRenderingOptions.refine).toBe('function');
     expect(refinements.length).toBe(1);
-    firstRenderingOptions.clearRefinement(refinements[0]);
+    firstRenderingOptions.refine(refinements[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
 
     helper.addFacetRefinement('myFacet', 'value');
@@ -93,9 +93,9 @@ describe('connectCurrentRefinedValues', () => {
 
     const secondRenderingOptions = rendering.lastCall.args[0];
     const otherRefinements = secondRenderingOptions.refinements;
-    expect(typeof secondRenderingOptions.clearRefinement).toBe('function');
+    expect(typeof secondRenderingOptions.refine).toBe('function');
     expect(otherRefinements.length).toBe(1);
-    secondRenderingOptions.clearRefinement(refinements[0]);
+    secondRenderingOptions.refine(refinements[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
   });
 

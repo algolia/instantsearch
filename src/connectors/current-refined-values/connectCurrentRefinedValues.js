@@ -24,7 +24,7 @@ var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(p
   //   clearAllClick,
   //   clearAllPosition,
   //   clearAllURL,
-  //   clearRefinement,
+  //   refine,
   //   createURL,
   //   refinements,
   //   instantSearchInstance,
@@ -47,7 +47,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} clearAllClick function to trigger the clear of all the currently refined values
  * @property {string} clearAllPosition position of the 'clear all' button
  * @property {function} clearAllURL url which leads to a state where all the refinements have been cleared
- * @property {function(item)} clearRefinement clearing function for a refinement
+ * @property {function(item)} refine clearing function for a refinement
  * @property {function(item)} createURL create an individual url where a single refinement is cleared
  * @property {Refinements[]} refinements all the current refinements
  * @property {InstantsSearch} instantSearchInstance the instance of instantsearch.js
@@ -130,7 +130,7 @@ export default function connectCurrentRefinedValues(renderFn) {
           attributes: attributesObj,
           clearAllClick: this._clearRefinementsAndSearch,
           clearAllURL,
-          clearRefinement: _clearRefinement,
+          refine: _clearRefinement,
           createURL: _createURL,
           refinements,
           instantSearchInstance,
@@ -150,7 +150,7 @@ export default function connectCurrentRefinedValues(renderFn) {
           attributes: attributesObj,
           clearAllClick: this._clearRefinementsAndSearch,
           clearAllURL,
-          clearRefinement: _clearRefinement,
+          refine: _clearRefinement,
           createURL: _createURL,
           refinements,
           instantSearchInstance,
