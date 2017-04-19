@@ -1,4 +1,3 @@
-import memoize from 'lodash/memoize';
 import times from 'lodash/times';
 import range from 'lodash/range';
 import has from 'lodash/has';
@@ -11,8 +10,6 @@ import Pit from './Pit.js';
 
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
-
-const getCacheKey = obj => Object.keys(obj).map(key => `${key}:${obj[key]}`).join('|');
 
 class RawSlider extends Component {
 
@@ -38,7 +35,7 @@ class RawSlider extends Component {
   }
 
   // creates an array number where to display a pit point on the slider
-  computeDefaultPitPoints = memoize(({min, max}) => {
+  computeDefaultPitPoints({min, max}) {
     const totalLenght = max - min;
     const steps = 34;
     const stepsLength = totalLenght / steps;
@@ -48,13 +45,12 @@ class RawSlider extends Component {
       .map(pitPoint => pitPoint === 0 ? 0.00001 : pitPoint);
 
     return pitPoints;
-  }, getCacheKey)
+  }
 
   // creates an array of values where the slider should snap to
-  computeSnapPoints = memoize(
-    ({min, max, step}) => range(min, max + step, step),
-    getCacheKey
-  );
+  computeSnapPoints({min, max, step}) {
+    return range(min, max + step, step);
+  }
 
   createHandleComponent = tooltips => props => {
     const value = has(tooltips, 'format')
