@@ -58,6 +58,8 @@ export default function connectClearAll(renderFn) {
     const {excludeAttributes = [], clearsQuery = false} = widgetParams;
 
     return {
+      // Provide the same function to the `renderFn` so that way the user
+      // has to only bind it once when `isFirstRendering` for instance
       _refine() {},
       _cachedRefine() { this._refine(); },
 
