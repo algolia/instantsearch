@@ -165,7 +165,7 @@ class RefinementList extends React.Component {
         placeholder={this.props.searchPlaceholder}
         onChange={this.props.searchFacetValues}
         onValidate={() => this.refineFirstValue()}
-        disabled={displayedFacetValues.length < limit}/> :
+        disabled={!this.props.isFromSearch && displayedFacetValues.length < limit}/> :
       null;
 
     const noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ?
