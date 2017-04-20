@@ -1,3 +1,14 @@
+<a name="1.11.6"></a>
+## [1.11.6](https://github.com/algolia/instantsearch.js/compare/v1.11.5...v1.11.6) (2017-04-20)
+
+
+### Bug Fixes
+
+* **CONTRIBUTING:** remove section about beta releases (#2109) ([5640131](https://github.com/algolia/instantsearch.js/commit/5640131))
+* **sffv:** disable sffv input when few facet values FIX #2111 ([1e33c10](https://github.com/algolia/instantsearch.js/commit/1e33c10)), closes [#2111](https://github.com/algolia/instantsearch.js/issues/2111)
+
+
+
 <a name="1.11.5"></a>
 ## [1.11.5](https://github.com/algolia/instantsearch.js/compare/v1.11.4...v1.11.5) (2017-04-12)
 
