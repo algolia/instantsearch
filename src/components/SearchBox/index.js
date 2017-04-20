@@ -6,6 +6,7 @@ export default class SearchBox extends React.Component {
     placeholder: React.PropTypes.string.isRequired,
     onChange: React.PropTypes.func.isRequired,
     onValidate: React.PropTypes.func.isRequired,
+    disabled: React.PropTypes.bool,
   }
 
   clearInput() {
@@ -24,6 +25,9 @@ export default class SearchBox extends React.Component {
 
   render() {
     const {placeholder, onChange} = this.props;
+    const searchInput = this.props.disabled ?
+      <input type="search" name="search" placeholder={placeholder} autoComplete="off" required="required" className="sbx-sffv__input sbx-sffv__input-disabled" onChange={e => onChange(e.target.value)} ref={i => { this.input = i; }} disabled/> :
+      <input type="search" name="search" placeholder={placeholder} autoComplete="off" required="required" className="sbx-sffv__input" onChange={e => onChange(e.target.value)} ref={i => { this.input = i; }}/>;
 
     return (
       <form noValidate="novalidate"
@@ -42,7 +46,7 @@ export default class SearchBox extends React.Component {
         </svg>
 
         <div role="search" className="sbx-sffv__wrapper">
-          <input type="search" name="search" placeholder={placeholder} autoComplete="off" required="required" className="sbx-sffv__input" onChange={e => onChange(e.target.value)} ref={i => { this.input = i; }} />
+          {searchInput}
           <button type="submit" title="Submit your search query." className="sbx-sffv__submit">
             <svg role="img" aria-label="Search">
               <use xlinkHref="#sbx-icon-search-12"></use>
