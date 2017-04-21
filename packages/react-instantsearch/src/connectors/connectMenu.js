@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import { orderBy } from 'lodash';
 
 import createConnector from '../core/createConnector';
@@ -102,8 +102,8 @@ export default createConnector({
     const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
 
-    const canRefine = Boolean(results) &&
-      Boolean(results.getFacetByName(attributeName));
+    const canRefine =
+      Boolean(results) && Boolean(results.getFacetByName(attributeName));
 
     const isFromSearch = Boolean(
       searchForFacetValuesResults &&

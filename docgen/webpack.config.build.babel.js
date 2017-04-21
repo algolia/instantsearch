@@ -4,9 +4,7 @@ import webpack from 'webpack';
 import webpackConfig from './webpack.config.babel.js';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
-const {
-  optimize: { UglifyJsPlugin },
-} = webpack;
+const { optimize: { UglifyJsPlugin } } = webpack;
 
 export default {
   ...webpackConfig,

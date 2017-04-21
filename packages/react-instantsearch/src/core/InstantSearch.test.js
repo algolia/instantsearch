@@ -10,7 +10,8 @@ import createInstantSearchManager from './createInstantSearchManager';
 jest.mock('./createInstantSearchManager', () =>
   jest.fn(() => ({
     context: {},
-  })));
+  }))
+);
 
 const DEFAULT_PROPS = {
   appId: 'foo',

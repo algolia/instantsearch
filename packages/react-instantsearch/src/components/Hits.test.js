@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 /* eslint-env jest, jasmine */
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 import renderer from 'react-test-renderer';
 
 import Hits from './Hits';

@@ -37,5 +37,5 @@ do
     -o "${dist_file_min}"
 
   gzip_size=$(gzip -9 < "$dist_file_min" | wc -c | pretty-bytes)
-  echo "=> $dist_file_min gzipped will weight $gzip_size"
+  echo "=> $dist_file_min gzipped will weigh $gzip_size"
 done

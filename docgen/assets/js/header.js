@@ -43,6 +43,7 @@ export default function initHeader() {
 
     function toggleMenu() {
       /* eslint-disable no-undef */
+
       docsearch({
         apiKey: '5cb6763f264e31381e18639a1147634c',
         indexName: 'react-instantsearch',
@@ -90,7 +91,8 @@ export default function initHeader() {
       setTimeout(() => {
         document.querySelector(
           '#menu-wrapper .cm-menu__list:first-of-type'
-        ).style.display = 'none';
+        ).style.display =
+          'none';
         const links = document.querySelectorAll('#menu-wrapper a');
         const linksArray = [];
         let linksTpl = '';
@@ -149,7 +151,8 @@ export default function initHeader() {
 
     function maybeOpenSearchBox(e) {
       if (
-        (e.target.tagName !== 'INPUT' && e.keyCode === 83) || e.keyCode === 191
+        (e.target.tagName !== 'INPUT' && e.keyCode === 83) ||
+        e.keyCode === 191
       ) {
         document.querySelector('.cm-search__input').classList.add('open');
         document.querySelector('#searchbox').focus();

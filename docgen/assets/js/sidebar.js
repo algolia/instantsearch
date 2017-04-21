@@ -51,7 +51,8 @@ function scrollSpy(sidebarContainer, headersContainer) {
     [...sidebarContainer.querySelectorAll('a')].forEach(item => {
       const currentHref = item.getAttribute('href');
       const anchorToFind = `#${header.getAttribute('id')}`;
-      const isCurrentHeader = currentHref.indexOf(anchorToFind) > 0 &&
+      const isCurrentHeader =
+        currentHref.indexOf(anchorToFind) > 0 &&
         currentHref.indexOf(anchorToFind) ===
           currentHref.length - anchorToFind.length;
       if (isCurrentHeader) {
@@ -77,7 +78,7 @@ function scrollSpy(sidebarContainer, headersContainer) {
       // then we take the closest to this position as reference
       .sort(
         (header1, header2) =>
-          Math.abs(header1.rect.top) < Math.abs(header2.rect.top) ? -1 : 1
+          (Math.abs(header1.rect.top) < Math.abs(header2.rect.top) ? -1 : 1)
       );
 
     if (headers[0] && highestVisibleHeaders.length === 0) {
@@ -105,7 +106,8 @@ function activeLinks(sidebarContainer) {
   linksContainer.addEventListener('click', e => {
     if (e.target.tagName === 'A') {
       [...linksContainer.querySelectorAll('a')].forEach(item =>
-        item.classList.remove('active'));
+        item.classList.remove('active')
+      );
       e.target.classList.add('active');
     }
   });

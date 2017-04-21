@@ -1,4 +1,5 @@
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { storiesOf } from '@kadira/storybook';
 import { connectRange } from '../packages/react-instantsearch/connectors';
 import { WrapWithHits } from './util';
@@ -12,18 +13,16 @@ stories.add('Airbnb Rheostat', () => (
   </WrapWithHits>
 ));
 
-const Range = React.createClass({
-  propTypes: {
-    min: React.PropTypes.number,
-    max: React.PropTypes.number,
-    currentRefinement: React.PropTypes.object,
-    refine: React.PropTypes.func.isRequired,
-    canRefine: React.PropTypes.bool.isRequired,
-  },
+class Range extends Component {
+  static propTypes = {
+    min: PropTypes.number,
+    max: PropTypes.number,
+    currentRefinement: PropTypes.object,
+    refine: PropTypes.func.isRequired,
+    canRefine: PropTypes.bool.isRequired,
+  };
 
-  getInitialState() {
-    return { currentValues: { min: this.props.min, max: this.props.max } };
-  },
+  state = { currentValues: { min: this.props.min, max: this.props.max } };
 
   componentWillReceiveProps(sliderState) {
     if (sliderState.canRefine) {
@@ -34,15 +33,15 @@ const Range = React.createClass({
         },
       });
     }
-  },
+  }
 
-  onValuesUpdated(sliderState) {
+  onValuesUpdated = sliderState => {
     this.setState({
       currentValues: { min: sliderState.values[0], max: sliderState.values[1] },
     });
-  },
+  };
 
-  onChange(sliderState) {
+  onChange = sliderState => {
     if (
       this.props.currentRefinement.min !== sliderState.values[0] ||
       this.props.currentRefinement.max !== sliderState.values[1]
@@ -52,7 +51,7 @@ const Range = React.createClass({
         max: sliderState.values[1],
       });
     }
-  },
+  };
 
   render() {
     const { min, max, currentRefinement } = this.props;
@@ -72,8 +71,8 @@ const Range = React.createClass({
           </div>
         </div>
       : null;
-  },
-});
+  }
+}
 
 const ConnectedRange = connectRange(Range);
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Highlighter from './Highlighter';
 
@@ -6,8 +7,8 @@ export default function Highlight(props) {
 }
 
 Highlight.propTypes = {
-  hit: React.PropTypes.object.isRequired,
-  attributeName: React.PropTypes.string.isRequired,
-  highlight: React.PropTypes.func.isRequired,
-  tagName: React.PropTypes.string,
+  hit: PropTypes.object.isRequired,
+  attributeName: PropTypes.string.isRequired,
+  highlight: PropTypes.func.isRequired,
+  tagName: PropTypes.string,
 };

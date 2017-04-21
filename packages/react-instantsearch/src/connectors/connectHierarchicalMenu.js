@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import { SearchParameters } from 'algoliasearch-helper';
 import {
@@ -30,13 +30,7 @@ function getCurrentRefinement(props, searchState, context) {
 }
 
 function getValue(path, props, searchState, context) {
-  const {
-    id,
-    attributes,
-    separator,
-    rootPath,
-    showParentLevel,
-  } = props;
+  const { id, attributes, separator, rootPath, showParentLevel } = props;
 
   const currentRefinement = getCurrentRefinement(props, searchState, context);
   let nextRefinement;
@@ -175,8 +169,8 @@ export default createConnector({
     const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
 
-    const isFacetPresent = Boolean(results) &&
-      Boolean(results.getFacetByName(id));
+    const isFacetPresent =
+      Boolean(results) && Boolean(results.getFacetByName(id));
 
     if (!isFacetPresent) {
       return {

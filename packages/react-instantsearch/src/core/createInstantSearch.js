@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import InstantSearch from './InstantSearch';
 import { version } from '../../package.json';
 
@@ -15,9 +16,9 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       algoliaClient: PropTypes.object,
       appId: PropTypes.string,
       apiKey: PropTypes.string,
-      children: React.PropTypes.oneOfType([
-        React.PropTypes.arrayOf(React.PropTypes.node),
-        React.PropTypes.node,
+      children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
       ]),
       indexName: PropTypes.string.isRequired,
       searchParameters: PropTypes.object,
@@ -28,8 +29,8 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
 
     constructor(props) {
       super();
-      this.client = props.algoliaClient ||
-        defaultAlgoliaClient(props.appId, props.apiKey);
+      this.client =
+        props.algoliaClient || defaultAlgoliaClient(props.appId, props.apiKey);
       this.client.addAlgoliaAgent(`react-instantsearch ${version}`);
     }
 
@@ -38,7 +39,8 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       if (nextProps.algoliaClient) {
         this.client = nextProps.algoliaClient;
       } else if (
-        props.appId !== nextProps.appId || props.apiKey !== nextProps.apiKey
+        props.appId !== nextProps.appId ||
+        props.apiKey !== nextProps.apiKey
       ) {
         this.client = defaultAlgoliaClient(nextProps.appId, nextProps.apiKey);
       }

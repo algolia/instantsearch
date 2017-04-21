@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 /* eslint-env jest, jasmine */
 
 import React from 'react';
@@ -304,7 +305,7 @@ describe('Pagination', () => {
       <Pagination {...DEFAULT_PROPS} refine={refine} canRefine={true} />,
       {
         context: { canRefine },
-        childContextTypes: { canRefine: React.PropTypes.func },
+        childContextTypes: { canRefine: PropTypes.func },
       }
     );
 

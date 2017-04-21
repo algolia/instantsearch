@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { InstantSearch, Configure } from 'react-instantsearch/dom';
 import { createConnector } from 'react-instantsearch';
@@ -47,20 +48,17 @@ const connectAutoComplete = createConnector({
     const hits = search.results && search.results.bestbuy
       ? search.results.bestbuy.hits
       : [];
-    const facets = props.attributes.reduce(
-      (acc, attributeName) => {
-        if (search.results && search.results.bestbuy) {
-          acc[attributeName] = search.results.bestbuy
-            .getFacetValues(attributeName)
-            .slice(0, 3)
-            .map(v => ({
-              name: v.name,
-            }));
-        }
-        return acc;
-      },
-      {}
-    );
+    const facets = props.attributes.reduce((acc, attributeName) => {
+      if (search.results && search.results.bestbuy) {
+        acc[attributeName] = search.results.bestbuy
+          .getFacetValues(attributeName)
+          .slice(0, 3)
+          .map(v => ({
+            name: v.name,
+          }));
+      }
+      return acc;
+    }, {});
     return {
       hits,
       query: state.query !== undefined ? state.query : '',
@@ -77,7 +75,7 @@ const connectAutoComplete = createConnector({
   },
 });
 
-class AutoComplete extends React.Component {
+class AutoComplete extends Component {
   formatHitsForAutoSuggest(props) {
     const hits = [];
     forOwn({ ...props.facets, hits: props.hits }, (value, key) => {
@@ -112,8 +110,8 @@ class AutoComplete extends React.Component {
 }
 
 AutoComplete.propTypes = {
-  refine: React.PropTypes.func.isRequired,
-  query: React.PropTypes.string.isRequired,
+  refine: PropTypes.func.isRequired,
+  query: PropTypes.string.isRequired,
 };
 
 const ConnectedAutoComplete = connectAutoComplete(AutoComplete);

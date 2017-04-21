@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Index from './Index';
 
 /**
@@ -10,9 +11,9 @@ import Index from './Index';
 export default function createIndex(root) {
   return class CreateIndex extends Component {
     static propTypes = {
-      children: React.PropTypes.oneOfType([
-        React.PropTypes.arrayOf(React.PropTypes.node),
-        React.PropTypes.node,
+      children: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.node),
+        PropTypes.node,
       ]),
       indexName: PropTypes.string.isRequired,
     };

@@ -165,14 +165,16 @@ const MaterialUiSearchBox = ({ currentRefinement, refine }) => {
         className="material-icons"
         onTouchTap={() => refine('')}
       >
-        clear
+        {' '}
+        clear{' '}
       </FontIcon>
     : null;
 
   return (
     <div style={style}>
       <FontIcon style={{ color: 'lightgrey' }} className="material-icons">
-        search
+        {' '}
+        search{' '}
       </FontIcon>
       <TextField
         value={currentRefinement}
@@ -202,9 +204,12 @@ const CheckBoxItem = ({ item, refine }) => (
   />
 );
 
-const MaterialUiCheckBoxRefinementList = (
-  { items, attributeName, refine, createURL }
-) => (
+const MaterialUiCheckBoxRefinementList = ({
+  items,
+  attributeName,
+  refine,
+  createURL,
+}) => (
   <List>
     <Subheader style={{ fontSize: 18 }}>
       {attributeName.toUpperCase()}

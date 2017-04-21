@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { storiesOf } from '@kadira/storybook';
 import { Hits, Highlight, Snippet } from '../packages/react-instantsearch/dom';
@@ -31,5 +32,5 @@ function Product({ hit }) {
 }
 
 Product.propTypes = {
-  hit: React.PropTypes.object.isRequired,
+  hit: PropTypes.object.isRequired,
 };

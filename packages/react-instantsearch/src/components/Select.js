@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { has } from 'lodash';
 
 export default class Select extends Component {
@@ -7,20 +8,16 @@ export default class Select extends Component {
     onSelect: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(
       PropTypes.shape({
-        value: PropTypes.oneOfType([
-          PropTypes.string,
-          PropTypes.number,
-        ]).isRequired,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+          .isRequired,
 
         key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         label: PropTypes.string,
         disabled: PropTypes.bool,
       })
     ).isRequired,
-    selectedItem: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
+    selectedItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
   };
 
   onChange = e => {

@@ -3,8 +3,8 @@
  * https://github.com/facebook/react-native
  * @flow
  */
-
-import React from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -31,8 +31,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default React.createClass({
-  displayName: 'React Native example',
+export default class extends Component {
+  static displayName = 'React Native example';
+
   render() {
     return (
       <View style={styles.maincontainer}>
@@ -46,10 +47,10 @@ export default React.createClass({
         </InstantSearch>
       </View>
     );
-  },
-});
+  }
+}
 
-class SearchBox extends React.Component {
+class SearchBox extends Component {
   render() {
     return (
       <TextInput
@@ -62,13 +63,13 @@ class SearchBox extends React.Component {
 }
 
 SearchBox.propTypes = {
-  refine: React.PropTypes.func.isRequired,
-  currentRefinement: React.PropTypes.string,
+  refine: PropTypes.func.isRequired,
+  currentRefinement: PropTypes.string,
 };
 
 const ConnectedSearchBox = connectSearchBox(SearchBox);
 
-class Hits extends React.Component {
+class Hits extends Component {
   onEndReached() {
     if (this.props.hasMore) {
       this.props.refine();
@@ -102,9 +103,9 @@ class Hits extends React.Component {
 }
 
 Hits.propTypes = {
-  hits: React.PropTypes.array.isRequired,
-  refine: React.PropTypes.func.isRequired,
-  hasMore: React.PropTypes.bool.isRequired,
+  hits: PropTypes.array.isRequired,
+  refine: PropTypes.func.isRequired,
+  hasMore: PropTypes.bool.isRequired,
 };
 
 const ConnectedHits = connectInfiniteHits(Hits);

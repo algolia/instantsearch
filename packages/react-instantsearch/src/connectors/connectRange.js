@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import {
   cleanUpValue,
   getIndex,
@@ -115,15 +115,18 @@ export default createConnector({
       }
     }
 
-    const count = results ? results.getFacetValues(attributeName).map(v => ({
+    const count = results
+      ? results.getFacetValues(attributeName).map(v => ({
           value: v.name,
           count: v.count,
-        })) : [];
+        }))
+      : [];
 
-    const {
-      min: valueMin = min,
-      max: valueMax = max,
-    } = getCurrentRefinement(props, searchState, this.context);
+    const { min: valueMin = min, max: valueMax = max } = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
     return {
       min,
       max,

@@ -34,15 +34,12 @@ export default createConnector({
       ? searchState.indices[index]
       : searchState;
     const configureKeys = subState[id] ? Object.keys(subState[id]) : [];
-    const configureState = configureKeys.reduce(
-      (acc, item) => {
-        if (!props[item]) {
-          acc[item] = subState[id][item];
-        }
-        return acc;
-      },
-      {}
-    );
+    const configureState = configureKeys.reduce((acc, item) => {
+      if (!props[item]) {
+        acc[item] = subState[id][item];
+      }
+      return acc;
+    }, {});
     const nextValue = { [id]: configureState };
     return refineValue(searchState, nextValue, this.context);
   },

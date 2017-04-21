@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
 import { isEmpty } from 'lodash';
@@ -49,12 +50,18 @@ class StarRating extends Component {
     }
   }
 
-  buildItem(
-    { max, lowerBound, count, translate, createURL, isLastSelectableItem }
-  ) {
+  buildItem({
+    max,
+    lowerBound,
+    count,
+    translate,
+    createURL,
+    isLastSelectableItem,
+  }) {
     const disabled = !count;
     const isCurrentMinLower = this.props.currentRefinement.min < lowerBound;
-    const selected = (isLastSelectableItem && isCurrentMinLower) ||
+    const selected =
+      (isLastSelectableItem && isCurrentMinLower) ||
       (!disabled &&
         lowerBound === this.props.currentRefinement.min &&
         max === this.props.currentRefinement.max);
@@ -135,11 +142,11 @@ class StarRating extends Component {
       const hasCount = !isEmpty(count.filter(item => Number(item.value) === i));
       const lastSelectableItem = count.reduce(
         (acc, item) =>
-          item.value < acc.value || (!acc.value && hasCount) ? item : acc,
+          (item.value < acc.value || (!acc.value && hasCount) ? item : acc),
         {}
       );
       const itemCount = count.reduce(
-        (acc, item) => item.value >= i && hasCount ? acc + item.count : acc,
+        (acc, item) => (item.value >= i && hasCount ? acc + item.count : acc),
         0
       );
       items.push(

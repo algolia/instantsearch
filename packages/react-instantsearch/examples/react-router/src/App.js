@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
   InstantSearch,
@@ -105,7 +106,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  router: React.PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
 };
 
 export default withRouter(App);

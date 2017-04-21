@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
@@ -62,9 +62,9 @@ export default createConnector({
     );
     const items = props.items.map(
       item =>
-        item.value === currentRefinement
+        (item.value === currentRefinement
           ? { ...item, isRefined: true }
-          : { ...item, isRefined: false }
+          : { ...item, isRefined: false })
     );
     return {
       items: props.transformItems ? props.transformItems(items) : items,

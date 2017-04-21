@@ -53,31 +53,29 @@ stories
 
 const VirtualHits = connectHits(() => null);
 
-const AutoComplete = connectAutoComplete(({
-  hits,
-  currentRefinement,
-  refine,
-}) => (
-  <Autosuggest
-    suggestions={hits}
-    multiSection={true}
-    onSuggestionsFetchRequested={({ value }) => refine(value)}
-    onSuggestionsClearRequested={() => refine('')}
-    getSuggestionValue={hit => hit.name}
-    renderSuggestion={hit => (
-      <div>
-        <div>{hit.name}</div>
-      </div>
-    )}
-    inputProps={{
-      placeholder: 'Type a product',
-      value: currentRefinement,
-      onChange: () => {},
-    }}
-    renderSectionTitle={section => section.index}
-    getSectionSuggestions={section => section.hits}
-  />
-));
+const AutoComplete = connectAutoComplete(
+  ({ hits, currentRefinement, refine }) => (
+    <Autosuggest
+      suggestions={hits}
+      multiSection={true}
+      onSuggestionsFetchRequested={({ value }) => refine(value)}
+      onSuggestionsClearRequested={() => refine('')}
+      getSuggestionValue={hit => hit.name}
+      renderSuggestion={hit => (
+        <div>
+          <div>{hit.name}</div>
+        </div>
+      )}
+      inputProps={{
+        placeholder: 'Type a product',
+        value: currentRefinement,
+        onChange: () => {},
+      }}
+      renderSectionTitle={section => section.index}
+      getSectionSuggestions={section => section.hits}
+    />
+  )
+);
 
 const CustomHits = connectHits(({ hits }) => (
   <div className="hits">

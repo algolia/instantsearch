@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-
+/* eslint react/prop-types: 0 */
 import React from 'react';
 import { createConnector } from 'react-instantsearch';
 import {
@@ -141,7 +141,7 @@ const ColorItem = ({ item, createURL, refine }) => {
 };
 
 const CustomColorRefinementList = ({ items, refine, createURL }) =>
-  items.length > 0
+  (items.length > 0
     ? <div>
         <h5 className={'ais-Panel__Title'}>Colors</h5>
         {items.map(item => (
@@ -153,7 +153,7 @@ const CustomColorRefinementList = ({ items, refine, createURL }) =>
           />
         ))}
       </div>
-    : null;
+    : null);
 
 function CustomHits({ hits }) {
   return (

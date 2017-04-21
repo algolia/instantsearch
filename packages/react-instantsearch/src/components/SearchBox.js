@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
 
@@ -67,9 +68,9 @@ class SearchBox extends Component {
   }
 
   getQuery = () =>
-    this.props.searchAsYouType
+    (this.props.searchAsYouType
       ? this.props.currentRefinement
-      : this.state.query;
+      : this.state.query);
 
   setQuery = val => {
     const { refine, searchAsYouType } = this.props;
@@ -96,7 +97,7 @@ class SearchBox extends Component {
     }
 
     const shortcuts = this.props.focusShortcuts.map(
-      key => typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key
+      key => (typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key)
     );
 
     const elt = e.target || e.srcElement;
@@ -152,10 +153,7 @@ class SearchBox extends Component {
   };
 
   render() {
-    const {
-      translate,
-      autoFocus,
-    } = this.props;
+    const { translate, autoFocus } = this.props;
     const query = this.getQuery();
 
     const submitComponent = this.props.submitComponent
@@ -170,19 +168,17 @@ class SearchBox extends Component {
           <use xlinkHref="#sbx-icon-clear-3" />
         </svg>;
 
-    const searchInputEvents = Object.keys(this.props).reduce(
-      (props, prop) => {
-        if (
-          ['onsubmit', 'onreset', 'onchange'].indexOf(prop.toLowerCase()) ===
-            -1 && prop.indexOf('on') === 0
-        ) {
-          return { ...props, [prop]: this.props[prop] };
-        }
+    const searchInputEvents = Object.keys(this.props).reduce((props, prop) => {
+      if (
+        ['onsubmit', 'onreset', 'onchange'].indexOf(prop.toLowerCase()) ===
+          -1 &&
+        prop.indexOf('on') === 0
+      ) {
+        return { ...props, [prop]: this.props[prop] };
+      }
 
-        return props;
-      },
-      {}
-    );
+      return props;
+    }, {});
 
     /* eslint-disable max-len */
     return (

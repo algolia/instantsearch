@@ -13,7 +13,8 @@ import {
   connectRange,
 } from 'react-instantsearch/connectors';
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import GoogleMap from 'google-map-react';
 import { fitBounds } from 'google-map-react/utils';
 
@@ -189,45 +190,43 @@ OptionCapacity.propTypes = {
   value: PropTypes.string,
 };
 
-const CapacitySelector = connectMultiRange(({
-  items,
-  currentRefinement,
-  refine,
-}) => {
-  const selectValue = e => refine(e.target.value);
+const CapacitySelector = connectMultiRange(
+  ({ items, currentRefinement, refine }) => {
+    const selectValue = e => refine(e.target.value);
 
-  const allOption = (
-    <OptionCapacity
-      label=""
-      value=""
-      isSelected={Boolean(currentRefinement)}
-      key="all"
-    />
-  );
-
-  const options = items.map(item => {
-    const val = parseFloat(item.value.split(':')[0]);
-    const label = `${val} person${val > 1 ? 's' : ''}`;
-    return (
+    const allOption = (
       <OptionCapacity
-        label={label}
-        value={item.value}
-        isSelected={item.isRefined}
-        key={item.value}
+        label=""
+        value=""
+        isSelected={Boolean(currentRefinement)}
+        key="all"
       />
     );
-  });
 
-  options.unshift(allOption);
+    const options = items.map(item => {
+      const val = parseFloat(item.value.split(':')[0]);
+      const label = `${val} person${val > 1 ? 's' : ''}`;
+      return (
+        <OptionCapacity
+          label={label}
+          value={item.value}
+          isSelected={item.isRefined}
+          key={item.value}
+        />
+      );
+    });
 
-  return (
-    <div className="capacity-menu-wrapper">
-      <select defaultValue={currentRefinement} onChange={selectValue}>
-        {options}
-      </select>
-    </div>
-  );
-});
+    options.unshift(allOption);
+
+    return (
+      <div className="capacity-menu-wrapper">
+        <select defaultValue={currentRefinement} onChange={selectValue}>
+          {options}
+        </select>
+      </div>
+    );
+  }
+);
 
 function DatesAndGuest() {
   return (
@@ -353,18 +352,16 @@ function Results() {
   );
 }
 
-const Range = React.createClass({
-  propTypes: {
-    min: React.PropTypes.number,
-    max: React.PropTypes.number,
-    currentRefinement: React.PropTypes.object,
-    refine: React.PropTypes.func.isRequired,
-    canRefine: React.PropTypes.bool.isRequired,
-  },
+class Range extends Component {
+  static propTypes = {
+    min: PropTypes.number,
+    max: PropTypes.number,
+    currentRefinement: PropTypes.object,
+    refine: PropTypes.func.isRequired,
+    canRefine: PropTypes.bool.isRequired,
+  };
 
-  getInitialState() {
-    return { currentValues: { min: this.props.min, max: this.props.max } };
-  },
+  state = { currentValues: { min: this.props.min, max: this.props.max } };
 
   componentWillReceiveProps(sliderState) {
     if (sliderState.canRefine) {
@@ -375,15 +372,15 @@ const Range = React.createClass({
         },
       });
     }
-  },
+  }
 
-  onValuesUpdated(sliderState) {
+  onValuesUpdated = sliderState => {
     this.setState({
       currentValues: { min: sliderState.values[0], max: sliderState.values[1] },
     });
-  },
+  };
 
-  onChange(sliderState) {
+  onChange = sliderState => {
     if (
       this.props.currentRefinement.min !== sliderState.values[0] ||
       this.props.currentRefinement.max !== sliderState.values[1]
@@ -393,7 +390,7 @@ const Range = React.createClass({
         max: sliderState.values[1],
       });
     }
-  },
+  };
 
   render() {
     const { min, max, currentRefinement } = this.props;
@@ -413,8 +410,8 @@ const Range = React.createClass({
           </div>
         </div>
       : null;
-  },
-});
+  }
+}
 
 const ConnectedRange = connectRange(Range);
 

@@ -37,9 +37,7 @@ stories
         submitComponent={<span>🔍</span>}
         resetComponent={
           <svg viewBox="200 198 108 122">
-            <path
-              d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7"
-            />
+            <path d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7" />
           </svg>
         }
       />
@@ -80,13 +78,12 @@ class SearchBoxContainer extends Component {
     ];
   }
 
-  handleSelectedEvent = eventName =>
-    ({ target: { checked } }) => {
-      const { selectedEvents } = this.state;
-      this.setState({
-        selectedEvents: { ...selectedEvents, [eventName]: checked },
-      });
-    };
+  handleSelectedEvent = eventName => ({ target: { checked } }) => {
+    const { selectedEvents } = this.state;
+    this.setState({
+      selectedEvents: { ...selectedEvents, [eventName]: checked },
+    });
+  };
 
   handleSubmit = event => {
     // we dont want the page to reload after the submit event
@@ -96,13 +93,12 @@ class SearchBoxContainer extends Component {
     this.logAction('onSubmit')(event);
   };
 
-  logAction = eventName =>
-    event => {
-      // we dont want to log unselected event
-      if (this.state.selectedEvents[eventName]) {
-        action(eventName)(event);
-      }
-    };
+  logAction = eventName => event => {
+    // we dont want to log unselected event
+    if (this.state.selectedEvents[eventName]) {
+      action(eventName)(event);
+    }
+  };
 
   render() {
     return (

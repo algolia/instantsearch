@@ -1,4 +1,5 @@
-import { PropTypes, Component, Children } from 'react';
+import PropTypes from 'prop-types';
+import { Component, Children } from 'react';
 import { findDOMNode } from 'react-dom';
 
 class ScrollTo extends Component {

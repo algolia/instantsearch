@@ -40,7 +40,8 @@ export function capitalize(key) {
 }
 
 export function assertFacetDefined(searchParameters, searchResults, facet) {
-  const wasRequested = searchParameters.isConjunctiveFacet(facet) ||
+  const wasRequested =
+    searchParameters.isConjunctiveFacet(facet) ||
     searchParameters.isDisjunctiveFacet(facet);
   const wasReceived = Boolean(searchResults.getFacetByName(facet));
   if (searchResults.nbHits > 0 && wasRequested && !wasReceived) {
