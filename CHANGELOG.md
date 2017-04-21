@@ -1,3 +1,13 @@
+<a name="4.0.0-beta.3"></a>
+# [4.0.0-beta.3](https://github.com/algolia/react-instantsearch/compare/v4.0.0-beta.2...v4.0.0-beta.3) (2017-04-21)
+
+
+### Bug Fixes
+
+* replace usage of Object.values (#47) ([4c79e3e](https://github.com/algolia/react-instantsearch/commit/4c79e3e))
+
+
+
 <a name="4.0.0-beta.2"></a>
 # [4.0.0-beta.2](https://github.com/algolia/react-instantsearch/compare/v4.0.0-beta.1...v4.0.0-beta.2) (2017-04-18)
 
