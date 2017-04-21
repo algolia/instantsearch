@@ -45,7 +45,7 @@ export default class SearchBox extends React.Component {
         </svg>
 
         <div role="search" className="sbx-sffv__wrapper">
-          <input type="search" name="search" placeholder={placeholder} autoComplete="off" required="required" className={inputCssClasses} onChange={e => onChange(e.target.value)} ref={i => { this.input = i; }} disabled={this.props.disabled}/> :
+          <input type="search" name="search" placeholder={placeholder} autoComplete="off" required="required" className={inputCssClasses} onChange={e => onChange(e.target.value)} ref={i => { this.input = i; }} disabled={this.props.disabled}/>
           <button type="submit" title="Submit your search query." className="sbx-sffv__submit">
             <svg role="img" aria-label="Search">
               <use xlinkHref="#sbx-icon-search-12"></use>
