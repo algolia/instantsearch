@@ -1,7 +1,8 @@
 import { InstantSearch, SearchBox, Configure } from 'react-instantsearch/dom';
 import { connectHits } from 'react-instantsearch/connectors';
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import GoogleMap from 'google-map-react';
 import { fitBounds } from 'google-map-react/utils';
 import 'react-instantsearch-theme-algolia/style.css';
@@ -9,9 +10,11 @@ import qs from 'qs';
 
 const updateAfter = 700;
 const searchStateToUrl = searchState =>
-  searchState ? `${window.location.pathname}?${qs.stringify(searchState)}` : '';
+  (searchState
+    ? `${window.location.pathname}?${qs.stringify(searchState)}`
+    : '');
 
-class App extends React.Component {
+class App extends Component {
   constructor() {
     super();
 
@@ -25,7 +28,8 @@ class App extends React.Component {
     this.onSearchStateChange = this.onSearchStateChange.bind(this);
     this.onLatLngChange = this.onLatLngChange.bind(this);
     window.addEventListener('popstate', ({ state: searchState }) =>
-      this.setState({ searchState }));
+      this.setState({ searchState })
+    );
   }
 
   // when a click on the map is performed, the query is reset and the aroundLatLng property updated.
@@ -39,16 +43,13 @@ class App extends React.Component {
   onSearchStateChange = searchState => {
     // update the URL when there is a new search state.
     clearTimeout(this.debouncedSetState);
-    this.debouncedSetState = setTimeout(
-      () => {
-        window.history.pushState(
-          searchState,
-          null,
-          searchStateToUrl(searchState)
-        );
-      },
-      updateAfter
-    );
+    this.debouncedSetState = setTimeout(() => {
+      window.history.pushState(
+        searchState,
+        null,
+        searchStateToUrl(searchState)
+      );
+    }, updateAfter);
 
     // when a new query is performed, removed the aroundLatLng property.
     const aroundLatLng = this.state.searchState.query !== searchState.query

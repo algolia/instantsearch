@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import classNames from './classNames.js';
 import translatable from '../core/translatable';
@@ -36,17 +37,16 @@ class InfiniteHits extends Component {
 
 InfiniteHits.propTypes = {
   hits: PropTypes.array,
-  hitComponent: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]).isRequired,
+  hitComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
+    .isRequired,
   hasMore: PropTypes.bool.isRequired,
   refine: PropTypes.func.isRequired,
   translate: PropTypes.func.isRequired,
 };
 
+/* eslint-disable react/display-name */
 InfiniteHits.defaultProps = {
-  hitComponent: hit => ( // eslint-disable-line react/display-name
+  hitComponent: hit => (
     <div
       style={{
         borderBottom: '1px solid #bbb',
@@ -58,6 +58,7 @@ InfiniteHits.defaultProps = {
     </div>
   ),
 };
+/* eslint-enable react/display-name */
 
 export default translatable({
   loadMore: 'Load more',

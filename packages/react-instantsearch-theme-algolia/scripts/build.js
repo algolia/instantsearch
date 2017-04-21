@@ -24,7 +24,8 @@ const write = (destination, content) =>
       }
 
       resolve();
-    }));
+    })
+  );
 
 const generateStylesheet = () => {
   const root = join(__dirname, '..');
@@ -49,12 +50,14 @@ const generateStylesheet = () => {
         .then(({ css: prefixedCss }) =>
           minify
             .process(prefixedCss)
-            .then(({ css: minifiedCss }) => ({ prefixedCss, minifiedCss })))
+            .then(({ css: minifiedCss }) => ({ prefixedCss, minifiedCss }))
+        )
         .then(({ prefixedCss, minifiedCss }) =>
           Promise.all([
             write(builtStylesheet, prefixedCss),
             write(minifiedStylesheet, minifiedCss),
-          ]))
+          ])
+        )
         .catch(postProcessingErr => {
           handleError(postProcessingErr);
         });

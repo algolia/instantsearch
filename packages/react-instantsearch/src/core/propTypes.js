@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 
 export const configManagerPropType = PropTypes.shape({
   register: PropTypes.func.isRequired,
@@ -13,18 +13,17 @@ export const stateManagerPropType = PropTypes.shape({
   unlisten: PropTypes.func.isRequired,
 });
 
-export const withKeysPropType = keys =>
-  (props, propName, componentName) => {
-    const prop = props[propName];
-    if (prop) {
-      for (const key of Object.keys(prop)) {
-        if (keys.indexOf(key) === -1) {
-          return new Error(
-            `Unknown \`${propName}\` key \`${key}\`. Check the render method ` +
-              `of \`${componentName}\`.`
-          );
-        }
+export const withKeysPropType = keys => (props, propName, componentName) => {
+  const prop = props[propName];
+  if (prop) {
+    for (const key of Object.keys(prop)) {
+      if (keys.indexOf(key) === -1) {
+        return new Error(
+          `Unknown \`${propName}\` key \`${key}\`. Check the render method ` +
+            `of \`${componentName}\`.`
+        );
       }
     }
-    return undefined;
-  };
+  }
+  return undefined;
+};

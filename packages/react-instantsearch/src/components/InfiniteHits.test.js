@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 /* eslint-env jest, jasmine */
 
 import React from 'react';
@@ -22,7 +23,7 @@ describe('Hits', () => {
   });
 
   const Hit = ({ hit }) => <div>{JSON.stringify(hit)}</div>;
-  Hit.propTypes = { hit: React.PropTypes.object };
+  Hit.propTypes = { hit: PropTypes.object };
 
   it('calls refine when the load more button is clicked', () => {
     const mockedRefine = jest.fn();

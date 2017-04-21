@@ -138,7 +138,7 @@ const ColorItem = ({ item, createURL, refine }) => {
 };
 
 const CustomColorRefinementList = ({ items, refine, createURL }) =>
-  items.length > 0
+  (items.length > 0
     ? <div>
         <h5 className={'ais-Panel__Title'}>Colors</h5>
         {items.map(item => (
@@ -150,7 +150,7 @@ const CustomColorRefinementList = ({ items, refine, createURL }) =>
           />
         ))}
       </div>
-    : null;
+    : null);
 
 function CustomHits({ hits, refine, hasMore }) {
   const loadMoreButton = hasMore

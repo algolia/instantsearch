@@ -33,7 +33,8 @@ watch(
       if (err) {
         throw err;
       }
-    }))
+    })
+  )
   .on('error', err => {
     throw err;
   });

@@ -85,6 +85,7 @@ const Facets = () => (
       <StarRating attributeName="rating" max={5} />
     </Panel>
     <div className="thank-you">
+      {' '}
       Data courtesy of <a href="https://www.imdb.com/">imdb.com</a>
     </div>
   </aside>
@@ -119,12 +120,7 @@ const Genres = ({ genres }) => (
 );
 
 const Hit = hit => {
-  const {
-    image,
-    rating,
-    year,
-    genre,
-  } = hit.hit;
+  const { image, rating, year, genre } = hit.hit;
   return (
     <div className="hit media">
       <div className="media-left">
@@ -154,32 +150,30 @@ const Results = connectSearchBox(() => (
   </article>
 ));
 
-const RefinementListLinks = connectRefinementList(({
-  items,
-  refine,
-  createURL,
-}) => {
-  const hitComponents = items.map(item => (
-    <div className={item.isRefined ? ' active' : ''} key={item.label}>
-      <a
-        className="item"
-        href={createURL(item.value)}
-        onClick={e => {
-          e.preventDefault();
-          refine(item.value);
-        }}
-      >
-        <span> {item.label}</span>
-        <span className="badge pull-right">{item.count}</span>
-      </a>
-    </div>
-  ));
+const RefinementListLinks = connectRefinementList(
+  ({ items, refine, createURL }) => {
+    const hitComponents = items.map(item => (
+      <div className={item.isRefined ? ' active' : ''} key={item.label}>
+        <a
+          className="item"
+          href={createURL(item.value)}
+          onClick={e => {
+            e.preventDefault();
+            refine(item.value);
+          }}
+        >
+          <span> {item.label}</span>
+          <span className="badge pull-right">{item.count}</span>
+        </a>
+      </div>
+    ));
 
-  return (
-    <div className="nav nav-list">
-      {hitComponents}
-    </div>
-  );
-});
+    return (
+      <div className="nav nav-list">
+        {hitComponents}
+      </div>
+    );
+  }
+);
 
 export default withUrlSync(App);

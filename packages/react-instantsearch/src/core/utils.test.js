@@ -83,17 +83,6 @@ describe('utils', () => {
       expect(getDisplayName(SuperComponent)).toBe('SuperComponent');
     });
 
-    it('gets the right displayName from React.createClass', () => {
-      const SuperComponent = React.createClass({
-        render() {
-          return null;
-        },
-        displayName: 'SuperComponent',
-      });
-
-      expect(getDisplayName(SuperComponent)).toBe('SuperComponent');
-    });
-
     it('sets a default displayName when not able to find one', () => {
       expect(getDisplayName(() => null)).toBe('UnknownComponent');
     });

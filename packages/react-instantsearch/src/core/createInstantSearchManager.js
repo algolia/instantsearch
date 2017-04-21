@@ -13,14 +13,12 @@ import { omit, isEmpty } from 'lodash';
  * @param {object} SearchParameters - optional additional parameters to send to the algolia API
  * @return {InstantSearchManager} a new instance of InstantSearchManager
  */
-export default function createInstantSearchManager(
-  {
-    indexName,
-    initialState = {},
-    algoliaClient,
-    searchParameters = {},
-  }
-) {
+export default function createInstantSearchManager({
+  indexName,
+  initialState = {},
+  algoliaClient,
+  searchParameters = {},
+}) {
   const baseSP = new SearchParameters({
     ...searchParameters,
     index: indexName,
@@ -84,19 +82,16 @@ export default function createInstantSearchManager(
           widget.multiIndexContext &&
           widget.multiIndexContext.targetedIndex !== indexName
       )
-      .reduce(
-        (indices, widget) => {
-          const targetedIndex = widget.multiIndexContext.targetedIndex;
-          const index = indices.find(i => i.targetedIndex === targetedIndex);
-          if (index) {
-            index.widgets.push(widget);
-          } else {
-            indices.push({ targetedIndex, widgets: [widget] });
-          }
-          return indices;
-        },
-        []
-      );
+      .reduce((indices, widget) => {
+        const targetedIndex = widget.multiIndexContext.targetedIndex;
+        const index = indices.find(i => i.targetedIndex === targetedIndex);
+        if (index) {
+          index.widgets.push(widget);
+        } else {
+          indices.push({ targetedIndex, widgets: [widget] });
+        }
+        return indices;
+      }, []);
 
     const mainIndexParameters = widgetsManager
       .getWidgets()
@@ -268,7 +263,7 @@ export default function createInstantSearchManager(
       .getState()
       .metadata.reduce(
         (res, meta) =>
-          typeof meta.id !== 'undefined' ? res.concat(meta.id) : res,
+          (typeof meta.id !== 'undefined' ? res.concat(meta.id) : res),
         []
       );
   }

@@ -14,7 +14,8 @@ function computeHashForFiles(
   files: string[]
 ): Promise<[{ file: string, hash: string }]> {
   const promises = files.map(file =>
-    hasha.fromFile(file, { algorithm: 'md5' }).then(hash => ({ file, hash })));
+    hasha.fromFile(file, { algorithm: 'md5' }).then(hash => ({ file, hash }))
+  );
 
   return Promise.all(promises);
 }
@@ -63,7 +64,8 @@ function computeFiles(
   return computeHashForFiles(files)
     .then(renameFiles)
     .then(result =>
-      renameReferences(`${DIST_PATH}/${replaceFilesGlob}`, result));
+      renameReferences(`${DIST_PATH}/${replaceFilesGlob}`, result)
+    );
 }
 
 export default function revAssets(): Promise<*> {

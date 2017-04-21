@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { has, isEqual } from 'lodash';
 
 import { shallowEqual, getDisplayName, removeEmptyKey } from './utils';
@@ -43,206 +44,204 @@ export default function createConnector(connectorDesc) {
   const hasCleanUp = has(connectorDesc, 'cleanUp');
   const isWidget = hasSearchParameters || hasMetadata || hasTransitionState;
 
-  return Composed =>
-    class Connector extends Component {
-      static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
-      static defaultClassNames = Composed.defaultClassNames;
-      static propTypes = connectorDesc.propTypes;
-      static defaultProps = connectorDesc.defaultProps;
+  return Composed => class Connector extends Component {
+    static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
+    static defaultClassNames = Composed.defaultClassNames;
+    static propTypes = connectorDesc.propTypes;
+    static defaultProps = connectorDesc.defaultProps;
 
-      static contextTypes = {
-        // @TODO: more precise state manager propType
-        ais: PropTypes.object.isRequired,
-        multiIndexContext: PropTypes.object,
+    static contextTypes = {
+      // @TODO: more precise state manager propType
+      ais: PropTypes.object.isRequired,
+      multiIndexContext: PropTypes.object,
+    };
+
+    constructor(props, context) {
+      super(props, context);
+
+      const { ais: { store, widgetsManager }, multiIndexContext } = context;
+      this.state = {
+        props: this.getProvidedProps(props),
       };
 
-      constructor(props, context) {
-        super(props, context);
-
-        const { ais: { store, widgetsManager }, multiIndexContext } = context;
-        this.state = {
-          props: this.getProvidedProps(props),
-        };
-
-        this.unsubscribe = store.subscribe(() => {
-          this.setState({
-            props: this.getProvidedProps(this.props),
-          });
+      this.unsubscribe = store.subscribe(() => {
+        this.setState({
+          props: this.getProvidedProps(this.props),
         });
+      });
 
-        const getSearchParameters = hasSearchParameters
-          ? searchParameters =>
-              connectorDesc.getSearchParameters.call(
-                this,
-                searchParameters,
-                this.props,
-                store.getState().widgets
-              )
-          : null;
-        const getMetadata = hasMetadata
-          ? nextWidgetsState =>
-              connectorDesc.getMetadata.call(this, this.props, nextWidgetsState)
-          : null;
-        const transitionState = hasTransitionState
-          ? (prevWidgetsState, nextWidgetsState) =>
-              connectorDesc.transitionState.call(
-                this,
-                this.props,
-                prevWidgetsState,
-                nextWidgetsState
-              )
-          : null;
-        if (isWidget) {
-          this.unregisterWidget = widgetsManager.registerWidget({
-            getSearchParameters,
-            getMetadata,
-            transitionState,
-            multiIndexContext,
-          });
-        }
-      }
-
-      componentWillReceiveProps(nextProps) {
-        if (!isEqual(this.props, nextProps)) {
-          this.setState({
-            props: this.getProvidedProps(nextProps),
-          });
-
-          if (isWidget) {
-            // Since props might have changed, we need to re-run getSearchParameters
-            // and getMetadata with the new props.
-
-            this.context.ais.widgetsManager.update();
-            if (connectorDesc.transitionState) {
-              this.context.ais.onSearchStateChange(
-                connectorDesc.transitionState.call(
-                  this,
-                  nextProps,
-                  this.context.ais.store.getState().widgets,
-                  this.context.ais.store.getState().widgets
-                )
-              );
-            }
-          }
-        }
-      }
-
-      componentWillUnmount() {
-        this.unsubscribe();
-        if (isWidget) {
-          this.unregisterWidget(); //will schedule an update
-          if (hasCleanUp) {
-            const newState = connectorDesc.cleanUp.call(
+      const getSearchParameters = hasSearchParameters
+        ? searchParameters =>
+            connectorDesc.getSearchParameters.call(
+              this,
+              searchParameters,
+              this.props,
+              store.getState().widgets
+            )
+        : null;
+      const getMetadata = hasMetadata
+        ? nextWidgetsState =>
+            connectorDesc.getMetadata.call(this, this.props, nextWidgetsState)
+        : null;
+      const transitionState = hasTransitionState
+        ? (prevWidgetsState, nextWidgetsState) =>
+            connectorDesc.transitionState.call(
               this,
               this.props,
-              this.context.ais.store.getState().widgets
+              prevWidgetsState,
+              nextWidgetsState
+            )
+        : null;
+      if (isWidget) {
+        this.unregisterWidget = widgetsManager.registerWidget({
+          getSearchParameters,
+          getMetadata,
+          transitionState,
+          multiIndexContext,
+        });
+      }
+    }
+
+    componentWillReceiveProps(nextProps) {
+      if (!isEqual(this.props, nextProps)) {
+        this.setState({
+          props: this.getProvidedProps(nextProps),
+        });
+
+        if (isWidget) {
+          // Since props might have changed, we need to re-run getSearchParameters
+          // and getMetadata with the new props.
+          this.context.ais.widgetsManager.update();
+          if (connectorDesc.transitionState) {
+            this.context.ais.onSearchStateChange(
+              connectorDesc.transitionState.call(
+                this,
+                nextProps,
+                this.context.ais.store.getState().widgets,
+                this.context.ais.store.getState().widgets
+              )
             );
-            this.context.ais.store.setState({
-              ...this.context.ais.store.getState(),
-              widgets: newState,
-            });
-            this.context.ais.onSearchStateChange(removeEmptyKey(newState));
           }
         }
       }
+    }
 
-      shouldComponentUpdate(nextProps, nextState) {
-        const propsEqual = shallowEqual(this.props, nextProps);
-        if (this.state.props === null || nextState.props === null) {
-          if (this.state.props === nextState.props) {
-            return !propsEqual;
-          }
-          return true;
-        }
-        return !propsEqual || !shallowEqual(this.state.props, nextState.props);
-      }
-
-      getProvidedProps = props => {
-        const { ais: { store } } = this.context;
-        const {
-          results,
-          searching,
-          error,
-          widgets,
-          metadata,
-          resultsFacetValues,
-        } = store.getState();
-        const searchState = { results, searching, error };
-        return connectorDesc.getProvidedProps.call(
-          this,
-          props,
-          widgets,
-          searchState,
-          metadata,
-          resultsFacetValues
-        );
-      };
-
-      refine = (...args) => {
-        this.context.ais.onInternalStateUpdate(
-          connectorDesc.refine.call(
+    componentWillUnmount() {
+      this.unsubscribe();
+      if (isWidget) {
+        this.unregisterWidget(); //will schedule an update
+        if (hasCleanUp) {
+          const newState = connectorDesc.cleanUp.call(
             this,
             this.props,
-            this.context.ais.store.getState().widgets,
-            ...args
-          )
-        );
-      };
-
-      searchForFacetValues = (...args) => {
-        this.context.ais.onSearchForFacetValues(
-          connectorDesc.searchForFacetValues(
-            this.props,
-            this.context.ais.store.getState().widgets,
-            ...args
-          )
-        );
-      };
-
-      createURL = (...args) =>
-        this.context.ais.createHrefForState(
-          connectorDesc.refine.call(
-            this,
-            this.props,
-            this.context.ais.store.getState().widgets,
-            ...args
-          )
-        );
-
-      cleanUp = (...args) => connectorDesc.cleanUp.call(this, ...args);
-
-      render() {
-        if (this.state.props === null) {
-          return null;
+            this.context.ais.store.getState().widgets
+          );
+          this.context.ais.store.setState({
+            ...this.context.ais.store.getState(),
+            widgets: newState,
+          });
+          this.context.ais.onSearchStateChange(removeEmptyKey(newState));
         }
-
-        const refineProps = hasRefine
-          ? { refine: this.refine, createURL: this.createURL }
-          : {};
-        const searchForFacetValuesProps = hasSearchForFacetValues
-          ? {
-              searchForItems: this.searchForFacetValues,
-              searchForFacetValues: (facetName, query) => {
-                if (process.env.NODE_ENV === 'development') {
-                  // eslint-disable-next-line no-console
-                  console.warn(
-                    'react-instantsearch: `searchForFacetValues` has been renamed to' +
-                      '`searchForItems`, this will break in the next major version.'
-                  );
-                }
-                this.searchForFacetValues(facetName, query);
-              },
-            }
-          : {};
-
-        return (
-          <Composed
-            {...this.props}
-            {...this.state.props}
-            {...refineProps}
-            {...searchForFacetValuesProps}
-          />
-        );
       }
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+      const propsEqual = shallowEqual(this.props, nextProps);
+      if (this.state.props === null || nextState.props === null) {
+        if (this.state.props === nextState.props) {
+          return !propsEqual;
+        }
+        return true;
+      }
+      return !propsEqual || !shallowEqual(this.state.props, nextState.props);
+    }
+
+    getProvidedProps = props => {
+      const { ais: { store } } = this.context;
+      const {
+        results,
+        searching,
+        error,
+        widgets,
+        metadata,
+        resultsFacetValues,
+      } = store.getState();
+      const searchState = { results, searching, error };
+      return connectorDesc.getProvidedProps.call(
+        this,
+        props,
+        widgets,
+        searchState,
+        metadata,
+        resultsFacetValues
+      );
     };
+
+    refine = (...args) => {
+      this.context.ais.onInternalStateUpdate(
+        connectorDesc.refine.call(
+          this,
+          this.props,
+          this.context.ais.store.getState().widgets,
+          ...args
+        )
+      );
+    };
+
+    searchForFacetValues = (...args) => {
+      this.context.ais.onSearchForFacetValues(
+        connectorDesc.searchForFacetValues(
+          this.props,
+          this.context.ais.store.getState().widgets,
+          ...args
+        )
+      );
+    };
+
+    createURL = (...args) =>
+      this.context.ais.createHrefForState(
+        connectorDesc.refine.call(
+          this,
+          this.props,
+          this.context.ais.store.getState().widgets,
+          ...args
+        )
+      );
+
+    cleanUp = (...args) => connectorDesc.cleanUp.call(this, ...args);
+
+    render() {
+      if (this.state.props === null) {
+        return null;
+      }
+
+      const refineProps = hasRefine
+        ? { refine: this.refine, createURL: this.createURL }
+        : {};
+      const searchForFacetValuesProps = hasSearchForFacetValues
+        ? {
+            searchForItems: this.searchForFacetValues,
+            searchForFacetValues: (facetName, query) => {
+              if (process.env.NODE_ENV === 'development') {
+                // eslint-disable-next-line no-console
+                console.warn(
+                  'react-instantsearch: `searchForFacetValues` has been renamed to' +
+                    '`searchForItems`, this will break in the next major version.'
+                );
+              }
+              this.searchForFacetValues(facetName, query);
+            },
+          }
+        : {};
+
+      return (
+        <Composed
+          {...this.props}
+          {...this.state.props}
+          {...refineProps}
+          {...searchForFacetValuesProps}
+        />
+      );
+    }
+  };
 }

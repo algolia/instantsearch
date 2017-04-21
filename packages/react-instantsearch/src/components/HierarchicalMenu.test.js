@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 /* eslint-env jest, jasmine */
 
 import React from 'react';
@@ -187,7 +188,7 @@ describe('HierarchicalMenu', () => {
         />,
         {
           context: { canRefine },
-          childContextTypes: { canRefine: React.PropTypes.func },
+          childContextTypes: { canRefine: PropTypes.func },
         }
       );
 

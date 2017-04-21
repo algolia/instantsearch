@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Select from './Select';
 import classNames from './classNames.js';
 
@@ -25,11 +26,7 @@ class HitsPerPage extends Component {
   };
 
   render() {
-    const {
-      currentRefinement,
-      refine,
-      items,
-    } = this.props;
+    const { currentRefinement, refine, items } = this.props;
     return (
       <Select
         onSelect={refine}

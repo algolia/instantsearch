@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { pick } from 'lodash';
 import translatable from '../core/translatable';
 import List from './List';
@@ -93,7 +94,7 @@ class Menu extends Component {
 }
 
 export default translatable({
-  showMore: extended => extended ? 'Show less' : 'Show more',
+  showMore: extended => (extended ? 'Show less' : 'Show more'),
   noResults: 'No results',
   submit: null,
   reset: null,

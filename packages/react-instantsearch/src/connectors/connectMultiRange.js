@@ -1,4 +1,4 @@
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import { find, isEmpty, has } from 'lodash';
 import {
   cleanUpValue,
@@ -51,13 +51,17 @@ function getCurrentRefinement(props, searchState, context) {
 }
 
 function isRefinementsRangeIncludesInsideItemRange(stats, start, end) {
-  return (stats.min > start && stats.min < end) ||
-    (stats.max > start && stats.max < end);
+  return (
+    (stats.min > start && stats.min < end) ||
+    (stats.max > start && stats.max < end)
+  );
 }
 
 function isItemRangeIncludedInsideRefinementsRange(stats, start, end) {
-  return (start > stats.min && start < stats.max) ||
-    (end > stats.min && end < stats.max);
+  return (
+    (start > stats.min && start < stats.max) ||
+    (end > stats.min && end < stats.max)
+  );
 }
 
 function itemHasRefinement(attributeName, results, value) {

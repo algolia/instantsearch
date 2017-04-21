@@ -12,40 +12,38 @@ import React from 'react';
  *
  * // Here's an example showing how to connect the airbnb rheostat slider to React InstantSearch using the
  * // range connector
- *
- * import React, {PropTypes} from 'react';
- * import {connectRange} from 'react-instantsearch/connectors';
- * import Rheostat from 'rheostat';
- *
- * const Range = React.createClass({
-  propTypes: {
-    min: React.PropTypes.number,
-    max: React.PropTypes.number,
-    currentRefinement: React.PropTypes.object,
-    refine: React.PropTypes.func.isRequired,
-    canRefine: React.PropTypes.bool.isRequired,
-  },
+import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import {connectRange} from 'react-instantsearch/connectors';
+import Rheostat from 'rheostat';
 
-  getInitialState() {
-    return {currentValues: {min: this.props.min, max: this.props.max}};
-  },
+class Range extends React.Component {
+  static propTypes = {
+    min: PropTypes.number,
+    max: PropTypes.number,
+    currentRefinement: PropTypes.object,
+    refine: PropTypes.func.isRequired,
+    canRefine: PropTypes.bool.isRequired,
+  };
+
+  state = {currentValues: {min: this.props.min, max: this.props.max}};
 
   componentWillReceiveProps(sliderState) {
     if (sliderState.canRefine) {
       this.setState({currentValues: {min: sliderState.currentRefinement.min, max: sliderState.currentRefinement.max}});
     }
-  },
+  }
 
-  onValuesUpdated(sliderState) {
+  onValuesUpdated = (sliderState) => {
     this.setState({currentValues: {min: sliderState.values[0], max: sliderState.values[1]}});
-  },
+  };
 
-  onChange(sliderState) {
+  onChange = (sliderState) => {
     if (this.props.currentRefinement.min !== sliderState.values[0] ||
       this.props.currentRefinement.max !== sliderState.values[1]) {
       this.props.refine({min: sliderState.values[0], max: sliderState.values[1]});
     }
-  },
+  };
 
   render() {
     const {min, max, currentRefinement} = this.props;
@@ -64,8 +62,8 @@ import React from 'react';
           <div>{currentValues.max}</div>
         </div>
       </div> : null;
-  },
-});
+  }
+}
 
 const ConnectedRange = connectRange(Range);
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {
   InstantSearch,
@@ -22,19 +23,17 @@ const Wrap = props => (
 );
 
 Wrap.propTypes = {
-  children: React.PropTypes.node,
+  children: PropTypes.node,
 };
 
-const WrapWithHits = (
-  {
-    searchParameters: askedSearchParameters = {},
-    children,
-    searchBox = true,
-    hasPlayground = false,
-    linkedStoryGroup,
-    pagination = true,
-  }
-) => {
+const WrapWithHits = ({
+  searchParameters: askedSearchParameters = {},
+  children,
+  searchBox = true,
+  hasPlayground = false,
+  linkedStoryGroup,
+  pagination = true,
+}) => {
   const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${linkedStoryGroup}.stories.js`;
   const playgroundLink = hasPlayground
     ? <button
@@ -123,12 +122,12 @@ const CustomHits = connectHits(({ hits }) => (
 ));
 
 WrapWithHits.propTypes = {
-  children: React.PropTypes.node,
-  searchBox: React.PropTypes.bool,
-  linkedStoryGroup: React.PropTypes.string,
-  hasPlayground: React.PropTypes.bool,
-  pagination: React.PropTypes.bool,
-  searchParameters: React.PropTypes.object,
+  children: PropTypes.node,
+  searchBox: PropTypes.bool,
+  linkedStoryGroup: PropTypes.string,
+  hasPlayground: PropTypes.bool,
+  pagination: PropTypes.bool,
+  searchParameters: PropTypes.object,
 };
 
 export { Wrap, WrapWithHits };

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component, Children } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component, Children } from 'react';
 import createInstantSearchManager from './createInstantSearchManager';
 
 function validateNextProps(props, nextProps) {
@@ -157,10 +158,7 @@ InstantSearch.propTypes = {
   children: PropTypes.node,
 
   root: PropTypes.shape({
-    Root: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func,
-    ]),
+    Root: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     props: PropTypes.object,
   }).isRequired,
 };

@@ -3,10 +3,7 @@
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.babel.js';
 
-const {
-  HotModuleReplacementPlugin,
-  NoEmitOnErrorsPlugin,
-} = webpack;
+const { HotModuleReplacementPlugin, NoEmitOnErrorsPlugin } = webpack;
 
 export default {
   ...webpackConfig,

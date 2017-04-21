@@ -1,8 +1,13 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
-export default function Highlighter(
-  { hit, attributeName, highlight, highlightProperty, tagName }
-) {
+export default function Highlighter({
+  hit,
+  attributeName,
+  highlight,
+  highlightProperty,
+  tagName,
+}) {
   const parsedHighlightedValue = highlight({
     hit,
     attributeName,
@@ -28,9 +33,9 @@ export default function Highlighter(
 }
 
 Highlighter.propTypes = {
-  hit: React.PropTypes.object.isRequired,
-  attributeName: React.PropTypes.string.isRequired,
-  highlight: React.PropTypes.func.isRequired,
-  highlightProperty: React.PropTypes.string.isRequired,
-  tagName: React.PropTypes.string,
+  hit: PropTypes.object.isRequired,
+  attributeName: PropTypes.string.isRequired,
+  highlight: PropTypes.func.isRequired,
+  highlightProperty: PropTypes.string.isRequired,
+  tagName: PropTypes.string,
 };

@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 import {
   cleanUpValue,
   refineValue,

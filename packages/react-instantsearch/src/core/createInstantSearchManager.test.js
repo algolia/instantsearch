@@ -208,12 +208,9 @@ function makeClient(response) {
   clientInstance.addAlgoliaAgent = () => {};
   clientInstance.search = jest.fn((queries, cb) => {
     if (cb) {
-      setTimeout(
-        () => {
-          cb(null, clonedResponse);
-        },
-        1
-      );
+      setTimeout(() => {
+        cb(null, clonedResponse);
+      }, 1);
       return undefined;
     }
 

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { storiesOf } from '@kadira/storybook';
 import { Snippet, Hits } from '../packages/react-instantsearch/dom';
@@ -20,7 +21,7 @@ const Default = ({ hit }) => (
 );
 
 Default.propTypes = {
-  hit: React.PropTypes.object.isRequired,
+  hit: PropTypes.object.isRequired,
 };
 
 const StrongHits = ({ hit }) => (
@@ -43,7 +44,7 @@ const StrongHits = ({ hit }) => (
 );
 
 StrongHits.propTypes = {
-  hit: React.PropTypes.object.isRequired,
+  hit: PropTypes.object.isRequired,
 };
 
 stories

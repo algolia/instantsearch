@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import { PropTypes } from 'react';
+import PropTypes from 'prop-types';
 
 /**
  * connectCurrentRefinements connector provides the logic to build a widget that will
@@ -21,26 +21,23 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState, searchResults, metadata) {
-    const items = metadata.reduce(
-      (res, meta) => {
-        if (typeof meta.items !== 'undefined') {
-          if (!props.clearsQuery && meta.id === 'query') {
+    const items = metadata.reduce((res, meta) => {
+      if (typeof meta.items !== 'undefined') {
+        if (!props.clearsQuery && meta.id === 'query') {
+          return res;
+        } else {
+          if (
+            props.clearsQuery &&
+            meta.id === 'query' &&
+            meta.items[0].currentRefinement === ''
+          ) {
             return res;
-          } else {
-            if (
-              props.clearsQuery &&
-              meta.id === 'query' &&
-              meta.items[0].currentRefinement === ''
-            ) {
-              return res;
-            }
-            return res.concat(meta.items);
           }
+          return res.concat(meta.items);
         }
-        return res;
-      },
-      []
-    );
+      }
+      return res;
+    }, []);
 
     return {
       items: props.transformItems ? props.transformItems(items) : items,

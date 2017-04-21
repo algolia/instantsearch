@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 /* eslint-env jest, jasmine */
 
 import React from 'react';
@@ -175,7 +176,7 @@ describe('StarRating', () => {
       const canRefine = jest.fn();
       const wrapper = mount(starRating, {
         context: { canRefine },
-        childContextTypes: { canRefine: React.PropTypes.func },
+        childContextTypes: { canRefine: PropTypes.func },
       });
 
       expect(canRefine.mock.calls.length).toBe(1);

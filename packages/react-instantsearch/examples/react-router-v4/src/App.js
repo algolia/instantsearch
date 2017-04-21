@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {
   InstantSearch,
   HierarchicalMenu,
@@ -12,6 +12,7 @@ import {
   ClearAll,
 } from 'react-instantsearch/dom';
 import 'react-instantsearch-theme-algolia/style.css';
+import PropTypes from 'prop-types';
 import qs from 'qs';
 
 const updateAfter = 700;
@@ -19,7 +20,7 @@ const updateAfter = 700;
 const createURL = state => `?${qs.stringify(state)}`;
 
 const searchStateToUrl = (props, searchState) =>
-  searchState ? `${props.location.pathname}${createURL(searchState)}` : '';
+  (searchState ? `${props.location.pathname}${createURL(searchState)}` : '');
 
 class App extends Component {
   constructor(props) {
@@ -29,15 +30,12 @@ class App extends Component {
 
   onSearchStateChange = searchState => {
     clearTimeout(this.debouncedSetState);
-    this.debouncedSetState = setTimeout(
-      () => {
-        this.props.history.push(
-          searchStateToUrl(this.props, searchState),
-          searchState
-        );
-      },
-      updateAfter
-    );
+    this.debouncedSetState = setTimeout(() => {
+      this.props.history.push(
+        searchStateToUrl(this.props, searchState),
+        searchState
+      );
+    }, updateAfter);
     this.setState({ searchState });
   };
 

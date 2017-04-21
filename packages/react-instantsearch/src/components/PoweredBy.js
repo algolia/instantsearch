@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
 
@@ -46,10 +47,7 @@ class PoweredBy extends Component {
   };
 
   render() {
-    const {
-      translate,
-      url,
-    } = this.props;
+    const { translate, url } = this.props;
 
     return (
       <div {...cx('root')}>

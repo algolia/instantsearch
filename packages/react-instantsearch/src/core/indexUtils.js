@@ -125,8 +125,8 @@ export function getCurrentRefinementValue(
   refinementsCallback
 ) {
   const index = getIndex(context);
-  const refinements = (hasMultipleIndex(context) &&
-    has(searchState, `indices.${index}.${id}`)) ||
+  const refinements =
+    (hasMultipleIndex(context) && has(searchState, `indices.${index}.${id}`)) ||
     (!hasMultipleIndex(context) && has(searchState, id));
   if (refinements) {
     const currentRefinement = hasMultipleIndex(context)

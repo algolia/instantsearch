@@ -10,9 +10,9 @@ export default function() {
   return function(files, metalsmith, done) {
     const allFilles = Object.entries(files).reduce(
       (memo, [filename, file]) =>
-        /\.jsdoc$/.test(filename)
+        (/\.jsdoc$/.test(filename)
           ? [...memo, { filename: filename.replace(/\.jsdoc$/, ''), ...file }]
-          : memo,
+          : memo),
       []
     );
 
@@ -62,9 +62,9 @@ export default function() {
         forEach(symbols, data => {
           const buildFilename = `${data.kind}s/${data.name}.html`;
           const customTags = parseCustomTags(data.customTags);
-          const isNameUnique = unfilteredSymbols
-            .map(s => s.name)
-            .filter(n => n === data.name).length === 1;
+          const isNameUnique =
+            unfilteredSymbols.map(s => s.name).filter(n => n === data.name)
+              .length === 1;
           const title = isNameUnique ? data.name : `${data.name} ${data.kind}`;
 
           const fileFromMetalsmith = allFilles.find(
@@ -72,7 +72,7 @@ export default function() {
               filename === join(data.meta.path, data.meta.filename)
           );
 
-          files[buildFilename] = (cachedFiles[buildFilename] = {
+          files[buildFilename] = cachedFiles[buildFilename] = {
             ...data,
             ...customTags,
             mode: '0764',
@@ -89,7 +89,7 @@ export default function() {
             navWeight: data.name === 'InstantSearch' || data.name === 'Index'
               ? 1000
               : 0,
-          });
+          };
         });
       });
 
@@ -113,6 +113,7 @@ export default function() {
  * ]
  * the first square bracket is  matched in order to detect optional parameter
  */
+
 const typeNameValueDescription = /\{(.+)\} (?:(\[?)(\S+?)(?:=(\S+?))?]? - )?([\s\S]*)/;
 function parseTypeNameValueDescription(v) {
   const parsed = typeNameValueDescription.exec(v);
@@ -130,6 +131,7 @@ function parseTypeNameValueDescription(v) {
  * This regexp aims to parse simple key description tag values. Example
  *  showMore - container for the show more button
  */
+
 const keyDescription = /(?:(\S+) - )?([\s\S]*)/;
 function parseKeyDescription(v) {
   const parsed = keyDescription.exec(v);

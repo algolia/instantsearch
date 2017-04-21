@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { range } from 'lodash';
 import { capitalize } from '../core/utils';
 import translatable from '../core/translatable';
@@ -87,11 +88,7 @@ class Pagination extends Component {
   }
 
   getItem(modifier, translationKey, value) {
-    const {
-      nbPages,
-      maxPages,
-      translate,
-    } = this.props;
+    const { nbPages, maxPages, translate } = this.props;
     return {
       key: `${modifier}.${value}`,
       modifier,

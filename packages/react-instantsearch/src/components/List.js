@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import SearchBox from '../components/SearchBox';
 
 const itemsPropType = PropTypes.arrayOf(
@@ -58,7 +59,8 @@ class List extends Component {
   };
 
   renderItem = (item, resetQuery) => {
-    const items = item.items &&
+    const items =
+      item.items &&
       <div {...this.props.cx('itemItems')}>
         {item.items
           .slice(0, this.getLimit())

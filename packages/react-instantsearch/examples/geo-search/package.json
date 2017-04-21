@@ -4,10 +4,10 @@
     "react-scripts": "^0.8.5"
   },
   "dependencies": {
-    "google-map-react": "^0.22.3",
+    "google-map-react": "^0.24.0",
     "qs": "^6.3.0",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
     "react-instantsearch": "latest",
     "react-instantsearch-theme-algolia": "latest"
   },
