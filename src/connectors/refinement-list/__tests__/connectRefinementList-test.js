@@ -262,7 +262,7 @@ describe('connectRefinementList', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.currentRefinement).toBe(null);
+    expect(firstRenderingOptions.currentRefinement).toEqual([]);
 
     widget.render({
       results: new SearchResults(helper.state, [{
@@ -286,11 +286,11 @@ describe('connectRefinementList', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.currentRefinement).toEqual({
+    expect(secondRenderingOptions.currentRefinement).toEqual([{
       name: 'Decoration',
       highlighted: 'Decoration',
       count: 880,
       isRefined: true,
-    });
+    }]);
   });
 });

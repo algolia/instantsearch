@@ -100,7 +100,7 @@ export default function connectRefinementList(renderFn) {
         isFromSearch,
         canRefine: isFromSearch || items.length > 0,
         widgetParams,
-        currentRefinement: items.find(({isRefined}) => isRefined) || null,
+        currentRefinement: items.filter(({isRefined}) => isRefined) || null,
       }, isFirstSearch);
     };
 

@@ -6,7 +6,6 @@ const renderFn = ({
   refine,
   canRefine,
   createURL,
-  currentRefinement,
   widgetParams: {containerNode, title},
 }, isFirstRendering) => {
   if (isFirstRendering) {

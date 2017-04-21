@@ -54,6 +54,7 @@ export default search => {
   search.addWidget(
     jqueryWidgets.hits({
       containerNode: window.$('#hits'),
+      hitsPerPage: 3,
     })
   );
 
@@ -104,6 +105,60 @@ export default search => {
         {start: 5, end: 10, name: 'between 5 and 10'},
         {start: 10, name: 'more than 10'},
       ],
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.priceRanges({
+      containerNode: window.$('#price-ranges'),
+      attributeName: 'price',
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.searchBox({
+      inputNode: window.$('#search-box'),
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.sortBySelector({
+      containerNode: window.$('#sort-by-selector'),
+      indices: [
+        {name: 'instant_search', label: 'Most relevant'},
+        {name: 'instant_search_price_asc', label: 'Lowest price'},
+        {name: 'instant_search_price_desc', label: 'Highest price'},
+      ],
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.starRating({
+      containerNode: window.$('#rating'),
+      attributeName: 'rating',
+      max: 5,
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.stats({
+      containerNode: window.$('#stats'),
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.toggle({
+      containerNode: window.$('#free-shipping'),
+      attributeName: 'free_shipping',
+      label: 'Free Shipping (toggle single value)',
+      title: 'Free Shipping',
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.infiniteHits({
+      containerNode: window.$('#infinite-hits'),
+      hitsPerPage: 3,
     })
   );
 };

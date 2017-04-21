@@ -2,13 +2,13 @@
 import instantsearch from '../../../../index.js';
 
 const renderFn = ({
-  createURL,
   items,
+  createURL,
   refine,
+  currentRefinement,
   widgetParams: {
     containerNode,
-    attributeName,
-    title = 'Numeric refinement list',
+    title = 'Rating',
   },
 }, isFirstRendering) => {
   if (isFirstRendering) {
@@ -19,27 +19,19 @@ const renderFn = ({
     containerNode.append(markup);
   }
 
-  // remove event listeners if any before attachign new ones
   containerNode
     .find('li')
-    .each(function() { window.$(this).off(); });
+    .each(function() { window.$(this).off('click'); });
 
   const list = items.map(item => `
-    <li
-      class="facet-value clearfix"
-      data-facet-name="${item.name}"
-    >
-      <label
-        style="display: block;"
-        class="ais-refinement-list--label"
-      >
-        <input
-          type="radio"
-          name="${attributeName}"
-          ${item.isRefined ? 'checked' : ''}
-        />
-        ${item.name}
-      </label>
+    <li ${item.isRefined ? 'style="font-weight: bold;"' : ''}>
+      <a href="${createURL(item)}">
+        ${item.stars
+            .map(star => `<span class="ais-star-rating--star${star === false ? '__empty' : ''}"></span>`)
+            .join('')}
+
+        & up (${item.count})
+      </a>
     </li>
   `);
 
@@ -59,4 +51,4 @@ const renderFn = ({
     });
 };
 
-export default instantsearch.connectors.connectNumericRefinementList(renderFn);
+export default instantsearch.connectors.connectStarRating(renderFn);
