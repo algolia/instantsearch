@@ -117,7 +117,7 @@ export default function createInstantSearchManager({
         derivatedWidgets,
       } = getSearchParameters(helper.state);
 
-      Object.values(derivedHelpers).forEach(d => d.detach());
+      Object.keys(derivedHelpers).forEach(key => derivedHelpers[key].detach());
       derivedHelpers = {};
 
       helper.setState(sharedParameters);
