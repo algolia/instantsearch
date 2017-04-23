@@ -7,238 +7,309 @@ withHeadings: true
 navWeight: 100
 ---
 
-*This guide will walk you through the few steps needed to start a project with InstantSearch Android.
-We will start from an empty Android project, and create from scratch a full search interface!*
+## Welcome to InstantSearch.js
+
+**instantsearch.js** is a JavaScript library that lets you create an instant search results experience using Algolia’s REST API.
+
+In this tutorial, you'll lean how to:
+
+  * import `instantsearch.js` on your website
+  * display results from Algolia
+  * add widget to filter the results
 
 ## Before we start
-To use InstantSearch Android, you need an Algolia account. You can create one by clicking [here](https://www.algolia.com/users/sign_up), or use the following credentials:
-- APP ID: `latency`
-- Search API Key: `3d9875e51fbd20c7754e65422f7ce5e1`
-- Index name: `bestbuy`
 
-*These credentials will let you use a preloaded dataset of products appropriate for this guide.*
+**instantsearch.js** is meant to be used with Algolia.
 
-## Create a new Project and add InstantSearch Android
-In Android Studio, create a new Project:
-- On the Target screen, select **Phone and Tablet**
-- On the Add an Activity screen, select **Empty Activity**
+Therefore, you'll need the credentials to an Algolia index. To ease this getting started, here are credentials to an already configured index:
 
-in your app's `build.gradle`, add the following dependency:
-```groovy
-compile 'com.algolia:instantsearch-android:0.5.1'
+  * `appId: latency`
+  * `searchKey: 3d9875e51fbd20c7754e65422f7ce5e1`
+  * `indexName: bestbuy`
+
+It contains sample data for an e-commerce website.
+
+This guide also expects you to have a working website. You can also use our bootstrapped project by clicking this link.
+
+
+## Install `instantsearch.js`
+
+### From a CDN
+
+Use a built bersion of **instantsearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
+<script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
 ```
 
-## Build the User Interface and display your data: Hits and helpers
+You will then have access to the `instantsearch` function in the global scope (window).
 
-InstantSearch Android is based on a system of [widgets][widgets] that communicate when an user interacts with your app. The first widget we'll add is **[Hits][widgets-hits]**, which will display your search results.
+The jsDeliver CDN is highly available with [over 110 locations](https://www.jsdelivr.com/features/network-map) in the world.
 
+### From NPM
 
-- To keep this guide simple, we'll replace the main activity's layout by a vertical `LinearLayout`:
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/activity_main"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-</LinearLayout>
+If you have a JavaScript build system, you can install **instantsearch.js** from NPM:
+
+```js
+// npm install instantsearch.js --save
+
+var instantsearch = require('instantsearch.js');
 ```
 
-<div id="itemlayout" />
+You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css) into your page.
 
-- You can then add the `Hits` widget to your layout:
-```xml
-<com.algolia.instantsearch.ui.views.Hits
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        algolia:itemLayout="@layout/hits_item"/>
+### Bower
+
+Use jsDelivr build to install with bower:
+
+```shell
+bower install https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.js
 ```
 
-The `itemLayout` attribute references a layout that will be used to display each item of the results. This layout will contain a `View` for each attribute of our data that we want to display.
-- Let's create a new layout called **`hits_item.xml`**:
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/product_image"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/product_name"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/product_price"/>
-</LinearLayout>
+
+## Initialization
+
+To initialize the instantsearch.js library, you need an Algolia account with a configured and non-empty index.
+
+```js
+var search = instantsearch({
+  appId: 'latency',
+  apiKey: '3d9875e51fbd20c7754e65422f7ce5e1',
+  indexName: 'bestbuy',
+  urlSync: true
+});
 ```
 
-- InstantSearch Android will automatically bind your records to these Views using the [Data Binding Library][dbl].
-First, enable it in your app's `build.gradle`:
-```groovy
-android {
-    dataBinding.enabled true
-    //...
-}
-```
-- To use data binding in your layout, wrap it in a **`<layout>`** root tag.
-You can then specify which View will hold each record's attribute:
-add **`algolia:attribute='@{"foo"}'`** on a View to bind it to the `foo` attribute of your data:
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:algolia="http://schemas.android.com/apk/res-auto">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="horizontal">
+`appId`, `apiKey` and `indexName` are mandatory. Those props are the credentials of your application in Algolia. They can be found in your [Algolia dashboard](https://www.algolia.com/api-keys).
 
-        <ImageView
-            android:id="@+id/product_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            algolia:attribute='@{"image"}'/>
+You can synchronise the current search with the browser url. It provides two benefits:
 
-        <TextView
-            android:id="@+id/product_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            algolia:attribute='@{"name"}'/>
+  * Working back/next browser buttons
+  * Copy and share the current search url
 
-        <TextView
-            android:id="@+id/product_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            algolia:attribute='@{"price"}'/>
-    </LinearLayout>
-</layout>
-```
-*Beware of the data binding attributes' syntax: **@'{"string"}'**.*
+To configure this feature, pass `urlSync: true` option to `instantsearch()`.The urlSync option has more parameters [add link to params doc]
 
-You have now a main activity layout containing your `Hits` widget, and a data-binding layout ready to display your search results. You just miss a search query to display its results!
-As your application has no input for now, we will trigger the search programmatically.
+Congrats 🎉 ! Your website is now connected to Algolia.
 
-- In your `MainActivity`, create a [`Searcher`][searcher] with your credentials:
-```java
-Searcher searcher = new Searcher(ALGOLIA_APP_ID, ALGOLIA_SEARCH_API_KEY, ALGOLIA_INDEX_NAME);
+
+## Display results
+
+The core of a search experience is to display results. By default, **instantsearch.js** will do a query at the start of the page and will retrieve the most relevant hits.
+
+To display results, we are gonna use the Hits widget. This widget will display all the results returned by Algolia, and it will update when there are new results.
+
+```html
+<div id="hits">
+  <!-- Hits widget will appear here -->
+</div>
+
+<script>
+  var search = instantsearch(options);
+
+  search.addWidget(
+    instantsearch.widgets.hits({
+      container: '#hits',
+      hitsPerPage: 6
+    })
+  );
+</script>
 ```
 
-- Instantiate an [`InstantSearchHelper`][instantsearchhelper] to link your `Searcher` to your Activity:
-```java
-InstantSearchHelper helper = new InstantSearchHelper(this, searcher);
+You should now be able to see the results without any styling. This view lets you inspect the values that are retrieved from Algolia, in order to build your custom view.
+
+In order to customize the view for each product, we can use a special option of the Hit widget: `templates`. This option accepts a [Mustache](https://community.algolia.com/instantsearch.js/documentation/) template string or a function returning a string.
+
+```html
+<div id="hits">
+  <!-- Hits widget will appear here -->
+</div>
+
+<script>
+  var search = instantsearch(options);
+
+  search.addWidget(
+    instantsearch.widgets.hits({
+      container: '#hits',
+      templates: {
+        empty: 'No results',
+        item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
+      },
+      hitsPerPage: 6
+    })
+  );
+</script>
 ```
 
-- Now your Activity is connected to Algolia through the Searcher, you can trigger a search using [`InstantSearchHelper#search(String)`][doc-instantsearch-search]:
-```java
-helper.search(); // Search with empty query
+In this section we’ve seen:
+
+  * how to display the results from Algolia
+  * how to customize the display of those results
+
+
+## Add a SearchBox
+
+Now that we’ve added the results, we can start querying our index. To do this, we are gonna use the Searchbox widget. Let’s add it in the html page that we created before:
+
+```html
+<div id="search-box">
+  <!-- SearchBox widget will appear here -->
+</div>
+
+<div id="hits">
+  <!-- Hits widget will appear here -->
+</div>
+
+<script>
+  var search = instantsearch(options);
+
+  // initialize SearchBox
+  search.addWidget(
+    instantsearch.widgets.searchBox({
+      container: '#search-box',
+      placeholder: 'Search for products'
+    })
+  );
+
+  // initialize hits widget
+  search.addWidget(
+    instantsearch.widgets.hits({
+      container: '#hits',
+      hitsPerPage: 6
+    })
+  );
+</script>
 ```
 
-Your activity should now look like this:
+The search is now interactive and we see what matched in each of the products. Good thing for us, Algolia computes the matching part. For better control over what kind of data is returned, you should configure the [attributeToRetrieve](https://www.algolia.com/doc/rest#param-attributesToRetrieve) and [attributeToHighLight](https://www.algolia.com/doc/rest#param-attributesToHighlight) of your index
 
-```java
-public class MainActivity extends AppCompatActivity {
-    private static final String ALGOLIA_APP_ID = "latency";
-    private static final String ALGOLIA_SEARCH_API_KEY = "3d9875e51fbd20c7754e65422f7ce5e1";
-    private static final String ALGOLIA_INDEX_NAME = "bestbuy";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Searcher searcher = new Searcher(ALGOLIA_APP_ID, ALGOLIA_SEARCH_API_KEY, ALGOLIA_INDEX_NAME);
-        InstantSearchHelper helper = new InstantSearchHelper(this, searcher);
-        helper.search();
-    }
-}
+## Add RefinementList
+
+While the SearchBox is the way to go when it comes to textual search, you may also want to provide filters based on the structure of the records.
+
+Algolia provides a set of parameters for filtering by facets, numbers or geo location. **instantsearch.js** packages those into a set of widgets and connectors.
+
+Since the dataset used here is an e-commerce one, let’s add a [RefinementList](https://community.algolia.com/instantsearch.js/documentation/#refinementlist) to filter the products by categories:
+
+```html
+<div id="search-box">
+  <!-- SearchBox widget will appear here -->
+</div>
+
+<div id="refinement-list">
+  <!-- RefinementList widget will appear here -->
+</div>
+
+<div id="hits">
+  <!-- Hits widget will appear here -->
+</div>
+
+<script>
+  var search = instantsearch(options);
+
+  // initialize RefinementList
+  search.addWidget(
+    instantsearch.widgets.refinementList({
+      container: '#refinement-list',
+      attributeName: 'category'
+    })
+  );
+
+  // initialize SearchBox
+  search.addWidget(
+    instantsearch.widgets.searchBox({
+      container: '#search-box',
+      placeholder: 'Search for products'
+    })
+  );
+
+  // initialize hits widget
+  search.addWidget(
+    instantsearch.widgets.hits({
+      container: '#hits',
+      hitsPerPage: 6
+    })
+  );
+</script>
 ```
 
-----
+The `attributeName` option specifies the faceted attribute to use in this widget. This attribute should be declared as a facet in the index configuration as well.
 
-<img src="assets/img/mvp/step1.png" class="img-object" align="right"/>
+The values displayed are computed by Algolia from the results.
 
-**Build and run your application: you now have an InstantSearch Android app displaying your data!**
+In this part, we’ve seen the following:
 
-<p class="cb">In this part you've learned:</p>
-
-- How to build your interface with Widgets by adding the `Hits` widget
-- How to create a data-binding `<layout>` for displaying search results
-- How to initialize Algolia with your credentials
-- How to trigger a search programmatically
-
-## Search your data: the SearchBox
-
-Your application displays search results, but for now the user cannot input anything.
-This will be the role of another Widget: the **[`SearchBox`][widgets-searchbox]**.
+  * there are components for all types of refinements
+  * the RefinementList works with facets
+  * facets are computed from the results
 
 
-<br />
-<img src="assets/img/widget_SearchBox.png" class="img-object" align="right"/>
-<br />
-<br />
-<br />
+## Refine the search experience further
 
+We now miss two elements in our search interface:
 
+  * the ability to browse beyond the first page of results
+  * the ability to reset the search state
 
-- Add a `SearchBox` to your `main_activity.xml`:
-```xml
-<com.algolia.instantsearch.ui.views.SearchBox
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+Those two features are implemented respectively with the [pagination](https://community.algolia.com/instantsearch.js/documentation/#pagination), [clearAll](https://community.algolia.com/instantsearch.js/documentation/#clearall) and [currentRefinedValues](https://community.algolia.com/instantsearch.js/documentation/#currentrefinedvalues) widgets. Both have nice defaults which means that we can use them directly without further configuration.
+
+```html
+<div id="current-refined-values">
+  <!-- CurrentRefinedValues widget will appear here -->
+</div>
+
+<div id="clear-all">
+  <!-- ClearAll widget will appear here -->
+</div>
+
+[ ... ]
+
+<div id="pagination">
+  <!-- Pagination widget will appear here -->
+</div>
+
+<script>
+  var search = instantsearch(options);
+
+  // initialize currentRefinedValues
+  search.addWidget(
+    instantsearch.widgets.currentRefinedValues({
+      container: '#current-refined-values',
+      // This widget can also contain a clear all link to remove all filters,
+      // we disable it in this example since we use `clearAll` widget on its own.
+      clearAll: false
+    })
+  );
+
+  // initialize clearAll
+  search.addWidget(
+    instantsearch.widgets.clearAll({
+      container: '#clear-all',
+      templates: {
+        link: 'Reset everything'
+      },
+      autoHideContainer: false
+    })
+  );
+
+  // initialize pagination
+  search.addWidget(
+    instantsearch.widgets.pagination({
+      container: '#pagination',
+      maxPages: 20,
+      // default is to scroll to 'body', here we disable this behavior
+      scrollTo: false
+    })
+  );
+
+  [...]
+</script>
 ```
 
-InstantSearch will automatically recognize your SearchBox as a source of search queries.
-Restart your app and tap a few characters: you now have a fully functional search interface!
+Current filters will display all the filters currently selected by the user. This gives the user a synthetic way of understanding the current search. `clearAll` displays a button to remove all the filters.
 
-## Help the user understand your results: Highlighting
+In this part, we’ve seen the following:
 
-<img src="assets/img/mvp/step2.png" class="img-object" align="right"/>
-
-Your application lets the user search and displays results, but doesn't explain _why_ these results match the user's query.
-
-You can improve it by using the [Highlighting][highlighting] feature: just add `algolia:highlighted="@{true}"` to every Views where the query should be highlighted:
-
-```xml
-<TextView
-    android:id="@+id/product_name"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    algolia:attribute='@{"name"}'
-    algolia:highlighted='@{true}'/>
-```
-
-<br />
-
-Restart your application and type something in the SearchBox: the results are displayed with your keywords highlighted in these Views!
-
-<!-- TODO: Add Filtering when RefinementList is a mobile-ready component
-## Filter your data: the RefinementList
--->
-
-
-You now know how to:
-- Add a search input with the `SearchBox` widget
-- Highlight search results with `algolia:highlighted`
-
-----
-
-
-## Go further
-
-Your application now displays your data, lets your users enter a query and displays search results as-they-type: you just built an instant-search interface! Congratulations 🎉
-
-This is only an introduction to what you can do with InstantSearch Android: have a look at our [examples][examples] to see more complex examples of applications built with InstantSearch.
-You can also head to our [Widgets page][widgets] to see the other components that you could use.
-
-[examples]: examples.html
-[widgets]: widgets.html
-[widgets-hits]: widgets.html#hits
-[widgets-searchbox]: widgets.html#hits
-[dbl]: https://developer.android.com/topic/libraries/data-binding/index.html
-[searcher]: concepts.html#searcher
-[instantsearchhelper]: concepts.html#instantsearchhelper
-[highlighting]: widgets.html#highlighting
-[doc-instantsearch-search]: javadoc/com/algolia/instantsearch/ui/InstantSearchHelper.html#search--
+  * how to clear the filters
+  * how to paginate the results

@@ -6,7 +6,7 @@ nav.sidebar {
   max-width: $sidebar-width;
   border-right: 1px solid #d8d8d8;
   overflow: hidden;
-  padding-top: 120px;
+  padding-top: 60px;
 
   .sidebar-container {
     width: 100%;
@@ -35,7 +35,6 @@ nav.sidebar {
 
     .sidebar-elements {
       .sidebar-element {
-        width: calc(100% - 16px);
         line-height: 32px;
         margin-bottom: 1em;
 

@@ -1,7 +1,6 @@
 ---
 title: Examples
 layout: examples.pug
-name: examples
 category: examples
 withHeadings: true
 navWeight: 0

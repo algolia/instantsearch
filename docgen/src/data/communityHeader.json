@@ -24,12 +24,12 @@
         "url": "guides/concepts.html"
       },
       {
-        "name": "Advanced customization",
-        "url": "guides/deep-customization.html"
+        "name": "Custom widgets",
+        "url": "guides/customization.html"
       },
       {
-        "name": "Creating widgets",
-        "url": "guides/new-widgets.html"
+        "name": "Migrate to V2",
+        "url": "guides/migration.html"
       }
     ]
   },
@@ -40,7 +40,7 @@
     "dropdownItems": [
       {
         "name": "instantsearch()",
-        "url": "widgets.html"
+        "url": "common.html"
       },
       {
         "name": "Widgets",
@@ -48,7 +48,7 @@
       },
       {
         "name": "Connectors",
-        "url": "concepts.html"
+        "url": "connectors.html"
       }
     ]
   },

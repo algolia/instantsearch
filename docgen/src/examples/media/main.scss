@@ -1,0 +1,264 @@
+@charset 'utf-8';
+
+$white: #FFFFFF;
+$media-red: #E91D00;
+$media-red-dark: #CE1312;
+$media-gray: #E8E8E8;
+$media-gray-light: #F8F8F8;
+$media-bg: #F1F1F1;
+$media-text-color: #333333;
+$media-blue: #167AC6;
+$header-height: 56px;
+$highlight-color: #FFFFD4;
+$shadow-color: rgba(0, 0, 0, .1);
+
+body {
+  min-height: 100%;
+  font-family: Roboto;
+  background: #F1F1F1;
+}
+
+a {
+  color: $media-text-color;
+}
+
+hr {
+  margin: 10px 14px;
+}
+.is-logo {
+  float: left;
+  margin-left: 18px;
+}
+.logo {
+  margin-left: 15px;
+  font-size: 30px;
+  font-weight: bold;
+  float: left;
+  &:hover {
+    text-decoration: none;
+  }
+  i {
+    margin-left: 5px;
+    color: $media-red;
+  }
+}
+
+header {
+  background: $white;
+  padding: 10px;
+  border-bottom: 1px solid $media-gray;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+
+  .searchbox-container {
+    margin-left: 240px;
+    max-width: 400px;
+    .input-group {
+      margin-top: 5px;
+      .form-control {
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+
+      .input-group-btn button {
+        padding-left: 20px;
+        padding-right: 20px;
+        background: $media-gray-light;
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+section {
+  background: $media-bg;
+  min-height: 100%;
+  z-index: 1;
+
+  aside {
+    position: fixed;
+    top: $header-height + 14px;
+    left: 0;
+    bottom: 10px;
+    width: 230px;
+    background: $white;
+    border-right: 1px solid $media-gray;
+
+    .nav {
+      margin: 0 20px;
+      li {
+        a {
+          display: block;
+          padding: 2px 10px;
+          margin: 10px 0;
+          &:hover {
+            color: $white;
+            background: $media-text-color;
+          }
+        }
+
+        &.separator {
+          height: 1px;
+          background: $media-gray;
+        }
+      }
+    }
+
+    h5 {
+      color: $media-red-dark;
+      margin-left: 30px;
+      text-transform: uppercase;
+      font-size: 10px;
+      margin-top: 20px;
+    }
+
+    .badge {
+      font-size: .8em;
+      background: #BBBBBB;
+      position: relative;
+      top: 1px;
+    }
+
+    #genres {
+      label {
+        display: block;
+        cursor: pointer;
+        padding: 4px 4px 4px 8px;
+        font-weight: normal;
+        font-size: .9em;
+        margin: 0 0 -1px;
+        &:hover {
+          color: $white;
+          background: $media-text-color;
+        }
+        input {
+          display: none;
+        }
+      }
+      .active {
+        label {
+          border: 1px solid $media-red-dark;
+          margin-top: -1px;
+        }
+        .badge {
+          background: $media-text-color;
+        }
+      }
+    }
+
+    #ratings {
+      margin-left: 10px;
+      .ais-stars-list--link {
+        font-size: .9em;
+        &:hover, &:active, &:focus {
+          text-decoration: none;
+        }
+      }
+      .ais-stars-list--count {
+        font-size: 8px;
+      }
+      .ais-star-rating--item {
+        margin-bottom: 6px;
+      }
+      .ais-star-rating--item__active a {
+        color: $media-red-dark;
+      }
+    }
+
+  }
+
+  article {
+    margin-top: $header-height + 14px;
+    margin-bottom: 10px;
+    margin-left: 237px;
+    margin-right: 10px;
+    padding: 10px 0;
+    max-width: 100%;
+    background: $white;
+    box-shadow: 0 1px 2px $shadow-color;
+
+    #stats {
+      padding-right: 14px;
+      font-size: .8em;
+      line-height: 24px;
+    }
+
+    #hits {
+      padding: 0 15px;
+    }
+
+    #pagination {
+      .pagination a {
+        background: $media-gray-light;
+        padding: 3px 8px;
+        color: $media-text-color;
+        margin-right: 4px;
+        &.active {
+          border-color: darken($media-gray, 20%);
+          background: $media-gray;
+        }
+        &:hover {
+          border-color: darken($media-gray, 10%);
+          background: darken($media-gray-light, 5%);
+        }
+      }
+    }
+
+    .hit {
+      margin-bottom: 10px;
+      height: 130px;
+      border: 1px solid #F3F3F3;
+
+      em {
+        font-style: normal;
+        background: $highlight-color;
+        text-decoration: underline;
+      }
+
+      .media-object {
+        height: 130px;
+        width: 130px;
+        overflow: hidden;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+
+      .media-heading {
+        color: $media-blue;
+        font-weight: normal;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .thank-you {
+    font-size: .8em;
+    margin-top: 18px;
+    margin-left: 30px;
+    a {
+      color: #CE1312;
+    }
+  }
+}
+
+.ais-search-box--input {
+  padding-left: 14px;
+}
+
+.genre, .year {
+  margin: 12px 0;
+}
+
+.year {
+  font-weight: bold;
+}
+
+.genre .badge {
+  background: #BBBBBB;
+}

@@ -41,11 +41,11 @@ function mapConnectors(connectors, symbols, files) {
       mode: '0764',
       contents: '',
       title: symbol.name,
-      mainTitle: `connectors`, //
+      mainTitle: 'connectors',
       withHeadings: false,
       layout: `connector.pug`,
-      category: 'Connector',
-      navWeight: symbol.name,
+      category: 'connectors',
+      navWeight: 1,
       jsdoc: symbolWithRelatedType,
     };
   });
@@ -68,8 +68,8 @@ function mapWidgets(widgets, symbols, files) {
       mainTitle: `widgets`,
       withHeadings: false,
       layout: `widget.pug`,
-      category: 'WidgetFactory',
-      navWeight: symbol.name,
+      category: 'widgets',
+      navWeight: 1,
       jsdoc: symbolWithRelatedType,
     };
   });

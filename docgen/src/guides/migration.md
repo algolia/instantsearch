@@ -1,7 +1,7 @@
 ---
-title: Creating new widgets
+title: Migrate to V2
+mainTitle: Guides
 layout: main.pug
-name: create new widgets
 category: guides
 withHeadings: true
 navWeight: 0

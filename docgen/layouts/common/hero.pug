@@ -8,7 +8,7 @@ section.hero-section.shrink
         figcaption
           if mainTitle
             h1
-              | #{mainTitle + ' > '}
+              | !{'<span style="font-weight: normal">' + mainTitle + ' /</span> '}
               span=title
           else
             h1=title
