@@ -53,7 +53,7 @@
     ]
   },
   {
-    "name": "<span class='visible-sm-inline'>Examples</span>",
+    "name": "<span class='visible-sm-inline'>Demos</span>",
     "url": "examples.html"
   },{
     "name": "Github",
@@ -66,22 +66,22 @@
   },
   {
     "name": "Concepts",
-    "url": "concepts.html"
+    "url": "guides/concepts.html"
   },
   {
     "name": "Widgets",
     "url": "widgets.html"
   },
   {
-    "name": "API Reference",
-    "url": "javadoc/"
+    "name": "Connectors",
+    "url": "connectors.html"
   },
   {
     "name": "Troubleshooting",
     "url": "troubleshooting.html"
   },
   {
-    "name": "Examples",
+    "name": "Demos",
     "url": "examples.html"
   }],
   "docSearch": {

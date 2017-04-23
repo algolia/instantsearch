@@ -1,45 +1,27 @@
 ---
-title: Examples
+title: Demos
 layout: examples.pug
 category: examples
-withHeadings: true
-navWeight: 0
+navWeight: 1000
+examplesCTA: 'Go to live demo'
+examples: [{
+    id: 'e-commerce',
+    title: 'E-commerce',
+    description: 'This demos shows the usage of react-instantsearch in the context of an e-commerce website.'
+  }, {
+    id: 'media',
+    title: 'Media',
+    description: 'This demos shows the usage of react-instantsearch in the context of a media website'
+  }, {
+    id: 'tourism',
+    title: 'Tourism',
+    description: 'This demos shows the usage of react-instantsearch in the context of a home renting website'
+  }]
+examplesEndpoint: examples
 ---
 
-We made two demo applications to give you an idea of what you can build with InstantSearch Android:
+## Demos
 
-## Media application
-<img src="assets/img/media.gif" class="img-object" align="right"/>
+Demos are non trivial examples of what you can do with instantsearch.js. They 
 
-This example mimics the classical video search interface, with a modal to refine your search.
-
-- Search in **video's title**
-- Filter by *number of views*, *rating*, *video quality* or *captioning*
-- Automatic focus on the SearchBox
-- Automatic closing of the keyboard when scrolling through the videos
-- Filtering in a `DialogFragment` applied only when the users submit their final filters
-
-<a href="https://github.com/algolia/instantsearch-android-examples/tree/master/media" class="btn btn-static-primary">See example <i class="icon icon-arrow-right"></i></a>
-
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-
-## E-commerce application
-<img src="assets/img/ecommerce.gif" class="img-object" align="right"/>
-
-This example imitates a product search interface like well-known e-commerce applications.
-
-- Search in the **product's name**, **seller's name**, and **category**
-- Filter by *number of views*, *rating*, *video quality* or *captioning*
-- Custom views using [`AlgoliaHitView`](https://github.com/algolia/instantsearch-android/blob/master/instantsearch/src/main/java/com/algolia/instantsearch/ui/views/AlgoliaHitView.java) for displaying the promotions, ratings, ...
-- Filtering in a `PopupWindow` with immediate feedback to let the user see its influence on the search results
-
-<a href="https://github.com/algolia/instantsearch-android-examples/tree/master/ecommerce" class="btn btn-static-primary">See example <i class="icon icon-arrow-right"></i></a>
-
-[media-url]: https://github.com/algolia/instantsearch-android-examples/tree/master/media
-[ecommerce-url]: https://github.com/algolia/instantsearch-android-examples/tree/master/ecommerce
+If you think about a new example or have any questions about them, [come talk to us](https://discourse.algolia.com/c/instantsearch).
