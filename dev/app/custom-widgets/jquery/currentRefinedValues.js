@@ -46,8 +46,7 @@ const renderFn = ({
     // ---------------------------
     const list = refinements
       .map(value => {
-        const {labelWithOperator, count} = value;
-        const name = labelWithOperator || value.name;
+        const {computedLabel, count} = value;
 
         const afterCount = count ?
           `<span class="pull-right facet-count">${count}</span>`
@@ -55,16 +54,16 @@ const renderFn = ({
 
         switch (true) {
         case value.attributeName === 'price_range':
-          return `Price range: ${name.replace(/(\d+)/g, '$$$1')} ${afterCount}`;
+          return `Price range: ${computedLabel.replace(/(\d+)/g, '$$$1')} ${afterCount}`;
 
         case value.attributeName === 'price':
-          return `Price: ${name.replace(/(\d+)/g, '$$$1')}`;
+          return `Price: ${computedLabel.replace(/(\d+)/g, '$$$1')}`;
 
         case value.attributeName === 'free_shipping':
-          return name === 'true' ? `Free shipping ${afterCount}` : '';
+          return computedLabel === 'true' ? `Free shipping ${afterCount}` : '';
 
         default:
-          return `${name} ${afterCount}`;
+          return `${computedLabel} ${afterCount}`;
         }
       })
       .map((content, index) => `

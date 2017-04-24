@@ -220,11 +220,14 @@ function clearRefinement(helper, refinement) {
 }
 
 function computeLabel(value) {
+  // default to `value.name` if no operators
+  value.computedLabel = value.name;
+
   if (value.hasOwnProperty('operator') && typeof value.operator === 'string') {
     let displayedOperator = value.operator;
     if (value.operator === '>=') displayedOperator = '≥';
     if (value.operator === '<=') displayedOperator = '≤';
-    value.labelWithOperator = `${displayedOperator} ${value.name}`;
+    value.computedLabel = `${displayedOperator} ${value.name}`;
   }
 
   return value;
