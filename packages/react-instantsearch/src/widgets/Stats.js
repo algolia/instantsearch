@@ -10,7 +10,7 @@ import StatsComponent from '../components/Stats.js';
  * @example
  * import React from 'react';
  *
- * import {Stats, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { Stats, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

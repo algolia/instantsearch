@@ -25,7 +25,7 @@ import SearchBoxComponent from '../components/SearchBox.js';
  * @example
  * import React from 'react';
  *
- * import {SearchBox, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { SearchBox, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

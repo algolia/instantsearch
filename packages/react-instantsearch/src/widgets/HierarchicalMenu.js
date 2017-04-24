@@ -58,10 +58,7 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @example
  * import React from 'react';
 
- * import {
- *   InstantSearch,
- *   HierarchicalMenu,
- * } from 'react-instantsearch/dom';
+ * import { HierarchicalMenu, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

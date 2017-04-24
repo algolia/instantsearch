@@ -14,7 +14,7 @@ import PoweredByComponent from '../components/PoweredBy.js';
  * @example
  * import React from 'react';
  *
- * import {PoweredBy, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { PoweredBy, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

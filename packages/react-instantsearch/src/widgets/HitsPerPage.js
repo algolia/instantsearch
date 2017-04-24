@@ -17,10 +17,7 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  * @example
  * import React from 'react';
 
- * import {
- *   InstantSearch,
- *   HitsPerPage,
- * } from 'react-instantsearch/dom';
+ * import { HitsPerPage, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

@@ -12,11 +12,11 @@ import Panel from '../components/Panel.js';
  * @themeKey ais-Panel__root - Container of the widget
  * @themeKey ais-Panel__title - The panel title
  * @themeKey ais-Panel__noRefinement - Present if the panel content is empty
-* @example
+ * @example
  * import React from 'react';
- *
- * import {Panel, RefinementList, InstantSearch} from '../packages/react-instantsearch/dom';
- *
+ * 
+ * import { Panel, RefinementList, InstantSearch } from 'react-instantsearch/dom';
+ * 
  * export default function App() {
  *   return (
  *     <InstantSearch
@@ -25,7 +25,7 @@ import Panel from '../components/Panel.js';
  *       indexName="ikea"
  *     >
  *       <Panel title="category">
- *            <RefinementList attributeName="category" />
+ *         <RefinementList attributeName="category" />
  *       </Panel>
  *     </InstantSearch>
  *   );

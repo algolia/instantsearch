@@ -35,7 +35,7 @@ import PaginationComponent from '../components/Pagination.js';
  * @example
  * import React from 'react';
  *
- * import {Pagination, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { Pagination, InstantSearch } from '../packages/react-instantsearch/dom';
  *
  * export default function App() {
  *   return (
@@ -44,7 +44,7 @@ import PaginationComponent from '../components/Pagination.js';
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
  *     >
- *         <Pagination/>
+ *       <Pagination />
  *     </InstantSearch>
  *   );
  * }

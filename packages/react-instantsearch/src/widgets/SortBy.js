@@ -13,9 +13,9 @@ import SortByComponent from '../components/SortBy.js';
  * @themeKey ais-SortBy__root - the root of the component
  * @example
  * import React from 'react';
- *
- * import {SortBy, InstantSearch} from '../packages/react-instantsearch/dom';
- *
+ * 
+ * import { SortBy, InstantSearch } from 'react-instantsearch/dom';
+ * 
  * export default function App() {
  *   return (
  *     <InstantSearch
@@ -24,14 +24,15 @@ import SortByComponent from '../components/SortBy.js';
  *       indexName="ikea"
  *     >
  *       <SortBy
- *          items={[
- *            {value: 'ikea', label: 'Featured'},
- *            {value: 'ikea_price_asc', label: 'Price asc.'},
- *            {value: 'ikea_price_desc', label: 'Price desc.'},
- *          ]}
- *          defaultRefinement="ikea"
- *        />
+ *         items={[
+ *           { value: 'ikea', label: 'Featured' },
+ *           { value: 'ikea_price_asc', label: 'Price asc.' },
+ *           { value: 'ikea_price_desc', label: 'Price desc.' },
+ *         ]}
+ *         defaultRefinement="ikea"
+ *       />
  *     </InstantSearch>
  *   );
- * } */
+ * }
+ */
 export default connectSortBy(SortByComponent);

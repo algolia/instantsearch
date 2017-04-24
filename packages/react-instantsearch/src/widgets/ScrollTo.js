@@ -12,7 +12,7 @@ import ScrollToComponent from '../components/ScrollTo.js';
  * @example
  * import React from 'react';
  *
- * import {ScrollTo, Hits, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { ScrollTo, Hits, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (
@@ -22,7 +22,7 @@ import ScrollToComponent from '../components/ScrollTo.js';
  *       indexName="ikea"
  *     >
  *       <ScrollTo>
- *            <Hits />
+ *         <Hits />
  *       </ScrollTo>
  *     </InstantSearch>
  *   );
