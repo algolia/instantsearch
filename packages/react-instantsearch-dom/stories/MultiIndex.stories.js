@@ -40,18 +40,12 @@ stories
       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
       indexName="ikea"
     >
-      <AutoComplete />
       <Configure hitsPerPage={1} />
-      <Index indexName="bestbuy">
-        <VirtualHits />
-      </Index>
-      <Index indexName="airbnb">
-        <VirtualHits />
-      </Index>
+      <Index indexName="bestbuy" />
+      <Index indexName="airbnb" />
+      <AutoComplete />
     </InstantSearch>
   ));
-
-const VirtualHits = connectHits(() => null);
 
 const AutoComplete = connectAutoComplete(
   ({ hits, currentRefinement, refine }) => (

@@ -67,6 +67,11 @@ describe('createInstantSearchManager', () => {
           multiIndexContext: { targetedIndex: 'first' },
         });
 
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setIndex('second'),
+          multiIndexContext: { targetedIndex: 'second' },
+        });
+
         expect(ism.store.getState().results).toBe(null);
 
         return Promise.resolve().then(() => {
@@ -130,6 +135,10 @@ describe('createInstantSearchManager', () => {
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setPage(3),
           multiIndexContext: { targetedIndex: 'first' },
+        });
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setIndex('second'),
+          multiIndexContext: { targetedIndex: 'second' },
         });
 
         ism.onExternalStateUpdate({});
