@@ -8,7 +8,7 @@ import {
 const usage = `Usage:
 var customClearAll = connectClearAll(function render(params, isFirstRendering) {
   // params = {
-  //   clearAll,
+  //   refine,
   //   hasRefinements,
   //   createURL,
   //   instantSearchInstance,
@@ -17,26 +17,28 @@ var customClearAll = connectClearAll(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customClearAll({
-    [ excludeAttributes = [] ]
+    [ excludeAttributes = [] ],
+    [ clearsQuery = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectClearAll.html
 `;
 
-const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
+const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () => {
   if (hasRefinements) {
-    clearRefinementsAndSearch(helper, clearAttributes);
+    clearRefinementsAndSearch(helper, clearAttributes, clearsQuery);
   }
 };
 
 /**
  * @typedef {Object} CustomClearAllWidgetOptions
  * @param {string[]} excludeAttributes - all the attributes that should not be displayed
+ * @param {boolean} [clearsQuery = false] also clears the active search query
  */
 
 /**
  * @typedef {Object} ClearAllRenderingOptions
- * @property {function} clearAll function to trigger the clear of all the currently refined values
+ * @property {function} refine function to trigger the clear of all the currently refined values
  * @property {boolean} hasRefinements boolean to indicate if search state is refined
  * @property {function} createURL function that create a url for the next state
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
@@ -53,18 +55,28 @@ export default function connectClearAll(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {excludeAttributes = []} = widgetParams;
+    const {excludeAttributes = [], clearsQuery = false} = widgetParams;
 
     return {
+      // Provide the same function to the `renderFn` so that way the user
+      // has to only bind it once when `isFirstRendering` for instance
+      _refine() {},
+      _cachedRefine() { this._refine(); },
+
       init({helper, instantSearchInstance, createURL}) {
+        this._cachedRefine = this._cachedRefine.bind(this);
+
         const clearAttributes = getRefinements({}, helper.state)
-        .map(one => one.attributeName)
-        .filter(one => excludeAttributes.indexOf(one) === -1);
+          .map(one => one.attributeName)
+          .filter(one => excludeAttributes.indexOf(one) === -1);
+
         const hasRefinements = clearAttributes.length !== 0;
-        const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state));
+        const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
+
+        this._refine = refine({helper, clearAttributes, hasRefinements, clearsQuery});
 
         renderFn({
-          clearAll: () => {},
+          refine: this._cachedRefine,
           hasRefinements,
           createURL: preparedCreateURL,
           instantSearchInstance,
@@ -74,13 +86,16 @@ export default function connectClearAll(renderFn) {
 
       render({results, state, createURL, helper, instantSearchInstance}) {
         const clearAttributes = getRefinements(results, state)
-        .map(one => one.attributeName)
-        .filter(one => excludeAttributes.indexOf(one) === -1);
+          .map(one => one.attributeName)
+          .filter(one => excludeAttributes.indexOf(one) === -1);
+
         const hasRefinements = clearAttributes.length !== 0;
-        const preparedCreateURL = () => createURL(clearRefinementsFromState(state));
+        const preparedCreateURL = () => createURL(clearRefinementsFromState(state, [], clearsQuery));
+
+        this._refine = refine({helper, clearAttributes, hasRefinements, clearsQuery});
 
         renderFn({
-          clearAll: clearAll({helper, clearAttributes, hasRefinements}),
+          refine: this._cachedRefine,
           hasRefinements,
           createURL: preparedCreateURL,
           instantSearchInstance,

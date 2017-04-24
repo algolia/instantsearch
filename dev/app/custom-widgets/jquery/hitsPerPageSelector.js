@@ -2,8 +2,7 @@
 import instantsearch from '../../../../index.js';
 
 const renderFn = ({
-  options,
-  currentRefinement,
+  items,
   refine,
   widgetParams: {containerNode},
 }, isFirstRendering) => {
@@ -12,10 +11,10 @@ const renderFn = ({
     containerNode.append(markup);
   }
 
-  const optionsHTML = options.map(({value, label}) => `
+  const itemsHTML = items.map(({value, label, isRefined}) => `
     <option
       value="${value}"
-      ${currentRefinement === value ? 'selected' : ''}
+      ${isRefined ? 'selected' : ''}
     >
       ${label}
     </option>
@@ -23,7 +22,7 @@ const renderFn = ({
 
   containerNode
     .find('select')
-    .html(optionsHTML);
+    .html(itemsHTML);
 
   containerNode
     .find('select')
@@ -31,4 +30,4 @@ const renderFn = ({
     .on('change', e => { refine(e.target.value); });
 };
 
-export default instantsearch.connectors.connectHitsPerPageSelector(renderFn);
+export default instantsearch.connectors.connectHitsPerPage(renderFn);

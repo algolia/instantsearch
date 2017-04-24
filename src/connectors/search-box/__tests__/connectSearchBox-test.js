@@ -79,8 +79,8 @@ describe('connectSearchBox', () => {
     { // first rendering
       expect(helper.state.query).toBe('');
       const renderOptions = rendering.lastCall.args[0];
-      const {search} = renderOptions;
-      search('bip');
+      const {refine} = renderOptions;
+      refine('bip');
       expect(helper.state.query).toBe('bip');
       expect(helper.search.callCount).toBe(1);
     }
@@ -95,9 +95,9 @@ describe('connectSearchBox', () => {
     { // Second rendering
       expect(helper.state.query).toBe('bip');
       const renderOptions = rendering.lastCall.args[0];
-      const {search, query} = renderOptions;
+      const {refine, query} = renderOptions;
       expect(query).toBe('bip');
-      search('bop');
+      refine('bop');
       expect(helper.state.query).toBe('bop');
       expect(helper.search.callCount).toBe(2);
     }
@@ -127,15 +127,15 @@ describe('connectSearchBox', () => {
 
     { // first rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {search} = renderOptions;
+      const {refine} = renderOptions;
 
-      search('bip');
+      refine('bip');
       expect(queryHook.callCount).toBe(1);
       expect(helper.state.query).toBe('');
       expect(helper.search.callCount).toBe(0);
 
       letSearchThrough = true;
-      search('bip');
+      refine('bip');
       expect(queryHook.callCount).toBe(2);
       expect(helper.state.query).toBe('bip');
       expect(helper.search.callCount).toBe(1);
@@ -153,15 +153,15 @@ describe('connectSearchBox', () => {
 
     { // Second rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {search} = renderOptions;
+      const {refine} = renderOptions;
 
-      search('bop');
+      refine('bop');
       expect(queryHook.callCount).toBe(3);
       expect(helper.state.query).toBe('bip');
       expect(helper.search.callCount).toBe(1);
 
       letSearchThrough = true;
-      search('bop');
+      refine('bop');
       expect(queryHook.callCount).toBe(4);
       expect(helper.state.query).toBe('bop');
       expect(helper.search.callCount).toBe(2);

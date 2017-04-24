@@ -36,8 +36,8 @@ const renderer = ({
   attributes,
   clearAllClick,
   clearAllURL,
-  clearRefinementClicks,
-  clearRefinementURLs,
+  refine,
+  createURL,
   refinements,
   instantSearchInstance,
 }, isFirstRendering) => {
@@ -52,6 +52,9 @@ const renderer = ({
   }
 
   const shouldAutoHideContainer = autoHideContainer && refinements && refinements.length === 0;
+
+  const clearRefinementClicks = refinements.map(refinement => refine.bind(null, refinement));
+  const clearRefinementURLs = refinements.map(refinement => createURL(refinement));
 
   ReactDOM.render(
     <CurrentRefinedValuesWithHOCs
@@ -81,7 +84,8 @@ currentRefinedValues({
   [ transformData.{item} ],
   [ autoHideContainer = true ],
   [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
-  [ collapsible=false ]
+  [ collapsible = false ]
+  [ clearsQuery = false ]
 })`;
 
 /**
@@ -115,6 +119,7 @@ currentRefinedValues({
  * @param {string} [$0.cssClasses.footer] CSS classes added to the footer element
  * @param {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
  * @param {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
+ * @param {boolean} [$0.clearsQuery] also clears the active search query
  * @returns {Object} A currentRefinedValues widget instance
  */
 export default function currentRefinedValues({
@@ -127,6 +132,7 @@ export default function currentRefinedValues({
   autoHideContainer = true,
   cssClasses: userCssClasses = {},
   collapsible = false,
+  clearsQuery = false,
 }) {
   const transformDataOK = isUndefined(transformData) ||
     isFunction(transformData) ||
@@ -194,7 +200,7 @@ export default function currentRefinedValues({
 
   try {
     const makeCurrentRefinedValues = connectCurrentRefinedValues(specializedRenderer);
-    return makeCurrentRefinedValues({attributes, onlyListedAttributes, clearAll});
+    return makeCurrentRefinedValues({attributes, onlyListedAttributes, clearAll, clearsQuery});
   } catch (e) {
     throw new Error(usage);
   }

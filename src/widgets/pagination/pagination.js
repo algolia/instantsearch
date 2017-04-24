@@ -35,8 +35,8 @@ const renderer = ({
 }, isFirstRendering) => {
   if (isFirstRendering) return;
 
-  const setCurrrentPage = () => {
-    refine();
+  const setCurrrentPage = pageNumber => {
+    refine(pageNumber);
 
     if (scrollToNode !== false) {
       scrollToNode.scrollIntoView();

@@ -5,7 +5,7 @@ import renderer from 'react-test-renderer';
 
 describe('ClearAll', () => {
   const defaultProps = {
-    clearAll: () => {},
+    refine: () => {},
     cssClasses: {
       link: 'custom-link',
     },
@@ -27,7 +27,7 @@ describe('ClearAll', () => {
 
   it('should handle clicks (and special clicks)', () => {
     const props = {
-      clearAll: sinon.spy(),
+      refine: sinon.spy(),
     };
     const preventDefault = sinon.spy();
     const component = new ClearAll(props);
@@ -35,11 +35,11 @@ describe('ClearAll', () => {
       const event = {preventDefault};
       event[e] = true;
       component.handleClick(event);
-      expect(props.clearAll.called).toBe(false, 'clearAll never called');
+      expect(props.refine.called).toBe(false, 'clearAll never called');
       expect(preventDefault.called).toBe(false, 'preventDefault never called');
     });
     component.handleClick({preventDefault});
-    expect(props.clearAll.calledOnce).toBe(true, 'clearAll called once');
+    expect(props.refine.calledOnce).toBe(true, 'clearAll called once');
     expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
   });
 });

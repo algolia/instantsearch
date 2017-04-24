@@ -4,8 +4,8 @@ import instantsearch from '../../../../index.js';
 const renderFn = ({
   clearAllClick,
   clearAllURL,
-  clearRefinementURLs,
-  clearRefinementClicks,
+  createURL,
+  refine,
   refinements,
   widgetParams: {containerNode},
 }, isFirstRendering) => {
@@ -46,17 +46,7 @@ const renderFn = ({
     // ---------------------------
     const list = refinements
       .map(value => {
-        if (value.hasOwnProperty('operator') && typeof value.operator === 'string') {
-          let displayedOperator = value.operator;
-          if (value.operator === '>=') displayedOperator = '&ge;';
-          if (value.operator === '<=') displayedOperator = '&le;';
-          value.name = `${displayedOperator} ${value.name}`;
-        }
-
-        return value;
-      })
-      .map(value => {
-        const {name, count} = value;
+        const {computedLabel, count} = value;
 
         const afterCount = count ?
           `<span class="pull-right facet-count">${count}</span>`
@@ -64,22 +54,22 @@ const renderFn = ({
 
         switch (true) {
         case value.attributeName === 'price_range':
-          return `Price range: ${name.replace(/(\d+)/g, '$$$1')} ${afterCount}`;
+          return `Price range: ${computedLabel.replace(/(\d+)/g, '$$$1')} ${afterCount}`;
 
         case value.attributeName === 'price':
-          return `Price: ${name.replace(/(\d+)/g, '$$$1')}`;
+          return `Price: ${computedLabel.replace(/(\d+)/g, '$$$1')}`;
 
         case value.attributeName === 'free_shipping':
-          return name === 'true' ? `Free shipping ${afterCount}` : '';
+          return computedLabel === 'true' ? `Free shipping ${afterCount}` : '';
 
         default:
-          return `${name} ${afterCount}`;
+          return `${computedLabel} ${afterCount}`;
         }
       })
       .map((content, index) => `
         <li>
           <a
-            href="${clearRefinementURLs[index]}"
+            href="${createURL(refinements[index])}"
             class="facet-value facet-value-removable clearfix"
           >
             ${content}
@@ -98,7 +88,7 @@ const renderFn = ({
           .off('click')
           .on('click', e => {
             e.preventDefault();
-            clearRefinementClicks[index]();
+            refine(refinements[index]);
           });
       });
 

@@ -32,7 +32,7 @@ export default search => {
   search.addWidget(
     jqueryWidgets.hitsPerPageSelector({
       containerNode: window.$('#hits-per-page-selector'),
-      options: [
+      items: [
         {value: 6, label: '6 per page'},
         {value: 12, label: '12 per page'},
         {value: 24, label: '24 per page'},
@@ -65,17 +65,6 @@ export default search => {
       operator: 'or',
       limit: 10,
       title: 'Brands',
-    })
-  );
-
-  search.addWidget(
-    jqueryWidgets.hitsPerPageSelector({
-      containerNode: window.$('#hits-per-page-selector'),
-      options: [
-        {value: 6, label: '6 per page'},
-        {value: 12, label: '12 per page'},
-        {value: 24, label: '24 per page'},
-      ],
     })
   );
 
@@ -159,6 +148,15 @@ export default search => {
     jqueryWidgets.infiniteHits({
       containerNode: window.$('#infinite-hits'),
       hitsPerPage: 3,
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.showMoreMenu({
+      containerNode: window.$('#categories'),
+      attributeName: 'categories',
+      limit: 3,
+      showMoreLimit: 10,
     })
   );
 };

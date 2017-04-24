@@ -159,21 +159,21 @@ describe('connectHierarchicalMenu', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.items).toEqual([
       {
-        name: 'Decoration',
-        path: 'Decoration',
+        label: 'Decoration',
+        value: 'Decoration',
         count: 880,
         isRefined: true,
         data: [
           {
-            name: 'Candle holders & candles',
-            path: 'Decoration > Candle holders & candles',
+            label: 'Candle holders & candles',
+            value: 'Decoration > Candle holders & candles',
             count: 193,
             isRefined: false,
             data: null,
           },
           {
-            name: 'Frames & pictures',
-            path: 'Decoration > Frames & pictures',
+            label: 'Frames & pictures',
+            value: 'Decoration > Frames & pictures',
             count: 173,
             isRefined: false,
             data: null,
@@ -181,8 +181,8 @@ describe('connectHierarchicalMenu', () => {
         ],
       },
       {
-        name: 'Outdoor',
-        path: 'Outdoor',
+        label: 'Outdoor',
+        value: 'Outdoor',
         count: 47,
         isRefined: false,
         data: null,
@@ -242,21 +242,21 @@ describe('connectHierarchicalMenu', () => {
     const [, [secondRenderingOptions]] = rendering.mock.calls;
 
     expect(secondRenderingOptions.currentRefinement).toEqual({
-      name: 'Decoration',
-      path: 'Decoration',
+      label: 'Decoration',
+      value: 'Decoration',
       count: 880,
       isRefined: true,
       data: [
         {
-          name: 'Candle holders & candles',
-          path: 'Decoration > Candle holders & candles',
+          label: 'Candle holders & candles',
+          value: 'Decoration > Candle holders & candles',
           count: 193,
           isRefined: false,
           data: null,
         },
         {
-          name: 'Frames & pictures',
-          path: 'Decoration > Frames & pictures',
+          label: 'Frames & pictures',
+          value: 'Decoration > Frames & pictures',
           count: 173,
           isRefined: false,
           data: null,

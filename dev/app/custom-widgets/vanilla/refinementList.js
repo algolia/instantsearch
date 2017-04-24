@@ -43,11 +43,11 @@ function render(
     label.appendChild(check);
 
     check.addEventListener('change', () => {
-      refine(item.name);
+      refine(item.value);
     });
 
     const span = document.createElement('span');
-    span.innerText = item.name;
+    span.innerText = item.label;
     label.appendChild(span);
 
     const count = document.createElement('span');

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
-import connectHitsPerPageSelector from '../../connectors/hits-per-page-selector/connectHitsPerPageSelector.js';
+import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
 
 import {
   bemHelper,
@@ -17,18 +17,19 @@ const renderer = ({
   cssClasses,
   autoHideContainer,
 }) => ({
-  currentRefinement,
-  options,
+  items,
   refine,
   hasNoResults,
 }, isFirstRendering) => {
   if (isFirstRendering) return;
 
+  const {value: currentValue} = items.find(({isRefined}) => isRefined) || {};
+
   ReactDOM.render(
     <Selector
       cssClasses={cssClasses}
-      currentValue={currentRefinement}
-      options={options}
+      currentValue={currentValue}
+      options={items}
       setValue={refine}
       shouldAutoHideContainer={autoHideContainer && hasNoResults}
     />,
@@ -39,7 +40,7 @@ const renderer = ({
 const usage = `Usage:
 hitsPerPageSelector({
   container,
-  options,
+  items,
   [ cssClasses.{root,item}={} ],
   [ autoHideContainer=false ]
 })`;
@@ -48,9 +49,9 @@ hitsPerPageSelector({
  * Instantiate a dropdown element to choose the number of hits to display per page
  * @function hitsPerPageSelector
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {Object[]} $0.options Array of objects defining the different values and labels
- * @param  {number} $0.options[0].value number of hits to display per page
- * @param  {string} $0.options[0].label Label to display in the option
+ * @param  {Object[]} $0.items Array of objects defining the different values and labels
+ * @param  {number} $0.items[0].value number of hits to display per page
+ * @param  {string} $0.items[0].label Label to display in the option
  * @param  {boolean} [$0.autoHideContainer=false] Hide the container when no results match
  * @param  {Object} [$0.cssClasses] CSS classes to be added
  * @param  {string|string[]} [$0.cssClasses.root] CSS classes added to the parent `<select>`
@@ -59,7 +60,7 @@ hitsPerPageSelector({
  */
 export default function hitsPerPageSelector({
   container,
-  options,
+  items,
   cssClasses: userCssClasses = {},
   autoHideContainer = false,
 } = {}) {
@@ -81,8 +82,8 @@ export default function hitsPerPageSelector({
   });
 
   try {
-    const makeHitsPerPageSelector = connectHitsPerPageSelector(specializedRenderer);
-    return makeHitsPerPageSelector({options});
+    const makeHitsPerPageSelector = connectHitsPerPage(specializedRenderer);
+    return makeHitsPerPageSelector({items});
   } catch (e) {
     throw new Error(usage);
   }

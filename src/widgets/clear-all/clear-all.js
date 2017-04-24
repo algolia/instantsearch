@@ -16,7 +16,7 @@ import defaultTemplates from './defaultTemplates.js';
 const bem = bemHelper('ais-clear-all');
 
 const renderer = ({containerNode, cssClasses, collapsible, autoHideContainer, renderState, templates}) => ({
-  clearAll, // eslint-disable-line
+  refine,
   hasRefinements,
   createURL,
   instantSearchInstance,
@@ -34,7 +34,7 @@ const renderer = ({containerNode, cssClasses, collapsible, autoHideContainer, re
 
   ReactDOM.render(
     <ClearAllWithHOCs
-      clearAll={clearAll}
+      refine={refine}
       collapsible={collapsible}
       cssClasses={cssClasses}
       hasRefinements={hasRefinements}
@@ -75,7 +75,8 @@ clearAll({
  * @param  {string|string[]} [$0.cssClasses.link] CSS class to add to the link element
  * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
  * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Widget} a clearAll widget instance
+ * @param  {boolean} [$0.clearsQuery = false] also clears the active search query
+ * @returns {Object} widget
  */
 export default function clearAll({
   container,
@@ -84,6 +85,7 @@ export default function clearAll({
   collapsible = false,
   autoHideContainer = true,
   excludeAttributes = [],
+  clearsQuery = false,
 }) {
   if (!container) {
     throw new Error(usage);
@@ -110,7 +112,7 @@ export default function clearAll({
 
   try {
     const makeWidget = connectClearAll(specializedRenderer);
-    return makeWidget({excludeAttributes});
+    return makeWidget({excludeAttributes, clearsQuery});
   } catch (e) {
     throw new Error(usage);
   }

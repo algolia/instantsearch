@@ -2,7 +2,6 @@
 
 exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -22,10 +21,12 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
   facetValues={
     Array [
       Object {
-        "name": "foo",
+        "label": "foo",
+        "value": undefined,
       },
       Object {
-        "name": "bar",
+        "label": "bar",
+        "value": undefined,
       },
     ]
   }
@@ -35,7 +36,7 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
       "templates": Object {
         "footer": "",
         "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{name}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -52,7 +53,6 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
 
 exports[`hierarchicalMenu() render has a templates option 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -72,10 +72,12 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
   facetValues={
     Array [
       Object {
-        "name": "foo",
+        "label": "foo",
+        "value": undefined,
       },
       Object {
-        "name": "bar",
+        "label": "bar",
+        "value": undefined,
       },
     ]
   }
@@ -102,7 +104,6 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
 
 exports[`hierarchicalMenu() render sets facetValues to empty array when no results 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -126,7 +127,7 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
       "templates": Object {
         "footer": "",
         "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{name}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -143,7 +144,6 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
 
 exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no results 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -167,7 +167,7 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
       "templates": Object {
         "footer": "",
         "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{name}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -184,7 +184,6 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
 
 exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
 <HeaderFooter-AutoHide
-  attributeNameKey="path"
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -204,10 +203,12 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
   facetValues={
     Array [
       Object {
-        "name": "foo",
+        "label": "foo",
+        "value": undefined,
       },
       Object {
-        "name": "bar",
+        "label": "bar",
+        "value": undefined,
       },
     ]
   }
@@ -217,7 +218,7 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
       "templates": Object {
         "footer": "",
         "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{name}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,

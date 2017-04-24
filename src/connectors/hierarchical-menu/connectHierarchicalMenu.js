@@ -109,12 +109,11 @@ export default function connectHierarchicalMenu(renderFn) {
       _prepareFacetValues(facetValues, state) {
         return facetValues
           .slice(0, limit)
-          .map(subValue => {
+          .map(({name: label, path: value, ...subValue}) => {
             if (Array.isArray(subValue.data)) {
               subValue.data = this._prepareFacetValues(subValue.data, state);
             }
-
-            return subValue;
+            return {...subValue, label, value};
           });
       },
 

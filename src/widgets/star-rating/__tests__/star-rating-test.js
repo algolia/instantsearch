@@ -68,10 +68,22 @@ describe('starRating()', () => {
       collapsible: false,
       createURL: () => {},
       facetValues: [
-        {isRefined: false, stars: [true, true, true, true, false], count: 0, name: '4', labels: defaultLabels},
-        {isRefined: false, stars: [true, true, true, false, false], count: 0, name: '3', labels: defaultLabels},
-        {isRefined: false, stars: [true, true, false, false, false], count: 0, name: '2', labels: defaultLabels},
-        {isRefined: false, stars: [true, false, false, false, false], count: 0, name: '1', labels: defaultLabels},
+        {
+          isRefined: false, stars: [true, true, true, true, false],
+          count: 0, name: '4', value: '4', labels: defaultLabels,
+        },
+        {
+          isRefined: false, stars: [true, true, true, false, false],
+          count: 0, name: '3', value: '3', labels: defaultLabels,
+        },
+        {
+          isRefined: false, stars: [true, true, false, false, false],
+          count: 0, name: '2', value: '2', labels: defaultLabels,
+        },
+        {
+          isRefined: false, stars: [true, false, false, false, false],
+          count: 0, name: '1', value: '1', labels: defaultLabels,
+        },
       ],
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
@@ -104,6 +116,7 @@ describe('starRating()', () => {
         count: 42,
         isRefined: true,
         name: '1',
+        value: '1',
         stars: [true, false, false, false, false],
         labels: defaultLabels,
       },

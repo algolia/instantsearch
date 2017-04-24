@@ -35,7 +35,7 @@ describe('clearAll()', () => {
     };
 
     props = {
-      clearAll: sinon.spy(),
+      refine: sinon.spy(),
       cssClasses: {
         root: 'ais-clear-all root cx',
         header: 'ais-clear-all--header',

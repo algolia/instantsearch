@@ -66,7 +66,7 @@ const renderer = ({
       showMore={showMoreConfig !== null}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
-      searchFacetValues={searchForFacetValues && searchForItems}
+      searchFacetValues={searchForFacetValues ? searchForItems : undefined}
       searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
       isFromSearch={isFromSearch}
     />,

@@ -1,4 +1,3 @@
-import find from 'lodash/find';
 import includes from 'lodash/includes';
 
 import {checkRendering} from '../../lib/utils.js';
@@ -12,7 +11,6 @@ var customNumericRefinementList = connectNumericRefinementList(function renderFn
   //   refine,
   //   instantSearchInstance,
   //   widgetParams,
-  //   currentRefinement,
   //  }
 });
 search.addWidget(
@@ -46,7 +44,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function(string)} refine set the selected value and trigger a new search
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
- * @property {Object} currentRefinement the refinement currently applied
  */
 
 /**
@@ -77,48 +74,31 @@ export default function connectNumericRefinementList(renderFn) {
         };
 
         this._createURL = state => facetValue => createURL(refine(state, attributeName, options, facetValue));
-
-        const items = options.map(facetValue =>
-          ({
-            ...facetValue,
-            isRefined: isRefined(helper.state, attributeName, facetValue),
-            attributeName,
-          })
-        );
+        this._prepareItems = state => options.map(({start, end, name: label}) => ({
+          label,
+          value: window.encodeURI(JSON.stringify({start, end})),
+          isRefined: isRefined(state, attributeName, {start, end}),
+        }));
 
         renderFn({
           createURL: this._createURL(helper.state),
-          items,
+          items: this._prepareItems(helper.state),
           hasNoResults: true,
           refine: this._refine,
           instantSearchInstance,
           widgetParams,
-          currentRefinement: this._findCurrentRefinement(items),
         }, true);
       },
 
       render({results, state, instantSearchInstance}) {
-        const items = options.map(facetValue =>
-          ({
-            ...facetValue,
-            isRefined: isRefined(state, attributeName, facetValue),
-            attributeName,
-          })
-        );
-
         renderFn({
           createURL: this._createURL(state),
-          items,
+          items: this._prepareItems(state),
           hasNoResults: results.nbHits === 0,
           refine: this._refine,
           instantSearchInstance,
           widgetParams,
-          currentRefinement: this._findCurrentRefinement(items),
         }, false);
-      },
-
-      _findCurrentRefinement(items) {
-        return items.find(({isRefined: itemIsRefined}) => itemIsRefined);
       },
     };
   };
@@ -151,7 +131,7 @@ function isRefined(state, attributeName, option) {
 function refine(state, attributeName, options, facetValue) {
   let resolvedState = state;
 
-  const refinedOption = find(options, {name: facetValue});
+  const refinedOption = JSON.parse(window.decodeURI(facetValue));
 
   const currentRefinements = resolvedState.getNumericRefinements(attributeName);
 

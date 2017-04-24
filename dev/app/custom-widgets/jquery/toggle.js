@@ -24,7 +24,7 @@ const renderFn = ({
   $facetValue.off('click');
   $facetValue.html(`
     <a
-      href="${createURL(value)()}"
+      href="${createURL()}"
       style="text-decoration: none; color: #000"
     >
       <label
@@ -38,9 +38,7 @@ const renderFn = ({
         />
         ${value.name}
         <span class="facet-count pull-right">
-          ${value.isRefined
-            ? value.onFacetValue.count
-            : value.offFacetValue.count}
+          ${value.count}
         </span>
       </label>
     </a>
@@ -50,7 +48,7 @@ const renderFn = ({
     e.preventDefault();
     e.stopPropagation();
 
-    refine(value, value.isRefined);
+    refine(value);
   });
 };
 

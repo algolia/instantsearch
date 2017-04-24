@@ -3,10 +3,9 @@ import some from 'lodash/some';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
-var customHitsPerPage = connectHitsPerPageSelector(function render(params, isFirstRendering) {
+var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
   // params = {
-  //   options,
-  //   currentRefinement,
+  //   items,
   //   refine,
   //   hasNoResults,
   //   instantSearchInstance,
@@ -15,21 +14,21 @@ var customHitsPerPage = connectHitsPerPageSelector(function render(params, isFir
 });
 search.addWidget(
   customHitsPerPage({
-    options: [
+    items: [
       {value: 10, label: '10 results per page'},
       {value: 42, label: '42 results per page'},
     ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHitsPerPageSelector.html
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHitsPerPage.html
 `;
 
 /**
  * @typedef HitsPerPageRenderingOptions
- * @property {Object[]} options Array of objects defining the different values and labels
- * @property {number} options[0].value number of hits to display per page
- * @property {string} options[0].label Label to display in the option
- * @property {number} currentRefinement the currently selected value of hitsPerPage
+ * @property {Object[]} items Array of objects defining the different values and labels
+ * @property {number} items[0].value number of hits to display per page
+ * @property {string} items[0].label Label to display in the option
+ * @property {boolean} items[0].isRefined boolean to indicate current refined value
  * @property {function(number)} refine sets the number of hits per page and trigger a search
  * @property {boolean} hasNoResults true if there were no results in the last search
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
@@ -38,9 +37,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef HitsPerPageWidgetOptions
- * @property {Object[]} options Array of objects defining the different values and labels
- * @property {number} options[0].value number of hits to display per page
- * @property {string} options[0].label Label to display in the option
+ * @property {Object[]} items Array of objects defining the different values and labels
+ * @property {number} items[0].value number of hits to display per page
+ * @property {string} items[0].label Label to display in the option
  */
 
 /**
@@ -48,52 +47,49 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn function that renders the hits widget, the boolean indicates if the current call is the first one / the one before the first search.
  * @return {function(HitsPerPageWidgetOptions)} a custom HitsPerPage widget factory
  */
-export default function connectHitsPerPageSelector(renderFn) {
+export default function connectHitsPerPage(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {options: userOptions} = widgetParams;
-    let options = userOptions;
+    const {items: userItems} = widgetParams;
+    let items = userItems;
 
-    if (!options) {
+    if (!items) {
       throw new Error(usage);
     }
 
     return {
       init({helper, state, instantSearchInstance}) {
         const isCurrentInOptions = some(
-          options,
-          option => Number(state.hitsPerPage) === Number(option.value)
+          items,
+          item => Number(state.hitsPerPage) === Number(item.value)
         );
 
         if (!isCurrentInOptions) {
           if (state.hitsPerPage === undefined) {
             if (window.console) {
-              window.console.log(
+              window.console.warn(
   `[Warning][hitsPerPageSelector] hitsPerPage not defined.
   You should probably use a \`hits\` widget or set the value \`hitsPerPage\`
   using the searchParameters attribute of the instantsearch constructor.`
               );
             }
           } else if (window.console) {
-            window.console.log(
-  `[Warning][hitsPerPageSelector] No option in \`options\`
+            window.console.warn(
+  `[Warning][hitsPerPageSelector] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
             );
           }
 
-          options = [{value: undefined, label: ''}].concat(options);
+          items = [{value: undefined, label: ''}, ...items];
         }
-
-        const currentRefinement = state.hitsPerPage;
 
         this.setHitsPerPage = value => helper
           .setQueryParameter('hitsPerPage', value)
           .search();
 
         renderFn({
-          currentRefinement,
-          options,
+          items: this._transformItems(state),
           refine: this.setHitsPerPage,
           hasNoResults: true,
           widgetParams,
@@ -102,17 +98,20 @@ export default function connectHitsPerPageSelector(renderFn) {
       },
 
       render({state, results, instantSearchInstance}) {
-        const currentRefinement = state.hitsPerPage;
         const hasNoResults = results.nbHits === 0;
 
         renderFn({
-          currentRefinement,
-          options,
+          items: this._transformItems(state),
           refine: this.setHitsPerPage,
           hasNoResults,
           widgetParams,
           instantSearchInstance,
         }, false);
+      },
+
+      _transformItems({hitsPerPage}) {
+        return items.map(item =>
+          ({...item, isRefined: Number(item.value) === Number(hitsPerPage)}));
       },
     };
   };

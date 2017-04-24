@@ -128,20 +128,20 @@ describe('priceRanges()', () => {
     });
 
     it('refines on the lower bound', () => {
-      widget._refine(10, undefined);
+      widget._refine({from: 10, to: undefined});
       expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
       expect(helper.addNumericRefinement.calledOnce).toBe(true, 'helper.addNumericRefinement called once');
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');
     });
 
     it('refines on the upper bound', () => {
-      widget._refine(undefined, 10);
+      widget._refine({fromt: undefined, to: 10});
       expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');
     });
 
     it('refines on the 2 bounds', () => {
-      widget._refine(10, 20);
+      widget._refine({from: 10, to: 20});
       expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
       expect(helper.addNumericRefinement.calledTwice).toBe(true, 'helper.addNumericRefinement called twice');
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');

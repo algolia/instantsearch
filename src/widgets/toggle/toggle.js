@@ -48,7 +48,7 @@ const renderer = ({
       facetValues={[value]}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
-      toggleRefinement={refine}
+      toggleRefinement={(name, isRefined) => refine({isRefined})}
     />,
     containerNode
   );

@@ -37,10 +37,6 @@ describe('hits()', () => {
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });
 
-  it('configures hitsPerPage', () => {
-    expect(widget.getConfiguration()).toEqual({hitsPerPage: 20});
-  });
-
   it('calls twice ReactDOM.render(<Hits props />, container)', () => {
     props = getProps();
     widget.render({results});

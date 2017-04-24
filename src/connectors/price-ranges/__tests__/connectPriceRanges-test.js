@@ -106,7 +106,7 @@ describe('connectPriceRanges', () => {
       expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
       const renderOptions = rendering.lastCall.args[0];
       const {refine} = renderOptions;
-      refine(10, 30);
+      refine({from: 10, to: 30});
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
       expect(helper.search.callCount).toBe(1);
@@ -138,64 +138,10 @@ describe('connectPriceRanges', () => {
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
       const renderOptions = rendering.lastCall.args[0];
       const {refine} = renderOptions;
-      refine(40, 50);
+      refine({from: 40, to: 50});
       expect(helper.getNumericRefinement('price', '>=')).toEqual([40]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([50]);
       expect(helper.search.callCount).toBe(2);
     }
-  });
-
-  it('provides the correct `currentRefinement` value', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectPriceRanges(rendering);
-
-    const attributeName = 'price';
-    const widget = makeWidget({attributeName});
-
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration());
-    helper.search = jest.fn();
-
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      onHistoryChange: () => {},
-    });
-
-    const [[firstRenderingOptions]] = rendering.mock.calls;
-
-    expect(rendering).toBeCalled();
-    expect(firstRenderingOptions.currentRefinement).toBe(null);
-
-    firstRenderingOptions.refine(10, 30);
-
-    widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [{test: 'oneTime'}],
-        facets: {price: {10: 1, 20: 1, 30: 1}},
-        facets_stats: { // eslint-disable-line
-          price: {
-            avg: 20,
-            max: 30,
-            min: 10,
-            sum: 60,
-          },
-        },
-        nbHits: 1,
-        nbPages: 1,
-        page: 0,
-      }]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
-
-    const [, [secondRenderingOptions]] = rendering.mock.calls;
-    expect(secondRenderingOptions.currentRefinement).toEqual({
-      from: 10,
-      to: 30,
-      url: '#',
-      isRefined: true,
-    });
   });
 });

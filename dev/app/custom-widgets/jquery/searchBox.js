@@ -1,25 +1,14 @@
 /* eslint-disable import/default */
-import throttle from 'lodash/throttle';
 import instantsearch from '../../../../index.js';
-
-const handleChange = ({query, search, inputNode}) => () => {
-  const inputValue = inputNode.val();
-  if (inputValue !== query) search(inputValue);
-};
 
 const renderFn = ({
   query,
   onHistoryChange,
-  search,
+  refine,
   widgetParams: {inputNode},
 }, isFirstRendering) => {
   if (isFirstRendering) {
-    const throttledSearch = throttle(
-      handleChange({query, search, inputNode}),
-      300
-    );
-
-    inputNode.on('keyup', throttledSearch);
+    inputNode.on('keyup', () => refine(inputNode.val()));
     inputNode.val(query);
   }
 };

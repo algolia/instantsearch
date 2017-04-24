@@ -22,7 +22,7 @@ export class RawClearAll extends React.Component {
       return;
     }
     e.preventDefault();
-    this.props.clearAll();
+    this.props.refine();
   }
 
   render() {
@@ -46,7 +46,7 @@ export class RawClearAll extends React.Component {
 }
 
 RawClearAll.propTypes = {
-  clearAll: React.PropTypes.func.isRequired,
+  refine: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
     link: React.PropTypes.string,
   }),

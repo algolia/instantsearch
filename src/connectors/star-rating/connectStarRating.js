@@ -9,7 +9,6 @@ var customStarRating = connectStarRating(function render(params, isFirstRenderin
   //   instantSearchInstance,
   //   hasNoResults,
   //   widgetParams,
-  //   currentRefinement,
   // }
 });
 search.addWidget(
@@ -35,7 +34,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {boolean} hasNoResults a boolean that indicates that the last search contains no results
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  * @property {Object} widgetParams all original options forwarded to rendering
- * @property {Object} currentRefinement the refinement currently applied
  */
 
 /**
@@ -72,7 +70,6 @@ export default function connectStarRating(renderFn) {
           refine: this._toggleRefinement,
           createURL: this._createURL(helper.state),
           widgetParams,
-          currentRefinement: null,
         }, true);
       },
 
@@ -106,6 +103,7 @@ export default function connectStarRating(renderFn) {
           facetValues.push({
             stars,
             name: String(star),
+            value: String(star),
             count,
             isRefined: refinedStar === star,
           });
@@ -118,7 +116,6 @@ export default function connectStarRating(renderFn) {
           refine: this._toggleRefinement,
           createURL: this._createURL(state),
           widgetParams,
-          currentRefinement: facetValues.find(({isRefined}) => isRefined),
         }, false);
       },
 

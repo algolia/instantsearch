@@ -60,6 +60,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
     Array [
       Object {
         "attributeName": "extraFacet",
+        "computedLabel": "extraFacet-val1",
         "count": 42,
         "exhaustive": true,
         "name": "extraFacet-val1",
@@ -67,6 +68,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -74,6 +76,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -81,18 +84,21 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -100,6 +106,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -107,6 +114,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -114,6 +122,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -121,6 +130,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -128,6 +138,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -135,6 +146,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -142,11 +154,13 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -236,6 +250,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
     Array [
       Object {
         "attributeName": "extraFacet",
+        "computedLabel": "extraFacet-val1",
         "count": 42,
         "exhaustive": true,
         "name": "extraFacet-val1",
@@ -243,6 +258,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -250,6 +266,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -257,18 +274,21 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -276,6 +296,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -283,6 +304,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -290,6 +312,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -297,6 +320,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -304,6 +328,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -311,6 +336,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -318,11 +344,13 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -426,6 +454,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -433,6 +462,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -440,18 +470,21 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -459,6 +492,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -466,6 +500,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "extraFacet",
+        "computedLabel": "extraFacet-val1",
         "count": 42,
         "exhaustive": true,
         "name": "extraFacet-val1",
@@ -473,6 +508,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -480,6 +516,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -487,6 +524,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -494,6 +532,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -501,6 +540,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -508,11 +548,13 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -602,6 +644,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
     Array [
       Object {
         "attributeName": "extraFacet",
+        "computedLabel": "extraFacet-val1",
         "count": 42,
         "exhaustive": true,
         "name": "extraFacet-val1",
@@ -609,6 +652,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -616,6 +660,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -623,18 +668,21 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -642,6 +690,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -649,6 +698,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -656,6 +706,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -663,6 +714,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -670,6 +722,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -677,6 +730,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -684,11 +738,13 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -778,6 +834,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
     Array [
       Object {
         "attributeName": "extraFacet",
+        "computedLabel": "extraFacet-val1",
         "count": 42,
         "exhaustive": true,
         "name": "extraFacet-val1",
@@ -785,6 +842,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -792,6 +850,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -799,18 +858,21 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -818,6 +880,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -825,6 +888,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -832,6 +896,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -839,6 +904,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -846,6 +912,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -853,6 +920,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -860,11 +928,13 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -952,6 +1022,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -959,6 +1030,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -966,18 +1038,21 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -985,6 +1060,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -1090,6 +1166,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -1097,6 +1174,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -1104,18 +1182,21 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -1123,6 +1204,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -1130,6 +1212,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "extraFacet",
+        "computedLabel": "extraFacet-val1",
         "count": 42,
         "exhaustive": true,
         "name": "extraFacet-val1",
@@ -1137,6 +1220,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -1144,6 +1228,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -1151,6 +1236,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -1158,6 +1244,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -1165,6 +1252,7 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -1172,11 +1260,13 @@ exports[`currentRefinedValues() render() options.attributes with options.onlyLis
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -1288,6 +1378,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -1295,6 +1386,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -1302,18 +1394,21 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -1321,6 +1416,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -1328,6 +1424,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -1335,6 +1432,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -1342,6 +1440,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -1349,6 +1448,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -1356,6 +1456,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -1363,11 +1464,13 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -1479,6 +1582,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -1486,6 +1590,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -1493,18 +1598,21 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -1512,6 +1620,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -1519,6 +1628,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -1526,6 +1636,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -1533,6 +1644,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -1540,6 +1652,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -1547,6 +1660,7 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -1554,11 +1668,13 @@ exports[`currentRefinedValues() render() options.autoHideContainer with refineme
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -1812,6 +1928,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -1819,6 +1936,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -1826,18 +1944,21 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -1845,6 +1966,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -1852,6 +1974,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -1859,6 +1982,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -1866,6 +1990,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -1873,6 +1998,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -1880,6 +2006,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -1887,11 +2014,13 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -2003,6 +2132,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -2010,6 +2140,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -2017,18 +2148,21 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -2036,6 +2170,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -2043,6 +2178,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -2050,6 +2186,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2057,6 +2194,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2064,6 +2202,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2071,6 +2210,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2078,11 +2218,13 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -2194,6 +2336,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -2201,6 +2344,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -2208,18 +2352,21 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -2227,6 +2374,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -2234,6 +2382,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -2241,6 +2390,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2248,6 +2398,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2255,6 +2406,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2262,6 +2414,7 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2269,11 +2422,13 @@ exports[`currentRefinedValues() render() options.container should render with a 
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -2385,6 +2540,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -2392,6 +2548,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -2399,18 +2556,21 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -2418,6 +2578,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -2425,6 +2586,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -2432,6 +2594,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2439,6 +2602,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2446,6 +2610,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2453,6 +2618,7 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2460,11 +2626,13 @@ exports[`currentRefinedValues() render() options.cssClasses should be passed in 
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -2576,6 +2744,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -2583,6 +2752,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -2590,18 +2760,21 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -2609,6 +2782,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -2616,6 +2790,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -2623,6 +2798,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2630,6 +2806,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2637,6 +2814,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2644,6 +2822,7 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2651,11 +2830,13 @@ exports[`currentRefinedValues() render() options.cssClasses should work with an 
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -2767,6 +2948,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -2774,6 +2956,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -2781,18 +2964,21 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -2800,6 +2986,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -2807,6 +2994,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -2814,6 +3002,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -2821,6 +3010,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -2828,6 +3018,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -2835,6 +3026,7 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -2842,11 +3034,13 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -2958,6 +3152,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -2965,6 +3160,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -2972,18 +3168,21 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -2991,6 +3190,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -2998,6 +3198,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -3005,6 +3206,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -3012,6 +3214,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -3019,6 +3222,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -3026,6 +3230,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -3033,11 +3238,13 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -3149,6 +3356,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
     Array [
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -3156,6 +3364,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -3163,18 +3372,21 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -3182,6 +3394,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -3189,6 +3402,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -3196,6 +3410,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -3203,6 +3418,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -3210,6 +3426,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -3217,6 +3434,7 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -3224,11 +3442,13 @@ exports[`currentRefinedValues() render() should render twice <CurrentRefinedValu
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
@@ -3327,6 +3547,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
     Array [
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
         "count": 3,
         "exhaustive": true,
         "name": "disjunctiveFacet-val1",
@@ -3334,6 +3555,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
         "count": 4,
         "exhaustive": true,
         "name": "disjunctiveFacet-val2",
@@ -3341,18 +3563,21 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
         "exclude": true,
         "name": "facetExclude-val1",
         "type": "exclude",
       },
       Object {
         "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
         "exclude": true,
         "name": "facetExclude-val2",
         "type": "exclude",
       },
       Object {
         "attributeName": "extraFacet",
+        "computedLabel": "extraFacet-val1",
         "count": 42,
         "exhaustive": true,
         "name": "extraFacet-val1",
@@ -3360,6 +3585,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val1",
         "count": 1,
         "exhaustive": true,
         "name": "facet-val1",
@@ -3367,6 +3593,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "facet",
+        "computedLabel": "facet-val2",
         "count": 2,
         "exhaustive": true,
         "name": "facet-val2",
@@ -3374,6 +3601,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
         "count": 6,
         "exhaustive": true,
         "name": "hierarchicalFacet-val2",
@@ -3381,6 +3609,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
         "name": "1",
         "numericValue": 1,
         "operator": ">=",
@@ -3388,6 +3617,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
         "name": "2",
         "numericValue": 2,
         "operator": "<=",
@@ -3395,6 +3625,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
         "name": "3",
         "numericValue": 3,
         "operator": ">=",
@@ -3402,6 +3633,7 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
         "name": "4",
         "numericValue": 4,
         "operator": "<=",
@@ -3409,11 +3641,13 @@ exports[`currentRefinedValues() render() with attributes should sort the refinem
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag1",
         "name": "tag1",
         "type": "tag",
       },
       Object {
         "attributeName": "_tags",
+        "computedLabel": "tag2",
         "name": "tag2",
         "type": "tag",
       },
