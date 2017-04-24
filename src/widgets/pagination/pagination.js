@@ -76,7 +76,7 @@ pagination({
 
 /**
  * Add a pagination menu to navigate through the results
- * @function pagination
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [$0.labels] Text to display in the various links (prev, next, first, last)
  * @param  {string} [$0.labels.previous] Label for the Previous link

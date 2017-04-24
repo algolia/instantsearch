@@ -1,0 +1,5 @@
+mixin description(description)
+  if description && description.children
+    for paragraph in description.children
+      for text in paragraph.children
+        | !{text.value}

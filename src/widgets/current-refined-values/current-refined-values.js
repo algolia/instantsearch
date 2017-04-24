@@ -90,7 +90,7 @@ currentRefinedValues({
 
 /**
  * Instantiate a list of current refinements with the possibility to clear them.
- * @function currentRefinedValues
+ * @type {WidgetFactory}
  * @param {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param {Array} [$0.attributes = []] Attributes configuration
  * @param {string} $0.attributes[].name Required attribute name

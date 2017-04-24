@@ -1,12 +1,3 @@
-/**
- * Pushes analytics data to any analytic service
- * @function analytics
- * @param  {Function} [options.pushFunction] Push function called when data are supposed to be pushed to analytic service
- * @param  {int} [options.delay=3000] Number of milliseconds between last search key stroke and calling pushFunction
- * @param  {boolean} [options.triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
- * @param  {boolean} [options.pushInitialSearch=true] Trigger pushFunction after the initial search
- * @return {Object}
- */
 const usage = `Usage:
 analytics({
   pushFunction,
@@ -14,6 +5,16 @@ analytics({
   [ triggerOnUIInteraction=false ],
   [ pushInitialSearch=true ]
 })`;
+
+/**
+ * Pushes analytics data to any analytic service
+ * @type {WidgetFactory}
+ * @param  {Function} [options.pushFunction] Push function called when data are supposed to be pushed to analytic service
+ * @param  {int} [options.delay=3000] Number of milliseconds between last search key stroke and calling pushFunction
+ * @param  {boolean} [options.triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
+ * @param  {boolean} [options.pushInitialSearch=true] Trigger pushFunction after the initial search
+ * @return {Widget}
+ */
 function analytics({
   pushFunction,
   delay = 3000,

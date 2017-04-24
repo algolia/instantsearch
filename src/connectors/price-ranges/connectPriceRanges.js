@@ -20,7 +20,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomPriceRangesWidgetOptions
- * @param {string} attributeName Name of the attribute for faceting
+ * @property {string} attributeName Name of the attribute for faceting
  */
 
 /**
@@ -33,6 +33,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the price ranges business logic.
+  * @type {Connector}
   * @param {function(PriceRangesRenderingOptions, boolean)} renderFn function that renders the price ranges widget
   * @return {function(CustomPriceRangesWidgetOptions)} a widget factory for price ranges widget
   */

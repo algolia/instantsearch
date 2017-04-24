@@ -12,6 +12,7 @@ import markdown from './plugins/markdown.js';
 import onlyChanged from './plugins/onlyChanged.js';
 import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
 import autoprefixer from './plugins/autoprefixer.js';
+import documentationjs from './plugins/documentationjs-data.js';
 
 // performance and debug info for metalsmith, when needed see usage below
 // import {start as perfStart, stop as perfStop} from './plugins/perf.js';
@@ -19,7 +20,7 @@ import autoprefixer from './plugins/autoprefixer.js';
 import webpackStartConfig from './webpack.config.start.babel.js';
 import webpackBuildConfig from './webpack.config.build.babel';
 
-import {reactPackage} from './path.js';
+import {rootPath} from './path.js';
 
 const common = [
   helpers,
@@ -41,7 +42,7 @@ const common = [
     if (/-build\.js$/.test(fileName)) return false;
 
     // if it's an example JavaScript file, keep it
-    // if (/examples\/(.*)?\.js$/.test(fileName)) return false;
+    if (/examples\/(.*)?\.js$/.test(fileName)) return false;
 
     // if it's any other JavaScript file, ignore it, it's handled by build files above
     if (/\.js$/.test(fileName)) return true;
@@ -52,6 +53,7 @@ const common = [
     // otherwise, keep file
     return false;
   }),
+  documentationjs({rootJSFile: rootPath('src/lib/main.js')}),
   markdown,
   headings('h2'),
   nav(),

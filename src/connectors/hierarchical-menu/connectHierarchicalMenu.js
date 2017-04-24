@@ -1,7 +1,7 @@
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
-var customToggle = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
+var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
   // params = {
   //   createURL,
   //   items,
@@ -12,7 +12,7 @@ var customToggle = connectHierarchicalMenu(function renderFn(params, isFirstRend
   // }
 });
 search.addWidget(
-  customToggle({
+  customHierarchicalMenu({
     attributes,
     [ separator = ' > ' ],
     [ rootPath = null ],
@@ -26,12 +26,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomHierarchicalMenuWidgetOptions
- * @param {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
- * @param  {string} [separator='>'] Separator used in the attributes to separate level values. [*]
- * @param  {string} [rootPath] Prefix path to use if the first level is not the root level.
- * @param  {string} [showParentLevel=false] Show the parent level of the current refined value
- * @param  {number} [limit=10] How much facet values to get [*]
- * @param  {string[]|Function} [sortBy=['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
+ * @property  {string} [separator='>'] Separator used in the attributes to separate level values. [*]
+ * @property  {string} [rootPath] Prefix path to use if the first level is not the root level.
+ * @property  {string} [showParentLevel=false] Show the parent level of the current refined value
+ * @property  {number} [limit=10] How much facet values to get [*]
+ * @property  {string[]|Function} [sortBy=['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  */
 
@@ -46,9 +46,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
  /**
-  * Connects a rendering function with the toggle business logic.
-  * @param {function(HierarchicalMenuRenderingOptions)} renderFn function that renders the toggle widget
-  * @return {function(CustomHierarchicalMenuWidgetOptions)} a custom toggle widget factory
+  * Connects a rendering function with the hierarchical menu business logic.
+  * @type {Connector}
+  * @param {function(HierarchicalMenuRenderingOptions)} renderFn function that renders the hierarchical menu widget
+  * @return {function(CustomHierarchicalMenuWidgetOptions)} a custom hierarchical menu widget factory
   */
 export default function connectHierarchicalMenu(renderFn) {
   checkRendering(renderFn, usage);

@@ -65,7 +65,7 @@ infiniteHits({
 
 /**
  * Display the list of results (hits) from the current search
- * @function infiniteHits
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {number} [$0.hitsPerPage=20] The number of hits to display per page [*]
  * @param  {Object} [$0.templates] Templates to use for the widget

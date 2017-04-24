@@ -14,13 +14,5 @@ const header = new alg.communityHeader(docSearch);
 const container = document.querySelector('.documentation-container');
 const sidebarContainer = document.querySelector('.sidebar');
 
-if (sidebarContainer) {
-  sidebar({
-    headersContainer: container,
-    sidebarContainer,
-    headerStartLevel: 2,
-  });
-}
-
 dropdowns();
 move();

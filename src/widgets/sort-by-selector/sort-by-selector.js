@@ -44,7 +44,7 @@ sortBySelector({
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
- * @function sortBySelector
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} $0.indices Array of objects defining the different indices to choose from.
  * @param  {string} $0.indices[i].name Name of the index to target

@@ -22,8 +22,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomStarRatingWidgetOptions
- * @param {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
- * @param {number} [max = 5] the maximum rating value
+ * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
+ * @property {number} [max = 5] the maximum rating value
  */
 
 /**
@@ -38,6 +38,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * Connects a rendering function with the star rating business logic.
+ * @type {Connector}
  * @param {function(StarRatingRenderingOptions, boolean)} renderFn function that renders the star rating widget
  * @return {function(CustomStarRatingWidgetOptions)} a widget factory for star rating widget
  */

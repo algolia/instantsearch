@@ -1,4 +1,4 @@
-.documentation-section,
+.documentation-section ,
 .examples-section {
   .container {
     article {
@@ -21,7 +21,6 @@
     padding: 0;
 
     position: relative;
-    left: 1em;
 
     li {
       padding: 0;
@@ -85,7 +84,7 @@
     min-height: 1000px;
     padding-left: 30px;
     padding-bottom: 300px;
-    padding-top: 120px;
+    padding-top: 60px;
 
     p, li {
       color: darken($logan, 15%);
@@ -221,7 +220,7 @@
 }
 
 .examples-section > .container {
-  padding-top: 120px;
+  padding-top: 60px;
 }
 
 .storybook-section {

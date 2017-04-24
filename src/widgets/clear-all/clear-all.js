@@ -59,7 +59,7 @@ clearAll({
 /**
  * Allows to clear all refinements at once
  *
- * @function clearAll
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string[]} [$0.excludeAttributes] List of attributes names to exclude from clear actions
  * @param  {Object} [$0.templates] Templates to use for the widget

@@ -93,7 +93,7 @@ refinementList({
 
 /**
  * Instantiate a list of refinements based on a facet
- * @function refinementList
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string} $0.attributeName Name of the attribute for faceting
  * @param  {string} [$0.operator='or'] How to apply refinements. Possible values: `or`, `and` [*]

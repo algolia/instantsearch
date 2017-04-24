@@ -1,7 +1,8 @@
 ---
-title: Making deep customizations
+title: Custom widgets
+mainTitle: Guides
 layout: main.pug
-name: concepts
+name: customize
 category: guides
 withHeadings: true
 navWeight: 0

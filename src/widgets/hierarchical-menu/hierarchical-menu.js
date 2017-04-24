@@ -72,7 +72,7 @@ hierarchicalMenu({
 
 /**
  * Create a hierarchical menu using multiple attributes
- * @function hierarchicalMenu
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string[]} $0.attributes Array of attributes to use to generate the hierarchy of the menu.
  * See the example for the convention to follow.

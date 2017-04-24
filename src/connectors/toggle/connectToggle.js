@@ -26,9 +26,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomToggleWidgetOptions
- * @param {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
- * @param {string} label Human-readable name of the filter (eg. "Free Shipping")
- * @param {Object} [values] Lets you define the values to filter on when toggling
+ * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
+ * @property {string} label Human-readable name of the filter (eg. "Free Shipping")
+ * @property {Object} [values] Lets you define the values to filter on when toggling
  */
 
 /**
@@ -42,6 +42,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * Connects a rendering function with the toggle business logic.
+ * @type {Connector}
  * @param {function(ToggleRenderingOptions, boolean)} renderFn function that renders the toggle widget
  * @return {function(CustomToggleWidgetOptions)} a widget factory for toggle widget
  */

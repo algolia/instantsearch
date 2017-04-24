@@ -26,10 +26,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomMenuWidgetOptions
- * @param {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
- * @param {number} [limit = 10] How many facets values to retrieve [*]
- * @param {number} [showMoreLimit] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option
- * @param {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
+ * @property {number} [limit = 10] How many facets values to retrieve [*]
+ * @property {number} [showMoreLimit] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option
+ * @property {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
  */
 
@@ -47,8 +47,50 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the menu business logic.
+  * @type {Connector}
   * @param {function(MenuRenderingOptions, boolean)} renderFn function that renders the menu widget
-  * @return {function(CustomMenuWidgetOptions)} a widget factory for menu widget
+  * @return {function(CustomMenuWidgetOptions):Widget} a widget factory for menu widget
+  * @example
+  * import instantsearch from '../../../../index.js';
+  * 
+  * export default instantsearch.connectors.connectMenu(customMenuRendering);
+  * function customMenuRendering(opts, isFirstRendering) {
+  *   const container = opts.widgetParams.containerNode;
+  * 
+  *   let input;
+  *   if (isFirstRendering) {
+  *     input = $('<select></select>');
+  *     input.refine = opts.refine;
+  *     input.on('change', e => {
+  *       input.refine(e.target.value);
+  *     });
+  *     container.html('<div class="ais-toggle--header facet-title ais-header">Custom categories</div>')
+  *              .append(input);
+  *   } else {
+  *     input = container.find('select');
+  *   }
+  * 
+  *   input.refine = opts.refine;
+  * 
+  *   const facetValues = opts.items.slice(0, opts.widgetParams.limit || 10);
+  *   const facetOptions = facetValues.map(f => f.isRefined ?
+  *       $(`<option value='${f.path}' selected>${f.name}</option>`) :
+  *       $(`<option value='${f.path}'>${f.name}</option>`)
+  *   );
+  *   const isValueSelected = facetValues.find(f => f.isRefined);
+  * 
+  *   const noValue = $(`<option value='' selected='${!isValueSelected}'></option>`);
+  * 
+  *   input.html('');
+  * 
+  *   input.append(noValue);
+  *   if (facetOptions.length > 0) {
+  *     facetOptions.forEach(o => {
+  *       input.append(o);
+  *     });
+  *   }
+  * }
+  *
   */
 export default function connectMenu(renderFn) {
   checkRendering(renderFn, usage);

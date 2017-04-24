@@ -80,7 +80,7 @@ menu({
 
 /**
  * Create a menu out of a facet
- * @function menu
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string} $0.attributeName Name of the attribute for faceting
  * @param  {string[]|Function} [$0.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.

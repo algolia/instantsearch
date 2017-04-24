@@ -1,9 +1,16 @@
-extends archetypes/content-with-menu.pug
-include mixins/nav.pug
-
-block navigation
-  +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
+extends archetypes/single-column-formatted.pug
 
 block content
-  div(id="examples")
-    .content!=contents
+  .content!=contents
+
+  - var values = []
+  if examples
+      - values = examples
+  div(class="examples-container")
+    each val in values
+      div.example-tile
+        h2=val.title
+        a(href=`${examplesEndpoint}/${val.id}`)
+          figure
+            img(src=`examples/${val.id}/capture.png`)
+            figcaption=examplesCTA

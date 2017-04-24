@@ -1,0 +1,13 @@
+mixin connectorUsage(fnSymbol)
+  - var rendererOptionsT = fnSymbol.params[0].type.params[0].name;
+  - var widgetOptionT = fnSymbol.returns[0].type.params ? fnSymbol.returns[0].type.params[0].name : 'undefined';
+  pre
+    | const makeWidget = !{fnSymbol.name}(
+    |   function renderfn(renderOpts: !{`<a href='${navPath}#struct-${rendererOptionsT}'>${rendererOptionsT}</a>`}, isFirstRender: boolean) {
+    |     // render the widget
+    |   }
+    | );
+    |
+    | const widget = makeStatsWidget(instanceOpts: !{`<a href='${navPath}#struct-${widgetOptionT}'>${widgetOptionT}</a>`});
+    |
+    | instantsearch.addWidget(widget);

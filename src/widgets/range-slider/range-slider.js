@@ -87,7 +87,7 @@ rangeSlider({
 /**
  * Instantiate a slider based on a numeric attribute.
  * This is a wrapper around [noUiSlider](http://refreshless.com/nouislider/)
- * @function rangeSlider
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {string} $0.attributeName Name of the attribute for faceting
  * @param  {boolean|Object} [$0.tooltips=true] Should we show tooltips or not.

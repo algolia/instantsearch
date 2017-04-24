@@ -20,7 +20,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomSearchBoxWidgetOptions
- * @param {function} queryHook A function that will be called every time a new search would be done. You
+ * @property {function} queryHook A function that will be called every time a new search would be done. You
  * will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
  */
@@ -36,6 +36,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the search box business logic.
+  * @type {Connector}
   * @param {function(SearchBoxRenderingOptions, boolean)} renderFn function that renders the search box widget
   * @return {function(CustomSearchBoxWidgetOptions)} a widget factory for search box widget
   */

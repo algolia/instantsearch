@@ -24,12 +24,12 @@
         "url": "guides/concepts.html"
       },
       {
-        "name": "Advanced customization",
-        "url": "guides/deep-customization.html"
+        "name": "Custom widgets",
+        "url": "guides/customization.html"
       },
       {
-        "name": "Creating widgets",
-        "url": "guides/new-widgets.html"
+        "name": "Migrate to V2",
+        "url": "guides/migration.html"
       }
     ]
   },
@@ -40,7 +40,7 @@
     "dropdownItems": [
       {
         "name": "instantsearch()",
-        "url": "widgets.html"
+        "url": "common.html"
       },
       {
         "name": "Widgets",
@@ -48,12 +48,12 @@
       },
       {
         "name": "Connectors",
-        "url": "concepts.html"
+        "url": "connectors.html"
       }
     ]
   },
   {
-    "name": "<span class='visible-sm-inline'>Examples</span>",
+    "name": "<span class='visible-sm-inline'>Demos</span>",
     "url": "examples.html"
   },{
     "name": "Github",
@@ -66,22 +66,22 @@
   },
   {
     "name": "Concepts",
-    "url": "concepts.html"
+    "url": "guides/concepts.html"
   },
   {
     "name": "Widgets",
     "url": "widgets.html"
   },
   {
-    "name": "API Reference",
-    "url": "javadoc/"
+    "name": "Connectors",
+    "url": "connectors.html"
   },
   {
     "name": "Troubleshooting",
     "url": "troubleshooting.html"
   },
   {
-    "name": "Examples",
+    "name": "Demos",
     "url": "examples.html"
   }],
   "docSearch": {

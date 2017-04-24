@@ -50,6 +50,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * Instantiate a list of refinements based on a facet
  *
  * @function connectNumericRefinementList
+ * @type {Connector}
  * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn function that render the numeric refinement list
  * @return {function(NumericRefinementListWidgetOptions)} a custom numeric refinement list widget factory
  */

@@ -2,13 +2,15 @@ import {runMode} from 'codemirror/addon/runmode/runmode.node';
 import 'codemirror/mode/groovy/groovy';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/jsx/jsx';
+import 'codemirror/mode/javascript/javascript';
 import escape from 'escape-html';
 
-export default function highlight(source, lang = 'js', inline = false) {
+export default function highlight(source, lang = 'javascript', inline = false) {
   let theme = "mdn-like";
-  if (lang == "java") {
-    lang = "text/x-java";
-    theme = "eclipse";
+
+  if (lang === 'html') {
+    lang = 'htmlmixed';
   }
 
   const blockTheme = 'cm-s-' + theme;

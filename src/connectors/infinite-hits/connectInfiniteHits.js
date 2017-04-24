@@ -21,7 +21,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomInfiniteHitsWidgetOptions
- * @param {number} [hitsPerPage = 20] The number of hits to display per page
+ * @property {number} [hitsPerPage = 20] The number of hits to display per page
  */
 
 /**
@@ -36,6 +36,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * Connects a rendering function with the infinite hits business logic.
+ * @type {Connector}
  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn function that renders the infinite hits widget
  * @return {function(CustomInfiniteHitsWidgetOptions)} a widget factory for infinite hits widget
  */

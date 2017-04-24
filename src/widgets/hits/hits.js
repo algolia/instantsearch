@@ -57,7 +57,7 @@ hits({
 
 /**
  * Display the list of results (hits) from the current search
- * @function hits
+ * @type {WidgetFactory}
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [$0.templates] Templates to use for the widget
  * @param  {string|Function} [$0.templates.empty=''] Template to use when there are no results.

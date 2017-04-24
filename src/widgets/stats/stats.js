@@ -69,23 +69,38 @@ stats({
 })`;
 
 /**
- * Display various stats about the current search state
- * @function stats
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header=''] Header template
- * @param  {string|Function} [$0.templates.body] Body template, provided with `hasManyResults`,
+ * @typedef {Object} StatsWidgetTemplates
+ * @property {string|Function} [header=''] Header template
+ * @property {string|Function} [body] Body template, provided with `hasManyResults`,
  * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`
- * @param  {string|Function} [$0.templates.footer=''] Footer template
- * @param  {Function} [$0.transformData.body] Function to change the object passed to the `body` template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no results match
- * @param  {Object} [$0.cssClasses] CSS classes to add
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [$0.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
- * @return {Object} widget
+ * @property {string|Function} [footer=''] Footer template
+ */
+
+/**
+ * @typedef {Object} StatsWidgetCssClasses
+ * @property {string|string[]} [root] CSS class to add to the root element
+ * @property {string|string[]} [header] CSS class to add to the header element
+ * @property {string|string[]} [body] CSS class to add to the body element
+ * @property {string|string[]} [footer] CSS class to add to the footer element
+ * @property {string|string[]} [time] CSS class to add to the element wrapping the time processingTimeMs
+ */
+
+/**
+ * @typedef {Object} StatsWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {StatsWidgetTemplates} [templates] Templates to use for the widget
+ * @property {Object.<string, function>} [transformData] Object that contains the functions to be applied on the data
+ * before being used for templating. Valid keys are `body` for the body template.
+ * @property {boolean} [autoHideContainer=true] Hide the container when no results match
+ * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add
+ */
+
+/**
+ * Display various stats about the current search state
+ * @type {WidgetFactory}
+ * @memberof instantsearch.widgets
+ * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatories: `container`, 
+ * @return {Widget} A new stats widget instance
  */
 export default function stats({
   container,
@@ -94,7 +109,7 @@ export default function stats({
   collapsible = false,
   transformData,
   templates = defaultTemplates,
-} = {}) {
+}) {
   if (!container) {
     throw new Error(usage);
   }
