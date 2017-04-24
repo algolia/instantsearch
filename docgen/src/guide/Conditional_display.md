@@ -65,7 +65,7 @@ In slow user network situations you might want to know when the search results a
 const content = createConnector({
     displayName: 'ConditionalError',
     getProvidedProps(props, searchState, searchResults) {
-      return {loading: searchResults.loading};
+      return {loading: searchResults.searching};
     },
 })(({loading}) => {
     const content = loading
