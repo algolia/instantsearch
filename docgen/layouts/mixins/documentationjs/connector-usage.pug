@@ -1,13 +1,15 @@
 mixin connectorUsage(fnSymbol)
   - var rendererOptionsT = fnSymbol.params[0].type.params[0].name;
   - var widgetOptionT = fnSymbol.returns[0].type.params ? fnSymbol.returns[0].type.params[0].name : 'undefined';
+  - var widgetName = rendererOptionsT.replace('RenderingOptions', '')
   pre
-    | const makeWidget = !{fnSymbol.name}(
-    |   function renderfn(renderOpts: !{`<a href='${navPath}#struct-${rendererOptionsT}'>${rendererOptionsT}</a>`}, isFirstRender: boolean) {
-    |     // render the widget
-    |   }
-    | );
-    |
-    | const widget = makeStatsWidget(instanceOpts: !{`<a href='${navPath}#struct-${widgetOptionT}'>${widgetOptionT}</a>`});
-    |
-    | instantsearch.addWidget(widget);
+    code
+      | var make!{widgetName} = !{fnSymbol.name}(
+      |   function renderFn(renderOpts: !{`<a href='${navPath}#struct-${rendererOptionsT}'>${rendererOptionsT}</a>`}, isFirstRender: boolean) {
+      |     // render the custom !{widgetName} widget
+      |   }
+      | );
+      |
+      | var custom!{widgetName} = make!{widgetName}(instanceOpts: !{`<a href='${navPath}#struct-${widgetOptionT}'>${widgetOptionT}</a>`});
+      |
+      | instantsearch.addWidget(custom!{widgetName});
