@@ -66,7 +66,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} CurrentRefinedValuesWidgetOptions
  * @property {CurrentRefinedValuesAttributes[]} attributes specification for the display of refinements per attribute
  * @property {boolean} onlyListedAttributes limit the displayed refinement to the list specified
- * @property {boolean} clearsQuery also clears the active search query
+ * @property {boolean} [clearsQuery=false] also clears the active search query
  */
 
 /**
