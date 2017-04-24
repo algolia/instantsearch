@@ -11,8 +11,10 @@ const renderFn = ({
     const markup = window.$('<button id="custom-clear-all">Clear All</button>');
     containerNode.append(markup);
 
-    markup
-      .on('click', e => hasRefinements ? refine() : e.preventDefault());
+    markup.on('click', e => {
+      e.preventDefault();
+      refine();
+    });
   }
   const clearAllCTA = containerNode.find('#custom-clear-all');
 
