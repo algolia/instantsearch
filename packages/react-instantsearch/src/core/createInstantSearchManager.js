@@ -127,7 +127,7 @@ export default function createInstantSearchManager({
         const derivedHelper = helper.derive(() => {
           const parameters = derivatedSearchParameters.widgets.reduce(
             (res, widget) => widget.getSearchParameters(res),
-            sharedParameters.setIndex(index)
+            sharedParameters
           );
           indexMapping[parameters.index] = index;
           return parameters;

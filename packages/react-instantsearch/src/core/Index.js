@@ -31,12 +31,38 @@ import React, { Component, Children } from 'react';
  * }
  */
 class Index extends Component {
+  constructor(props, context) {
+    super(props);
+    const { ais: { widgetsManager } } = context;
+
+    /*
+     we want <Index> to be seen as a regular widget. 
+     It means that with only <Index> present a new query will be sent to Algolia.
+     That way you don't need a virtual hits widget to use the connectAutoComplete. 
+    */
+    this.unregisterWidget = widgetsManager.registerWidget({
+      getSearchParameters: searchParameters =>
+        this.getSearchParameters.call(this, searchParameters, this.props),
+      multiIndexContext: {
+        targetedIndex: this.props.indexName,
+      },
+    });
+  }
+
+  componentWillUnmount() {
+    this.unregisterWidget();
+  }
+
   getChildContext() {
     return {
       multiIndexContext: {
         targetedIndex: this.props.indexName,
       },
     };
+  }
+
+  getSearchParameters(searchParameters, props) {
+    return searchParameters.setIndex(props.indexName);
   }
 
   render() {
@@ -58,8 +84,12 @@ Index.propTypes = {
 };
 
 Index.childContextTypes = {
-  // @TODO: more precise widgets manager propType
   multiIndexContext: PropTypes.object.isRequired,
+};
+
+Index.contextTypes = {
+  // @TODO: more precise widgets manager propType
+  ais: PropTypes.object.isRequired,
 };
 
 export default Index;
