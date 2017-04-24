@@ -26,10 +26,11 @@ export default class SearchBox extends React.Component {
   render() {
     const {placeholder, onChange} = this.props;
     const inputCssClasses = this.props.disabled ? 'sbx-sffv__input sbx-sffv__input-disabled' : 'sbx-sffv__input';
+    const formCssClasses = this.props.disabled ? 'searchbox sbx-sffv sbx-sffv-disabled' : 'searchbox sbx-sffv';
 
     return (
       <form noValidate="novalidate"
-        className="searchbox sbx-sffv"
+        className={formCssClasses}
         onReset={() => { onChange(''); }}
         onSubmit={e => this.validateSearch(e) }
       >
