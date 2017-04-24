@@ -134,7 +134,7 @@ describe('connectHitsPerPage', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.items.find(({isRefined}) => isRefined).value).toBe(7);
+    expect(firstRenderingOptions.items).toMatchSnapshot();
     firstRenderingOptions.refine(3);
 
     widget.render({
@@ -145,7 +145,7 @@ describe('connectHitsPerPage', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items.find(({isRefined}) => isRefined).value).toBe(3);
+    expect(secondRenderingOptions.items).toMatchSnapshot();
   });
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {
