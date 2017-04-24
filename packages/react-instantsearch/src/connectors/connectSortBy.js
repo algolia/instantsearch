@@ -29,8 +29,8 @@ function getCurrentRefinement(props, searchState, context) {
 }
 
 /**
- * connectSortBy connector provides the logic to build a widget that will
- *  displays a list of indexes allowing a user to change the hits are sorting.
+ * The connectSortBy connector provides the logic to build a widget that will
+ *  display a list of indices. This allows a user to change how the hits are being sorted.
  * @name connectSortBy
  * @requirements Algolia handles sorting by creating replica indices. [Read more about sorting](https://www.algolia.com/doc/guides/relevance/sorting/) on
  * the Algolia website.
