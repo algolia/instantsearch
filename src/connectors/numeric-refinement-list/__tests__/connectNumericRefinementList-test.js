@@ -286,4 +286,46 @@ describe('connectNumericRefinementList', () => {
     const renderingParameters1 = rendering.lastCall.args[0];
     expect(renderingParameters1.items).toEqual(expectedResults1);
   });
+
+  it('should set `isRefined: true` after calling `refine(item)`', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectNumericRefinementList(rendering);
+    const listOptions = [
+      {name: 'below 10', end: 10},
+      {name: '10 - 20', start: 10, end: 20},
+      {name: 'more than 20', start: 20},
+      {name: '42', start: 42, end: 42},
+      {name: 'void'},
+    ];
+    const widget = makeWidget({
+      attributeName: 'numerics',
+      options: listOptions,
+    });
+
+    const helper = jsHelper(fakeClient);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items[0].isRefined).toBe(false);
+
+    // a user selects a value in the refinement list
+    firstRenderingOptions.refine(encodeValue(listOptions[0].start, listOptions[0].end));
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items[0].isRefined).toBe(true);
+  });
 });
