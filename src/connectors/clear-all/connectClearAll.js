@@ -32,24 +32,24 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
 
 /**
  * @typedef {Object} CustomClearAllWidgetOptions
- * @property {string[]} excludeAttributes all the attributes that should not be displayed
- * @property {boolean} [clearsQuery = false] also clears the active search query
+ * @property {string[]} excludeAttributes Every attributes that should not be removed on `refine()`
+ * @property {boolean = false} clearsQuery Should also clears the active search query
  */
 
 /**
  * @typedef {Object} ClearAllRenderingOptions
- * @property {function} refine function to trigger the clear of all the currently refined values
- * @property {boolean} hasRefinements boolean to indicate if search state is refined
- * @property {function} createURL function that create a url for the next state
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
- * @property {Object} widgetParams all original options forwarded to rendering
+ * @property {function} refine Trigger the clear of all the currently refined values
+ * @property {boolean} hasRefinements Indicate if search state is refined
+ * @property {function} createURL Create a url for the next state when refinements are cleared
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached
+ * @property {Object} widgetParams All original options forwarded to `renderFn`
  */
 
 /**
- * Connects a rendering with the clearAll business logic.
+ * Connects business logic to clear all refinements to your rendering function (custom ClearAll CTA widget).
  * @type {Connector}
- * @param {function(ClearAllRenderingOptions, boolean)} renderFn function that renders the clear all widget
- * @return {function(CustomClearAllWidgetOptions)} - a widget factory for a clear all widget
+ * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the clear all widget
+ * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a clear all custom widget
  */
 export default function connectClearAll(renderFn) {
   checkRendering(renderFn, usage);
