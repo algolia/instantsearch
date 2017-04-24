@@ -1,3 +1,14 @@
+<a name="1.11.7"></a>
+## [1.11.7](https://github.com/algolia/instantsearch.js/compare/v1.11.6...v1.11.7) (2017-04-24)
+
+
+### Bug Fixes
+
+* **sffv:** add class for disabled state at the form level (#2122) ([029fa5f](https://github.com/algolia/instantsearch.js/commit/029fa5f))
+* **sffv:** fixes typo (: was left) ([26d2845](https://github.com/algolia/instantsearch.js/commit/26d2845))
+
+
+
 <a name="1.11.6"></a>
 ## [1.11.6](https://github.com/algolia/instantsearch.js/compare/v1.11.5...v1.11.6) (2017-04-20)
 
