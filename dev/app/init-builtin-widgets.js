@@ -76,7 +76,7 @@ export default search => {
   search.addWidget(
     instantsearch.widgets.hitsPerPageSelector({
       container: '#hits-per-page-selector',
-      items: [
+      options: [
         {value: 6, label: '6 per page'},
         {value: 12, label: '12 per page'},
         {value: 24, label: '24 per page'},
@@ -294,7 +294,7 @@ export default search => {
         header: 'Price ranges',
       },
       transformData(data) {
-        data.label = data.label.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
+        data.name = data.name.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
         return data;
       },
     })

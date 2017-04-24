@@ -21,13 +21,13 @@ const renderFn = ({
 
   // remove event listeners if any before attachign new ones
   containerNode
-    .find('li[data-refine-value]')
+    .find('li')
     .each(function() { window.$(this).off(); });
 
   const list = items.map(item => `
     <li
       class="facet-value clearfix"
-      data-refine-value="${item.value}"
+      data-facet-name="${item.name}"
     >
       <label
         style="display: block;"
@@ -38,7 +38,7 @@ const renderFn = ({
           name="${attributeName}"
           ${item.isRefined ? 'checked' : ''}
         />
-        ${item.label}
+        ${item.name}
       </label>
     </li>
   `);
@@ -48,13 +48,13 @@ const renderFn = ({
     .html(list);
 
   containerNode
-    .find('li[data-refine-value]')
-    .each(function() {
+    .find('li')
+    .each(function(index) {
       window.$(this).on('click', e => {
         e.preventDefault();
         e.stopPropagation();
 
-        refine(window.$(this).data('refine-value'));
+        refine(items[index].name);
       });
     });
 };

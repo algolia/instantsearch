@@ -12,12 +12,10 @@ exports[`hitsPerPageSelector() calls twice ReactDOM.render(<Selector props />, c
   options={
     Array [
       Object {
-        "isRefined": true,
         "label": "10 results",
         "value": 10,
       },
       Object {
-        "isRefined": false,
         "label": "20 results",
         "value": 20,
       },

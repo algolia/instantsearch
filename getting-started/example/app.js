@@ -16,6 +16,7 @@ search.addWidget(
             '<div class="desc">{{{_highlightResult.name.value}}}</div>' +
             '<div class="sale-price">$ {{{salePrice}}}</div>',
     },
+    hitsPerPage: 8,
   })
 );
 

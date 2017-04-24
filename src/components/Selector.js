@@ -48,13 +48,13 @@ RawSelector.propTypes = {
   currentValue: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number,
-  ]),
+  ]).isRequired,
   options: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       value: React.PropTypes.oneOfType([
         React.PropTypes.string,
         React.PropTypes.number,
-      ]),
+      ]).isRequired,
       label: React.PropTypes.string.isRequired,
     })
   ).isRequired,

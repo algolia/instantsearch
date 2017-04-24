@@ -2,7 +2,7 @@ export {default as connectClearAll} from './clear-all/connectClearAll.js';
 export {default as connectCurrentRefinedValues} from './current-refined-values/connectCurrentRefinedValues.js';
 export {default as connectHierarchicalMenu} from './hierarchical-menu/connectHierarchicalMenu.js';
 export {default as connectHits} from './hits/connectHits.js';
-export {default as connectHitsPerPage} from './hits-per-page/connectHitsPerPage.js';
+export {default as connectHitsPerPageSelector} from './hits-per-page-selector/connectHitsPerPageSelector.js';
 export {default as connectInfiniteHits} from './infinite-hits/connectInfiniteHits.js';
 export {default as connectMenu} from './menu/connectMenu.js';
 export {default as connectNumericRefinementList} from './numeric-refinement-list/connectNumericRefinementList.js';

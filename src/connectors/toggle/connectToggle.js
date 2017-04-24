@@ -34,8 +34,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} ToggleRenderingOptions
  * @property {Object} value the value of the toggle with `name`, `isRefined`, `count`, `onFacetValue` and `offFacetValue`
- * @property {function(facetValue)} createURL the function to create a url for the next state
- * @property {function(facetValue)} refine updates to the next state
+ * @property {function} createURL the function to create a url for the next state
+ * @property {function} refine updates to the next state
  * @property {Object} widgetParams all `CustomToggleWidgetOptions` forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
@@ -70,7 +70,7 @@ export default function connectToggle(renderFn) {
         };
       },
 
-      toggleRefinement(helper, {isRefined} = {}) {
+      toggleRefinement(helper, facetValue, isRefined) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
@@ -129,7 +129,7 @@ export default function connectToggle(renderFn) {
 
         renderFn({
           value,
-          createURL: this._createURL(value.isRefined),
+          createURL: this._createURL,
           refine: this.toggleRefinement,
           instantSearchInstance,
           widgetParams,
@@ -154,9 +154,7 @@ export default function connectToggle(renderFn) {
         const offFacetValue = {
           name: label,
           isRefined: offData !== undefined ? offData.isRefined : false,
-          count: offData === undefined
-            ? allFacetValues.reduce((total, {count}) => total + count, 0)
-            : offData.count,
+          count: offData === undefined ? results.nbHits : offData.count,
         };
 
         // what will we show by default,
@@ -175,7 +173,7 @@ export default function connectToggle(renderFn) {
         renderFn({
           value,
           state,
-          createURL: this._createURL(value.isRefined),
+          createURL: this._createURL,
           refine: this.toggleRefinement,
           helper,
           instantSearchInstance,

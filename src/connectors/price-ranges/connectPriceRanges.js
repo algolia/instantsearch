@@ -8,6 +8,7 @@ var customPriceRanges = connectToggle(function render(params, isFirstRendering) 
   //   refine,
   //   instantSearchInstance,
   //   widgetParams,
+  //   currentRefinement,
   // }
 });
 search.addWidget(
@@ -26,9 +27,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} PriceRangesRenderingOptions
  * @property {Object[]} items the prices ranges to display
- * @property {function({from: ?number, to: ?number})} refine select or unselect a price range and trigger a search
+ * @property {function} refine select or unselect a price range and trigger a search
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object} currentRefinement the refinement currently applied
  */
 
  /**
@@ -75,7 +77,7 @@ export default function connectPriceRanges(renderFn) {
         return [{from, to, isRefined: true}];
       },
 
-      _refine(helper, {from, to}) {
+      _refine(helper, from, to) {
         const facetValues = this._extractRefinedRange(helper);
 
         helper.clearRefinements(attributeName);
@@ -99,6 +101,7 @@ export default function connectPriceRanges(renderFn) {
           items: [],
           refine: this._refine,
           widgetParams,
+          currentRefinement: null,
         }, true);
       },
 
@@ -134,6 +137,7 @@ export default function connectPriceRanges(renderFn) {
           refine: this._refine,
           widgetParams,
           instantSearchInstance,
+          currentRefinement: facetValues.find(({isRefined}) => isRefined),
         }, false);
       },
     };

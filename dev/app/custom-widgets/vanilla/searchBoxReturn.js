@@ -5,12 +5,13 @@ function render(
   {
     query,
     onHistoryChange,
-    refine,
+    search,
     widgetParams,
   },
   isFirstRendering,
 ) {
   const {node} = widgetParams;
+  node.search = search;
 
   if (isFirstRendering) {
     const containingForm = document.createElement('form');
@@ -21,7 +22,7 @@ function render(
 
     containingForm.addEventListener('submit', e => {
       e.preventDefault();
-      refine(node.value);
+      node.search(node.value);
     });
   }
 }

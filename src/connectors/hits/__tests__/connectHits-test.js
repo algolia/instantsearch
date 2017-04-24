@@ -13,12 +13,17 @@ describe('connectHits', () => {
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget();
+    const widget = makeWidget({
+      hitsPerPage: 10,
+    });
+
+    const config = widget.getConfiguration();
+    expect(config).toEqual({hitsPerPage: 10});
 
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = jsHelper(fakeClient, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -32,7 +37,9 @@ describe('connectHits', () => {
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({});
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      hitsPerPage: 10,
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -44,7 +51,9 @@ describe('connectHits', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({});
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      hitsPerPage: 10,
+    });
   });
 
   it('Provides the hits and the whole results', () => {

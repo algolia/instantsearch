@@ -20,18 +20,17 @@ exports[`menu snapshot 1`] = `
   facetValues={
     Array [
       Object {
-        "label": "foo",
+        "name": "foo",
         "url": "#",
-        "value": undefined,
       },
       Object {
-        "label": "bar",
+        "name": "bar",
         "url": "#",
-        "value": undefined,
       },
     ]
   }
-  isShowingMore={false}
+  limitMax={10}
+  limitMin={10}
   shouldAutoHideContainer={false}
   showMore={false}
   templateProps={
@@ -39,7 +38,7 @@ exports[`menu snapshot 1`] = `
       "templates": Object {
         "footer": "",
         "header": "",
-        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{name}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -51,6 +50,5 @@ exports[`menu snapshot 1`] = `
     }
   }
   toggleRefinement={[Function]}
-  toggleShowMore={[Function]}
 />
 `;

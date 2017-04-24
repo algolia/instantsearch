@@ -114,7 +114,8 @@ Once you’ve set the place where the widget will be rendered, you need to add t
 
   search.addWidget(
     instantsearch.widgets.hits({
-      container: '#hits'
+      container: '#hits',
+      hitsPerPage: 6
     })
   );
 </script>
@@ -140,7 +141,8 @@ In order to customize the view for each product, we can use a special option of 
       templates: {
         empty: 'No results',
         item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
-      }
+      },
+      hitsPerPage: 6
     })
   );
 </script>
@@ -180,7 +182,8 @@ Now that we’ve added the results, we can start querying our index. To do this,
   // initialize hits widget
   search.addWidget(
     instantsearch.widgets.hits({
-      container: '#hits'
+      container: '#hits',
+      hitsPerPage: 6
     })
   );
 </script>
@@ -236,7 +239,8 @@ Since the dataset used here is an e-commerce one, let’s add a [RefinementList]
   // initialize hits widget
   search.addWidget(
     instantsearch.widgets.hits({
-      container: '#hits'
+      container: '#hits',
+      hitsPerPage: 6
     })
   );
 </script>

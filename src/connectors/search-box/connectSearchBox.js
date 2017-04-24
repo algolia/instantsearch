@@ -29,7 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} SearchBoxRenderingOptions
  * @property {string} query the query from the last search
  * @property {function} onHistoryChange set a callback when the browser history changes
- * @property {function} refine triggers the search with a `query` as parameter
+ * @property {function} search triggers the search with a `query` as parameter
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
@@ -47,7 +47,7 @@ export default function connectSearchBox(renderFn) {
 
     return {
       init({helper, onHistoryChange, instantSearchInstance}) {
-        this._refine = (() => {
+        this._search = (() => {
           let previousQuery;
 
           const setQueryAndSearch = (q, doSearch = true) => {
@@ -68,7 +68,7 @@ export default function connectSearchBox(renderFn) {
         renderFn({
           query: helper.state.query,
           onHistoryChange: this._onHistoryChange,
-          refine: this._refine,
+          search: this._search,
           widgetParams,
           instantSearchInstance,
         }, true);
@@ -78,7 +78,7 @@ export default function connectSearchBox(renderFn) {
         renderFn({
           query: helper.state.query,
           onHistoryChange: this._onHistoryChange,
-          refine: this._refine,
+          search: this._search,
           widgetParams,
           instantSearchInstance,
         }, false);

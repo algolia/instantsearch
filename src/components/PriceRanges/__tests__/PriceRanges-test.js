@@ -102,7 +102,7 @@ describe('PriceRanges', () => {
 
         // Then
         expect(mockEvent.preventDefault.called).toBe(true);
-        expect(props.refine.calledWith({from: 1, to: 10})).toBe(true);
+        expect(props.refine.calledWith(1, 10)).toBe(true);
       });
     });
 

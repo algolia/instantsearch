@@ -24,6 +24,8 @@ const renderer = ({
   renderState,
   templates,
   transformData,
+  widgetMaxValuesPerFacet,
+  limit,
   showMoreConfig,
 }) => ({
   refine,
@@ -31,8 +33,6 @@ const renderer = ({
   createURL,
   canRefine,
   instantSearchInstance,
-  isShowingMore,
-  toggleShowMore,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -53,12 +53,12 @@ const renderer = ({
       createURL={ createURL }
       cssClasses={ cssClasses }
       facetValues={ facetValues }
+      limitMax={ widgetMaxValuesPerFacet }
+      limitMin={ limit }
       shouldAutoHideContainer={ shouldAutoHideContainer }
       showMore={ showMoreConfig !== null }
       templateProps={ renderState.templateProps }
       toggleRefinement={ refine }
-      toggleShowMore={ toggleShowMore }
-      isShowingMore={ isShowingMore }
     />,
     containerNode
   );
@@ -132,9 +132,10 @@ export default function menu({
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
 
+  const widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
+
   const containerNode = getContainerNode(container);
 
-  const showMoreLimit = showMoreConfig && showMoreConfig.limit || undefined;
   const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
   const allTemplates = showMoreTemplates ? {...templates, ...showMoreTemplates} : templates;
 
@@ -158,12 +159,14 @@ export default function menu({
     renderState: {},
     templates: allTemplates,
     transformData,
+    widgetMaxValuesPerFacet,
+    limit,
     showMoreConfig,
   });
 
   try {
     const makeWidget = connectMenu(specializedRenderer);
-    return makeWidget({attributeName, limit, sortBy, showMoreLimit});
+    return makeWidget({attributeName, limit, sortBy});
   } catch (e) {
     throw new Error(usage);
   }

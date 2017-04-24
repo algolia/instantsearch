@@ -49,7 +49,7 @@ describe('RefinementList', () => {
           item: 'item',
         },
         facetValues: [
-          {value: 'foo', isRefined: true},
+          {name: 'foo', isRefined: true},
         ],
       };
 
@@ -68,8 +68,8 @@ describe('RefinementList', () => {
           active: 'active',
         },
         facetValues: [
-          {value: 'foo', isRefined: true},
-          {value: 'bar', isRefined: false},
+          {name: 'foo', isRefined: true},
+          {name: 'bar', isRefined: false},
         ],
       };
 
@@ -89,8 +89,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: false},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
         ],
       };
 
@@ -104,13 +104,31 @@ describe('RefinementList', () => {
       expect(secondItem.props().facetValueToRefine).toEqual('bar');
     });
 
+    it('understands attributeNameKey', () => {
+      // Given
+      const props = {
+        ...defaultProps,
+        facetValues: [{name: 'no', youpiName: 'hello', isRefined: false}],
+        attributeNameKey: 'youpiName',
+      };
+
+      // When
+      const items = shallowRender(props).find(RefinementListItem);
+      const item = items.at(0);
+
+      // Then
+      expect(item.props().facetValueToRefine).toEqual('hello');
+      expect(createURL.calledOnce).toBe(true);
+      expect(createURL.args[0][0]).toBe('hello');
+    });
+
     it('should correctly set if refined or not', () => {
       // Given
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: true},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: true},
         ],
       };
 
@@ -131,8 +149,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', count: 42, isRefined: false},
-          {value: 'bar', count: 16, isRefined: false},
+          {name: 'foo', count: 42, isRefined: false},
+          {name: 'bar', count: 16, isRefined: false},
         ],
       };
 
@@ -148,17 +166,82 @@ describe('RefinementList', () => {
   });
 
   describe('showMore', () => {
+    it('displays a number of items equal to the limit when showMore: false', () => {
+      // Given
+      const props = {
+        ...defaultProps,
+        facetValues: [
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
+        ],
+        showMore: false,
+        limitMin: 2,
+      };
+
+      // When
+      const actual = shallowRender(props).find(RefinementListItem);
+
+      // Then
+      expect(actual.length).toEqual(2);
+    });
+
+    it('displays a number of items equal to the limit when showMore: true but not enabled', () => {
+      // Given
+      const props = {
+        ...defaultProps,
+        facetValues: [
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
+        ],
+        showMore: true,
+        limitMin: 2,
+        limitMax: 3,
+      };
+
+      // When
+      const actual = shallowRender(props).find(RefinementListItem);
+
+      // Then
+      expect(actual.length).toEqual(2);
+    });
+
+    it('displays a number of items equal to the showMore limit when showMore: true and enabled', () => {
+      // Given
+      const props = {
+        ...defaultProps,
+        facetValues: [
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
+        ],
+        limitMin: 2,
+        limitMax: 3,
+        showMore: true,
+      };
+
+      // When
+      const root = shallowRender(props);
+      root.setState({isShowMoreOpen: true});
+      const actual = root.find(RefinementListItem);
+
+      // Then
+      expect(actual.length).toEqual(3);
+    });
+
     it('adds a showMore link when the feature is enabled', () => {
       // Given
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: false},
-          {value: 'baz', isRefined: false},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: true,
-        isShowingMore: false,
+        limitMin: 2,
+        limitMax: 3,
       };
 
       // When
@@ -174,12 +257,13 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: false},
-          {value: 'baz', isRefined: false},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: false,
-        isShowingMore: false,
+        limitMin: 2,
+        limitMax: 3,
       };
 
       // When
@@ -190,25 +274,78 @@ describe('RefinementList', () => {
       expect(actual.length).toEqual(0);
     });
 
-    it('should displays showLess', () => {
+    it('no showMore when: state = open -> values change -> values <= limitMin ', () => {
       // Given
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: false},
-          {value: 'baz', isRefined: false},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: true,
-        isShowingMore: true,
+        limitMin: 2,
+        limitMax: 5,
       };
 
       // When
       const root = shallowRender(props);
-      const actual = root.find('[templateKey="show-more-active"]');
+      root.instance().handleClickShowMore();
+      root.setProps({facetValues: props.facetValues.slice(2)});
 
       // Then
-      expect(actual.length).toEqual(1);
+      expect(root.find({templateKey: 'show-more-active'}).length).toEqual(0);
+    });
+
+    it('does not add a showMore link when the facet values length is equal to the minLimit', () => {
+      // Given
+      const props = {
+        ...defaultProps,
+        facetValues: [
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
+        ],
+        showMore: true,
+        limitMin: 3,
+        limitMax: 4,
+      };
+
+      // When
+      const root = shallowRender(props);
+      const actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
+
+      // Then
+      expect(actual.length).toEqual(0);
+    });
+
+    it('changing the state will toggle the number of items displayed', () => {
+      // Given
+      const props = {
+        ...defaultProps,
+        facetValues: [
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
+        ],
+        limitMin: 2,
+        limitMax: 3,
+        showMore: true,
+      };
+
+      // When
+      const root = shallowRender(props);
+
+      // Then: Not opened, initial number displayed
+      expect(root.find(RefinementListItem).length).toEqual(2);
+
+      // Then: Toggling the state, display the limitMax
+      root.setState({isShowMoreOpen: true});
+      expect(root.find(RefinementListItem).length).toEqual(3);
+
+      // Then: Toggling the state again, back to the limitMin
+      root.setState({isShowMoreOpen: false});
+      expect(root.find(RefinementListItem).length).toEqual(2);
     });
   });
 
@@ -219,10 +356,10 @@ describe('RefinementList', () => {
         ...defaultProps,
         facetValues: [
           {
-            value: 'foo',
+            name: 'foo',
             data: [
-              {value: 'bar', isRefined: false},
-              {value: 'baz', isRefined: false},
+              {name: 'bar', isRefined: false},
+              {name: 'baz', isRefined: false},
             ],
             isRefined: false,
           },
@@ -250,10 +387,10 @@ describe('RefinementList', () => {
         },
         facetValues: [
           {
-            value: 'foo',
+            name: 'foo',
             data: [
-              {value: 'bar', isRefined: false},
-              {value: 'baz', isRefined: false},
+              {name: 'bar', isRefined: false},
+              {name: 'baz', isRefined: false},
             ],
             isRefined: false,
           },

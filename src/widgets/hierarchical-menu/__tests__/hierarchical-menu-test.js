@@ -241,29 +241,29 @@ describe('hierarchicalMenu()', () => {
 
     it('has a limit option', () => {
       const secondLevel = [
-        {name: 'six', path: 'six'},
-        {name: 'seven', path: 'seven'},
-        {name: 'eight', path: 'eight'},
-        {name: 'nine', path: 'nine'},
+        {name: 'six'},
+        {name: 'seven'},
+        {name: 'eight'},
+        {name: 'nine'},
       ];
 
       const firstLevel = [
-        {name: 'one', path: 'one'},
-        {name: 'two', path: 'two', data: secondLevel},
-        {name: 'three', path: 'three'},
-        {name: 'four', path: 'four'},
-        {name: 'five', path: 'five'},
+        {name: 'one'},
+        {name: 'two', data: secondLevel},
+        {name: 'three'},
+        {name: 'four'},
+        {name: 'five'},
       ];
 
       data = {data: firstLevel};
       const expectedFacetValues = [
-        {label: 'one', value: 'one'},
-        {label: 'two', value: 'two', data: [
-          {label: 'six', value: 'six'},
-          {label: 'seven', value: 'seven'},
-          {label: 'eight', value: 'eight'},
+        {name: 'one'},
+        {name: 'two', data: [
+          {name: 'six'},
+          {name: 'seven'},
+          {name: 'eight'},
         ]},
-        {label: 'three', value: 'three'},
+        {name: 'three'},
       ];
       widget = hierarchicalMenu({...options, limit: 3});
       widget.init({helper, createURL, instantSearchInstance: {}});

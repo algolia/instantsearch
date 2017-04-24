@@ -215,15 +215,15 @@ describe('connectMenu', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.items).toEqual([
       {
-        label: 'Decoration',
-        value: 'Decoration',
+        name: 'Decoration',
+        path: 'Decoration',
         count: 880,
         isRefined: true,
         data: null,
       },
       {
-        label: 'Outdoor',
-        value: 'Outdoor',
+        name: 'Outdoor',
+        path: 'Outdoor',
         count: 47,
         isRefined: false,
         data: null,
@@ -231,113 +231,50 @@ describe('connectMenu', () => {
     ]);
   });
 
-  describe('showMore', () => {
-    it('should throw when `showMoreLimit` is lower than `limit`', () => {
-      expect(
-        () => connectMenu(() => {})({
-          attributeName: 'myFacet',
-          limit: 10,
-          showMoreLimit: 1,
-        })
-      ).toThrow();
+  it('provides the correct `currentRefinement` value', () => {
+    const widget = makeWidget({attributeName: 'category'});
+
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
     });
 
-    it('should provide `showMoreLimit` as `maxValuesPerFacet`', () => {
-      const widget = makeWidget({
-        attributeName: 'myFacet',
-        limit: 10,
-        showMoreLimit: 20,
-      });
+    expect(rendering.lastCall.args[0].currentRefinement).toBe(null);
 
-      expect(widget.getConfiguration({})).toEqual({
-        hierarchicalFacets: [{
-          name: 'myFacet',
-          attributes: ['myFacet'],
-        }],
-        maxValuesPerFacet: 20,
-      });
-    });
-
-    it('should initialize with `isShowingMore === false`', () => {
-      // Given
-      const widget = makeWidget({
-        attributeName: 'myFacet',
-        limit: 10,
-        showMoreLimit: 20,
-      });
-
-      // When
-      const config = widget.getConfiguration({});
-      const helper = algoliasearchHelper(fakeClient, '', config);
-      helper.search = jest.fn();
-
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-        onHistoryChange: () => {},
-      });
-
-      // Then
-      const firstRenderingOptions = rendering.lastCall.args[0];
-      expect(firstRenderingOptions.isShowingMore).toBe(false);
-    });
-
-    it('should toggle `isShowingMore` when `toggleShowMore` is called', () => {
-      // Given
-      const widget = makeWidget({
-        attributeName: 'category',
-        limit: 1,
-        showMoreLimit: 2,
-      });
-
-      // When
-      const config = widget.getConfiguration({});
-      const helper = algoliasearchHelper(fakeClient, '', config);
-
-      helper.search = jest.fn();
-      helper.toggleRefinement('category', 'Decoration');
-
-      widget.init({
-        helper,
-        state: helper.state,
-        createURL: () => '#',
-        onHistoryChange: () => {},
-      });
-
-      widget.render({
-        results: new SearchResults(helper.state, [{
-          hits: [],
-          facets: {
-            category: {
-              Decoration: 880,
-            },
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+        facets: {
+          category: {
+            Decoration: 880,
           },
-        }, {
-          facets: {
-            category: {
-              Decoration: 880,
-              Outdoor: 47,
-            },
+        },
+      }, {
+        facets: {
+          category: {
+            Decoration: 880,
+            Outdoor: 47,
           },
-        }]),
-        state: helper.state,
-        helper,
-        createURL: () => '#',
-      });
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
 
-      // Then
-      const firstRenderingOptions = rendering.lastCall.args[0];
-      expect(firstRenderingOptions.isShowingMore).toBe(false);
-      expect(firstRenderingOptions.items.length).toBe(1);
-
-      // When
-      firstRenderingOptions.toggleShowMore();
-
-      // Then
-      const secondRenderingOptions = rendering.lastCall.args[0];
-      expect(secondRenderingOptions.isShowingMore).toBe(true);
-      expect(secondRenderingOptions.items.length).toBe(2);
+    expect(rendering.lastCall.args[0].currentRefinement).toEqual({
+      name: 'Decoration',
+      path: 'Decoration',
+      count: 880,
+      isRefined: true,
+      data: null,
     });
   });
 });

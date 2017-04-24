@@ -232,19 +232,65 @@ describe('connectRefinementList', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.items).toEqual([
       {
-        label: 'Decoration',
-        value: 'Decoration',
+        name: 'Decoration',
         highlighted: 'Decoration',
         count: 880,
         isRefined: true,
       },
       {
-        label: 'Outdoor',
-        value: 'Outdoor',
+        name: 'Outdoor',
         highlighted: 'Outdoor',
         count: 47,
         isRefined: false,
       },
     ]);
+  });
+
+  it('provides the correct `currentRefinement` value', () => {
+    const widget = makeWidget({attributeName: 'category'});
+
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    helper.search = sinon.stub();
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    expect(firstRenderingOptions.currentRefinement).toEqual([]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+        facets: {
+          category: {
+            Decoration: 880,
+          },
+        },
+      }, {
+        facets: {
+          category: {
+            Decoration: 880,
+            Outdoor: 47,
+          },
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.currentRefinement).toEqual([{
+      name: 'Decoration',
+      highlighted: 'Decoration',
+      count: 880,
+      isRefined: true,
+    }]);
   });
 });

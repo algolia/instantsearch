@@ -65,19 +65,19 @@ describe('connectStarRating', () => {
       const {items} = rendering.lastCall.args[0];
       expect(items).toEqual([
         {
-          count: 1000, isRefined: false, name: '4', value: '4',
+          count: 1000, isRefined: false, name: '4',
           stars: [true, true, true, true, false],
         },
         {
-          count: 1050, isRefined: false, name: '3', value: '3',
+          count: 1050, isRefined: false, name: '3',
           stars: [true, true, true, false, false],
         },
         {
-          count: 1070, isRefined: false, name: '2', value: '2',
+          count: 1070, isRefined: false, name: '2',
           stars: [true, true, false, false, false],
         },
         {
-          count: 1080, isRefined: false, name: '1', value: '1',
+          count: 1080, isRefined: false, name: '1',
           stars: [true, false, false, false, false],
         },
       ]);
@@ -139,19 +139,19 @@ describe('connectStarRating', () => {
       const {refine, items} = renderOptions;
       expect(items).toEqual([
         {
-          count: 1000, isRefined: false, name: '4', value: '4',
+          count: 1000, isRefined: false, name: '4',
           stars: [true, true, true, true, false],
         },
         {
-          count: 1050, isRefined: true, name: '3', value: '3',
+          count: 1050, isRefined: true, name: '3',
           stars: [true, true, true, false, false],
         },
         {
-          count: 1070, isRefined: false, name: '2', value: '2',
+          count: 1070, isRefined: false, name: '2',
           stars: [true, true, false, false, false],
         },
         {
-          count: 1080, isRefined: false, name: '1', value: '1',
+          count: 1080, isRefined: false, name: '1',
           stars: [true, false, false, false, false],
         },
       ]);
@@ -167,5 +167,51 @@ describe('connectStarRating', () => {
       ]);
       expect(helper.search.callCount).toBe(2);
     }
+  });
+
+  it('provides the correct `currentRefinement` value', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectStarRating(rendering);
+
+    const attributeName = 'grade';
+    const widget = makeWidget({attributeName});
+
+    const config = widget.getConfiguration({});
+
+    const helper = jsHelper(fakeClient, '', config);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const [[firstRenderingOptions]] = rendering.mock.calls;
+    expect(rendering).toBeCalled();
+    expect(firstRenderingOptions.currentRefinement).toBe(null);
+
+    firstRenderingOptions.refine('3');
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        facets: {
+          [attributeName]: {3: 50, 4: 900, 5: 100},
+        },
+      }, {
+        facets: {
+          [attributeName]: {0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100},
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const [, [secondRenderingOptions]] = rendering.mock.calls;
+    expect(secondRenderingOptions.currentRefinement).toEqual({
+      count: 1050, isRefined: true, name: '3',
+      stars: [true, true, true, false, false],
+    });
   });
 });

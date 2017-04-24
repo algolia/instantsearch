@@ -7,8 +7,6 @@ import numericRefinementList from '../numeric-refinement-list.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 expect.extend(expectJSX);
 
-const encodeValue = (start, end) => window.encodeURI(JSON.stringify({start, end}));
-
 describe('numericRefinementList call', () => {
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -101,11 +99,11 @@ describe('numericRefinementList()', () => {
       collapsible: false,
       createURL() {},
       facetValues: [
-        {label: 'All', value: encodeValue(), isRefined: true},
-        {label: 'less than 4', value: encodeValue(undefined, 4), isRefined: false},
-        {label: '4', value: encodeValue(4, 4), isRefined: false},
-        {label: 'between 5 and 10', value: encodeValue(5, 10), isRefined: false},
-        {label: 'more than 10', value: encodeValue(10), isRefined: false},
+        {attributeName: 'price', isRefined: true, name: 'All'},
+        {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4'},
+        {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4},
+        {attributeName: 'price', end: 10, isRefined: false, name: 'between 5 and 10', start: 5},
+        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10},
       ],
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
@@ -114,7 +112,7 @@ describe('numericRefinementList()', () => {
           footer: '',
           header: '',
           // eslint-disable-next-line max-len
-          item: '<label class="{{cssClasses.label}}">\n <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{label}}\n</label>',
+          item: '<label class="{{cssClasses.label}}">\n <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{name}}\n</label>',
         },
         templatesConfig: undefined,
         transformData: undefined,
@@ -141,7 +139,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls the refinement functions if refined with "4"', () => {
-    widget._refine(encodeValue(4, 4));
+    widget._refine('4');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '=', 4]);
@@ -149,7 +147,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls the refinement functions if refined with "between 5 and 10"', () => {
-    widget._refine(encodeValue(5, 10));
+    widget._refine('between 5 and 10');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledTwice).toBe(true, 'addNumericRefinement called twice');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 5]);
@@ -158,7 +156,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls two times the refinement functions if refined with "less than 4"', () => {
-    widget._refine(encodeValue(undefined, 4));
+    widget._refine('less than 4');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '<=', 4]);
@@ -166,7 +164,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls two times the refinement functions if refined with "more than 10"', () => {
-    widget._refine(encodeValue(10));
+    widget._refine('more than 10');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 10]);

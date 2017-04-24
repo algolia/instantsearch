@@ -24,8 +24,8 @@ var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(p
   //   clearAllClick,
   //   clearAllPosition,
   //   clearAllURL,
-  //   refine,
-  //   createURL,
+  //   clearRefinementClicks,
+  //   clearRefinementURLs,
   //   refinements,
   //   instantSearchInstance,
   //   widgetParams,
@@ -35,7 +35,6 @@ search.addWidget(
   customCurrentRefinedValues({
     [ attributes = [] ],
     [ onlyListedAttributes = false ],
-    [ clearsQuery = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectCurrentRefinedValues.html
@@ -47,8 +46,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} clearAllClick function to trigger the clear of all the currently refined values
  * @property {string} clearAllPosition position of the 'clear all' button
  * @property {function} clearAllURL url which leads to a state where all the refinements have been cleared
- * @property {function(item)} refine clearing function for a refinement
- * @property {function(item)} createURL create an individual url where a single refinement is cleared
+ * @property {function[]} clearRefinementClicks individual clearing function per refinement
+ * @property {string[]} clearRefinementURLs individual url where a single refinement is cleared
  * @property {Refinements[]} refinements all the current refinements
  * @property {InstantsSearch} instantSearchInstance the instance of instantsearch.js
  * @property {Object} widgetParams all original options forwarded to rendering
@@ -66,7 +65,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} CurrentRefinedValuesWidgetOptions
  * @property {CurrentRefinedValuesAttributes[]} attributes specification for the display of refinements per attribute
  * @property {boolean} onlyListedAttributes limit the displayed refinement to the list specified
- * @property {boolean} [clearsQuery=false] also clears the active search query
  */
 
 /**
@@ -82,7 +80,6 @@ export default function connectCurrentRefinedValues(renderFn) {
     const {
       attributes = [],
       onlyListedAttributes = false,
-      clearsQuery = false,
     } = widgetParams;
 
     const attributesOK = isArray(attributes) &&
@@ -115,43 +112,42 @@ export default function connectCurrentRefinedValues(renderFn) {
     }, {});
 
     return {
-
       init({helper, createURL, instantSearchInstance}) {
-        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo, clearsQuery);
+        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
 
-        const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo, clearsQuery));
+        const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo));
 
         const refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes);
-
-        const _createURL = refinement => createURL(clearRefinementFromState(helper.state, refinement));
-        const _clearRefinement = refinement => clearRefinement(helper, refinement);
+        const clearRefinementURLs =
+          refinements.map(refinement => createURL(clearRefinementFromState(helper.state, refinement)));
+        const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
 
         renderFn({
           attributes: attributesObj,
           clearAllClick: this._clearRefinementsAndSearch,
           clearAllURL,
-          refine: _clearRefinement,
-          createURL: _createURL,
+          clearRefinementClicks,
+          clearRefinementURLs,
           refinements,
           instantSearchInstance,
           widgetParams,
         }, true);
       },
-
       render({results, helper, state, createURL, instantSearchInstance}) {
-        const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo, clearsQuery));
+        const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
 
         const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
-
-        const _createURL = refinement => createURL(clearRefinementFromState(helper.state, refinement));
-        const _clearRefinement = refinement => clearRefinement(helper, refinement);
+        const clearRefinementURLs = refinements
+          .map(refinement => createURL(clearRefinementFromState(state, refinement)));
+        const clearRefinementClicks = refinements
+          .map(refinement => clearRefinement.bind(null, helper, refinement));
 
         renderFn({
           attributes: attributesObj,
           clearAllClick: this._clearRefinementsAndSearch,
           clearAllURL,
-          refine: _clearRefinement,
-          createURL: _createURL,
+          clearRefinementClicks,
+          clearRefinementURLs,
           refinements,
           instantSearchInstance,
           widgetParams,
@@ -193,7 +189,7 @@ function getFilteredRefinements(results, state, attributeNames, onlyListedAttrib
   if (onlyListedAttributes && !isEmpty(attributeNames)) {
     refinements = filter(refinements, refinement => attributeNames.indexOf(refinement.attributeName) !== -1);
   }
-  return refinements.map(computeLabel);
+  return refinements;
 }
 
 function clearRefinementFromState(state, refinement) {
@@ -217,18 +213,4 @@ function clearRefinementFromState(state, refinement) {
 
 function clearRefinement(helper, refinement) {
   helper.setState(clearRefinementFromState(helper.state, refinement)).search();
-}
-
-function computeLabel(value) {
-  // default to `value.name` if no operators
-  value.computedLabel = value.name;
-
-  if (value.hasOwnProperty('operator') && typeof value.operator === 'string') {
-    let displayedOperator = value.operator;
-    if (value.operator === '>=') displayedOperator = '≥';
-    if (value.operator === '<=') displayedOperator = '≤';
-    value.computedLabel = `${displayedOperator} ${value.name}`;
-  }
-
-  return value;
 }

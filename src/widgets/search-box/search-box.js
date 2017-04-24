@@ -26,7 +26,7 @@ const renderer = ({
   searchOnEnterKeyPressOnly,
   wrapInput,
 }) => ({
-  refine,
+  search,
   query,
   onHistoryChange,
 }, isFirstRendering) => {
@@ -78,18 +78,18 @@ const renderer = ({
     // search on enter
     if (searchOnEnterKeyPressOnly) {
       addListener(input, INPUT_EVENT, e => {
-        refine(getValue(e), false);
+        search(getValue(e), false);
       });
       addListener(input, 'keyup', e => {
-        if (e.keyCode === KEY_ENTER) refine(getValue(e));
+        if (e.keyCode === KEY_ENTER) search(getValue(e));
       });
     } else {
-      addListener(input, INPUT_EVENT, getInputValueAndCall(refine));
+      addListener(input, INPUT_EVENT, getInputValueAndCall(search));
 
       // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
       // can be removed as soon as we remove support for it
       if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(refine)));
+        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(search)));
       }
     }
   } else {

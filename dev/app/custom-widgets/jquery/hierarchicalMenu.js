@@ -16,11 +16,11 @@ const formatMenuEntry = (createURL, lvl = 0) => item => {
     return `
       <div ${lvl === 0 ? 'class="hierarchical-categories-list"' : ''}>
         <a
-          href="${createURL(item.value)}"
+          href="${createURL(item)}"
           class="facet-value clearfix"
-          data-refine-value="${item.value}"
+          data-refine-path="${item.path}"
         >
-          <strong>${item.label}</strong> ${countHTML}
+          <strong>${item.name}</strong> ${countHTML}
         </a>
         <div class="hierarchical-categories-list ais-hierarchical-menu--list__lvl${lvl + 1}">
           ${item.data.map(formatMenuEntry(createURL, lvl + 1)).join('')}
@@ -32,13 +32,13 @@ const formatMenuEntry = (createURL, lvl = 0) => item => {
   return `
     <div>
       <a
-        href="${createURL(item.value)}"
+        href="${createURL(item)}"
         class="facet-value clearfix"
-        data-refine-value="${item.value}"
+        data-refine-path="${item.path}"
       >
         ${item.isRefined
-          ? `<strong>${item.label}</strong>`
-          : item.label} ${countHTML}
+          ? `<strong>${item.name}</strong>`
+          : item.name} ${countHTML}
       </a>
     </div>
   `;
@@ -61,12 +61,13 @@ const renderFn = ({
 
   // remove event listeners before replacing markup
   containerNode
-    .find('a[data-refine-value]')
+    .find('a[data-refine-path]')
     .each(function() { window.$(this).off('click'); });
 
   if (items && items.length > 0) {
     // replace markup with items
     const menuItems = items
+      .map(item => item.isRefined ? {...item, data: currentRefinement.data} : item)
       .map(formatMenuEntry(createURL))
       .join('');
 
@@ -74,13 +75,13 @@ const renderFn = ({
       .find('#custom-hierarchical-menu__container')
       .html(menuItems);
 
-    // bind links with `data-refine-value`
+    // bind links with `data-refine-path`
     containerNode
-      .find('a[data-refine-value]')
+      .find('a[data-refine-path]')
       .each(function() {
         window.$(this).on('click', e => {
           e.preventDefault();
-          refine(window.$(this).data('refine-value'));
+          refine(window.$(this).data('refine-path'));
         });
       });
   }

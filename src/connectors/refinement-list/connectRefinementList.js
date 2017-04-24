@@ -11,6 +11,7 @@ var customRefinementList = connectRefinementList(function render(params) {
   //   instantSearchInstance,
   //   canRefine,
   //   widgetParams,
+  //   currentRefinement,
   // }
 });
 search.addWidget(
@@ -51,6 +52,7 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @property {boolean} canRefine indicates if a refinement can be applied
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object} currentRefinement the refinement currently applied
  */
 
 /**
@@ -72,9 +74,6 @@ export default function connectRefinementList(renderFn) {
     } = widgetParams;
 
     checkUsage({attributeName, operator, usage});
-
-    const formatItems = ({name: label, ...item}) =>
-      ({...item, label, value: label, highlighted: label});
 
     const render = ({items, state, createURL,
                     helperSpecializedSearchFacetValues,
@@ -102,6 +101,7 @@ export default function connectRefinementList(renderFn) {
         isFromSearch,
         canRefine: isFromSearch || items.length > 0,
         widgetParams,
+        currentRefinement: items.filter(({isRefined}) => isRefined) || null,
       }, isFirstSearch);
     };
 
@@ -126,8 +126,10 @@ export default function connectRefinementList(renderFn) {
           });
         } else {
           helper.searchForFacetValues(attributeName, query).then(results => {
-            const facetValues = results.facetHits.map(formatItems);
-
+            const facetValues = results.facetHits.map(h => {
+              h.name = h.value;
+              return h;
+            });
             render({
               items: facetValues,
               state,
@@ -174,14 +176,17 @@ export default function connectRefinementList(renderFn) {
         });
       },
       render({results, state, createURL, instantSearchInstance}) {
-        const items = results
+        const facetValues = results
           .getFacetValues(attributeName, {sortBy})
-          .map(formatItems);
+          .map(h => {
+            h.highlighted = h.name;
+            return h;
+          });
 
-        lastResultsFromMainSearch = items;
+        lastResultsFromMainSearch = facetValues;
 
         render({
-          items,
+          items: facetValues,
           state,
           createURL,
           helperSpecializedSearchFacetValues: searchForFacetValues,

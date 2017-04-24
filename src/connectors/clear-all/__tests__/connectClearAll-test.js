@@ -74,10 +74,10 @@ describe('connectClearAll', () => {
     });
 
     expect(helper.hasRefinements('myFacet')).toBe(true);
-    const initClearMethod = rendering.lastCall.args[0].refine;
+    const initClearMethod = rendering.lastCall.args[0].clearAll;
     initClearMethod();
 
-    expect(helper.hasRefinements('myFacet')).toBe(false);
+    expect(helper.hasRefinements('myFacet')).toBe(true);
 
     helper.toggleRefinement('myFacet', 'someOtherValue');
 
@@ -89,7 +89,7 @@ describe('connectClearAll', () => {
     });
 
     expect(helper.hasRefinements('myFacet')).toBe(true);
-    const renderClearMethod = rendering.lastCall.args[0].refine;
+    const renderClearMethod = rendering.lastCall.args[0].clearAll;
     renderClearMethod();
     expect(helper.hasRefinements('myFacet')).toBe(false);
   });

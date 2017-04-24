@@ -2,36 +2,36 @@ import sinon from 'sinon';
 import hitsPerPageSelector from '../hits-per-page-selector';
 
 describe('hitsPerPageSelector call', () => {
-  it('throws an exception when no items', () => {
+  it('throws an exception when no options', () => {
     const container = document.createElement('div');
     expect(hitsPerPageSelector.bind(null, {container})).toThrow(/^Usage:/);
   });
 
   it('throws an exception when no container', () => {
-    const items = {a: {value: 'value', label: 'My value'}};
-    expect(hitsPerPageSelector.bind(null, {items})).toThrow(/^Usage:/);
+    const options = {a: {value: 'value', label: 'My value'}};
+    expect(hitsPerPageSelector.bind(null, {options})).toThrow(/^Usage:/);
   });
 });
 
 describe('hitsPerPageSelector()', () => {
   let ReactDOM;
   let container;
-  let items;
+  let options;
   let cssClasses;
   let widget;
   let helper;
   let results;
-  let consoleWarn;
+  let consoleLog;
   let state;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
 
     hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
-    consoleWarn = sinon.stub(window.console, 'warn');
+    consoleLog = sinon.stub(window.console, 'log');
 
     container = document.createElement('div');
-    items = [
+    options = [
       {value: 10, label: '10 results'},
       {value: 20, label: '20 results'},
     ];
@@ -39,7 +39,7 @@ describe('hitsPerPageSelector()', () => {
       root: ['custom-root', 'cx'],
       item: 'custom-item',
     };
-    widget = hitsPerPageSelector({container, items, cssClasses});
+    widget = hitsPerPageSelector({container, options, cssClasses});
     helper = {
       state: {
         hitsPerPage: 20,
@@ -76,13 +76,13 @@ describe('hitsPerPageSelector()', () => {
   });
 
   it('should throw if there is no name attribute in a passed object', () => {
-    items.length = 0;
-    items.push({label: 'Label without a value'});
+    options.length = 0;
+    options.push({label: 'Label without a value'});
     widget.init({state: helper.state, helper});
-    expect(consoleWarn.calledOnce).toBe(true, 'console.warn called once');
-    expect(consoleWarn.firstCall.args[0]).
+    expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
+    expect(consoleLog.firstCall.args[0]).
       toEqual(
-`[Warning][hitsPerPageSelector] No item in \`items\`
+`[Warning][hitsPerPageSelector] No option in \`options\`
   with \`value: hitsPerPage\` (hitsPerPage: 20)`
       );
   });
@@ -90,10 +90,10 @@ describe('hitsPerPageSelector()', () => {
   it('must include the current hitsPerPage at initialization time', () => {
     helper.state.hitsPerPage = -1;
     widget.init({state: helper.state, helper});
-    expect(consoleWarn.calledOnce).toBe(true, 'console.warn called once');
-    expect(consoleWarn.firstCall.args[0]).
+    expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
+    expect(consoleLog.firstCall.args[0]).
       toEqual(
-`[Warning][hitsPerPageSelector] No item in \`items\`
+`[Warning][hitsPerPageSelector] No option in \`options\`
   with \`value: hitsPerPage\` (hitsPerPage: -1)`
       );
   });
@@ -102,11 +102,11 @@ describe('hitsPerPageSelector()', () => {
     delete helper.state.hitsPerPage;
     expect(() => {
       widget.init({state: helper.state, helper});
-    }).not.toThrow(/No item in `items`/);
+    }).not.toThrow(/No option in `options`/);
   });
 
   afterEach(() => {
     hitsPerPageSelector.__ResetDependency__('ReactDOM');
-    consoleWarn.restore();
+    consoleLog.restore();
   });
 });

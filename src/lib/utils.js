@@ -216,12 +216,8 @@ function getRefinements(results, state) {
   return res;
 }
 
-function clearRefinementsFromState(inputState, attributeNames, clearsQuery = false) {
+function clearRefinementsFromState(inputState, attributeNames) {
   let state = inputState;
-
-  if (clearsQuery) {
-    state = state.setQuery('');
-  }
 
   if (isEmpty(attributeNames)) {
     state = state.clearTags();
@@ -240,8 +236,8 @@ function clearRefinementsFromState(inputState, attributeNames, clearsQuery = fal
   return state;
 }
 
-function clearRefinementsAndSearch(helper, attributeNames, clearsQuery = false) {
-  helper.setState(clearRefinementsFromState(helper.state, attributeNames, clearsQuery)).search();
+function clearRefinementsAndSearch(helper, attributeNames) {
+  helper.setState(clearRefinementsFromState(helper.state, attributeNames)).search();
 }
 
 function prefixKeys(prefix, obj) {

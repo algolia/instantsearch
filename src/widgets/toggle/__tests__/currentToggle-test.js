@@ -119,7 +119,7 @@ describe('currentToggle()', () => {
             count: 2,
             isRefined: false,
             name: label,
-            offFacetValue: {count: 3, name: 'Hello, ', isRefined: false},
+            offFacetValue: {count: 1, name: 'Hello, ', isRefined: false},
             onFacetValue: {count: 2, name: 'Hello, ', isRefined: false},
           }],
           shouldAutoHideContainer: false,
@@ -169,7 +169,7 @@ describe('currentToggle()', () => {
             isRefined:
             false,
             name: label,
-            offFacetValue: {count: 3, name: 'Hello, ', isRefined: false},
+            offFacetValue: {count: 1, name: 'Hello, ', isRefined: false},
             onFacetValue: {count: 2, name: 'Hello, ', isRefined: false},
           }],
           shouldAutoHideContainer: false,
@@ -220,7 +220,7 @@ describe('currentToggle()', () => {
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
         expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
 
-        widget.toggleRefinement({isRefined: true});
+        widget.toggleRefinement(helper, 'facetValueToRefine', true);
         expect(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 5)).toBe(true);
         expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, '\\-2')).toBe(true);
       });
@@ -289,11 +289,11 @@ describe('currentToggle()', () => {
 
         props = {
           facetValues: [{
-            count: 3,
+            count: 1,
             isRefined: true,
             name: label,
             onFacetValue: {name: label, isRefined: true, count: 2},
-            offFacetValue: {name: label, isRefined: false, count: 3},
+            offFacetValue: {name: label, isRefined: false, count: 1},
           }],
           shouldAutoHideContainer: false,
           ...props,
@@ -334,10 +334,10 @@ describe('currentToggle()', () => {
       let helper;
 
       function toggleOn() {
-        widget.toggleRefinement(helper, {isRefined: false});
+        widget.toggleRefinement(helper, 'facetValueToRefine', false);
       }
       function toggleOff() {
-        widget.toggleRefinement(helper, {isRefined: true});
+        widget.toggleRefinement(helper, 'facetValueToRefine', true);
       }
 
       beforeEach(() => {

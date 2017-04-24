@@ -2,18 +2,18 @@ import sinon from 'sinon';
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectHitsPerPage from '../connectHitsPerPage.js';
+import connectHitsPerPageSelector from '../connectHitsPerPageSelector.js';
 
 const fakeClient = {addAlgoliaAgent: () => {}};
 
-describe('connectHitsPerPage', () => {
+describe('connectHitsPerPageSelector', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
-    const makeWidget = connectHitsPerPage(rendering);
+    const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      items: [
+      options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
       ],
@@ -41,7 +41,7 @@ describe('connectHitsPerPage', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      items: [
+      options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
       ],
@@ -58,7 +58,7 @@ describe('connectHitsPerPage', () => {
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      items: [
+      options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
       ],
@@ -67,9 +67,9 @@ describe('connectHitsPerPage', () => {
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectHitsPerPage(rendering);
+    const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      items: [
+      options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
         {value: 11, label: ''},
@@ -112,9 +112,9 @@ describe('connectHitsPerPage', () => {
 
   it('provides the current hitsPerPage value', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectHitsPerPage(rendering);
+    const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      items: [
+      options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
         {value: 7, label: ''},
@@ -134,7 +134,7 @@ describe('connectHitsPerPage', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.items).toMatchSnapshot();
+    expect(firstRenderingOptions.currentRefinement).toBe(7);
     firstRenderingOptions.refine(3);
 
     widget.render({
@@ -145,14 +145,14 @@ describe('connectHitsPerPage', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items).toMatchSnapshot();
+    expect(secondRenderingOptions.currentRefinement).toBe(3);
   });
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectHitsPerPage(rendering);
+    const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      items: [
+      options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
       ],
@@ -171,8 +171,8 @@ describe('connectHitsPerPage', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.items.length).toBe(3);
-    firstRenderingOptions.refine(firstRenderingOptions.items[0].value);
+    expect(firstRenderingOptions.options.length).toBe(3);
+    firstRenderingOptions.refine(firstRenderingOptions.options[0].value);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
 
     // Reset the hitsPerPage to an actual value
@@ -186,8 +186,8 @@ describe('connectHitsPerPage', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items.length).toBe(3);
-    secondRenderingOptions.refine(secondRenderingOptions.items[0].value);
+    expect(secondRenderingOptions.options.length).toBe(3);
+    secondRenderingOptions.refine(secondRenderingOptions.options[0].value);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
   });
 });

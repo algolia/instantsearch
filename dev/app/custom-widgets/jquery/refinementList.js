@@ -17,29 +17,29 @@ const renderFn = ({
     containerNode.append(markup);
   }
 
-  // remove event listeners if any before attaching new ones
+  // remove event listeners if any before attachign new ones
   window.$('li[data-refine-value]').each(function() { window.$(this).off(); });
 
   if (canRefine) {
     const list = items.map(item => `
       <li
-        data-refine-value="${item.value}"
+        data-refine-value="${item.name}"
         class="facet-value checkbox clearfix"
       >
         <label style="display: block;">
           <input
             type="checkbox"
-            value="${item.value}"
+            value="${item.name}"
             ${item.isRefined ? 'checked' : ''}
           />
 
           <a
-            href="${createURL(item.value)}"
+            href="${createURL(item)}"
             style="text-decoration: none; color: #000;"
           >
             ${item.isRefined
-              ? `<strong>${item.label}</strong>`
-              : item.label}
+              ? `<strong>${item.name}</strong>`
+              : item.name}
           </a>
 
           <span class="facet-count pull-right">

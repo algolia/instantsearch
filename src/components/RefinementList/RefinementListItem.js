@@ -41,7 +41,7 @@ RefinementListItem.propTypes = {
   facetValueToRefine: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number,
-  ]),
+  ]).isRequired,
   handleClick: React.PropTypes.func.isRequired,
   isRefined: React.PropTypes.bool.isRequired,
   itemClassName: React.PropTypes.string,
