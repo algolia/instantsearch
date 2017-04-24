@@ -1,5 +1,26 @@
 mixin widgetUsage(fnSymbol)
-  pre
-    | const widget = !{fnSymbol.name}();
-    |
-    | instantsearch.addWidget(widget);
+  - const paramsTypeName = fnSymbol.params[0].type.name;
+  if paramsTypeName && paramsTypeName !== 'Object'
+    - const paramsType = fnSymbol.relatedTypes && fnSymbol.relatedTypes.find(t => t.name === paramsTypeName);
+    - const properties = '\n' + paramsType.properties.map(p => `  ${p.name}: ${p.type.name}`).join(',\n');
+    pre.CodeMirror.cm-s-mdn-like
+      code
+        span.cm-keyword const 
+        span.cm-def widget 
+        span.cm-operator = 
+        span.cm-variable=fnSymbol.name
+        | ({ !{'\n'}
+        for property in paramsType.properties
+          span.cm-property='  ' + property.name
+          | :
+          span.cm-def
+            +type(property.type)
+          | , !{'\n'}
+        | });
+        |
+        span.cm-variable instantsearch
+        |.
+        span.cm-property addWidget
+        | (
+        span.cm-variable widget
+        | );
