@@ -17,10 +17,7 @@ import InfiniteHitsComponent from '../components/InfiniteHits.js';
  * @example
  * import React from 'react';
 
- * import {
- *   InstantSearch,
- *   Hits,
- * } from 'react-instantsearch/dom';
+ * import { InfiniteHits, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

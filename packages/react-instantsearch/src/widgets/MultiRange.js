@@ -24,9 +24,9 @@ import MultiRangeComponent from '../components/MultiRange.js';
  * @translationkey all - The label of the largest range added automatically by react instantsearch
  * @example
  * import React from 'react';
- *
- * import {InstantSearch, MultiRange} from '../packages/react-instantsearch/dom';
- *
+ * 
+ * import { MultiRange, InstantSearch } from 'react-instantsearch/dom';
+ * 
  * export default function App() {
  *   return (
  *     <InstantSearch
@@ -34,14 +34,15 @@ import MultiRangeComponent from '../components/MultiRange.js';
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
  *     >
- *       <MultiRange attributeName="price"
- *           items={[
- *             {end: 10, label: '<$10'},
- *             {start: 10, end: 100, label: '$10-$100'},
- *             {start: 100, end: 500, label: '$100-$500'},
- *             {start: 500, label: '>$500'},
- *           ]}
- *        />
+ *       <MultiRange
+ *         attributeName="price"
+ *         items={[
+ *           { end: 10, label: '<$10' },
+ *           { start: 10, end: 100, label: '$10-$100' },
+ *           { start: 100, end: 500, label: '$100-$500' },
+ *           { start: 500, label: '>$500' },
+ *         ]}
+ *       />
  *     </InstantSearch>
  *   );
  * }

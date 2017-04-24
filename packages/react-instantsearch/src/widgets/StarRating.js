@@ -33,7 +33,7 @@ import StarRatingComponent from '../components/StarRating.js';
  * @example
  * import React from 'react';
  *
- * import {StarRating, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { StarRating, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

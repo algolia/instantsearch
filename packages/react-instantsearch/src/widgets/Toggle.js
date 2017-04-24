@@ -14,9 +14,9 @@ import ToggleComponent from '../components/Toggle.js';
  * @themeKey ais-Toggle__label - the toggle label
  * @example
  * import React from 'react';
- *
- * import {Toggle, InstantSearch} from '../packages/react-instantsearch/dom';
- *
+ * 
+ * import { Toggle, InstantSearch } from 'react-instantsearch/dom';
+ * 
  * export default function App() {
  *   return (
  *     <InstantSearch
@@ -24,10 +24,11 @@ import ToggleComponent from '../components/Toggle.js';
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
  *     >
- *       <Toggle attributeName="materials"
- *           label="Made with solid pine"
- *           value={'Solid pine'}
- *        />
+ *       <Toggle
+ *         attributeName="materials"
+ *         label="Made with solid pine"
+ *         value={'Solid pine'}
+ *       />
  *     </InstantSearch>
  *   );
  * }

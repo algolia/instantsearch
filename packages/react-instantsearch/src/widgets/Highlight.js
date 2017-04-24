@@ -13,7 +13,7 @@ import HighlightComponent from '../components/Highlight.js';
  * @example
  * import React from 'react';
  *
- * import {InstantSearch, connectHits, Highlight} from 'InstantSearch';
+ * import { connectHits, Highlight, InstantSearch } from 'react-instantsearch/dom';
  *
  * const CustomHits = connectHits(hits => {
  *  return hits.map((hit) => <p><Highlight attributeName="description" hit={hit}/></p>);

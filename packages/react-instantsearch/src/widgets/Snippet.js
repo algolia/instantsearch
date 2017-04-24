@@ -13,7 +13,7 @@ import SnippetComponent from '../components/Snippet.js';
  * @example
  * import React from 'react';
  *
- * import {InstantSearch, connectHits, Snippet} from 'InstantSearch';
+ * import { connectHits, Snippet, InstantSearch } from 'react-instantsearch/dom';
  *
  * const CustomHits = connectHits(hits => {
  *  return hits.map((hit) => <p><Snippet attributeName="description" hit={hit}/></p>);

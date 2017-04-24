@@ -31,7 +31,7 @@ import MenuComponent from '../components/Menu.js';
  * @example
  * import React from 'react';
  *
- * import {Menu, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { Menu, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

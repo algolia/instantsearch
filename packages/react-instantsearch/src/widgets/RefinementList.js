@@ -32,7 +32,7 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @example
  * import React from 'react';
  *
- * import {RefinementList, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { RefinementList, InstantSearch } from '../packages/react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

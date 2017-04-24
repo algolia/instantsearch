@@ -23,7 +23,7 @@ import RangeInputComponent from '../components/RangeInput.js';
  * @example
  * import React from 'react';
  *
- * import {RangeInput, InstantSearch} from '../packages/react-instantsearch/dom';
+ * import { RangeInput, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (
@@ -32,7 +32,7 @@ import RangeInputComponent from '../components/RangeInput.js';
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
  *     >
- *        <RangeInput attributeName="price"/>
+ *       <RangeInput attributeName="price"/>
  *     </InstantSearch>
  *   );
  * }

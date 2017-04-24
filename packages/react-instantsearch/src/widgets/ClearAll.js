@@ -14,7 +14,7 @@ import ClearAllComponent from '../components/ClearAll.js';
  * @example
  * import React from 'react';
  *
- * import {ClearAll, RefinementList} from '../packages/react-instantsearch/dom';
+ * import { ClearAll, RefinementList, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

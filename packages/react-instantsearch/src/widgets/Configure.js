@@ -18,7 +18,7 @@ import Configure from '../components/Configure';
  * @example
  * import React from 'react';
  *
- * import {Configure} from '../packages/react-instantsearch/dom';
+ * import { Configure, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (

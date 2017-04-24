@@ -16,10 +16,7 @@ import HitsComponent from '../components/Hits.js';
  * @example
  * import React from 'react';
 
- * import {
- *   InstantSearch,
- *   Hits,
- * } from 'react-instantsearch/dom';
+ * import { Hits, InstantSearch } from 'react-instantsearch/dom';
  *
  * export default function App() {
  *   return (
