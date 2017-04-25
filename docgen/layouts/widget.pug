@@ -17,22 +17,7 @@ block content
     +description(jsdoc.description)
   h2#usage Usage
   +widgetUsage(jsdoc)
-  h2#parameters Parameters
-    a.anchor(href=`${navPath}#parameters`)
-  table.api.proptypes
-    tbody
-      each p in jsdoc.params
-        tr.api-entry-values
-          td.api-entry-name
-            div.api-entry(id=`param-${name}-${p.name}`)=p.name
-              a.anchor(href=`${navPath}#param-${name}-${p.name}`)
-          td.api-entry-type
-            code
-              +type(p.type)
-        tr.api-entry-description
-          td(colspan=2)
-            +description(p.description)
-  h2#structure Options details
+  h2#structure Details
     a.anchor(href=`${navPath}#return`)
     each t in jsdoc.relatedTypes
       if t

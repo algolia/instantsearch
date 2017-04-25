@@ -12,11 +12,14 @@ mixin widgetUsage(fnSymbol)
         | ({ !{'\n'}
         for property in paramsType.properties
           span.cm-property='  ' + property.name
-          | :
+          | : 
           span.cm-def
             +type(property.type)
           | , !{'\n'}
-        | });
+        | }: 
+        span.cm-def
+          +type(paramsType)
+        | );
         |
         span.cm-variable instantsearch
         |.
