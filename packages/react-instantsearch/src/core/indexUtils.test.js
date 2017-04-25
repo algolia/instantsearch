@@ -189,11 +189,11 @@ describe('utility method for manipulating the search state', () => {
       });
     });
     it('get results', () => {
-      const searchResults = { results: { some: 'results' } };
+      const searchResults = { results: { hits: ['some'] } };
 
       const results = getResults(searchResults, context);
 
-      expect(results).toEqual({ some: 'results' });
+      expect(results).toEqual({ hits: ['some'] });
     });
   });
   describe('when there are multiple index', () => {
@@ -385,9 +385,17 @@ describe('utility method for manipulating the search state', () => {
     });
 
     it('get results', () => {
-      const searchResults = { results: { first: { some: 'results' } } };
+      let searchResults = { results: { first: { some: 'results' } } };
 
-      const results = getResults(searchResults, context);
+      let results = getResults(searchResults, context);
+
+      expect(results).toEqual({ some: 'results' });
+
+      searchResults = { results: { first: { some: 'results' } } };
+
+      results = getResults(searchResults, {
+        ais: { mainTargetedIndex: 'first' },
+      });
 
       expect(results).toEqual({ some: 'results' });
     });

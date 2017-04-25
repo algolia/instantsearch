@@ -18,14 +18,18 @@ describe('connectPagination', () => {
     const cleanUp = connect.cleanUp.bind(context);
 
     it('provides the correct props to the component', () => {
-      props = getProvidedProps({}, {}, { results: { nbPages: 666 } });
+      props = getProvidedProps({}, {}, { results: { nbPages: 666, hits: [] } });
       expect(props).toEqual({
         currentRefinement: 1,
         nbPages: 666,
         canRefine: true,
       });
 
-      props = getProvidedProps({}, { page: 5 }, { results: { nbPages: 666 } });
+      props = getProvidedProps(
+        {},
+        { page: 5 },
+        { results: { nbPages: 666, hits: [] } }
+      );
       expect(props).toEqual({
         currentRefinement: 5,
         nbPages: 666,
@@ -35,7 +39,7 @@ describe('connectPagination', () => {
       props = getProvidedProps(
         {},
         { page: '5' },
-        { results: { nbPages: 666 } }
+        { results: { nbPages: 666, hits: [] } }
       );
       expect(props).toEqual({
         currentRefinement: 5,
@@ -43,7 +47,11 @@ describe('connectPagination', () => {
         canRefine: true,
       });
 
-      props = getProvidedProps({}, { page: '1' }, { results: { nbPages: 1 } });
+      props = getProvidedProps(
+        {},
+        { page: '1' },
+        { results: { nbPages: 1, hits: [] } }
+      );
       expect(props).toEqual({
         currentRefinement: 1,
         nbPages: 1,

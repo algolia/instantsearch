@@ -7,8 +7,8 @@ export function getIndex(context) {
 }
 
 export function getResults(searchResults, context) {
-  if (hasMultipleIndex(context)) {
-    return searchResults.results && searchResults.results[getIndex(context)]
+  if (searchResults.results && !searchResults.results.hits) {
+    return searchResults.results[getIndex(context)]
       ? searchResults.results[getIndex(context)]
       : null;
   } else {
