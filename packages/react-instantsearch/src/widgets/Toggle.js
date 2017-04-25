@@ -8,7 +8,7 @@ import ToggleComponent from '../components/Toggle.js';
  * @propType {string} attributeName - Name of the attribute on which to apply the `value` refinement. Required when `value` is present.
  * @propType {string} label - Label for the toggle.
  * @propType {string} value - Value of the refinement to apply on `attributeName` when checked.
- * @propType {boolean} [defaultChecked=false] - Default state of the widget. Should the toggle be checked by default?
+ * @propType {boolean} [defaultRefinement=false] - Default state of the widget. Should the toggle be checked by default?
  * @themeKey ais-Toggle__root - the root of the component
  * @themeKey ais-Toggle__checkbox - the toggle checkbox
  * @themeKey ais-Toggle__label - the toggle label
