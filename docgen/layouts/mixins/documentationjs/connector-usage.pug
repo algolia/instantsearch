@@ -1,13 +1,15 @@
 mixin connectorUsage(fnSymbol)
   - var rendererOptionsT = fnSymbol.params[0].type.params[0].name;
   - var widgetOptionT = fnSymbol.returns[0].type.params ? fnSymbol.returns[0].type.params[0].name : 'undefined';
-  pre
-    | const makeWidget = !{fnSymbol.name}(
-    |   function renderfn(renderOpts: !{`<a href='${navPath}#struct-${rendererOptionsT}'>${rendererOptionsT}</a>`}, isFirstRender: boolean) {
-    |     // render the widget
-    |   }
-    | );
-    |
-    | const widget = makeStatsWidget(instanceOpts: !{`<a href='${navPath}#struct-${widgetOptionT}'>${widgetOptionT}</a>`});
-    |
-    | instantsearch.addWidget(widget);
+  - var widgetName = rendererOptionsT.replace('RenderingOptions', '')
+  pre.CodeMirror.cm-s-mdn-like
+    code
+      | <span class="cm-keyword">var</span> <span class="cm-variable">make!{widgetName}</span> <span class="cm-operator">=</span> <span class="cm-variable-2">!{fnSymbol.name}</span>(
+      |   <span class="cm-keyword">function</span> <span class="cm-variable">renderFn</span>(<span class="cm-variable">renderOpts</span>: !{`<a href='${navPath}#struct-${rendererOptionsT}'>${rendererOptionsT}</a>`}, <span class="cm-variable">isFirstRender</span>: boolean) {
+      |     // render the custom !{widgetName} widget
+      |   }
+      | )<span class="cm-operator">;</span>
+      |
+      | <span class="cm-keyword">var</span> <span class="cm-variable">custom!{widgetName}</span> <span class="cm-operator">=</span> <span class="cm-variable-2">make!{widgetName}</span>(<span class="cm-variable">instanceOpts</span>: !{`<a href='${navPath}#struct-${widgetOptionT}'>${widgetOptionT}</a>`})<span class="cm-operator">;</span>
+      |
+      | <span class="cm-variable">instantsearch</span>.<span class="cm-property">addWidget</span>(<span class="cm-variable">custom!{widgetName}</span>)<span class="cm-operator">;</span>
