@@ -63,9 +63,10 @@ const renderer = ({
 const usage = `Usage:
 stats({
   container,
-  [ templates.{header,body,footer} ],
+  [ templates.{header, body, footer} ],
   [ transformData.{body} ],
-  [ autoHideContainer]
+  [ autoHideContainer=true ],
+  [ cssClasses.{root, header, body, footer, time} ],
 })`;
 
 /**
@@ -86,12 +87,16 @@ stats({
  */
 
 /**
+ * @typedef {Object} StatsWidgetTransforms
+ * @property {function} [body=Identity] Updates the content of object passed to the `body` template
+ */
+
+/**
  * @typedef {Object} StatsWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {string|DOMElement} container Place where to insert the widget in your webpage
  * @property {StatsWidgetTemplates} [templates] Templates to use for the widget
- * @property {Object.<string, function>} [transformData] Object that contains the functions to be applied on the data
- * before being used for templating. Valid keys are `body` for the body template.
- * @property {boolean} [autoHideContainer=true] Hide the container when no results match
+ * @property {StatsWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
+ * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching
  * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add
  */
 

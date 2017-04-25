@@ -53,6 +53,18 @@ const renderer = ({
   );
 };
 
+const usage = `Usage:
+numericRefinementList({
+  container,
+  attributeName,
+  options,
+  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],
+  [ templates.{header,item,footer} ],
+  [ transformData.{item} ],
+  [ autoHideContainer ],
+  [ collapsible=false ]
+})`;
+
 /**
  * Instantiate a list of refinements based on a facet
  * @type {WidgetFactory}
@@ -80,20 +92,8 @@ const renderer = ({
  * @param  {string|string[]} [$0.cssClasses.active] CSS class to add to each active element
  * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
  * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
+ * @return {Object} Returns a widget.
  */
-const usage = `Usage:
-numericRefinementList({
-  container,
-  attributeName,
-  options,
-  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer ],
-  [ collapsible=false ]
-})`;
-
 export default function numericRefinementList({
   container,
   attributeName,

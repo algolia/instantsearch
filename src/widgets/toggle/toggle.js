@@ -68,41 +68,75 @@ toggle({
 })`;
 
 /**
- * Instantiate the toggling of a boolean facet filter on and off.
- * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string} $0.attributeName Name of the attribute for faceting (eg. "free_shipping")
- * @param  {string} $0.label Human-readable name of the filter (eg. "Free Shipping")
- * @param  {Object} [$0.values] Lets you define the values to filter on when toggling
- * @param  {string|number|boolean} [$0.values.on=true] Value to filter on when checked
- * @param  {string|number|boolean} [$0.values.off=undefined] Value to filter on when unchecked
+ * @typedef {Object} ToggleWidgetCSSClasses
+ * @property  {string|string[]} [root] CSS class to add to the root element
+ * @property  {string|string[]} [header] CSS class to add to the header element
+ * @property  {string|string[]} [body] CSS class to add to the body element
+ * @property  {string|string[]} [footer] CSS class to add to the footer element
+ * @property  {string|string[]} [list] CSS class to add to the list element
+ * @property  {string|string[]} [item] CSS class to add to each item element
+ * @property  {string|string[]} [active] CSS class to add to each active element
+ * @property  {string|string[]} [label] CSS class to add to each
+ * label element (when using the default template)
+ * @property  {string|string[]} [checkbox] CSS class to add to each
+ * checkbox element (when using the default template)
+ * @property  {string|string[]} [count] CSS class to add to each count
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetTransforms
+ * @property  {Function} item Function to change the object passed to the `item` template
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetTemplates
+ * @property  {string|Function} header Header template
+ * @property  {string|Function} item Item template, provided with `name`, `count`, `isRefined`, `url` data properties
+ * count is always the number of hits that would be shown if you toggle the widget. We also provide
+ * `onFacetValue` and `offFacetValue` objects with according counts.
+ * @property  {string|Function} footer Footer template
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetValues
+ * @property  {string|number|boolean} on Value to filter on when checked
+ * @property  {string|number|boolean} off Value to filter on when unchecked
  * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
  * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
  * having `false` has a value for the selected attribute.
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header] Header template
- * @param  {string|Function} [$0.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * count is always the number of hits that would be shown if you toggle the widget. We also provide
- * `onFacetValue` and `offFacetValue` objects with according counts.
- * @param  {string|Function} [$0.templates.footer] Footer template
- * @param  {Function} [$0.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when there are no results
- * @param  {Object} [$0.cssClasses] CSS classes to add
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [$0.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [$0.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [$0.cssClasses.active] CSS class to add to each active element
- * @param  {string|string[]} [$0.cssClasses.label] CSS class to add to each
- * label element (when using the default template)
- * @param  {string|string[]} [$0.cssClasses.checkbox] CSS class to add to each
- * checkbox element (when using the default template)
- * @param  {string|string[]} [$0.cssClasses.count] CSS class to add to each count
- * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object} widget
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetCollapsibleOption
+ * @property {boolean} collapsed If set to true, the widget will be collapsed at first rendering.
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetOptions
+ * @property {string|DOMElement} container Place where to insert the widget in your webpage.
+ * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {string} label Human-readable name of the filter (eg. "Free Shipping").
+ * @property {ToggleWidgetValues} [values={on: true, off: undefined}] Values that the widget can set.
+ * @property {ToggleWidgetTemplates} [templates] Templates to use for the widget.
+ * @property {ToggleWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
+ * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching
+ * @property {ToggleWidgetCSSClasses} [cssClasses] CSS classes to add
+ * @property {boolean|ToggleWidgetCollapsibleOption} collapsible If set to true, the widget can be collapsed. This parameter can also be
+ * an object, with the property collapsed, if you want the toggle to be collapsed initially.
+ */
+
+/**
+ * The toggle widget lets the user either:
+ *  - switch between two values for a single facetted attribute (free_shipping / not_free_shipping)
+ *  - toggle a faceted value on and off (only 'canon' for brands)
+ *
+ * This widget is particularly useful if you have a boolean value in the records.
+ *
+ * The attribute has to in the list of attributes for faceting in the dashboard.
+ * @type {WidgetFactory}
+ * @memberof instantsearch.widgets
+ * @param {ToggleWidgetOptions} $0 Options for the toggle widget.
+ * @return {Widget} A new instance of the toggle widget
  */
 export default function toggle({
   container,
@@ -114,7 +148,7 @@ export default function toggle({
   autoHideContainer = true,
   collapsible = false,
   values: userValues = {on: true, off: undefined},
-} = {}) {
+}) {
   if (!container) {
     throw new Error(usage);
   }

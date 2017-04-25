@@ -43,16 +43,32 @@ sortBySelector({
 })`;
 
 /**
- * Instantiate a dropdown element to choose the current targeted index
+ * @typedef {Object} SortByWidgetCssClasses
+ * @property {string|string[]} [root] CSS classes added to the parent `<select>`
+ * @property {string|string[]} [item] CSS classes added to each `<option>`
+ */
+
+/**
+ * @typedef {Object} SortByIndexDefinition
+ * @property {string} name The name of the index in Algolia.
+ * @property {string} label The name of the index, for user usage.
+ */
+
+/**
+ * @typedef {Object} SortByWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {SortByIndexDefinition[]} indices Array of objects defining the different indices to choose from.
+ * @property {boolean} [autoHideContainer=false] Hide the container when no results match
+ * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added
+ */
+
+/**
+ * Sort by selector is a widget used for letting the user choose between different
+ * indices that contains the same data with a different order / ranking formula.
+ *
+ * For the users it is like they are selecting a new sort order.
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} $0.indices Array of objects defining the different indices to choose from.
- * @param  {string} $0.indices[i].name Name of the index to target
- * @param  {string} $0.indices[i].label Label displayed in the dropdown
- * @param  {boolean} [$0.autoHideContainer=false] Hide the container when no results match
- * @param  {Object} [$0.cssClasses] CSS classes to be added
- * @param  {string|string[]} [$0.cssClasses.root] CSS classes added to the parent <select>
- * @param  {string|string[]} [$0.cssClasses.item] CSS classes added to each <option>
+ * @param {SortByWidgetOptions} $0 Options for the sort by selector widget
  * @return {Object} widget
  */
 export default function sortBySelector({

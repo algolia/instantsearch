@@ -34,14 +34,13 @@ export default function({rootJSFile}) {
     documentation.build(rootJSFile, {}, (e, symbols) => {
       if(e) done(e);
       else {
-        console.log('after documentationjs');
-
         // transform all md like structure to html --> type: 'root' using formatMD
         const mdFormattedSymbols = formatAllMD(symbols);
 
         mapConnectors(filterSymbolsByType('Connector', mdFormattedSymbols), mdFormattedSymbols, files),
         mapWidgets(filterSymbolsByType('WidgetFactory', mdFormattedSymbols), mdFormattedSymbols, files),
 
+        console.log('after documentationjs');
         done();
       }
     });
@@ -57,7 +56,7 @@ function filterSymbolsByType(type, symbols) {
 
 function mapConnectors(connectors, symbols, files) {
   return forEach(connectors, symbol => {
-    console.log(symbol.name);
+    // console.log(symbol.name);
     const fileName = `connectors/${symbol.name}.html`;
 
     const symbolWithRelatedType = {

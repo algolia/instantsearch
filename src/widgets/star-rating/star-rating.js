@@ -71,36 +71,65 @@ starRating({
 })`;
 
 /**
- * Instantiate a list of refinements based on a rating attribute
- * The ratings must be integer values. You can still keep the precise float value in another attribute
- * to be used in the custom ranking configuration. So that the actual hits ranking is precise.
+ * @typedef {Object} StarWidgetLabels
+ * @property {string} [andUp] Label used to suffix the ratings.
+ */
+
+/**
+ * @typedef {Object} StarWidgetTemplates
+ * @property  {string|Function} [header] Header template
+ * @property  {string|Function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
+ * @property  {string|Function} [footer] Footer template
+ */
+
+/**
+ * @typedef {Object} StarWidgetCssClasses
+ * @property  {string|string[]} [root] CSS class to add to the root element
+ * @property  {string|string[]} [header] CSS class to add to the header element
+ * @property  {string|string[]} [body] CSS class to add to the body element
+ * @property  {string|string[]} [footer] CSS class to add to the footer element
+ * @property  {string|string[]} [list] CSS class to add to the list element
+ * @property  {string|string[]} [item] CSS class to add to each item element
+ * @property  {string|string[]} [link] CSS class to add to each link element
+ * @property  {string|string[]} [disabledLink] CSS class to add to each disabled link (when using the default template)
+ * @property  {string|string[]} [count] CSS class to add to each counters
+ * @property  {string|string[]} [star] CSS class to add to each star element (when using the default template)
+ * @property  {string|string[]} [emptyStar] CSS class to add to each empty star element (when using the default template)
+ * @property  {string|string[]} [active] CSS class to add to each active element
+ */
+
+/**
+ * @typedef {Object} StarWidgetCollapsibleOption
+ * @property {boolean} collapsed If set to true, the widget will be collapsed at first rendering.
+ */
+
+/**
+ * @typedef {Object} StarWidgetTransforms
+ * @property  {Function} [item] Function to change the object passed to the `item` template
+ */
+
+/**
+ * @typedef {Object} StarWidgetOptions
+ * @property {string|DOMElement} container Place where to insert the widget in your webpage.
+ * @property {string} attributeName Name of the attribute in your records that contains the ratings.
+ * @property {number} [max=5] The maximum rating value
+ * @property {StarWidgetLabels} [labels] Labels used by the default template
+ * @property {StarWidgetTemplates} [templates] Templates to use for the widget.
+ * @property {StarWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
+ * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching
+ * @property {StarWidgetCssClasses} [cssClasses] CSS classes to add
+ * @property {boolean|StarWidgetCollapsibleOption} [collapsible=false] If set to true, the widget can be collapsed. This parameter can also be
+ */
+
+/**
+ * Star rating is used for displaying grade like filters. The values are normalized within boundaries.
+ *
+ * The values must be **integers** in your records. Even though, the maximum value can be set (with `max`), the minimum is
+ * always 0.
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string} $0.attributeName Name of the attribute for filtering
- * @param  {number} [$0.max] The maximum rating value
- * @param  {Object} [$0.labels] Labels used by the default template
- * @param  {string} [$0.labels.andUp] The label suffixed after each line
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header] Header template
- * @param  {string|Function} [$0.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @param  {string|Function} [$0.templates.footer] Footer template
- * @param  {Function} [$0.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no results match
- * @param  {Object} [$0.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [$0.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [$0.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [$0.cssClasses.link] CSS class to add to each link element
- * @param  {string|string[]} [$0.cssClasses.disabledLink] CSS class to add to each disabled link (when using the default template)
- * @param  {string|string[]} [$0.cssClasses.star] CSS class to add to each star element (when using the default template)
- * @param  {string|string[]} [$0.cssClasses.emptyStar] CSS class to add to each empty star element (when using the default template)
- * @param  {string|string[]} [$0.cssClasses.active] CSS class to add to each active element
- * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object} widget
+ * @memberof instantsearch.widgets
+ * @param {StarWidgetOptions} $0 Star rating widget options.
+ * @return {Widget} A new star rating widget instance.
  */
 export default function starRating({
   container,

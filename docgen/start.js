@@ -20,6 +20,7 @@ watch([
   rootPath('docgen/assets/'),
   rootPath('docgen/src/**/*'),
   rootPath('docgen/layouts/**/*.pug'),
+  rootPath('src/**/*.js'),
 ], {
   ignoreInitial: true,
   ignored: /assets\/js\/(.*)?\.js$/,
