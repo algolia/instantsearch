@@ -20,6 +20,7 @@ describe('connectMultiRange', () => {
     const results = {
       getFacetStats: () => ({ min: 0, max: 300 }),
       getFacetByName: () => true,
+      hits: [],
     };
 
     it('provides the correct props to the component', () => {

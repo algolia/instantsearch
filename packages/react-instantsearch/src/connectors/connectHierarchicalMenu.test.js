@@ -21,6 +21,7 @@ describe('connectHierarchicalMenu', () => {
       const results = {
         getFacetValues: jest.fn(),
         getFacetByName: () => true,
+        hits: [],
       };
 
       results.getFacetValues.mockImplementationOnce(() => ({}));

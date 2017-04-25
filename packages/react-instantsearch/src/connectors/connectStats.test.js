@@ -13,7 +13,7 @@ describe('connectStats', () => {
       expect(props).toBe(null);
 
       props = getProvidedProps(null, null, {
-        results: { nbHits: 666, processingTimeMS: 1 },
+        results: { nbHits: 666, processingTimeMS: 1, hits: [] },
       });
       expect(props).toEqual({ nbHits: 666, processingTimeMS: 1 });
     });

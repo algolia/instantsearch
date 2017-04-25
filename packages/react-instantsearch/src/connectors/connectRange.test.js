@@ -38,6 +38,7 @@ describe('connectRange', () => {
           { name: '2', count: 20 },
         ],
         getFacetByName: () => true,
+        hits: [],
       };
       props = getProvidedProps({ attributeName: 'ok' }, {}, { results });
       expect(props).toEqual({
