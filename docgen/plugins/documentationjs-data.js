@@ -1,5 +1,30 @@
-import {forEach, reduce, groupBy, findIndex, find, filter} from 'lodash';
+import {forEach, reduce, groupBy, findIndex, find, filter, isArray, isObject} from 'lodash';
 import documentation from 'documentation';
+import remark from 'remark';
+import html from 'remark-html';
+
+function formatMD(ast) {
+  if (ast) {
+    return remark().use(html).stringify(ast);
+  }
+};
+
+
+function formatAllMD(symbols) {
+  if(isArray(symbols)) {
+    return symbols.map(s => formatAllMD(s));
+  } else if (isObject(symbols)) {
+    return reduce(symbols, (acc, propertyValue, propertyName) => {
+      if(propertyName === 'description' && propertyValue && propertyValue.type === 'root') {
+        acc[propertyName] = formatMD(propertyValue); 
+      } else {
+        acc[propertyName] = formatAllMD(propertyValue);
+      }
+      return acc;
+    }, {});
+  }
+  return symbols;
+}
 
 let cachedFiles;
 
@@ -11,8 +36,11 @@ export default function({rootJSFile}) {
       else {
         console.log('after documentationjs');
 
-        mapConnectors(filterSymbolsByType('Connector', symbols), symbols, files),
-        mapWidgets(filterSymbolsByType('WidgetFactory', symbols), symbols, files),
+        // transform all md like structure to html --> type: 'root' using formatMD
+        const mdFormattedSymbols = formatAllMD(symbols);
+
+        mapConnectors(filterSymbolsByType('Connector', mdFormattedSymbols), mdFormattedSymbols, files),
+        mapWidgets(filterSymbolsByType('WidgetFactory', mdFormattedSymbols), mdFormattedSymbols, files),
 
         done();
       }
