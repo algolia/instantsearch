@@ -1,6 +1,5 @@
 import {
   cleanUpValue,
-  getIndex,
   refineValue,
   getCurrentRefinementValue,
   getResults,
@@ -57,7 +56,6 @@ export default createConnector({
   displayName: 'AlgoliaPagination',
 
   getProvidedProps(props, searchState, searchResults) {
-    const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
 
     if (!results) {

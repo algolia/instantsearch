@@ -59,7 +59,7 @@
     "doctoc": "^1.2.0",
     "escape-html": "^1.0.3",
     "eslint": "^3.19.0",
-    "eslint-config-algolia": "^7.0.2",
+    "eslint-config-algolia": "^7.0.3",
     "eslint-config-prettier": "^1.5.0",
     "eslint-import-resolver-webpack": "^0.8.1",
     "eslint-plugin-import": "^2.2.0",

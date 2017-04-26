@@ -5,11 +5,12 @@
   },
   "dependencies": {
     "google-map-react": "^0.24.0",
+    "prop-types": "^15.5.8",
     "qs": "^6.3.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-instantsearch": "latest",
-    "react-instantsearch-theme-algolia": "latest"
+    "react-instantsearch": "beta",
+    "react-instantsearch-theme-algolia": "beta"
   },
   "scripts": {
     "start": "react-scripts start"
