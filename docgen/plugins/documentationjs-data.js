@@ -80,7 +80,7 @@ function mapConnectors(connectors, symbols, files) {
 
 function mapWidgets(widgets, symbols, files) {
   return forEach(widgets, symbol => {
-    console.log(symbol.name);
+    // console.log(symbol.name);
     const fileName = `widgets/${symbol.name}.html`;
 
     const symbolWithRelatedType = {
@@ -124,7 +124,12 @@ function findRelatedTypes(functionSymbol, symbols) {
       const isCustomType = currentTypeName && currentTypeName !== 'Object' && currentTypeName[0] === currentTypeName[0].toUpperCase();
       if (isCustomType) {
         const typeSymbol = find(symbols, {name: currentTypeName});
-        types = [...types, typeSymbol];
+        if(!typeSymbol) console.warn('Undefined type: ', currentTypeName);
+        else {
+          types = [...types, typeSymbol];
+          // iterate over each property to get their types
+          forEach(typeSymbol.properties, p => findParamsTypes(p));
+        }
       }
     }
   };
