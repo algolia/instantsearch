@@ -33,7 +33,7 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
 /**
  * @typedef {Object} CustomClearAllWidgetOptions
  * @property {string[]} excludeAttributes Every attributes that should not be removed when calling `refine()`.
- * @property {boolean = false} clearsQuery [default=false] Should calling `refine()` also clears the active search query.
+ * @property {boolean} clearsQuery Should calling `refine()` also clears the active search query.
  */
 
 /**
