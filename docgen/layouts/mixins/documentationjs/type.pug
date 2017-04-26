@@ -19,6 +19,8 @@ mixin type(t)
       if index < t.applications.length - 1
         |,
     | &gt;
+  else if t.type && t.type === 'StringLiteralType'
+    | "!{t.value}"
   else if t.type && t.type === 'OptionalType'
     | [
     +type(t.expression)
