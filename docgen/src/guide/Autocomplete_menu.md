@@ -8,7 +8,7 @@ navWeight: 20
 
 You can build with React InstantSearch an autocomplete menu that uses an external autocomplete component.
 
-[Read the examples](https://github.com/algolia/react-instantsearch/tree/masters/packages/react-instantsearch/examples/autocomplete)
+[Read the examples](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/autocomplete)
  showing you how to build an autocomplete menu that will:
 * display hits and facet values from the same index
 * display hits from different indices
