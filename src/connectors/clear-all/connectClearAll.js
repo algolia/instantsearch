@@ -32,24 +32,54 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
 
 /**
  * @typedef {Object} CustomClearAllWidgetOptions
- * @property {string[]} excludeAttributes Every attributes that should not be removed on `refine()`
- * @property {boolean = false} clearsQuery Should also clears the active search query
+ * @property {string[]} excludeAttributes Every attributes that should not be removed when calling `refine()`.
+ * @property {boolean} clearsQuery Should calling `refine()` also clears the active search query.
  */
 
 /**
  * @typedef {Object} ClearAllRenderingOptions
- * @property {function} refine Trigger the clear of all the currently refined values
- * @property {boolean} hasRefinements Indicate if search state is refined
- * @property {function} createURL Create a url for the next state when refinements are cleared
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached
- * @property {Object} widgetParams All original options forwarded to `renderFn`
+ * @property {function} refine Trigger the clear of all the currently refined values.
+ * @property {boolean} hasRefinements Indicate if search state is refined.
+ * @property {function} createURL Create a url for the next state when refinements are cleared.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams All original `CustomClearAllWidgetOptions` forwarded to the `renderFn`
  */
 
 /**
- * Connects business logic to clear all refinements to your rendering function (custom ClearAll CTA widget).
+ * **ClearAll** connector provides the logic to build a widget that will give the user the ability to reset the search state.
+ * This connector provides a `ClearAllRenderingOptions.refine()` function to remove the current refined facets.
  * @type {Connector}
  * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the clear all widget
  * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a clear all custom widget
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom ClearAll widget
+ * function renderFn(ClearAllRenderingOptions) {
+ *   if (ClearAllRenderingOptions.isFirstRendering === true) {
+ *     var markup = $('<button id="custom-clear-all">Clear All</button>');
+ *     containerNode.append(markup);
+ *
+ *     markup.on('click', function(event) {
+ *       event.preventDefault();
+ *       ClearAllRenderingOptions.refine();
+ *     })
+ *   }
+ *
+ *   var clearAllCTA = containerNode.find('#custom-clear-all');
+ *   clearAllCTA.attr('disabled', !ClearAllRenderingOptions.hasRefinements)
+ * };
+ *
+ * // connect `renderFn` to ClearAll logic
+ * var customClearAllWidget = instantsearch.connectors.connectClearAll(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customClearAllWidget({
+ *     containerNode: $('#custom-clear-all-container'),
+ *   })
+ * );
  */
 export default function connectClearAll(renderFn) {
   checkRendering(renderFn, usage);
