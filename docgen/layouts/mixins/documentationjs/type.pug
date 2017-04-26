@@ -32,6 +32,6 @@ mixin type(t)
         ||
   else if t.name
     if t.name !== 'Object' && t.name !== 'Array' && t.name[0] === t.name[0].toUpperCase()
-      a(href=`${navPath}#struct-${t.name}`)=t.name
+      a.typed-link(href=`${navPath}#struct-${t.name}`)=t.name
     else
       | !{t.name}

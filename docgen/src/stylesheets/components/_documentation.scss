@@ -149,7 +149,7 @@
     }
 
 
-    h2, h3, .api-entry, .css-class {
+    h2, h3, .api-entry, .css-class, .type {
       &:before {
         content: "";
         display: block;
@@ -216,6 +216,11 @@
         width: 300px !important;
       }
     }
+  }
+
+  .typed-link {
+    color: inherit;
+    text-decoration: underline;
   }
 }
 
