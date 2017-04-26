@@ -119,7 +119,6 @@ export default createConnector({
   ) {
     const { attributeName, showMore, limitMin, limitMax } = props;
     const limit = showMore ? limitMax : limitMin;
-    const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
 
     const canRefine =

@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import { getIndex, getResults } from '../core/indexUtils';
+import { getResults } from '../core/indexUtils';
 
 /**
  * connectStats connector provides the logic to build a widget that will
@@ -13,7 +13,6 @@ export default createConnector({
   displayName: 'AlgoliaStats',
 
   getProvidedProps(props, searchState, searchResults) {
-    const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
 
     if (!results) {

@@ -1,6 +1,5 @@
 import createConnector from '../core/createConnector';
 import {
-  getIndex,
   getCurrentRefinementValue,
   refineValue,
   getResults,
@@ -42,7 +41,6 @@ export default createConnector({
   displayName: 'AlgoliaInfiniteHits',
 
   getProvidedProps(props, searchState, searchResults) {
-    const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
 
     if (!results) {

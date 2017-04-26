@@ -88,7 +88,6 @@ export default createConnector({
     const hasMin = typeof min !== 'undefined';
     const hasMax = typeof max !== 'undefined';
 
-    const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
 
     if (!hasMin || !hasMax) {

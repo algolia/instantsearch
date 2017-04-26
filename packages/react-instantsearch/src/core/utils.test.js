@@ -1,6 +1,6 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 import {
   isSpecialClick,

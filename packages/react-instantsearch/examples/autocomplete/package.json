@@ -5,11 +5,12 @@
   },
   "dependencies": {
     "lodash": "^4.16.6",
-    "react": "^15.3.2",
+    "prop-types": "^15.5.8",
+    "react": "^15.5.4",
     "react-autosuggest": "^9.0.0",
-    "react-dom": "^15.3.2",
-    "react-instantsearch": "latest",
-    "react-instantsearch-theme-algolia": "latest"
+    "react-dom": "^15.5.4",
+    "react-instantsearch": "beta",
+    "react-instantsearch-theme-algolia": "beta"
   },
   "scripts": {
     "start": "react-scripts start"

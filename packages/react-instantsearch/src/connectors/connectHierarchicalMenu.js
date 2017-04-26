@@ -166,7 +166,6 @@ export default createConnector({
   getProvidedProps(props, searchState, searchResults) {
     const { showMore, limitMin, limitMax } = props;
     const id = getId(props);
-    const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
 
     const isFacetPresent =

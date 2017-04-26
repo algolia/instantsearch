@@ -42,7 +42,7 @@ class Index extends Component {
     */
     this.unregisterWidget = widgetsManager.registerWidget({
       getSearchParameters: searchParameters =>
-        this.getSearchParameters.call(this, searchParameters, this.props),
+        this.getSearchParameters(searchParameters, this.props),
       multiIndexContext: {
         targetedIndex: this.props.indexName,
       },

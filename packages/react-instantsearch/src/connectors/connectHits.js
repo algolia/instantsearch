@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import { getIndex, getResults } from '../core/indexUtils';
+import { getResults } from '../core/indexUtils';
 
 /**
  * connectHits connector provides the logic to create connected
@@ -17,7 +17,6 @@ export default createConnector({
   displayName: 'AlgoliaHits',
 
   getProvidedProps(props, searchState, searchResults) {
-    const index = getIndex(this.context);
     const results = getResults(searchResults, this.context);
     const hits = results ? results.hits : [];
 
@@ -27,7 +26,7 @@ export default createConnector({
   /* Hits needs to be considered as a widget to trigger a search if no others widgets are used.
    * To be considered as a widget you need either getSearchParameters, getMetadata or getTransitionState
    * See createConnector.js
-    * */
+   * */
   getSearchParameters(searchParameters) {
     return searchParameters;
   },
