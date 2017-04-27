@@ -52,7 +52,7 @@ const sortBy = ['count:desc', 'name:asc'];
 
 /**
  * connectMenu connector provides the logic to build a widget that will
- * give the user tha ability to choose a single value for a specific facet.
+ * give the user the ability to choose a single value for a specific facet.
  * @name connectMenu
  * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
