@@ -5,11 +5,13 @@ mixin connectorUsage(fnSymbol)
   pre.CodeMirror.cm-s-mdn-like
     code
       | <span class="cm-keyword">var</span> <span class="cm-variable">make!{widgetName}</span> <span class="cm-operator">=</span> <span class="cm-variable-2">!{fnSymbol.name}</span>(
-      |   <span class="cm-keyword">function</span> <span class="cm-variable">renderFn</span>(<span class="cm-variable">renderOpts</span>: !{`<a href='${navPath}#struct-${rendererOptionsT}'>${rendererOptionsT}</a>`}, <span class="cm-variable">isFirstRender</span>: boolean) {
+      |   <span class="cm-keyword">function</span> <span class="cm-variable">renderFn</span>(
+      |       <span class="cm-variable">renderOpts</span>: <span class="cm-def">!{`<a class='typed-link' href='${navPath}#struct-${rendererOptionsT}'>${rendererOptionsT}</a>`}</span>,
+      |       <span class="cm-variable">isFirstRender</span>: <span class="cm-def">boolean</span>) {
       |     // render the custom !{widgetName} widget
       |   }
       | )<span class="cm-operator">;</span>
       |
-      | <span class="cm-keyword">var</span> <span class="cm-variable">custom!{widgetName}</span> <span class="cm-operator">=</span> <span class="cm-variable-2">make!{widgetName}</span>(<span class="cm-variable">instanceOpts</span>: !{`<a href='${navPath}#struct-${widgetOptionT}'>${widgetOptionT}</a>`})<span class="cm-operator">;</span>
+      | <span class="cm-keyword">var</span> <span class="cm-variable">custom!{widgetName}</span> <span class="cm-operator">=</span> <span class="cm-variable-2">make!{widgetName}</span>(<span class="cm-variable">instanceOpts</span>: <span class="cm-def">!{`<a class="typed-link" href='${navPath}#struct-${widgetOptionT}'>${widgetOptionT}</a>`})</span><span class="cm-operator">;</span>
       |
       | <span class="cm-variable">instantsearch</span>.<span class="cm-property">addWidget</span>(<span class="cm-variable">custom!{widgetName}</span>)<span class="cm-operator">;</span>
