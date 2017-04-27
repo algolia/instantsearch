@@ -88,7 +88,20 @@ stats({
 
 /**
  * @typedef {Object} StatsWidgetTransforms
- * @property {function} [body=Identity] Updates the content of object passed to the `body` template
+ * @property {function(StatsBodyData):object} [body] Updates the content of object passed to the `body` template
+ */
+
+/**
+ * @typedef {Object} StatsBodyData
+ * @property {boolean} hasManyResults True if the result set has more than one result.
+ * @property {boolean} hasNoResults True if the result set has no result.
+ * @property {boolean} hasOneResult True if the result set has exactly one result.
+ * @property {number} hitsPerPage Number of hits per page.
+ * @property {number} nbHits Number of hit in the result set.
+ * @property {number} nbPages Number of pages in the result set with regard to the hitsPerPage and number of hits
+ * @property {number} page Number of the current page. First page is 0.
+ * @property {number} processingTimeMS Time taken to compute the results inside the engine.
+ * @property {string} query Text query currently used.
  */
 
 /**

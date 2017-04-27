@@ -85,16 +85,16 @@ toggle({
 
 /**
  * @typedef {Object} ToggleWidgetTransforms
- * @property  {Function} item Function to change the object passed to the `item` template
+ * @property  {function(Object):Object} item Function to change the object passed to the `item` template
  */
 
 /**
  * @typedef {Object} ToggleWidgetTemplates
- * @property  {string|Function} header Header template
- * @property  {string|Function} item Item template, provided with `name`, `count`, `isRefined`, `url` data properties
+ * @property  {string|function} header Header template
+ * @property  {string|function} item Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * count is always the number of hits that would be shown if you toggle the widget. We also provide
  * `onFacetValue` and `offFacetValue` objects with according counts.
- * @property  {string|Function} footer Footer template
+ * @property  {string|function} footer Footer template
  */
 
 /**

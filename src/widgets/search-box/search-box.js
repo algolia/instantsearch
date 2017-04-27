@@ -114,27 +114,49 @@ searchBox({
 })`;
 
 /**
- * Instantiate a searchbox
- * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string} [$0.placeholder] Input's placeholder [*]
- * @param  {boolean|Object} [$0.poweredBy=false] Define if a "powered by Algolia" link should be added near the input
- * @param  {function|string} [$0.poweredBy.template] Template used for displaying the link. Can accept a function or a Hogan string.
- * @param  {number} [$0.poweredBy.cssClasses] CSS classes to add
- * @param  {string|string[]} [$0.poweredBy.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.poweredBy.cssClasses.link] CSS class to add to the link element
- * @param  {boolean} [$0.wrapInput=true] Wrap the input in a `div.ais-search-box`
- * @param  {boolean|string} [autofocus='auto'] autofocus on the input
- * @param  {boolean} [$0.searchOnEnterKeyPressOnly=false] If set, trigger the search
+ * @typedef {Object} SearchBoxPoweredByCSSClasses
+ * @property  {string|string[]} [root] CSS class to add to the root element
+ * @property  {string|string[]} [link] CSS class to add to the link element
+ */
+
+/**
+ * @typedef {Object} SearchBoxPoweredByOption
+ * @property {function|string} template Template used for displaying the link. Can accept a function or a Hogan string.
+ * @property {SearchBoxPoweredByCSSClasses} [cssClasses] CSS classes added to the powered-by badge
+ */
+
+/**
+ * @typedef {Object} SearchBoxCSSClasses
+ * @property  {string|string[]} [cssClasses.root] CSS class to add to the
+ * wrapping `<div>` (if `wrapInput` set to `true`)
+ * @property  {string|string[]} [cssClasses.input] CSS class to add to the input
+ */
+
+/**
+ * @typedef {Object} SearchBoxWidgetOptions
+ * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property  {string} [placeholder] Input's placeholder
+ * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input
+ * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`
+ * @property  {boolean|string} [autofocus="auto"] autofocus on the input
+ * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
  * once `<Enter>` is pressed only
- * @param  {Object} [$0.cssClasses] CSS classes to add
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the
- * wrapping div (if `wrapInput` set to `true`)
- * @param  {string|string[]} [$0.cssClasses.input] CSS class to add to the input
- * @param  {function} [$0.queryHook] A function that will be called every time a new search would be done. You
+ * @property  {SearchBoxCSSClasses} [cssClasses] CSS classes to add
+ * @property  {function} [queryHook] A function that will be called every time a new search would be done. You
  * will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
- * @return {Object} widget
+ */
+
+/**
+ * The searchbox widget is used to let the user set a text based query.
+ *
+ * This is usually the  main entry point to start the search in an instantsearch context. For that
+ * reason is usually placed on top, and not hidden so that the user can start searching right
+ * away.
+ *
+ * @type {WidgetFactory}
+ * @param {SearchBoxWidgetOptions} $0 Options used to configure a searchbox widget.
+ * @return {Widget} A new instance of a searchbox instance.
  */
 export default function searchBox({
   container,

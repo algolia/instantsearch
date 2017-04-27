@@ -85,31 +85,55 @@ rangeSlider({
 `;
 
 /**
- * Instantiate a slider based on a numeric attribute.
- * This is a wrapper around [noUiSlider](http://refreshless.com/nouislider/)
- * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string} $0.attributeName Name of the attribute for faceting
- * @param  {boolean|Object} [$0.tooltips=true] Should we show tooltips or not.
+ * @typedef {Object} RangeSliderTemplates
+ * @property  {string|Function} [header=""] Header template
+ * @property  {string|Function} [footer=""] Footer template
+ */
+
+/**
+ * @typedef {Object} RangeSliderCssClasses
+ * @property  {string|string[]} [root] CSS class to add to the root element
+ * @property  {string|string[]} [header] CSS class to add to the header element
+ * @property  {string|string[]} [body] CSS class to add to the body element
+ * @property  {string|string[]} [footer] CSS class to add to the footer element
+ */
+
+/**
+ * @typedef {Object} RangeSliderTooltipOptions
+ * @property {function(number):string} format The function takes the raw value as input, and should return
+ * a string for the label that should be used for this value.
+ * `format: function(rawValue) {return '$' + Math.round(rawValue).toLocaleString()}`
+ */
+
+/**
+ * @typedef {Object} RangeSliderCollapsibleOptions
+ * @property  {boolean} [collapsed] Initially collapsed state of a collapsible widget
+ */
+
+/**
+ * @typedef {Object} RangeSliderWidgetOptions
+ * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property  {string} attributeName Name of the attribute for faceting
+ * @property  {boolean|RangeSliderTooltipOptions} [tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the raw value.
- * You can also provide
- * `tooltips: {format: function(rawValue) {return '$' + Math.round(rawValue).toLocaleString()}}`
+ * You can also provide an object with a format function as an attribute.
  * So that you can format the tooltip display value as you want
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header=''] Header template
- * @param  {string|Function} [$0.templates.footer=''] Footer template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no refinements available
- * @param  {Object} [$0.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
- * @param  {boolean|object} [$0.pips=true] Show slider pips.
- * @param  {boolean|object} [$0.step=1] Every handle move will jump that number of steps.
- * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @param  {number} [$0.min] Minimal slider value, default to automatically computed from the result set
- * @param  {number} [$0.max] Maximal slider value, defaults to automatically computed from the result set
+ * @property  {RangeSliderTemplates} [templates] Templates to use for the widget
+ * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available
+ * @property  {RangeSliderCssClasses} [cssClasses] CSS classes to add to the wrapping elements
+ * @property  {boolean} [pips=true] Show slider pips.
+ * @property  {number} [step=1] Every handle move will jump that number of steps.
+ * @property  {boolean|RangeSliderCollapsibleOptions} [collapsible=false] Hide the widget body and footer when clicking on header
+ * @property  {number} [min] Minimal slider value, default to automatically computed from the result set
+ * @property  {number} [max] Maximal slider value, defaults to automatically computed from the result set
+ */
+
+/**
+ * The range slider is a widget which provides a user-friendly way to filter the
+ * results based on a single numeric range.
+ *
+ * @type {WidgetFactory}
+ * @param {RangeSliderWidgetOptions} $0 Range slider widget options.
  * @return {Object} widget
  */
 export default function rangeSlider({
@@ -125,7 +149,7 @@ export default function rangeSlider({
   min,
   max,
   precision = 2,
-} = {}) {
+}) {
   if (!container) {
     throw new Error(usage);
   }
