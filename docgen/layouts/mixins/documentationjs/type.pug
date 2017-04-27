@@ -25,6 +25,14 @@ mixin type(t)
     | [
     +type(t.expression)
     | ]
+  else if t.type && t.type === 'RecordType'
+    |{
+    for field in t.fields
+      +type(field)
+    |}
+  else if t.type && t.type === 'FieldType'
+    | !{t.key}: 
+    +type(t.value)
   else if t.type && t.type === 'UnionType'
     each p, index in t.elements
       +type(p)
