@@ -54,7 +54,7 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @themeKey ais-HierarchicalMenu__itemItems - id representing a children
  * @themeKey ais-HierarchicalMenu__showMore - container for the show more button
  * @themeKey ais-HierarchicalMenu__noRefinement - present when there is no refinement
- * @translationKey showMore - Label value of the button which toggles the number of items
+ * @translationKey showMore - The label of the show more button. Accepts one parameter, a boolean that is true if the values are expanded
  * @example
  * import React from 'react';
 
