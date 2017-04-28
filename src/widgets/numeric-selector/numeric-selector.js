@@ -45,19 +45,32 @@ const usage = `Usage: numericSelector({
 })`;
 
 /**
+ * @typedef {Object} NumericOption
+ * @property {number} value The numerical value to refine with
+ * @property {string} label Label to display in the option
+ */
+
+/**
+ * @typedef {Object} NumericSelectorCSSClasses
+ * @property {string|string[]} [root] CSS classes added to the parent `<select>`
+ * @property {string|string[]} [item] CSS classes added to each `<option>`
+ */
+
+/**
+ * @typedef {Object} NumericSelectorWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {string} attributeName Name of the numeric attribute to use
+ * @property {NumericOption[]} options Array of objects defining the different values and labels
+ * @property {string} [operator='='] The operator to use to refine
+ * @property {boolean} [autoHideContainer=false] Hide the container when no results match
+ * @property {NumericSelectorCSSClasses} [cssClasses] CSS classes to be added
+ */
+
+/**
  * Instantiate a dropdown element to choose the number of hits to display per page
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string} $0.attributeName Name of the numeric attribute to use
- * @param  {Array} $0.options Array of objects defining the different values and labels
- * @param  {number} $0.options[i].value The numerical value to refine with
- * @param  {string} $0.options[i].label Label to display in the option
- * @param  {string} [$0.operator='='] The operator to use to refine
- * @param  {boolean} [$0.autoHideContainer=false] Hide the container when no results match
- * @param  {Object} [$0.cssClasses] CSS classes to be added
- * @param  {string|string[]} [$0.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string|string[]} [$0.cssClasses.item] CSS classes added to each `<option>`
- * @return {Object} a numeric selector widget instance
+ * @param {NumericSelectorWidgetOptions} $0 The numeric selector widget options.
+ * @return {Object} A new instance of numeric selector widget.
  */
 export default function numericSelector({
   container,

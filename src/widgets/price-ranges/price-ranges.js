@@ -85,21 +85,32 @@ priceRanges({
  */
 
 /**
- * @typedef {Object} PriceRangeWidgetOptions
- * @property  {string|DOMElement} container Valid CSS Selector as a string or DOMElement
- * @property  {string} attributeName Name of the attribute for faceting
- * @property  {Object} [templates] Templates to use for the widget
- * @property  {string|Function} [templates.item] Item template. Template data: `from`, `to` and `currency`
- * @property  {string} [currency='$'] The currency to display
- * @property  {Object} [labels] Labels to use for the widget
- * @property  {string|Function} [labels.separator] Separator label, between min and max
- * @property  {string|Function} [labels.button] Button label
- * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available
- * @property  {PriceRangeClasses} [cssClasses] CSS classes to add
- * @property  {{collapsed: boolean}|boolean} [collapsible=false] Hide the widget body and footer when clicking on header
+ * @typedef {Object} PriceRangeLabels
+ * @property  {string} [separator] Separator label, between min and max
+ * @property  {string} [button] Button label
  */
 
 /**
+ * @typedef {Object} PriceRangeTemplates
+ * @property  {string|function({from: number, to: number, currency: string})} [item] Item template. Template data: `from`, `to` and `currency`
+ */
+
+/**
+ * @typedef {Object} PriceRangeWidgetOptions
+ * @property  {string|DOMElement} container Valid CSS Selector as a string or DOMElement
+ * @property  {string} attributeName Name of the attribute for faceting
+ * @property  {PriceRangeTemplates} [templates] Templates to use for the widget
+ * @property  {string} [currency='$'] The currency to display
+ * @property  {PriceRangeLabels} [labels] Labels to use for the widget
+ * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available
+ * @property  {PriceRangeClasses} [cssClasses] CSS classes to add
+ * @property  {boolean|{collapsed: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header
+ */
+
+/**
+ * Price ranges widget let the user choose from of a set of predefined ranges. The ranges are
+ * displayed in a list.
+ *
  * @type {WidgetFactory}
  * @param {PriceRangeWidgetOptions} $0 The price ranges widget options.
  * @return {Object} widget

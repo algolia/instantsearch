@@ -75,30 +75,48 @@ pagination({
 })`;
 
 /**
- * Add a pagination menu to navigate through the results
+ * @typedef {Object} PaginationCSSClasses
+ * @property  {string|string[]} [root] CSS classes added to the parent `<ul>`
+ * @property  {string|string[]} [item] CSS classes added to each `<li>`
+ * @property  {string|string[]} [link] CSS classes added to each link
+ * @property  {string|string[]} [page] CSS classes added to page `<li>`
+ * @property  {string|string[]} [previous] CSS classes added to the previous `<li>`
+ * @property  {string|string[]} [next] CSS classes added to the next `<li>`
+ * @property  {string|string[]} [first] CSS classes added to the first `<li>`
+ * @property  {string|string[]} [last] CSS classes added to the last `<li>`
+ * @property  {string|string[]} [active] CSS classes added to the active `<li>`
+ * @property  {string|string[]} [disabled] CSS classes added to the disabled `<li>`
+ */
+
+/**
+ * @typedef {Object} PaginationLabels
+ * @property  {string} [previous] Label for the Previous link
+ * @property  {string} [next] Label for the Next link
+ * @property  {string} [first] Label for the First link
+ * @property  {string} [last] Label for the Last link
+ */
+
+/**
+ * @typedef {Object} PaginationWidgetOptions
+ * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property  {number} [maxPages] The max number of pages to browse
+ * @property  {number} [padding=3] The number of pages to display on each side of the current page
+ * @property  {string|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable
+ * @property  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
+ * @property  {boolean} [autoHideContainer=true] Hide the container when no results match
+ * @property  {PaginationLabels} [labels] Text to display in the various links (prev, next, first, last)
+ * @property  {PaginationCSSClasses} [cssClasses] CSS classes to be added
+ */
+
+/**
+ * The pagination widget allow the user to switch between pages of the results.
+ *
+ * This is an alternative to using the *show more* pattern, that allows the user
+ * only to display more items. The *show more* pattern is usually prefered
+ * because it is simpler to use, and it is more convenient in a mobile context.
+ * See the infinite hits widget, for more informations.
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {Object} [$0.labels] Text to display in the various links (prev, next, first, last)
- * @param  {string} [$0.labels.previous] Label for the Previous link
- * @param  {string} [$0.labels.next] Label for the Next link
- * @param  {string} [$0.labels.first] Label for the First link
- * @param  {string} [$0.labels.last] Label for the Last link
- * @param  {number} [$0.maxPages] The max number of pages to browse
- * @param  {number} [$0.padding=3] The number of pages to display on each side of the current page
- * @param  {string|DOMElement|boolean} [$0.scrollTo='body'] Where to scroll after a click, set to `false` to disable
- * @param  {boolean} [$0.showFirstLast=true] Define if the First and Last links should be displayed
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no results match
- * @param  {Object} [$0.cssClasses] CSS classes to be added
- * @param  {string|string[]} [$0.cssClasses.root] CSS classes added to the parent `<ul>`
- * @param  {string|string[]} [$0.cssClasses.item] CSS classes added to each `<li>`
- * @param  {string|string[]} [$0.cssClasses.link] CSS classes added to each link
- * @param  {string|string[]} [$0.cssClasses.page] CSS classes added to page `<li>`
- * @param  {string|string[]} [$0.cssClasses.previous] CSS classes added to the previous `<li>`
- * @param  {string|string[]} [$0.cssClasses.next] CSS classes added to the next `<li>`
- * @param  {string|string[]} [$0.cssClasses.first] CSS classes added to the first `<li>`
- * @param  {string|string[]} [$0.cssClasses.last] CSS classes added to the last `<li>`
- * @param  {string|string[]} [$0.cssClasses.active] CSS classes added to the active `<li>`
- * @param  {string|string[]} [$0.cssClasses.disabled] CSS classes added to the disabled `<li>`
+ * @param {PaginationWidgetOptions} $0 Options for the pagination
  * @return {Object} widget
  */
 export default function pagination({
