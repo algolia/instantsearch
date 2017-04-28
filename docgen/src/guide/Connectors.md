@@ -63,7 +63,7 @@ Provided props always follow the same pattern for ease of use:
 - `currentRefinement`: Search state representation of the connector, most of the time you do not need that
 - `refine`: Function to call to refine the search state of the connector
 - `createURL`: See the [routing guide](guide/Routing.html)
-- `items[{label, value, count}]`: Only when dealing with list based connectors
+- `items[{label, value, count, isRefined}]`: Only when dealing with list based connectors
   - `label`: Text representation of the item to be shown
   - `value`: State representation to be used when calling `refine()` or `createURL()`
   - `count`: Number of hits concerned by the facet
