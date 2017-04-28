@@ -14,7 +14,7 @@ mixin widgetUsage(fnSymbol)
         | ({ !{'\n'}
         for property in paramsType.properties
           span.cm-property='  '
-            a.typed-link(href=`${navPath}#struct-${paramsTypeName}-${property.name}`)=property.name
+            a.typed-link(href=`${navPath}#struct-${paramTypeName}-${property.name}`)=property.name
           | : 
           span.cm-def
             +type(property.type)

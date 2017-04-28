@@ -118,6 +118,10 @@ function findRelatedTypes(functionSymbol, symbols) {
       forEach(p.type.elements, e => { findParamsTypes({name: e.name, type: e}); });
     } else if (currentParamType === 'OptionalType') {
       findParamsTypes({name: p.type.expression.name, type: p.type.expression});
+    } else if (currentParamType === 'TypeApplication') {
+      const applications = p.type.applications;
+      if(applications && applications.length > 0)
+        applications.forEach(a => { findParamsTypes({name: a.name, type: a}); });
     } else if (p.name === '$0') {
       const unnamedParameterType = p.type.name;
       const typeSymbol = find(symbols, {name: unnamedParameterType});
