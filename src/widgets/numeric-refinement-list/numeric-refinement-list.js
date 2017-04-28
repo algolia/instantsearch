@@ -66,32 +66,54 @@ numericRefinementList({
 })`;
 
 /**
- * Instantiate a list of refinements based on a facet
+ * @typedef {Object} NumericRefinementListCSSClasses
+ * @property {string|string[]} [root] CSS class to add to the root element
+ * @property {string|string[]} [header] CSS class to add to the header element
+ * @property {string|string[]} [body] CSS class to add to the body element
+ * @property {string|string[]} [footer] CSS class to add to the footer element
+ * @property {string|string[]} [list] CSS class to add to the list element
+ * @property {string|string[]} [label] CSS class to add to each link element
+ * @property {string|string[]} [item] CSS class to add to each item element
+ * @property {string|string[]} [radio] CSS class to add to each radio element (when using the default template)
+ * @property {string|string[]} [active] CSS class to add to each active element
+ */
+
+/**
+ * @typedef {Object} NumericRefinementListTemplates
+ * @property {string|Function} [header] Header template
+ * @property {string|Function} [item] Item template, provided with `name`, `isRefined`, `url` data properties
+ * @property {string|Function} [footer] Footer template
+ */
+
+/**
+ * @typedef {Object} NumericRefinementListOption
+ * @property {string} name Name of the option
+ * @property {number} [start] Low bound of the option (>=)
+ * @property {number} [end] High bound of the option (<=)
+ */
+
+/**
+ * @typedef {Object} NumericRefinementListTransforms
+ * @param {function({name: string, isRefined: boolean, url: string}):object} item Transforms the data for a single item to render.
+ */
+
+/**
+ * @typedef {Object} NumericRefinementListWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {string} attributeName Name of the attribute for filtering
+ * @property {NumericRefinementListOption[]} options List of all the options
+ * @property {NumericRefinementListTemplates} [templates] Templates to use for the widget
+ * @property {NumericRefinementListTransforms} [transformData] Functions to change the data passes to the templates. Only item can be set.
+ * @property {boolean} [autoHideContainer=true] Hide the container when no results match
+ * @property {NumericRefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements
+ * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header
+ */
+
+/**
+ * The numeric refinement list is a widget that display a list of numeric filters in a list. Those numeric filters
+ * are pre-configured with creating the widget.
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string} $0.attributeName Name of the attribute for filtering
- * @param  {Object[]} $0.options List of all the options
- * @param  {string} $0.options[].name Name of the option
- * @param  {number} [$0.options[].start] Low bound of the option (>=)
- * @param  {number} [$0.options[].end] High bound of the option (<=)
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header] Header template
- * @param  {string|Function} [$0.templates.item] Item template, provided with `name`, `isRefined`, `url` data properties
- * @param  {string|Function} [$0.templates.footer] Footer template
- * @param  {Function} [$0.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no results match
- * @param  {Object} [$0.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [$0.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [$0.cssClasses.label] CSS class to add to each link element
- * @param  {string|string[]} [$0.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [$0.cssClasses.radio] CSS class to add to each radio element (when using the default template)
- * @param  {string|string[]} [$0.cssClasses.active] CSS class to add to each active element
- * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
+ * @param {NumericRefinementListWidgetOptions} $0 The numeric refinement list widget options
  * @return {Object} Returns a widget.
  */
 export default function numericRefinementList({
@@ -103,7 +125,7 @@ export default function numericRefinementList({
   collapsible = false,
   transformData,
   autoHideContainer = true,
-}) {
+} = {}) {
   if (!container || !attributeName || !options) {
     throw new Error(usage);
   }

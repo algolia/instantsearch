@@ -79,37 +79,62 @@ menu({
 })`;
 
 /**
+ * @typedef {Object} MenuCSSClasses
+ * @property {string|string[]} [root] CSS class to add to the root element
+ * @property {string|string[]} [header] CSS class to add to the header element
+ * @property {string|string[]} [body] CSS class to add to the body element
+ * @property {string|string[]} [footer] CSS class to add to the footer element
+ * @property {string|string[]} [list] CSS class to add to the list element
+ * @property {string|string[]} [item] CSS class to add to each item element
+ * @property {string|string[]} [active] CSS class to add to each active element
+ * @property {string|string[]} [link] CSS class to add to each link (when using the default template)
+ * @property {string|string[]} [count] CSS class to add to each count element (when using the default template)
+ */
+
+/**
+ * @typedef {Object} MenuTemplates
+ * @property {string|Function} [header] Header template
+ * @property {string|Function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
+ * @property {string|Function} [footer] Footer template
+ */
+
+/**
+ * @typedef {Object} MenuShowMoreOptions
+ * @property {MenuShowMoreTemplates} [templates] Templates to use for showMore
+ * @property {object} [limit] Max number of facets values to display when showMore is clicked
+ */
+
+/**
+ * @typedef {Object} MenuShowMoreTemplates
+ * @property {string} [active] Template used when showMore was clicked
+ * @property {string} [inactive] Template used when showMore not clicked
+ */
+
+/**
+ * @typedef {Object} MenuTransforms
+ * @property {function} [item] Method to change the object passed to the `item` template
+ */
+
+/**
+ * @typedef {Object} MenuWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {string} attributeName Name of the attribute for faceting
+ * @property {string[]|function} [sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ * @property {string} [limit=10] How many facets values to retrieve [*]
+ * @property {boolean|MenuShowMoreOptions} [showMore=false] Limit the number of results and display a showMore button
+ * @property {MenuShowMoreTemplates} [templates] Templates to use for the widget
+ * @property {MenuTransforms} [transformData] Set of functions to update the data before passing them to the templates
+ * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu
+ * @property {MenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements
+ * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header
+ */
+
+/**
  * Create a menu out of a facet
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string} $0.attributeName Name of the attribute for faceting
- * @param  {string[]|Function} [$0.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
- * @param  {string} [$0.limit=10] How many facets values to retrieve [*]
- * @param  {object|boolean} [$0.showMore=false] Limit the number of results and display a showMore button
- * @param  {object} [$0.showMore.templates] Templates to use for showMore
- * @param  {object} [$0.showMore.templates.active] Template used when showMore was clicked
- * @param  {object} [$0.showMore.templates.inactive] Template used when showMore not clicked
- * @param  {object} [$0.showMore.limit] Max number of facets values to display when showMore is clicked
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header] Header template
- * @param  {string|Function} [$0.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @param  {string|Function} [$0.templates.footer] Footer template
- * @param  {Function} [$0.transformData.item] Method to change the object passed to the `item` template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when there are no items in the menu
- * @param  {Object} [$0.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [$0.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [$0.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [$0.cssClasses.active] CSS class to add to each active element
- * @param  {string|string[]} [$0.cssClasses.link] CSS class to add to each link (when using the default template)
- * @param  {string|string[]} [$0.cssClasses.count] CSS class to add to each count element (when using the default template)
- * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object} Widget instance
+ * @param {MenuWidgetOptions} $0 The menu widget options.
+ * @return {Widget} Creates a new instance of the menu widget.
  */
 export default function menu({
   container,

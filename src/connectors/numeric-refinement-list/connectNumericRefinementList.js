@@ -23,7 +23,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
- * @typedef {Object} NumericRefinementListWidgetOptions
+ * @typedef {Object} CustomNumericRefinementListWidgetOptions
  * @property {string} attributeName Name of the attribute for filtering
  * @property {Object[]} options List of all the options
  * @property {string} options[].name Name of the option
@@ -52,7 +52,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @function connectNumericRefinementList
  * @type {Connector}
  * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn function that render the numeric refinement list
- * @return {function(NumericRefinementListWidgetOptions)} a custom numeric refinement list widget factory
+ * @return {function(CustomNumericRefinementListWidgetOptions)} a custom numeric refinement list widget factory
  */
 export default function connectNumericRefinementList(renderFn) {
   checkRendering(renderFn, usage);

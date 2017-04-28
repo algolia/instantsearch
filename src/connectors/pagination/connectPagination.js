@@ -20,7 +20,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
- * @typedef CustomPaginationWidgetOptions
+ * @typedef {Object} CustomPaginationWidgetOptions
  * @property {number} [maxPages] The max number of pages to browse
  */
 
