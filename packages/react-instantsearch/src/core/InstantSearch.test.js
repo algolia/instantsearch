@@ -119,6 +119,27 @@ describe('InstantSearch', () => {
     });
   });
 
+  it('updates Algolia client when new one is given in props', () => {
+    const ism = {
+      updateClient: jest.fn(),
+    };
+
+    createInstantSearchManager.mockImplementation(() => ism);
+
+    const wrapper = mount(
+      <InstantSearch {...DEFAULT_PROPS}>
+        <div />
+      </InstantSearch>
+    );
+
+    expect(ism.updateClient.mock.calls.length).toBe(0);
+    wrapper.setProps({
+      ...DEFAULT_PROPS,
+      algoliaClient: {},
+    });
+    expect(ism.updateClient.mock.calls.length).toBe(1);
+  });
+
   it('works as a controlled input', () => {
     const ism = {
       transitionState: searchState => ({ ...searchState, transitioned: true }),
