@@ -83,10 +83,13 @@ function mapWidgets(widgets, symbols, files) {
     // console.log(symbol.name);
     const fileName = `widgets/${symbol.name}.html`;
 
+    const relatedTypes = findRelatedTypes(symbol, symbols);
+
     const symbolWithRelatedType = {
       ...symbol,
-      relatedTypes: findRelatedTypes(symbol, symbols),
+      relatedTypes,
     };
+
 
     files[fileName] = {
       mode: '0764',

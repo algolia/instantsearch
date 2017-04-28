@@ -189,7 +189,7 @@ export default function refinementList({
   autoHideContainer = true,
   showMore = false,
   searchForFacetValues = false,
-}) {
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

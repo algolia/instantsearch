@@ -148,7 +148,7 @@ export default function toggle({
   autoHideContainer = true,
   collapsible = false,
   values: userValues = {on: true, off: undefined},
-}) {
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

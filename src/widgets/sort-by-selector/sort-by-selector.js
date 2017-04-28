@@ -76,7 +76,7 @@ export default function sortBySelector({
   indices,
   cssClasses: userCssClasses = {},
   autoHideContainer = false,
-}) {
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

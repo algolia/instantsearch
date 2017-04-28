@@ -167,7 +167,7 @@ export default function searchBox({
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
   queryHook,
-}) {
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

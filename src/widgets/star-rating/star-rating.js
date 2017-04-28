@@ -141,7 +141,7 @@ export default function starRating({
   collapsible = false,
   transformData,
   autoHideContainer = true,
-}) {
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

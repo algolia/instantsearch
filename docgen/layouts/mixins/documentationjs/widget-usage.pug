@@ -1,7 +1,9 @@
 mixin widgetUsage(fnSymbol)
-  - const paramsTypeName = fnSymbol.params[0].type.name;
-  if paramsTypeName && paramsTypeName !== 'Object'
-    - const paramsType = fnSymbol.relatedTypes && fnSymbol.relatedTypes.find(t => t.name === paramsTypeName);
+  - const paramTag = fnSymbol.tags.find(tag => tag.title === 'param' && tag.name === '$0');
+  if paramTag && paramTag.type
+    - const paramTypeName = paramTag.type.name;
+    - const paramsType = fnSymbol.relatedTypes && fnSymbol.relatedTypes.find(t => t.name === paramTypeName);
+    - if(!paramsType) console.log(fnSymbol.relatedTypes.map(t => t.name));
     - const properties = '\n' + paramsType.properties.map(p => `  ${p.name}: ${p.type.name}`).join(',\n');
     pre.CodeMirror.cm-s-mdn-like
       code

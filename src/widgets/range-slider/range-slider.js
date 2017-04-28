@@ -149,7 +149,7 @@ export default function rangeSlider({
   min,
   max,
   precision = 2,
-}) {
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

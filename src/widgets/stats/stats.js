@@ -130,7 +130,7 @@ export default function stats({
   collapsible = false,
   transformData,
   templates = defaultTemplates,
-}) {
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }
