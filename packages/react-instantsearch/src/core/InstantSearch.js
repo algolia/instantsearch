@@ -68,6 +68,10 @@ class InstantSearch extends Component {
     if (this.props.indexName !== nextProps.indexName) {
       this.aisManager.updateIndex(nextProps.indexName);
     }
+    
+    if (this.props.algoliaClient !== nextProps.algoliaClient) {
+      this.aisManager.updateClient(nextProps.algoliaClient)
+    }
 
     if (this.isControlled) {
       this.aisManager.onExternalStateUpdate(nextProps.searchState);
