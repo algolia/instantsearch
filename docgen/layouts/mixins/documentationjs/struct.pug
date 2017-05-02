@@ -4,7 +4,7 @@ include type.pug
 mixin struct(t)
   h3(id=`struct-${t.name}`)=t.name
     a.anchor(href=`${navPath}#struct-${t.name}`)
-  ul
+  ul.struct-def
     if t.properties
       each property in t.properties
         li.type(id=`struct-${t.name}-${property.name}`)
@@ -12,5 +12,4 @@ mixin struct(t)
           a.anchor(href=`${navPath}#param-${t.name}-${property.name}`)
           code
             +type(property.type)
-          br
           +description(property.description)
