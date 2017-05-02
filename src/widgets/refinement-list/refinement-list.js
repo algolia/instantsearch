@@ -116,9 +116,20 @@ refinementList({
 
 /**
  * @typedef {Object} RefinementListTemplates
- * @property  {string|Function} [header] Header template, provided with `refinedFacetsCount` data property
- * @property  {string|Function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @property  {string|Function} [footer] Footer template
+ * @property  {string|function(object):string} [header] Header template, provided with `refinedFacetsCount` data property
+ * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties
+ * @property  {string|function} [footer] Footer template
+ */
+
+/**
+ * @typedef {Object} RefinementListItemData
+ * @property {number} count The number of occurences of the facet in the result set.
+ * @property {boolean} isRefined True if the value is selected.
+ * @property {string} label The label to display.
+ * @property {string} value The value used for refining.
+ * @property {string} highlighted The label highlighted (when using search for facet values)
+ * @property {string} url The url with this refinement selected.
+ * @property {object} cssClasses Object containing all the classes computed for the item.
  */
 
 /**
