@@ -62,7 +62,7 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * var $ = window.$;
  * var instantsearch = window.instantsearch;
  *
- * // custom `renderFn` to render the custom NumericRefinementList widget
+ * // custom `renderFn` to render the custom RefinementList widget
  * function renderFn(RefinementListRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {
  *     RefinementListRenderingOptions.widgetParams.containerNode
@@ -102,7 +102,7 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * // mount widget on the page
  * search.addWidget(
  *   customRefinementList({
- *     containerNode: $('#custom-clear-all-container'),
+ *     containerNode: $('#custom-refinement-list-container'),
  *     attributeName: 'categories',
  *   })
  * );
