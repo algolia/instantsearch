@@ -26,71 +26,71 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomMenuWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
- * @property {number} [limit = 10] How many facets values to retrieve [*]
- * @property {number} [showMoreLimit] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option
+ * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {number} [limit = 10] How many facets values to retrieve [*].
+ * @property {number} [showMoreLimit] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
  */
 
 /**
  * @typedef {Object} MenuRenderingOptions
- * @property {Object[]} items the elements that can be refined for the current search results
- * @property {function} createURL creates the URL for a single item name in the list
- * @property {function} refine filter the search to item.name value
- * @property {boolean} canRefine true if refinement can be applied
- * @property {Object} widgetParams all original options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
- * @property {boolean} isShowingMore is displaying all the results
- * @property {function} toggleShowMore switch between show less and more
+ * @property {Object[]} items The elements that can be refined for the current search results.
+ * @property {function} createURL Creates the URL for a single item name in the list.
+ * @property {function(item)} refine Filter the search to item value.
+ * @property {boolean} canRefine True if refinement can be applied.
+ * @property {Object} widgetParams All original `CustomMenuWidgetOptions` forwarded to the `renderFn`.
+ * @property {InstantSearch} instantSearchInstance The instance of instantsearch on which the widget is attached.
+ * @property {boolean} isShowingMore Does the menu is displaying all the results.
+ * @property {function} toggleShowMore Action to call for switching between show less and more.
  */
 
  /**
-  * Connects a rendering function with the menu business logic.
+  * **Menu** connector provides the logic to build a widget that will give the user the ability to choose a single value for a specific facet.
   * @type {Connector}
-  * @param {function(MenuRenderingOptions, boolean)} renderFn function that renders the menu widget
-  * @return {function(CustomMenuWidgetOptions):Widget} a widget factory for menu widget
+  * @param {function(MenuRenderingOptions, boolean)} renderFn Rrenders the custom menu widget.
+  * @return {function(CustomMenuWidgetOptions)} Widget factory for custom menu widget.
   * @example
-  * import instantsearch from '../../../../index.js';
-  * 
-  * export default instantsearch.connectors.connectMenu(customMenuRendering);
-  * function customMenuRendering(opts, isFirstRendering) {
-  *   const container = opts.widgetParams.containerNode;
-  * 
-  *   let input;
-  *   if (isFirstRendering) {
-  *     input = $('<select></select>');
-  *     input.refine = opts.refine;
-  *     input.on('change', e => {
-  *       input.refine(e.target.value);
-  *     });
-  *     container.html('<div class="ais-toggle--header facet-title ais-header">Custom categories</div>')
-  *              .append(input);
-  *   } else {
-  *     input = container.find('select');
-  *   }
-  * 
-  *   input.refine = opts.refine;
-  * 
-  *   const facetValues = opts.items.slice(0, opts.widgetParams.limit || 10);
-  *   const facetOptions = facetValues.map(f => f.isRefined ?
-  *       $(`<option value='${f.path}' selected>${f.name}</option>`) :
-  *       $(`<option value='${f.path}'>${f.name}</option>`)
-  *   );
-  *   const isValueSelected = facetValues.find(f => f.isRefined);
-  * 
-  *   const noValue = $(`<option value='' selected='${!isValueSelected}'></option>`);
-  * 
-  *   input.html('');
-  * 
-  *   input.append(noValue);
-  *   if (facetOptions.length > 0) {
-  *     facetOptions.forEach(o => {
-  *       input.append(o);
-  *     });
-  *   }
+  * var $ = window.$;
+  * var instantsearch = window.instantsearch;
+  *
+  * // custom `renderFn` to render the custom ClearAll widget
+  * function renderFn(MenuRenderingOptions, isFirstRendering) {
+  *  if (isFirstRendering) {
+  *    MenuRenderingOptions.widgetParams.containerNode
+  *      .html('<select></select');
+  *
+  *    MenuRenderingOptions.widgetParams.containerNode
+  *      .find('select')
+  *      .on('change', function(event) {
+  *        MenuRenderingOptions.refine(event.target.value);
+  *      });
+  *  }
+  *
+  *  var options = MenuRenderingOptions.items.map(function(item) {
+  *    return item.isRefined
+  *      ? '<option value="' + item.value '" selected>' + item.label + '</option>'
+  *      : '<option value="' + item.value '">' + item.label + '</option>';
+  *  });
+  *
+  *  MenuRenderingOptions.widgetParams.containerNode
+  *    .find('select')
+  *    .html(options);
+  *
   * }
   *
+  * // connect `renderFn` to Hits logic
+  * var customMenu = instantsearch.connectors.connectMenu(renderFn);
+  *
+  * // mount widget on the page
+  * search.addWidget(
+  *   customMenu({
+  *     containerNode: $('#custom-menu-container'),
+  *     attributeName: 'categories',
+  *     limit: 3,
+  *   })
+  * );
+}
   */
 export default function connectMenu(renderFn) {
   checkRendering(renderFn, usage);
