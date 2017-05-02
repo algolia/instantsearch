@@ -51,7 +51,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function(item)} createURL Creates an individual url where a single refinement is cleared.
  * @property {Refinements[]} refinements All the current refinements.
  * @property {InstantsSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
- * @property {Object} widgetParams All original `CurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomCurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
@@ -63,7 +63,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
- * @typedef {Object} CurrentRefinedValuesWidgetOptions
+ * @typedef {Object} CustomCurrentRefinedValuesWidgetOptions
  * @property {CurrentRefinedValuesAttributes[]} attributes specification for the display of refinements per attribute
  * @property {boolean} onlyListedAttributes limit the displayed refinement to the list specified
  * @property {boolean} [clearsQuery=false] also clears the active search query
@@ -74,7 +74,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * This provides a `CurrentRefinedValuesRenderingOptions.refine(item)` function to remove the selected refinement.
  * @type {Connector}
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
- * @return {function(CurrentRefinedValuesWidgetOptions): CurrentRefinedValuesWidget} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
+ * @return {function(CurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
  * @example
  * var $ = window.$;
  * var instantsearch = window.instantsearch;

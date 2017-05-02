@@ -55,28 +55,43 @@ clearAll({
   [ collapsible=false ],
   [ excludeAttributes=[] ]
 })`;
+/**
+ * @typedef {Object} ClearAllCSSClasses
+ * @property {string|string[]} [root] CSS class to add to the root element
+ * @property {string|string[]} [header] CSS class to add to the header element
+ * @property {string|string[]} [body] CSS class to add to the body element
+ * @property {string|string[]} [footer] CSS class to add to the footer element
+ * @property {string|string[]} [link] CSS class to add to the link element
+ */
 
 /**
- * Allows to clear all refinements at once
+ * @typedef {Object} ClearAllTemplates
+ * @property {string|function(object):string} [header] Header template
+ * @property {string|function(object):string} [link] Link template
+ * @property {string|function(object):string} [footer] Footer template
+ */
+
+/**
+ * @typedef {Object} ClearAllWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {string[]} [excludeAttributes] List of attributes names to exclude from clear actions
+ * @property {ClearAllTemplates} [templates] Templates to use for the widget
+ * @property {boolean} [autoHideContainer=true] Hide the container when there are no refinements to clear.
+ * @property {ClearAllCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
+ * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
+ * property is `true`, then the widget is hidden during the first rendering.
+ * @property {boolean} [clearsQuery = false] If true, the widget will also clear the query.
+ */
+
+/**
+ * The clear all widget gives the user the ability to clear all the refinements currently
+ * applied on the results. It is equivalent to the reset button of a form.
  *
+ * The current refined values widget can display a button that has the same behavior.
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string[]} [$0.excludeAttributes] List of attributes names to exclude from clear actions
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header] Header template
- * @param  {string|Function} [$0.templates.link] Link template
- * @param  {string|Function} [$0.templates.footer] Footer template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when there's no refinement to clear
- * @param  {Object} [$0.cssClasses] CSS classes to be added
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [$0.cssClasses.link] CSS class to add to the link element
- * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @param  {boolean} [$0.clearsQuery = false] also clears the active search query
- * @returns {Object} widget
+ * @param {ClearAllWidgetOptions} $0 The clear all widget options.
+ * @returns {Object} A new instance of the clear all widget.
  */
 export default function clearAll({
   container,

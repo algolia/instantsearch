@@ -56,22 +56,43 @@ hits({
 })`;
 
 /**
- * Display the list of results (hits) from the current search
+ * @typedef {Object} HitsCSSClasses
+ * @property {string|string[]} [root] CSS class to add to the wrapping element.
+ * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property {string|string[]} [item] CSS class to add to each result.
+ */
+
+/**
+ * @typedef {Object} HitsTemplates
+ * @property {string|function(object):string} [empty=''] Template to use when there are no results.
+ * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record.
+ * @property {string|function(object):string} [allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
+ */
+
+/**
+ * @typedef {Object} HitsTransforms
+ * @property {function(object):object} [empty] Method used to change the object passed to the `empty` template.
+ * @property {function(object):object} [item] Method used to change the object passed to the `item` template.
+ * @property {function(object):object} [allItems] Method used to change the object passed to the `allItems` template.
+ */
+
+/**
+ * @typedef {Object} HitsWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {HitsTemplates} [templates] Templates to use for the widget.
+ * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
+ * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
+ */
+
+/**
+ * Display the list of results (hits) from the current search.
+ *
+ * This is a traditional display of the hits. It has to be implemented
+ * together with a pagination widget, to let the user browse the results
+ * beyond the first page.
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.empty=''] Template to use when there are no results.
- * @param  {string|Function} [$0.templates.item=''] Template to use for each result. This template will receive an object containing a single record.
- * @param  {string|Function} [$0.templates.allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
- * @param  {Object} [$0.transformData] Method to change the object passed to the templates
- * @param  {Function} [$0.transformData.empty] Method used to change the object passed to the `empty` template
- * @param  {Function} [$0.transformData.item] Method used to change the object passed to the `item` template
- * @param  {Function} [$0.transformData.allItems] Method used to change the object passed to the `allItems` template
- * @param  {Object} [$0.cssClasses] CSS classes to add
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the wrapping element
- * @param  {string|string[]} [$0.cssClasses.empty] CSS class to add to the wrapping element when no results
- * @param  {string|string[]} [$0.cssClasses.item] CSS class to add to each result
- * @return {Object} widget instance
+ * @param {HitsWidgetOptions} $0 Options of the hits widget.
+ * @return {Object} A new instance of hits widget.
  */
 export default function hits({
   container,
