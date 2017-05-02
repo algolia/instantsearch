@@ -93,7 +93,11 @@ infiniteHits({
  */
 
 /**
- * Display the list of results (hits) from the current search
+ * Display the list of results (hits) from the current search.
+ *
+ * This widget uses the infinite hits pattern. It contains a button that
+ * will let the user load more results to the list. This is particularly
+ * handy on mobile implementations.
  * @type {WidgetFactory}
  * @param {InfiniteHitsWidgetOptions} $0 The options for the infinite hits widget.
  * @return {Object} widget

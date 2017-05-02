@@ -16,7 +16,7 @@ function formatAllMD(symbols) {
   } else if (isObject(symbols)) {
     return reduce(symbols, (acc, propertyValue, propertyName) => {
       if(propertyName === 'description' && propertyValue && propertyValue.type === 'root') {
-        acc[propertyName] = formatMD(propertyValue); 
+        acc[propertyName] = formatMD(propertyValue);
       } else {
         acc[propertyName] = formatAllMD(propertyValue);
       }
