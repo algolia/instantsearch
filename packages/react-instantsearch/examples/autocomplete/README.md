@@ -3,8 +3,8 @@ It uses [react-autosuggest](https://github.com/moroshko/react-autosuggest) as th
 
 You will find two use cases:
 
-* How to build an autocomplete displaying hits and facet values from the same index.
 * How to build an autocomplete displaying hits from different indices
+* How to build @-mentions using [ant](https://ant.design) as the external component
 
 To start the example:
 

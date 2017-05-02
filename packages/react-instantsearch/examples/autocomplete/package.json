@@ -4,6 +4,7 @@
     "react-scripts": "^0.9.2"
   },
   "dependencies": {
+    "antd": "^2.9.3",
     "lodash": "^4.16.6",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
