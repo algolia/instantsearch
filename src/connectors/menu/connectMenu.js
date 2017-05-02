@@ -47,9 +47,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * **Menu** connector provides the logic to build a widget that will give the user the ability to choose a single value for a specific facet.
+  * This connector provides a `MenuRenderingOptions.toggleShowMore()` function to display more or less items.
   * @type {Connector}
-  * @param {function(MenuRenderingOptions, boolean)} renderFn Rrenders the custom menu widget.
-  * @return {function(CustomMenuWidgetOptions)} Widget factory for custom menu widget.
+  * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
+  * @return {function(CustomMenuWidgetOptions)} Re-usable widget factory for a custom **Menu** widget.
   * @example
   * var $ = window.$;
   * var instantsearch = window.instantsearch;
@@ -79,7 +80,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
   *
   * }
   *
-  * // connect `renderFn` to Hits logic
+  * // connect `renderFn` to Menu logic
   * var customMenu = instantsearch.connectors.connectMenu(renderFn);
   *
   * // mount widget on the page

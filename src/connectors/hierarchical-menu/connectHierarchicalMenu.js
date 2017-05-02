@@ -46,13 +46,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
  /**
-  * **HierarchicalMenu** connector provides the logic to build a widget that will give the user the ability to explore a tree-like structure.
+  * **HierarchicalMenu** connector provides the logic to build a custom widget that will give the user the ability to explore a tree-like structure.
   * This is commonly used for multi-level categorization of products on e-commerce websites. From a UX point of view, we suggest not displaying more than two levels deep.
   *
   * There's a complete example available on how to write a custom **HierarchicalMenu**: [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/feat/instantsearch.js/v2/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
   * @type {Connector}
-  * @param {function(HierarchicalMenuRenderingOptions)} renderFn function that renders the hierarchical menu widget
-  * @return {function(CustomHierarchicalMenuWidgetOptions)} a custom hierarchical menu widget factory
+  * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
+  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
   */
 export default function connectHierarchicalMenu(renderFn) {
   checkRendering(renderFn, usage);
