@@ -94,7 +94,6 @@ export default search => {
         empty,
         allItems,
       },
-      hitsPerPage: 24,
     })
   );
 
@@ -105,7 +104,6 @@ export default search => {
         empty,
         item,
       },
-      hitsPerPage: 24,
     })
   );
 
@@ -116,7 +114,6 @@ export default search => {
         empty,
         item,
       },
-      hitsPerPage: 3,
       showMoreLabel: 'Show more',
     })
   );

@@ -60,7 +60,6 @@ infiniteHits({
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty} ],
   [ transformData.{empty,item} | transformData.{empty} ],
-  [ hitsPerPage=20 ]
 })`;
 
 /**
@@ -85,7 +84,6 @@ infiniteHits({
 /**
  * @typedef {Object} InfiniteHitsWidgetOptions
  * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property  {number} [hitsPerPage=20] The number of hits to display per page
  * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget
  * @property  {string} [showMoreLabel="Show more results"] label used on the show more button
  * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates
@@ -108,7 +106,6 @@ export default function infiniteHits({
   showMoreLabel = 'Show more results',
   templates = defaultTemplates,
   transformData,
-  hitsPerPage = 20,
 } = {}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -133,7 +130,7 @@ export default function infiniteHits({
 
   try {
     const makeInfiniteHits = connectInfiniteHits(specializedRenderer);
-    return makeInfiniteHits({hitsPerPage});
+    return makeInfiniteHits();
   } catch (e) {
     throw new Error(usage);
   }

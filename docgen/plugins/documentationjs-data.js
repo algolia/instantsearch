@@ -110,7 +110,7 @@ function findRelatedTypes(functionSymbol, symbols) {
   if(!functionSymbol) return types;
 
   const findParamsTypes = p => {
-    if (!p || !p.type || !p.type.type) return;
+    if (!p || !p.type) return;
     const currentParamType = p.type.type;
     if (currentParamType === 'FunctionType') {
       types = [...types, ...findRelatedTypes(p.type, symbols)]

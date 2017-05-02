@@ -15,6 +15,8 @@ describe('connectHits', () => {
     const makeWidget = connectHits(rendering);
     const widget = makeWidget();
 
+    expect(widget.getConfiguration).toEqual(undefined);
+
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 

@@ -42,8 +42,8 @@ describe('infiniteHits()', () => {
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });
 
-  it('configures hitsPerPage', () => {
-    expect(widget.getConfiguration()).toEqual({hitsPerPage: 20});
+  it('Does not have a specific configuration', () => {
+    expect(widget.getConfiguration).toBe(undefined);
   });
 
   it('calls twice ReactDOM.render(<Hits props />, container)', () => {
