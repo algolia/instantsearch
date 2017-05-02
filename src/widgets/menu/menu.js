@@ -101,7 +101,7 @@ menu({
 /**
  * @typedef {Object} MenuShowMoreOptions
  * @property {MenuShowMoreTemplates} [templates] Templates to use for showMore
- * @property {object} [limit] Max number of facets values to display when showMore is clicked
+ * @property {number} [limit] Max number of facets values to display when showMore is clicked
  */
 
 /**

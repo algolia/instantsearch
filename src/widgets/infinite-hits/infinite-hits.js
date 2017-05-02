@@ -64,21 +64,38 @@ infiniteHits({
 })`;
 
 /**
+ * @typedef {Object} InfiniteHitsTemplates
+ * @property  {string|function} [empty=""] Template used when there are no results.
+ * @property  {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
+ */
+
+/**
+ * @typedef {Object} InfiniteHitsTransforms
+ * @property  {function} [empty] Method used to change the object passed to the `empty` template.
+ * @property  {function} [item] Method used to change the object passed to the `item` template.
+ */
+
+/**
+ * @typedef {object} InfiniteHitsCSSClasses
+ * @property  {string|string[]} [root] CSS class to add to the wrapping element.
+ * @property  {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property  {string|string[]} [item] CSS class to add to each result.
+ */
+
+/**
+ * @typedef {Object} InfiniteHitsWidgetOptions
+ * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property  {number} [hitsPerPage=20] The number of hits to display per page
+ * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget
+ * @property  {string} [showMoreLabel="Show more results"] label used on the show more button
+ * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates
+ * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add
+ */
+
+/**
  * Display the list of results (hits) from the current search
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {number} [$0.hitsPerPage=20] The number of hits to display per page [*]
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.empty=""] Template to use when there are no results.
- * @param  {string|Function} [$0.templates.item=""] Template to use for each result. This template will receive an object containing a single record.
- * @param  {string} [$0.showMoreLabel="Show more results"] label used on the show more button
- * @param  {Object} [$0.transformData] Method to change the object passed to the templates
- * @param  {Function} [$0.transformData.empty] Method used to change the object passed to the `empty` template
- * @param  {Function} [$0.transformData.item] Method used to change the object passed to the `item` template
- * @param  {Object} [$0.cssClasses] CSS classes to add
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the wrapping element
- * @param  {string|string[]} [$0.cssClasses.empty] CSS class to add to the wrapping element when no results
- * @param  {string|string[]} [$0.cssClasses.item] CSS class to add to each result
+ * @param {InfiniteHitsWidgetOptions} $0 The options for the infinite hits widget.
  * @return {Object} widget
  */
 export default function infiniteHits({
@@ -88,7 +105,7 @@ export default function infiniteHits({
   templates = defaultTemplates,
   transformData,
   hitsPerPage = 20,
-}) {
+} = {}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
   }
