@@ -17,13 +17,12 @@ describe('connectInfiniteHits', () => {
       hitsPerPage: 10,
     });
 
-    const config = widget.getConfiguration({});
-    expect(config).toEqual({hitsPerPage: 10});
+    expect(widget.getConfiguration).toEqual(undefined);
 
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper(fakeClient, '');
     helper.search = sinon.stub();
 
     widget.init({

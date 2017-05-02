@@ -54,7 +54,6 @@ export default search => {
   search.addWidget(
     jqueryWidgets.hits({
       containerNode: window.$('#hits'),
-      hitsPerPage: 3,
     })
   );
 
@@ -147,7 +146,6 @@ export default search => {
   search.addWidget(
     jqueryWidgets.infiniteHits({
       containerNode: window.$('#infinite-hits'),
-      hitsPerPage: 3,
     })
   );
 
