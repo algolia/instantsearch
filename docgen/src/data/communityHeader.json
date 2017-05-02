@@ -2,10 +2,10 @@
   "menu": {
     "project": {
       "view": "links",
-      "label": "InstantSearch Android",
+      "label": "InstantSearch.js",
       "logo": "",
       "caret": "",
-      "url":"https://community.algolia.com/instantsearch-android",
+      "url":"https://community.algolia.com/instantsearch.js",
       "dropdownItems": []
     }
   },
@@ -58,7 +58,7 @@
   },{
     "name": "Github",
     "image": "<img src='assets/img/github-icon.svg'/>",
-    "url": "https://github.com/algolia/instantsearch-android"
+    "url": "https://github.com/algolia/instantsearch.js"
   }],
   "mobileMenu": [{
     "name": "Getting Started",

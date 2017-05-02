@@ -17,11 +17,9 @@ block content
     +description(jsdoc.description)
   h2#usage Usage
   +widgetUsage(jsdoc)
-  h2#structure Details
-    a.anchor(href=`${navPath}#return`)
-    each t in jsdoc.relatedTypes
-      if t
-        +struct(t)
+  each t in jsdoc.relatedTypes
+    if t
+      +struct(t)
   if jsdoc.examples
     h2#example Example
       a.anchor(href=`${navPath}#example`)
