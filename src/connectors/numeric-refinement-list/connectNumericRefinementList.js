@@ -23,36 +23,96 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
+ * @typedef {Object} Options
+ * @property {string} name Name of the option.
+ * @property {number} start Low bound of the option (>=).
+ * @property {number} end High bound of the option (<=).
+ */
+
+/**
+ * @typedef {Object} Item
+ * @property {string} name Name of the option.
+ * @property {number} start Low bound of the option (>=).
+ * @property {number} end High bound of the option (<=).
+ * @property {boolean} isRefined True if the value is selected.
+ * @property {string} attributeName The name of the attribute in the records.
+ */
+
+/**
  * @typedef {Object} CustomNumericRefinementListWidgetOptions
- * @property {string} attributeName Name of the attribute for filtering
- * @property {Object[]} options List of all the options
- * @property {string} options[].name Name of the option
- * @property {number} [options[].start] Low bound of the option (>=)
- * @property {number} [options[].end] High bound of the option (<=)
+ * @property {string} attributeName Name of the attribute for filtering.
+ * @property {Options[]} options List of all the options.
  */
 
 /**
  * @typedef {Object} NumericRefinementListRenderingOptions
- * @property {function(string)} createURL create URL's for the next state, the string is the name of the selected option
- * @property {FacetValue[]} items the list of available choices
- * @property {string} items[].name Name of the option
- * @property {number} [items[].start] Low bound of the option (>=)
- * @property {number} [items[].end] High bound of the option (<=)
- * @property {number} [items[].isRefined] true if the value is selected
- * @property {number} [items[].attributeName] the name of the attribute in the records
- * @property {boolean} hasNoResults true if there were no results retrieved in the previous search
- * @property {function(string)} refine set the selected value and trigger a new search
- * @property {Object} widgetParams all original options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {function(string)} createURL Creates URL's for the next state, the string is the name of the selected option.
+ * @property {Item[]} items The list of available choices.
+ * @property {boolean} hasNoResults True if there were no results retrieved in the previous search.
+ * @property {function(string)} refine Action to set the selected value and trigger a new search.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams All original `CustomNumericRefinementListWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * Instantiate a list of refinements based on a facet
+ * **NumericRefinementList** connector provides the logic to build a custom widget that will give the user the ability to choose a range on to refine the search results.
+ * It provides a `NumericRefinementListRenderingOptions.refine(item)` function to refine on the selected range.
  *
+ * **Requirement:** the attribute passed to the `CustomNumericRefinementListWidgetOptions.attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
  * @function connectNumericRefinementList
  * @type {Connector}
- * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn function that render the numeric refinement list
- * @return {function(CustomNumericRefinementListWidgetOptions)} a custom numeric refinement list widget factory
+ * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericRefinementList** widget.
+ * @return {function(CustomNumericRefinementListWidgetOptions)} Re-usable widget factory for a custom **NumericRefinementList** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom NumericRefinementList widget
+ * function renderFn(NumericRefinementListRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
+ *     NumericRefinementListRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
+ *   }
+ *
+ *   NumericRefinementListRenderingOptions.widgetParams.containerNode
+ *     .find('li[data-refine-value]')
+ *     .each(function() { $(this).off('click'); });
+ *
+ *   var list = NumericRefinementListRenderingOptions.items.map(function(item) {
+ *     return '<li data-refine-value="' + item.value + '">' +
+ *       '<input type="radio"' + (item.isRefined ? ' checked' : '') + '/>' +
+ *       item.label + '</li>';
+ *   });
+ *
+ *   NumericRefinementListRenderingOptions.widgetParams.containerNode.find('ul').html(list);
+ *   NumericRefinementListRenderingOptions.widgetParams.containerNode
+ *     .find('li[data-refine-value]')
+ *     .each(function() {
+ *       $(this).on('click', function(event) {
+ *         event.preventDefault();
+ *         event.stopPropagation();
+ *         NumericRefinementListRenderingOptions.refine($(this).data('refine-value'));
+ *       });
+ *     });
+ * }
+ *
+ * // connect `renderFn` to NumericRefinementList logic
+ * var customNumericRefinementList = instantsearch.connectors.connectNumericRefinementList(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customNumericRefinementList({
+ *     containerNode: $('#custom-numeric-refinement-container'),
+ *     attributeName: 'price',
+ *     operator: 'or',
+ *     options: [
+ *       {name: 'All'},
+ *       {end: 4, name: 'less than 4'},
+ *       {start: 4, end: 4, name: '4'},
+ *       {start: 5, end: 10, name: 'between 5 and 10'},
+ *       {start: 10, name: 'more than 10'},
+ *     ],
+ *   })
+ * );
  */
 export default function connectNumericRefinementList(renderFn) {
   checkRendering(renderFn, usage);

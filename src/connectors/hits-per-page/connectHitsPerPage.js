@@ -24,15 +24,21 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
- * @typedef {Object} Items
+ * @typedef {Object} HitsPerPageRenderingOptionsItem
  * @property {number} value Number of hits to display per page.
  * @property {string} label Label to display in the option.
  * @property {boolean} isRefined Indicate if it's the current refined value.
  */
 
 /**
+* @typedef {Object} HitsPerPageWidgetOptionsItem
+* @property {number} value Number of hits to display per page.
+* @property {string} label Label to display in the option.
+*/
+
+/**
  * @typedef {Object} HitsPerPageRenderingOptions
- * @property {Items} items Array of objects defining the different values and labels.
+ * @property {HitsPerPageRenderingOptionsItem[]} items Array of objects defining the different values and labels.
  * @property {function(number)} refine Sets the number of hits per page and trigger a search.
  * @property {boolean} hasNoResults True if there were no results in the last search.
  * @property {InstantSearch} instantSearchInstance The instance of instantsearch on which the widget is attached.
@@ -41,7 +47,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} HitsPerPageWidgetOptions
- * @property {Items} items Array of objects defining the different values and labels.
+ * @property {HitsPerPageWidgetOptionsItem[]} items Array of objects defining the different values and labels.
  */
 
 /**

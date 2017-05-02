@@ -43,23 +43,23 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CurrentRefinedValuesRenderingOptions
- * @property {Object.<string, object>} attributes attributes mapped by keys
- * @property {function} clearAllClick function to trigger the clear of all the currently refined values
- * @property {string} clearAllPosition position of the 'clear all' button
- * @property {function} clearAllURL url which leads to a state where all the refinements have been cleared
- * @property {function(item)} refine clearing function for a refinement
- * @property {function(item)} createURL create an individual url where a single refinement is cleared
- * @property {Refinements[]} refinements all the current refinements
- * @property {InstantsSearch} instantSearchInstance the instance of instantsearch.js
- * @property {Object} widgetParams all original options forwarded to rendering
+ * @property {Object.<string, object>} attributes `CurrentRefinedValuesWidgetOptions.attributes` mapped by keys.
+ * @property {function} clearAllClick Trigger the clear of all the currently refined values.
+ * @property {function} clearAllURL URL which leads to a state where all the refinements have been cleared.
+ * @property {string} clearAllPosition Position of the `clearAll` button / link.
+ * @property {function(item)} refine Clearing function for a refinement.
+ * @property {function(item)} createURL Creates an individual url where a single refinement is cleared.
+ * @property {Refinements[]} refinements All the current refinements.
+ * @property {InstantsSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams All original `CustomCurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
  * @typedef {Object} CurrentRefinedValuesAttributes
- * @property {string} name mandatory field which is the name of the attribute
- * @property {string} label the label to apply on a refinement per attribute
- * @property {string|function} template the template to apply
- * @property {function} transformData function to transform the content of the refinement before rendering the template
+ * @property {string} name Mandatory field which is the name of the attribute.
+ * @property {string} label The label to apply on a refinement per attribute.
+ * @property {string|function} template The template to apply.
+ * @property {function} transformData Transform the content of the refinement before rendering the template.
  */
 
 /**
@@ -70,10 +70,71 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
- * Creactes a currentRefinedValues widget with a custom rendering.
+ * **CurrentRefinedValues** connector provides the logic to build a widget that will give the user the ability to remove all or some of the filters that were set.
+ * This provides a `CurrentRefinedValuesRenderingOptions.refine(item)` function to remove the selected refinement.
  * @type {Connector}
- * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn the custom rendering function
- * @return {function(CustomCurrentRefinedValuesWidgetOptions): CurrentRefinedValuesWidget} a function that creates CurrentRefinedValues widget
+ * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
+ * @return {function(CurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom ClearAll widget
+ * function renderFn(CurrentRefinedValuesRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
+ *     CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *       .html('<ul id="refiments"></ul><div id="cta-container"></div>');
+ *   }
+ *
+ *   CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *     .find('#cta-container > a')
+ *     .off('click');
+ *
+ *   CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *     .find('li > a')
+ *     .each(function() { $(this).off('click') });
+ *
+ *   if (refinements && refinements.length > 0) {
+ *     CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *       .find('#cta-container')
+ *       .html('<a href="' + CurrentRefinedValuesRenderingOptions.clearAllURL + '">Clear all </a>');
+ *
+ *     CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *       .find('#cta-container > a')
+ *       .on('click', function(event) {
+ *         event.preventDefault();
+ *         CurrentRefinedValuesRenderingOptions.clearAllClick();
+ *       });
+ *
+ *     var list = CurrentRefinedValuesRenderingOptions.refinements.map(function(refinement) {
+ *       return '<li><a href="' + CurrentRefinedValuesRenderingOptions.createURL(refinement) + '">'
+ *         + refinement.computedLabel + ' ' + refinement.count + '</a></li>';
+ *     });
+ *
+ *     CurrentRefinedValuesRenderingOptions.find('ul').html(list);
+ *     CurrentRefinedValuesRenderingOptions.find('li > a').each(function(index) {
+ *       $(this).on('click', function(event) {
+ *         event.preventDefault();
+ *
+ *         var refinement = CurrentRefinedValuesRenderingOptions.refinements[index];
+ *         CurrentRefinedValuesRenderingOptions.refine(refinement);
+ *       });
+ *     });
+ *   } else {
+ *     CurrentRefin.widgetParams.containerNode.find('#cta-container').html('');
+ *     CurrentRefin.widgetParams.containerNode.find('ul').html('');
+ *   }
+ * }
+ *
+ * // connect `renderFn` to CurrentRefinedValues logic
+ * var customCurrentRefinedValues = instantsearch.connectors.connectCurrentRefinedValues(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customCurrentRefinedValues({
+ *     containerNode: $('#custom-crv-container'),
+ *   })
+ * );
  */
 export default function connectCurrentRefinedValues(renderFn) {
   checkRendering(renderFn, usage);
