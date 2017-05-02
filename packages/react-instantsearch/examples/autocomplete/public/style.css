@@ -1,5 +1,8 @@
 body {
     font-family: Helvetica, sans-serif;
+    margin: 0;
+    padding: 1em;
+    box-sizing: border-box;
 }
 
 .highlighted{
