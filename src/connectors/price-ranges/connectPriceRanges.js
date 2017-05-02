@@ -19,24 +19,83 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
+ * @typedef {Object} PriceRangesItem
+ * @property {number} [from] Low bound of the price range.
+ * @property {number} [to] High bound of the price range.
+ */
+
+/**
  * @typedef {Object} CustomPriceRangesWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting
+ * @property {string} attributeName Name of the attribute for faceting.
  */
 
 /**
  * @typedef {Object} PriceRangesRenderingOptions
- * @property {Object[]} items the prices ranges to display
- * @property {function({from: ?number, to: ?number})} refine select or unselect a price range and trigger a search
- * @property {Object} widgetParams all original options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {PriceRangesItem[]} items The prices ranges to display.
+ * @property {function(PriceRangesItem)} refine Select or unselect a price range and trigger a search.
+ * @property {Object} widgetParams All original `CustomPriceRangesWidgetOptions` forwarded to the `renderFn`.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  */
 
- /**
-  * Connects a rendering function with the price ranges business logic.
-  * @type {Connector}
-  * @param {function(PriceRangesRenderingOptions, boolean)} renderFn function that renders the price ranges widget
-  * @return {function(CustomPriceRangesWidgetOptions)} a widget factory for price ranges widget
-  */
+/**
+ * **PriceRanges** connector provides the logic to build a custom widget that will give the user the ability to refine results by price ranges.
+ * @type {Connector}
+ * @param {function(PriceRangesRenderingOptions, boolean)} renderFn Rendering function for the custom **PriceRanges** widget.
+ * @return {function(CustomPriceRangesWidgetOptions)} Re-usable widget factory for a custom **PriceRanges** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * function getLabel(item) {
+ *   var from = item.from;
+ *   var to = item.to;
+ *
+ *   if (to === undefined) return '≥ $' + from;
+ *   if (from === undefined) return '≤ $' + to;
+ *   return '$' + from + ' - $' + to;
+ * }
+ *
+ * // custom `renderFn` to render the custom ClearAll widget
+ * function renderFn(PriceRangesRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
+ *     PriceRangesRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
+ *   }
+ *
+ *   PriceRangesRenderingOptions.widgetParams.containerNode
+ *     .find('ul > li')
+ *     .each(function() { $(this).off('click'); });
+ *
+ *   var list = PriceRangesRenderingOptions.items.map(function(item) {
+ *     return '<li><a href="' + item.url + '">' + getLabel(item) + '</a></li>';
+ *   });
+ *
+ *   PriceRangesRenderingOptions.widgetParams.containerNode
+ *     .find('ul')
+ *     .html(list);
+ *
+ *   PriceRangesRenderingOptions.widgetParams.containerNode
+ *     .find('li')
+ *     .each(function(index) {
+ *       $(this).on('click', function(event) {
+ *         event.stopPropagation();
+ *         event.preventDefault();
+ *
+ *         PriceRangesRenderingOptions.refine(items[index]);
+ *       });
+ *     });
+ * }
+ *
+ * // connect `renderFn` to PriceRanges logic
+ * var customPriceRanges = instantsearch.connectors.connectPriceRanges(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customPriceRanges({
+ *     containerNode: $('#custom-price-ranges-container'),
+ *     attributeName: 'price',
+ *   })
+ * );
+ */
 export default function connectPriceRanges(renderFn) {
   checkRendering(renderFn, usage);
 

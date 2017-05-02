@@ -21,26 +21,72 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomPaginationWidgetOptions
- * @property {number} [maxPages] The max number of pages to browse
+ * @property {number} [maxPages] The max number of pages to browse.
  */
 
 /**
  * @typedef {Object} PaginationRenderingOptions
- * @property {function(number)} createURL create URL's for the next state, the number is the page to generate the URL for
- * @property {number} currentRefinement the number of the page currently displayed
- * @property {number} nbHits the number of hits computed for the last query (can be approximated)
- * @property {number} nbPages the number of pages for the result set
- * @property {function} refine set the current page and trigger a search
- * @property {Object} widgetParams all original options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {function(number)} createURL Creates URL's for the next state, the number is the page to generate the URL for.
+ * @property {number} currentRefinement The number of the page currently displayed.
+ * @property {number} nbHits The number of hits computed for the last query (can be approximated).
+ * @property {number} nbPages The number of pages for the result set.
+ * @property {function} refine Set the current page and trigger a search.
+ * @property {Object} widgetParams All original `CustomPaginationWidgetOptions` forwarded to the `renderFn`.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  */
 
- /**
-  * Connects a rendering function with the pagination business logic.
-  * @type {Connector}
-  * @param {function(PaginationRenderingOptions, boolean)} renderFn function that renders the pagination widget
-  * @return {function(CustomPaginationWidgetOptions)} a widget factory for pagination widget
-  */
+/**
+ * **Pagination** connector provides the logic to build a widget that will let the user displays hits corresponding to a certain page.
+ * @type {Connector}
+ * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
+ * @return {function(CustomPaginationWidgetOptions)} Re-usable widget factory for a custom **Pagination** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom ClearAll widget
+ * function renderFn(PaginationRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
+ *     PaginationRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
+ *   }
+ *
+ *   // remove event listeners before replacing markup
+ *   PaginationRenderingOptions.widgetParams.containerNode
+ *     .find('a[data-page]')
+ *     .each(function() { $(this).off('click'); });
+ *
+ *   var pages = Array.apply(null, {length: PaginationRenderingOptions.nbPages})
+ *     .map(Number.call, Number)
+ *     .map(function(page) {
+ *       return '<li><a href="' + PaginationRenderingOptions.createURL(page) + '" data-page="' + page + '">' +
+ *         page + 1 + '</a></li>';
+ *     });
+ *
+ *   PaginationRenderingOptions.widgetParams.containerNode
+ *     .find('ul')
+ *     .html(pages);
+ *
+ *   PaginationRenderingOptions.widgetParams.containerNode
+ *     .find('a[data-page]')
+ *     .each(function() {
+ *       $(this).on('click', function(event) {
+ *         event.preventDefault();
+ *         PaginationRenderingOptions.refine($(this).data('page'));
+ *       });
+ *     });
+ * }
+ *
+ * // connect `renderFn` to Pagination logic
+ * var customPagination = instantsearch.connectors.connectPagination(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customPagination({
+ *     containerNode: $('#custom-pagination-container'),
+ *     maxPages: 20,
+ *   })
+ * );
+ */
 export default function connectPagination(renderFn) {
   checkRendering(renderFn, usage);
 

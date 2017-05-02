@@ -1,4 +1,4 @@
-import {forEach, reduce, groupBy, findIndex, find, filter, isArray, isObject} from 'lodash';
+import {uniqBy, forEach, reduce, groupBy, findIndex, find, filter, isArray, isObject} from 'lodash';
 import documentation from 'documentation';
 import remark from 'remark';
 import html from 'remark-html';
@@ -145,5 +145,5 @@ function findRelatedTypes(functionSymbol, symbols) {
   forEach(functionSymbol.returns, findParamsTypes);
   forEach(functionSymbol.properties, findParamsTypes);
 
-  return types;
+  return uniqBy(types, 'name');
 }

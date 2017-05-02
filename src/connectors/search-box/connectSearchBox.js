@@ -27,19 +27,42 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} SearchBoxRenderingOptions
- * @property {string} query the query from the last search
- * @property {function} onHistoryChange set a callback when the browser history changes
- * @property {function} refine triggers the search with a `query` as parameter
- * @property {Object} widgetParams all original options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {string} query The query from the last search.
+ * @property {function} onHistoryChange Register a callback when the browser history changes.
+ * @property {function(query)} refine Action to trigger the search with a `query` as parameter.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
  */
 
- /**
-  * Connects a rendering function with the search box business logic.
-  * @type {Connector}
-  * @param {function(SearchBoxRenderingOptions, boolean)} renderFn function that renders the search box widget
-  * @return {function(CustomSearchBoxWidgetOptions)} a widget factory for search box widget
-  */
+/**
+ * **SearchBox** connector provides the logic to build a widget that will let the user search for a query.
+ * @type {Connector}
+ * @param {function(SearchBoxRenderingOptions, boolean)} renderFn Rendering function for the custom **SearchBox** widget.
+ * @return {function(CustomSearchBoxWidgetOptions)} Re-usable widget factory for a custom **SearchBox** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom SearchBox widget
+ * function renderFn(SearchBoxRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
+ *     SearchBoxRenderingOptions.widgetParams.inputNode.on('keyup', function() {
+ *       SearchBoxRenderingOptions.refine($(this).val());
+ *     });
+ *     SearchBoxRenderingOptions.widgetParams.inputNode.val(SearchBoxRenderingOptions.query);
+ *   }
+ * }
+ *
+ * // connect `renderFn` to SearchBox logic
+ * var customSearchBox = instantsearch.connectors.connectSearchBox(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customSearchBox({
+ *     inputNode: $('input#custom-searchbox'),
+ *   })
+ * );
+ */
 export default function connectSearchBox(renderFn) {
   checkRendering(renderFn, usage);
 

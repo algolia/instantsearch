@@ -34,30 +34,78 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
 };
 
 /**
- * @typedef {Object} RefinementListRenderingOptions
- * @property {string} attributeName the attribute in the records that are used by the widget
- * @property {string} operator how the filters are combined together
- * @property {number} limit the max number of items displayed
+ * @typedef {Object} CustomRefinementListWidgetOptions
+ * @property {string} attributeName The name of the attribute in the records.
+ * @property {"and"|"or"} [operator = "or"] How the filters are combined together.
+ * @property {number} [limit] The max number of items to display.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  */
 
 /**
  * @typedef {Object} RefinementListRenderingOptions
- * @property {Object[]} items the list of filtering values returned from Algolia
- * @property {function} createURL create the next state url
- * @property {function} refine set the next state url
- * @property {function} searchForItems search for values inside the list
- * @property {boolean} isFromSearch indicates if the values are from an index search
- * @property {boolean} canRefine indicates if a refinement can be applied
- * @property {Object} widgetParams all original options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object[]} items The list of filtering values returned from Algolia API.
+ * @property {function} createURL Creates the next state url for a selected refinement.
+ * @property {function} refine Action to apply selected refinements.
+ * @property {function} searchForItems Search for values inside the list.
+ * @property {boolean} isFromSearch Indicates if the values are from an index search.
+ * @property {boolean} canRefine Indicates if a refinement can be applied.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams All original `CustomRefinementListWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * Creates a custom widget for a refinement list.
+ * **RefinementList** connector provides the logic to build a custom widget that will give the user the ability to choose multiple values for a specific facet.
  * @type {Connector}
- * @param {function(RefinementListRenderingOptions, boolean)} renderFn function that renders the refinement list widget
- * @returns {function(RefinementListWidgetOptions)} a custom refinement list widget factory
+ * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
+ * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom RefinementList widget
+ * function renderFn(RefinementListRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
+ *     RefinementListRenderingOptions.widgetParams.containerNode
+ *       .html('<ul></ul>')
+ *   }
+ *
+ *     RefinementListRenderingOptions.widgetParams.containerNode
+ *       .find('li[data-refine-value]')
+ *       .each(function() { $(this).off('click'); });
+ *
+ *   if (RefinementListRenderingOptions.canRefine) {
+ *     var list = RefinementListRenderingOptions.items.map(function(item) {
+ *       return '<li data-refine-value="' + item.value + '">' +
+ *         '<input type="checkbox" value="' + item.value + '"' + item.isRefined ? ' checked' : '' + '/>' +
+ *         '<a href="' + RefinementListRenderingOptions.createURL(item.value) + '">' + item.label + '</a>' +
+ *         '</li>';
+ *     });
+ *
+ *     RefinementListRenderingOptions.widgetParams.containerNode.find('ul').html(list);
+ *     RefinementListRenderingOptions.widgetParams.containerNode
+ *       .find('li[data-refine-value]')
+ *       .each(function() {
+ *         $(this).on('click', function(event) {
+ *           event.stopPropagation();
+ *           event.preventDefault();
+ *
+ *           RefinementListRenderingOptions.refine($(this).data('refine-value'));
+ *         });
+ *       });
+ *   } else {
+ *     RefinementListRenderingOptions.widgetParams.containerNode.find('ul').html('');
+ *   }
+ *
+ * // connect `renderFn` to RefinementList logic
+ * var customRefinementList = instantsearch.connectors.connectRefinementList(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customRefinementList({
+ *     containerNode: $('#custom-refinement-list-container'),
+ *     attributeName: 'categories',
+ *   })
+ * );
  */
 export default function connectRefinementList(renderFn) {
   checkRendering(renderFn, usage);
