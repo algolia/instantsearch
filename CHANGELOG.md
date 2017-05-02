@@ -1,3 +1,14 @@
+<a name="4.0.0-beta.5"></a>
+# [4.0.0-beta.5](https://github.com/algolia/react-instantsearch/compare/v4.0.0-beta.4...v4.0.0-beta.5) (2017-05-02)
+
+
+### Bug Fixes
+
+* **connectAutoComplete:** allow usage with hits from a single index (#75) ([8b3b358](https://github.com/algolia/react-instantsearch/commit/8b3b358)), closes [#74](https://github.com/algolia/react-instantsearch/issues/74)
+* **InstantSearch:** update algoliaClient when it change (#70) ([9e97dbd](https://github.com/algolia/react-instantsearch/commit/9e97dbd))
+
+
+
 <a name="4.0.0-beta.4"></a>
 # [4.0.0-beta.4](https://github.com/algolia/react-instantsearch/compare/v4.0.0-beta.3...v4.0.0-beta.4) (2017-04-25)
 
