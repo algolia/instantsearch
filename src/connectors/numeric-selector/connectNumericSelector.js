@@ -45,7 +45,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
- * **NumericSelector** connector connects privdes the logic to build a custom widget that will give the user the ability to limit results between numerical refinements.
+ * **NumericSelector** connector provides the logic to build a custom widget that will give the user the ability to limit results between numerical refinements.
+ *
  * It provides a `NumericSelectorRenderingOptions.refine(option)` function to trigger a new search with selected option.
  * @type {Connector}
  * @param {function(NumericSelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericSelector** widget.
