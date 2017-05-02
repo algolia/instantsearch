@@ -56,10 +56,10 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
  * var instantsearch = window.instantsearch;
  *
  * // custom `renderFn` to render the custom ClearAll widget
- * function renderFn(ClearAllRenderingOptions) {
- *   if (ClearAllRenderingOptions.isFirstRendering === true) {
+ * function renderFn(ClearAllRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering === true) {
  *     var markup = $('<button id="custom-clear-all">Clear All</button>');
- *     containerNode.append(markup);
+ *     ClearAllRenderingOptions.widgetParams.containerNode.append(markup);
  *
  *     markup.on('click', function(event) {
  *       event.preventDefault();
@@ -67,7 +67,7 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
  *     })
  *   }
  *
- *   var clearAllCTA = containerNode.find('#custom-clear-all');
+ *   var clearAllCTA = ClearAllRenderingOptions.widgetParams.containerNode.find('#custom-clear-all');
  *   clearAllCTA.attr('disabled', !ClearAllRenderingOptions.hasRefinements)
  * };
  *
