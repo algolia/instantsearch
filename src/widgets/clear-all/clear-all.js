@@ -92,6 +92,16 @@ clearAll({
  * @type {WidgetFactory}
  * @param {ClearAllWidgetOptions} $0 The clear all widget options.
  * @returns {Object} A new instance of the clear all widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.clearAll({
+ *     container: '#clear-all',
+ *     templates: {
+ *       link: 'Reset everything'
+ *     },
+ *     autoHideContainer: false
+ *   })
+ * );
  */
 export default function clearAll({
   container,

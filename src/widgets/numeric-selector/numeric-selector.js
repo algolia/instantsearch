@@ -71,6 +71,19 @@ const usage = `Usage: numericSelector({
  * @type {WidgetFactory}
  * @param {NumericSelectorWidgetOptions} $0 The numeric selector widget options.
  * @return {Object} A new instance of numeric selector widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.numericSelector({
+ *     container: '#popularity-selector',
+ *     attributeName: 'popularity',
+ *     operator: '>=',
+ *     options: [
+ *       {label: 'Top 10', value: 9900},
+ *       {label: 'Top 100', value: 9800},
+ *       {label: 'Top 500', value: 9700}
+ *     ]
+ *   })
+ * );
  */
 export default function numericSelector({
   container,

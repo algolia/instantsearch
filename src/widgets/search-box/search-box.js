@@ -157,6 +157,15 @@ searchBox({
  * @type {WidgetFactory}
  * @param {SearchBoxWidgetOptions} $0 Options used to configure a searchbox widget.
  * @return {Widget} A new instance of a searchbox instance.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.searchBox({
+ *     container: '#q',
+ *     placeholder: 'Search for products',
+ *     autofocus: false,
+ *     poweredBy: true
+ *   })
+ * );
  */
 export default function searchBox({
   container,

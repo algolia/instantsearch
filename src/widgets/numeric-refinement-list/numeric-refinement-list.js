@@ -94,7 +94,7 @@ numericRefinementList({
 
 /**
  * @typedef {Object} NumericRefinementListTransforms
- * @param {function({name: string, isRefined: boolean, url: string}):object} item Transforms the data for a single item to render.
+ * @property {function({name: string, isRefined: boolean, url: string}):object} item Transforms the data for a single item to render.
  */
 
 /**
@@ -115,6 +115,22 @@ numericRefinementList({
  * @type {WidgetFactory}
  * @param {NumericRefinementListWidgetOptions} $0 The numeric refinement list widget options
  * @return {Object} Returns a widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.numericRefinementList({
+ *     container: '#popularity',
+ *     attributeName: 'popularity',
+ *     options: [
+ *       {name: 'All'},
+ *       {end: 500, name: 'less than 500'},
+ *       {start: 500, end: 2000, name: 'between 500 and 2000'},
+ *       {start: 2000, name: 'more than 2000'}
+ *     ],
+ *     templates: {
+ *       header: 'Popularity'
+ *     }
+ *   })
+ * );
  */
 export default function numericRefinementList({
   container,

@@ -137,6 +137,16 @@ hierarchicalMenu({
  * @type {WidgetFactory}
  * @param {HierarchicalMenuWidgetOptions} $0 The hierarchical menu widget options.
  * @return {Object} A new hierarchical menu widget instance.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.hierarchicalMenu({
+ *     container: '#hierarchical-categories',
+ *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+ *     templates: {
+ *       header: 'Hierarchical categories'
+ *     }
+ *   })
+ * );
  */
 export default function hierarchicalMenu({
   container,

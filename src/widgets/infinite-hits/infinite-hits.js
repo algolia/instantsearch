@@ -99,6 +99,17 @@ infiniteHits({
  * @type {WidgetFactory}
  * @param {InfiniteHitsWidgetOptions} $0 The options for the infinite hits widget.
  * @return {Object} widget
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.infiniteHits({
+ *     container: '#infinite-hits-container',
+ *     templates: {
+ *       empty: 'No results',
+ *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
+ *     },
+ *     hitsPerPage: 3
+ *   })
+ * );
  */
 export default function infiniteHits({
   container,

@@ -130,6 +130,17 @@ starRating({
  * @memberof instantsearch.widgets
  * @param {StarWidgetOptions} $0 Star rating widget options.
  * @return {Widget} A new star rating widget instance.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.starRating({
+ *     container: '#stars',
+ *     attributeName: 'rating',
+ *     max: 5,
+ *     labels: {
+ *       andUp: '& Up'
+ *     }
+ *   })
+ * );
  */
 export default function starRating({
   container,
