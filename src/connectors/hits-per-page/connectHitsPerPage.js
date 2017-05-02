@@ -35,8 +35,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Items} items Array of objects defining the different values and labels.
  * @property {function(number)} refine Sets the number of hits per page and trigger a search.
  * @property {boolean} hasNoResults True if there were no results in the last search.
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
- * @property {Object} widgetParams Original HitsPerPageWidgetOptions forwarded to `renderFn`.
+ * @property {InstantSearch} instantSearchInstance The instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams Original `HitsPerPageWidgetOptions` forwarded to `renderFn`.
  */
 
 /**
@@ -45,12 +45,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
- * **HitsPerPage** connector provides the logic to create connected components that will
+ * **HitsPerPage** connector provides the logic to create custom widget that will
  * allow a user to choose to display more or less results from Algolia.
+ * This connector provides a `HitsPerPageRenderingOptions.refine()` function to change the hits per page configuration and trigger a new search.
  * @type {Connector}
- * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn Render function for the custom HitsPerPage widget,
- * the boolean indicates if the current call is the first one / the one before the first search.
- * @return {function(HitsPerPageWidgetOptions)} a custom HitsPerPage widget factory
+ * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn Rendering function for the custom **HitsPerPage** widget.
+ * @return {function(HitsPerPageWidgetOptions)} Re-usable widget factory for a custom **HitsPerPage** widget.
  * @example
  * var $ = window.$;
  * var instantsearch = window.instantsearch;

@@ -42,15 +42,15 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
  * @property {boolean} hasRefinements Indicate if search state is refined.
  * @property {function} createURL Create a url for the next state when refinements are cleared.
  * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
- * @property {Object} widgetParams All original `CustomClearAllWidgetOptions` forwarded to the `renderFn`
+ * @property {Object} widgetParams All original `CustomClearAllWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **ClearAll** connector provides the logic to build a widget that will give the user the ability to reset the search state.
+ * **ClearAll** connector provides the logic to build a custom widget that will give the user the ability to reset the search state.
  * This connector provides a `ClearAllRenderingOptions.refine()` function to remove the current refined facets.
  * @type {Connector}
- * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the clear all widget
- * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a clear all custom widget
+ * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the custom **ClearAll** widget.
+ * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a custom **ClearAll** widget.
  * @example
  * var $ = window.$;
  * var instantsearch = window.instantsearch;
