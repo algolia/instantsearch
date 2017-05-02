@@ -1,17 +1,62 @@
 import createConnector from '../core/createConnector';
-import { omit } from 'lodash';
+import {
+  cleanUpValue,
+  refineValue,
+  getCurrentRefinementValue,
+} from '../core/indexUtils';
 
 const getId = () => 'query';
 
-function getCurrentRefinement(props, searchState) {
+function getCurrentRefinement(props, searchState, context) {
   const id = getId();
-  if (typeof searchState[id] !== 'undefined') {
-    return searchState[id];
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    id,
+    '',
+    currentRefinement => {
+      if (currentRefinement) {
+        return currentRefinement;
+      }
+      return '';
+    }
+  );
+}
+
+function getHits(searchResults) {
+  if (searchResults.results) {
+    if (
+      searchResults.results.hits &&
+      Array.isArray(searchResults.results.hits)
+    ) {
+      return searchResults.results.hits;
+    } else {
+      return Object.keys(searchResults.results).reduce(
+        (hits, index) => [
+          ...hits,
+          {
+            index,
+            hits: searchResults.results[index].hits,
+          },
+        ],
+        []
+      );
+    }
+  } else {
+    return [];
   }
-  if (typeof props.defaultRefinement !== 'undefined') {
-    return props.defaultRefinement;
-  }
-  return '';
+}
+
+function refine(props, searchState, nextRefinement, context) {
+  const id = getId();
+  const nextValue = { [id]: nextRefinement };
+  const resetPage = true;
+  return refineValue(searchState, nextValue, context, resetPage);
+}
+
+function cleanUp(props, searchState, context) {
+  return cleanUpValue(searchState, context, getId());
 }
 
 /**
@@ -32,28 +77,18 @@ export default createConnector({
   displayName: 'AlgoliaAutoComplete',
 
   getProvidedProps(props, searchState, searchResults) {
-    const hits = [];
-    if (searchResults.results) {
-      Object.keys(searchResults.results).forEach(index => {
-        hits.push({ index, hits: searchResults.results[index].hits });
-      });
-    }
     return {
-      hits,
-      currentRefinement: getCurrentRefinement(props, searchState),
+      hits: getHits(searchResults),
+      currentRefinement: getCurrentRefinement(props, searchState, this.context),
     };
   },
 
-  refine(props, searchState, nextCurrentRefinement) {
-    const id = getId();
-    return {
-      ...searchState,
-      [id]: nextCurrentRefinement,
-    };
+  refine(props, searchState, nextRefinement) {
+    return refine(props, searchState, nextRefinement, this.context);
   },
 
   cleanUp(props, searchState) {
-    return omit(searchState, getId());
+    return cleanUp(props, searchState, this.context);
   },
 
   /* connectAutoComplete needs to be considered as a widget to trigger a search if no others widgets are used.
@@ -61,6 +96,8 @@ export default createConnector({
    * See createConnector.js
     * */
   getSearchParameters(searchParameters, props, searchState) {
-    return searchParameters.setQuery(getCurrentRefinement(props, searchState));
+    return searchParameters.setQuery(
+      getCurrentRefinement(props, searchState, this.context)
+    );
   },
 });
