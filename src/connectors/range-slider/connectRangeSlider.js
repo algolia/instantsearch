@@ -25,27 +25,27 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} CustomRangeSliderWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting.
- * @property {number} [min] Minimal slider value, default to automatically computed from the result set
- * @property {number} [max] Maximal slider value, defaults to automatically computed from the result set
- * @property {number} [precision = 2] Number of digits after decimal point to display.
+ * @property {number} [min] Minimal slider value, default to automatically computed from the result set.
+ * @property {number} [max] Maximal slider value, default to automatically computed from the result set.
+ * @property {number} [precision='2'] Number of digits after decimal point to display.
  */
 
 /**
  * @typedef {Object} RangeSliderRenderingOptions
- * @property {function} refine set the next search state setting the range of the widget
- * @property {{min: number, max: number}} numeric bounds without the current range filter
- * @property {[number, number]} start current numeric bounds of the search
+ * @property {function} refine Refine results by applying the selected range.
+ * @property {{min: number, max: number}} numeric Results bounds without the current range filter.
+ * @property {Array<number, number>} start Current numeric bounds of the search.
  * @property {{from: function, to: function}} formatter functions
- * @property {Object} widgetParams all original options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams All original `CustomRangeSliderWidgetOptions` forwarded to the `renderFn`.
  */
 
- /**
-  * Connects a rendering function with the range slider business logic.
-  * @type {Connector}
-  * @param {function(RangeSliderRenderingOptions, boolean)} renderFn function that renders the range slider widget
-  * @return {function(CustomRangeSliderWidgetOptions)} a widget factory for range slider widget
-  */
+/**
+ * **RangeSlider** connector provides the logic to create custom widget that will give the ability for a user to refine results using a numeric range.
+ * @type {Connector}
+ * @param {function(RangeSliderRenderingOptions, boolean)} renderFn Rendering function for the custom **RangeSlider** widget.
+ * @return {function(CustomRangeSliderWidgetOptions)} Re-usable widget factory for a custom **RangeSlider** widget.
+ */
 export default function connectRangeSlider(renderFn) {
   checkRendering(renderFn, usage);
 
