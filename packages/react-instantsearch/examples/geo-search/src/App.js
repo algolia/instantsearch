@@ -71,7 +71,7 @@ class App extends Component {
         onSearchStateChange={this.onSearchStateChange}
       >
         {configuration}
-        Either type a destination or click somewhere on the map to see the closest appartement.
+        Either type a destination or click somewhere on the map to see the closest apartment.
         <SearchBox />
         <div className="map">
           <ConnectedHitsMap onLatLngChange={this.onLatLngChange} />
