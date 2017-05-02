@@ -89,38 +89,69 @@ currentRefinedValues({
 })`;
 
 /**
- * Instantiate a list of current refinements with the possibility to clear them.
+ * @typedef {Object} CurrentRefinedValuesCSSClasses
+ * @property {string} [root] CSS classes added to the root element
+ * @property {string} [header] CSS classes added to the header element
+ * @property {string} [body] CSS classes added to the body element
+ * @property {string} [clearAll] CSS classes added to the clearAll element
+ * @property {string} [list] CSS classes added to the list element
+ * @property {string} [item] CSS classes added to the item element
+ * @property {string} [link] CSS classes added to the link element
+ * @property {string} [count] CSS classes added to the count element
+ * @property {string} [footer] CSS classes added to the footer element
+ */
+
+/**
+ * @typedef {Object} CurrentRefinedValuesAttributes
+ * @property {string} name Required attribute name
+ * @property {string} label Attribute label (passed to the item template)
+ * @property {string|function(object):string} template Attribute specific template
+ * @property {function(object):object} transformData Attribute specific transformData
+ */
+
+/**
+ * @typedef {Object} CurrentRefinedValuesTemplates
+ * @property {string|function(object):string} [header] Header template
+ * @property {string|function(object):string} [item] Item template
+ * @property {string|function(object):string} [clearAll] Clear all template
+ * @property {string|function(object):string} [footer] Footer template
+ */
+
+/**
+ * @typedef {Object} CurrentRefinedValuesTransforms
+ * @property {function(object):object} [item] Method to change the object passed to the `item` template
+ */
+
+/**
+ * @typedef {Object} CurrentRefinedValuesWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {Array} [attributes = []] Attributes configuration.
+ * @property {boolean} [onlyListedAttributes=false] Only use the declared attributes. By default, the widget
+ * displays the refinements for the whole search state. If true, the list of attributes in `attributes` is used.
+ * @property {'before'|'after'|boolean} [clearAll='before'] Defines the clear all button position.
+ * By default, it is placed before the set of current filters. If the value is false, the button
+ * won't be added in the widget.
+ * @property {CurrentRefinedValuesTemplates} [templates] Templates to use for the widget.
+ * @property {CurrentRefinedValuesTransforms} [transformData] Set of functions to transform
+ * the data passed to the templates.
+ * @property {boolean} [autoHideContainer=true] Hides the widget when there are no current refinements.
+ * @property {CurrentRefinedValuesCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
+ * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
+ * property is `true`, then the widget is hidden during the first rendering.
+ * @property {boolean} [clearsQuery=false] If true, the clear all button also clears the active search query.
+ */
+
+/**
+ * The current refined values widget has two purposes:
+ *
+ *  - give the user a synthetic view of the current filters.
+ *  - give the user the ability to remove a filter.
+ *
+ * This widget is usually in the top part of the search UI.
  * @type {WidgetFactory}
- * @param {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param {Array} [$0.attributes = []] Attributes configuration
- * @param {string} $0.attributes[].name Required attribute name
- * @param {string} $0.attributes[].label Attribute label (passed to the item template)
- * @param {string|Function} $0.attributes[].template Attribute specific template
- * @param {Function} $0.attributes[].transformData Attribute specific transformData
- * @param {boolean} $0.onlyListedAttributes=false] Only use declared attributes
- * @param {boolean|string} [$0.clearAll='before'] Clear all position (one of ('before', 'after', false))
- * @param {Object} [$0.templates] Templates to use for the widget
- * @param {string|Function} [$0.templates.header] Header template
- * @param {string|Function} [$0.templates.item] Item template
- * @param {string|Function} [$0.templates.clearAll] Clear all template
- * @param {string|Function} [$0.templates.footer] Footer template
- * @param {Function} [$0.transformData] Object containing the transformData functions
- * @param {Function} [$0.transformData.item] Function to change the object passed to the `item` template
- * @param {boolean} [$0.autoHideContainer=true] Hide the container when no current refinements
- * @param {Object} [$0.cssClasses] CSS classes to be added
- * @param {string} [$0.cssClasses.root] CSS classes added to the root element
- * @param {string} [$0.cssClasses.header] CSS classes added to the header element
- * @param {string} [$0.cssClasses.body] CSS classes added to the body element
- * @param {string} [$0.cssClasses.clearAll] CSS classes added to the clearAll element
- * @param {string} [$0.cssClasses.list] CSS classes added to the list element
- * @param {string} [$0.cssClasses.item] CSS classes added to the item element
- * @param {string} [$0.cssClasses.link] CSS classes added to the link element
- * @param {string} [$0.cssClasses.count] CSS classes added to the count element
- * @param {string} [$0.cssClasses.footer] CSS classes added to the footer element
- * @param {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @param {boolean} [$0.clearsQuery] also clears the active search query
- * @returns {Object} A currentRefinedValues widget instance
+ * @param {CurrentRefinedValuesWidgetOptions} $0 The current refined values widget options.
+ * @returns {Object} A new currentRefinedValues widget instance.
  */
 export default function currentRefinedValues({
   container,

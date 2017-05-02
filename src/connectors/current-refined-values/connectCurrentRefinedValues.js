@@ -63,7 +63,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
- * @typedef {Object} CurrentRefinedValuesWidgetOptions
+ * @typedef {Object} CustomCurrentRefinedValuesWidgetOptions
  * @property {CurrentRefinedValuesAttributes[]} attributes specification for the display of refinements per attribute
  * @property {boolean} onlyListedAttributes limit the displayed refinement to the list specified
  * @property {boolean} [clearsQuery=false] also clears the active search query
@@ -73,7 +73,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * Creactes a currentRefinedValues widget with a custom rendering.
  * @type {Connector}
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn the custom rendering function
- * @return {function(CurrentRefinedValuesWidgetOptions): CurrentRefinedValuesWidget} a function that creates CurrentRefinedValues widget
+ * @return {function(CustomCurrentRefinedValuesWidgetOptions): CurrentRefinedValuesWidget} a function that creates CurrentRefinedValues widget
  */
 export default function connectCurrentRefinedValues(renderFn) {
   checkRendering(renderFn, usage);

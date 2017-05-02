@@ -46,17 +46,31 @@ hitsPerPageSelector({
 })`;
 
 /**
- * Instantiate a dropdown element to choose the number of hits to display per page
+ * @typedef {Object} HitsPerPageSelectorCSSClasses
+ * @property {string|string[]} [root] CSS classes added to the parent `<select>`.
+ * @property {string|string[]} [item] CSS classes added to each `<option>`.
+ */
+
+/**
+ * @typedef {Object} HitsPerPageSelectorItems
+ * @property {number} value number of hits to display per page.
+ * @property {string} label Label to display in the option.
+ */
+
+/**
+ * @typedef {Object} HitsPerPageSelectorWidgetOptions
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {HitsPerPageSelectorItems[]} items Array of objects defining the different values and labels.
+ * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
+ * @property {HitsPerPageSelectorCSSClasses} [cssClasses] CSS classes to be added.
+ */
+
+/**
+ * The hitsPerPageSelector widget gives the user the ability to change the number of results
+ * displayed in the hits widget.
  * @type {WidgetFactory}
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {Object[]} $0.items Array of objects defining the different values and labels
- * @param  {number} $0.items[0].value number of hits to display per page
- * @param  {string} $0.items[0].label Label to display in the option
- * @param  {boolean} [$0.autoHideContainer=false] Hide the container when no results match
- * @param  {Object} [$0.cssClasses] CSS classes to be added
- * @param  {string|string[]} [$0.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string|string[]} [$0.cssClasses.item] CSS classes added to each `<option>`
- * @return {Object} widget
+ * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the hitPerPageSelector widget.
+ * @return {Object} A new instance of the hitPerPageSelector widget.
  */
 export default function hitsPerPageSelector({
   container,

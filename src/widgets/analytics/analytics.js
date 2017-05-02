@@ -7,13 +7,25 @@ analytics({
 })`;
 
 /**
- * Pushes analytics data to any analytic service
+ * @typedef {Object} AnalyticsWidgetOptions
+ * @property {function(qs: string, state: SearchParameters, results: SearchResults)} pushFunction
+ * Function called when data are ready to be pushed. It should push the data to your analytics platform.
+ * The `qs` parameter contains the parameters serialized as a query string. The `state` contains the
+ * whole search state, and the `results` the last results received.
+ * @property {number} [delay=3000] Number of milliseconds between last search key stroke and calling pushFunction
+ * @property {boolean} [triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
+ * @property {boolean} [pushInitialSearch=true] Trigger pushFunction after the initial search
+ */
+
+/**
+ * The analytics widget pushes the current state of the search to the analytics platform of your
+ * choice. It requires the implementation of a function that will push the data.
+ *
+ * This is a headless widget, which means that it does not have a rendered output in the
+ * UI.
  * @type {WidgetFactory}
- * @param  {Function} [options.pushFunction] Push function called when data are supposed to be pushed to analytic service
- * @param  {int} [options.delay=3000] Number of milliseconds between last search key stroke and calling pushFunction
- * @param  {boolean} [options.triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
- * @param  {boolean} [options.pushInitialSearch=true] Trigger pushFunction after the initial search
- * @return {Widget}
+ * @param {AnalyticsWidgetOptions} $0 The analytics widget options
+ * @return {Widget} A new instance of the analytics widget.
  */
 function analytics({
   pushFunction,
