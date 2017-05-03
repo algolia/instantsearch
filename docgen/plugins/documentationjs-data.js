@@ -74,7 +74,6 @@ function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files)
   // console.log(JSON.stringify(InstantSearchSymbol.params, null, 2));
   const fileName = 'instantsearch.html';
 
-  const symbolWithRelatedType = 
   files[fileName] = {
     mode: '0764',
     contents: '',
@@ -178,7 +177,7 @@ function findRelatedTypes(functionSymbol, symbols) {
         else {
           types = [...types, typeSymbol];
           // iterate over each property to get their types
-          forEach(typeSymbol.properties, p => findParamsTypes(p));
+          forEach(typeSymbol.properties, p => findParamsTypes({name: p.type.name, type: p.type}));
         }
       }
     }
