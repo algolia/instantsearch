@@ -3,7 +3,9 @@ import 'codemirror/mode/groovy/groovy';
 import 'codemirror/mode/xml/xml';
 import 'codemirror/mode/clike/clike';
 import 'codemirror/mode/jsx/jsx';
+import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/shell/shell';
 import escape from 'escape-html';
 
 export default function highlight(source, lang = 'javascript', inline = false) {
@@ -17,7 +19,6 @@ export default function highlight(source, lang = 'javascript', inline = false) {
   const spanTheme = 'cm-s-' + theme;
 
   let output = '';
-  // Even though highlight accepts a lang parameter, force to JSX for now.
   runMode(source, lang, (text, style) => {
     text = escape(text);
     if (!style) {

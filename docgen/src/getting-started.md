@@ -51,7 +51,7 @@ The jsDeliver CDN is highly available with [over 110 locations](https://www.jsde
 
 If you have a JavaScript build system, you can install **instantsearch.js** from NPM:
 
-```js
+```javascript
 // npm install instantsearch.js --save
 
 var instantsearch = require('instantsearch.js');
@@ -72,7 +72,7 @@ bower install https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.js
 
 To initialize the instantsearch.js library, you need an Algolia account with a configured and non-empty index.
 
-```js
+```javascript
 var search = instantsearch({
   appId: 'latency',
   apiKey: '3d9875e51fbd20c7754e65422f7ce5e1',

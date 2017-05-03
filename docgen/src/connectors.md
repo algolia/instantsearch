@@ -23,14 +23,14 @@ create widget instances.
 
 They follow the pattern:
 
-```js
+```javascript
 (rendering) => (widgetParameters) => Widget
 ```
 
 In practice, creating a new custom widget based on a connector would look like that:
 
-```js
-const makeHits = connectHits(function renderHits({hits}, isFirstRendering) {
+```javascript
+const makeHits = instantsearch.connectors.connectHits(function renderHits({hits}, isFirstRendering) {
   hits.forEach(function(hit) {
     console.log(hit);
   });
@@ -62,7 +62,7 @@ rendering.
 Let's take an example where we want to be able to configure the DOM element that will
 host the widget:
 
-```js
+```javascript
 const makeHits = connectHits(function renderHits({hits, widgetParams}) {
   // widgetParams contains all the option used to call the widget factory
   const container = widgetParams.container;  
