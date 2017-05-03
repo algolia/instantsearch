@@ -25,6 +25,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
+ * @typedef {Object} ToggleValue
+ * @property {string} name Human-readable name of the filter.
+ * @property {boolean} isRefined Indicates if the toggle is on or off.
+ * @property {number} count How many results are matched after applying the toggle refinement.
+ * @property {Object} onFacetValue Value of the toggle when it's on.
+ * @property {Object} offFacetValue Value of the toggle when it's off.
+ */
+
+/**
  * @typedef {Object} CustomToggleWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
  * @property {string} label Human-readable name of the filter (eg. "Free Shipping")
@@ -33,18 +42,56 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} ToggleRenderingOptions
- * @property {Object} value the value of the toggle with `name`, `isRefined`, `count`, `onFacetValue` and `offFacetValue`
- * @property {function(facetValue)} createURL the function to create a url for the next state
- * @property {function(facetValue)} refine updates to the next state
- * @property {Object} widgetParams all `CustomToggleWidgetOptions` forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {ToggleValue} value The current toggle value.
+ * @property {function()} createURL Creates an URL for the next state.
+ * @property {function(value)} refine Updates to the next state by applying the toggle refinement.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams All original `CustomToggleWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * Connects a rendering function with the toggle business logic.
+ * **Toggle** connector provides the logic to build a custom widget that will provides an on/off filtering feature based on an attribute value.
  * @type {Connector}
- * @param {function(ToggleRenderingOptions, boolean)} renderFn function that renders the toggle widget
- * @return {function(CustomToggleWidgetOptions)} a widget factory for toggle widget
+ * @param {function(ToggleRenderingOptions, boolean)} renderFn Rendering function for the custom **Toggle** widget.
+ * @return {function(CustomToggleWidgetOptions)} Re-usable widget factory for a custom **Toggle** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom ClearAll widget
+ * function renderFn(ToggleRenderingOptions, isFirstRendering) {
+ *   ToggleRenderingOptions.widgetParams.containerNode
+ *     .find('a')
+ *     .off('click');
+ *
+ *   var buttonHTML = '<a href="' + ToggleRenderingOptions.createURL() + '">' +
+ *     '<input type="checkbox" value="' + ToggleRenderingOptions.value.name + '"' +
+ *     ToggleRenderingOptions.value.isRefined ? ' checked' : '' + '/>' +
+ *     ToggleRenderingOptions.value.name + '(' + ToggleRenderingOptions.value.count + ')' +
+ *     '</a>';
+ *
+ *   ToggleRenderingOptions.widgetParams.containerNode.html(buttonHTML);
+ *   ToggleRenderingOptions.widgetParams.containerNode
+ *     .find('a')
+ *     .on('click', function(event) {
+ *       event.preventDefault();
+ *       event.stopPropagation();
+ *
+ *       ToggleRenderingOptions.refine(ToggleRenderingOptions.value);
+ *     });
+ * }
+ *
+ * // connect `renderFn` to Toggle logic
+ * var customToggle = instantsearch.connectors.connectToggle(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customToggle({
+ *     containerNode: $('#custom-toggle-container'),
+ *     attributeName: 'free_shipping',
+ *     label: 'Free Shipping (toggle single value)',
+ *   })
+ * );
  */
 export default function connectToggle(renderFn) {
   checkRendering(renderFn, usage);

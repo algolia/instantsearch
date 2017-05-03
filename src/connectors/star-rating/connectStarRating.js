@@ -21,26 +21,85 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
+ * @typedef {Object} StarRatingItems
+ * @property {string} name Name corresponding to the number of stars.
+ * @property {string} value Number of stars as string.
+ * @property {number} count Count of matched results corresponding to the number of stars.
+ * @property {boolean[]} stars Array of length of maximum rating value with stars to display or not.
+ * @property {boolean} isRefined Indicates if star rating refinement is applied.
+ */
+
+/**
  * @typedef {Object} CustomStarRatingWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
- * @property {number} [max = 5] the maximum rating value
+ * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {number} [max = 5] The maximum rating value.
  */
 
 /**
  * @typedef {Object} StarRatingRenderingOptions
- * @property {Object[]} items all the elements to render
- * @property {function} createURL a function that creates a url for the next state (takes the filter value as parameter)
- * @property {function} refine a function that switch to the next state and do a search (takes the filter value as parameter)
- * @property {boolean} hasNoResults a boolean that indicates that the last search contains no results
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
- * @property {Object} widgetParams all original options forwarded to rendering
+ * @property {StarRatingItems[]} items Possible star ratings the user can apply.
+ * @property {function(item.value)} createURL Creates an URL for the next state (takes the item value as parameter).
+ * @property {function(item.value)} refine Switch to the next state and do a search (takes the filter value as parameter).
+ * @property {boolean} hasNoResults Indicates that the last search contains no results.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {Object} widgetParams All original `CustomStarRatingWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * Connects a rendering function with the star rating business logic.
+ * **StarRating** connector provides the logic to build a custom widget that will give the user ability to refine search results by clicking on stars.
+ * The stars are based on the selected attributeName.
  * @type {Connector}
- * @param {function(StarRatingRenderingOptions, boolean)} renderFn function that renders the star rating widget
- * @return {function(CustomStarRatingWidgetOptions)} a widget factory for star rating widget
+ * @param {function(StarRatingRenderingOptions, boolean)} renderFn Rendering function for the custom **StarRating** widget.
+ * @return {function(CustomStarRatingWidgetOptions)} Re-usable widget factory for a custom **StarRating** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom StarRating widget
+ * function renderFn(StarRatingRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
+ *     StarRatingRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
+ *   }
+ *
+ *   StarRatingRenderingOptions.widgetParams.containerNode
+ *     .find('li[data-refine-value]')
+ *     .each(function() { $(this).off('click'); });
+ *
+ *   var listHTML = StarRatingRenderingOptions.items.map(function(item) {
+ *     return '<li data-refine-value="' + item.value + '">' +
+ *       '<a href="' + StarRatingRenderingOptions.createURL(item.value) + '">' +
+ *       item.stars.map(function(star) { return star === false ? '☆' : '★'; }).join(' ') +
+ *       '& up (' + item.count + ')' +
+ *       '</a></li>';
+ *   });
+ *
+ *   StarRatingRenderingOptions.widgetParams.containerNode
+ *     .find('ul')
+ *     .html(listHTML);
+ *
+ *   StarRatingRenderingOptions.widgetParams.containerNode
+ *     .find('li[data-refine-value]')
+ *     .each(function() {
+ *       $(this).on('click', function(event) {
+ *         event.preventDefault();
+ *         event.stopPropagation();
+ *
+ *         StarRatingRenderingOptions.refine($(this).data('refine-value'));
+ *       });
+ *     });
+ * }
+ *
+ * // connect `renderFn` to StarRating logic
+ * var customStarRating = instantsearch.connectors.connectStarRating(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customStarRating({
+ *     containerNode: $('#custom-star-rating-container'),
+ *     attributeName: 'rating',
+ *     max: 5,
+ *   })
+ * );
  */
 export default function connectStarRating(renderFn) {
   checkRendering(renderFn, usage);
