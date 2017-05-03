@@ -70,6 +70,17 @@ sortBySelector({
  * @type {WidgetFactory}
  * @param {SortByWidgetOptions} $0 Options for the sort by selector widget
  * @return {Object} widget
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.sortBySelector({
+ *     container: '#sort-by-container',
+ *     indices: [
+ *       {name: 'instant_search', label: 'Most relevant'},
+ *       {name: 'instant_search_price_asc', label: 'Lowest price'},
+ *       {name: 'instant_search_price_desc', label: 'Highest price'}
+ *     ]
+ *   })
+ * );
  */
 export default function sortBySelector({
   container,

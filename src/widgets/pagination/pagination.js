@@ -118,6 +118,15 @@ pagination({
  * @type {WidgetFactory}
  * @param {PaginationWidgetOptions} $0 Options for the pagination
  * @return {Object} widget
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.pagination({
+ *     container: '#pagination-container',
+ *     maxPages: 20,
+ *     // default is to scroll to 'body', here we disable this behavior
+ *     scrollTo: false
+ *   })
+ * );
  */
 export default function pagination({
   container,

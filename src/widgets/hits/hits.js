@@ -93,6 +93,17 @@ hits({
  * @type {WidgetFactory}
  * @param {HitsWidgetOptions} $0 Options of the hits widget.
  * @return {Object} A new instance of hits widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.hits({
+ *     container: '#hits-container',
+ *     templates: {
+ *       empty: 'No results',
+ *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
+ *     },
+ *     hitsPerPage: 6
+ *   })
+ * );
  */
 export default function hits({
   container,

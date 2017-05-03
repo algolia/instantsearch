@@ -152,6 +152,13 @@ currentRefinedValues({
  * @type {WidgetFactory}
  * @param {CurrentRefinedValuesWidgetOptions} $0 The current refined values widget options.
  * @returns {Object} A new currentRefinedValues widget instance.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.currentRefinedValues({
+ *     container: '#current-refined-values',
+ *     clearAll: 'after'
+ *   })
+ * );
  */
 export default function currentRefinedValues({
   container,

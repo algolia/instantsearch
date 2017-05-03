@@ -74,6 +74,7 @@ function mapConnectors(connectors, symbols, files) {
       category: 'connectors',
       navWeight: 1,
       jsdoc: symbolWithRelatedType,
+      withHeadings: true,
     };
   });
 }
@@ -101,6 +102,7 @@ function mapWidgets(widgets, symbols, files) {
       category: 'widgets',
       navWeight: 1,
       jsdoc: symbolWithRelatedType,
+      withHeadings: true,
     };
   });
 }

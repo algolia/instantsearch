@@ -122,6 +122,12 @@ stats({
  * @memberof instantsearch.widgets
  * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatories: `container`,
  * @return {Widget} A new stats widget instance
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.stats({
+ *     container: '#stats-container'
+ *   })
+ * );
  */
 export default function stats({
   container,

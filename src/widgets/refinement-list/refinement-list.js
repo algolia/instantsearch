@@ -116,9 +116,20 @@ refinementList({
 
 /**
  * @typedef {Object} RefinementListTemplates
- * @property  {string|Function} [header] Header template, provided with `refinedFacetsCount` data property
- * @property  {string|Function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @property  {string|Function} [footer] Footer template
+ * @property  {string|function(object):string} [header] Header template, provided with `refinedFacetsCount` data property
+ * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties
+ * @property  {string|function} [footer] Footer template
+ */
+
+/**
+ * @typedef {Object} RefinementListItemData
+ * @property {number} count The number of occurences of the facet in the result set.
+ * @property {boolean} isRefined True if the value is selected.
+ * @property {string} label The label to display.
+ * @property {string} value The value used for refining.
+ * @property {string} highlighted The label highlighted (when using search for facet values)
+ * @property {string} url The url with this refinement selected.
+ * @property {object} cssClasses Object containing all the classes computed for the item.
  */
 
 /**
@@ -150,7 +161,7 @@ refinementList({
  * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
  * @property {string} attributeName Name of the attribute for faceting
  * @property {"and"|"or"} [operator="or"] How to apply refinements. Possible values: `or`, `and`
- * @property {("isRefined"|"count:asc"|"count:desc"|"name:asc"|"name:desc")[]|function} [sortBy=["count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc|count:desc|name:asc|name:desc|isRefined`.
+ * @property {("isRefined"|"count:asc"|"count:desc"|"name:asc"|"name:desc")[]|function} [sortBy=["count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc` `count:desc` `name:asc` `name:desc` `isRefined`.
  *   You can lso use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
  * @property {SearchForFacetOptions|boolean} [searchForFacetValues=false] Add a search input to let the user search for more facet values
@@ -175,6 +186,18 @@ refinementList({
  * @type {WidgetFactory}
  * @param {RefinementListWidgetOptions} $0 The widget options that you use to customize the widget.
  * @return {Object} Widget instance
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.refinementList({
+ *     container: '#brands',
+ *     attributeName: 'brand',
+ *     operator: 'or',
+ *     limit: 10,
+ *     templates: {
+ *       header: 'Brands'
+ *     }
+ *   })
+ * );
  */
 export default function refinementList({
   container,

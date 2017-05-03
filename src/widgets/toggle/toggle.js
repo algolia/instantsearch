@@ -137,6 +137,21 @@ toggle({
  * @memberof instantsearch.widgets
  * @param {ToggleWidgetOptions} $0 Options for the toggle widget.
  * @return {Widget} A new instance of the toggle widget
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.toggle({
+ *     container: '#free-shipping',
+ *     attributeName: 'free_shipping',
+ *     label: 'Free Shipping',
+ *     values: {
+ *       on: true,
+ *       off: false
+ *     },
+ *     templates: {
+ *       header: 'Shipping'
+ *     }
+ *   })
+ * );
  */
 export default function toggle({
   container,

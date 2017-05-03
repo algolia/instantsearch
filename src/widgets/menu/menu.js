@@ -135,6 +135,17 @@ menu({
  * @type {WidgetFactory}
  * @param {MenuWidgetOptions} $0 The menu widget options.
  * @return {Widget} Creates a new instance of the menu widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.menu({
+ *     container: '#categories',
+ *     attributeName: 'categories',
+ *     limit: 10,
+ *     templates: {
+ *       header: 'Categories'
+ *     }
+ *   })
+ * );
  */
 export default function menu({
   container,

@@ -71,6 +71,17 @@ hitsPerPageSelector({
  * @type {WidgetFactory}
  * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the hitPerPageSelector widget.
  * @return {Object} A new instance of the hitPerPageSelector widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.hitsPerPageSelector({
+ *     container: '#hits-per-page-selector',
+ *     options: [
+ *       {value: 6, label: '6 per page'},
+ *       {value: 12, label: '12 per page'},
+ *       {value: 24, label: '24 per page'}
+ *     ]
+ *   })
+ * );
  */
 export default function hitsPerPageSelector({
   container,

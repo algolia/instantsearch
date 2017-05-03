@@ -26,6 +26,36 @@ analytics({
  * @type {WidgetFactory}
  * @param {AnalyticsWidgetOptions} $0 The analytics widget options
  * @return {Widget} A new instance of the analytics widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.analytics({
+ *     pushFunction: function(formattedParameters, state, results) {
+ *       // Google Analytics
+ *       // window.ga('set', 'page', '/search/query/?query=' + state.query + '&' + formattedParameters + '&numberOfHits=' + results.nbHits);
+ *       // window.ga('send', 'pageView');
+ * 
+ *       // GTM
+ *       // dataLayer.push({'event': 'search', 'Search Query': state.query, 'Facet Parameters': formattedParameters, 'Number of Hits': results.nbHits});
+ * 
+ *       // Segment.io
+ *       // analytics.page( '[SEGMENT] instantsearch', { path: '/instantsearch/?query=' + state.query + '&' + formattedParameters });
+ * 
+ *       // Kissmetrics
+ *       // var objParams = JSON.parse('{"' + decodeURI(formattedParameters.replace(/&/g, "\",\"").replace(/=/g,"\":\"")) + '"}');
+ *       // var arrParams = $.map(objParams, function(value, index) {
+ *       //   return [value];
+ *       // });
+ *       //
+ *       // _kmq.push(['record', '[KM] Viewed Result page', {
+ *       //   'Query': state.query ,
+ *       //   'Number of Hits': results.nbHits,
+ *       //   'Search Params': arrParams
+ *       // }]);
+ * 
+ *       // any other analytics service
+ *     }
+ *   })
+ * );
  */
 function analytics({
   pushFunction,

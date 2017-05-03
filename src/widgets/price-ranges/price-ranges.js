@@ -114,6 +114,21 @@ priceRanges({
  * @type {WidgetFactory}
  * @param {PriceRangeWidgetOptions} $0 The price ranges widget options.
  * @return {Object} widget
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.priceRanges({
+ *     container: '#price-ranges',
+ *     attributeName: 'price',
+ *     labels: {
+ *       currency: '$',
+ *       separator: 'to',
+ *       button: 'Go'
+ *     },
+ *     templates: {
+ *       header: 'Price'
+ *     }
+ *   })
+ * );
  */
 export default function priceRanges({
   container,

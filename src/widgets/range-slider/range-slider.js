@@ -135,6 +135,21 @@ rangeSlider({
  * @type {WidgetFactory}
  * @param {RangeSliderWidgetOptions} $0 Range slider widget options.
  * @return {Object} widget
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.rangeSlider({
+ *     container: '#price',
+ *     attributeName: 'price',
+ *     templates: {
+ *       header: 'Price'
+ *     },
+ *     tooltips: {
+ *       format: function(rawValue) {
+ *         return '$' + Math.round(rawValue).toLocaleString();
+ *       }
+ *     }
+ *   })
+ * );
  */
 export default function rangeSlider({
   container,
