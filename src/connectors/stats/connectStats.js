@@ -18,21 +18,42 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} StatsRenderingOptions
- * @property {number} hitsPerPage the maximum number of hits per page returned by Algolia
- * @property {number} nbHits the number of hits in the result set
- * @property {number} nbPages the number of pages computed for the result set
- * @property {number} page the current page
- * @property {number} processingTimeMS the time taken to compute the results inside the Algolia engine
- * @property {string} query the query used for the current search
- * @property {object} widgetParams all widget options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {number} hitsPerPage The maximum number of hits per page returned by Algolia.
+ * @property {number} nbHits The number of hits in the result set.
+ * @property {number} nbPages The number of pages computed for the result set.
+ * @property {number} page The current page.
+ * @property {number} processingTimeMS The time taken to compute the results inside the Algolia engine.
+ * @property {string} query The query used for the current search.
+ * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
+ * @property {object} widgetParams All original `CustomStatsWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * Connects a rendering function with the stats business logic.
+ * **Stats** connector provides the logic to build a custom widget that will displays Algolia API search statistics (hits number and processing time).
  * @type {Connector}
- * @param {function(StatsRenderingOptions, boolean)} renderFn function that renders the stats widget
- * @return {function} a widget factory for stats widget
+ * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
+ * @return {function} Re-usable widget factory for a custom **Stats** widget.
+ * @example
+ * var $ = window.$;
+ * var instantsearch = window.instantsearch;
+ *
+ * // custom `renderFn` to render the custom Stats widget
+ * function renderFn(StatsRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) return;
+ *
+ *   StatsRenderingOptions.widgetParams.containerNode
+ *     .html(StatsRenderingOptions.nbHits + ' results found in ' + StatsRenderingOptions.processingTimeMS);
+ * }
+ *
+ * // connect `renderFn` to Stats logic
+ * var customStatsWidget = instantsearch.connectors.connectStats(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customStatsWidget({
+ *     containerNode: $('#custom-stats-container'),
+ *   })
+ * );
  */
 export default function connectStats(renderFn) {
   checkRendering(renderFn, usage);
