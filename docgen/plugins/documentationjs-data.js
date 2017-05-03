@@ -37,6 +37,14 @@ export default function({rootJSFile}) {
         // transform all md like structure to html --> type: 'root' using formatMD
         const mdFormattedSymbols = formatAllMD(symbols);
 
+        mapInstantSearch(
+          [
+            findInstantSearchFactory(mdFormattedSymbols),
+            findInstantSearch(mdFormattedSymbols),
+          ],
+          mdFormattedSymbols,
+          files
+        );
         mapConnectors(filterSymbolsByType('Connector', mdFormattedSymbols), mdFormattedSymbols, files),
         mapWidgets(filterSymbolsByType('WidgetFactory', mdFormattedSymbols), mdFormattedSymbols, files),
 
@@ -47,11 +55,44 @@ export default function({rootJSFile}) {
   };
 }
 
+function findInstantSearch(symbols) {
+  return filter(symbols, s => s.name === 'InstantSearch')[0];
+}
+
+function findInstantSearchFactory(symbols) {
+  return filter(symbols, s => s.name === 'instantsearch')[0];
+}
+
 function filterSymbolsByType(type, symbols) {
   return filter(symbols, (s) => {
     const index = findIndex(s.tags, t => t.title === 'type' && t.type.name === type);
     return index !== -1;
   });
+}
+
+function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files) {
+  // console.log(JSON.stringify(InstantSearchSymbol.params, null, 2));
+  const fileName = 'instantsearch.html';
+
+  const symbolWithRelatedType = 
+  files[fileName] = {
+    mode: '0764',
+    contents: '',
+    title: instantsearchFactory.name,
+    withHeadings: false,
+    layout: `instantsearch.pug`,
+    category: 'instantsearch',
+    navWeight: 1,
+    instantsearchFactory: {
+      ...instantsearchFactory,
+      relatedTypes: findRelatedTypes(instantsearchFactory, symbols),
+    },
+    InstantSearch: {
+      ...InstantSearch,
+      relatedTypes: findRelatedTypes(InstantSearch, symbols),
+    },
+    withHeadings: true,
+  };
 }
 
 function mapConnectors(connectors, symbols, files) {

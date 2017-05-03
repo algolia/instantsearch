@@ -16,46 +16,19 @@ function defaultCreateURL() { return '#'; }
 const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) => defaultAlgoliasearch(appId, apiKey);
 
 /**
- * @param  {string} options.appId The Algolia application ID
- * @param  {string} options.apiKey The Algolia search-only API key
- * @param  {string} options.indexName The name of the main index
- * @param  {string} [options.numberLocale] The locale used to display numbers. This will be passed
- * to Number.prototype.toLocaleString()
- * @param  {function} [options.searchFunction] A hook that will be called each time a search needs to be done, with the
- * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
- * searches at page load for example.
- * @param   {function} [options.createAlgoliaClient] Allows you to provide your own algolia client instead of
- * the one instantiated internally by instantsearch.js. Useful in situations where you need
- * to setup complex options on the client or if you need to share it easily.
- * Usage:
- * `createAlgoliaClient: function(algoliasearch, appId, apiKey) { return anyCustomClient; }`
- * We forward `algoliasearch` which is the original algoliasearch module imported inside instantsearch.js
- * @param  {Object} [options.searchParameters] Additional parameters to pass to
- * the Algolia API.
- * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
- * @param  {Object|boolean} [options.urlSync] Url synchronization configuration.
- * Setting to `true` will synchronize the needed search parameters with the browser url.
- * @param  {Object} [options.urlSync.mapping] Object used to define replacement query
- * parameter to use in place of another. Keys are current query parameters
- * and value the new value, e.g. `{ q: 'query' }`.
- * @param  {number} [options.urlSync.threshold] Idle time in ms after which a new
- * state is created in the browser history. The default value is 700. The url is always updated at each keystroke
- * but we only create a "previous search state" (activated when click on back button) every 700ms of idle time.
- * @param  {string[]} [options.urlSync.trackedParameters] Parameters that will
- * be synchronized in the URL. Default value is `['query', 'attribute:*',
- * 'index', 'page', 'hitsPerPage']`. `attribute:*` means all the faceting attributes will be tracked. You
- * can track only some of them by using [..., 'attribute:color', 'attribute:categories']. All other possible
- * values are all the [attributes of the Helper SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
- *
- * There's a special `is_v` parameter that will get added everytime, it tracks the version of instantsearch.js
- * linked to the url.
- * @param  {boolean} [options.urlSync.useHash] If set to true, the url will be
- * hash based. Otherwise, it'll use the query parameters using the modern
- * history API.
- * @param  {function} [options.urlSync.getHistoryState] Pass this function to override the
- * default history API state we set to `null`. For example this could be used to force passing
- * {turbolinks: true} to the history API every time we update it.
- * @return {Object} the instantsearch instance
+ * Widgets are the building blocks of InstantSearch.js. Any
+ * valid widget must have at least a `render` or a `init` function.
+ * @typedef {Object} Widget
+ * @param {function} [widget.render] Called after each search response has been received
+ * @param {function} [widget.getConfiguration] Let the widget update the configuration
+ * of the search with new parameters
+ * @param {function} [widget.init] Called once before the first search
+ */
+
+/**
+ * The actual implementation of the InstantSearch. This is
+ * created using the `instantsearch` factory function.
+ * @fires Instantsearch#render This event is triggered each time a render is done
  */
 class InstantSearch extends EventEmitter {
   constructor({
@@ -101,12 +74,10 @@ Usage: instantsearch({
 
   /**
    * Add a widget
-   * @param  {Object} [widget] The widget to add
-   * @param  {function} [widget.render] Called after each search response has been received
-   * @param  {function} [widget.getConfiguration] Let the widget update the configuration
-   * of the search with new parameters
-   * @param  {function} [widget.init] Called once before the first search
-   * @return {Object} the added widget
+   * @param  {Widget} widget The widget to add to InstantSearch. Widgets are simple objects
+   * that have methods that map the search lifecycle in a UI perspective. Usually widgets are
+   * created by [widget factories](widgets.html) like the one provided with InstantSearch.js.
+   * @return {undefined} This method does not return anything
    */
   addWidget(widget) {
     // Add the widget to the list of widget
@@ -117,6 +88,13 @@ Usage: instantsearch({
     this.widgets.push(widget);
   }
 
+  /**
+   * The start methods ends the initialization of InstantSearch.js and triggers the
+   * first search. This method should be called after all widgets have been added
+   * to the instance of InstantSearch.js
+   *
+   * @return {undefined} Does not return anything
+   */
   start() {
     if (!this.widgets) throw new Error('No widgets were added to instantsearch.js');
 
@@ -184,6 +162,12 @@ Usage: instantsearch({
         instantSearchInstance: this,
       });
     });
+
+    /**
+     * Render is triggered when the rendering of the widgets has been completed
+     * after a search.
+     * @event IntantSearch#render
+     */
     this.emit('render');
   }
 

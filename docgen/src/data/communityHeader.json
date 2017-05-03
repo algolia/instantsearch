@@ -40,7 +40,7 @@
     "dropdownItems": [
       {
         "name": "instantsearch()",
-        "url": "common.html"
+        "url": "instantsearch.html"
       },
       {
         "name": "Widgets",

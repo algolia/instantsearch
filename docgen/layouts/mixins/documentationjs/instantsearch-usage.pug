@@ -1,4 +1,4 @@
-mixin widgetUsage(fnSymbol)
+mixin instantsearchUsage(fnSymbol)
   - const paramTag = fnSymbol.tags.find(tag => tag.title === 'param' && tag.name === '$0');
   if paramTag && paramTag.type
     - const paramTypeName = paramTag.type.name;
@@ -8,7 +8,7 @@ mixin widgetUsage(fnSymbol)
     pre.CodeMirror.cm-s-mdn-like
       code
         span.cm-keyword const 
-        span.cm-def widget 
+        span.cm-def search 
         span.cm-operator = 
         span.cm-variable=fnSymbol.name
         | ({ !{'\n'}
@@ -25,9 +25,9 @@ mixin widgetUsage(fnSymbol)
         | );
         |
         br
-        span.cm-variable instantsearch
+        span.cm-variable search
         |.
         span.cm-property addWidget
         | (
-        span.cm-variable widget
+        span.cm-comment /* A widget instance here */
         | );
