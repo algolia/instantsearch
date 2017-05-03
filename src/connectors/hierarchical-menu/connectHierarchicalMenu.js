@@ -40,7 +40,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} createURL Create an url for the next state for a clicked item.
  * @property {Object[]} items Values to be rendered.
  * @property {function} refine Set the path of the hierarchical filter and triggers a new search.
- * @property {InstantSearch} instantSearchInstance The instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomHierarchicalMenuWidgetOptions` forwarded to the `renderFn`.
  * @property {Object} currentRefinement The refinement currently applied.
  */

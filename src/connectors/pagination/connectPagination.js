@@ -32,7 +32,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {number} nbPages The number of pages for the result set.
  * @property {function} refine Set the current page and trigger a search.
  * @property {Object} widgetParams All original `CustomPaginationWidgetOptions` forwarded to the `renderFn`.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  */
 
 /**

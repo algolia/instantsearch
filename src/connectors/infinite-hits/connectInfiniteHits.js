@@ -23,7 +23,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object} results The complete results response from Algolia API.
  * @property {function} showMore Action to load next page of hits.
  * @property {boolean} isLastPage Indicate if the last page of hits has been reached.
- * @property {InstantSearch} instantSearchInstance The instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original widget options forwarded to the `renderFn`.
  */
 

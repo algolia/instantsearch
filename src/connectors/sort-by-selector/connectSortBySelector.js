@@ -34,7 +34,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {SortBySelectorIndices[]} options All the available indices
  * @property {function} refine Switch indices and trigger a new search.
  * @property {boolean} hasNoResults Indicates if there were no results during that last search.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomSortBySelectorWidgetOptions` forwarded to the `renderFn`.
  */
 

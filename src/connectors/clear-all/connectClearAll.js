@@ -41,7 +41,6 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
  * @property {function} refine Trigger the clear of all the currently refined values.
  * @property {boolean} hasRefinements Indicate if search state is refined.
  * @property {function} createURL Create a url for the next state when refinements are cleared.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomClearAllWidgetOptions` forwarded to the `renderFn`.
  */
 

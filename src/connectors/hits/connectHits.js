@@ -17,7 +17,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} HitsRenderingOptions
  * @property {Object[]} hits The matched hits from Algolia API.
  * @property {Object} results The complete results response from Algolia API.
- * @property {InstantSearch} instantSearchInstance The instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original widget options forwarded to the `renderFn`.
  */
 

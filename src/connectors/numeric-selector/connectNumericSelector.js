@@ -40,7 +40,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Option[]} options The different values and labels of the selector.
  * @property {function} refine Action to update the results with the selected value.
  * @property {boolean} hasNoResults Indicates if the last search returned any value.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomNumericSelectorWidgetOptions` forwarded to the `renderFn`.
  */
 

@@ -41,7 +41,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {HitsPerPageRenderingOptionsItem[]} items Array of objects defining the different values and labels.
  * @property {function(number)} refine Sets the number of hits per page and trigger a search.
  * @property {boolean} hasNoResults True if there were no results in the last search.
- * @property {InstantSearch} instantSearchInstance The instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams Original `HitsPerPageWidgetOptions` forwarded to `renderFn`.
  */
 

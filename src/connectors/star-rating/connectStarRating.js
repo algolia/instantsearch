@@ -41,7 +41,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function(item.value)} createURL Creates an URL for the next state (takes the item value as parameter).
  * @property {function(item.value)} refine Switch to the next state and do a search (takes the filter value as parameter).
  * @property {boolean} hasNoResults Indicates that the last search contains no results.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomStarRatingWidgetOptions` forwarded to the `renderFn`.
  */
 

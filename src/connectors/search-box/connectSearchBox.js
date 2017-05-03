@@ -30,7 +30,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string} query The query from the last search.
  * @property {function} onHistoryChange Register a callback when the browser history changes.
  * @property {function(query)} refine Action to trigger the search with a `query` as parameter.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
  */
 

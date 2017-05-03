@@ -24,7 +24,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {number} page The current page.
  * @property {number} processingTimeMS The time taken to compute the results inside the Algolia engine.
  * @property {string} query The query used for the current search.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {object} widgetParams All original `CustomStatsWidgetOptions` forwarded to the `renderFn`.
  */
 

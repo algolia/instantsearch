@@ -40,7 +40,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function(item)} refine Filter the search to item value.
  * @property {boolean} canRefine True if refinement can be applied.
  * @property {Object} widgetParams All original `CustomMenuWidgetOptions` forwarded to the `renderFn`.
- * @property {InstantSearch} instantSearchInstance The instance of instantsearch on which the widget is attached.
  * @property {boolean} isShowingMore Does the menu is displaying all the results.
  * @property {function} toggleShowMore Action to call for switching between show less and more.
  */

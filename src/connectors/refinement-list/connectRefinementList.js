@@ -49,7 +49,6 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @property {function} searchForItems Search for values inside the list.
  * @property {boolean} isFromSearch Indicates if the values are from an index search.
  * @property {boolean} canRefine Indicates if a refinement can be applied.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomRefinementListWidgetOptions` forwarded to the `renderFn`.
  */
 

@@ -45,7 +45,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {ToggleValue} value The current toggle value.
  * @property {function()} createURL Creates an URL for the next state.
  * @property {function(value)} refine Updates to the next state by applying the toggle refinement.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomToggleWidgetOptions` forwarded to the `renderFn`.
  */
 

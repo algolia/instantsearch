@@ -50,7 +50,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Item[]} items The list of available choices.
  * @property {boolean} hasNoResults True if there were no results retrieved in the previous search.
  * @property {function(string)} refine Action to set the selected value and trigger a new search.
- * @property {InstantSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomNumericRefinementListWidgetOptions` forwarded to the `renderFn`.
  */
 

@@ -50,7 +50,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function(item)} refine Clearing function for a refinement.
  * @property {function(item)} createURL Creates an individual url where a single refinement is cleared.
  * @property {Refinements[]} refinements All the current refinements.
- * @property {InstantsSearch} instantSearchInstance Instance of instantsearch on which the widget is attached.
  * @property {Object} widgetParams All original `CustomCurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
  */
 
