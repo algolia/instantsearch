@@ -8,7 +8,6 @@ var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, i
   //   refine,
   //   instantSearchInstance,
   //   widgetParams,
-  //   currentRefinement,
   // }
 });
 search.addWidget(
@@ -25,23 +24,31 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
+ * @typedef {Object} HierarchicalMenuItem
+ * @property {string} value Value of the menu item.
+ * @property {string} label Human-readable value of the menu item.
+ * @property {number} count Number of matched results after refinement is applied.
+ * @property {isRefined} boolean Indicates if the refinement is applied.
+ * @property {HierarchicalMenuItem} [data] n+1 level of items.
+ */
+
+/**
  * @typedef {Object} CustomHierarchicalMenuWidgetOptions
  * @property {string[]} attributesof Attributes to use to generate the hierarchy of the menu.
- * @property  {string} [separator='>'] Separator used in the attributes to separate level values.
- * @property  {string} [rootPath] Prefix path to use if the first level is not the root level.
- * @property  {string} [showParentLevel=false] Show the parent level of the current refined value.
- * @property  {number} [limit=10] How much facet values to get.
- * @property  {string[]|function} [sortBy=['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {string} [separator='>'] Separator used in the attributes to separate level values (default: `>`).
+ * @property {string} [rootPath] Prefix path to use if the first level is not the root level (default: `null`).
+ * @property {string} [showParentLevel] Show the parent level of the current refined value (default: `true`).
+ * @property {number} [limit] How much facet values to get (default: `10`).
+ * @property {string[]|function} [sortBy] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). (default: `['isRefined', 'count:desc']`).
  */
 
 /**
  * @typedef {Object} HierarchicalMenuRenderingOptions
- * @property {function} createURL Create an url for the next state for a clicked item.
- * @property {Object[]} items Values to be rendered.
- * @property {function} refine Set the path of the hierarchical filter and triggers a new search.
+ * @property {function(item.value): string} createURL Create an url for the next state for a clicked item.
+ * @property {HierarchicalMenuItem[]} items Values to be rendered.
+ * @property {function(item.value)} refine Set the path of the hierarchical filter and triggers a new search.
  * @property {Object} widgetParams All original `CustomHierarchicalMenuWidgetOptions` forwarded to the `renderFn`.
- * @property {Object} currentRefinement The refinement currently applied.
  */
 
  /**
@@ -105,7 +112,6 @@ export default function connectHierarchicalMenu(renderFn) {
           refine: this._refine,
           instantSearchInstance,
           widgetParams,
-          currentRefinement: null,
         }, true);
       },
 
@@ -118,10 +124,6 @@ export default function connectHierarchicalMenu(renderFn) {
             }
             return {...subValue, label, value};
           });
-      },
-
-      _findCurrentRefinement(items) {
-        return items.find(({isRefined}) => isRefined);
       },
 
       render({results, state, createURL, instantSearchInstance}) {
@@ -141,7 +143,6 @@ export default function connectHierarchicalMenu(renderFn) {
           refine: this._refine,
           instantSearchInstance,
           widgetParams,
-          currentRefinement: this._findCurrentRefinement(items),
         }, false);
       },
     };
