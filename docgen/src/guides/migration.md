@@ -26,3 +26,33 @@ var search = instantsearch({
   }
 });
 ```
+
+## The items are not sorted like before in the refinementList / menu
+
+We changed the default sort order of those widgets. This might have impacted your implementation
+if you didn't specify them originally. To change back the order use the `sortBy` configuration
+key.
+
+Here are examples of usage of `sortBy` using the previous sorting scheme:
+
+```javascript
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: '#brands',
+    attributeName: 'brand',
+    sortBy: ['count:desc', 'name:asc'],
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.menu({
+    container: '#categories',
+    attributeName: 'categories',
+    sortBy: ['count:desc', 'name:asc']
+  })
+);
+```
+
+If you want to learn more about sorting the values, check out the widget API to see what are
+the valid values for the `sortBy` option of [menu](../widgets/menu.html#struct-MenuWidgetOptions-sortBy) or 
+[refinementList](../widgets/refinementList.html#struct-RefinementListWidgetOptions-sortBy)

@@ -79,7 +79,7 @@ refinementList({
   container,
   attributeName,
   [ operator='or' ],
-  [ sortBy=['count:desc', 'name:asc'] ],
+  [ sortBy=['isRefined', 'count:desc', 'name:asc'] ],
   [ limit=10 ],
   [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],
   [ templates.{header,item,footer} ],
@@ -161,8 +161,8 @@ refinementList({
  * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
  * @property {string} attributeName Name of the attribute for faceting
  * @property {"and"|"or"} [operator="or"] How to apply refinements. Possible values: `or`, `and`
- * @property {("isRefined"|"count:asc"|"count:desc"|"name:asc"|"name:desc")[]|function} [sortBy=["count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc` `count:desc` `name:asc` `name:desc` `isRefined`.
- *   You can lso use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {string[]|function} [sortBy=["isRefined", "count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc` `count:desc` `name:asc` `name:desc` `isRefined`.
+ *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
  * @property {SearchForFacetOptions|boolean} [searchForFacetValues=false] Add a search input to let the user search for more facet values
  * @property {RefinementListShowMoreOptions|boolean} [showMore=false] Limit the number of results and display a showMore button
@@ -203,7 +203,7 @@ export default function refinementList({
   container,
   attributeName,
   operator = 'or',
-  sortBy = ['count:desc', 'name:asc'],
+  sortBy = ['isRefined', 'count:desc', 'name:asc'],
   limit = 10,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
