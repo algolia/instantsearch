@@ -54,9 +54,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(ToggleRenderingOptions, boolean)} renderFn Rendering function for the custom **Toggle** widget.
  * @return {function(CustomToggleWidgetOptions)} Re-usable widget factory for a custom **Toggle** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom ClearAll widget
  * function renderFn(ToggleRenderingOptions, isFirstRendering) {
  *   ToggleRenderingOptions.widgetParams.containerNode
