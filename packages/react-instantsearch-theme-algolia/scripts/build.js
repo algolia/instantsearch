@@ -1,10 +1,11 @@
-import { join } from 'path';
-import { render } from 'node-sass';
-import postcss from 'postcss';
-import syntax from 'postcss-scss';
-import autoprefixer from 'autoprefixer';
-import { writeFile } from 'fs';
-import cssnano from 'cssnano';
+/* eslint-disable import/no-commonjs */
+const { join } = require('path');
+const { render } = require('node-sass');
+const postcss = require('postcss');
+const syntax = require('postcss-scss');
+const autoprefixer = require('autoprefixer');
+const { writeFile } = require('fs');
+const cssnano = require('cssnano');
 
 const handleError = err => {
   if (process.env.NODE_ENV === 'production') {
