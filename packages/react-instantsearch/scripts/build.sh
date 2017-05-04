@@ -2,15 +2,30 @@
 
 set -e # exit when error
 
+# copy files
 mkdir -p dist/ &&
 rm -rf dist/* &&
 cp package.json dist/ &&
-cp README.md dist/ &&
+cp README.md dist/
+
+# first make es module build
+export BABEL_ENV=es
+mkdir -p dist/es &&
+babel -q index.js -o dist/es/index.js &&
+babel -q dom.js -o dist/es/dom.js &&
+babel -q connectors.js -o dist/es/connectors.js &&
+babel -q native.js -o dist/es/native.js
+babel -q --ignore test.js,__mocks__ --out-dir dist/es/src src
+
+# then also make a commonjs build
+export BABEL_ENV=commonjs
 babel -q index.js -o dist/index.js &&
 babel -q dom.js -o dist/dom.js &&
 babel -q connectors.js -o dist/connectors.js &&
-babel -q native.js -o dist/native.js &&
-babel -q --ignore test.js,__mocks__ --out-dir dist/src src &&
+babel -q native.js -o dist/native.js
+babel -q --ignore test.js,__mocks__ --out-dir dist/src src
+
+# finally a UMD build
 NODE_ENV=production webpack
 
 license="/*! ReactInstantSearch ${VERSION:-UNRELEASED} | © Algolia, inc. | https://community.algolia.com/react-instantsearch/ */"
