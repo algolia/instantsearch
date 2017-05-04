@@ -93,32 +93,32 @@ refinementList({
 
 /**
  * @typedef {Object} SearchForFacetTemplates
- * @property {string} [noResults] Templates to use for search for facet values
+ * @property {string} [noResults] Templates to use for search for facet values.
  */
 
 /**
  * @typedef {Object} SearchForFacetOptions
- * @property {string} [placeholder] Value of the search field placeholder
- * @property {SearchForFacetTemplates} [templates] Templates to use for search for facet values
+ * @property {string} [placeholder] Value of the search field placeholder.
+ * @property {SearchForFacetTemplates} [templates] Templates to use for search for facet values.
  */
 
 /**
  * @typedef {Object} RefinementListShowMoreTemplates
- * @property {string} [active] Template used when showMore was clicked
- * @property {string} [inactive] Template used when showMore not clicked
+ * @property {string} [active] Template used when showMore was clicked.
+ * @property {string} [inactive] Template used when showMore not clicked.
  */
 
 /**
  * @typedef {Object} RefinementListShowMoreOptions
- * @property {RefinementListShowMoreTemplates} [templates] Templates to use for showMore
- * @property {number} [limit] Max number of facets values to display when showMore is clicked
+ * @property {RefinementListShowMoreTemplates} [templates] Templates to use for showMore.
+ * @property {number} [limit] Max number of facets values to display when showMore is clicked.
  */
 
 /**
  * @typedef {Object} RefinementListTemplates
- * @property  {string|function(object):string} [header] Header template, provided with `refinedFacetsCount` data property
- * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties
- * @property  {string|function} [footer] Footer template
+ * @property  {string|function(object):string} [header] Header template, provided with `refinedFacetsCount` data property.
+ * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
+ * @property  {string|function} [footer] Footer template.
  */
 
 /**
@@ -127,46 +127,47 @@ refinementList({
  * @property {boolean} isRefined True if the value is selected.
  * @property {string} label The label to display.
  * @property {string} value The value used for refining.
- * @property {string} highlighted The label highlighted (when using search for facet values)
+ * @property {string} highlighted The label highlighted (when using search for facet values).
  * @property {string} url The url with this refinement selected.
  * @property {object} cssClasses Object containing all the classes computed for the item.
  */
 
 /**
  * @typedef {Object} RefinementListTransforms
- * @property {function} [transformData.item] Function to change the object passed to the `item` template
+ * @property {function} [transformData.item] Function to change the object passed to the `item` template.
  */
 
 /**
  * @typedef {Object} RefinementListCSSClasses
- * @property {string|string[]} [root] CSS class to add to the root element
- * @property {string|string[]} [header] CSS class to add to the header element
- * @property {string|string[]} [body] CSS class to add to the body element
- * @property {string|string[]} [footer] CSS class to add to the footer element
- * @property {string|string[]} [list] CSS class to add to the list element
- * @property {string|string[]} [item] CSS class to add to each item element
- * @property {string|string[]} [active] CSS class to add to each active element
- * @property {string|string[]} [label] CSS class to add to each label element (when using the default template)
- * @property {string|string[]} [checkbox] CSS class to add to each checkbox element (when using the default template)
- * @property {string|string[]} [count] CSS class to add to each count element (when using the default template)
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [header] CSS class to add to the header element.
+ * @property {string|string[]} [body] CSS class to add to the body element.
+ * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [list] CSS class to add to the list element.
+ * @property {string|string[]} [item] CSS class to add to each item element.
+ * @property {string|string[]} [active] CSS class to add to each active element.
+ * @property {string|string[]} [label] CSS class to add to each label element (when using the default template).
+ * @property {string|string[]} [checkbox] CSS class to add to each checkbox element (when using the default template).
+ * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
  */
 
 /**
  * @typedef {Object} RefinementListCollapsibleOptions
- * @property {boolean} [collapsed] Initial collapsed state of a collapsible widget
+ * @property {boolean} [collapsed] Initial collapsed state of a collapsible widget.
  */
 
 /**
  * @typedef {Object} RefinementListWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property {string} attributeName Name of the attribute for faceting
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string} attributeName Name of the attribute for faceting.
  * @property {"and"|"or"} [operator="or"] How to apply refinements. Possible values: `or`, `and`
  * @property {string[]|function} [sortBy=["isRefined", "count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc` `count:desc` `name:asc` `name:desc` `isRefined`.
- *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ *
+ * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
- * @property {SearchForFacetOptions|boolean} [searchForFacetValues=false] Add a search input to let the user search for more facet values
- * @property {RefinementListShowMoreOptions|boolean} [showMore=false] Limit the number of results and display a showMore button
- * @property {RefinementListTemplates} [templates] Templates to use for the widget
+ * @property {SearchForFacetOptions|boolean} [searchForFacetValues=false] Add a search input to let the user search for more facet values.
+ * @property {RefinementListShowMoreOptions|boolean} [showMore=false] Limit the number of results and display a showMore button.
+ * @property {RefinementListTemplates} [templates] Templates to use for the widget.
  * @property {RefinementListTransforms} [transformData] Functions to update the values before applying the templates.
  * @property {boolean} [autoHideContainer=true] Hide the container when no items in the refinement list.
  * @property {RefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
@@ -184,8 +185,8 @@ refinementList({
  * This widget also implements search for facet values, which is a mini search inside the
  * values of the facets. This makes easy to deal with uncommon facet values.
  * @type {WidgetFactory}
- * @param {RefinementListWidgetOptions} $0 The widget options that you use to customize the widget.
- * @return {Object} Widget instance
+ * @param {RefinementListWidgetOptions} $0 The RefinementList widget options that you use to customize the widget.
+ * @return {Widget} Creates a new instance of the RefinementList widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.refinementList({

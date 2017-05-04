@@ -115,33 +115,33 @@ searchBox({
 
 /**
  * @typedef {Object} SearchBoxPoweredByCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the root element
- * @property  {string|string[]} [link] CSS class to add to the link element
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [link] CSS class to add to the link element.
  */
 
 /**
  * @typedef {Object} SearchBoxPoweredByOption
  * @property {function|string} template Template used for displaying the link. Can accept a function or a Hogan string.
- * @property {SearchBoxPoweredByCSSClasses} [cssClasses] CSS classes added to the powered-by badge
+ * @property {SearchBoxPoweredByCSSClasses} [cssClasses] CSS classes added to the powered-by badge.
  */
 
 /**
  * @typedef {Object} SearchBoxCSSClasses
  * @property  {string|string[]} [cssClasses.root] CSS class to add to the
- * wrapping `<div>` (if `wrapInput` set to `true`)
- * @property  {string|string[]} [cssClasses.input] CSS class to add to the input
+ * wrapping `<div>` (if `wrapInput` set to `true`).
+ * @property  {string|string[]} [cssClasses.input] CSS class to add to the input.
  */
 
 /**
  * @typedef {Object} SearchBoxWidgetOptions
- * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property  {string} [placeholder] Input's placeholder
- * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input
- * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`
- * @property  {boolean|string} [autofocus="auto"] autofocus on the input
+ * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property  {string} [placeholder] Input's placeholder.
+ * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
+ * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
+ * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
  * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
- * once `<Enter>` is pressed only
- * @property  {SearchBoxCSSClasses} [cssClasses] CSS classes to add
+ * once `<Enter>` is pressed only.
+ * @property  {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
  * @property  {function} [queryHook] A function that will be called every time a new search would be done. You
  * will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
@@ -155,8 +155,8 @@ searchBox({
  * away.
  *
  * @type {WidgetFactory}
- * @param {SearchBoxWidgetOptions} $0 Options used to configure a searchbox widget.
- * @return {Widget} A new instance of a searchbox instance.
+ * @param {SearchBoxWidgetOptions} $0 Options used to configure a SearchBox widget.
+ * @return {Widget} Creates a new instance of the SearchBox widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.searchBox({

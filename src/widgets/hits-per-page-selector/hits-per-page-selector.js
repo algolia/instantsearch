@@ -69,8 +69,8 @@ hitsPerPageSelector({
  * The hitsPerPageSelector widget gives the user the ability to change the number of results
  * displayed in the hits widget.
  * @type {WidgetFactory}
- * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the hitPerPageSelector widget.
- * @return {Object} A new instance of the hitPerPageSelector widget.
+ * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the HitPerPageSelector widget.
+ * @return {Widget} A new instance of the HitPerPageSelector widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.hitsPerPageSelector({

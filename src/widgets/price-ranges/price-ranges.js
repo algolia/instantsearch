@@ -68,26 +68,26 @@ priceRanges({
 
 /**
  * @typedef {Object} PriceRangeClasses
- * @property  {string|string[]} [root] CSS class to add to the root element
- * @property  {string|string[]} [header] CSS class to add to the header element
- * @property  {string|string[]} [body] CSS class to add to the body element
- * @property  {string|string[]} [list] CSS class to add to the wrapping list element
- * @property  {string|string[]} [item] CSS class to add to each item element
- * @property  {string|string[]} [active] CSS class to add to the active item element
- * @property  {string|string[]} [link] CSS class to add to each link element
- * @property  {string|string[]} [form] CSS class to add to the form element
- * @property  {string|string[]} [label] CSS class to add to each wrapping label of the form
- * @property  {string|string[]} [input] CSS class to add to each input of the form
- * @property  {string|string[]} [currency] CSS class to add to each currency element of the form
- * @property  {string|string[]} [separator] CSS class to add to the separator of the form
- * @property  {string|string[]} [button] CSS class to add to the submit button of the form
- * @property  {string|string[]} [footer] CSS class to add to the footer element
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [header] CSS class to add to the header element.
+ * @property  {string|string[]} [body] CSS class to add to the body element.
+ * @property  {string|string[]} [list] CSS class to add to the wrapping list element.
+ * @property  {string|string[]} [item] CSS class to add to each item element.
+ * @property  {string|string[]} [active] CSS class to add to the active item element.
+ * @property  {string|string[]} [link] CSS class to add to each link element.
+ * @property  {string|string[]} [form] CSS class to add to the form element.
+ * @property  {string|string[]} [label] CSS class to add to each wrapping label of the form.
+ * @property  {string|string[]} [input] CSS class to add to each input of the form.
+ * @property  {string|string[]} [currency] CSS class to add to each currency element of the form.
+ * @property  {string|string[]} [separator] CSS class to add to the separator of the form.
+ * @property  {string|string[]} [button] CSS class to add to the submit button of the form.
+ * @property  {string|string[]} [footer] CSS class to add to the footer element.
  */
 
 /**
  * @typedef {Object} PriceRangeLabels
- * @property  {string} [separator] Separator label, between min and max
- * @property  {string} [button] Button label
+ * @property  {string} [separator] Separator label, between min and max.
+ * @property  {string} [button] Button label.
  */
 
 /**
@@ -97,14 +97,14 @@ priceRanges({
 
 /**
  * @typedef {Object} PriceRangeWidgetOptions
- * @property  {string|DOMElement} container Valid CSS Selector as a string or DOMElement
- * @property  {string} attributeName Name of the attribute for faceting
- * @property  {PriceRangeTemplates} [templates] Templates to use for the widget
- * @property  {string} [currency='$'] The currency to display
- * @property  {PriceRangeLabels} [labels] Labels to use for the widget
- * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available
- * @property  {PriceRangeClasses} [cssClasses] CSS classes to add
- * @property  {boolean|{collapsed: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header
+ * @property  {string|DOMElement} container Valid CSS Selector as a string or DOMElement.
+ * @property  {string} attributeName Name of the attribute for faceting.
+ * @property  {PriceRangeTemplates} [templates] Templates to use for the widget.
+ * @property  {string} [currency='$'] The currency to display.
+ * @property  {PriceRangeLabels} [labels] Labels to use for the widget.
+ * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available.
+ * @property  {PriceRangeClasses} [cssClasses] CSS classes to add.
+ * @property  {boolean|{collapsed: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
  */
 
 /**
@@ -112,8 +112,8 @@ priceRanges({
  * displayed in a list.
  *
  * @type {WidgetFactory}
- * @param {PriceRangeWidgetOptions} $0 The price ranges widget options.
- * @return {Object} widget
+ * @param {PriceRangeWidgetOptions} $0 The PriceRanges widget options.
+ * @return {Widget} A new instance of PriceRanges widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.priceRanges({

@@ -71,24 +71,24 @@ stats({
 
 /**
  * @typedef {Object} StatsWidgetTemplates
- * @property {string|Function} [header=''] Header template
+ * @property {string|Function} [header=''] Header template.
  * @property {string|Function} [body] Body template, provided with `hasManyResults`,
- * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`
- * @property {string|Function} [footer=''] Footer template
+ * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`.
+ * @property {string|Function} [footer=''] Footer template.
  */
 
 /**
  * @typedef {Object} StatsWidgetCssClasses
- * @property {string|string[]} [root] CSS class to add to the root element
- * @property {string|string[]} [header] CSS class to add to the header element
- * @property {string|string[]} [body] CSS class to add to the body element
- * @property {string|string[]} [footer] CSS class to add to the footer element
- * @property {string|string[]} [time] CSS class to add to the element wrapping the time processingTimeMs
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [header] CSS class to add to the header element.
+ * @property {string|string[]} [body] CSS class to add to the body element.
+ * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [time] CSS class to add to the element wrapping the time processingTimeMs.
  */
 
 /**
  * @typedef {Object} StatsWidgetTransforms
- * @property {function(StatsBodyData):object} [body] Updates the content of object passed to the `body` template
+ * @property {function(StatsBodyData):object} [body] Updates the content of object passed to the `body` template.
  */
 
 /**
@@ -98,7 +98,7 @@ stats({
  * @property {boolean} hasOneResult True if the result set has exactly one result.
  * @property {number} hitsPerPage Number of hits per page.
  * @property {number} nbHits Number of hit in the result set.
- * @property {number} nbPages Number of pages in the result set with regard to the hitsPerPage and number of hits
+ * @property {number} nbPages Number of pages in the result set with regard to the hitsPerPage and number of hits.
  * @property {number} page Number of the current page. First page is 0.
  * @property {number} processingTimeMS Time taken to compute the results inside the engine.
  * @property {string} query Text query currently used.
@@ -106,11 +106,11 @@ stats({
 
 /**
  * @typedef {Object} StatsWidgetOptions
- * @property {string|DOMElement} container Place where to insert the widget in your webpage
- * @property {StatsWidgetTemplates} [templates] Templates to use for the widget
+ * @property {string|DOMElement} container Place where to insert the widget in your webpage.
+ * @property {StatsWidgetTemplates} [templates] Templates to use for the widget.
  * @property {StatsWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
- * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching
- * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add
+ * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
+ * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add.
  */
 
 /**
@@ -119,7 +119,6 @@ stats({
  * By default, it will display the **number of hits** and the time taken to compute the
  * results inside the engine.
  * @type {WidgetFactory}
- * @memberof instantsearch.widgets
  * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatories: `container`,
  * @return {Widget} A new stats widget instance
  * @example

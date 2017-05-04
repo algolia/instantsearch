@@ -77,25 +77,25 @@ starRating({
 
 /**
  * @typedef {Object} StarWidgetTemplates
- * @property  {string|Function} [header] Header template
- * @property  {string|Function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @property  {string|Function} [footer] Footer template
+ * @property  {string|Function} [header] Header template.
+ * @property  {string|Function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property  {string|Function} [footer] Footer template.
  */
 
 /**
  * @typedef {Object} StarWidgetCssClasses
- * @property  {string|string[]} [root] CSS class to add to the root element
- * @property  {string|string[]} [header] CSS class to add to the header element
- * @property  {string|string[]} [body] CSS class to add to the body element
- * @property  {string|string[]} [footer] CSS class to add to the footer element
- * @property  {string|string[]} [list] CSS class to add to the list element
- * @property  {string|string[]} [item] CSS class to add to each item element
- * @property  {string|string[]} [link] CSS class to add to each link element
- * @property  {string|string[]} [disabledLink] CSS class to add to each disabled link (when using the default template)
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [header] CSS class to add to the header element.
+ * @property  {string|string[]} [body] CSS class to add to the body element.
+ * @property  {string|string[]} [footer] CSS class to add to the footer element.
+ * @property  {string|string[]} [list] CSS class to add to the list element.
+ * @property  {string|string[]} [item] CSS class to add to each item element.
+ * @property  {string|string[]} [link] CSS class to add to each link element.
+ * @property  {string|string[]} [disabledLink] CSS class to add to each disabled link (when using the default template).
  * @property  {string|string[]} [count] CSS class to add to each counters
- * @property  {string|string[]} [star] CSS class to add to each star element (when using the default template)
- * @property  {string|string[]} [emptyStar] CSS class to add to each empty star element (when using the default template)
- * @property  {string|string[]} [active] CSS class to add to each active element
+ * @property  {string|string[]} [star] CSS class to add to each star element (when using the default template).
+ * @property  {string|string[]} [emptyStar] CSS class to add to each empty star element (when using the default template).
+ * @property  {string|string[]} [active] CSS class to add to each active element.
  */
 
 /**
@@ -105,19 +105,19 @@ starRating({
 
 /**
  * @typedef {Object} StarWidgetTransforms
- * @property  {Function} [item] Function to change the object passed to the `item` template
+ * @property  {Function} [item] Function to change the object passed to the `item` template.
  */
 
 /**
  * @typedef {Object} StarWidgetOptions
  * @property {string|DOMElement} container Place where to insert the widget in your webpage.
  * @property {string} attributeName Name of the attribute in your records that contains the ratings.
- * @property {number} [max=5] The maximum rating value
- * @property {StarWidgetLabels} [labels] Labels used by the default template
+ * @property {number} [max=5] The maximum rating value.
+ * @property {StarWidgetLabels} [labels] Labels used by the default template.
  * @property {StarWidgetTemplates} [templates] Templates to use for the widget.
  * @property {StarWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
- * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching
- * @property {StarWidgetCssClasses} [cssClasses] CSS classes to add
+ * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
+ * @property {StarWidgetCssClasses} [cssClasses] CSS classes to add.
  * @property {boolean|StarWidgetCollapsibleOption} [collapsible=false] If set to true, the widget can be collapsed. This parameter can also be
  */
 
@@ -127,9 +127,8 @@ starRating({
  * The values must be **integers** in your records. Even though, the maximum value can be set (with `max`), the minimum is
  * always 0.
  * @type {WidgetFactory}
- * @memberof instantsearch.widgets
- * @param {StarWidgetOptions} $0 Star rating widget options.
- * @return {Widget} A new star rating widget instance.
+ * @param {StarWidgetOptions} $0 StarRating widget options.
+ * @return {Widget} A new StarRating widget instance.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.starRating({

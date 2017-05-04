@@ -71,44 +71,45 @@ hierarchicalMenu({
 })`;
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
- * @property {string|string[]} [root] CSS class to add to the root element
- * @property {string|string[]} [header] CSS class to add to the header element
- * @property {string|string[]} [body] CSS class to add to the body element
- * @property {string|string[]} [footer] CSS class to add to the footer element
- * @property {string|string[]} [list] CSS class to add to the list element
- * @property {string|string[]} [item] CSS class to add to each item element
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [header] CSS class to add to the header element.
+ * @property {string|string[]} [body] CSS class to add to the body element.
+ * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [list] CSS class to add to the list element.
+ * @property {string|string[]} [item] CSS class to add to each item element.
  * @property {string|string[]} [depth] CSS class to add to each item element to denote its depth. The actual level will be appended to the given class name (ie. if `depth` is given, the widget will add `depth0`, `depth1`, ... according to the level of each item).
- * @property {string|string[]} [active] CSS class to add to each active element
- * @property {string|string[]} [link] CSS class to add to each link (when using the default template)
- * @property {string|string[]} [count] CSS class to add to each count element (when using the default template)
+ * @property {string|string[]} [active] CSS class to add to each active element.
+ * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
+ * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
  */
 
 /**
  * @typedef {Object} HierarchicalMenuTemplates
- * @property {string|function(object):string} [header=''] Header template (root level only)
- * @property {string|function(object):string} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @property {string|function(object):string} [footer=''] Footer template (root level only)
+ * @property {string|function(object):string} [header=''] Header template (root level only).
+ * @property {string|function(object):string} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|function(object):string} [footer=''] Footer template (root level only).
  */
 
 /**
  * @typedef {Object} HierarchicalMenuTransforms
- * @property {function(object):object} [item] Method to change the object passed to the `item` template
+ * @property {function(object):object} [item] Method to change the object passed to the `item`. template
  */
 
 /**
  * @typedef {Object} HierarchicalMenuWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
- * @property {number} [limit=10] How much facet values to get [*]
- * @property {string} [separator=" > "] Separator used in the attributes to separate level values. [*]
+ * @property {number} [limit=10] How much facet values to get [*].
+ * @property {string} [separator=" > "] Separator used in the attributes to separate level values. [*].
  * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
- * @property {string} [showParentLevel=false] Show the parent level of the current refined value
+ * @property {string} [showParentLevel=false] Show the parent level of the current refined value.
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
- * @property {HierarchicalMenuTemplates} [templates] Templates to use for the widget
+ *
+ * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {HierarchicalMenuTemplates} [templates] Templates to use for the widget.
  * @property {HierarchicalMenuTransforms} [transformData] Set of functions to transform the data passed to the templates.
- * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu
- * @property {HierarchicalMenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements
+ * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu.
+ * @property {HierarchicalMenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
  * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
  * property is `true`, then the widget is hidden during the first rendering.
@@ -135,8 +136,8 @@ hierarchicalMenu({
  *
  * By default, the separator is ` > ` but it can be different and specified with the `separator` option.
  * @type {WidgetFactory}
- * @param {HierarchicalMenuWidgetOptions} $0 The hierarchical menu widget options.
- * @return {Object} A new hierarchical menu widget instance.
+ * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
+ * @return {Widget} A new HierarchicalMenu widget instance.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.hierarchicalMenu({

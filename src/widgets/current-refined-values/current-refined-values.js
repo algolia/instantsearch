@@ -90,36 +90,36 @@ currentRefinedValues({
 
 /**
  * @typedef {Object} CurrentRefinedValuesCSSClasses
- * @property {string} [root] CSS classes added to the root element
- * @property {string} [header] CSS classes added to the header element
- * @property {string} [body] CSS classes added to the body element
- * @property {string} [clearAll] CSS classes added to the clearAll element
- * @property {string} [list] CSS classes added to the list element
- * @property {string} [item] CSS classes added to the item element
- * @property {string} [link] CSS classes added to the link element
- * @property {string} [count] CSS classes added to the count element
- * @property {string} [footer] CSS classes added to the footer element
+ * @property {string} [root] CSS classes added to the root element.
+ * @property {string} [header] CSS classes added to the header element.
+ * @property {string} [body] CSS classes added to the body element.
+ * @property {string} [clearAll] CSS classes added to the clearAll element.
+ * @property {string} [list] CSS classes added to the list element.
+ * @property {string} [item] CSS classes added to the item element.
+ * @property {string} [link] CSS classes added to the link element.
+ * @property {string} [count] CSS classes added to the count element.
+ * @property {string} [footer] CSS classes added to the footer element.
  */
 
 /**
  * @typedef {Object} CurrentRefinedValuesAttributes
- * @property {string} name Required attribute name
- * @property {string} label Attribute label (passed to the item template)
- * @property {string|function(object):string} template Attribute specific template
- * @property {function(object):object} transformData Attribute specific transformData
+ * @property {string} name Required attribute name.
+ * @property {string} label Attribute label (passed to the item template).
+ * @property {string|function(object):string} template Attribute specific template.
+ * @property {function(object):object} transformData Attribute specific transformData.
  */
 
 /**
  * @typedef {Object} CurrentRefinedValuesTemplates
- * @property {string|function(object):string} [header] Header template
- * @property {string|function(object):string} [item] Item template
- * @property {string|function(object):string} [clearAll] Clear all template
- * @property {string|function(object):string} [footer] Footer template
+ * @property {string|function(object):string} [header] Header template.
+ * @property {string|function(object):string} [item] Item template.
+ * @property {string|function(object):string} [clearAll] Clear all template.
+ * @property {string|function(object):string} [footer] Footer template.
  */
 
 /**
  * @typedef {Object} CurrentRefinedValuesTransforms
- * @property {function(object):object} [item] Method to change the object passed to the `item` template
+ * @property {function(object):object} [item] Method to change the object passed to the `item` template.
  */
 
 /**
@@ -150,8 +150,8 @@ currentRefinedValues({
  *
  * This widget is usually in the top part of the search UI.
  * @type {WidgetFactory}
- * @param {CurrentRefinedValuesWidgetOptions} $0 The current refined values widget options.
- * @returns {Object} A new currentRefinedValues widget instance.
+ * @param {CurrentRefinedValuesWidgetOptions} $0 The CurrentRefinedValues widget options.
+ * @returns {Object} A new CurrentRefinedValues widget instance.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.currentRefinedValues({

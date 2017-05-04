@@ -46,31 +46,31 @@ const usage = `Usage: numericSelector({
 
 /**
  * @typedef {Object} NumericOption
- * @property {number} value The numerical value to refine with
- * @property {string} label Label to display in the option
+ * @property {number} value The numerical value to refine with.
+ * @property {string} label Label to display in the option.
  */
 
 /**
  * @typedef {Object} NumericSelectorCSSClasses
- * @property {string|string[]} [root] CSS classes added to the parent `<select>`
- * @property {string|string[]} [item] CSS classes added to each `<option>`
+ * @property {string|string[]} [root] CSS classes added to the parent `<select>`.
+ * @property {string|string[]} [item] CSS classes added to each `<option>`.
  */
 
 /**
  * @typedef {Object} NumericSelectorWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property {string} attributeName Name of the numeric attribute to use
- * @property {NumericOption[]} options Array of objects defining the different values and labels
- * @property {string} [operator='='] The operator to use to refine
- * @property {boolean} [autoHideContainer=false] Hide the container when no results match
- * @property {NumericSelectorCSSClasses} [cssClasses] CSS classes to be added
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string} attributeName Name of the numeric attribute to use.
+ * @property {NumericOption[]} options Array of objects defining the different values and labels.
+ * @property {string} [operator='='] The operator to use to refine.
+ * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
+ * @property {NumericSelectorCSSClasses} [cssClasses] CSS classes to be added.
  */
 
 /**
- * Instantiate a dropdown element to choose the number of hits to display per page
+ * Instantiate a dropdown element to choose the number of hits to display per page.
  * @type {WidgetFactory}
- * @param {NumericSelectorWidgetOptions} $0 The numeric selector widget options.
- * @return {Object} A new instance of numeric selector widget.
+ * @param {NumericSelectorWidgetOptions} $0 The NumericSelector widget options.
+ * @return {Widget} A new instance of NumericSelector widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.numericSelector({

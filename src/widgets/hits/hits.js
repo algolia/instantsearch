@@ -91,8 +91,8 @@ hits({
  * together with a pagination widget, to let the user browse the results
  * beyond the first page.
  * @type {WidgetFactory}
- * @param {HitsWidgetOptions} $0 Options of the hits widget.
- * @return {Object} A new instance of hits widget.
+ * @param {HitsWidgetOptions} $0 Options of the Hits widget.
+ * @return {Widget} A new instance of Hits widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.hits({
