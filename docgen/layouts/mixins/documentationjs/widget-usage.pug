@@ -7,7 +7,7 @@ mixin widgetUsage(fnSymbol)
     - const properties = '\n' + paramsType.properties.map(p => `  ${p.name}: ${p.type.name}`).join(',\n');
     pre.CodeMirror.cm-s-mdn-like
       code
-        span.cm-keyword const 
+        span.cm-keyword var 
         span.cm-def widget 
         span.cm-operator = 
         span.cm-variable=fnSymbol.name
