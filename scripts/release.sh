@@ -59,7 +59,7 @@ read -p "=> Release: press [ENTER] to view changes since latest version.."
 conventional-changelog --preset angular --output-unreleased | less
 
 additionalInfo=''
-if [[ $beta ]]; then
+if $beta; then
   additionalInfo='. You are releasing a BETA version. New version should look like x.x.x-beta.x.'
 fi
 
@@ -103,7 +103,7 @@ git push origin --tags
 printf "\n\nRelease: pushed to github, publish on npm"
 
 npmFlags=''
-if [[ $beta ]]; then
+if $beta; then
   npmFlags="--tag beta"
 fi
 
