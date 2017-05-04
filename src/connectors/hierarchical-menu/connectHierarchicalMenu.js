@@ -29,7 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string} label Human-readable value of the menu item.
  * @property {number} count Number of matched results after refinement is applied.
  * @property {isRefined} boolean Indicates if the refinement is applied.
- * @property {HierarchicalMenuItem} [data] n+1 level of items.
+ * @property {Object} [data] n+1 level of items, same structure HierarchicalMenuItem (default: `undefined`).
  */
 
 /**
