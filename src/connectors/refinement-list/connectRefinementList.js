@@ -34,18 +34,26 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
 };
 
 /**
+ * @typedef {Object} RefinementListItem
+ * @property {string} value The value of the refinement list item.
+ * @property {string} label Human-readable value of the refinement list item.
+ * @property {number} count Number of matched results after refinement is applied.
+ * @property {boolean} isRefined Indicates if the list item is refined.
+ */
+
+/**
  * @typedef {Object} CustomRefinementListWidgetOptions
  * @property {string} attributeName The name of the attribute in the records.
- * @property {"and"|"or"} [operator = "or"] How the filters are combined together.
+ * @property {"and"|"or"} [operator] How the filters are combined together (default: `"or"`).
  * @property {number} [limit] The max number of items to display.
- * @property {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {string[]|function} [sortBy] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc` (default: `['isRefined', 'count:desc']`).
  */
 
 /**
  * @typedef {Object} RefinementListRenderingOptions
- * @property {Object[]} items The list of filtering values returned from Algolia API.
- * @property {function} createURL Creates the next state url for a selected refinement.
- * @property {function} refine Action to apply selected refinements.
+ * @property {RefinementListItem[]} items The list of filtering values returned from Algolia API.
+ * @property {function(item.value): string} createURL Creates the next state url for a selected refinement.
+ * @property {function(item.value)} refine Action to apply selected refinements.
  * @property {function} searchForItems Search for values inside the list.
  * @property {boolean} isFromSearch Indicates if the values are from an index search.
  * @property {boolean} canRefine Indicates if a refinement can be applied.
@@ -58,9 +66,6 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
  * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom RefinementList widget
  * function renderFn(RefinementListRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {

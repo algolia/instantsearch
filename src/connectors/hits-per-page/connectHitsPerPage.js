@@ -52,14 +52,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * **HitsPerPage** connector provides the logic to create custom widget that will
  * allow a user to choose to display more or less results from Algolia.
+ *
  * This connector provides a `HitsPerPageRenderingOptions.refine()` function to change the hits per page configuration and trigger a new search.
  * @type {Connector}
  * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn Rendering function for the custom **HitsPerPage** widget.
  * @return {function(HitsPerPageWidgetOptions)} Re-usable widget factory for a custom **HitsPerPage** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom HitsPerPage widget
  * function renderFn(HitsPerPageRenderingOptions) {
  *   if (isFirstRendering) {

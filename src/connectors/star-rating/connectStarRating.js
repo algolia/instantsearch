@@ -32,13 +32,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} CustomStarRatingWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
- * @property {number} [max = 5] The maximum rating value.
+ * @property {number} [max] The maximum rating value (default: `5`).
  */
 
 /**
  * @typedef {Object} StarRatingRenderingOptions
  * @property {StarRatingItems[]} items Possible star ratings the user can apply.
- * @property {function(item.value)} createURL Creates an URL for the next state (takes the item value as parameter).
+ * @property {function(item.value): string} createURL Creates an URL for the next state (takes the item value as parameter).
  * @property {function(item.value)} refine Switch to the next state and do a search (takes the filter value as parameter).
  * @property {boolean} hasNoResults Indicates that the last search contains no results.
  * @property {Object} widgetParams All original `CustomStarRatingWidgetOptions` forwarded to the `renderFn`.
@@ -51,9 +51,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(StarRatingRenderingOptions, boolean)} renderFn Rendering function for the custom **StarRating** widget.
  * @return {function(CustomStarRatingWidgetOptions)} Re-usable widget factory for a custom **StarRating** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom StarRating widget
  * function renderFn(StarRatingRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {

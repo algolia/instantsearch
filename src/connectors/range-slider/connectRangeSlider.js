@@ -35,7 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} refine Refine results by applying the selected range.
  * @property {{min: number, max: number}} numeric Results bounds without the current range filter.
  * @property {Array<number, number>} start Current numeric bounds of the search.
- * @property {{from: function, to: function}} formatter functions
+ * @property {{from: function, to: function}} formatter Transform for the rendering `from` and/or `to` values.
  * @property {Object} widgetParams All original `CustomRangeSliderWidgetOptions` forwarded to the `renderFn`.
  */
 

@@ -32,7 +32,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} SortBySelectorRenderingOptions
  * @property {string} currentRefinement The currently selected index.
  * @property {SortBySelectorIndices[]} options All the available indices
- * @property {function} refine Switch indices and trigger a new search.
+ * @property {function(option.value)} refine Switch indices and trigger a new search.
  * @property {boolean} hasNoResults Indicates if there were no results during that last search.
  * @property {Object} widgetParams All original `CustomSortBySelectorWidgetOptions` forwarded to the `renderFn`.
  */
@@ -43,9 +43,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(SortBySelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBySelector** widget.
  * @return {function(CustomSortBySelectorWidgetOptions)} Re-usable widget factory for a custom **SortBySelector** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom SortBySelector widget
  * function renderFn(SortBySelectorRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {

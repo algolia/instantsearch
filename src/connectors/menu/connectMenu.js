@@ -25,36 +25,45 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
+ * @typedef {Object} MenuItem
+ * @property {string} value The value of the menu item.
+ * @property {string} label Human-readable value of the menu item.
+ * @property {number} count Number of results matched after refinement is applied.
+ * @property {isRefined} boolean Indicates if the refinement is applied.
+ */
+
+/**
  * @typedef {Object} CustomMenuWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
- * @property {number} [limit = 10] How many facets values to retrieve [*].
- * @property {number} [showMoreLimit] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option.
- * @property {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ * @property {number} [limit] How many facets values to retrieve [*] (default: `10`).
+ * @property {number} [showMoreLimit] How many facets values to retrieve when `toggleShowMore` is called, this value is meant to be greater than `limit` option (default: `undefined`).
+ * @property {string[]|function} [sortBy] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ *
+ * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ *
+ * (default: `['isRefined', 'count:desc']`).
  */
 
 /**
  * @typedef {Object} MenuRenderingOptions
- * @property {Object[]} items The elements that can be refined for the current search results.
- * @property {function} createURL Creates the URL for a single item name in the list.
- * @property {function(item)} refine Filter the search to item value.
+ * @property {MenuItem[]} items The elements that can be refined for the current search results.
+ * @property {function(item.value): string} createURL Creates the URL for a single item name in the list.
+ * @property {function(item.value)} refine Filter the search to item value.
  * @property {boolean} canRefine True if refinement can be applied.
  * @property {Object} widgetParams All original `CustomMenuWidgetOptions` forwarded to the `renderFn`.
- * @property {boolean} isShowingMore Does the menu is displaying all the results.
- * @property {function} toggleShowMore Action to call for switching between show less and more.
+ * @property {boolean} isShowingMore Indicates if the menu is displaying all the menu items.
+ * @property {function} toggleShowMore Action to call for switching between show less and more menu items.
  */
 
  /**
   * **Menu** connector provides the logic to build a widget that will give the user the ability to choose a single value for a specific facet.
+  *
   * This connector provides a `MenuRenderingOptions.toggleShowMore()` function to display more or less items.
   * @type {Connector}
   * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
   * @return {function(CustomMenuWidgetOptions)} Re-usable widget factory for a custom **Menu** widget.
   * @example
-  * var $ = window.$;
-  * var instantsearch = window.instantsearch;
-  *
-  * // custom `renderFn` to render the custom ClearAll widget
+  * // custom `renderFn` to render the custom Menu widget
   * function renderFn(MenuRenderingOptions, isFirstRendering) {
   *  if (isFirstRendering) {
   *    MenuRenderingOptions.widgetParams.containerNode

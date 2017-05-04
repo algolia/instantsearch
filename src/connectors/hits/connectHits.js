@@ -26,9 +26,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(HitsRenderingOptions, boolean)} renderFn Rendering function for the custom **Hits** widget.
  * @return {function} Re-usable widget factory for a custom **Hits** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom Hits widget
  * function renderFn(HitsRenderingOptions) {
  *   HitsRenderingOptions.containerNode.html(

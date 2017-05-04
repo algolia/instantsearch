@@ -42,9 +42,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(PriceRangesRenderingOptions, boolean)} renderFn Rendering function for the custom **PriceRanges** widget.
  * @return {function(CustomPriceRangesWidgetOptions)} Re-usable widget factory for a custom **PriceRanges** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * function getLabel(item) {
  *   var from = item.from;
  *   var to = item.to;

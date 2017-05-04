@@ -26,11 +26,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} PaginationRenderingOptions
- * @property {function(number)} createURL Creates URL's for the next state, the number is the page to generate the URL for.
+ * @property {function(page): string} createURL Creates URL's for the next state, the number is the page to generate the URL for.
  * @property {number} currentRefinement The number of the page currently displayed.
  * @property {number} nbHits The number of hits computed for the last query (can be approximated).
  * @property {number} nbPages The number of pages for the result set.
- * @property {function} refine Set the current page and trigger a search.
+ * @property {function(page)} refine Set the current page and trigger a search.
  * @property {Object} widgetParams All original `CustomPaginationWidgetOptions` forwarded to the `renderFn`.
  */
 
@@ -40,9 +40,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
  * @return {function(CustomPaginationWidgetOptions)} Re-usable widget factory for a custom **Pagination** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom ClearAll widget
  * function renderFn(PaginationRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {

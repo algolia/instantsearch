@@ -43,13 +43,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CurrentRefinedValuesRenderingOptions
- * @property {Object.<string, object>} attributes `CurrentRefinedValuesWidgetOptions.attributes` mapped by keys.
+ * @property {Object.<string, object>} attributes Original `CurrentRefinedValuesWidgetOptions.attributes` mapped by keys.
  * @property {function} clearAllClick Trigger the clear of all the currently refined values.
  * @property {function} clearAllURL URL which leads to a state where all the refinements have been cleared.
- * @property {string} clearAllPosition Position of the `clearAll` button / link.
  * @property {function(item)} refine Clearing function for a refinement.
- * @property {function(item)} createURL Creates an individual url where a single refinement is cleared.
- * @property {Refinements[]} refinements All the current refinements.
+ * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
+ * @property {Object[]} refinements All the current refinements.
  * @property {Object} widgetParams All original `CustomCurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
  */
 
@@ -57,27 +56,23 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} CurrentRefinedValuesAttributes
  * @property {string} name Mandatory field which is the name of the attribute.
  * @property {string} label The label to apply on a refinement per attribute.
- * @property {string|function} template The template to apply.
- * @property {function} transformData Transform the content of the refinement before rendering the template.
  */
 
 /**
  * @typedef {Object} CustomCurrentRefinedValuesWidgetOptions
- * @property {CurrentRefinedValuesAttributes[]} attributes specification for the display of refinements per attribute
- * @property {boolean} onlyListedAttributes limit the displayed refinement to the list specified
- * @property {boolean} [clearsQuery=false] also clears the active search query
+ * @property {CurrentRefinedValuesAttributes[]} [attributes] Specification for the display of refinements per attribute (default: `[]`).
+ * @property {boolean} [onlyListedAttributes] Limit the displayed refinement to the list specified (default: `false`).
+ * @property {boolean} [clearsQuery] Clear also the active search query (default: `false`).
  */
 
 /**
  * **CurrentRefinedValues** connector provides the logic to build a widget that will give the user the ability to remove all or some of the filters that were set.
- * This provides a `CurrentRefinedValuesRenderingOptions.refine(item)` function to remove the selected refinement.
+ *
+ * This provides a `CurrentRefinedValuesRenderingOptions.refine(item)` function to remove a selected refinement.
  * @type {Connector}
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
- * @return {function(CurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
+ * @return {function(CustomCurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom ClearAll widget
  * function renderFn(CurrentRefinedValuesRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {

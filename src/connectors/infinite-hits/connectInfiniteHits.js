@@ -28,14 +28,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * **InfiniteHits** connector provides the logic to create custom widgets that will render an continuous list of results retrieved from Algolia.
+ *
  * This connector provides a `InfiniteHitsRenderingOptions.showMore()` function to load next page of matched results.
  * @type {Connector}
  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn Rendering function for the custom **InfiniteHits** widget.
  * @return {function(object)} Re-usable widget factory for a custom **InfiniteHits** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom ClearAll widget
  * function renderFn(InfiniteHitsRenderingOptions) {
  *   if (isFirstRendering === true) {

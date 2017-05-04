@@ -22,7 +22,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
- * @typedef {Object} Option
+ * @typedef {Object} NumericSelectorOption
  * @property {number} value The numerical value to refine with.
  * @property {string} label Label to display in the option.
  */
@@ -30,15 +30,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} CustomNumericSelectorWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
- * @property {Option[]} options Array of objects defining the different values and labels.
+ * @property {NumericSelectorOption[]} options Array of objects defining the different values and labels.
  * @property {string} [operator='='] The operator to use to refine.
  */
 
 /**
  * @typedef {Object} NumericSelectorRenderingOptions
  * @property {string} currentRefinement The currently selected value.
- * @property {Option[]} options The different values and labels of the selector.
- * @property {function} refine Action to update the results with the selected value.
+ * @property {NumericSelectorOption[]} options The different values and labels of the selector.
+ * @property {function(option.value)} refine Action to update the results with the selected value.
  * @property {boolean} hasNoResults Indicates if the last search returned any value.
  * @property {Object} widgetParams All original `CustomNumericSelectorWidgetOptions` forwarded to the `renderFn`.
  */
@@ -51,10 +51,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(NumericSelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericSelector** widget.
  * @return {function(CustomNumericSelectorWidgetOptions)} Re-usable widget factory for a custom **NumericSelector** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
- * // custom `renderFn` to render the custom ClearAll widget
+ * // custom `renderFn` to render the custom NumericSelector widget
  * function renderFn(NumericSelectorRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {
  *     NumericSelectorRenderingOptions.widgetParams.containerNode.html('<select></select>');

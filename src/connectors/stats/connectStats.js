@@ -33,9 +33,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
  * @return {function} Re-usable widget factory for a custom **Stats** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom Stats widget
  * function renderFn(StatsRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) return;

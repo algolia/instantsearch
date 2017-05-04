@@ -46,17 +46,15 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
 
 /**
  * **ClearAll** connector provides the logic to build a custom widget that will give the user the ability to reset the search state.
+ *
  * This connector provides a `ClearAllRenderingOptions.refine()` function to remove the current refined facets.
  * @type {Connector}
  * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the custom **ClearAll** widget.
  * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a custom **ClearAll** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom ClearAll widget
  * function renderFn(ClearAllRenderingOptions, isFirstRendering) {
- *   if (isFirstRendering === true) {
+ *   if (isFirstRendering) {
  *     var markup = $('<button id="custom-clear-all">Clear All</button>');
  *     ClearAllRenderingOptions.widgetParams.containerNode.append(markup);
  *
