@@ -30,4 +30,4 @@ examplesEndpoint: https://github.com/algolia/react-instantsearch/tree/master/pac
 ## Recipes
 
 To demonstrate more complex use cases of React InstantSearch we created some recipes.
-If you think about a new recipe or have any questions about them, [come talk to us](https://discourse.algolia.com/c/instantsearch).
+If you think about a new recipe or have any questions about them, [come talk to us](https://discourse.algolia.com/tags/react-instantsearch).

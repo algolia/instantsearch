@@ -14,7 +14,7 @@ most use cases in with simple API entries. But we could not plan everything and 
 in some cases the current API may not be able to fulfill this promise of simplicity.
 
 If that's not the case or in doubt, **before diving into custom conectors**
-please expose us your use case and come ask us questions on [discourse](https://discourse.algolia.com/c/instantsearch)
+please expose us your use case and come ask us questions on [discourse](https://discourse.algolia.com/tags/react-instantsearch)
 or [GitHub](https://github.com/algolia/react-instantsearch/issues) first. We will be glad
 that you do so.
 
