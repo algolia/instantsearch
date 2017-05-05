@@ -134,7 +134,7 @@ searchBox({
 
 /**
  * @typedef {Object} SearchBoxWidgetOptions
- * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
  * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.

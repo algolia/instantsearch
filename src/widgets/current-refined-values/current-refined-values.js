@@ -124,7 +124,7 @@ currentRefinedValues({
 
 /**
  * @typedef {Object} CurrentRefinedValuesWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
  * @property {CurrentRefinedValuesAttributes[]} [attributes = []] Label definitions for the
  * different filters.
  * @property {boolean} [onlyListedAttributes=false] Only use the declared attributes. By default, the widget

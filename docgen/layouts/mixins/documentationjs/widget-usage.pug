@@ -4,7 +4,6 @@ mixin widgetUsage(fnSymbol)
     - const paramTypeName = paramTag.type.name;
     - const paramsType = fnSymbol.relatedTypes && fnSymbol.relatedTypes.find(t => t.name === paramTypeName);
     - if(!paramsType) console.log(fnSymbol.relatedTypes.map(t => t.name));
-    - const properties = '\n' + paramsType.properties.map(p => `  ${p.name}: ${p.type.name}`).join(',\n');
     pre.CodeMirror.cm-s-mdn-like
       code
         span.cm-keyword var 
@@ -30,11 +29,11 @@ mixin widgetUsage(fnSymbol)
             a.typed-link(href=`${navPath}#struct-${paramTypeName}-${property.name}`)=property.name
           | : 
           span.cm-def
-            +type(property.type)
+            +type(property.type, fnSymbol.relatedTypes)
           | , !{'\n'}
         | }: 
         span.cm-def
-          +type(paramsType)
+          +type(paramsType, fnSymbol.relatedTypes)
         | );
         |
         br

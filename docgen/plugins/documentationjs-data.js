@@ -4,9 +4,10 @@ import remark from 'remark';
 import html from 'remark-html';
 
 function formatMD(ast) {
-  if (ast) {
+  if (ast && ast.type === 'root') {
     return remark().use(html).stringify(ast);
   }
+  return ast;
 };
 
 
@@ -15,8 +16,10 @@ function formatAllMD(symbols) {
     return symbols.map(s => formatAllMD(s));
   } else if (isObject(symbols)) {
     return reduce(symbols, (acc, propertyValue, propertyName) => {
-      if(propertyName === 'description' && propertyValue && propertyValue.type === 'root') {
+      if(propertyName === 'description') {
         acc[propertyName] = formatMD(propertyValue);
+      } else if(propertyName === 'sees') {
+        acc[propertyName] = propertyValue.map(s => formatMD(s));
       } else {
         acc[propertyName] = formatAllMD(propertyValue);
       }
@@ -25,8 +28,6 @@ function formatAllMD(symbols) {
   }
   return symbols;
 }
-
-let cachedFiles;
 
 export default function({rootJSFile}) {
   return function(files, metalsmith, done) {

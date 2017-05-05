@@ -77,9 +77,9 @@ starRating({
 
 /**
  * @typedef {Object} StarWidgetTemplates
- * @property  {string|Function} [header] Header template.
- * @property  {string|Function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property  {string|Function} [footer] Footer template.
+ * @property  {string|function} [header] Header template.
+ * @property  {string|function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property  {string|function} [footer] Footer template.
  */
 
 /**
@@ -105,12 +105,12 @@ starRating({
 
 /**
  * @typedef {Object} StarWidgetTransforms
- * @property  {Function} [item] Function to change the object passed to the `item` template.
+ * @property  {function} [item] Function to change the object passed to the `item` template.
  */
 
 /**
  * @typedef {Object} StarWidgetOptions
- * @property {string|DOMElement} container Place where to insert the widget in your webpage.
+ * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attributeName Name of the attribute in your records that contains the ratings.
  * @property {number} [max=5] The maximum rating value.
  * @property {StarWidgetLabels} [labels] Labels used by the default template.

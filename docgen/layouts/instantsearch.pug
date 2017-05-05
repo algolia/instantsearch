@@ -22,11 +22,11 @@ block content
   +instantsearchUsage(instantsearchFactory)
   each t in instantsearchFactory.relatedTypes
     if t
-      +struct(t)
+      +struct(t, instantsearchFactory.relatedTypes)
   h2#methods Methods
   each m in InstantSearch.members.instance
     if m
-      +method(m)
+      +method(m, instantsearchFactory.relatedTypes)
   h2#events Events
   p InstantSearch is an EventEmitter and as such it emits events on specific parts of the lifecycle.
   h3 render

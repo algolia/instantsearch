@@ -71,10 +71,10 @@ stats({
 
 /**
  * @typedef {Object} StatsWidgetTemplates
- * @property {string|Function} [header=''] Header template.
- * @property {string|Function} [body] Body template, provided with `hasManyResults`,
+ * @property {string|function} [header=''] Header template.
+ * @property {string|function} [body] Body template, provided with `hasManyResults`,
  * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`.
- * @property {string|Function} [footer=''] Footer template.
+ * @property {string|function} [footer=''] Footer template.
  */
 
 /**
@@ -106,7 +106,7 @@ stats({
 
 /**
  * @typedef {Object} StatsWidgetOptions
- * @property {string|DOMElement} container Place where to insert the widget in your webpage.
+ * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {StatsWidgetTemplates} [templates] Templates to use for the widget.
  * @property {StatsWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
  * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.

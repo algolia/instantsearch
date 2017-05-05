@@ -97,7 +97,7 @@ hierarchicalMenu({
 
 /**
  * @typedef {Object} HierarchicalMenuWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
  * @property {number} [limit=10] How much facet values to get [*].
  * @property {string} [separator=" > "] Separator used in the attributes to separate level values. [*].

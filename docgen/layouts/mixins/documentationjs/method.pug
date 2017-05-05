@@ -1,7 +1,7 @@
 include description.pug
 include type.pug
 
-mixin method(t)
+mixin method(t, relatedTypes)
   h3(id=`struct-${t.name}`)=`${t.name}(`
     if t.params
       each param, idx in t.params
@@ -18,5 +18,5 @@ mixin method(t)
           strong=param.name
           a.anchor(href=`${navPath}#param-${t.name}-${param.name}`)
           code
-            +type(param.type)
+            +type(param.type, relatedTypes)
           +description(param.description)

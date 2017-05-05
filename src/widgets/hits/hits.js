@@ -78,7 +78,7 @@ hits({
 
 /**
  * @typedef {Object} HitsWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {HitsTemplates} [templates] Templates to use for the widget.
  * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property {HitsCSSClasses} [cssClasses] CSS classes to add.

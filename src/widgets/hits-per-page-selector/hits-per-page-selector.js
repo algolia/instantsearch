@@ -59,7 +59,7 @@ hitsPerPageSelector({
 
 /**
  * @typedef {Object} HitsPerPageSelectorWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {HitsPerPageSelectorItems[]} items Array of objects defining the different values and labels.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {HitsPerPageSelectorCSSClasses} [cssClasses] CSS classes to be added.

@@ -117,7 +117,7 @@ menu({
 
 /**
  * @typedef {Object} MenuWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attributeName Name of the attribute for faceting/
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *

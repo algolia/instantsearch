@@ -13,14 +13,56 @@ mixin connectorUsage(fnSymbol)
       | );
       br
       br
-      | <span class="cm-keyword">var</span> <span class="cm-variable">make!{widgetName}</span> <span class="cm-operator">=</span> <span class="cm-variable">instantsearch</span>.<span class="cm-variable">connectors</span>.<span class="cm-variable-2">!{fnSymbol.name}</span>(
-      |   <span class="cm-keyword">function</span> <span class="cm-variable">renderFn</span>(
-      |       <span class="cm-variable">renderOpts</span>: <span class="cm-def">!{`<a class='typed-link' href='${navPath}#struct-${rendererOptionsT}'>${rendererOptionsT}</a>`}</span>,
-      |       <span class="cm-variable">isFirstRendering</span>: <span class="cm-def">boolean</span>) {
-      |     // render the custom !{widgetName} widget
+      span.cm-keyword var 
+      span.cm-variable make!{widgetName}
+      span.cm-operator = 
+      span.cm-variable instantsearch
+      | .
+      span.cm-variable connectors
+      | .
+      span.cm-variable-2=fnSymbol.name
+      | (
+      br
+      span.cm-keyword='  function '
+      span.cm-variable renderFn
+      | (
+      br
+      span.cm-variable='      renderOpts'
+      | : 
+      span.cm-def
+        a.typed-link(href=`${navPath}#struct-${rendererOptionsT}`)=rendererOptionsT
+      | ,
+      br
+      span.cm-variable='      isFirstRendering'
+      | : 
+      span.cm-def boolean
+      | ) {
+      br
+      span.cm-comment=`    // render the custom ${widgetName} widget`
+      br
       |   }
-      | )<span class="cm-operator">;</span>
+      | )
+      span.cm-operator ;
+      br
+      br
       |
-      | <span class="cm-keyword">var</span> <span class="cm-variable">custom!{widgetName}</span> <span class="cm-operator">=</span> <span class="cm-variable-2">make!{widgetName}</span>(<span class="cm-variable">instanceOpts</span>: <span class="cm-def">!{`<a class="typed-link" href='${navPath}#struct-${widgetOptionT}'>${widgetOptionT}</a>`})</span><span class="cm-operator">;</span>
+      span.cm-keyword var 
+      span.cm-variable custom!{widgetName} 
+      span.cm-operator = 
+      span.cm-variable-2 make!{widgetName}
+      | (
+      span.cm-variable instanceOpts
+      | : 
+      span.cm-def
+        a.typed-link(href=`${navPath}#struct-${widgetOptionT}`)=widgetOptionT
+      | )
+      span.cm-operator ;
+      br
       |
-      | <span class="cm-variable">search</span>.<span class="cm-property">addWidget</span>(<span class="cm-variable">custom!{widgetName}</span>)<span class="cm-operator">;</span>
+      span.cm-variable search
+      | .
+      span.cm-property addWidget
+      | (
+      span.cm-variable custom!{widgetName}
+      | )
+      span.cm-operator ;

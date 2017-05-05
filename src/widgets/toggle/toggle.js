@@ -113,7 +113,7 @@ toggle({
 
 /**
  * @typedef {Object} ToggleWidgetOptions
- * @property {string|DOMElement} container Place where to insert the widget in your webpage.
+ * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
  * @property {string} label Human-readable name of the filter (eg. "Free Shipping").
  * @property {ToggleWidgetValues} [values={on: true, off: undefined}] Values that the widget can set.

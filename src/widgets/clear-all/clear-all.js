@@ -73,7 +73,7 @@ clearAll({
 
 /**
  * @typedef {Object} ClearAllWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} [excludeAttributes] List of attributes names to exclude from clear actions.
  * @property {ClearAllTemplates} [templates] Templates to use for the widget.
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no refinements to clear.

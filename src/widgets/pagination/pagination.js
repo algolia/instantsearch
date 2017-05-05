@@ -98,10 +98,10 @@ pagination({
 
 /**
  * @typedef {Object} PaginationWidgetOptions
- * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {number} [maxPages] The max number of pages to browse.
  * @property  {number} [padding=3] The number of pages to display on each side of the current page.
- * @property  {string|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable.
+ * @property  {string|HTMLElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable.
  * @property  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed.
  * @property  {boolean} [autoHideContainer=true] Hide the container when no results match.
  * @property  {PaginationLabels} [labels] Text to display in the various links (prev, next, first, last).

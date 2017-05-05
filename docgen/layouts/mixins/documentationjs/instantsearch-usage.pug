@@ -17,11 +17,11 @@ mixin instantsearchUsage(fnSymbol)
             a.typed-link(href=`${navPath}#struct-${paramTypeName}-${property.name}`)=property.name
           | : 
           span.cm-def
-            +type(property.type)
+            +type(property.type, fnSymbol.relatedTypes)
           | , !{'\n'}
         | }: 
         span.cm-def
-          +type(paramsType)
+          +type(paramsType, fnSymbol.relatedTypes)
         | );
         |
         br

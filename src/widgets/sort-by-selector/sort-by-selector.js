@@ -56,7 +56,7 @@ sortBySelector({
 
 /**
  * @typedef {Object} SortByWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {SortByIndexDefinition[]} indices Array of objects defining the different indices to choose from.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.

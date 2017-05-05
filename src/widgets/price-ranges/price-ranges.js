@@ -97,7 +97,7 @@ priceRanges({
 
 /**
  * @typedef {Object} PriceRangeWidgetOptions
- * @property  {string|DOMElement} container Valid CSS Selector as a string or DOMElement.
+ * @property  {string|HTMLElement} container Valid CSS Selector as a string or DOMElement.
  * @property  {string} attributeName Name of the attribute for faceting.
  * @property  {PriceRangeTemplates} [templates] Templates to use for the widget.
  * @property  {string} [currency='$'] The currency to display.

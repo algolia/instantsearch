@@ -20,7 +20,7 @@ block content
   +widgetUsage(jsdoc)
   each t in jsdoc.relatedTypes
     if t
-      +struct(t)
+      +struct(t, jsdoc.relatedTypes)
   if jsdoc.examples
     h2#example Example
       a.anchor(href=`${navPath}#example`)

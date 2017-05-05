@@ -58,7 +58,7 @@ const usage = `Usage: numericSelector({
 
 /**
  * @typedef {Object} NumericSelectorWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attributeName Name of the numeric attribute to use.
  * @property {NumericOption[]} options Array of objects defining the different values and labels.
  * @property {string} [operator='='] The operator to use to refine.

@@ -2050,7 +2050,7 @@ exports[`currentRefinedValues() render() options.clearAll should pass it as clea
 />
 `;
 
-exports[`currentRefinedValues() render() options.container should render with a DOMElement container 1`] = `
+exports[`currentRefinedValues() render() options.container should render with a HTMLElement container 1`] = `
 <HeaderFooter-AutoHide
   attributes={
     Object {

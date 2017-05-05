@@ -158,7 +158,7 @@ refinementList({
 
 /**
  * @typedef {Object} RefinementListWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attributeName Name of the attribute for faceting.
  * @property {"and"|"or"} [operator="or"] How to apply refinements. Possible values: `or`, `and`
  * @property {string[]|function} [sortBy=["isRefined", "count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc` `count:desc` `name:asc` `name:desc` `isRefined`.

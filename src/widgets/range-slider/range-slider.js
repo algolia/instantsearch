@@ -86,8 +86,8 @@ rangeSlider({
 
 /**
  * @typedef {Object} RangeSliderTemplates
- * @property  {string|Function} [header=""] Header template.
- * @property  {string|Function} [footer=""] Footer template.
+ * @property  {string|function} [header=""] Header template.
+ * @property  {string|function} [footer=""] Footer template.
  */
 
 /**
@@ -112,7 +112,7 @@ rangeSlider({
 
 /**
  * @typedef {Object} RangeSliderWidgetOptions
- * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property  {string|HTMLElement} container CSS Selector or DOMElement to insert the widget.
  * @property  {string} attributeName Name of the attribute for faceting.
  * @property  {boolean|RangeSliderTooltipOptions} [tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the raw value.

@@ -83,7 +83,7 @@ infiniteHits({
 
 /**
  * @typedef {Object} InfiniteHitsWidgetOptions
- * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget.
  * @property  {string} [showMoreLabel="Show more results"] label used on the show more button.
  * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.

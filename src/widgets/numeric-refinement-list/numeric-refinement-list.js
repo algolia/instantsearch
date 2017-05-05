@@ -80,9 +80,9 @@ numericRefinementList({
 
 /**
  * @typedef {Object} NumericRefinementListTemplates
- * @property {string|Function} [header] Header template.
- * @property {string|Function} [item] Item template, provided with `name`, `isRefined`, `url` data properties.
- * @property {string|Function} [footer] Footer template.
+ * @property {string|function} [header] Header template.
+ * @property {string|function} [item] Item template, provided with `name`, `isRefined`, `url` data properties.
+ * @property {string|function} [footer] Footer template.
  */
 
 /**
@@ -99,7 +99,7 @@ numericRefinementList({
 
 /**
  * @typedef {Object} NumericRefinementListWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attributeName Name of the attribute for filtering.
  * @property {NumericRefinementListOption[]} options List of all the options.
  * @property {NumericRefinementListTemplates} [templates] Templates to use for the widget.

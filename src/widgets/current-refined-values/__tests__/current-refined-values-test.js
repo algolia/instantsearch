@@ -37,7 +37,7 @@ describe('currentRefinedValues()', () => {
         expect(boundWidget).not.toThrow();
       });
 
-      it('doesn\'t throw usage with a DOMElement', () => {
+      it('doesn\'t throw usage with a HTMLElement', () => {
         parameters.container = document.createElement('div');
         expect(boundWidget).not.toThrow();
       });
@@ -47,7 +47,7 @@ describe('currentRefinedValues()', () => {
         expect(boundWidget).toThrow(/Usage/);
       });
 
-      it('throws usage with another type than string or DOMElement', () => {
+      it('throws usage with another type than string or HTMLElement', () => {
         parameters.container = true;
         expect(boundWidget).toThrow(/Usage/);
       });
@@ -564,7 +564,7 @@ describe('currentRefinedValues()', () => {
         expect(ReactDOM.render.firstCall.args[1]).toBe(element);
       });
 
-      it('should render with a DOMElement container', () => {
+      it('should render with a HTMLElement container', () => {
         const element = document.createElement('div');
 
         parameters.container = element;
