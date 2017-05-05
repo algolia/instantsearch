@@ -20,8 +20,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} PriceRangesItem
- * @property {number} [from] Low bound of the price range.
- * @property {number} [to] High bound of the price range.
+ * @property {number} [from] Lower bound of the price range.
+ * @property {number} [to] Higher bound of the price range.
  */
 
 /**
@@ -32,12 +32,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} PriceRangesRenderingOptions
  * @property {PriceRangesItem[]} items The prices ranges to display.
- * @property {function(PriceRangesItem)} refine Select or unselect a price range and trigger a search.
+ * @property {function(PriceRangesItem)} refine Selects or unselects a price range and trigger a search.
  * @property {Object} widgetParams All original `CustomPriceRangesWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **PriceRanges** connector provides the logic to build a custom widget that will give the user the ability to refine results by price ranges.
+ * **PriceRanges** connector provides the logic to build a custom widget that will let
+ * the user refine results based on price ranges.
+ *
  * @type {Connector}
  * @param {function(PriceRangesRenderingOptions, boolean)} renderFn Rendering function for the custom **PriceRanges** widget.
  * @return {function(CustomPriceRangesWidgetOptions)} Re-usable widget factory for a custom **PriceRanges** widget.

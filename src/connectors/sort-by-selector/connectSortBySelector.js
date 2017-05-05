@@ -32,13 +32,20 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} SortBySelectorRenderingOptions
  * @property {string} currentRefinement The currently selected index.
  * @property {SortBySelectorIndices[]} options All the available indices
- * @property {function(option.value)} refine Switch indices and trigger a new search.
- * @property {boolean} hasNoResults Indicates if there were no results during that last search.
+ * @property {function(string)} refine Switches indices and triggers a new search.
+ * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams All original `CustomSortBySelectorWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * The **SortBySelector** connector provides the logic to build a custom widget that will display a list of indices. This allows a user to change how the hits are being sorted.
+ * The **SortBySelector** connector provides the logic to build a custom widget that will display a
+ * list of indices. With Algolia, this is most commonly used for changing ranking strategy. This allows
+ * a user to change how the hits are being sorted.
+ *
+ * This connector provides the `refine` function that allows to switch indices.
+ * The connector provides to the rendering: `refine()` to swith the current index and
+ * `options` that are the values that can be selected. `refine` should be used
+ * with `options.value`.
  * @type {Connector}
  * @param {function(SortBySelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBySelector** widget.
  * @return {function(CustomSortBySelectorWidgetOptions)} Re-usable widget factory for a custom **SortBySelector** widget.

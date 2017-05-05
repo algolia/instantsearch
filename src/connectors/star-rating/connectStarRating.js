@@ -38,15 +38,21 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} StarRatingRenderingOptions
  * @property {StarRatingItems[]} items Possible star ratings the user can apply.
- * @property {function(item.value): string} createURL Creates an URL for the next state (takes the item value as parameter).
- * @property {function(item.value)} refine Switch to the next state and do a search (takes the filter value as parameter).
- * @property {boolean} hasNoResults Indicates that the last search contains no results.
+ * @property {function(string): string} createURL Creates an URL for the next
+ * state (takes the item value as parameter). Takes the value of an item as parameter.
+ * @property {function(string)} refine Selects a rating to filter the results
+ * (takes the filter value as parameter). Takes the value of an item as parameter.
+ * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams All original `CustomStarRatingWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **StarRating** connector provides the logic to build a custom widget that will give the user ability to refine search results by clicking on stars.
- * The stars are based on the selected attributeName.
+ * **StarRating** connector provides the logic to build a custom widget that will let
+ * the user refine search results based on ratings.
+ *
+ * The connector provides to the rendering: `refine()` to select a value and
+ * `items` that are the values that can be selected. `refine` should be used
+ * with `items.value`.
  * @type {Connector}
  * @param {function(StarRatingRenderingOptions, boolean)} renderFn Rendering function for the custom **StarRating** widget.
  * @return {function(CustomStarRatingWidgetOptions)} Re-usable widget factory for a custom **StarRating** widget.

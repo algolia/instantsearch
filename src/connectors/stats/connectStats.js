@@ -28,7 +28,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
- * **Stats** connector provides the logic to build a custom widget that will displays Algolia API search statistics (hits number and processing time).
+ * **Stats** connector provides the logic to build a custom widget that will displays
+ * search statistics (hits number and processing time).
+ *
  * @type {Connector}
  * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
  * @return {function} Re-usable widget factory for a custom **Stats** widget.

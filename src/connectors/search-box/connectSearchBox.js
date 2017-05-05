@@ -20,20 +20,26 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomSearchBoxWidgetOptions
- * @property {function} [queryHook = undefined] A function that will be called every time a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter.
+ * @property {function(string, function(string))} [queryHook = undefined] A function that will be called every time
+ * a new value for the query is set. The first parameter is the query and the second is a
+ * function to actually trigger the search. The function takes the query as the parameter.
+ *
  * This queryHook can be used to debounce the number of searches done from the searchBox.
  */
 
 /**
  * @typedef {Object} SearchBoxRenderingOptions
  * @property {string} query The query from the last search.
- * @property {function} onHistoryChange Register a callback when the browser history changes.
- * @property {function(query)} refine Action to trigger the search with a `query` as parameter.
+ * @property {function(SearchParameters)} onHistoryChange Registers a callback when the browser history changes.
+ * @property {function(string)} refine Sets a new query and searches.
  * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
  * **SearchBox** connector provides the logic to build a widget that will let the user search for a query.
+ *
+ * The connector provides to the rendering: `refine()` to set the query. The behaviour of this function
+ * may be impacted by the `queryHook` widget parameter.
  * @type {Connector}
  * @param {function(SearchBoxRenderingOptions, boolean)} renderFn Rendering function for the custom **SearchBox** widget.
  * @return {function(CustomSearchBoxWidgetOptions)} Re-usable widget factory for a custom **SearchBox** widget.

@@ -25,15 +25,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} NumericRefinementListOption
  * @property {string} name Name of the option.
- * @property {number} start Low bound of the option (>=).
- * @property {number} end High bound of the option (<=).
+ * @property {number} start Lower bound of the option (>=).
+ * @property {number} end Higher bound of the option (<=).
  */
 
 /**
  * @typedef {Object} NumericRefinementListItem
  * @property {string} name Name of the option.
- * @property {number} start Low bound of the option (>=).
- * @property {number} end High bound of the option (<=).
+ * @property {number} start Lower bound of the option (>=).
+ * @property {number} end Higher bound of the option (<=).
  * @property {boolean} isRefined True if the value is selected.
  * @property {string} attributeName The name of the attribute in the records.
  */
@@ -48,15 +48,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} NumericRefinementListRenderingOptions
  * @property {function(item.value): string} createURL Creates URL's for the next state, the string is the name of the selected option.
  * @property {NumericRefinementListItem[]} items The list of available choices.
- * @property {boolean} hasNoResults True if there were no results retrieved in the previous search.
- * @property {function(item.value)} refine Action to set the selected value and trigger a new search.
+ * @property {boolean} hasNoResults `true` if the last search contains no result.
+ * @property {function(item.value)} refine Sets the selected value and trigger a new search.
  * @property {Object} widgetParams All original `CustomNumericRefinementListWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
  * **NumericRefinementList** connector provides the logic to build a custom widget that will give the user the ability to choose a range on to refine the search results.
  *
- * It provides a `NumericRefinementListRenderingOptions.refine(item)` function to refine on the selected range.
+ * It provides a `refine(item)` function to refine on the selected range.
  *
  * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
  * @function connectNumericRefinementList
@@ -64,9 +64,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericRefinementList** widget.
  * @return {function(CustomNumericRefinementListWidgetOptions)} Re-usable widget factory for a custom **NumericRefinementList** widget.
  * @example
- * var $ = window.$;
- * var instantsearch = window.instantsearch;
- *
  * // custom `renderFn` to render the custom NumericRefinementList widget
  * function renderFn(NumericRefinementListRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {

@@ -38,15 +38,16 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} NumericSelectorRenderingOptions
  * @property {string} currentRefinement The currently selected value.
  * @property {NumericSelectorOption[]} options The different values and labels of the selector.
- * @property {function(option.value)} refine Action to update the results with the selected value.
- * @property {boolean} hasNoResults Indicates if the last search returned any value.
+ * @property {function(option.value)} refine Updates the results with the selected value.
+ * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams All original `CustomNumericSelectorWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **NumericSelector** connector provides the logic to build a custom widget that will give the user the ability to limit results between numerical refinements.
+ * **NumericSelector** connector provides the logic to build a custom widget that will let the
+ * user filter the results based on a list of numerical filters.
  *
- * It provides a `NumericSelectorRenderingOptions.refine(option)` function to trigger a new search with selected option.
+ * It provides a `refine(value)` function to trigger a new search with selected option.
  * @type {Connector}
  * @param {function(NumericSelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericSelector** widget.
  * @return {function(CustomNumericSelectorWidgetOptions)} Re-usable widget factory for a custom **NumericSelector** widget.

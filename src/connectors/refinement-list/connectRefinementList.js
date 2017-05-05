@@ -54,14 +54,18 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @property {RefinementListItem[]} items The list of filtering values returned from Algolia API.
  * @property {function(item.value): string} createURL Creates the next state url for a selected refinement.
  * @property {function(item.value)} refine Action to apply selected refinements.
- * @property {function} searchForItems Search for values inside the list.
- * @property {boolean} isFromSearch Indicates if the values are from an index search.
- * @property {boolean} canRefine Indicates if a refinement can be applied.
+ * @property {function} searchForItems Searches for values inside the list.
+ * @property {boolean} isFromSearch `true` if the values are from an index search.
+ * @property {boolean} canRefine `true` if a refinement can be applied.
  * @property {Object} widgetParams All original `CustomRefinementListWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **RefinementList** connector provides the logic to build a custom widget that will give the user the ability to choose multiple values for a specific facet.
+ * **RefinementList** connector provides the logic to build a custom widget that will let the
+ * user filter the results based on the values of a specific facet.
+ *
+ * The connector provides to the rendering: `refine()` to select a value and
+ * `items` that are the values that can be selected.
  * @type {Connector}
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
  * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.

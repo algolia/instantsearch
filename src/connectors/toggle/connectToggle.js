@@ -27,8 +27,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} ToggleValue
  * @property {string} name Human-readable name of the filter.
- * @property {boolean} isRefined Indicates if the toggle is on or off.
- * @property {number} count How many results are matched after applying the toggle refinement.
+ * @property {boolean} isRefined `true` if the toggle is on.
+ * @property {number} count Number of results matched after applying the toggle refinement.
  * @property {Object} onFacetValue Value of the toggle when it's on.
  * @property {Object} offFacetValue Value of the toggle when it's off.
  */
@@ -37,7 +37,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} CustomToggleWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
  * @property {string} label Human-readable name of the filter (eg. "Free Shipping").
- * @property {Object} [values = {on: true, off: undefined}] Lets you define the values to filter on when toggling.
+ * @property {Object} [values = {on: true, off: undefined}] Values to filter on when toggling.
  */
 
 /**
@@ -49,7 +49,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
- * **Toggle** connector provides the logic to build a custom widget that will provides an on/off filtering feature based on an attribute value.
+ * **Toggle** connector provides the logic to build a custom widget that will provide
+ * an on/off filtering feature based on an attribute value or values.
+ *
+ * Two modes are implemented in the custom widget:
+ *  - with or without the value filtered
+ *  - switch between two values.
+ *
  * @type {Connector}
  * @param {function(ToggleRenderingOptions, boolean)} renderFn Rendering function for the custom **Toggle** widget.
  * @return {function(CustomToggleWidgetOptions)} Re-usable widget factory for a custom **Toggle** widget.

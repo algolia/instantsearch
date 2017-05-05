@@ -30,12 +30,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {number} currentRefinement The number of the page currently displayed.
  * @property {number} nbHits The number of hits computed for the last query (can be approximated).
  * @property {number} nbPages The number of pages for the result set.
- * @property {function(page)} refine Set the current page and trigger a search.
+ * @property {function(page)} refine Sets the current page and trigger a search.
  * @property {Object} widgetParams All original `CustomPaginationWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **Pagination** connector provides the logic to build a widget that will let the user displays hits corresponding to a certain page.
+ * **Pagination** connector provides the logic to build a widget that will let the user
+ * choose the current page of the results.
+ *
  * @type {Connector}
  * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
  * @return {function(CustomPaginationWidgetOptions)} Re-usable widget factory for a custom **Pagination** widget.

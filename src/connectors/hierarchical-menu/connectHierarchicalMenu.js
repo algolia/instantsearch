@@ -37,8 +37,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string[]} attributesof Attributes to use to generate the hierarchy of the menu.
  * @property {string} [separator = '>'] Separator used in the attributes to separate level values.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
- * @property {string} [showParentLevel = true] Show the parent level of the current refined value.
- * @property {number} [limit = 10] How much facet values to get.
+ * @property {string} [showParentLevel = true] Shows the parent level of the current refined value.
+ * @property {number} [limit = 10] Max number of value to display.
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
@@ -46,17 +46,22 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} HierarchicalMenuRenderingOptions
- * @property {function(item.value): string} createURL Create an url for the next state for a clicked item.
+ * @property {function(item.value): string} createURL Creates an url for the next state for a clicked item.
  * @property {HierarchicalMenuItem[]} items Values to be rendered.
- * @property {function(item.value)} refine Set the path of the hierarchical filter and triggers a new search.
+ * @property {function(item.value)} refine Sets the path of the hierarchical filter and triggers a new search.
  * @property {Object} widgetParams All original `CustomHierarchicalMenuWidgetOptions` forwarded to the `renderFn`.
  */
 
  /**
-  * **HierarchicalMenu** connector provides the logic to build a custom widget that will give the user the ability to explore a tree-like structure.
-  * This is commonly used for multi-level categorization of products on e-commerce websites. From a UX point of view, we suggest not displaying more than two levels deep.
+  * **HierarchicalMenu** connector provides the logic to build a custom widget
+  * that will give the user the ability to explore facets in a tree-like structure.
   *
-  * There's a complete example available on how to write a custom **HierarchicalMenu**: [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/feat/instantsearch.js/v2/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
+  * This is commonly used for multi-level categorization of products on e-commerce
+  * websites. From a UX point of view, we suggest not displaying more than two
+  * levels deep.
+  *
+  * There's a complete example available on how to write a custom **HierarchicalMenu**:
+  *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/feat/instantsearch.js/v2/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
   * @type {Connector}
   * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
   * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.

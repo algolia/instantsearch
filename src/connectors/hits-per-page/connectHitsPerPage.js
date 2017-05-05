@@ -27,7 +27,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} HitsPerPageRenderingOptionsItem
  * @property {number} value Number of hits to display per page.
  * @property {string} label Label to display in the option.
- * @property {boolean} isRefined Indicate if it's the current refined value.
+ * @property {boolean} isRefined Indicates if it's the current refined value.
  */
 
 /**
@@ -40,7 +40,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} HitsPerPageRenderingOptions
  * @property {HitsPerPageRenderingOptionsItem[]} items Array of objects defining the different values and labels.
  * @property {function(number)} refine Sets the number of hits per page and trigger a search.
- * @property {boolean} hasNoResults True if there were no results in the last search.
+ * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams Original `HitsPerPageWidgetOptions` forwarded to `renderFn`.
  */
 
@@ -53,7 +53,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * **HitsPerPage** connector provides the logic to create custom widget that will
  * allow a user to choose to display more or less results from Algolia.
  *
- * This connector provides a `HitsPerPageRenderingOptions.refine()` function to change the hits per page configuration and trigger a new search.
+ * This connector provides a `refine()` function to change the hits per page configuration and trigger a new search.
  * @type {Connector}
  * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn Rendering function for the custom **HitsPerPage** widget.
  * @return {function(HitsPerPageWidgetOptions)} Re-usable widget factory for a custom **HitsPerPage** widget.

@@ -21,8 +21,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} InfiniteHitsRenderingOptions
  * @property {Array<Object>} hits The aggregated matched hits from Algolia API of all pages.
  * @property {Object} results The complete results response from Algolia API.
- * @property {function} showMore Action to load next page of hits.
- * @property {boolean} isLastPage Indicate if the last page of hits has been reached.
+ * @property {function} showMore Loads the next page of hits.
+ * @property {boolean} isLastPage Indicates if the last page of hits has been reached.
  * @property {Object} widgetParams All original widget options forwarded to the `renderFn`.
  */
 
@@ -53,6 +53,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *       return '<div>' + hit._highlightResult.name.value + '</div>';
  *     })
  *   );
+ * };
  *
  * // connect `renderFn` to InfiniteHits logic
  * var customInfiniteHits = instantsearch.connectors.connectInfiniteHits(renderFn);

@@ -27,20 +27,26 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string} attributeName Name of the attribute for faceting.
  * @property {number} [min = undefined] Minimal slider value, default to automatically computed from the result set.
  * @property {number} [max = undefined] Maximal slider value, default to automatically computed from the result set.
- * @property {number} [precision = 2] Number of digits after decimal point to display.
+ * @property {number} [precision = 2] Number of digits after decimal point to use.
  */
 
 /**
  * @typedef {Object} RangeSliderRenderingOptions
- * @property {function} refine Refine results by applying the selected range.
+ * @property {function({min: number, max: number})} refine Sets a range to filter the results on. Both values
+ * are optional, and will default to the higher and lower bounds.
  * @property {{min: number, max: number}} numeric Results bounds without the current range filter.
  * @property {Array<number, number>} start Current numeric bounds of the search.
  * @property {{from: function, to: function}} formatter Transform for the rendering `from` and/or `to` values.
+ * Both functions take a `number` as input and should output a `string`.
  * @property {Object} widgetParams All original `CustomRangeSliderWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **RangeSlider** connector provides the logic to create custom widget that will give the ability for a user to refine results using a numeric range.
+ * **RangeSlider** connector provides the logic to create custom widget that will let
+ * the user refine results using a numeric range.
+ *
+ * Thic connectors provides a `refine()` function that accepts bounds. It will also provide
+ * information about the min and max bounds for the current result set.
  * @type {Connector}
  * @param {function(RangeSliderRenderingOptions, boolean)} renderFn Rendering function for the custom **RangeSlider** widget.
  * @return {function(CustomRangeSliderWidgetOptions)} Re-usable widget factory for a custom **RangeSlider** widget.
