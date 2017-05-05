@@ -29,21 +29,19 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string} label Human-readable value of the menu item.
  * @property {number} count Number of matched results after refinement is applied.
  * @property {isRefined} boolean Indicates if the refinement is applied.
- * @property {Object} [data] n+1 level of items, same structure HierarchicalMenuItem (default: `undefined`).
+ * @property {Object} [data = undefined] n+1 level of items, same structure HierarchicalMenuItem (default: `undefined`).
  */
 
 /**
  * @typedef {Object} CustomHierarchicalMenuWidgetOptions
  * @property {string[]} attributesof Attributes to use to generate the hierarchy of the menu.
- * @property {string} [separator='>'] Separator used in the attributes to separate level values (default: `>`).
- * @property {string} [rootPath] Prefix path to use if the first level is not the root level (default: `null`).
- * @property {string} [showParentLevel] Show the parent level of the current refined value (default: `true`).
- * @property {number} [limit] How much facet values to get (default: `10`).
- * @property  {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {string} [separator = '>'] Separator used in the attributes to separate level values.
+ * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
+ * @property {string} [showParentLevel = true] Show the parent level of the current refined value.
+ * @property {number} [limit = 10] How much facet values to get.
+ * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
- *
- * (default: `['isRefined', 'count:desc']`).
  */
 
 /**

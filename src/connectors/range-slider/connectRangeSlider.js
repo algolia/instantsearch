@@ -25,9 +25,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} CustomRangeSliderWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting.
- * @property {number} [min] Minimal slider value, default to automatically computed from the result set.
- * @property {number} [max] Maximal slider value, default to automatically computed from the result set.
- * @property {number} [precision='2'] Number of digits after decimal point to display.
+ * @property {number} [min = undefined] Minimal slider value, default to automatically computed from the result set.
+ * @property {number} [max = undefined] Maximal slider value, default to automatically computed from the result set.
+ * @property {number} [precision = 2] Number of digits after decimal point to display.
  */
 
 /**

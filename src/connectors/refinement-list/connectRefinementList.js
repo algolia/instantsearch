@@ -44,10 +44,9 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
 /**
  * @typedef {Object} CustomRefinementListWidgetOptions
  * @property {string} attributeName The name of the attribute in the records.
- * @property {"and"|"or"} [operator] How the filters are combined together (default: `"or"`).
- * @property {number} [limit] The max number of items to display.
+ * @property {"and"|"or"} [operator = 'or'] How the filters are combined together.
+ * @property {number} [limit = undefined] The max number of items to display.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- * @property {string[]|function} [sortBy] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc` (default: `['isRefined', 'count:desc']`).
  */
 
 /**

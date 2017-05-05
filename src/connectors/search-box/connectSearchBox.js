@@ -12,7 +12,7 @@ var customSearchBox = connectSearchBox(function render(params, isFirstRendering)
 });
 search.addWidget(
   customSearchBox({
-    [ onQueryHook ],
+    [ queryHook ],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSearchBox.html
@@ -20,7 +20,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomSearchBoxWidgetOptions
- * @property {function} queryHook A function that will be called every time a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter.
+ * @property {function} [queryHook = undefined] A function that will be called every time a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
  */
 

@@ -60,11 +60,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomCurrentRefinedValuesWidgetOptions
- * @property {CurrentRefinedValuesAttributes[]} [attributes] Specification for the display of
+ * @property {CurrentRefinedValuesAttributes[]} [attributes = []] Specification for the display of
  * refinements per attribute (default: `[]`). By default, the widget will display all the filters
  * set with no special treatment for the label.
- * @property {boolean} [onlyListedAttributes] Limit the displayed refinement to the list specified (default: `false`).
- * @property {boolean} [clearsQuery] Clear also the active search query (default: `false`).
+ * @property {boolean} [onlyListedAttributes = false] Limit the displayed refinement to the list specified.
+ * @property {boolean} [clearsQuery = false] Clears also the active search query when using clearAll.
  */
 
 /**
