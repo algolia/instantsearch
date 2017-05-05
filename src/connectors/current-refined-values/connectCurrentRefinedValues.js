@@ -44,9 +44,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} CurrentRefinedValuesRenderingOptions
  * @property {Object.<string, object>} attributes Original `CurrentRefinedValuesWidgetOptions.attributes` mapped by keys.
- * @property {function} clearAllClick Trigger the clear of all the currently refined values.
- * @property {function} clearAllURL URL which leads to a state where all the refinements have been cleared.
- * @property {function(item)} refine Clearing function for a refinement.
+ * @property {function} clearAllClick Clears all the currently refined values.
+ * @property {function} clearAllURL Generate a URL which leads to a state where all the refinements have been cleared.
+ * @property {function(item)} refine Clears a single refinement.
  * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
  * @property {Object[]} refinements All the current refinements.
  * @property {Object} widgetParams All original `CustomCurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
@@ -60,40 +60,47 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomCurrentRefinedValuesWidgetOptions
- * @property {CurrentRefinedValuesAttributes[]} [attributes] Specification for the display of refinements per attribute (default: `[]`).
+ * @property {CurrentRefinedValuesAttributes[]} [attributes] Specification for the display of
+ * refinements per attribute (default: `[]`). By default, the widget will display all the filters
+ * set with no special treatment for the label.
  * @property {boolean} [onlyListedAttributes] Limit the displayed refinement to the list specified (default: `false`).
  * @property {boolean} [clearsQuery] Clear also the active search query (default: `false`).
  */
 
 /**
- * **CurrentRefinedValues** connector provides the logic to build a widget that will give the user the ability to remove all or some of the filters that were set.
+ * **CurrentRefinedValues** connector provides the logic to build a widget that will give
+ * the user the ability to see all the currently aplied filters and, remove some or all of
+ * them.
  *
- * This provides a `CurrentRefinedValuesRenderingOptions.refine(item)` function to remove a selected refinement.
+ * This provides a `refine(item)` function to remove a selected refinement and a `clearAllClick`
+ * function to clear all the filters. Those functions can see their behaviour change based on
+ * the widget options used.
  * @type {Connector}
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
  * @return {function(CustomCurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
  * @example
  * // custom `renderFn` to render the custom ClearAll widget
  * function renderFn(CurrentRefinedValuesRenderingOptions, isFirstRendering) {
+ *   var containerNode = CurrentRefinedValuesRenderingOptions.widgetParams.containerNode;
  *   if (isFirstRendering) {
- *     CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *     containerNode
  *       .html('<ul id="refiments"></ul><div id="cta-container"></div>');
  *   }
  *
- *   CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *   containerNode
  *     .find('#cta-container > a')
  *     .off('click');
  *
- *   CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *   containerNode
  *     .find('li > a')
  *     .each(function() { $(this).off('click') });
  *
  *   if (refinements && refinements.length > 0) {
- *     CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *     containerNode
  *       .find('#cta-container')
  *       .html('<a href="' + CurrentRefinedValuesRenderingOptions.clearAllURL + '">Clear all </a>');
  *
- *     CurrentRefinedValuesRenderingOptions.widgetParams.containerNode
+ *     containerNode
  *       .find('#cta-container > a')
  *       .on('click', function(event) {
  *         event.preventDefault();
@@ -115,8 +122,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *       });
  *     });
  *   } else {
- *     CurrentRefin.widgetParams.containerNode.find('#cta-container').html('');
- *     CurrentRefin.widgetParams.containerNode.find('ul').html('');
+ *     containerNode.find('#cta-container').html('');
+ *     containerNode.find('ul').html('');
  *   }
  * }
  *

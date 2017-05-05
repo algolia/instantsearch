@@ -125,7 +125,8 @@ currentRefinedValues({
 /**
  * @typedef {Object} CurrentRefinedValuesWidgetOptions
  * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property {Array} [attributes = []] Attributes configuration.
+ * @property {CurrentRefinedValuesAttributes[]} [attributes = []] Label definitions for the
+ * different filters.
  * @property {boolean} [onlyListedAttributes=false] Only use the declared attributes. By default, the widget
  * displays the refinements for the whole search state. If true, the list of attributes in `attributes` is used.
  * @property {'before'|'after'|boolean} [clearAll='before'] Defines the clear all button position.

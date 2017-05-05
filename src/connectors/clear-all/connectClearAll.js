@@ -33,30 +33,37 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
 /**
  * @typedef {Object} CustomClearAllWidgetOptions
  * @property {string[]} excludeAttributes Every attributes that should not be removed when calling `refine()`.
- * @property {boolean} clearsQuery Should calling `refine()` also clears the active search query.
+ * @property {boolean} clearsQuery If `true`, `refine()` also clears the current search query.
  */
 
 /**
  * @typedef {Object} ClearAllRenderingOptions
- * @property {function} refine Trigger the clear of all the currently refined values.
- * @property {boolean} hasRefinements Indicate if search state is refined.
- * @property {function} createURL Create a url for the next state when refinements are cleared.
+ * @property {function} refine Triggers the clear of all the currently refined values.
+ * @property {boolean} hasRefinements Indicates if search state is refined.
+ * @property {function} createURL Creates a url for the next state when refinements are cleared.
  * @property {Object} widgetParams All original `CustomClearAllWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **ClearAll** connector provides the logic to build a custom widget that will give the user the ability to reset the search state.
+ * **ClearAll** connector provides the logic to build a custom widget that will give the user
+ * the ability to reset the search state.
  *
- * This connector provides a `ClearAllRenderingOptions.refine()` function to remove the current refined facets.
+ * This connector provides a `refine` function to remove the current refined facets.
+ *
+ * The behaviour of this function can be changed with widget options. If `clearsQuery`
+ * is set to `true`, `refine` will also clear the query and `excludeAttributes` can
+ * prevent certain attributes from being cleared.
+ *
  * @type {Connector}
  * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the custom **ClearAll** widget.
  * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a custom **ClearAll** widget.
  * @example
  * // custom `renderFn` to render the custom ClearAll widget
  * function renderFn(ClearAllRenderingOptions, isFirstRendering) {
+ *   var containerNode = ClearAllRenderingOptions.widgetParams.containerNode;
  *   if (isFirstRendering) {
  *     var markup = $('<button id="custom-clear-all">Clear All</button>');
- *     ClearAllRenderingOptions.widgetParams.containerNode.append(markup);
+ *     containerNode.append(markup);
  *
  *     markup.on('click', function(event) {
  *       event.preventDefault();
@@ -64,7 +71,7 @@ const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () =>
  *     })
  *   }
  *
- *   var clearAllCTA = ClearAllRenderingOptions.widgetParams.containerNode.find('#custom-clear-all');
+ *   var clearAllCTA = containerNode.find('#custom-clear-all');
  *   clearAllCTA.attr('disabled', !ClearAllRenderingOptions.hasRefinements)
  * };
  *
