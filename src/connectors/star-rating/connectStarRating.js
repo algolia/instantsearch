@@ -32,7 +32,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} CustomStarRatingWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
- * @property {number} [max] The maximum rating value (default: `5`).
+ * @property {number} [max = 5] The maximum rating value.
  */
 
 /**
