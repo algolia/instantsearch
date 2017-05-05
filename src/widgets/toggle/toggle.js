@@ -69,38 +69,38 @@ toggle({
 
 /**
  * @typedef {Object} ToggleWidgetCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the root element
- * @property  {string|string[]} [header] CSS class to add to the header element
- * @property  {string|string[]} [body] CSS class to add to the body element
- * @property  {string|string[]} [footer] CSS class to add to the footer element
- * @property  {string|string[]} [list] CSS class to add to the list element
- * @property  {string|string[]} [item] CSS class to add to each item element
- * @property  {string|string[]} [active] CSS class to add to each active element
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [header] CSS class to add to the header element.
+ * @property  {string|string[]} [body] CSS class to add to the body element.
+ * @property  {string|string[]} [footer] CSS class to add to the footer element.
+ * @property  {string|string[]} [list] CSS class to add to the list element.
+ * @property  {string|string[]} [item] CSS class to add to each item element.
+ * @property  {string|string[]} [active] CSS class to add to each active element.
  * @property  {string|string[]} [label] CSS class to add to each
- * label element (when using the default template)
+ * label element (when using the default template).
  * @property  {string|string[]} [checkbox] CSS class to add to each
- * checkbox element (when using the default template)
- * @property  {string|string[]} [count] CSS class to add to each count
+ * checkbox element (when using the default template).
+ * @property  {string|string[]} [count] CSS class to add to each count.
  */
 
 /**
  * @typedef {Object} ToggleWidgetTransforms
- * @property  {function(Object):Object} item Function to change the object passed to the `item` template
+ * @property  {function(Object):Object} item Function to change the object passed to the `item`. template
  */
 
 /**
  * @typedef {Object} ToggleWidgetTemplates
- * @property  {string|function} header Header template
- * @property  {string|function} item Item template, provided with `name`, `count`, `isRefined`, `url` data properties
+ * @property  {string|function} header Header template.
+ * @property  {string|function} item Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
  * count is always the number of hits that would be shown if you toggle the widget. We also provide
  * `onFacetValue` and `offFacetValue` objects with according counts.
- * @property  {string|function} footer Footer template
+ * @property  {string|function} footer Footer template.
  */
 
 /**
  * @typedef {Object} ToggleWidgetValues
- * @property  {string|number|boolean} on Value to filter on when checked
- * @property  {string|number|boolean} off Value to filter on when unchecked
+ * @property  {string|number|boolean} on Value to filter on when checked.
+ * @property  {string|number|boolean} off Value to filter on when unchecked.
  * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
  * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
  * having `false` has a value for the selected attribute.
@@ -119,8 +119,8 @@ toggle({
  * @property {ToggleWidgetValues} [values={on: true, off: undefined}] Values that the widget can set.
  * @property {ToggleWidgetTemplates} [templates] Templates to use for the widget.
  * @property {ToggleWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
- * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching
- * @property {ToggleWidgetCSSClasses} [cssClasses] CSS classes to add
+ * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
+ * @property {ToggleWidgetCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean|ToggleWidgetCollapsibleOption} collapsible If set to true, the widget can be collapsed. This parameter can also be
  * an object, with the property collapsed, if you want the toggle to be collapsed initially.
  */
@@ -134,9 +134,8 @@ toggle({
  *
  * The attribute has to in the list of attributes for faceting in the dashboard.
  * @type {WidgetFactory}
- * @memberof instantsearch.widgets
- * @param {ToggleWidgetOptions} $0 Options for the toggle widget.
- * @return {Widget} A new instance of the toggle widget
+ * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
+ * @return {Widget} A new instance of the Toggle widget
  * @example
  * search.addWidget(
  *   instantsearch.widgets.toggle({

@@ -86,16 +86,16 @@ rangeSlider({
 
 /**
  * @typedef {Object} RangeSliderTemplates
- * @property  {string|Function} [header=""] Header template
- * @property  {string|Function} [footer=""] Footer template
+ * @property  {string|Function} [header=""] Header template.
+ * @property  {string|Function} [footer=""] Footer template.
  */
 
 /**
  * @typedef {Object} RangeSliderCssClasses
- * @property  {string|string[]} [root] CSS class to add to the root element
- * @property  {string|string[]} [header] CSS class to add to the header element
- * @property  {string|string[]} [body] CSS class to add to the body element
- * @property  {string|string[]} [footer] CSS class to add to the footer element
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [header] CSS class to add to the header element.
+ * @property  {string|string[]} [body] CSS class to add to the body element.
+ * @property  {string|string[]} [footer] CSS class to add to the footer element.
  */
 
 /**
@@ -107,25 +107,25 @@ rangeSlider({
 
 /**
  * @typedef {Object} RangeSliderCollapsibleOptions
- * @property  {boolean} [collapsed] Initially collapsed state of a collapsible widget
+ * @property  {boolean} [collapsed] Initially collapsed state of a collapsible widget.
  */
 
 /**
  * @typedef {Object} RangeSliderWidgetOptions
- * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property  {string} attributeName Name of the attribute for faceting
+ * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property  {string} attributeName Name of the attribute for faceting.
  * @property  {boolean|RangeSliderTooltipOptions} [tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the raw value.
  * You can also provide an object with a format function as an attribute.
  * So that you can format the tooltip display value as you want
- * @property  {RangeSliderTemplates} [templates] Templates to use for the widget
- * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available
- * @property  {RangeSliderCssClasses} [cssClasses] CSS classes to add to the wrapping elements
+ * @property  {RangeSliderTemplates} [templates] Templates to use for the widget.
+ * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available.
+ * @property  {RangeSliderCssClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property  {boolean} [pips=true] Show slider pips.
  * @property  {number} [step=1] Every handle move will jump that number of steps.
- * @property  {boolean|RangeSliderCollapsibleOptions} [collapsible=false] Hide the widget body and footer when clicking on header
- * @property  {number} [min] Minimal slider value, default to automatically computed from the result set
- * @property  {number} [max] Maximal slider value, defaults to automatically computed from the result set
+ * @property  {boolean|RangeSliderCollapsibleOptions} [collapsible=false] Hide the widget body and footer when clicking on header.
+ * @property  {number} [min] Minimal slider value, default to automatically computed from the result set.
+ * @property  {number} [max] Maximal slider value, defaults to automatically computed from the result set.
  */
 
 /**
@@ -133,8 +133,8 @@ rangeSlider({
  * results based on a single numeric range.
  *
  * @type {WidgetFactory}
- * @param {RangeSliderWidgetOptions} $0 Range slider widget options.
- * @return {Object} widget
+ * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
+ * @return {Widget} A new RangeSlider widget instance.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.rangeSlider({

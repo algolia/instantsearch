@@ -12,9 +12,9 @@ analytics({
  * Function called when data are ready to be pushed. It should push the data to your analytics platform.
  * The `qs` parameter contains the parameters serialized as a query string. The `state` contains the
  * whole search state, and the `results` the last results received.
- * @property {number} [delay=3000] Number of milliseconds between last search key stroke and calling pushFunction
- * @property {boolean} [triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
- * @property {boolean} [pushInitialSearch=true] Trigger pushFunction after the initial search
+ * @property {number} [delay=3000] Number of milliseconds between last search key stroke and calling pushFunction.
+ * @property {boolean} [triggerOnUIInteraction=false] Trigger pushFunction after click on page or. redirecting the page
+ * @property {boolean} [pushInitialSearch=true] Trigger pushFunction after the initial search.
  */
 
 /**
@@ -24,8 +24,8 @@ analytics({
  * This is a headless widget, which means that it does not have a rendered output in the
  * UI.
  * @type {WidgetFactory}
- * @param {AnalyticsWidgetOptions} $0 The analytics widget options
- * @return {Widget} A new instance of the analytics widget.
+ * @param {AnalyticsWidgetOptions} $0 The Analytics widget options.
+ * @return {Widget} A new instance of the Analytics widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.analytics({
@@ -33,13 +33,13 @@ analytics({
  *       // Google Analytics
  *       // window.ga('set', 'page', '/search/query/?query=' + state.query + '&' + formattedParameters + '&numberOfHits=' + results.nbHits);
  *       // window.ga('send', 'pageView');
- * 
+ *
  *       // GTM
  *       // dataLayer.push({'event': 'search', 'Search Query': state.query, 'Facet Parameters': formattedParameters, 'Number of Hits': results.nbHits});
- * 
+ *
  *       // Segment.io
  *       // analytics.page( '[SEGMENT] instantsearch', { path: '/instantsearch/?query=' + state.query + '&' + formattedParameters });
- * 
+ *
  *       // Kissmetrics
  *       // var objParams = JSON.parse('{"' + decodeURI(formattedParameters.replace(/&/g, "\",\"").replace(/=/g,"\":\"")) + '"}');
  *       // var arrParams = $.map(objParams, function(value, index) {
@@ -51,7 +51,7 @@ analytics({
  *       //   'Number of Hits': results.nbHits,
  *       //   'Search Params': arrParams
  *       // }]);
- * 
+ *
  *       // any other analytics service
  *     }
  *   })

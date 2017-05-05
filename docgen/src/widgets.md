@@ -9,7 +9,7 @@ navWeight: 100
 
 ## Introduction to widgets
 
-In InstantSearch.js, widgets are the building blocks of search UI. They 
+In InstantSearch.js, widgets are the building blocks of search UI. They
 
 In order to make your work efficient, InstantSearch.js it comes with a set
 of 18 widgets factories, functions that create widget instances. Each one
@@ -83,8 +83,8 @@ search.addWidget(instantsearch.refinementList({
     header: 'Header',
     item: '{{value}} {{#isRefined}}Selected{{/isRefined}} ({{count}})',
     // OR
-    item: function(params) {
-      return `${param.value}`;
+    item: function(param) {
+      return '👉 ' + param.value;
     }
   }
 }));

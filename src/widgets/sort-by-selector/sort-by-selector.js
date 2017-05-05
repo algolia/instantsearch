@@ -44,8 +44,8 @@ sortBySelector({
 
 /**
  * @typedef {Object} SortByWidgetCssClasses
- * @property {string|string[]} [root] CSS classes added to the parent `<select>`
- * @property {string|string[]} [item] CSS classes added to each `<option>`
+ * @property {string|string[]} [root] CSS classes added to the parent `<select>`.
+ * @property {string|string[]} [item] CSS classes added to each `<option>`.
  */
 
 /**
@@ -56,10 +56,10 @@ sortBySelector({
 
 /**
  * @typedef {Object} SortByWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
  * @property {SortByIndexDefinition[]} indices Array of objects defining the different indices to choose from.
- * @property {boolean} [autoHideContainer=false] Hide the container when no results match
- * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added
+ * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
+ * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
  */
 
 /**
@@ -68,8 +68,8 @@ sortBySelector({
  *
  * For the users it is like they are selecting a new sort order.
  * @type {WidgetFactory}
- * @param {SortByWidgetOptions} $0 Options for the sort by selector widget
- * @return {Object} widget
+ * @param {SortByWidgetOptions} $0 Options for the SortBySelector widget
+ * @return {Widget} Creates a new instance of the SortBySelector widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.sortBySelector({

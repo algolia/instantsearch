@@ -57,28 +57,28 @@ clearAll({
 })`;
 /**
  * @typedef {Object} ClearAllCSSClasses
- * @property {string|string[]} [root] CSS class to add to the root element
- * @property {string|string[]} [header] CSS class to add to the header element
- * @property {string|string[]} [body] CSS class to add to the body element
- * @property {string|string[]} [footer] CSS class to add to the footer element
- * @property {string|string[]} [link] CSS class to add to the link element
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [header] CSS class to add to the header element.
+ * @property {string|string[]} [body] CSS class to add to the body element.
+ * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [link] CSS class to add to the link element.
  */
 
 /**
  * @typedef {Object} ClearAllTemplates
- * @property {string|function(object):string} [header] Header template
- * @property {string|function(object):string} [link] Link template
- * @property {string|function(object):string} [footer] Footer template
+ * @property {string|function(object):string} [header] Header template.
+ * @property {string|function(object):string} [link] Link template.
+ * @property {string|function(object):string} [footer] Footer template.
  */
 
 /**
  * @typedef {Object} ClearAllWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property {string[]} [excludeAttributes] List of attributes names to exclude from clear actions
- * @property {ClearAllTemplates} [templates] Templates to use for the widget
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string[]} [excludeAttributes] List of attributes names to exclude from clear actions.
+ * @property {ClearAllTemplates} [templates] Templates to use for the widget.
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no refinements to clear.
  * @property {ClearAllCSSClasses} [cssClasses] CSS classes to be added.
- * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
+ * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then.
  * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
  * property is `true`, then the widget is hidden during the first rendering.
  * @property {boolean} [clearsQuery = false] If true, the widget will also clear the query.
@@ -90,8 +90,8 @@ clearAll({
  *
  * The current refined values widget can display a button that has the same behavior.
  * @type {WidgetFactory}
- * @param {ClearAllWidgetOptions} $0 The clear all widget options.
- * @returns {Object} A new instance of the clear all widget.
+ * @param {ClearAllWidgetOptions} $0 The ClearAll widget options.
+ * @returns {Widget} A new instance of the ClearAll widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.clearAll({

@@ -76,36 +76,36 @@ pagination({
 
 /**
  * @typedef {Object} PaginationCSSClasses
- * @property  {string|string[]} [root] CSS classes added to the parent `<ul>`
- * @property  {string|string[]} [item] CSS classes added to each `<li>`
- * @property  {string|string[]} [link] CSS classes added to each link
- * @property  {string|string[]} [page] CSS classes added to page `<li>`
- * @property  {string|string[]} [previous] CSS classes added to the previous `<li>`
- * @property  {string|string[]} [next] CSS classes added to the next `<li>`
- * @property  {string|string[]} [first] CSS classes added to the first `<li>`
- * @property  {string|string[]} [last] CSS classes added to the last `<li>`
- * @property  {string|string[]} [active] CSS classes added to the active `<li>`
- * @property  {string|string[]} [disabled] CSS classes added to the disabled `<li>`
+ * @property  {string|string[]} [root] CSS classes added to the parent `<ul>`.
+ * @property  {string|string[]} [item] CSS classes added to each `<li>`.
+ * @property  {string|string[]} [link] CSS classes added to each link.
+ * @property  {string|string[]} [page] CSS classes added to page `<li>`.
+ * @property  {string|string[]} [previous] CSS classes added to the previous `<li>`.
+ * @property  {string|string[]} [next] CSS classes added to the next `<li>`.
+ * @property  {string|string[]} [first] CSS classes added to the first `<li>`.
+ * @property  {string|string[]} [last] CSS classes added to the last `<li>`.
+ * @property  {string|string[]} [active] CSS classes added to the active `<li>`.
+ * @property  {string|string[]} [disabled] CSS classes added to the disabled `<li>`.
  */
 
 /**
  * @typedef {Object} PaginationLabels
- * @property  {string} [previous] Label for the Previous link
- * @property  {string} [next] Label for the Next link
- * @property  {string} [first] Label for the First link
- * @property  {string} [last] Label for the Last link
+ * @property  {string} [previous] Label for the Previous link.
+ * @property  {string} [next] Label for the Next link.
+ * @property  {string} [first] Label for the First link.
+ * @property  {string} [last] Label for the Last link.
  */
 
 /**
  * @typedef {Object} PaginationWidgetOptions
- * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property  {number} [maxPages] The max number of pages to browse
- * @property  {number} [padding=3] The number of pages to display on each side of the current page
- * @property  {string|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable
- * @property  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
- * @property  {boolean} [autoHideContainer=true] Hide the container when no results match
- * @property  {PaginationLabels} [labels] Text to display in the various links (prev, next, first, last)
- * @property  {PaginationCSSClasses} [cssClasses] CSS classes to be added
+ * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property  {number} [maxPages] The max number of pages to browse.
+ * @property  {number} [padding=3] The number of pages to display on each side of the current page.
+ * @property  {string|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable.
+ * @property  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed.
+ * @property  {boolean} [autoHideContainer=true] Hide the container when no results match.
+ * @property  {PaginationLabels} [labels] Text to display in the various links (prev, next, first, last).
+ * @property  {PaginationCSSClasses} [cssClasses] CSS classes to be added.
  */
 
 /**
@@ -116,8 +116,8 @@ pagination({
  * because it is simpler to use, and it is more convenient in a mobile context.
  * See the infinite hits widget, for more informations.
  * @type {WidgetFactory}
- * @param {PaginationWidgetOptions} $0 Options for the pagination
- * @return {Object} widget
+ * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
+ * @return {Widget} A new instance of Pagination widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.pagination({

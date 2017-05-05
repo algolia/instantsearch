@@ -83,11 +83,11 @@ infiniteHits({
 
 /**
  * @typedef {Object} InfiniteHitsWidgetOptions
- * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget
- * @property  {string} [showMoreLabel="Show more results"] label used on the show more button
- * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates
- * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add
+ * @property  {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget.
+ * @property  {string} [showMoreLabel="Show more results"] label used on the show more button.
+ * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.
+ * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
  */
 
 /**
@@ -97,8 +97,8 @@ infiniteHits({
  * will let the user load more results to the list. This is particularly
  * handy on mobile implementations.
  * @type {WidgetFactory}
- * @param {InfiniteHitsWidgetOptions} $0 The options for the infinite hits widget.
- * @return {Object} widget
+ * @param {InfiniteHitsWidgetOptions} $0 The options for the InfiniteHits widget.
+ * @return {Widget} Creates a new instance of the InfiniteHits widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.infiniteHits({

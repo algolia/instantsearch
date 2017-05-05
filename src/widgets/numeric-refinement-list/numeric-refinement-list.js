@@ -67,29 +67,29 @@ numericRefinementList({
 
 /**
  * @typedef {Object} NumericRefinementListCSSClasses
- * @property {string|string[]} [root] CSS class to add to the root element
- * @property {string|string[]} [header] CSS class to add to the header element
- * @property {string|string[]} [body] CSS class to add to the body element
- * @property {string|string[]} [footer] CSS class to add to the footer element
- * @property {string|string[]} [list] CSS class to add to the list element
- * @property {string|string[]} [label] CSS class to add to each link element
- * @property {string|string[]} [item] CSS class to add to each item element
- * @property {string|string[]} [radio] CSS class to add to each radio element (when using the default template)
- * @property {string|string[]} [active] CSS class to add to each active element
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [header] CSS class to add to the header element.
+ * @property {string|string[]} [body] CSS class to add to the body element.
+ * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [list] CSS class to add to the list element.
+ * @property {string|string[]} [label] CSS class to add to each link element.
+ * @property {string|string[]} [item] CSS class to add to each item element.
+ * @property {string|string[]} [radio] CSS class to add to each radio element (when using the default template).
+ * @property {string|string[]} [active] CSS class to add to each active element.
  */
 
 /**
  * @typedef {Object} NumericRefinementListTemplates
- * @property {string|Function} [header] Header template
- * @property {string|Function} [item] Item template, provided with `name`, `isRefined`, `url` data properties
- * @property {string|Function} [footer] Footer template
+ * @property {string|Function} [header] Header template.
+ * @property {string|Function} [item] Item template, provided with `name`, `isRefined`, `url` data properties.
+ * @property {string|Function} [footer] Footer template.
  */
 
 /**
  * @typedef {Object} NumericRefinementListOption
- * @property {string} name Name of the option
- * @property {number} [start] Low bound of the option (>=)
- * @property {number} [end] High bound of the option (<=)
+ * @property {string} name Name of the option.
+ * @property {number} [start] Low bound of the option (>=).
+ * @property {number} [end] High bound of the option (<=).
  */
 
 /**
@@ -99,22 +99,22 @@ numericRefinementList({
 
 /**
  * @typedef {Object} NumericRefinementListWidgetOptions
- * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget
- * @property {string} attributeName Name of the attribute for filtering
- * @property {NumericRefinementListOption[]} options List of all the options
- * @property {NumericRefinementListTemplates} [templates] Templates to use for the widget
+ * @property {string|DOMElement} container CSS Selector or DOMElement to insert the widget.
+ * @property {string} attributeName Name of the attribute for filtering.
+ * @property {NumericRefinementListOption[]} options List of all the options.
+ * @property {NumericRefinementListTemplates} [templates] Templates to use for the widget.
  * @property {NumericRefinementListTransforms} [transformData] Functions to change the data passes to the templates. Only item can be set.
- * @property {boolean} [autoHideContainer=true] Hide the container when no results match
- * @property {NumericRefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements
- * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header
+ * @property {boolean} [autoHideContainer=true] Hide the container when no results match.
+ * @property {NumericRefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
  */
 
 /**
  * The numeric refinement list is a widget that display a list of numeric filters in a list. Those numeric filters
  * are pre-configured with creating the widget.
  * @type {WidgetFactory}
- * @param {NumericRefinementListWidgetOptions} $0 The numeric refinement list widget options
- * @return {Object} Returns a widget.
+ * @param {NumericRefinementListWidgetOptions} $0 The NumericRefinementList widget options
+ * @return {Widget} Creates a new instance of the NumericRefinementList widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.numericRefinementList({
