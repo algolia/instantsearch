@@ -7,9 +7,12 @@ mixin struct(t)
   ul.struct-def
     if t.properties
       each property in t.properties
+        - var tag = t.tags.find(tag => tag.name === property.name)
         li.type(id=`struct-${t.name}-${property.name}`)
           strong=property.name
           a.anchor(href=`${navPath}#param-${t.name}-${property.name}`)
           code
             +type(property.type)
+          if tag && tag.default
+            code=`(default: ${tag.default})`
           +description(property.description)
