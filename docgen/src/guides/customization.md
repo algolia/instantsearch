@@ -15,7 +15,8 @@ has options to manipulate CSS classes or even modifying part of the HTML
 output (templates).
 
 However, those may not be enough for your use-case or you might want
-to use parameters from that are not usable in the current set of widgets.
+to use parameters from Algolia that are not usable in the current set of
+widgets.
 
 That's what this guide is all about: extending instantsearch.js to fit your
 needs perfectly.
@@ -39,7 +40,9 @@ They follow the pattern:
 (rendering) => (widgetParameters) => Widget
 ```
 
-We will cover two examples in this guide, a menu as dropdown and a second one to display hits with having a custom message every 5 results.
+We will cover two examples in this guide:
+ - how to display a menu as a dropdown
+ - how to enhance the displayed results based on what Algolia answers
 
 Don't be scared! let's go together step by step on how to write a custom widget.
 
