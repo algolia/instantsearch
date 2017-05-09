@@ -19,7 +19,9 @@ export default {
         test: /\.json$/, loader: 'json',
       },
       {
-        test: /\.js$/, exclude: /node_modules/, loader: 'babel',
+        test: /\.js$/,
+        exclude: /node_modules\/(?!algolia-frontend-components\/components)/,
+        loader: 'babel',
       },
       {
         test: /\.scss$/,
@@ -27,7 +29,7 @@ export default {
       },
     ],
   },
-  
+
   postcss: [autoprefixer()],
   resolve: {
     alias: {
