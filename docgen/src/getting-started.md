@@ -7,7 +7,7 @@ withHeadings: true
 navWeight: 100
 ---
 
-## Welcome to InstantSearch.js
+# Welcome to InstantSearch.js
 
 **instantsearch.js** is a JavaScript library that lets you create an instant search results experience using Algolia’s REST API.
 
@@ -15,11 +15,11 @@ In this tutorial, you'll lean how to:
 
   * import `instantsearch.js` on your website
   * display results from Algolia
-  * add widget to filter the results
+  * add widgets to filter the results
 
 ## Before we start
 
-**instantsearch.js** is meant to be used with Algolia.
+**instantsearch.js is meant to be used with Algolia.**
 
 Therefore, you'll need the credentials to an Algolia index. To ease this getting started, here are credentials to an already configured index:
 
@@ -29,7 +29,7 @@ Therefore, you'll need the credentials to an Algolia index. To ease this getting
 
 It contains sample data for an e-commerce website.
 
-This guide also expects you to have a working website. You can also use our bootstrapped project by clicking this link.
+This guide also expects you to have a working website. You can also use our bootstrapped project by clicking [this link](/assets/getting-started-boilerplate.zip).
 
 
 ## Install `instantsearch.js`
@@ -39,38 +39,41 @@ This guide also expects you to have a working website. You can also use our boot
 Use a built bersion of **instantsearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
-<script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css">
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.js"></script>
 ```
 
 You will then have access to the `instantsearch` function in the global scope (window).
 
 The jsDeliver CDN is highly available with [over 110 locations](https://www.jsdelivr.com/features/network-map) in the world.
 
-### From NPM
+### From NPM/Yarn
 
 If you have a JavaScript build system, you can install **instantsearch.js** from NPM:
 
 ```javascript
-// npm install instantsearch.js --save
+// `npm install instantsearch.js --save` OR
+// `yarn add instantsearch.js`
 
 var instantsearch = require('instantsearch.js');
 ```
 
-You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css) into your page.
+You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css) into your page.
 
 ### Bower
 
 Use jsDelivr build to install with bower:
 
-```shell
+```bash
 bower install https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.js
 ```
 
 
 ## Initialization
 
-To initialize the instantsearch.js library, you need an Algolia account with a configured and non-empty index.
+To initialize instantsearch.js, you need an Algolia account with a configured and non-empty index.
+
+To initialize with the credentials proposed at the beginning:
 
 ```javascript
 var search = instantsearch({
@@ -79,16 +82,18 @@ var search = instantsearch({
   indexName: 'bestbuy',
   urlSync: true
 });
+
+search.start();
 ```
 
-`appId`, `apiKey` and `indexName` are mandatory. Those props are the credentials of your application in Algolia. They can be found in your [Algolia dashboard](https://www.algolia.com/api-keys).
+`appId`, `apiKey` and `indexName` are mandatory. Those values are the credentials of your application in Algolia. They can be found in your [Algolia dashboard](https://www.algolia.com/api-keys).
 
 You can synchronise the current search with the browser url. It provides two benefits:
 
   * Working back/next browser buttons
   * Copy and share the current search url
 
-To configure this feature, pass `urlSync: true` option to `instantsearch()`.The urlSync option has more parameters [add link to params doc]
+To configure this feature, pass `urlSync: true` option to `instantsearch()`. The urlSync option has more parameters ([see documentation](http://localhost:3000/guides/concepts.html#instantsearch))
 
 Congrats 🎉 ! Your website is now connected to Algolia.
 
@@ -97,28 +102,37 @@ Congrats 🎉 ! Your website is now connected to Algolia.
 
 The core of a search experience is to display results. By default, **instantsearch.js** will do a query at the start of the page and will retrieve the most relevant hits.
 
-To display results, we are gonna use the Hits widget. This widget will display all the results returned by Algolia, and it will update when there are new results.
+To display results, we are gonna use the hits widget. This widget will display all the results returned by Algolia, and it will update when there are new results.
+
+A key aspect of instantsearch.js, is that you need to provide a container for each widget. This will tell instantsearch where to display the widget. Here we need to define first a that will contain our results:
 
 ```html
 <div id="hits">
   <!-- Hits widget will appear here -->
 </div>
+```
 
+Once you’ve set the place where the widget will be rendered, you need to add to your instantsearch instance, using `addWidget`:
+
+```html
 <script>
   var search = instantsearch(options);
 
   search.addWidget(
     instantsearch.widgets.hits({
-      container: '#hits',
-      hitsPerPage: 6
+      container: '#hits'
     })
   );
+
+  search.start();
 </script>
 ```
 
+All the widgets provided by the library can be found in the namespace `instantsearch.widgets`.
+
 You should now be able to see the results without any styling. This view lets you inspect the values that are retrieved from Algolia, in order to build your custom view.
 
-In order to customize the view for each product, we can use a special option of the Hit widget: `templates`. This option accepts a [Mustache](https://community.algolia.com/instantsearch.js/documentation/) template string or a function returning a string.
+In order to customize the view for each product, we can use a special option of the hit widget: `templates`. This option accepts a [Mustache](https://community.algolia.com/instantsearch.js/documentation/) template string or a function returning a string.
 
 ```html
 <div id="hits">
@@ -134,15 +148,17 @@ In order to customize the view for each product, we can use a special option of 
       templates: {
         empty: 'No results',
         item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
-      },
-      hitsPerPage: 6
+      }
     })
   );
+
+  search.start();
 </script>
 ```
 
 In this section we’ve seen:
 
+  * how to define containers for the widgets
   * how to display the results from Algolia
   * how to customize the display of those results
 
@@ -174,14 +190,18 @@ Now that we’ve added the results, we can start querying our index. To do this,
   // initialize hits widget
   search.addWidget(
     instantsearch.widgets.hits({
-      container: '#hits',
-      hitsPerPage: 6
+      container: '#hits'
     })
   );
+
+  search.start();
 </script>
 ```
 
 The search is now interactive and we see what matched in each of the products. Good thing for us, Algolia computes the matching part. For better control over what kind of data is returned, you should configure the [attributeToRetrieve](https://www.algolia.com/doc/rest#param-attributesToRetrieve) and [attributeToHighLight](https://www.algolia.com/doc/rest#param-attributesToHighlight) of your index
+
+In this part, we’ve seen:
+  * How to use the searchbox to query Algolia with text
 
 
 ## Add RefinementList
@@ -227,10 +247,11 @@ Since the dataset used here is an e-commerce one, let’s add a [RefinementList]
   // initialize hits widget
   search.addWidget(
     instantsearch.widgets.hits({
-      container: '#hits',
-      hitsPerPage: 6
+      container: '#hits'
     })
   );
+
+  search.start();
 </script>
 ```
 
@@ -238,10 +259,10 @@ The `attributeName` option specifies the faceted attribute to use in this widget
 
 The values displayed are computed by Algolia from the results.
 
-In this part, we’ve seen the following:
+In this part, we’ve seen that:
 
-  * there are components for all types of refinements
-  * the RefinementList works with facets
+  * there are components for different types of filters
+  * the refinementList works with facets
   * facets are computed from the results
 
 
@@ -250,7 +271,7 @@ In this part, we’ve seen the following:
 We now miss two elements in our search interface:
 
   * the ability to browse beyond the first page of results
-  * the ability to reset the search state
+  * the ability to reset the filters
 
 Those two features are implemented respectively with the [pagination](https://community.algolia.com/instantsearch.js/documentation/#pagination), [clearAll](https://community.algolia.com/instantsearch.js/documentation/#clearall) and [currentRefinedValues](https://community.algolia.com/instantsearch.js/documentation/#currentrefinedvalues) widgets. Both have nice defaults which means that we can use them directly without further configuration.
 
@@ -304,12 +325,22 @@ Those two features are implemented respectively with the [pagination](https://co
   );
 
   [...]
+
+  search.start();
 </script>
 ```
 
 Current filters will display all the filters currently selected by the user. This gives the user a synthetic way of understanding the current search. `clearAll` displays a button to remove all the filters.
 
-In this part, we’ve seen the following:
+In this part, we’ve seen:
 
   * how to clear the filters
   * how to paginate the results
+
+
+## Wrapping up
+
+Congratulations, you now have a fully featured instantsearch result page. But this is only the beginning! If you want to dig further into instantsearch.js, we suggest reading:
+  * The concepts of instantsearch.js
+  * How to use connectors to provide your very own rendering
+  * The reference API of the widgets
