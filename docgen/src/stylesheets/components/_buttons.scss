@@ -44,23 +44,23 @@
 .btn-static-primary {
   border: none;
   color: #fff;
-  background-image: -webkit-linear-gradient(166deg, #1cc7d0, #2dde98);
-  background-image: linear-gradient(284deg, #1cc7d0, #2dde98);
+  background-image: -webkit-linear-gradient(166deg, #1197f7, #2989ee);
+  background-image: linear-gradient(284deg, #1197f7, #2989ee);
 }
 .btn-static-primary:hover, .btn-static-primary:focus {
   color: white;
-  background-image: -webkit-linear-gradient(166deg, #1cc7d0, #2dde98);
-  background-image: linear-gradient(284deg, #1cc7d0, #2dde98);
+  background-image: -webkit-linear-gradient(166deg, rgb(84, 179, 247), #0b6fd8);
+  background-image: linear-gradient(284deg, rgb(84, 179, 247), #0b6fd8);
 }
 .btn-static-primary:active, .btn-static-primary.active {
-  background-image: -webkit-linear-gradient(166deg, #1ab6be, #21d58e);
-  background-image: linear-gradient(284deg, #1ab6be, #21d58e);
+  background-image: -webkit-linear-gradient(166deg, rgb(84, 179, 247), #0b6fd8);
+  background-image: linear-gradient(284deg, rgb(84, 179, 247), #0b6fd8);
 }
 .btn-static-primary.btn-shadow {
-  box-shadow: 0 2px 6px 0 rgba(45, 222, 152, 0.4);
+  box-shadow: 0 2px 6px 0 rgba(84, 179, 247, 0.4);
 }
 .btn-static-primary.btn-shadow:hover, .btn-static-primary.btn-shadow:focus {
-  box-shadow: 0 4px 12px rgba(45, 222, 152, 0.4);
+  box-shadow: 0 4px 12px rgba(84, 179, 247, 0.4);
 }
 
 .btn-static-secondary {
@@ -136,13 +136,13 @@
 .btn-static-enterprise {
   color: white;
   background-color: #050f2c;
-  border: solid 2px #2dde98;
+  border: solid 2px #2989ee;
   line-height: 36px;
 }
 .btn-static-enterprise:hover, .btn-static-enterprise:focus {
   color: white;
-  background-color: #2dde98;
-  border-color: #2dde98;
+  background-color: #2989ee;
+  border-color: #2989ee;
 }
 
 .btn-static-shadow-dark {

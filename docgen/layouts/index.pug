@@ -3,126 +3,38 @@ extends archetypes/single-column.pug
 block content
   section.is-section__intro
     figure.section-illustration
-      img(src="assets/img/search-focus.svg", width="380", class="searchfocus-illu hidden-md-down")
-      img(src="assets/img/autocomplete-dropdown-simple.svg", width="300", class="autocomplete-illu hidden-md-down", data-move= '-y', data-threesold = '300', data-factor = '50')
+      img(src="assets/img/framed-example.png", width="670px")
 
     .container.text-center
       h2.title.
-        Leverage Algolia’s Out of the Box Search on Android
+        There’s a widget for that
       p.
-        Algolia is a leading provider of hosted search delivering a full-featured autocomplete menu with realtime results from the first keystroke.
+        Pick from an extensive library of widgets to power your search 
+        and build a state-of-the-art instant-search experience.
 
   section.is-section__blocks
     .spacer100
     .container.flex-container
       .flex-item-100.text-center
-        h2 Built for mobile from the ground up
+        h2 More than widgets
       .spacer100
       .flex-item-60.text-center
         img(src="assets/img/phone-build-3D.svg", class="illustration")
 
-
       .flex-item-40
         p.
-          Widgets and Helpers give you the API & UX tools to easily integrate a powerful search in any Android App
+          Your code is easy to write and maintain. instantsearch.js provides the glue between the different parts of your search page. Everything is packaged in one library.
 
       .spacer100
 
       .flex-item-100.text-center
-        h2 UX Tools
-        .spacer60
-        ul.flex-container.flex-space
-          li.flex-item-30
-            img(src="assets/img/icon-highlighting.svg")
-            p.
-              <a href="https://community.algolia.com/instantsearch-android/concepts.html#highlighting">Highlighting</a>
-          li.flex-item-30
-            img(src="assets/img/icon-refinement-list.svg")
-            p.
-              Refinement lists
-          li.flex-item-30
-            img(src="assets/img/icon-infinite-scroll.svg")
-            p.
-              <a href="https://community.algolia.com/instantsearch-android/widgets.html#infinite-scroll">Infinite scroll</a>
+        h2 Infinite possibilities
+        .spacer32
+        .flex-item-40
+          p.
+            Every website is different. The modular design of instantsearch.js allows you to configure, rearrange and combine the widgets to build your own experience.
+            
     .spacer100
-
-  section.is-section__relevancy
-    .container.flex-container.v-center
-        .section-content.flex-item-50
-          h2 Build beautiful search on Android easily
-          p.
-            InstantSearch for Android brings you pre-built UI widgets and components so you can easily build serverless search.
-          ul.bullets
-            li Fully customizable search results page
-            li Intuitive UI Components
-            li Complete Documentation
-
-          p.
-            All of the best practices we learned while implementing search on hundreds of websites are now packed into our widgets
-
-
-        .section-content.flex-item-50.text-center
-          svg(xmlns='http://www.w3.org/2000/svg', viewbox="0 0 292 590", xmlns:xlink='http://www.w3.org/1999/xlink')
-            defs
-              path#path-1(d='M.48670134.72533533H265.199347V470H.48670134z')
-            g#Page-1(fill='none', fill-rule='evenodd')
-              g#OUTLINE
-                g#Group-2
-                  g#Phone
-                    path#Body(stroke='currentColor', stroke-width='1', d='M2.35892408 557.161947c0 13.385465 9.13814142 19.869011 12.66269432 21.527476 7.8755782 3.705241 17.7463028 4.629672 35.2084671 5.873521 14.2217499 1.012115 55.4897795 5.086878 94.3006285 5.086878l1.95685-.038831c39.943697 0 79.557546-3.293131 93.734822-4.81506 15.704212-1.686023 28.670811-3.69522 36.546389-7.400461 3.523318-1.658465 12.199425-7.474366 12.199425-19.687382V28.4774065c0-7.8814662-7.089873-14.2384974-10.614426-15.8957097-7.875578-3.70524112-17.323801-6.5048401-34.785966-7.74743617-14.22175-1.01211453-53.327856-3.79668212-93.271553-3.79668212L141.648562 1c-38.812085 0-79.6674962 2.8221461-93.8892461 3.83426063C30.2971516 6.0768567 22.5364642 7.96580313 14.660886 11.6710442c-3.5233175 1.6584649-12.30196192 7.4117346-12.30196192 16.8063633V557.161947z')
-                    path#Speaker(fill='currentColor', d='M153.330065 29.3118151c0-3.9094924-3.167932-7.0779538-7.076772-7.0779538-3.907609 0-7.076772 3.1684614-7.076772 7.0779538 0 3.9082614 3.169163 7.0779537 7.076772 7.0779537 3.90884 0 7.076772-3.1696923 7.076772-7.0779537')
-                    path#Mic(fill='currentColor', d='M51.8963298 31.6705263c0-1.9536269-1.5842071-3.5383702-3.5383861-3.5383702-1.954179 0-3.5383861 1.5847433-3.5383861 3.5383702 0 1.9548403 1.5842071 3.5395836 3.5383861 3.5395836 1.954179 0 3.5383861-1.5847433 3.5383861-3.5395836')
-                    path#Volumes(fill='currentColor', d='M0 114.24726h2.35892408v92.013399H0z')
-                    path#Power(fill='currentColor', d='M288.9682 76.4981735h2.358924V114.24726H288.9682z')
-                    g#Screen(transform='translate(14 51)')
-                      mask#mask-2(fill='#fff')
-                        use(xlink:href='#path-1')
-                      use#Mask(fill='currentColor', xlink:href='#path-1')
-                    image#iPhone-3(x='15', y='51', width='264', height='468.782443', xlink:href='assets/img/ecommerce.gif')
-
-  section.is-section__api
-    div.section__description.text-right.pos-rel
-      .v-center
-        figure
-          svg.desc-icon
-            use(xlink:href="#bulb-icon")
-        h3.title.color-java Intuitive API
-        p.m400 Algolia's API and documentation are crafted and cared for by developers who spend all day thinking about search
-        .spacer20
-        a(href="getting-started.html", class="btn btn-static-primary btn-shadow-dark").
-          Read the guide&nbsp;<span class="icon icon-arrow-right"></span>
-    div.section__graphic.hidden-md-down
-      .spacer60
-      pre(class="al-snippet sn-1" data-snippet-theme="dark")
-        code.
-          &lt;<span class="sn-keyword">com.algolia.instantsearch.ui.views.SearchBox</span>
-            <span class="sn-keyword">android:id</span><span class="sn-operator">=</span>"<span class="sn-string">@id/searchBox</span>"
-            <span class="sn-keyword">style</span><span class="sn-operator">=</span>"<span class="sn-string">@style/AppTheme.View</span>"
-            <span class="sn-keyword">algolia:autofocus</span><span class="sn-operator">=</span>"<span class="sn-string">true</span>"
-            <span class="sn-keyword">algolia:queryHint</span><span class="sn-operator">=</span>"<span class="sn-string">Search for a Product</span>"/&gt;
-
-          &lt;<span class="sn-keyword">com.algolia.instantsearch.ui.views.Hits</span>
-            <span class="sn-keyword">android:id</span><span class="sn-operator">=</span>"<span class="sn-string">@+id/hits</span>"
-            <span class="sn-keyword">style</span><span class="sn-operator">=</span>"<span class="sn-string">@style/AppTheme.View</span>"
-            <span class="sn-keyword">algolia:hitsPerPage</span><span class="sn-operator">=</span>"<span class="sn-string">5</span>"
-            <span class="sn-keyword">algolia:itemLayout</span><span class="sn-operator">=</span>"<span class="sn-string">@layout/hits_item</span>"
-            <span class="sn-keyword">algolia:remainingItemsBeforeLoading</span>="<span class="sn-string">5</span>"/&gt;
-
-      pre(class="al-snippet sn-2" data-snippet-theme="dark")
-        code.
-          <span class="sn-comment">// Simple initialization of your search interface</span>
-          <span class="sn-variable">helper</span> <span class="sn-operator">=</span> new <span class="sn-keyword">InstantSearchHelper</span>(<span class="sn-operator">this</span>, new <span class="sn-keyword">Searcher</span>(<span class="sn-operator">ALGOLIA_APP_ID</span>, <span class="sn-operator">ALGOLIA_API_KEY</span>, <span class="sn-operator">ALGOLIA_INDEX_NAME</span>)
-          <span class="sn-comment">// Easily set custom query-time parameters</span>
-          .<span class="sn-keyword">setQuery</span>(new <span class="sn-keyword">Query</span>().<span class="sn-keyword">setHitsPerPage</span>(<span class="sn-string">10</span>).<span class="sn-keyword">setAttributesToRetrieve</span>("<span class="sn-string">title</span>")));
-
-          <span class="sn-comment">// Various useful out-of-the-box features</span>
-          <span class="sn-variable">helper</span>.<span class="sn-keyword">enableProgressBar</span>(); <span class="sn-comment">// progress indicators</span>
-          <span class="sn-keyword">searcher</span>.<span class="sn-keyword">loadMore</span>(); <span class="sn-comment">// infinite scroll with programmatic control</span>
-
-          <span class="sn-comment">// Search lifecycle events to which you can react</span>
-          <span class="sn-keyword">EventBus</span>.<span class="sn-keyword">getDefault</span>().<span class="sn-keyword">register</span>(<span class="sn-operator">this</span>);
-
-
 
   section.is-section__features
     .spacer100.hidden-md-down
@@ -169,84 +81,8 @@ block content
             h3 Geo-Search
           p
             | Easily search addresses and show locations on a map that updates in real-time.
+            
 
-
-
-  section.is-section__offline
-    .container.pos-rel
-      .spacer80
-      h2.color-white Algolia Offline
-      p.
-        Take your app experience offline in low- and zero-connectivity scenarios by leveraging Algolia Offline.
-      a.btn.btn-static-primary.btn-shadow(href="https://algolia.com/offline").
-        Learn more <i class="icon icon-arrow-right"></i>
-
-
-  section.is-section__live
-    .spacer80
-    header.text-center
-      h2 Example Apps
-    .spacer20
-    .container
-      ul.live__examples.cm-large-tiles
-        li.examples-item.tile
-          a(href='https://github.com/algolia/instantsearch-android-examples/tree/master/ecommerce')
-            .tile-container
-              figure
-                img(src='images/e-commerce.svg')
-              h3.item-title E-commerce
-              span.light-link.
-                See it live  <i class="icon icon-arrow-right"></i>
-        li.examples-item.tile
-          a(href='https://github.com/algolia/instantsearch-android-examples/tree/master/media')
-            .tile-container
-              figure
-                img(src='images/media.svg')
-              h3.item-title Media
-              span.light-link.
-                See it live  <i class="icon icon-arrow-right"></i>
-
-        li.examples-item.tile.muted
-          .tile-container
-            figure
-              img(src='images/more-icon.svg')
-            h3.item-title More to come
-        .spacer50.fl-left
-
-  section.is-section__modular-widgets
-    .container.flex-container.pos-rel
-      .pos-rel.flex-item-40
-        .spacer80
-        .section-content
-          h2 Modular Widgets
-          p Build and personalize your search experience with a library of powerful widgets
-          .spacer40
-          ul.flex-container.text-center.flex-start
-            li.
-              <img src="assets/img/icon-search.svg"/>
-              <p>SearchBox</p>
-            li.
-              <img src="assets/img/icon-infinite-scroll.svg"/>
-              <p>Hits</p>
-            li.
-              <img src="assets/img/icon-refinement-list.svg"/>
-              <p>RefinementList</p>
-            li.
-              <img src="assets/img/icon-stats.svg"/>
-              <p>Stats</p>
-            li.
-              <img src="assets/img/icon-custom.svg"/>
-              <p>Custom widgets</p>
-
-            li.
-
-          .spacer40
-          a(href="widgets.html" class="btn btn-static-default color-white").
-            Discover the widgets <i class="icon icon-arrow-right"></i>
-
-      .pos-rel.flex-item-40
-        .section-graphic.flex-item-50.text-center.hidden-md-down
-          img(src="images/android-tile_dark.svg", class="illustration", data-move = '-y', data-threesold = '800', data-factor = '100', data-xtra-transform = "scale(1.2)")
   section.pos-rel.h300.w100p.fl-left
     .cta-free-trial
       .container

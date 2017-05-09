@@ -137,20 +137,13 @@ body:not(.example) section {
 
   .section-illustration {
     margin: auto;
-    width: 414px;
+    width: 670px;
     text-align: center;
     position: absolute;
     z-index: 15;
     left: 0;
     right: 0;
-    top: -140%;
-
-    .searchfocus-illu {
-      position: relative;
-      z-index: 90;
-      top: 30px;
-      max-width: 380px
-    }
+    top: -165%;
   }
 
   .container {
