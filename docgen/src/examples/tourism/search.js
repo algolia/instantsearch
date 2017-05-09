@@ -78,7 +78,12 @@ window.addEventListener('load', function() {
 
   search.addWidget(
     instantsearch.widgets.googleMaps({
-      container: document.querySelector('#map')
+      container: document.querySelector('#map'),
+      prepareMarkerData: function(hit, index, hits) {
+        return {
+          title: hit.description
+        };
+      }
     })
   );
 
