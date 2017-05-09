@@ -56,3 +56,14 @@ search.addWidget(
 If you want to learn more about sorting the values, check out the widget API to see what are
 the valid values for the `sortBy` option of [menu](../widgets/menu.html#struct-MenuWidgetOptions-sortBy) or
 [refinementList](../widgets/refinementList.html#struct-RefinementListWidgetOptions-sortBy)
+
+## Templates not working
+
+Internally all the widgets are now using the connectors. And we wanted their API
+to be close to the one offered by react-instantsearch connectors. This then
+impacted the name of some variables in the templates.
+
+List of global changes:
+
+ - name ==> label
+ - name ==> value (refinementList)

@@ -46,16 +46,16 @@ var noResultsTemplate =
   '<div class="text-center">No results found matching <strong>{{query}}</strong>.</div>';
 
 var menuTemplate =
-  '<a href="javascript:void(0);" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"><i class="fa fa-angle-right"></i> {{name}}</span class="facet-name"></a>';
+  '<a href="javascript:void(0);" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"><i class="fa fa-angle-right"></i> {{label}}</span class="facet-name"></a>';
 
 var facetTemplateCheckbox =
   '<a href="javascript:void(0);" class="facet-item">' +
-    '<input type="checkbox" class="{{cssClasses.checkbox}}" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}}' +
+    '<input type="checkbox" class="{{cssClasses.checkbox}}" value="{{label}}" {{#isRefined}}checked{{/isRefined}} />{{label}}' +
     '<span class="facet-count">({{count}})</span>' +
   '</a>';
 
 var facetTemplateColors =
-  '<a href="javascript:void(0);" data-facet-value="{{name}}" class="facet-color {{#isRefined}}checked{{/isRefined}}"></a>';
+  '<a href="javascript:void(0);" data-facet-value="{{label}}" class="facet-color {{#isRefined}}checked{{/isRefined}}"></a>';
 
 search.addWidget(
   instantsearch.widgets.hits({
