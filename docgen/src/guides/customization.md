@@ -50,10 +50,13 @@ We will cover step by step on how to write a render function used by the connect
 
 For simplicity, we will write custom widgets with [jQuery](https://jquery.com/) to manipulate the DOM.
 
+In the first three steps we focus on implementing the rendering function and then will it connect it to InstantSearch.
 
-#### 1. First render
+#### 1. Set up the DOM
 
-First of all, we want to use `isFirstRendering` boolean (which is second argument of the render function) to insert the needed markup in the DOM on the first rendering lifecycle:
+Since we use jQuery in these examples, we want to update only the changing parts of the markup at every render.
+
+To help you to do that, the connectors API provides `isFirstRendering` a boolean as second argument of the render function. We can leverage this to insert the initial markup of your custom widget.
 
 ```javascript
 var customMenuRenderFn = function(renderParams, isFirstRendering) {
@@ -68,8 +71,10 @@ var customMenuRenderFn = function(renderParams, isFirstRendering) {
 }
 ```
 
+If you use a rendering library such as React, you can omit this part because React will compute this for you.
 
-#### 2. Display available menu select options
+
+#### 2. Display the available dropdown options
 
 Then, on every render we want to update and insert the available menu items as `<option>` DOM nodes:
 
@@ -83,8 +88,7 @@ var customMenuRenderFn = function(renderParams, isFirstRendering) {
   }
 
   // `renderParams` is an object containing all the informations
-  // you need to create a custom widget. If you think something is missing
-  // or you want to enhance this connector feel free to open an issue on Github.
+  // you need to create a custom widget.
   var items = renderParams.items;
 
   // Transform `items[]` to HTML markup:
@@ -99,7 +103,7 @@ var customMenuRenderFn = function(renderParams, isFirstRendering) {
     );
   });
 
-  // then replace content of `<select></select>` node with the new menu items markup.
+  // then replace the content of `<select></select>` node with the new menu items markup.
   $(document.body).find('select').html(optionsHTML);
 }
 ```
@@ -110,7 +114,7 @@ Now we have all the menu options displayed on the page but nothing is updating w
 #### 3. Make it interacts with the search results
 
 Menu connector comes with a `refine()` function in the first argument `renderParams` object.
-You need to call this `refine()` function everytime an user select another option to filter the search results:
+You need to call this `refine()` function every time an user select another option to *refine* the search results:
 
 ```javascript
 var customMenuRenderFn = function(renderParams, isFirstRendering) {
@@ -121,7 +125,7 @@ var customMenuRenderFn = function(renderParams, isFirstRendering) {
     );
 
     // We will bind the `<select>` change event on first render
-    // since we don't want to create new listeners on every render
+    // because we don't want to create new listeners on every render
     // for potential performance issues:
     var refine = renderParams.refine;
 
@@ -149,9 +153,9 @@ Now every time an user selects a new option in the dropdown menu, it triggers ne
 
 #### 4. Mount the custom menu dropdown widget on your page
 
-We have written the render function that will be passed to connector.
+We've just written the render function, we can now use it with the menu connector. This will create a new widget factory for our custom dropdown widget.
 
-Now we need to instantiate the custom widget so it will be displayed in the page:
+Let's use this factory in your search:
 
 ```javascript
 var customMenuRenderFn = function(renderParams, isFirstRendering) {
@@ -194,6 +198,7 @@ search.addWidget(
 );
 ```
 
+This example works on a single DOM element, which means that you won't be able to re-use it for another attribute.
 
 #### 5. Make it reusable!
 
@@ -257,8 +262,12 @@ search.addWidget(
 );
 ```
 
-And voilà, we have covered how to write simple custom widgets using connectors 🎉 !
+With this steps we introduced a way to provide custom parameters:
+  * a DOM container
+  * a title
+
+And voilà, we have covered how to write a simple custom widget using connectors 🎉 !
 
 Now you can [read more about connectors](/connectors.html) in the docs and create more advance usages with the same simplicity.
 
-Feel free to share with the community your custom widgets 🙏
+Feel free to share with the [community](https://discourse.algolia.com) your custom widgets 🙏
