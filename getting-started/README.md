@@ -77,6 +77,8 @@ var search = instantsearch({
   indexName: 'bestbuy',
   urlSync: true
 });
+
+search.start();
 ```
 
 `appId`, `apiKey` and `indexName` are mandatory. Those values are the credentials of your application in Algolia. They can be found in your [Algolia dashboard](https://www.algolia.com/api-keys).
@@ -117,6 +119,8 @@ Once you’ve set the place where the widget will be rendered, you need to add t
       container: '#hits'
     })
   );
+
+  search.start();
 </script>
 ```
 
@@ -143,6 +147,8 @@ In order to customize the view for each product, we can use a special option of 
       }
     })
   );
+
+  search.start();
 </script>
 ```
 
@@ -183,6 +189,8 @@ Now that we’ve added the results, we can start querying our index. To do this,
       container: '#hits'
     })
   );
+
+  search.start();
 </script>
 ```
 
@@ -239,6 +247,8 @@ Since the dataset used here is an e-commerce one, let’s add a [RefinementList]
       container: '#hits'
     })
   );
+
+  search.start();
 </script>
 ```
 
@@ -313,6 +323,8 @@ Those two features are implemented respectively with the [pagination](https://co
   );
 
   [...]
+
+  search.start();
 </script>
 ```
 
