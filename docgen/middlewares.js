@@ -32,6 +32,18 @@ const common = [
     source: './rootFiles',
     destination: './',
   }),
+  assets({
+    source: '../dist',
+    destination: './examples/media',
+  }),
+  assets({
+    source: '../dist',
+    destination: './examples/e-commerce',
+  }),
+  assets({
+    source: '../dist',
+    destination: './examples/tourism',
+  }),
   ignore(fileName => {
     // This is a fix for VIM swp files inside src/,
     // We could also configure VIM to store swp files somewhere else

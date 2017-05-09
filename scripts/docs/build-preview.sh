@@ -2,20 +2,27 @@
 
 set -ev # exit when error
 
-VERSION=preview-`cat package.json | json version`
+VERSION=preview-$(json version < package.json)
 
-set -e # exit when error
+# Build the documentation
+rm -rf docs-preview
+(
+  cd docgen
+  npm install && npm run build
+)
 
-NODE_ENV=production VERSION=${VERSION} npm run build
-(cd docs
-bundle install
-rm -rf _site_preview
-JEKYLL_ENV=production VERSION=${VERSION} bundle exec jekyll build --destination _site_preview/instantsearch.js --config _config.yml,_preview.yml
-for example in _site_preview/examples/*; do
+
+# Package the examples in the website
+for example in docs_preview/examples/*; do
   if [ -d "$example" ]; then
-    name=`basename "$example"`
-    (cd "$example" && zip -r ../$name.zip *)
+    name=$(basename "$example")
+    (cd "$example" && zip -r "../$name.zip" ./*)
   fi
-done)
-cp dist/* docs/_site_preview/instantsearch.js/
-echo '/ /instantsearch.js/ 301' > docs/_site_preview/_redirects
+done
+
+
+# Build instantsearch.js library and move the files to the root of the website
+NODE_ENV=production VERSION=${VERSION} npm run build
+cp dist/* docs-preview
+
+# echo '/ /instantsearch.js/ 301' > docs/_site_preview/_redirects

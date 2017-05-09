@@ -54,5 +54,5 @@ search.addWidget(
 ```
 
 If you want to learn more about sorting the values, check out the widget API to see what are
-the valid values for the `sortBy` option of [menu](../widgets/menu.html#struct-MenuWidgetOptions-sortBy) or 
+the valid values for the `sortBy` option of [menu](../widgets/menu.html#struct-MenuWidgetOptions-sortBy) or
 [refinementList](../widgets/refinementList.html#struct-RefinementListWidgetOptions-sortBy)
