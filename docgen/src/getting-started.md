@@ -65,7 +65,7 @@ You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/i
 Use jsDelivr build to install with bower:
 
 ```bash
-bower install https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.js
+bower install https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.js
 ```
 
 
@@ -93,7 +93,7 @@ You can synchronise the current search with the browser url. It provides two ben
   * Working back/next browser buttons
   * Copy and share the current search url
 
-To configure this feature, pass `urlSync: true` option to `instantsearch()`. The urlSync option has more parameters ([see documentation](http://localhost:3000/guides/concepts.html#instantsearch))
+To configure this feature, pass `urlSync: true` option to `instantsearch()`. The urlSync option has more parameters ([see InstantSearch.js API documentation](/instantsearch.html)).
 
 Congrats 🎉 ! Your website is now connected to Algolia.
 
