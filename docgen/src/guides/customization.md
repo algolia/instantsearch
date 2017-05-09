@@ -15,7 +15,8 @@ has options to manipulate CSS classes or even modifying part of the HTML
 output (templates).
 
 However, those may not be enough for your use-case or you might want
-to use parameters from that are not usable in the current set of widgets.
+to use parameters from Algolia that are not usable in the current set of
+widgets.
 
 That's what this guide is all about: extending instantsearch.js to fit your
 needs perfectly.
@@ -39,7 +40,9 @@ They follow the pattern:
 (rendering) => (widgetParameters) => Widget
 ```
 
-We will cover two examples in this guide, a menu as dropdown and a second one to display hits with having a custom message every 5 results.
+We will cover two examples in this guide:
+ - how to display a menu as a dropdown
+ - how to enhance the displayed results based on what Algolia answers
 
 Don't be scared! let's go together step by step on how to write a custom widget.
 
@@ -48,8 +51,7 @@ Don't be scared! let's go together step by step on how to write a custom widget.
 In this example we will create a new custom widget using [connectMenu](/connectors.html#connectMenu) connector.
 We will cover step by step on how to write a render function used by the connector.
 
-For simplicity, we will write custom widgets with [jQuery](https://jquery.com/) to manipulate the DOM.
-
+For simplicity, we will write custom widgets using [jQuery](https://jquery.com/) to manipulate the DOM.
 
 #### 1. First render
 
