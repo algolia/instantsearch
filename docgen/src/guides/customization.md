@@ -1,5 +1,5 @@
 ---
-title: Custom widgets
+title: Customize widgets
 mainTitle: Guides
 layout: main.pug
 name: customize
