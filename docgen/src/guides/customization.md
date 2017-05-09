@@ -5,25 +5,17 @@ layout: main.pug
 name: customize
 category: guides
 withHeadings: true
-navWeight: 0
+navWeight: 20
 ---
 
-## Custom widgets
+## Customize widgets
 
 InstantSearch.js comes bundled with a set of 18 UI components. Each of them
 has options to manipulate CSS classes or even modifying part of the HTML
 output (templates).
 
-However, those may not be enough for your use-case or you might want
-to use parameters from Algolia that are not usable in the current set of
-widgets.
-
-That's what this guide is all about: extending instantsearch.js to fit your
-needs perfectly.
-
-InstantSearch.js offers two ways for building new widgets:
- - use connectors to reuse the business logic of an existing widget
- - use the widget specification to interact directly with Algolia
+To go a step further in terms of customization, InstantSearch.js offers connectors
+that contains the logic of the widgets without their rendering.
 
 ## Connectors
 
@@ -31,8 +23,8 @@ Connectors are the render-less counterparts of the widgets. They encapsulate
 all the logic needed for making search widgets. Each one of them is specialized
 to make a certain type of widget.
 
-Connectors are functions that will create a widget factory, functions that can
-creates widgets instances.
+Connectors are functions that will create a widget factory: a function that can
+create widgets instances.
 
 They follow the pattern:
 
@@ -40,11 +32,11 @@ They follow the pattern:
 (rendering) => (widgetParameters) => Widget
 ```
 
-We will cover two examples in this guide:
- - how to display a menu as a dropdown
- - how to enhance the displayed results based on what Algolia answers
+In this guide, we will go through the implementation of the custom rendering of a
+menu widget. In the end, we'll have a widget that behaves like a menu and that
+uses a dropdown for the rendering.
 
-Don't be scared! let's go together step by step on how to write a custom widget.
+Let's go step by step on how to write this custom widget.
 
 ### How to create a custom menu with a dropdown
 

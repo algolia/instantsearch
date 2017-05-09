@@ -4,7 +4,7 @@ mainTitle: Guides
 layout: main.pug
 category: guides
 withHeadings: true
-navWeight: 0
+navWeight: 10
 ---
 
 ## No more `hitsPerPage` in `hits` and `infiniteHits`

@@ -20,11 +20,11 @@
     "image": "",
     "dropdownItems": [
       {
-        "name": "Concepts",
-        "url": "guides/concepts.html"
+        "name": "Use InstantSearch.js",
+        "url": "guides/usage.html"
       },
       {
-        "name": "Custom widgets",
+        "name": "Customize widgets",
         "url": "guides/customization.html"
       },
       {
@@ -65,8 +65,8 @@
     "url": "getting-started.html"
   },
   {
-    "name": "Concepts",
-    "url": "guides/concepts.html"
+    "name": "Use InstantSearch.js",
+    "url": "guides/usage.html"
   },
   {
     "name": "Widgets",

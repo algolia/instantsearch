@@ -60,15 +60,6 @@ var instantsearch = require('instantsearch.js');
 
 You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css) into your page.
 
-### Bower
-
-Use jsDelivr build to install with bower:
-
-```bash
-bower install https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.js
-```
-
-
 ## Initialization
 
 To initialize instantsearch.js, you need an Algolia account with a configured and non-empty index.
