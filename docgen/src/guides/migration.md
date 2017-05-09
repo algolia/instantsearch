@@ -65,5 +65,5 @@ impacted the name of some variables in the templates.
 
 List of global changes:
 
- - name ==> label
- - name ==> value (refinementList)
+ - name → label (hierarchicalMenu / menu, item template, the value to display)
+ - name → value (refinementList, item template, the value to refine)

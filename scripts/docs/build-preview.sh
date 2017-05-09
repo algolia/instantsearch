@@ -4,6 +4,9 @@ set -ev # exit when error
 
 VERSION=preview-$(json version < package.json)
 
+# Build instantsearch.js library
+NODE_ENV=production VERSION=${VERSION} npm run build
+
 # Build the documentation
 rm -rf docs-preview
 (
@@ -20,9 +23,7 @@ for example in docs_preview/examples/*; do
   fi
 done
 
-
-# Build instantsearch.js library and move the files to the root of the website
-NODE_ENV=production VERSION=${VERSION} npm run build
+# Copy instantsearch.js builds to the website root
 cp dist/* docs-preview
 
 # echo '/ /instantsearch.js/ 301' > docs/_site_preview/_redirects
