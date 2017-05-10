@@ -1,5 +1,5 @@
 ---
-title: Migrate to V2
+title: Differences in V2
 mainTitle: Guides
 layout: main.pug
 category: guides
@@ -40,6 +40,7 @@ search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#brands',
     attributeName: 'brand',
+    // now the default is ['isRefined', 'count:desc', 'name:asc']
     sortBy: ['count:desc', 'name:asc'],
   })
 );
@@ -48,6 +49,7 @@ search.addWidget(
   instantsearch.widgets.menu({
     container: '#categories',
     attributeName: 'categories',
+    // now the default is ['name:asc']
     sortBy: ['count:desc', 'name:asc']
   })
 );
@@ -57,7 +59,7 @@ If you want to learn more about sorting the values, check out the widget API to 
 the valid values for the `sortBy` option of [menu](../widgets/menu.html#struct-MenuWidgetOptions-sortBy) or
 [refinementList](../widgets/refinementList.html#struct-RefinementListWidgetOptions-sortBy)
 
-## Templates not working
+## Some template variable have been changed
 
 Internally all the widgets are now using the connectors. And we wanted their API
 to be close to the one offered by react-instantsearch connectors. This then
@@ -65,5 +67,16 @@ impacted the name of some variables in the templates.
 
 List of global changes:
 
- - name → label (hierarchicalMenu / menu, item template, the value to display)
- - name → value (refinementList, item template, the value to refine)
+ - In the item template of the hierarchicalMenu and menu widgets, name becomes label
+ - In the item template of the refinementList widget, name becomes value.
+
+## React components can't be used as templates anymore
+
+When we created instantsearch.js, it was built using React and we didn't
+know that we would build react-instantsearch. However, we have now react-instantsearch
+and it is production ready. That's why we're dropping in this version the support
+for the react based templates.
+
+As of now, we consider the engine used to build the widgets in instantsearch.js
+as an implementation detail. Since we do not expose it anymore, we'll be able
+to change it and use the best solution for each release.
