@@ -14,7 +14,6 @@ nav.sidebar {
 
     &.fixed {
       position: fixed;
-      top: ($nav-height);
       z-index: 9;
       .sidebar-elements{
         overflow: auto;
