@@ -5,9 +5,9 @@ var alg = require('algolia-frontend-components/javascripts.js');
 
 const docSearch = {
   apiKey: 'fd5e835f5153cad7d5ec0c3595dfa244',
-  indexName: 'instantsearch-android',
-  inputSelector: '#searchbox'
-}
+  indexName: 'instantsearch.js-v2',
+  inputSelector: '#searchbox',
+};
 
 const header = new alg.communityHeader(docSearch);
 
