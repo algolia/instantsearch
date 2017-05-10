@@ -70,7 +70,7 @@ List of global changes:
  - In the item template of the hierarchicalMenu and menu widgets, name becomes label
  - In the item template of the refinementList widget, name becomes value.
 
-## React components can't be used as templates anymore
+## React components can't be used as templates
 
 When we created instantsearch.js, it was built using React and we didn't
 know that we would build react-instantsearch. However, we have now react-instantsearch
