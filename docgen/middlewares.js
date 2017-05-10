@@ -29,10 +29,6 @@ const common = [
     destination: './assets/',
   }),
   assets({
-    source: './rootFiles',
-    destination: './',
-  }),
-  assets({
     source: '../dist',
     destination: './examples/media',
   }),
