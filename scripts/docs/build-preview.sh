@@ -5,13 +5,13 @@ set -ev # exit when error
 VERSION=preview-$(json version < package.json)
 
 # Build instantsearch.js library
-NODE_ENV=production VERSION=${VERSION} npm run build
+NODE_ENV=production VERSION=${VERSION} yarn run build
 
 # Build the documentation
 rm -rf docs-preview
 (
   cd docgen
-  npm install && npm run build
+  yarn install && yarn run build
 )
 
 

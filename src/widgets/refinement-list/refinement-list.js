@@ -134,7 +134,7 @@ refinementList({
 
 /**
  * @typedef {Object} RefinementListTransforms
- * @property {function} [transformData.item] Function to change the object passed to the `item` template.
+ * @property {function} [item] Function to change the object passed to the `item` template.
  */
 
 /**

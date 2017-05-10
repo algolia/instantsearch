@@ -19,10 +19,10 @@ const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) => defa
  * Widgets are the building blocks of InstantSearch.js. Any
  * valid widget must have at least a `render` or a `init` function.
  * @typedef {Object} Widget
- * @param {function} [widget.render] Called after each search response has been received
- * @param {function} [widget.getConfiguration] Let the widget update the configuration
+ * @property {function} [render] Called after each search response has been received
+ * @property {function} [getConfiguration] Let the widget update the configuration
  * of the search with new parameters
- * @param {function} [widget.init] Called once before the first search
+ * @property {function} [init] Called once before the first search
  */
 
 /**

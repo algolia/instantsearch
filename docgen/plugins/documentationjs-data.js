@@ -32,27 +32,24 @@ function formatAllMD(symbols) {
 export default function({rootJSFile}) {
   return function(files, metalsmith, done) {
     console.log('before documentationjs');
-    documentation.build(rootJSFile, {}, (e, symbols) => {
-      if(e) done(e);
-      else {
-        // transform all md like structure to html --> type: 'root' using formatMD
-        const mdFormattedSymbols = formatAllMD(symbols);
+    const out = documentation.build(rootJSFile, {}).then((symbols) => {
+      // transform all md like structure to html --> type: 'root' using formatMD
+      const mdFormattedSymbols = formatAllMD(symbols);
 
-        mapInstantSearch(
-          [
-            findInstantSearchFactory(mdFormattedSymbols),
-            findInstantSearch(mdFormattedSymbols),
-          ],
-          mdFormattedSymbols,
-          files
-        );
-        mapConnectors(filterSymbolsByType('Connector', mdFormattedSymbols), mdFormattedSymbols, files),
-        mapWidgets(filterSymbolsByType('WidgetFactory', mdFormattedSymbols), mdFormattedSymbols, files),
+      mapInstantSearch(
+        [
+          findInstantSearchFactory(mdFormattedSymbols),
+          findInstantSearch(mdFormattedSymbols),
+        ],
+        mdFormattedSymbols,
+        files
+      );
+      mapConnectors(filterSymbolsByType('Connector', mdFormattedSymbols), mdFormattedSymbols, files),
+      mapWidgets(filterSymbolsByType('WidgetFactory', mdFormattedSymbols), mdFormattedSymbols, files),
 
-        console.log('after documentationjs');
-        done();
-      }
-    });
+      console.log('after documentationjs');
+      done();
+    }, (e) => done);
   };
 }
 

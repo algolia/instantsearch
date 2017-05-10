@@ -127,9 +127,9 @@ searchBox({
 
 /**
  * @typedef {Object} SearchBoxCSSClasses
- * @property  {string|string[]} [cssClasses.root] CSS class to add to the
+ * @property  {string|string[]} [root] CSS class to add to the
  * wrapping `<div>` (if `wrapInput` set to `true`).
- * @property  {string|string[]} [cssClasses.input] CSS class to add to the input.
+ * @property  {string|string[]} [input] CSS class to add to the input.
  */
 
 /**
