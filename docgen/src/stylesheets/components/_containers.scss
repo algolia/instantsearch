@@ -144,6 +144,10 @@ body:not(.example) section {
     left: 0;
     right: 0;
     top: -165%;
+
+    @include mobile-mq {
+      display: none;
+    }
   }
 
   .container {
