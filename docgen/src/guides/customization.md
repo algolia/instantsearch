@@ -12,7 +12,7 @@ githubSource: docgen/src/guides/customization.md
 
 ## Customize widgets
 
-InstantSearch.js comes bundled with a set of 18 UI components. Each of them
+InstantSearch.js comes bundled with a set of 15+ UI components. Each of them
 has options to manipulate CSS classes or even modifying part of the HTML
 output (templates).
 

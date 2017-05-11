@@ -18,7 +18,7 @@ this option of the engine, there are still three ways:
    the [client](https://www.algolia.com/doc/api-client/default/settings/#set-settings),
    to change the setting at the index level.
  - use the [hitsPerPageSelector](../widgets/hitsPerPageSelector.html) widget.
- - use the configuration option of instantsearch:
+ - use the configuration option of `instantsearch`:
 
 ```javascript
 var search = instantsearch({
@@ -64,7 +64,7 @@ the valid values for the `sortBy` option of [menu](../widgets/menu.html#struct-M
 ## Some template variables have been changed
 
 Internally all the widgets are now using the connectors. And we wanted their API
-to be close to the one offered by react-instantsearch connectors. This then
+to be close to the one offered by [react-instantsearch connectors](https://community.algolia.com/react-instantsearch/connectors/). This then
 impacted the name of some variables in the templates.
 
 List of global changes:
@@ -74,11 +74,11 @@ List of global changes:
 
 ## React components can't be used as templates
 
-When we created instantsearch.js, it was built using React and we didn't
-know that we would build react-instantsearch. However, we have now react-instantsearch
-and it is production ready. That's why we're dropping in this version the support
-for the react based templates.
+When we created InstantSearch.js, it was built using React and we didn't
+know that we would build react-instantsearch. However, we have now [react-instantsearch](https://community.algolia.com/react-instantsearch)
+and it is the recommended solution if your application uses React. That's why we're
+dropping in this version the support for the react based templates.
 
-As of now, we consider the engine used to build the widgets in instantsearch.js
+As of now, we consider the engine used to build the widgets in InstantSearch.js
 as an implementation detail. Since we do not expose it anymore, we'll be able
 to change it and use the best solution for each release.

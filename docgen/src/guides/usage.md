@@ -16,7 +16,7 @@ InstantSearch.js can be used either with a direct link in your webpage or with a
 
 ### Directly in your page
 
-This method uses built bersion of **instantsearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
+This method uses built bersion of **InstantSearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
 
 ```html
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css">
@@ -29,7 +29,7 @@ The jsDeliver CDN is highly available with [over 110 locations](https://www.jsde
 
 ### With a build system
 
-If you have a JavaScript build system, you can install **instantsearch.js** from NPM:
+If you have a JavaScript build system, you can install **InstantSearch.js** from NPM:
 
 ```sh
 npm install instantsearch.js --save

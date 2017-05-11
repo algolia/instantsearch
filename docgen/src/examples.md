@@ -24,6 +24,6 @@ githubSource: docgen/src/examples.md
 
 ## Demos
 
-Demos are non trivial examples of what you can do with instantsearch.js. They 
+Demos are non trivial examples of what you can do with InstantSearch.js. They 
 
 If you think about a new example or have any questions about them, [come talk to us](https://discourse.algolia.com/c/instantsearch).

@@ -11,7 +11,7 @@ githubSource: docgen/src/getting-started.md
 
 # Welcome to InstantSearch.js
 
-**instantsearch.js** is a JavaScript library that lets you create an instant search results experience using Algolia’s REST API.
+**InstantSearch.js** is a JavaScript library that lets you create an instant search results experience using Algolia’s REST API.
 
 In this tutorial, you'll lean how to:
 
@@ -21,7 +21,7 @@ In this tutorial, you'll lean how to:
 
 ## Before we start
 
-**instantsearch.js is meant to be used with Algolia.**
+**InstantSearch.js is meant to be used with Algolia.**
 
 Therefore, you'll need the credentials to an Algolia index. To ease this getting started, here are credentials to an already configured index:
 
@@ -34,11 +34,11 @@ It contains sample data for an e-commerce website.
 This guide also expects you to have a working website. You can also use our bootstrapped project by clicking [this link](/assets/getting-started-boilerplate.zip).
 
 
-## Install `instantsearch.js`
+## Install `InstantSearch.js`
 
 ### From a CDN
 
-Use a built version of **instantsearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
+Use a built version of **InstantSearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
 
 ```html
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css">
@@ -68,7 +68,7 @@ You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/i
 
 ## Initialization
 
-To initialize instantsearch.js, you need an Algolia account with a configured and non-empty index.
+To initialize InstantSearch.js, you need an Algolia account with a configured and non-empty index.
 
 To initialize with the credentials proposed at the beginning:
 
@@ -100,7 +100,7 @@ The core of a search experience is to display results. By default, **instantsear
 
 To display results, we are gonna use the hits widget. This widget will display all the results returned by Algolia, and it will update when there are new results.
 
-A key aspect of instantsearch.js, is that you need to provide a container for each widget. This will tell instantsearch where to display the widget. Here, we need to define first the container of our results:
+A key aspect of InstantSearch.js, is that you need to provide a container for each widget. This will tell instantsearch where to display the widget. Here, we need to define first the container of our results:
 
 ```html
 <div id="hits">
@@ -209,7 +209,7 @@ In this part, we’ve seen:
 
 While the SearchBox is the way to go when it comes to textual search, you may also want to provide filters based on the structure of the records.
 
-Algolia provides a set of parameters for filtering by facets, numbers or geo location. **instantsearch.js** packages those into a set of widgets and connectors.
+Algolia provides a set of parameters for filtering by facets, numbers or geo location. **InstantSearch.js** packages those into a set of widgets and connectors.
 
 Since the dataset used here is an e-commerce one, let’s add a [RefinementList](https://community.algolia.com/instantsearch.js/documentation/#refinementlist) to filter the products by categories:
 
@@ -341,7 +341,7 @@ In this part, we’ve seen:
 
 ## Wrapping up
 
-Congratulations, you now have a fully featured instantsearch result page. But this is only the beginning! If you want to dig further into instantsearch.js, we suggest reading:
+Congratulations, you now have a fully featured InstantSearch result page. But this is only the beginning! If you want to dig further into instantsearch.js, we suggest reading:
   * [the API of instantsearch()](instantsearch.html)
   * [more about the widgets and their API](widgets.html)
   * [how to use connectors to provide your very own rendering](guides/customization.html)
