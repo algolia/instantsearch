@@ -36,7 +36,7 @@ This guide also expects you to have a working website. You can also use our boot
 
 ### From a CDN
 
-Use a built bersion of **instantsearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
+Use a built version of **instantsearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
 
 ```html
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css">
@@ -58,7 +58,11 @@ If you have a JavaScript build system, you can install **instantsearch.js** from
 var instantsearch = require('instantsearch.js');
 ```
 
-You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css) into your page.
+You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css). You can load it by adding this to your page `<head>`:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css">
+```
 
 ## Initialization
 
@@ -88,14 +92,13 @@ To configure this feature, pass `urlSync: true` option to `instantsearch()`. The
 
 Congrats 🎉 ! Your website is now connected to Algolia.
 
-
 ## Display results
 
 The core of a search experience is to display results. By default, **instantsearch.js** will do a query at the start of the page and will retrieve the most relevant hits.
 
 To display results, we are gonna use the hits widget. This widget will display all the results returned by Algolia, and it will update when there are new results.
 
-A key aspect of instantsearch.js, is that you need to provide a container for each widget. This will tell instantsearch where to display the widget. Here we need to define first a that will contain our results:
+A key aspect of instantsearch.js, is that you need to provide a container for each widget. This will tell instantsearch where to display the widget. Here, we need to define first the container of our results:
 
 ```html
 <div id="hits">
@@ -138,7 +141,7 @@ In order to customize the view for each product, we can use a special option of 
       container: '#hits',
       templates: {
         empty: 'No results',
-        item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
+        item: '<em>Hit {{objectID}}</em>: {{{_highlightResult.name.value}}}'
       }
     })
   );
@@ -147,11 +150,16 @@ In order to customize the view for each product, we can use a special option of 
 </script>
 ```
 
+In this example, we have used the `_highlightResult` that contains the attributes highlighted
+based on the current query. This is a very important aspect of search, as it gives the user
+a feedback on the matching parts of the results.
+
 In this section we’ve seen:
 
   * how to define containers for the widgets
   * how to display the results from Algolia
   * how to customize the display of those results
+  * how to leverage highlighting in results
 
 
 ## Add a SearchBox
@@ -332,6 +340,6 @@ In this part, we’ve seen:
 ## Wrapping up
 
 Congratulations, you now have a fully featured instantsearch result page. But this is only the beginning! If you want to dig further into instantsearch.js, we suggest reading:
-  * The concepts of instantsearch.js
-  * How to use connectors to provide your very own rendering
-  * The reference API of the widgets
+  * [the API of instantsearch()](instantsearch.html)
+  * [more about the widgets and their API](widgets.html)
+  * [how to use connectors to provide your very own rendering](guides/customization.html)

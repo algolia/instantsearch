@@ -30,7 +30,7 @@ They follow the pattern:
 In practice, creating a new custom widget based on a connector would look like that:
 
 ```javascript
-const makeHits = instantsearch.connectors.connectHits(function renderHits({hits}, isFirstRendering) {
+const makeHits = instantsearch.connectors.connectHits(function renderHits({hits}) {
   hits.forEach(function(hit) {
     console.log(hit);
   });
@@ -39,18 +39,6 @@ const makeHits = instantsearch.connectors.connectHits(function renderHits({hits}
 const search = instantsearch(/* options */);
 search.add(makeHits());
 ```
-
-## When is the rendering function called?
-
-The rendering function is called at the before the first search (*init* lifecycle step)
-and each time results come back from Algolia (*render* lifecycle step).
-
-To be able to identify at which point of the lifecycle the rendering function is
-called, a second argument `isFirstRendering` is provided to the rendering function.
-
-This parameter is there to be able to only do some operations once, like creating
-the basic structure of the new widget once. The latter calls can then be used to
-only update the DOM.
 
 ## Reusability of connectors
 
@@ -72,4 +60,33 @@ const makeHits = connectHits(function renderHits({hits, widgetParams}) {
 const search = instantsearch(/* options */);
 search.add(makeHits({container: $('#hits-1')}));
 search.add(makeHits({container: $('#hits-2')}));
+```
+
+## When is the rendering function called?
+
+The rendering function is called before the first search (*init* lifecycle step)
+and each time results come back from Algolia (*render* lifecycle step).
+
+Depending on the method you are relying on to render your widget, you might
+want to use the first call to create the basic DOM structure (like when using
+vanilla JS or jQuery).
+
+To be able to identify at which point of the lifecycle the rendering function is
+called, a second argument `isFirstRendering` is provided to the rendering function.
+
+This parameter is there to be able to only do some operations once, like creating
+the basic structure of the new widget once. The latter calls can then be used to
+only update the DOM.
+
+```javascript
+const makeHits = instantsearch.connectors.connectHits(function renderHits({hits}, isFirstRendering) {
+  if(isFirstRendering) {
+    // Do some initial rendering
+  }
+
+  // Do the normal rendering
+});
+
+const search = instantsearch(/* options */);
+search.add(makeHits());
 ```

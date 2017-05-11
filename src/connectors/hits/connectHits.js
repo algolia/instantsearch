@@ -28,7 +28,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @example
  * // custom `renderFn` to render the custom Hits widget
  * function renderFn(HitsRenderingOptions) {
- *   HitsRenderingOptions.containerNode.html(
+ *   HitsRenderingOptions.widgetParams.containerNode.html(
  *     HitsRenderingOptions.hits.map(function(hit) {
  *       return '<div>' + hit._highlightResult.name.value + '</div>';
  *     })

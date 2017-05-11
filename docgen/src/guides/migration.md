@@ -1,5 +1,5 @@
 ---
-title: Differences in V2
+title: Migrate from v1
 mainTitle: Guides
 layout: main.pug
 category: guides
