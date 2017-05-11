@@ -145,6 +145,22 @@
         width: calc(100% - 4em);
         margin: auto;
       }
+
+      .heading {
+        background: #eee;
+        margin: -8px 0 0;
+        padding: 4px 8px;
+        font-family: $font-stack;
+
+        button {
+          float: right;
+          cursor: copy;
+          background: #ddd;
+          border: none;
+          padding: 0px 8px;
+          font-size: 90%;
+        }
+      }
     }
 
 

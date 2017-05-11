@@ -33,5 +33,5 @@ export default function highlight(source, lang = 'javascript', inline = false) {
     return `<code class="CodeMirror ${spanTheme}">${output}</code>`;
   }
 
-  return `<pre class="CodeMirror ${blockTheme}"><code>${output}</code></pre>`;
+  return `<pre class="CodeMirror ${blockTheme} code-sample"><code>${output}</code></pre>`;
 }
