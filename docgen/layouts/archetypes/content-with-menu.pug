@@ -9,6 +9,8 @@ body.documentation
         block navigation
       a.sidebar-opener
       .documentation-container
+        if(editable)
+          a.editThisPage(href=`http://github.com/algolia/instantsearch.js/edit/master/${githubSource}`) Edit this page
         block content
 
   include ../common/footer.pug

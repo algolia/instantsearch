@@ -72,6 +72,8 @@ function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files)
   // console.log(JSON.stringify(InstantSearchSymbol.params, null, 2));
   const fileName = 'instantsearch.html';
 
+  const githubSource = InstantSearch.context.file.split('instantsearch.js')[1];
+
   files[fileName] = {
     mode: '0764',
     contents: '',
@@ -89,6 +91,8 @@ function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files)
       relatedTypes: findRelatedTypes(InstantSearch, symbols),
     },
     withHeadings: true,
+    editable: true,
+    githubSource: githubSource,
   };
 }
 
@@ -102,6 +106,9 @@ function mapConnectors(connectors, symbols, files) {
       relatedTypes: findRelatedTypes(symbol, symbols),
     };
 
+    const githubSource = 'http://github.com/algolia/instantsearch.js/edit/master' +
+      symbolWithRelatedType.context.file.split('instantsearch.js')[1];
+
     files[fileName] = {
       mode: '0764',
       contents: '',
@@ -113,6 +120,8 @@ function mapConnectors(connectors, symbols, files) {
       navWeight: 1,
       jsdoc: symbolWithRelatedType,
       withHeadings: true,
+      editable: true,
+      githubSource: githubSource,
     };
   });
 }
@@ -129,6 +138,7 @@ function mapWidgets(widgets, symbols, files) {
       relatedTypes,
     };
 
+    const githubSource = symbolWithRelatedType.context.file.split('instantsearch.js/')[1];
 
     files[fileName] = {
       mode: '0764',
@@ -141,6 +151,8 @@ function mapWidgets(widgets, symbols, files) {
       navWeight: 1,
       jsdoc: symbolWithRelatedType,
       withHeadings: true,
+      editable: true,
+      githubSource: githubSource,
     };
   });
 }

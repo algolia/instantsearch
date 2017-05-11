@@ -5,6 +5,8 @@ layout: main.pug
 category: connectors
 withHeadings: true
 navWeight: 100
+editable: true
+githubSource: docgen/src/connectors.md
 ---
 
 ## Introduction to connectors

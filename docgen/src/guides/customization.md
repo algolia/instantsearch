@@ -6,6 +6,8 @@ name: customize
 category: guides
 withHeadings: true
 navWeight: 20
+editable: true
+githubSource: docgen/src/guides/customization.md
 ---
 
 ## Customize widgets

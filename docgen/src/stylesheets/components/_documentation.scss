@@ -199,6 +199,24 @@
       }
     }
 
+    .editThisPage {
+      position: absolute;
+      font-size: 12px;
+      right: 0;
+      top: 12px;
+      padding: 3px 6px;
+      border: 1px solid $accent-color;
+      color: $accent-color;
+      border-radius: 3px;
+      text-transform: uppercase;
+      opacity: .7; 
+
+      &:hover {
+        background: $accent-color;
+        color: #ebf1f5;
+        opacity: 1; 
+      }
+    }
   }
 
 

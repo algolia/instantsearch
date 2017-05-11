@@ -5,6 +5,8 @@ layout: main.pug
 category: guides
 withHeadings: true
 navWeight: 10
+editable: true
+githubSource: docgen/src/guides/migration.md
 ---
 
 ## No more `hitsPerPage` in `hits` and `infiniteHits`

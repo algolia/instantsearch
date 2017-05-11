@@ -5,6 +5,8 @@ name: getting-started
 category: getting-started
 withHeadings: true
 navWeight: 100
+editable: true
+githubSource: docgen/src/getting-started.md
 ---
 
 # Welcome to InstantSearch.js
