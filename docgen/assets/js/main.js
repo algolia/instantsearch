@@ -2,6 +2,7 @@ import sidebar from './sidebar.js';
 import dropdowns from './dropdowns.js';
 import move from './mover.js';
 import activateClipboard from './activateClipboard.js';
+import bindRunExamples from './bindRunExamples.js';
 
 var alg = require('algolia-frontend-components/javascripts.js');
 
@@ -20,3 +21,4 @@ const codeSamples = document.querySelectorAll('.code-sample');
 dropdowns();
 move();
 activateClipboard(codeSamples);
+bindRunExamples(codeSamples);
