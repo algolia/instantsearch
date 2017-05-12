@@ -24,8 +24,6 @@ const renderer = ({
   templates,
   renderState,
   collapsible,
-  limitMax,
-  limit,
   autoHideContainer,
   showMoreConfig,
   searchForFacetValues,
@@ -37,6 +35,8 @@ const renderer = ({
   isFromSearch,
   instantSearchInstance,
   canRefine,
+  toggleShowMore,
+  isShowingMore,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -60,15 +60,15 @@ const renderer = ({
       cssClasses={cssClasses}
       facetValues={items}
       headerFooterData={headerFooterData}
-      limitMax={limitMax}
-      limitMin={limit}
       shouldAutoHideContainer={autoHideContainer && canRefine === false}
-      showMore={showMoreConfig !== null}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
       searchFacetValues={searchForFacetValues ? searchForItems : undefined}
       searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
       isFromSearch={isFromSearch}
+      showMore={showMoreConfig !== null}
+      toggleShowMore={toggleShowMore}
+      isShowingMore={isShowingMore}
     />,
     containerNode
   );
@@ -223,7 +223,7 @@ export default function refinementList({
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
 
-  const limitMax = showMoreConfig && showMoreConfig.limit || limit;
+  const showMoreLimit = showMoreConfig && showMoreConfig.limit || limit;
   const containerNode = getContainerNode(container);
   const showMoreTemplates = showMoreConfig ? prefixKeys('show-more-', showMoreConfig.templates) : {};
   const searchForValuesTemplates = searchForFacetValues ? searchForFacetValues.templates : {};
@@ -249,8 +249,6 @@ export default function refinementList({
     templates: allTemplates,
     renderState: {},
     collapsible,
-    limitMax,
-    limit,
     autoHideContainer,
     showMoreConfig,
     searchForFacetValues,
@@ -261,7 +259,8 @@ export default function refinementList({
     return makeWidget({
       attributeName,
       operator,
-      limit: limitMax,
+      limit,
+      showMoreLimit,
       sortBy,
     });
   } catch (e) {

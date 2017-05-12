@@ -162,8 +162,6 @@ export default function connectMenu(renderFn) {
           .toggleRefinement(attributeName, facetValue)
           .search();
 
-        this._helper = helper;
-
         renderFn({
           items: [],
           createURL: this._createURL,

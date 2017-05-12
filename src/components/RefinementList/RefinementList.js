@@ -182,12 +182,12 @@ RawRefinementList.propTypes = {
   }),
   depth: React.PropTypes.number,
   facetValues: React.PropTypes.array,
-  showMore: React.PropTypes.bool,
   templateProps: React.PropTypes.object.isRequired,
   toggleRefinement: React.PropTypes.func.isRequired,
   searchFacetValues: React.PropTypes.func,
   searchPlaceholder: React.PropTypes.string,
   isFromSearch: React.PropTypes.bool,
+  showMore: React.PropTypes.bool,
   toggleShowMore: React.PropTypes.func,
   isShowingMore: React.PropTypes.bool,
 };

@@ -10,6 +10,8 @@ var customRefinementList = connectRefinementList(function render(params) {
   //   searchForItems,
   //   instantSearchInstance,
   //   canRefine,
+  //   toggleShowMore,
+  //   isShowingMore,
   //   widgetParams,
   // }
 });
@@ -18,17 +20,20 @@ search.addWidget(
     attributeName,
     [ operator = 'or' ],
     [ limit ],
+    [ showMoreLimit ],
     [ sortBy = ['isRefined', 'count:desc', 'name:asc']],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html
 `;
 
-export const checkUsage = ({attributeName, operator, usageMessage}) => {
+export const checkUsage = ({attributeName, operator, usageMessage, showMoreLimit, limit}) => {
   const noAttributeName = attributeName === undefined;
   const invalidOperator = !(/^(and|or)$/).test(operator);
+  const invalidShowMoreLimit = showMoreLimit !== undefined ?
+    isNaN(showMoreLimit) || showMoreLimit < limit : false;
 
-  if (noAttributeName || invalidOperator) {
+  if (noAttributeName || invalidOperator || invalidShowMoreLimit) {
     throw new Error(usageMessage);
   }
 };
@@ -45,7 +50,10 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @typedef {Object} CustomRefinementListWidgetOptions
  * @property {string} attributeName The name of the attribute in the records.
  * @property {"and"|"or"} [operator = 'or'] How the filters are combined together.
- * @property {number} [limit = undefined] The max number of items to display.
+ * @property {number} [limit = undefined] The max number of items to display when
+ * `showMoreLimit` is not or if the widget is showing less value.
+ * @property {number} [showMoreLimit] The max number of items to display if the widget
+ * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  */
 
@@ -58,14 +66,16 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @property {boolean} isFromSearch `true` if the values are from an index search.
  * @property {boolean} canRefine `true` if a refinement can be applied.
  * @property {Object} widgetParams All original `CustomRefinementListWidgetOptions` forwarded to the `renderFn`.
+ * @property {boolean} isShowingMore True if the menu is displaying all the menu items.
+ * @property {function} toggleShowMore Toggles the number of values displayed between `limit` and `showMoreLimit`.
  */
 
 /**
  * **RefinementList** connector provides the logic to build a custom widget that will let the
  * user filter the results based on the values of a specific facet.
  *
- * The connector provides to the rendering: `refine()` to select a value and
- * `items` that are the values that can be selected.
+  * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
+  * function to select an item.
  * @type {Connector}
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
  * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.
@@ -123,17 +133,20 @@ export default function connectRefinementList(renderFn) {
       attributeName,
       operator = 'or',
       limit,
+      showMoreLimit,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
     } = widgetParams;
 
-    checkUsage({attributeName, operator, usage});
+    checkUsage({attributeName, operator, usage, limit, showMoreLimit});
 
     const formatItems = ({name: label, ...item}) =>
       ({...item, label, value: label, highlighted: label});
 
     const render = ({items, state, createURL,
                     helperSpecializedSearchFacetValues,
-                    refine, isFromSearch, isFirstSearch, instantSearchInstance}) => {
+                    refine, isFromSearch, isFirstSearch,
+                    isShowingMore, toggleShowMore,
+                    instantSearchInstance}) => {
       // Compute a specific createURL method able to link to any facet value state change
       const _createURL = facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
 
@@ -157,6 +170,8 @@ export default function connectRefinementList(renderFn) {
         isFromSearch,
         canRefine: isFromSearch || items.length > 0,
         widgetParams,
+        isShowingMore,
+        toggleShowMore,
       }, isFirstSearch);
     };
 
@@ -198,6 +213,24 @@ export default function connectRefinementList(renderFn) {
       };
 
     return {
+      isShowingMore: false,
+
+      // Provide the same function to the `renderFn` so that way the user
+      // has to only bind it once when `isFirstRendering` for instance
+      toggleShowMore() {},
+      cachedToggleShowMore() { this.toggleShowMore(); },
+
+      createToggleShowMore(renderOptions) {
+        return () => {
+          this.isShowingMore = !this.isShowingMore;
+          this.render(renderOptions);
+        };
+      },
+
+      getLimit() {
+        return this.isShowingMore ? showMoreLimit : limit;
+      },
+
       getConfiguration: (configuration = {}) => {
         const widgetConfiguration = {
           [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attributeName],
@@ -205,12 +238,18 @@ export default function connectRefinementList(renderFn) {
 
         if (limit !== undefined) {
           const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-          widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit);
+          if (showMoreLimit === undefined) {
+            widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit);
+          } else {
+            widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit, showMoreLimit);
+          }
         }
 
         return widgetConfiguration;
       },
       init({helper, createURL, instantSearchInstance}) {
+        this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
+
         refine = facetValue => helper
           .toggleRefinement(attributeName, facetValue)
           .search();
@@ -226,14 +265,20 @@ export default function connectRefinementList(renderFn) {
           isFromSearch: false,
           isFirstSearch: true,
           instantSearchInstance,
+          isShowingMore: this.isShowingMore,
+          toggleShowMore: this.cachedToggleShowMore,
         });
       },
-      render({results, state, createURL, instantSearchInstance}) {
+      render(renderOptions) {
+        const {results, state, createURL, instantSearchInstance} = renderOptions;
         const items = results
           .getFacetValues(attributeName, {sortBy})
+          .slice(0, this.getLimit())
           .map(formatItems);
 
         lastResultsFromMainSearch = items;
+
+        this.toggleShowMore = this.createToggleShowMore(renderOptions);
 
         render({
           items,
@@ -244,6 +289,8 @@ export default function connectRefinementList(renderFn) {
           isFromSearch: false,
           isFirstSearch: false,
           instantSearchInstance,
+          isShowingMore: this.isShowingMore,
+          toggleShowMore: this.cachedToggleShowMore,
         });
       },
     };
