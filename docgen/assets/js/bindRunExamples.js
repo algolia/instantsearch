@@ -20,6 +20,10 @@ const el = html => {
 
 export default function bindRunExamples(codeSamples) {
   codeSamples.forEach((codeSample, index) => {
+    if (codeSample.lastChild.innerText.indexOf('search.addWidget') !== 0) {
+      return
+    }
+
     const state = { RUNNING: false };
 
     const [, widgetName] = /widgets.(\S+)\(/g.exec(
