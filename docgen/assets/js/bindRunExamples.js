@@ -26,7 +26,7 @@ export default function bindRunExamples(codeSamples) {
 
         // replace `container` option with the generated one
         const codeToEval = codeSample.lastChild.innerText.replace(
-          /container: \S+,/,
+          /container: \S+,?/,
           `container: "#${liveExampleContainer.id}",`
         );
 
