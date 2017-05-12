@@ -1,12 +1,18 @@
 import React from 'react';
 import sinon from 'sinon';
 import expect from 'expect';
+
+import jsHelper from 'algoliasearch-helper';
+
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 import defaultTemplates from '../../../widgets/star-rating/defaultTemplates.js';
 import defaultLabels from '../../../widgets/star-rating/defaultLabels.js';
 import starRating from '../star-rating.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
+
+const fakeClient = {addAlgoliaAgent: () => {}};
+const SearchResults = jsHelper.SearchResults;
 
 describe('starRating()', () => {
   let ReactDOM;
@@ -153,6 +159,61 @@ describe('starRating()', () => {
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addDisjunctiveFacetRefinement.calledTwice).toBe(true, 'addDisjunctiveFacetRefinement called twice');
     expect(helper.search.calledOnce).toBe(true, 'search called once');
+  });
+
+  it('should return the right facet counts and results', () => {
+    const attributeName = 'anAttrName';
+
+    const _widget = starRating({container, attributeName, cssClasses: {body: ['body', 'cx']}});
+    const _helper = jsHelper(fakeClient, '', _widget.getConfiguration({}));
+    _helper.search = sinon.stub();
+
+    _widget.init({
+      helper: _helper,
+      state: _helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+      instantSearchInstance: {
+        templatesConfig: {},
+      },
+    });
+
+    _widget.render({
+      results: new SearchResults(_helper.state, [{
+        facets: {
+          [attributeName]: {0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100},
+        },
+      }, {}]),
+      state: _helper.state,
+      helper: _helper,
+      createURL: () => '#',
+      instantSearchInstance: {
+        templatesConfig: {},
+      },
+    });
+
+    expect(ReactDOM.render.lastCall.args[0].props.facetValues).toEqual([
+      {
+        count: 1000, isRefined: false,
+        labels: {andUp: '& Up'}, name: '4', value: '4',
+        stars: [true, true, true, true, false],
+      },
+      {
+        count: 1050, isRefined: false,
+        labels: {andUp: '& Up'}, name: '3', value: '3',
+        stars: [true, true, true, false, false],
+      },
+      {
+        count: 1070, isRefined: false,
+        labels: {andUp: '& Up'}, name: '2', value: '2',
+        stars: [true, true, false, false, false],
+      },
+      {
+        count: 1080, isRefined: false,
+        labels: {andUp: '& Up'}, name: '1', value: '1',
+        stars: [true, false, false, false, false],
+      },
+    ]);
   });
 
   afterEach(() => {

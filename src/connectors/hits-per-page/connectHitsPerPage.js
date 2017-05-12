@@ -122,7 +122,7 @@ export default function connectHitsPerPage(renderFn) {
             if (window.console) {
               window.console.warn(
   `[Warning][hitsPerPageSelector] hitsPerPage not defined.
-  You should probably use a \`hits\` widget or set the value \`hitsPerPage\`
+  You should probably set the value \`hitsPerPage\`
   using the searchParameters attribute of the instantsearch constructor.`
               );
             }

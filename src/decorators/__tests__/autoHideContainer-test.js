@@ -27,7 +27,6 @@ describe('autoHideContainer', () => {
     const AutoHide = autoHideContainer(TestComponent);
     renderer.render(<AutoHide shouldAutoHideContainer {...props} />);
     const out = renderer.getRenderOutput();
-
     expect(out).toEqualJSX(
       <div style={{display: 'none'}}>
         <TestComponent

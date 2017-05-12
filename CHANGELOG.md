@@ -1,3 +1,56 @@
+<a name="1.11.7"></a>
+## [1.11.7](https://github.com/algolia/instantsearch.js/compare/v1.11.6...v1.11.7) (2017-04-24)
+
+
+### Bug Fixes
+
+* **sffv:** add class for disabled state at the form level (#2122) ([029fa5f](https://github.com/algolia/instantsearch.js/commit/029fa5f))
+* **sffv:** fixes typo (: was left) ([26d2845](https://github.com/algolia/instantsearch.js/commit/26d2845))
+
+
+
+<a name="1.11.6"></a>
+## [1.11.6](https://github.com/algolia/instantsearch.js/compare/v1.11.5...v1.11.6) (2017-04-20)
+
+
+### Bug Fixes
+
+* **CONTRIBUTING:** remove section about beta releases (#2109) ([5640131](https://github.com/algolia/instantsearch.js/commit/5640131))
+* **sffv:** disable sffv input when few facet values FIX #2111 ([1e33c10](https://github.com/algolia/instantsearch.js/commit/1e33c10)), closes [#2111](https://github.com/algolia/instantsearch.js/issues/2111)
+
+
+
+<a name="1.11.5"></a>
+## [1.11.5](https://github.com/algolia/instantsearch.js/compare/v1.11.4...v1.11.5) (2017-04-12)
+
+
+### Bug Fixes
+
+* **url-sync:** sync url on search (#2108) ([7f33ffb](https://github.com/algolia/instantsearch.js/commit/7f33ffb))
+
+
+
+<a name="1.11.4"></a>
+## [1.11.4](https://github.com/algolia/instantsearch.js/compare/v1.11.3...v1.11.4) (2017-03-29)
+
+
+### Bug Fixes
+
+* **autoHideContainer:** dont prevent render with `shouldComponentUpdate` (#2076) ([b520400](https://github.com/algolia/instantsearch.js/commit/b520400))
+* **star-rating:** make max value inclusive ([f5fc41c](https://github.com/algolia/instantsearch.js/commit/f5fc41c)), closes [#2002](https://github.com/algolia/instantsearch.js/issues/2002)
+
+
+
+<a name="1.11.3"></a>
+## [1.11.3](https://github.com/algolia/instantsearch.js/compare/v1.11.2...v1.11.3) (2017-03-22)
+
+
+### Bug Fixes
+
+* **Slider:** display disabled slider when `min === max` (#2041) ([511fdfd](https://github.com/algolia/instantsearch.js/commit/511fdfd)), closes [#2037](https://github.com/algolia/instantsearch.js/issues/2037)
+
+
+
 <a name="1.11.2"></a>
 ## [1.11.2](https://github.com/algolia/instantsearch.js/compare/v1.11.1...v1.11.2) (2017-02-28)
 

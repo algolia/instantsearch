@@ -131,7 +131,7 @@ To use it, require this file:
 
 ### React InstantSearch
 
-We also have a dedicated React library if you are already using React: [React InstantSearch](https://community.algolia.com/instantsearch.js/react/).
+We also have a dedicated React library if you are already using React: [React InstantSearch](https://community.algolia.com/react-instantsearch/).
 
 ### Initialization
 
@@ -185,7 +185,7 @@ The `urlSync` option has more parameters, see the `instantsearch` function docum
 
 <div class="codebox-combo">
 
-To build your search results page, you need to combine several widgets. Start by adding a `searchBox` widget, a `hits` widget and a `pagination` widget to build a basic results page.
+To build your search results page, you need to combine several widgets. Start by adding a `searchBox` widget, a `hits` widget, and a `pagination` widget to build a basic results page.
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -1264,7 +1264,7 @@ This method takes only one argument, `helper`, on which you can call `.search()`
 to actually start the search.  `helper.state` also contains information about
 the current state of your search.
 
-You can for example check for `helper.state.query` to see if the query is empty
+You can, for example, check for `helper.state.query` to see if the query is empty
 or not, and act accordingly. You might also have to handle the case when users
 start typing, then delete their query and hide the results when that happens.
 
@@ -1352,7 +1352,7 @@ In order to help you use templates, **instantsearch.js** exposes a few helpers.
 
 All helpers are accessible in the Mustache templating through `{% raw %}{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}{% endraw %}`. To use them in the function templates, you'll have to call `search.templatesConfig.helpers.nameOfTheHelper` where `search` is your current **instantsearch.js** instance.
 
-Currently we have one helper:
+Currently, we have one helper:
 
 `formatNumber`: Will accept a number as input and return the formatted version of the number in the locale defined with the `numberLocale` config option (defaults to `en-EN`). eg. `100000` will be formatted as `100 000` with `en-EN`
 
@@ -1427,7 +1427,7 @@ The widget may implement some of the following methods (depending on the need of
     - results: the [results](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults) of the query
     - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
     - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/reference.html#algoliasearchhelper) used to create a new search query
-    - createURL: function provided to create urls
+    - createURL: function provided to create URLs
 
   </div>
 </div>
@@ -1470,7 +1470,7 @@ Or you can wrap an existing React component, see our [<i class='fa fa-github'></
 
 All widgets have been designed to be heavily stylable with CSS rules. **instantsearch.js** ships with a default CSS theme that only includes the necessary CSS classes.
 
-You can see all the existing customizable CSS classes in the [non minified CSS](https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.css).
+You can see all the existing customizable CSS classes in the [non-minified CSS](https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.css).
 
 We use [Sass](http://sass-lang.com/) to build the CSS.
 
