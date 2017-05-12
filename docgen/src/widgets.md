@@ -21,7 +21,7 @@ on...
 Widgets can be added to the InstantSearch instance using the `addWidget` method.
 
 ```javascript
-var search = instantsearch(/* parameters here */);
+const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.searchbox(/* searchbox parameters */));
 ```
 
@@ -42,7 +42,7 @@ may be unpredictable.
 This is usually one of the only attribute required to use a widget.
 
 ```javascript
-var search = instantsearch(/* parameters here */);
+const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.searchbox({
   container: '#my-searchbox',
 }));
@@ -56,7 +56,7 @@ an object of either string or array of strings. The different keys available
 is define in the widget reference.
 
 ```javascript
-var search = instantsearch(/* parameters here */);
+const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.searchbox({
   container: '#search-box',
   cssClasses: {
@@ -78,7 +78,7 @@ Like the css classes they can only be written for some specific parts of the ren
 widget.
 
 ```javascript
-var search = instantsearch(/* parameters here */);
+const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.refinementList({
   container: '#hits',
   templates: {
@@ -107,7 +107,7 @@ return an object. Usually, it is an enhanced version of the original object with
 new properties.
 
 ```javascript
-var search = instantsearch(/* parameters here */);
+const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.refinementList({
   container: '#categories',
   attribute: 'categories',
@@ -134,7 +134,7 @@ like the property is true and you can defined it's initial state using the prope
 `collapsed`.
 
 ```javascript
-var search = instantsearch(/* parameters here */);
+const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.refinementList({
   container: '#categories',
   attribute: 'categories',
@@ -143,7 +143,7 @@ search.addWidget(instantsearch.refinementList({
 
 // OR for an initially collapsed refinement list
 
-var search = instantsearch(/* parameters here */);
+const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.refinementList({
   container: '#categories',
   attribute: 'categories',
@@ -161,7 +161,7 @@ This can help the users focus on the important like the current refined values s
 they can remove some filters.
 
 ```javascript
-var search = instantsearch(/* parameters here */);
+const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.refinementList({
   container: '#categories',
   attribute: 'categories',
