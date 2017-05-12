@@ -181,7 +181,7 @@ export default function connectRefinementList(renderFn) {
           });
         } else {
           helper.searchForFacetValues(attributeName, query).then(results => {
-            const facetValues = results.facetHits.map(formatItems);
+            const facetValues = results.facetHits;
 
             render({
               items: facetValues,
