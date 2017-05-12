@@ -6,7 +6,7 @@ mixin widgetUsage(fnSymbol)
     - if(!paramsType) console.log(fnSymbol.relatedTypes.map(t => t.name));
     pre.CodeMirror.cm-s-mdn-like
       code
-        span.cm-keyword var 
+        span.cm-keyword const  
         span.cm-variable search 
         | = 
         span.cm-def instantsearch
@@ -15,7 +15,7 @@ mixin widgetUsage(fnSymbol)
         | );
         br
         br
-        span.cm-keyword var 
+        span.cm-keyword const  
         span.cm-def widget 
         span.cm-operator = 
         span.cm-variable instantsearch

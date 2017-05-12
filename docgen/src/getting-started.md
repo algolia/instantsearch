@@ -57,7 +57,7 @@ If you have a JavaScript build system, you can install **instantsearch.js** from
 // `npm install instantsearch.js --save` OR
 // `yarn add instantsearch.js`
 
-var instantsearch = require('instantsearch.js');
+const instantsearch = require('instantsearch.js');
 ```
 
 You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css). You can load it by adding this to your page `<head>`:
@@ -73,7 +73,7 @@ To initialize InstantSearch.js, you need an Algolia account with a configured an
 To initialize with the credentials proposed at the beginning:
 
 ```javascript
-var search = instantsearch({
+const search = instantsearch({
   appId: 'latency',
   apiKey: '3d9875e51fbd20c7754e65422f7ce5e1',
   indexName: 'bestbuy',
@@ -112,7 +112,7 @@ Once you’ve set the place where the widget will be rendered, you need to add t
 
 ```html
 <script>
-  var search = instantsearch(options);
+  const search = instantsearch(options);
 
   search.addWidget(
     instantsearch.widgets.hits({
@@ -136,7 +136,7 @@ In order to customize the view for each product, we can use a special option of 
 </div>
 
 <script>
-  var search = instantsearch(options);
+  const search = instantsearch(options);
 
   search.addWidget(
     instantsearch.widgets.hits({
@@ -178,7 +178,7 @@ Now that we’ve added the results, we can start querying our index. To do this,
 </div>
 
 <script>
-  var search = instantsearch(options);
+  const search = instantsearch(options);
 
   // initialize SearchBox
   search.addWidget(
@@ -227,7 +227,7 @@ Since the dataset used here is an e-commerce one, let’s add a [RefinementList]
 </div>
 
 <script>
-  var search = instantsearch(options);
+  const search = instantsearch(options);
 
   // initialize RefinementList
   search.addWidget(
@@ -292,7 +292,7 @@ Those two features are implemented respectively with the [pagination](https://co
 </div>
 
 <script>
-  var search = instantsearch(options);
+  const search = instantsearch(options);
 
   // initialize currentRefinedValues
   search.addWidget(
@@ -342,6 +342,7 @@ In this part, we’ve seen:
 ## Wrapping up
 
 Congratulations, you now have a fully featured InstantSearch result page. But this is only the beginning! If you want to dig further into instantsearch.js, we suggest reading:
+
   * [the API of instantsearch()](instantsearch.html)
   * [more about the widgets and their API](widgets.html)
   * [how to use connectors to provide your very own rendering](guides/customization.html)

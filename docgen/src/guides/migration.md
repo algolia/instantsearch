@@ -21,7 +21,7 @@ this option of the engine, there are still three ways:
  - use the configuration option of `instantsearch`:
 
 ```javascript
-var search = instantsearch({
+const search = instantsearch({
   // ... do not forget the credentials
   searchParameters: {
     hitsPerPage: 42,

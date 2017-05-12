@@ -40,7 +40,7 @@ yarn add instantsearch.js
 Then in your module, you can load the main package:
 
 ```javascript
-var instantsearch = require('instantsearch.js');
+const instantsearch = require('instantsearch.js');
 ```
 
 or if you are using ES modules:
