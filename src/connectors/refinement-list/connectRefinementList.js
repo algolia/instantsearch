@@ -145,7 +145,7 @@ export default function connectRefinementList(renderFn) {
     const render = ({items, state, createURL,
                     helperSpecializedSearchFacetValues,
                     refine, isFromSearch, isFirstSearch,
-                    isShowingMore, toggleShowMore,
+                    isShowingMore, toggleShowMore, hasExhaustiveItems,
                     instantSearchInstance}) => {
       // Compute a specific createURL method able to link to any facet value state change
       const _createURL = facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
@@ -172,6 +172,7 @@ export default function connectRefinementList(renderFn) {
         widgetParams,
         isShowingMore,
         toggleShowMore,
+        hasExhaustiveItems,
       }, isFirstSearch);
     };
 
@@ -193,6 +194,7 @@ export default function connectRefinementList(renderFn) {
             isFromSearch: false,
             isFirstSearch: false,
             instantSearchInstance,
+            hasExhaustiveItems: false, // SFFV should not be used with show more
           });
         } else {
           helper.searchForFacetValues(attributeName, query).then(results => {
@@ -207,6 +209,7 @@ export default function connectRefinementList(renderFn) {
               isFromSearch: true,
               isFirstSearch: false,
               instantSearchInstance,
+              hasExhaustiveItems: false, // SFFV should not be used with show more
             });
           });
         }
@@ -267,6 +270,7 @@ export default function connectRefinementList(renderFn) {
           instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
+          hasExhaustiveItems: true,
         });
       },
       render(renderOptions) {
@@ -275,6 +279,8 @@ export default function connectRefinementList(renderFn) {
           .getFacetValues(attributeName, {sortBy})
           .slice(0, this.getLimit())
           .map(formatItems);
+
+        const hasExhaustiveItems = items.length < this.getLimit();
 
         lastResultsFromMainSearch = items;
 
@@ -291,6 +297,7 @@ export default function connectRefinementList(renderFn) {
           instantSearchInstance,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
+          hasExhaustiveItems,
         });
       },
     };

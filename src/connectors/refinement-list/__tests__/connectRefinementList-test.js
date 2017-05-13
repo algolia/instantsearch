@@ -185,15 +185,15 @@ describe('connectRefinementList', () => {
     expect(helper.hasRefinements('category')).toBe(true);
   });
 
-  it('provides the correct facet values', () => {
+  it('Show more should toggle between two limits', () => {
     const widget = makeWidget({
       attributeName: 'category',
+      limit: 1,
+      showMoreLimit: 3,
     });
 
     const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
-
-    helper.toggleRefinement('category', 'Decoration');
 
     widget.init({
       helper,
@@ -202,25 +202,24 @@ describe('connectRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    // During the first rendering there are no facet values
-    // The function get an empty array so that it doesn't break
-    // over null-ish values.
-    expect(firstRenderingOptions.items).toEqual([]);
-
     widget.render({
       results: new SearchResults(helper.state, [{
         hits: [],
         facets: {
           category: {
-            Decoration: 880,
+            c1: 880,
+            c2: 47,
+            c3: 880,
+            c4: 47,
           },
         },
       }, {
         facets: {
           category: {
-            Decoration: 880,
-            Outdoor: 47,
+            c1: 880,
+            c2: 47,
+            c3: 880,
+            c4: 47,
           },
         },
       }]),
@@ -232,19 +231,146 @@ describe('connectRefinementList', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.items).toEqual([
       {
-        label: 'Decoration',
-        value: 'Decoration',
-        highlighted: 'Decoration',
+        label: 'c1',
+        value: 'c1',
+        highlighted: 'c1',
         count: 880,
-        isRefined: true,
+        isRefined: false,
+      },
+    ]);
+
+    // toggleShowMore does a new render
+    secondRenderingOptions.toggleShowMore();
+
+    const thirdRenderingOptions = rendering.lastCall.args[0];
+    expect(thirdRenderingOptions.items).toEqual([
+      {
+        label: 'c1',
+        value: 'c1',
+        highlighted: 'c1',
+        count: 880,
+        isRefined: false,
       },
       {
-        label: 'Outdoor',
-        value: 'Outdoor',
-        highlighted: 'Outdoor',
+        label: 'c3',
+        value: 'c3',
+        highlighted: 'c3',
+        count: 880,
+        isRefined: false,
+      },
+      {
+        label: 'c2',
+        value: 'c2',
+        highlighted: 'c2',
         count: 47,
         isRefined: false,
       },
     ]);
+  });
+
+  it('Provide a function to clear the refinements at each step', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    helper.search = sinon.stub();
+
+    helper.toggleRefinement('category', 'value');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    const {refine} = firstRenderingOptions;
+    refine('value');
+    expect(helper.hasRefinements('category')).toBe(false);
+    refine('value');
+    expect(helper.hasRefinements('category')).toBe(true);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}, {}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    const {refine: renderToggleRefinement} = secondRenderingOptions;
+    renderToggleRefinement('value');
+    expect(helper.hasRefinements('category')).toBe(false);
+    renderToggleRefinement('value');
+    expect(helper.hasRefinements('category')).toBe(true);
+  });
+
+  it('hasExhaustiveItems indicates if the items provided are exhaustive', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+        facets: {
+          category: {
+            c1: 880,
+          },
+        },
+      }, {
+        facets: {
+          category: {
+            c1: 880,
+          },
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+        facets: {
+          category: {
+            c1: 880,
+            c2: 34,
+            c3: 440,
+          },
+        },
+      }, {
+        facets: {
+          category: {
+            c1: 880,
+            c2: 34,
+            c3: 440,
+          },
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
   });
 });

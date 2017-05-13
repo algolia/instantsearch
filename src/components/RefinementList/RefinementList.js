@@ -151,7 +151,7 @@ export class RawRefinementList extends React.Component {
         placeholder={this.props.searchPlaceholder}
         onChange={this.props.searchFacetValues}
         onValidate={() => this.refineFirstValue()}
-        disabled={!this.props.isFromSearch && displayedFacetValues.length < limit}/> :
+        disabled={this.props.hasExhaustiveItems}/> :
       null;
 
     const noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ?
@@ -191,6 +191,7 @@ RawRefinementList.propTypes = {
   showMore: React.PropTypes.bool,
   toggleShowMore: React.PropTypes.func,
   isShowingMore: React.PropTypes.bool,
+  hasExhaustiveItems: React.PropTypes.bool,
 };
 
 RawRefinementList.defaultProps = {
