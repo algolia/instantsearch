@@ -42,7 +42,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
  * @return {function(CustomPaginationWidgetOptions)} Re-usable widget factory for a custom **Pagination** widget.
  * @example
- * // custom `renderFn` to render the custom ClearAll widget
+ * // custom `renderFn` to render the custom Pagination widget
  * function renderFn(PaginationRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {
  *     PaginationRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
@@ -56,8 +56,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   var pages = Array.apply(null, {length: PaginationRenderingOptions.nbPages})
  *     .map(Number.call, Number)
  *     .map(function(page) {
- *       return '<li><a href="' + PaginationRenderingOptions.createURL(page) + '" data-page="' + page + '">' +
- *         page + 1 + '</a></li>';
+ *       return '<li style="display: inline-block; margin-right: 10px;">' +
+ *         '<a href="' + PaginationRenderingOptions.createURL(page) + '" data-page="' + page + '">' +
+ *         (parseInt(page) + 1) + '</a></li>';
  *     });
  *
  *   PaginationRenderingOptions.widgetParams.containerNode

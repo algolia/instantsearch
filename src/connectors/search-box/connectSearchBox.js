@@ -47,10 +47,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * // custom `renderFn` to render the custom SearchBox widget
  * function renderFn(SearchBoxRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {
- *     SearchBoxRenderingOptions.widgetParams.inputNode.on('keyup', function() {
- *       SearchBoxRenderingOptions.refine($(this).val());
- *     });
- *     SearchBoxRenderingOptions.widgetParams.inputNode.val(SearchBoxRenderingOptions.query);
+ *     SearchBoxRenderingOptions.widgetParams.containerNode.html('<input type="text" />');
+ *     SearchBoxRenderingOptions.widgetParams.containerNode
+ *       .find('input')
+ *       .on('keyup', function() {
+ *         SearchBoxRenderingOptions.refine($(this).val());
+ *       });
+ *     SearchBoxRenderingOptions.widgetParams.containerNode
+ *       .find('input')
+ *       .val(SearchBoxRenderingOptions.query);
  *   }
  * }
  *
@@ -60,7 +65,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * // mount widget on the page
  * search.addWidget(
  *   customSearchBox({
- *     inputNode: $('input#custom-searchbox'),
+ *     containerNode: $('#custom-searchbox'),
  *   })
  * );
  */

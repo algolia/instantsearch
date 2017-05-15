@@ -66,11 +66,16 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *     .find('a')
  *     .off('click');
  *
- *   var buttonHTML = '<a href="' + ToggleRenderingOptions.createURL() + '">' +
- *     '<input type="checkbox" value="' + ToggleRenderingOptions.value.name + '"' +
- *     ToggleRenderingOptions.value.isRefined ? ' checked' : '' + '/>' +
- *     ToggleRenderingOptions.value.name + '(' + ToggleRenderingOptions.value.count + ')' +
- *     '</a>';
+ *   var buttonHTML = `
+ *     <a href="${ToggleRenderingOptions.createURL()}">
+ *       <input
+ *         type="checkbox"
+ *         value="${ToggleRenderingOptions.value.name}"
+ *         ${ToggleRenderingOptions.value.isRefined ? 'checked' : ''}
+ *       />
+ *       ${ToggleRenderingOptions.value.name} (${ToggleRenderingOptions.value.count})
+ *     </a>
+ *   `;
  *
  *   ToggleRenderingOptions.widgetParams.containerNode.html(buttonHTML);
  *   ToggleRenderingOptions.widgetParams.containerNode

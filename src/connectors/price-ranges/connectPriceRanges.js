@@ -53,7 +53,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   return '$' + from + ' - $' + to;
  * }
  *
- * // custom `renderFn` to render the custom ClearAll widget
+ * // custom `renderFn` to render the custom PriceRanges widget
  * function renderFn(PriceRangesRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {
  *     PriceRangesRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
@@ -78,7 +78,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *         event.stopPropagation();
  *         event.preventDefault();
  *
- *         PriceRangesRenderingOptions.refine(items[index]);
+ *         PriceRangesRenderingOptions.refine(
+ *           PriceRangesRenderingOptions.items[index]
+ *         );
  *       });
  *     });
  * }

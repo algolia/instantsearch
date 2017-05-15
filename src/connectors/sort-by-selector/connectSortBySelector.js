@@ -62,9 +62,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   }
  *
  *   var optionsHTML = SortBySelectorRenderingOptions.options.map(function(option) {
- *     return '<option value="' + option.value + '"' +
- *       SortBySelectorRenderingOptions.currentRefinement === option.value ? ' selected' : '' +
- *       '>' + option.label + '</option>';
+ *     return `
+ *       <option
+ *         value="${option.value}"
+ *         ${SortBySelectorRenderingOptions.currentRefinement === option.value ? 'selected' : ''}
+ *       >
+ *         ${option.label}
+ *       </option>
+ *     `;
  *   });
  *
  *   SortBySelectorRenderingOptions.widgetParams.containerNode

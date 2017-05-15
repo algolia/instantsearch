@@ -65,8 +65,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *
  *   var optionsHTML = NumericSelectorRenderingOptions.options.map(function(option) {
  *     return '<option value="' + option.value + '"' +
- *       (NumericSelectorRenderingOptions.currentRefinement === item.value ? ' selected' : '') + '>' +
- *       item.label + '</option>';
+ *       (NumericSelectorRenderingOptions.currentRefinement === option.value ? ' selected' : '') + '>' +
+ *       option.label + '</option>';
  *   });
  *
  *   NumericSelectorRenderingOptions.widgetParams.containerNode

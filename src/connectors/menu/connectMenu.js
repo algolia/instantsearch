@@ -80,8 +80,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
   *
   *   var options = MenuRenderingOptions.items.map(function(item) {
   *     return item.isRefined
-  *       ? '<option value="' + item.value '" selected>' + item.label + '</option>'
-  *       : '<option value="' + item.value '">' + item.label + '</option>';
+  *       ? '<option value="' + item.value + '" selected>' + item.label + '</option>'
+  *       : '<option value="' + item.value + '">' + item.label + '</option>';
   *   });
   *
   *   MenuRenderingOptions.widgetParams.containerNode
@@ -97,7 +97,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
   *   customMenu({
   *     containerNode: $('#custom-menu-container'),
   *     attributeName: 'categories',
-  *     limit: 3,
+  *     limit: 10,
   *   })
   * );
   */

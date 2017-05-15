@@ -76,7 +76,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *
  *   var list = NumericRefinementListRenderingOptions.items.map(function(item) {
  *     return '<li data-refine-value="' + item.value + '">' +
- *       '<input type="radio"' + (item.isRefined ? ' checked' : '') + '/>' +
+ *       '<input type="radio"' + (item.isRefined ? ' checked' : '') + '/> ' +
  *       item.label + '</li>';
  *   });
  *
