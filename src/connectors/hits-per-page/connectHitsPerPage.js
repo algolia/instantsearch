@@ -59,7 +59,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @return {function(HitsPerPageWidgetOptions)} Re-usable widget factory for a custom **HitsPerPage** widget.
  * @example
  * // custom `renderFn` to render the custom HitsPerPage widget
- * function renderFn(HitsPerPageRenderingOptions) {
+ * function renderFn(HitsPerPageRenderingOptions, isFirstRendering) {
+ *   var containerNode = HitsPerPageRenderingOptions.widgetParams.containerNode
+ *   var items = HitsPerPageRenderingOptions.items
+ *   var refine = HitsPerPageRenderingOptions.refine
+ *
  *   if (isFirstRendering) {
  *     var markup = '<select></select>';
  *     containerNode.append(markup);
