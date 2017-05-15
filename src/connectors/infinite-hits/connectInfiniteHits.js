@@ -34,11 +34,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn Rendering function for the custom **InfiniteHits** widget.
  * @return {function(object)} Re-usable widget factory for a custom **InfiniteHits** widget.
  * @example
- * // custom `renderFn` to render the custom ClearAll widget
- * function renderFn(InfiniteHitsRenderingOptions) {
- *   if (isFirstRendering === true) {
+ * // custom `renderFn` to render the custom InfiniteHits widget
+ * function renderFn(InfiniteHitsRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
  *     InfiniteHitsRenderingOptions.widgetParams.containerNode
- *       .html('<div id="hits"></div><button id="show-more"></button>');
+ *       .html('<div id="hits"></div><button id="show-more">Load more</button>');
  *
  *     InfiniteHitsRenderingOptions.widgetParams.containerNode
  *       .find('#show-more')
