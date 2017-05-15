@@ -1,6 +1,9 @@
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/algolia/react-instantsearch/compare/v4.0.0-beta.6...v4.0.0) (2017-05-15)
 
+### Features and migration guide
+
+You can find all the details of the release and the migration guide from v3 to v4 here: https://discourse.algolia.com/t/react-instantsearch-v4/1329. 
 
 
 <a name="4.0.0-beta.6"></a>
