@@ -1,14 +1,12 @@
-import EventEmitter from 'events';
-
 import range from 'lodash/range';
 import sinon from 'sinon';
 
-import SearchParameters from 'algoliasearch-helper/src/SearchParameters';
+import algoliaSearchHelper from 'algoliasearch-helper';
 import InstantSearch from '../InstantSearch';
 
 describe('InstantSearch lifecycle', () => {
   let algoliasearch;
-  let algoliasearchHelper;
+  let helperStub;
   let client;
   let helper;
   let appId;
@@ -21,17 +19,11 @@ describe('InstantSearch lifecycle', () => {
 
   beforeEach(() => {
     client = {algolia: 'client', addAlgoliaAgent: () => {}};
-    helper = new EventEmitter();
+    helper = algoliaSearchHelper(client);
 
     // when using searchFunction, we lose the reference to
     // the original helper.search
-    helperSearchSpy = sinon.spy();
-    helper.search = helperSearchSpy;
-    helper.getState = sinon.stub().returns({});
-    helper.setState = sinon.spy();
-    helper.state = {
-      setQueryParameters(params) { return new SearchParameters(params); },
-    };
+    helper.search = helperSearchSpy = sinon.spy();
 
     urlSync = {
       createURL: sinon.spy(),
@@ -41,7 +33,7 @@ describe('InstantSearch lifecycle', () => {
     };
 
     algoliasearch = sinon.stub().returns(client);
-    algoliasearchHelper = sinon.stub().returns(helper);
+    helperStub = sinon.stub().returns(helper);
 
     appId = 'appId';
     apiKey = 'apiKey';
@@ -56,7 +48,7 @@ describe('InstantSearch lifecycle', () => {
 
     InstantSearch.__Rewire__('urlSyncWidget', () => urlSync);
     InstantSearch.__Rewire__('algoliasearch', algoliasearch);
-    InstantSearch.__Rewire__('algoliasearchHelper', algoliasearchHelper);
+    InstantSearch.__Rewire__('algoliasearchHelper', helperStub);
 
     search = new InstantSearch({
       appId,
@@ -80,7 +72,7 @@ describe('InstantSearch lifecycle', () => {
   });
 
   it('does not call algoliasearchHelper', () => {
-    expect(algoliasearchHelper.notCalled).toBe(true, 'algoliasearchHelper not yet called');
+    expect(helperStub.notCalled).toBe(true, 'algoliasearchHelper not yet called');
   });
 
   describe('when providing a custom client module', () => {
@@ -134,7 +126,9 @@ describe('InstantSearch lifecycle', () => {
   });
 
   it('calls the provided searchFunction when used', () => {
-    const searchSpy = sinon.spy();
+    const searchSpy = sinon.spy(h => {
+      h.setQuery('test').search();
+    });
     search = new InstantSearch({
       appId,
       apiKey,
@@ -143,7 +137,8 @@ describe('InstantSearch lifecycle', () => {
     });
     search.start();
     expect(searchSpy.calledOnce).toBe(true);
-    expect(helperSearchSpy.calledOnce).toBe(false);
+    expect(helper.state.query).toBe('test');
+    expect(helperSearchSpy.calledOnce).toBe(true);
   });
 
   it('does not fail when passing same references inside multiple searchParameters props', () => {
@@ -194,8 +189,8 @@ describe('InstantSearch lifecycle', () => {
       });
 
       it('calls algoliasearchHelper(client, indexName, searchParameters)', () => {
-        expect(algoliasearchHelper.calledOnce).toBe(true, 'algoliasearchHelper called once');
-        expect(algoliasearchHelper.args[0])
+        expect(helperStub.calledOnce).toBe(true, 'algoliasearchHelper called once');
+        expect(helperStub.args[0])
           .toEqual([
             client,
             indexName,
@@ -288,7 +283,7 @@ describe('InstantSearch lifecycle', () => {
     });
 
     it('recursively merges searchParameters.values array', () => {
-      expect(algoliasearchHelper.args[0][2].values).toEqual([-2, -1, 0, 1, 2, 3, 4]);
+      expect(helperStub.args[0][2].values).toEqual([-2, -1, 0, 1, 2, 3, 4]);
     });
   });
 

@@ -87,3 +87,48 @@ dropping in this version the support for the react based templates.
 As of now, we consider the engine used to build the widgets in InstantSearch.js
 as an implementation detail. Since we do not expose it anymore, we'll be able
 to change it and use the best solution for each release.
+
+## searchFunction can be used to modify parameters
+
+Introduced in 1.3.0, `searchFunction` was originally meant as a way to modify
+the timing of the search. However we realized that it was a good way to
+alter the search state before making the actual state.
+
+This is what was required to force the query string:
+
+```javascript
+const search = instantsearch({
+  /* other parameters */
+  searchFunction: function(helper) {
+    search.helper.setQuery('fixed query');
+    helper.search();
+  }
+});
+```
+
+And now, it is more straightforward:
+
+```javascript
+const search = instantsearch({
+  /* other parameters */
+  searchFunction: function(helper) {
+    helper.setQuery('fixed query').search();
+  }
+});
+```
+
+Bear in mind that the helper [still resets the page to 0](https://community.algolia.com/algoliasearch-helper-js/concepts.html#smart-page-behaviour)
+when the parameters change. So in order to keep
+the previously set page you have to do the following:
+
+```javascript
+const search = instantsearch({
+  /* other parameters */
+  searchFunction: function(helper) {
+    const p = helper.getPage();
+    helper.setQuery('fixed query')
+          .setPage(p)
+          .search();
+  }
+});
+```
