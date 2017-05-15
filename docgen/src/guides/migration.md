@@ -61,16 +61,21 @@ If you want to learn more about sorting the values, check out the widget API to 
 the valid values for the `sortBy` option of [menu](../widgets/menu.html#struct-MenuWidgetOptions-sortBy) or
 [refinementList](../widgets/refinementList.html#struct-RefinementListWidgetOptions-sortBy)
 
-## Some template variables have been changed
+## Some variables have been changed
 
 Internally all the widgets are now using the connectors. And we wanted their API
-to be close to the one offered by [react-instantsearch connectors](https://community.algolia.com/react-instantsearch/connectors/). This then
-impacted the name of some variables in the templates.
+to be close to the one offered by
+[react-instantsearch connectors](https://community.algolia.com/react-instantsearch/connectors/).
+This then impacted the name of some variables in the templates and the API.
 
-List of global changes:
+Changes in templates:
 
  - In the item template of the hierarchicalMenu and menu widgets, `name` becomes `label`
  - In the item template of the refinementList widget, `name` becomes `value`.
+
+Changes in the API:
+
+ - In hitsPerPageSelector, the `options` has been renamed to `items`.
 
 ## React components can't be used as templates
 

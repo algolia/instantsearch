@@ -24,7 +24,7 @@ export class RawSelector extends React.Component {
         {options.map(option =>
           <option
             className={this.props.cssClasses.item}
-            key={option.value}
+            key={option.label + option.value}
             value={option.value}>
               {option.label}
           </option>

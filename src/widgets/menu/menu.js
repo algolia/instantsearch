@@ -140,7 +140,7 @@ menu({
  * search.addWidget(
  *   instantsearch.widgets.menu({
  *     container: '#categories',
- *     attributeName: 'categories',
+ *     attributeName: 'hierarchicalCategories.lvl0',
  *     limit: 10,
  *     templates: {
  *       header: 'Categories'

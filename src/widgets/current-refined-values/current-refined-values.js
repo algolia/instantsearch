@@ -157,7 +157,8 @@ currentRefinedValues({
  * search.addWidget(
  *   instantsearch.widgets.currentRefinedValues({
  *     container: '#current-refined-values',
- *     clearAll: 'after'
+ *     clearAll: 'after',
+ *     clearsQuery: true,
  *   })
  * );
  */
