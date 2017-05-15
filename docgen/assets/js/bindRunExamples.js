@@ -143,7 +143,7 @@ export default function bindRunExamples(codeSamples) {
     }
 
     // initialize examples for connector, check we have the matching pattern
-    if (/function renderFn\(\S+, isFirstRendering\) {/g.test(exampleContent)) {
+    if (/function renderFn\(\S+(, isFirstRendering)?\) {/g.test(exampleContent)) {
       initConnectorExample(codeSample, index);
     }
   });
