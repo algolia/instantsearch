@@ -2,7 +2,6 @@ input {
   outline: none;
   border-radius: 4px;
 
-  @include appearance(none !important);
   &::-webkit-search-decoration,
   &::-webkit-search-cancel-button,
   &::-webkit-search-results-button,
