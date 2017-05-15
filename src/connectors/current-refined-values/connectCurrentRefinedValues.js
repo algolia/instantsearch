@@ -95,7 +95,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *     .find('li > a')
  *     .each(function() { $(this).off('click') });
  *
- *   if (refinements && refinements.length > 0) {
+ *   if (CurrentRefinedValuesRenderingOptions.refinements
+ *       && CurrentRefinedValuesRenderingOptions.refinements.length > 0) {
  *     containerNode
  *       .find('#cta-container')
  *       .html('<a href="' + CurrentRefinedValuesRenderingOptions.clearAllURL + '">Clear all </a>');
