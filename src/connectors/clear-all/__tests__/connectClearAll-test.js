@@ -60,11 +60,12 @@ describe('connectClearAll', () => {
 
     const helper = jsHelper({addAlgoliaAgent: () => {}}, '', {facets: ['myFacet']});
     helper.search = sinon.stub();
+    helper.setQuery('not empty');
     helper.toggleRefinement('myFacet', 'myValue');
 
     const rendering = sinon.stub();
     const makeWidget = connectClearAll(rendering);
-    const widget = makeWidget();
+    const widget = makeWidget({clearsQuery: false});
 
     widget.init({
       helper,
@@ -74,10 +75,12 @@ describe('connectClearAll', () => {
     });
 
     expect(helper.hasRefinements('myFacet')).toBe(true);
+    expect(helper.state.query).toBe('not empty');
     const initClearMethod = rendering.lastCall.args[0].refine;
     initClearMethod();
 
     expect(helper.hasRefinements('myFacet')).toBe(false);
+    expect(helper.state.query).toBe('not empty');
 
     helper.toggleRefinement('myFacet', 'someOtherValue');
 
@@ -89,9 +92,57 @@ describe('connectClearAll', () => {
     });
 
     expect(helper.hasRefinements('myFacet')).toBe(true);
+    expect(helper.state.query).toBe('not empty');
     const renderClearMethod = rendering.lastCall.args[0].refine;
     renderClearMethod();
     expect(helper.hasRefinements('myFacet')).toBe(false);
+    expect(helper.state.query).toBe('not empty');
+  });
+
+  it('Receives a mean to clear the values (and the query)', () => {
+    // test the function received by the rendering function
+    // to clear the refinements
+
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', {facets: ['myFacet']});
+    helper.search = sinon.stub();
+    helper.setQuery('a query');
+    helper.toggleRefinement('myFacet', 'myValue');
+
+    const rendering = sinon.stub();
+    const makeWidget = connectClearAll(rendering);
+    const widget = makeWidget({clearsQuery: true});
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(helper.hasRefinements('myFacet')).toBe(true);
+    expect(helper.state.query).toBe('a query');
+    const initClearMethod = rendering.lastCall.args[0].refine;
+    initClearMethod();
+
+    expect(helper.hasRefinements('myFacet')).toBe(false);
+    expect(helper.state.query).toBe('');
+
+    helper.toggleRefinement('myFacet', 'someOtherValue');
+    helper.setQuery('another query');
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(helper.hasRefinements('myFacet')).toBe(true);
+    expect(helper.state.query).toBe('another query');
+    const renderClearMethod = rendering.lastCall.args[0].refine;
+    renderClearMethod();
+    expect(helper.hasRefinements('myFacet')).toBe(false);
+    expect(helper.state.query).toBe('');
   });
 
   it('some refinements from results <=> hasRefinements = true', () => {
@@ -124,16 +175,49 @@ describe('connectClearAll', () => {
     expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
   });
 
-  it('no refinements <=> hasRefinements = false', () => {
+  it('(clearsQuery: true) query not empty <=> hasRefinements = true', () => {
     // test if the values sent to the rendering function
     // are consistent with the search state
-
-    const helper = jsHelper({addAlgoliaAgent: () => {}});
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, undefined, {facets: ['aFacet']});
+    helper.setQuery('no empty');
     helper.search = sinon.stub();
 
     const rendering = sinon.stub();
     const makeWidget = connectClearAll(rendering);
-    const widget = makeWidget();
+    const widget = makeWidget({
+      clearsQuery: true,
+    });
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
+  });
+
+  it('(clearsQuery: false) no refinements <=> hasRefinements = false', () => {
+    // test if the values sent to the rendering function
+    // are consistent with the search state
+
+    const helper = jsHelper({addAlgoliaAgent: () => {}});
+    helper.setQuery('not empty');
+    helper.search = sinon.stub();
+
+    const rendering = sinon.stub();
+    const makeWidget = connectClearAll(rendering);
+    const widget = makeWidget({clearsQuery: false});
 
     widget.init({
       helper,

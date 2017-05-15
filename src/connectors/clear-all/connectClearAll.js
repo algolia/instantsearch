@@ -104,7 +104,9 @@ export default function connectClearAll(renderFn) {
           .map(one => one.attributeName)
           .filter(one => excludeAttributes.indexOf(one) === -1);
 
-        const hasRefinements = clearAttributes.length !== 0;
+        const hasRefinements = clearsQuery ?
+          clearAttributes.length !== 0 || helper.state.query !== '' :
+          clearAttributes.length !== 0;
         const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
 
         this._refine = refine({helper, clearAttributes, hasRefinements, clearsQuery});
@@ -123,7 +125,9 @@ export default function connectClearAll(renderFn) {
           .map(one => one.attributeName)
           .filter(one => excludeAttributes.indexOf(one) === -1);
 
-        const hasRefinements = clearAttributes.length !== 0;
+        const hasRefinements = clearsQuery ?
+          clearAttributes.length !== 0 || helper.state.query !== '' :
+          clearAttributes.length !== 0;
         const preparedCreateURL = () => createURL(clearRefinementsFromState(state, [], clearsQuery));
 
         this._refine = refine({helper, clearAttributes, hasRefinements, clearsQuery});

@@ -99,7 +99,8 @@ clearAll({
  *     templates: {
  *       link: 'Reset everything'
  *     },
- *     autoHideContainer: false
+ *     autoHideContainer: false,
+ *     clearsQuery: true,
  *   })
  * );
  */
