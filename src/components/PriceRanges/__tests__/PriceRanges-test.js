@@ -98,7 +98,7 @@ describe('PriceRanges', () => {
         const component = getComponentWithMockRendering(props);
 
         // When
-        component.refine(1, 10, mockEvent);
+        component.refine({from: 1, to: 10}, mockEvent);
 
         // Then
         expect(mockEvent.preventDefault.called).toBe(true);
