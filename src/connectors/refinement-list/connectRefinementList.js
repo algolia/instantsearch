@@ -93,10 +93,14 @@ export const checkUsage = ({attributeName, operator, usageMessage, showMoreLimit
  *
  *   if (RefinementListRenderingOptions.canRefine) {
  *     var list = RefinementListRenderingOptions.items.map(function(item) {
- *       return '<li data-refine-value="' + item.value + '">' +
- *         '<input type="checkbox" value="' + item.value + '"' + item.isRefined ? ' checked' : '' + '/>' +
- *         '<a href="' + RefinementListRenderingOptions.createURL(item.value) + '">' + item.label + '</a>' +
- *         '</li>';
+ *       return `
+ *         <li data-refine-value="${item.value}">
+ *           <input type="checkbox" value="${item.value}" ${item.isRefined ? 'checked' : ''} />
+ *           <a href="${RefinementListRenderingOptions.createURL(item.value)}">
+ *             ${item.label} (${item.count})
+ *           </a>
+ *         </li>
+ *       `;
  *     });
  *
  *     RefinementListRenderingOptions.widgetParams.containerNode.find('ul').html(list);
@@ -113,6 +117,7 @@ export const checkUsage = ({attributeName, operator, usageMessage, showMoreLimit
  *   } else {
  *     RefinementListRenderingOptions.widgetParams.containerNode.find('ul').html('');
  *   }
+ * }
  *
  * // connect `renderFn` to RefinementList logic
  * var customRefinementList = instantsearch.connectors.connectRefinementList(renderFn);
@@ -122,6 +127,7 @@ export const checkUsage = ({attributeName, operator, usageMessage, showMoreLimit
  *   customRefinementList({
  *     containerNode: $('#custom-refinement-list-container'),
  *     attributeName: 'categories',
+ *     limit: 10,
  *   })
  * );
  */
