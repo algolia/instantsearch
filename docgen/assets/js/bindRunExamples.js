@@ -1,5 +1,5 @@
 import instantsearch from "../../../index.js";
-import capitalize from 'lodash/capitalize';
+import capitalize from "lodash/capitalize";
 
 window.instantsearch = instantsearch;
 window.search = instantsearch({
@@ -18,77 +18,133 @@ const el = html => {
   return div;
 };
 
+function initWidgetExample(codeSample, index) {
+  const state = { IS_RUNNING: false };
+
+  const [, widgetName] = /widgets.(\S+)\(/g.exec(
+    codeSample.lastChild.innerText
+  );
+
+  // container for code sample live example
+  const liveExampleContainer = createLiveExampleContainer(
+    widgetName,
+    "widget",
+    index
+  );
+
+  const runExample = function() {
+    if (!state.IS_RUNNING) {
+      state.IS_RUNNING = true;
+
+      // append widget container before running code
+      codeSample.after(liveExampleContainer);
+
+      // replace `container` option with the generated one
+      const codeToEval = codeSample.lastChild.innerText.replace(
+        /container: \S+,?/,
+        `container: "#live-example-${index}",`
+      );
+
+      // execute code, display widget
+      window.eval(codeToEval);
+      appendDefaultSearchWidgets(index);
+    }
+  };
+
+  appendRunButton(codeSample, runExample);
+}
+
+function initConnectorExample(codeSample, index) {
+  const state = { IS_RUNNING: false };
+
+  const [, widgetName] = /the custom (\S+) widget/g.exec(
+    codeSample.lastChild.innerText
+  );
+
+  const liveExampleContainer = createLiveExampleContainer(
+    widgetName,
+    "connector",
+    index
+  );
+
+  const runExample = () => {
+    if (!state.IS_RUNNING) {
+      state.IS_RUNNING = true;
+
+      codeSample.after(liveExampleContainer);
+
+      const codeToEval = codeSample.lastChild.innerText.replace(
+        /containerNode: \S+,?/,
+        `containerNode: $("#live-example-${index}"),`
+      );
+
+      window.eval(codeToEval);
+      appendDefaultSearchWidgets(index);
+    }
+  };
+
+  appendRunButton(codeSample, runExample);
+}
+
+function createLiveExampleContainer(name, type, index) {
+  return el(`
+    <div class="live-example">
+      <h3>${capitalize(name)} ${type} example</h3>
+      <div id="live-example-${index}"></div>
+
+      <div class="live-example-helpers">
+        <h3>SearchBox & Hits</h3>
+        <div id="search-box-container-${index}"></div>
+        <div id="hits-container-${index}"></div>
+      </div>
+    </div>
+  `);
+}
+
+function appendDefaultSearchWidgets(index) {
+  // add default searchbox & hits
+  search.addWidget(
+    instantsearch.widgets.searchBox({
+      container: `#search-box-container-${index}`,
+      placeholder: "Search for products",
+      autofocus: false
+    })
+  );
+
+  search.addWidget(
+    instantsearch.widgets.hits({
+      container: `#hits-container-${index}`,
+      templates: {
+        empty: "No results",
+        item: "<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}"
+      }
+    })
+  );
+
+  search.start();
+}
+
+function appendRunButton(codeSample, handler) {
+  const runBtn = document.createElement("button");
+  runBtn.textContent = "Run";
+  runBtn.style.marginRight = "10px";
+  runBtn.onclick = handler;
+
+  codeSample.firstChild.appendChild(runBtn);
+}
+
 export default function bindRunExamples(codeSamples) {
   codeSamples.forEach((codeSample, index) => {
-    if (codeSample.lastChild.innerText.indexOf('search.addWidget') !== 0) {
-      return
+    const exampleContent = codeSample.lastChild.innerText;
+
+    // initialize examples for widget
+    if (exampleContent.indexOf("search.addWidget") === 0) {
+      initWidgetExample(codeSample, index);
     }
 
-    const state = { RUNNING: false };
-
-    const [, widgetName] = /widgets.(\S+)\(/g.exec(
-      codeSample.lastChild.innerText
-    );
-
-    // container for code sample live example
-    const liveExampleContainer = el(`
-      <div class="live-example">
-        <h3>${capitalize(widgetName)} widget example</h3>
-        <div id="live-example-${index}"></div>
-
-        <div class="live-example-helpers">
-          <h3>SearchBox & Hits</h3>
-          <div id="search-box-container-${index}"></div>
-          <div id="hits-container-${index}"></div>
-        </div>
-      </div>
-    `);
-
-    const runExample = function() {
-      if (!state.RUNNING) {
-        state.RUNNING = true;
-
-        // append widget container before running code
-        codeSample.after(liveExampleContainer);
-
-        // replace `container` option with the generated one
-        const codeToEval = codeSample.lastChild.innerText.replace(
-          /container: \S+,?/,
-          `container: "#live-example-${index}",`
-        );
-
-        // execute code, display widget
-        window.eval(codeToEval);
-
-        // add default searchbox & hits
-        search.addWidget(
-          instantsearch.widgets.searchBox({
-            container: `#search-box-container-${index}`,
-            placeholder: "Search for products",
-            autofocus: false
-          })
-        );
-
-        search.addWidget(
-          instantsearch.widgets.hits({
-            container: `#hits-container-${index}`,
-            templates: {
-              empty: "No results",
-              item: "<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}"
-            }
-          })
-        );
-
-        search.start();
-      }
-    };
-
-    // button with `Run` label
-    const runBtn = document.createElement("button");
-    runBtn.textContent = "Run";
-    runBtn.style.marginRight = "10px";
-    runBtn.onclick = runExample;
-
-    codeSample.firstChild.appendChild(runBtn);
+    // initialize examples for connector, check we have the matching pattern
+    if (/function renderFn\(\S+, isFirstRendering\) {/g.test(exampleContent)) {
+      initConnectorExample(codeSample, index);
+    }
   });
 }
