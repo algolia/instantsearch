@@ -11,9 +11,9 @@ import Pit from './Pit.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
-class RawSlider extends Component {
+class Slider extends Component {
 
-  propTypes = {
+  static propTypes = {
     refine: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
@@ -88,10 +88,11 @@ class RawSlider extends Component {
         snap={ true }
         snapPoints={ snapPoints }
         values={ values }
+        disabled={ true }
       />
     );
   }
 
 }
 
-export default autoHideContainerHOC(headerFooterHOC(RawSlider));
+export default autoHideContainerHOC(headerFooterHOC(Slider));
