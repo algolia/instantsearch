@@ -88,7 +88,7 @@ class Slider extends Component {
         snap={ true }
         snapPoints={ snapPoints }
         values={ values }
-        disabled={ true }
+        disabled={ min === max }
       />
     );
   }
