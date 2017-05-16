@@ -36,9 +36,9 @@ class Slider extends Component {
 
   // creates an array number where to display a pit point on the slider
   computeDefaultPitPoints({min, max}) {
-    const totalLenght = max - min;
+    const totalLength = max - min;
     const steps = 34;
-    const stepsLength = totalLenght / steps;
+    const stepsLength = totalLength / steps;
 
     const pitPoints = [min, ...times(steps - 1, step => min + stepsLength * (step + 1)), max]
       // bug with `key={ 0 }` and preact, see https://github.com/developit/preact/issues/642
