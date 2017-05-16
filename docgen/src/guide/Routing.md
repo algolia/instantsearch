@@ -1,5 +1,5 @@
 ---
-title: Routing
+title: Routing and URLs
 mainTitle: Guide
 layout: main.pug
 category: guide
@@ -20,6 +20,10 @@ need to return a string.
 * The [search state guide](guide/Search_state.html) details all widgets and connectors search state values.
 * React InstantSearch can be plugged into any history or routing library, you only have to listen for searchState
 changes and inject searchState appropriately.
+* Be careful when synchronizing your [search state](guide/Search_state.html) to the url bar of the browser.
+Doing it too often will lead to not good back/next navigation points (one per letter) and it will slow down the overall experience. We have
+experienced that browsers don't like it when we manipulate the url bar too often. We try to update the url 700ms after the last
+search state event.
 
 <div class="guide-nav">
     <div class="guide-nav-left">
