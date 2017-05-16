@@ -1,76 +1,22 @@
 import React from 'react';
-import expect from 'expect';
-import TestUtils from 'react-addons-test-utils';
-import expectJSX from 'expect-jsx';
-import {RawSlider as Slider} from '../Slider';
-import Nouislider from 'react-nouislider';
-expect.extend(expectJSX);
+import renderer from 'react-test-renderer';
+
+import Slider from '../Slider';
 
 describe('Slider', () => {
-   // to ensure the global.window is set
-
-  let renderer;
-  let props;
-
-  beforeEach(() => {
-    const {createRenderer} = TestUtils;
-    renderer = createRenderer();
-
-    props = {
-      range: {min: 0, max: 5000},
-      format: {to: () => {}, from: () => {}},
-      start: [0, 0],
-    };
-  });
-
-  it('should render <NouiSlider {...props} />', () => {
-    const out = render();
-    expect(out).toEqualJSX(
-      <Nouislider
-        animate={false}
-        behaviour="snap"
-        connect
-        cssPrefix="ais-range-slider--"
-        format={{to: () => {}, from: () => {}}}
-        onChange={() => {}}
-        pips={{
-          density: 3,
-          mode: 'positions',
-          stepped: true,
-          values: [0, 50, 100],
-        }}
-        range={props.range}
-        start={ props.start }
+  it('should render correctly', () => {
+    const tree = renderer.create(
+      <Slider
+        refine={ () => undefined }
+        min={ 0 }
+        max={ 500 }
+        values={ [0, 0] }
+        pips={ true }
+        step={ 2 }
+        tooltips={ true }
+        shouldAutoHideContainer={ false }
       />
-    );
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
   });
-
-  it('should render <NouisLider disabled="true" /> when ranges are equal', () => {
-    props.range.min = props.range.max = 8;
-    const out = render();
-    expect(out).toEqualJSX(
-      <Nouislider
-        animate={ false }
-        behaviour="snap"
-        connect
-        cssPrefix="ais-range-slider--"
-        format={ {to: () => {}, from: () => {}} }
-        onChange={ () => {} }
-        pips={ {
-          density: 3,
-          mode: 'positions',
-          stepped: true,
-          values: [0, 50, 100],
-        } }
-        range={ {min: props.range.min, max: props.range.min + 0.0001} }
-        start={ props.start }
-        disabled
-      />
-    );
-  });
-
-  function render() {
-    renderer.render(<Slider {...props} />);
-    return renderer.getRenderOutput();
-  }
 });

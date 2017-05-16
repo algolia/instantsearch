@@ -21,19 +21,18 @@ const bem = bemHelper('ais-range-slider');
 const renderer = ({
   containerNode,
   cssClasses,
-  tooltips,
-  renderState,
-  autoHideContainer,
   pips,
   step,
+  tooltips,
+  autoHideContainer,
   collapsible,
+  renderState,
   templates,
 }) => ({
   refine,
-  range,
+  range: {min, max},
   start,
   instantSearchInstance,
-  format,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -44,25 +43,24 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && range.min === range.max;
+  const shouldAutoHideContainer = autoHideContainer && min === max;
 
-  if (tooltips.format !== undefined) {
-    tooltips = [{to: tooltips.format}, {to: tooltips.format}];
-  }
+  const minValue = start[0] === -Infinity ? min : start[0];
+  const maxValue = start[1] === Infinity ? max : start[1];
 
   ReactDOM.render(
     <Slider
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      onChange={refine}
-      pips={pips}
-      range={range}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      start={start}
-      step={step}
-      templateProps={renderState.templateProps}
-      tooltips={tooltips}
-      format={format}
+      cssClasses={ cssClasses }
+      refine={ refine }
+      min={ min }
+      max={ max }
+      values={ [minValue, maxValue] }
+      tooltips={ tooltips }
+      step={ step }
+      pips={ pips }
+      shouldAutoHideContainer={ shouldAutoHideContainer }
+      collapsible={ collapsible }
+      templateProps={ renderState.templateProps }
     />,
     containerNode
   );
@@ -72,66 +70,32 @@ const usage = `Usage:
 rangeSlider({
   container,
   attributeName,
-  [ tooltips=true ],
-  [ templates.{header, footer} ],
-  [ cssClasses.{root, header, body, footer} ],
-  [ step=1 ],
-  [ pips=true ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
   [ min ],
-  [ max ]
+  [ max ],
+  [ pips = true ],
+  [ step = 1 ],
+  [ precision = 2 ]
 });
 `;
 
-/**
- * Instantiate a slider based on a numeric attribute.
- * This is a wrapper around [noUiSlider](http://refreshless.com/nouislider/)
- * @function rangeSlider
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {string} $0.attributeName Name of the attribute for faceting
- * @param  {boolean|Object} [$0.tooltips=true] Should we show tooltips or not.
- * The default tooltip will show the raw value.
- * You can also provide
- * `tooltips: {format: function(rawValue) {return '$' + Math.round(rawValue).toLocaleString()}}`
- * So that you can format the tooltip display value as you want
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header=''] Header template
- * @param  {string|Function} [$0.templates.footer=''] Footer template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no refinements available
- * @param  {Object} [$0.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
- * @param  {boolean|object} [$0.pips=true] Show slider pips.
- * @param  {boolean|object} [$0.step=1] Every handle move will jump that number of steps.
- * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @param  {number} [$0.min] Minimal slider value, default to automatically computed from the result set
- * @param  {number} [$0.max] Maximal slider value, defaults to automatically computed from the result set
- * @return {Object} widget
- */
 export default function rangeSlider({
   container,
   attributeName,
-  tooltips = true,
-  templates = defaultTemplates,
-  collapsible = false,
+  min,
+  max,
+  templates,
   cssClasses: userCssClasses = {},
   step = 1,
   pips = true,
-  autoHideContainer = true,
-  min,
-  max,
   precision = 2,
+  tooltips = true,
+  autoHideContainer = true,
 } = {}) {
   if (!container) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
-
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
@@ -141,14 +105,13 @@ export default function rangeSlider({
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
-    tooltips,
-    templates,
-    renderState: {},
-    collapsible,
     step,
     pips,
+    tooltips,
+    renderState: {},
+    templates,
     autoHideContainer,
+    cssClasses,
   });
 
   try {

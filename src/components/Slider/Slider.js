@@ -1,92 +1,98 @@
-import React from 'react';
-import omit from 'lodash/omit';
+import times from 'lodash/times';
+import range from 'lodash/range';
+import has from 'lodash/has';
 
-import Nouislider from 'react-nouislider';
+import React, {Component, PropTypes} from 'react';
+import Rheostat from 'rheostat';
+import cx from 'classnames';
 
-const cssPrefix = 'ais-range-slider--';
-
-import isEqual from 'lodash/isEqual';
+import Pit from './Pit.js';
 
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
-export class RawSlider extends React.Component {
-  componentWillMount() {
-    this.handleChange = this.handleChange.bind(this);
+class Slider extends Component {
+
+  static propTypes = {
+    refine: PropTypes.func.isRequired,
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+    values: PropTypes.arrayOf(PropTypes.number).isRequired,
+    pips: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.object,
+    ]),
+    step: PropTypes.number.isRequired,
+    tooltips: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.shape({format: PropTypes.func.isRequired}),
+    ]),
   }
 
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props.range, nextProps.range) ||
-      !isEqual(this.props.start, nextProps.start);
+  handleChange = ({values}) => {
+    const {refine} = this.props;
+    refine(values);
   }
 
-  // we are only interested in rawValues
-  handleChange(formattedValues, handleId, rawValues) {
-    this.props.onChange(rawValues);
+  // creates an array number where to display a pit point on the slider
+  computeDefaultPitPoints({min, max}) {
+    const totalLenght = max - min;
+    const steps = 34;
+    const stepsLength = totalLenght / steps;
+
+    const pitPoints = [min, ...times(steps - 1, step => min + stepsLength * (step + 1)), max]
+      // bug with `key={ 0 }` and preact, see https://github.com/developit/preact/issues/642
+      .map(pitPoint => pitPoint === 0 ? 0.00001 : pitPoint);
+
+    return pitPoints;
+  }
+
+  // creates an array of values where the slider should snap to
+  computeSnapPoints({min, max, step}) {
+    return range(min, max + step, step);
+  }
+
+  createHandleComponent = tooltips => props => {
+    const value = has(tooltips, 'format')
+      ? tooltips.format(props['aria-valuenow'])
+      : props['aria-valuenow'];
+
+    return (
+      <div
+        {...props}
+        className={ cx('ais-range-slider--handle', props.className)}
+      >
+        { tooltips
+            ? <div className="ais-range-slider--tooltip">{value}</div>
+            : null }
+      </div>
+    );
   }
 
   render() {
-    // display a `disabled` state of the `NoUiSlider` when range.min === range.max
-    const {range: {min, max}} = this.props;
-    const isDisabled = min === max;
+    const {tooltips, step, pips, values, min, max} = this.props;
 
-    // when range.min === range.max, we only want to add a little more to the max
-    // to display the same value in the UI, but the `NoUiSlider` wont
-    // throw an error since they are not the same value.
-    const range = isDisabled
-      ? {min, max: min + 0.0001}
-      : {min, max};
-
-    // setup pips
-    let pips;
-    if (this.props.pips === false) {
-      pips = undefined;
-    } else if (this.props.pips === true || typeof this.props.pips === 'undefined') {
-      pips = {
-        mode: 'positions',
-        density: 3,
-        values: [0, 50, 100],
-        stepped: true,
-      };
-    } else {
-      pips = this.props.pips;
-    }
+    const snapPoints = this.computeSnapPoints({min, max, step});
+    const pitPoints = pips === true || pips === undefined || pips === false
+      ? this.computeDefaultPitPoints({min, max})
+      : pips;
 
     return (
-      <Nouislider
-        // NoUiSlider also accepts a cssClasses prop, but we don't want to
-        // provide one.
-        {...omit(this.props, ['cssClasses', 'range'])}
-        animate={false}
-        behaviour={'snap'}
-        connect
-        cssPrefix={cssPrefix}
-        onChange={this.handleChange}
-        range={range}
-        disabled={isDisabled}
-        pips={pips}
+      <Rheostat
+        handle={ this.createHandleComponent(tooltips) }
+        onChange={ this.handleChange }
+        min={ min }
+        max={ max }
+        pitComponent={ Pit }
+        pitPoints={ pitPoints }
+        snap={ true }
+        snapPoints={ snapPoints }
+        values={ values }
+        disabled={ min === max }
       />
     );
   }
+
 }
 
-RawSlider.propTypes = {
-  onChange: React.PropTypes.func,
-  onSlide: React.PropTypes.func,
-  pips: React.PropTypes.oneOfType([
-    React.PropTypes.bool,
-    React.PropTypes.object,
-  ]),
-  range: React.PropTypes.object.isRequired,
-  start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-  tooltips: React.PropTypes.oneOfType([
-    React.PropTypes.bool,
-    React.PropTypes.arrayOf(
-      React.PropTypes.shape({
-        to: React.PropTypes.func,
-      })
-    ),
-  ]),
-};
-
-export default autoHideContainerHOC(headerFooterHOC(RawSlider));
+export default autoHideContainerHOC(headerFooterHOC(Slider));
