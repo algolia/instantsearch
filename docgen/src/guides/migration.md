@@ -88,6 +88,16 @@ As of now, we consider the engine used to build the widgets in InstantSearch.js
 as an implementation detail. Since we do not expose it anymore, we'll be able
 to change it and use the best solution for each release.
 
+## RangeSlider widget is using Rheostat as Slider Component
+
+Since we had unclosed issues with the old slider, we switched to a new
+well maintained component [Rheostat](https://github.com/airbnb/rheostat).
+
+If you want to customize the style, some CSS classes have changed. You can find
+examples of stylesheets by clicking [here](https://github.com/airbnb/rheostat/tree/master/css).
+
+We are still providing a look which is similar as the one in the V1.
+
 ## searchFunction can be used to modify parameters
 
 Introduced in 1.3.0, `searchFunction` was originally meant as a way to modify
