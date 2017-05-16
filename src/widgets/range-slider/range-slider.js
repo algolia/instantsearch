@@ -74,7 +74,12 @@ rangeSlider({
   [ max ],
   [ pips = true ],
   [ step = 1 ],
-  [ precision = 2 ]
+  [ precision = 2 ],
+  [ tooltips=true ],
+  [ templates.{header, footer} ],
+  [ cssClasses.{root, header, body, footer} ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ],
 });
 `;
 
