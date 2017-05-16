@@ -5,7 +5,6 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import forEach from 'lodash/forEach';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
-import clone from 'lodash/clone';
 import isPlainObject from 'lodash/isPlainObject';
 import {EventEmitter} from 'events';
 import urlSyncWidget from './url-sync.js';
@@ -122,23 +121,20 @@ Usage: instantsearch({
     );
 
     if (this._searchFunction) {
-      this._originalHelperSearch = helper.search.bind(helper);
-      helper.search = this._wrappedSearch.bind(this);
+      this.helper = Object.create(helper);
+      this.helper.search = () => {
+        helper.setState(this.helper.state);
+        this._searchFunction(helper);
+      };
+      this._init(helper.state, this.helper);
+      helper.on('result', this._render.bind(this, this.helper));
+    } else {
+      this.helper = helper;
+      this._init(helper.state, this.helper);
+      this.helper.on('result', this._render.bind(this, this.helper));
     }
 
-    this.helper = helper;
-
-    this._init(helper.state, helper);
-
-    helper.on('result', this._render.bind(this, helper));
-    helper.search();
-  }
-
-  _wrappedSearch() {
-    const helper = clone(this.helper);
-    helper.search = this._originalHelperSearch;
-    this._searchFunction(helper);
-    return;
+    this.helper.search();
   }
 
   createURL(params) {
