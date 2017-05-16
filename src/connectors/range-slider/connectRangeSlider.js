@@ -33,7 +33,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} RangeSliderRenderingOptions
  * @property {function} refine set the next search state setting the range of the widget
- * @property {{min: number, max: number}} numeric bounds without the current range filter
+ * @property {{min: number, max: number}} range numeric bounds without the current range filter
  * @property {[number, number]} start current numeric bounds of the search
  * @property {{from: function, to: function}} formatter functions
  * @property {Object} widgetParams all original options forwarded to rendering
