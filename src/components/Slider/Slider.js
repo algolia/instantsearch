@@ -49,8 +49,7 @@ class Slider extends Component {
 
   // creates an array of values where the slider should snap to
   computeSnapPoints({min, max, step}) {
-    const r = range(min, max, step);
-    return r.includes(max) ? r : [...r.slice(0, -1), max];
+    return [...range(min, max, step), max];
   }
 
   createHandleComponent = tooltips => props => {
