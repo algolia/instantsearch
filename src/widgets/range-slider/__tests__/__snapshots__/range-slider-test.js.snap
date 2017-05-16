@@ -1,0 +1,288 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`rangeSlider widget usage max option render will use the results min when only max is passed 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={undefined}
+  cssClasses={
+    Object {
+      "body": "ais-range-slider--body",
+      "footer": "ais-range-slider--footer",
+      "header": "ais-range-slider--header",
+      "root": "ais-range-slider",
+    }
+  }
+  max={100}
+  min={1}
+  pips={true}
+  refine={[Function]}
+  shouldAutoHideContainer={false}
+  step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  tooltips={true}
+  values={
+    Array [
+      1,
+      100,
+    ]
+  }
+/>
+`;
+
+exports[`rangeSlider widget usage min option sets the right range 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={undefined}
+  cssClasses={
+    Object {
+      "body": "ais-range-slider--body",
+      "footer": "ais-range-slider--footer",
+      "header": "ais-range-slider--header",
+      "root": "ais-range-slider",
+    }
+  }
+  max={200}
+  min={100}
+  pips={true}
+  refine={[Function]}
+  shouldAutoHideContainer={false}
+  step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  tooltips={true}
+  values={
+    Array [
+      100,
+      200,
+    ]
+  }
+/>
+`;
+
+exports[`rangeSlider widget usage min option will use the results max when only min passed 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={undefined}
+  cssClasses={
+    Object {
+      "body": "ais-range-slider--body",
+      "footer": "ais-range-slider--footer",
+      "header": "ais-range-slider--header",
+      "root": "ais-range-slider",
+    }
+  }
+  max={5000}
+  min={100}
+  pips={true}
+  refine={[Function]}
+  shouldAutoHideContainer={false}
+  step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  tooltips={true}
+  values={
+    Array [
+      100,
+      5000,
+    ]
+  }
+/>
+`;
+
+exports[`rangeSlider widget usage should \`shouldAutoHideContainer\` when range min === max 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={undefined}
+  cssClasses={
+    Object {
+      "body": "ais-range-slider--body",
+      "footer": "ais-range-slider--footer",
+      "header": "ais-range-slider--header",
+      "root": "ais-range-slider root cx",
+    }
+  }
+  max={65}
+  min={65}
+  pips={true}
+  refine={[Function]}
+  shouldAutoHideContainer={true}
+  step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  tooltips={true}
+  values={
+    Array [
+      65,
+      65,
+    ]
+  }
+/>
+`;
+
+exports[`rangeSlider widget usage should render without results 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={undefined}
+  cssClasses={
+    Object {
+      "body": "ais-range-slider--body",
+      "footer": "ais-range-slider--footer",
+      "header": "ais-range-slider--header",
+      "root": "ais-range-slider root cx",
+    }
+  }
+  max={0}
+  min={0}
+  pips={true}
+  refine={[Function]}
+  shouldAutoHideContainer={true}
+  step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  tooltips={true}
+  values={
+    Array [
+      0,
+      0,
+    ]
+  }
+/>
+`;
+
+exports[`rangeSlider widget usage with results calls twice ReactDOM.render 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={undefined}
+  cssClasses={
+    Object {
+      "body": "ais-range-slider--body",
+      "footer": "ais-range-slider--footer",
+      "header": "ais-range-slider--header",
+      "root": "ais-range-slider",
+    }
+  }
+  max={5000}
+  min={1}
+  pips={true}
+  refine={[Function]}
+  shouldAutoHideContainer={false}
+  step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  tooltips={true}
+  values={
+    Array [
+      1,
+      5000,
+    ]
+  }
+/>
+`;
+
+exports[`rangeSlider widget usage with results calls twice ReactDOM.render 2`] = `
+<HeaderFooter-AutoHide
+  collapsible={undefined}
+  cssClasses={
+    Object {
+      "body": "ais-range-slider--body",
+      "footer": "ais-range-slider--footer",
+      "header": "ais-range-slider--header",
+      "root": "ais-range-slider",
+    }
+  }
+  max={5000}
+  min={1}
+  pips={true}
+  refine={[Function]}
+  shouldAutoHideContainer={false}
+  step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  tooltips={true}
+  values={
+    Array [
+      1,
+      5000,
+    ]
+  }
+/>
+`;

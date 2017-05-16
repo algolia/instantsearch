@@ -5526,10 +5526,6 @@ normalize-range@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/normalize-range/-/normalize-range-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
 
-nouislider-algolia-fork@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/nouislider-algolia-fork/-/nouislider-algolia-fork-10.0.0.tgz#66d0a941aaa0ca64e58379e67bd320956f3cf3ce"
-
 npm-install-package@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/npm-install-package/-/npm-install-package-1.1.0.tgz#f9fc1f84c2d31f6105631e0b5f5f280d1151d97e"
@@ -6220,12 +6216,6 @@ react-element-to-jsx-string@^3.0.0:
     stringify-object "^2.3.1"
     traverse "^0.6.6"
 
-react-nouislider@^1.14.2:
-  version "1.14.2"
-  resolved "https://registry.yarnpkg.com/react-nouislider/-/react-nouislider-1.14.2.tgz#44be62ba53fa10bd3b7ceaaabd685dd98ff46e5e"
-  dependencies:
-    nouislider-algolia-fork "^10.0.0"
-
 react-test-renderer@^15.4.2:
   version "15.4.2"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-15.4.2.tgz#27e1dff5d26d0e830f99614c487622bc831416f3"
@@ -6595,6 +6585,10 @@ revalidator@0.1.x:
 rgb2hex@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/rgb2hex/-/rgb2hex-0.1.0.tgz#ccd55f860ae0c5c4ea37504b958e442d8d12325b"
+
+rheostat@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/rheostat/-/rheostat-2.1.0.tgz#0dfa569a3cd9cdd5639ad7bb06b3499b96af68ca"
 
 right-align@^0.1.1:
   version "0.1.3"
