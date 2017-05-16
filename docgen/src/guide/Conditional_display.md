@@ -1,5 +1,5 @@
 ---
-title: Conditional Display
+title: Conditional display
 mainTitle: Guide
 layout: main.pug
 category: guide
