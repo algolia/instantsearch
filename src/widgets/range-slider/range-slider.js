@@ -155,7 +155,7 @@ export default function rangeSlider({
   attributeName,
   min,
   max,
-  templates,
+  templates = defaultTemplates,
   cssClasses: userCssClasses = {},
   step = 1,
   pips = true,
