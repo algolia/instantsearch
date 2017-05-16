@@ -6,6 +6,9 @@ var search = instantsearch({ // eslint-disable-line
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
   urlSync: true,
+  searchParameters: {
+    hitsPerPage: 6,
+  },
 });
 
 search.addWidget(
@@ -39,7 +42,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.hitsPerPageSelector({
     container: '#hits-per-page-selector',
-    options: [
+    items: [
       {value: 6, label: '6 per page'},
       {value: 12, label: '12 per page'},
       {value: 24, label: '24 per page'},
@@ -57,7 +60,6 @@ search.addWidget(
       empty: document.querySelector('#empty').innerHTML,
       item: document.querySelector('#item').innerHTML,
     },
-    hitsPerPage: 6,
   })
 );
 
@@ -97,16 +99,16 @@ search.addWidget(
       {
         name: 'price',
         label: 'Price',
-        transformData: function(data) { data.name = data.name + ''; return data; },
+        transformData: function(data) { data.label = data.label + ''; return data; },
       },
       {
         name: 'price_range',
         label: 'Price range',
-        transformData: function(data) { data.name = data.name.replace(/(\d+)/g, '$$$1'); return data; },
+        transformData: function(data) { data.label = data.label.replace(/(\d+)/g, '$$$1'); return data; },
       },
       {
         name: 'free_shipping',
-        transformData: function(data) { if (data.name === 'true') data.name = 'Free shipping'; return data; },
+        transformData: function(data) { if (data.label === 'true') data.label = 'Free shipping'; return data; },
       },
     ],
   })
@@ -171,7 +173,7 @@ search.addWidget(
       header: 'Price ranges',
     },
     transformData: function(data) {
-      data.name = data.name.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
+      data.label = data.label.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
       return data;
     },
   })

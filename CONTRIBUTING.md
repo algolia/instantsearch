@@ -42,6 +42,39 @@ Watch mode:
 yarn test:watch # unit tests watch mode, no lint
 ```
 
+## Functional tests
+
+We have one functional test ensuring that when we instantiate a full app with
+a `searchBox`, we are able to use it and get different hits than initially.
+
+Functional tests are built with [webdriver.io](http://webdriver.io/), a wrapper
+around [WebDriver API](https://www.w3.org/TR/2013/WD-webdriver-20130117/) (Selenium).
+On travis they will run on different browsers using [Sauce Labs](https://saucelabs.com/).
+
+### Local setup
+
+Locally it will use a docker image bundling Selenium and browsers.
+
+```sh
+docker pull elgalu/selenium
+# this helps in loading the host website from the container,
+# comes from https://docs.docker.com/docker-for-mac/networking/#known-limitations-use-cases-and-workarounds
+sudo ifconfig lo0 alias 10.200.10.1/24
+docker run -d --name=grid -p 4444:24444 -p 6080:26080 -p 5900:25900 \
+    -e TZ="US/Pacific" -e NOVNC=true -v /dev/shm:/dev/shm --privileged elgalu/selenium
+```
+
+### Local run
+
+```sh
+npm run test:functional
+# npm run test:functional:dev will reload tests when file changes
+# npm run test:functional:dev:debug will load the test website locally for you to open it
+# if something goes wrong: docker restart grid && killall node
+```
+
+Locally you can inspect (view) the browser doing the test here: http://localhost:6080/.
+
 ## Lint
 
 ```sh
