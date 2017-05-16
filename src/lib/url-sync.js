@@ -6,7 +6,6 @@ import assign from 'lodash/assign';
 
 const AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 const majorVersionNumber = version.split('.')[0];
-let firstRender = true;
 
 function timerMaker(t0) {
   let t = t0;
@@ -102,6 +101,7 @@ class URLSync {
     this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
+    this.firstRender = true;
 
     this.searchParametersFromUrl = AlgoliaSearchHelper
       .getConfigurationFromQueryString(
@@ -123,8 +123,8 @@ class URLSync {
   }
 
   render({helper}) {
-    if (firstRender) {
-      firstRender = false;
+    if (this.firstRender) {
+      this.firstRender = false;
       this.onHistoryChange(this.onPopState.bind(this, helper));
       helper.on('search', state => this.renderURLFromState(state));
     }
