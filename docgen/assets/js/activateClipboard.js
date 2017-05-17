@@ -28,7 +28,7 @@ export default function activateClipboard(codeSamples) {
     heading.className = 'heading';
     heading.innerHTML = 'Code';
     heading.appendChild(copyToClipboard);
-    codeSample.insertBefore(heading, codeSample.firstChild);
+    codeSample.parentNode.insertBefore(heading, codeSample);
 
     copyToClipboard.addEventListener('mouseleave', setup, true);
     clipboard.on('success', () => {
