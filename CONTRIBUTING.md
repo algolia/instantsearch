@@ -13,6 +13,14 @@
 
 [![InstantSearch.js logo][logo]][website]
 
+A note about the branches used in this project:
+ - `develop` is for the major version in active development (currently v2)
+ - `maintenance` is for the previous major version (currently v1)
+ - `master` is for the main current stable version
+
+You should do the dev and PR according to the target version. No new features
+will be done on the maintenance version.
+
 ## Development
 
 ```sh
