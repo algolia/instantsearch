@@ -228,9 +228,7 @@ const customMenuRenderFn = function(renderParams, isFirstRendering) {
   const items = renderParams.items;
   const optionsHTML = items.map(item => {
     return (
-      '<option value="' + item.value + '"' + (item.isRefined ? ' selected' : '') + '>' +
-      item.label + '(' + item.count ')' +
-      '</option>'
+      `<option value="${item.value}"${item.isRefined ? ' selected' : ''}>${item.label}(${item.count})</option>`
     );
   });
   $(container).find('select').html(optionsHTML);
