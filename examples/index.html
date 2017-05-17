@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Examples - instantsearch.js</title>
+    <meta name="description" content="instantsearch.js is a library of widgets designed to help you build high performance instant search experiences with Algolia">
+
+    <!-- /twitter -->
+    <meta content="summary_large_image" name="twitter:card">
+    <meta content="@algolia" name="twitter:site">
+    <meta content="instantsearch.js" name="twitter:title">
+    <meta content="Check out instantsearch.js—the new JS library of UI widgets to help you build the best instant-search experience with Algolia" name="twitter:description">
+    <meta content="/instantsearch.js/assets/instantsearch-cover-6630408f1e9eacd08a4209f803be3d43.png" name="twitter:image:src">
+    <meta content="www.algolia.com" name="twitter:domain">
+    <!-- /facebook -->
+    <meta content="https://www.algolia.com/" property="og:url">
+    <meta content="Algolia" property="og:site_name">
+    <meta content="instantsearch.js" property="og:title">
+    <meta content="Check out instantsearch.js—the new JS library of UI widgets to help you build the best instant-search experience with Algolia" property="og:description">
+    <meta content="/instantsearch.js/assets/instantsearch-cover-6630408f1e9eacd08a4209f803be3d43.png" property="og:image">
+    <meta content="1200" property="og:image:width">
+    <meta content="500" property="og:image:height">
+
+    <link rel="stylesheet" href="/instantsearch.js/assets/main-50855c0f0617137d16091376e8c6da6f.css">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
+    
+
+    <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Raleway:300,800" />
+    <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" />
+
+    <link rel="icon" href="/instantsearch.js/assets/favicon-2deaed58ea4f43deff471c1402578ba5.png">
+  </head>
+
+  <body class="url_examples_ layout_default">
+    <header class='ac-nav'>
+  <div class='ac-nav-container'>
+    <div class='ac-nav-brand'>
+      <a class='ac-logo' href='https://community.algolia.com/' title='Algolia Community'>
+        <img alt='Algolia Community' class='ac-logo__lg' src='https://res.cloudinary.com/hilnmyskv/image/upload/v1484217596/algolia-community-logo-darkbg.svg' width='150'>
+        <img alt='Algolia Community' class='ac-logo__sm' src='/instantsearch.js/assets/logo-community-bc6dc17c2b88d625fc4cde07eb373c9c.svg'>
+      </a>
+      <span class='ac-nav-brand-breadcrumb'></span>
+      <a class='ac-nav-brand-title' href="/instantsearch.js/" title='Home'>instantsearch.js</a>
+    </div>
+
+    <div class='ac-nav-menu' id="instant-search-nav">
+      <div class='ac-nav-searchbox'>
+        <form class='searchbox form search-form' id='docsearch-form' novalidate='novalidate' onsubmit='return false;' style='visibility:hidden;height:0'>
+          <div class='searchbox__wrapper' role='search'>
+            
+            <input autocomplete='off' class='searchbox__input' id='doc-search' name='search' placeholder='Search in the doc' required='required' type='search'>
+            
+            <button class='searchbox__submit' title='Submit your search query.' type='submit'>
+              <svg aria-label='Search' role='img'>
+                <use xlink:href='#sbx-icon-search-13' xmlns:xlink='http://www.w3.org/1999/xlink'></use>
+              </svg>
+            </button>
+            <button class='searchbox__reset hide' title='Clear the search query.' type='reset'>
+              <svg aria-label='Reset' role='img'>
+                <use xlink:href='#sbx-icon-clear-3' xmlns:xlink='http://www.w3.org/1999/xlink'></use>
+              </svg>
+            </button>
+          </div>
+        </form>
+        <div class='svg-icons' style='height: 0; width: 0; position: absolute; visibility: hidden'>
+          <svg xmlns='http://www.w3.org/2000/svg'>
+            <symbol id="sbx-icon-clear-3" viewBox="0 0 40 40"><path d="M16.228 20L1.886 5.657 0 3.772 3.772 0l1.885 1.886L20 16.228 34.343 1.886 36.228 0 40 3.772l-1.886 1.885L23.772 20l14.342 14.343L40 36.228 36.228 40l-1.885-1.886L20 23.772 5.657 38.114 3.772 40 0 36.228l1.886-1.885L16.228 20z" fill-rule="evenodd"/></symbol>
+            <symbol id="sbx-icon-search-13" viewBox="0 0 12 12"><path d="M12 11.077c0-.245-.1-.483-.267-.65L9.26 7.955c.584-.843.894-1.853.894-2.877C10.154 2.272 7.882 0 5.077 0S0 2.272 0 5.077s2.272 5.077 5.077 5.077c1.024 0 2.034-.31 2.877-.894l2.474 2.466c.166.173.404.274.65.274.504 0 .922-.418.922-.923zm-3.692-6c0 1.78-1.45 3.23-3.23 3.23-1.782 0-3.232-1.45-3.232-3.23s1.45-3.23 3.23-3.23c1.782 0 3.232 1.45 3.232 3.23z" fill-rule="evenodd" opacity="0.85"/></symbol>
+          </svg>
+        </div>
+      </div>
+      <ul class='ac-nav-menu-list'>
+      
+      
+        <li class='ac-nav-menu-list-item '>
+          <a data-path='/instantsearch.js/documentation/' data-current=""  href="/instantsearch.js/documentation/" title="Documentation">Documentation</a>
+        </li>
+      
+        <li class='ac-nav-menu-list-item active'>
+          <a data-path='/instantsearch.js/examples/' data-current="true"  href="/instantsearch.js/examples/" title="Examples">Examples</a>
+        </li>
+      
+        <li class='ac-nav-menu-list-item '>
+          <a data-path='/instantsearch.js/about/' data-current=""  href="/instantsearch.js/about/" title="About">About</a>
+        </li>
+      
+        <li class='ac-nav-menu-list-item '>
+          <a data-path='/instantsearch.js/../react-instantsearch/' data-current=""  href="/instantsearch.js/../react-instantsearch/" title="React InstantSearch">React InstantSearch</a>
+        </li>
+      
+        <li class='ac-nav-menu-list-icon'>
+          <a class='ac-icon' href='https://github.com/algolia/instantsearch.js/tree/develop' title='GitHub repository'>
+            <span class='ac-icon ac-icon-github'></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+
+    <div class='hero container'>
+  <h1 class='text-center'>Check out our examples!</h1>
+  <p class='text-center lead'><strong>instantsearch.js</strong> lets you build valuable search experiences.</p>
+</div>
+<div class='spacer40'></div>
+<div class='container'>
+  <div class='m800 m-l-r-auto'>
+    <div class='spacer40'></div>
+    <div class='demo-item clearfix'>
+      <a class='pull-left link-thumbnail' href='/instantsearch.js/examples/media/'>
+        <img class='m-b img-thumbnail m-r' src='/instantsearch.js/examples/media/capture.png' width='270'>
+      </a>
+      <a href='/instantsearch.js/examples/media/'>
+        <h3>Media</h3>
+      </a>
+      <p>Browsing video, music and other media becomes much more intuitive with instant search.</p>
+      <div class='built-with m-b'>
+        <img src="/instantsearch.js/assets/icon-widget-searchbox-20a8ec38090651d1954c2273a4d15cc5.svg" title='searchBox' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-results-496ff3e2f2d4b413a48a049422a76494.svg" title='hits' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-stats-44e5704b7adaece84ff3014830c700e6.svg" title='stats' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-pagination-2547f3022a737e6a384b71e415d8fc95.svg" title='pagination' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-refinement-436b3326b879aeab2b30c96b64b47f27.svg" title='refinementList' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-slider-dafa1a66e2b9796983a3a6f896d1f869.svg" title='rangeSlider' width=30>
+      </div>
+      <a href='https://github.com/algolia/instantsearch.js/tree/master/docs/examples/media'>View code <i class="fa fa-github"></i></a>
+      <span>or</span>
+      <a href='/instantsearch.js/examples/media.zip'>download</a>
+    </div>
+    <div class='spacer40'></div>
+    <div class='demo-item clearfix'>
+      <a class='pull-left link-thumbnail' href='/instantsearch.js/examples/e-commerce/'>
+        <img class='m-b img-thumbnail m-r' src='/instantsearch.js/examples/e-commerce/capture.png' width='270'>
+      </a>
+      <a href='/instantsearch.js/examples/e-commerce/'>
+        <h3>E-commerce</h3>
+      </a>
+      <p>An instant-search experience helps shoppers more easily find and buy what they want.</p>
+      <div class='built-with m-b'>
+        <img src="/instantsearch.js/assets/icon-widget-searchbox-20a8ec38090651d1954c2273a4d15cc5.svg" title='searchBox' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-results-496ff3e2f2d4b413a48a049422a76494.svg" title='hits' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-stats-44e5704b7adaece84ff3014830c700e6.svg" title='stats' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-clearall-4a8e9686f31454213a54b8211c3728fe.svg" title='clearAll' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-index-f899d20a314e7e88c06399b8ef7a84d0.svg" title='sortBySelector' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-pagination-2547f3022a737e6a384b71e415d8fc95.svg" title='pagination' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-hierarchical-e3e4a1ee3c3cc5c7a3c6469831a660b0.svg" title='hierarchicalMenu' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-refinement-436b3326b879aeab2b30c96b64b47f27.svg" title='refinementList' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-pricerange-90141e7a7ca84340cc2d398c2157e5ea.svg" title='priceRanges' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-star-rating-ce05cd7147d0f288f60c3a8edceeb84d.svg" title='starRating' width=30>
+      </div>
+      <a href='https://github.com/algolia/instantsearch.js/tree/master/docs/examples/e-commerce'>View code <i class="fa fa-github"></i></a>
+      <span>or</span>
+      <a href='/instantsearch.js/examples/e-commerce.zip'>download</a>
+    </div>
+    <div class='spacer40'></div>
+    <div class='demo-item clearfix'>
+      <a class='pull-left link-thumbnail' href='/instantsearch.js/examples/tourism/'>
+        <img class='m-b img-thumbnail m-r' src='/instantsearch.js/examples/tourism/capture.png' width='270'>
+      </a>
+      <a href='/instantsearch.js/examples/tourism/'>
+        <h3>Tourism</h3>
+      </a>
+      <p>Travel the world at the speed of search with instant results.</p>
+      <div class='built-with m-b'>
+        <img src="/instantsearch.js/assets/icon-widget-searchbox-20a8ec38090651d1954c2273a4d15cc5.svg" title='searchBox' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-stats-44e5704b7adaece84ff3014830c700e6.svg" title='stats' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-pagination-2547f3022a737e6a384b71e415d8fc95.svg" title='pagination' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-results-496ff3e2f2d4b413a48a049422a76494.svg" title='hits' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-slider-dafa1a66e2b9796983a3a6f896d1f869.svg" title='rangeSlider' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-refinement-436b3326b879aeab2b30c96b64b47f27.svg" title='refinementList' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-numerical-de628be67144641f714abdeea66170ac.svg" title='numericRefinementList' width=30>
+        <img src="/instantsearch.js/assets/icon-widget-custom-cf176ec940459865b8a9982654d4f363.svg" title='custom' width=30>
+      </div>
+      <a href='https://github.com/algolia/instantsearch.js/tree/master/docs/examples/tourism'>View code <i class="fa fa-github"></i></a>
+      <span>or</span>
+      <a href='/instantsearch.js/examples/tourism.zip'>download</a>
+    </div>
+  </div>
+</div>
+<div class='spacer80'></div>
+
+
+    
+        <section class='ac-footer'>
+  <div class='ac-footer-container'>
+    <p class='ac-footer-links'>
+      Code licensed under
+      <a class='ac-footer-link-item' href='https://github.com/algolia/instantsearch.js/blob/master/LICENSE'>MIT</a>
+      <br>
+      <a class='ac-footer-link-item' href='https://github.com/algolia/instantsearch.js'>Github</a>
+      <a class='ac-footer-link-item' href='https://github.com/algolia/instantsearch.js/issues'>Issues</a>
+      <a class='ac-footer-link-item' href='https://www.algolia.com/policies/privacy'>Privacy Policy</a>
+    </p>
+  </div>
+  <div class='ac-footer-container ac-footer-brand'>
+    <p>This project is part of</p>
+    <img class='ac-footer-brand-icon' src='/instantsearch.js/assets/community-badge-df655d29433e6b407e9d7b85127e655b.svg'>
+    <figure>
+      <img class='ac-footer-brand-logo' src='https://res.cloudinary.com/hilnmyskv/image/upload/v1484219849/algolia-community-logo-words-darkbg.svg'>
+      <figcaption>Algolia Community</figcaption>
+    </figure>
+    <a class='ac-footer-btn ac-footer-btn-cta' href='https://community.algolia.com/'>See More</a>
+    <span class='ac-icon ac-icon-love-dark'></span>
+  </div>
+  <p class='ac-footer-version'>Latest version: v1.11.9</p>
+  <div class='ac-footer-actions'>
+    <div class='footer-container'>
+      <p>Build unique search experiences with Algolia</p>
+      <a class='ac-footer-btn ac-footer-btn-ghost-grey' href='https://www.algolia.com/why?utm_medium=social-owned&amp;utm_source=instanstsearchjs%20website&amp;utm_campaign=homepage&amp;utm_term=why'>
+        See Why
+        <span class='ac-icon-triangle'></span>
+      </a>
+      <a class='ac-footer-btn ac-footer-btn-ghost-pink' href='https://www.algolia.com/users/sign_up?utm_medium=social-owned&amp;utm_source=instanstsearchjs%20website&amp;utm_campaign=homepage&amp;utm_term=get_started'>Get Started For Free</a>
+    </div>
+  </div>
+</section>
+
+    
+    <script id="suggestion-item-template" type="text/template">
+
+{{#isCategoryHeader}}<div class="suggestion-category">{{{category}}}</div>{{/isCategoryHeader}}
+<div class="suggestion {{#isCategoryHeader}}suggestion-is-category-header{{/isCategoryHeader}}">
+  <div class="suggestion-subcategory-main">{{#isSubcategoryHeader}}{{{subcategory}}}{{/isSubcategoryHeader}}</div>
+  <div class="suggestion-content">
+    <div class="suggestion-subcategory-secondary">{{{subcategory}}}</div>
+    <div class="suggestion-title">{{{title}}}</div>
+    <div class="suggestion-text">{{{text}}}</div>
+  </div>
+</div>
+
+</script>
+<script id="suggestion-footer-template" type="text/template">
+
+<a href="https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage" class="suggestion-footer text-hide">Powered by Algolia</a>
+
+</script>
+
+    <script src="https://cdn.jsdelivr.net/g/jquery@1.12.1,bootstrap@3.3.6,hogan.js@3.0.2,autocomplete.js@0.16.2(autocomplete.jquery.min.js),algoliasearch@3.13.0"></script>
+    <script src="/instantsearch.js/assets/search-4a389e1ea48af41e51ad1b9ce3946ed3.js"></script>
+    <script src="/instantsearch.js/assets/responsiveNavigation-b7f560fa16698ae9d7732348bea57617.js"></script>
+    <script src="//use.fonticons.com/dff9b562.js"></script>
+    
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-N8JP8G"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-N8JP8G');</script>
+
+
+    
+    
+  </body>
+</html>
