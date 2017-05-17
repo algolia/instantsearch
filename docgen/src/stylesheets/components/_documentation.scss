@@ -127,16 +127,36 @@
       }
     }
 
+    .heading {
+      background: #eee;
+      border: 1px solid #d8d8d8;
+      border-bottom: none;
+      border-radius: 2px 2px 0 0;
+      margin: -8px 0 0;
+      padding: 4px 8px;
+      font-family: $font-stack;
+
+      button {
+        float: right;
+        cursor: copy;
+        background: #ddd;
+        border: none;
+        padding: 0px 8px;
+        font-size: 90%;
+      }
+    }
+
     pre {
-      margin: .5em 0px .5em 0px;
+      margin: 0 0 .5em 0;
       line-height: 23px;
       white-space: pre;
       overflow-x: auto;
       word-break: inherit;
       word-wrap: inherit;
       border: 1px solid #d8d8d8;
-      border-radius: 2px;
-      padding: 0.5em 0;
+      border-top: none;
+      border-radius: 0 0 2px 2px;
+      padding: .5em 0;
       position: relative;
       z-index: 1; // avoid scroll bar being unusable because <code></code><h2></h2> used and headers have :content that will be over
 
@@ -144,22 +164,6 @@
         display: block;
         width: calc(100% - 4em);
         margin: auto;
-      }
-
-      .heading {
-        background: #eee;
-        margin: -8px 0 0;
-        padding: 4px 8px;
-        font-family: $font-stack;
-
-        button {
-          float: right;
-          cursor: copy;
-          background: #ddd;
-          border: none;
-          padding: 0px 8px;
-          font-size: 90%;
-        }
       }
     }
 
