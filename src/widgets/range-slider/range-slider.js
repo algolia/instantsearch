@@ -21,19 +21,18 @@ const bem = bemHelper('ais-range-slider');
 const renderer = ({
   containerNode,
   cssClasses,
-  tooltips,
-  renderState,
-  autoHideContainer,
   pips,
   step,
+  tooltips,
+  autoHideContainer,
   collapsible,
+  renderState,
   templates,
 }) => ({
   refine,
-  range,
+  range: {min, max},
   start,
   instantSearchInstance,
-  format,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -44,25 +43,24 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && range.min === range.max;
+  const shouldAutoHideContainer = autoHideContainer && min === max;
 
-  if (tooltips.format !== undefined) {
-    tooltips = [{to: tooltips.format}, {to: tooltips.format}];
-  }
+  const minValue = start[0] === -Infinity ? min : start[0];
+  const maxValue = start[1] === Infinity ? max : start[1];
 
   ReactDOM.render(
     <Slider
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      onChange={refine}
-      pips={pips}
-      range={range}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      start={start}
-      step={step}
-      templateProps={renderState.templateProps}
-      tooltips={tooltips}
-      format={format}
+      cssClasses={ cssClasses }
+      refine={ refine }
+      min={ min }
+      max={ max }
+      values={ [minValue, maxValue] }
+      tooltips={ tooltips }
+      step={ step }
+      pips={ pips }
+      shouldAutoHideContainer={ shouldAutoHideContainer }
+      collapsible={ collapsible }
+      templateProps={ renderState.templateProps }
     />,
     containerNode
   );
@@ -72,15 +70,16 @@ const usage = `Usage:
 rangeSlider({
   container,
   attributeName,
+  [ min ],
+  [ max ],
+  [ pips = true ],
+  [ step = 1 ],
+  [ precision = 2 ],
   [ tooltips=true ],
   [ templates.{header, footer} ],
   [ cssClasses.{root, header, body, footer} ],
-  [ step=1 ],
-  [ pips=true ],
   [ autoHideContainer=true ],
   [ collapsible=false ],
-  [ min ],
-  [ max ]
 });
 `;
 
@@ -154,23 +153,21 @@ rangeSlider({
 export default function rangeSlider({
   container,
   attributeName,
-  tooltips = true,
+  min,
+  max,
   templates = defaultTemplates,
-  collapsible = false,
   cssClasses: userCssClasses = {},
   step = 1,
   pips = true,
-  autoHideContainer = true,
-  min,
-  max,
   precision = 2,
+  tooltips = true,
+  autoHideContainer = true,
 } = {}) {
   if (!container) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
-
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
@@ -180,14 +177,13 @@ export default function rangeSlider({
 
   const specializedRenderer = renderer({
     containerNode,
-    cssClasses,
-    tooltips,
-    templates,
-    renderState: {},
-    collapsible,
     step,
     pips,
+    tooltips,
+    renderState: {},
+    templates,
     autoHideContainer,
+    cssClasses,
   });
 
   try {
