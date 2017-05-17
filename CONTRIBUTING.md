@@ -59,7 +59,6 @@ Locally it will use a docker image bundling Selenium and browsers.
 docker pull elgalu/selenium
 # this helps in loading the host website from the container,
 # comes from https://docs.docker.com/docker-for-mac/networking/#known-limitations-use-cases-and-workarounds
-sudo ifconfig lo0 alias 10.200.10.1/24
 docker run -d --name=grid -p 4444:24444 -p 6080:26080 -p 5900:25900 \
     -e TZ="US/Pacific" -e NOVNC=true -v /dev/shm:/dev/shm --privileged elgalu/selenium
 ```
@@ -67,6 +66,9 @@ docker run -d --name=grid -p 4444:24444 -p 6080:26080 -p 5900:25900 \
 ### Local run
 
 ```sh
+# We want to access the host machine from the container (to reach the test app web server).
+# Needed once per session, this is not persistent:
+sudo ifconfig lo0 alias 10.200.10.1/24
 npm run test:functional
 # npm run test:functional:dev will reload tests when file changes
 # npm run test:functional:dev:debug will load the test website locally for you to open it

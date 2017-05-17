@@ -4,7 +4,7 @@ const INDEX_PAGE = process.env.INDEX_PAGE || 'index';
 
 let conf = {
   specs: [
-    'test.js',
+    './functional-tests/test.js',
   ],
   reporters: ['dot'],
   framework: 'mocha',
@@ -13,7 +13,7 @@ let conf = {
     timeout: 50000,
     compilers: ['js:babel-core/register'],
   },
-  baseUrl: 'http://10.200.10.1:9000',
+  baseUrl: `http://${process.env.CI === 'true' ? 'localhost' : '10.200.10.1'}:9000`,
   onPrepare() {
     return testServer.start();
   },
