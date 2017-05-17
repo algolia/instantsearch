@@ -19,8 +19,8 @@ InstantSearch.js can be used either with a direct link in your webpage or with a
 This method uses built bersion of **InstantSearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css">
-<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.2/dist/instantsearch.min.css">
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.2/dist/instantsearch.min.js"></script>
 ```
 
 You will then have access to the `instantsearch` function in the global scope (window).
@@ -40,7 +40,7 @@ yarn add instantsearch.js
 Then in your module, you can load the main package:
 
 ```javascript
-const instantsearch = require('instantsearch.js');
+const instantsearch = require('instantsearch.js@beta');
 ```
 
 or if you are using ES modules:
@@ -49,4 +49,4 @@ or if you are using ES modules:
 import instantsearch from 'instantsearch.js';
 ```
 
-Afterwards, you need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css) into your page.
+Afterwards, you need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.2/dist/instantsearch.min.css) into your page.
