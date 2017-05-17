@@ -33,11 +33,16 @@ nav.cm-navigation
     ul.cm-menu__list
       li.cm-menu__list__item(class=h.maybeActive(navPath, "Getting_started.html"))
         a(href="Getting_started.html", data-link = 'true') Getting started
-      li.cm-menu__list__item(class=h.maybeActive(navPath, "guide/"))
-        a(href="guide/", data-link = 'true') Guide
-      li.cm-menu__list__item(class=h.maybeActive(navPath, ["widgets/", ["connectors/"]]))
-        a(aria-controls='dropdown-1', aria-expanded='false', data-toggle-dropdown='dropdown-1', class="dropdown-toggler") API <span class="glyph">&#x25BC;</span>
+      li.cm-menu__list__item(class=h.maybeActive(navPath, "learn/"))
+        a(aria-controls='dropdown-1', aria-expanded='false', data-toggle-dropdown='dropdown-1', class="dropdown-toggler") Learn <span class="glyph">&#x25BC;</span>
         ul#dropdown-1.simple-dropdown(role='tree', tabindex='-1')
+          li
+            a(href="guide/", role='treeitem', data-link = 'true') Guides
+          li
+            a(href="videos/", role='treeitem', data-link = 'true') Videos
+      li.cm-menu__list__item(class=h.maybeActive(navPath, ["widgets/", ["connectors/"]]))
+        a(aria-controls='dropdown-2', aria-expanded='false', data-toggle-dropdown='dropdown-2', class="dropdown-toggler") API <span class="glyph">&#x25BC;</span>
+        ul#dropdown-2.simple-dropdown(role='tree', tabindex='-1')
           li
             a(href="widgets/InstantSearch.html", role='treeitem', data-link = 'true') #{'<InstantSearch>'}
           li
@@ -47,12 +52,13 @@ nav.cm-navigation
           li
             a(href="connectors/", role='treeitem', data-link = 'true') Connectors
       li.cm-menu__list__item(class=h.maybeActive(navPath, "examples/"))
-        a(aria-controls='dropdown-2', aria-expanded='false', data-toggle-dropdown='dropdown-2', class="dropdown-toggler") Examples <span class="glyph">&#x25BC;</span>
-        ul#dropdown-2.simple-dropdown(role='tree', tabindex='-1')
+        a(aria-controls='dropdown-3', aria-expanded='false', data-toggle-dropdown='dropdown-3', class="dropdown-toggler") Examples <span class="glyph">&#x25BC;</span>
+        ul#dropdown-3.simple-dropdown(role='tree', tabindex='-1')
           li
             a(href="examples/Demos.html", role='treeitem', data-link = 'true') Demos
           li
             a(href="examples/Recipes.html", role='treeitem', data-link = 'true') Recipes
+      
 
       li.cm-menu__list__item
         a(href='https://github.com/algolia/react-instantsearch/', data-link = 'true')

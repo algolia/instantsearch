@@ -1,6 +1,6 @@
 ---
 title: <InstantSearch>
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 90

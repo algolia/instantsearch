@@ -1,6 +1,6 @@
 ---
 title: Widgets
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 85

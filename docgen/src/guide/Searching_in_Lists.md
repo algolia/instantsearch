@@ -1,6 +1,6 @@
 ---
 title: Searching in *Lists
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 68

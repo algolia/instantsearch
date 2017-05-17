@@ -1,6 +1,6 @@
 ---
 title: React native
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 35

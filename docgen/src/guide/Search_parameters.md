@@ -1,6 +1,6 @@
 ---
 title: Search parameters
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 57
