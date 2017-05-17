@@ -19,6 +19,8 @@ In this tutorial, you'll learn how to:
  - add widgets to filter the results
  - connect your own component to the search
 
+**If you prefer to get started by watching a video, [we created one for you](/videos/Getting_started.html).**
+
 ## Before we start
 
 React InstantSearch is meant to be used with Algolia.

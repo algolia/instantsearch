@@ -1,6 +1,6 @@
 ---
 title: Sorting and filtering items
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 78

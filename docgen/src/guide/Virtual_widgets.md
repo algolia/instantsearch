@@ -1,6 +1,6 @@
 ---
 title: Virtual widgets
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 65

@@ -1,6 +1,6 @@
 ---
 title: Search state
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 55

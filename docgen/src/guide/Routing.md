@@ -1,6 +1,6 @@
 ---
 title: Routing and URLs
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 60

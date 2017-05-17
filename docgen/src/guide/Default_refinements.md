@@ -1,6 +1,6 @@
 ---
 title: Default refinements
-mainTitle: Guide
+mainTitle: Guides
 layout: main.pug
 category: guide
 navWeight: 70
