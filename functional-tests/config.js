@@ -1,10 +1,10 @@
 import testServer from './testServer.js';
 import {clearAll, searchBox} from './utils.js';
-const INDEX_PAGE = process.env.INDEX_PAGE || 'index.html';
+const INDEX_PAGE = process.env.INDEX_PAGE || 'index';
 
 let conf = {
   specs: [
-    'functional-tests/specs/**',
+    'test.js',
   ],
   reporters: ['dot'],
   framework: 'mocha',
@@ -13,12 +13,12 @@ let conf = {
     timeout: 50000,
     compilers: ['js:babel-core/register'],
   },
-  baseUrl: 'http://localhost:9000',
+  baseUrl: 'http://10.200.10.1:9000',
   onPrepare() {
     return testServer.start();
   },
   before() {
-    browser.timeoutsImplicitWait(500);
+    browser.timeouts('implicit', 500);
     browser.url(`/${INDEX_PAGE}.html`);
     browser.waitForText('#hits', 30000);
 
@@ -89,7 +89,7 @@ if (process.env.CI === 'true') {
 } else {
   conf = {
     host: '127.0.0.1',
-    port: 24444,
+    port: 4444,
     path: '/wd/hub',
     capabilities: [{browserName: 'firefox'}],
     ...conf,
