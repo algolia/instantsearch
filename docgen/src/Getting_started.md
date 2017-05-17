@@ -19,7 +19,7 @@ In this tutorial, you'll learn how to:
  - add widgets to filter the results
  - connect your own component to the search
 
-**If you prefer to get started by watching a video, [we created one for you](/videos/Getting_started.html).**
+**If you prefer to get started by watching a video, [we created one for you](videos/Index.html).**
 
 ## Before we start
 
@@ -98,7 +98,7 @@ We provide an Algolia theme that should be a good start.
 Include it in your webpage with this CDN link or copy paste the raw content:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@3.0.0/style.min.css">
+<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@4.0.0/style.min.css">
 ```
 
 Read the [styling](guide/Styling_widgets.html) guide for more information.
