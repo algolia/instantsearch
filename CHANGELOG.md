@@ -1,3 +1,13 @@
+<a name="1.11.8"></a>
+## [1.11.8](https://github.com/algolia/instantsearch.js/compare/v1.11.7...v1.11.8) (2017-05-16)
+
+
+### Bug Fixes
+
+* **url-sync:** set firstRender to be class attribute ([22dbaeb](https://github.com/algolia/instantsearch.js/commit/22dbaeb))
+
+
+
 <a name="1.11.7"></a>
 ## [1.11.7](https://github.com/algolia/instantsearch.js/compare/v1.11.6...v1.11.7) (2017-04-24)
 

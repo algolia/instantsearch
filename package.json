@@ -29,6 +29,10 @@
     "serve": "./scripts/serve.sh"
   },
   "repository": "algolia/instantsearch.js",
+  "files": [
+    "dist",
+    "dist-es5-modules"
+  ],
   "devDependencies": {
     "autoprefixer": "^6.7.7",
     "babel-cli": "^6.24.0",
