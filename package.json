@@ -31,7 +31,7 @@
   "repository": "algolia/instantsearch.js",
   "files": [
     "dist",
-    "dist-es5-modules"
+    "dist-es5-module"
   ],
   "devDependencies": {
     "autoprefixer": "^6.7.6",
