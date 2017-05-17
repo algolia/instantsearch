@@ -13,21 +13,12 @@ if [ $currentBranch != 'master' ]; then
   exit 1
 fi
 
-VERSION=`cat package.json | json version`
-
 set -e # exit when error
 
 printf "\nPublish website to gh-pages\n"
 
-cd docs
-bundle install
-rm -rf _site
-JEKYLL_ENV=production VERSION=${VERSION} bundle exec jekyll build --config _config.yml,_production.yml
-for example in _site/examples/*; do
-  if [ -d "$example" ]; then
-    name=`basename "$example"`
-    (cd "$example" && zip -r ../$name.zip *)
-  fi
-done
-cd ..
+# Build docs for production
+NODE_ENV=production npm run docs:build:dev
+
+# Publish docs to github pages on `/v2`
 babel-node scripts/docs/gh-pages.js

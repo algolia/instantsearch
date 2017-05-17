@@ -2,16 +2,19 @@
 
 set -ev # exit when error
 
+NODE_ENV=${NODE_ENV:-development}
 VERSION=preview-$(json version < package.json)
 
 # Build instantsearch.js library
 NODE_ENV=production VERSION=${VERSION} yarn run build
 
 # Build the documentation
-rm -rf docs-preview
+rm -rf docs
+mkdir -p docs
+
 (
   cd docgen
-  yarn install && yarn run build
+  yarn install && NODE_ENV=$NODE_ENV yarn run build
 )
 
 
@@ -24,6 +27,6 @@ for example in docs_preview/examples/*; do
 done
 
 # Copy instantsearch.js builds to the website root
-cp dist/* docs-preview
+cp dist/* docs
 
 # echo '/ /instantsearch.js/ 301' > docs/_site_preview/_redirects
