@@ -4,11 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "babel-node start.js",
-    "build": "babel-node build.js",
-    "build-preview": "DOCS_DIST=../docs-preview/instantsearch-android; mkdir -p $DOCS_DIST && NODE_ENV=production yarn build && mv $DOCS_DIST/_redirects $DOCS_DIST/../; unset DOCS_DIST",
-    "deploy-preview": "rm -f preview.zip && ls .. && zip -r -9 preview.zip ../docs-preview/ && netlify deploy && rm preview.zip",
-    "preview": "yarn build-preview && yarn deploy-preview"
+    "dev": "babel-node start.js",
+    "build": "babel-node build.js"
   },
   "dependencies": {
     "algolia-frontend-components": "^0.0.24",
