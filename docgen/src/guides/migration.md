@@ -90,8 +90,9 @@ to change it and use the best solution for each release.
 
 ## RangeSlider widget is using Rheostat as Slider Component
 
-Since we had unclosed issues with the old slider, we switched to a new
-well maintained component [Rheostat](https://github.com/airbnb/rheostat).
+Slider compoments are hard to implement and that's why we rely on an external
+component for that. We are taking the opportunity of this new version
+to switch to the current state of the art of sliders: [Rheostat](https://github.com/airbnb/rheostat).
 
 If you want to customize the style, some CSS classes have changed. You can find
 examples of stylesheets by clicking [here](https://github.com/airbnb/rheostat/tree/master/css).
