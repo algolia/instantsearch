@@ -1,0 +1,299 @@
+<!DOCTYPE html><html><head><base href="/instantsearch.js/v2/"><meta content="IE=edge" http-equiv="X-UA-Compatible"><meta charset="utf-8"><meta content="width=device-width, initial-scale=1" name="viewport"><link rel="icon" href="assets/img/instantsearch-android-favicon.png"><meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"><meta content="instantsearch.js - Widgets and more for Algolia using vanilla JS" name="description"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><!-- / Twitter card--><meta content="summary_large_image" name="twitter:card"><meta content="https://community.algolia.com/instantsearch.js/v2/" name="twitter:site"><meta content="Algolia" name="twitter:creator"><meta content="instantsearch.js" name="twitter:title"><meta content="Widgets and more for Algolia using vanilla JS" name="twitter:description"><meta content="http://i.imgur.com/z89TR3T.png" name="twitter:image"><!-- / OG meta--><meta content="https://community.algolia.com/instantsearch.js/v2/" property="og:url"><meta content="instantsearch.js" property="og:title"><meta content="http://i.imgur.com/z89TR3T.png" property="og:image"><meta content="website" property="og:type"><meta content="Widgets and helpers to build instant search applications on the web" property="og:description"><meta content="instantsearch.js" property="og:site_name"><title>instantsearch.js | connectRangeSlider</title><link rel="stylesheet" href="stylesheets/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css"></head></html><body class="documentation"><div><!-- Start community header -->
+    <nav class='algc-navigation'>
+      <div class='algc-navigation__container'>
+        <div class='algc-mainmenu'>
+          <ul class='algc-navigation__brands'>
+            <li class='algc-navigation__li algc-navigation__li--algolia'>
+              <a href='https://www.algolia.com/'>
+                <svg class="algolia-logo" role="img" aria-labelledby="algc-algolia-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 387 96">
+  <title id="algc-algolia-logo">algolia</title>
+  <defs>
+    <linearGradient x1="-37.7495%" y1="134.9357%" x2="130.2389%" y2="-27.7001%" id="linearGradient-1">
+      <stop stop-color="#00AEFF" offset="0%" />
+      <stop stop-color="#3369E7" offset="100%" />
+    </linearGradient>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <g>
+      <path d="M12.6144 0h70.5712C90.1322 0 95.8 5.637 95.8 12.6106v70.579c0 6.9446-5.6387 12.6106-12.6144 12.6106H12.6144C5.6678 95.8002 0 90.1632 0 83.1896v-70.608C0 5.637 5.6387 0 12.6144 0z" fill="url(#linearGradient-1)" transform="translate(-636.000000, -51.000000) translate(588.000000, -3.000000) translate(48.000000, 54.000000)" />
+      <path d="M49.087 24.3205c-14.9294 0-27.0414 12.1167-27.0414 27.081 0 14.9642 12.112 27.0518 27.0415 27.0518 14.9297 0 27.0417-12.1167 27.0417-27.081 0-14.964-12.083-27.0518-27.0414-27.0518zm0 46.1422c-10.5144 0-19.0538-8.5427-19.0538-19.0612 0-10.5186 8.5394-19.0613 19.054-19.0613 10.5144 0 19.0538 8.5427 19.0538 19.0613 0 10.5185-8.5104 19.0612-19.054 19.0612zm0-34.229v14.209c0 .4067.4358.6972.8134.4938l12.6058-6.5377c.2904-.1453.3775-.494.2323-.7846-2.614-4.591-7.4647-7.729-13.0705-7.9325-.2905 0-.581.2325-.581.552zM31.4274 25.8025l-1.6556-1.6562c-1.6265-1.6272-4.2406-1.6272-5.8672 0l-1.975 1.976c-1.6266 1.627-1.6266 4.242 0 5.8693l1.6265 1.6272c.2616.2615.639.2034.8716-.058.9585-1.3077 2.004-2.557 3.166-3.7194C28.784 28.65 30.004 27.604 31.34 26.645c.2905-.1743.3195-.581.087-.8426zM57.946 21.502v-3.2834c0-2.2955-1.859-4.155-4.1535-4.155h-9.6722c-2.2946 0-4.1535 1.8595-4.1535 4.155v3.3706c0 .3777.3485.6392.726.552 2.7013-.7845 5.5478-1.1913 8.4233-1.1913 2.7597 0 5.49.3775 8.133 1.104.3486.087.697-.1744.697-.552zm181.535 51.8954c0 7.7582-1.975 13.4243-5.9543 17.0273-3.9793 3.603-10.0498 5.4046-18.2406 5.4046-2.9914 0-9.2072-.5812-14.174-1.6853l1.83-9.0076c4.1534.8717 9.643 1.104 12.5185 1.104 4.5602 0 7.8133-.9297 9.7594-2.7893 1.946-1.8593 2.9044-4.62 2.9044-8.281v-1.8595c-1.1328.552-2.614 1.104-4.444 1.6853-1.8298.552-3.9502.8426-6.332.8426-3.1368 0-5.9833-.494-8.5684-1.482-2.585-.9878-4.8216-2.4407-6.6515-4.3584-1.83-1.9178-3.2822-4.3296-4.2988-7.206-1.0166-2.8768-1.5394-8.02-1.5394-11.797 0-3.545.552-7.991 1.6266-10.9546 1.1035-2.9638 2.672-5.5208 4.7923-7.642 2.0913-2.121 4.6473-3.7483 7.639-4.9396 2.9917-1.1914 6.5062-1.9468 10.3112-1.9468 3.6888 0 7.087.4648 10.3983 1.0168 3.311.552 6.1285 1.1333 8.423 1.7725v45.096zm-31.5725-22.4318c0 4.7653 1.0456 10.0537 3.137 12.262 2.0912 2.2083 4.7924 3.3124 8.1036 3.3124 1.801 0 3.5148-.2615 5.112-.7554 1.598-.494 2.876-1.075 3.8925-1.7725V35.798c-.8133-.1744-4.2117-.8717-7.4938-.959-4.1245-.116-7.2614 1.5692-9.469 4.2714-2.1783 2.7023-3.282 7.4386-3.282 11.8552zm85.4812 0c0 3.8355-.552 6.7412-1.6846 9.9084-1.1325 3.1672-2.73 5.8694-4.7923 8.1068-2.0622 2.2374-4.531 3.9808-7.4357 5.2012-2.9046 1.2204-7.3776 1.9177-9.614 1.9177-2.2367-.029-6.6806-.6683-9.556-1.9177-2.8757-1.2495-5.3445-2.9638-7.4068-5.2012-2.062-2.2374-3.6596-4.9396-4.8215-8.1068-1.1618-3.1672-1.7427-6.073-1.7427-9.9084 0-3.8355.5228-7.5257 1.6847-10.6638 1.1618-3.1382 2.7883-5.8114 4.8796-8.0488 2.0914-2.2373 4.5893-3.9517 7.4358-5.172 2.8757-1.2205 6.0417-1.8016 9.469-1.8016 3.4274 0 6.5934.6102 9.498 1.8015 2.9045 1.22 5.4025 2.9345 7.4357 5.172 2.0622 2.2372 3.6597 4.9104 4.8215 8.0486 1.22 3.138 1.83 6.8283 1.83 10.6638zm-11.6182.029c0-4.9105-1.0747-9.0075-3.166-11.855-2.0913-2.8767-5.025-4.3005-8.7718-4.3005-3.747 0-6.6805 1.424-8.7718 4.3007-2.0916 2.8766-3.108 6.9446-3.108 11.8552 0 4.9686 1.0455 8.31 3.137 11.1867 2.091 2.9057 5.025 4.3295 8.7716 4.3295 3.7468 0 6.6804-1.453 8.7717-4.3294 2.0913-2.9057 3.137-6.218 3.137-11.1868zm36.917 25.105C300.07 76.187 300.07 61.0484 300.07 58.6366l-.029-53.697 11.3568-1.8014v53.3484c0 1.3657 0 10.0246 7.2904 10.0536V76.1zm20.0123 0h-11.415V27.052l11.415-1.8017v50.8494zm-5.722-56.2248c3.805 0 6.913-3.08 6.913-6.8864 0-3.8065-3.079-6.8865-6.913-6.8865s-6.9128 3.08-6.9128 6.8862 3.108 6.8864 6.913 6.8864zm34.0996 5.4046c3.747 0 6.913.465 9.469 1.3947 2.556.93 4.618 2.2377 6.1285 3.894 1.51 1.6562 2.585 3.9226 3.224 6.3053.668 2.3827.9873 4.9978.9873 7.8745v29.231c-1.7427.3778-4.386.8137-7.9294 1.3367-3.5436.523-7.523.7845-11.9378.7845-2.9336 0-5.6348-.2906-8.0456-.8427-2.44-.552-4.502-1.4528-6.2448-2.7022-1.714-1.2492-3.05-2.8474-4.0376-4.8232-.9585-1.976-1.4522-4.7653-1.4522-7.671 0-2.7895.5518-4.562 1.6265-6.4797 1.1037-1.9176 2.585-3.4867 4.444-4.707 1.888-1.2205 4.0373-2.092 6.5062-2.615 2.469-.523 5.054-.7847 7.726-.7847 1.249 0 2.556.087 3.9502.2323s2.8464.4068 4.415.7846v-1.86c0-1.3075-.1454-2.557-.465-3.7192-.3194-1.1914-.8712-2.2084-1.6264-3.109-.7843-.901-1.801-1.5982-3.079-2.0922-1.278-.494-2.9045-.8717-4.8506-.8717-2.614 0-4.9958.3197-7.1742.6975-2.1785.3777-3.9793.8135-5.3444 1.3075l-1.3653-9.3273c1.4234-.494 3.5437-.988 6.274-1.482s5.664-.7554 8.8008-.7554zm.9585 41.2316c3.4852 0 6.0702-.2034 7.871-.552V54.3942c-.639-.1743-1.5393-.3777-2.7302-.552-1.191-.1744-2.498-.2906-3.9503-.2906-1.249 0-2.527.087-3.805.2905-1.278.1746-2.4398.523-3.4564 1.017-1.0165.494-1.859 1.1915-2.469 2.092-.639.901-.9293 1.424-.9293 2.7898 0 2.6732.9294 4.2132 2.614 5.2302 1.7137 1.046 3.9793 1.54 6.855 1.54zM143.7464 25.57c3.747 0 6.913.465 9.469 1.3947 2.556.9298 4.618 2.2374 6.1285 3.8936 1.5395 1.6853 2.585 3.9227 3.224 6.3053.668 2.3827.9877 4.9978.9877 7.8744v29.231c-1.7427.378-4.386.8137-7.9294 1.3368-3.5436.523-7.5228.7845-11.9378.7845-2.9336 0-5.6348-.2906-8.0456-.8427-2.44-.552-4.502-1.4528-6.245-2.7022-1.7137-1.2495-3.0498-2.8476-4.0374-4.8235-.9585-1.976-1.4522-4.7656-1.4522-7.671 0-2.7897.5518-4.562 1.6265-6.48 1.104-1.9177 2.585-3.4867 4.444-4.707 1.888-1.2204 4.0373-2.092 6.5062-2.615 2.469-.523 5.054-.7847 7.726-.7847 1.249 0 2.5562.0872 3.9504.2325 1.365.145 2.8464.4066 4.415.7843v-1.8595c0-1.3076-.1453-2.557-.4648-3.7193-.3197-1.1913-.8716-2.2083-1.6268-3.109-.7842-.9008-1.8008-1.5982-3.0788-2.092-1.278-.494-2.9046-.8718-4.8507-.8718-2.614 0-4.9958.3196-7.1742.6973-2.1784.3777-3.9793.8135-5.3444 1.3075l-1.365-9.3273c1.423-.494 3.5434-.988 6.274-1.482 2.73-.523 5.6636-.7554 8.8005-.7554zm.9876 41.2606c3.4855 0 6.0706-.2034 7.8714-.552V54.7138c-.639-.1744-1.5394-.3778-2.7303-.552-1.1907-.1745-2.498-.2907-3.95-.2907-1.249 0-2.527.0874-3.805.2908-1.278.1742-2.44.523-3.4564 1.0168-1.0166.494-1.859 1.1914-2.4688 2.092-.639.901-.9297 1.424-.9297 2.7896 0 2.6733.9296 4.2133 2.614 5.2303 1.685 1.017 3.9795 1.54 6.855 1.54zm46.0374 9.269c-18.6183.0873-18.6183-15.0513-18.6183-17.463l-.029-53.697 11.357-1.8016v53.3485c0 1.3657 0 10.0246 7.2906 10.0536v9.56z" fill="#FFF" />
+    </g>
+  </g>
+</svg>
+
+              </a>
+            </li>
+            <li class='algc-navigation__li algc-navigation__li--community'>
+              <a href='https://community.algolia.com/' data-enabledropdown="true" data-dropdown="integrations">
+                <svg class="algc-arrowseparator" viewBox="0 0 18 35" xmlns="http://www.w3.org/2000/svg"><g id="Symbols" fill="none" fill-rule="evenodd"><g id="community/header" fill="#3369E6"><g id="Group-13"><g id="Group-2"><path id="Combined-Shape-Copy" d="M1.8537 34.7643l15.5597-17.268L1.8537 0H0l15.5597 17.4964L0 34.7644z"/></g></g></g></g></svg>
+                <svg class="algolia-community-logo" role="img" aria-labelledby="algc-algolia-community-logo" width="143" height="32" viewBox="0 0 143 32" xmlns="http://www.w3.org/2000/svg">
+  <title id="algc-algolia-community-logo">algolia community</title>
+  <g fill="none" fill-rule="evenodd">
+    <path fill="#46AEDA" d="M13.503 3.268L16.366.402l3.45 3.456-1.145 1.146-2.3-2.304-1.716 1.72" />
+    <path fill="#FE336F" d="M19.302 29.712L16.44 32.58l-9.777-9.792 1.145-1.146 8.627 8.638 1.717-1.72" />
+    <path fill="#F5A623" d="M20.447 28.566l12.02-12.04-11.5-11.517-1.146 1.146 10.353 10.366-10.876 10.892" />
+    <path fill="#50E3C2" d="M5.49 11.294l-5.153 5.16 5.176 5.182 1.145-1.146-4.025-4.03 4.007-4.014" />
+    <path fill="#BD0FE1" d="M6.634 10.147l5.725-5.732 1.15 1.152L7.783 11.3" />
+    <path d="M16.538 11.796c-3.07 0-5.558 2.477-5.558 5.536 0 3.06 2.49 5.53 5.558 5.53 3.068 0 5.558-2.477 5.558-5.536 0-3.06-2.484-5.53-5.558-5.53zm0 9.432c-2.16 0-3.916-1.746-3.916-3.896s1.755-3.896 3.916-3.896c2.16 0 3.916 1.746 3.916 3.896s-1.75 3.896-3.916 3.896zm0-6.996v2.904c0 .083.09.143.167.1l2.59-1.335c.06-.03.078-.1.05-.16-.557-.97-1.573-1.582-2.688-1.62-.06 0-.12.047-.12.112zm-3.63-2.133l-.34-.34c-.334-.332-.873-.332-1.206 0l-.406.405c-.16.158-.25.374-.25.6 0 .225.09.44.25.6l.334.332c.054.053.132.04.18-.012.197-.27.414-.524.65-.76.238-.24.496-.457.77-.654.06-.034.066-.117.018-.17zm5.45-.88v-.67c0-.47-.382-.85-.853-.85h-1.988c-.472 0-.854.38-.854.85v.688c0 .077.072.13.15.113.562-.16 1.145-.243 1.73-.242.568 0 1.13.077 1.673.225.034.01.07 0 .1-.02.027-.023.043-.057.043-.093zM41.436 16.5c0-.77.12-1.488.358-2.157.238-.67.58-1.25 1.022-1.74.444-.49.984-.876 1.62-1.154.635-.28 1.35-.42 2.144-.42.98 0 1.907.18 2.78.538l-.516 1.97c-.278-.12-.592-.22-.943-.3-.35-.08-.724-.12-1.12-.12-.94 0-1.656.296-2.146.886-.49.59-.735 1.423-.735 2.497 0 1.035.23 1.854.694 2.457.463.603 1.245.905 2.344.905.41 0 .814-.04 1.21-.12.398-.08.743-.178 1.034-.298l.337 1.99c-.265.132-.666.25-1.202.357-.546.108-1.102.16-1.658.16-.888 0-1.66-.136-2.314-.407-.656-.272-1.2-.65-1.63-1.134-.43-.485-.75-1.062-.962-1.732-.212-.67-.318-1.395-.318-2.177zm19.126-.02c0 .823-.12 1.572-.357 2.248-.24.676-.576 1.253-1.013 1.73-.437.478-.964.85-1.58 1.114-.615.266-1.294.398-2.035.398-.74 0-1.416-.132-2.026-.398-.608-.265-1.13-.636-1.568-1.113-.437-.48-.778-1.056-1.023-1.732-.246-.676-.368-1.425-.368-2.247 0-.82.123-1.567.367-2.237.244-.67.59-1.243 1.032-1.72.444-.478.97-.846 1.58-1.104.608-.26 1.277-.39 2.005-.39s1.4.13 2.016.39c.616.257 1.142.625 1.58 1.103.436.477.777 1.05 1.022 1.72.245.67.367 1.416.367 2.238zm-2.463 0c0-1.034-.223-1.852-.666-2.456-.443-.603-1.063-.905-1.857-.905s-1.414.3-1.857.904c-.443.604-.665 1.422-.665 2.457 0 1.048.222 1.877.665 2.487.444.61 1.063.915 1.857.915s1.414-.305 1.857-.915c.444-.61.665-1.44.665-2.486zm10.863-.258c0-1.087-.135-1.873-.407-2.357-.27-.484-.778-.726-1.52-.726-.264 0-.555.02-.873.06-.318.04-.556.072-.715.098v8.394h-2.403V11.628c.463-.133 1.07-.26 1.817-.378.748-.12 1.54-.18 2.373-.18.715 0 1.3.094 1.758.28.457.185.838.43 1.142.735.146-.106.33-.22.556-.338.226-.12.478-.23.756-.328.29-.104.584-.187.884-.25.31-.066.625-.1.943-.1.808 0 1.473.117 1.996.35.522.23.933.556 1.23.973.298.418.504.922.616 1.512.113.59.17 1.237.17 1.94v5.847H74.88v-5.47c0-1.087-.133-1.873-.397-2.357-.265-.484-.775-.726-1.53-.726-.384 0-.748.062-1.092.188-.344.126-.602.25-.775.368.106.332.18.683.22 1.054.04.372.058.77.058 1.194v5.748h-2.403v-5.47zm17.18 0c0-1.087-.136-1.873-.407-2.357-.272-.484-.778-.726-1.52-.726-.264 0-.556.02-.873.06-.318.04-.556.072-.715.098v8.394h-2.404V11.628c.464-.133 1.07-.26 1.818-.378.748-.12 1.54-.18 2.373-.18.715 0 1.3.094 1.758.28.457.185.837.43 1.142.735.145-.106.33-.22.556-.338.226-.12.478-.23.756-.328.288-.104.584-.187.883-.25.31-.066.625-.1.943-.1.807 0 1.473.117 1.996.35.522.23.932.556 1.23.973.298.418.503.922.616 1.512.112.59.17 1.237.17 1.94v5.847H92.06v-5.47c0-1.087-.133-1.873-.398-2.357-.264-.484-.774-.726-1.53-.726-.383 0-.747.062-1.09.188-.346.126-.604.25-.776.368.106.332.18.683.22 1.054.038.372.058.77.058 1.194v5.748h-2.403v-5.47zm19.78 5.15c-.462.12-1.065.244-1.806.37-.74.125-1.556.188-2.443.188-.834 0-1.532-.12-2.095-.358-.564-.238-1.014-.57-1.352-.994-.337-.424-.58-.932-.725-1.522-.145-.59-.218-1.236-.218-1.94V11.29h2.403v5.45c0 1.113.162 1.91.487 2.386.324.477.89.716 1.698.716.29 0 .6-.013.923-.04.325-.026.566-.06.725-.1V11.29h2.404v10.083zm3.06-9.744c.463-.133 1.066-.26 1.807-.378.742-.12 1.563-.18 2.463-.18.848 0 1.556.117 2.125.35.57.23 1.023.556 1.36.973.338.418.577.922.716 1.512.14.59.208 1.237.208 1.94v5.847h-2.403v-5.47c0-.557-.037-1.03-.11-1.422-.073-.39-.192-.71-.358-.955-.165-.245-.39-.424-.675-.537-.285-.112-.632-.17-1.043-.17-.304 0-.622.02-.953.06-.33.04-.575.074-.734.1v8.394h-2.403V11.628zm14.042 10.064h-2.404V11.29h2.405v10.402zm.258-13.445c0 .45-.146.808-.437 1.074-.292.266-.636.398-1.033.398-.41 0-.76-.132-1.053-.397-.29-.265-.436-.622-.436-1.073 0-.465.145-.83.436-1.094.292-.266.643-.398 1.053-.398.397 0 .74.132 1.033.398.29.265.437.63.437 1.094zm2.68.298l2.404-.398v3.143h3.694v2.008h-3.693v4.237c0 .835.133 1.432.397 1.79.265.358.715.537 1.35.537.438 0 .825-.046 1.163-.14.337-.092.606-.178.804-.258l.398 1.91c-.278.12-.642.242-1.092.367-.45.127-.98.19-1.59.19-.74 0-1.36-.1-1.856-.298-.496-.2-.89-.487-1.182-.865-.29-.378-.496-.836-.615-1.373-.12-.537-.18-1.15-.18-1.84v-9.01zm16.903 2.745c-1.073 3.95-2.318 7.53-3.734 10.74-.265.596-.536 1.107-.815 1.53-.278.425-.59.777-.933 1.055-.34.277-.732.483-1.152.607-.423.126-.914.19-1.47.19-.37 0-.738-.04-1.102-.12-.364-.08-.64-.166-.824-.26l.437-1.928c.476.186.947.278 1.41.278.622 0 1.11-.15 1.46-.447.35-.3.658-.76.923-1.383-.754-1.458-1.48-3.05-2.175-4.773-.694-1.725-1.313-3.555-1.856-5.49h2.563c.132.556.294 1.16.486 1.81.397 1.342.844 2.67 1.34 3.977.236.623.488 1.24.755 1.85.424-1.18.82-2.436 1.192-3.77.358-1.283.696-2.573 1.013-3.867h2.483z" fill="#FFF" />
+  </g>
+</svg>
+
+                <svg width="12" height="7" role="img" arial-labelledby="algc-icon-separator-alt" viewBox="0 0 12 7" xmlns="http://www.w3.org/2000/svg">
+  <title id="algc-icon-separator-alt">menu with dropdown</title>
+  <path d="M6.458 3.58L2.81.37C2.344-.04 1.634.01 1.225.477c-.41.468-.362 1.18.105 1.59L5.51 5.74s.537.375 1.05.356c.515-.02.984-.433.984-.433l4.072-3.596c.467-.41.515-1.12.107-1.59C11.315.01 10.605-.04 10.138.37l-3.68 3.21z" fill="#FFF" fill-rule="evenodd" />
+</svg>
+
+              </a>
+            </li>
+            
+    <li class="algc-navigation__li">
+      <a class='algc-badge algc-navigation__navitem' href='https://community.algolia.com/instantsearch.js '
+       data-dropdown="links" data-enabledropdown="false">
+            <svg class="algc-arrowseparator" viewBox="0 0 18 35" xmlns="http://www.w3.org/2000/svg"><g id="Symbols" fill="none" fill-rule="evenodd"><g id="community/header" fill="#3369E6"><g id="Group-13"><g id="Group-2"><path id="Combined-Shape-Copy" d="M1.8537 34.7643l15.5597-17.268L1.8537 0H0l15.5597 17.4964L0 34.7644z"/></g></g></g></g></svg>
+            
+            <span>InstantSearch.js</span>
+      </a>
+    </li>
+          </ul>
+
+          <div class='algc-navigation__menu'>
+            
+    <div class='algc-menu__search'>
+      <div class='algc-menu__search--holder'>
+        <div class='algc-search__input algc-search__input--docsearch'>
+          <input id='searchbox' placeholder='Search the docs' type='search'>
+          <button id='search'>
+            <svg role="img" aria-labelledby="algc-top-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15">
+  <title id="algc-top-search-icon">Open search input</title>
+  <path d="M10.052 10.88c-1.1.91-2.483 1.406-3.91 1.403C2.75 12.283 0 9.533 0 6.14 0 2.75 2.75 0 6.142 0c3.392 0 6.14 2.75 6.14 6.142 0 1.485-.526 2.847-1.403 3.91l3.95 3.95c.227.227.228.596-.002.826-.228.227-.597.228-.826 0l-3.95-3.95zm-3.91.234c2.745 0 4.972-2.227 4.972-4.972 0-2.747-2.227-4.972-4.972-4.972-2.747 0-4.972 2.225-4.972 4.972 0 2.745 2.225 4.972 4.972 4.972z" fill="#FFF" fill-rule="evenodd" />
+</svg>
+
+          </button>
+          <button id='cancel'>
+            <svg role="img" aria-labelledby="algc-top-search-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 13">
+  <title id="algc-top-search-close">Close search input</title>
+  <path d="M5.274 6.5L.614 1.84 0 1.225 1.226 0l.613.613 4.66 4.66 4.66-4.66.614-.613L13 1.226l-.613.613-4.66 4.66 4.66 4.66.613.614L11.774 13l-.613-.613-4.66-4.66-4.66 4.66-.614.613L0 11.774l.613-.613" fill="#FFF" fill-rule="evenodd" />
+</svg>
+
+          </button>
+        </div>
+      </div>
+    </div>
+            <ul class='algc-menu__list'>
+      <li class="algc-menu__list__item ">
+        <a href="getting-started.html"  class="">
+          <span class='visible-sm-inline'>Getting Started</span>
+          
+        </a>
+        
+      </li>
+      <li class="algc-menu__list__item algc-menu--hassublist">
+        <a href="#"  class="algc-menu--sublistlink">
+          Guides
+          <span class="algc-glyph">▼</span>
+        </a>
+        <ul class='algc-menu__sublist'>
+    <li>
+      <a href="guides/usage.html" >Use InstantSearch.js</a>
+    </li>
+  
+    <li>
+      <a href="guides/customization.html" >Customize widgets</a>
+    </li>
+  
+    <li>
+      <a href="guides/migration.html" >Migrate from V1</a>
+    </li>
+  </ul>
+      </li>
+      <li class="algc-menu__list__item algc-menu--hassublist">
+        <a href="#"  class="algc-menu--sublistlink">
+          API
+          <span class="algc-glyph">▼</span>
+        </a>
+        <ul class='algc-menu__sublist'>
+    <li>
+      <a href="instantsearch.html" >instantsearch()</a>
+    </li>
+  
+    <li>
+      <a href="widgets.html" >Widgets</a>
+    </li>
+  
+    <li>
+      <a href="connectors.html" >Connectors</a>
+    </li>
+  </ul>
+      </li>
+      <li class="algc-menu__list__item ">
+        <a href="examples.html"  class="">
+          <span class='visible-sm-inline'>Demos</span>
+          
+        </a>
+        
+      </li>
+      <li class="algc-menu__list__item ">
+        <a href="https://github.com/algolia/instantsearch.js"
+          
+          class="">
+          <img src='assets/img/github-icon.svg'/>
+          
+        </a>
+        
+      </li></ul>
+            <button class='algc-openmobile'><span></span></button>
+          </div>
+          
+          <div class='algc-navigation__dropdown-holder'>
+            <div class='algc-dropdownroot notransition'>
+              <div class='algc-dropdownroot__dropdownbg'></div>
+              <div class='algc-dropdownroot__dropdownarrow'></div>
+              <div class='algc-dropdownroot__dropdowncontainer'>
+                
+    <div class="algc-dropdownroot__section">
+      <div class="algc-dropdownroot__content" data-dropdown-content="integrations">
+      <ul class="algc-dropdownroot__widelist">
+  <li>
+    <div class="dropdown-item">
+      <a href="https://community.algolia.com/places/" >
+        <span class="item-icon" style="background: #3a5395">
+          <img src="https://community.algolia.com/places/images/svg/places-illustration-65745839.svg" alt="places.js" />
+        </span>
+        <h4>places.js</h4>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="dropdown-item">
+      <a href="https://community.algolia.com/wordpress" >
+        <span class="item-icon" style="background: linear-gradient(to bottom right, #4041B2, #516ED1)">
+          <img src="https://community.algolia.com/wordpress/img/icons/wp-icon.svg" alt="wordpress" />
+        </span>
+        <h4>wordpress</h4>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="dropdown-item">
+      <a href="https://github.com/algolia/autocomplete.js" >
+        <span class="item-icon" style="background: #00587f">
+          <img src="https://community.algolia.com/img/illus-autocomplete.svg" alt="Autocomplete.js" />
+        </span>
+        <h4>Autocomplete.js</h4>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="dropdown-item">
+      <a href="https://community.algolia.com/instantsearch.js/" >
+        <span class="item-icon" style="background: #385D72">
+          <img src="https://community.algolia.com/img/logo-is.svg" alt="instantsearch.js" />
+        </span>
+        <h4>instantsearch.js</h4>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="dropdown-item">
+      <a href="https://community.algolia.com/algoliasearch-helper-js/" >
+        <span class="item-icon" style="background: #FDBD57">
+          <img src="https://community.algolia.com/img/logo-helper.svg" alt="Helper.js" />
+        </span>
+        <h4>Helper.js</h4>
+      </a>
+    </div>
+  </li>
+  <li>
+    <div class="dropdown-item">
+      <a href="https://community.algolia.com/magento/" >
+        <span class="item-icon" style="background: linear-gradient(to bottom right, #ed9259, #e76d22)">
+          <img src="https://res.cloudinary.com/hilnmyskv/image/upload/v1477318624/magento-icon-white.svg" alt="magento" />
+        </span>
+        <h4>magento</h4>
+      </a>
+    </div>
+  </li></ul>
+        <div class="algc-dropdownroot__footer">
+          <a href="https://discourse.algolia.com/?ref=communityHeader">
+            <span style="font-weight:bold;">Community Forum</span>
+          </a>
+        </div>
+        </div>
+        </div>
+    <div class="algc-dropdownroot__section">
+      <div class="algc-dropdownroot__content" data-dropdown-content="links">
+      <ul class="algc-dropdownroot__widelist"></ul>
+        <div class="algc-dropdownroot__footer">
+          <a href="https://discourse.algolia.com/?ref=communityHeader">
+            <span style="font-weight:bold;">Community Forum</span>
+          </a>
+        </div>
+        </div>
+        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class='algc-mobilemenu'><div class='algc-mobilemenuwrapper'><ul class='algc-mobilemenulist'>
+      <li class="algc-mobilemenu__item">
+        <a href="getting-started.html" >
+          Getting Started
+        </a>
+      </li>
+      <li class="algc-mobilemenu__item">
+        <a href="guides/usage.html" >
+          Use InstantSearch.js
+        </a>
+      </li>
+      <li class="algc-mobilemenu__item">
+        <a href="widgets.html" >
+          Widgets
+        </a>
+      </li>
+      <li class="algc-mobilemenu__item">
+        <a href="connectors.html" >
+          Connectors
+        </a>
+      </li>
+      <li class="algc-mobilemenu__item">
+        <a href="troubleshooting.html" >
+          Troubleshooting
+        </a>
+      </li>
+      <li class="algc-mobilemenu__item">
+        <a href="examples.html" >
+          Demos
+        </a>
+      </li></ul></div></div>
+
+    </nav>
+    <!-- End community_header --> </div><script src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js"></script><section class="hero-section shrink"><div class="container"><div class="hero-container text-left"><figcaption><h1><span style="font-weight: normal">connectors /</span> <span>connectRangeSlider</span></h1></figcaption></div></div></section><section class="documentation-section"><div class="container"><nav class="sidebar"><div class="sidebar-container"><h2 class="sidebar-header">connectors</h2><ul class="sidebar-elements"><li class="sidebar-element level-h2 navItem connectors"><a href="connectors.html">Introduction</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectClearAll.html">connectClearAll</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectCurrentRefinedValues.html">connectCurrentRefinedValues</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectHierarchicalMenu.html">connectHierarchicalMenu</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectHits.html">connectHits</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectHitsPerPage.html">connectHitsPerPage</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectInfiniteHits.html">connectInfiniteHits</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectMenu.html">connectMenu</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectNumericRefinementList.html">connectNumericRefinementList</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectNumericSelector.html">connectNumericSelector</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectPagination.html">connectPagination</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectPriceRanges.html">connectPriceRanges</a><ul></ul></li><li class="sidebar-element level-h2 navItem-active connectors"><a class="navItem-active" href="connectors/connectRangeSlider.html">connectRangeSlider</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectRefinementList.html">connectRefinementList</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectSearchBox.html">connectSearchBox</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectSortBySelector.html">connectSortBySelector</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectStarRating.html">connectStarRating</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectStats.html">connectStats</a><ul></ul></li><li class="sidebar-element level-h2 navItem connectors"><a href="connectors/connectToggle.html">connectToggle</a><ul></ul></li></ul></div></nav><a class="sidebar-opener"></a><div class="documentation-container"><a class="editThisPage" href="http://github.com/algolia/instantsearch.js/edit/master/http://github.com/algolia/instantsearch.js/edit/master/src/connectors/range-slider/connectRangeSlider.js">Edit this page</a><h2 id="description">Description<a class="anchor" href="connectors/connectRangeSlider.html#description"></a></h2><p><p><strong>RangeSlider</strong> connector provides the logic to create custom widget that will let
+the user refine results using a numeric range.</p>
+<p>Thic connectors provides a <code>refine()</code> function that accepts bounds. It will also provide
+information about the min and max bounds for the current result set.</p>
+</p><h2 id="usage">Usage</h2><pre class="CodeMirror cm-s-mdn-like"><code><span class="cm-keyword">const  </span><span class="cm-def">search </span>= <span class="cm-variable">instantsearch</span>(<span class="cm-comment">/* parameters */</span>);<br/><br/><span class="cm-keyword">const  </span><span class="cm-variable">makeRangeSlider</span><span class="cm-operator">= </span><span class="cm-variable">instantsearch</span>.<span class="cm-variable">connectors</span>.<span class="cm-variable-2">connectRangeSlider</span>(<br/><span class="cm-keyword">  function </span><span class="cm-variable">renderFn</span>(<br/><span class="cm-variable">      renderOpts</span>: <span class="cm-def"><a class="typed-link" href="connectors/connectRangeSlider.html#struct-RangeSliderRenderingOptions">RangeSliderRenderingOptions</a></span>,<br/><span class="cm-variable">      isFirstRendering</span>: <span class="cm-def">boolean</span>) {<br/><span class="cm-comment">    // render the custom RangeSlider widget</span><br/>  }
+)<span class="cm-operator">;</span><br/><br/><span class="cm-keyword">const  </span><span class="cm-variable">customRangeSlider </span><span class="cm-operator">= </span><span class="cm-variable-2">makeRangeSlider</span>(<span class="cm-variable">instanceOpts</span>: <span class="cm-def"><a class="typed-link" href="connectors/connectRangeSlider.html#struct-CustomRangeSliderWidgetOptions">CustomRangeSliderWidgetOptions</a></span>)<span class="cm-operator">;</span><br/><span class="cm-variable">search</span>.<span class="cm-property">addWidget</span>(<span class="cm-variable">customRangeSlider</span>)<span class="cm-operator">;</span></code></pre><h2 id="structure">Connector options<a class="anchor" href="connectors/connectRangeSlider.html#return"></a></h2><h3 id="struct-RangeSliderRenderingOptions">RangeSliderRenderingOptions<a class="anchor" href="connectors/connectRangeSlider.html#struct-RangeSliderRenderingOptions"></a></h3><ul class="struct-def"><li class="type" id="struct-RangeSliderRenderingOptions-refine"><strong>refine</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-RangeSliderRenderingOptions-refine"></a><code>({min: number, max: number}) => undefined</code><p>Sets a range to filter the results on. Both values
+are optional, and will default to the higher and lower bounds.</p>
+</li><li class="type" id="struct-RangeSliderRenderingOptions-numeric"><strong>numeric</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-RangeSliderRenderingOptions-numeric"></a><code>{min: number, max: number}</code><p>Results bounds without the current range filter.</p>
+</li><li class="type" id="struct-RangeSliderRenderingOptions-start"><strong>start</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-RangeSliderRenderingOptions-start"></a><code>Array&lt;number,number&gt;</code><p>Current numeric bounds of the search.</p>
+</li><li class="type" id="struct-RangeSliderRenderingOptions-formatter"><strong>formatter</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-RangeSliderRenderingOptions-formatter"></a><code>{from: function, to: function}</code><p>Transform for the rendering <code>from</code> and/or <code>to</code> values.
+Both functions take a <code>number</code> as input and should output a <code>string</code>.</p>
+</li><li class="type" id="struct-RangeSliderRenderingOptions-widgetParams"><strong>widgetParams</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-RangeSliderRenderingOptions-widgetParams"></a><code>Object</code><p>All original <code>CustomRangeSliderWidgetOptions</code> forwarded to the <code>renderFn</code>.</p>
+</li></ul><h3 id="struct-CustomRangeSliderWidgetOptions">CustomRangeSliderWidgetOptions<a class="anchor" href="connectors/connectRangeSlider.html#struct-CustomRangeSliderWidgetOptions"></a></h3><ul class="struct-def"><li class="type" id="struct-CustomRangeSliderWidgetOptions-attributeName"><strong>attributeName</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-CustomRangeSliderWidgetOptions-attributeName"></a><code>string</code><p>Name of the attribute for faceting.</p>
+</li><li class="type" id="struct-CustomRangeSliderWidgetOptions-min"><strong>min</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-CustomRangeSliderWidgetOptions-min"></a><code>[number]</code><code>(default: undefined)</code><p>Minimal slider value, default to automatically computed from the result set.</p>
+</li><li class="type" id="struct-CustomRangeSliderWidgetOptions-max"><strong>max</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-CustomRangeSliderWidgetOptions-max"></a><code>[number]</code><code>(default: undefined)</code><p>Maximal slider value, default to automatically computed from the result set.</p>
+</li><li class="type" id="struct-CustomRangeSliderWidgetOptions-precision"><strong>precision</strong><a class="anchor" href="connectors/connectRangeSlider.html#param-CustomRangeSliderWidgetOptions-precision"></a><code>[number]</code><code>(default: 2)</code><p>Number of digits after decimal point to use.</p>
+</li></ul><script src="//code.jquery.com/jquery-3.2.1.slim.min.js"></script><h2 id="example">Example<a class="anchor" href="connectors/connectRangeSlider.html#example"></a></h2></div></div></section><div id="footer"><div class="credits"><div class="container pos-rel"><div class="row"><div class="col-md-12 text-center"><a data-no-turbolink="true" href="/"><img width="40" src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo_badge-598a1fe6.svg"></a></div></div><div class="spacer40"></div></div></div></div><script src="/instantsearch.js/v2/js/main.c455091bef2cc9f5202a-build.js"></script><script type="text/javascript">var _kmq = _kmq || [];
+var _kmk = _kmk || 'cb5a3adb92e8915a37a36ba1a50f2ce4fae4a1b9';
+function _kms(u){
+  setTimeout(function(){
+    var d = document, f = d.getElementsByTagName('script')[0],
+    s = d.createElement('script');
+    s.type = 'text/javascript'; s.async = true; s.src = u;
+    f.parentNode.insertBefore(s, f);
+  }, 1);
+}
+_kms('//i.kissmetrics.com/i.js');
+_kms('//scripts.kissmetrics.com/' + _kmk + '.2.js');</script></body>
