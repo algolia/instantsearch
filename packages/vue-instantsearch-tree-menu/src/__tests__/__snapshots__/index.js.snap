@@ -23,7 +23,7 @@ exports[`renders proper HTML 1`] = `
           200
         </span>
       </a>
-      <ul>
+      <ul class>
         <li class="ais-tree-menu__item">
           <a href="#">
             <span class="ais-tree-menu__value">
