@@ -8,12 +8,6 @@
   "module": "dist/instantsearch-store.esm.js",
   "jsnext:main": "dist/instantsearch-store.esm.js",
   "unpkg": "dist/instantsearch-store.js",
-  "scripts": {
-    "build": "npm run build:umd && npm run build:es && npm run build:cjs",
-    "build:umd": "rollup -c ../../build/rollup.umd.config.js",
-    "build:es": "rollup -c ../../build/rollup.es.config.js",
-    "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
-  },
   "dependencies": {
     "algoliasearch": "^3.18.1",
     "algoliasearch-helper": "^2.14.0"

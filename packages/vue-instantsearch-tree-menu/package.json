@@ -8,12 +8,6 @@
   "module": "dist/vue-instantsearch-tree-menu.esm.js",
   "jsnext:main": "dist/vue-instantsearch-tree-menu.esm.js",
   "unpkg": "dist/vue-instantsearch-tree-menu.js",
-  "scripts": {
-    "build": "npm run build:umd && npm run build:es && npm run build:cjs",
-    "build:umd": "rollup -c ../../build/rollup.umd.config.js",
-    "build:es": "rollup -c ../../build/rollup.es.config.js",
-    "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
-  },
   "dependencies": {
     "instantsearch-store": "*",
     "vue-instantsearch-component": "*"
@@ -22,4 +16,3 @@
     "vue": "^2.2.2"
   }
 }
-

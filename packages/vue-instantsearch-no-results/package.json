@@ -8,12 +8,6 @@
   "module": "dist/vue-instantsearch-no-results.esm.js",
   "jsnext:main": "dist/vue-instantsearch-no-results.esm.js",
   "unpkg": "dist/vue-instantsearch-no-results.js",
-  "scripts": {
-    "build": "npm run build:umd && npm run build:es && npm run build:cjs",
-    "build:umd": "rollup -c ../../build/rollup.umd.config.js",
-    "build:es": "rollup -c ../../build/rollup.es.config.js",
-    "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
-  },
   "dependencies": {
     "vue-instantsearch-component": "*"
   },
