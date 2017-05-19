@@ -42,8 +42,10 @@ export default {
       },
       domProps: {
         innerHTML: attributeValue
-          .replace(HIGHLIGHT_PRE_TAG, `<${tagName}>`)
-          .replace(HIGHLIGHT_POST_TAG, `</${tagName}>`),
+          .split(HIGHLIGHT_PRE_TAG)
+          .join(`<${tagName}>`)
+          .split(HIGHLIGHT_POST_TAG)
+          .join(`</${tagName}>`),
       },
     });
   },
