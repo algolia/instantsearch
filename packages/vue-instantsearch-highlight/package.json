@@ -8,12 +8,6 @@
   "module": "dist/vue-instantsearch-highlight.esm.js",
   "jsnext:main": "dist/vue-instantsearch-highlight.esm.js",
   "unpkg": "dist/vue-instantsearch-highlight.js",
-  "scripts": {
-    "build": "npm run build:umd && npm run build:es && npm run build:cjs",
-    "build:umd": "rollup -c ../../build/rollup.umd.config.js",
-    "build:es": "rollup -c ../../build/rollup.es.config.js",
-    "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
-  },
   "dependencies": {
     "escape-html": "^1.0.3",
     "instantsearch-store": "*",
