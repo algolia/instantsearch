@@ -34,7 +34,7 @@ const bem = bemHelper('ais-refinement-list');
  * @param  {object} [options.showMore.templates.inactive] Template used when showMore not clicked
  * @param  {object} [options.showMore.limit] Max number of facets values to display when showMore is clicked
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template, provided with `refinedFacetsCount` data property
+ * @param  {string|Function} [options.templates.header] Header template, provided with `facetsCount`, `refinedFacetsCount` data properties
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
@@ -134,10 +134,11 @@ function refinementList({
       return createURL(state.toggleRefinement(attributeName, facetValue));
     }
 
-    // Pass count of currently selected items to the header template
+    // Pass count of total and currently selected items to the header template
+    const facetsCount = facetValues.length;
     const refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
     const headerFooterData = {
-      header: {refinedFacetsCount},
+      header: {facetsCount, refinedFacetsCount},
     };
 
     // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
