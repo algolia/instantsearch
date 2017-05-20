@@ -1,7 +1,7 @@
 # Summary
 
-* [Introduction](README.md#welcome-to-vue-instantsearch)
-  * [Welcome](README.md#welcome-to-vue-instantsearch)
+### Introduction
+* [Getting Started](README.md#welcome-to-vue-instantsearch)
   * [Setup a new Vue project](README.md#setup-a-new-vue-project)
   * [Install vue-instantsearch](README.md#install-vue-instantsearch)
   * [Use the InstantSearch plugin](README.md#use-the-instantsearch-plugin)

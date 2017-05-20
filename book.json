@@ -1,4 +1,4 @@
 {
   "root": "./docs",
-  "plugins": ["expandable-chapters"]
+  "plugins": []
 }
