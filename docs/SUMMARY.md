@@ -19,3 +19,4 @@
   * [Powered By](components/powered-by.md)
   * [Price Range](components/price-range.md)
   * [Results per page selector](components/results-per-page-selector.md)
+  * [Rating](components/rating.md)
