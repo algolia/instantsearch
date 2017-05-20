@@ -1,7 +1,7 @@
 Vue InstantSearch Clear
 ---
 
-A button that allows the user to clear the `query`, the `facet refinements`, or both.
+A button that clears the `query`, the `active refinements`, or both when pressed.
 
 ## Usage
 
@@ -11,7 +11,7 @@ Basic usage:
 <ais-clear></ais-clear>
 ```
 
-Overriding the default content:
+Overriding the default button text:
 
 ```html
 <ais-clear>
