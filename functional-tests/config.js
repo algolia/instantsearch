@@ -20,7 +20,7 @@ let conf = {
   before() {
     browser.timeouts('implicit', 500);
     browser.url(`/${INDEX_PAGE}.html`);
-    browser.waitForText('#hits', 30000);
+    browser.waitForText('#hits', 50000);
 
     if (!browser.isMobile) {
       browser.windowHandle(handle => browser.windowHandleMaximize(handle));
