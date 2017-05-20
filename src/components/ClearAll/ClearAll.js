@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Template from '../Template.js';
 import {isSpecialClick} from '../../lib/utils.js';
@@ -46,13 +47,13 @@ export class RawClearAll extends React.Component {
 }
 
 RawClearAll.propTypes = {
-  refine: React.PropTypes.func.isRequired,
-  cssClasses: React.PropTypes.shape({
-    link: React.PropTypes.string,
+  refine: PropTypes.func.isRequired,
+  cssClasses: PropTypes.shape({
+    link: PropTypes.string,
   }),
-  hasRefinements: React.PropTypes.bool.isRequired,
-  templateProps: React.PropTypes.object.isRequired,
-  url: React.PropTypes.string.isRequired,
+  hasRefinements: PropTypes.bool.isRequired,
+  templateProps: PropTypes.object.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
 export default autoHideContainer(headerFooter(RawClearAll));

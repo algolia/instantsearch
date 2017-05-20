@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Template from '../Template.js';
@@ -113,28 +114,28 @@ function handleClick(cb) {
 }
 
 RawCurrentRefinedValues.propTypes = {
-  attributes: React.PropTypes.object,
-  clearAllClick: React.PropTypes.func,
-  clearAllPosition: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.bool,
+  attributes: PropTypes.object,
+  clearAllClick: PropTypes.func,
+  clearAllPosition: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
   ]),
-  clearAllURL: React.PropTypes.string,
-  clearRefinementClicks: React.PropTypes.arrayOf(
-    React.PropTypes.func
+  clearAllURL: PropTypes.string,
+  clearRefinementClicks: PropTypes.arrayOf(
+    PropTypes.func
   ),
-  clearRefinementURLs: React.PropTypes.arrayOf(
-    React.PropTypes.string
+  clearRefinementURLs: PropTypes.arrayOf(
+    PropTypes.string
   ),
-  cssClasses: React.PropTypes.shape({
-    clearAll: React.PropTypes.string,
-    list: React.PropTypes.string,
-    item: React.PropTypes.string,
-    link: React.PropTypes.string,
-    count: React.PropTypes.string,
+  cssClasses: PropTypes.shape({
+    clearAll: PropTypes.string,
+    list: PropTypes.string,
+    item: PropTypes.string,
+    link: PropTypes.string,
+    count: PropTypes.string,
   }).isRequired,
-  refinements: React.PropTypes.array,
-  templateProps: React.PropTypes.object.isRequired,
+  refinements: PropTypes.array,
+  templateProps: PropTypes.object.isRequired,
 };
 
 export default autoHideContainerHOC(headerFooterHOC(RawCurrentRefinedValues));

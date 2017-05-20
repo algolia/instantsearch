@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
 
@@ -83,19 +84,19 @@ function headerFooter(ComposedComponent) {
   }
 
   HeaderFooter.propTypes = {
-    collapsible: React.PropTypes.oneOfType([
-      React.PropTypes.bool,
-      React.PropTypes.shape({
-        collapsed: React.PropTypes.bool,
+    collapsible: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.shape({
+        collapsed: PropTypes.bool,
       }),
     ]),
-    cssClasses: React.PropTypes.shape({
-      root: React.PropTypes.string,
-      header: React.PropTypes.string,
-      body: React.PropTypes.string,
-      footer: React.PropTypes.string,
+    cssClasses: PropTypes.shape({
+      root: PropTypes.string,
+      header: PropTypes.string,
+      body: PropTypes.string,
+      footer: PropTypes.string,
     }),
-    templateProps: React.PropTypes.object,
+    templateProps: PropTypes.object,
   };
 
   HeaderFooter.defaultProps = {

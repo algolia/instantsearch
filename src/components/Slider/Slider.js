@@ -2,7 +2,9 @@ import times from 'lodash/times';
 import range from 'lodash/range';
 import has from 'lodash/has';
 
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+
+import React, {Component} from 'react';
 import Rheostat from 'rheostat';
 import cx from 'classnames';
 

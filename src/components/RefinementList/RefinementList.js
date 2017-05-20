@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 import {isSpecialClick} from '../../lib/utils.js';
@@ -173,25 +174,25 @@ export class RawRefinementList extends React.Component {
 }
 
 RawRefinementList.propTypes = {
-  Template: React.PropTypes.func,
-  createURL: React.PropTypes.func,
-  cssClasses: React.PropTypes.shape({
-    active: React.PropTypes.string,
-    depth: React.PropTypes.string,
-    item: React.PropTypes.string,
-    list: React.PropTypes.string,
+  Template: PropTypes.func,
+  createURL: PropTypes.func,
+  cssClasses: PropTypes.shape({
+    active: PropTypes.string,
+    depth: PropTypes.string,
+    item: PropTypes.string,
+    list: PropTypes.string,
   }),
-  depth: React.PropTypes.number,
-  facetValues: React.PropTypes.array,
-  templateProps: React.PropTypes.object.isRequired,
-  toggleRefinement: React.PropTypes.func.isRequired,
-  searchFacetValues: React.PropTypes.func,
-  searchPlaceholder: React.PropTypes.string,
-  isFromSearch: React.PropTypes.bool,
-  showMore: React.PropTypes.bool,
-  toggleShowMore: React.PropTypes.func,
-  isShowingMore: React.PropTypes.bool,
-  hasExhaustiveItems: React.PropTypes.bool,
+  depth: PropTypes.number,
+  facetValues: PropTypes.array,
+  templateProps: PropTypes.object.isRequired,
+  toggleRefinement: PropTypes.func.isRequired,
+  searchFacetValues: PropTypes.func,
+  searchPlaceholder: PropTypes.string,
+  isFromSearch: PropTypes.bool,
+  showMore: PropTypes.bool,
+  toggleShowMore: PropTypes.func,
+  isShowingMore: PropTypes.bool,
+  hasExhaustiveItems: PropTypes.bool,
 };
 
 RawRefinementList.defaultProps = {

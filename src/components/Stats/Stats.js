@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Template from '../Template.js';
@@ -31,16 +32,16 @@ export class RawStats extends React.Component {
 }
 
 RawStats.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    time: React.PropTypes.string,
+  cssClasses: PropTypes.shape({
+    time: PropTypes.string,
   }),
-  hitsPerPage: React.PropTypes.number,
-  nbHits: React.PropTypes.number,
-  nbPages: React.PropTypes.number,
-  page: React.PropTypes.number,
-  processingTimeMS: React.PropTypes.number,
-  query: React.PropTypes.string,
-  templateProps: React.PropTypes.object.isRequired,
+  hitsPerPage: PropTypes.number,
+  nbHits: PropTypes.number,
+  nbPages: PropTypes.number,
+  page: PropTypes.number,
+  processingTimeMS: PropTypes.number,
+  query: PropTypes.string,
+  templateProps: PropTypes.object.isRequired,
 };
 
 export default autoHideContainerHOC(headerFooterHOC(RawStats));

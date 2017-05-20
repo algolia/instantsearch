@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Template from '../Template.js';
@@ -38,17 +39,17 @@ class RefinementListItem extends React.Component {
 }
 
 RefinementListItem.propTypes = {
-  facetValueToRefine: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
+  facetValueToRefine: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
   ]),
-  handleClick: React.PropTypes.func.isRequired,
-  isRefined: React.PropTypes.bool.isRequired,
-  itemClassName: React.PropTypes.string,
-  subItems: React.PropTypes.object,
-  templateData: React.PropTypes.object.isRequired,
-  templateKey: React.PropTypes.string.isRequired,
-  templateProps: React.PropTypes.object.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  isRefined: PropTypes.bool.isRequired,
+  itemClassName: PropTypes.string,
+  subItems: PropTypes.object,
+  templateData: PropTypes.object.isRequired,
+  templateKey: PropTypes.string.isRequired,
+  templateProps: PropTypes.object.isRequired,
 };
 
 export default RefinementListItem;

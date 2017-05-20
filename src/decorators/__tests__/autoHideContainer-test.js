@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import expect from 'expect';
@@ -14,7 +15,7 @@ class TestComponent extends React.Component {
 }
 
 TestComponent.propTypes = {
-  hello: React.PropTypes.string,
+  hello: PropTypes.string,
 };
 
 describe('autoHideContainer', () => {

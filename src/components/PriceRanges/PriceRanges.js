@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Template from '../Template.js';
@@ -85,25 +86,25 @@ export class RawPriceRanges extends React.Component {
 }
 
 RawPriceRanges.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    active: React.PropTypes.string,
-    button: React.PropTypes.string,
-    form: React.PropTypes.string,
-    input: React.PropTypes.string,
-    item: React.PropTypes.string,
-    label: React.PropTypes.string,
-    link: React.PropTypes.string,
-    list: React.PropTypes.string,
-    separator: React.PropTypes.string,
+  cssClasses: PropTypes.shape({
+    active: PropTypes.string,
+    button: PropTypes.string,
+    form: PropTypes.string,
+    input: PropTypes.string,
+    item: PropTypes.string,
+    label: PropTypes.string,
+    link: PropTypes.string,
+    list: PropTypes.string,
+    separator: PropTypes.string,
   }),
-  currency: React.PropTypes.string,
-  facetValues: React.PropTypes.array,
-  labels: React.PropTypes.shape({
-    button: React.PropTypes.string,
-    to: React.PropTypes.string,
+  currency: PropTypes.string,
+  facetValues: PropTypes.array,
+  labels: PropTypes.shape({
+    button: PropTypes.string,
+    to: PropTypes.string,
   }),
-  refine: React.PropTypes.func.isRequired,
-  templateProps: React.PropTypes.object.isRequired,
+  refine: PropTypes.func.isRequired,
+  templateProps: PropTypes.object.isRequired,
 };
 
 RawPriceRanges.defaultProps = {

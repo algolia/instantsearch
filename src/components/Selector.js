@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import autoHideContainer from '../decorators/autoHideContainer.js';
@@ -35,30 +36,30 @@ export class RawSelector extends React.Component {
 }
 
 RawSelector.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string),
+  cssClasses: PropTypes.shape({
+    root: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
     ]),
-    item: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string),
+    item: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
     ]),
   }),
-  currentValue: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
+  currentValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
   ]),
-  options: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      value: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.number,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
       ]),
-      label: React.PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
     })
   ).isRequired,
-  setValue: React.PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
 export default autoHideContainer(headerFooter(RawSelector));
