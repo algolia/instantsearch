@@ -10,6 +10,7 @@
 
 ### Components
   * [Search Box](components/search-box.md)
+  * [Refinement List](components/refinement-list.md)
   * [Pagination](components/pagination.md)
   * [Clear](components/clear.md)
   * [Highlight](components/highlight.md)
