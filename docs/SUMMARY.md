@@ -10,12 +10,13 @@
 
 ### Components
   * [Search Box](components/search-box.md)
+  * [Results](components/results.md)
+  * [No Results](components/no-results.md)
   * [Refinement List](components/refinement-list.md)
   * [Pagination](components/pagination.md)
   * [Clear](components/clear.md)
   * [Highlight](components/highlight.md)
   * [Snippet](components/snippet.md)
-  * [No Results](components/no-results.md)
   * [Powered By](components/powered-by.md)
   * [Price Range](components/price-range.md)
   * [Results per page selector](components/results-per-page-selector.md)
