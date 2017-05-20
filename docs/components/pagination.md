@@ -1,7 +1,7 @@
 Vue InstantSearch Pagination
 ---
 
-A component that helps you navigate between results pages.
+A component to navigate between results pages.
 
 ## Usage
 
@@ -25,13 +25,13 @@ Customize the number of pages to display around the active one:
 
 ## Slots
 
-| Name     | Props        | Default      | Description        |
-|:---------|:-------------|:-------------|:-------------------|
-| first    |              | `&lt;&lt;`   | First page text    |
-| previous |              | `&lt;`       | Previous page text |
-| default  | active, item | `{{ item }}` | Page text          |
-| next     |              | `&gt;`       | Next page text     |
-| last     |              | `&gt;&gt;`   | Last page text     |
+| Name     | Props        | Default                           | Description        |
+|:---------|:-------------|:----------------------------------|:-------------------|
+| first    |              | `&lt;&lt;`                        | First page text    |
+| previous |              | `&lt;`                            | Previous page text |
+| default  | active, item | {% raw %}`{{ item }}`{% endraw %} | Page text          |
+| next     |              | `&gt;`                            | Next page text     |
+| last     |              | `&gt;&gt;`                        | Last page text     |
 
 ## CSS Classes
 

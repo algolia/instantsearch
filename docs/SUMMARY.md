@@ -9,6 +9,7 @@
 
 
 ### Components
+  * [Pagination](components/pagination.md)
   * [Clear](components/clear.md)
   * [Highlight](components/highlight.md)
   * [Snippet](components/snippet.md)
