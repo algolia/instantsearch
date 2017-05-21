@@ -129,4 +129,79 @@ describe('Store', () => {
     const version = require('../../package.json').version;
     expect(addAlgoliaAgent).toBeCalledWith(`vue-instantsearch ${version}`);
   });
+
+  test('should merge query parameters with existing ones', () => {
+    const store = createFromAlgoliaCredentials('whatever', 'whatever');
+    store.queryParameters = {
+      attributesToRetrieve: ['objectID'],
+      nonRetrievableAttributes: ['secret'],
+    };
+
+    expect(store.queryParameters).toHaveProperty('attributesToRetrieve', [
+      'objectID',
+    ]);
+    expect(store.queryParameters).toHaveProperty('nonRetrievableAttributes', [
+      'secret',
+    ]);
+
+    // Ensure parameters have been merged with existing ones.
+    expect(Object.keys(store.queryParameters).length).toBeGreaterThan(2);
+  });
+
+  test('can retrieve query parameters', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+    helper.setQueryParameter('distinct', 1);
+    helper.setPage(3);
+
+    const store = new Store(helper);
+
+    expect(store.queryParameters).toHaveProperty('distinct', 1);
+
+    // Ensure that pages start at 1 by making sure our initial 3 became 4.
+    expect(store.queryParameters).toHaveProperty('page', 4);
+  });
+
+  test('should reset page when query parameters are changed', () => {
+    const store = createFromAlgoliaCredentials('whatever', 'whatever');
+    store.page = 2;
+    store.queryParameters = {
+      distinct: 1,
+      attributesToRetrieve: ['objectID'],
+    };
+
+    expect(store.page).toEqual(1);
+  });
+
+  test('should allow page to be changed by updating query parameters', () => {
+    const store = createFromAlgoliaCredentials('whatever', 'whatever');
+    store.queryParameters = {
+      page: 3,
+      distinct: 1,
+      attributesToRetrieve: ['objectID'],
+    };
+
+    expect(store.page).toEqual(3);
+  });
+
+  test('should trigger search only once when query parameters are changed', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+    const store = new Store(helper);
+
+    const search = jest.fn();
+    helper.search = search;
+
+    store.start();
+
+    helper.search.mockClear();
+
+    store.queryParameters = {
+      page: 3,
+      distinct: 1,
+      attributesToRetrieve: ['objectID'],
+    };
+
+    expect(search).toHaveBeenCalledTimes(1);
+  });
 });

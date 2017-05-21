@@ -48,6 +48,9 @@ export default {
       type: String,
       default: '',
     },
+    queryParameters: {
+      type: Object,
+    },
   },
   data() {
     return {
@@ -73,6 +76,10 @@ export default {
       this._localSearchStore.query = this.query;
     }
 
+    if (this.queryParameters) {
+      this._localSearchStore.queryParameters = this.queryParameters;
+    }
+
     return {
       _searchStore: this._localSearchStore,
     };
@@ -86,6 +93,9 @@ export default {
     },
     query() {
       this._localSearchStore.query = this.query;
+    },
+    queryParameters() {
+      this._localSearchStore.queryParameters = this.queryParameters;
     },
   },
 };
