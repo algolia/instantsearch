@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-store',
+      blockClassName: 'ais-index',
     };
   },
   provide() {

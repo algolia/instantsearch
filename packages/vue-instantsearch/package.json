@@ -9,7 +9,7 @@
   "jsnext:main": "dist/vue-instantsearch.esm.js",
   "unpkg": "dist/vue-instantsearch.js",
   "dependencies": {
-    "vue-instantsearch-store": "*",
+    "vue-instantsearch-index": "*",
     "vue-instantsearch-highlight": "*",
     "vue-instantsearch-snippet": "*",
     "vue-instantsearch-input": "*",
