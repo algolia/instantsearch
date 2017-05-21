@@ -65,16 +65,16 @@ export class Store {
     this._helper.getClient().addAlgoliaAgent(`vue-instantsearch ${version}`);
   }
 
+  get algoliaHelper() {
+    return this._helper;
+  }
+
   get highlightPreTag() {
     return this._helper.getQueryParameter('highlightPreTag');
   }
 
   get highlightPostTag() {
     return this._helper.getQueryParameter('highlightPostTag');
-  }
-
-  get algoliaHelper() {
-    return this._helper;
   }
 
   set algoliaClient(algoliaClient) {
@@ -280,6 +280,27 @@ export class Store {
 
   get query() {
     return this._helper.state.query;
+  }
+
+  set queryParameters(parameters) {
+    this.stop();
+    for (let parameter in parameters) {
+      this._helper.setQueryParameter(parameter, parameters[parameter]);
+    }
+
+    // Make sure page starts at 1.
+    if ('page' in parameters) {
+      this.page = parameters.page;
+      delete parameters.page;
+    }
+    this.start();
+  }
+
+  get queryParameters() {
+    const parameters = this._helper.state.getQueryParams();
+    parameters.page = this.page;
+
+    return parameters;
   }
 
   // Todo: find a better name for this function.
