@@ -1,9 +1,9 @@
 <template>
-  <ais-store :search-store="searchStore" :query="query">
+  <ais-index :search-store="searchStore" :query="query">
     <ais-input placeholder="Search for a user..."/>
     <ais-results></ais-results>
 
-  </ais-store>
+  </ais-index>
 </template>
 
 <script>

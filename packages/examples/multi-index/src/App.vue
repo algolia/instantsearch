@@ -9,7 +9,7 @@
     <ais-powered-by />
 
     <div class="grid">
-      <ais-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="bestbuy" :query="query">
+      <ais-index appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="bestbuy" :query="query">
         <ais-results>
           <div slot="header">
             <h2>Products from first index</h2>
@@ -42,9 +42,9 @@
             </div>
           </template>
         </ais-results>
-      </ais-store>
+      </ais-index>
 
-      <ais-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="ikea" :query="query">
+      <ais-index appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="ikea" :query="query">
         <ais-results>
 
           <div slot="header">
@@ -78,7 +78,7 @@
           </template>
 
         </ais-results>
-      </ais-store>
+      </ais-index>
     </div>
 
     <p style="text-align: center;">Data courtesy of ikea.com &amp; bestbuy.com</p>
@@ -133,7 +133,7 @@ export default {
   .grid {
     display: flex;
 
-    .ais-store {
+    .ais-index {
       flex: 0 0 50%;
     }
   }
