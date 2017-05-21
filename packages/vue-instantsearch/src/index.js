@@ -1,4 +1,4 @@
-import Store from 'vue-instantsearch-store';
+import Index from 'vue-instantsearch-index';
 import Highlight from 'vue-instantsearch-highlight';
 import Snippet from 'vue-instantsearch-snippet';
 import Input from 'vue-instantsearch-input';
@@ -18,7 +18,7 @@ import PriceRange from 'vue-instantsearch-price-range';
 import PoweredBy from 'vue-instantsearch-powered-by';
 
 const InstantSearch = {
-  Store,
+  Index,
   Highlight,
   Snippet,
   Input,
@@ -37,7 +37,7 @@ const InstantSearch = {
   PoweredBy,
 
   install(Vue) {
-    Vue.component('ais-store', Store);
+    Vue.component('ais-index', Index);
     Vue.component('ais-highlight', Highlight);
     Vue.component('ais-snippet', Snippet);
     Vue.component('ais-input', Input);
@@ -65,7 +65,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 export default InstantSearch;
 
 export {
-  Store,
+  Index,
   Highlight,
   Snippet,
   Input,

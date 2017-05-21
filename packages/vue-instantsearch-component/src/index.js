@@ -8,7 +8,7 @@ export default {
       },
       validator(value) {
         if (typeof value !== 'object') {
-          throw 'It looks like you forgot to wrap your Algolia search component inside of an <ais-store> component. You can also pass the store as a prop to your component.';
+          throw 'It looks like you forgot to wrap your Algolia search component inside of an <ais-index> component. You can also pass the store as a prop to your component.';
         }
 
         return true;
