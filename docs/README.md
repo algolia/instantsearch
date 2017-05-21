@@ -17,7 +17,7 @@ an e-commerce website's index.
 
 ## Setup a new Vue project
 
-We recommend you bootstrap a new Vue project with the [official CLI tool](https://vuejs.org/v2/guide/installation.html#CLI).
+Bootstrap a new Vue project with the [official CLI tool](https://vuejs.org/v2/guide/installation.html#CLI).
 
 ```sh
 # Install it with npm
@@ -58,6 +58,7 @@ Vue.use(InstantSearch);
 ```
 
 **Note: If Vue is available as a global variable this will be done for you automatically.
+
 This is the case when you are using the UMD build directly in the browser for example.**
 
 ## Create your first search experience
@@ -69,7 +70,7 @@ This is the case when you are using the UMD build directly in the browser for ex
     apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
     indexName="bestbuy"
   >
-    <ais-input />
+    <ais-search-box />
     <ais-results>
       <template scope="{ result }">
         <h2><ais-highlight :result="result" attributeName="name" /></h2>

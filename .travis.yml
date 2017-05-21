@@ -3,3 +3,5 @@ node_js: stable
 before_script:
   - npm run boot
   - npm run build:cjs
+notifications:
+  email: false
