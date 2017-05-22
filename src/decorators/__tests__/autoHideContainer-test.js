@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import expect from 'expect';
-import TestUtils from 'react-addons-test-utils';
+import {createRenderer} from 'react-test-renderer/shallow';
 import autoHideContainer from '../autoHideContainer';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -22,7 +22,6 @@ describe('autoHideContainer', () => {
   let props = {};
 
   it('should render autoHideContainer(<TestComponent />)', () => {
-    const {createRenderer} = TestUtils;
     const renderer = createRenderer();
     props.hello = 'son';
     const AutoHide = autoHideContainer(TestComponent);

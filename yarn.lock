@@ -5799,7 +5799,7 @@ rc@^1.0.1, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-"react-addons-test-utils@^0.14.8 || ^15.0.1", react-addons-test-utils@^15.4.2:
+"react-addons-test-utils@^0.14.8 || ^15.0.1":
   version "15.5.1"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.5.1.tgz#e0d258cda2a122ad0dff69f838260d0c3958f5f7"
   dependencies:

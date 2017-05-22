@@ -2,7 +2,7 @@ import React from 'react';
 import sinon from 'sinon';
 import {RawPriceRanges as PriceRanges} from '../PriceRanges';
 import renderer from 'react-test-renderer';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 
 describe('PriceRanges', () => {
   const defaultProps = {
