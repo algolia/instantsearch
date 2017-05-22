@@ -65,6 +65,7 @@ export const checkUsage = ({attributeName, operator, usageMessage, showMoreLimit
  * @property {function} searchForItems Searches for values inside the list.
  * @property {boolean} isFromSearch `true` if the values are from an index search.
  * @property {boolean} canRefine `true` if a refinement can be applied.
+ * @property {boolean} canToggleShowMore `true` if the show more feature is available and there are enough items to show more
  * @property {Object} widgetParams All original `CustomRefinementListWidgetOptions` forwarded to the `renderFn`.
  * @property {boolean} isShowingMore True if the menu is displaying all the menu items.
  * @property {function} toggleShowMore Toggles the number of values displayed between `limit` and `showMoreLimit`.
@@ -177,6 +178,7 @@ export default function connectRefinementList(renderFn) {
         canRefine: isFromSearch || items.length > 0,
         widgetParams,
         isShowingMore,
+        canToggleShowMore: isShowingMore || !hasExhaustiveItems,
         toggleShowMore,
         hasExhaustiveItems,
       }, isFirstSearch);

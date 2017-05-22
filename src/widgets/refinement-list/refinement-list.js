@@ -38,6 +38,7 @@ const renderer = ({
   toggleShowMore,
   isShowingMore,
   hasExhaustiveItems,
+  canToggleShowMore,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -71,6 +72,7 @@ const renderer = ({
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
       hasExhaustiveItems={hasExhaustiveItems}
+      canToggleShowMore={canToggleShowMore}
     />,
     containerNode
   );

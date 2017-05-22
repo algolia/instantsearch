@@ -185,6 +185,99 @@ describe('connectRefinementList', () => {
     expect(helper.hasRefinements('category')).toBe(true);
   });
 
+  it('If there are too few items then canToggleShowMore is false', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 3,
+      showMoreLimit: 10,
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+        facets: {
+          category: {
+            c1: 880,
+            c2: 47,
+          },
+        },
+      }, {
+        facets: {
+          category: {
+            c1: 880,
+            c2: 47,
+          },
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.canToggleShowMore).toBe(false);
+  });
+
+  it('If there are too few items then canToggleShowMore is false', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 1,
+      showMoreLimit: 10,
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+        facets: {
+          category: {
+            c1: 880,
+            c2: 47,
+          },
+        },
+      }, {
+        facets: {
+          category: {
+            c1: 880,
+            c2: 47,
+          },
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.canToggleShowMore).toBe(true);
+
+    // toggleShowMore will set the state of the show more to true
+    // therefore it's always possible to go back and show less items
+    secondRenderingOptions.toggleShowMore();
+
+    const thirdRenderingOptions = rendering.lastCall.args[0];
+    expect(thirdRenderingOptions.canToggleShowMore).toBe(true);
+  });
+
   it('Show more should toggle between two limits', () => {
     const widget = makeWidget({
       attributeName: 'category',

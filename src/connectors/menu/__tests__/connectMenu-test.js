@@ -330,6 +330,7 @@ describe('connectMenu', () => {
       const firstRenderingOptions = rendering.lastCall.args[0];
       expect(firstRenderingOptions.isShowingMore).toBe(false);
       expect(firstRenderingOptions.items.length).toBe(1);
+      expect(firstRenderingOptions.canToggleShowMore).toBe(true);
 
       // When
       firstRenderingOptions.toggleShowMore();
@@ -338,6 +339,54 @@ describe('connectMenu', () => {
       const secondRenderingOptions = rendering.lastCall.args[0];
       expect(secondRenderingOptions.isShowingMore).toBe(true);
       expect(secondRenderingOptions.items.length).toBe(2);
+      expect(firstRenderingOptions.canToggleShowMore).toBe(true);
+    });
+
+    it('should set canToggleShowMore to false when there are not enough items', () => {
+      // Given
+      const widget = makeWidget({
+        attributeName: 'category',
+        limit: 1,
+        showMoreLimit: 2,
+      });
+
+      // When
+      const config = widget.getConfiguration({});
+      const helper = algoliasearchHelper(fakeClient, '', config);
+
+      helper.search = jest.fn();
+      helper.toggleRefinement('category', 'Decoration');
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [{
+          hits: [],
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+          },
+        }, {
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+          },
+        }]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const firstRenderingOptions = rendering.lastCall.args[0];
+      expect(firstRenderingOptions.items.length).toBe(1);
+      expect(firstRenderingOptions.canToggleShowMore).toBe(false);
     });
   });
 });
