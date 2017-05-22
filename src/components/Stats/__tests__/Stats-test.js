@@ -1,6 +1,6 @@
 import React from 'react';
 import expect from 'expect';
-import TestUtils from 'react-addons-test-utils';
+import {createRenderer} from 'react-test-renderer/shallow';
 import {RawStats as Stats} from '../Stats';
 import Template from '../../Template';
 
@@ -11,7 +11,6 @@ describe('Stats', () => {
   let renderer;
 
   beforeEach(() => {
-    const {createRenderer} = TestUtils;
     renderer = createRenderer();
   });
 

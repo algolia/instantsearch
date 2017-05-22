@@ -1,7 +1,8 @@
 import React from 'react';
 import expect from 'expect';
 import {shallow} from 'enzyme';
-import TestUtils from 'react-addons-test-utils';
+import {createRenderer} from 'react-test-renderer/shallow';
+
 import headerFooter from '../headerFooter';
 import Template from '../../components/Template';
 
@@ -34,7 +35,6 @@ describe('headerFooter', () => {
   }
 
   beforeEach(() => {
-    const {createRenderer} = TestUtils;
     defaultProps = {
       cssClasses: {
         root: 'root',

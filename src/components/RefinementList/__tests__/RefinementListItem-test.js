@@ -1,5 +1,5 @@
 import React from 'react';
-import {createRenderer} from 'react-addons-test-utils';
+import {createRenderer} from 'react-dom/test-utils';
 import RefinementListItem from '../RefinementListItem';
 import Template from '../../Template';
 import sinon from 'sinon';
