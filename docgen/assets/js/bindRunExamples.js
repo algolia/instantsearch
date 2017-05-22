@@ -130,7 +130,7 @@ function appendRunButton(codeSample, handler) {
   runBtn.style.marginRight = "10px";
   runBtn.onclick = handler;
 
-  codeSample.firstChild.appendChild(runBtn);
+  codeSample.previousSibling.appendChild(runBtn);
 }
 
 export default function bindRunExamples(codeSamples) {
