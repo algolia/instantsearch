@@ -15,7 +15,10 @@ describe('connectHits', () => {
     const makeWidget = connectHits(rendering);
     const widget = makeWidget();
 
-    expect(widget.getConfiguration).toEqual(undefined);
+    expect(widget.getConfiguration()).toEqual({
+      highlightPreTag: '__ais-highlight__',
+      highlightPostTag: '__/ais-highlight__',
+    });
 
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
@@ -71,7 +74,17 @@ describe('connectHits', () => {
     const hits = [
       {fake: 'data'},
       {sample: 'infos'},
+      {
+        toEscape: '<a href="#top">Go to top</a>',
+        _highlightResult: {
+          toEscape: {
+            wontEscape: '<h1>Not escaped</h1>',
+            value: '<a href="#top">__ais-highlight__Go to top__/ais-highlight__</a>',
+          },
+        },
+      },
     ];
+
     const results = new SearchResults(helper.state, [{hits}]);
     widget.render({
       results,
@@ -80,8 +93,22 @@ describe('connectHits', () => {
       createURL: () => '#',
     });
 
+    const processedHits = [
+      {fake: 'data'},
+      {sample: 'infos'},
+      {
+        toEscape: '&lt;a href=&quot;#top&quot;&gt;Go to top&lt;/a&gt;',
+        _highlightResult: {
+          toEscape: {
+            wontEscape: '<h1>Not escaped</h1>',
+            value: '&lt;a href=&quot;#top&quot;&gt;<em>Go to top</em>&lt;/a&gt;',
+          },
+        },
+      },
+    ];
+
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.hits).toEqual(hits);
+    expect(secondRenderingOptions.hits).toEqual(processedHits);
     expect(secondRenderingOptions.results).toEqual(results);
   });
 });
