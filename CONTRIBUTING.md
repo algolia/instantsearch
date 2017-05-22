@@ -108,7 +108,8 @@ the test page with your VM. **Do not commit this change**
 + webpack-dev-server --config dev/webpack.dev.config.babel.js --hot --inline --no-info --public [your_ip] &
 ```
 
-Then you should be able bebug using the dev setup: `yarn run dev` and the virtual machine.
+Then you should be able bebug using the dev setup: `yarn run dev` and the virtual machine. You can also
+run the page used for function tests using `yarn run test:functional:dev:debug`
 
 ## Lint
 
