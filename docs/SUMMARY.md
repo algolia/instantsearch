@@ -18,6 +18,7 @@
   * [Clear](components/clear.md)
   * [Highlight](components/highlight.md)
   * [Snippet](components/snippet.md)
+  * [Stats](components/stats.md)
   * [Powered By](components/powered-by.md)
   * [Price Range](components/price-range.md)
   * [Results per page selector](components/results-per-page-selector.md)
