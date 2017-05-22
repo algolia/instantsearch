@@ -11,7 +11,7 @@ import {
   createFromAlgoliaCredentials,
   createFromAlgoliaClient,
   Store,
-} from 'vue-instantsearch';
+} from '../store';
 
 test('FACET_AND should be "and"', () => {
   expect(FACET_AND).toBe('and');
