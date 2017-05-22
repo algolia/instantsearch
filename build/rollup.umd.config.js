@@ -6,15 +6,10 @@ import commonjs from 'rollup-plugin-commonjs';
 import uglify from 'rollup-plugin-uglify';
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
-import camelize from 'camelize';
-import fs from 'fs';
-const pkg = JSON.parse(fs.readFileSync('package.json'));
-let moduleName = camelize(pkg.name);
-moduleName = moduleName.charAt(0).toUpperCase() + moduleName.slice(1);
 
 export default {
-  entry: 'src/index.js',
-  moduleName: moduleName,
+  entry: 'src/instantsearch.js',
+  moduleName: 'VueInstantSearch',
   plugins: [
     vue({ compileTemplate: true, css: true }),
     json(),
@@ -36,5 +31,5 @@ export default {
     uglify(),
     filesize(),
   ],
-  targets: [{ dest: `dist/${pkg.name}.js`, format: 'umd' }],
+  targets: [{ dest: `dist/vue-instantsearch.js`, format: 'umd' }],
 };
