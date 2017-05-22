@@ -21,5 +21,6 @@
   * [Stats](components/stats.md)
   * [Powered By](components/powered-by.md)
   * [Price Range](components/price-range.md)
-  * [Results per page selector](components/results-per-page-selector.md)
+  * [Results per Page Selector](components/results-per-page-selector.md)
+  * [Sort by Selector](components/sort-by-selector.md)
   * [Rating](components/rating.md)
