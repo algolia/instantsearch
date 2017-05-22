@@ -57,9 +57,10 @@ import InstantSearch from 'vue-instantsearch';
 Vue.use(InstantSearch);
 ```
 
-**Note: If Vue is available as a global variable this will be done for you automatically.
+**Info: If `Vue` is available as a global variable, components will be registered automatically.
+This is the case for example when you are using the UMD build directly in the browser.**
 
-This is the case when you are using the UMD build directly in the browser for example.**
+
 
 ## Create your first search experience
 
