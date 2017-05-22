@@ -10,6 +10,7 @@ import json from 'rollup-plugin-json';
 export default {
   entry: 'src/instantsearch.js',
   moduleName: 'VueInstantSearch',
+  exports: 'named',
   plugins: [
     vue({ compileTemplate: true, css: true }),
     json(),

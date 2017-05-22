@@ -6,6 +6,7 @@ import json from 'rollup-plugin-json';
 export default {
   entry: 'src/instantsearch.js',
   external: ['algoliasearch', 'algoliasearch-helper', 'escape-html'],
+  exports: 'named',
   plugins: [
     vue({ compileTemplate: true, css: true }),
     json(),
