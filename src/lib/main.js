@@ -89,11 +89,11 @@ import * as widgets from '../widgets/index.js';
  * @param {InstantSearchOptions} $0 The options
  * @return {InstantSearch} the instantsearch instance
  */
-const instantsearch = Object.assign(toFactory(InstantSearch), {
-  createQueryString: algoliasearchHelper.url.getQueryStringFromState,
-  connectors,
-  widgets,
-  version,
-});
+const instantsearch = toFactory(InstantSearch);
+
+instantsearch.createQueryString = algoliasearchHelper.url.getQueryStringFromState;
+instantsearch.connectors = connectors;
+instantsearch.widgets = widgets;
+instantsearch.version = version;
 
 export default instantsearch;
