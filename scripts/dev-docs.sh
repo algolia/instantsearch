@@ -4,6 +4,6 @@ set -ev # exit when error
 
 (
   cd docgen
-  yarn && yarn dev
+  yarn && yarn run dev
 ) & ./scripts/dev.sh
 wait

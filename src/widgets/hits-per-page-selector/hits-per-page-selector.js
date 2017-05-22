@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
 
+import find from 'lodash/find';
+
 import Selector from '../../components/Selector.js';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
 
@@ -23,7 +25,7 @@ const renderer = ({
 }, isFirstRendering) => {
   if (isFirstRendering) return;
 
-  const {value: currentValue} = items.find(({isRefined}) => isRefined) || {};
+  const {value: currentValue} = find(items, ({isRefined}) => isRefined) || {};
 
   ReactDOM.render(
     <Selector

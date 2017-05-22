@@ -85,6 +85,31 @@ npm run test:functional
 
 Locally you can inspect (view) the browser doing the test here: http://localhost:6080/.
 
+### Debugging
+
+In order to check the status of the functional tests on all the platforms we use
+sauce labs. The first here is to [get the credentials](https://saucelabs.com/beta/user-settings) of your sauce labs account.
+
+Running the functional tests on sauce labs:
+
+```sh
+SAUCE_USERNAME=[your login] SAUCE_ACCESS_KEY=[your api key] CI=true yarn run test:functional
+```
+
+You can then inspect the status of tests from your dashboard. Check the browsers for which tests are
+failing. If some are IE or edged you can download a an virtual machine image from
+[Microsoft website](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/).
+
+Update the config of the dev server (instantsearch.js/scripts/dev.sh) so that you can access
+the test page with your VM. **Do not commit this change**
+
+```diff
+- webpack-dev-server --config dev/webpack.dev.config.babel.js --hot --inline --no-info &
++ webpack-dev-server --config dev/webpack.dev.config.babel.js --hot --inline --no-info --public [your_ip] &
+```
+
+Then you should be able bebug using the dev setup: `yarn run dev` and the virtual machine.
+
 ## Lint
 
 ```sh

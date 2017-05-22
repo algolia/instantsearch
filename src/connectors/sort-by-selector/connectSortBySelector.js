@@ -1,3 +1,4 @@
+import find from 'lodash/find';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -107,7 +108,7 @@ export default function connectSortBySelector(renderFn) {
     return {
       init({helper, instantSearchInstance}) {
         const currentIndex = helper.getIndex();
-        const isIndexInList = indices.find(({name}) => name === currentIndex);
+        const isIndexInList = find(indices, ({name}) => name === currentIndex);
 
         if (!isIndexInList) {
           throw new Error(`[sortBySelector]: Index ${currentIndex} not present in \`indices\``);

@@ -1,3 +1,5 @@
+import find from 'lodash/find';
+
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -144,7 +146,8 @@ export default function connectRangeSlider(renderFn) {
       },
 
       render({results, helper, instantSearchInstance}) {
-        const facet = (results.disjunctiveFacets || []).find(({name}) => name === attributeName);
+        const facetsFromResults = results.disjunctiveFacets || [];
+        const facet = find(facetsFromResults, ({name}) => name === attributeName);
         const stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
           min: null,
           max: null,

@@ -4,6 +4,8 @@ import {
   unescapeRefinement,
 } from '../../lib/utils.js';
 
+import find from 'lodash/find';
+
 const usage = `Usage:
 var customToggle = connectToggle(function render(params, isFirstRendering) {
   // params = {
@@ -196,7 +198,7 @@ export default function connectToggle(renderFn) {
         const offValue = off === undefined ? false : off;
         const allFacetValues = results.getFacetValues(attributeName);
 
-        const onData = allFacetValues.find(({name}) => name === unescapeRefinement(on));
+        const onData = find(allFacetValues, ({name}) => name === unescapeRefinement(on));
         const onFacetValue = {
           name: label,
           isRefined: onData !== undefined ? onData.isRefined : false,
@@ -204,7 +206,7 @@ export default function connectToggle(renderFn) {
         };
 
         const offData = hasAnOffValue
-          ? allFacetValues.find(({name}) => name === unescapeRefinement(offValue))
+          ? find(allFacetValues, ({name}) => name === unescapeRefinement(offValue))
           : undefined;
         const offFacetValue = {
           name: label,

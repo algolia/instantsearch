@@ -2,10 +2,12 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 
+import includes from 'lodash/includes';
+
 const Pit = ({style, children}) => {
   // first, end & middle
   const positionValue = Math.round(parseFloat(style.left));
-  const shouldDisplayValue = [0, 50, 100].includes(positionValue);
+  const shouldDisplayValue = includes([0, 50, 100], positionValue);
 
   return (
     <div
