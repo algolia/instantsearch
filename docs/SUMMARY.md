@@ -9,6 +9,7 @@
 
 
 ### Components
+  * [Index](components/index.md)
   * [Search Box](components/search-box.md)
   * [Results](components/results.md)
   * [No Results](components/no-results.md)

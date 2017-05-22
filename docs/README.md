@@ -65,7 +65,7 @@ This is the case when you are using the UMD build directly in the browser for ex
 
 ```html
 <template>
-  <ais-store
+  <ais-index
     appId="latency"
     apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
     indexName="bestbuy"
@@ -77,6 +77,6 @@ This is the case when you are using the UMD build directly in the browser for ex
         <p><ais-snippet :result="result" attributeName="shortDescription" /></p>
       </template>
     </ais-results>
-  </ais-store>
+  </ais-index>
 </template>
 ```
