@@ -53,7 +53,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "**/*.common.js"
+      "dist/vue-instantsearch.common.js"
     ],
     "snapshotSerializers": [
       "jest-serializer-html"
