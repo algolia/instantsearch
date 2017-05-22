@@ -97,7 +97,7 @@ SAUCE_USERNAME=[your login] SAUCE_ACCESS_KEY=[your api key] CI=true yarn run tes
 ```
 
 You can then inspect the status of tests from your dashboard. Check the browsers for which tests are
-failing. If some are IE or edged you can download a an virtual machine image from
+failing. If some are IE or Edge you can download a virtual machine image from the 
 [Microsoft website](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/).
 
 Update the config of the dev server (instantsearch.js/scripts/dev.sh) so that you can access
