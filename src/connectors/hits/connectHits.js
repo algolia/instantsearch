@@ -1,3 +1,9 @@
+import escape from 'lodash/escape';
+import isPlainObject from 'lodash/isPlainObject';
+import isArray from 'lodash/isArray';
+import isString from 'lodash/isString';
+import reduce from 'lodash/reduce';
+
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -12,6 +18,11 @@ var customHits = connectHits(function render(params, isFirstRendering) {
 search.addWidget(customHits());
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHits.html
 `;
+
+const config = {
+  highlightPreTag: '__ais-highlight__',
+  highlightPostTag: '__/ais-highlight__',
+};
 
 /**
  * @typedef {Object} HitsRenderingOptions
@@ -49,6 +60,10 @@ export default function connectHits(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => ({
+    getConfiguration() {
+      return config;
+    },
+
     init({instantSearchInstance}) {
       renderFn({
         hits: [],
@@ -59,6 +74,8 @@ export default function connectHits(renderFn) {
     },
 
     render({results, instantSearchInstance}) {
+      results.hits = escapeAll(results.hits);
+
       renderFn({
         hits: results.hits,
         results,
@@ -67,4 +84,85 @@ export default function connectHits(renderFn) {
       }, false);
     },
   });
+}
+
+function escapeAll(hits) {
+  if (hits && hits.__hitsEscaped !== true && hits.length > 0) {
+    hits.__hitsEscaped = true;
+    return recursiveEscape(hits);
+  }
+
+  return hits;
+}
+
+function replaceWithEm(val) {
+  if (isPlainObject(val)) {
+    return reduce(
+      val,
+      (result, value, key) => {
+        result[key] = replaceWithEm(value);
+        return {};
+      },
+      {}
+    );
+  }
+
+  if (isArray(val)) {
+    return val.map(replaceWithEm);
+  }
+
+  if (isString(val)) {
+    return val
+      .replace(new RegExp(config.highlightPreTag, 'g'), '<em>')
+      .replace(new RegExp(config.highlightPostTag, 'g'), '</em>');
+  }
+
+  return val;
+}
+
+function escapeHighlightProperty(highlightResult) {
+  return reduce(
+    highlightResult,
+    (result, value, key) => {
+      if (isPlainObject(value)) {
+        value.value = replaceWithEm(recursiveEscape(value.value));
+        result[key] = value;
+      }
+
+      if (isArray(value)) {
+        result[key] = value.map(item => {
+          item.value = replaceWithEm(recursiveEscape(item.value));
+          return item;
+        });
+      }
+
+      return result;
+    },
+    {}
+  );
+}
+
+function recursiveEscape(val) {
+  if (isPlainObject(val)) {
+    return reduce(
+      val,
+      (result, value, key) => {
+        result[key] = key === '_highlightResult' || key === '_snippetResult'
+          ? escapeHighlightProperty(value)
+          : recursiveEscape(value);
+        return result;
+      },
+      {}
+    );
+  }
+
+  if (isString(val)) {
+    return escape(val);
+  }
+
+  if (isArray(val)) {
+    return val.map(recursiveEscape);
+  }
+
+  return val;
 }
