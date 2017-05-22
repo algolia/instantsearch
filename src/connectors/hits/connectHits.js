@@ -74,7 +74,7 @@ export default function connectHits(renderFn) {
     },
 
     render({results, instantSearchInstance}) {
-      results.hits = escapeAll(results.hits);
+      results.hits = recursiveEscape(results.hits);
 
       renderFn({
         hits: results.hits,
@@ -84,15 +84,6 @@ export default function connectHits(renderFn) {
       }, false);
     },
   });
-}
-
-function escapeAll(hits) {
-  if (hits && hits.__hitsEscaped !== true && hits.length > 0) {
-    hits.__hitsEscaped = true;
-    return recursiveEscape(hits);
-  }
-
-  return hits;
 }
 
 function replaceWithEm(val) {
