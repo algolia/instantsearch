@@ -1,12 +1,18 @@
 {
   "name": "vue-instantsearch",
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "description": "👀 Lightning-fast Algolia search for Vue apps",
+  "keywords": ["vue", "algolia", "search", "instantsearch", "components", "ui", "facet", "autocomplete"],
+  "license": "MIT",
   "version": "0.1.0",
   "files": [
     "dist"
   ],
   "main": "dist/vue-instantsearch.common.js",
   "module": "dist/vue-instantsearch.esm.js",
-  "jsnext:main": "dist/vue-instantsearch.esm.js",
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
