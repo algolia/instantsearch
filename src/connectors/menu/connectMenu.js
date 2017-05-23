@@ -52,7 +52,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {boolean} isShowingMore True if the menu is displaying all the menu items.
  * @property {function} toggleShowMore Toggles the number of values displayed between `limit` and `showMore.limit`.
  * @property {boolean} canToggleShowMore `true` if the toggleShowMore button can be activated (enough items to display more or
- * already displaying more than limit items)
+ * already displaying more than `limit` items)
  */
 
  /**
