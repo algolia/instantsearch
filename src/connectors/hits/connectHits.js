@@ -1,4 +1,4 @@
-import escapeHighlight from '../../lib/escape-highlight.js';
+import escapeHighlight, {tagConfig} from '../../lib/escape-highlight.js';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -17,11 +17,6 @@ search.addWidget(
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHits.html
 `;
-
-const config = {
-  highlightPreTag: '__ais-highlight__',
-  highlightPostTag: '__/ais-highlight__',
-};
 
 /**
  * @typedef {Object} CustomHitsWidgetOptions
@@ -68,7 +63,7 @@ export default function connectHits(renderFn) {
 
     return {
       getConfiguration() {
-        return config;
+        return tagConfig;
       },
 
       init({instantSearchInstance}) {
