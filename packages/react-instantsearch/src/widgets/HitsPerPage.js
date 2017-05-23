@@ -28,7 +28,7 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  *     >
  *       <HitsPerPage
  *         defaultRefinement={20}
- *         items={[{value: '30', label: 'Show 20 hits'}, {value: '50', label: 'Show 50 hits'}]}
+ *         items={[{value: 20, label: 'Show 20 hits'}, {value: 50, label: 'Show 50 hits'}]}
  *       />
  *     </InstantSearch>
  *   );
