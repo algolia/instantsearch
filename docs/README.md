@@ -57,15 +57,16 @@ import InstantSearch from 'vue-instantsearch';
 Vue.use(InstantSearch);
 ```
 
-**Note: If Vue is available as a global variable this will be done for you automatically.
+**Info: If `Vue` is available as a global variable, components will be registered automatically.
+This is the case for example when you are using the UMD build directly in the browser.**
 
-This is the case when you are using the UMD build directly in the browser for example.**
+
 
 ## Create your first search experience
 
 ```html
 <template>
-  <ais-store
+  <ais-index
     appId="latency"
     apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
     indexName="bestbuy"
@@ -77,6 +78,6 @@ This is the case when you are using the UMD build directly in the browser for ex
         <p><ais-snippet :result="result" attributeName="shortDescription" /></p>
       </template>
     </ais-results>
-  </ais-store>
+  </ais-index>
 </template>
 ```

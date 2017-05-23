@@ -1,6 +1,8 @@
 <template>
   <div :class="bem()" v-if="totalResults > 0">
-    <slot>{{ totalResults }} results found in {{ processingTimeMS }}ms</slot>
+    <slot :totalResults="totalResults" :processingTime="processingTime" :query="query">
+      {{ totalResults }} results found in {{ processingTime }}ms
+    </slot>
   </div>
 </template>
 
@@ -15,10 +17,13 @@ export default {
     };
   },
   computed: {
+    query() {
+      return this.searchStore.query;
+    },
     totalResults() {
       return this.searchStore.totalResults;
     },
-    processingTimeMS() {
+    processingTime() {
       return this.searchStore.processingTimeMS;
     },
   },
