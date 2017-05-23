@@ -55,7 +55,10 @@ describe('connectHits', () => {
   it('Provides the hits and the whole results', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget();
+    const widget = makeWidget({
+      escapeHits: true,
+      escapeHitsWhitelist: ['whitelisted'],
+    });
 
     const helper = jsHelper(fakeClient, '', {});
     helper.search = sinon.stub();
@@ -83,6 +86,15 @@ describe('connectHits', () => {
           },
         },
       },
+      {
+        whitelisted: '<a href="#top">Go to top</a>',
+        _highlightResult: {
+          whitelisted: {
+            wontEscape: '<h1>Not escaped</h1>',
+            value: '<a href="#top">__ais-highlight__Go to top__/ais-highlight__</a>',
+          },
+        },
+      },
     ];
 
     const results = new SearchResults(helper.state, [{hits}]);
@@ -102,6 +114,15 @@ describe('connectHits', () => {
           toEscape: {
             wontEscape: '<h1>Not escaped</h1>',
             value: '&lt;a href=&quot;#top&quot;&gt;<em>Go to top</em>&lt;/a&gt;',
+          },
+        },
+      },
+      {
+        whitelisted: '<a href="#top">Go to top</a>',
+        _highlightResult: {
+          whitelisted: {
+            wontEscape: '<h1>Not escaped</h1>',
+            value: '<a href="#top"><em>Go to top</em></a>',
           },
         },
       },

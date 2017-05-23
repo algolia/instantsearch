@@ -15,7 +15,12 @@ var customHits = connectHits(function render(params, isFirstRendering) {
   //   widgetParams,
   // }
 });
-search.addWidget(customHits());
+search.addWidget(
+  customHits({
+    [ escapeHits = false ],
+    [ escapeHitsWhitelist = [] ]
+  })
+);
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHits.html
 `;
 
@@ -23,6 +28,12 @@ const config = {
   highlightPreTag: '__ais-highlight__',
   highlightPostTag: '__/ais-highlight__',
 };
+
+/**
+ * @typedef CustomHitsWidgetOptions
+ * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {string[]} [escapeHitsWhitelist = []] Dont escape theses fields from hits.
+ */
 
 /**
  * @typedef {Object} HitsRenderingOptions
@@ -35,7 +46,7 @@ const config = {
  * **Hits** connector provides the logic to create custom widgets that will render the results retrieved from Algolia.
  * @type {Connector}
  * @param {function(HitsRenderingOptions, boolean)} renderFn Rendering function for the custom **Hits** widget.
- * @return {function} Re-usable widget factory for a custom **Hits** widget.
+ * @return {function(CustomHitsWidgetOptions)} Re-usable widget factory for a custom **Hits** widget.
  * @example
  * // custom `renderFn` to render the custom Hits widget
  * function renderFn(HitsRenderingOptions) {
@@ -59,31 +70,44 @@ const config = {
 export default function connectHits(renderFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetParams = {}) => ({
-    getConfiguration() {
-      return config;
-    },
+  return (widgetParams = {}) => {
+    const {
+      escapeHits = false,
+      escapeHitsWhitelist = [],
+    } = widgetParams;
 
-    init({instantSearchInstance}) {
-      renderFn({
-        hits: [],
-        results: undefined,
-        instantSearchInstance,
-        widgetParams,
-      }, true);
-    },
+    if (!isArray(escapeHitsWhitelist)) {
+      throw new Error(usage);
+    }
 
-    render({results, instantSearchInstance}) {
-      results.hits = recursiveEscape(results.hits);
+    return {
+      getConfiguration() {
+        return config;
+      },
 
-      renderFn({
-        hits: results.hits,
-        results,
-        instantSearchInstance,
-        widgetParams,
-      }, false);
-    },
-  });
+      init({instantSearchInstance}) {
+        renderFn({
+          hits: [],
+          results: undefined,
+          instantSearchInstance,
+          widgetParams,
+        }, true);
+      },
+
+      render({results, instantSearchInstance}) {
+        if (escapeHits === true) {
+          results.hits = recursiveEscape(results.hits, escapeHitsWhitelist);
+        }
+
+        renderFn({
+          hits: results.hits,
+          results,
+          instantSearchInstance,
+          widgetParams,
+        }, false);
+      },
+    };
+  };
 }
 
 function replaceWithEm(val) {
@@ -111,18 +135,25 @@ function replaceWithEm(val) {
   return val;
 }
 
-function escapeHighlightProperty(highlightResult) {
+function escapeHighlightProperty(highlightResult, whitelist) {
   return reduce(
     highlightResult,
     (result, value, key) => {
+      // Stop here don't escape this key, it's whitelisted.
+      if (whitelist.includes(key)) {
+        if (isPlainObject(value)) value.value = replaceWithEm(value.value);
+        result[key] = value;
+        return result;
+      }
+
       if (isPlainObject(value)) {
-        value.value = replaceWithEm(recursiveEscape(value.value));
+        value.value = replaceWithEm(recursiveEscape(value.value, whitelist));
         result[key] = value;
       }
 
       if (isArray(value)) {
         result[key] = value.map(item => {
-          item.value = replaceWithEm(recursiveEscape(item.value));
+          item.value = replaceWithEm(recursiveEscape(item.value, whitelist));
           return item;
         });
       }
@@ -133,14 +164,19 @@ function escapeHighlightProperty(highlightResult) {
   );
 }
 
-function recursiveEscape(val) {
+function recursiveEscape(val, whitelist) {
   if (isPlainObject(val)) {
     return reduce(
       val,
       (result, value, key) => {
-        result[key] = key === '_highlightResult' || key === '_snippetResult'
-          ? escapeHighlightProperty(value)
-          : recursiveEscape(value);
+        // dont escape theses values, they are whitelisted
+        if (whitelist.includes(key)) {
+          result[key] = value;
+        } else {
+          result[key] = key === '_highlightResult' || key === '_snippetResult'
+          ? escapeHighlightProperty(value, whitelist)
+          : recursiveEscape(value, whitelist);
+        }
         return result;
       },
       {}
@@ -152,7 +188,7 @@ function recursiveEscape(val) {
   }
 
   if (isArray(val)) {
-    return val.map(recursiveEscape);
+    return val.map(item => recursiveEscape(item, whitelist));
   }
 
   return val;
