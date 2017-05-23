@@ -13,7 +13,6 @@
   ],
   "main": "dist/vue-instantsearch.common.js",
   "module": "dist/vue-instantsearch.esm.js",
-  "jsnext:main": "dist/vue-instantsearch.esm.js",
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
