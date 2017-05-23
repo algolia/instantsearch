@@ -1,9 +1,4 @@
-import escape from 'lodash/escape';
-import isPlainObject from 'lodash/isPlainObject';
-import isArray from 'lodash/isArray';
-import isString from 'lodash/isString';
-import reduce from 'lodash/reduce';
-
+import escapeHighlight from '../../lib/escape-highlight.js';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -17,8 +12,7 @@ var customHits = connectHits(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customHits({
-    [ escapeHits = false ],
-    [ escapeHitsWhitelist = [] ]
+    [ escapeHits = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHits.html
@@ -30,9 +24,8 @@ const config = {
 };
 
 /**
- * @typedef CustomHitsWidgetOptions
+ * @typedef {Object} CustomHitsWidgetOptions
  * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
- * @property {string[]} [escapeHitsWhitelist = []] Dont escape theses fields from hits.
  */
 
 /**
@@ -71,14 +64,7 @@ export default function connectHits(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {
-      escapeHits = false,
-      escapeHitsWhitelist = [],
-    } = widgetParams;
-
-    if (!isArray(escapeHitsWhitelist)) {
-      throw new Error(usage);
-    }
+    const {escapeHits = false} = widgetParams;
 
     return {
       getConfiguration() {
@@ -96,7 +82,7 @@ export default function connectHits(renderFn) {
 
       render({results, instantSearchInstance}) {
         if (escapeHits === true) {
-          results.hits = recursiveEscape(results.hits, escapeHitsWhitelist);
+          results.hits = results.hits.map(escapeHighlight);
         }
 
         renderFn({
@@ -108,88 +94,4 @@ export default function connectHits(renderFn) {
       },
     };
   };
-}
-
-function replaceWithEm(val) {
-  if (isPlainObject(val)) {
-    return reduce(
-      val,
-      (result, value, key) => {
-        result[key] = replaceWithEm(value);
-        return result;
-      },
-      {}
-    );
-  }
-
-  if (isArray(val)) {
-    return val.map(replaceWithEm);
-  }
-
-  if (isString(val)) {
-    return val
-      .replace(new RegExp(config.highlightPreTag, 'g'), '<em>')
-      .replace(new RegExp(config.highlightPostTag, 'g'), '</em>');
-  }
-
-  return val;
-}
-
-function escapeHighlightProperty(highlightResult, whitelist) {
-  return reduce(
-    highlightResult,
-    (result, value, key) => {
-      // Stop here don't escape this key, it's whitelisted.
-      if (whitelist.indexOf(key) !== -1) {
-        if (isPlainObject(value)) value.value = replaceWithEm(value.value);
-        result[key] = value;
-        return result;
-      }
-
-      if (isPlainObject(value)) {
-        value.value = replaceWithEm(recursiveEscape(value.value, whitelist));
-        result[key] = value;
-      }
-
-      if (isArray(value)) {
-        result[key] = value.map(item => {
-          item.value = replaceWithEm(recursiveEscape(item.value, whitelist));
-          return item;
-        });
-      }
-
-      return result;
-    },
-    {}
-  );
-}
-
-function recursiveEscape(val, whitelist) {
-  if (isPlainObject(val)) {
-    return reduce(
-      val,
-      (result, value, key) => {
-        // dont escape theses values, they are whitelisted
-        if (whitelist.indexOf(key) !== -1) {
-          result[key] = value;
-        } else {
-          result[key] = key === '_highlightResult' || key === '_snippetResult'
-          ? escapeHighlightProperty(value, whitelist)
-          : recursiveEscape(value, whitelist);
-        }
-        return result;
-      },
-      {}
-    );
-  }
-
-  if (isString(val)) {
-    return escape(val);
-  }
-
-  if (isArray(val)) {
-    return val.map(item => recursiveEscape(item, whitelist));
-  }
-
-  return val;
 }

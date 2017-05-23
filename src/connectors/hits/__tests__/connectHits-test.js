@@ -55,10 +55,7 @@ describe('connectHits', () => {
   it('Provides the hits and the whole results', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget({
-      escapeHits: true,
-      escapeHitsWhitelist: ['whitelisted'],
-    });
+    const widget = makeWidget({});
 
     const helper = jsHelper(fakeClient, '', {});
     helper.search = sinon.stub();
@@ -77,36 +74,6 @@ describe('connectHits', () => {
     const hits = [
       {fake: 'data'},
       {sample: 'infos'},
-      {
-        toEscape: '<a href="#top">Go to top</a>',
-        _highlightResult: {
-          toEscape: {
-            wontEscape: '<h1>Not escaped</h1>',
-            value: '<a href="#top">__ais-highlight__Go to top__/ais-highlight__</a>',
-          },
-        },
-      },
-      {
-        toEscapeAlso: '<a href="#top">Go to top</a>',
-        _highlightResult: {
-          toEscape: {
-            wontEscape: '<h1>Not escaped</h1>',
-            value: {
-              foo: '<a href="#top">__ais-highlight__Go to top__/ais-highlight__</a>',
-              bar: '<a href="#top">__ais-highlight__Go to top__/ais-highlight__</a>',
-            },
-          },
-        },
-      },
-      {
-        whitelisted: '<a href="#top">Go to top</a>',
-        _highlightResult: {
-          whitelisted: {
-            wontEscape: '<h1>Not escaped</h1>',
-            value: '<a href="#top">__ais-highlight__Go to top__/ais-highlight__</a>',
-          },
-        },
-      },
     ];
 
     const results = new SearchResults(helper.state, [{hits}]);
@@ -117,43 +84,8 @@ describe('connectHits', () => {
       createURL: () => '#',
     });
 
-    const processedHits = [
-      {fake: 'data'},
-      {sample: 'infos'},
-      {
-        toEscape: '&lt;a href=&quot;#top&quot;&gt;Go to top&lt;/a&gt;',
-        _highlightResult: {
-          toEscape: {
-            wontEscape: '<h1>Not escaped</h1>',
-            value: '&lt;a href=&quot;#top&quot;&gt;<em>Go to top</em>&lt;/a&gt;',
-          },
-        },
-      },
-      {
-        toEscapeAlso: '&lt;a href=&quot;#top&quot;&gt;Go to top&lt;/a&gt;',
-        _highlightResult: {
-          toEscape: {
-            wontEscape: '<h1>Not escaped</h1>',
-            value: {
-              foo: '&lt;a href=&quot;#top&quot;&gt;<em>Go to top</em>&lt;/a&gt;',
-              bar: '&lt;a href=&quot;#top&quot;&gt;<em>Go to top</em>&lt;/a&gt;',
-            },
-          },
-        },
-      },
-      {
-        whitelisted: '<a href="#top">Go to top</a>',
-        _highlightResult: {
-          whitelisted: {
-            wontEscape: '<h1>Not escaped</h1>',
-            value: '<a href="#top"><em>Go to top</em></a>',
-          },
-        },
-      },
-    ];
-
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.hits).toEqual(processedHits);
+    expect(secondRenderingOptions.hits).toEqual(hits);
     expect(secondRenderingOptions.results).toEqual(results);
   });
 });
