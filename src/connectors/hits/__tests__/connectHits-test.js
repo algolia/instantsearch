@@ -88,4 +88,56 @@ describe('connectHits', () => {
     expect(secondRenderingOptions.hits).toEqual(hits);
     expect(secondRenderingOptions.results).toEqual(results);
   });
+
+  it('escape highlight properties if requested', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectHits(rendering);
+    const widget = makeWidget({escapeHits: true});
+
+    const helper = jsHelper(fakeClient, '', {});
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    expect(firstRenderingOptions.hits).toEqual([]);
+    expect(firstRenderingOptions.results).toBe(undefined);
+
+    const hits = [
+      {
+        _highlightResult: {
+          foobar: {
+            value: '<script>__ais-highlight__foobar__/ais-highlight__</script>',
+          },
+        },
+      },
+    ];
+
+    const results = new SearchResults(helper.state, [{hits}]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const escapedHits = [
+      {
+        _highlightResult: {
+          foobar: {
+            value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
+          },
+        },
+      },
+    ];
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.hits).toEqual(escapedHits);
+    expect(secondRenderingOptions.results).toEqual(results);
+  });
 });
