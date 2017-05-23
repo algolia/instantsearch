@@ -23,3 +23,6 @@
   * [Results per Page Selector](components/results-per-page-selector.md)
   * [Sort by Selector](components/sort-by-selector.md)
   * [Rating](components/rating.md)
+
+### Going Further
+  * [Custom Component](custom-component.md)
