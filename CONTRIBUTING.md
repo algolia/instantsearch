@@ -1,25 +1,21 @@
 # Contributing
 
+
 First of all, thanks for contributing! You can check out the issues tagged with "difficulty: easy ❄️" for a start.
 
-## Getting started
+## Get ready for contributions
 
-To get started you should:
+You'll first need to install the dependencies:
 
 ```sh
-# Install dependencies common to the packages
 yarn install
+```
 
-# Build CommonJS, ES module and UMD
-yarn build
+Then we recommend that you run:
 
-# Launch tests with Jest and also run the linter
-# Most of the tests rely on the CommonJS build
-# Because we need rollup to load .vue files
-# Consider using `yarn watch` when developing.
-yarn test
-
-# Watch for changes and run tests with Jest
-# Also runs the linter
+```sh
 yarn watch
 ```
+
+This will watch the files for changes and build the CommonJS bundle that is required by the tests.
+It will the run the test on that newly generated build.
