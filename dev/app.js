@@ -209,6 +209,31 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.refinementList({
+    container: '#searchable-brands-alwaysActive',
+    attributeName: 'brand',
+    operator: 'or',
+    limit: 10,
+    cssClasses: {
+      header: 'facet-title',
+      item: 'facet-value checkbox',
+      count: 'facet-count pull-right',
+      active: 'facet-active',
+    },
+    templates: {
+      header: 'Searchable brands',
+    },
+    searchForFacetValues: {
+      placeholder: 'Find other brands...',
+      templates: {
+        noResults: 'No results',
+      },
+      isAlwaysActive: true,
+    },
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.refinementList({
     collapsible: {
       collapsed: true,
     },
