@@ -116,7 +116,7 @@ function replaceWithEm(val) {
       val,
       (result, value, key) => {
         result[key] = replaceWithEm(value);
-        return {};
+        return result;
       },
       {}
     );
