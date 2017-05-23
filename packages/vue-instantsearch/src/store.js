@@ -285,6 +285,9 @@ export class Store {
   set queryParameters(parameters) {
     this.stop();
     for (let parameter in parameters) {
+      if (parameters[parameter] === null) {
+        parameters[parameter] = undefined;
+      }
       this._helper.setQueryParameter(parameter, parameters[parameter]);
     }
 

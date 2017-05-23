@@ -204,4 +204,42 @@ describe('Store', () => {
 
     expect(search).toHaveBeenCalledTimes(1);
   });
+
+  test('should remove query parameters that have a value of null or undefined', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+    const store = new Store(helper);
+
+    const search = jest.fn();
+
+    client.search = search;
+
+    store.queryParameters = {
+      query: '',
+      page: 3,
+      distinct: 1,
+      attributesToRetrieve: ['objectID'],
+    };
+
+    // Make sure distinct parameter is there.
+    expect(store.queryParameters).toHaveProperty('distinct');
+
+    store.queryParameters = {
+      page: 3,
+      distinct: undefined,
+      attributesToRetrieve: ['objectID'],
+    };
+
+    // Make sure distinct parameter is gone when overrided with undefined.
+    expect(store.queryParameters).not.toHaveProperty('distinct');
+
+    store.queryParameters = {
+      page: 3,
+      distinct: null,
+      attributesToRetrieve: ['objectID'],
+    };
+
+    // Make sure distinct parameter is gone when overrided with null.
+    expect(store.queryParameters).not.toHaveProperty('distinct');
+  });
 });
