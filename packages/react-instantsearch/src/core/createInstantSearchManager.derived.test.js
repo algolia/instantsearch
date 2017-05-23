@@ -2,7 +2,7 @@
 
 import createInstantSearchManager from './createInstantSearchManager';
 
-import algoliaClient from 'algoliasearch';
+import algoliaClient from 'algoliasearch/lite';
 
 jest.useFakeTimers();
 
