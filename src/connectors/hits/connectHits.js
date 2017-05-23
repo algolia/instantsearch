@@ -19,11 +19,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
- * @typedef {Object} CustomHitsWidgetOptions
- * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
- */
-
-/**
  * @typedef {Object} HitsRenderingOptions
  * @property {Object[]} hits The matched hits from Algolia API.
  * @property {Object} results The complete results response from Algolia API.
@@ -34,7 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * **Hits** connector provides the logic to create custom widgets that will render the results retrieved from Algolia.
  * @type {Connector}
  * @param {function(HitsRenderingOptions, boolean)} renderFn Rendering function for the custom **Hits** widget.
- * @return {function(CustomHitsWidgetOptions)} Re-usable widget factory for a custom **Hits** widget.
+ * @return {function()} Re-usable widget factory for a custom **Hits** widget.
  * @example
  * // custom `renderFn` to render the custom Hits widget
  * function renderFn(HitsRenderingOptions) {
@@ -58,35 +53,31 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectHits(renderFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetParams = {}) => {
-    const {escapeHits = false} = widgetParams;
+  return (widgetParams = {}) => ({
+    getConfiguration() {
+      return tagConfig;
+    },
 
-    return {
-      getConfiguration() {
-        return tagConfig;
-      },
+    init({instantSearchInstance}) {
+      renderFn({
+        hits: [],
+        results: undefined,
+        instantSearchInstance,
+        widgetParams,
+      }, true);
+    },
 
-      init({instantSearchInstance}) {
-        renderFn({
-          hits: [],
-          results: undefined,
-          instantSearchInstance,
-          widgetParams,
-        }, true);
-      },
+    render({results, instantSearchInstance}) {
+      if (results.hits && results.hits.length > 0) {
+        results.hits = results.hits.map(escapeHighlight);
+      }
 
-      render({results, instantSearchInstance}) {
-        if (escapeHits === true) {
-          results.hits = results.hits.map(escapeHighlight);
-        }
-
-        renderFn({
-          hits: results.hits,
-          results,
-          instantSearchInstance,
-          widgetParams,
-        }, false);
-      },
-    };
-  };
+      renderFn({
+        hits: results.hits,
+        results,
+        instantSearchInstance,
+        widgetParams,
+      }, false);
+    },
+  });
 }

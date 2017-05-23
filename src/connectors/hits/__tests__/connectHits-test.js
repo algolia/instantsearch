@@ -92,7 +92,7 @@ describe('connectHits', () => {
   it('escape highlight properties if requested', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget({escapeHits: true});
+    const widget = makeWidget();
 
     const helper = jsHelper(fakeClient, '', {});
     helper.search = sinon.stub();
