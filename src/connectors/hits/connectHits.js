@@ -140,7 +140,7 @@ function escapeHighlightProperty(highlightResult, whitelist) {
     highlightResult,
     (result, value, key) => {
       // Stop here don't escape this key, it's whitelisted.
-      if (whitelist.includes(key)) {
+      if (whitelist.indexOf(key) !== -1) {
         if (isPlainObject(value)) value.value = replaceWithEm(value.value);
         result[key] = value;
         return result;
@@ -170,7 +170,7 @@ function recursiveEscape(val, whitelist) {
       val,
       (result, value, key) => {
         // dont escape theses values, they are whitelisted
-        if (whitelist.includes(key)) {
+        if (whitelist.indexOf(key) !== -1) {
           result[key] = value;
         } else {
           result[key] = key === '_highlightResult' || key === '_snippetResult'
