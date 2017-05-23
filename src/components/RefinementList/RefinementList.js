@@ -160,19 +160,15 @@ class RefinementList extends React.Component {
         /> :
         undefined;
 
-    let searchInput = null;
-    if (this.props.searchFacetValues) {
-      searchInput = this.props.searchIsAlwaysActive ?
-        <SearchBox ref={i => { this.searchbox = i; }}
-          placeholder={this.props.searchPlaceholder}
-          onChange={this.props.searchFacetValues}
-          onValidate={() => this.refineFirstValue()}/> :
+    const shouldDisableSearchInput =
+      this.props.searchIsAlwaysActive !== true &&
+      !(this.props.isFromSearch || displayedFacetValues.length >= limit);
+    const searchInput = this.props.searchFacetValues ?
         <SearchBox ref={i => { this.searchbox = i; }}
           placeholder={this.props.searchPlaceholder}
           onChange={this.props.searchFacetValues}
           onValidate={() => this.refineFirstValue()}
-          disabled={!this.props.isFromSearch && displayedFacetValues.length < limit}/>;
-    }
+          disabled={shouldDisableSearchInput}/> : null;
 
     const noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ?
       <Template
