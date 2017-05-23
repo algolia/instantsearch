@@ -82,6 +82,8 @@ hits({
  * @property {HitsTemplates} [templates] Templates to use for the widget.
  * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
+ * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {string[]} [escapeHitsWhitelist = []] Dont escape theses fields from hits.
  */
 
 /**
@@ -110,6 +112,8 @@ export default function hits({
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   transformData,
+  escapeHits = false,
+  escapeHitsWhitelist = [],
 }) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -136,7 +140,7 @@ export default function hits({
 
   try {
     const makeHits = connectHits(specializedRenderer);
-    return makeHits();
+    return makeHits({escapeHits, escapeHitsWhitelist});
   } catch (e) {
     throw new Error(usage);
   }
