@@ -1,3 +1,4 @@
+import escapeHighlight, {tagConfig} from '../../lib/escape-highlight.js';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -73,6 +74,10 @@ export default function connectInfiniteHits(renderFn) {
     const getShowMore = helper => () => helper.nextPage().search();
 
     return {
+      getConfiguration() {
+        return tagConfig;
+      },
+
       init({instantSearchInstance, helper}) {
         this.showMore = getShowMore(helper);
 
@@ -89,6 +94,10 @@ export default function connectInfiniteHits(renderFn) {
       render({results, state, instantSearchInstance}) {
         if (state.page === 0) {
           hitsCache = [];
+        }
+
+        if (results.hits && results.hits.length > 0) {
+          results.hits = results.hits.map(escapeHighlight);
         }
 
         hitsCache = [...hitsCache, ...results.hits];

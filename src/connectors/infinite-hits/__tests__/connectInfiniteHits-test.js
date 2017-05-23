@@ -17,7 +17,10 @@ describe('connectInfiniteHits', () => {
       hitsPerPage: 10,
     });
 
-    expect(widget.getConfiguration).toEqual(undefined);
+    expect(widget.getConfiguration()).toEqual({
+      highlightPostTag: '__/ais-highlight__',
+      highlightPreTag: '__ais-highlight__',
+    });
 
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
