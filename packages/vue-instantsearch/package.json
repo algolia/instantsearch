@@ -1,5 +1,11 @@
 {
   "name": "vue-instantsearch",
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "description": "👀 Lightning-fast Algolia search for Vue apps",
+  "license": "MIT",
   "version": "0.1.0",
   "files": [
     "dist"
