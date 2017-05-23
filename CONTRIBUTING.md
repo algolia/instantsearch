@@ -4,26 +4,22 @@ First of all, thanks for contributing! You can check out the issues tagged with 
 
 ## Getting started
 
-This project uses [Lerna](https://github.com/lerna/lerna) to orchestrate all the packages.
-
 To get started you should:
 
 ```sh
 # Install dependencies common to the packages
 yarn install
 
-# Download all dependencies and build all packages
-yarn boot
-
-# Build the dependencies of all packages
+# Build CommonJS, ES module and UMD
 yarn build
 
-# Clean all the dependencies and build again
-yarn reboot
-
 # Launch tests with Jest and also run the linter
+# Most of the tests rely on the CommonJS build
+# Because we need rollup to load .vue files
+# Consider using `yarn watch` when developing.
 yarn test
 
 # Watch for changes and run tests with Jest
+# Also runs the linter
 yarn watch
 ```
