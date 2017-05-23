@@ -159,6 +159,7 @@ describe('RefinementList', () => {
         ],
         showMore: true,
         isShowingMore: false,
+        canToggleShowMore: true,
       };
 
       // When
@@ -201,6 +202,7 @@ describe('RefinementList', () => {
         ],
         showMore: true,
         isShowingMore: true,
+        canToggleShowMore: true,
       };
 
       // When

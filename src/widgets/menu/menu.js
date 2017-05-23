@@ -33,6 +33,7 @@ const renderer = ({
   instantSearchInstance,
   isShowingMore,
   toggleShowMore,
+  canToggleShowMore,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -59,6 +60,7 @@ const renderer = ({
       toggleRefinement={ refine }
       toggleShowMore={ toggleShowMore }
       isShowingMore={ isShowingMore }
+      canToggleShowMore={ canToggleShowMore }
     />,
     containerNode
   );

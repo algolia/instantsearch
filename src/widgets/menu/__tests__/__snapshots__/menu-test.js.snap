@@ -2,6 +2,7 @@
 
 exports[`menu snapshot 1`] = `
 <HeaderFooter-AutoHide
+  canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
   cssClasses={

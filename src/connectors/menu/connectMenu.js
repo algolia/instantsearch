@@ -51,6 +51,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object} widgetParams All original `CustomMenuWidgetOptions` forwarded to the `renderFn`.
  * @property {boolean} isShowingMore True if the menu is displaying all the menu items.
  * @property {function} toggleShowMore Toggles the number of values displayed between `limit` and `showMore.limit`.
+ * @property {boolean} canToggleShowMore `true` if the toggleShowMore button can be activated (enough items to display more or
+ * already displaying more than `limit` items)
  */
 
  /**
@@ -171,11 +173,13 @@ export default function connectMenu(renderFn) {
           widgetParams,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
+          canToggleShowMore: false,
         }, true);
       },
 
       render({results, instantSearchInstance}) {
-        const items = (results.getFacetValues(attributeName, {sortBy}).data || [])
+        const facetItems = results.getFacetValues(attributeName, {sortBy}).data || [];
+        const items = facetItems
           .slice(0, this.getLimit())
           .map(({name: label, path: value, ...item}) => ({...item, label, value}));
 
@@ -190,6 +194,7 @@ export default function connectMenu(renderFn) {
           widgetParams,
           isShowingMore: this.isShowingMore,
           toggleShowMore: this.cachedToggleShowMore,
+          canToggleShowMore: this.isShowingMore || facetItems.length > this.getLimit(),
         }, false);
       },
     };

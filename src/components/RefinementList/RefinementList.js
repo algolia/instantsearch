@@ -139,7 +139,7 @@ export class RawRefinementList extends React.Component {
       cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
     }
 
-    const showMoreBtn = this.props.showMore === true ?
+    const showMoreBtn = this.props.showMore === true && this.props.canToggleShowMore ?
         <Template
           rootProps={{onClick: this.props.toggleShowMore}}
           templateKey={`show-more-${this.props.isShowingMore ? 'active' : 'inactive'}`}
@@ -193,6 +193,7 @@ RawRefinementList.propTypes = {
   toggleShowMore: PropTypes.func,
   isShowingMore: PropTypes.bool,
   hasExhaustiveItems: PropTypes.bool,
+  canToggleShowMore: PropTypes.bool,
 };
 
 RawRefinementList.defaultProps = {
