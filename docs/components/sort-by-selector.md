@@ -1,7 +1,10 @@
-Vue InstantSearch Sort by Selector
+Vue InstantSearch Sort By Selector
 ---
 
 A component that lets the user change the sorting by changing the index the search is operated on.
+
+To be able to sort results with the Algolia engine, you need to have different indices.
+To read more about sorting with Algolia, please checkout the [official documentation about sorting](https://www.algolia.com/doc/guides/relevance/sorting/#guides).
 
 ## Usage
 
