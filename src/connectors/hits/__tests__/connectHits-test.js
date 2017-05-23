@@ -76,7 +76,7 @@ describe('connectHits', () => {
       {sample: 'infos'},
     ];
 
-    const results = new SearchResults(helper.state, [{hits}]);
+    const results = new SearchResults(helper.state, [{hits: [].concat(hits)}]);
     widget.render({
       results,
       state: helper.state,

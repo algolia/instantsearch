@@ -1,4 +1,4 @@
-import escapeHighlight, {tagConfig} from '../../lib/escape-highlight.js';
+import escapeHits, {tagConfig} from '../../lib/escape-highlight.js';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -69,7 +69,7 @@ export default function connectHits(renderFn) {
 
     render({results, instantSearchInstance}) {
       if (results.hits && results.hits.length > 0) {
-        results.hits = results.hits.map(escapeHighlight);
+        results.hits = escapeHits(results.hits);
       }
 
       renderFn({

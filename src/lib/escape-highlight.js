@@ -33,14 +33,22 @@ function recursiveEscape(input) {
   }, {});
 }
 
-export default function escapeHighlight(input) {
-  if (input._highlightResult) {
-    input._highlightResult = recursiveEscape(input._highlightResult);
+export default function escapeHits(hits) {
+  if (hits.__escaped === undefined) {
+    hits.__escaped = true;
+
+    return hits.map(hit => {
+      if (hit._highlightResult) {
+        hit._highlightResult = recursiveEscape(hit._highlightResult);
+      }
+
+      if (hit._snippetResult) {
+        hit._snippetResult = recursiveEscape(hit._snippetResult);
+      }
+
+      return hit;
+    });
   }
 
-  if (input._snippetResult) {
-    input._snippetResult = recursiveEscape(input._snippetResult);
-  }
-
-  return input;
+  return hits;
 }

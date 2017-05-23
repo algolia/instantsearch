@@ -83,7 +83,7 @@ describe('connectInfiniteHits', () => {
       {fake: 'data'},
       {sample: 'infos'},
     ];
-    const results = new SearchResults(helper.state, [{hits}]);
+    const results = new SearchResults(helper.state, [{hits: [].concat(hits)}]);
     widget.render({
       results,
       state: helper.state,
@@ -104,7 +104,7 @@ describe('connectInfiniteHits', () => {
       {sample: 'infos 2'},
     ];
     const otherResults = new SearchResults(helper.state, [{
-      hits: otherHits,
+      hits: [].concat(otherHits),
     }]);
     widget.render({
       results: otherResults,
@@ -126,7 +126,7 @@ describe('connectInfiniteHits', () => {
       {sample: 'infos 3'},
     ];
     const thirdResults = new SearchResults(helper.state, [{
-      hits: thirdHits,
+      hits: [].concat(thirdHits),
     }]);
     widget.render({
       results: thirdResults,
