@@ -11,10 +11,6 @@ describe('hits call', () => {
   it('throws an exception when no container', () => {
     expect(hits).toThrow();
   });
-
-  it('throws an execption when `escapeHitsWhitelist` is wrong format', () => {
-    expect(() => hits({escapeHitsWhitelist: /foobar/})).toThrow();
-  });
 });
 
 describe('hits()', () => {
