@@ -9,6 +9,19 @@ $range-slider-bar-color: $blue-light;
 $range-slider-handle-bg: $white;
 
 @include block(range-slider) {
+  .ais-range-slider--disabled {
+    cursor: not-allowed;
+
+    .ais-range-slider--handle {
+      border-color: $range-slider-marker-bg;
+      cursor: not-allowed;
+    }
+
+    .rheostat-horizontal .rheostat-progress {
+      background-color: $range-slider-marker-bg;
+    }
+  }
+
   .rheostat {
     overflow: visible;
     margin-top: 2em;

@@ -44,7 +44,7 @@ class Slider extends Component {
 
     const pitPoints = [min, ...times(steps - 1, step => min + stepsLength * (step + 1)), max]
       // bug with `key={ 0 }` and preact, see https://github.com/developit/preact/issues/642
-      .map(pitPoint => pitPoint === 0 ? 0.00001 : pitPoint);
+      .map(pitPoint => pitPoint === 0 ? 0.000001 : pitPoint);
 
     return pitPoints;
   }
@@ -55,9 +55,12 @@ class Slider extends Component {
   }
 
   createHandleComponent = tooltips => props => {
+    // display only two decimals after comma,
+    // and apply `tooltips.format()` if any`
+    const roundedValue = Math.round(parseFloat(props['aria-valuenow']) * 100) / 100;
     const value = has(tooltips, 'format')
-      ? tooltips.format(props['aria-valuenow'])
-      : props['aria-valuenow'];
+      ? tooltips.format(roundedValue)
+      : roundedValue;
 
     const className = cx('ais-range-slider--handle', props.className, {
       'ais-range-slider--handle-lower': props['data-handle-key'] === 0,
@@ -65,10 +68,7 @@ class Slider extends Component {
     });
 
     return (
-      <div
-        {...props}
-        className={ className }
-      >
+      <div {...props} className={ className }>
         { tooltips
             ? <div className="ais-range-slider--tooltip">{value}</div>
             : null }
@@ -77,7 +77,12 @@ class Slider extends Component {
   }
 
   render() {
-    const {tooltips, step, pips, values, min, max} = this.props;
+    const {tooltips, step, pips, values} = this.props;
+
+    const isDisabled = this.props.min === this.props.max;
+    const {min, max} = isDisabled
+      ? {min: this.props.min, max: this.props.max + 0.001}
+      : this.props;
 
     const snapPoints = this.computeSnapPoints({min, max, step});
     const pitPoints = pips === true || pips === undefined || pips === false
@@ -85,18 +90,20 @@ class Slider extends Component {
       : pips;
 
     return (
-      <Rheostat
-        handle={ this.createHandleComponent(tooltips) }
-        onChange={ this.handleChange }
-        min={ min }
-        max={ max }
-        pitComponent={ Pit }
-        pitPoints={ pitPoints }
-        snap={ true }
-        snapPoints={ snapPoints }
-        values={ values }
-        disabled={ min === max }
-      />
+      <div className={ isDisabled ? 'ais-range-slider--disabled' : '' }>
+        <Rheostat
+          handle={ this.createHandleComponent(tooltips) }
+          onChange={ this.handleChange }
+          min={ min }
+          max={ max }
+          pitComponent={ Pit }
+          pitPoints={ pitPoints }
+          snap={ true }
+          snapPoints={ snapPoints }
+          values={ isDisabled ? [min, max] : values }
+          disabled={ isDisabled }
+        />
+      </div>
     );
   }
 
