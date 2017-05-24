@@ -83,7 +83,6 @@ hits({
  * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
- * @property {string[]} [escapeHitsWhitelist = []] Dont escape theses fields from hits.
  */
 
 /**
@@ -103,7 +102,8 @@ hits({
  *       empty: 'No results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
- *     hitsPerPage: 6
+ *     hitsPerPage: 6,
+ *     escapeHits: true,
  *   })
  * );
  */
@@ -113,7 +113,6 @@ export default function hits({
   templates = defaultTemplates,
   transformData,
   escapeHits = false,
-  escapeHitsWhitelist = [],
 }) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -140,7 +139,7 @@ export default function hits({
 
   try {
     const makeHits = connectHits(specializedRenderer);
-    return makeHits({escapeHits, escapeHitsWhitelist});
+    return makeHits({escapeHits});
   } catch (e) {
     throw new Error(usage);
   }

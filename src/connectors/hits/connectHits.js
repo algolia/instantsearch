@@ -26,10 +26,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
+ * @typedef {Object} CustomHitsWidgetOptions
+ * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ */
+
+/**
  * **Hits** connector provides the logic to create custom widgets that will render the results retrieved from Algolia.
  * @type {Connector}
  * @param {function(HitsRenderingOptions, boolean)} renderFn Rendering function for the custom **Hits** widget.
- * @return {function()} Re-usable widget factory for a custom **Hits** widget.
+ * @return {function(CustomHitsWidgetOptions)} Re-usable widget factory for a custom **Hits** widget.
  * @example
  * // custom `renderFn` to render the custom Hits widget
  * function renderFn(HitsRenderingOptions) {
@@ -68,7 +73,7 @@ export default function connectHits(renderFn) {
     },
 
     render({results, instantSearchInstance}) {
-      if (results.hits && results.hits.length > 0) {
+      if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
         results.hits = escapeHits(results.hits);
       }
 
