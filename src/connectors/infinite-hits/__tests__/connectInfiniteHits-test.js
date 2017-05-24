@@ -83,7 +83,7 @@ describe('connectInfiniteHits', () => {
       {fake: 'data'},
       {sample: 'infos'},
     ];
-    const results = new SearchResults(helper.state, [{hits: [].concat(hits)}]);
+    const results = new SearchResults(helper.state, [{hits}]);
     widget.render({
       results,
       state: helper.state,
@@ -104,7 +104,7 @@ describe('connectInfiniteHits', () => {
       {sample: 'infos 2'},
     ];
     const otherResults = new SearchResults(helper.state, [{
-      hits: [].concat(otherHits),
+      hits: otherHits,
     }]);
     widget.render({
       results: otherResults,
@@ -126,7 +126,7 @@ describe('connectInfiniteHits', () => {
       {sample: 'infos 3'},
     ];
     const thirdResults = new SearchResults(helper.state, [{
-      hits: [].concat(thirdHits),
+      hits: thirdHits,
     }]);
     widget.render({
       results: thirdResults,
@@ -138,5 +138,57 @@ describe('connectInfiniteHits', () => {
     const fourthRenderingOptions = rendering.lastCall.args[0];
     expect(fourthRenderingOptions.hits).toEqual(thirdHits);
     expect(fourthRenderingOptions.results).toEqual(thirdResults);
+  });
+
+  it('escape highlight properties if requested', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({escapeHits: true});
+
+    const helper = jsHelper(fakeClient, '', {});
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    expect(firstRenderingOptions.hits).toEqual([]);
+    expect(firstRenderingOptions.results).toBe(undefined);
+
+    const hits = [
+      {
+        _highlightResult: {
+          foobar: {
+            value: '<script>__ais-highlight__foobar__/ais-highlight__</script>',
+          },
+        },
+      },
+    ];
+
+    const results = new SearchResults(helper.state, [{hits}]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const escapedHits = [
+      {
+        _highlightResult: {
+          foobar: {
+            value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
+          },
+        },
+      },
+    ];
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.hits).toEqual(escapedHits);
+    expect(secondRenderingOptions.results).toEqual(results);
   });
 });

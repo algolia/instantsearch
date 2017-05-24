@@ -56,6 +56,7 @@ const usage = `
 Usage:
 infiniteHits({
   container,
+  [ escapeHits = false ],
   [ showMoreLabel ],
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty} ],
@@ -88,6 +89,7 @@ infiniteHits({
  * @property  {string} [showMoreLabel="Show more results"] label used on the show more button.
  * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
+ * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
  */
 
 /**
@@ -107,7 +109,8 @@ infiniteHits({
  *       empty: 'No results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
- *     hitsPerPage: 3
+ *     hitsPerPage: 3,
+ *     escapeHits: true,
  *   })
  * );
  */
@@ -117,6 +120,7 @@ export default function infiniteHits({
   showMoreLabel = 'Show more results',
   templates = defaultTemplates,
   transformData,
+  escapeHits = false,
 } = {}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -141,7 +145,7 @@ export default function infiniteHits({
 
   try {
     const makeInfiniteHits = connectInfiniteHits(specializedRenderer);
-    return makeInfiniteHits();
+    return makeInfiniteHits({escapeHits});
   } catch (e) {
     throw new Error(usage);
   }
