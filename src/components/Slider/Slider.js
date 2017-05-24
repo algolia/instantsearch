@@ -59,10 +59,15 @@ class Slider extends Component {
       ? tooltips.format(props['aria-valuenow'])
       : props['aria-valuenow'];
 
+    const className = cx('ais-range-slider--handle', props.className, {
+      'ais-range-slider--handle-lower': props['data-handle-key'] === 0,
+      'ais-range-slider--handle-upper': props['data-handle-key'] === 1,
+    });
+
     return (
       <div
         {...props}
-        className={ cx('ais-range-slider--handle', props.className)}
+        className={ className }
       >
         { tooltips
             ? <div className="ais-range-slider--tooltip">{value}</div>
