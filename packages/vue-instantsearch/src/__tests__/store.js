@@ -238,8 +238,56 @@ describe('Store', () => {
       distinct: null,
       attributesToRetrieve: ['objectID'],
     };
+    store.addFacet('price');
 
     // Make sure distinct parameter is gone when overrided with null.
     expect(store.queryParameters).not.toHaveProperty('distinct');
+  });
+
+  test('should allow to retrieve all the search parameters', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+
+    const store = new Store(helper);
+
+    const searchParameters = Object.assign({}, helper.getState(), { page: 1 });
+    expect(store.searchParameters).toEqual(searchParameters);
+  });
+
+  test('should accept new search parameters', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+
+    const store = new Store(helper);
+
+    const searchParameters = helper.getState();
+    const newSearchParameters = Object.assign({}, searchParameters, {
+      distinct: true,
+      page: 1,
+    });
+
+    store.searchParameters = newSearchParameters;
+
+    expect(store.searchParameters).toEqual(newSearchParameters);
+  });
+
+  test('page search parameter should start at 1', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+
+    const store = new Store(helper);
+
+    expect(store.searchParameters).toHaveProperty('page', 1);
+
+    helper.setPage(2);
+    expect(store.searchParameters).toHaveProperty('page', 3);
+
+    const newSearchParameters = Object.assign({}, store.searchParameters, {
+      page: 5,
+    });
+
+    store.searchParameters = newSearchParameters;
+
+    expect(helper.getPage()).toEqual(4);
   });
 });
