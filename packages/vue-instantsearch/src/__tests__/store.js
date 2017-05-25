@@ -244,7 +244,7 @@ describe('Store', () => {
     expect(store.queryParameters).not.toHaveProperty('distinct');
   });
 
-  test('should allow to retrieve all the searchParameters', () => {
+  test('should allow to retrieve all the search parameters', () => {
     const client = algoliaClient('app_id', 'api_key');
     const helper = algoliaHelper(client);
 
@@ -254,7 +254,7 @@ describe('Store', () => {
     expect(store.searchParameters).toEqual(searchParameters);
   });
 
-  test('should allow to accept new search parameters', () => {
+  test('should accept new search parameters', () => {
     const client = algoliaClient('app_id', 'api_key');
     const helper = algoliaHelper(client);
 
@@ -271,7 +271,7 @@ describe('Store', () => {
     expect(store.searchParameters).toEqual(newSearchParameters);
   });
 
-  test('should consider page search parameter should start as 1', () => {
+  test('page search parameter should start at 1', () => {
     const client = algoliaClient('app_id', 'api_key');
     const helper = algoliaHelper(client);
 
