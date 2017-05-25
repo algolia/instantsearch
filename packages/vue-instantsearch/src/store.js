@@ -307,11 +307,15 @@ export class Store {
   }
 
   get searchParameters() {
-    return Object.assign({}, this._helper.state);
+    return Object.assign({}, this._helper.state, { page: this.page });
   }
 
   set searchParameters(searchParameters) {
-    const newSearchParameters = SearchParameters.make(searchParameters);
+    const params = Object.assign({}, searchParameters);
+    if (params.page !== undefined) {
+      params.page = params.page - 1;
+    }
+    const newSearchParameters = SearchParameters.make(params);
     this._helper.setState(newSearchParameters);
   }
 

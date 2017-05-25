@@ -250,7 +250,7 @@ describe('Store', () => {
 
     const store = new Store(helper);
 
-    const searchParameters = helper.getState();
+    const searchParameters = Object.assign({}, helper.getState(), { page: 1 });
     expect(store.searchParameters).toEqual(searchParameters);
   });
 
@@ -262,10 +262,32 @@ describe('Store', () => {
 
     const searchParameters = helper.getState();
     const newSearchParameters = Object.assign({}, searchParameters, {
-      page: 3,
+      distinct: true,
+      page: 1,
     });
 
     store.searchParameters = newSearchParameters;
+
     expect(store.searchParameters).toEqual(newSearchParameters);
+  });
+
+  test('should consider page search parameter should start as 1', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+
+    const store = new Store(helper);
+
+    expect(store.searchParameters).toHaveProperty('page', 1);
+
+    helper.setPage(2);
+    expect(store.searchParameters).toHaveProperty('page', 3);
+
+    const newSearchParameters = Object.assign({}, store.searchParameters, {
+      page: 5,
+    });
+
+    store.searchParameters = newSearchParameters;
+
+    expect(helper.getPage()).toEqual(4);
   });
 });
