@@ -1,5 +1,5 @@
 import algolia from 'algoliasearch';
-import algoliaHelper, { SearchParameters } from 'algoliasearch-helper';
+import algoliaHelper from 'algoliasearch-helper';
 import { version } from '../package.json';
 
 export const FACET_AND = 'and';
@@ -315,7 +315,7 @@ export class Store {
     if (params.page !== undefined) {
       params.page = params.page - 1;
     }
-    const newSearchParameters = SearchParameters.make(params);
+    const newSearchParameters = algoliaHelper.SearchParameters.make(params);
     this._helper.setState(newSearchParameters);
   }
 
