@@ -8,7 +8,7 @@ export default {
   external: ['algoliasearch', 'algoliasearch-helper', 'escape-html'],
   exports: 'named',
   plugins: [
-    vue({ compileTemplate: true, css: true }),
+    vue({ compileTemplate: true, css: false }),
     json(),
     buble({
       transforms: {

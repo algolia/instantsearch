@@ -7,7 +7,7 @@ export default {
   entry: 'src/instantsearch.js',
   external: ['algoliasearch', 'algoliasearch-helper', 'escape-html'],
   plugins: [
-    vue({ compileTemplate: true, css: true }),
+    vue({ compileTemplate: true, css: false }),
     json(),
     buble({
       transforms: {
