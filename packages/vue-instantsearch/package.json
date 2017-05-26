@@ -5,7 +5,16 @@
     "url": "https://www.algolia.com"
   },
   "description": "👀 Lightning-fast Algolia search for Vue apps",
-  "keywords": ["vue", "algolia", "search", "instantsearch", "components", "ui", "facet", "autocomplete"],
+  "keywords": [
+    "vue",
+    "algolia",
+    "search",
+    "instantsearch",
+    "components",
+    "ui",
+    "facet",
+    "autocomplete"
+  ],
   "license": "MIT",
   "version": "0.1.0",
   "files": [
