@@ -6,6 +6,7 @@ import {
   HIGHLIGHT_POST_TAG,
   createFromAlgoliaCredentials,
   createFromAlgoliaClient,
+  createFromSerialized,
   Store,
 } from './store';
 
@@ -85,6 +86,7 @@ export {
   HIGHLIGHT_POST_TAG,
   createFromAlgoliaCredentials,
   createFromAlgoliaClient,
+  createFromSerialized,
   Store,
   Index,
   Highlight,

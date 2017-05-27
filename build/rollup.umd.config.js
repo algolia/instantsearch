@@ -12,7 +12,7 @@ export default {
   moduleName: 'VueInstantSearch',
   exports: 'named',
   plugins: [
-    vue({ compileTemplate: true, css: true }),
+    vue({ compileTemplate: true, css: false }),
     json(),
     resolve({
       browser: true,

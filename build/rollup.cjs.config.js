@@ -5,10 +5,10 @@ import json from 'rollup-plugin-json';
 
 export default {
   entry: 'src/instantsearch.js',
-  external: ['algoliasearch', 'algoliasearch-helper', 'escape-html'],
+  external: ['algoliasearch/lite', 'algoliasearch-helper', 'escape-html'],
   exports: 'named',
   plugins: [
-    vue({ compileTemplate: true, css: true }),
+    vue({ compileTemplate: true, css: false }),
     json(),
     buble({
       transforms: {

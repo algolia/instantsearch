@@ -1,6 +1,10 @@
-import algolia from 'algoliasearch';
-import algoliaHelper, { SearchParameters } from 'algoliasearch-helper';
+import algolia from 'algoliasearch/lite';
+import algoliaHelper from 'algoliasearch-helper';
 import { version } from '../package.json';
+import {
+  serialize as serializeHelper,
+  unserialize as unserializeHelper,
+} from './helper-serializer';
 
 export const FACET_AND = 'and';
 export const FACET_OR = 'or';
@@ -26,6 +30,12 @@ export const createFromAlgoliaCredentials = (appID, apiKey) => {
 
 export const createFromAlgoliaClient = client => {
   const helper = algoliaHelper(client);
+
+  return new Store(helper);
+};
+
+export const createFromSerialized = data => {
+  const helper = unserializeHelper(data);
 
   return new Store(helper);
 };
@@ -315,12 +325,35 @@ export class Store {
     if (params.page !== undefined) {
       params.page = params.page - 1;
     }
-    const newSearchParameters = SearchParameters.make(params);
+    const newSearchParameters = algoliaHelper.SearchParameters.make(params);
     this._helper.setState(newSearchParameters);
+  }
+
+  serialize() {
+    return serializeHelper(this._helper);
   }
 
   // Todo: find a better name for this function.
   refresh() {
     this._helper.search();
+  }
+
+  waitUntilInSync() {
+    return new Promise(resolve => {
+      if (this._helper.hasPendingRequests() === false) {
+        return resolve();
+      }
+
+      // Todo: we need to de-register the one that is not being triggered.
+      this._helper.once('searchQueueEmpty', () => {
+        resolve();
+      });
+      this._helper.once('error', error => {
+        throw new Error(error.message);
+        // Todo: implement rejection once this has a solution
+        // https://github.com/algolia/algoliasearch-helper-js/issues/502
+        // reject(error);
+      });
+    });
   }
 }
