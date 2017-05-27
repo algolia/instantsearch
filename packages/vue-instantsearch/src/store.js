@@ -67,7 +67,7 @@ export class Store {
     this._helper = algoliaHelper;
 
     // Here we enforce custom highlight tags for handling XSS protection.
-    // We also make sure that we keep the current page as this operation resets it.
+    // We also make sure that we keep the current page as setQueryParameter resets it.
     const page = this._helper.getPage();
     this._helper.setQueryParameter('highlightPreTag', HIGHLIGHT_PRE_TAG);
     this._helper.setQueryParameter('highlightPostTag', HIGHLIGHT_POST_TAG);
