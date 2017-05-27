@@ -47,13 +47,16 @@ const onHelperChange = function() {
 };
 
 export class Store {
-  constructor(algoliaHelper) {
+  constructor(helper) {
+    if (!(helper instanceof algoliaHelper.AlgoliaSearchHelper)) {
+      throw new TypeError('Expected an AlgoliaSearchHelper instance.');
+    }
     // We require one start() call to execute the first search query.
     // Allows every widget to alter the state at initialization
     // without trigger multiple queries.
     this._stoppedCounter = 1;
 
-    this.algoliaHelper = algoliaHelper;
+    this.algoliaHelper = helper;
   }
 
   set algoliaHelper(algoliaHelper) {

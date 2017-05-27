@@ -71,6 +71,12 @@ describe('Store', () => {
     expect(store.algoliaHelper).toBe(helper);
   });
 
+  test('should throw an exception if not constructed with a helper', () => {
+    expect(() => {
+      new Store({});
+    }).toThrow(TypeError);
+  });
+
   test('should always use custom highlighting tags', () => {
     const client = algoliaClient('app_id', 'api_key');
     const helper = algoliaHelper(client);
