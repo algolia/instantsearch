@@ -1,4 +1,4 @@
-import algolia from 'algoliasearch';
+import algolia from 'algoliasearch/lite';
 import algoliaHelper from 'algoliasearch-helper';
 import { version } from '../package.json';
 import {

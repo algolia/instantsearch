@@ -1,4 +1,4 @@
-import algoliaClient from 'algoliasearch';
+import algoliaClient from 'algoliasearch/lite';
 import algoliaHelper from 'algoliasearch-helper';
 
 export const serialize = function(helper) {
