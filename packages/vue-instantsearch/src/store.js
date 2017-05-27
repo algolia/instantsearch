@@ -339,7 +339,7 @@ export class Store {
   }
 
   waitUntilInSync() {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       if (this._helper.hasPendingRequests() === false) {
         return resolve();
       }
