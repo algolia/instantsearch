@@ -209,29 +209,45 @@ export class Store {
     assertValidFacetType(type);
 
     this.stop();
-    this.removeFacet(attribute);
 
     let state = null;
     if (type === FACET_AND) {
-      state = this._helper.state.addFacet(attribute);
+      if (!this._helper.state.isConjunctiveFacet(attribute)) {
+        this.removeFacet(attribute);
+        state = this._helper.state.addFacet(attribute);
+      }
     } else if (type === FACET_OR) {
-      state = this._helper.state.addDisjunctiveFacet(attribute);
+      if (!this._helper.state.isDisjunctiveFacet(attribute)) {
+        this.removeFacet(attribute);
+        state = this._helper.state.addDisjunctiveFacet(attribute);
+      }
     } else if (type === FACET_TREE) {
-      state = this._helper.state.addHierarchicalFacet(attribute);
+      if (!this._helper.state.isHierarchicalFacet(attribute.name)) {
+        this.removeFacet(attribute.name);
+        state = this._helper.state.addHierarchicalFacet(attribute);
+      }
     }
 
-    this._helper.setState(state);
+    if (state !== null) {
+      this._helper.setState(state);
+    }
     this.start();
   }
 
   removeFacet(attribute) {
+    let state = null;
+
     if (this._helper.state.isConjunctiveFacet(attribute)) {
-      this._helper.state.removeFacet(attribute);
+      state = this._helper.state.removeFacet(attribute);
     } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
-      this._helper.state.removeDisjunctiveFacet(attribute);
-    } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
-      this._helper.state.removeHierarchicalFacet(attribute);
+      state = this._helper.state.removeDisjunctiveFacet(attribute);
+    } else if (this._helper.state.isHierarchicalFacet(attribute)) {
+      state = this._helper.state.removeHierarchicalFacet(attribute);
+    } else {
+      return;
     }
+
+    this._helper.setState(state);
   }
 
   addFacetRefinement(attribute, value) {
@@ -239,7 +255,7 @@ export class Store {
       this._helper.addFacetRefinement(attribute, value);
     } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
       this._helper.addDisjunctiveFacetRefinement(attribute, value);
-    } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
+    } else if (this._helper.state.isHierarchicalFacet(attribute)) {
       this._helper.addHierarchicalFacetRefinement(attribute, value);
     }
   }
