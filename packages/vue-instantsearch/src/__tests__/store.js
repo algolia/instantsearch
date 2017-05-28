@@ -136,6 +136,27 @@ describe('Store', () => {
     expect(addAlgoliaAgent).toBeCalledWith(`vue-instantsearch ${version}`);
   });
 
+  test('can register a conjunctive facet for retrieval', () => {
+    const client = algoliaClient('whatever', 'whatever');
+    const helper = algoliaHelper(client);
+    const store = new Store(helper);
+
+    store.addFacet('attribute');
+
+    expect(helper.state.isConjunctiveFacet('attribute')).toBe(true);
+  });
+
+  test('should remove existing non conjunctive facet if a conjunctive facet is added for retrieval', () => {
+    const client = algoliaClient('whatever', 'whatever');
+    const helper = algoliaHelper(client);
+    const store = new Store(helper);
+    store.addFacet('attribute', FACET_OR);
+    store.addFacet('attribute');
+
+    expect(helper.state.isConjunctiveFacet('attribute')).toBe(true);
+    expect(helper.state.isDisjunctiveFacet('attribute')).toBe(false);
+  });
+
   test('should merge query parameters with existing ones', () => {
     const store = createFromAlgoliaCredentials('whatever', 'whatever');
     store.queryParameters = {
