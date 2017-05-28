@@ -132,6 +132,13 @@ describe('Store', () => {
     expect(addAlgoliaAgent).toBeCalledWith(`vue-instantsearch ${version}`);
   });
 
+  test('should throw an error upon adding a facet of unkown type', () => {
+    const store = createStore();
+    expect(() => {
+      store.addFacet('attribute', 'unknown');
+    }).toThrow(Error);
+  });
+
   test('can register a conjunctive facet for retrieval', () => {
     const store = createStore();
     store.addFacet('attribute');
