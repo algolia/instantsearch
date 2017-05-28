@@ -81,7 +81,11 @@ describe('Store', () => {
   test('should throw an exception if not constructed with a helper', () => {
     expect(() => {
       new Store({});
-    }).toThrow(TypeError);
+    }).toThrow(
+      TypeError(
+        'Store should be constructed with an AlgoliaSearchHelper instance as first parameter.'
+      )
+    );
   });
 
   test('should always use custom highlighting tags', () => {
