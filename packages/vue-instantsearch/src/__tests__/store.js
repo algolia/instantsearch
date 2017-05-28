@@ -148,6 +148,38 @@ describe('Store', () => {
     expect(store._helper.state.isDisjunctiveFacet('attribute')).toBe(false);
   });
 
+  test('can register a disjunctive facet for retrieval', () => {
+    const store = createStore();
+    store.addFacet('attribute', FACET_OR);
+
+    expect(store._helper.state.isDisjunctiveFacet('attribute')).toBe(true);
+  });
+
+  test('should remove existing non disjunctive facet if a disjunctive facet is added for retrieval', () => {
+    const store = createStore();
+    store.addFacet('attribute');
+    store.addFacet('attribute', FACET_OR);
+
+    expect(store._helper.state.isDisjunctiveFacet('attribute')).toBe(true);
+    expect(store._helper.state.isConjunctiveFacet('attribute')).toBe(false);
+  });
+
+  test('can register a hierarchical facet for retrieval', () => {
+    const store = createStore();
+    store.addFacet({ name: 'attribute' }, FACET_TREE);
+
+    expect(store._helper.state.isHierarchicalFacet('attribute')).toBe(true);
+  });
+
+  test('should remove existing non hierarchical facet if a hierarchical facet is added for retrieval', () => {
+    const store = createStore();
+    store.addFacet('attribute');
+    store.addFacet({ name: 'attribute' }, FACET_TREE);
+
+    expect(store._helper.state.isHierarchicalFacet('attribute')).toBe(true);
+    expect(store._helper.state.isConjunctiveFacet('attribute')).toBe(false);
+  });
+
   test('should merge query parameters with existing ones', () => {
     const store = createStore();
     store.queryParameters = {
