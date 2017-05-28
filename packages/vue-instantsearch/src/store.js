@@ -47,13 +47,18 @@ const onHelperChange = function() {
 };
 
 export class Store {
-  constructor(algoliaHelper) {
+  constructor(helper) {
+    if (!(helper instanceof algoliaHelper.AlgoliaSearchHelper)) {
+      throw new TypeError(
+        'Store should be constructed with an AlgoliaSearchHelper instance as first parameter.'
+      );
+    }
     // We require one start() call to execute the first search query.
     // Allows every widget to alter the state at initialization
     // without trigger multiple queries.
     this._stoppedCounter = 1;
 
-    this.algoliaHelper = algoliaHelper;
+    this.algoliaHelper = helper;
   }
 
   set algoliaHelper(algoliaHelper) {
@@ -64,7 +69,7 @@ export class Store {
     this._helper = algoliaHelper;
 
     // Here we enforce custom highlight tags for handling XSS protection.
-    // We also make sure that we keep the current page as this operation resets it.
+    // We also make sure that we keep the current page as setQueryParameter resets it.
     const page = this._helper.getPage();
     this._helper.setQueryParameter('highlightPreTag', HIGHLIGHT_PRE_TAG);
     this._helper.setQueryParameter('highlightPostTag', HIGHLIGHT_POST_TAG);
@@ -206,29 +211,45 @@ export class Store {
     assertValidFacetType(type);
 
     this.stop();
-    this.removeFacet(attribute);
 
     let state = null;
     if (type === FACET_AND) {
-      state = this._helper.state.addFacet(attribute);
+      if (!this._helper.state.isConjunctiveFacet(attribute)) {
+        this.removeFacet(attribute);
+        state = this._helper.state.addFacet(attribute);
+      }
     } else if (type === FACET_OR) {
-      state = this._helper.state.addDisjunctiveFacet(attribute);
+      if (!this._helper.state.isDisjunctiveFacet(attribute)) {
+        this.removeFacet(attribute);
+        state = this._helper.state.addDisjunctiveFacet(attribute);
+      }
     } else if (type === FACET_TREE) {
-      state = this._helper.state.addHierarchicalFacet(attribute);
+      if (!this._helper.state.isHierarchicalFacet(attribute.name)) {
+        this.removeFacet(attribute.name);
+        state = this._helper.state.addHierarchicalFacet(attribute);
+      }
     }
 
-    this._helper.setState(state);
+    if (state !== null) {
+      this._helper.setState(state);
+    }
     this.start();
   }
 
   removeFacet(attribute) {
+    let state = null;
+
     if (this._helper.state.isConjunctiveFacet(attribute)) {
-      this._helper.state.removeFacet(attribute);
+      state = this._helper.state.removeFacet(attribute);
     } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
-      this._helper.state.removeDisjunctiveFacet(attribute);
-    } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
-      this._helper.state.removeHierarchicalFacet(attribute);
+      state = this._helper.state.removeDisjunctiveFacet(attribute);
+    } else if (this._helper.state.isHierarchicalFacet(attribute)) {
+      state = this._helper.state.removeHierarchicalFacet(attribute);
+    } else {
+      return;
     }
+
+    this._helper.setState(state);
   }
 
   addFacetRefinement(attribute, value) {
@@ -236,7 +257,7 @@ export class Store {
       this._helper.addFacetRefinement(attribute, value);
     } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
       this._helper.addDisjunctiveFacetRefinement(attribute, value);
-    } else if (this._helper.state.isDisjunctiveFacet(attribute)) {
+    } else if (this._helper.state.isHierarchicalFacet(attribute)) {
       this._helper.addHierarchicalFacetRefinement(attribute, value);
     }
   }
