@@ -13,6 +13,13 @@ import {
   Store,
 } from '../store';
 
+const createStore = () => {
+  const client = algoliaClient('app_id', 'api_key');
+  const helper = algoliaHelper(client);
+
+  return new Store(helper);
+};
+
 test('FACET_AND should be "and"', () => {
   expect(FACET_AND).toBe('and');
 });
@@ -78,49 +85,38 @@ describe('Store', () => {
   });
 
   test('should always use custom highlighting tags', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
-    const store = new Store(helper);
+    const store = createStore();
 
     expect(store.highlightPreTag).toEqual(HIGHLIGHT_PRE_TAG);
     expect(store.highlightPostTag).toEqual(HIGHLIGHT_POST_TAG);
   });
 
   test('can retrieve index name', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client, 'my_index');
-    const store = new Store(helper);
+    const store = createStore();
+    store._helper.setIndex('my_index');
 
     expect(store.indexName).toEqual('my_index');
   });
 
   test('can set index name', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
-    const store = new Store(helper);
-
+    const store = createStore();
     store.indexName = 'custom_index_name';
 
     expect(store.indexName).toEqual('custom_index_name');
   });
 
   test('can retrieve the current page', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
-    helper.setPage(1);
-    const store = new Store(helper);
+    const store = createStore();
+    store._helper.setPage(1);
 
     expect(store.page).toEqual(2);
   });
 
   test('can change the current page', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
-    const store = new Store(helper);
-
+    const store = createStore();
     store.page = 2;
 
-    expect(helper.getPage()).toEqual(1);
+    expect(store._helper.getPage()).toEqual(1);
     expect(store.page).toEqual(2);
   });
 
@@ -137,28 +133,23 @@ describe('Store', () => {
   });
 
   test('can register a conjunctive facet for retrieval', () => {
-    const client = algoliaClient('whatever', 'whatever');
-    const helper = algoliaHelper(client);
-    const store = new Store(helper);
-
+    const store = createStore();
     store.addFacet('attribute');
 
-    expect(helper.state.isConjunctiveFacet('attribute')).toBe(true);
+    expect(store._helper.state.isConjunctiveFacet('attribute')).toBe(true);
   });
 
   test('should remove existing non conjunctive facet if a conjunctive facet is added for retrieval', () => {
-    const client = algoliaClient('whatever', 'whatever');
-    const helper = algoliaHelper(client);
-    const store = new Store(helper);
+    const store = createStore();
     store.addFacet('attribute', FACET_OR);
     store.addFacet('attribute');
 
-    expect(helper.state.isConjunctiveFacet('attribute')).toBe(true);
-    expect(helper.state.isDisjunctiveFacet('attribute')).toBe(false);
+    expect(store._helper.state.isConjunctiveFacet('attribute')).toBe(true);
+    expect(store._helper.state.isDisjunctiveFacet('attribute')).toBe(false);
   });
 
   test('should merge query parameters with existing ones', () => {
-    const store = createFromAlgoliaCredentials('whatever', 'whatever');
+    const store = createStore();
     store.queryParameters = {
       attributesToRetrieve: ['objectID'],
       nonRetrievableAttributes: ['secret'],
@@ -176,12 +167,9 @@ describe('Store', () => {
   });
 
   test('can retrieve query parameters', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
-    helper.setQueryParameter('distinct', 1);
-    helper.setPage(3);
-
-    const store = new Store(helper);
+    const store = createStore();
+    store._helper.setQueryParameter('distinct', 1);
+    store._helper.setPage(3);
 
     expect(store.queryParameters).toHaveProperty('distinct', 1);
 
@@ -190,7 +178,7 @@ describe('Store', () => {
   });
 
   test('should reset page when query parameters are changed', () => {
-    const store = createFromAlgoliaCredentials('whatever', 'whatever');
+    const store = createStore();
     store.page = 2;
     store.queryParameters = {
       distinct: 1,
@@ -201,7 +189,7 @@ describe('Store', () => {
   });
 
   test('should allow page to be changed by updating query parameters', () => {
-    const store = createFromAlgoliaCredentials('whatever', 'whatever');
+    const store = createStore();
     store.queryParameters = {
       page: 3,
       distinct: 1,
@@ -212,16 +200,14 @@ describe('Store', () => {
   });
 
   test('should trigger search only once when query parameters are changed', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
-    const store = new Store(helper);
-
+    const store = createStore();
     const search = jest.fn();
-    helper.search = search;
+
+    store._helper.search = search;
 
     store.start();
 
-    helper.search.mockClear();
+    store._helper.search.mockClear();
 
     store.queryParameters = {
       page: 3,
@@ -233,13 +219,9 @@ describe('Store', () => {
   });
 
   test('should remove query parameters that have a value of null or undefined', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
-    const store = new Store(helper);
-
+    const store = createStore();
     const search = jest.fn();
-
-    client.search = search;
+    store._helper.getClient().search = search;
 
     store.queryParameters = {
       query: '',
@@ -272,22 +254,18 @@ describe('Store', () => {
   });
 
   test('should allow to retrieve all the search parameters', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
+    const store = createStore();
 
-    const store = new Store(helper);
-
-    const searchParameters = Object.assign({}, helper.getState(), { page: 1 });
+    const searchParameters = Object.assign({}, store._helper.getState(), {
+      page: 1,
+    });
     expect(store.searchParameters).toEqual(searchParameters);
   });
 
   test('should accept new search parameters', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
+    const store = createStore();
 
-    const store = new Store(helper);
-
-    const searchParameters = helper.getState();
+    const searchParameters = store._helper.getState();
     const newSearchParameters = Object.assign({}, searchParameters, {
       distinct: true,
       page: 1,
@@ -299,14 +277,11 @@ describe('Store', () => {
   });
 
   test('page search parameter should start at 1', () => {
-    const client = algoliaClient('app_id', 'api_key');
-    const helper = algoliaHelper(client);
-
-    const store = new Store(helper);
+    const store = createStore();
 
     expect(store.searchParameters).toHaveProperty('page', 1);
 
-    helper.setPage(2);
+    store._helper.setPage(2);
     expect(store.searchParameters).toHaveProperty('page', 3);
 
     const newSearchParameters = Object.assign({}, store.searchParameters, {
@@ -315,6 +290,6 @@ describe('Store', () => {
 
     store.searchParameters = newSearchParameters;
 
-    expect(helper.getPage()).toEqual(4);
+    expect(store._helper.getPage()).toEqual(4);
   });
 });
