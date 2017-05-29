@@ -8,6 +8,11 @@ if [ "$CURRENT_BRANCH" != master ]; then
   exit 1
 fi
 
+if ! git diff-index --quiet HEAD --; then
+  echo "Working tree is not clean, aborting..."
+  exit 1
+fi
+
 if ! yarn run build; then
   echo "Failed to build dist files, aborting..."
   exit 1
