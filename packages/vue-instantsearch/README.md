@@ -1,5 +1,7 @@
 [![Vue InstantSearch logo][logo]][website]
 
+**WARNING: Vue InstantSearch is currently in BETA**
+
 InstantSearch projects: **Vue InstantSearch**
 | [InstantSearch.js][instantsearch.js-github]
 | [React InstantSearch][react-instantsearch-github]
