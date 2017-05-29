@@ -29,7 +29,7 @@ readonly PACKAGE_VERSION=$(< package.json grep version \
   | sed 's/[",]//g' \
   | tr -d '[:space:]')
 
-yarn publish
+npm publish
 
 git tag "v$PACKAGE_VERSION"
 
