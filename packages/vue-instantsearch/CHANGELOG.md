@@ -1,3 +1,8 @@
+<a name="0.2.1"></a>
+## [0.2.1](https://github.com/algolia/vue-instantsearch/compare/v0.2.0...v0.2.1) (2017-05-29)
+
+
+
 <a name="0.2.0"></a>
 # 0.2.0 (2017-05-29)
 
