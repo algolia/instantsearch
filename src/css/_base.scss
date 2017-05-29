@@ -5,13 +5,13 @@
 }
 
 @mixin element($element) {
-  &--#{$element} {
+  &__#{$element} {
     @content;
   }
 }
 
 @mixin modifier($modifier) {
-  &__#{$modifier} {
+  &--#{$modifier} {
     @content;
   }
 }
