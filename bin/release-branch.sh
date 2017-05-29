@@ -18,10 +18,12 @@ if ! yarn run build; then
   exit 1
 fi
 
-if ! yarn run test; then
+if ! yarn test; then
   echo "Tests failed, aborting..."
   exit 1
 fi
+
+yarn run changelog:unreleased
 
 # Only update the package.json version
 # We need to update changelog before tagging

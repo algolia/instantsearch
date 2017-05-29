@@ -35,7 +35,8 @@
     "test:watch": "jest --verbose --watchAll --notify",
     "lint": "eslint --ext .js,.vue .",
     "lint:fix": "eslint . --fix",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file",
+    "changelog:unreleased": "conventional-changelog --preset angular --output-unreleased"
   },
   "dependencies": {
     "algoliasearch": "^3.18.1",
