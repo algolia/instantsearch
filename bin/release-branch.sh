@@ -46,6 +46,8 @@ git checkout -b "chore/release-$PACKAGE_VERSION"
 # Gives user a chance to review and eventually abort.
 git add --patch
 
+git commit --message="chore(release): v${PACKAGE_VERSION}"
+
 git push origin HEAD
 
 echo "Your release branch 'chore/release-$PACKAGE_VERSION' is now ready for review..."
