@@ -1,5 +1,7 @@
 ## Welcome to Vue InstantSearch
 
+**WARNING: This project is currently in BETA.**
+
 Vue InstantSearch is the ultimate toolbox for creating instant-search
 experiences using [Vue.js](https://vuejs.org/) and [Algolia](https://www.algolia.com/).
 
