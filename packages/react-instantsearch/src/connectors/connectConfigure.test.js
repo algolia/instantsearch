@@ -196,6 +196,16 @@ describe('connectConfigure', () => {
       expect(searchState).toEqual({
         indices: { first: { configure: {} }, second: { configure: {} } },
       });
+
+      searchState = cleanUp(
+        { distinct: 1, whatever: 'please', children: 'whatever' },
+        { indices: {} }
+      );
+      expect(searchState).toEqual({
+        indices: {
+          first: { configure: {} },
+        },
+      });
     });
   });
 });

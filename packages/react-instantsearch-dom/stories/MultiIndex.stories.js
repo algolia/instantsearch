@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { storiesOf } from '@kadira/storybook';
 import {
   Configure,
@@ -19,30 +20,43 @@ stories
     <InstantSearch
       appId="latency"
       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="ikea"
+      indexName="categories"
     >
       <SearchBox />
-      <Configure hitsPerPage={1} />
-      <Index indexName="ikea">
-        <CustomHits />
-      </Index>
-      <Index indexName="bestbuy">
-        <CustomHits />
-      </Index>
-      <Index indexName="airbnb">
-        <CustomHits />
-      </Index>
+      <div className="multi-index_content">
+        <div className="multi-index_categories-or-brands">
+          <Index indexName="categories">
+            <div>Categories: </div>
+            <Configure hitsPerPage={3} />
+            <CustomCategoriesOrBrands />
+          </Index>
+          <Index indexName="brands">
+            <div>Brand: </div>
+            <Configure hitsPerPage={3} />
+            <CustomCategoriesOrBrands />
+          </Index>
+        </div>
+        <div className="multi-index_products">
+          <Index indexName="products">
+            <div>Products: </div>
+            <Configure hitsPerPage={5} />
+            <CustomProducts />
+          </Index>
+        </div>
+      </div>
     </InstantSearch>
   ))
   .add('AutoComplete', () => (
     <InstantSearch
       appId="latency"
       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="ikea"
+      indexName="categories"
     >
-      <Configure hitsPerPage={1} />
-      <Index indexName="bestbuy" />
-      <Index indexName="airbnb" />
+      <Configure hitsPerPage={3} />
+      <Index indexName="brands" />
+      <Index indexName="products">
+        <Configure hitsPerPage={5} />
+      </Index>
       <AutoComplete />
     </InstantSearch>
   ));
@@ -55,13 +69,10 @@ const AutoComplete = connectAutoComplete(
       onSuggestionsFetchRequested={({ value }) => refine(value)}
       onSuggestionsClearRequested={() => refine('')}
       getSuggestionValue={hit => hit.name}
-      renderSuggestion={hit => (
-        <div>
-          <div>{hit.name}</div>
-        </div>
-      )}
+      renderSuggestion={hit =>
+        (hit.brand ? <Product hit={hit} /> : <CategoryOrBrand hit={hit} />)}
       inputProps={{
-        placeholder: 'Type a product',
+        placeholder: 'Search for a category, brand or product',
         value: currentRefinement,
         onChange: () => {},
       }}
@@ -71,30 +82,58 @@ const AutoComplete = connectAutoComplete(
   )
 );
 
-const CustomHits = connectHits(({ hits }) => (
-  <div className="hits">
-    {hits.map((hit, idx) => {
-      const image = hit.image ? hit.image : hit.picture_url;
-      return (
-        <div key={idx} className="hit">
-          <div>
-            <div className="hit-picture"><img src={`${image}`} /></div>
-          </div>
-          <div className="hit-content">
-            <div>
-              <Highlight attributeName="name" hit={hit} />
-              <span> - ${hit.price}</span>
-              <span> - {hit.rating} stars</span>
-            </div>
-            <div className="hit-type">
-              <Highlight attributeName="type" hit={hit} />
-            </div>
-            <div className="hit-description">
-              <Highlight attributeName="description" hit={hit} />
-            </div>
-          </div>
-        </div>
-      );
-    })}
+const CustomCategoriesOrBrands = connectHits(({ hits }) => {
+  const categoryOrBrand = hits.map((hit, idx) => (
+    <CategoryOrBrand hit={hit} key={idx} />
+  ));
+  return (
+    <div className="multi-index_hits">
+      {categoryOrBrand}
+    </div>
+  );
+});
+
+const CategoryOrBrand = ({ hit }) => (
+  <div className="multi-index_hit">
+    <Highlight attributeName="name" hit={hit} />
   </div>
-));
+);
+
+CategoryOrBrand.propTypes = {
+  hit: PropTypes.object.isRequired,
+};
+
+const CustomProducts = connectHits(({ hits }) => {
+  const products = hits.map((hit, idx) => <Product hit={hit} key={idx} />);
+  return (
+    <div className="multi-index_hits">
+      {products}
+    </div>
+  );
+});
+
+const Product = ({ hit }) => {
+  const image = `https://ecommerce-images.algolia.com/img/produit/nano/${hit.objectID}-1.jpg%3Falgolia`;
+  return (
+    <div className="multi-index_hit">
+      <div>
+        <div className="multi-index_hit-picture">
+          <img src={`${image}`} />
+        </div>
+      </div>
+      <div className="multi-index_hit-content">
+        <div>
+          <Highlight attributeName="name" hit={hit} />
+          <span> - ${hit.price}</span>
+        </div>
+        <div className="multi-index_hit-description">
+          <Highlight attributeName="brand" hit={hit} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+Product.propTypes = {
+  hit: PropTypes.object.isRequired,
+};

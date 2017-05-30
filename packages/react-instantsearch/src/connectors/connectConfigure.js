@@ -33,7 +33,9 @@ export default createConnector({
     const subState = hasMultipleIndex(this.context) && searchState.indices
       ? searchState.indices[index]
       : searchState;
-    const configureKeys = subState[id] ? Object.keys(subState[id]) : [];
+    const configureKeys = subState && subState[id]
+      ? Object.keys(subState[id])
+      : [];
     const configureState = configureKeys.reduce((acc, item) => {
       if (!props[item]) {
         acc[item] = subState[id][item];
