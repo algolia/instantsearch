@@ -37,13 +37,6 @@ Now Finally, let's install the npm dependencies:
 npm install
 ```
 
-From here on out, we are able to run the simple Vue.js application:
-
-```sh
-npm run dev
-```
-
-
 ## Install `vue-instantsearch`
 
 Now let's create our first Algolia Vue InstantSearch experience.
@@ -104,4 +97,8 @@ Open the `src/App.vue` component, and replace the content between the `<template
 </template>
 ```
 
-If we now run `npm run dev` again, we have a functional instant-search experience.
+From here on out, we are able to run the simple application:
+
+```sh
+npm run dev
+```
