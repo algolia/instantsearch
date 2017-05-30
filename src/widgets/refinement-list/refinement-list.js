@@ -26,6 +26,8 @@ const bem = bemHelper('ais-refinement-list');
  * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state). [*]
  * @param  {object|boolean} [options.searchForFacetValues=false] Add a search input to let the user search for more facet values
  * @param  {string} [options.searchForFacetValues.placeholder] Value of the search field placeholder
+ * @param  {boolean} [options.searchForFacetValues.isAlwaysActive=false] When `false` the search field will become disabled if
+ * there are less items to display than the `options.limit`, otherwise the search field is always usable.
  * @param  {string} [options.searchForFacetValues.templates] Templates to use for search for facet values
  * @param  {string} [options.searchForFacetValues.templates.noResults] Templates to use for search for facet values
  * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
@@ -68,7 +70,7 @@ refinementList({
   [ collapsible=false ],
   [ showMore.{templates: {active, inactive}, limit} ],
   [ collapsible=false ],
-  [ searchForFacetValues.{placeholder, templates: {noResults}}],
+  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive}],
 })`;
 function refinementList({
     container,
@@ -165,6 +167,7 @@ function refinementList({
         toggleRefinement={toggleRefinement}
         searchFacetValues={searchFacetValues}
         searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
+        searchIsAlwaysActive={searchForFacetValues.isAlwaysActive || false}
         isFromSearch={isFromSearch}
       />,
       containerNode
