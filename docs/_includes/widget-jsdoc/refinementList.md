@@ -35,6 +35,11 @@
 </p>
 <p class="attr-description">Value of the search field placeholder</p>
 <p class="attr-name">
+<span class='attr-optional'>`options.searchForFacetValues.isAlwaysActive`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span>
+</p>
+<p class="attr-description">When `false` the search field will become disabled if there are less items to display than the `options.limit`, otherwise the search field is always usable.</p>
+<p class="attr-name">
 <span class='attr-optional'>`options.searchForFacetValues.templates`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>

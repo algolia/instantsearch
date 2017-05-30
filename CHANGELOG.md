@@ -1,3 +1,13 @@
+<a name="1.11.12"></a>
+## [1.11.12](https://github.com/algolia/instantsearch.js/compare/v1.11.11...v1.11.12) (2017-05-30)
+
+
+### Bug Fixes
+
+* **sffv:** when using a large limit, retain the search (#2163) ([3d95d4c](https://github.com/algolia/instantsearch.js/commit/3d95d4c)), closes [#2156](https://github.com/algolia/instantsearch.js/issues/2156)
+
+
+
 <a name="1.11.10"></a>
 ## [1.11.10](https://github.com/algolia/instantsearch.js/compare/v1.11.9...v1.11.10) (2017-05-17)
 
