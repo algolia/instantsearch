@@ -160,13 +160,15 @@ class RefinementList extends React.Component {
         /> :
         undefined;
 
+    const shouldDisableSearchInput =
+      this.props.searchIsAlwaysActive !== true &&
+      !(this.props.isFromSearch || displayedFacetValues.length >= limit);
     const searchInput = this.props.searchFacetValues ?
-      <SearchBox ref={i => { this.searchbox = i; }}
-        placeholder={this.props.searchPlaceholder}
-        onChange={this.props.searchFacetValues}
-        onValidate={() => this.refineFirstValue()}
-        disabled={!this.props.isFromSearch && displayedFacetValues.length < limit}/> :
-      null;
+        <SearchBox ref={i => { this.searchbox = i; }}
+          placeholder={this.props.searchPlaceholder}
+          onChange={this.props.searchFacetValues}
+          onValidate={() => this.refineFirstValue()}
+          disabled={shouldDisableSearchInput}/> : null;
 
     const noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ?
       <Template
@@ -205,6 +207,7 @@ RefinementList.propTypes = {
   toggleRefinement: React.PropTypes.func.isRequired,
   searchFacetValues: React.PropTypes.func,
   searchPlaceholder: React.PropTypes.string,
+  searchIsAlwaysActive: React.PropTypes.bool,
   isFromSearch: React.PropTypes.bool,
 };
 
