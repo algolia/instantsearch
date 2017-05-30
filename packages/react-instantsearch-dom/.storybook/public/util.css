@@ -5,7 +5,7 @@
   clear: left;
 }
 
-.container:after{
+.container:after {
   font-size: 13px;
   top: 0;
   left: 0;
@@ -52,11 +52,12 @@
   background-color: #F3F3F3;
 }
 
-button.playground-url{
+button.playground-url {
   border: none;
 }
 
-.playground-url, .source-code-url {
+.playground-url,
+.source-code-url {
   font-size: 13px;
   top: 0;
   left: 0;
@@ -64,7 +65,6 @@ button.playground-url{
   padding: 4px 6px;
   line-height: 1em;
   background-color: #F3F3F3;
-
 }
 
 .hit {
@@ -74,7 +74,7 @@ button.playground-url{
 }
 
 .hit-actions {
-  display:flex;
+  display: flex;
 }
 
 .ais-SearchBox__root {
@@ -85,7 +85,7 @@ button.playground-url{
   padding: 0px 10px;
 }
 
-.hit-picture img{
+.hit-picture img {
   width: 80px;
   height: 80px;
 }
@@ -93,4 +93,22 @@ button.playground-url{
 .hit-type {
   color: #888888;
   font-size: 13px;
+}
+
+.multi-index_content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.multi-index_hit {
+  padding: 10px;
+}
+
+.multi-index_hit {
+  display: flex;
+}
+
+.multi-index_hit .multi-index_hit-content {
+  padding-left: 10px;
 }
