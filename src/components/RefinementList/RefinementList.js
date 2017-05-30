@@ -147,13 +147,15 @@ export class RawRefinementList extends React.Component {
         /> :
         undefined;
 
+    const shouldDisableSearchInput =
+      this.props.searchIsAlwaysActive !== true &&
+      !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
     const searchInput = this.props.searchFacetValues ?
-      <SearchBox ref={i => { this.searchbox = i; }}
-        placeholder={this.props.searchPlaceholder}
-        onChange={this.props.searchFacetValues}
-        onValidate={() => this.refineFirstValue()}
-        disabled={this.props.hasExhaustiveItems}/> :
-      null;
+        <SearchBox ref={i => { this.searchbox = i; }}
+          placeholder={this.props.searchPlaceholder}
+          onChange={this.props.searchFacetValues}
+          onValidate={() => this.refineFirstValue()}
+          disabled={shouldDisableSearchInput}/> : null;
 
     const noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ?
       <Template
@@ -194,6 +196,7 @@ RawRefinementList.propTypes = {
   isShowingMore: PropTypes.bool,
   hasExhaustiveItems: PropTypes.bool,
   canToggleShowMore: PropTypes.bool,
+  searchIsAlwaysActive: PropTypes.bool,
 };
 
 RawRefinementList.defaultProps = {
