@@ -1,3 +1,4 @@
+import escapeHits, {tagConfig} from '../../lib/escape-highlight.js';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -12,7 +13,9 @@ var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRend
   // }
 });
 search.addWidget(
-  customInfiniteHits()
+  customInfiniteHits({
+    escapeHits: true,
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectInfiniteHits.html
 `;
@@ -27,12 +30,17 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
+ * @typedef {Object} CustomInfiniteHitsWidgetOptions
+ * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ */
+
+/**
  * **InfiniteHits** connector provides the logic to create custom widgets that will render an continuous list of results retrieved from Algolia.
  *
  * This connector provides a `InfiniteHitsRenderingOptions.showMore()` function to load next page of matched results.
  * @type {Connector}
  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn Rendering function for the custom **InfiniteHits** widget.
- * @return {function(object)} Re-usable widget factory for a custom **InfiniteHits** widget.
+ * @return {function(CustomInfiniteHitsWidgetOptions)} Re-usable widget factory for a custom **InfiniteHits** widget.
  * @example
  * // custom `renderFn` to render the custom InfiniteHits widget
  * function renderFn(InfiniteHitsRenderingOptions, isFirstRendering) {
@@ -73,6 +81,10 @@ export default function connectInfiniteHits(renderFn) {
     const getShowMore = helper => () => helper.nextPage().search();
 
     return {
+      getConfiguration() {
+        return tagConfig;
+      },
+
       init({instantSearchInstance, helper}) {
         this.showMore = getShowMore(helper);
 
@@ -89,6 +101,10 @@ export default function connectInfiniteHits(renderFn) {
       render({results, state, instantSearchInstance}) {
         if (state.page === 0) {
           hitsCache = [];
+        }
+
+        if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
+          results.hits = escapeHits(results.hits);
         }
 
         hitsCache = [...hitsCache, ...results.hits];

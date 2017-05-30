@@ -42,8 +42,11 @@ describe('infiniteHits()', () => {
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });
 
-  it('Does not have a specific configuration', () => {
-    expect(widget.getConfiguration).toBe(undefined);
+  it('It does have a specific configuration', () => {
+    expect(widget.getConfiguration()).toEqual({
+      highlightPostTag: '__/ais-highlight__',
+      highlightPreTag: '__ais-highlight__',
+    });
   });
 
   it('calls twice ReactDOM.render(<Hits props />, container)', () => {
@@ -72,10 +75,10 @@ describe('infiniteHits()', () => {
     });
 
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    const propsWithIsLastPageFalse = {...(getProps({...results, page: 0, nbPages: 2})), isLastPage: false};
+    const propsWithIsLastPageFalse = {...getProps({...results, page: 0, nbPages: 2}), isLastPage: false};
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<InfiniteHits {...propsWithIsLastPageFalse} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    const propsWithIsLastPageTrue = {...(getProps({...results, page: 1, nbPages: 2})), isLastPage: true};
+    const propsWithIsLastPageTrue = {...getProps({...results, page: 1, nbPages: 2}), isLastPage: true};
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<InfiniteHits {...propsWithIsLastPageTrue} />);
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
