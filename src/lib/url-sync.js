@@ -88,7 +88,8 @@ function getFullURL(relative) {
 // IE <= 11 has no location.origin or buggy
 function getLocationOrigin() {
   // eslint-disable-next-line max-len
-  return `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+  const port = window.location.port ? `:${window.location.port}` : '';
+  return `${window.location.protocol}//${window.location.hostname}${port}`;
 }
 
 // see InstantSearch.js file for urlSync options
@@ -102,6 +103,7 @@ class URLSync {
     this.threshold = options.threshold || 700;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
     this.firstRender = true;
+    this.updateFromHistory = false;
 
     this.searchParametersFromUrl = AlgoliaSearchHelper
       .getConfigurationFromQueryString(
@@ -138,6 +140,7 @@ class URLSync {
 
     if (isEqual(fullHelperState, fullState)) return;
 
+    this.updateFromHistory = true;
     helper.overrideStateWithoutTriggeringChangeEvent(fullState).search();
   }
 
@@ -158,9 +161,14 @@ class URLSync {
     );
 
     clearTimeout(this.urlUpdateTimeout);
-    this.urlUpdateTimeout = setTimeout(() => {
-      this.urlUtils.pushState(qs, {getHistoryState: this.getHistoryState});
-    }, this.threshold);
+
+    if (!this.updateFromHistory) {
+      this.urlUpdateTimeout = setTimeout(() => {
+        this.urlUtils.pushState(qs, {getHistoryState: this.getHistoryState});
+      }, this.threshold);
+    }
+
+    this.updateFromHistory = false;
   }
 
   // External API's
