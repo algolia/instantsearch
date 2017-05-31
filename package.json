@@ -120,7 +120,7 @@
     "webpack-hot-middleware": "^2.17.1"
   },
   "engines": {
-    "node": "^6.x.x || ^7.x.x"
+    "node": "7.10.0"
   },
   "jest": {
     "notify": false

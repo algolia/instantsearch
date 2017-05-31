@@ -1,5 +1,12 @@
 [![React InstantSearch logo][logo]][website]
 
+### Requirements
+
+To run this project, you will need:
+
+- Node.js >= v7.10.0, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
+- Yarn >= v0.23.4 - [install instructions](https://yarnpkg.com/en/docs/install#alternatives-tab)
+
 ## Development
 
 We use the [documentation website][website] as the main way to develop
