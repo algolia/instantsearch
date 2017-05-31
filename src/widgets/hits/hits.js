@@ -102,7 +102,6 @@ hits({
  *       empty: 'No results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
- *     hitsPerPage: 6,
  *     escapeHits: true,
  *   })
  * );

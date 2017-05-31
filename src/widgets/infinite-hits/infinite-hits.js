@@ -109,7 +109,6 @@ infiniteHits({
  *       empty: 'No results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
- *     hitsPerPage: 3,
  *     escapeHits: true,
  *   })
  * );
