@@ -18,7 +18,7 @@
     "test:build": "./scripts/test:build.sh",
     "dev": "jest --watch --bail",
     "docs:storybook-start": "NODE_ENV=development start-storybook -p 6006 -c ./storybook -s ./storybook/public",
-    "docs:storybook-build-production": "NODE_ENV=production build-storybook -s ./storybook/public -o docs-production/react-instantsearch/storybook -c ./storybook",
+    "docs:storybook-build-production": "NODE_ENV=development build-storybook -s ./storybook/public -o docs-production/react-instantsearch/storybook -c ./storybook",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -28,12 +28,6 @@
     ]
   },
   "dependencies": {
-    "@kadira/react-storybook-addon-info": "^3.3.0",
-    "@kadira/storybook": "^2.35.3",
-    "@kadira/storybook-addon-knobs": "^1.5.0",
-    "@kadira/storybook-addon-notes": "^1.0.1",
-    "@kadira/storybook-addon-options": "^1.0.1",
-    "@kadira/storybook-addons": "^1.6.1",
     "async": "^2.1.5",
     "autoprefixer": "^6.7.5",
     "babel-cli": "^6.23.0",
@@ -111,6 +105,12 @@
     "rheostat": "^2.1.0",
     "sass-loader": "^6.0.2",
     "stat-mode": "^0.2.2",
+    "@storybook/react": "3.0.0",
+    "@storybook/ui": "3.0.0",
+    "@storybook/addons": "3.0.0",
+    "@storybook/addon-knobs": "3.0.0",
+    "@storybook/addon-options": "3.0.0",
+    "@storybook/addon-actions": "3.0.0",
     "string": "^3.3.3",
     "style-loader": "^0.13.2",
     "uglify-js": "^2.7.5",

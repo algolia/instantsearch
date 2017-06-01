@@ -1,6 +1,6 @@
 import React from 'react';
-import { storiesOf } from '@kadira/storybook';
-import { withKnobs, object, number } from '@kadira/storybook-addon-knobs';
+import { storiesOf } from '@storybook/react';
+import { withKnobs, object, number } from '@storybook/addon-knobs';
 import { WrapWithHits } from './util';
 import Range from './3rdPartyIntegrations.stories';
 const stories = storiesOf('RangeSlider', module);
