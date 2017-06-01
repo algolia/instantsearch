@@ -8,7 +8,12 @@
 
 ### Going Further
   * [Server Side Rendering](server-side-rendering.md)
-  * [Multi Index Search](README.md#todo)
+
+### Examples
+  * [Use the UMD standalone build](examples/umd.md)
+  * [Integrate with Bootstrap CSS](examples/bootstrap.md)
+  * [Infinite Scroll](examples/infinite-scroll.md)
+  * [Multi-Index search](examples/multi-index-search.md)
 
 ### Components
   * [Index](components/index.md)
