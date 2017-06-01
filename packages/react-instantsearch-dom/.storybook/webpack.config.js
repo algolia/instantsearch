@@ -1,15 +1,12 @@
 /* eslint-disable import/no-commonjs */
-const autoprefixer = require('autoprefixer');
-
 module.exports = {
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.scss$/,
-        loaders: ['style?insertAt=top', 'css', 'postcss', 'sass'],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
     ],
   },
-  postcss: [autoprefixer()],
 };
 /* eslint-enable import/no-commonjs */

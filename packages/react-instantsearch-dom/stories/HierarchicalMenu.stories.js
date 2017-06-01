@@ -1,16 +1,11 @@
 import React from 'react';
-import { storiesOf } from '@kadira/storybook';
+import { storiesOf } from '@storybook/react';
 import {
   HierarchicalMenu,
   Panel,
   SearchBox,
 } from '../packages/react-instantsearch/dom';
-import {
-  withKnobs,
-  text,
-  boolean,
-  number,
-} from '@kadira/storybook-addon-knobs';
+import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('HierarchicalMenu', module);

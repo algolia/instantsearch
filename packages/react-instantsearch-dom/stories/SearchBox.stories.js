@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { storiesOf, action } from '@kadira/storybook';
+import { storiesOf } from '@storybook/react';
 import { SearchBox } from '../packages/react-instantsearch/dom';
-import { withKnobs, object } from '@kadira/storybook-addon-knobs';
+import { withKnobs, object } from '@storybook/addon-knobs';
 import { WrapWithHits } from './util';
+import { action } from '@storybook/addon-actions';
 
 const stories = storiesOf('SearchBox', module);
 

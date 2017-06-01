@@ -1,6 +1,5 @@
-import { configure, setAddon } from '@kadira/storybook';
-import infoAddon from '@kadira/react-storybook-addon-info';
-import { setOptions } from '@kadira/storybook-addon-options';
+import { configure } from '@storybook/react';
+import { setOptions } from '@storybook/addon-options';
 
 setOptions({
   name: 'react-instantsearch',
@@ -11,8 +10,6 @@ setOptions({
   showSearchBox: false,
   downPanelInRight: true,
 });
-
-setAddon(infoAddon);
 
 const req = require.context('../stories', true, /.stories.js$/);
 
