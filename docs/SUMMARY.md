@@ -1,11 +1,14 @@
 # Summary
 
-### Getting Started
-  * [Setup a new Vue project](README.md#welcome-to-vue-instantsearch)
-  * [Install vue-instantsearch](README.md#install-vue-instantsearch)
-  * [Use the InstantSearch plugin](README.md#use-the-instantsearch-plugin)
-  * [Create your first search experience](README.md#create-your-first-search-experience)
+### Essentials
+  * [Getting Started](README.md)
+  * [Using Components](README.md#todo)
+  * [Custom Search Component](custom-component.md)
+  * [The Search Store instance](README.md#todo)
 
+### Going Further
+  * [Server Side Rendering](server-side-rendering.md)
+  * [Multi Index Search](README.md#todo)
 
 ### Components
   * [Index](components/index.md)
@@ -23,7 +26,3 @@
   * [Results per Page Selector](components/results-per-page-selector.md)
   * [Sort by Selector](components/sort-by-selector.md)
   * [Rating](components/rating.md)
-
-### Going Further
-  * [Custom Component](custom-component.md)
-  * [Server Side Rendering](server-side-rendering.md)

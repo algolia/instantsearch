@@ -1,4 +1,4 @@
-Custom Component
+Custom Search Component
 ---------
 
 There will be times were the components we provide fall short depending on the context.
@@ -57,7 +57,7 @@ You can also provide your custom searchStore to any custom component as a proper
 ```
 <template>
   <div id="app">
-    <current-query :searchStore="searchStore"></current-query>
+    <current-query :search-store="searchStore"></current-query>
   </div>
 </template>
 <script>
