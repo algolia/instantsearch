@@ -17,7 +17,7 @@ It can then:
 
 To make it as easy as possible to access the search store, you simply need to inject a mixin into your component.
 
-Here is a the bear minimum Vue InstantSearch component:
+Here is a bare minimum Vue InstantSearch component:
 
 ```html
 <!-- CurrentQuery.vue -->
