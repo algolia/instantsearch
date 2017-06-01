@@ -19,7 +19,7 @@ To make it as easy as possible to access the search store, you simply need to in
 
 Here is a the bear minimum Vue InstantSearch component:
 
-```
+```html
 <!-- CurrentQuery.vue -->
 <template>
   <div>
@@ -54,7 +54,7 @@ The search store will be automatically fetched from a parent [Index component](/
 
 You can also provide your custom searchStore to any custom component as a property:
 
-```
+```html
 <template>
   <div id="app">
     <current-query :search-store="searchStore"></current-query>

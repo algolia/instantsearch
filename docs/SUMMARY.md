@@ -2,7 +2,7 @@
 
 ### Essentials
   * [Getting Started](README.md)
-  * [Using Components](README.md#todo)
+  * [Using Components](using-components.md)
   * [Custom Search Component](custom-component.md)
   * [The Search Store instance](README.md#todo)
 
