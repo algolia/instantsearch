@@ -141,7 +141,7 @@ function SearchParameters(newParameters) {
    * filters selected for the associated facet name.
    *
    * When querying algolia, the values stored in this attribute will
-   * be translated into the `facetFiters` attribute.
+   * be translated into the `facetFilters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.facetsRefinements = params.facetsRefinements || {};
@@ -154,7 +154,7 @@ function SearchParameters(newParameters) {
    * filters excluded for the associated facet name.
    *
    * When querying algolia, the values stored in this attribute will
-   * be translated into the `facetFiters` attribute.
+   * be translated into the `facetFilters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.facetsExcludes = params.facetsExcludes || {};
@@ -167,7 +167,7 @@ function SearchParameters(newParameters) {
    * filters selected for the associated facet name.
    *
    * When querying algolia, the values stored in this attribute will
-   * be translated into the `facetFiters` attribute.
+   * be translated into the `facetFilters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.disjunctiveFacetsRefinements = params.disjunctiveFacetsRefinements || {};
@@ -199,10 +199,10 @@ function SearchParameters(newParameters) {
    * The key is the name of the facet, and the `FacetList` contains all
    * filters selected for the associated facet name. The FacetList values
    * are structured as a string that contain the values for each level
-   * seperated by the configured separator.
+   * separated by the configured separator.
    *
    * When querying algolia, the values stored in this attribute will
-   * be translated into the `facetFiters` attribute.
+   * be translated into the `facetFilters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
@@ -247,7 +247,7 @@ function SearchParameters(newParameters) {
    */
   this.hitsPerPage = params.hitsPerPage;
   /**
-   * Number of values for each facetted attribute
+   * Number of values for each faceted attribute
    * @member {number}
    * @see https://www.algolia.com/doc/rest#param-maxValuesPerFacet
    */
@@ -612,7 +612,7 @@ SearchParameters.prototype = {
   /**
    * Remove all refinements (disjunctive + conjunctive + excludes + numeric filters)
    * @method
-   * @param {undefined|string|SearchParameters.clearCallback} [attribute] optionnal string or function
+   * @param {undefined|string|SearchParameters.clearCallback} [attribute] optional string or function
    * - If not given, means to clear all the filters.
    * - If `string`, means to clear all refinements for the `attribute` named filter.
    * - If `function`, means to clear all the refinements that return truthy values.
@@ -682,9 +682,9 @@ SearchParameters.prototype = {
   },
   /**
    * Facets setter
-   * The facets are the simple facets, used for conjunctive (and) facetting.
+   * The facets are the simple facets, used for conjunctive (and) faceting.
    * @method
-   * @param {string[]} facets all the attributes of the algolia records used for conjunctive facetting
+   * @param {string[]} facets all the attributes of the algolia records used for conjunctive faceting
    * @return {SearchParameters}
    */
   setFacets: function setFacets(facets) {
@@ -696,7 +696,7 @@ SearchParameters.prototype = {
    * Disjunctive facets setter
    * Change the list of disjunctive (or) facets the helper chan handle.
    * @method
-   * @param {string[]} facets all the attributes of the algolia records used for disjunctive facetting
+   * @param {string[]} facets all the attributes of the algolia records used for disjunctive faceting
    * @return {SearchParameters}
    */
   setDisjunctiveFacets: function setDisjunctiveFacets(facets) {
@@ -773,7 +773,7 @@ SearchParameters.prototype = {
   },
   /**
    * Get the list of conjunctive refinements for a single facet
-   * @param {string} facetName name of the attribute used for facetting
+   * @param {string} facetName name of the attribute used for faceting
    * @return {string[]} list of refinements
    */
   getConjunctiveRefinements: function(facetName) {
@@ -784,7 +784,7 @@ SearchParameters.prototype = {
   },
   /**
    * Get the list of disjunctive refinements for a single facet
-   * @param {string} facetName name of the attribute used for facetting
+   * @param {string} facetName name of the attribute used for faceting
    * @return {string[]} list of refinements
    */
   getDisjunctiveRefinements: function(facetName) {
@@ -797,7 +797,7 @@ SearchParameters.prototype = {
   },
   /**
    * Get the list of hierarchical refinements for a single facet
-   * @param {string} facetName name of the attribute used for facetting
+   * @param {string} facetName name of the attribute used for faceting
    * @return {string[]} list of refinements
    */
   getHierarchicalRefinement: function(facetName) {
@@ -807,7 +807,7 @@ SearchParameters.prototype = {
   },
   /**
    * Get the list of exclude refinements for a single facet
-   * @param {string} facetName name of the attribute used for facetting
+   * @param {string} facetName name of the attribute used for faceting
    * @return {string[]} list of refinements
    */
   getExcludeRefinements: function(facetName) {
@@ -852,7 +852,7 @@ SearchParameters.prototype = {
   },
   /**
    * Get the list of numeric refinements for a single facet
-   * @param {string} facetName name of the attribute used for facetting
+   * @param {string} facetName name of the attribute used for faceting
    * @return {SearchParameters.OperatorList[]} list of refinements
    */
   getNumericRefinements: function(facetName) {
@@ -871,7 +871,7 @@ SearchParameters.prototype = {
    * Clear numeric filters.
    * @method
    * @private
-   * @param {string|SearchParameters.clearCallback} [attribute] optionnal string or function
+   * @param {string|SearchParameters.clearCallback} [attribute] optional string or function
    * - If not given, means to clear all the filters.
    * - If `string`, means to clear all refinements for the `attribute` named filter.
    * - If `function`, means to clear all the refinements that return truthy values.
@@ -954,7 +954,7 @@ SearchParameters.prototype = {
   /**
    * Add a refinement on a "normal" facet
    * @method
-   * @param {string} facet attribute to apply the facetting on
+   * @param {string} facet attribute to apply the faceting on
    * @param {string} value value of the attribute (will be converted to string)
    * @return {SearchParameters}
    */
@@ -988,7 +988,7 @@ SearchParameters.prototype = {
   /**
    * Adds a refinement on a disjunctive facet.
    * @method
-   * @param {string} facet attribute to apply the facetting on
+   * @param {string} facet attribute to apply the faceting on
    * @param {string} value value of the attribute (will be converted to string)
    * @return {SearchParameters}
    */
@@ -1076,9 +1076,9 @@ SearchParameters.prototype = {
   /**
    * Remove a refinement set on facet. If a value is provided, it will clear the
    * refinement for the given value, otherwise it will clear all the refinement
-   * values for the facetted attribute.
+   * values for the faceted attribute.
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {string} [value] value used to filter
    * @return {SearchParameters}
    */
@@ -1095,7 +1095,7 @@ SearchParameters.prototype = {
   /**
    * Remove a negative refinement on a facet
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {string} value value used to filter
    * @return {SearchParameters}
    */
@@ -1112,7 +1112,7 @@ SearchParameters.prototype = {
   /**
    * Remove a refinement on a disjunctive facet
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {string} value value used to filter
    * @return {SearchParameters}
    */
@@ -1178,7 +1178,7 @@ SearchParameters.prototype = {
   /**
    * Switch the refinement applied over a facet/value
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {value} value value used for filtering
    * @return {SearchParameters}
    */
@@ -1194,7 +1194,7 @@ SearchParameters.prototype = {
   /**
    * Switch the refinement applied over a facet/value
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {value} value value used for filtering
    * @return {SearchParameters}
    */
@@ -1210,7 +1210,7 @@ SearchParameters.prototype = {
   /**
    * Switch the refinement applied over a facet/value
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {value} value value used for filtering
    * @return {SearchParameters}
    */
@@ -1228,7 +1228,7 @@ SearchParameters.prototype = {
   /**
    * Switch the refinement applied over a facet/value
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {value} value value used for filtering
    * @return {SearchParameters}
    */
@@ -1348,8 +1348,8 @@ SearchParameters.prototype = {
    * Returns true if the facet is refined, either for a specific value or in
    * general.
    * @method
-   * @param {string} facet name of the attribute for used for facetting
-   * @param {string} value, optionnal value. If passed will test that this value
+   * @param {string} facet name of the attribute for used for faceting
+   * @param {string} value, optional value. If passed will test that this value
    * is filtering the given facet.
    * @return {boolean} returns true if refined
    */
@@ -1364,8 +1364,8 @@ SearchParameters.prototype = {
    * excluded.
    *
    * @method
-   * @param {string} facet name of the attribute for used for facetting
-   * @param {string} [value] optionnal value. If passed will test that this value
+   * @param {string} facet name of the attribute for used for faceting
+   * @param {string} [value] optional value. If passed will test that this value
    * is filtering the given facet.
    * @return {boolean} returns true if refined
    */
@@ -1379,8 +1379,8 @@ SearchParameters.prototype = {
    * Returns true if the facet contains a refinement, or if a value passed is a
    * refinement for the facet.
    * @method
-   * @param {string} facet name of the attribute for used for facetting
-   * @param {string} value optionnal, will test if the value is used for refinement
+   * @param {string} facet name of the attribute for used for faceting
+   * @param {string} value optional, will test if the value is used for refinement
    * if there is one, otherwise will test if the facet contains any refinement
    * @return {boolean}
    */
@@ -1395,8 +1395,8 @@ SearchParameters.prototype = {
    * Returns true if the facet contains a refinement, or if a value passed is a
    * refinement for the facet.
    * @method
-   * @param {string} facet name of the attribute for used for facetting
-   * @param {string} value optionnal, will test if the value is used for refinement
+   * @param {string} facet name of the attribute for used for faceting
+   * @param {string} value optional, will test if the value is used for refinement
    * if there is one, otherwise will test if the facet contains any refinement
    * @return {boolean}
    */
@@ -1455,7 +1455,7 @@ SearchParameters.prototype = {
   /**
    * Returns the list of all disjunctive facets refined
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {value} value value used for filtering
    * @return {string[]}
    */
@@ -1473,7 +1473,7 @@ SearchParameters.prototype = {
   /**
    * Returns the list of all disjunctive facets refined
    * @method
-   * @param {string} facet name of the attribute used for facetting
+   * @param {string} facet name of the attribute used for faceting
    * @param {value} value value used for filtering
    * @return {string[]}
    */
