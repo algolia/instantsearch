@@ -72,6 +72,7 @@ const renderer = ({
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
       hasExhaustiveItems={hasExhaustiveItems}
+      searchIsAlwaysActive={searchForFacetValues.isAlwaysActive || false}
       canToggleShowMore={canToggleShowMore}
     />,
     containerNode
@@ -92,7 +93,7 @@ refinementList({
   [ collapsible=false ],
   [ showMore.{templates: {active, inactive}, limit} ],
   [ collapsible=false ],
-  [ searchForFacetValues.{placeholder, templates: {noResults}}],
+  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive}],
 })`;
 
 /**
@@ -104,6 +105,8 @@ refinementList({
  * @typedef {Object} SearchForFacetOptions
  * @property {string} [placeholder] Value of the search field placeholder.
  * @property {SearchForFacetTemplates} [templates] Templates to use for search for facet values.
+ * @property {boolean} [isAlwaysActive=false] When `false` the search field will become disabled if
+ * there are less items to display than the `options.limit`, otherwise the search field is always usable.
  */
 
 /**
