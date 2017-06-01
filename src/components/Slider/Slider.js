@@ -31,9 +31,19 @@ class Slider extends Component {
     ]),
   }
 
+  get isDisabled() {
+    return this.props.min === this.props.max;
+  }
+
   handleChange = ({values}) => {
-    const {refine} = this.props;
-    refine(values);
+    // when Slider is disabled, we alter `min, max` values
+    // in order to render a "disabled state" Slider. Since we alter
+    // theses values, Rheostat trigger a "change" event which trigger a new
+    // search to Algolia with wrong values.
+    if (!this.isDisabled) {
+      const {refine} = this.props;
+      refine(values);
+    }
   }
 
   // creates an array number where to display a pit point on the slider
@@ -79,8 +89,7 @@ class Slider extends Component {
   render() {
     const {tooltips, step, pips, values} = this.props;
 
-    const isDisabled = this.props.min === this.props.max;
-    const {min, max} = isDisabled
+    const {min, max} = this.isDisabled
       ? {min: this.props.min, max: this.props.max + 0.001}
       : this.props;
 
@@ -90,7 +99,7 @@ class Slider extends Component {
       : pips;
 
     return (
-      <div className={ isDisabled ? 'ais-range-slider--disabled' : '' }>
+      <div className={ this.isDisabled ? 'ais-range-slider--disabled' : '' }>
         <Rheostat
           handle={ this.createHandleComponent(tooltips) }
           onChange={ this.handleChange }
@@ -100,8 +109,8 @@ class Slider extends Component {
           pitPoints={ pitPoints }
           snap={ true }
           snapPoints={ snapPoints }
-          values={ isDisabled ? [min, max] : values }
-          disabled={ isDisabled }
+          values={ this.isDisabled ? [min, max] : values }
+          disabled={ this.isDisabled }
         />
       </div>
     );
