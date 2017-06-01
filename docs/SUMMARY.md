@@ -26,3 +26,4 @@
 
 ### Going Further
   * [Custom Component](custom-component.md)
+  * [Server Side Rendering](server-side-rendering.md)
