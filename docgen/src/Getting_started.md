@@ -19,7 +19,7 @@ In this tutorial, you'll learn how to:
  - add widgets to filter the results
  - connect your own component to the search
 
-**If you prefer to get started by watching a video, [we created one for you](videos/Index.html).**
+**If you prefer to get started by watching a video, [we created one for you](videos/).**
 
 ## Before we start
 
