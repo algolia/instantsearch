@@ -32,7 +32,7 @@
 	{
 		"name":"magento",
 		"url":"https://community.algolia.com/magento/",
-		"logo":"http://res.cloudinary.com/hilnmyskv/image/upload/v1477318624/magento-icon-white.svg",
+		"logo":"https://res.cloudinary.com/hilnmyskv/image/upload/v1477318624/magento-icon-white.svg",
 		"backgroundColor": "linear-gradient(to bottom right, #ed9259, #e76d22)"
 	}
 ]
