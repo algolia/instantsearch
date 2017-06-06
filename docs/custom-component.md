@@ -1,8 +1,7 @@
-Custom Search Component
+Custom Components
 ---------
 
-There will be times were the components we provide fall short depending on the context.
-Good news is that it is simple to create custom components.
+In order to provide the flexibility necessary to build an advanced search experience, Vue Instant Search includes the ability to build custom components.
 
 ## What is a Custom Component
 
@@ -52,36 +51,15 @@ You can read more about the inject/provide feature on the [Vue.js documentation]
 
 The search store will be automatically fetched from a parent [Index component](/components/index.md) higher in the DOM tree.
 
-You can also provide your custom searchStore to any custom component as a property:
-
-```html
-<template>
-  <div id="app">
-    <current-query :search-store="searchStore"></current-query>
-  </div>
-</template>
-<script>
-  import { createFromAlgoliaCredentials } from 'vue-instantsearch';
-
-  export default {
-    name: 'app',
-    data: function() {
-      return {
-        searchStore: createFromAlgoliaCredentials('app_id', 'api_key'),
-      };
-    },
-  }
-</script>
-```
-
+As a reminder, you can also [provide your custom searchStore to any custom component](using-components.md#manually-inject-the-search-store-into-components) as a property.
 
 ## Component Best Practices
 
-Here comes few rules / guidelines to ensure maximum consistency & re-usability for custom components.
+To ensure consistency and re-usability for custom components, we recommend reviewing the following guidelines.
 
 ### Styles and Classes
 
-* Prefix your classes with a short (max 4 chars) vendor name. We use `ais`, please use another one.
+* As Vue InstantSearch is using `ais`, we recommend choosing a different prefix
 * Do not use [`scoped`](https://vue-loader.vuejs.org/en/features/scoped-css.html) styles, it makes it very hard to override them.
 * Use [BEM notation](http://getbem.com/introduction/) with only one depth level.
 * Unless you are trying to ship a very opinionated styled component, just add styles for the elements that helps understanding the behaviour. i.e. for a pagination component, you will want to put in bold the current page.
