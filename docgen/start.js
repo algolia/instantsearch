@@ -25,11 +25,23 @@ watch([
   ignoreInitial: true,
   ignored: /assets\/js\/(.*)?\.js$/,
 })
-  .on('all', () => builder({clean: false, middlewares}, err => {
-    if (err) {
-      throw err;
-    }
-  }))
+  .on('all', (event, filePath) => {
+    // filter out plugins we dont need on some files changes
+    // example: remove `documentationjs` when no src/ files changed.
+    const isSrcFileChange = event === 'change'
+      && filePath.includes('src/')
+      && !filePath.includes('docgen')
+
+    const nextMiddlewares = isSrcFileChange
+      ? middlewares
+      : middlewares.filter(fn => fn.name !== 'documentationjs')
+
+    builder({clean: false, middlewares: nextMiddlewares}, err => {
+      if (err) {
+        throw err;
+      }
+    })
+  })
   .on('error', err => {
     throw err;
   });

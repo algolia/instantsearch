@@ -30,7 +30,7 @@ function formatAllMD(symbols) {
 }
 
 export default function({rootJSFile}) {
-  return function(files, metalsmith, done) {
+  return function documentationjs(files, metalsmith, done) {
     console.log('before documentationjs');
     const out = documentation.build(rootJSFile, {}).then((symbols) => {
       // transform all md like structure to html --> type: 'root' using formatMD
