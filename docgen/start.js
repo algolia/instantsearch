@@ -32,9 +32,19 @@ watch([
       && filePath.includes('src/')
       && !filePath.includes('docgen')
 
-    const nextMiddlewares = isSrcFileChange
-      ? middlewares
-      : middlewares.filter(fn => fn.name !== 'documentationjs')
+    const isSassFile =  event === 'change'
+      && filePath.includes('docgen')
+      && /^[^_.].*\.s[ac]ss/.test(filePath)
+
+    const nextMiddlewares = middlewares
+      .filter(fn =>
+        !isSrcFileChange && fn.name !== 'documentationjs'
+      )
+      .filter(fn =>
+        !isSassFile && (fn.name === 'bound compileSass' || fn.name === 'sassAutoprefixer')
+          ? false
+          : true
+      )
 
     builder({clean: false, middlewares: nextMiddlewares}, err => {
       if (err) {
