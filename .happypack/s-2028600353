@@ -1,0 +1,57 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = activateClipboard;
+
+var _clipboard = require('clipboard');
+
+var _clipboard2 = _interopRequireDefault(_clipboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function activateClipboard(codeSamples) {
+  codeSamples.forEach(function (codeSample) {
+    var cleanAfter = 500;
+    var timeout = void 0;
+    var copyToClipboard = document.createElement('span');
+
+    var setup = function setup() {
+      clearTimeout(timeout);
+      copyToClipboard.textContent = 'Copy to clipboard';
+      copyToClipboard.classList.remove('clipboard-done');
+      copyToClipboard.classList.add('clipboard');
+    };
+
+    var done = function done() {
+      copyToClipboard.classList.add('clipboard-done');
+      copyToClipboard.textContent = 'Copied!';
+    };
+
+    var clipboard = new _clipboard2.default(copyToClipboard, {
+      text: function text() {
+        return codeSample.querySelector('code').textContent;
+      }
+    });
+
+    setup();
+    codeSample.querySelector('.heading').appendChild(copyToClipboard);
+    copyToClipboard.addEventListener('mouseleave', setup, true);
+    clipboard.on('success', function () {
+      done();
+      timeout = setTimeout(setup, cleanAfter);
+    });
+  });
+}
+;
+
+var _temp = function () {
+  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+    return;
+  }
+
+  __REACT_HOT_LOADER__.register(activateClipboard, 'activateClipboard', '/Users/lucasbonomi/Sites/instantsearch.js/docgen/assets/js/activateClipboard.js');
+}();
+
+;

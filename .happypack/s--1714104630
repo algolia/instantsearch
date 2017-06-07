@@ -1,0 +1,97 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.withUrlSync = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _jsxFileName = '/Users/lucasbonomi/Sites/instantsearch.js/docgen/src/examples/urlSync.js';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _qs = require('qs');
+
+var _qs2 = _interopRequireDefault(_qs);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var updateAfter = 700;
+var searchStateToUrl = function searchStateToUrl(searchState) {
+  return searchState ? window.location.pathname + '?' + _qs2.default.stringify(searchState) : '';
+};
+
+var withUrlSync = exports.withUrlSync = function withUrlSync(App) {
+  return function (_Component) {
+    _inherits(_class2, _Component);
+
+    function _class2() {
+      _classCallCheck(this, _class2);
+
+      var _this = _possibleConstructorReturn(this, (_class2.__proto__ || Object.getPrototypeOf(_class2)).call(this));
+
+      _this.onSearchStateChange = function () {
+        return _this.__onSearchStateChange__REACT_HOT_LOADER__.apply(_this, arguments);
+      };
+
+      _this.state = { searchState: _qs2.default.parse(window.location.search.slice(1)) };
+      window.addEventListener('popstate', function (_ref) {
+        var searchState = _ref.state;
+        return _this.setState({ searchState: searchState });
+      });
+      return _this;
+    }
+
+    _createClass(_class2, [{
+      key: '__onSearchStateChange__REACT_HOT_LOADER__',
+      value: function __onSearchStateChange__REACT_HOT_LOADER__(searchState) {
+        clearTimeout(this.debouncedSetState);
+        this.debouncedSetState = setTimeout(function () {
+          window.history.pushState(searchState, null, searchStateToUrl(searchState));
+        }, updateAfter);
+        this.setState({ searchState: searchState });
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        return _react2.default.createElement(App, _extends({}, this.props, {
+          searchState: this.state.searchState,
+          onSearchStateChange: this.onSearchStateChange,
+          createURL: searchStateToUrl,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 32
+          }
+        }));
+      }
+    }]);
+
+    return _class2;
+  }(_react.Component);
+};
+;
+
+var _temp = function () {
+  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+    return;
+  }
+
+  __REACT_HOT_LOADER__.register(updateAfter, 'updateAfter', '/Users/lucasbonomi/Sites/instantsearch.js/docgen/src/examples/urlSync.js');
+
+  __REACT_HOT_LOADER__.register(searchStateToUrl, 'searchStateToUrl', '/Users/lucasbonomi/Sites/instantsearch.js/docgen/src/examples/urlSync.js');
+
+  __REACT_HOT_LOADER__.register(withUrlSync, 'withUrlSync', '/Users/lucasbonomi/Sites/instantsearch.js/docgen/src/examples/urlSync.js');
+}();
+
+;

@@ -1,0 +1,188 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = initHeader;
+function initHeader() {
+  var cmSearch = function cmSearch() {
+    var searchIcon = document.querySelector('#search');
+    var cancelIcon = document.querySelector('#cancel');
+    var searchContainer = document.querySelector('.cm-search__input');
+    var searchInput = document.querySelector('#searchbox');
+
+    function openSearchInput() {
+      searchContainer.classList.add('open');
+      searchInput.focus();
+    }
+
+    function closeSearchInput() {
+      searchContainer.classList.remove('open');
+    }
+
+    function emptySearchInput() {
+      if (searchInput.value !== '') {
+        searchInput.value = '';
+      } else {
+        closeSearchInput();
+      }
+    }
+
+    searchIcon.addEventListener('click', openSearchInput);
+    cancelIcon.addEventListener('click', emptySearchInput);
+
+    window.onresize = function () {
+      emptySearchInput();
+      closeSearchInput();
+    };
+
+    return cmSearch;
+  };
+
+  var toggleMobileMenu = function toggleMobileMenu(args) {
+    var trigger = args.trigger || '#open-menu';
+    var opened = false;
+    var target = args.target || '.cm-navigation__menu';
+    var openedClass = args.openedClass || 'opened';
+
+    document.querySelector(trigger).addEventListener('click', toggleMenu);
+
+    function toggleMenu() {
+      /* eslint-disable no-undef */
+      docsearch({
+        apiKey: '5cb6763f264e31381e18639a1147634c',
+        indexName: 'react-instantsearch',
+        inputSelector: '#mobile-searchbox',
+        debug: true
+      });
+
+      if (document.body.clientWidth < 768) {
+        if (opened === false) {
+          opened = true;
+          document.querySelector('#menu-wrapper').classList.add(openedClass);
+        } else {
+          opened = false;
+          document.querySelector('#menu-wrapper').classList.remove(openedClass);
+        }
+      } else if (opened === false) {
+        opened = true;
+        document.querySelector(target).classList.add(openedClass);
+      } else {
+        opened = false;
+        document.querySelector(target).classList.remove(openedClass);
+      }
+
+      var cancelIconMobile = document.querySelector('#cancel-mobile');
+      cancelIconMobile.addEventListener('click', mobileSearchBla);
+
+      function mobileSearchBla() {
+        document.querySelector('#searchbox-mobile').value = '';
+      }
+    }
+  };
+
+  function wrapMenuOnMobile() {
+    var container = document.querySelector('.cm-navigation');
+    var wrapper = document.createElement('div');
+    wrapper.id = 'menu-wrapper';
+    wrapper.classList.add('cm-navigation__menu');
+    wrapper.classList.add('mobile-navigation-wrapper');
+    var innerMenu = document.querySelector('.cm-navigation__menu').innerHTML;
+
+    if (!document.getElementById('menu-wrapper')) {
+      wrapper.innerHTML = innerMenu;
+
+      container.appendChild(wrapper);
+      setTimeout(function () {
+        document.querySelector('#menu-wrapper .cm-menu__list:first-of-type').style.display = 'none';
+        var links = document.querySelectorAll('#menu-wrapper a');
+        var linksArray = [];
+        var linksTpl = '';
+        var inm = document.querySelector('.mobile-navigation-wrapper input');
+        var searchButton = document.querySelector('.mobile-navigation-wrapper button#search');
+        var cancelButton = document.querySelector('.mobile-navigation-wrapper button#cancel');
+        inm.id = 'mobile-searchbox';
+        searchButton.id = 'search-mobile';
+        cancelButton.id = 'cancel-mobile';
+
+        links.forEach(function (e) {
+          if (e.getAttribute('data-link')) {
+            linksArray.push({
+              link: e.href,
+              name: e.textContent
+            });
+          }
+        });
+
+        linksArray.forEach(function (e) {
+          linksTpl += '<li class="cm-menu__list__item"><a href="' + e.link + '">' + e.name + '</a></li>';
+        });
+        wrapper.innerHTML += '<ul class="cm-menu__list">' + linksTpl + '</ul>';
+      });
+    }
+  }
+
+  function displayDropdown() {
+    var active = false;
+    var trigger = document.querySelector('.cm-navigation__brands--community');
+    document.querySelector('body').addEventListener('click', function () {
+      if (active) {
+        toggle();
+      }
+    });
+
+    trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      toggle();
+    });
+
+    function toggle() {
+      active = !active;
+      trigger.classList.toggle('dropdownActive');
+    }
+  }
+
+  // If the user type :"s" or "/", open the searchbox
+  function catchCmdF() {
+    document.addEventListener('keyup', maybeOpenSearchBox);
+
+    function maybeOpenSearchBox(e) {
+      if (e.target.tagName !== 'INPUT' && e.keyCode === 83 || e.keyCode === 191) {
+        document.querySelector('.cm-search__input').classList.add('open');
+        document.querySelector('#searchbox').focus();
+      } else if (e.keyCode === 27) {
+        document.querySelector('.cm-search__input').classList.remove('open');
+        document.querySelector('#searchbox').blur();
+      }
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    cmSearch();
+    toggleMobileMenu({
+      trigger: '#open-menu'
+    });
+
+    wrapMenuOnMobile();
+    displayDropdown();
+    catchCmdF();
+  });
+
+  window.addEventListener('resize', function () {
+    if (document.body.clientWidth < 768) {
+      wrapMenuOnMobile();
+    }
+  });
+}
+;
+
+var _temp = function () {
+  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+    return;
+  }
+
+  __REACT_HOT_LOADER__.register(initHeader, 'initHeader', '/Users/lucasbonomi/Sites/instantsearch.js/docgen/assets/js/header.js');
+}();
+
+;
