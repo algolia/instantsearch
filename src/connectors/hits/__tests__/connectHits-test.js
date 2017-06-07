@@ -13,7 +13,7 @@ describe('connectHits', () => {
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget();
+    const widget = makeWidget({escapeHits: true});
 
     expect(widget.getConfiguration()).toEqual({
       highlightPreTag: '__ais-highlight__',
@@ -37,7 +37,7 @@ describe('connectHits', () => {
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({});
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({escapeHits: true});
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -49,7 +49,7 @@ describe('connectHits', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({});
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({escapeHits: true});
   });
 
   it('Provides the hits and the whole results', () => {

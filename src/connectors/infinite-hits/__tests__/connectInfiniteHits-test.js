@@ -14,6 +14,7 @@ describe('connectInfiniteHits', () => {
     const rendering = sinon.stub();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({
+      escapeHits: true,
       hitsPerPage: 10,
     });
 
@@ -40,6 +41,7 @@ describe('connectInfiniteHits', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      escapeHits: true,
       hitsPerPage: 10,
     });
 
@@ -56,6 +58,7 @@ describe('connectInfiniteHits', () => {
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      escapeHits: true,
       hitsPerPage: 10,
     });
   });

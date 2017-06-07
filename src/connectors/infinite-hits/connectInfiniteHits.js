@@ -82,7 +82,9 @@ export default function connectInfiniteHits(renderFn) {
 
     return {
       getConfiguration() {
-        return tagConfig;
+        return widgetParams.escapeHits
+          ? tagConfig
+          : undefined;
       },
 
       init({instantSearchInstance, helper}) {

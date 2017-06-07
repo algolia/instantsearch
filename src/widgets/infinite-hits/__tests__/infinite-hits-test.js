@@ -37,7 +37,7 @@ describe('infiniteHits()', () => {
       templates: defaultTemplates,
       useCustomCompileOptions: {item: false, empty: false},
     };
-    widget = infiniteHits({container, cssClasses: {root: ['root', 'cx']}});
+    widget = infiniteHits({container, escapeHits: true, cssClasses: {root: ['root', 'cx']}});
     widget.init({helper, instantSearchInstance: {}});
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });

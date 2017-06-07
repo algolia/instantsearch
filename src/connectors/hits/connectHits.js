@@ -60,7 +60,9 @@ export default function connectHits(renderFn) {
 
   return (widgetParams = {}) => ({
     getConfiguration() {
-      return tagConfig;
+      return widgetParams.escapeHits
+        ? tagConfig
+        : undefined;
     },
 
     init({instantSearchInstance}) {
