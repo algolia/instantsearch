@@ -28,18 +28,13 @@ watch([
   .on('all', (event, filePath) => {
     // filter out plugins we dont need on some files changes
     // example: remove `documentationjs` when no src/ files changed.
-    const isSrcFileChange = event === 'change'
-      && filePath.includes('src/')
-      && !filePath.includes('docgen')
-
-    const isSassFile =  event === 'change'
-      && filePath.includes('docgen')
-      && /^[^_.].*\.s[ac]ss/.test(filePath)
+    const isSrcFileChange = filePath.includes('src/') && !filePath.includes('docgen')
+    const isSassFile = filePath.includes('docgen') && /^[^_.].*\.s[ac]ss/.test(filePath)
+    const isMarkdownFile = filePath.includes('docgen') && /\.md$/.test(filePath)
 
     const nextMiddlewares = middlewares
-      .filter(fn =>
-        !isSrcFileChange && fn.name !== 'documentationjs'
-      )
+      .filter(fn => !isSrcFileChange && fn.name !== 'documentationjs')
+      .filter(fn => !isMarkdownFile && fn.name !== 'markdown')
       .filter(fn =>
         !isSassFile && (fn.name === 'bound compileSass' || fn.name === 'sassAutoprefixer')
           ? false
