@@ -30,16 +30,13 @@ watch([
     // example: remove `documentationjs` when no src/ files changed.
     const isSrcFileChange = filePath.includes('src/') && !filePath.includes('docgen')
     const isSassFile = filePath.includes('docgen') && /^[^_.].*\.s[ac]ss/.test(filePath)
-    const isMarkdownFile = filePath.includes('docgen') && /\.md$/.test(filePath)
+    const isMarkdownOrPugFile = filePath.includes('docgen') && /\.md$|\.pug$/.test(filePath)
 
     const nextMiddlewares = middlewares
-      .filter(fn => !isSrcFileChange && fn.name !== 'documentationjs')
-      .filter(fn => !isMarkdownFile && fn.name !== 'markdown')
-      .filter(fn =>
-        !isSassFile && (fn.name === 'bound compileSass' || fn.name === 'sassAutoprefixer')
-          ? false
-          : true
-      )
+      .filter(fn => isSrcFileChange || fn.name !== 'documentationjs')
+      .filter(fn => isMarkdownOrPugFile || fn.name !== 'markdown')
+      .filter(fn => isSassFile || fn.name !== 'bound compileSass')
+      .filter(fn => isSassFile || fn.name !== 'sassAutoprefixer')
 
     builder({clean: false, middlewares: nextMiddlewares}, err => {
       if (err) {
