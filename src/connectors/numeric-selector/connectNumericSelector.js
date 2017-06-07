@@ -31,7 +31,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} CustomNumericSelectorWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
  * @property {NumericSelectorOption[]} options Array of objects defining the different values and labels.
- * @property {string} [operator = '='] The operator to use to refine.
+ * @property {string} [operator = '＝'] The operator to use to refine. Supports following operators: <, <=, =, >, >= and !=.
  */
 
 /**

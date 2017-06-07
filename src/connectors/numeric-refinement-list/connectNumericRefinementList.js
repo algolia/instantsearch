@@ -31,7 +31,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} NumericRefinementListItem
- * @property {string} name Name of the option.
+ * @property {string} label Name of the option.
  * @property {number} start Lower bound of the option (>=).
  * @property {number} end Higher bound of the option (<=).
  * @property {boolean} isRefined True if the value is selected.
@@ -100,7 +100,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   customNumericRefinementList({
  *     containerNode: $('#custom-numeric-refinement-container'),
  *     attributeName: 'price',
- *     operator: 'or',
  *     options: [
  *       {name: 'All'},
  *       {end: 4, name: 'less than 4'},
