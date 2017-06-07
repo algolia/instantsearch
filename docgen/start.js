@@ -40,7 +40,11 @@ watch([
 
     builder({clean: false, middlewares: nextMiddlewares}, err => {
       if (err) {
-        throw err;
+        if (err.message.includes('[metalsmith-sass] Error: Invalid CSS')) {
+          console.warn(err.message);
+        } else {
+          throw err;
+        }
       }
     })
   })
