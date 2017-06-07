@@ -62,8 +62,8 @@ Use a built version of **instantsearch.js** from the [jsDelivr](https://www.jsde
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
 {% highlight html %}
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
-<script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.css">
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.js"></script>
 {% endhighlight %}
   </div>
 </div>
@@ -96,7 +96,7 @@ var instantsearch = require('instantsearch.js');
   </div>
 </div>
 
-You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css) into your page.
+You need to manually load the companion [CSS file](https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.css) into your page.
 
 </div>
 
@@ -119,15 +119,16 @@ We created a light build that uses [Preact](https://preactjs.com/) instead of [R
 We recommend using the light build for new users and switching to it for existing users if you are not using
 React on your side.
 
-To use it, require this file:
-
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
 {% highlight html %}
-<script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch-preact.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch-preact.min.js"></script>
 {% endhighlight %}
   </div>
 </div>
+
+To use it, load the file like this in your HTML:
+
 
 ### React InstantSearch
 
@@ -246,7 +247,7 @@ This example shows you how to create a very simple search results page that incl
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.css" />
     <title>instantsearch.js basics</title>
   </head>
   <body>
@@ -254,7 +255,7 @@ This example shows you how to create a very simple search results page that incl
     <div id="hits-container"></div>
     <div id="pagination-container"></div>
 
-    <script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.js"></script>
     <script>
       var search = instantsearch({
         appId: 'YourApplicationID',
@@ -1470,7 +1471,7 @@ Or you can wrap an existing React component, see our [<i class='fa fa-github'></
 
 All widgets have been designed to be heavily stylable with CSS rules. **instantsearch.js** ships with a default CSS theme that only includes the necessary CSS classes.
 
-You can see all the existing customizable CSS classes in the [non-minified CSS](https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.css).
+You can see all the existing customizable CSS classes in the [non-minified CSS](https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.css).
 
 We use [Sass](http://sass-lang.com/) to build the CSS.
 
