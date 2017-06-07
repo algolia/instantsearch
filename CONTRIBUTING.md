@@ -21,6 +21,12 @@ A note about the branches used in this project:
 You should do the dev and PR according to the target version. No new features
 will be done on the maintenance version.
 
+### Requirements
+
+To run this project, you will need:
+
+- Node.js >= v7.10.0 and <= 8, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
+
 ## Development
 
 ```sh
