@@ -11,6 +11,7 @@ export default function sassAutoprefixer(files, metalsmith, done) {
       const originalContent = files[file].contents.toString();
       const autoprefixedContent = processor.process(originalContent, {syntax}).css;
       files[file].contents = new Buffer(autoprefixedContent);
+      files[file].stats.mtime = (new Date()).toISOString();
     });
 
   done();
