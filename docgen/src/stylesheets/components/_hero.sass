@@ -1,8 +1,14 @@
 .hero
-	padding-top: 56px
-	text-align: center
+  padding-top: 56px
+  text-align: center
+  position: relative
 
-	.row
-		background: url(../images/background-hero.svg)no-repeat center left / 80%
+  @include diagonal(-6deg, $white, 350px, before)
+    bottom: -170px
+    z-index: 1
+    box-shadow: rgba(112, 128, 175, 0.05) 0 -16px 24px
+
+  .row
+    background: url(../images/background-hero.svg)no-repeat center left / 80%
 
 
