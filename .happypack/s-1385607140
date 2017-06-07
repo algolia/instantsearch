@@ -1,0 +1,56 @@
+'use strict';
+
+var _sidebar = require('./sidebar.js');
+
+var _sidebar2 = _interopRequireDefault(_sidebar);
+
+var _header = require('./header.js');
+
+var _header2 = _interopRequireDefault(_header);
+
+var _communityProjects = require('./communityProjects.js');
+
+var _communityProjects2 = _interopRequireDefault(_communityProjects);
+
+var _dropdowns = require('./dropdowns.js');
+
+var _dropdowns2 = _interopRequireDefault(_dropdowns);
+
+require('./editThisPage.js');
+
+var _activateClipboard = require('./activateClipboard.js');
+
+var _activateClipboard2 = _interopRequireDefault(_activateClipboard);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var container = document.querySelector('.documentation-container');
+var sidebarContainer = document.querySelector('.sidebar');
+
+if (sidebarContainer) {
+  (0, _sidebar2.default)({
+    headersContainer: container,
+    sidebarContainer: sidebarContainer,
+    headerStartLevel: 2
+  });
+}
+
+(0, _header2.default)();
+(0, _communityProjects2.default)();
+(0, _dropdowns2.default)();
+(0, _activateClipboard2.default)([].concat(_toConsumableArray(document.querySelectorAll('.code-sample'))));
+;
+
+var _temp = function () {
+  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+    return;
+  }
+
+  __REACT_HOT_LOADER__.register(container, 'container', '/Users/lucasbonomi/Sites/instantsearch.js/docgen/assets/js/main.js');
+
+  __REACT_HOT_LOADER__.register(sidebarContainer, 'sidebarContainer', '/Users/lucasbonomi/Sites/instantsearch.js/docgen/assets/js/main.js');
+}();
+
+;
