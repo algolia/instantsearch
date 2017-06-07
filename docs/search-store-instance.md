@@ -32,7 +32,9 @@ There are several ways to create a new search store.
 
 ### Create a search store from Algolia credentials
 
-The easiest way to create a search store, is by using the `createFromAlgoliaCredentials` factory method.
+The easiest way to create a search store, is by using the `createFromAlgoliaCredentials` factory method. In that case, all you need is the Algolia application ID and the search API key. These information can both be found on your [Algolia dashboard](https://www.algolia.com/dashboard), on the "API keys" screen.
+
+**Security notice: Make sure you always use Search Only API keys. Using the Admin API key in a frontend application would let any user have full control over your Algolia application.**
 
 ```js
 import { createFromAlgoliaCredentials } from 'vue-instantsearch';
@@ -42,8 +44,9 @@ const searchStore = createFromAlgoliaCredentials('app_id', 'api_key');
 
 ### Create a search store from an Algolia Client instance
 
-If you already have an instance of the [official Algolia client](https://github.com/algolia/algoliasearch-client-javascript), here is how you would create a search store instance:
+The Algolia Client is the [official JavaScript API Client](https://github.com/algolia/algoliasearch-client-javascript) which simplifies communication with the Algolia API.
 
+If you are already a user of Algolia, and have an existing application using the Algolia Client, you could re-use an existing instance of that API Client like so:
 
 ```js
 import algoliaClient from 'algoliasearch';
@@ -53,9 +56,15 @@ const client = algoliaClient('app_id', 'api_key');
 const searchStore = createFromAlgoliaClient(client);
 ```
 
+Note that there is no reason to use the Algolia API Client if you were not already using it.
+
 ### Create a search store from an Algolia Helper instance
 
-If you already have an instance of the [Algolia Helper](https://github.com/algolia/algoliasearch-helper-js), here is how you would create a search store instance:
+The [Algolia Helper](https://github.com/algolia/algoliasearch-helper-js) is a JavaScript library that is built on top of the Algolia API Client. It's goal is to expose a simple API to achieve advanced queries and it also exposes some utility methods and behaviours like keeping track of the last result.
+
+As for the Algolia Client, if you do not have an existing Algolia Helper in your application, there should be no reason for you to instantiate the search Store like showcased below.
+
+If you do have an existing Algolia Helper, her is how you can instantiate the search Store:
 
 ```js
 import algoliaClient from 'algoliasearch';
@@ -90,6 +99,14 @@ const reconstructedSearchStore = createFromSerialized(serializedData);
 Every time the state of the store is mutated, it will produce a new call to the Algolia API.
 The moment the response comes back, the state is updated and all components observing the results will be able to re-render if needed.
 
+```js
+const store = /* Existing Store instance */;
+store.page = 3;
+// Triggers a call to Algolia with page set to 3.
+store.resultsPerPage = 10;
+// Triggers a call to Algolia with page set to 3 and resultsPerPage set to 10.
+```
+
 There are times though you will not want the store to perform Algolia requests right after a query parameter changed.
 
 Here are some examples where you want to "batch" mutations, and only trigger a call to the Algolia API once you have finished mutating the state:
@@ -102,7 +119,7 @@ To allow you to control what calls are being made to Algolia, you can `stop` the
 
 ```js
 // ...
-const store = /* Existing store instance */
+const store = /* Existing store instance */;
 
 store.stop();
 
@@ -116,3 +133,13 @@ store.start();
 In this example, even if the state is mutated several times, only one call to Algolia will be made after the Store is resumed by the `start()` call.
 
 **Important: When you manually create a search Store, it is stopped by default. You need to manually call `start()` to trigger the first call. This gives you full control over the initial state of the store before the first call to Algolia is sent.**
+
+```js
+import { createFromAlgoliaCredentials } from 'vue-instantsearch';
+
+const store = createFromAlgoliaCredentials('app_id', 'search_api_key');
+store.index = 'new_index';
+store.start();
+```
+
+In the example above, the first query will be sent to Algolia after `store.start()` has been called.
