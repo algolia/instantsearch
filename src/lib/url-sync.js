@@ -88,7 +88,8 @@ function getFullURL(relative) {
 // IE <= 11 has no location.origin or buggy
 function getLocationOrigin() {
   // eslint-disable-next-line max-len
-  return `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+  const port = window.location.port ? `:${window.location.port}` : '';
+  return `${window.location.protocol}//${window.location.hostname}${port}`;
 }
 
 // see InstantSearch.js file for urlSync options

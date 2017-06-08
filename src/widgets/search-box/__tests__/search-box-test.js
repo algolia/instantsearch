@@ -411,8 +411,8 @@ describe('searchBox()', () => {
         simulateInputEvent('test', 'tes', widget, helper, state, container);
       });
 
-      it('updates the query', () => {
-        expect(helper.setQuery.calledOnce).toBe(true);
+      it('does not update the query in the state', () => {
+        expect(helper.setQuery.calledOnce).toBe(false);
       });
 
       it('does not search', () => {
@@ -477,10 +477,14 @@ describe('searchBox()', () => {
         widget = searchBox({container, searchOnEnterKeyPressOnly: true});
       });
 
-      it('performs the search on keyup if <ENTER>', () => {
+      it('does not perform search when typing', () => {
         simulateInputEvent('test', 'tes', widget, helper, state, container);
+        expect(helper.search.callCount).toBe(0);
+      });
+
+      it('performs the search on keyup if <ENTER>', () => {
         simulateKeyUpEvent({keyCode: 13}, widget, helper, state, container);
-        expect(helper.search.calledOnce).toBe(true);
+        expect(helper.search.callCount).toBe(1);
       });
 
       it('doesn\'t perform the search on keyup if not <ENTER>', () => {

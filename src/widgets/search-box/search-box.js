@@ -37,6 +37,10 @@ const KEY_SUPPRESS = 8;
  * @return {Object}
  */
 
+const defaultQueryHook = function (query, setQueryAndSearch) {
+  setQueryAndSearch(query);
+};
+
 const usage = `Usage:
 searchBox({
   container,
@@ -56,7 +60,7 @@ function searchBox({
   wrapInput = true,
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
-  queryHook,
+  queryHook = defaultQueryHook,
 }) {
   // the 'input' event is triggered when the input value changes
   // in any case: typing, copy pasting with mouse..
@@ -172,11 +176,6 @@ function searchBox({
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, state.query);
 
-      // always set the query every keystrokes when there's no queryHook
-      if (!queryHook) {
-        addListener(input, INPUT_EVENT, getInputValueAndCall(setQuery));
-      }
-
       // search on enter
       if (searchOnEnterKeyPressOnly) {
         addListener(input, 'keyup', ifKey(KEY_ENTER, getInputValueAndCall(maybeSearch)));
@@ -186,18 +185,12 @@ function searchBox({
         // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
         // can be removed as soon as we remove support for it
         if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(setQuery)));
           addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(maybeSearch)));
         }
       }
 
       function maybeSearch(query) {
-        if (queryHook) {
-          queryHook(query, setQueryAndSearch);
-          return;
-        }
-
-        search(query);
+        queryHook(query, setQueryAndSearch);
       }
 
       function setQuery(query) {
