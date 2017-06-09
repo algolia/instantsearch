@@ -64,7 +64,7 @@ The [Algolia Helper](https://github.com/algolia/algoliasearch-helper-js) is a Ja
 
 As for the Algolia Client, if you do not have an existing Algolia Helper in your application, there should be no reason for you to instantiate the search Store like showcased below.
 
-If you do have an existing Algolia Helper, her is how you can instantiate the search Store:
+If you do have an existing Algolia Helper, here is how you can instantiate the search Store:
 
 ```js
 import algoliaClient from 'algoliasearch';
