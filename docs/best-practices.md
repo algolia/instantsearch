@@ -26,3 +26,9 @@ To ensure consistency and re-usability for custom components, we recommend revie
 ### Export UMD + ES2015
 
 * Export your components as UMD, CommonJS and ES2015.
+
+## Security
+
+All security best practices are covered by the official [security guidelines on the Algolia documentation](https://www.algolia.com/doc/guides/security/best-security-practices/#guides).
+
+Regarding Vue InstantSearch, if there is one thing to remember, it is to use the **Search Only** API Key when using the Index component or manually instantiating the Store.
