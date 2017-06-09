@@ -9,6 +9,7 @@
 
 ### Going Further
   * [Server Side Rendering](server-side-rendering.md)
+  * [Multi-Index Search](multi-index-search.md)
 
 ### Examples
   * [Use the UMD standalone build](examples/umd.md)
