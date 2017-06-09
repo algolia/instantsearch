@@ -134,7 +134,7 @@ The text input value is bound to the query.
 
 Every time the query changes, the search Store will contact Algolia to get the new results for the new query.
 
-**Info: The Search Box component is wrapped into a <form> element and also provides a reset and submit button by default. These [good search practices are explained here](https://blog.algolia.com/mobile-search-ux-tips/).**
+**Info: The Search Box component is wrapped into a `<form>` element and also provides a reset and submit button by default. These [good search practices are explained here](https://blog.algolia.com/mobile-search-ux-tips/).**
 
 ### The Results component
 
