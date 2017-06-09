@@ -100,3 +100,65 @@ From here on out, you should be able to run the simple application by running:
 ```sh
 npm run dev
 ```
+
+## Understand the first search experience
+
+In this section you will learn a bit more about what you just implemented.
+
+### The Index component
+
+All search components needs to be wrapped in an Index component.
+
+
+```html
+<ais-index
+  appId="latency"
+  apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
+  indexName="bestbuy"
+>
+  <!-- Search components go here -->
+</ais-index>
+```
+
+You should configure the Index component with the application ID and API search only key.
+
+The job of the Index component is to hold the state of the search, and to provide it to child components.
+
+**Info: even though we recommend using the Index component, you could also [manually inject the search store](search-store-instance.md).**
+
+### The Search Box component
+
+The Search Box component will render a text input.
+
+The text input value is bound to the query.
+
+Every time the query changes, the search Store will contact Algolia to get the new results for the new query.
+
+**Info: The Search Box component is wrapped into a <form> element and also provides a reset and submit button by default. These [good search practices are explained here](https://blog.algolia.com/mobile-search-ux-tips/).**
+
+### The Results component
+
+The Results component will loop over all results returned by the Algolia responses,
+and display them.
+
+The component has a [default slot](https://vuejs.org/v2/guide/components.html#Single-Slot) so that you can easily define your custom template for the rendering of every single result.
+
+**Info: By default, if no slot is provided, the component will display every `objectID` of every result.**
+
+The slot provided by the Results components is [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots).
+
+A scoped slot means that the template can access data passed to the slot.
+
+This is illustrated by this snippet:
+
+```html
+<template scope="{ result }">
+```
+
+Here we tell the template that we want to get the `result` variable out of the current scope and make it accessible to the current template.
+
+**Note: the `{ result }` is an ES6 syntax named object destructuring. You could also replace is with `parameters` and access the same `result` variable by doing `parameters.result`.**
+
+Now that the `result` is available, we can just customize the html inside of the template.
+
+In the example we provided, we display the highlighted version of the name of the result.
