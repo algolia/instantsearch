@@ -3,8 +3,9 @@
 ### Essentials
   * [Getting Started](README.md)
   * [Using Components](using-components.md)
-  * [Custom Search Component](custom-component.md)
+  * [Custom Components](custom-component.md)
   * [The Search Store instance](search-store-instance.md)
+  * [Best Practices](best-practices.md)
 
 ### Going Further
   * [Server Side Rendering](server-side-rendering.md)

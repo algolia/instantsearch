@@ -1,7 +1,7 @@
 Using components
 ---
 
-Vue InstantSearch comes with a bunch of existing components that cover common search patterns.
+Vue InstantSearch comes pre-packaged with many of the components necessary to build a fully-featured search experience.
 
 If provided components do not fit your needs, we can [create a custom components](custom-component.md).
 
@@ -92,19 +92,6 @@ Here we will use default names.
 All search components must be wrapped in an `Index` component.
 
 ```html
-<!-- WRONG: do not do this -->
-<template>
-  <div id="app">
-    <ais-search-box></ais-search-box>
-    <ais-index app-id="app_id" api-key="api_key" index-name="index_name">
-      <ais-results></ais-results>
-      <ais-pagination></ais-pagination>
-    </ais-index>
-  </div>
-</template>
-
-
-<!-- CORRECT: do this instead -->
 <template>
   <div id="app">
     <ais-index app-id="app_id" api-key="api_key" index-name="index_name">
@@ -154,3 +141,5 @@ In these cases, we can simply pass a searchStore as a property of the component 
 
 **Info: The Index component also accepts the searchStore as parameter.
 Here we used that to avoid us to repeat the Algolia credentials.**
+
+**Best practice: Wrapping your search components inside of an Index component makes it easier to reason about the code because all the logic is present inside of the template. If you do not explicitly need to manually inject a search Store, we recommend you stick with using the Index component.**
