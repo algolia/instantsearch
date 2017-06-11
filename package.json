@@ -24,6 +24,7 @@
     "test:functional": "wdio functional-tests/wdio.conf.js",
     "test:functional:dev": "babel-node scripts/dev-functional-tests",
     "test:functional:dev:debug-server": "PORT=9090 babel-node scripts/dev-functional-tests-debug-server",
+    "argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
     "serve": "./scripts/serve.sh"
   },
   "repository": "algolia/instantsearch.js",
@@ -35,6 +36,7 @@
     "node": "7.10.0"
   },
   "devDependencies": {
+    "argos-cli": "^0.0.8",
     "autoprefixer": "^6.7.7",
     "babel-cli": "^6.24.0",
     "babel-core": "^6.24.0",
@@ -88,6 +90,7 @@
     "wdio-dot-reporter": "^0.0.8",
     "wdio-mocha-framework": "^0.5.10",
     "wdio-sauce-service": "^0.4.0",
+    "wdio-visual-regression-service": "^0.8.0",
     "webdriverio": "^4.8.0",
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2"

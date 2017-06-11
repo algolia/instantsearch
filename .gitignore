@@ -5,3 +5,6 @@ npm-debug.log
 .DS_Store
 docs/
 !scripts/docs/
+
+# Ignore Argos CI screenshots.
+functional-tests/screenshots/
