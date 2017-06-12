@@ -36,6 +36,47 @@ describe('connectInfiniteHits', () => {
       expect(res2.hasMore).toBe(true);
     });
 
+    it('accumulate hits internally while changing hitsPerPage configuration', () => {
+      const hits = [{}, {}, {}, {}, {}, {}];
+      const hits2 = [{}, {}, {}, {}, {}, {}];
+      const hits3 = [{}, {}, {}, {}, {}, {}, {}, {}];
+      const res1 = getProvidedProps(null, null, {
+        results: { hits, page: 0, hitsPerPage: 6, nbPages: 10 },
+      });
+      expect(res1.hits).toEqual(hits);
+      expect(res1.hasMore).toBe(true);
+      const res2 = getProvidedProps(null, null, {
+        results: {
+          hits: hits2,
+          page: 1,
+          hitsPerPage: 6,
+          nbPages: 10,
+        },
+      });
+      expect(res2.hits).toEqual([...hits, ...hits2]);
+      expect(res2.hasMore).toBe(true);
+      let res3 = getProvidedProps(null, null, {
+        results: {
+          hits: hits3,
+          page: 2,
+          hitsPerPage: 8,
+          nbPages: 10,
+        },
+      });
+      expect(res3.hits).toEqual([...hits, ...hits2, ...hits3]);
+      expect(res3.hasMore).toBe(true);
+      res3 = getProvidedProps(null, null, {
+        results: {
+          hits: hits3,
+          page: 2,
+          hitsPerPage: 8,
+          nbPages: 10,
+        },
+      }); //re-render with the same property
+      expect(res3.hits).toEqual([...hits, ...hits2, ...hits3]);
+      expect(res3.hasMore).toBe(true);
+    });
+
     it('should not reset while accumulating results', () => {
       const nbPages = 100;
       let allHits = [];
@@ -150,6 +191,38 @@ describe('connectInfiniteHits', () => {
       });
       expect(res2.hits).toEqual([...hits, ...hits2]);
       expect(res2.hasMore).toBe(true);
+    });
+
+    it('accumulate hits internally while changing hitsPerPage configuration', () => {
+      const hits = [{}, {}, {}, {}, {}, {}];
+      const hits2 = [{}, {}, {}, {}, {}, {}];
+      const hits3 = [{}, {}, {}, {}, {}, {}, {}, {}];
+      const res1 = getProvidedProps(null, null, {
+        results: { second: { hits, page: 0, hitsPerPage: 6, nbPages: 10 } },
+      });
+      expect(res1.hits).toEqual(hits);
+      expect(res1.hasMore).toBe(true);
+      const res2 = getProvidedProps(null, null, {
+        results: {
+          second: { hits: hits2, page: 1, hitsPerPage: 6, nbPages: 10 },
+        },
+      });
+      expect(res2.hits).toEqual([...hits, ...hits2]);
+      expect(res2.hasMore).toBe(true);
+      let res3 = getProvidedProps(null, null, {
+        results: {
+          second: { hits: hits3, page: 2, hitsPerPage: 8, nbPages: 10 },
+        },
+      });
+      expect(res3.hits).toEqual([...hits, ...hits2, ...hits3]);
+      expect(res3.hasMore).toBe(true);
+      res3 = getProvidedProps(null, null, {
+        results: {
+          second: { hits: hits3, page: 2, hitsPerPage: 8, nbPages: 10 },
+        },
+      }); //re-render with the same property
+      expect(res3.hits).toEqual([...hits, ...hits2, ...hits3]);
+      expect(res3.hasMore).toBe(true);
     });
 
     it('should not reset while accumulating results', () => {
