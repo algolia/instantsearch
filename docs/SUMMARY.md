@@ -1,21 +1,22 @@
 # Summary
 
 ### Essentials
-  * [Getting Started](README.md)
-  * [Using Components](using-components.md)
-  * [Custom Components](custom-component.md)
-  * [The Search Store instance](search-store-instance.md)
-  * [Best Practices](best-practices.md)
+  * [Getting started](README.md)
+  * [Installing](installing.md)
+  * [Using components](components.md)
+  * [Custom components](custom-components.md)
+  * [The search store](search-store.md)
+  * [Best practices](best-practices.md)
 
-### Going Further
-  * [Server Side Rendering](server-side-rendering.md)
-  * [Multi-Index Search](multi-index-search.md)
+### Going further
+  * [Server side rendering](server-side-rendering.md)
+  * [Multi-index search](multi-index-search.md)
 
 ### Examples
   * [Use the UMD standalone build](examples/umd.md)
   * [Integrate with Bootstrap CSS](examples/bootstrap.md)
-  * [Infinite Scroll](examples/infinite-scroll.md)
-  * [Multi-Index search](examples/multi-index-search.md)
+  * [Infinite scroll](examples/infinite-scroll.md)
+  * [Multi-index search](examples/multi-index-search.md)
 
 ### Components
   * [Index](components/index.md)
