@@ -51,16 +51,14 @@ export default createConnector({
       };
     }
 
-    const { hits, page, nbPages, hitsPerPage } = results;
+    const { hits, page, nbPages } = results;
 
     if (page === 0) {
       this._allResults = hits;
     } else {
-      const previousPage = this._allResults.length / hitsPerPage - 1;
-
-      if (page > previousPage) {
+      if (page > this.previousPage) {
         this._allResults = [...this._allResults, ...hits];
-      } else if (page < previousPage) {
+      } else if (page < this.previousPage) {
         this._allResults = hits;
       }
       // If it is the same page we do not touch the page result list
@@ -68,6 +66,7 @@ export default createConnector({
 
     const lastPageIndex = nbPages - 1;
     const hasMore = page < lastPageIndex;
+    this.previousPage = page;
     return {
       hits: this._allResults,
       hasMore,
