@@ -17,6 +17,9 @@ const search = instantsearch({
       hFR: 'hierarchical',
     },
   },
+  searchFunction: h => {
+    h.search();
+  },
 });
 
 const q = window.location.search;
@@ -35,6 +38,20 @@ default:
 search.once('render', () => {
   [...document.querySelectorAll('.smooth-search--hidden')]
     .forEach(element => element.classList.remove('smooth-search--hidden'));
+});
+
+search.addWidget({
+  init: ({helper}) => {
+    helper.on('change', () => {
+      console.log('change event');
+    });
+    helper.on('search', () => {
+      console.log('search event');
+    });
+    helper.on('result', () => {
+      console.log('result event');
+    });
+  },
 });
 
 search.start();

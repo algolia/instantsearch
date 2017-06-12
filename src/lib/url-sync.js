@@ -88,7 +88,8 @@ function getFullURL(relative) {
 // IE <= 11 has no location.origin or buggy
 function getLocationOrigin() {
   // eslint-disable-next-line max-len
-  return `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
+  const port = window.location.port ? `:${window.location.port}` : '';
+  return `${window.location.protocol}//${window.location.hostname}${port}`;
 }
 
 // see InstantSearch.js file for urlSync options
@@ -126,7 +127,10 @@ class URLSync {
     if (this.firstRender) {
       this.firstRender = false;
       this.onHistoryChange(this.onPopState.bind(this, helper));
-      helper.on('search', state => this.renderURLFromState(state));
+      helper.on('change', state => {
+        console.log('updating url');
+        this.renderURLFromState(state);
+      });
     }
   }
 
