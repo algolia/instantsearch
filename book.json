@@ -1,4 +1,12 @@
 {
   "root": "./docs",
-  "plugins": []
+  "plugins": [
+    "edit-link"
+  ],
+  "pluginsConfig": {
+    "edit-link": {
+      "base": "https://github.com/algolia/vue-instantsearch/edit/master/docs",
+      "label": "Edit in GitHub"
+    }
+  }
 }
