@@ -64,7 +64,7 @@ from the results. This function takes a single parameter object with three
 properties:
  - attributeName: the highlighted attribute name
  - hit: a single result object
- - path: the path to the structure containing the highlighted attribute
+ - highlightProperty: the path to the structure containing the highlighted attribute. The value is either `_highlightResult` or `_snippetResult` depending if you want to make an Highlight or Snippet widget. 
 
 Those parameters are taken from the context in which the the custom component
 is used, therefore it's reasonable to have them as props.
@@ -73,13 +73,36 @@ Here is an example of a custom Highlight widget. It can be used the same
 way as the [widgets](guide/Highlighting_results.html#highlight-and-snippet-widgets).
 
 ```jsx
-const CustomHighlight = connectHighlight(({highlight, attributeName, hit}) => {
-  const parsedHit = highlight({attributeName, hit, highlightProperty: 'highlightProperty'});
-  return parsedHit.map(part => {
-    if(part.isHighlighted) return <mark>{part.value}</mark>;
-    return part.value;
-  });
-});
+import React from 'react';
+import { connectHighlight } from 'react-instantsearch/connectors';
+import { InstantSearch, Hits } from 'react-instantsearch/dom';
+
+const CustomHighlight = connectHighlight(
+  ({ highlight, attributeName, hit, highlightProperty }) => {
+    const parsedHit = highlight({ attributeName, hit, highlightProperty: '_highlightResult' });
+    const highlightedHits = parsedHit.map(part => {
+      if (part.isHighlighted) return <mark>{part.value}</mark>;
+      return part.value;
+    });
+    return <div>{highlightedHits}</div>;
+  }
+);
+
+const Hit = ({hit}) =>
+<p>
+  <CustomHighlight attributeName="description" hit={hit}/>
+</p>;
+
+export default function App() {
+  return (
+    <InstantSearch
+       appId="latency"
+       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+       indexName="ikea">
+      <Hits hitComponent={Hit} />
+    </InstantSearch>
+  );
+}
 ```
 
 <div class="guide-nav">
