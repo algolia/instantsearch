@@ -208,6 +208,21 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.menuSelect({
+    container: '#menu-select',
+    attributeName: 'categories',
+    templates: {
+      header: 'Categories through select',
+      seeAllOption: 'See all',
+    },
+    cssClasses: {
+      header: 'facet-title',
+      select: 'form-control',
+    },
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#searchable-brands-alwaysActive',
     attributeName: 'brand',
