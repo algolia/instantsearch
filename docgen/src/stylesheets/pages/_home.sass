@@ -1,9 +1,37 @@
 .live-section
+
+  .container .col-md-12
+    transform-style: preserve-3d
+    perspective: 1030px
+
+    .row
+      @media (max-width: $screen-sm)
+        height: auto !important
+
+      .col-md-4
+        &:nth-child(1) .card
+          transform: rotateY(30deg) skewY(3deg) scale(1.08) translateY(-1.5%)
+
+        &:nth-child(3) .card
+          transform: rotateY(-30deg) skewY(-3deg) scale(1.08) translateY(-1.5%)
+        @media (max-width: $screen-sm)
+          &:not(:last-child)
+            margin-bottom: 2em
+
+
   .card
     margin: auto
     width: 100%
     top: 0
     left: 0
+
+    @media (max-width: $screen-md)
+      transform: none !important
+
+
+
+
+
 
 .discover-section
   .card
@@ -11,3 +39,10 @@
 
   .card:hover
     background: $titan-white !important
+
+  @media (max-width: $screen-sm)
+    .logos-container
+      height: auto !important
+
+    .card
+      margin-bottom: 1em

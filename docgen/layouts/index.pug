@@ -1,39 +1,44 @@
 extends archetypes/single-column.pug
 
 block content
-  section.row.fill-white.p-xlarge
+  section.row.fill-white.p-xlarge.m-l-none.m-r-none
     .container
       .inline.spacer80
       .col-md-12.z-10
-        .col-md-6
-          p lol
+        .col-md-6.hidden-sm
+          img.section-illustration(src="assets/img/instantsearch-components.svg", alt="")
         .col-md-6
           header
-            h3 Design Best Practices
-
-          p InstantSearch.js comes with 18 widgets to cover a wide variety of search use cases. They have been designed to  bring search UI best practices to your  website.
-
+            h3.no-p-t.m-t-none Design Best Practices
+          .spacer16.visible-sm
+          img.section-illustration.visible-sm(src="assets/img/instantsearch-components.svg", alt="")
+          .spacer24
+          p.color-logan.text-regular.text-normal InstantSearch.js comes with 18 widgets to cover a wide variety of search use cases. They have been designed to  bring search UI best practices to your  website.
+          .spacer24
           a.btn.btn-static-theme.b-n.elevation0(href="#") Discover widgets &gt;
+
       .inline.spacer80
 
-  section.row.fill-titan.p-xlarge
+  section.row.fill-titan.p-xlarge.m-l-none.m-r-none
     .container
       .inline.spacer80
       .col-md-12.z-10
         .col-md-6
           header
-            h3 Infinite possibilities
-
-          p Build the ideal search experience you’ve imagined for your users by customizing our existing widgets or building your own.
-
+            h3.no-p-t.m-t-none Infinite possibilities
+          .spacer16.visible-sm
+          img.section-illustration.visible-sm(src="assets/img/phone-build-3D.svg", alt="")
+          .spacer24
+          p.color-logan.text-regular.text-normal Build the ideal search experience you’ve imagined for your users by customizing our existing widgets or building your own.
+          .spacer24
           a.btn.btn-static-theme.b-n.elevation0(href="#") Learn about advanced customization &gt;
 
-        .col-md-6
-          p lol
+        .col-md-6.hidden-sm
+          img.section-illustration(src="assets/img/phone-build-3D.svg", alt="")
 
       .inline.spacer80
 
-  section.row.fill-white.p-xlarge
+  section.row.fill-white.p-xlarge.m-l-none.m-r-none
     .container
       .inline.spacer80
       .col-md-12.z-10
@@ -41,44 +46,53 @@ block content
           p lol
         .col-md-6
           header
-            h3 No framework needed
-
-          p InstantSearch.js does not depend on any framework like jQuery or React. You can still plug yours if you want a smooth integration.
-
+            h3.no-p-t.m-t-none No framework needed
+          .spacer24
+          p.color-logan.text-regular.text-normal InstantSearch.js does not depend on any framework like jQuery or React. You can still plug yours if you want a smooth integration.
+          .spacer24
           a.btn.btn-static-theme.b-n.elevation0(href="#") Get started &gt;
       .inline.spacer80
 
-  section.row.fill-titan.p-xlarge.live-section
+  section.row.fill-titan.p-xlarge.live-section.m-l-none.m-r-none
     .container
       .inline.spacer80
       .col-md-12.z-10.text-center.row
         header
-          h3 See it live
-
+          h3.no-p-t.m-t-none See it live
+        .spacer40
         .row.h300
           .col-md-4.pos-rel
-            .card.fill-white.elevation1.radius6.p-large.h300
-
+            .card.fill-white.elevation1.radius6.p-large.h300.flex-container.flex-dir-row
+              .spacer16
+              img.flex-it-1.h80(src="assets/img/example-e-commerce.svg", alt="")
+              h3.text-lg.text-demi.m-t-none.no-p-t.flex-it-1 E-commerce
+              a.flex-it-1(href="#") See it live &gt;
 
           .col-md-4.pos-rel
-            .card.fill-white.elevation1.radius6.p-large.h300
-
+            .card.fill-white.elevation1.radius6.p-large.h300.flex-container.flex-dir-row
+              .spacer16
+              img.flex-it-1.h80(src="assets/img/example-media.svg", alt="")
+              h3.text-lg.text-demi.m-t-none.no-p-t.flex-it-1 Media
+              a.flex-it-1(href="#") See it live &gt;
 
           .col-md-4.pos-rel
-            .card.fill-white.elevation1.radius6.p-large.h300
-
+            .card.fill-white.elevation1.radius6.p-large.h300.flex-container.flex-dir-row
+              .spacer16
+              img.flex-it-1.h80(src="assets/img/example-tourism.svg", alt="")
+              h3.text-lg.text-demi.m-t-none.no-p-t.flex-it-1 Travel
+              a.flex-it-1(href="#") See it live &gt;
 
       .inline.spacer80
 
-  section.row.fill-white.p-xlarge.discover-section
+  section.row.fill-white.p-xlarge.discover-section.m-l-none.m-r-none
     .container
       .inline.spacer80
       .col-md-12.z-10.text-center.row
         header
-          h3 Discover the<br/>InstantSearch family
+          h3.no-p-t.m-t-none Discover the<br/>InstantSearch family
 
         .spacer80
-        .row.h100
+        .row.h100.logos-container
           .col-md-12
             .col-md-4.col-md-offset-4
               .card.p-large.h100.fill-white.elevation1.radius6.text-left
