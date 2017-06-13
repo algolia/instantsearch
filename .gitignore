@@ -2,6 +2,7 @@ dist
 yarn-error.log
 node_modules
 coverage
+.DS_store
 
 # Output of documentation
 _book

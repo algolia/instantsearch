@@ -10,7 +10,7 @@ This component automatically provides the search state to all its children.
 Basic usage:
 
 ```html
-<ais-index indexName="your_index_name"
+<ais-index indexName="your_indexName"
            appId="YourAppID"
            apiKey="YourSearchAPIKey"
 >
@@ -21,7 +21,7 @@ Basic usage:
 Provide search query parameters:
 
 ```html
-<ais-index indexName="your_index_name"
+<ais-index indexName="your_indexName"
            appId="YourAppID"
            apiKey="YourSearchAPIKey"
            :queryParameters="{

@@ -1,4 +1,4 @@
-Multi-Index Search Example
+Multi-index search example
 ---
 
 In this example we showcase how to search simultaneously on multiple indices as you search into 1 input.

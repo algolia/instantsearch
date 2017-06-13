@@ -14,7 +14,7 @@ import {
 } from '../store';
 
 const createStore = () => {
-  const client = algoliaClient('app_id', 'api_key');
+  const client = algoliaClient('appId', 'apiKey');
   const helper = algoliaHelper(client);
 
   return new Store(helper);
@@ -56,14 +56,14 @@ test('can assert that a facet type is valid', () => {
 });
 
 test('can create a Store instance from algolia credentials', () => {
-  const store = createFromAlgoliaCredentials('app_id', 'api_key');
+  const store = createFromAlgoliaCredentials('appId', 'apiKey');
   expect(store).toBeInstanceOf(Store);
-  expect(store.algoliaApiKey).toBe('api_key');
-  expect(store.algoliaAppId).toBe('app_id');
+  expect(store.algoliaApiKey).toBe('apiKey');
+  expect(store.algoliaAppId).toBe('appId');
 });
 
 test('can create a Store instance from an algolia client', () => {
-  const client = algoliaClient('app_id', 'api_key');
+  const client = algoliaClient('appId', 'apiKey');
   const store = createFromAlgoliaClient(client);
   expect(store).toBeInstanceOf(Store);
   expect(store.algoliaClient).toBe(client);
@@ -71,7 +71,7 @@ test('can create a Store instance from an algolia client', () => {
 
 describe('Store', () => {
   test('should be constructed with a helper instance', () => {
-    const client = algoliaClient('app_id', 'api_key');
+    const client = algoliaClient('appId', 'apiKey');
     const helper = algoliaHelper(client);
     const store = new Store(helper);
 
@@ -104,9 +104,9 @@ describe('Store', () => {
 
   test('can set index name', () => {
     const store = createStore();
-    store.indexName = 'custom_index_name';
+    store.indexName = 'custom_indexName';
 
-    expect(store.indexName).toEqual('custom_index_name');
+    expect(store.indexName).toEqual('custom_indexName');
   });
 
   test('can retrieve the current page', () => {

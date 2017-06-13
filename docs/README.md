@@ -65,7 +65,7 @@ new Vue({
 });
 ```
 
-From now on, you can use all [Vue InstantSearch components](using-components.md) in your templates throughout the whole application.
+From now on, you can use all [Vue InstantSearch components](components.md) in your templates throughout the whole application.
 
 ## Create your first search experience
 
@@ -116,7 +116,7 @@ You should configure the Index component with the application ID and API search 
 
 The job of the Index component is to hold the state of the search, and to provide it to child components.
 
-**Info: Alternatively you can [manually inject a search store](search-store-instance.md), for example to support server-side rendering.**
+**Info: Alternatively you can [manually inject a search store](search-store.md), for example to support server-side rendering.**
 
 ### Algolia demo credentials
 
@@ -134,7 +134,7 @@ The [Search Box component](components/search-box.md) renders a text input.
 
 The text input value is bound to the query of the current search.
 
-Every time the query changes, the search Store will contact Algolia to get the new results for the new query.
+Every time the query changes, the search store will contact Algolia to get the new results for the new query.
 
 **Info: The Search Box component is wrapped into a `<form>` element and provides a reset and submit button by default. These [good search practices are explained here](https://blog.algolia.com/mobile-search-ux-tips/).**
 
