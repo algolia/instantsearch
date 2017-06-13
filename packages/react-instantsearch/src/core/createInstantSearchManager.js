@@ -42,6 +42,7 @@ export default function createInstantSearchManager({
     results: null,
     error: null,
     searching: false,
+    searchingForFacetValues: false,
   });
 
   let skip = false;

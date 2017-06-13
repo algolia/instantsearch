@@ -75,6 +75,22 @@ const content = createConnector({
  });
 ```
 
+Alternatively, if you're using the search in List feature then you can know when the search results are loading by doing: 
+
+```jsx
+const content = createConnector({
+    displayName: 'ConditionalError',
+    getProvidedProps(props, searchState, searchResults) {
+      return {loading: searchResults.searchingForFacetValues};
+    },
+})(({loading}) => {
+    const content = loading
+      ? <div>We are loading</div>
+      : <div>Search finished</div>;
+    return <div>{content}</div>;
+ });
+```
+
 <div class="guide-nav">
     <div class="guide-nav-left">
         Previous: <a href="guide/Custom_connectors.html">← Custom Connectors</a>

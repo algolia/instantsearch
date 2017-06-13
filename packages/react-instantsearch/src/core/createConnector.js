@@ -165,8 +165,14 @@ export default function createConnector(connectorDesc) {
         widgets,
         metadata,
         resultsFacetValues,
+        searchingForFacetValues,
       } = store.getState();
-      const searchState = { results, searching, error };
+      const searchState = {
+        results,
+        searching,
+        error,
+        searchingForFacetValues,
+      };
       return connectorDesc.getProvidedProps.call(
         this,
         props,
