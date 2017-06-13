@@ -12,6 +12,7 @@ function createState() {
     results: {},
     error: {},
     searching: {},
+    searchingForFacetValues: {},
     metadata: {},
   };
 }
@@ -47,6 +48,9 @@ describe('createConnector', () => {
       expect(args[2].results).toBe(state.results);
       expect(args[2].error).toBe(state.error);
       expect(args[2].searching).toBe(state.searching);
+      expect(args[2].searchingForFacetValues).toBe(
+        state.searchingForFacetValues
+      );
       expect(args[3]).toBe(state.metadata);
       expect(wrapper.find(Dummy).props()).toEqual({
         ...props,
@@ -83,6 +87,10 @@ describe('createConnector', () => {
       expect(args[2].results).toBe(state.results);
       expect(args[2].error).toBe(state.error);
       expect(args[2].searching).toBe(state.searching);
+      expect(args[2].searchingForFacetValues).toBe(
+        state.searchingForFacetValues
+      );
+
       expect(args[3]).toBe(state.metadata);
       expect(wrapper.find(Dummy).props()).toEqual({
         ...props,
@@ -138,6 +146,10 @@ describe('createConnector', () => {
       expect(args[2].results).toBe(state.results);
       expect(args[2].error).toBe(state.error);
       expect(args[2].searching).toBe(state.searching);
+      expect(args[2].searchingForFacetValues).toBe(
+        state.searchingForFacetValues
+      );
+
       expect(args[3]).toBe(state.metadata);
       expect(wrapper.find(Dummy).props()).toEqual({
         ...props,
@@ -198,6 +210,9 @@ describe('createConnector', () => {
       expect(args[2].results).toBe(state.results);
       expect(args[2].error).toBe(state.error);
       expect(args[2].searching).toBe(state.searching);
+      expect(args[2].searchingForFacetValues).toBe(
+        state.searchingForFacetValues
+      );
       expect(args[3]).toBe(state.metadata);
       expect(wrapper.find(Dummy).props()).toEqual({
         ...props,

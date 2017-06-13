@@ -39,6 +39,7 @@ describe('createInstantSearchManager', () => {
       metadata: [],
       results: null,
       searching: false,
+      searchingForFacetValues: false,
       widgets: {},
     });
 
