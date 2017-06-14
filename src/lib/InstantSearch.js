@@ -120,19 +120,19 @@ Usage: instantsearch({
       this.searchParameters
     );
 
+    this.helper = helper;
     if (this._searchFunction) {
-      this.helper = Object.create(helper);
+      this._originalSearchMethod = this.helper.search;
       this.helper.search = () => {
-        helper.setState(this.helper.state);
+        const proxySearch = this.helper.search;
+        this.helper.search = this._originalSearchMethod;
         this._searchFunction(helper);
+        this.helper.search = proxySearch;
       };
-      this._init(helper.state, this.helper);
-      helper.on('result', this._render.bind(this, this.helper));
-    } else {
-      this.helper = helper;
-      this._init(helper.state, this.helper);
-      this.helper.on('result', this._render.bind(this, this.helper));
     }
+
+    this._init(helper.state, this.helper);
+    this.helper.on('result', this._render.bind(this, this.helper));
 
     this.helper.search();
   }
