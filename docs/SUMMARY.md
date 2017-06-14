@@ -3,7 +3,7 @@
 ### Essentials
   * [Getting started](README.md)
   * [Installing](installing.md)
-  * [Using components](components.md)
+  * [Using components](using-components.md)
   * [Custom components](custom-components.md)
   * [The search store](search-store.md)
   * [Best practices](best-practices.md)

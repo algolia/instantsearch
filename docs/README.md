@@ -65,7 +65,7 @@ new Vue({
 });
 ```
 
-From now on, you can use all [Vue InstantSearch components](components.md) in your templates throughout the whole application.
+From now on, you can use all [Vue InstantSearch components](using-components.md) in your templates throughout the whole application.
 
 ## Create your first search experience
 

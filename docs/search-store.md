@@ -11,7 +11,7 @@ The search store of Vue InstantSearch allows you to:
 
 Before going further, it is important to realize that directly interacting with the search store is not mandatory but an advanced use of Vue InstantSearch.
 
-If you use [provided components](components.md), wrapped into an [Index](./components/index.md) component, then search stores are created and used automatically by components.
+If you use [provided components](using-components.md), wrapped into an [Index](./components/index.md) component, then search stores are created and used automatically by components.
 
 In that case, it is the responsibility of the `Index` component to make sure a search store is successfully made available to child components.
 
