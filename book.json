@@ -1,7 +1,8 @@
 {
   "root": "./docs",
   "plugins": [
-    "edit-link"
+    "edit-link",
+    "copy-code-button"
   ],
   "pluginsConfig": {
     "edit-link": {
