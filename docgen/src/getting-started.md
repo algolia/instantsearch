@@ -98,7 +98,7 @@ Congrats 🎉 ! Your website is now connected to Algolia.
 
 The core of a search experience is to display results. By default, **instantsearch.js** will do a query at the start of the page and will retrieve the most relevant hits.
 
-To display results, we are gonna use the hits widget. This widget will display all the results returned by Algolia, and it will update when there are new results.
+To display results, we are the hits widget will be used. This widget will display all the results returned by Algolia, and it will update when there are new results.
 
 A key aspect of InstantSearch.js, is that you need to provide a container for each widget. This will tell instantsearch where to display the widget. Here, we need to define first the container of our results:
 
@@ -166,7 +166,7 @@ In this section we’ve seen:
 
 ## Add a SearchBox
 
-Now that we’ve added the results, we can start querying our index. To do this, we are gonna use the Searchbox widget. Let’s add it in the html page that we created before:
+Now that we’ve added the results, we can start querying our index. To do this, we are going to use the Searchbox widget. Let’s add it in the html page that we created before:
 
 ```html
 <div id="search-box">
@@ -205,7 +205,7 @@ In this part, we’ve seen:
   * How to use the searchbox to query Algolia with text
 
 
-## Add RefinementList
+## Add a RefinementList
 
 While the SearchBox is the way to go when it comes to textual search, you may also want to provide filters based on the structure of the records.
 
