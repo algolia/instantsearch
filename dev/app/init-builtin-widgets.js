@@ -150,7 +150,7 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.refinementList({
           container,
-          attributeName: 'brands',
+          attributeName: 'brand',
           operator: 'or',
           limit: 10,
           templates: {
@@ -163,7 +163,7 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.refinementList({
           container,
-          attributeName: 'brands',
+          attributeName: 'brand',
           operator: 'or',
           limit: 3,
           templates: {
