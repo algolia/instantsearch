@@ -1,160 +1,178 @@
 /* eslint-disable import/default */
+import {storiesOf} from 'dev-novel';
 import * as jqueryWidgets from './custom-widgets/jquery/index.js';
 
-export default search => {
-  search.addWidget(
-    jqueryWidgets.pagination({
-      containerNode: window.$('#pagination'),
-      maxPages: 20,
-    })
-  );
+import wrapWithHits from './wrap-with-hits.js';
 
-  search.addWidget(
-    jqueryWidgets.menu({
-      containerNode: window.$('#menu'),
-      attributeName: 'categories',
-      limit: 3,
-    })
-  );
+// transform `container` to jQuery object
+const wrap = fn => wrapWithHits(container => fn(window.$(container)));
 
-  search.addWidget(
-    jqueryWidgets.clearAll({
-      containerNode: window.$('#clear-all'),
-    })
-  );
+export default () => {
+  storiesOf('Pagination').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.pagination({
+        containerNode,
+        maxPages: 20,
+      })
+    );
+  }));
 
-  search.addWidget(
-    jqueryWidgets.currentRefinedValues({
-      containerNode: window.$('#current-refined-values'),
-    })
-  );
+  storiesOf('Menu')
+    .add('default', wrap(containerNode => {
+      window.search.addWidget(
+        jqueryWidgets.menu({
+          containerNode,
+          attributeName: 'categories',
+          limit: 3,
+        })
+      );
+    }))
+    .add('with show more', wrap(containerNode => {
+      window.search.addWidget(
+        jqueryWidgets.showMoreMenu({
+          containerNode,
+          attributeName: 'categories',
+          limit: 3,
+          showMoreLimit: 10,
+        })
+      );
+    }));
 
-  search.addWidget(
-    jqueryWidgets.hitsPerPageSelector({
-      containerNode: window.$('#hits-per-page-selector'),
-      items: [
-        {value: 6, label: '6 per page'},
-        {value: 12, label: '12 per page'},
-        {value: 24, label: '24 per page'},
-      ],
-    })
-  );
+  storiesOf('ClearAll').add('default', wrap(containerNode => {
+    window.search.addWidget(jqueryWidgets.clearAll({containerNode}));
+  }));
 
-  search.addWidget(
-    jqueryWidgets.hierarchicalMenu({
-      containerNode: window.$('#hierarchical-categories'),
-      attributes: [
-        'hierarchicalCategories.lvl0',
-        'hierarchicalCategories.lvl1',
-        'hierarchicalCategories.lvl2',
-      ],
-    })
-  );
+  storiesOf('CurrentRefinedValues').add('default', wrap(containerNode => {
+    window.search.addWidget(jqueryWidgets.currentRefinedValues({containerNode}));
+  }));
 
-  search.addWidget(
-    jqueryWidgets.hits({
-      containerNode: window.$('#hits'),
-    })
-  );
+  storiesOf('HitsPerPageSelector').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.hitsPerPageSelector({
+        containerNode,
+        items: [
+          {value: 3, label: '3 per page'},
+          {value: 5, label: '5 per page'},
+          {value: 10, label: '10 per page'},
+        ],
+      })
+    );
+  }));
 
-  search.addWidget(
-    jqueryWidgets.refinementList({
-      containerNode: window.$('#brands'),
-      attributeName: 'brand',
-      operator: 'or',
-      limit: 10,
-      title: 'Brands',
-    })
-  );
+  storiesOf('HierarchicalMenu').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.hierarchicalMenu({
+        containerNode,
+        attributes: [
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+        ],
+      })
+    );
+  }));
 
-  search.addWidget(
-    jqueryWidgets.numericSelector({
-      containerNode: window.$('#popularity-selector'),
-      operator: '>=',
-      attributeName: 'popularity',
-      options: [
-        {label: 'Default', value: 0},
-        {label: 'Top 10', value: 9991},
-        {label: 'Top 100', value: 9901},
-        {label: 'Top 500', value: 9501},
-      ],
-    })
-  );
+  storiesOf('Hits').add('default', wrap(containerNode => {
+    window.search.addWidget(jqueryWidgets.hits({containerNode}));
+  }));
 
-  search.addWidget(
-    jqueryWidgets.numericRefinementList({
-      containerNode: window.$('#price-numeric-list'),
-      attributeName: 'price',
-      operator: 'or',
-      options: [
-        {name: 'All'},
-        {end: 4, name: 'less than 4'},
-        {start: 4, end: 4, name: '4'},
-        {start: 5, end: 10, name: 'between 5 and 10'},
-        {start: 10, name: 'more than 10'},
-      ],
-    })
-  );
+  storiesOf('RefinementList').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.refinementList({
+        containerNode,
+        attributeName: 'brand',
+        operator: 'or',
+        limit: 10,
+        title: 'Brands',
+      })
+    );
+  }));
 
-  search.addWidget(
-    jqueryWidgets.priceRanges({
-      containerNode: window.$('#price-ranges'),
-      attributeName: 'price',
-    })
-  );
+  storiesOf('NumericSelector').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.numericSelector({
+        containerNode,
+        operator: '>=',
+        attributeName: 'popularity',
+        options: [
+          {label: 'Default', value: 0},
+          {label: 'Top 10', value: 9991},
+          {label: 'Top 100', value: 9901},
+          {label: 'Top 500', value: 9501},
+        ],
+      })
+    );
+  }));
 
-  search.addWidget(
-    jqueryWidgets.searchBox({
-      inputNode: window.$('#search-box'),
-    })
-  );
+  storiesOf('NumericRefinementList').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.numericRefinementList({
+        containerNode,
+        attributeName: 'price',
+        operator: 'or',
+        options: [
+          {name: 'All'},
+          {end: 4, name: 'less than 4'},
+          {start: 4, end: 4, name: '4'},
+          {start: 5, end: 10, name: 'between 5 and 10'},
+          {start: 10, name: 'more than 10'},
+        ],
+      })
+    );
+  }));
 
-  search.addWidget(
-    jqueryWidgets.sortBySelector({
-      containerNode: window.$('#sort-by-selector'),
-      indices: [
-        {name: 'instant_search', label: 'Most relevant'},
-        {name: 'instant_search_price_asc', label: 'Lowest price'},
-        {name: 'instant_search_price_desc', label: 'Highest price'},
-      ],
-    })
-  );
+  storiesOf('PriceRanges').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.priceRanges({
+        containerNode,
+        attributeName: 'price',
+      })
+    );
+  }));
 
-  search.addWidget(
-    jqueryWidgets.starRating({
-      containerNode: window.$('#rating'),
-      attributeName: 'rating',
-      max: 5,
-    })
-  );
+  storiesOf('SearchBox').add('default', wrap(containerNode => {
+    window.search.addWidget(jqueryWidgets.searchBox({inputNode: containerNode}));
+  }));
 
-  search.addWidget(
-    jqueryWidgets.stats({
-      containerNode: window.$('#stats'),
-    })
-  );
+  storiesOf('SortBySelector').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.sortBySelector({
+        containerNode,
+        indices: [
+          {name: 'instant_search', label: 'Most relevant'},
+          {name: 'instant_search_price_asc', label: 'Lowest price'},
+          {name: 'instant_search_price_desc', label: 'Highest price'},
+        ],
+      })
+    );
+  }));
 
-  search.addWidget(
-    jqueryWidgets.toggle({
-      containerNode: window.$('#free-shipping'),
-      attributeName: 'free_shipping',
-      label: 'Free Shipping (toggle single value)',
-      title: 'Free Shipping',
-    })
-  );
+  storiesOf('StarRating').add('default', containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.starRating({
+        containerNode,
+        attributeName: 'rating',
+        max: 5,
+      })
+    );
+  });
 
-  search.addWidget(
-    jqueryWidgets.infiniteHits({
-      containerNode: window.$('#infinite-hits'),
-    })
-  );
+  storiesOf('Stats').add('default', wrap(containerNode => {
+    window.search.addWidget(jqueryWidgets.stats({containerNode}));
+  }));
 
-  search.addWidget(
-    jqueryWidgets.showMoreMenu({
-      containerNode: window.$('#categories'),
-      attributeName: 'categories',
-      limit: 3,
-      showMoreLimit: 10,
-    })
-  );
+  storiesOf('Toggle').add('default', wrap(containerNode => {
+    window.search.addWidget(
+      jqueryWidgets.toggle({
+        containerNode,
+        attributeName: 'free_shipping',
+        label: 'Free Shipping (toggle single value)',
+        title: 'Free Shipping',
+      })
+    );
+  }));
+
+  storiesOf('InfiniteHits').add('default', wrap(containerNode => {
+    window.search.addWidget(jqueryWidgets.infiniteHits({containerNode}));
+  }));
 };
