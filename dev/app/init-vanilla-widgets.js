@@ -1,40 +1,51 @@
 /* eslint-disable import/default */
+import {storiesOf} from 'dev-novel';
+
 import * as vanillaWidgets from './custom-widgets/vanilla/index.js';
+import wrapWithHits from './wrap-with-hits.js';
 
-export default search => {
-  search.addWidget(
-    vanillaWidgets.searchBox({
-      node: document.getElementById('search-box'),
-      placeholder: 'Search for products',
-    })
-  );
+export default () => {
+  storiesOf('SearchBox')
+    .add('default', wrapWithHits(container => {
+      const input = document.createElement('input');
+      container.appendChild(input);
 
-  search.addWidget(
-    vanillaWidgets.searchBoxReturn({
-      node: document.getElementById('search-box-return'),
-      placeholder: 'Search for products',
-    })
-  );
+      window.search.addWidget(
+        vanillaWidgets.searchBox({
+          node: input,
+          placeholder: 'Search for products',
+        })
+      );
+    }))
+    .add('with enter to search', wrapWithHits(container => {
+      const input = document.createElement('input');
+      container.appendChild(input);
 
-  search.addWidget(
-    vanillaWidgets.clearAll({
-      containerNode: document.getElementById('clear-all'),
-    })
-  );
+      window.search.addWidget(
+        vanillaWidgets.searchBoxReturn({
+          node: input,
+          placeholder: 'Search for products',
+        })
+      );
+    }));
 
-  search.addWidget(
-    vanillaWidgets.hits({
-      containerNode: document.getElementById('hits'),
-    })
-  );
+  storiesOf('ClearAll').add('default', wrapWithHits(containerNode => {
+    window.search.addWidget(vanillaWidgets.clearAll({containerNode}));
+  }));
 
-  search.addWidget(
-    vanillaWidgets.refinementList({
-      containerNode: document.getElementById('brands'),
-      attributeName: 'brand',
-      operator: 'or',
-      limit: 10,
-      title: 'Brands',
-    })
-  );
+  storiesOf('Hits').add('default', wrapWithHits(containerNode => {
+    window.search.addWidget(vanillaWidgets.hits({containerNode}));
+  }));
+
+  storiesOf('RefinementList').add('default', wrapWithHits(containerNode => {
+    window.search.addWidget(
+      vanillaWidgets.refinementList({
+        containerNode,
+        attributeName: 'brand',
+        operator: 'or',
+        limit: 10,
+        title: 'Brands',
+      })
+    );
+  }));
 };
