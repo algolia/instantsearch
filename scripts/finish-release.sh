@@ -10,7 +10,7 @@ fi
 set -ev # exit when error
 
 VERSION=`cat package.json | json version`
-JSDELIVER_URL="http://cdn.jsdelivr.net/instantsearch.js/$VERSION/instantsearch.min.js"
+JSDELIVER_URL="https://cdn.jsdelivr.net/npm/instantsearch.js@$VERSION/dist/instantsearch.min.js"
 
 while true; do
   STATUS=$(curl -L -I $JSDELIVER_URL 2>/dev/null | head -n 1 | cut -d$' ' -f2);

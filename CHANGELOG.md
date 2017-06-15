@@ -1,3 +1,13 @@
+<a name="1.11.13"></a>
+## [1.11.13](https://github.com/algolia/instantsearch.js/compare/v1.11.12...v1.11.13) (2017-06-07)
+
+
+### Bug Fixes
+
+* **url-sync:** reverting back to using `change` event (#2183) ([07f4be0](https://github.com/algolia/instantsearch.js/commit/07f4be0)), closes [#2173](https://github.com/algolia/instantsearch.js/issues/2173) [#2171](https://github.com/algolia/instantsearch.js/issues/2171)
+
+
+
 <a name="1.11.12"></a>
 ## [1.11.12](https://github.com/algolia/instantsearch.js/compare/v1.11.11...v1.11.12) (2017-05-30)
 
