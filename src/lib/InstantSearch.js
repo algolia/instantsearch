@@ -121,19 +121,27 @@ Usage: instantsearch({
     );
 
     if (this._searchFunction) {
-      this.helper = Object.create(helper);
-      this.helper.search = () => {
-        helper.setState(this.helper.state);
-        this._searchFunction(helper);
+      this._searchToAlgolia = helper.search.bind(helper);
+      helper.search = () => {
+        const helperSearchFunction = algoliasearchHelper(
+          {
+            addAlgoliaAgent: () => {},
+            search: () => {},
+          },
+          helper.state.index
+        );
+        helperSearchFunction.overrideStateWithoutTriggeringChangeEvent(helper.state);
+        helperSearchFunction.once('search', state => {
+          helper.overrideStateWithoutTriggeringChangeEvent(state);
+          this._searchToAlgolia();
+        });
+        this._searchFunction(helperSearchFunction);
       };
-      this._init(helper.state, this.helper);
-      helper.on('result', this._render.bind(this, this.helper));
-    } else {
-      this.helper = helper;
-      this._init(helper.state, this.helper);
-      this.helper.on('result', this._render.bind(this, this.helper));
     }
 
+    this.helper = helper;
+    this._init(helper.state, this.helper);
+    this.helper.on('result', this._render.bind(this, this.helper));
     this.helper.search();
   }
 
