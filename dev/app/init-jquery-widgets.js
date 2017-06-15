@@ -131,7 +131,9 @@ export default () => {
   }));
 
   storiesOf('SearchBox').add('default', wrap(containerNode => {
-    window.search.addWidget(jqueryWidgets.searchBox({inputNode: containerNode}));
+    const inputNode = document.createElement('input');
+    containerNode.appendChild(inputNode);
+    window.search.addWidget(jqueryWidgets.searchBox({inputNode}));
   }));
 
   storiesOf('SortBySelector').add('default', wrap(containerNode => {
