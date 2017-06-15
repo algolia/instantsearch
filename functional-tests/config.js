@@ -1,6 +1,5 @@
 import path from 'path';
-// eslint-disable-next-line import/no-commonjs
-const VisualRegressionCompare = require('wdio-visual-regression-service/compare');
+import {SaveScreenshot} from 'wdio-visual-regression-service/compare';
 import testServer from './testServer.js';
 import {clearAll, searchBox} from './utils.js';
 const INDEX_PAGE = process.env.INDEX_PAGE || 'index';
@@ -29,7 +28,7 @@ let conf = {
     'visual-regression',
   ],
   visualRegression: {
-    compare: new VisualRegressionCompare.SaveScreenshot({
+    compare: new SaveScreenshot({
       screenshotName,
     }),
     viewportChangePause: 300, // ms
