@@ -20,8 +20,7 @@
   </div>
 </template>
 
-<script>
-import algoliaComponent from '../component';
+<script>import algoliaComponent from '../component';
 export default {
   mixins: [algoliaComponent],
   data() {
@@ -31,11 +30,13 @@ export default {
   },
   computed: {
     algoliaUrl() {
-      return 'https://www.algolia.com/?' +
+      return (
+        'https://www.algolia.com/?' +
         'utm_source=vue-instantsearch&' +
         'utm_medium=website&' +
         `utm_content=${location.hostname}&` +
-        'utm_campaign=poweredby';
+        'utm_campaign=poweredby'
+      );
     },
   },
 };

@@ -1,11 +1,11 @@
-dist
+dist/
 yarn-error.log
-node_modules
+node_modules/
 coverage
 .DS_store
 
 # Output of documentation
-_book
+_book/
 book.pdf
 book.epub
 book.mobi

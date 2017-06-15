@@ -1,5 +1,4 @@
-<script>
-import { HIGHLIGHT_PRE_TAG, HIGHLIGHT_POST_TAG } from '../store';
+<script>import { HIGHLIGHT_PRE_TAG, HIGHLIGHT_POST_TAG } from '../store';
 import escapeHtml from 'escape-html';
 
 export default {

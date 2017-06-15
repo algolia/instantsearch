@@ -6,15 +6,14 @@
   </select>
 </template>
 
-<script>
-import algoliaComponent from '../component';
+<script>import algoliaComponent from '../component';
 
 export default {
   mixins: [algoliaComponent],
   props: {
     options: {
       type: Array,
-      default: function() {
+      default() {
         return [6, 12, 24];
       },
     },
@@ -34,7 +33,7 @@ export default {
       },
     },
   },
-  mounted: function() {
+  mounted() {
     if (this.options.indexOf(this.searchStore.resultsPerPage) === -1) {
       this.searchStore.resultsPerPage = this.options[0];
     }

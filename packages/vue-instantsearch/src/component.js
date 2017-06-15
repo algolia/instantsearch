@@ -8,7 +8,9 @@ export default {
       },
       validator(value) {
         if (typeof value !== 'object') {
-          throw 'It looks like you forgot to wrap your Algolia search component inside of an <ais-index> component. You can also pass the store as a prop to your component.';
+          throw new Error(
+            'It looks like you forgot to wrap your Algolia search component inside of an <ais-index> component. You can also pass the store as a prop to your component.'
+          );
         }
 
         return true;
@@ -33,21 +35,21 @@ export default {
       }
 
       if (!element) {
-        const blockModifierClassName = blockClassName + '--' + modifier;
+        const blockModifierClassName = `${blockClassName}--${modifier}`;
 
         return this.customClassName(blockModifierClassName);
       }
 
-      const elementClassName = blockClassName + '__' + element;
+      const elementClassName = `${blockClassName}__${element}`;
       if (!modifier) {
         return this.customClassName(elementClassName);
       }
 
-      const elementModifierClassName = elementClassName + '--' + modifier;
+      const elementModifierClassName = `${elementClassName}--${modifier}`;
 
-      return this.customClassName(elementClassName) +
-        ' ' +
-        this.customClassName(elementModifierClassName);
+      return `${this.customClassName(elementClassName)} ${this.customClassName(
+        elementModifierClassName
+      )}`;
     },
     customClassName(className) {
       return !this.classNames[className]

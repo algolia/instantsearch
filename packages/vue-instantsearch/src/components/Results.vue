@@ -12,8 +12,7 @@
   </div>
 </template>
 
-<script>
-import algoliaComponent from '../component';
+<script>import algoliaComponent from '../component';
 
 export default {
   mixins: [algoliaComponent],
@@ -71,7 +70,7 @@ export default {
           this.searchStore.results.length - 1
         ];
 
-        if (lastStacked['objectID'] !== lastResult['objectID']) {
+        if (lastStacked.objectID !== lastResult.objectID) {
           this.stackedResults.push(...this.searchStore.results);
         }
       }

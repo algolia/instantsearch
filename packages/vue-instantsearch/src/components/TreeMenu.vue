@@ -1,5 +1,4 @@
-<script>
-import { FACET_TREE } from '../store';
+<script>import { FACET_TREE } from '../store';
 import algoliaComponent from '../component';
 
 export default {
@@ -47,7 +46,10 @@ export default {
   },
   computed: {
     facetValues() {
-      let values = this.searchStore.getFacetValues(this.attribute, this.sortBy);
+      const values = this.searchStore.getFacetValues(
+        this.attribute,
+        this.sortBy
+      );
 
       return values.data || [];
     },
@@ -61,8 +63,8 @@ export default {
     },
     _renderList(h, facetValues, isRoot = true) {
       const listItems = [];
-      for (let facet of facetValues) {
-        let listItemLabel = [];
+      for (const facet of facetValues) {
+        const listItemLabel = [];
 
         if (this.$scopedSlots.default) {
           listItemLabel.push(
@@ -91,7 +93,7 @@ export default {
           );
         }
 
-        let listItemChildren = [
+        const listItemChildren = [
           h(
             'a',
             {
@@ -138,7 +140,7 @@ export default {
   },
   render(h) {
     if (this.show === false) {
-      return;
+      return undefined;
     }
 
     const children = [];

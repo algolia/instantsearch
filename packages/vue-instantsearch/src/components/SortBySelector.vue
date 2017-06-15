@@ -8,8 +8,7 @@
   </select>
 </template>
 
-<script>
-import algoliaComponent from '../component';
+<script>import algoliaComponent from '../component';
 
 export default {
   mixins: [algoliaComponent],
@@ -34,9 +33,9 @@ export default {
       },
     },
   },
-  mounted: function() {
+  mounted() {
     let match = false;
-    for (let index in this.indices) {
+    for (const index in this.indices) {
       if (this.indices[index].name === this.indexName) {
         match = true;
       }
