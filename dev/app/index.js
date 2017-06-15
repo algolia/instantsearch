@@ -1,40 +1,42 @@
 /* eslint-disable import/default */
+import {registerInitializer, registerDisposer, start} from 'dev-novel';
+
 import instantsearch from '../../index.js';
 
 import initBuiltInWidgets from './init-builtin-widgets.js';
 import initVanillaWidgets from './init-vanilla-widgets.js';
 import initJqueryWidgets from './init-jquery-widgets.js';
 
-const search = instantsearch({
-  appId: 'latency',
-  apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-  indexName: 'instant_search',
-  urlSync: {
-    useHash: !(window.history && 'pushState' in window.history),
-    mapping: {
-      q: 'query',
-      hPP: 'hits',
-      hFR: 'hierarchical',
+registerInitializer(() => {
+  window.search = instantsearch({
+    appId: 'latency',
+    apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
+    indexName: 'instant_search',
+    searchParameters: {
+      hitsPerPage: 3,
     },
-  },
+  });
+});
+
+registerDisposer(() => {
+  window.search = undefined;
+  delete window.search;
 });
 
 const q = window.location.search;
 
 switch (true) {
 case q.includes('widgets=vanilla'):
-  initVanillaWidgets(search);
+  initVanillaWidgets();
   break;
 case q.includes('widgets=jquery'):
-  initJqueryWidgets(search);
+  initJqueryWidgets();
   break;
 default:
-  initBuiltInWidgets(search);
+  initBuiltInWidgets();
 }
 
-search.once('render', () => {
-  [...document.querySelectorAll('.smooth-search--hidden')]
-    .forEach(element => element.classList.remove('smooth-search--hidden'));
+start({
+  projectName: 'instantsearch.js',
+  projectLink: 'https://community.algolia.com/instantsearch.js/',
 });
-
-search.start();
