@@ -1,0 +1,13 @@
+.ais-star-rating {
+  &--item {
+    @extend .ais-current-refined-values--item;
+  }
+
+  &--link {
+    @extend .ais-current-refined-values--link;
+  }
+
+  &--count {
+    @extend .ais-current-refined-values--count;
+  }
+}
