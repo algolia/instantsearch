@@ -1,2 +1,11 @@
 @import 'variables';
 @import 'clear-all';
+@import 'current-refined-values';
+
+.ais-header {
+  border-bottom: 2px solid #eee;
+  font-size: .8em;
+  margin: 0 0 6px;
+  padding: 0 0 6px;
+  text-transform: uppercase;
+}
