@@ -7,7 +7,12 @@ describe('searchBox', () => {
 
     it('input is empty', () => expect(searchBox.get()).toBe(''));
 
-    it('triggers an empty search', () => expect(browser.getText('#hits')).toNotContain('MP3'));
+    it('triggers an empty search', () => {
+      expect(browser.getText('#hits')).toNotContain('MP3');
+      browser.checkDocument({
+        hide: ['.ais-stats--body'], // Flaky X ms information.
+      });
+    });
   });
 
   describe('when there is a query', () => {
@@ -15,6 +20,11 @@ describe('searchBox', () => {
 
     it('fills the input', () => expect(searchBox.get()).toBe('mp3'));
 
-    it('triggers a new search', () => expect(browser.getText('#hits')).toContain('MP3'));
+    it('triggers a new search', () => {
+      expect(browser.getText('#hits')).toContain('MP3');
+      browser.checkDocument({
+        hide: ['.ais-stats--body'], // Flaky X ms information.
+      });
+    });
   });
 });
