@@ -119,14 +119,21 @@ export default function connectRangeSlider(renderFn) {
 
       init({helper, instantSearchInstance}) {
         this._refine = bounds => newValues => {
-          helper.clearRefinements(attributeName);
-          if (!bounds.min || newValues[0] > bounds.min) {
-            helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
+          const currentValues = [
+            helper.getNumericRefinement(attributeName, '>='),
+            helper.getNumericRefinement(attributeName, '<='),
+          ];
+
+          if (currentValues[0] !== newValues[0] || currentValues[1] !== newValues[1]) {
+            helper.clearRefinements(attributeName);
+            if (!bounds.min || newValues[0] > bounds.min) {
+              helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
+            }
+            if (!bounds.max || newValues[1] < bounds.max) {
+              helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
+            }
+            helper.search();
           }
-          if (!bounds.max || newValues[1] < bounds.max) {
-            helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
-          }
-          helper.search();
         };
 
         const stats = {
