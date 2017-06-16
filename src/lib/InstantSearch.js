@@ -128,9 +128,9 @@ Usage: instantsearch({
             addAlgoliaAgent: () => {},
             search: () => {},
           },
-          helper.state.index
+          helper.state.index,
+          helper.state
         );
-        helperSearchFunction.overrideStateWithoutTriggeringChangeEvent(helper.state);
         helperSearchFunction.once('search', state => {
           helper.overrideStateWithoutTriggeringChangeEvent(state);
           this._searchToAlgolia();
