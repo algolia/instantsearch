@@ -5,7 +5,7 @@ import initBuiltInWidgets from './init-builtin-widgets.js';
 import initVanillaWidgets from './init-vanilla-widgets.js';
 import initJqueryWidgets from './init-jquery-widgets.js';
 
-import '../../src/css/theme/default.scss';
+import '../../src/css/instantsearch-theme-algolia.scss';
 
 registerDisposer(() => {
   window.search = undefined;

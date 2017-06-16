@@ -20,7 +20,7 @@ export default {
       test: /\.html$/, exclude: /node_modules/, loader: 'raw',
     }, {
       test: /\.scss$/,
-      include: /src\/css\/theme/,
+      include: /src\/css\/instantsearch-theme-algolia/,
       loader: 'style!css!autoprefixer-loader!sass',
     }, {
       test: require.resolve('react'), loader: 'expose?React',
