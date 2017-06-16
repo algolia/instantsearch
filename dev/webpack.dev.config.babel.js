@@ -19,6 +19,8 @@ export default {
     }, {
       test: /\.html$/, exclude: /node_modules/, loader: 'raw',
     }, {
+      test: /\.scss$/, include: /src\/css\/theme/, loader: 'style!css!sass',
+    }, {
       test: require.resolve('react'), loader: 'expose?React',
     }, {
       test: require.resolve('react-dom'), loader: 'expose?ReactDOM',
