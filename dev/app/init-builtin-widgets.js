@@ -366,22 +366,55 @@ export default () => {
     );
   }));
 
-  storiesOf('HierarchicalMenu').add('default', wrapWithHits(container => {
-    window.search.addWidget(
-      instantsearch.widgets.hierarchicalMenu({
-        container,
-        attributes: [
-          'hierarchicalCategories.lvl0',
-          'hierarchicalCategories.lvl1',
-          'hierarchicalCategories.lvl2',
-        ],
-        rootPath: 'Cameras & Camcorders',
-        templates: {
-          header: 'Hierarchical categories',
+  storiesOf('HierarchicalMenu')
+    .add('default', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.hierarchicalMenu({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+          rootPath: 'Cameras & Camcorders',
+        })
+      );
+    }))
+    .add('with default selected item', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.hierarchicalMenu({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+          rootPath: 'Cameras & Camcorders',
+        })
+      );
+    }, {
+      searchParameters: {
+        hierarchicalFacetsRefinements: {
+          'hierarchicalCategories.lvl0': ['Cameras & Camcorders > Digital Cameras'],
         },
-      })
-    );
-  }));
+      },
+    }))
+    .add('with header', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.hierarchicalMenu({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+          rootPath: 'Cameras & Camcorders',
+          templates: {
+            header: 'Hierarchical categories',
+          },
+        })
+      );
+    }));
 
   storiesOf('PriceRanges').add('default', wrapWithHits(container => {
     window.search.addWidget(
