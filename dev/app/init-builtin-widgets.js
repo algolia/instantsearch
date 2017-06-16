@@ -107,6 +107,11 @@ export default () => {
         autoHideContainer: false,
       })
     );
+  }, {
+    searchParameters: {
+      disjunctiveFacetsRefinements: {brand: ['Apple']},
+      disjunctiveFacets: ['brand'],
+    },
   }));
 
   storiesOf('CurrentRefinedValues').add('default', wrapWithHits(container => {
