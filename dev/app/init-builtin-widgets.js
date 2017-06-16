@@ -327,25 +327,34 @@ export default () => {
       );
     }));
 
-  storiesOf('Menu').add('with show more', wrapWithHits(container => {
-    window.search.addWidget(
-      instantsearch.widgets.menu({
-        container,
-        attributeName: 'categories',
-        limit: 3,
-        showMore: {
-          templates: {
-            active: '<button>Show less</button>',
-            inactive: '<button>Show more</button>',
+  storiesOf('Menu')
+    .add('Default', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.menu({
+          container,
+          attributeName: 'categories',
+        })
+      );
+    }))
+    .add('with show more and header', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.menu({
+          container,
+          attributeName: 'categories',
+          limit: 3,
+          showMore: {
+            templates: {
+              active: '<button>Show less</button>',
+              inactive: '<button>Show more</button>',
+            },
+            limit: 10,
           },
-          limit: 10,
-        },
-        templates: {
-          header: 'Categories (menu widget)',
-        },
-      })
-    );
-  }));
+          templates: {
+            header: 'Categories (menu widget)',
+          },
+        })
+      );
+    }));
 
   storiesOf('RangeSlider').add('default', wrapWithHits(container => {
     window.search.addWidget(
