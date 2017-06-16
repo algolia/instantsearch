@@ -126,6 +126,7 @@ export default createConnector({
       searchState,
       this.context
     );
+
     return {
       min,
       max,
