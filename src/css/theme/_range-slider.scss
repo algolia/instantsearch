@@ -1,0 +1,9 @@
+.ais-range-slider {
+  &--handle {
+    border: 1px solid $blue;
+  }
+
+  .rheostat-progress {
+    background-color: $blue !important;
+  }
+}
