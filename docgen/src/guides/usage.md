@@ -12,7 +12,7 @@ githubSource: docgen/src/guides/usage.md
 
 ## Use InstantSearch.js
 
-InstantSearch.js can be used either with a direct link in your webpage or with a packaging system. 
+InstantSearch.js can be used either with a direct link in your webpage or with a packaging system.
 
 ### Directly in your page
 
@@ -21,6 +21,12 @@ This method uses built bersion of **InstantSearch.js** from the [jsDeliver](http
 ```html
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css">
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.js"></script>
+```
+
+We also provide you a default Algolia theme for the widgets to be effectively styled:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch-theme-algolia.min.css">
 ```
 
 You will then have access to the `instantsearch` function in the global scope (window).
@@ -50,3 +56,5 @@ import instantsearch from 'instantsearch.js';
 ```
 
 Afterwards, you need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css) into your page.
+
+You can also load into your page the [Algolia default theme](https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.6/dist/instantsearch-theme-algolia.min.css) for the widgets to be styled.
