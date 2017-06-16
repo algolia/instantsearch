@@ -140,41 +140,41 @@ export default () => {
       },
     }));
 
-  storiesOf('CurrentRefinedValues').add('default', wrapWithHits(container => {
-    window.search.addWidget(
-      instantsearch.widgets.currentRefinedValues({
-        container,
-        templates: {
-          header: 'Current refinements',
-        },
-        attributes: [
-          {
-            name: 'price',
-            label: 'Price',
-            transformData: data => {
-              data.name = `$${data.name}`;
-              return data;
-            },
+  storiesOf('CurrentRefinedValues')
+    .add('default', wrapWithHits(container => {
+      window.search.addWidget(instantsearch.widgets.currentRefinedValues({container}));
+    }, {
+      searchParameters: {
+        disjunctiveFacetsRefinements: {brand: ['Apple', 'Samsung']},
+        disjunctiveFacets: ['brand'],
+      },
+    }))
+    .add('with header', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.currentRefinedValues({
+          container,
+          templates: {
+            header: 'Current refinements',
           },
-          {
-            name: 'price_range',
-            label: 'Price range',
-            transformData: data => {
-              data.name = data.name.replace(/(\d+)/g, '$$$1');
-              return data;
-            },
+        })
+      );
+    }, {
+      searchParameters: {
+        disjunctiveFacetsRefinements: {brand: ['Apple', 'Samsung']},
+        disjunctiveFacets: ['brand'],
+      },
+    }))
+    .add('with header but no refinements', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.currentRefinedValues({
+          container,
+          autoHideContainer: false,
+          templates: {
+            header: 'Current refinements',
           },
-          {
-            name: 'free_shipping',
-            transformData: data => {
-              if (data.name === 'true') data.name = 'Free shipping';
-              return data;
-            },
-          },
-        ],
-      })
-    );
-  }));
+        })
+      );
+    }));
 
   storiesOf('RefinementList')
     .add('default', wrapWithHits(container => {
