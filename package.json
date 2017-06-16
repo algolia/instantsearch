@@ -33,9 +33,6 @@
     "dist",
     "dist-es5-module"
   ],
-  "engines": {
-    "node": "7.10.0"
-  },
   "devDependencies": {
     "autoprefixer": "^6.7.6",
     "babel-cli": "^6.23.0",
