@@ -1,0 +1,30 @@
+.ais-search-box {
+  display: inline-block;
+  position: relative;
+  max-width: 300px;
+  width: 100%;
+  height: 46px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  font-size: 14px;
+
+  &--input {
+    appearence: none;
+    background: $white;
+    display: inline-block;
+    border: 1px solid #D4D8E3;
+    border-radius: $border-radius;
+    box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+    transition: box-shadow .4s ease, background .4s ease;
+    padding: 10px;
+    vertical-align: middle;
+    white-space: normal;
+    height: 100%;
+    width: 100%;
+
+    &:focus {
+      box-shadow: none;
+      outline: 0;
+    }
+  }
+}
