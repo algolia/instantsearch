@@ -103,8 +103,12 @@ const renderer = ({
     }
   }
 
+  const resetButtonContainer = containerNode.tagName === 'INPUT'
+    ? containerNode.parentNode
+    : containerNode;
+
   // hide reset button when there is no query
-  const resetButton = containerNode.querySelector('button[type="reset"]');
+  const resetButton = resetButtonContainer.querySelector('button[type="reset"]');
   resetButton.style.display = query && query.trim() ? 'block' : 'none';
 };
 
