@@ -79,10 +79,8 @@ describe('Store', () => {
   });
 
   test('should throw an exception if not constructed with a helper', () => {
-    expect(() => {
-      new Store({});
-    }).toThrow(
-      TypeError(
+    expect(() => new Store({})).toThrow(
+      new TypeError(
         'Store should be constructed with an AlgoliaSearchHelper instance as first parameter.'
       )
     );
@@ -131,7 +129,7 @@ describe('Store', () => {
     };
 
     const helper = algoliaHelper(client);
-    new Store(helper);
+    new Store(helper); // eslint-disable-line no-new
     const version = require('../../package.json').version;
     expect(addAlgoliaAgent).toBeCalledWith(`vue-instantsearch ${version}`);
   });

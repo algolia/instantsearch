@@ -4,8 +4,7 @@
   </div>
 </template>
 
-<script>
-import { createFromAlgoliaCredentials } from '../store';
+<script>import { createFromAlgoliaCredentials } from '../store';
 import algoliaComponent from '../component';
 
 export default {
@@ -19,7 +18,7 @@ export default {
           return this._searchStore.algoliaApiKey;
         }
 
-        return;
+        return undefined;
       },
     },
     appId: {
@@ -30,7 +29,7 @@ export default {
           return this._searchStore.algoliaAppId;
         }
 
-        return;
+        return undefined;
       },
     },
     indexName: {
@@ -41,7 +40,7 @@ export default {
           return this._searchStore.indexName;
         }
 
-        return;
+        return undefined;
       },
     },
     query: {

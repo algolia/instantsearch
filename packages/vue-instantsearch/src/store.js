@@ -21,25 +21,6 @@ export const assertValidFacetType = function(type) {
   throw new Error(`Invalid facet type ${type}.`);
 };
 
-export const createFromAlgoliaCredentials = (appID, apiKey) => {
-  const client = algolia(appID, apiKey);
-  const helper = algoliaHelper(client);
-
-  return new Store(helper);
-};
-
-export const createFromAlgoliaClient = client => {
-  const helper = algoliaHelper(client);
-
-  return new Store(helper);
-};
-
-export const createFromSerialized = data => {
-  const helper = unserializeHelper(data);
-
-  return new Store(helper);
-};
-
 const onHelperChange = function() {
   if (this._stoppedCounter === 0) {
     this.refresh();
@@ -61,12 +42,12 @@ export class Store {
     this.algoliaHelper = helper;
   }
 
-  set algoliaHelper(algoliaHelper) {
+  set algoliaHelper(helper) {
     if (this._helper) {
       this._helper.removeListener('change', onHelperChange);
     }
 
-    this._helper = algoliaHelper;
+    this._helper = helper;
 
     // Here we enforce custom highlight tags for handling XSS protection.
     // We also make sure that we keep the current page as setQueryParameter resets it.
@@ -142,7 +123,7 @@ export class Store {
   }
 
   get resultsPerPage() {
-    let resultsPerPage = this._helper.getQueryParameter('hitsPerPage');
+    const resultsPerPage = this._helper.getQueryParameter('hitsPerPage');
 
     if (resultsPerPage) {
       return resultsPerPage;
@@ -278,7 +259,9 @@ export class Store {
     // Todo: make sure the attribute is already added.
     // Todo: Not sure this should be here because will make it very hard to debug I suppose.
 
-    let values = this._helper.lastResults.getFacetValues(attribute, { sortBy });
+    const values = this._helper.lastResults.getFacetValues(attribute, {
+      sortBy,
+    });
     if (limit === -1) {
       return values;
     }
@@ -314,8 +297,10 @@ export class Store {
   }
 
   set queryParameters(parameters) {
+    /* eslint-disable no-param-reassign */
+    // Todo: this should be rewritten to be non-mutating method
     this.stop();
-    for (let parameter in parameters) {
+    for (const parameter in parameters) {
       if (parameters[parameter] === null) {
         parameters[parameter] = undefined;
       }
@@ -362,7 +347,8 @@ export class Store {
   waitUntilInSync() {
     return new Promise(resolve => {
       if (this._helper.hasPendingRequests() === false) {
-        return resolve();
+        resolve();
+        return;
       }
 
       // Todo: we need to de-register the one that is not being triggered.
@@ -378,3 +364,22 @@ export class Store {
     });
   }
 }
+
+export const createFromAlgoliaCredentials = (appID, apiKey) => {
+  const client = algolia(appID, apiKey);
+  const helper = algoliaHelper(client);
+
+  return new Store(helper);
+};
+
+export const createFromAlgoliaClient = client => {
+  const helper = algoliaHelper(client);
+
+  return new Store(helper);
+};
+
+export const createFromSerialized = data => {
+  const helper = unserializeHelper(data);
+
+  return new Store(helper);
+};

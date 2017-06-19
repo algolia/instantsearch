@@ -23,8 +23,7 @@
   </div>
 </template>
 
-<script>
-import { FACET_OR, FACET_AND } from '../store';
+<script>import { FACET_OR, FACET_AND } from '../store';
 import algoliaComponent from '../component';
 
 export default {
@@ -37,8 +36,8 @@ export default {
     operator: {
       type: String,
       default: FACET_OR,
-      validator(value) {
-        value = value.toLowerCase();
+      validator(rawValue) {
+        const value = rawValue.toLowerCase();
 
         return value === FACET_OR || value === FACET_AND;
       },
@@ -77,7 +76,7 @@ export default {
     },
   },
   methods: {
-    toggleRefinement: function(value) {
+    toggleRefinement(value) {
       return this.searchStore.toggleFacetRefinement(
         this.attributeName,
         value.name

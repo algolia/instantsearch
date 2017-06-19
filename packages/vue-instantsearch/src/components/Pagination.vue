@@ -30,8 +30,7 @@
   </ul>
 </template>
 
-<script>
-import algoliaComponent from '../component';
+<script>import algoliaComponent from '../component';
 
 export default {
   mixins: [algoliaComponent],
@@ -62,7 +61,7 @@ export default {
         maxPages = this.totalPages - 1;
       }
 
-      let pages = [this.page];
+      const pages = [this.page];
       let even = false;
       let lastPage = this.page;
       let firstPage = this.page;
@@ -70,13 +69,13 @@ export default {
         even = !even;
         if (even) {
           if (firstPage <= 1) {
-            continue;
+            continue; // eslint-disable-line no-continue
           }
           firstPage--;
           pages.unshift(firstPage);
         } else {
           if (lastPage >= this.totalPages) {
-            continue;
+            continue; // eslint-disable-line no-continue
           }
           lastPage++;
           pages.push(lastPage);
@@ -88,8 +87,7 @@ export default {
   },
   methods: {
     goToPage(page) {
-      page = Math.min(this.totalPages, page);
-      this.searchStore.page = page;
+      this.searchStore.page = Math.min(this.totalPages, page);
     },
     goToFirstPage() {
       this.goToPage(1);

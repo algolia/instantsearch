@@ -20,7 +20,7 @@ test('renders proper HTML', () => {
       return h('highlight', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
         },
       });
     },
@@ -47,7 +47,7 @@ test('accepts custom highlighting tag', () => {
       return h('highlight', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
           tagName: 'em',
         },
       });
@@ -75,7 +75,7 @@ test('protects against XSS', () => {
       return h('highlight', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
         },
       });
     },
@@ -102,7 +102,7 @@ test('allows unsafe output', () => {
       return h('highlight', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
           escapeHtml: false,
         },
       });
@@ -126,7 +126,7 @@ test('should render an empty string if attribute is not highlighted', () => {
       return h('highlight', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
         },
       });
     },

@@ -20,7 +20,7 @@ test('renders proper HTML', () => {
       return h('snippet', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
         },
       });
     },
@@ -47,7 +47,7 @@ test('accepts custom highlighting tag', () => {
       return h('snippet', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
           tagName: 'em',
         },
       });
@@ -75,7 +75,7 @@ test('protects against XSS', () => {
       return h('snippet', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
         },
       });
     },
@@ -102,7 +102,7 @@ test('allows unsafe output', () => {
       return h('snippet', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
           escapeHtml: false,
         },
       });
@@ -126,7 +126,7 @@ test('should render an empty string if attribute is not snippeted', () => {
       return h('snippet', {
         props: {
           attributeName: 'attr',
-          result: result,
+          result,
         },
       });
     },

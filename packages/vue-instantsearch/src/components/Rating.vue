@@ -27,8 +27,7 @@
   </div>
 </template>
 
-<script>
-import { FACET_OR } from '../store';
+<script>import { FACET_OR } from '../store';
 import algoliaComponent from '../component';
 
 export default {
@@ -60,7 +59,7 @@ export default {
   },
   computed: {
     show() {
-      for (let value in this.facetValues) {
+      for (const value in this.facetValues) {
         if (this.facetValues[value].count > 0) {
           return true;
         }
@@ -78,22 +77,23 @@ export default {
       let isRefined = false;
 
       for (let i = 0; i <= this.max; i++) {
-        let name = i.toString();
-        let star = {
+        const name = i.toString();
+        const star = {
           count: 0,
           isRefined: false,
-          name: name,
+          name,
           value: i,
         };
 
-        for (let value in values) {
-          if (values[value].name === name) {
-            if (!isRefined && values[value].isRefined) {
+        // eslint-disable-next-line no-loop-func
+        values.forEach(facetValue => {
+          if (facetValue.name === name) {
+            if (!isRefined && facetValue.isRefined) {
               isRefined = true;
               star.isRefined = true;
             }
           }
-        }
+        });
 
         stars.push(star);
       }
@@ -101,26 +101,28 @@ export default {
       stars = stars.reverse();
 
       let count = 0;
-      for (let index in stars) {
-        stars[index].count = count;
-        for (let value in values) {
-          if (values[value].name === stars[index].name) {
-            count += values[value].count;
-            stars[index].count = count;
+
+      stars = stars.map(star => {
+        const newStar = Object.assign({}, star, { count });
+        values.forEach(facetValue => {
+          if (facetValue.name === star.name) {
+            count += facetValue.count;
+            newStar.count = count;
           }
-        }
-      }
+        });
+        return star;
+      });
 
       return stars.slice(this.min, this.max);
     },
     currentValue() {
-      for (let value in this.facetValues) {
+      for (const value in this.facetValues) {
         if (this.facetValues[value].isRefined) {
           return this.facetValues[value].value;
         }
       }
 
-      return;
+      return undefined;
     },
   },
   methods: {
@@ -130,7 +132,7 @@ export default {
       }
 
       if (facet.count === 0) {
-        return;
+        return undefined;
       }
 
       this.searchStore.stop();
@@ -139,6 +141,7 @@ export default {
         this.searchStore.addFacetRefinement(this.attributeName, val);
       }
       this.searchStore.start();
+      return undefined;
     },
     clear() {
       this.searchStore.clearRefinements(this.attributeName);

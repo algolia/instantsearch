@@ -10,8 +10,7 @@
   </button>
 </template>
 
-<script>
-import algoliaComponent from '../component';
+<script>import algoliaComponent from '../component';
 
 export default {
   mixins: [algoliaComponent],
@@ -33,7 +32,7 @@ export default {
     };
   },
   computed: {
-    disabled: function() {
+    disabled() {
       if (this.clearsQuery && this.searchStore.query.length > 0) {
         return false;
       }
@@ -46,7 +45,7 @@ export default {
     },
   },
   methods: {
-    clear: function() {
+    clear() {
       this.searchStore.stop();
       if (this.clearsQuery && this.searchStore.query.length > 0) {
         this.searchStore.query = '';

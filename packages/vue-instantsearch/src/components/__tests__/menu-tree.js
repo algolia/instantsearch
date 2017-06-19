@@ -1,38 +1,36 @@
 import Vue from 'vue';
 import { TreeMenu, FACET_TREE } from 'vue-instantsearch';
 
-const getFacetValues = jest.fn(attributeName => {
-  return {
-    name: attributeName,
-    count: null,
-    isRefined: true,
-    path: null,
-    data: [
-      {
-        count: 319,
-        data: null,
-        isRefined: false,
-        name: 'Bathroom',
-        path: 'Bathroom',
-      },
-      {
-        count: 200,
-        data: [
-          {
-            count: 43,
-            data: null,
-            isRefined: false,
-            name: 'Bakeware',
-            path: 'Cooking > Bakeware',
-          },
-        ],
-        isRefined: true,
-        name: 'Cooking',
-        path: 'Cooking',
-      },
-    ],
-  };
-});
+const getFacetValues = jest.fn(attributeName => ({
+  name: attributeName,
+  count: null,
+  isRefined: true,
+  path: null,
+  data: [
+    {
+      count: 319,
+      data: null,
+      isRefined: false,
+      name: 'Bathroom',
+      path: 'Bathroom',
+    },
+    {
+      count: 200,
+      data: [
+        {
+          count: 43,
+          data: null,
+          isRefined: false,
+          name: 'Bakeware',
+          path: 'Cooking > Bakeware',
+        },
+      ],
+      isRefined: true,
+      name: 'Cooking',
+      path: 'Cooking',
+    },
+  ],
+}));
 const addFacet = jest.fn();
 const searchStore = {
   getFacetValues,

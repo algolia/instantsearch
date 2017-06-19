@@ -26,8 +26,7 @@
   </div>
 </template>
 
-<script>
-import algoliaComponent from '../component';
+<script>import algoliaComponent from '../component';
 
 export default {
   mixins: [algoliaComponent],
@@ -53,7 +52,7 @@ export default {
       type: String,
       required: false,
       default: 'left',
-      validator: function(value) {
+      validator(value) {
         return value === 'left' || value === 'right';
       },
     },
@@ -69,7 +68,7 @@ export default {
     },
     from: {
       get() {
-        for (let refinement in this.searchStore.activeRefinements) {
+        for (const refinement in this.searchStore.activeRefinements) {
           if (
             this.searchStore.activeRefinements[refinement].attributeName ===
               this.attributeName &&
@@ -79,10 +78,10 @@ export default {
             return this.searchStore.activeRefinements[refinement].numericValue;
           }
         }
-        return;
+        return undefined;
       },
-      set(value) {
-        value = Number(value);
+      set(rawValue) {
+        const value = Number(rawValue);
 
         this.searchStore.stop();
         this.searchStore.removeNumericRefinement(this.attributeName, '>');
@@ -100,7 +99,7 @@ export default {
     },
     to: {
       get() {
-        for (let refinement in this.searchStore.activeRefinements) {
+        for (const refinement in this.searchStore.activeRefinements) {
           if (
             this.searchStore.activeRefinements[refinement].attributeName ===
               this.attributeName &&
@@ -110,10 +109,10 @@ export default {
             return this.searchStore.activeRefinements[refinement].numericValue;
           }
         }
-        return;
+        return undefined;
       },
-      set(value) {
-        value = Number(value);
+      set(rawValue) {
+        const value = Number(rawValue);
 
         // Only update when `to` has reached the `from` value.
         if (value < Number(this.from)) {
