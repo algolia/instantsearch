@@ -328,4 +328,40 @@ describe('connectNumericRefinementList', () => {
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items[0].isRefined).toBe(true);
   });
+
+  it('should reset page on refine()', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectNumericRefinementList(rendering);
+
+    const widget = makeWidget({
+      attributeName: 'numerics',
+      options: [
+        {name: 'below 10', end: 10},
+        {name: '10 - 20', start: 10, end: 20},
+        {name: 'more than 20', start: 20},
+        {name: '42', start: 42, end: 42},
+        {name: 'void'},
+      ],
+    });
+
+    const helper = jsHelper(fakeClient);
+    helper.search = sinon.stub();
+    helper.setPage(2);
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(helper.state.page).toBe(2);
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    const {refine, items} = firstRenderingOptions;
+
+    refine(items[0].value);
+
+    expect(helper.state.page).toBe(0);
+  });
 });
