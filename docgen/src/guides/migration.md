@@ -19,6 +19,17 @@ You can customize the result with these two options:
    Display a reset button in the input when there is a query.
  - **magnifier** `boolan|{template?: string|Function, cssClasses?: {root: string}}`
    Display a magnifier should at beginning of the input.
+   
+To make the search box like in v1, you can do the following:
+
+```javascript
+const search = instantsearch(/* Your parameters here */);
+search.addWidget(instantsearch.widgets.searchbox({
+  container: '#your-search-input',
+  reset: false,
+  magnifier: false,
+}));
+```
 
 You can read more about these options [here](/widgets/searchBox.html).
 
