@@ -24,17 +24,10 @@ describe('searchBox()', () => {
       query: '',
     };
     helper = {
-      setState(nextState) {
-        helper.state = {...helper.state, ...nextState};
-        return helper;
-      },
       setQuery: sinon.spy(),
       search: sinon.spy(),
       state: {
         query: '',
-        setQuery(nextQuery) {
-          return {query: nextQuery};
-        },
       },
       ...EventEmitter.prototype,
     };
@@ -240,14 +233,8 @@ describe('searchBox()', () => {
       $('button[type="reset"]')[0].click();
 
       // Then
-      expect(helper.state.query).toBe('');
+      expect(helper.setQuery.called).toBe(true);
       expect(helper.search.called).toBe(true);
-
-      // When
-      widget.render({helper, instantSearchInstance: {}});
-
-      // Then
-      expect($('button[type="reset"]')[0].style.display).toBe('none');
     });
   });
 
