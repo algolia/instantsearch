@@ -79,9 +79,8 @@ export default function connectSearchBox(renderFn) {
 
     function clear(helper) {
       return function() {
-        helper
-          .setState(helper.state.setQuery(''))
-          .search();
+        helper.setQuery('');
+        helper.search();
       };
     }
 
