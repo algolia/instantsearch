@@ -210,4 +210,42 @@ describe('connectSearchBox', () => {
       expect(helper.search.callCount).toBe(2);
     }
   });
+
+  it('should always provide the same refine() and clear() function reference', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectSearchBox(rendering);
+
+    const widget = makeWidget();
+
+    const helper = jsHelper(fakeClient);
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const firstRenderOptions = rendering.lastCall.args[0];
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderOptions = rendering.lastCall.args[0];
+
+    expect(firstRenderOptions.clear).toBe(secondRenderOptions.clear);
+    expect(firstRenderOptions.refine).toBe(secondRenderOptions.refine);
+  });
 });
