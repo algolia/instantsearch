@@ -1,8 +1,10 @@
+/**
+ * Algolia components - community header
+ * Light theme
+ */
 
 
-.algc-dropdownroot .algc-dropdownroot__dropdownarrow
-  background: #F7F7FF
-
+// Navigation
 .algc-navigation
   background: $white
   box-shadow: 0 10px 40px 0 rgba($bunting,0.07), 0 2px 9px 0 rgba($bunting,0.06)
@@ -37,6 +39,17 @@
 
 .algc-navigation__brands svg.algc-arrowseparator path
   fill: $logan
+
+
+// Dropdown
+.algc-dropdownroot
+  .algc-dropdownroot__dropdownarrow
+    background: #F7F7FF
+
+
+  &.activeDropdown .algc-dropdownroot__dropdownbg
+    box-shadow: 0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1), 0 -4px 16px rgba(50, 50, 93,0.1)
+
 
 // Mobile
 .algc-openmobile

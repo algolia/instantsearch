@@ -3,8 +3,8 @@
   text-align: center
   position: relative
 
-  @include diagonal(-6deg, $white, 350px, before)
-    bottom: -170px
+  @include diagonal(-6deg, $white, 300px, before)
+    bottom: -190px
     z-index: 1
     box-shadow: rgba(112, 128, 175, 0.05) 0 -16px 24px
 
@@ -12,7 +12,20 @@
       height: 100px
       bottom: -80px
 
+  @media (max-width: $screen-sm)
+    figure
+      img
+        width: 80%
+
+
   .row
     background: url(../images/background-hero.svg)no-repeat center left / 80%
+
+    @media (max-width: $screen-sm)
+      background: url(../images/background-hero.svg)no-repeat center left / cover
+
+    @media (min-width: 1600px)
+      height: 600px
+      background: url(../images/background-hero.svg)no-repeat center left / 80%
 
 
