@@ -248,4 +248,30 @@ describe('connectSearchBox', () => {
     expect(firstRenderOptions.clear).toBe(secondRenderOptions.clear);
     expect(firstRenderOptions.refine).toBe(secondRenderOptions.refine);
   });
+
+  it('should clear on init as well', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectSearchBox(rendering);
+
+    const widget = makeWidget();
+
+    const helper = jsHelper(fakeClient);
+    helper.search = sinon.stub();
+    helper.setQuery('foobar');
+
+    expect(helper.state.query).toBe('foobar');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const renderingOptions = rendering.lastCall.args[0];
+    renderingOptions.clear();
+
+    expect(helper.state.query).toBe('');
+    expect(helper.search.called).toBe(true);
+  });
 });
