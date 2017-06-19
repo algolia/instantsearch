@@ -9,6 +9,19 @@ editable: true
 githubSource: docgen/src/guides/migration.md
 ---
 
+## The searchBox widget has new default options
+
+To identify correctly the input as a search box we added a magnifier glass at the start of the input
+and a reset button displayed as a cross on the end.
+
+You can customize the result with these two options:
+ - **reset** `boolan|{template?: string|Function, cssClasses?: {root: string}}`
+   Display a reset button in the input when there is a query.
+ - **magnifier** `boolan|{template?: string|Function, cssClasses?: {root: string}}`
+   Display a magnifier should at beginning of the input.
+
+You can read more about these options [here](/widgets/searchBox.html).
+
 ## No more `hitsPerPage` in `hits` and `infiniteHits`
 
 This option has been removed from those two widgets. To configure
