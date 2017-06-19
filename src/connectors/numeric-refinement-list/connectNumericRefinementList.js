@@ -231,6 +231,8 @@ function refine(state, attributeName, options, facetValue) {
     }
   }
 
+  resolvedState.page = 0;
+
   return resolvedState;
 }
 
