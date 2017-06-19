@@ -26,6 +26,7 @@ const renderer = ({
   searchOnEnterKeyPressOnly,
   wrapInput,
   reset,
+  magnifier,
 }) => ({
   refine,
   clear,
@@ -49,7 +50,8 @@ const renderer = ({
       const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
       containerNode.appendChild(wrappedInput);
     }
-    addReset(input, reset, templates, clear);
+    if (magnifier) addMagnifier(input, templates);
+    if (reset) addReset(input, reset, templates, clear);
     addDefaultAttributesToInput(placeholder, input, query, cssClasses);
     // Optional "powered by Algolia" widget
     if (poweredBy) {
@@ -195,6 +197,7 @@ export default function searchBox({
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
   reset = true,
+  magnifier = true,
   queryHook,
 } = {}) {
   if (!container) {
@@ -223,6 +226,7 @@ export default function searchBox({
     searchOnEnterKeyPressOnly,
     wrapInput,
     reset,
+    magnifier,
   });
 
   try {
@@ -335,6 +339,16 @@ function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
     event.preventDefault();
     clearFunction();
   });
+}
+
+function addMagnifier(input, {magnifier: magnifierTemplate}) {
+  const cssClass = cx(bem('magnifier'));
+  const htmlNode = createNodeFromString(`
+    <div class="${cssClass}">
+      ${magnifierTemplate}
+    </div>
+  `);
+  input.parentNode.appendChild(htmlNode);
 }
 
 function addPoweredBy(input, poweredBy, templates) {

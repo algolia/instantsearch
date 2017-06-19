@@ -8,8 +8,24 @@
 
   @include element(input) {
     /* search input */
+    padding-left: 24px;
     height: 100%;
     width: 100%;
+  }
+
+  @include element(magnifier) {
+    background: transparent;
+    position: absolute;
+    user-select: none;
+    top: 4px;
+    left: 7px;
+
+    svg {
+      display: block;
+      vertical-align: middle;
+      height: 14px;
+      width: 14px;
+    }
   }
 
   @include element(reset) {
