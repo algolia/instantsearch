@@ -50,7 +50,7 @@ const renderer = ({
       const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
       containerNode.appendChild(wrappedInput);
     }
-    if (magnifier) addMagnifier(input, templates);
+    if (magnifier) addMagnifier(input, magnifier, templates);
     if (reset) addReset(input, reset, templates, clear);
     addDefaultAttributesToInput(placeholder, input, query, cssClasses);
     // Optional "powered by Algolia" widget
@@ -143,6 +143,7 @@ searchBox({
  * @typedef {Object} SearchBoxResetOption
  * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
  * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
+ */
 
 /**
  * @typedef {Object} SearchBoxCSSClasses
@@ -152,12 +153,18 @@ searchBox({
  */
 
 /**
+ * @typedef {Object} SearchBoxMagnifierOption
+ * @property {function|string} template Template used for displaying the magnifier. Can accept a function or a Hogan string.
+ * @property {{root: string}} [cssClasses] CSS classes added to the magnifier.
+ */
+
+/**
  * @typedef {Object} SearchBoxWidgetOptions
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
  * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
- * @property  {boolean} [magnifier=true] Define if a magnifier should be added at begining of the input to indicate a search input.
+ * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at begining of the input to indicate a search input.
  * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
  * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
  * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
@@ -342,13 +349,27 @@ function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
   });
 }
 
-function addMagnifier(input, {magnifier: magnifierTemplate}) {
-  const cssClass = cx(bem('magnifier'));
-  const htmlNode = createNodeFromString(`
-    <div class="${cssClass}">
-      ${magnifierTemplate}
-    </div>
-  `);
+function addMagnifier(input, magnifier, {magnifier: magnifierTemplate}) {
+  magnifier = {
+    cssClasses: {},
+    template: magnifierTemplate,
+    ...magnifier,
+  };
+
+  const magnifierCSSClasses = {root: cx(bem('magnifier'), magnifier.cssClasses.root)};
+  const templateData = {cssClasses: magnifierCSSClasses};
+
+  let stringNode;
+
+  if (isString(magnifierTemplate)) {
+    stringNode = Hogan.compile(magnifierTemplate).render(templateData);
+  }
+
+  if (isFunction(magnifierTemplate)) {
+    stringNode = magnifierTemplate(templateData);
+  }
+
+  const htmlNode = createNodeFromString(stringNode);
   input.parentNode.appendChild(htmlNode);
 }
 
