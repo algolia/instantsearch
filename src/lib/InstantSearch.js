@@ -121,7 +121,7 @@ Usage: instantsearch({
     );
 
     if (this._searchFunction) {
-      this._searchToAlgolia = helper.search.bind(helper);
+      this._mainHelperSearch = helper.search.bind(helper);
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
@@ -133,7 +133,7 @@ Usage: instantsearch({
         );
         helperSearchFunction.once('search', state => {
           helper.overrideStateWithoutTriggeringChangeEvent(state);
-          this._searchToAlgolia();
+          this._mainHelperSearch();
         });
         this._searchFunction(helperSearchFunction);
       };
