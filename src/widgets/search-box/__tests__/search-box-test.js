@@ -24,10 +24,17 @@ describe('searchBox()', () => {
       query: '',
     };
     helper = {
+      setState(nextState) {
+        helper.state = {...helper.state, ...nextState};
+        return helper;
+      },
       setQuery: sinon.spy(),
       search: sinon.spy(),
       state: {
         query: '',
+        setQuery(nextQuery) {
+          return {query: nextQuery};
+        },
       },
       ...EventEmitter.prototype,
     };
@@ -54,6 +61,13 @@ describe('searchBox()', () => {
       widget.init({state, helper, onHistoryChange});
       const inputs = container.getElementsByTagName('input');
       expect(inputs.length).toEqual(1);
+    });
+
+    it('add a reset button inside the div', () => {
+      widget = searchBox(opts);
+      widget.init({state, helper, onHistoryChange});
+      const button = container.getElementsByTagName('button');
+      expect(button.length).toEqual(1);
     });
 
     it('sets default HTML attribute to the input', () => {
@@ -171,6 +185,62 @@ describe('searchBox()', () => {
       const input = container.querySelectorAll('input')[0];
       expect(wrapper.length).toEqual(0);
       expect(container.firstChild).toEqual(input);
+    });
+  });
+
+  describe('reset', () => {
+    let defaultInitOptions;
+    let defaultWidgetOptions;
+    let $;
+
+    beforeEach(() => {
+      container = document.createElement('div');
+      $ = container.querySelectorAll.bind(container);
+      defaultWidgetOptions = {container};
+      defaultInitOptions = {state, helper, onHistoryChange};
+    });
+
+    it('should be hidden when there is no query', () => {
+      // Given
+      widget = searchBox(defaultWidgetOptions);
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect($('button[type="reset"]')[0].style.display).toBe('none');
+    });
+
+    it('should be shown when there is a query', () => {
+      // Given
+      widget = searchBox(defaultWidgetOptions);
+
+      // When
+      widget.init(defaultInitOptions);
+      simulateInputEvent('test', 'tes', widget, helper, state, container);
+
+      // Then
+      expect($('button[type="reset"]')[0].style.display).toBe('block');
+    });
+
+    it('should clear the query', () => {
+      // Given
+      widget = searchBox(defaultWidgetOptions);
+      widget.init(defaultInitOptions);
+      simulateInputEvent('test', 'tes', widget, helper, state, container);
+
+      // When
+      $('button[type="reset"]')[0].click();
+
+      // Then
+      expect(helper.state.query).toBe('');
+      expect(helper.search.called).toBe(true);
+
+      // When
+      widget.render({helper, instantSearchInstance: {}});
+
+      // Then
+      expect($('button[type="reset"]')[0].style.display).toBe('none');
     });
   });
 
