@@ -164,7 +164,7 @@ searchBox({
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
  * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
- * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at begining of the input to indicate a search input.
+ * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
  * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
  * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
  * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
