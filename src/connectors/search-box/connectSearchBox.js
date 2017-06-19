@@ -5,9 +5,10 @@ var customSearchBox = connectSearchBox(function render(params, isFirstRendering)
   // params = {
   //   query,
   //   onHistoryChange,
-  //   search,
+  //   refine,
   //   instantSearchInstance,
   //   widgetParams,
+  //   clear,
   // }
 });
 search.addWidget(
@@ -32,6 +33,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string} query The query from the last search.
  * @property {function(SearchParameters)} onHistoryChange Registers a callback when the browser history changes.
  * @property {function(string)} refine Sets a new query and searches.
+ * @property {function()} clear Remove the query and perform search.
  * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
  */
 
@@ -75,8 +77,22 @@ export default function connectSearchBox(renderFn) {
   return (widgetParams = {}) => {
     const {queryHook} = widgetParams;
 
+    function clear(helper) {
+      return function() {
+        helper
+          .setState(helper.state.setQuery(''))
+          .search();
+      };
+    }
+
     return {
+      _clear() {},
+      _cachedClear() { this._clear(); },
+
       init({helper, onHistoryChange, instantSearchInstance}) {
+        this._cachedClear = this._cachedClear.bind(this);
+        this._clear = clear(helper);
+
         this._refine = (() => {
           let previousQuery;
 
@@ -99,16 +115,20 @@ export default function connectSearchBox(renderFn) {
           query: helper.state.query,
           onHistoryChange: this._onHistoryChange,
           refine: this._refine,
+          clear: this._cachedClear,
           widgetParams,
           instantSearchInstance,
         }, true);
       },
 
       render({helper, instantSearchInstance}) {
+        this._clear = clear(helper);
+
         renderFn({
           query: helper.state.query,
           onHistoryChange: this._onHistoryChange,
           refine: this._refine,
+          clear: this._cachedClear,
           widgetParams,
           instantSearchInstance,
         }, false);
