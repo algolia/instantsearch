@@ -1,7 +1,25 @@
+.screen-mockup
+  top: -200px
 
+.section-best-practices
+  @media (max-width: $screen-sm)
+    .img-responsive
+      top: 100px
+
+.section-infinite-possibilities
+  @include diagonal(-4deg, /*$titan-white*/ $titan-white, 180px, after)
+    top: -80px
+    left: 0
+
+.section-framework
+  @include diagonal(-4deg, /*$titan-white*/ #FFF, 180px, after)
+    top: -80px
+    left: 0
 
 .live-section
-
+  @include diagonal(-4deg, /*$titan-white*/ $titan-white, 180px, after)
+    top: -80px
+    left: 0
   .container .col-md-12
     transform-style: preserve-3d
     perspective: 1030px
@@ -34,6 +52,9 @@
 
 
 .discover-section
+  @include diagonal(-4deg, /*$titan-white*/ #FFF, 180px, after)
+    top: -80px
+    left: 0
   .card
     line-height: 60px
 
