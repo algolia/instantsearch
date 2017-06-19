@@ -80,10 +80,10 @@
 
 .btn-static-theme
   border: none
-  color: #fff
+  color: $bunting
   background-color: $theme-color
   &:hover, &:focus
-    color: white
+    color: $deep-cove
     background-color: darken($theme-color, 10%)
   &:active, &.active
     background-image: darken($theme-color, 10%)
@@ -91,6 +91,15 @@
     box-shadow: 0 2px 6px 0 rgba($koromiko, 0.4)
     &:hover, &:focus
       box-shadow: 0 4px 12px rgba($koromiko, 0.4)
+
+  svg
+    width: 16px
+    height: 16px
+    vertical-align: middle
+    margin-left: 0.5em
+
+    use
+      fill: $bunting
 
 
 

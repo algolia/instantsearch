@@ -61,10 +61,6 @@ $footer-shade-3: #12102E
 #footer
   position: relative
 
-  @include diagonal(-6deg, $footer-shade-1, 500px, before)
-    top: -84px
-    left: 0
-    display: none
 
   @include diagonal(-4deg, $footer-shade-2, 130px, after)
     bottom: 64px
@@ -159,3 +155,15 @@ $footer-shade-3: #12102E
       opacity: 0
     to
       opacity: 1
+
+.search-icon,
+.arrow-icon
+  margin-left: 1em
+  width: 22px
+  height: 42px
+  vertical-align: middle
+
+.arrow-icon
+  width: 16px
+  use
+    fill: $bunting
