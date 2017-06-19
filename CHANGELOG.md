@@ -1,3 +1,13 @@
+<a name="4.0.4"></a>
+## [4.0.4](https://github.com/algolia/react-instantsearch/compare/v4.0.3...v4.0.4) (2017-06-19)
+
+
+### Bug Fixes
+
+* **MultiIndex:** handle switch between mono and multi index (#132) ([e161921](https://github.com/algolia/react-instantsearch/commit/e161921))
+
+
+
 <a name="4.0.3"></a>
 ## [4.0.3](https://github.com/algolia/react-instantsearch/compare/v4.0.2...v4.0.3) (2017-06-14)
 
