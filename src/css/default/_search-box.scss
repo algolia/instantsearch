@@ -2,8 +2,48 @@
 @import "variables";
 
 @include block(search-box) {
+  position: relative;
+  max-width: 300px;
+  width: 100%;
+
   @include element(input) {
     /* search input */
+    padding-left: 24px;
+    height: 100%;
+    width: 100%;
+  }
+
+  @include element(magnifier) {
+    background: transparent;
+    position: absolute;
+    user-select: none;
+    top: 4px;
+    left: 7px;
+
+    svg {
+      display: block;
+      vertical-align: middle;
+      height: 14px;
+      width: 14px;
+    }
+  }
+
+  @include element(reset) {
+    background: none;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    user-select: none;
+
+    svg {
+      display: block;
+      width: 12px;
+      height: 12px;
+    }
   }
 
   @include element(powered-by) {
