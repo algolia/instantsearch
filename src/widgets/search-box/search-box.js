@@ -25,8 +25,10 @@ const renderer = ({
   autofocus,
   searchOnEnterKeyPressOnly,
   wrapInput,
+  reset,
 }) => ({
   refine,
+  clear,
   query,
   onHistoryChange,
 }, isFirstRendering) => {
@@ -47,6 +49,7 @@ const renderer = ({
       const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
       containerNode.appendChild(wrappedInput);
     }
+    addReset(input, reset, templates, clear);
     addDefaultAttributesToInput(placeholder, input, query, cssClasses);
     // Optional "powered by Algolia" widget
     if (poweredBy) {
@@ -99,6 +102,10 @@ const renderer = ({
       input.value = query;
     }
   }
+
+  // hide reset button when there is no query
+  const resetButton = containerNode.querySelector('button[type="reset"]');
+  resetButton.style.display = query && query.trim() ? 'block' : 'none';
 };
 
 const usage = `Usage:
@@ -111,6 +118,7 @@ searchBox({
   [ autofocus ],
   [ searchOnEnterKeyPressOnly ],
   [ queryHook ]
+  [ reset=true || reset.{template, cssClasses.{root}} ]
 })`;
 
 /**
@@ -126,6 +134,11 @@ searchBox({
  */
 
 /**
+ * @typedef {Object} SearchBoxResetOption
+ * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
+ * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
+
+/**
  * @typedef {Object} SearchBoxCSSClasses
  * @property  {string|string[]} [root] CSS class to add to the
  * wrapping `<div>` (if `wrapInput` set to `true`).
@@ -137,6 +150,7 @@ searchBox({
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
+ * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
  * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
  * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
  * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
@@ -163,7 +177,8 @@ searchBox({
  *     container: '#q',
  *     placeholder: 'Search for products',
  *     autofocus: false,
- *     poweredBy: true
+ *     poweredBy: true,
+ *     reset: false,
  *   })
  * );
  */
@@ -175,6 +190,7 @@ export default function searchBox({
   wrapInput = true,
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
+  reset = true,
   queryHook,
 } = {}) {
   if (!container) {
@@ -202,6 +218,7 @@ export default function searchBox({
     autofocus,
     searchOnEnterKeyPressOnly,
     wrapInput,
+    reset,
   });
 
   try {
@@ -287,6 +304,35 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
 }
 
+function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
+  reset = {
+    cssClasses: {},
+    template: resetTemplate,
+    ...reset,
+  };
+
+  const resetCSSClasses = {root: cx(bem('reset'), reset.cssClasses.root)};
+  const templateData = {cssClasses: resetCSSClasses};
+
+  let stringNode;
+
+  if (isString(resetTemplate)) {
+    stringNode = Hogan.compile(resetTemplate).render(templateData);
+  }
+
+  if (isFunction(resetTemplate)) {
+    stringNode = resetTemplate(templateData);
+  }
+
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.appendChild(htmlNode);
+
+  htmlNode.addEventListener('click', event => {
+    event.preventDefault();
+    clearFunction();
+  });
+}
+
 function addPoweredBy(input, poweredBy, templates) {
   // Default values
   poweredBy = {
@@ -321,11 +367,14 @@ function addPoweredBy(input, poweredBy, templates) {
     stringNode = template(templateData);
   }
 
-  // Crossbrowser way to create a DOM node from a string. We wrap in
-  // a `span` to make sure we have one and only one node.
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.insertBefore(htmlNode, input.nextSibling);
+}
+
+// Crossbrowser way to create a DOM node from a string. We wrap in
+// a `span` to make sure we have one and only one node.
+function createNodeFromString(stringNode) {
   const tmpNode = document.createElement('div');
   tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
-  const htmlNode = tmpNode.firstChild;
-
-  input.parentNode.insertBefore(htmlNode, input.nextSibling);
+  return tmpNode.firstChild;
 }
