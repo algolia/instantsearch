@@ -70,6 +70,13 @@ describe('searchBox()', () => {
       expect(button.length).toEqual(1);
     });
 
+    it('add a magnifier inside the div', () => {
+      widget = searchBox(opts);
+      widget.init({state, helper, onHistoryChange});
+      const magnifier = container.getElementsByClassName('ais-search-box--magnifier');
+      expect(magnifier.length).toEqual(1);
+    });
+
     it('sets default HTML attribute to the input', () => {
       widget = searchBox(opts);
       widget.init({state, helper, onHistoryChange});
