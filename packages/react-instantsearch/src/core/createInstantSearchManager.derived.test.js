@@ -160,6 +160,95 @@ describe('createInstantSearchManager', () => {
         });
         expect(store.error).toBe(null);
       });
+      it('updates the store and searches when switching from mono to multi index', () => {
+        const ism = createInstantSearchManager({
+          indexName: 'first',
+          initialState: {},
+          searchParameters: {},
+          algoliaClient: client,
+        });
+
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setQuery('first query 1'),
+        });
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setQuery('second query 1'),
+          multiIndexContext: { targetedIndex: 'second' },
+        });
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setPage(3),
+          multiIndexContext: { targetedIndex: 'first' },
+        });
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setIndex('second'),
+          multiIndexContext: { targetedIndex: 'second' },
+        });
+
+        ism.onExternalStateUpdate({});
+
+        expect(ism.store.getState().results).toBe(null);
+
+        jest.runAllTimers();
+
+        let store = ism.store.getState();
+        expect(store.results.first).toEqual({
+          query: 'first query 1',
+          page: 3,
+          index: 'first',
+        });
+        expect(store.results.second).toEqual({
+          query: 'second query 1',
+          page: 0,
+          index: 'second',
+        });
+        expect(store.error).toBe(null);
+
+        ism.widgetsManager.getWidgets()[0].getSearchParameters = params =>
+          params.setQuery('first query 2');
+        ism.widgetsManager.getWidgets().pop();
+        ism.widgetsManager.getWidgets().pop();
+        ism.widgetsManager.getWidgets().pop();
+
+        ism.onExternalStateUpdate({});
+
+        jest.runAllTimers();
+
+        store = ism.store.getState();
+        expect(store.results).toEqual({
+          query: 'first query 2',
+          page: 0,
+          index: 'first',
+        });
+
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setQuery('second query 2'),
+          multiIndexContext: { targetedIndex: 'second' },
+        });
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setPage(3),
+          multiIndexContext: { targetedIndex: 'first' },
+        });
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setIndex('second'),
+          multiIndexContext: { targetedIndex: 'second' },
+        });
+
+        ism.onExternalStateUpdate({});
+
+        jest.runAllTimers();
+
+        store = ism.store.getState();
+        expect(store.results.first).toEqual({
+          query: 'first query 2',
+          page: 3,
+          index: 'first',
+        });
+        expect(store.results.second).toEqual({
+          query: 'second query 2',
+          page: 0,
+          index: 'second',
+        });
+      });
     });
   });
 });
