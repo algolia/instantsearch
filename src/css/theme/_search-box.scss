@@ -27,4 +27,10 @@
       outline: 0;
     }
   }
+
+  &--reset {
+    fill: #bfc7d8;
+    top: calc(50% - 12px / 2);
+    right: 13px;
+  }
 }
