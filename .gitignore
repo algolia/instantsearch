@@ -5,6 +5,7 @@ npm-debug.log
 .DS_Store
 docs/
 !scripts/docs/
+dev/instantsearch-theme-algolia.css
 
 # Ignore Argos CI screenshots.
 functional-tests/screenshots/
