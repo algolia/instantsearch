@@ -204,6 +204,13 @@ describe('numericRefinementList()', () => {
     expect(initialOptions).toEqual(initialOptionsClone);
   });
 
+  it('should reset page on refine()', () => {
+    helper.state.page = 2;
+    expect(helper.state.page).toBe(2);
+    widget._toggleRefinement('more than 10');
+    expect(helper.state.page).toBe(0);
+  });
+
   afterEach(() => {
     numericRefinementList.__ResetDependency__('ReactDOM');
     numericRefinementList.__ResetDependency__('autoHideContainerHOC');
