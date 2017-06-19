@@ -328,17 +328,7 @@ function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
   };
 
   const resetCSSClasses = {root: cx(bem('reset'), reset.cssClasses.root)};
-  const templateData = {cssClasses: resetCSSClasses};
-
-  let stringNode;
-
-  if (isString(resetTemplate)) {
-    stringNode = Hogan.compile(resetTemplate).render(templateData);
-  }
-
-  if (isFunction(resetTemplate)) {
-    stringNode = resetTemplate(templateData);
-  }
+  const stringNode = processTemplate(resetTemplate, {cssClasses: resetCSSClasses});
 
   const htmlNode = createNodeFromString(stringNode);
   input.parentNode.appendChild(htmlNode);
@@ -357,17 +347,7 @@ function addMagnifier(input, magnifier, {magnifier: magnifierTemplate}) {
   };
 
   const magnifierCSSClasses = {root: cx(bem('magnifier'), magnifier.cssClasses.root)};
-  const templateData = {cssClasses: magnifierCSSClasses};
-
-  let stringNode;
-
-  if (isString(magnifierTemplate)) {
-    stringNode = Hogan.compile(magnifierTemplate).render(templateData);
-  }
-
-  if (isFunction(magnifierTemplate)) {
-    stringNode = magnifierTemplate(templateData);
-  }
+  const stringNode = processTemplate(magnifierTemplate, {cssClasses: magnifierCSSClasses});
 
   const htmlNode = createNodeFromString(stringNode);
   input.parentNode.appendChild(htmlNode);
@@ -398,15 +378,7 @@ function addPoweredBy(input, poweredBy, templates) {
   };
 
   const template = poweredBy.template;
-  let stringNode;
-
-  if (isString(template)) {
-    stringNode = Hogan.compile(template).render(templateData);
-  }
-  if (isFunction(template)) {
-    stringNode = template(templateData);
-  }
-
+  const stringNode = processTemplate(template, templateData);
   const htmlNode = createNodeFromString(stringNode);
   input.parentNode.insertBefore(htmlNode, input.nextSibling);
 }
@@ -417,4 +389,20 @@ function createNodeFromString(stringNode) {
   const tmpNode = document.createElement('div');
   tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
   return tmpNode.firstChild;
+}
+
+function processTemplate(template, templateData) {
+  let result;
+
+  if (isString(template)) {
+    result = Hogan.compile(template).render(templateData);
+  } else if (isFunction(template)) {
+    result = template(templateData);
+  }
+
+  if (!isString(result)) {
+    throw new Error('Wrong template options for the SearchBox widget');
+  }
+
+  return result;
 }
