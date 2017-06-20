@@ -1,3 +1,13 @@
+<a name="1.11.15"></a>
+## [1.11.15](https://github.com/algolia/instantsearch.js/compare/v1.11.14...v1.11.15) (2017-06-20)
+
+
+### Bug Fixes
+
+* **numeric-refinement-list:** reset page on refine ([ee55ccb](https://github.com/algolia/instantsearch.js/commit/ee55ccb))
+
+
+
 <a name="1.11.14"></a>
 ## [1.11.14](https://github.com/algolia/instantsearch.js/compare/v1.11.13...v1.11.14) (2017-06-19)
 
