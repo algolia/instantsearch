@@ -41,14 +41,14 @@ This guide also expects you to have a working website. You can also use our boot
 Use a built version of **InstantSearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css">
-<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch.min.css">
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch.min.js"></script>
 ```
 
 We also provide you a default Algolia theme for the widgets to be effectively styled:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch-theme-algolia.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch-theme-algolia.min.css">
 ```
 
 You will then have access to the `instantsearch` function in the global scope (window).
@@ -66,16 +66,16 @@ If you have a JavaScript build system, you can install **instantsearch.js** from
 const instantsearch = require('instantsearch.js');
 ```
 
-You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css). You can load it by adding this to your page `<head>`:
+You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch.min.css). You can load it by adding this to your page `<head>`:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch.min.css">
 ```
 
 You will also need to load manually the default Algolia theme for the widgets to be effectively styled:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.6/dist/instantsearch-theme-algolia.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch-theme-algolia.min.css">
 ```
 
 ## Initialization
