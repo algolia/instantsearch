@@ -1,5 +1,55 @@
+/*! instantsearch.js preview-2.0.0-beta.5 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
+
+.ais-search-box {
+  position: relative;
+  max-width: 300px;
+  width: 100%;
+}
+
 .ais-search-box--input {
   /* search input */
+  padding-left: 24px;
+  height: 100%;
+  width: 100%;
+}
+
+.ais-search-box--magnifier {
+  background: transparent;
+  position: absolute;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  top: 4px;
+  left: 7px;
+}
+
+.ais-search-box--magnifier svg {
+  display: block;
+  vertical-align: middle;
+  height: 14px;
+  width: 14px;
+}
+
+.ais-search-box--reset {
+  background: none;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.ais-search-box--reset svg {
+  display: block;
+  width: 12px;
+  height: 12px;
 }
 
 .ais-search-box--powered-by {
