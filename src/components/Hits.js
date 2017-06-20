@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import map from 'lodash/map';
 import Template from './Template.js';
@@ -75,15 +76,15 @@ class Hits extends React.Component {
 }
 
 Hits.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.string,
-    item: React.PropTypes.string,
-    allItems: React.PropTypes.string,
-    empty: React.PropTypes.string,
+  cssClasses: PropTypes.shape({
+    root: PropTypes.string,
+    item: PropTypes.string,
+    allItems: PropTypes.string,
+    empty: PropTypes.string,
   }),
-  hits: React.PropTypes.object,
-  results: React.PropTypes.object,
-  templateProps: React.PropTypes.object.isRequired,
+  hits: PropTypes.array,
+  results: PropTypes.object,
+  templateProps: PropTypes.object.isRequired,
 };
 
 Hits.defaultProps = {

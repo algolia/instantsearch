@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import expect from 'expect';
 import version from '../version';
 

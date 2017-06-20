@@ -1,58 +1,76 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import defaultTemplates from './defaultTemplates.js';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
+import connectMenu from '../../connectors/menu/connectMenu.js';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
+
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
   prefixKeys,
 } from '../../lib/utils.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
-import defaultTemplates from './defaultTemplates.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
 const bem = bemHelper('ais-menu');
 
-/**
- * Create a menu out of a facet
- * @function menu
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.attributeName Name of the attribute for faceting
- * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
- * @param  {string} [options.limit=10] How many facets values to retrieve [*]
- * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
- * @param  {object} [options.showMore.templates] Templates to use for showMore
- * @param  {object} [options.showMore.templates.active] Template used when showMore was clicked
- * @param  {object} [options.showMore.templates.inactive] Template used when showMore not clicked
- * @param  {object} [options.showMore.limit] Max number of facets values to display when showMore is clicked
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData.item] Method to change the object passed to the `item` template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
- * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
+const renderer = ({
+  containerNode,
+  cssClasses,
+  collapsible,
+  autoHideContainer,
+  renderState,
+  templates,
+  transformData,
+  showMoreConfig,
+}) => ({
+  refine,
+  items,
+  createURL,
+  canRefine,
+  instantSearchInstance,
+  isShowingMore,
+  toggleShowMore,
+  canToggleShowMore,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const facetValues = items.map(facetValue => ({...facetValue, url: createURL(facetValue.name)}));
+  const shouldAutoHideContainer = autoHideContainer && !canRefine;
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={ collapsible }
+      createURL={ createURL }
+      cssClasses={ cssClasses }
+      facetValues={ facetValues }
+      shouldAutoHideContainer={ shouldAutoHideContainer }
+      showMore={ showMoreConfig !== null }
+      templateProps={ renderState.templateProps }
+      toggleRefinement={ refine }
+      toggleShowMore={ toggleShowMore }
+      isShowingMore={ isShowingMore }
+      canToggleShowMore={ canToggleShowMore }
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 menu({
   container,
   attributeName,
-  [ sortBy=['count:desc', 'name:asc'] ],
+  [ sortBy=['name:asc'] ],
   [ limit=10 ],
   [ cssClasses.{root,list,item} ],
   [ templates.{header,item,footer} ],
@@ -61,43 +79,103 @@ menu({
   [ showMore.{templates: {active, inactive}, limit} ],
   [ collapsible=false ]
 })`;
-function menu({
-    container,
-    attributeName,
-    sortBy = ['count:desc', 'name:asc'],
-    limit = 10,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-    showMore = false,
-  } = {}) {
+
+/**
+ * @typedef {Object} MenuCSSClasses
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [header] CSS class to add to the header element.
+ * @property {string|string[]} [body] CSS class to add to the body element.
+ * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [list] CSS class to add to the list element.
+ * @property {string|string[]} [item] CSS class to add to each item element.
+ * @property {string|string[]} [active] CSS class to add to each active element.
+ * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
+ * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
+ */
+
+/**
+ * @typedef {Object} MenuTemplates
+ * @property {string|Function} [header] Header template.
+ * @property {string|Function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|Function} [footer] Footer template.
+ */
+
+/**
+ * @typedef {Object} MenuShowMoreOptions
+ * @property {MenuShowMoreTemplates} [templates] Templates to use for showMore.
+ * @property {number} [limit] Max number of facets values to display when showMore is clicked.
+ */
+
+/**
+ * @typedef {Object} MenuShowMoreTemplates
+ * @property {string} [active] Template used when showMore was clicked.
+ * @property {string} [inactive] Template used when showMore not clicked.
+ */
+
+/**
+ * @typedef {Object} MenuTransforms
+ * @property {function} [item] Method to change the object passed to the `item` template.
+ */
+
+/**
+ * @typedef {Object} MenuWidgetOptions
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property {string} attributeName Name of the attribute for faceting/
+ * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ *
+ * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ * @property {string} [limit=10] How many facets values to retrieve [*].
+ * @property {boolean|MenuShowMoreOptions} [showMore=false] Limit the number of results and display a showMore button.
+ * @property {MenuShowMoreTemplates} [templates] Templates to use for the widget.
+ * @property {MenuTransforms} [transformData] Set of functions to update the data before passing them to the templates.
+ * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu.
+ * @property {MenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
+ */
+
+/**
+ * Create a menu out of a facet
+ * @type {WidgetFactory}
+ * @param {MenuWidgetOptions} $0 The Menu widget options.
+ * @return {Widget} Creates a new instance of the Menu widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.menu({
+ *     container: '#categories',
+ *     attributeName: 'hierarchicalCategories.lvl0',
+ *     limit: 10,
+ *     templates: {
+ *       header: 'Categories'
+ *     }
+ *   })
+ * );
+ */
+export default function menu({
+  container,
+  attributeName,
+  sortBy = ['name:asc'],
+  limit = 10,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+  showMore = false,
+}) {
+  if (!container) {
+    throw new Error(usage);
+  }
+
   const showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
-  const widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
-
-  if (!container || !attributeName) {
-    throw new Error(usage);
-  }
 
   const containerNode = getContainerNode(container);
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
 
-  // we use a hierarchicalFacet for the menu because that's one of the use cases
-  // of hierarchicalFacet: a flat menu
-  const hierarchicalFacetName = attributeName;
-
+  const showMoreLimit = showMoreConfig && showMoreConfig.limit || undefined;
   const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
-  const allTemplates =
-    showMoreTemplates ?
-      {...templates, ...showMoreTemplates} :
-      templates;
+  const allTemplates = showMoreTemplates ? {...templates, ...showMoreTemplates} : templates;
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -111,65 +189,21 @@ function menu({
     count: cx(bem('count'), userCssClasses.count),
   };
 
-  return {
-    getConfiguration: configuration => {
-      const widgetConfiguration = {
-        hierarchicalFacets: [{
-          name: hierarchicalFacetName,
-          attributes: [attributeName],
-        }],
-      };
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    collapsible,
+    autoHideContainer,
+    renderState: {},
+    templates: allTemplates,
+    transformData,
+    showMoreConfig,
+  });
 
-      const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-      widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, widgetMaxValuesPerFacet);
-
-      return widgetConfiguration;
-    },
-    init({templatesConfig, helper, createURL}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates: allTemplates,
-      });
-      this._createURL = (state, facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
-      this._toggleRefinement = facetValue => helper
-        .toggleRefinement(hierarchicalFacetName, facetValue)
-        .search();
-    },
-    _prepareFacetValues(facetValues, state) {
-      return facetValues
-        .map(facetValue => {
-          facetValue.url = this._createURL(state, facetValue);
-          return facetValue;
-        });
-    },
-    render({results, state, createURL}) {
-      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [];
-      facetValues = this._prepareFacetValues(facetValues, state);
-
-      // Bind createURL to this specific attribute
-      function _createURL(facetValue) {
-        return createURL(state.toggleRefinement(attributeName, facetValue));
-      }
-
-      ReactDOM.render(
-        <RefinementList
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={facetValues}
-          limitMax={widgetMaxValuesPerFacet}
-          limitMin={limit}
-          shouldAutoHideContainer={facetValues.length === 0}
-          showMore={showMoreConfig !== null}
-          templateProps={this._templateProps}
-          toggleRefinement={this._toggleRefinement}
-        />,
-        containerNode
-      );
-    },
-  };
+  try {
+    const makeWidget = connectMenu(specializedRenderer);
+    return makeWidget({attributeName, limit, sortBy, showMoreLimit});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default menu;

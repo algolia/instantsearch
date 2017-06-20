@@ -1,50 +1,59 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import PriceRanges from '../../components/PriceRanges/PriceRanges.js';
+import connectPriceRanges from '../../connectors/price-ranges/connectPriceRanges.js';
+import defaultTemplates from './defaultTemplates.js';
+
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
 } from '../../lib/utils.js';
-import generateRanges from './generate-ranges.js';
-import defaultTemplates from './defaultTemplates.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import cx from 'classnames';
-import PriceRangesComponent from '../../components/PriceRanges/PriceRanges.js';
 
 const bem = bemHelper('ais-price-ranges');
 
-/**
- * Instantiate a price ranges on a numerical facet
- * @function priceRanges
- * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
- * @param  {string} options.attributeName Name of the attribute for faceting
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.item] Item template. Template data: `from`, `to` and `currency`
- * @param  {string} [options.currency='$'] The currency to display
- * @param  {Object} [options.labels] Labels to use for the widget
- * @param  {string|Function} [options.labels.separator] Separator label, between min and max
- * @param  {string|Function} [options.labels.button] Button label
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
- * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the wrapping list element
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [options.cssClasses.active] CSS class to add to the active item element
- * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link element
- * @param  {string|string[]} [options.cssClasses.form] CSS class to add to the form element
- * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each wrapping label of the form
- * @param  {string|string[]} [options.cssClasses.input] CSS class to add to each input of the form
- * @param  {string|string[]} [options.cssClasses.currency] CSS class to add to each currency element of the form
- * @param  {string|string[]} [options.cssClasses.separator] CSS class to add to the separator of the form
- * @param  {string|string[]} [options.cssClasses.button] CSS class to add to the submit button of the form
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
+const renderer = ({
+  containerNode,
+  templates,
+  renderState,
+  collapsible,
+  cssClasses,
+  labels,
+  currency,
+  autoHideContainer,
+}) => ({
+  refine,
+  items,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && items.length === 0;
+
+  ReactDOM.render(
+    <PriceRanges
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      currency={currency}
+      facetValues={items}
+      labels={labels}
+      refine={refine}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 priceRanges({
   container,
@@ -56,27 +65,86 @@ priceRanges({
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
-function priceRanges({
-    container,
-    attributeName,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    labels: userLabels = {},
-    currency: userCurrency = '$',
-    autoHideContainer = true,
-  } = {}) {
-  let currency = userCurrency;
 
-  if (!container || !attributeName) {
+/**
+ * @typedef {Object} PriceRangeClasses
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [header] CSS class to add to the header element.
+ * @property  {string|string[]} [body] CSS class to add to the body element.
+ * @property  {string|string[]} [list] CSS class to add to the wrapping list element.
+ * @property  {string|string[]} [item] CSS class to add to each item element.
+ * @property  {string|string[]} [active] CSS class to add to the active item element.
+ * @property  {string|string[]} [link] CSS class to add to each link element.
+ * @property  {string|string[]} [form] CSS class to add to the form element.
+ * @property  {string|string[]} [label] CSS class to add to each wrapping label of the form.
+ * @property  {string|string[]} [input] CSS class to add to each input of the form.
+ * @property  {string|string[]} [currency] CSS class to add to each currency element of the form.
+ * @property  {string|string[]} [separator] CSS class to add to the separator of the form.
+ * @property  {string|string[]} [button] CSS class to add to the submit button of the form.
+ * @property  {string|string[]} [footer] CSS class to add to the footer element.
+ */
+
+/**
+ * @typedef {Object} PriceRangeLabels
+ * @property  {string} [separator] Separator label, between min and max.
+ * @property  {string} [button] Button label.
+ */
+
+/**
+ * @typedef {Object} PriceRangeTemplates
+ * @property  {string|function({from: number, to: number, currency: string})} [item] Item template. Template data: `from`, `to` and `currency`
+ */
+
+/**
+ * @typedef {Object} PriceRangeWidgetOptions
+ * @property  {string|HTMLElement} container Valid CSS Selector as a string or DOMElement.
+ * @property  {string} attributeName Name of the attribute for faceting.
+ * @property  {PriceRangeTemplates} [templates] Templates to use for the widget.
+ * @property  {string} [currency='$'] The currency to display.
+ * @property  {PriceRangeLabels} [labels] Labels to use for the widget.
+ * @property  {boolean} [autoHideContainer=true] Hide the container when no refinements available.
+ * @property  {PriceRangeClasses} [cssClasses] CSS classes to add.
+ * @property  {boolean|{collapsed: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
+ */
+
+/**
+ * Price ranges widget let the user choose from of a set of predefined ranges. The ranges are
+ * displayed in a list.
+ *
+ * @type {WidgetFactory}
+ * @param {PriceRangeWidgetOptions} $0 The PriceRanges widget options.
+ * @return {Widget} A new instance of PriceRanges widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.priceRanges({
+ *     container: '#price-ranges',
+ *     attributeName: 'price',
+ *     labels: {
+ *       currency: '$',
+ *       separator: 'to',
+ *       button: 'Go'
+ *     },
+ *     templates: {
+ *       header: 'Price'
+ *     }
+ *   })
+ * );
+ */
+export default function priceRanges({
+  container,
+  attributeName,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  labels: userLabels = {},
+  currency: userCurrency = '$',
+  autoHideContainer = true,
+} = {}) {
+  if (!container) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
-  let PriceRanges = headerFooterHOC(PriceRangesComponent);
-  if (autoHideContainer === true) {
-    PriceRanges = autoHideContainerHOC(PriceRanges);
-  }
 
   const labels = {
     button: 'Go',
@@ -102,104 +170,25 @@ function priceRanges({
   };
 
   // before we had opts.currency, you had to pass labels.currency
-  if (userLabels.currency !== undefined && userLabels.currency !== currency) currency = userLabels.currency;
+  const currency = userLabels.currency !== undefined
+    ? userLabels.currency
+    : userCurrency;
 
-  return {
-    getConfiguration: () => ({
-      facets: [attributeName],
-    }),
+  const specializedRenderer = renderer({
+    containerNode,
+    templates,
+    renderState: {},
+    collapsible,
+    cssClasses,
+    labels,
+    currency,
+    autoHideContainer,
+  });
 
-    _generateRanges(results) {
-      const stats = results.getFacetStats(attributeName);
-      return generateRanges(stats);
-    },
-
-    _extractRefinedRange(helper) {
-      const refinements = helper.getRefinements(attributeName);
-      let from;
-      let to;
-
-      if (refinements.length === 0) {
-        return [];
-      }
-
-      refinements.forEach(v => {
-        if (v.operator.indexOf('>') !== -1) {
-          from = Math.floor(v.value[0]);
-        } else if (v.operator.indexOf('<') !== -1) {
-          to = Math.ceil(v.value[0]);
-        }
-      });
-      return [{from, to, isRefined: true}];
-    },
-
-    _refine(helper, from, to) {
-      const facetValues = this._extractRefinedRange(helper);
-
-      helper.clearRefinements(attributeName);
-      if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
-        if (typeof from !== 'undefined') {
-          helper.addNumericRefinement(attributeName, '>=', Math.floor(from));
-        }
-        if (typeof to !== 'undefined') {
-          helper.addNumericRefinement(attributeName, '<=', Math.ceil(to));
-        }
-      }
-
-      helper.search();
-    },
-
-    init({helper, templatesConfig}) {
-      this._refine = this._refine.bind(this, helper);
-      this._templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-    },
-
-    render({results, helper, state, createURL}) {
-      let facetValues;
-
-      if (results.hits.length > 0) {
-        facetValues = this._extractRefinedRange(helper);
-
-        if (facetValues.length === 0) {
-          facetValues = this._generateRanges(results);
-        }
-      } else {
-        facetValues = [];
-      }
-
-      facetValues.map(facetValue => {
-        let newState = state.clearRefinements(attributeName);
-        if (!facetValue.isRefined) {
-          if (facetValue.from !== undefined) {
-            newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(facetValue.from));
-          }
-          if (facetValue.to !== undefined) {
-            newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(facetValue.to));
-          }
-        }
-        facetValue.url = createURL(newState);
-        return facetValue;
-      });
-
-      ReactDOM.render(
-        <PriceRanges
-          collapsible={collapsible}
-          cssClasses={cssClasses}
-          currency={currency}
-          facetValues={facetValues}
-          labels={labels}
-          refine={this._refine}
-          shouldAutoHideContainer={facetValues.length === 0}
-          templateProps={this._templateProps}
-        />,
-        containerNode
-      );
-    },
-  };
+  try {
+    const makeWidget = connectPriceRanges(specializedRenderer);
+    return makeWidget({attributeName});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default priceRanges;

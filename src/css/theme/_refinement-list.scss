@@ -1,0 +1,31 @@
+.ais-refinement-list {
+  &--item {
+    @extend .ais-current-refined-values--item;
+    line-height: $font-size * 2;
+
+    &__active > div > .ais-refinement-list--label {
+      font-weight: bold;
+    }
+  }
+
+  &--label {
+    @extend .ais-current-refined-values--link;
+    cursor: pointer;
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 5px;
+    }
+  }
+
+  &--count {
+    @extend .ais-current-refined-values--count;
+  }
+
+  div > button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: $font-size - 1px;
+  }
+}

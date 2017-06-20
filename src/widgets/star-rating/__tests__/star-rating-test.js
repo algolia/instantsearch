@@ -1,16 +1,13 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
+import expect from 'expect';
 
 import jsHelper from 'algoliasearch-helper';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
-import defaultTemplates from '../defaultTemplates.js';
-import defaultLabels from '../defaultLabels.js';
+import defaultTemplates from '../../../widgets/star-rating/defaultTemplates.js';
+import defaultLabels from '../../../widgets/star-rating/defaultLabels.js';
 import starRating from '../star-rating.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
@@ -25,17 +22,11 @@ describe('starRating()', () => {
   let state;
   let createURL;
 
-  let autoHideContainer;
-  let headerFooter;
   let results;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     starRating.__Rewire__('ReactDOM', ReactDOM);
-    autoHideContainer = sinon.stub().returns(RefinementList);
-    starRating.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returns(RefinementList);
-    starRating.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
     widget = starRating({container, attributeName: 'anAttrName', cssClasses: {body: ['body', 'cx']}});
@@ -54,7 +45,7 @@ describe('starRating()', () => {
       hits: [],
     };
     createURL = () => '#';
-    widget.init({helper});
+    widget.init({helper, instantSearchInstance: {templatesConfig: undefined}});
   });
 
   it('configures the underlying disjunctive facet', () => {
@@ -83,10 +74,22 @@ describe('starRating()', () => {
       collapsible: false,
       createURL: () => {},
       facetValues: [
-        {isRefined: false, stars: [true, true, true, true, false], count: 0, name: '4', labels: defaultLabels},
-        {isRefined: false, stars: [true, true, true, false, false], count: 0, name: '3', labels: defaultLabels},
-        {isRefined: false, stars: [true, true, false, false, false], count: 0, name: '2', labels: defaultLabels},
-        {isRefined: false, stars: [true, false, false, false, false], count: 0, name: '1', labels: defaultLabels},
+        {
+          isRefined: false, stars: [true, true, true, true, false],
+          count: 0, name: '4', value: '4', labels: defaultLabels,
+        },
+        {
+          isRefined: false, stars: [true, true, true, false, false],
+          count: 0, name: '3', value: '3', labels: defaultLabels,
+        },
+        {
+          isRefined: false, stars: [true, true, false, false, false],
+          count: 0, name: '2', value: '2', labels: defaultLabels,
+        },
+        {
+          isRefined: false, stars: [true, false, false, false, false],
+          count: 0, name: '1', value: '1', labels: defaultLabels,
+        },
       ],
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
@@ -102,9 +105,7 @@ describe('starRating()', () => {
       },
     };
 
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+    expect(ReactDOM.render.callCount).toBe(2);
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
@@ -115,12 +116,13 @@ describe('starRating()', () => {
     helper.getRefinements = sinon.stub().returns([{value: '1'}]);
     results.getFacetValues = sinon.stub().returns([{name: '1', count: 42}]);
     widget.render({state, helper, results, createURL});
-    expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+    expect(ReactDOM.render.callCount).toBe(1);
     expect(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([
       {
         count: 42,
         isRefined: true,
         name: '1',
+        value: '1',
         stars: [true, false, false, false, false],
         labels: defaultLabels,
       },
@@ -171,6 +173,9 @@ describe('starRating()', () => {
       state: _helper.state,
       createURL: () => '#',
       onHistoryChange: () => {},
+      instantSearchInstance: {
+        templatesConfig: {},
+      },
     });
 
     _widget.render({
@@ -182,27 +187,30 @@ describe('starRating()', () => {
       state: _helper.state,
       helper: _helper,
       createURL: () => '#',
+      instantSearchInstance: {
+        templatesConfig: {},
+      },
     });
 
     expect(ReactDOM.render.lastCall.args[0].props.facetValues).toEqual([
       {
         count: 1000, isRefined: false,
-        labels: {andUp: '& Up'}, name: '4',
+        labels: {andUp: '& Up'}, name: '4', value: '4',
         stars: [true, true, true, true, false],
       },
       {
         count: 1050, isRefined: false,
-        labels: {andUp: '& Up'}, name: '3',
+        labels: {andUp: '& Up'}, name: '3', value: '3',
         stars: [true, true, true, false, false],
       },
       {
         count: 1070, isRefined: false,
-        labels: {andUp: '& Up'}, name: '2',
+        labels: {andUp: '& Up'}, name: '2', value: '2',
         stars: [true, true, false, false, false],
       },
       {
         count: 1080, isRefined: false,
-        labels: {andUp: '& Up'}, name: '1',
+        labels: {andUp: '& Up'}, name: '1', value: '1',
         stars: [true, false, false, false, false],
       },
     ]);

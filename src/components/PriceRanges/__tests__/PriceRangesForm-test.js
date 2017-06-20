@@ -1,32 +1,14 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 import sinon from 'sinon';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-
 import PriceRangesForm from '../PriceRangesForm';
+import renderer from 'react-test-renderer';
 
 describe('PriceRangesForm', () => {
-  let renderer;
-  beforeEach(() => {
-    const {createRenderer} = TestUtils;
-    renderer = createRenderer();
-  });
-
-  function render(extraProps = {}) {
-    const props = {
-      ...extraProps,
-    };
-    renderer.render(<PriceRangesForm {...props} />);
-    return renderer.getRenderOutput();
-  }
-
-  context('display', () => {
+  describe('display', () => {
     it('should pass all css classes and labels', () => {
-      const out = render({
+      const props = {
+        refine() {},
         labels: {
           currency: '$',
           separator: 'to',
@@ -44,25 +26,16 @@ describe('PriceRangesForm', () => {
           from: 10,
           to: 20,
         },
-      });
-      expect(out).toEqualJSX(
-        <form className="form" onSubmit={() => {}} ref="form">
-          <label className="label">
-            <span className="currency">$ </span>
-            <input className="input" onChange={() => {}} ref="from" type="number" value={10} />
-          </label>
-          <span className="separator"> to </span>
-          <label className="label">
-            <span className="currency">$ </span>
-            <input className="input" onChange={() => {}} ref="to" type="number" value={20} />
-          </label>
-          <button className="button" type="submit">Go</button>
-        </form>
-      );
+      };
+
+      const tree = renderer.create(
+        <PriceRangesForm {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
   });
 
-  context('submit', () => {
+  describe('submit', () => {
     it('starts a refine on submit', () => {
       // Given
       const refine = sinon.spy();

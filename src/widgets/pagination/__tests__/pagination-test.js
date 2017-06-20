@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
@@ -24,7 +22,6 @@ describe('pagination()', () => {
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     pagination.__Rewire__('ReactDOM', ReactDOM);
-    pagination.__Rewire__('autoHideContainerHOC', sinon.stub().returns(Pagination));
 
     container = document.createElement('div');
     cssClasses = {
@@ -42,8 +39,9 @@ describe('pagination()', () => {
     widget = pagination({container, scrollTo: false, cssClasses});
     results = {hits: [{first: 'hit', second: 'hit'}], nbHits: 200, hitsPerPage: 10, nbPages: 20};
     helper = {
-      setCurrentPage: sinon.spy(),
+      setPage: sinon.spy(),
       search: sinon.spy(),
+      getPage: () => 0,
     };
     widget.init({helper});
   });
@@ -53,14 +51,14 @@ describe('pagination()', () => {
   });
 
   it('sets the page', () => {
-    widget.setCurrentPage(helper, 42);
-    expect(helper.setCurrentPage.calledOnce).toBe(true);
+    widget.refine(helper, 42);
+    expect(helper.setPage.calledOnce).toBe(true);
     expect(helper.search.calledOnce).toBe(true);
   });
 
   it('calls twice ReactDOM.render(<Pagination props />, container)', () => {
-    widget.render({results, helper});
-    widget.render({results, helper});
+    widget.render({results, helper, state: {page: 0}});
+    widget.render({results, helper, state: {page: 0}});
 
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Pagination {...getProps()} />);
@@ -69,7 +67,7 @@ describe('pagination()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
-  context('mocking getContainerNode', () => {
+  describe('mocking getContainerNode', () => {
     let scrollIntoView;
 
     beforeEach(() => {
@@ -83,14 +81,16 @@ describe('pagination()', () => {
     it('should not scroll', () => {
       widget = pagination({container, scrollTo: false});
       widget.init({helper});
-      widget.setCurrentPage(helper, 2);
+      widget.refine(helper, 2);
       expect(scrollIntoView.calledOnce).toBe(false, 'scrollIntoView never called');
     });
 
     it('should scroll to body', () => {
       widget = pagination({container});
       widget.init({helper});
-      widget.setCurrentPage(helper, 2);
+      widget.render({results, helper, state: {page: 0}});
+      const {props: {setCurrentPage}} = ReactDOM.render.firstCall.args[0];
+      setCurrentPage(2);
       expect(scrollIntoView.calledOnce).toBe(true, 'scrollIntoView called once');
     });
 
@@ -142,7 +142,6 @@ describe('pagination MaxPage', () => {
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     pagination.__Rewire__('ReactDOM', ReactDOM);
-    pagination.__Rewire__('autoHideContainerHOC', sinon.stub().returns(Pagination));
 
     container = document.createElement('div');
     cssClasses = {

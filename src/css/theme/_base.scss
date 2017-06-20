@@ -1,0 +1,24 @@
+@import 'variables';
+@import 'clear-all';
+@import 'current-refined-values';
+@import 'hierarchical-menu';
+@import 'hits-per-page';
+@import 'menu';
+@import 'refinement-list';
+@import 'numeric-selector';
+@import 'pagination';
+@import 'price-ranges';
+@import 'range-slider';
+@import 'search-box';
+@import 'sort-by-selector';
+@import 'star-rating';
+@import 'stats';
+@import 'toggle';
+
+.ais-header {
+  border-bottom: 2px solid #eee;
+  font-size: .8em;
+  margin: 0 0 6px;
+  padding: 0 0 6px;
+  text-transform: uppercase;
+}

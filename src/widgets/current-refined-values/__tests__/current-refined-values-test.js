@@ -1,7 +1,3 @@
-/* eslint-env mocha */
-
-import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
@@ -9,13 +5,10 @@ import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import {prepareTemplateProps} from '../../../lib/utils';
 import currentRefinedValues from '../current-refined-values';
-import CurrentRefinedValues from '../../../components/CurrentRefinedValues/CurrentRefinedValues';
 import defaultTemplates from '../defaultTemplates';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 
 describe('currentRefinedValues()', () => {
-  context('types checking', () => {
+  describe('types checking', () => {
     let boundWidget;
     let parameters;
 
@@ -35,18 +28,18 @@ describe('currentRefinedValues()', () => {
       boundWidget = currentRefinedValues.bind(null, parameters);
     });
 
-    context('options.container', () => {
+    describe('options.container', () => {
       it('doesn\'t throw usage with a string', () => {
         const element = document.createElement('div');
         element.id = 'testid2';
         document.body.appendChild(element);
         parameters.container = '#testid2';
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
-      it('doesn\'t throw usage with a DOMElement', () => {
+      it('doesn\'t throw usage with a HTMLElement', () => {
         parameters.container = document.createElement('div');
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('throws usage if not defined', () => {
@@ -54,21 +47,21 @@ describe('currentRefinedValues()', () => {
         expect(boundWidget).toThrow(/Usage/);
       });
 
-      it('throws usage with another type than string or DOMElement', () => {
+      it('throws usage with another type than string or HTMLElement', () => {
         parameters.container = true;
         expect(boundWidget).toThrow(/Usage/);
       });
     });
 
-    context('options.attributes', () => {
+    describe('options.attributes', () => {
       it('doesn\'t throw usage if not defined', () => {
         delete parameters.attributes;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage if attributes is an empty array', () => {
         parameters.attributes = [];
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with name, label, template and transformData', () => {
@@ -86,12 +79,12 @@ describe('currentRefinedValues()', () => {
             transformData: data => { data.name = 'newname'; return data; },
           },
         ];
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with a function template', () => {
         parameters.attributes = [{name: 'attr1'}, {name: 'attr2', template: () => 'CUSTOM TEMPLATE'}];
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('throws usage if attributes isn\'t an array', () => {
@@ -130,20 +123,20 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    context('options.onlyListedAttributes', () => {
+    describe('options.onlyListedAttributes', () => {
       it('doesn\'t throw usage if not defined', () => {
         delete parameters.onlyListedAttributes;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage if true', () => {
         parameters.onlyListedAttributes = true;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage if false', () => {
         parameters.onlyListedAttributes = false;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('throws usage if not boolean', () => {
@@ -152,25 +145,25 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    context('options.clearAll', () => {
+    describe('options.clearAll', () => {
       it('doesn\'t throw usage if not defined', () => {
         delete parameters.clearAll;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage if false', () => {
         parameters.clearAll = false;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage if \'before\'', () => {
         parameters.clearAll = 'before';
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage if \'after\'', () => {
         parameters.clearAll = 'after';
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('throws usage if not one of [false, \'before\', \'after\']', () => {
@@ -179,29 +172,29 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    context('options.templates', () => {
+    describe('options.templates', () => {
       it('doesn\'t throw usage if not defined', () => {
         delete parameters.templates;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with an empty object', () => {
         parameters.templates = {};
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with a string template', () => {
         parameters.templates = {
           item: 'STRING TEMPLATE',
         };
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with a function template', () => {
         parameters.templates = {
           item: () => 'ITEM TEMPLATE',
         };
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with all keys', () => {
@@ -211,7 +204,7 @@ describe('currentRefinedValues()', () => {
           clearAll: 'CLEAR ALL TEMPLATE',
           footer: 'FOOTER TEMPLATE',
         };
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('throws usage with template being something else than an object', () => {
@@ -235,22 +228,22 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    context('options.transformData', () => {
+    describe('options.transformData', () => {
       it('doesn\'t throw usage if not defined', () => {
         delete parameters.transformData;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with a function', () => {
         parameters.transformData = data => data;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with an object of functions', () => {
         parameters.transformData = {
           item: data => data,
         };
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('throws usage if not a function', () => {
@@ -259,20 +252,20 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    context('options.autoHideContainer', () => {
+    describe('options.autoHideContainer', () => {
       it('doesn\'t throw usage if not defined', () => {
         delete parameters.autoHideContainer;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with true', () => {
         parameters.autoHideContainer = true;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with false', () => {
         parameters.autoHideContainer = false;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('throws usage if not boolean', () => {
@@ -281,22 +274,22 @@ describe('currentRefinedValues()', () => {
       });
     });
 
-    context('options.cssClasses', () => {
+    describe('options.cssClasses', () => {
       it('doesn\'t throw usage if not defined', () => {
         delete parameters.cssClasses;
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with an empty object', () => {
         parameters.cssClasses = {};
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with string class', () => {
         parameters.cssClasses = {
           item: 'item-class',
         };
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('doesn\'t throw usage with all keys', () => {
@@ -311,7 +304,7 @@ describe('currentRefinedValues()', () => {
           count: 'count-class',
           footer: 'footer-class',
         };
-        expect(boundWidget).toNotThrow();
+        expect(boundWidget).not.toThrow();
       });
 
       it('throws usage with cssClasses being something else than an object', () => {
@@ -335,7 +328,7 @@ describe('currentRefinedValues()', () => {
     });
   });
 
-  context('getConfiguration()', () => {
+  describe('getConfiguration()', () => {
     it('configures nothing', () => {
       const widget = currentRefinedValues({
         container: document.createElement('div'),
@@ -344,14 +337,13 @@ describe('currentRefinedValues()', () => {
     });
   });
 
-  context('render()', () => {
+  describe('render()', () => {
     let ReactDOM;
-    let autoHideContainerHOC;
-    let headerFooterHOC;
 
     let parameters;
     let client;
     let helper;
+    let initParameters;
     let renderParameters;
     let refinements;
     let expectedProps;
@@ -365,10 +357,6 @@ describe('currentRefinedValues()', () => {
     beforeEach(() => {
       ReactDOM = {render: sinon.spy()};
       currentRefinedValues.__Rewire__('ReactDOM', ReactDOM);
-      autoHideContainerHOC = sinon.stub().returns(CurrentRefinedValues);
-      currentRefinedValues.__Rewire__('autoHideContainerHOC', autoHideContainerHOC);
-      headerFooterHOC = sinon.stub().returns(CurrentRefinedValues);
-      currentRefinedValues.__Rewire__('headerFooterHOC', headerFooterHOC);
 
       parameters = {
         container: document.createElement('div'),
@@ -428,6 +416,14 @@ describe('currentRefinedValues()', () => {
         .addNumericRefinement('numericDisjunctiveFacet', '<=', 4)
         .toggleTag('tag1')
         .toggleTag('tag2');
+
+      initParameters = {
+        helper,
+        createURL: () => '',
+        instantSearchInstance: {
+          templatesConfig: {randomAttributeNeverUsed: 'value'},
+        },
+      };
 
       renderParameters = {
         results: {
@@ -541,18 +537,18 @@ describe('currentRefinedValues()', () => {
 
     it('should render twice <CurrentRefinedValues ... />', () => {
       const widget = currentRefinedValues(parameters);
-      widget.init({helper});
+      widget.init(initParameters);
       widget.render(renderParameters);
       widget.render(renderParameters);
 
-      expect(ReactDOM.render.calledTwice).toBe(true);
-      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+      expect(ReactDOM.render.callCount).toBe(2);
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       expect(ReactDOM.render.firstCall.args[1]).toBe(parameters.container);
-      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+      expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       expect(ReactDOM.render.secondCall.args[1]).toBe(parameters.container);
     });
 
-    context('options.container', () => {
+    describe('options.container', () => {
       it('should render with a string container', () => {
         const element = document.createElement('div');
         element.id = 'testid';
@@ -561,29 +557,29 @@ describe('currentRefinedValues()', () => {
         parameters.container = '#testid';
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         expect(ReactDOM.render.firstCall.args[1]).toBe(element);
       });
 
-      it('should render with a DOMElement container', () => {
+      it('should render with a HTMLElement container', () => {
         const element = document.createElement('div');
 
         parameters.container = element;
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         expect(ReactDOM.render.firstCall.args[1]).toBe(element);
       });
     });
 
-    context('options.attributes', () => {
-      context('with options.onlyListedAttributes === true', () => {
+    describe('options.attributes', () => {
+      describe('with options.onlyListedAttributes === true', () => {
         beforeEach(() => {
           parameters.onlyListedAttributes = true;
         });
@@ -601,14 +597,14 @@ describe('currentRefinedValues()', () => {
             );
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
 
         it('should render all attributes with an empty array', () => {
@@ -623,14 +619,14 @@ describe('currentRefinedValues()', () => {
           });
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
 
         it('should render and pass all attributes defined in each objects', () => {
@@ -649,7 +645,7 @@ describe('currentRefinedValues()', () => {
           );
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
@@ -668,11 +664,11 @@ describe('currentRefinedValues()', () => {
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
       });
 
-      context('with options.onlyListedAttributes === false', () => {
+      describe('with options.onlyListedAttributes === false', () => {
         beforeEach(() => {
           parameters.onlyListedAttributes = false;
         });
@@ -689,14 +685,14 @@ describe('currentRefinedValues()', () => {
           });
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
 
         it('should render all attributes with an empty array', () => {
@@ -711,14 +707,14 @@ describe('currentRefinedValues()', () => {
           });
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
 
         it('should render and pass all attributes defined in each objects', () => {
@@ -748,7 +744,7 @@ describe('currentRefinedValues()', () => {
           refinements = [].concat(firstRefinements).concat(otherRefinements);
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
@@ -767,11 +763,11 @@ describe('currentRefinedValues()', () => {
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
       });
 
-      context('with options.onlyListedAttributes not defined', () => {
+      describe('with options.onlyListedAttributes not defined', () => {
         beforeEach(() => {
           delete parameters.onlyListedAttributes;
         });
@@ -803,7 +799,7 @@ describe('currentRefinedValues()', () => {
           refinements = [].concat(firstRefinements).concat(otherRefinements);
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
@@ -822,43 +818,43 @@ describe('currentRefinedValues()', () => {
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
       });
     });
 
-    context('options.clearAll', () => {
+    describe('options.clearAll', () => {
       it('should pass it as clearAllPosition', () => {
         parameters.clearAll = 'before';
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.clearAllPosition = 'before';
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       });
     });
 
-    context('options.templates', () => {
+    describe('options.templates', () => {
       it('should pass it in templateProps', () => {
         parameters.templates.item = 'MY CUSTOM TEMPLATE';
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.templateProps.templates.item = 'MY CUSTOM TEMPLATE';
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       });
     });
 
-    context('options.autoHideContainer', () => {
-      context('without refinements', () => {
+    describe('options.autoHideContainer', () => {
+      describe('without refinements', () => {
         beforeEach(() => {
           helper.clearRefinements().clearTags();
           renderParameters.state = helper.state;
@@ -873,84 +869,86 @@ describe('currentRefinedValues()', () => {
           parameters.autoHideContainer = true;
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
-        });
-
-        it('shouldAutoHideContainer should be true with autoHideContainer = false', () => {
-          parameters.autoHideContainer = false;
-
-          const widget = currentRefinedValues(parameters);
-          widget.init({helper});        // eslint-disable-next-line max-len
-
-          widget.render(renderParameters);
-
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
-        });
-      });
-
-      context('with refinements', () => {
-        it('shouldAutoHideContainer should be false with autoHideContainer = true', () => {
-          parameters.autoHideContainer = true;
-
-          const widget = currentRefinedValues(parameters);
-          widget.init({helper});
-          widget.render(renderParameters);
-
-          expectedProps.shouldAutoHideContainer = false;
-
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
 
         it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
           parameters.autoHideContainer = false;
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);        // eslint-disable-next-line max-len
+
           widget.render(renderParameters);
 
           expectedProps.shouldAutoHideContainer = false;
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        });
+      });
+
+      describe('with refinements', () => {
+        it('shouldAutoHideContainer should be false with autoHideContainer = true', () => {
+          parameters.autoHideContainer = true;
+
+          const widget = currentRefinedValues(parameters);
+          widget.init(initParameters);
+          widget.render(renderParameters);
+
+          expectedProps.shouldAutoHideContainer = false;
+
+          expect(ReactDOM.render.calledOnce).toBe(true);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        });
+
+        it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
+          parameters.autoHideContainer = false;
+
+          const widget = currentRefinedValues(parameters);
+          widget.init(initParameters);
+          widget.render(renderParameters);
+
+          expectedProps.shouldAutoHideContainer = false;
+
+          expect(ReactDOM.render.calledOnce).toBe(true);
+          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         });
       });
     });
 
-    context('options.cssClasses', () => {
+    describe('options.cssClasses', () => {
       it('should be passed in the cssClasses', () => {
         parameters.cssClasses.body = 'custom-passed-body';
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.cssClasses.body = 'ais-current-refined-values--body custom-passed-body';
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       });
 
       it('should work with an array', () => {
         parameters.cssClasses.body = ['custom-body', 'custom-body-2'];
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.cssClasses.body = 'ais-current-refined-values--body custom-body custom-body-2';
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       });
     });
 
-    context('with attributes', () => {
+    describe('with attributes', () => {
       it('should sort the refinements according to their order', () => {
         parameters.attributes = [{name: 'disjunctiveFacet'}, {name: 'facetExclude'}];
         parameters.onlyListedAttributes = false;
@@ -970,7 +968,7 @@ describe('currentRefinedValues()', () => {
         refinements = [].concat(firstRefinements).concat(secondRefinements).concat(otherRefinements);
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         setRefinementsInExpectedProps();
@@ -980,14 +978,12 @@ describe('currentRefinedValues()', () => {
         };
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       });
     });
 
     afterEach(() => {
       currentRefinedValues.__ResetDependency__('ReactDOM');
-      currentRefinedValues.__ResetDependency__('autoHideContainerHOC');
-      currentRefinedValues.__ResetDependency__('headerFooterHOC');
     });
   });
 });

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Template from '../Template.js';
@@ -5,7 +6,10 @@ import PriceRangesForm from './PriceRangesForm.js';
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
 
-class PriceRanges extends React.Component {
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
+
+export class RawPriceRanges extends React.Component {
   componentWillMount() {
     this.refine = this.refine.bind(this);
   }
@@ -46,7 +50,7 @@ class PriceRanges extends React.Component {
       {[this.props.cssClasses.active]: facetValue.isRefined}
     );
     const key = `${facetValue.from}_${facetValue.to}`;
-    const handleClick = this.refine.bind(this, facetValue.from, facetValue.to);
+    const handleClick = this.refine.bind(this, facetValue);
     const data = {
       currency: this.props.currency,
       ...facetValue,
@@ -64,9 +68,9 @@ class PriceRanges extends React.Component {
     );
   }
 
-  refine(from, to, event) {
+  refine(range, event) {
     event.preventDefault();
-    this.props.refine(from, to);
+    this.props.refine(range);
   }
 
   render() {
@@ -81,30 +85,30 @@ class PriceRanges extends React.Component {
   }
 }
 
-PriceRanges.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    active: React.PropTypes.string,
-    button: React.PropTypes.string,
-    form: React.PropTypes.string,
-    input: React.PropTypes.string,
-    item: React.PropTypes.string,
-    label: React.PropTypes.string,
-    link: React.PropTypes.string,
-    list: React.PropTypes.string,
-    separator: React.PropTypes.string,
+RawPriceRanges.propTypes = {
+  cssClasses: PropTypes.shape({
+    active: PropTypes.string,
+    button: PropTypes.string,
+    form: PropTypes.string,
+    input: PropTypes.string,
+    item: PropTypes.string,
+    label: PropTypes.string,
+    link: PropTypes.string,
+    list: PropTypes.string,
+    separator: PropTypes.string,
   }),
-  currency: React.PropTypes.string,
-  facetValues: React.PropTypes.array,
-  labels: React.PropTypes.shape({
-    button: React.PropTypes.string,
-    to: React.PropTypes.string,
+  currency: PropTypes.string,
+  facetValues: PropTypes.array,
+  labels: PropTypes.shape({
+    button: PropTypes.string,
+    to: PropTypes.string,
   }),
-  refine: React.PropTypes.func.isRequired,
-  templateProps: React.PropTypes.object.isRequired,
+  refine: PropTypes.func.isRequired,
+  templateProps: PropTypes.object.isRequired,
 };
 
-PriceRanges.defaultProps = {
+RawPriceRanges.defaultProps = {
   cssClasses: {},
 };
 
-export default PriceRanges;
+export default autoHideContainerHOC(headerFooterHOC(RawPriceRanges));

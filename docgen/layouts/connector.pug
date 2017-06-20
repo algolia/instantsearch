@@ -1,0 +1,33 @@
+extends archetypes/content-with-menu.pug
+
+include mixins/nav.pug
+
+include mixins/documentationjs/description.pug
+include mixins/documentationjs/type.pug
+include mixins/documentationjs/struct.pug
+include mixins/documentationjs/connector-usage.pug
+
+block navigation
+  +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
+
+block content
+  h2#description Description
+    a.anchor(href=`${navPath}#description`)
+  p
+    +description(jsdoc.description)
+    
+  h2#usage Usage
+  +connectorUsage(jsdoc)
+  
+  h2#structure Connector options
+    a.anchor(href=`${navPath}#return`)
+  each t in jsdoc.relatedTypes
+    if t
+      +struct(t)
+
+  if jsdoc.examples
+    script(src="//code.jquery.com/jquery-3.2.1.slim.min.js")
+    h2#example Example
+      a.anchor(href=`${navPath}#example`)
+    each example in jsdoc.examples
+      p!=h.highlight(example.description)

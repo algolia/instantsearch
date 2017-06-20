@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="95px" height="95px" viewBox="0 0 95 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-search</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="42.966%" y1="14.059%" x2="85.153%" y2="110.153%" id="linearGradient-1">
+            <stop stop-color="#2CA5C3" offset="0%"></stop>
+            <stop stop-color="#136B90" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="10.934%" y1="-27.347%" x2="73.434%" y2="79.684%" id="linearGradient-2">
+            <stop stop-color="#2EDE98" offset="0%"></stop>
+            <stop stop-color="#1CC7D0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-search" fill-rule="nonzero">
+            <g transform="translate(16.000000, 13.000000)" id="icon-widget-searchbox">
+                <g>
+                    <g id="Group">
+                        <g id="Rectangle-path">
+                            <rect fill="url(#linearGradient-1)" x="0" y="5" width="64" height="64" rx="4"></rect>
+                            <rect fill="url(#linearGradient-2)" x="0" y="0" width="64" height="64" rx="4"></rect>
+                        </g>
+                        <path d="M40.92,41.936 C40.992,41.526 40.893,41.096 40.665,40.77 L37.26,35.9 C38.486,34.66 39.303,33.06 39.606,31.347 C40.436,26.651 37.309,22.177 32.618,21.349 C27.928,20.519 23.456,23.649 22.628,28.346 C21.798,33.041 24.924,37.516 29.615,38.343 C31.328,38.646 33.108,38.425 34.691,37.697 L38.101,42.555 C38.326,42.893 38.695,43.133 39.105,43.205 C39.949,43.355 40.772,42.778 40.921,41.933 L40.92,41.936 Z M36.52,30.802 C35.992,33.782 33.14,35.782 30.16,35.255 C27.182,34.729 25.187,31.875 25.714,28.893 C26.241,25.911 29.094,23.913 32.072,24.439 C35.05,24.963 37.046,27.819 36.519,30.799 L36.52,30.802 Z" id="Shape" fill="#FFFFFF"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

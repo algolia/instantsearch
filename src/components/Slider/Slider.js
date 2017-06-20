@@ -1,89 +1,124 @@
-import React from 'react';
-import omit from 'lodash/omit';
+import times from 'lodash/times';
+import range from 'lodash/range';
+import has from 'lodash/has';
 
-import Nouislider from 'react-nouislider';
+import PropTypes from 'prop-types';
 
-const cssPrefix = 'ais-range-slider--';
+import React, {Component} from 'react';
+import Rheostat from 'rheostat';
+import cx from 'classnames';
 
-import isEqual from 'lodash/isEqual';
+import Pit from './Pit.js';
 
-class Slider extends React.Component {
-  componentWillMount() {
-    this.handleChange = this.handleChange.bind(this);
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
+
+class Slider extends Component {
+
+  static propTypes = {
+    refine: PropTypes.func.isRequired,
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+    values: PropTypes.arrayOf(PropTypes.number).isRequired,
+    pips: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.object,
+    ]),
+    step: PropTypes.number.isRequired,
+    tooltips: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.shape({format: PropTypes.func.isRequired}),
+    ]),
   }
 
-  shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props.range, nextProps.range) ||
-      !isEqual(this.props.start, nextProps.start);
+  get isDisabled() {
+    return this.props.min === this.props.max;
   }
 
-  // we are only interested in rawValues
-  handleChange(formattedValues, handleId, rawValues) {
-    this.props.onChange(rawValues);
+  handleChange = ({min, max, values}) => {
+    // when Slider is disabled, we alter `min, max` values
+    // in order to render a "disabled state" Slider. Since we alter
+    // theses values, Rheostat trigger a "change" event which trigger a new
+    // search to Algolia with wrong values.
+    if (!this.isDisabled) {
+      const {refine} = this.props;
+      refine([
+        min === values[0] ? undefined : values[0],
+        max === values[1] ? undefined : values[1],
+      ]);
+    }
+  }
+
+  // creates an array number where to display a pit point on the slider
+  computeDefaultPitPoints({min, max}) {
+    const totalLength = max - min;
+    const steps = 34;
+    const stepsLength = totalLength / steps;
+
+    const pitPoints = [min, ...times(steps - 1, step => min + stepsLength * (step + 1)), max]
+      // bug with `key={ 0 }` and preact, see https://github.com/developit/preact/issues/642
+      .map(pitPoint => pitPoint === 0 ? 0.000001 : pitPoint);
+
+    return pitPoints;
+  }
+
+  // creates an array of values where the slider should snap to
+  computeSnapPoints({min, max, step}) {
+    return [...range(min, max, step), max];
+  }
+
+  createHandleComponent = tooltips => props => {
+    // display only two decimals after comma,
+    // and apply `tooltips.format()` if any`
+    const roundedValue = Math.round(parseFloat(props['aria-valuenow']) * 100) / 100;
+    const value = has(tooltips, 'format')
+      ? tooltips.format(roundedValue)
+      : roundedValue;
+
+    const className = cx('ais-range-slider--handle', props.className, {
+      'ais-range-slider--handle-lower': props['data-handle-key'] === 0,
+      'ais-range-slider--handle-upper': props['data-handle-key'] === 1,
+    });
+
+    return (
+      <div {...props} className={ className }>
+        { tooltips
+            ? <div className="ais-range-slider--tooltip">{value}</div>
+            : null }
+      </div>
+    );
   }
 
   render() {
-    // display a `disabled` state of the `NoUiSlider` when range.min === range.max
-    const {range: {min, max}} = this.props;
-    const isDisabled = min === max;
+    const {tooltips, step, pips, values} = this.props;
 
-    // when range.min === range.max, we only want to add a little more to the max
-    // to display the same value in the UI, but the `NoUiSlider` wont
-    // throw an error since they are not the same value.
-    const range = isDisabled
-      ? {min, max: min + 0.0001}
-      : {min, max};
+    const {min, max} = this.isDisabled
+      ? {min: this.props.min, max: this.props.max + 0.001}
+      : this.props;
 
-    // setup pips
-    let pips;
-    if (this.props.pips === false) {
-      pips = undefined;
-    } else if (this.props.pips === true || typeof this.props.pips === 'undefined') {
-      pips = {
-        mode: 'positions',
-        density: 3,
-        values: [0, 50, 100],
-        stepped: true,
-      };
-    } else {
-      pips = this.props.pips;
-    }
+    const snapPoints = this.computeSnapPoints({min, max, step});
+    const pitPoints = pips === true || pips === undefined || pips === false
+      ? this.computeDefaultPitPoints({min, max})
+      : pips;
 
     return (
-      <Nouislider
-        // NoUiSlider also accepts a cssClasses prop, but we don't want to
-        // provide one.
-        {...omit(this.props, ['cssClasses', 'range'])}
-        animate={false}
-        behaviour={'snap'}
-        connect
-        cssPrefix={cssPrefix}
-        onChange={this.handleChange}
-        range={range}
-        disabled={isDisabled}
-        pips={pips}
-      />
+      <div className={ this.isDisabled ? 'ais-range-slider--disabled' : '' }>
+        <Rheostat
+          handle={ this.createHandleComponent(tooltips) }
+          onChange={ this.handleChange }
+          min={ min }
+          max={ max }
+          pitComponent={ Pit }
+          pitPoints={ pitPoints }
+          snap={ true }
+          snapPoints={ snapPoints }
+          values={ this.isDisabled ? [min, max] : values }
+          disabled={ this.isDisabled }
+        />
+      </div>
     );
   }
+
 }
 
-Slider.propTypes = {
-  onChange: React.PropTypes.func,
-  onSlide: React.PropTypes.func,
-  pips: React.PropTypes.oneOfType([
-    React.PropTypes.bool,
-    React.PropTypes.object,
-  ]),
-  range: React.PropTypes.object.isRequired,
-  start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-  tooltips: React.PropTypes.oneOfType([
-    React.PropTypes.bool,
-    React.PropTypes.arrayOf(
-      React.PropTypes.shape({
-        to: React.PropTypes.func,
-      })
-    ),
-  ]),
-};
-
-export default Slider;
+export default autoHideContainerHOC(headerFooterHOC(Slider));

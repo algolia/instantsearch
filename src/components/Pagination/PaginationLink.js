@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import isEqual from 'lodash/isEqual';
@@ -48,22 +49,22 @@ class PaginationLink extends React.Component {
 }
 
 PaginationLink.propTypes = {
-  ariaLabel: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
+  ariaLabel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
   ]).isRequired,
-  cssClasses: React.PropTypes.shape({
-    item: React.PropTypes.string,
-    link: React.PropTypes.string,
+  cssClasses: PropTypes.shape({
+    item: PropTypes.string,
+    link: PropTypes.string,
   }),
-  handleClick: React.PropTypes.func.isRequired,
-  isDisabled: React.PropTypes.bool,
-  label: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
+  handleClick: PropTypes.func.isRequired,
+  isDisabled: PropTypes.bool,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
   ]).isRequired,
-  pageNumber: React.PropTypes.number,
-  url: React.PropTypes.string,
+  pageNumber: PropTypes.number,
+  url: PropTypes.string,
 };
 
 export default PaginationLink;

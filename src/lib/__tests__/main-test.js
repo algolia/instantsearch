@@ -1,9 +1,6 @@
-/* eslint-env mocha */
-
-import expect from 'expect';
-
 import instantsearch from '../main.js';
 import forEach from 'lodash/forEach';
+import expect from 'expect';
 
 describe('instantsearch()', () => {
    // to ensure the global.window is set
@@ -24,6 +21,12 @@ describe('instantsearch()', () => {
   it('includes the widget functions', () => {
     forEach(instantsearch.widgets, widget => {
       expect(typeof widget).toEqual('function', 'A widget must be a function');
+    });
+  });
+
+  it('includes the connectors functions', () => {
+    forEach(instantsearch.connectors, connector => {
+      expect(typeof connector).toEqual('function', 'A connector must be a function');
     });
   });
 });

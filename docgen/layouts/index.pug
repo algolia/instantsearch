@@ -1,0 +1,105 @@
+extends archetypes/single-column.pug
+
+block content
+  section.is-section__intro
+    figure.section-illustration
+      img(src="assets/img/framed-example.png", width="100%", height="auto")
+
+    .container.text-center
+      h2.title.
+        There’s a widget for that
+      p.
+        Pick from an extensive library of widgets to power your search 
+        and build a state-of-the-art instant-search experience.
+
+  section.is-section__blocks
+    .spacer100
+    .container.flex-container
+      .flex-item-100.text-center
+        h2 More than widgets
+      .spacer100
+      .flex-item-60.text-center
+        img(src="assets/img/phone-build-3D.svg", class="illustration")
+
+      .flex-item-40
+        p.
+          Your code is easy to write and maintain. instantsearch.js provides the glue between the different parts of your search page. Everything is packaged in one library.
+
+      .spacer100
+
+      .flex-item-100.text-center
+        h2 Infinite possibilities
+        .spacer32
+        .flex-item-40
+          p.
+            Every website is different. The modular design of instantsearch.js allows you to configure, rearrange and combine the widgets to build your own experience.
+            
+    .spacer100
+
+  section.is-section__features
+    .spacer100.hidden-md-down
+    .container.flex-container
+      .flex-item-100.text-center
+        header
+          h2 Features
+
+      .spacer60
+
+      .flex-item-50.text-right
+        div.content-holder
+          header
+            h3 Synonyms and Typo Tolerance
+          p
+            | Native support for typing mistakes and synonyms so users can always find the most relevant results
+        div.image-holder.text-center
+          img(src="assets/img/typotolerant-icon.svg")
+
+      .flex-item-50
+        div.image-holder.text-center
+          img(src="assets/img/performance-icon.svg")
+        div.content-holder
+          header
+            h3 Lightning Fast Results
+          p
+            | Deliver instant results with a search bar and autocomplete that update with every keystroke.
+
+      .flex-item-50.text-right
+        div.content-holder
+          header
+            h3 Worldwide Hosting
+          p
+            | All queries are automatically routed to our closest server so results are fast no matter where users are.
+        div.image-holder.text-center
+          img(src="assets/img/worldwide-icon.svg")
+
+      .flex-item-50
+        div.image-holder.text-center
+          img(src="assets/img/worldmap-icon.svg")
+
+        div.content-holder
+          header
+            h3 Geo-Search
+          p
+            | Easily search addresses and show locations on a map that updates in real-time.
+            
+
+  section.pos-rel.h300.w100p.fl-left
+    .cta-free-trial
+      .container
+        .inner-container
+          .row
+            .spacer80
+            .col-md-6
+              h3 Get Started Today, For Free
+              p
+                | Don't wait! Try Algolia! No credit card required.
+                span.clearfix
+                |  Try Algolia for free for 14 days.
+            .col-md-6
+              .inline.spacer32
+              a.btn.btn-static-dark(href='https://algolia.com/users/sign_up')
+                | Start FREE Trial
+                i.icon.icon-arrow-right
+              .inline.spacer30
+              a.link(href='/schedule-demo') I’d rather schedule a demo with a Product Specialist
+            .spacer80.visible-md.visible-sm-visible-xs

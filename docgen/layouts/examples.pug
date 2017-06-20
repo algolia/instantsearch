@@ -1,0 +1,16 @@
+extends archetypes/single-column-formatted.pug
+
+block content
+  .content!=contents
+
+  - var values = []
+  if examples
+      - values = examples
+  div(class="examples-container")
+    each val in values
+      div.example-tile
+        h2=val.title
+        a(href=`${examplesEndpoint}/${val.id}`)
+          figure
+            img(src=`examples/${val.id}/capture.png`)
+            figcaption=examplesCTA

@@ -1,0 +1,192 @@
+// Extra small screen / phone
+//** Deprecated `$screen-xs` as of v3.0.1;
+$screen-xs:                  480px !default;
+//** Deprecated `$screen-xs-min` as of v3.2.0;
+$screen-xs-min:              $screen-xs !default;
+//** Deprecated `$screen-phone` as of v3.0.1;
+$screen-phone:               $screen-xs-min !default;
+
+// Small screen / tablet
+//** Deprecated `$screen-sm` as of v3.0.1;
+$screen-sm:                  768px !default;
+$screen-sm-min:              $screen-sm !default;
+//** Deprecated `$screen-tablet` as of v3.0.1;
+$screen-tablet:              $screen-sm-min !default;
+
+// Medium screen / desktop
+//** Deprecated `$screen-md` as of v3.0.1;
+$screen-md:                  992px !default;
+$screen-md-min:              $screen-md !default;
+//** Deprecated `$screen-desktop` as of v3.0.1;
+$screen-desktop:             $screen-md-min !default;
+
+// Large screen / wide desktop
+//** Deprecated `$screen-lg` as of v3.0.1;
+$screen-lg:                  1200px !default;
+$screen-lg-min:              $screen-lg !default;
+//** Deprecated `$screen-lg-desktop` as of v3.0.1;
+$screen-lg-desktop:          $screen-lg-min !default;
+
+// So media queries don't overlap when required, provide a maximum
+$screen-xs-max:              ($screen-sm-min - 1) !default;
+$screen-sm-max:              ($screen-md-min - 1) !default;
+$screen-md-max:              ($screen-lg-min - 1) !default;
+
+/* Dimensions
+==================*/
+$max-container-width: 1100px;
+$container-width: 980px;
+$nav-height: 60px;
+$margin: 16px;
+$sidebar-width: 240px;
+$offset-height: $nav-height + 20;
+
+
+/* Fonts
+==================*/
+$font-name: "Raleway";
+$font-fallback: Helvetica Neue, helvetica;
+$font-settings:  $font-name, $font-fallback;
+$font-stack: 'Open Sans',open sans,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+$font-code: 'inconsolata', monospace;
+
+$light: 300;
+$regular: 400;
+$bold: 600;
+
+//colors
+$white: white;
+$black: black;
+
+//V2
+$purple-heart: rgb(142,67,231);
+$mulberry: rgb(184,69,146);
+$radical-red: rgb(255,79,129);
+$bittersweet: rgb(255,108,95);
+$koromiko: rgb(255,193,104);
+$shamrock: rgb(45,222,152);
+$java: rgb(28,199,208);
+$algolia-blue: rgb(0,174,255);
+$royal-blue: rgb(51,105,231);
+
+$bunting: rgb(24,35,89);
+$titan-white: rgb(247,247,255);
+$logan: rgb(157,157,189);
+$deep-cove: rgb(5,15,44);
+
+$highlight-color: #f6624e;
+
+$cabaret: #E7486B;
+$rouge: #9C4274;
+$sea-green: #13C4A5;
+$blue-green: #10A4B8;
+$violet: #8A63B3;
+$chambray: #3B5295;
+$sunset-orange: #F6624E;
+$saffron-mango: #FDBD57;
+$red-pink: #fb366e;
+$plum: #65133a;
+$light-navy: #184a80;
+
+$primary-color: $bunting;
+$secondary-color: $titan-white;
+$tertiary-color: $logan;
+
+$cloudy-blue: #c4c8d7;
+$cloudy-blue-2: #a6b0d8;
+$cloudy-blue-3: #8995C7;
+$summertime: mix($radical-red, $bittersweet, 50%);
+
+$accent-color: $shamrock;
+$accent-color-darkish: darken($shamrock, 10%);
+
+//header
+$header-height: 60px;
+
+//BootStrap
+$gray-darker: lighten(#000, 13.5%);
+$gray-dark: lighten(#000, 20%);
+$gray: lighten(#000, 33.5%);
+$gray-light: lighten(#000, 46.7%);
+$gray-lighter: lighten(#000, 93.5%);
+
+$brand-primary: $algolia-blue;
+$brand-secondary: #FA3870;
+$brand-success: $shamrock;
+
+$brand-info: $algolia-blue;
+$brand-warning: $koromiko;
+$brand-danger: $radical-red;
+
+$body-bg: $white;
+$text-color: $bunting;
+
+$text-muted: $logan;
+
+$border-radius-base: 3px;
+$border-radius-large: 3px;
+$border-radius-small: 3px;
+
+$link-color: $brand-primary;
+$link-hover-color: darken($link-color, 15%);
+
+//fonts
+$font-family-base: "Open Sans", Helvetica, Arial, sans-serif;
+$headings-font-family: Raleway, "Times New Roman", Times, serif;
+$headings-font-weight: $light;
+$headings-small-color: darken($tertiary-color,10%);
+
+//Buttons
+$btn-font-weight: normal;
+//default
+$btn-default-color: #777;
+$btn-default-bg: $white;
+$btn-default-border: #ccc;
+//primary
+$btn-primary-color: $white;
+$btn-primary-bg: $brand-primary;
+$btn-primary-border: darken($btn-primary-bg, 5%);
+//success
+$btn-success-color: $white;
+$btn-success-bg: $brand-success;
+$btn-success-border: darken($btn-success-bg, 5%);
+//info
+$btn-info-color: $white;
+$btn-info-bg: $brand-info;
+$btn-info-border: darken($btn-info-bg, 5%);
+//warning
+$btn-warning-color: $white;
+$btn-warning-bg: $brand-warning;
+$btn-warning-border: darken($btn-warning-bg, 5%);
+//danger
+$btn-danger-color: $white;
+$btn-danger-bg: $brand-danger;
+$btn-danger-border: darken($btn-danger-bg, 5%);
+//link
+$btn-link-disabled-color: $gray-light;
+$input-bg-disabled: $gray-lighter;
+
+//Panels
+$panel-bg: $white;
+//** Border color for elements within panels
+$panel-inner-border: lighten($tertiary-color,20%);
+$panel-footer-bg: lighten($secondary-color, 10%);
+
+$panel-default-text: $gray-dark;
+$panel-default-border: $white;
+$panel-default-heading-bg: $white;
+
+//forms
+$input-group-addon-bg: lighten($secondary-color,3%);
+$input-border: lighten($gray,30%);
+
+//tables
+$table-border-color: $secondary-color;
+$table-bg-accent: lighten($secondary-color,5%);
+
+//tooltip
+$tooltip-bg: $primary-color;
+$tooltip-opacity: 1;
+
+//popover
+$popover-max-width: 300px;

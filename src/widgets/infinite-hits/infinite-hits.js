@@ -1,52 +1,126 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import InfiniteHits from '../../components/InfiniteHits.js';
+import defaultTemplates from './defaultTemplates.js';
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
+
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
 } from '../../lib/utils.js';
-import cx from 'classnames';
-import InfiniteHits from '../../components/InfiniteHits.js';
-import defaultTemplates from './defaultTemplates.js';
 
 const bem = bemHelper('ais-infinite-hits');
 
-/**
- * Display the list of results (hits) from the current search
- * @function infiniteHits
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {number} [options.hitsPerPage=20] The number of hits to display per page [*]
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.empty=""] Template to use when there are no results.
- * @param  {string|Function} [options.templates.item=""] Template to use for each result. This template will receive an object containing a single record.
- * @param  {string} [options.showMoreLabel="Show more results"] label used on the show more button
- * @param  {Object} [options.transformData] Method to change the object passed to the templates
- * @param  {Function} [options.transformData.empty] Method used to change the object passed to the `empty` template
- * @param  {Function} [options.transformData.item] Method used to change the object passed to the `item` template
- * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the wrapping element
- * @param  {string|string[]} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each result
- * @return {Object}
- */
+const renderer = ({
+  cssClasses,
+  containerNode,
+  renderState,
+  templates,
+  transformData,
+  showMoreLabel,
+}) => ({
+  hits,
+  results,
+  showMore,
+  isLastPage,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  ReactDOM.render(
+    <InfiniteHits
+      cssClasses={cssClasses}
+      hits={hits}
+      results={results}
+      showMore={showMore}
+      showMoreLabel={showMoreLabel}
+      templateProps={renderState.templateProps}
+      isLastPage={isLastPage}
+    />,
+    containerNode
+  );
+};
+
 const usage = `
 Usage:
 infiniteHits({
   container,
+  [ escapeHits = false ],
+  [ showMoreLabel ],
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty} ],
-  [ showMoreLabel="Show more results" ]
   [ transformData.{empty,item} | transformData.{empty} ],
-  [ hitsPerPage=20 ]
 })`;
-function infiniteHits({
-    container,
-    cssClasses: userCssClasses = {},
-    showMoreLabel = 'Show more results',
-    templates = defaultTemplates,
-    transformData,
-    hitsPerPage = 20,
-  } = {}) {
+
+/**
+ * @typedef {Object} InfiniteHitsTemplates
+ * @property  {string|function} [empty=""] Template used when there are no results.
+ * @property  {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
+ */
+
+/**
+ * @typedef {Object} InfiniteHitsTransforms
+ * @property  {function} [empty] Method used to change the object passed to the `empty` template.
+ * @property  {function} [item] Method used to change the object passed to the `item` template.
+ */
+
+/**
+ * @typedef {object} InfiniteHitsCSSClasses
+ * @property  {string|string[]} [root] CSS class to add to the wrapping element.
+ * @property  {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property  {string|string[]} [item] CSS class to add to each result.
+ */
+
+/**
+ * @typedef {Object} InfiniteHitsWidgetOptions
+ * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property  {InfiniteHitsTemplates} [templates] Templates to use for the widget.
+ * @property  {string} [showMoreLabel="Show more results"] label used on the show more button.
+ * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.
+ * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
+ * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ */
+
+/**
+ * Display the list of results (hits) from the current search.
+ *
+ * This widget uses the infinite hits pattern. It contains a button that
+ * will let the user load more results to the list. This is particularly
+ * handy on mobile implementations.
+ * @type {WidgetFactory}
+ * @param {InfiniteHitsWidgetOptions} $0 The options for the InfiniteHits widget.
+ * @return {Widget} Creates a new instance of the InfiniteHits widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.infiniteHits({
+ *     container: '#infinite-hits-container',
+ *     templates: {
+ *       empty: 'No results',
+ *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
+ *     },
+ *     escapeHits: true,
+ *   })
+ * );
+ */
+export default function infiniteHits({
+  container,
+  cssClasses: userCssClasses = {},
+  showMoreLabel = 'Show more results',
+  templates = defaultTemplates,
+  transformData,
+  escapeHits = false,
+} = {}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
   }
@@ -59,45 +133,19 @@ function infiniteHits({
     showmore: cx(bem('showmore'), userCssClasses.showmore),
   };
 
-  let hitsCache = [];
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    transformData,
+    templates,
+    showMoreLabel,
+    renderState: {},
+  });
 
-  const getShowMore = helper => () => helper.nextPage().search();
-
-  return {
-    getConfiguration: () => ({hitsPerPage}),
-    init({templatesConfig, helper}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-
-      this.showMore = getShowMore(helper);
-    },
-    render({results, state}) {
-      if (state.page === 0) {
-        hitsCache = [];
-      }
-
-      hitsCache = [...hitsCache, ...results.hits];
-
-      const isLastPage = results.nbPages <= results.page + 1;
-
-      ReactDOM.render(
-        <InfiniteHits
-          cssClasses={cssClasses}
-          hits={hitsCache}
-          results={results}
-          showMore={this.showMore}
-          showMoreLabel={showMoreLabel}
-          isLastPage={isLastPage}
-          templateProps={this._templateProps}
-        />,
-        containerNode
-      );
-    },
-  };
+  try {
+    const makeInfiniteHits = connectInfiniteHits(specializedRenderer);
+    return makeInfiniteHits({escapeHits});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default infiniteHits;

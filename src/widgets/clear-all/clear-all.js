@@ -1,41 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
+import cx from 'classnames';
+
 import {
   bemHelper,
   getContainerNode,
   prepareTemplateProps,
-  getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
 } from '../../lib/utils.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+
+import connectClearAll from '../../connectors/clear-all/connectClearAll.js';
+
 import defaultTemplates from './defaultTemplates.js';
-import ClearAllComponent from '../../components/ClearAll/ClearAll.js';
 
 const bem = bemHelper('ais-clear-all');
 
-/**
- * Allows to clear all refinements at once
- * @function clearAll
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string[]} [options.excludeAttributes] List of attributes names to exclude from clear actions
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.link] Link template
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no refinement to clear
- * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.link] CSS class to add to the link element
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
+const renderer = ({containerNode, cssClasses, collapsible, autoHideContainer, renderState, templates}) => ({
+  refine,
+  hasRefinements,
+  createURL,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
+
+  ReactDOM.render(
+    <ClearAllWithHOCs
+      refine={refine}
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      hasRefinements={hasRefinements}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+      url={createURL()}
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 clearAll({
   container,
@@ -45,23 +55,69 @@ clearAll({
   [ collapsible=false ],
   [ excludeAttributes=[] ]
 })`;
-function clearAll({
-    container,
-    templates = defaultTemplates,
-    cssClasses: userCssClasses = {},
-    collapsible = false,
-    autoHideContainer = true,
-    excludeAttributes = [],
-  } = {}) {
+/**
+ * @typedef {Object} ClearAllCSSClasses
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [header] CSS class to add to the header element.
+ * @property {string|string[]} [body] CSS class to add to the body element.
+ * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [link] CSS class to add to the link element.
+ */
+
+/**
+ * @typedef {Object} ClearAllTemplates
+ * @property {string|function(object):string} [header] Header template.
+ * @property {string|function(object):string} [link] Link template.
+ * @property {string|function(object):string} [footer] Footer template.
+ */
+
+/**
+ * @typedef {Object} ClearAllWidgetOptions
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property {string[]} [excludeAttributes] List of attributes names to exclude from clear actions.
+ * @property {ClearAllTemplates} [templates] Templates to use for the widget.
+ * @property {boolean} [autoHideContainer=true] Hide the container when there are no refinements to clear.
+ * @property {ClearAllCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then.
+ * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
+ * property is `true`, then the widget is hidden during the first rendering.
+ * @property {boolean} [clearsQuery = false] If true, the widget will also clear the query.
+ */
+
+/**
+ * The clear all widget gives the user the ability to clear all the refinements currently
+ * applied on the results. It is equivalent to the reset button of a form.
+ *
+ * The current refined values widget can display a button that has the same behavior.
+ * @type {WidgetFactory}
+ * @param {ClearAllWidgetOptions} $0 The ClearAll widget options.
+ * @returns {Widget} A new instance of the ClearAll widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.clearAll({
+ *     container: '#clear-all',
+ *     templates: {
+ *       link: 'Reset everything'
+ *     },
+ *     autoHideContainer: false,
+ *     clearsQuery: true,
+ *   })
+ * );
+ */
+export default function clearAll({
+  container,
+  templates = defaultTemplates,
+  cssClasses: userCssClasses = {},
+  collapsible = false,
+  autoHideContainer = true,
+  excludeAttributes = [],
+  clearsQuery = false,
+}) {
   if (!container) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
-  let ClearAll = headerFooterHOC(ClearAllComponent);
-  if (autoHideContainer === true) {
-    ClearAll = autoHideContainerHOC(ClearAll);
-  }
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -71,39 +127,19 @@ function clearAll({
     link: cx(bem('link'), userCssClasses.link),
   };
 
-  return {
-    init({helper, templatesConfig}) {
-      this.clearAll = this.clearAll.bind(this, helper);
-      this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
-    },
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    collapsible,
+    autoHideContainer,
+    renderState: {},
+    templates,
+  });
 
-    render({results, state, createURL}) {
-      this.clearAttributes = getRefinements(results, state)
-        .map(one => one.attributeName)
-        .filter(one => excludeAttributes.indexOf(one) === -1);
-      const hasRefinements = this.clearAttributes.length !== 0;
-      const url = createURL(clearRefinementsFromState(state));
-
-      ReactDOM.render(
-        <ClearAll
-          clearAll={this.clearAll}
-          collapsible={collapsible}
-          cssClasses={cssClasses}
-          hasRefinements={hasRefinements}
-          shouldAutoHideContainer={!hasRefinements}
-          templateProps={this._templateProps}
-          url={url}
-        />,
-        containerNode
-      );
-    },
-
-    clearAll(helper) {
-      if (this.clearAttributes.length > 0) {
-        clearRefinementsAndSearch(helper, this.clearAttributes);
-      }
-    },
-  };
+  try {
+    const makeWidget = connectClearAll(specializedRenderer);
+    return makeWidget({excludeAttributes, clearsQuery});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default clearAll;

@@ -1,107 +1,117 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import find from 'lodash/find';
+
+import Selector from '../../components/Selector.js';
+import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
+
 import {
   bemHelper,
   getContainerNode,
 } from '../../lib/utils.js';
-import some from 'lodash/some';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import SelectorComponent from '../../components/Selector.js';
 
 const bem = bemHelper('ais-hits-per-page-selector');
 
-/**
- * Instantiate a dropdown element to choose the number of hits to display per page
- * @function hitsPerPageSelector
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} options.options Array of objects defining the different values and labels
- * @param  {number} options.options[0].value number of hits to display per page
- * @param  {string} options.options[0].label Label to display in the option
- * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<option>`
- * @return {Object}
- */
+const renderer = ({
+  containerNode,
+  cssClasses,
+  autoHideContainer,
+}) => ({
+  items,
+  refine,
+  hasNoResults,
+}, isFirstRendering) => {
+  if (isFirstRendering) return;
+
+  const {value: currentValue} = find(items, ({isRefined}) => isRefined) || {};
+
+  ReactDOM.render(
+    <Selector
+      cssClasses={cssClasses}
+      currentValue={currentValue}
+      options={items}
+      setValue={refine}
+      shouldAutoHideContainer={autoHideContainer && hasNoResults}
+    />,
+    containerNode
+  );
+};
 
 const usage = `Usage:
 hitsPerPageSelector({
   container,
-  options,
+  items,
   [ cssClasses.{root,item}={} ],
   [ autoHideContainer=false ]
 })`;
-function hitsPerPageSelector({
-    container,
-    options: userOptions,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
-  } = {}) {
-  let options = userOptions;
 
-  if (!container || !options) {
+/**
+ * @typedef {Object} HitsPerPageSelectorCSSClasses
+ * @property {string|string[]} [root] CSS classes added to the parent `<select>`.
+ * @property {string|string[]} [item] CSS classes added to each `<option>`.
+ */
+
+/**
+ * @typedef {Object} HitsPerPageSelectorItems
+ * @property {number} value number of hits to display per page.
+ * @property {string} label Label to display in the option.
+ */
+
+/**
+ * @typedef {Object} HitsPerPageSelectorWidgetOptions
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property {HitsPerPageSelectorItems[]} items Array of objects defining the different values and labels.
+ * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
+ * @property {HitsPerPageSelectorCSSClasses} [cssClasses] CSS classes to be added.
+ */
+
+/**
+ * The hitsPerPageSelector widget gives the user the ability to change the number of results
+ * displayed in the hits widget.
+ * @type {WidgetFactory}
+ * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the HitPerPageSelector widget.
+ * @return {Widget} A new instance of the HitPerPageSelector widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.hitsPerPageSelector({
+ *     container: '#hits-per-page-selector',
+ *     items: [
+ *       {value: 3, label: '3 per page'},
+ *       {value: 6, label: '6 per page'},
+ *       {value: 12, label: '12 per page'},
+ *     ]
+ *   })
+ * );
+ */
+export default function hitsPerPageSelector({
+  container,
+  items,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = false,
+} = {}) {
+  if (!container) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
-  let Selector = SelectorComponent;
-  if (autoHideContainer === true) {
-    Selector = autoHideContainerHOC(Selector);
-  }
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
   };
 
-  return {
-    init({helper, state}) {
-      const isCurrentInOptions = some(
-        options,
-        option => Number(state.hitsPerPage) === Number(option.value)
-      );
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    autoHideContainer,
+  });
 
-      if (!isCurrentInOptions) {
-        if (state.hitsPerPage === undefined) {
-          if (window.console) {
-            window.console.log(
-`[Warning][hitsPerPageSelector] hitsPerPage not defined.
-You should probably use a \`hits\` widget or set the value \`hitsPerPage\`
-using the searchParameters attribute of the instantsearch constructor.`
-            );
-          }
-        } else if (window.console) {
-          window.console.log(
-`[Warning][hitsPerPageSelector] No option in \`options\`
-with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
-          );
-        }
-
-        options = [{value: undefined, label: ''}].concat(options);
-      }
-
-      this.setHitsPerPage = value => helper
-        .setQueryParameter('hitsPerPage', Number(value))
-        .search();
-    },
-
-    render({state, results}) {
-      const currentValue = state.hitsPerPage;
-      const hasNoResults = results.nbHits === 0;
-
-      ReactDOM.render(
-        <Selector
-          cssClasses={cssClasses}
-          currentValue={currentValue}
-          options={options}
-          setValue={this.setHitsPerPage}
-          shouldAutoHideContainer={hasNoResults}
-        />,
-        containerNode
-      );
-    },
-  };
+  try {
+    const makeHitsPerPageSelector = connectHitsPerPage(specializedRenderer);
+    return makeHitsPerPageSelector({items});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default hitsPerPageSelector;

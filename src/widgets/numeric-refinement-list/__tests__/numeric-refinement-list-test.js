@@ -1,15 +1,13 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-
 import cloneDeep from 'lodash/cloneDeep';
-
 import expectJSX from 'expect-jsx';
 import numericRefinementList from '../numeric-refinement-list.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 expect.extend(expectJSX);
+
+const encodeValue = (start, end) => window.encodeURI(JSON.stringify({start, end}));
 
 describe('numericRefinementList call', () => {
   it('throws an exception when no container', () => {
@@ -37,8 +35,6 @@ describe('numericRefinementList()', () => {
   let widget;
   let helper;
 
-  let autoHideContainer;
-  let headerFooter;
   let options;
   let results;
   let createURL;
@@ -47,10 +43,6 @@ describe('numericRefinementList()', () => {
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     numericRefinementList.__Rewire__('ReactDOM', ReactDOM);
-    autoHideContainer = sinon.stub().returns(RefinementList);
-    numericRefinementList.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returns(RefinementList);
-    numericRefinementList.__Rewire__('headerFooterHOC', headerFooter);
 
     options = [
       {name: 'All'},
@@ -87,7 +79,7 @@ describe('numericRefinementList()', () => {
     helper.state.clearRefinements = sinon.stub().returns(helper.state);
     helper.state.addNumericRefinement = sinon.stub().returns(helper.state);
     createURL = () => '#';
-    widget.init({helper});
+    widget.init({helper, instantSearchInstance: {}});
   });
 
   it('calls twice ReactDOM.render(<RefinementList props />, container)', () => {
@@ -109,11 +101,11 @@ describe('numericRefinementList()', () => {
       collapsible: false,
       createURL() {},
       facetValues: [
-        {attributeName: 'price', isRefined: true, name: 'All'},
-        {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4'},
-        {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4},
-        {attributeName: 'price', end: 10, isRefined: false, name: 'between 5 and 10', start: 5},
-        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10},
+        {label: 'All', value: encodeValue(), isRefined: true},
+        {label: 'less than 4', value: encodeValue(undefined, 4), isRefined: false},
+        {label: '4', value: encodeValue(4, 4), isRefined: false},
+        {label: 'between 5 and 10', value: encodeValue(5, 10), isRefined: false},
+        {label: 'more than 10', value: encodeValue(10), isRefined: false},
       ],
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
@@ -122,7 +114,7 @@ describe('numericRefinementList()', () => {
           footer: '',
           header: '',
           // eslint-disable-next-line max-len
-          item: '<label class="{{cssClasses.label}}">\n <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{name}}\n</label>',
+          item: '<label class="{{cssClasses.label}}">\n <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{label}}\n</label>',
         },
         templatesConfig: undefined,
         transformData: undefined,
@@ -134,9 +126,7 @@ describe('numericRefinementList()', () => {
       },
     };
 
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+    expect(ReactDOM.render.callCount).toBe(2);
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
@@ -151,7 +141,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls the refinement functions if refined with "4"', () => {
-    widget._toggleRefinement('4');
+    widget._refine(encodeValue(4, 4));
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '=', 4]);
@@ -159,7 +149,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls the refinement functions if refined with "between 5 and 10"', () => {
-    widget._toggleRefinement('between 5 and 10');
+    widget._refine(encodeValue(5, 10));
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledTwice).toBe(true, 'addNumericRefinement called twice');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 5]);
@@ -168,7 +158,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls two times the refinement functions if refined with "less than 4"', () => {
-    widget._toggleRefinement('less than 4');
+    widget._refine(encodeValue(undefined, 4));
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '<=', 4]);
@@ -176,7 +166,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls two times the refinement functions if refined with "more than 10"', () => {
-    widget._toggleRefinement('more than 10');
+    widget._refine(encodeValue(10));
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 10]);
@@ -197,18 +187,14 @@ describe('numericRefinementList()', () => {
       options: initialOptions,
     });
 
+    // The lifeccycle impose all the steps
+    testWidget.init({helper, createURL: () => '', instantSearchInstance: {}});
+
     // When
     testWidget.render({state, results, createURL});
 
     // Then
     expect(initialOptions).toEqual(initialOptionsClone);
-  });
-
-  it('should reset page on refine()', () => {
-    helper.state.page = 2;
-    expect(helper.state.page).toBe(2);
-    widget._toggleRefinement('more than 10');
-    expect(helper.state.page).toBe(0);
   });
 
   afterEach(() => {

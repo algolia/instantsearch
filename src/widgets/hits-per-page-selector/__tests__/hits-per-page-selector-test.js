@@ -1,50 +1,37 @@
-/* eslint-env mocha */
-
-import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
-
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-
 import hitsPerPageSelector from '../hits-per-page-selector';
-import Selector from '../../../components/Selector';
 
 describe('hitsPerPageSelector call', () => {
-  it('throws an exception when no options', () => {
+  it('throws an exception when no items', () => {
     const container = document.createElement('div');
     expect(hitsPerPageSelector.bind(null, {container})).toThrow(/^Usage:/);
   });
 
   it('throws an exception when no container', () => {
-    const options = {a: {value: 'value', label: 'My value'}};
-    expect(hitsPerPageSelector.bind(null, {options})).toThrow(/^Usage:/);
+    const items = {a: {value: 'value', label: 'My value'}};
+    expect(hitsPerPageSelector.bind(null, {items})).toThrow(/^Usage:/);
   });
 });
 
 describe('hitsPerPageSelector()', () => {
   let ReactDOM;
   let container;
-  let options;
+  let items;
   let cssClasses;
   let widget;
-  let props;
   let helper;
   let results;
-  let autoHideContainer;
-  let consoleLog;
+  let consoleWarn;
   let state;
 
   beforeEach(() => {
-    autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = {render: sinon.spy()};
 
     hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
-    hitsPerPageSelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    consoleLog = sinon.stub(window.console, 'log');
+    consoleWarn = sinon.stub(window.console, 'warn');
 
     container = document.createElement('div');
-    options = [
+    items = [
       {value: 10, label: '10 results'},
       {value: 20, label: '20 results'},
     ];
@@ -52,7 +39,7 @@ describe('hitsPerPageSelector()', () => {
       root: ['custom-root', 'cx'],
       item: 'custom-item',
     };
-    widget = hitsPerPageSelector({container, options, cssClasses});
+    widget = hitsPerPageSelector({container, items, cssClasses});
     helper = {
       state: {
         hitsPerPage: 20,
@@ -77,24 +64,8 @@ describe('hitsPerPageSelector()', () => {
     widget.init({helper, state: helper.state});
     widget.render({results, state});
     widget.render({results, state});
-    props = {
-      cssClasses: {
-        root: 'ais-hits-per-page-selector custom-root cx',
-        item: 'ais-hits-per-page-selector--item custom-item',
-      },
-      currentValue: 10,
-      shouldAutoHideContainer: true,
-      options: [
-        {value: 10, label: '10 results'},
-        {value: 20, label: '20 results'},
-      ],
-      setValue: () => {},
-    };
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...props} />);
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Selector {...props} />);
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.callCount).toBe(2);
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
   });
 
   it('sets the underlying hitsPerPage', () => {
@@ -105,25 +76,25 @@ describe('hitsPerPageSelector()', () => {
   });
 
   it('should throw if there is no name attribute in a passed object', () => {
-    options.length = 0;
-    options.push({label: 'Label without a value'});
+    items.length = 0;
+    items.push({label: 'Label without a value'});
     widget.init({state: helper.state, helper});
-    expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
-    expect(consoleLog.firstCall.args[0]).
+    expect(consoleWarn.calledOnce).toBe(true, 'console.warn called once');
+    expect(consoleWarn.firstCall.args[0]).
       toEqual(
-`[Warning][hitsPerPageSelector] No option in \`options\`
-with \`value: hitsPerPage\` (hitsPerPage: 20)`
+`[Warning][hitsPerPageSelector] No item in \`items\`
+  with \`value: hitsPerPage\` (hitsPerPage: 20)`
       );
   });
 
   it('must include the current hitsPerPage at initialization time', () => {
     helper.state.hitsPerPage = -1;
     widget.init({state: helper.state, helper});
-    expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
-    expect(consoleLog.firstCall.args[0]).
+    expect(consoleWarn.calledOnce).toBe(true, 'console.warn called once');
+    expect(consoleWarn.firstCall.args[0]).
       toEqual(
-`[Warning][hitsPerPageSelector] No option in \`options\`
-with \`value: hitsPerPage\` (hitsPerPage: -1)`
+`[Warning][hitsPerPageSelector] No item in \`items\`
+  with \`value: hitsPerPage\` (hitsPerPage: -1)`
       );
   });
 
@@ -131,12 +102,11 @@ with \`value: hitsPerPage\` (hitsPerPage: -1)`
     delete helper.state.hitsPerPage;
     expect(() => {
       widget.init({state: helper.state, helper});
-    }).toNotThrow(/No option in `options`/);
+    }).not.toThrow(/No item in `items`/);
   });
 
   afterEach(() => {
     hitsPerPageSelector.__ResetDependency__('ReactDOM');
-    hitsPerPageSelector.__ResetDependency__('autoHideContainerHOC');
-    consoleLog.restore();
+    consoleWarn.restore();
   });
 });

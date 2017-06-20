@@ -1,0 +1,17 @@
+.ais-toggle {
+  &--item {
+    @extend .ais-current-refined-values--item;
+
+    &__active {
+      font-weight: bold;
+    }
+  }
+
+  &--label {
+    @extend .ais-refinement-list--label;
+  }
+
+  &--count {
+    @extend .ais-current-refined-values--count;
+  }
+}

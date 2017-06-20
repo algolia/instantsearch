@@ -1,13 +1,14 @@
 import ghpages from 'gh-pages';
 import {join} from 'path';
 
-let basePath = join(__dirname, '../../docs/_site');
+let basePath = join(__dirname, '../../docs');
 
 ghpages.clean();
 
 let config = {
   silent: true,
-  logger: msg => console.log(msg)
+  logger: msg => console.log(msg),
+  dest: 'v2'
 };
 
 if (process.env.CI === 'true') {
