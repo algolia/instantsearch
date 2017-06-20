@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="65px" height="70px" viewBox="0 0 65 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.4 (15575) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-widget-star-rating</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="42.9656982%" y1="14.0594482%" x2="85.1531982%" y2="110.153198%" id="linearGradient-1">
+            <stop stop-color="#2CA5C3" offset="0%"></stop>
+            <stop stop-color="#136B90" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="10.9344482%" y1="-27.3468018%" x2="73.4344482%" y2="79.6844482%" id="linearGradient-2">
+            <stop stop-color="#51C8E5" offset="0%"></stop>
+            <stop stop-color="#2897C5" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="instansearch-website" sketch:type="MSArtboardGroup" transform="translate(-484.000000, -512.000000)">
+            <g id="icon-widget-star-rating" sketch:type="MSLayerGroup" transform="translate(484.000000, 512.000000)">
+                <g id="widget-bg" transform="translate(0.612763, 0.335471)" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1-Copy" fill="url(#linearGradient-1)" x="-4.54747351e-13" y="5" width="64" height="64" rx="4"></rect>
+                    <rect id="Rectangle-1" fill="url(#linearGradient-2)" x="-2.27373675e-13" y="4.54747351e-13" width="64" height="64" rx="4"></rect>
+                </g>
+                <path d="M32.8055545,41.313131 L24.3921277,45.7363312 L25.9989492,36.3678428 L19.1923439,29.7330424 L28.5988411,28.3661984 L32.8055545,19.842466 L37.0122679,28.3661984 L46.418765,29.7330424 L39.6121598,36.3678428 L41.2189813,45.7363312 L32.8055545,41.313131 Z M32.7737486,38.6523957 L27.4611491,41.4453945 L28.4757653,35.5297281 L24.1777821,31.3402299 L30.1174489,30.4771458 L32.7737486,25.0948947 L35.4300483,30.4771458 L41.369715,31.3402299 L37.0717318,35.5297281 L38.086348,41.4453945 L32.7737486,38.6523957 Z" id="Star-1" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

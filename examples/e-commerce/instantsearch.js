@@ -17072,23 +17072,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var helper = (0, _algoliasearchHelper2.default)(this.client, this.searchParameters.index || this.indexName, this.searchParameters);
 	
 	      if (this._searchFunction) {
-	        this._mainHelperSearch = helper.search.bind(helper);
-	        helper.search = function () {
-	          var helperSearchFunction = (0, _algoliasearchHelper2.default)({
-	            addAlgoliaAgent: function addAlgoliaAgent() {},
-	            search: function search() {}
-	          }, helper.state.index, helper.state);
-	          helperSearchFunction.once('search', function (state) {
-	            helper.overrideStateWithoutTriggeringChangeEvent(state);
-	            _this2._mainHelperSearch();
-	          });
-	          _this2._searchFunction(helperSearchFunction);
+	        this.helper = Object.create(helper);
+	        this.helper.search = function () {
+	          helper.setState(_this2.helper.state);
+	          _this2._searchFunction(helper);
 	        };
+	        this._init(helper.state, this.helper);
+	        helper.on('result', this._render.bind(this, this.helper));
+	      } else {
+	        this.helper = helper;
+	        this._init(helper.state, this.helper);
+	        this.helper.on('result', this._render.bind(this, this.helper));
 	      }
 	
-	      this.helper = helper;
-	      this._init(helper.state, this.helper);
-	      this.helper.on('result', this._render.bind(this, this.helper));
 	      this.helper.search();
 	    }
 	  }, {
@@ -18982,7 +18978,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 325 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {/**
+	/* WEBPACK VAR INJECTION */(function(process) {
+	/**
 	 * This is the web browser implementation of `debug()`.
 	 *
 	 * Expose `debug()` as the module.
@@ -19021,23 +19018,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	function useColors() {
-	  // NB: In an Electron preload script, document will be defined but not fully
-	  // initialized. Since we know we're in Chrome, we'll just detect this case
-	  // explicitly
-	  if (typeof window !== 'undefined' && window.process && window.process.type === 'renderer') {
-	    return true;
-	  }
-	
 	  // is webkit? http://stackoverflow.com/a/16459606/376773
 	  // document is undefined in react-native: https://github.com/facebook/react-native/pull/1632
-	  return (typeof document !== 'undefined' && document.documentElement && document.documentElement.style && document.documentElement.style.WebkitAppearance) ||
+	  return (typeof document !== 'undefined' && 'WebkitAppearance' in document.documentElement.style) ||
 	    // is firebug? http://stackoverflow.com/a/398120/376773
-	    (typeof window !== 'undefined' && window.console && (window.console.firebug || (window.console.exception && window.console.table))) ||
+	    (window.console && (console.firebug || (console.exception && console.table))) ||
 	    // is firefox >= v31?
 	    // https://developer.mozilla.org/en-US/docs/Tools/Web_Console#Styling_messages
-	    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31) ||
-	    // double check webkit in userAgent just in case we are in a worker
-	    (typeof navigator !== 'undefined' && navigator.userAgent && navigator.userAgent.toLowerCase().match(/applewebkit\/(\d+)/));
+	    (navigator.userAgent.toLowerCase().match(/firefox\/(\d+)/) && parseInt(RegExp.$1, 10) >= 31);
 	}
 	
 	/**
@@ -19059,7 +19047,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 	
-	function formatArgs(args) {
+	function formatArgs() {
+	  var args = arguments;
 	  var useColors = this.useColors;
 	
 	  args[0] = (useColors ? '%c' : '')
@@ -19069,17 +19058,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    + (useColors ? '%c ' : ' ')
 	    + '+' + exports.humanize(this.diff);
 	
-	  if (!useColors) return;
+	  if (!useColors) return args;
 	
 	  var c = 'color: ' + this.color;
-	  args.splice(1, 0, c, 'color: inherit')
+	  args = [args[0], c, 'color: inherit'].concat(Array.prototype.slice.call(args, 1));
 	
 	  // the final "%c" is somewhat tricky, because there could be other
 	  // arguments passed either before or after the %c, so we need to
 	  // figure out the correct index to insert the CSS into
 	  var index = 0;
 	  var lastC = 0;
-	  args[0].replace(/%[a-zA-Z%]/g, function(match) {
+	  args[0].replace(/%[a-z%]/g, function(match) {
 	    if ('%%' === match) return;
 	    index++;
 	    if ('%c' === match) {
@@ -19090,6 +19079,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	
 	  args.splice(lastC, 0, c);
+	  return args;
 	}
 	
 	/**
@@ -19134,15 +19124,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	function load() {
 	  var r;
 	  try {
-	    r = exports.storage.debug;
+	    return exports.storage.debug;
 	  } catch(e) {}
 	
 	  // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
-	  if (!r && typeof process !== 'undefined' && 'env' in process) {
-	    r = ({"NODE_ENV":"production"}).DEBUG;
+	  if (typeof process !== 'undefined' && 'env' in process) {
+	    return ({"NODE_ENV":"production"}).DEBUG;
 	  }
-	
-	  return r;
 	}
 	
 	/**
@@ -19162,7 +19150,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api private
 	 */
 	
-	function localstorage() {
+	function localstorage(){
 	  try {
 	    return window.localStorage;
 	  } catch (e) {}
@@ -19182,7 +19170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Expose `debug()` as the module.
 	 */
 	
-	exports = module.exports = createDebug.debug = createDebug['default'] = createDebug;
+	exports = module.exports = debug.debug = debug;
 	exports.coerce = coerce;
 	exports.disable = disable;
 	exports.enable = enable;
@@ -19199,10 +19187,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Map of special "%n" handling functions, for the debug "format" argument.
 	 *
-	 * Valid key names are a single, lower or upper-case letter, i.e. "n" and "N".
+	 * Valid key names are a single, lowercased letter, i.e. "n".
 	 */
 	
 	exports.formatters = {};
+	
+	/**
+	 * Previously assigned color.
+	 */
+	
+	var prevColor = 0;
 	
 	/**
 	 * Previous log timestamp.
@@ -19212,20 +19206,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/**
 	 * Select a color.
-	 * @param {String} namespace
+	 *
 	 * @return {Number}
 	 * @api private
 	 */
 	
-	function selectColor(namespace) {
-	  var hash = 0, i;
-	
-	  for (i in namespace) {
-	    hash  = ((hash << 5) - hash) + namespace.charCodeAt(i);
-	    hash |= 0; // Convert to 32bit integer
-	  }
-	
-	  return exports.colors[Math.abs(hash) % exports.colors.length];
+	function selectColor() {
+	  return exports.colors[prevColor++ % exports.colors.length];
 	}
 	
 	/**
@@ -19236,13 +19223,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @api public
 	 */
 	
-	function createDebug(namespace) {
+	function debug(namespace) {
 	
-	  function debug() {
-	    // disabled?
-	    if (!debug.enabled) return;
+	  // define the `disabled` version
+	  function disabled() {
+	  }
+	  disabled.enabled = false;
 	
-	    var self = debug;
+	  // define the `enabled` version
+	  function enabled() {
+	
+	    var self = enabled;
 	
 	    // set `diff` timestamp
 	    var curr = +new Date();
@@ -19252,7 +19243,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    self.curr = curr;
 	    prevTime = curr;
 	
-	    // turn the `arguments` into a proper Array
+	    // add the `color` if not set
+	    if (null == self.useColors) self.useColors = exports.useColors();
+	    if (null == self.color && self.useColors) self.color = selectColor();
+	
 	    var args = new Array(arguments.length);
 	    for (var i = 0; i < args.length; i++) {
 	      args[i] = arguments[i];
@@ -19261,13 +19255,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    args[0] = exports.coerce(args[0]);
 	
 	    if ('string' !== typeof args[0]) {
-	      // anything else let's inspect with %O
-	      args.unshift('%O');
+	      // anything else let's inspect with %o
+	      args = ['%o'].concat(args);
 	    }
 	
 	    // apply any `formatters` transformations
 	    var index = 0;
-	    args[0] = args[0].replace(/%([a-zA-Z%])/g, function(match, format) {
+	    args[0] = args[0].replace(/%([a-z%])/g, function(match, format) {
 	      // if we encounter an escaped % then don't increase the array index
 	      if (match === '%%') return match;
 	      index++;
@@ -19283,24 +19277,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return match;
 	    });
 	
-	    // apply env-specific formatting (colors, etc.)
-	    exports.formatArgs.call(self, args);
+	    // apply env-specific formatting
+	    args = exports.formatArgs.apply(self, args);
 	
-	    var logFn = debug.log || exports.log || console.log.bind(console);
+	    var logFn = enabled.log || exports.log || console.log.bind(console);
 	    logFn.apply(self, args);
 	  }
+	  enabled.enabled = true;
 	
-	  debug.namespace = namespace;
-	  debug.enabled = exports.enabled(namespace);
-	  debug.useColors = exports.useColors();
-	  debug.color = selectColor(namespace);
+	  var fn = exports.enabled(namespace) ? enabled : disabled;
 	
-	  // env-specific initialization logic for debug instances
-	  if ('function' === typeof exports.init) {
-	    exports.init(debug);
-	  }
+	  fn.namespace = namespace;
 	
-	  return debug;
+	  return fn;
 	}
 	
 	/**
@@ -19314,15 +19303,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function enable(namespaces) {
 	  exports.save(namespaces);
 	
-	  exports.names = [];
-	  exports.skips = [];
-	
-	  var split = (typeof namespaces === 'string' ? namespaces : '').split(/[\s,]+/);
+	  var split = (namespaces || '').split(/[\s,]+/);
 	  var len = split.length;
 	
 	  for (var i = 0; i < len; i++) {
 	    if (!split[i]) continue; // ignore empty strings
-	    namespaces = split[i].replace(/\*/g, '.*?');
+	    namespaces = split[i].replace(/[\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, '.*?');
 	    if (namespaces[0] === '-') {
 	      exports.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
 	    } else {
@@ -19386,11 +19372,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Helpers.
 	 */
 	
-	var s = 1000;
-	var m = s * 60;
-	var h = m * 60;
-	var d = h * 24;
-	var y = d * 365.25;
+	var s = 1000
+	var m = s * 60
+	var h = m * 60
+	var d = h * 24
+	var y = d * 365.25
 	
 	/**
 	 * Parse or format the given `val`.
@@ -19400,25 +19386,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *  - `long` verbose formatting [false]
 	 *
 	 * @param {String|Number} val
-	 * @param {Object} [options]
+	 * @param {Object} options
 	 * @throws {Error} throw an error if val is not a non-empty string or a number
 	 * @return {String|Number}
 	 * @api public
 	 */
 	
-	module.exports = function(val, options) {
-	  options = options || {};
-	  var type = typeof val;
+	module.exports = function (val, options) {
+	  options = options || {}
+	  var type = typeof val
 	  if (type === 'string' && val.length > 0) {
-	    return parse(val);
+	    return parse(val)
 	  } else if (type === 'number' && isNaN(val) === false) {
-	    return options.long ? fmtLong(val) : fmtShort(val);
+	    return options.long ?
+				fmtLong(val) :
+				fmtShort(val)
 	  }
-	  throw new Error(
-	    'val is not a non-empty string or a valid number. val=' +
-	      JSON.stringify(val)
-	  );
-	};
+	  throw new Error('val is not a non-empty string or a valid number. val=' + JSON.stringify(val))
+	}
 	
 	/**
 	 * Parse the given `str` and return milliseconds.
@@ -19429,55 +19414,53 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	function parse(str) {
-	  str = String(str);
-	  if (str.length > 100) {
-	    return;
+	  str = String(str)
+	  if (str.length > 10000) {
+	    return
 	  }
-	  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
-	    str
-	  );
+	  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(str)
 	  if (!match) {
-	    return;
+	    return
 	  }
-	  var n = parseFloat(match[1]);
-	  var type = (match[2] || 'ms').toLowerCase();
+	  var n = parseFloat(match[1])
+	  var type = (match[2] || 'ms').toLowerCase()
 	  switch (type) {
 	    case 'years':
 	    case 'year':
 	    case 'yrs':
 	    case 'yr':
 	    case 'y':
-	      return n * y;
+	      return n * y
 	    case 'days':
 	    case 'day':
 	    case 'd':
-	      return n * d;
+	      return n * d
 	    case 'hours':
 	    case 'hour':
 	    case 'hrs':
 	    case 'hr':
 	    case 'h':
-	      return n * h;
+	      return n * h
 	    case 'minutes':
 	    case 'minute':
 	    case 'mins':
 	    case 'min':
 	    case 'm':
-	      return n * m;
+	      return n * m
 	    case 'seconds':
 	    case 'second':
 	    case 'secs':
 	    case 'sec':
 	    case 's':
-	      return n * s;
+	      return n * s
 	    case 'milliseconds':
 	    case 'millisecond':
 	    case 'msecs':
 	    case 'msec':
 	    case 'ms':
-	      return n;
+	      return n
 	    default:
-	      return undefined;
+	      return undefined
 	  }
 	}
 	
@@ -19491,18 +19474,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function fmtShort(ms) {
 	  if (ms >= d) {
-	    return Math.round(ms / d) + 'd';
+	    return Math.round(ms / d) + 'd'
 	  }
 	  if (ms >= h) {
-	    return Math.round(ms / h) + 'h';
+	    return Math.round(ms / h) + 'h'
 	  }
 	  if (ms >= m) {
-	    return Math.round(ms / m) + 'm';
+	    return Math.round(ms / m) + 'm'
 	  }
 	  if (ms >= s) {
-	    return Math.round(ms / s) + 's';
+	    return Math.round(ms / s) + 's'
 	  }
-	  return ms + 'ms';
+	  return ms + 'ms'
 	}
 	
 	/**
@@ -19518,7 +19501,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    plural(ms, h, 'hour') ||
 	    plural(ms, m, 'minute') ||
 	    plural(ms, s, 'second') ||
-	    ms + ' ms';
+	    ms + ' ms'
 	}
 	
 	/**
@@ -19527,12 +19510,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function plural(ms, n, name) {
 	  if (ms < n) {
-	    return;
+	    return
 	  }
 	  if (ms < n * 1.5) {
-	    return Math.floor(ms / n) + ' ' + name;
+	    return Math.floor(ms / n) + ' ' + name
 	  }
-	  return Math.ceil(ms / n) + ' ' + name + 's';
+	  return Math.ceil(ms / n) + ' ' + name + 's'
 	}
 
 
@@ -21225,14 +21208,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var client = algoliasearch(appID, apiKey, opts);
 	    var index = client.initIndex('places');
 	    index.search = buildSearchMethod('query', '/1/places/query');
-	    index.getObject = function(objectID, callback) {
-	      return this.as._jsonRequest({
-	        method: 'GET',
-	        url: '/1/places/' + encodeURIComponent(objectID),
-	        hostType: 'read',
-	        callback: callback
-	      });
-	    };
 	    return index;
 	  };
 	}
@@ -21264,7 +21239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	module.exports = '3.23.0';
+	module.exports = '3.22.2';
 
 
 /***/ }),
@@ -21615,7 +21590,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.firstRender) {
 	        this.firstRender = false;
 	        this.onHistoryChange(this.onPopState.bind(this, helper));
-	        helper.on('change', function (state) {
+	        helper.on('search', function (state) {
 	          return _this2.renderURLFromState(state);
 	        });
 	      }
@@ -24165,8 +24140,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	
-	  resolvedState.page = 0;
-	
 	  return resolvedState;
 	}
 	
@@ -24907,18 +24880,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	        this._refine = function (bounds) {
 	          return function (newValues) {
-	            var currentValues = [helper.getNumericRefinement(attributeName, '>='), helper.getNumericRefinement(attributeName, '<=')];
-	
-	            if (currentValues[0] !== newValues[0] || currentValues[1] !== newValues[1]) {
-	              helper.clearRefinements(attributeName);
-	              if (!bounds.min || newValues[0] > bounds.min) {
-	                helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
-	              }
-	              if (!bounds.max || newValues[1] < bounds.max) {
-	                helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
-	              }
-	              helper.search();
+	            helper.clearRefinements(attributeName);
+	            if (!bounds.min || newValues[0] > bounds.min) {
+	              helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
 	            }
+	            if (!bounds.max || newValues[1] < bounds.max) {
+	              helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
+	            }
+	            helper.search();
 	          };
 	        };
 	
@@ -25183,8 +25152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              isFromSearch: false,
 	              isFirstSearch: false,
 	              instantSearchInstance: instantSearchInstance,
-	              hasExhaustiveItems: false // SFFV should not be used with show more
-	            });
+	              hasExhaustiveItems: false });
 	          } else {
 	            helper.searchForFacetValues(attributeName, query).then(function (results) {
 	              var facetValues = results.facetHits;
@@ -25198,8 +25166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                isFromSearch: true,
 	                isFirstSearch: false,
 	                instantSearchInstance: instantSearchInstance,
-	                hasExhaustiveItems: false // SFFV should not be used with show more
-	              });
+	                hasExhaustiveItems: false });
 	            });
 	          }
 	        };
@@ -25316,7 +25283,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _utils = __webpack_require__(348);
 	
-	var usage = 'Usage:\nvar customSearchBox = connectSearchBox(function render(params, isFirstRendering) {\n  // params = {\n  //   query,\n  //   onHistoryChange,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //   clear,\n  // }\n});\nsearch.addWidget(\n  customSearchBox({\n    [ queryHook ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSearchBox.html\n';
+	var usage = 'Usage:\nvar customSearchBox = connectSearchBox(function render(params, isFirstRendering) {\n  // params = {\n  //   query,\n  //   onHistoryChange,\n  //   search,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customSearchBox({\n    [ queryHook ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSearchBox.html\n';
 	
 	/**
 	 * @typedef {Object} CustomSearchBoxWidgetOptions
@@ -25332,7 +25299,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @property {string} query The query from the last search.
 	 * @property {function(SearchParameters)} onHistoryChange Registers a callback when the browser history changes.
 	 * @property {function(string)} refine Sets a new query and searches.
-	 * @property {function()} clear Remove the query and perform search.
 	 * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
 	 */
 	
@@ -25378,25 +25344,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var queryHook = widgetParams.queryHook;
 	
 	
-	    function clear(helper) {
-	      return function () {
-	        helper.setQuery('');
-	        helper.search();
-	      };
-	    }
-	
 	    return {
-	      _clear: function _clear() {},
-	      _cachedClear: function _cachedClear() {
-	        this._clear();
-	      },
 	      init: function init(_ref) {
 	        var helper = _ref.helper,
 	            onHistoryChange = _ref.onHistoryChange,
 	            instantSearchInstance = _ref.instantSearchInstance;
-	
-	        this._cachedClear = this._cachedClear.bind(this);
-	        this._clear = clear(helper);
 	
 	        this._refine = function () {
 	          var previousQuery = void 0;
@@ -25422,7 +25374,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	          query: helper.state.query,
 	          onHistoryChange: this._onHistoryChange,
 	          refine: this._refine,
-	          clear: this._cachedClear,
 	          widgetParams: widgetParams,
 	          instantSearchInstance: instantSearchInstance
 	        }, true);
@@ -25431,13 +25382,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var helper = _ref2.helper,
 	            instantSearchInstance = _ref2.instantSearchInstance;
 	
-	        this._clear = clear(helper);
-	
 	        renderFn({
 	          query: helper.state.query,
 	          onHistoryChange: this._onHistoryChange,
 	          refine: this._refine,
-	          clear: this._cachedClear,
 	          widgetParams: widgetParams,
 	          instantSearchInstance: instantSearchInstance
 	        }, false);
@@ -27859,16 +27807,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _props = this.props,
-	          hasRefinements = _props.hasRefinements,
-	          cssClasses = _props.cssClasses;
-	
-	      var data = { hasRefinements: hasRefinements };
+	      var data = {
+	        hasRefinements: this.props.hasRefinements
+	      };
 	
 	      return _react2.default.createElement(
 	        'a',
 	        {
-	          className: hasRefinements ? cssClasses.link : cssClasses.link + ' ' + cssClasses.link + '-disabled',
+	          className: this.props.cssClasses.link,
 	          href: this.props.url,
 	          onClick: this.handleClick
 	        },
@@ -29601,15 +29547,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (requestedPosition !== position) {
 	        return undefined;
 	      }
-	
-	      var _props = this.props,
-	          refinements = _props.refinements,
-	          cssClasses = _props.cssClasses;
-	
 	      return _react2.default.createElement(
 	        'a',
 	        {
-	          className: refinements && refinements.length > 0 ? cssClasses.clearAll : cssClasses.clearAll + ' ' + cssClasses.clearAll + '-disabled',
+	          className: this.props.cssClasses.clearAll,
 	          href: this.props.clearAllURL,
 	          onClick: handleClick(this.props.clearAllClick)
 	        },
@@ -33663,12 +33604,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      templates = _ref.templates,
 	      autofocus = _ref.autofocus,
 	      searchOnEnterKeyPressOnly = _ref.searchOnEnterKeyPressOnly,
-	      wrapInput = _ref.wrapInput,
-	      reset = _ref.reset,
-	      magnifier = _ref.magnifier;
+	      wrapInput = _ref.wrapInput;
 	  return function (_ref2, isFirstRendering) {
 	    var refine = _ref2.refine,
-	        clear = _ref2.clear,
 	        query = _ref2.query,
 	        onHistoryChange = _ref2.onHistoryChange;
 	
@@ -33687,8 +33625,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
 	        containerNode.appendChild(_wrappedInput);
 	      }
-	      if (magnifier) addMagnifier(input, magnifier, templates);
-	      if (reset) addReset(input, reset, templates, clear);
 	      addDefaultAttributesToInput(placeholder, input, query, cssClasses);
 	      // Optional "powered by Algolia" widget
 	      if (poweredBy) {
@@ -33741,16 +33677,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _input.value = query;
 	      }
 	    }
-	
-	    var resetButtonContainer = containerNode.tagName === 'INPUT' ? containerNode.parentNode : containerNode;
-	
-	    // hide reset button when there is no query
-	    var resetButton = resetButtonContainer.querySelector('button[type="reset"]');
-	    resetButton.style.display = query && query.trim() ? 'block' : 'none';
 	  };
 	};
 	
-	var usage = 'Usage:\nsearchBox({\n  container,\n  [ placeholder ],\n  [ cssClasses.{input,poweredBy} ],\n  [ poweredBy=false || poweredBy.{template, cssClasses.{root,link}} ],\n  [ wrapInput ],\n  [ autofocus ],\n  [ searchOnEnterKeyPressOnly ],\n  [ queryHook ]\n  [ reset=true || reset.{template, cssClasses.{root}} ]\n})';
+	var usage = 'Usage:\nsearchBox({\n  container,\n  [ placeholder ],\n  [ cssClasses.{input,poweredBy} ],\n  [ poweredBy=false || poweredBy.{template, cssClasses.{root,link}} ],\n  [ wrapInput ],\n  [ autofocus ],\n  [ searchOnEnterKeyPressOnly ],\n  [ queryHook ]\n})';
 	
 	/**
 	 * @typedef {Object} SearchBoxPoweredByCSSClasses
@@ -33765,12 +33695,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	/**
-	 * @typedef {Object} SearchBoxResetOption
-	 * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
-	 * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
-	 */
-	
-	/**
 	 * @typedef {Object} SearchBoxCSSClasses
 	 * @property  {string|string[]} [root] CSS class to add to the
 	 * wrapping `<div>` (if `wrapInput` set to `true`).
@@ -33778,18 +33702,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	/**
-	 * @typedef {Object} SearchBoxMagnifierOption
-	 * @property {function|string} template Template used for displaying the magnifier. Can accept a function or a Hogan string.
-	 * @property {{root: string}} [cssClasses] CSS classes added to the magnifier.
-	 */
-	
-	/**
 	 * @typedef {Object} SearchBoxWidgetOptions
 	 * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
 	 * @property  {string} [placeholder] Input's placeholder.
 	 * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
-	 * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
-	 * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
 	 * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
 	 * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
 	 * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
@@ -33816,8 +33732,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *     container: '#q',
 	 *     placeholder: 'Search for products',
 	 *     autofocus: false,
-	 *     poweredBy: true,
-	 *     reset: false,
+	 *     poweredBy: true
 	 *   })
 	 * );
 	 */
@@ -33836,10 +33751,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      autofocus = _ref3$autofocus === undefined ? 'auto' : _ref3$autofocus,
 	      _ref3$searchOnEnterKe = _ref3.searchOnEnterKeyPressOnly,
 	      searchOnEnterKeyPressOnly = _ref3$searchOnEnterKe === undefined ? false : _ref3$searchOnEnterKe,
-	      _ref3$reset = _ref3.reset,
-	      reset = _ref3$reset === undefined ? true : _ref3$reset,
-	      _ref3$magnifier = _ref3.magnifier,
-	      magnifier = _ref3$magnifier === undefined ? true : _ref3$magnifier,
 	      queryHook = _ref3.queryHook;
 	
 	  if (!container) {
@@ -33866,9 +33777,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    templates: _defaultTemplates2.default,
 	    autofocus: autofocus,
 	    searchOnEnterKeyPressOnly: searchOnEnterKeyPressOnly,
-	    wrapInput: wrapInput,
-	    reset: reset,
-	    magnifier: magnifier
+	    wrapInput: wrapInput
 	  });
 	
 	  try {
@@ -33962,41 +33871,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	}
 	
-	function addReset(input, reset, _ref4, clearFunction) {
-	  var resetTemplate = _ref4.reset;
-	
-	  reset = _extends({
-	    cssClasses: {},
-	    template: resetTemplate
-	  }, reset);
-	
-	  var resetCSSClasses = { root: (0, _classnames2.default)(bem('reset'), reset.cssClasses.root) };
-	  var stringNode = processTemplate(resetTemplate, { cssClasses: resetCSSClasses });
-	
-	  var htmlNode = createNodeFromString(stringNode);
-	  input.parentNode.appendChild(htmlNode);
-	
-	  htmlNode.addEventListener('click', function (event) {
-	    event.preventDefault();
-	    clearFunction();
-	  });
-	}
-	
-	function addMagnifier(input, magnifier, _ref5) {
-	  var magnifierTemplate = _ref5.magnifier;
-	
-	  magnifier = _extends({
-	    cssClasses: {},
-	    template: magnifierTemplate
-	  }, magnifier);
-	
-	  var magnifierCSSClasses = { root: (0, _classnames2.default)(bem('magnifier'), magnifier.cssClasses.root) };
-	  var stringNode = processTemplate(magnifierTemplate, { cssClasses: magnifierCSSClasses });
-	
-	  var htmlNode = createNodeFromString(stringNode);
-	  input.parentNode.appendChild(htmlNode);
-	}
-	
 	function addPoweredBy(input, poweredBy, templates) {
 	  // Default values
 	  poweredBy = _extends({
@@ -34017,33 +33891,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	  };
 	
 	  var template = poweredBy.template;
-	  var stringNode = processTemplate(template, templateData);
-	  var htmlNode = createNodeFromString(stringNode);
-	  input.parentNode.insertBefore(htmlNode, input.nextSibling);
-	}
-	
-	// Crossbrowser way to create a DOM node from a string. We wrap in
-	// a `span` to make sure we have one and only one node.
-	function createNodeFromString(stringNode) {
-	  var tmpNode = document.createElement('div');
-	  tmpNode.innerHTML = '<span>' + stringNode.trim() + '</span>';
-	  return tmpNode.firstChild;
-	}
-	
-	function processTemplate(template, templateData) {
-	  var result = void 0;
+	  var stringNode = void 0;
 	
 	  if ((0, _isString2.default)(template)) {
-	    result = _hogan2.default.compile(template).render(templateData);
-	  } else if ((0, _isFunction2.default)(template)) {
-	    result = template(templateData);
+	    stringNode = _hogan2.default.compile(template).render(templateData);
+	  }
+	  if ((0, _isFunction2.default)(template)) {
+	    stringNode = template(templateData);
 	  }
 	
-	  if (!(0, _isString2.default)(result)) {
-	    throw new Error('Wrong template options for the SearchBox widget');
-	  }
+	  // Crossbrowser way to create a DOM node from a string. We wrap in
+	  // a `span` to make sure we have one and only one node.
+	  var tmpNode = document.createElement('div');
+	  tmpNode.innerHTML = '<span>' + stringNode.trim() + '</span>';
+	  var htmlNode = tmpNode.firstChild;
 	
-	  return result;
+	  input.parentNode.insertBefore(htmlNode, input.nextSibling);
 	}
 
 /***/ }),
@@ -34055,12 +33918,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	/* eslint max-len: 0 */
-	
 	exports.default = {
-	  poweredBy: "\n<div class=\"{{cssClasses.root}}\">\n  Search by\n  <a class=\"{{cssClasses.link}}\" href=\"{{url}}\" target=\"_blank\">Algolia</a>\n</div>",
-	  reset: "\n<button type=\"reset\" title=\"Clear the search query.\" class=\"{{cssClasses.root}}\">\n  <svg\n    xmlns=\"http://www.w3.org/2000/svg\"\n    viewBox=\"0 0 20 20\" width=\"100%\"\n    height=\"100%\"\n  >\n    <path\n      d=\"M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z\"\n      fill-rule=\"evenodd\">\n    </path>\n  </svg>\n</button>\n  ",
-	  magnifier: "\n<div class=\"{{cssClasses.root}}\">\n  <svg\n    xmlns=\"http://www.w3.org/2000/svg\" id=\"sbx-icon-search-13\"\n    viewBox=\"0 0 40 40\"\n    width=\"100%\"\n    height=\"100%\"\n  >\n    <path\n      d=\"M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z\"\n      fill-rule=\"evenodd\">\n    </path>\n  </svg>\n</div>\n  "
+	  poweredBy: "\n<div class=\"{{cssClasses.root}}\">\n  Search by\n  <a class=\"{{cssClasses.link}}\" href=\"{{url}}\" target=\"_blank\">Algolia</a>\n</div>"
 	};
 
 /***/ }),
@@ -34353,9 +34212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	
 	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Slider.__proto__ || Object.getPrototypeOf(Slider)).call.apply(_ref, [this].concat(args))), _this), _this.handleChange = function (_ref2) {
-	      var min = _ref2.min,
-	          max = _ref2.max,
-	          values = _ref2.values;
+	      var values = _ref2.values;
 	
 	      // when Slider is disabled, we alter `min, max` values
 	      // in order to render a "disabled state" Slider. Since we alter
@@ -34364,7 +34221,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (!_this.isDisabled) {
 	        var refine = _this.props.refine;
 	
-	        refine([min === values[0] ? undefined : values[0], max === values[1] ? undefined : values[1]]);
+	        refine(values);
 	      }
 	    }, _this.createHandleComponent = function (tooltips) {
 	      return function (props) {
