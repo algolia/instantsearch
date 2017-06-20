@@ -125,22 +125,6 @@ describe('InstantSearch lifecycle', () => {
     });
   });
 
-  it('calls the provided searchFunction when used', () => {
-    const searchSpy = sinon.spy(h => {
-      h.setQuery('test').search();
-    });
-    search = new InstantSearch({
-      appId,
-      apiKey,
-      indexName,
-      searchFunction: searchSpy,
-    });
-    search.start();
-    expect(searchSpy.calledOnce).toBe(true);
-    expect(helper.state.query).toBe('test');
-    expect(helperSearchSpy.calledOnce).toBe(true);
-  });
-
   it('does not fail when passing same references inside multiple searchParameters props', () => {
     const disjunctiveFacetsRefinements = {fruits: ['apple']};
     const facetsRefinements = disjunctiveFacetsRefinements;
