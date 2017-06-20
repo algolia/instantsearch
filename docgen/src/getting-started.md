@@ -45,6 +45,12 @@ Use a built version of **InstantSearch.js** from the [jsDeliver](https://www.jsd
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.js"></script>
 ```
 
+We also provide you a default Algolia theme for the widgets to be effectively styled:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch-theme-algolia.min.css">
+```
+
 You will then have access to the `instantsearch` function in the global scope (window).
 
 The jsDeliver CDN is highly available with [over 110 locations](https://www.jsdelivr.com/features/network-map) in the world.
@@ -64,6 +70,12 @@ You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/i
 
 ```html
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css">
+```
+
+You will also need to load manually the default Algolia theme for the widgets to be effectively styled:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.6/dist/instantsearch-theme-algolia.min.css">
 ```
 
 ## Initialization

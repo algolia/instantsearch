@@ -100,50 +100,81 @@ export default () => {
     );
   }));
 
-  storiesOf('ClearAll').add('default', wrapWithHits(container => {
-    window.search.addWidget(
-      instantsearch.widgets.clearAll({
-        container,
-        autoHideContainer: false,
-      })
-    );
-  }));
+  storiesOf('ClearAll')
+    .add('default', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.clearAll({
+          container,
+          autoHideContainer: false,
+        })
+      );
+    }, {
+      searchParameters: {
+        disjunctiveFacetsRefinements: {brand: ['Apple']},
+        disjunctiveFacets: ['brand'],
+      },
+    }))
+    .add('with nothing to clear', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.clearAll({
+          container,
+          autoHideContainer: false,
+        })
+      );
+    }))
+    .add('with clear refinements and query', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.clearAll({
+          container,
+          autoHideContainer: false,
+          clearsQuery: true,
+          templates: {
+            link: 'Clear refinements and query',
+          },
+        })
+      );
+    }, {
+      searchParameters: {
+        disjunctiveFacetsRefinements: {brand: ['Apple']},
+        disjunctiveFacets: ['brand'],
+      },
+    }));
 
-  storiesOf('CurrentRefinedValues').add('default', wrapWithHits(container => {
-    window.search.addWidget(
-      instantsearch.widgets.currentRefinedValues({
-        container,
-        templates: {
-          header: 'Current refinements',
-        },
-        attributes: [
-          {
-            name: 'price',
-            label: 'Price',
-            transformData: data => {
-              data.name = `$${data.name}`;
-              return data;
-            },
+  storiesOf('CurrentRefinedValues')
+    .add('default', wrapWithHits(container => {
+      window.search.addWidget(instantsearch.widgets.currentRefinedValues({container}));
+    }, {
+      searchParameters: {
+        disjunctiveFacetsRefinements: {brand: ['Apple', 'Samsung']},
+        disjunctiveFacets: ['brand'],
+      },
+    }))
+    .add('with header', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.currentRefinedValues({
+          container,
+          templates: {
+            header: 'Current refinements',
           },
-          {
-            name: 'price_range',
-            label: 'Price range',
-            transformData: data => {
-              data.name = data.name.replace(/(\d+)/g, '$$$1');
-              return data;
-            },
+        })
+      );
+    }, {
+      searchParameters: {
+        disjunctiveFacetsRefinements: {brand: ['Apple', 'Samsung']},
+        disjunctiveFacets: ['brand'],
+      },
+    }))
+    .add('with header but no refinements', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.currentRefinedValues({
+          container,
+          autoHideContainer: false,
+          templates: {
+            header: 'Current refinements',
           },
-          {
-            name: 'free_shipping',
-            transformData: data => {
-              if (data.name === 'true') data.name = 'Free shipping';
-              return data;
-            },
-          },
-        ],
-      })
-    );
-  }));
+        })
+      );
+    }));
 
   storiesOf('RefinementList')
     .add('default', wrapWithHits(container => {
@@ -296,25 +327,34 @@ export default () => {
       );
     }));
 
-  storiesOf('Menu').add('with show more', wrapWithHits(container => {
-    window.search.addWidget(
-      instantsearch.widgets.menu({
-        container,
-        attributeName: 'categories',
-        limit: 3,
-        showMore: {
-          templates: {
-            active: '<button>Show less</button>',
-            inactive: '<button>Show more</button>',
+  storiesOf('Menu')
+    .add('Default', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.menu({
+          container,
+          attributeName: 'categories',
+        })
+      );
+    }))
+    .add('with show more and header', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.menu({
+          container,
+          attributeName: 'categories',
+          limit: 3,
+          showMore: {
+            templates: {
+              active: '<button>Show less</button>',
+              inactive: '<button>Show more</button>',
+            },
+            limit: 10,
           },
-          limit: 10,
-        },
-        templates: {
-          header: 'Categories (menu widget)',
-        },
-      })
-    );
-  }));
+          templates: {
+            header: 'Categories (menu widget)',
+          },
+        })
+      );
+    }));
 
   storiesOf('RangeSlider').add('default', wrapWithHits(container => {
     window.search.addWidget(
@@ -335,22 +375,55 @@ export default () => {
     );
   }));
 
-  storiesOf('HierarchicalMenu').add('default', wrapWithHits(container => {
-    window.search.addWidget(
-      instantsearch.widgets.hierarchicalMenu({
-        container,
-        attributes: [
-          'hierarchicalCategories.lvl0',
-          'hierarchicalCategories.lvl1',
-          'hierarchicalCategories.lvl2',
-        ],
-        rootPath: 'Cameras & Camcorders',
-        templates: {
-          header: 'Hierarchical categories',
+  storiesOf('HierarchicalMenu')
+    .add('default', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.hierarchicalMenu({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+          rootPath: 'Cameras & Camcorders',
+        })
+      );
+    }))
+    .add('with default selected item', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.hierarchicalMenu({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+          rootPath: 'Cameras & Camcorders',
+        })
+      );
+    }, {
+      searchParameters: {
+        hierarchicalFacetsRefinements: {
+          'hierarchicalCategories.lvl0': ['Cameras & Camcorders > Digital Cameras'],
         },
-      })
-    );
-  }));
+      },
+    }))
+    .add('with header', wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.hierarchicalMenu({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+          rootPath: 'Cameras & Camcorders',
+          templates: {
+            header: 'Hierarchical categories',
+          },
+        })
+      );
+    }));
 
   storiesOf('PriceRanges').add('default', wrapWithHits(container => {
     window.search.addWidget(

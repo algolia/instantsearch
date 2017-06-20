@@ -17,6 +17,10 @@ export default {
       test: /\.js$/, exclude: /node_modules/, loader: 'babel',
     }, {
       test: /\.html$/, exclude: /node_modules/, loader: 'raw',
+    }, {
+      test: /\.scss$/,
+      include: /src\/css\/instantsearch-theme-algolia/,
+      loader: 'style!css!autoprefixer-loader!sass',
     }],
   },
   // when module not found, find locally first

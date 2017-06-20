@@ -25,8 +25,11 @@ const renderer = ({
   autofocus,
   searchOnEnterKeyPressOnly,
   wrapInput,
+  reset,
+  magnifier,
 }) => ({
   refine,
+  clear,
   query,
   onHistoryChange,
 }, isFirstRendering) => {
@@ -47,6 +50,8 @@ const renderer = ({
       const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
       containerNode.appendChild(wrappedInput);
     }
+    if (magnifier) addMagnifier(input, magnifier, templates);
+    if (reset) addReset(input, reset, templates, clear);
     addDefaultAttributesToInput(placeholder, input, query, cssClasses);
     // Optional "powered by Algolia" widget
     if (poweredBy) {
@@ -99,6 +104,14 @@ const renderer = ({
       input.value = query;
     }
   }
+
+  const resetButtonContainer = containerNode.tagName === 'INPUT'
+    ? containerNode.parentNode
+    : containerNode;
+
+  // hide reset button when there is no query
+  const resetButton = resetButtonContainer.querySelector('button[type="reset"]');
+  resetButton.style.display = query && query.trim() ? 'block' : 'none';
 };
 
 const usage = `Usage:
@@ -111,6 +124,7 @@ searchBox({
   [ autofocus ],
   [ searchOnEnterKeyPressOnly ],
   [ queryHook ]
+  [ reset=true || reset.{template, cssClasses.{root}} ]
 })`;
 
 /**
@@ -126,6 +140,12 @@ searchBox({
  */
 
 /**
+ * @typedef {Object} SearchBoxResetOption
+ * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
+ * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
+ */
+
+/**
  * @typedef {Object} SearchBoxCSSClasses
  * @property  {string|string[]} [root] CSS class to add to the
  * wrapping `<div>` (if `wrapInput` set to `true`).
@@ -133,10 +153,18 @@ searchBox({
  */
 
 /**
+ * @typedef {Object} SearchBoxMagnifierOption
+ * @property {function|string} template Template used for displaying the magnifier. Can accept a function or a Hogan string.
+ * @property {{root: string}} [cssClasses] CSS classes added to the magnifier.
+ */
+
+/**
  * @typedef {Object} SearchBoxWidgetOptions
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
+ * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
+ * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
  * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
  * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
  * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
@@ -163,7 +191,8 @@ searchBox({
  *     container: '#q',
  *     placeholder: 'Search for products',
  *     autofocus: false,
- *     poweredBy: true
+ *     poweredBy: true,
+ *     reset: false,
  *   })
  * );
  */
@@ -175,6 +204,8 @@ export default function searchBox({
   wrapInput = true,
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
+  reset = true,
+  magnifier = true,
   queryHook,
 } = {}) {
   if (!container) {
@@ -202,6 +233,8 @@ export default function searchBox({
     autofocus,
     searchOnEnterKeyPressOnly,
     wrapInput,
+    reset,
+    magnifier,
   });
 
   try {
@@ -287,6 +320,39 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
 }
 
+function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
+  reset = {
+    cssClasses: {},
+    template: resetTemplate,
+    ...reset,
+  };
+
+  const resetCSSClasses = {root: cx(bem('reset'), reset.cssClasses.root)};
+  const stringNode = processTemplate(resetTemplate, {cssClasses: resetCSSClasses});
+
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.appendChild(htmlNode);
+
+  htmlNode.addEventListener('click', event => {
+    event.preventDefault();
+    clearFunction();
+  });
+}
+
+function addMagnifier(input, magnifier, {magnifier: magnifierTemplate}) {
+  magnifier = {
+    cssClasses: {},
+    template: magnifierTemplate,
+    ...magnifier,
+  };
+
+  const magnifierCSSClasses = {root: cx(bem('magnifier'), magnifier.cssClasses.root)};
+  const stringNode = processTemplate(magnifierTemplate, {cssClasses: magnifierCSSClasses});
+
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.appendChild(htmlNode);
+}
+
 function addPoweredBy(input, poweredBy, templates) {
   // Default values
   poweredBy = {
@@ -312,20 +378,31 @@ function addPoweredBy(input, poweredBy, templates) {
   };
 
   const template = poweredBy.template;
-  let stringNode;
+  const stringNode = processTemplate(template, templateData);
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.insertBefore(htmlNode, input.nextSibling);
+}
 
-  if (isString(template)) {
-    stringNode = Hogan.compile(template).render(templateData);
-  }
-  if (isFunction(template)) {
-    stringNode = template(templateData);
-  }
-
-  // Crossbrowser way to create a DOM node from a string. We wrap in
-  // a `span` to make sure we have one and only one node.
+// Crossbrowser way to create a DOM node from a string. We wrap in
+// a `span` to make sure we have one and only one node.
+function createNodeFromString(stringNode) {
   const tmpNode = document.createElement('div');
   tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
-  const htmlNode = tmpNode.firstChild;
+  return tmpNode.firstChild;
+}
 
-  input.parentNode.insertBefore(htmlNode, input.nextSibling);
+function processTemplate(template, templateData) {
+  let result;
+
+  if (isString(template)) {
+    result = Hogan.compile(template).render(templateData);
+  } else if (isFunction(template)) {
+    result = template(templateData);
+  }
+
+  if (!isString(result)) {
+    throw new Error('Wrong template options for the SearchBox widget');
+  }
+
+  return result;
 }

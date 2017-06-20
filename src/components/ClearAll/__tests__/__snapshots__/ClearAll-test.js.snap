@@ -2,7 +2,7 @@
 
 exports[`ClearAll should render <ClearAll /> 1`] = `
 <a
-  className="custom-link"
+  className="custom-link custom-link-disabled"
   href="#all-cleared!"
   onClick={[Function]}
 >

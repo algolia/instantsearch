@@ -19,6 +19,10 @@ export default {
     }, {
       test: /\.html$/, exclude: /node_modules/, loader: 'raw',
     }, {
+      test: /\.scss$/,
+      include: /src\/css\/instantsearch-theme-algolia/,
+      loader: 'style!css!autoprefixer-loader!sass',
+    }, {
       test: require.resolve('react'), loader: 'expose?React',
     }, {
       test: require.resolve('react-dom'), loader: 'expose?ReactDOM',
