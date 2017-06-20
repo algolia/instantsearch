@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>fast-icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="fast-icon">
+            <path d="M40,61.8333333 C27.9611,61.8333333 18.1666667,52.0389 18.1666667,40 C18.1666667,27.9611 27.9611,18.1666667 40,18.1666667 C52.0389,18.1666667 61.8333333,27.9611 61.8333333,40 C61.8333333,52.0389 52.0389,61.8333333 40,61.8333333" id="Fill-109" fill="#F7F7FF"></path>
+            <path d="M40.1692,45.3213867 C38.7238667,45.37072 37.2625333,44.8437867 36.1593333,43.7405867 C34.0470667,41.62832 34.0470667,38.2040533 36.1593333,36.0920533 C38.2713333,33.9797867 41.6956,33.9797867 43.8078667,36.0920533 C44.8345333,37.11872 45.3622667,38.4557867 45.3905333,39.8013867" id="Stroke-111" stroke="#182359" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M41.3741867,38.5255733 L53.1821867,53.1149067" id="Stroke-113" stroke="#2DDE98" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M38.5929067,41.3068533 L53.18224,53.1148533" id="Stroke-115" stroke="#2DDE98" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M41.3741867,41.3068533 C40.6061867,42.0748533 39.3608533,42.0748533 38.5928533,41.3068533 C37.8248533,40.5388533 37.8248533,39.29352 38.5928533,38.52552 C39.3608533,37.75752 40.6061867,37.75752 41.3741867,38.52552 C42.1421867,39.29352 42.1421867,40.5388533 41.3741867,41.3068533 L41.3741867,41.3068533 Z" id="Stroke-117" stroke="#2DDE98" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M72,40 C72,57.6730667 57.6730667,72 40,72 C22.3269333,72 8,57.6730667 8,40 C8,22.3269333 22.3269333,8 40,8 C57.6730667,8 72,22.3269333 72,40 L72,40 Z" id="Stroke-119" stroke="#182359" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M55.5480267,55.69584 L58.2522933,58.4001067 L58.29896,58.4001067 C68.3890933,48.2867733 68.3890933,31.8313067 58.29896,21.71824 C48.2088267,11.6051733 31.79096,11.6051733 21.7008267,21.71824 C11.6106933,31.8313067 11.6106933,48.2867733 21.7008267,58.4001067" id="Stroke-121" stroke="#182359" stroke-width="1.59746434" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M24.3903733,55.69584 L21.70104,58.4001067" id="Stroke-123" stroke="#182359" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path id="Stroke-125" stroke="#1E96C7" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path id="Stroke-127" stroke="#1E96C7" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path id="Stroke-129" stroke="#1E96C7" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M21.7504,21.7514133 L24.4546667,24.45568" id="Stroke-131" stroke="#182359" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M58.2521867,21.7488267 L55.54792,24.4530933" id="Stroke-133" stroke="#182359" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M50.6036533,29.39736 C55.7628533,34.55656 56.3769867,42.5394933 52.4460533,48.37096" id="Stroke-135" stroke="#2DDE98" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M51.3080267,39.9162133 C51.3218933,41.7930133 50.87176,43.67248 49.9570933,45.36768" id="Stroke-137" stroke="#2DDE98" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M32.4293333,22.9147467 C39.2845333,19.87928 47.592,21.1710133 53.2112,26.7899467 C59.8453333,33.42408 60.4472,43.8059467 55.0173333,51.1203467" id="Stroke-139" stroke="#2DDE98" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M26.78888,26.7898933 C27.4590133,26.11976 28.1675467,25.5112267 28.9070133,24.9640267" id="Stroke-141" stroke="#2DDE98" stroke-width="1.59746434" stroke-linecap="round"></path>
+            <path d="M35.0836533,61.3256267 C36.66392,61.68856 38.30952,61.8802933 39.99992,61.8802933 C41.75032,61.8802933 43.45272,61.6746933 45.0844533,61.2864267 L46.5585867,64.9728267 C44.4644533,65.52136 42.26632,65.8136267 39.99992,65.8136267 C37.8300533,65.8136267 35.7225867,65.5456267 33.7089867,65.04136 L35.0836533,61.3256267 L35.0836533,61.3256267 Z" id="Stroke-143" stroke="#182359" stroke-width="1.59746434" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+    </g>
+</svg>

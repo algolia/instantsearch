@@ -59,15 +59,18 @@ body {
   padding-top: 15px;
   padding-bottom: 15px;
   border-bottom: 1px solid #DCE0E0; }
+
 .aisdemo-filters .aisdemo-filter-title {
   font-size: 1em;
   font-weight: normal;
   padding-top: 9px;
   padding-left: 30px; }
+
 .aisdemo-filters .date, .aisdemo-filters #guests select {
   font-size: .8em;
   padding: 8px 10px;
   border: 1px solid #DCE0E0; }
+
 .aisdemo-filters #guests select {
   width: 100%;
   padding-right: 20px;
@@ -78,6 +81,7 @@ body {
           appearance: none; }
   .aisdemo-filters #guests select:focus {
     outline: none; }
+
 .aisdemo-filters .guests-caret:before {
   line-height: 1;
   position: absolute;
@@ -89,8 +93,10 @@ body {
   text-align: center;
   pointer-events: none;
   color: #82888A; }
+
 .aisdemo-filters #room_types .ais-refinement-list--count {
   display: none; }
+
 .aisdemo-filters #room_types .ais-refinement-list--item {
   display: inline-block;
   cursor: pointer; }
@@ -101,6 +107,7 @@ body {
     width: 100%;
     padding: 9px 10px 7px;
     background: #EDEFED; }
+
 .aisdemo-filters #room_types .ais-refinement-list--checkbox {
   position: relative;
   bottom: 3px;
@@ -116,6 +123,7 @@ body {
           appearance: none; }
   .aisdemo-filters #room_types .ais-refinement-list--checkbox:focus {
     outline: none; }
+
 .aisdemo-filters #room_types .ais-refinement-list--item__active .ais-refinement-list--checkbox:before {
   font-size: .85em;
   position: absolute;
@@ -123,18 +131,24 @@ body {
   content: '\2713';
   text-align: center;
   color: #FF5A5F; }
+
 .aisdemo-filters #price .ais-range-slider--target {
   margin: 30px 9px 18px; }
+
 .aisdemo-filters #price .ais-range-slider--handle {
   border-color: #FF585B; }
+
 .aisdemo-filters #price .ais-range-slider--handle-lower {
   -webkit-transform: translateX(-50%);
           transform: translateX(-50%); }
+
 .aisdemo-filters #price .ais-range-slider--handle-upper {
   -webkit-transform: translateX(50%);
           transform: translateX(50%); }
+
 .aisdemo-filters #price .ais-range-slider--tooltip:last-child {
   right: 0; }
+
 .aisdemo-filters #price .ais-range-slider--connect {
   background-color: #FF585B; }
 
@@ -169,6 +183,7 @@ body {
     width: 60px;
     border: 4px solid rgba(255, 255, 255, 0.3);
     border-radius: 30px; }
+
 #hits .hit .infos {
   height: 90px;
   padding: 16px 20px; }
