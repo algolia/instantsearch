@@ -7,8 +7,8 @@ import bindRunExamples from './bindRunExamples.js';
 var alg = require('algolia-frontend-components/javascripts.js');
 
 const docSearch = {
-  apiKey: 'fd5e835f5153cad7d5ec0c3595dfa244',
-  indexName: 'instantsearch.js-v2',
+  apiKey: '64eb3d69b6fb84f3c04a24224b6268a7',
+  indexName: 'instantsearchjs-v2',
   inputSelector: '#searchbox',
 };
 
