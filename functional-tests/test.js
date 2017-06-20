@@ -1,5 +1,5 @@
 import expect from 'expect';
-import {searchBox} from './utils.js';
+import {searchBox, prepareScreenshot} from './utils.js';
 
 describe('searchBox', () => {
   describe('when there is no query', () => {
@@ -9,6 +9,7 @@ describe('searchBox', () => {
 
     it('triggers an empty search', () => {
       expect(browser.getText('#hits')).toNotContain('MP3');
+      prepareScreenshot();
       browser.checkDocument({
         hide: ['.ais-stats--body'], // Flaky X ms information.
       });
@@ -22,6 +23,7 @@ describe('searchBox', () => {
 
     it('triggers a new search', () => {
       expect(browser.getText('#hits')).toContain('MP3');
+      prepareScreenshot();
       browser.checkDocument({
         hide: ['.ais-stats--body'], // Flaky X ms information.
       });
