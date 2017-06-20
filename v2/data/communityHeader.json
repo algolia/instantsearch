@@ -1,0 +1,92 @@
+{
+  "menu": {
+    "project": {
+      "view": "links",
+      "label": "InstantSearch.js",
+      "logo": "",
+      "caret": "",
+      "url":"https://community.algolia.com/instantsearch.js",
+      "dropdownItems": []
+    }
+  },
+  "sideMenu": [{
+    "name": "<span class='visible-sm-inline'>Getting Started</span>",
+    "url": "getting-started.html",
+    "dropdownItems": null
+  },
+  {
+    "name": "Guides",
+    "url": "",
+    "image": "",
+    "dropdownItems": [
+      {
+        "name": "Use InstantSearch.js",
+        "url": "guides/usage.html"
+      },
+      {
+        "name": "Customize widgets",
+        "url": "guides/customization.html"
+      },
+      {
+        "name": "Migrate from V1",
+        "url": "guides/migration.html"
+      }
+    ]
+  },
+  {
+    "name": "API",
+    "url": "",
+    "image": "",
+    "dropdownItems": [
+      {
+        "name": "instantsearch()",
+        "url": "instantsearch.html"
+      },
+      {
+        "name": "Widgets",
+        "url": "widgets.html"
+      },
+      {
+        "name": "Connectors",
+        "url": "connectors.html"
+      }
+    ]
+  },
+  {
+    "name": "<span class='visible-sm-inline'>Demos</span>",
+    "url": "examples.html"
+  },{
+    "name": "Github",
+    "image": "<img src='assets/img/github-icon.svg'/>",
+    "url": "https://github.com/algolia/instantsearch.js"
+  }],
+  "mobileMenu": [{
+    "name": "Getting Started",
+    "url": "getting-started.html"
+  },
+  {
+    "name": "Use InstantSearch.js",
+    "url": "guides/usage.html"
+  },
+  {
+    "name": "Widgets",
+    "url": "widgets.html"
+  },
+  {
+    "name": "Connectors",
+    "url": "connectors.html"
+  },
+  {
+    "name": "Troubleshooting",
+    "url": "troubleshooting.html"
+  },
+  {
+    "name": "Demos",
+    "url": "examples.html"
+  }],
+  "docSearch": {
+    "input_selector": "searchbox",
+    "input_selector_placeholder": "Search the docs",
+    "input_mobile_selector": "mobile-searchbox"
+  }
+}
