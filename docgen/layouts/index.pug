@@ -1,105 +1,169 @@
 extends archetypes/single-column.pug
 
 block content
-  section.is-section__intro
-    figure.section-illustration
-      img(src="assets/img/framed-example.png", width="100%", height="auto")
+  //- style.
+  //-   * {outline: 1px solid red}
+  //-   *:before,*:after {outline: 1px solid lime}
+  section.row.fill-white.p-xlarge.m-l-none.m-r-none.section-best-practices
+    .container
+      .col-md-12.z-10.text-center.pos-rel.screen-mockup
+        img.w100p.m800.img-responsive.pos-rel(src="assets/img/mockup-js.png", alt="Mockup instantsearch", width="800", height="469.63")
 
-    .container.text-center
-      h2.title.
-        There’s a widget for that
-      p.
-        Pick from an extensive library of widgets to power your search 
-        and build a state-of-the-art instant-search experience.
+      .col-md-12.z-10
+        .col-md-6.hidden-sm
+          img.section-illustration(src="assets/img/instantsearch-components.svg", alt="InstantSearch components", width="525", height="254.67")
+        .col-md-6.p-l-xlarge
+          header
+            h3.no-p-t.m-t-none Design Best Practices
+          .spacer16.visible-sm
+          img.section-illustration.visible-sm(src="assets/img/instantsearch-components.svg", alt="InstantSearch components", width="525", height="254.67")
+          .spacer24
+          p.color-logan.text-regular.text-normal InstantSearch.js comes with 18 widgets to cover a wide variety of search use cases. They have been designed to  bring search UI best practices to your  website.
+          .spacer24
+          a.btn.btn-static-theme.b-n.elevation0(href="#").
+            Discover widgets
+            <svg> <use xlink:href="#arrow-right"></svg>
 
-  section.is-section__blocks
-    .spacer100
-    .container.flex-container
-      .flex-item-100.text-center
-        h2 More than widgets
-      .spacer100
-      .flex-item-60.text-center
-        img(src="assets/img/phone-build-3D.svg", class="illustration")
+      .inline.spacer80
+      .inline.spacer120
 
-      .flex-item-40
-        p.
-          Your code is easy to write and maintain. instantsearch.js provides the glue between the different parts of your search page. Everything is packaged in one library.
+  section.row.fill-titan.p-xlarge.m-l-none.m-r-none.pos-rel.section-infinite-possibilities
+    .container
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+      .col-md-12.z-10
+        .col-md-6.p-r-xlarge
+          header
+            h3.no-p-t.m-t-none Infinite possibilities
+          .spacer16.visible-sm
+          img.section-illustration.visible-sm(src="assets/img/infinite-possibilities.svg", alt="Illustration infinite-possibilities", width="525", height="343.14")
+          .spacer24
+          p.color-logan.text-regular.text-normal Build the ideal search experience you’ve imagined for your users by customizing our existing widgets or building your own.
+          .spacer24
+          a.btn.btn-static-theme.b-n.elevation0(href="#").
+            Learn more
+            <svg><use xlink:href="#arrow-right"></svg>
 
-      .spacer100
+        .col-md-6.hidden-sm
+          img.section-illustration(src="assets/img/infinite-possibilities.svg", alt="Illustration infinite-possibilities", width="525", height="343.14")
 
-      .flex-item-100.text-center
-        h2 Infinite possibilities
-        .spacer32
-        .flex-item-40
-          p.
-            Every website is different. The modular design of instantsearch.js allows you to configure, rearrange and combine the widgets to build your own experience.
-            
-    .spacer100
+      .inline.spacer80
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
 
-  section.is-section__features
-    .spacer100.hidden-md-down
-    .container.flex-container
-      .flex-item-100.text-center
+  section.row.fill-white.p-xlarge.m-l-none.m-r-none.pos-rel.section-framework
+    .container
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+      .col-md-12.z-10
+        .col-md-6.p-r-xlarge
+          .spacer64
+          img.section-illustration(src="assets/img/framework-agnostic.svg", alt="Illustration framework-agnostic", width="510", height="148.86")
+        .col-md-6
+          header
+            h3.no-p-t.m-t-none No framework needed
+          .spacer24
+          p.color-logan.text-regular.text-normal InstantSearch.js does not depend on any framework like jQuery or React. You can still plug yours if you want a smooth integration.
+          .spacer24
+          a.btn.btn-static-theme.b-n.elevation0(href="#").
+            Get started
+            <svg> <use xlink:href="#arrow-right"></svg>
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+      .inline.spacer120
+
+  section.row.fill-titan.p-xlarge.live-section.m-l-none.m-r-none.pos-rel
+    .container
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+      .col-md-12.z-10.text-center.row
         header
-          h2 Features
+          h3.no-p-t.m-t-none See it live
+        .spacer40
+        .row.h300
+          .col-md-4.pos-rel
+            .card.fill-white.elevation1.radius6.p-large.h300.flex-container.flex-dir-row
+              .spacer16
+              img.flex-it-1.h80(src="assets/img/example-e-commerce.svg", alt="E-commerce icon")
+              h3.text-lg.text-demi.m-t-none.no-p-t.flex-it-1 E-commerce
+              a.flex-it-1(href="#") See it live
 
-      .spacer60
+          .col-md-4.pos-rel
+            .card.fill-white.elevation1.radius6.p-large.h300.flex-container.flex-dir-row
+              .spacer16
+              img.flex-it-1.h80(src="assets/img/example-media.svg", alt="Media icon")
+              h3.text-lg.text-demi.m-t-none.no-p-t.flex-it-1 Media
+              a.flex-it-1(href="#") See it live
 
-      .flex-item-50.text-right
-        div.content-holder
-          header
-            h3 Synonyms and Typo Tolerance
-          p
-            | Native support for typing mistakes and synonyms so users can always find the most relevant results
-        div.image-holder.text-center
-          img(src="assets/img/typotolerant-icon.svg")
+          .col-md-4.pos-rel
+            .card.fill-white.elevation1.radius6.p-large.h300.flex-container.flex-dir-row
+              .spacer16
+              img.flex-it-1.h80(src="assets/img/example-tourism.svg", alt="Travel icon")
+              h3.text-lg.text-demi.m-t-none.no-p-t.flex-it-1 Travel
+              a.flex-it-1(href="#") See it live
 
-      .flex-item-50
-        div.image-holder.text-center
-          img(src="assets/img/performance-icon.svg")
-        div.content-holder
-          header
-            h3 Lightning Fast Results
-          p
-            | Deliver instant results with a search bar and autocomplete that update with every keystroke.
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+      .inline.spacer80
 
-      .flex-item-50.text-right
-        div.content-holder
-          header
-            h3 Worldwide Hosting
-          p
-            | All queries are automatically routed to our closest server so results are fast no matter where users are.
-        div.image-holder.text-center
-          img(src="assets/img/worldwide-icon.svg")
+  section.row.fill-white.p-xlarge.discover-section.m-l-none.m-r-none.pos-rel
+    .container
+      .inline.spacer80
+      .col-md-12.z-10.text-center.row
+        header
+          h3.no-p-t.m-t-none Discover the<br/>InstantSearch family
 
-      .flex-item-50
-        div.image-holder.text-center
-          img(src="assets/img/worldmap-icon.svg")
+        .spacer80
+        .row.h100.logos-container
+          .col-md-12
+            .col-md-4.col-md-offset-4
+              .card.p-large.h100.fill-white.elevation1.radius6.text-left
+                a(href="#")
+                  figure
+                    img(src="assets/img/InstantSearch-Generic.svg", alt="Logo InstantSearch")
+                    figcaption InstantSearch
 
-        div.content-holder
-          header
-            h3 Geo-Search
-          p
-            | Easily search addresses and show locations on a map that updates in real-time.
-            
+          .spacer32.inline
+          .col-md-12
+            .col-md-8.pos-rel.p-b-large.col-md-offset-2
+              div.heading.w100p.text-left
+                small.color-logan InstantSearch for mobile
+          .col-md-12.mobile-projects
+            .col-md-4.col-md-offset-2
+              .card.fill-white.elevation1.radius6.p-large.h100.text-left
+                a(href="#")
+                  figure
+                    img(src="assets/img/InstantSearch-Android.svg", alt="Logo InstantSearch Android")
+                    figcaption InstantSearch for Android
+            .col-md-4
+              .card.fill-white.elevation1.radius6.p-large.h100.text-left
+                a(href="#")
+                  figure
+                    img(src="assets/img/InstantSearch-Swift.svg", alt="Logo InstantSearch Swift")
+                    figcaption InstantSearch for Swift
 
-  section.pos-rel.h300.w100p.fl-left
-    .cta-free-trial
-      .container
-        .inner-container
-          .row
-            .spacer80
-            .col-md-6
-              h3 Get Started Today, For Free
-              p
-                | Don't wait! Try Algolia! No credit card required.
-                span.clearfix
-                |  Try Algolia for free for 14 days.
-            .col-md-6
-              .inline.spacer32
-              a.btn.btn-static-dark(href='https://algolia.com/users/sign_up')
-                | Start FREE Trial
-                i.icon.icon-arrow-right
-              .inline.spacer30
-              a.link(href='/schedule-demo') I’d rather schedule a demo with a Product Specialist
-            .spacer80.visible-md.visible-sm-visible-xs
+        .spacer40.inline
+        .row.desktop-projects
+          .col-md-12.p-b-large
+            div.heading.w100p.text-left
+              small.color-logan InstantSearch for Desktop
+          .col-md-4
+            .card.fill-white.elevation1.radius6.p-large.h100.text-left
+              a(href="#")
+                figure
+                  img(src="assets/img/InstantSearch-Javascript.svg", alt="Logo InstantSearch Javascript")
+                  figcaption InstantSearch for Javascript
+          .col-md-4
+            .card.fill-white.elevation1.radius6.p-large.h100.text-left
+              a(href="#")
+                figure
+                  img(src="assets/img/InstantSearch-React.svg", alt="Logo InstantSearch React")
+                  figcaption InstantSearch for React
+          .col-md-4
+            .card.fill-white.elevation1.radius6.p-large.h100.text-left
+              a(href="#")
+                figure
+                  img(src="assets/img/InstantSearch-Vue.svg", alt="Logo InstantSearch Vue")
+                  figcaption InstantSearch for Vue
+
+      .inline.spacer80

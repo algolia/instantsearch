@@ -1,0 +1,68 @@
+/**
+ * Algolia components - community header
+ * Light theme
+ */
+
+
+// Navigation
+.algc-navigation
+  background: $white
+  box-shadow: 0 10px 40px 0 rgba($bunting,0.07), 0 2px 9px 0 rgba($bunting,0.06)
+
+
+.algc-navigation__brands a,
+.algc-navigation__menu .algc-menu__list a
+  color: $bunting
+  font-weight: 400
+
+  &:hover
+    color: $deep-cove
+    text-decoration: none
+
+
+.algc-menu__search .algc-search__input button svg path
+  fill: $bunting !important
+
+
+.algc-menu__search--holder.open input[type="search"]
+  background: rgba($bunting, 0.1)
+  color: $bunting
+
+  &::-webkit-input-placeholder
+    color: $bunting
+  &:-moz-placeholder
+    color: $bunting
+  &::-moz-placeholder
+    color: $bunting
+  &:-ms-input-placeholder
+    color: $bunting
+
+.algc-navigation__brands svg.algc-arrowseparator path
+  fill: $logan
+
+
+// Dropdown
+.algc-dropdownroot
+  .algc-dropdownroot__dropdownarrow
+    background: #F7F7FF
+
+
+  &.activeDropdown .algc-dropdownroot__dropdownbg
+    box-shadow: 0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1), 0 -4px 16px rgba(50, 50, 93,0.1)
+
+
+// Mobile
+.algc-openmobile
+  background: #332e58
+  border-radius: 6px
+
+.algc-mobilemenu
+  background: #f8faff
+  &:after
+    display: none
+
+  a
+    color: $bunting
+
+  .algc-mobilemenu__item:after
+    background: linear-gradient(76deg, rgba(28, 199, 208, 0.01) 0%, rgba(28, 199, 208, 0) 18%, #3369e7 46%, rgba(80, 191, 221, 0.7) 93%, rgba(125, 185, 232, 0) 100%)

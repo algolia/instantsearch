@@ -1,0 +1,62 @@
+.cm--item-block,
+.colored-tile {
+  max-width: 120px;
+  height: 120px;
+  border-radius: 16px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  &.small {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+  }
+
+
+  img {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+
+  &.block-green,
+  &.tile-green{
+    background-image: linear-gradient(322deg, #29c9b2, #b7da46);
+  }
+
+  &.block-blue,
+  &.tile-blue {
+    background-image: linear-gradient(135deg, #53ddec, #463d9d);
+  }
+
+  &.block-orange,
+  &.tile-orange {
+    background-image: linear-gradient(140deg, #ffc003, #f02b2b);
+  }
+
+  &.block-red,
+  &.tile-red{
+    background-image: linear-gradient(315deg, #ec4918, #e25d8d);
+  }
+
+  &.block-yellow,
+  &.tile-yellow {
+    background-image: linear-gradient(134deg, #fad961, #f76b1c);
+  }
+
+  &.block-purple,
+  &.tile-purple {
+    background-image: linear-gradient(138deg, #af84e3, #5071c7);
+  }
+
+  &.block-seaweed,
+  &.tile-seaweed {
+    background-image: linear-gradient(135deg, #13c4a5, #10a4b8);
+  }
+  &.tile-lime {
+    background-image: linear-gradient(45deg, #5f8e3d 0%, #94be46 100%);
+  }
+}
