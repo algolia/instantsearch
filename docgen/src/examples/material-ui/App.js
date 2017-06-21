@@ -58,13 +58,14 @@ const MaterialUiExample = props => (
   </InstantSearch>
 );
 
-const Content = React.createClass({
-  getInitialState() {
-    return { drawer: !isMobile };
-  },
+class Content extends React.Component {
+  constructor() {
+    super();
+    this.state = { drawer: !isMobile };
+  }
   drawerAction() {
     this.setState({ drawer: !this.state.drawer });
-  },
+  }
   render() {
     const baseDrawerStyle = {
       transition: 'none',
@@ -146,8 +147,8 @@ const Content = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 const MaterialUiSearchBox = ({ currentRefinement, refine }) => {
   const style = {
@@ -261,7 +262,7 @@ const MaterialUiNestedList = function({ id, items, refine }) {
   );
 };
 
-const MaterialUiSortBy = React.createClass({
+class MaterialUiSortBy extends React.Component {
   render() {
     return (
       <IconMenu
@@ -286,8 +287,8 @@ const MaterialUiSortBy = React.createClass({
         ))}
       </IconMenu>
     );
-  },
-});
+  }
+}
 
 function CustomHits({ hits, marginLeft, hasMore, refine }) {
   const cardStyle = isMobile
