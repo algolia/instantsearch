@@ -1,0 +1,16 @@
+.ais-clear-all {
+  &--link {
+    color: $white;
+    display: inline-block;
+    background: $blue;
+    border-radius: $border-radius;
+    font-size: $font-size;
+    text-decoration: none;
+    padding: 4px 8px;
+  }
+
+  &--link-disabled {
+    opacity: .5;
+    pointer-events: none;
+  }
+}

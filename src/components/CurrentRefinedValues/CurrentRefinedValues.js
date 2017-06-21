@@ -20,9 +20,15 @@ export class RawCurrentRefinedValues extends React.Component {
     if (requestedPosition !== position) {
       return undefined;
     }
+
+    const {refinements, cssClasses} = this.props;
     return (
       <a
-        className={this.props.cssClasses.clearAll}
+        className={
+          refinements && refinements.length > 0
+            ? cssClasses.clearAll
+            : `${cssClasses.clearAll} ${cssClasses.clearAll}-disabled`
+        }
         href={this.props.clearAllURL}
         onClick={handleClick(this.props.clearAllClick)}
       >

@@ -22,6 +22,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} PriceRangesItem
  * @property {number} [from] Lower bound of the price range.
  * @property {number} [to] Higher bound of the price range.
+ * @property {string} url The URL for a single item in the price range.
  */
 
 /**

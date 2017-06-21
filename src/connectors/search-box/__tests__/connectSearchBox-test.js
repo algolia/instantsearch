@@ -103,6 +103,49 @@ describe('connectSearchBox', () => {
     }
   });
 
+  it('provides a function to clear the query and perform new search', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectSearchBox(rendering);
+
+    const widget = makeWidget();
+
+    const helper = jsHelper(fakeClient);
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    { // first rendering
+      expect(helper.state.query).toBe('');
+      const renderOptions = rendering.lastCall.args[0];
+      const {refine} = renderOptions;
+      refine('bip');
+      expect(helper.state.query).toBe('bip');
+      expect(helper.search.callCount).toBe(1);
+    }
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    { // Second rendering
+      expect(helper.state.query).toBe('bip');
+      const renderOptions = rendering.lastCall.args[0];
+      const {clear, query} = renderOptions;
+      expect(query).toBe('bip');
+      clear();
+      expect(helper.state.query).toBe('');
+      expect(helper.search.callCount).toBe(2);
+    }
+  });
+
   it('queryHook parameter let the dev control the behavior of the search', () => {
     const rendering = sinon.stub();
     const makeWidget = connectSearchBox(rendering);
@@ -166,5 +209,69 @@ describe('connectSearchBox', () => {
       expect(helper.state.query).toBe('bop');
       expect(helper.search.callCount).toBe(2);
     }
+  });
+
+  it('should always provide the same refine() and clear() function reference', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectSearchBox(rendering);
+
+    const widget = makeWidget();
+
+    const helper = jsHelper(fakeClient);
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const firstRenderOptions = rendering.lastCall.args[0];
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderOptions = rendering.lastCall.args[0];
+
+    expect(firstRenderOptions.clear).toBe(secondRenderOptions.clear);
+    expect(firstRenderOptions.refine).toBe(secondRenderOptions.refine);
+  });
+
+  it('should clear on init as well', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectSearchBox(rendering);
+
+    const widget = makeWidget();
+
+    const helper = jsHelper(fakeClient);
+    helper.search = sinon.stub();
+    helper.setQuery('foobar');
+
+    expect(helper.state.query).toBe('foobar');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const renderingOptions = rendering.lastCall.args[0];
+    renderingOptions.clear();
+
+    expect(helper.state.query).toBe('');
+    expect(helper.search.called).toBe(true);
   });
 });

@@ -35,14 +35,17 @@ class Slider extends Component {
     return this.props.min === this.props.max;
   }
 
-  handleChange = ({values}) => {
+  handleChange = ({min, max, values}) => {
     // when Slider is disabled, we alter `min, max` values
     // in order to render a "disabled state" Slider. Since we alter
     // theses values, Rheostat trigger a "change" event which trigger a new
     // search to Algolia with wrong values.
     if (!this.isDisabled) {
       const {refine} = this.props;
-      refine(values);
+      refine([
+        min === values[0] ? undefined : values[0],
+        max === values[1] ? undefined : values[1],
+      ]);
     }
   }
 

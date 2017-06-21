@@ -34,10 +34,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomHierarchicalMenuWidgetOptions
- * @property {string[]} attributesof Attributes to use to generate the hierarchy of the menu.
+ * @property {string[]} attributes Attributes to use to generate the hierarchy of the menu.
  * @property {string} [separator = '>'] Separator used in the attributes to separate level values.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
- * @property {string} [showParentLevel = true] Shows the parent level of the current refined value.
+ * @property {boolean} [showParentLevel = true] Shows the parent level of the current refined value.
  * @property {number} [limit = 10] Max number of value to display.
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *

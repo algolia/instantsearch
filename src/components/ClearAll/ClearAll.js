@@ -27,13 +27,16 @@ export class RawClearAll extends React.Component {
   }
 
   render() {
-    const data = {
-      hasRefinements: this.props.hasRefinements,
-    };
+    const {hasRefinements, cssClasses} = this.props;
+    const data = {hasRefinements};
 
     return (
       <a
-        className={this.props.cssClasses.link}
+        className={
+          hasRefinements
+            ? cssClasses.link
+            : `${cssClasses.link} ${cssClasses.link}-disabled`
+        }
         href={this.props.url}
         onClick={this.handleClick}
       >

@@ -41,8 +41,14 @@ This guide also expects you to have a working website. You can also use our boot
 Use a built version of **InstantSearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css">
-<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch.min.css">
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch.min.js"></script>
+```
+
+We also provide you a default Algolia theme for the widgets to be effectively styled:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch-theme-algolia.min.css">
 ```
 
 You will then have access to the `instantsearch` function in the global scope (window).
@@ -60,10 +66,16 @@ If you have a JavaScript build system, you can install **instantsearch.js** from
 const instantsearch = require('instantsearch.js');
 ```
 
-You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css). You can load it by adding this to your page `<head>`:
+You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch.min.css). You can load it by adding this to your page `<head>`:
 
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.3/dist/instantsearch.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch.min.css">
+```
+
+You will also need to load manually the default Algolia theme for the widgets to be effectively styled:
+
+```html
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-RC.1/dist/instantsearch-theme-algolia.min.css">
 ```
 
 ## Initialization
@@ -98,7 +110,7 @@ Congrats 🎉 ! Your website is now connected to Algolia.
 
 The core of a search experience is to display results. By default, **instantsearch.js** will do a query at the start of the page and will retrieve the most relevant hits.
 
-To display results, we are gonna use the hits widget. This widget will display all the results returned by Algolia, and it will update when there are new results.
+To display results, we are the hits widget will be used. This widget will display all the results returned by Algolia, and it will update when there are new results.
 
 A key aspect of InstantSearch.js, is that you need to provide a container for each widget. This will tell instantsearch where to display the widget. Here, we need to define first the container of our results:
 
@@ -166,7 +178,7 @@ In this section we’ve seen:
 
 ## Add a SearchBox
 
-Now that we’ve added the results, we can start querying our index. To do this, we are gonna use the Searchbox widget. Let’s add it in the html page that we created before:
+Now that we’ve added the results, we can start querying our index. To do this, we are going to use the Searchbox widget. Let’s add it in the html page that we created before:
 
 ```html
 <div id="search-box">
@@ -205,7 +217,7 @@ In this part, we’ve seen:
   * How to use the searchbox to query Algolia with text
 
 
-## Add RefinementList
+## Add a RefinementList
 
 While the SearchBox is the way to go when it comes to textual search, you may also want to provide filters based on the structure of the records.
 

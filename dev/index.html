@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <title>Instant search demo built with instantsearch.js</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap-theme.min.css">
   <!-- Array.from needed by dev env -->
   <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.from"></script>
   <script src="https://cdn.jsdelivr.net/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
@@ -14,80 +12,6 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <div class="container">
-    <div class="page-header">
-      <h1><a href="./">Instant search demo</a> <small>using instantsearch.js</small></h1>
-    </div>
-
-    <div class="row">
-      <div class="col-md-3 smooth-search smooth-search--hidden">
-        <div class="facet" id="current-refined-values"></div>
-        <div class="facet" id="hierarchical-categories"></div>
-        <div class="facet" id="searchable-brands"></div>
-        <div class="facet" id="searchable-brands-alwaysActive"></div>
-        <div class="facet" id="brands"></div>
-        <div class="facet" id="brands-2"></div>
-        <div class="facet" id="price-range"></div>
-        <div class="facet" id="free-shipping"></div>
-        <div class="facet" id="google-amazon"></div>
-        <div class="facet" id="price"></div>
-        <div class="facet" id="categories"></div>
-        <div class="facet" id="price-ranges"></div>
-        <div class="facet" id="price-numeric-list"></div>
-        <div class="facet" id="rating"></div>
-        <div id="clear-all"></div>
-      </div>
-      <div class="col-md-9">
-        <div class="form-group">
-          <label for="search-box">InstantSearchBox:</label>
-          <input id="search-box" class="form-control" />
-        </div>
-        <div class="form-group">
-          <label for="search-box-return">EnterSearchBox:</label>
-          <input id="search-box-return" class="form-control" />
-        </div>
-        <div class="smooth-search smooth-search--hidden">
-          <div class="row">
-            <div class="col-md-3">
-              <div id="stats"></div>
-            </div>
-            <div class="col-md-3 text-right">
-              <div class="form-inline">
-                <div class="form-group">
-                  <label for="hits-per-page-selector">Hits per page selector / Show:</label>
-                  <span id="hits-per-page-selector"></span>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 text-right">
-              <div class="form-inline">
-                <div class="form-group">
-                  <label for="sort-by-selector-select">Numeric selector / Popularity:</label>
-                  <span id="popularity-selector"></span>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 text-right">
-              <div class="form-inline">
-                <div class="form-group">
-                  <label for="sort-by-selector-select">Sort by selector / Sort by:</label>
-                  <span id="sort-by-selector"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="pagination" class="text-center"></div>
-          <h3>Infinite hits</h3>
-          <div id="infinite-hits"></div>
-          <h3>Results overview</h3>
-          <div id="hits-table"></div>
-          <h3>Results</h3>
-          <div id="hits"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <script src="bundle.js"></script>
 </body>
 </html>

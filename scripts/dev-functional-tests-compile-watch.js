@@ -17,7 +17,13 @@ export default cb => {
   // first call triggers a watch, but we already have webpack watch triggering
   // so we ignore first call
   watch.watchTree(join(__dirname, '..', 'functional-tests'), (f, curr, prev) => {
+    // Finished walking the tree
     if (typeof f === 'object' && prev === null && curr === null) {
+      return;
+    }
+
+    // As the ignoreDirectoryPattern option is not working
+    if (f.match(/functional-tests\/screenshots/) !== null) {
       return;
     }
 
