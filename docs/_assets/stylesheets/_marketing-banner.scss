@@ -6,7 +6,7 @@ $banner-background: #6159E1;
   height: $banner-height;
   width: 100%;
   position: relative;
-  background: linear-gradient(to bottom right, #69A0F6, $banner-background)no-repeat top left / 150%;
+  background: linear-gradient(to top left, #FCB43A, #FEDD4E)no-repeat bottom right / 150%;
   float: left;
   line-height: $banner-height;
   padding: 0 2em;
@@ -16,16 +16,21 @@ $banner-background: #6159E1;
 
     a.banner-close {
       position: absolute;
-      top: 0;
-      right: 0;
-      padding: 0 2.5em;
-      color: #FFFFFF;
+      top: 11px;
+      right: 2.5em;
+      padding: 0 0;
+      color: #fff;
       text-decoration: none;
-      opacity: 0.5;
+      background: rgba(32, 28, 56, 0.5);
+      height: 2em;
+      width: 2em;
+      line-height: 2em;
+      text-align: center;
+      border-radius: 1em;
 
       &:hover {
-        color: #FB366E;
-        opacity: 1;
+        color: #fff;
+        background: rgba(32, 28, 56, 0.7);
       }
     }
 
@@ -34,11 +39,11 @@ $banner-background: #6159E1;
   }
 
   .banner__description {
-    color: #FFFFFF;
+    color: #201C38;
     text-align: center;
 
     a {
-      color: #FFFFFF;
+      color: #201C38;
       text-decoration: none;
       display: block;
       width: 100%;

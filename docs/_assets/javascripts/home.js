@@ -238,8 +238,8 @@ function banner() {
   inThreeMonth.setMonth(inThreeMonth.getMonth() + 3);
 
   // Cookies === js-cookie https://github.com/js-cookie/js-cookie
-  if (Cookies.get('showReactBanner') === undefined) {
-    Cookies.set('showReactBanner', true, {expires: 30}); // days
+  if (Cookies.get('showRCv2') === undefined) {
+    Cookies.set('showRCv2', true, {expires: 30}); // days
   }
 
   /* Second security - force banner to offset */
@@ -247,7 +247,7 @@ function banner() {
   banner.style.transform = `translateY(-${bannerHeight}px)`;
 
   /* Open banner after X seconds */
-  if ( Cookies.getJSON('showReactBanner') === true) {
+  if ( Cookies.getJSON('showRCv2') === true) {
     setTimeout( () => {
       banner.style.webkitTransform = `translateY(${headerHeight}px)`;
       banner.style.transform = `translateY(${headerHeight}px)`;
@@ -256,10 +256,10 @@ function banner() {
 
   /* Close banner if cross clicked */
   close.addEventListener('click', () => {
-    if (Cookies.getJSON('showReactBanner') === true) { // handle multiple clicks
+    if (Cookies.getJSON('showRCv2') === true) { // handle multiple clicks
       banner.style.webkitTransform = `translateY(-${bannerHeight}px)`;
       banner.style.transform = `translateY(-${bannerHeight}px)`;
-      Cookies.set('showReactBanner', false, {expires: 30});
+      Cookies.set('showRCv2', false, {expires: 30});
     }
   });
 }
