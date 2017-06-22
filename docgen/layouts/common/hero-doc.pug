@@ -1,0 +1,16 @@
+
+script(src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js")
+
+section.hero.hero-doc.fill-titan
+  .spacer120
+  .container
+    .col-md-12.h300.text-left
+      if mainTitle
+        h1.text-heading.color-white
+          | !{'<span class="text-thin">' + mainTitle + '  <span class="text-xl vertical-align-middle">&#9654;</span> </span> '}
+          span.text-normal=title
+      else
+        h1.text-heading.text-thin.color-white=title
+
+
+
