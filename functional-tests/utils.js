@@ -16,3 +16,14 @@ export const searchBox = {
     return browser.getValue('#search-box');
   },
 };
+
+function blurAll() {
+  if ('activeElement' in document) {
+    document.activeElement.blur();
+  }
+}
+
+export function prepareScreenshot() {
+  // The focus bar visibility is flaky.
+  return browser.execute(blurAll);
+}
