@@ -27,6 +27,7 @@ will be done on the maintenance version.
 To run this project, you will need:
 
 - Node.js >= v7.10.0 and <= 8, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
+- yarn https://yarnpkg.com/en/
 
 ## Development
 
@@ -67,8 +68,19 @@ Files are automatically formatted with prettier.
 
 ## Release
 
+### Main version
+For the main version, go on master (`git checkout master`) and use:
+
 ```sh
-npm run release
+yarn run release
+```
+
+### Maintenance version
+
+For the maintenance version, go on maintenance (`git checkout maintenance`) and use:
+
+```sh
+yarn run release-maintenance
 ```
 
 ## Update docs
