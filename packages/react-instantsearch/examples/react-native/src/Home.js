@@ -232,7 +232,7 @@ class Hits extends Component {
     return hits;
   }
 
-  _renderRow = (hit, sectionId, rowId) => (
+  _renderRow = (hit, sectionId, rowId) =>
     <View style={styles.item} key={rowId}>
       <Image style={{ height: 100, width: 100 }} source={{ uri: hit.image }} />
       <View style={styles.itemContent}>
@@ -264,18 +264,16 @@ class Hits extends Component {
         </View>
       </View>
 
-    </View>
-  );
+    </View>;
 
-  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => (
+  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) =>
     <View
       key={`${sectionID}-${rowID}`}
       style={{
         height: adjacentRowHighlighted ? 4 : 1,
         backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
       }}
-    />
-  );
+    />;
 }
 
 Hits.propTypes = {
@@ -285,9 +283,9 @@ Hits.propTypes = {
 };
 
 const ConnectedHits = connectInfiniteHits(Hits);
-const ConnectedStats = connectStats(({ nbHits }) => (
+const ConnectedStats = connectStats(({ nbHits }) =>
   <Text style={{ paddingLeft: 8 }}>{nbHits} products found</Text>
-));
+);
 
 const ConnectedSortBy = connectSortBy(
   ({ refine, items, currentRefinement }) => {
@@ -341,7 +339,7 @@ const ConnectedSortBy = connectSortBy(
 );
 
 const Filters = connectCurrentRefinements(
-  ({ items, searchState, onSearchStateChange }) => (
+  ({ items, searchState, onSearchStateChange }) =>
     <Button
       onPress={() =>
         Actions.Filters({
@@ -351,7 +349,6 @@ const Filters = connectCurrentRefinements(
       title={`Filters (${items.length})`}
       color="#162331"
     />
-  )
 );
 const VirtualRange = connectRange(() => null);
 const VirtualRefinementList = connectRefinementList(() => null);

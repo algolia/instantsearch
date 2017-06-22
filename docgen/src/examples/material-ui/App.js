@@ -37,14 +37,13 @@ import { withUrlSync } from '../urlSync';
 
 injectTapEventPlugin();
 
-const App = props => (
+const App = props =>
   <MuiThemeProvider>
     <MaterialUiExample {...props} />
-  </MuiThemeProvider>
-);
+  </MuiThemeProvider>;
 
 const isMobile = window.innerWidth < 450;
-const MaterialUiExample = props => (
+const MaterialUiExample = props =>
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
@@ -55,8 +54,7 @@ const MaterialUiExample = props => (
   >
     <Configure hitsPerPage={20} />
     <Content />
-  </InstantSearch>
-);
+  </InstantSearch>;
 
 class Content extends React.Component {
   constructor() {
@@ -190,7 +188,7 @@ const MaterialUiSearchBox = ({ currentRefinement, refine }) => {
   );
 };
 
-const CheckBoxItem = ({ item, refine }) => (
+const CheckBoxItem = ({ item, refine }) =>
   <ListItem
     primaryText={item.label}
     leftCheckbox={
@@ -202,29 +200,27 @@ const CheckBoxItem = ({ item, refine }) => (
         }}
       />
     }
-  />
-);
+  />;
 
 const MaterialUiCheckBoxRefinementList = ({
   items,
   attributeName,
   refine,
   createURL,
-}) => (
+}) =>
   <List>
     <Subheader style={{ fontSize: 18 }}>
       {attributeName.toUpperCase()}
     </Subheader>
-    {items.map(item => (
+    {items.map(item =>
       <CheckBoxItem
         key={item.label}
         item={item}
         refine={refine}
         createURL={createURL}
       />
-    ))}
-  </List>
-);
+    )}
+  </List>;
 
 const MaterialUiNestedList = function({ id, items, refine }) {
   return (
@@ -232,7 +228,7 @@ const MaterialUiNestedList = function({ id, items, refine }) {
       <Subheader style={{ fontSize: 18 }}>{id.toUpperCase()}</Subheader>
       {items.map((item, idx) => {
         const nestedElements = item.items
-          ? item.items.map((child, childIdx) => (
+          ? item.items.map((child, childIdx) =>
               <ListItem
                 primaryText={child.label}
                 key={childIdx}
@@ -242,7 +238,7 @@ const MaterialUiNestedList = function({ id, items, refine }) {
                 }}
                 style={child.isRefined ? { fontWeight: 700 } : {}}
               />
-            ))
+            )
           : [];
         return (
           <ListItem
@@ -274,7 +270,7 @@ class MaterialUiSortBy extends React.Component {
         onChange={this.handleChange}
         value={this.props.currentRefinement}
       >
-        {this.props.items.map(item => (
+        {this.props.items.map(item =>
           <MenuItem
             key={item.value}
             value={item.value}
@@ -284,7 +280,7 @@ class MaterialUiSortBy extends React.Component {
               this.props.refine(item.value);
             }}
           />
-        ))}
+        )}
       </IconMenu>
     );
   }
@@ -318,7 +314,7 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
   return (
     <div>
       <main id="hits" style={containerCardStyle}>
-        {hits.map((hit, idx) => (
+        {hits.map((hit, idx) =>
           <Card key={idx} style={cardStyle}>
             <CardHeader
               subtitle={<Highlight attributeName="name" hit={hit} />}
@@ -343,7 +339,7 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
               titleStyle={{ fontSize: 16 }}
             />
           </Card>
-        ))}
+        )}
       </main>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <RaisedButton

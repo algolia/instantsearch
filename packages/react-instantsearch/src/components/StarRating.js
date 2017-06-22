@@ -142,7 +142,7 @@ class StarRating extends Component {
       const hasCount = !isEmpty(count.filter(item => Number(item.value) === i));
       const lastSelectableItem = count.reduce(
         (acc, item) =>
-          (item.value < acc.value || (!acc.value && hasCount) ? item : acc),
+          item.value < acc.value || (!acc.value && hasCount) ? item : acc,
         {}
       );
       const itemCount = count.reduce(

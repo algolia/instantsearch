@@ -9,7 +9,7 @@ const stories = storiesOf('Snippet', module);
 
 stories.addDecorator(withKnobs);
 
-const Default = ({ hit }) => (
+const Default = ({ hit }) =>
   <article>
     <p>
       <Snippet attributeName="name" hit={hit} />
@@ -17,14 +17,13 @@ const Default = ({ hit }) => (
     <p>
       <Snippet attributeName="description" hit={hit} />
     </p>
-  </article>
-);
+  </article>;
 
 Default.propTypes = {
   hit: PropTypes.object.isRequired,
 };
 
-const StrongHits = ({ hit }) => (
+const StrongHits = ({ hit }) =>
   <article>
     <p>
       <Snippet
@@ -40,21 +39,20 @@ const StrongHits = ({ hit }) => (
         hit={hit}
       />
     </p>
-  </article>
-);
+  </article>;
 
 StrongHits.propTypes = {
   hit: PropTypes.object.isRequired,
 };
 
 stories
-  .add('default', () => (
+  .add('default', () =>
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Snippet">
       <Hits hitComponent={Default} />
     </WrapWithHits>
-  ))
-  .add('playground', () => (
+  )
+  .add('playground', () =>
     <WrapWithHits linkedStoryGroup="Snippet">
       <Hits hitComponent={StrongHits} />
     </WrapWithHits>
-  ));
+  );

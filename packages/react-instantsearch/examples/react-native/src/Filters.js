@@ -108,12 +108,14 @@ class Refinements extends React.Component {
       Price: {
         attributeName: 'price',
         value: item =>
-          `From ${item.currentRefinement.min}$ to ${item.currentRefinement.max}$`,
+          `From ${item.currentRefinement.min}$ to ${item.currentRefinement
+            .max}$`,
       },
       Rating: {
         attributeName: 'rating',
         value: item =>
-          `From ${item.currentRefinement.min} stars to ${item.currentRefinement.max} stars`,
+          `From ${item.currentRefinement.min} stars to ${item.currentRefinement
+            .max} stars`,
       },
       ClearAll: {
         attributeName: 'clearAll',
@@ -159,15 +161,14 @@ class Refinements extends React.Component {
     return <View>{filtersRow}</View>;
   };
 
-  _renderSeparator = (sectionID, rowId, adjacentRowHighlighted) => (
+  _renderSeparator = (sectionID, rowId, adjacentRowHighlighted) =>
     <View
       key={`${sectionID}-${rowId}`}
       style={{
         height: adjacentRowHighlighted ? 4 : 1,
         backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
       }}
-    />
-  );
+    />;
   render() {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,

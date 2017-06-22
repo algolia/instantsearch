@@ -22,7 +22,7 @@ import Rheostat from 'rheostat';
 
 import { withUrlSync } from '../urlSync';
 
-const App = props => (
+const App = props =>
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
@@ -35,8 +35,7 @@ const App = props => (
     <Header />
     <Filters />
     <Results />
-  </InstantSearch>
-);
+  </InstantSearch>;
 
 function Header() {
   return (
@@ -133,9 +132,9 @@ function HitsMap({ hits }) {
   const boundsConfig = hits.length > 0
     ? fitBounds(boundingPoints, availableSpace)
     : {};
-  const markers = hits.map(hit => (
+  const markers = hits.map(hit =>
     <CustomMarker lat={hit.lat} lng={hit.lng} key={hit.objectID} />
-  ));
+  );
   const options = {
     minZoomOverride: true,
     minZoom: 2,

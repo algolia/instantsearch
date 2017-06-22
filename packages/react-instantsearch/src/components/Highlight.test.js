@@ -15,7 +15,8 @@ describe('Highlight', () => {
         deep: {
           attribute: {
             value: {
-              value: 'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
+              value:
+                'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
               fullyHighlighted: true,
               matchLevel: 'full',
               matchedWords: [''],
@@ -52,7 +53,8 @@ describe('Highlight', () => {
         deep: {
           attribute: {
             value: {
-              value: 'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
+              value:
+                'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
               fullyHighlighted: true,
               matchLevel: 'full',
               matchedWords: [''],

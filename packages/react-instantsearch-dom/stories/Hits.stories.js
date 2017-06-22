@@ -9,17 +9,17 @@ const stories = storiesOf('Hits', module);
 
 stories.addDecorator(withKnobs);
 
-stories.add('default', () => (
+stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="Hits">
     <Hits />
   </WrapWithHits>
-));
+);
 
-stories.add('with custom rendering', () => (
+stories.add('with custom rendering', () =>
   <WrapWithHits linkedStoryGroup="Hits">
     <Hits hitComponent={Product} />
   </WrapWithHits>
-));
+);
 
 function Product({ hit }) {
   return (

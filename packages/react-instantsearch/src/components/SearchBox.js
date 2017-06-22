@@ -68,9 +68,9 @@ class SearchBox extends Component {
   }
 
   getQuery = () =>
-    (this.props.searchAsYouType
+    this.props.searchAsYouType
       ? this.props.currentRefinement
-      : this.state.query);
+      : this.state.query;
 
   setQuery = val => {
     const { refine, searchAsYouType } = this.props;

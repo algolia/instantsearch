@@ -15,9 +15,9 @@ class InfiniteHits extends Component {
       refine,
       translate,
     } = this.props;
-    const renderedHits = hits.map(hit => (
+    const renderedHits = hits.map(hit =>
       <ItemComponent key={hit.objectID} hit={hit} />
-    ));
+    );
     const loadMoreButton = hasMore
       ? <button {...cx('loadMore')} onClick={() => refine()}>
           {translate('loadMore')}
@@ -46,7 +46,7 @@ InfiniteHits.propTypes = {
 
 /* eslint-disable react/display-name */
 InfiniteHits.defaultProps = {
-  hitComponent: hit => (
+  hitComponent: hit =>
     <div
       style={{
         borderBottom: '1px solid #bbb',
@@ -55,8 +55,7 @@ InfiniteHits.defaultProps = {
       }}
     >
       {JSON.stringify(hit).slice(0, 100)}...
-    </div>
-  ),
+    </div>,
 };
 /* eslint-enable react/display-name */
 

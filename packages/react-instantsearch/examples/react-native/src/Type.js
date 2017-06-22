@@ -181,15 +181,14 @@ class RefinementList extends Component {
     );
   };
 
-  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => (
+  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) =>
     <View
       key={`${sectionID}-${rowID}`}
       style={{
         height: adjacentRowHighlighted ? 4 : 1,
         backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
       }}
-    />
-  );
+    />;
 }
 
 RefinementList.propTypes = {

@@ -1,5 +1,4 @@
-import connectCurrentRefinements
-  from '../connectors/connectCurrentRefinements.js';
+import connectCurrentRefinements from '../connectors/connectCurrentRefinements.js';
 import ClearAllComponent from '../components/ClearAll.js';
 
 /**

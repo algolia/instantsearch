@@ -8,8 +8,8 @@ const stories = storiesOf('InfiniteHits', module);
 
 stories.addDecorator(withKnobs);
 
-stories.add('default', () => (
+stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="Hits" pagination={false}>
     <InfiniteHits />
   </WrapWithHits>
-));
+);

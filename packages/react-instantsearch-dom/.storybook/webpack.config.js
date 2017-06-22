@@ -1,4 +1,4 @@
-/* eslint-disable import/no-commonjs */
+// eslint-disable-next-line import/no-commonjs
 module.exports = {
   module: {
     rules: [
@@ -9,4 +9,3 @@ module.exports = {
     ],
   },
 };
-/* eslint-enable import/no-commonjs */

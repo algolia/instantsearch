@@ -269,7 +269,7 @@ export default function createInstantSearchManager({
       .getState()
       .metadata.reduce(
         (res, meta) =>
-          (typeof meta.id !== 'undefined' ? res.concat(meta.id) : res),
+          typeof meta.id !== 'undefined' ? res.concat(meta.id) : res,
         []
       );
   }

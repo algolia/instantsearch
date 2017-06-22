@@ -23,7 +23,10 @@ export default function highlight(source, lang) {
       return;
     }
 
-    tokenizedSource += `<span class="cs-${style.replace(/ +/g, ' cs-')}">${text}</span>`;
+    tokenizedSource += `<span class="cs-${style.replace(
+      / +/g,
+      ' cs-'
+    )}">${text}</span>`;
   });
 
   return `<pre class="code-sample language-${lang}">

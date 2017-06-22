@@ -10,7 +10,7 @@ const stories = storiesOf('SearchBox', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () => (
+  .add('default', () =>
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
@@ -18,8 +18,8 @@ stories
     >
       <SearchBox />
     </WrapWithHits>
-  ))
-  .add('with a default query', () => (
+  )
+  .add('with a default query', () =>
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
@@ -27,8 +27,8 @@ stories
     >
       <SearchBox defaultRefinement="battery" />
     </WrapWithHits>
-  ))
-  .add('with submit and reset components', () => (
+  )
+  .add('with submit and reset components', () =>
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
@@ -43,8 +43,8 @@ stories
         }
       />
     </WrapWithHits>
-  ))
-  .add('playground', () => (
+  )
+  .add('playground', () =>
     <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
       <SearchBox
         focusShortcuts={['s']}
@@ -59,7 +59,7 @@ stories
         })}
       />
     </WrapWithHits>
-  ));
+  );
 
 // with event listeners
 // --------------------
@@ -116,7 +116,7 @@ class SearchBoxContainer extends Component {
           }}
         >
           {/* events checkboxes */}
-          {this.supportedEvents.map(eventName => (
+          {this.supportedEvents.map(eventName =>
             <label key={eventName} style={{ marginRight: 10 }}>
               <input
                 name={`selectEvent-${eventName}`}
@@ -126,11 +126,12 @@ class SearchBoxContainer extends Component {
               />
               {eventName}
             </label>
-          ))}
+          )}
 
           <div style={{ marginBottom: 5, marginTop: 5, fontSize: 12 }}>
             <em>
-              (Click on the "action logger" tab of the right sidebar to see events logs)
+              (Click on the "action logger" tab of the right sidebar to see
+              events logs)
             </em>
           </div>
         </div>

@@ -7,11 +7,11 @@ import Rheostat from 'rheostat';
 
 const stories = storiesOf('Integration With Other Libraries', module);
 
-stories.add('Airbnb Rheostat', () => (
+stories.add('Airbnb Rheostat', () =>
   <WrapWithHits linkedStoryGroup="3rdPartyIntegrations">
     <ConnectedRange attributeName="price" />
   </WrapWithHits>
-));
+);
 
 class Range extends Component {
   static propTypes = {

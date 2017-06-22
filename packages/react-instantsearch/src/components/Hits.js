@@ -22,7 +22,7 @@ Hits.propTypes = {
 
 /* eslint-disable react/display-name */
 Hits.defaultProps = {
-  hitComponent: hit => (
+  hitComponent: hit =>
     <div
       style={{
         borderBottom: '1px solid #bbb',
@@ -31,8 +31,7 @@ Hits.defaultProps = {
       }}
     >
       {JSON.stringify(hit).slice(0, 100)}...
-    </div>
-  ),
+    </div>,
 };
 /* eslint-enable react/display-name */
 

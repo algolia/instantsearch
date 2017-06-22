@@ -20,7 +20,7 @@ const updateAfter = 700;
 const createURL = state => `?${qs.stringify(state)}`;
 
 const searchStateToUrl = (props, searchState) =>
-  (searchState ? `${props.location.pathname}${createURL(searchState)}` : '');
+  searchState ? `${props.location.pathname}${createURL(searchState)}` : '';
 
 class App extends Component {
   constructor(props) {

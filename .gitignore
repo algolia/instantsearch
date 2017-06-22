@@ -9,3 +9,9 @@ npm-debug.log
 *.iml
 preview.zip
 .happypack/
+
+# Ignore Argos CI screenshots.
+test/screenshots/
+
+# Ignore Happo build.
+test/.happo/

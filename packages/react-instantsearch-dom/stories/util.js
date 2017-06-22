@@ -12,15 +12,14 @@ import { connectHits } from '../packages/react-instantsearch/connectors';
 import { linkTo } from '@storybook/react';
 import '../packages/react-instantsearch-theme-algolia/style.scss';
 
-const Wrap = props => (
+const Wrap = props =>
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="ikea"
   >
     {props.children}
-  </InstantSearch>
-);
+  </InstantSearch>;
 
 Wrap.propTypes = {
   children: PropTypes.node,
@@ -78,7 +77,8 @@ const WrapWithHits = ({
               {searchBox
                 ? <SearchBox
                     translations={{
-                      placeholder: 'Search into our furnitures: chair, table, tv unit...',
+                      placeholder:
+                        'Search into our furnitures: chair, table, tv unit...',
                     }}
                   />
                 : null}
@@ -96,9 +96,9 @@ const WrapWithHits = ({
   );
 };
 
-const CustomHits = connectHits(({ hits }) => (
+const CustomHits = connectHits(({ hits }) =>
   <div className="hits">
-    {hits.map((hit, idx) => (
+    {hits.map((hit, idx) =>
       <div key={idx} className="hit">
         <div>
           <div className="hit-picture"><img src={`${hit.image}`} /></div>
@@ -117,9 +117,9 @@ const CustomHits = connectHits(({ hits }) => (
           </div>
         </div>
       </div>
-    ))}
+    )}
   </div>
-));
+);
 
 WrapWithHits.propTypes = {
   children: PropTypes.node,

@@ -13,22 +13,22 @@ const stories = storiesOf('HierarchicalMenu', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () => (
+  .add('default', () =>
     <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
       <HierarchicalMenu
         attributes={['category', 'sub_category', 'sub_sub_category']}
       />
     </WrapWithHits>
-  ))
-  .add('with default selected item', () => (
+  )
+  .add('with default selected item', () =>
     <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
       <HierarchicalMenu
         attributes={['category', 'sub_category', 'sub_sub_category']}
         defaultRefinement="Eating"
       />
     </WrapWithHits>
-  ))
-  .add('with show more', () => (
+  )
+  .add('with show more', () =>
     <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
       <HierarchicalMenu
         attributes={['category', 'sub_category', 'sub_sub_category']}
@@ -37,8 +37,8 @@ stories
         showMore={true}
       />
     </WrapWithHits>
-  ))
-  .add('with panel', () => (
+  )
+  .add('with panel', () =>
     <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
       <Panel title="Category">
         <HierarchicalMenu
@@ -46,8 +46,8 @@ stories
         />
       </Panel>
     </WrapWithHits>
-  ))
-  .add('with panel but no refinement', () => (
+  )
+  .add('with panel but no refinement', () =>
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
@@ -62,8 +62,8 @@ stories
         </div>
       </Panel>
     </WrapWithHits>
-  ))
-  .add('playground', () => (
+  )
+  .add('playground', () =>
     <WrapWithHits linkedStoryGroup="HierarchicalMenu">
       <HierarchicalMenu
         attributes={['category', 'sub_category', 'sub_sub_category']}
@@ -73,4 +73,4 @@ stories
         showMore={boolean('showMore', true)}
       />
     </WrapWithHits>
-  ));
+  );

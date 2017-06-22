@@ -39,7 +39,7 @@ export default function App() {
   );
 }
 
-const Header = () => (
+const Header = () =>
   <header className="content-wrapper">
     <a
       href="https://community.algolia.com/react-instantsearch/"
@@ -52,10 +52,9 @@ const Header = () => (
     </a>
     <a href="./" className="logo">aeki</a>
     <ConnectedSearchBox />
-  </header>
-);
+  </header>;
 
-const Facets = () => (
+const Facets = () =>
   <aside>
 
     <ClearAll
@@ -101,10 +100,9 @@ const Facets = () => (
     <div className="thank-you">
       Data courtesy of <a href="http://www.ikea.com/">ikea.com</a>
     </div>
-  </aside>
-);
+  </aside>;
 
-const CustomSearchBox = ({ currentRefinement, refine }) => (
+const CustomSearchBox = ({ currentRefinement, refine }) =>
   <div className="input-group">
     <input
       type="text"
@@ -119,8 +117,7 @@ const CustomSearchBox = ({ currentRefinement, refine }) => (
         <i className="fa fa-search" />
       </button>
     </span>
-  </div>
-);
+  </div>;
 
 const ColorItem = ({ item, createURL, refine }) => {
   const active = item.isRefined ? 'checked' : '';
@@ -138,19 +135,19 @@ const ColorItem = ({ item, createURL, refine }) => {
 };
 
 const CustomColorRefinementList = ({ items, refine, createURL }) =>
-  (items.length > 0
+  items.length > 0
     ? <div>
         <h5 className={'ais-Panel__Title'}>Colors</h5>
-        {items.map(item => (
+        {items.map(item =>
           <ColorItem
             key={item.label}
             item={item}
             refine={refine}
             createURL={createURL}
           />
-        ))}
+        )}
       </div>
-    : null);
+    : null;
 
 function CustomHits({ hits, refine, hasMore }) {
   const loadMoreButton = hasMore
