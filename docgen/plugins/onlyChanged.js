@@ -17,10 +17,10 @@ const cssFiles = join(__dirname, '../src/stylesheets/**/*');
 const CSSEntryPoints = ['stylesheets/index.css', 'stylesheets/header.css'];
 
 export const hasChanged = file =>
-  (file.stats && file.stats.ctime && file.stats.mtime
+  file.stats && file.stats.ctime && file.stats.mtime
     ? Date.parse(file.stats.ctime) > lastRunTime ||
         Date.parse(file.stats.mtime) > lastRunTime
-    : true);
+    : true;
 
 export default function onlyChanged(files, metalsmith, cb) {
   if (lastRunTime === false) {

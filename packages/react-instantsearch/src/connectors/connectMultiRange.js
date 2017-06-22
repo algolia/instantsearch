@@ -75,9 +75,11 @@ function itemHasRefinement(attributeName, results, value) {
   const end = Number(range[1]) === 0 || value === ''
     ? Number.POSITIVE_INFINITY
     : Number(range[1]);
-  return !(Boolean(stats) &&
+  return !(
+    Boolean(stats) &&
     (isRefinementsRangeIncludesInsideItemRange(stats, start, end) ||
-      isItemRangeIncludedInsideRefinementsRange(stats, start, end)));
+      isItemRangeIncludedInsideRefinementsRange(stats, start, end))
+  );
 }
 
 function refine(props, searchState, nextRefinement, context) {
@@ -159,8 +161,8 @@ export default createConnector({
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement,
-      canRefine: items.length > 0 &&
-        items.some(item => item.noRefinement === false),
+      canRefine:
+        items.length > 0 && items.some(item => item.noRefinement === false),
     };
   },
 

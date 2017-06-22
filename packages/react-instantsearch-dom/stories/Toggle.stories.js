@@ -9,7 +9,7 @@ const stories = storiesOf('Toggle', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () => (
+  .add('default', () =>
     <WrapWithHits linkedStoryGroup="Toggle">
       <Toggle
         attributeName="materials"
@@ -17,8 +17,8 @@ stories
         value={'Solid pine'}
       />
     </WrapWithHits>
-  ))
-  .add('checked by default', () => (
+  )
+  .add('checked by default', () =>
     <WrapWithHits linkedStoryGroup="Toggle">
       <Toggle
         attributeName="materials"
@@ -27,4 +27,4 @@ stories
         defaultRefinement={true}
       />
     </WrapWithHits>
-  ));
+  );

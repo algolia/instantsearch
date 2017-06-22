@@ -4,9 +4,17 @@ before_script:
 branches:
   only:
     - master
+addons:
+  firefox: 50.0
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 cache:
   yarn: true
   directories:
     - node_modules
     - packages/react-instantsearch/node_modules
     - packages/react-instantsearch-theme-algolia/node_modules
+env:
+  global:
+  - ARGOS_TOKEN=da82cbbe3add183c6adb18f5c61da515d9bf99dd

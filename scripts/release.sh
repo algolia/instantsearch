@@ -20,7 +20,7 @@ if [[ $(cd packages/react-instantsearch && npm owner ls) != *"$(npm whoami)"* ]]
   printf "Release: Not an owner of the npm ris repo, ask for it\n"
   exit 1
 fi
- 
+
 if [[ $(cd packages/react-instantsearch-theme-algolia && npm owner ls) != *"$(npm whoami)"* ]]; then
   printf "Release: Not an owner of the npm theme repo, ask for it\n"
   exit 1

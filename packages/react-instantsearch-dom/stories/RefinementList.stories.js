@@ -14,17 +14,17 @@ const stories = storiesOf('RefinementList', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () => (
+  .add('default', () =>
     <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList attributeName="category" />
     </WrapWithHits>
-  ))
-  .add('with selected item', () => (
+  )
+  .add('with selected item', () =>
     <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList attributeName="category" defaultRefinement={['Dining']} />
     </WrapWithHits>
-  ))
-  .add('with show more', () => (
+  )
+  .add('with show more', () =>
     <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList
         attributeName="category"
@@ -33,13 +33,13 @@ stories
         showMore={true}
       />
     </WrapWithHits>
-  ))
-  .add('with search inside items', () => (
+  )
+  .add('with search inside items', () =>
     <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList attributeName="category" withSearchBox />
     </WrapWithHits>
-  ))
-  .add('with the sort strategy changed', () => (
+  )
+  .add('with the sort strategy changed', () =>
     <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <RefinementList
         attributeName="category"
@@ -47,15 +47,15 @@ stories
           orderBy(items, ['label', 'count'], ['asc', 'desc'])}
       />
     </WrapWithHits>
-  ))
-  .add('with panel', () => (
+  )
+  .add('with panel', () =>
     <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
       <Panel title="Category">
         <RefinementList attributeName="category" />
       </Panel>
     </WrapWithHits>
-  ))
-  .add('with panel but no refinement', () => (
+  )
+  .add('with panel but no refinement', () =>
     <WrapWithHits
       searchBox={false}
       linkedStoryGroup="RefinementList"
@@ -68,8 +68,8 @@ stories
         </div>
       </Panel>
     </WrapWithHits>
-  ))
-  .add('playground', () => (
+  )
+  .add('playground', () =>
     <WrapWithHits linkedStoryGroup="RefinementList">
       <RefinementList
         attributeName="category"
@@ -82,4 +82,4 @@ stories
         showMore={boolean('showMore', true)}
       />
     </WrapWithHits>
-  ));
+  );

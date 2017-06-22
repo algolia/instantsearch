@@ -10,9 +10,9 @@ export default function() {
   return function(files, metalsmith, done) {
     const allFilles = Object.entries(files).reduce(
       (memo, [filename, file]) =>
-        (/\.jsdoc$/.test(filename)
+        /\.jsdoc$/.test(filename)
           ? [...memo, { filename: filename.replace(/\.jsdoc$/, ''), ...file }]
-          : memo),
+          : memo,
       []
     );
 
@@ -80,9 +80,9 @@ export default function() {
             stats: fileFromMetalsmith && fileFromMetalsmith.stats,
             filename: fileFromMetalsmith && fileFromMetalsmith.filename,
             title,
-            mainTitle: `${data.kind
-              .charAt(0)
-              .toUpperCase()}${data.kind.slice(1)}s`, //
+            mainTitle: `${data.kind.charAt(0).toUpperCase()}${data.kind.slice(
+              1
+            )}s`, //
             withHeadings: false,
             layout: `${data.kind}.pug`,
             category: data.kind,

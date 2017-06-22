@@ -34,7 +34,7 @@ export default class LinkList extends Component {
     const { cx, createURL, items, onSelect, canRefine } = this.props;
     return (
       <ul {...cx('root', !canRefine && 'noRefinement')}>
-        {items.map(item => (
+        {items.map(item =>
           <li
             key={has(item, 'key') ? item.key : item.value}
             {...cx(
@@ -58,7 +58,7 @@ export default class LinkList extends Component {
                   {has(item, 'label') ? item.label : item.value}
                 </Link>}
           </li>
-        ))}
+        )}
       </ul>
     );
   }

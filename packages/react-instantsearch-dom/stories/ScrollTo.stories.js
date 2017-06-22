@@ -8,11 +8,11 @@ const stories = storiesOf('ScrollTo', module);
 
 stories.addDecorator(withKnobs);
 
-stories.add('default', () => (
+stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="ScrollTo">
     <Configure hitsPerPage={5} />
     <ScrollTo>
       <Hits />
     </ScrollTo>
   </WrapWithHits>
-));
+);

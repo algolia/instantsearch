@@ -8,10 +8,10 @@ const stories = storiesOf('Stats', module);
 
 stories.addDecorator(withKnobs);
 
-stories.add('default', () => (
+stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="Stats">
     <div>
       <Stats />
     </div>
   </WrapWithHits>
-));
+);

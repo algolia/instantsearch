@@ -29,7 +29,7 @@ export default class Select extends Component {
 
     return (
       <select {...cx('root')} value={selectedItem} onChange={this.onChange}>
-        {items.map(item => (
+        {items.map(item =>
           <option
             key={has(item, 'key') ? item.key : item.value}
             disabled={item.disabled}
@@ -37,7 +37,7 @@ export default class Select extends Component {
           >
             {has(item, 'label') ? item.label : item.value}
           </option>
-        ))}
+        )}
       </select>
     );
   }

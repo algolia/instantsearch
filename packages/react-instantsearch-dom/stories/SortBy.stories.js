@@ -9,7 +9,7 @@ const stories = storiesOf('SortBy', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () => (
+  .add('default', () =>
     <WrapWithHits linkedStoryGroup="SortBy">
       <SortBy
         items={[
@@ -20,8 +20,8 @@ stories
         defaultRefinement="ikea"
       />
     </WrapWithHits>
-  ))
-  .add('without label', () => (
+  )
+  .add('without label', () =>
     <WrapWithHits linkedStoryGroup="SortBy">
       <SortBy
         items={[
@@ -32,4 +32,4 @@ stories
         defaultRefinement="ikea"
       />
     </WrapWithHits>
-  ));
+  );

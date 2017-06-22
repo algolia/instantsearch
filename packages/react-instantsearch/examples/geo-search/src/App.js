@@ -10,9 +10,7 @@ import qs from 'qs';
 
 const updateAfter = 700;
 const searchStateToUrl = searchState =>
-  (searchState
-    ? `${window.location.pathname}?${qs.stringify(searchState)}`
-    : '');
+  searchState ? `${window.location.pathname}?${qs.stringify(searchState)}` : '';
 
 class App extends Component {
   constructor() {
@@ -71,7 +69,8 @@ class App extends Component {
         onSearchStateChange={this.onSearchStateChange}
       >
         {configuration}
-        Either type a destination or click somewhere on the map to see the closest apartment.
+        Either type a destination or click somewhere on the map to see the
+        closest apartment.
         <SearchBox />
         <div className="map">
           <ConnectedHitsMap onLatLngChange={this.onLatLngChange} />
@@ -132,9 +131,9 @@ function HitsMap({ hits, onLatLngChange }) {
   const boundsConfig = hits.length > 0
     ? fitBounds(boundingPoints, availableSpace)
     : {};
-  const markers = hits.map(hit => (
+  const markers = hits.map(hit =>
     <CustomMarker lat={hit.lat} lng={hit.lng} key={hit.objectID} />
-  ));
+  );
   const options = {
     minZoomOverride: true,
     minZoom: 2,

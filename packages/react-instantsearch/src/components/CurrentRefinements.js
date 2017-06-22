@@ -37,13 +37,13 @@ class CurrentRefinements extends Component {
     return (
       <div {...cx('root', !canRefine && 'noRefinement')}>
         <div {...cx('items')}>
-          {items.map(item => (
+          {items.map(item =>
             <div key={item.label} {...cx('item', item.items && 'itemParent')}>
               <span {...cx('itemLabel')}>
                 {item.label}
               </span>
               {item.items
-                ? item.items.map(nestedItem => (
+                ? item.items.map(nestedItem =>
                     <div key={nestedItem.label} {...cx('item')}>
                       <span {...cx('itemLabel')}>
                         {nestedItem.label}
@@ -55,7 +55,7 @@ class CurrentRefinements extends Component {
                         {translate('clearFilter', nestedItem)}
                       </button>
                     </div>
-                  ))
+                  )
                 : <button
                     {...cx('itemClear')}
                     onClick={refine.bind(null, item.value)}
@@ -63,7 +63,7 @@ class CurrentRefinements extends Component {
                     {translate('clearFilter', item)}
                   </button>}
             </div>
-          ))}
+          )}
         </div>
       </div>
     );

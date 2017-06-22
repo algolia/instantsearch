@@ -9,7 +9,7 @@ const stories = storiesOf('Highlight', module);
 
 stories.addDecorator(withKnobs);
 
-const Default = ({ hit }) => (
+const Default = ({ hit }) =>
   <article>
     <p>
       <Highlight attributeName="name" hit={hit} />
@@ -17,14 +17,13 @@ const Default = ({ hit }) => (
     <p>
       <Highlight attributeName="description" hit={hit} />
     </p>
-  </article>
-);
+  </article>;
 
 Default.propTypes = {
   hit: PropTypes.object.isRequired,
 };
 
-const StrongHits = ({ hit }) => (
+const StrongHits = ({ hit }) =>
   <article>
     <p>
       <Highlight
@@ -40,21 +39,20 @@ const StrongHits = ({ hit }) => (
         hit={hit}
       />
     </p>
-  </article>
-);
+  </article>;
 
 StrongHits.propTypes = {
   hit: PropTypes.object.isRequired,
 };
 
 stories
-  .add('default', () => (
+  .add('default', () =>
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Highlight">
       <Hits hitComponent={Default} />
     </WrapWithHits>
-  ))
-  .add('playground', () => (
+  )
+  .add('playground', () =>
     <WrapWithHits linkedStoryGroup="Highlight">
       <Hits hitComponent={StrongHits} />
     </WrapWithHits>
-  ));
+  );

@@ -23,7 +23,7 @@ const styles = {
     width,
   },
 };
-export default connectStats(({ nbHits, searchState, onSearchStateChange }) => (
+export default connectStats(({ nbHits, searchState, onSearchStateChange }) =>
   <View style={styles.stats}>
     <Button
       title={`See ${nbHits} products`}
@@ -39,4 +39,4 @@ export default connectStats(({ nbHits, searchState, onSearchStateChange }) => (
       bottom={Platform.OS === 'ios' ? 597 : 530}
     />
   </View>
-));
+);

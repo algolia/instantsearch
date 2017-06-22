@@ -112,13 +112,13 @@ class Rating extends Component {
     return { max, min: lowerBound, count, selected };
   }
 
-  _renderRow = ({ max, min, count, selected }) => (
+  _renderRow = ({ max, min, count, selected }) =>
     <TouchableHighlight
       style={{ backgroundColor: selected ? '#162331' : 'white' }}
       onPress={() =>
-        (selected
+        selected
           ? this.props.refine({ min: this.props.min, max: this.props.max })
-          : this.props.refine({ min, max }))}
+          : this.props.refine({ min, max })}
     >
       <View
         pointerEvents="none"
@@ -135,18 +135,16 @@ class Rating extends Component {
         <Text style={{ color: selected ? 'white' : 'black' }}> and up! </Text>
         <Text style={{ color: selected ? 'white' : 'black' }}>({count})</Text>
       </View>
-    </TouchableHighlight>
-  );
+    </TouchableHighlight>;
 
-  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => (
+  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) =>
     <View
       key={`${sectionID}-${rowID}`}
       style={{
         height: adjacentRowHighlighted ? 4 : 1,
         backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
       }}
-    />
-  );
+    />;
 
   render() {
     const { refine, min, max, count, createURL } = this.props;
@@ -155,7 +153,7 @@ class Rating extends Component {
       const hasCount = !isEmpty(count.filter(item => Number(item.value) === i));
       const lastSelectableItem = count.reduce(
         (acc, item) =>
-          (item.value < acc.value || (!acc.value && hasCount) ? item : acc),
+          item.value < acc.value || (!acc.value && hasCount) ? item : acc,
         {}
       );
       const itemCount = count.reduce(
