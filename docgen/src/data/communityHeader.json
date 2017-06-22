@@ -10,7 +10,7 @@
     }
   },
   "sideMenu": [{
-    "name": "<span class='visible-sm-inline'>Getting Started</span>",
+    "name": "<span>Getting Started</span>",
     "url": "getting-started.html",
     "dropdownItems": null
   },
@@ -53,7 +53,7 @@
     ]
   },
   {
-    "name": "<span class='visible-sm-inline'>Demos</span>",
+    "name": "<span>Demos</span>",
     "url": "examples.html"
   },{
     "name": "Github",
