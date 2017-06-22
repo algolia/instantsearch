@@ -5,12 +5,12 @@
       "label": "InstantSearch.js",
       "logo": "",
       "caret": "",
-      "url":"https://community.algolia.com/instantsearch.js",
+      "url":"https://community.algolia.com/instantsearch.js/v2/",
       "dropdownItems": []
     }
   },
   "sideMenu": [{
-    "name": "<span class='visible-sm-inline'>Getting Started</span>",
+    "name": "<span class='hidden-sm'>Getting Started</span>",
     "url": "getting-started.html",
     "dropdownItems": null
   },
@@ -53,12 +53,12 @@
     ]
   },
   {
-    "name": "<span class='visible-sm-inline'>Demos</span>",
+    "name": "<span class='hidden-sm'>Demos</span>",
     "url": "examples.html"
   },{
     "name": "Github",
     "image": "<img src='assets/img/github-icon.svg'/>",
-    "url": "https://github.com/algolia/instantsearch.js"
+    "url": "https://github.com/algolia/instantsearch.js/v2/"
   }],
   "mobileMenu": [{
     "name": "Getting Started",
