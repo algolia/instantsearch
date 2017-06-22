@@ -21,6 +21,7 @@
     "finish-release": "./scripts/finish-release.sh",
     "view-changelog": "conventional-changelog -p angular",
     "release": "./scripts/release.sh",
+    "release-maintenance": "./scripts/release-maintenance.sh",
     "test": "BABEL_ENV=test mocha --opts scripts/mocha.opts --reporter dot && npm run lint",
     "test:watch": "BABEL_ENV=test mocha --opts scripts/mocha.opts --reporter min --watch",
     "test:functional": "wdio functional-tests/wdio.conf.js",
