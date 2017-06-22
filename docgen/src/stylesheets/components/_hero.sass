@@ -3,14 +3,15 @@
   text-align: center
   position: relative
 
-  @include diagonal(-6deg, $white, 300px, before)
-    bottom: -190px
-    z-index: 1
-    box-shadow: rgba(112, 128, 175, 0.05) 0 -16px 24px
+  &:not(.hero-doc)
+    @include diagonal(-6deg, $white, 300px, before)
+      bottom: -190px
+      z-index: 1
+      box-shadow: rgba(112, 128, 175, 0.05) 0 -16px 24px
 
-    @media (max-width: $screen-sm)
-      height: 100px
-      bottom: -80px
+      @media (max-width: $screen-sm)
+        height: 100px
+        bottom: -80px
 
   @media (max-width: $screen-sm)
     figure
@@ -29,3 +30,10 @@
       background: url(../images/background-hero.svg)no-repeat center left / 80%
 
 
+// Hero documentation
+.hero.hero-doc
+  background:
+    image: url('../images/logo_isjs.svg'), linear-gradient(284deg, #fcb43a, #fedd4e)
+    repeat: no-repeat
+    size: 360px, 100%
+    position: top 60% right, center left
