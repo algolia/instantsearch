@@ -21,6 +21,7 @@
     "release": "./scripts/release.sh",
     "test": "jest",
     "test:watch": "jest --watch --bail",
+    "release-maintenance": "./scripts/release-maintenance.sh",
     "test:functional": "wdio functional-tests/wdio.conf.js",
     "test:functional:dev": "babel-node scripts/dev-functional-tests",
     "test:functional:dev:debug-server": "PORT=9090 babel-node scripts/dev-functional-tests-debug-server",
