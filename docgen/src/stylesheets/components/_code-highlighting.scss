@@ -1,0 +1,57 @@
+.cm-s-github {
+  font-size: 14px;
+  line-height: 1.5em;
+  font-family: inconsolata, monospace;
+  letter-spacing: 0.3px;
+  word-spacing: 1px;
+  background: #F8F8FF;
+  color: #000000;
+}
+.cm-s-github .CodeMirror-lines {
+  padding: 8px 0;
+}
+.cm-s-github .CodeMirror-gutters {
+  box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+  background-color: #F8F8FF;
+  padding-right: 10px;
+  z-index: 3;
+  border: none;
+}
+.cm-s-github div.CodeMirror-cursor {
+  border-left: 3px solid #000000;
+}
+.cm-s-github .CodeMirror-activeline-background {
+  background: #000000;
+}
+.cm-s-github .CodeMirror-selected {
+  background: #BCD5FA;
+}
+.cm-s-github .cm-comment {
+  font-style: italic;
+  color: #999988;
+}
+.cm-s-github .cm-number {
+  color: null;
+}
+.cm-s-github .cm-atom {
+  color: null;
+}
+.cm-s-github .cm-string {
+  color: #DD1144;
+}
+.cm-s-github .cm-variable-2 {
+  color: #121289;
+}
+.cm-s-github .cm-property {
+  color: null;
+}
+.cm-s-github .cm-keyword {
+  color: null;
+}
+.cm-s-github .cm-operator {
+  color: null;
+}
+.cm-s-github .CodeMirror-linenumber {
+  color: italic;
+}

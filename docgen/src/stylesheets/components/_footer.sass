@@ -13,6 +13,9 @@ $footer-shade-3: #12102E
   .homepage &
     height: 940px
 
+  @media (min-width: $screen-md)
+    margin-top: -200px
+
   @media (max-width: $screen-md)
     height: 860px
     text-align: center
@@ -26,13 +29,13 @@ $footer-shade-3: #12102E
   @media (max-width: $screen-xs)
     height: 960px
 
-  @include diagonal(-6deg, $white, 280px, before)
-    top: -160px
+  @include diagonal(-6deg, $white, 180px, before)
+    top: -80px
     z-index: 1
 
     @media (max-width: $screen-sm)
-      height: 100px
-      top: -80px
+      height: 80px
+      top: -40px
 
   .button-holder
     background: url('../images/light-speed.svg')no-repeat center top / contain
