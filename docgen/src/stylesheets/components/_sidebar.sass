@@ -1,8 +1,15 @@
+$sidebarTopOffset: 60px
+
 .sidebar
   width: $sidebar-width
   overflow: scroll
-  height: calc(100% - 476px)
-  padding-top: 60px
+  height: calc(100vh - 56px)
+  margin-top: $sidebarTopOffset
+  padding-top: 30px
+
+  &.fixed
+    position: fixed
+    top: $sidebarTopOffset
 
   ul
     list-style: none
