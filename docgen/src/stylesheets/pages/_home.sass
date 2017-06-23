@@ -39,6 +39,7 @@
             margin-bottom: 2em
 
 
+
   .card
     margin: auto
     width: 100%
@@ -77,4 +78,37 @@
 .content
   .btn
     @media (max-width: $screen-sm)
+      margin: auto
+      display: block
+      max-width: 280px
+
+    @media (max-width: $screen-xs)
       width: 100%
+
+.home
+  @media (max-width: $screen-sm)
+    .container,
+    .col-md-12,
+    .col-md-6,
+    .col-md-8.col-md-offset-2,
+    .col-md-10.col-md-offset-2
+      padding-left: 0 !important
+      padding-right: 0 !important
+      max-width: 100%
+    .col-md-10.col-md-offset-2 .m-l-large
+      margin-left: 0 !important
+    .col-md-12.row
+      margin: 0 !important
+
+    .section-illustration
+      display: block
+      max-width: 80%
+      margin: 2em auto
+
+    h3, p
+      text-align: center
+
+    .screen-mockup img
+      max-width: 600px
+
+

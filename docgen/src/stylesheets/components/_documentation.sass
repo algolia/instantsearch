@@ -31,7 +31,6 @@ $offset-height: 60px
   h2
     font-size: 28px
     padding-right: 1em
-    border-bottom: 1px solid #d8d8d8
     margin-top: 32px
     padding-bottom: 8px
 
@@ -111,21 +110,35 @@ $offset-height: 60px
         margin-top: 0
 
     .heading
-      background: #eee
+      background: #fff
       border: 1px solid #d8d8d8
-      border-bottom: none
       border-radius: 2px 2px 0 0
       margin: -8px 0 0
-      padding: 4px 8px
-      font-family: $font-stack
+      padding: 0.75em 1em
+      font-family: $paragraphs-font-family
+      border-radius: 6px 6px 0 0
+      font-size: 13px
+      color: #8994c6
+      font-weight: 400
 
       button
         float: right
         cursor: copy
-        background: #ddd
+        background: #f1f4fd
         border: none
-        padding: 0px 8px
+        padding: 2px 8px
         font-size: 90%
+        border-radius: 2px
+
+      .icon
+        width: 12px
+
+        svg
+          width: 12px
+          height: 12px
+
+        use
+          fill: #8794cb
 
     pre
       margin: 0 0 .5em 0
@@ -140,12 +153,13 @@ $offset-height: 60px
       padding: .5em 0
       position: relative
       z-index: 1
+      background: #fff
 
       // avoid scroll bar being unusable because <code></code><h2></h2> used and headers have :content that will be over
 
       code
         display: block
-        width: calc(100% - 4em)
+        width: calc(100% - 2em)
         margin: auto
 
     p + div.heading
@@ -205,8 +219,10 @@ $offset-height: 60px
 
       &:hover
         background: $accent-color
-        color: #ebf1f5
+        color: $bunting
         opacity: 1
+        text-decoration: none
+
 
   +small-mq
     padding-top: 32px

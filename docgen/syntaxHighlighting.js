@@ -9,7 +9,7 @@ import 'codemirror/mode/shell/shell';
 import escape from 'escape-html';
 
 export default function highlight(source, lang = 'javascript', inline = false) {
-  let theme = "mdn-like";
+  let theme = "github";
 
   if (lang === 'html') {
     lang = 'htmlmixed';

@@ -2,13 +2,14 @@ import Clipboard from 'clipboard';
 
 export default function activateClipboard(codeSamples) {
   codeSamples.forEach(codeSample => {
-    const cleanAfter = 500;
+    const cleanAfter = 800;
     let timeout;
     const copyToClipboard = document.createElement('button');
 
     const setup = () => {
       clearTimeout(timeout);
-      copyToClipboard.textContent = 'Copy';
+      copyToClipboard.innerHTML = '<span class="icon icon-copy"><svg><use xlink:href="#icon-copy" /></svg></span>';
+      copyToClipboard.setAttribute('title', 'copy')
       copyToClipboard.classList.remove('clipboard-done');
       copyToClipboard.classList.add('clipboard');
     };
