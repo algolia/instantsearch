@@ -69,16 +69,24 @@
     "url": "guides/usage.html"
   },
   {
+    "name": "Customize widgets",
+    "url": "/guides/customization.html"
+  },
+  {
+    "name": "Migrate from V1",
+    "url": "/guides/migration.html"
+  },
+  {
+    "name": "instantsearch()",
+    "url": "/instantsearch.html"
+  },
+  {
     "name": "Widgets",
-    "url": "widgets.html"
+    "url": "/widgets.html"
   },
   {
     "name": "Connectors",
     "url": "connectors.html"
-  },
-  {
-    "name": "Troubleshooting",
-    "url": "troubleshooting.html"
   },
   {
     "name": "Demos",
