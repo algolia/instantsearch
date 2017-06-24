@@ -24,9 +24,8 @@ move();
 activateClipboard(codeSamples);
 bindRunExamples(codeSamples);
 
-console.log(header);
-
 const sidebarContainer = document.querySelector('.sidebar');
-const headerHeight = document.querySelector('.algc-navigation').getBoundingClientRect().height;
-
-fixSidebar({sidebarContainer, topOffset: headerHeight});
+if(sidebarContainer) {
+  const headerHeight = document.querySelector('.algc-navigation').getBoundingClientRect().height;
+  fixSidebar({sidebarContainer, topOffset: headerHeight});
+}

@@ -1,11 +1,12 @@
-$sidebarTopOffset: 60px
+$sidebarTopOffset: 60px;
 
 .sidebar
   width: $sidebar-width
   overflow: scroll
-  height: calc(100vh - 56px)
+  height: calc(100vh - 56px - #{$sidebarTopOffset})
   margin-top: $sidebarTopOffset
   padding-top: 30px
+  padding-bottom: 30px
 
   &.fixed
     position: fixed
