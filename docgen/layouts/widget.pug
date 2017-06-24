@@ -25,4 +25,4 @@ block content
     h2#example Example
       a.anchor(href=`${navPath}#example`)
     each example in jsdoc.examples
-      p!=h.highlight(example.description)
+      div!=h.highlight(example.description)
