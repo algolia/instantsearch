@@ -4,7 +4,7 @@ import move from './mover.js';
 import activateClipboard from './activateClipboard.js';
 import bindRunExamples from './bindRunExamples.js';
 
-import fixSidebar from './fix-sidebar.js';
+import {fixSidebar, followSidebarNavigation} from './fix-sidebar.js';
 
 var alg = require('algolia-frontend-components/javascripts.js');
 
@@ -27,5 +27,7 @@ bindRunExamples(codeSamples);
 const sidebarContainer = document.querySelector('.sidebar');
 if(sidebarContainer) {
   const headerHeight = document.querySelector('.algc-navigation').getBoundingClientRect().height;
+  const contentContainer = document.querySelector('.documentation-container');
   fixSidebar({sidebarContainer, topOffset: headerHeight});
+  followSidebarNavigation(sidebarContainer.querySelectorAll('a'), contentContainer.querySelectorAll('h2'));
 }

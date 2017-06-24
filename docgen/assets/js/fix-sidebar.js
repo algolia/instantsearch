@@ -4,7 +4,7 @@
  * @param {HTMLElement} $0.sidebarContainer the holder of the menu
  * @param {topOffset} $0.topOffset an optional top offset for sticky menu
  */
-export default function fixSidebar({sidebarContainer, topOffset}) {
+export function fixSidebar({sidebarContainer, topOffset}) {
   const siderbarParent = sidebarContainer.parentElement;
   const boundaries = getStartStopBoundaries(siderbarParent, sidebarContainer, topOffset);
   const sidebarBBox = sidebarContainer.getBoundingClientRect();
@@ -55,4 +55,49 @@ function getStartStopBoundaries(parent, sidebar, topOffset) {
     start,
     stop,
   };
+}
+
+export function followSidebarNavigation(sidebarLinks, contentHeaders) {
+  const links = [...sidebarLinks];
+  const headers = [...contentHeaders];
+
+  const setActiveSidebarLink = header => {
+    links.forEach(item => {
+      const currentHref = item.getAttribute('href');
+      const anchorToFind = `#${header.getAttribute('id')}`;
+      const isCurrentHeader =
+        currentHref.indexOf(anchorToFind) != -1;
+      if (isCurrentHeader) {
+        item.classList.add('navItem-active');
+      } else {
+        item.classList.remove('navItem-active');
+      }
+    });
+  };
+
+  const findActiveSidebarLink = () => {
+    const highestVisibleHeaders = headers
+      .map(header => ({element: header, rect: header.getBoundingClientRect()}))
+      .filter(({rect}) =>
+        rect.top < window.innerHeight / 3 && rect.bottom < window.innerHeight
+        // top element relative viewport position should be at least 1/3 viewport
+        // and element should be in viewport
+      )
+      // then we take the closest to this position as reference
+      .sort((header1, header2) => Math.abs(header1.rect.top) < Math.abs(header2.rect.top) ? -1 : 1);
+
+    if (headers[0] && highestVisibleHeaders.length === 0) {
+      setActiveSidebarLink(headers[0]);
+      return;
+    }
+
+    if (highestVisibleHeaders[0]) {
+      setActiveSidebarLink(highestVisibleHeaders[0].element);
+    }
+  };
+
+  findActiveSidebarLink();
+  window.addEventListener('load', findActiveSidebarLink);
+  document.addEventListener('DOMContentLoaded', findActiveSidebarLink);
+  document.addEventListener('scroll', findActiveSidebarLink);
 }
