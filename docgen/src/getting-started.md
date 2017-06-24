@@ -279,7 +279,7 @@ In this part, we’ve seen that:
   * facets are computed from the results
 
 
-## Refine the search experience further
+## Going further
 
 We now miss two elements in our search interface:
 

@@ -1,4 +1,3 @@
-// import sidebar from './sidebar.js';
 import dropdowns from './dropdowns.js';
 import move from './mover.js';
 import activateClipboard from './activateClipboard.js';
