@@ -357,7 +357,7 @@ describe('utility method for manipulating the search state', () => {
         },
       };
 
-      expect.assertions(6); //async assertions
+      expect.assertions(7); //async assertions
 
       let expectedRefinement = value => expect(value).toEqual('refinement');
 
@@ -408,6 +408,17 @@ describe('utility method for manipulating the search state', () => {
         {},
         context,
         'refinement',
+        'defaultValue',
+        () => {}
+      );
+
+      expect(value).toEqual('defaultValue');
+
+      value = getCurrentRefinementValue(
+        {},
+        searchState,
+        context,
+        'anotherNamespace.refinement.top',
         'defaultValue',
         () => {}
       );
