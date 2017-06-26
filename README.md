@@ -29,7 +29,7 @@ There's a dedicated documentation available at <https://community.algolia.com/in
 We welcome all contributors, from casual to regular. You are only
 one command away to start the developer environment, [read our CONTRIBUTING guide](CONTRIBUTING.md).
 
-[logo]: https://community.algolia.com/instantsearch.js/v2/assets/img/instantsearch-medal.svg
+[logo]: https://community.algolia.com/instantsearch.js/v2/assets/img/InstantSearch-JavaScript.svg
 [website]: https://community.algolia.com/instantsearch.js
 [algolia-website]: https://www.algolia.com/
 [react-instantsearch-github]: https://github.com/algolia/react-instantsearch/
