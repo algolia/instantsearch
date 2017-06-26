@@ -12,7 +12,7 @@ describe('connectHits', () => {
     it('provides the current hits to the component', () => {
       const hits = [{}];
       const props = getProvidedProps(null, null, {
-        results: { hits },
+        results: { hits, index: 'index' },
       });
       expect(props).toEqual({ hits });
     });
@@ -38,7 +38,7 @@ describe('connectHits', () => {
     it('provides the current hits to the component', () => {
       const hits = [{}];
       const props = getProvidedProps(null, null, {
-        results: { second: { hits } },
+        results: { second: { hits, index: 'second' } },
       });
       expect(props).toEqual({ hits });
     });

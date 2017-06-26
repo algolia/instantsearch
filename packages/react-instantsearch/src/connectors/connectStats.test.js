@@ -13,7 +13,7 @@ describe('connectStats', () => {
       expect(props).toBe(null);
 
       props = getProvidedProps(null, null, {
-        results: { nbHits: 666, processingTimeMS: 1, hits: [] },
+        results: { nbHits: 666, processingTimeMS: 1, hits: [], index: 'index' },
       });
       expect(props).toEqual({ nbHits: 666, processingTimeMS: 1 });
     });
@@ -31,7 +31,9 @@ describe('connectStats', () => {
       expect(props).toBe(null);
 
       props = getProvidedProps(null, null, {
-        results: { second: { nbHits: 666, processingTimeMS: 1 } },
+        results: {
+          second: { nbHits: 666, processingTimeMS: 1, index: 'second' },
+        },
       });
       expect(props).toEqual({ nbHits: 666, processingTimeMS: 1 });
     });
