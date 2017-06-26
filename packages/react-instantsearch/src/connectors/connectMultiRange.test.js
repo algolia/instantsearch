@@ -21,6 +21,7 @@ describe('connectMultiRange', () => {
       getFacetStats: () => ({ min: 0, max: 300 }),
       getFacetByName: () => true,
       hits: [],
+      index: 'index',
     };
 
     it('provides the correct props to the component', () => {
@@ -372,6 +373,7 @@ describe('connectMultiRange', () => {
       first: {
         getFacetStats: () => ({ min: 0, max: 300 }),
         getFacetByName: () => true,
+        index: 'first',
       },
     };
 

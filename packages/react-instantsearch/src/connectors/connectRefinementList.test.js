@@ -24,6 +24,7 @@ describe('connectRefinementList', () => {
       getFacetValues: jest.fn(() => []),
       getFacetByName: () => true,
       hits: [],
+      index: 'index',
     };
 
     it('provides the correct props to the component', () => {
