@@ -1,3 +1,15 @@
+<a name="4.0.5"></a>
+## [4.0.5](https://github.com/algolia/react-instantsearch/compare/v4.0.4...v4.0.5) (2017-06-26)
+
+
+### Bug Fixes
+
+* **MultiIndex:** ensure getResults return only hits matching index in the context (#136) ([124ffe6](https://github.com/algolia/react-instantsearch/commit/124ffe6))
+* **MultiIndex:** handle if namespace isn't in search state (#139) ([1aab324](https://github.com/algolia/react-instantsearch/commit/1aab324))
+* **storybook:** process CSS through autoprefixer (#138) ([62cf512](https://github.com/algolia/react-instantsearch/commit/62cf512))
+
+
+
 <a name="4.0.4"></a>
 ## [4.0.4](https://github.com/algolia/react-instantsearch/compare/v4.0.3...v4.0.4) (2017-06-19)
 
