@@ -36,10 +36,27 @@ $sidebarTopOffset: 60px;
       font-weight: 300
       color: rgba(32, 28, 56, 0.8)
       font-family: OpenSans, helvetica, sans-serif
+      transition: transform .2s ease
+
+      &:before
+        content: ''
+        display: block
+        width: 10px
+        height: 10px
+        background: $accent-color
+        border-radius: 100%
+        position: absolute
+        top: 50%
+        transform: translateX(-20px) translateY(-50%) scale(0)
+        transition: transform .2s ease .15s
 
       &.navItem-active
         color: #201c38
         font-weight: 600
+        transform: translateX(20px)
+
+        &:before
+          transform:  translateX(-20px) translateY(-50%) scale(1)
 
 
 
