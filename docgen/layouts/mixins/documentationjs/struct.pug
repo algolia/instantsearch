@@ -14,5 +14,7 @@ mixin struct(t, relatedTypes)
           code
             +type(property.type, relatedTypes)
           if tag && tag.default
-            code=`(default: ${tag.default})`
+            div.default-value
+              | Default value: 
+              code=tag.default
           +description(property.description)
