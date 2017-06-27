@@ -4,7 +4,7 @@ mixin connectorUsage(fnSymbol)
   - var rendererOptionsT = fnSymbol.params[0].type.params[0].name;
   - var widgetOptionT = fnSymbol.returns[0].type.params ? fnSymbol.returns[0].type.params[0].name : 'undefined';
   - var widgetName = rendererOptionsT.replace('RenderingOptions', '')
-  pre.CodeMirror.cm-s-github
+  pre.CodeMirror.cm-s-mdn-like
     code
       span.cm-keyword const 
       span.cm-def search

@@ -6,7 +6,7 @@ mixin widgetUsage(fnSymbol)
     - const paramTypeName = paramTag.type.name;
     - const paramsType = fnSymbol.relatedTypes && fnSymbol.relatedTypes.find(t => t.name === paramTypeName);
     - if(!paramsType) console.log(fnSymbol.relatedTypes.map(t => t.name));
-    pre.CodeMirror.cm-s-github
+    pre.CodeMirror.cm-s-mdn-like
       code
         span.cm-keyword const 
         span.cm-variable search 
