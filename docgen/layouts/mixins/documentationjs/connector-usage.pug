@@ -1,7 +1,6 @@
 mixin connectorUsage(fnSymbol)
   .heading
     | Usage
-  button(style='margin-right: 10px;') Run
   - var rendererOptionsT = fnSymbol.params[0].type.params[0].name;
   - var widgetOptionT = fnSymbol.returns[0].type.params ? fnSymbol.returns[0].type.params[0].name : 'undefined';
   - var widgetName = rendererOptionsT.replace('RenderingOptions', '')
