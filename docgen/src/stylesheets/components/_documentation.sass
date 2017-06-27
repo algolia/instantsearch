@@ -122,6 +122,10 @@ $offset-height: 60px
       color: #8994c6
       font-weight: 400
 
+      &+ pre
+        border-top: none
+        border-radius:  0 0 6px 6px
+
       button
         float: right
         cursor: copy
@@ -149,12 +153,12 @@ $offset-height: 60px
       word-break: inherit
       word-wrap: inherit
       border: 1px solid #d8d8d8
-      border-top: none
       border-radius: 0 0 2px 2px
       padding: .5em 0
       position: relative
       z-index: 1
       background: #fff
+      border-radius: 6px
 
       // avoid scroll bar being unusable because <code></code><h2></h2> used and headers have :content that will be over
 
@@ -162,6 +166,7 @@ $offset-height: 60px
         display: block
         width: calc(100% - 2em)
         margin: auto
+
 
     p + div.heading
       margin-top: 1em
