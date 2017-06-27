@@ -4251,7 +4251,7 @@ p {
   .algc-mobilemenu a {
     color: #3e396b; }
   .algc-mobilemenu .algc-mobilemenu__item:after {
-    background: linear-gradient(76deg, rgba(28, 199, 208, 0.01) 0%, rgba(28, 199, 208, 0) 18%, #3369e7 46%, rgba(80, 191, 221, 0.7) 93%, rgba(125, 185, 232, 0) 100%); }
+    background: linear-gradient(76deg, rgba(252, 180, 58, 0.01) 0%, rgba(252, 180, 58, 0) 18%, #fcb43a 46%, rgba(254, 221, 78, 0.7) 93%, rgba(254, 221, 78, 0) 100%); }
 
 .hero {
   padding-top: 56px;
@@ -4288,7 +4288,8 @@ p {
         bottom: -80px; } }
   @media (max-width: 768px) {
     .hero figure img {
-      width: 80%; }
+      width: 80%;
+      max-width: 320px; }
     .hero h1 {
       font-size: 36px !important;
       font-weight: bold; }
@@ -4307,8 +4308,8 @@ p {
 .hero.hero-doc {
   background-image: url("../images/logo_isjs.svg"), linear-gradient(284deg, #fcb43a, #fedd4e);
   background-repeat: no-repeat;
-  background-size: 360px, 100%;
-  background-position: top 60% right 2em, center left; }
+  background-size: 330px, 100%;
+  background-position: top 90% right 5em, center left; }
 
 .btn {
   padding: 0 20px;
@@ -4501,6 +4502,9 @@ p {
   height: 750px; }
   .homepage .footer-new-cta {
     height: 940px; }
+  @media (min-width: 992px) {
+    .footer-new-cta {
+      margin-top: -200px; } }
   @media (max-width: 992px) {
     .footer-new-cta {
       height: 860px;
@@ -4518,12 +4522,12 @@ p {
     display: block;
     position: absolute;
     width: 100%;
-    height: 280px;
+    height: 180px;
     background: white;
     -webkit-transform: skewY(-6deg);
             transform: skewY(-6deg);
     z-index: 0;
-    top: -160px;
+    top: -80px;
     z-index: 1; }
     @media (min-width: 1200px) {
       .footer-new-cta:before {
@@ -4531,8 +4535,8 @@ p {
                 transform: skewY(-3deg); } }
     @media (max-width: 768px) {
       .footer-new-cta:before {
-        height: 100px;
-        top: -80px; } }
+        height: 80px;
+        top: -40px; } }
   .footer-new-cta .button-holder {
     background: url("../images/light-speed.svg") no-repeat center top/contain; }
     .footer-new-cta .button-holder span.inline {
@@ -4690,258 +4694,265 @@ figure figcaption {
 .section-illustration {
   max-width: 100%; }
 
-.documentation-section .container article,
-.examples-section .container article {
-  width: 100%;
-  position: relative;
-  margin-top: 60px; }
-
-.documentation-section p,
-.documentation-section ul,
-.documentation-section ol,
-.examples-section p,
-.examples-section ul,
-.examples-section ol {
-  font-size: 16px;
-  line-height: 22px; }
-
-.documentation-section ul,
-.examples-section ul {
-  margin: 0;
-  position: relative; }
-  .documentation-section ul li,
-  .examples-section ul li {
-    padding: 0; }
-  .documentation-section ul ul,
-  .examples-section ul ul {
-    padding: 0 1em; }
-
-.documentation-section h2, .documentation-section h3, .documentation-section h4,
-.examples-section h2,
-.examples-section h3,
-.examples-section h4 {
-  color: #201c38; }
-
-.documentation-section h2,
-.examples-section h2 {
-  font-size: 28px;
-  padding-right: 1em;
-  border-bottom: 1px solid #d8d8d8;
-  margin-top: 32px;
-  padding-bottom: 8px; }
-  .documentation-section h2:first-of-type,
-  .examples-section h2:first-of-type {
-    margin-top: 0; }
-  @media (max-width: 768px) {
-    .documentation-section h2,
-    .examples-section h2 {
-      font-size: 22px; } }
-
-.documentation-section h3,
-.examples-section h3 {
-  margin-top: 32px;
-  font-size: 24px;
-  color: #201c38; }
-
-.documentation-section h4,
-.examples-section h4 {
-  font-size: 18px;
-  font-weight: normal;
-  margin-top: 2em; }
-
-.documentation-section .api tr td:first-child,
-.examples-section .api tr td:first-child {
-  vertical-align: top; }
-  .documentation-section .api tr td:first-child p, .documentation-section .api tr td:first-child ul,
-  .examples-section .api tr td:first-child p,
-  .examples-section .api tr td:first-child ul {
-    font-size: 90%;
-    margin: .5em 0;
-    line-height: 1.5em; }
-  .documentation-section .api tr td:first-child ul,
-  .examples-section .api tr td:first-child ul {
-    padding-left: 1.5em; }
-  .documentation-section .api tr td:first-child em,
-  .examples-section .api tr td:first-child em {
-    text-decoration: underline;
-    font-style: normal; }
-
-.documentation-section .documentation-container,
-.examples-section .documentation-container {
-  float: left;
-  position: relative;
-  left: 260px;
-  width: calc(100% - 260px);
-  min-height: 1000px;
-  padding-left: 60px;
-  padding-bottom: 300px;
-  padding-top: 60px; }
-  .documentation-section .documentation-container p, .documentation-section .documentation-container li,
-  .examples-section .documentation-container p,
-  .examples-section .documentation-container li {
-    color: rgba(32, 28, 56, 0.8);
-    line-height: 2;
-    font-size: 16px;
-    font-family: 'Open Sans', Helvetica Neue, helvetica, sans-serif;
-    clear: both; }
-  .documentation-section .documentation-container ul,
-  .documentation-section .documentation-container ol,
-  .examples-section .documentation-container ul,
-  .examples-section .documentation-container ol {
+.documentation-section,
+.examples-section {
+  padding-bottom: 300px; }
+  .documentation-section .container article,
+  .examples-section .container article {
+    width: 100%;
+    position: relative;
+    margin-top: 60px; }
+  .documentation-section p,
+  .documentation-section ul,
+  .documentation-section ol,
+  .examples-section p,
+  .examples-section ul,
+  .examples-section ol {
     font-size: 16px;
     line-height: 22px; }
-    .documentation-section .documentation-container ul li,
-    .documentation-section .documentation-container ol li,
-    .examples-section .documentation-container ul li,
-    .examples-section .documentation-container ol li {
-      clear: both;
-      margin-bottom: 10px; }
-    .documentation-section .documentation-container ul ul,
-    .documentation-section .documentation-container ol ul,
-    .examples-section .documentation-container ul ul,
-    .examples-section .documentation-container ol ul {
-      font-weight: normal;
-      font-size: 14px;
-      position: relative; }
-      .documentation-section .documentation-container ul ul li,
-      .documentation-section .documentation-container ol ul li,
-      .examples-section .documentation-container ul ul li,
-      .examples-section .documentation-container ol ul li {
-        line-height: 26px; }
-        .documentation-section .documentation-container ul ul li:before,
-        .documentation-section .documentation-container ol ul li:before,
-        .examples-section .documentation-container ul ul li:before,
-        .examples-section .documentation-container ol ul li:before {
-          content: '-';
-          float: left;
-          margin-right: 6px;
-          color: #9d9dbd; }
-  .documentation-section .documentation-container .content p:first-child,
-  .examples-section .documentation-container .content p:first-child {
-    margin-top: 0; }
-  .documentation-section .documentation-container .heading,
-  .examples-section .documentation-container .heading {
-    background: #eee;
-    border: 1px solid #d8d8d8;
-    border-bottom: none;
-    border-radius: 2px 2px 0 0;
-    margin: -8px 0 0;
-    padding: 4px 8px;
-    font-family: "Montserrat", Helvetica, Arial, sans-serif; }
-    .documentation-section .documentation-container .heading button,
-    .examples-section .documentation-container .heading button {
-      float: right;
-      cursor: copy;
-      background: #ddd;
-      border: none;
-      padding: 0px 8px;
-      font-size: 90%; }
-  .documentation-section .documentation-container pre,
-  .examples-section .documentation-container pre {
-    margin: 0 0 .5em 0;
-    line-height: 23px;
-    white-space: pre;
-    overflow-x: auto;
-    word-break: inherit;
-    word-wrap: inherit;
-    border: 1px solid #d8d8d8;
-    border-top: none;
-    border-radius: 0 0 2px 2px;
-    padding: .5em 0;
+  .documentation-section ul,
+  .examples-section ul {
+    margin: 0;
+    position: relative; }
+    .documentation-section ul li,
+    .examples-section ul li {
+      padding: 0; }
+    .documentation-section ul ul,
+    .examples-section ul ul {
+      padding: 0 1em; }
+  .documentation-section h2, .documentation-section h3, .documentation-section h4,
+  .examples-section h2,
+  .examples-section h3,
+  .examples-section h4 {
+    color: #201c38; }
+  .documentation-section h2,
+  .examples-section h2 {
+    font-size: 28px;
+    padding-right: 1em;
+    margin-top: 32px;
+    padding-bottom: 8px; }
+    .documentation-section h2:first-of-type,
+    .examples-section h2:first-of-type {
+      margin-top: 0; }
+    @media (max-width: 768px) {
+      .documentation-section h2,
+      .examples-section h2 {
+        font-size: 22px; } }
+  .documentation-section h3,
+  .examples-section h3 {
+    margin-top: 32px;
+    font-size: 24px;
+    color: #201c38; }
+  .documentation-section h4,
+  .examples-section h4 {
+    font-size: 18px;
+    font-weight: normal;
+    margin-top: 2em; }
+  .documentation-section .api tr td:first-child,
+  .examples-section .api tr td:first-child {
+    vertical-align: top; }
+    .documentation-section .api tr td:first-child p, .documentation-section .api tr td:first-child ul,
+    .examples-section .api tr td:first-child p,
+    .examples-section .api tr td:first-child ul {
+      font-size: 90%;
+      margin: .5em 0;
+      line-height: 1.5em; }
+    .documentation-section .api tr td:first-child ul,
+    .examples-section .api tr td:first-child ul {
+      padding-left: 1.5em; }
+    .documentation-section .api tr td:first-child em,
+    .examples-section .api tr td:first-child em {
+      text-decoration: underline;
+      font-style: normal; }
+  .documentation-section .documentation-container,
+  .examples-section .documentation-container {
+    float: left;
     position: relative;
-    z-index: 1; }
-    .documentation-section .documentation-container pre code,
-    .examples-section .documentation-container pre code {
+    left: 260px;
+    width: calc(100% - 260px);
+    min-height: 1000px;
+    padding-left: 60px;
+    padding-top: 60px; }
+    .documentation-section .documentation-container p, .documentation-section .documentation-container li,
+    .examples-section .documentation-container p,
+    .examples-section .documentation-container li {
+      color: rgba(32, 28, 56, 0.8);
+      line-height: 2;
+      font-size: 16px;
+      font-family: 'Open Sans', Helvetica Neue, helvetica, sans-serif;
+      clear: both; }
+    .documentation-section .documentation-container ul,
+    .documentation-section .documentation-container ol,
+    .examples-section .documentation-container ul,
+    .examples-section .documentation-container ol {
+      font-size: 16px;
+      line-height: 22px; }
+      .documentation-section .documentation-container ul li,
+      .documentation-section .documentation-container ol li,
+      .examples-section .documentation-container ul li,
+      .examples-section .documentation-container ol li {
+        clear: both;
+        margin-bottom: 10px; }
+      .documentation-section .documentation-container ul ul,
+      .documentation-section .documentation-container ol ul,
+      .examples-section .documentation-container ul ul,
+      .examples-section .documentation-container ol ul {
+        font-weight: normal;
+        font-size: 14px;
+        position: relative; }
+        .documentation-section .documentation-container ul ul li,
+        .documentation-section .documentation-container ol ul li,
+        .examples-section .documentation-container ul ul li,
+        .examples-section .documentation-container ol ul li {
+          line-height: 26px; }
+          .documentation-section .documentation-container ul ul li:before,
+          .documentation-section .documentation-container ol ul li:before,
+          .examples-section .documentation-container ul ul li:before,
+          .examples-section .documentation-container ol ul li:before {
+            content: '-';
+            float: left;
+            margin-right: 6px;
+            color: #9d9dbd; }
+    .documentation-section .documentation-container .content p:first-child,
+    .examples-section .documentation-container .content p:first-child {
+      margin-top: 0; }
+    .documentation-section .documentation-container .heading,
+    .examples-section .documentation-container .heading {
+      background: #fff;
+      border: 1px solid #d8d8d8;
+      border-radius: 2px 2px 0 0;
+      margin: -8px 0 0;
+      padding: 0.75em 1em;
+      font-family: "Open Sans", helvetica, sans-serif;
+      border-radius: 6px 6px 0 0;
+      font-size: 13px;
+      color: #8994c6;
+      font-weight: 400; }
+      .documentation-section .documentation-container .heading button,
+      .examples-section .documentation-container .heading button {
+        float: right;
+        cursor: copy;
+        background: #f1f4fd;
+        border: none;
+        padding: 2px 8px;
+        font-size: 90%;
+        border-radius: 2px; }
+      .documentation-section .documentation-container .heading .icon,
+      .examples-section .documentation-container .heading .icon {
+        width: 12px; }
+        .documentation-section .documentation-container .heading .icon svg,
+        .examples-section .documentation-container .heading .icon svg {
+          width: 12px;
+          height: 12px; }
+        .documentation-section .documentation-container .heading .icon use,
+        .examples-section .documentation-container .heading .icon use {
+          fill: #8794cb; }
+    .documentation-section .documentation-container pre,
+    .examples-section .documentation-container pre {
+      margin: 0 0 .5em 0;
+      line-height: 23px;
+      white-space: pre;
+      overflow-x: auto;
+      word-break: inherit;
+      word-wrap: inherit;
+      border: 1px solid #d8d8d8;
+      border-top: none;
+      border-radius: 0 0 2px 2px;
+      padding: .5em 0;
+      position: relative;
+      z-index: 1;
+      background: #fff; }
+      .documentation-section .documentation-container pre code,
+      .examples-section .documentation-container pre code {
+        display: block;
+        width: calc(100% - 2em);
+        margin: auto; }
+    .documentation-section .documentation-container p + div.heading,
+    .examples-section .documentation-container p + div.heading {
+      margin-top: 1em; }
+      .documentation-section .documentation-container p + div.heading + pre,
+      .examples-section .documentation-container p + div.heading + pre {
+        margin-bottom: 2em; }
+    .documentation-section .documentation-container h2:before, .documentation-section .documentation-container h3:before, .documentation-section .documentation-container .api-entry:before, .documentation-section .documentation-container .css-class:before, .documentation-section .documentation-container .type:before,
+    .examples-section .documentation-container h2:before,
+    .examples-section .documentation-container h3:before,
+    .examples-section .documentation-container .api-entry:before,
+    .examples-section .documentation-container .css-class:before,
+    .examples-section .documentation-container .type:before {
+      content: "";
       display: block;
-      width: calc(100% - 4em);
-      margin: auto; }
-  .documentation-section .documentation-container p + div.heading,
-  .examples-section .documentation-container p + div.heading {
-    margin-top: 1em; }
-    .documentation-section .documentation-container p + div.heading + pre,
-    .examples-section .documentation-container p + div.heading + pre {
-      margin-bottom: 2em; }
-  .documentation-section .documentation-container h2:before, .documentation-section .documentation-container h3:before, .documentation-section .documentation-container .api-entry:before, .documentation-section .documentation-container .css-class:before, .documentation-section .documentation-container .type:before,
-  .examples-section .documentation-container h2:before,
-  .examples-section .documentation-container h3:before,
-  .examples-section .documentation-container .api-entry:before,
-  .examples-section .documentation-container .css-class:before,
-  .examples-section .documentation-container .type:before {
-    content: "";
-    display: block;
-    height: 60px;
-    margin: -60px 0 0; }
-  .documentation-section .documentation-container .anchor,
-  .examples-section .documentation-container .anchor {
-    margin-left: .2em;
-    display: inline;
-    visibility: hidden; }
-  .documentation-section .documentation-container h2 .anchor, .documentation-section .documentation-container h3 .anchor,
-  .examples-section .documentation-container h2 .anchor,
-  .examples-section .documentation-container h3 .anchor {
-    text-decoration: none; }
-  .documentation-section .documentation-container h2 .anchor:after, .documentation-section .documentation-container h3 .anchor:after,
-  .examples-section .documentation-container h2 .anchor:after,
-  .examples-section .documentation-container h3 .anchor:after {
-    content: '#';
-    color: #fecf50; }
-  .documentation-section .documentation-container h2:hover .anchor, .documentation-section .documentation-container h3:hover .anchor,
-  .examples-section .documentation-container h2:hover .anchor,
-  .examples-section .documentation-container h3:hover .anchor {
-    visibility: visible; }
-  .documentation-section .documentation-container h2:target .anchor, .documentation-section .documentation-container h3:target .anchor,
-  .examples-section .documentation-container h2:target .anchor,
-  .examples-section .documentation-container h3:target .anchor {
-    visibility: visible; }
-  .documentation-section .documentation-container .struct-def,
-  .examples-section .documentation-container .struct-def {
-    margin-top: 24px; }
-    .documentation-section .documentation-container .struct-def .type,
-    .examples-section .documentation-container .struct-def .type {
-      list-style-type: none; }
-      .documentation-section .documentation-container .struct-def .type p,
-      .examples-section .documentation-container .struct-def .type p {
-        margin-top: 0; }
-  .documentation-section .documentation-container .editThisPage,
-  .examples-section .documentation-container .editThisPage {
-    position: absolute;
-    font-size: 12px;
-    right: 0;
-    top: 12px;
-    padding: 3px 6px;
-    border: 1px solid #e7a901;
-    color: #e7a901;
-    border-radius: 3px;
-    text-transform: uppercase;
-    opacity: .7; }
-    .documentation-section .documentation-container .editThisPage:hover,
-    .examples-section .documentation-container .editThisPage:hover {
-      background: #fecf50;
-      color: #ebf1f5;
-      opacity: 1; }
-
-@media (max-width: 768px) {
-  .documentation-section,
-  .examples-section {
-    padding-top: 32px; }
-    .documentation-section .container .documentation-container,
-    .examples-section .container .documentation-container {
-      left: 0;
-      width: 100%;
-      padding: 32px 1em; }
-    .documentation-section .container article,
-    .examples-section .container article {
-      float: left;
-      margin-top: 40px; }
-    .documentation-section .documentation .hero-section .fl-left,
-    .examples-section .documentation .hero-section .fl-left {
-      max-width: 300px !important;
-      width: 300px !important; } }
-
-.documentation-section .typed-link,
-.examples-section .typed-link {
-  color: inherit;
-  text-decoration: underline; }
+      height: 60px;
+      margin: -60px 0 0; }
+    .documentation-section .documentation-container .anchor,
+    .examples-section .documentation-container .anchor {
+      margin-left: .2em;
+      display: inline;
+      visibility: hidden; }
+    .documentation-section .documentation-container h2 .anchor, .documentation-section .documentation-container h3 .anchor,
+    .examples-section .documentation-container h2 .anchor,
+    .examples-section .documentation-container h3 .anchor {
+      text-decoration: none; }
+    .documentation-section .documentation-container h2 .anchor:after, .documentation-section .documentation-container h3 .anchor:after,
+    .examples-section .documentation-container h2 .anchor:after,
+    .examples-section .documentation-container h3 .anchor:after {
+      content: '#';
+      color: #fecf50; }
+    .documentation-section .documentation-container h2:hover .anchor, .documentation-section .documentation-container h3:hover .anchor,
+    .examples-section .documentation-container h2:hover .anchor,
+    .examples-section .documentation-container h3:hover .anchor {
+      visibility: visible; }
+    .documentation-section .documentation-container h2:target .anchor, .documentation-section .documentation-container h3:target .anchor,
+    .examples-section .documentation-container h2:target .anchor,
+    .examples-section .documentation-container h3:target .anchor {
+      visibility: visible; }
+    .documentation-section .documentation-container .struct-def,
+    .examples-section .documentation-container .struct-def {
+      margin-top: 24px; }
+      .documentation-section .documentation-container .struct-def .type,
+      .examples-section .documentation-container .struct-def .type {
+        list-style-type: none; }
+        .documentation-section .documentation-container .struct-def .type p,
+        .examples-section .documentation-container .struct-def .type p {
+          margin-top: 0; }
+    .documentation-section .documentation-container .editThisPage,
+    .examples-section .documentation-container .editThisPage {
+      position: absolute;
+      font-size: 12px;
+      right: 0;
+      top: 12px;
+      padding: 3px 6px;
+      border: 1px solid #e7a901;
+      color: #e7a901;
+      border-radius: 3px;
+      text-transform: uppercase;
+      opacity: .7; }
+      .documentation-section .documentation-container .editThisPage:hover,
+      .examples-section .documentation-container .editThisPage:hover {
+        background: #fecf50;
+        color: #3e396b;
+        opacity: 1;
+        text-decoration: none; }
+  @media (max-width: 768px) {
+    .documentation-section,
+    .examples-section {
+      padding-top: 32px; }
+      .documentation-section .container .documentation-container,
+      .examples-section .container .documentation-container {
+        left: 0;
+        width: 100%;
+        padding: 32px 1em; }
+      .documentation-section .container article,
+      .examples-section .container article {
+        float: left;
+        margin-top: 40px; }
+      .documentation-section .documentation .hero-section .fl-left,
+      .examples-section .documentation .hero-section .fl-left {
+        max-width: 300px !important;
+        width: 300px !important; } }
+  .documentation-section .typed-link,
+  .examples-section .typed-link {
+    color: inherit;
+    text-decoration: underline; }
 
 .examples-section > .container {
   padding-top: 60px; }
@@ -5096,8 +5107,13 @@ figure figcaption {
 .sidebar {
   width: 260px;
   overflow: scroll;
-  height: calc(100% - 476px);
-  padding-top: 60px; }
+  height: calc(100vh - 56px - 60px);
+  margin-top: 60px;
+  padding-top: 30px;
+  padding-bottom: 30px; }
+  .sidebar.fixed {
+    position: fixed;
+    top: 60px; }
   .sidebar ul {
     list-style: none;
     padding: 0 !important;
@@ -5327,6 +5343,63 @@ body.example .btn {
 #examples h2 {
   clear: both; }
 
+.cm-s-github {
+  font-size: 14px;
+  line-height: 1.5em;
+  font-family: inconsolata, monospace;
+  letter-spacing: 0.3px;
+  word-spacing: 1px;
+  background: #F8F8FF;
+  color: #000000; }
+
+.cm-s-github .CodeMirror-lines {
+  padding: 8px 0; }
+
+.cm-s-github .CodeMirror-gutters {
+  box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.5);
+  background-color: #F8F8FF;
+  padding-right: 10px;
+  z-index: 3;
+  border: none; }
+
+.cm-s-github div.CodeMirror-cursor {
+  border-left: 3px solid #000000; }
+
+.cm-s-github .CodeMirror-activeline-background {
+  background: #000000; }
+
+.cm-s-github .CodeMirror-selected {
+  background: #BCD5FA; }
+
+.cm-s-github .cm-comment {
+  font-style: italic;
+  color: #999988; }
+
+.cm-s-github .cm-number {
+  color: null; }
+
+.cm-s-github .cm-atom {
+  color: null; }
+
+.cm-s-github .cm-string {
+  color: #DD1144; }
+
+.cm-s-github .cm-variable-2 {
+  color: #121289; }
+
+.cm-s-github .cm-property {
+  color: null; }
+
+.cm-s-github .cm-keyword {
+  color: null; }
+
+.cm-s-github .cm-operator {
+  color: null; }
+
+.cm-s-github .CodeMirror-linenumber {
+  color: italic; }
+
 .screen-mockup {
   top: -200px; }
 
@@ -5447,7 +5520,38 @@ body.example .btn {
 
 @media (max-width: 768px) {
   .content .btn {
+    margin: auto;
+    display: block;
+    max-width: 280px; } }
+
+@media (max-width: 480px) {
+  .content .btn {
     width: 100%; } }
+
+.home.content {
+  margin-bottom: 300px; }
+
+@media (max-width: 768px) {
+  .home .container,
+  .home .col-md-12,
+  .home .col-md-6,
+  .home .col-md-8.col-md-offset-2,
+  .home .col-md-10.col-md-offset-2 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 100%; }
+  .home .col-md-10.col-md-offset-2 .m-l-large {
+    margin-left: 0 !important; }
+  .home .col-md-12.row {
+    margin: 0 !important; }
+  .home .section-illustration {
+    display: block;
+    max-width: 80%;
+    margin: 2em auto; }
+  .home h3, .home p {
+    text-align: center; }
+  .home .screen-mockup img {
+    max-width: 600px; } }
 
 * {
   box-sizing: border-box; }
