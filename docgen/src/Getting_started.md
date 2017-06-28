@@ -1,5 +1,5 @@
 ---
-title: Getting started tutorial
+title: React
 layout: main.pug
 category: gettingstarted
 withHeadings: true
@@ -20,6 +20,9 @@ In this tutorial, you'll learn how to:
  - connect your own component to the search
 
 **If you prefer to get started by watching a video, [we created one for you](videos/).**
+
+**If you want to use React InstantSearch with React Native, [read our dedicated Getting Started for React Native](guide/React_native.html).**
+
 
 ## Before we start
 
@@ -81,12 +84,16 @@ dashboard](https://www.algolia.com/api-keys).
 
 Congrats 🎉! Your application is now connected to Algolia.
 
-In this section we've seen:
- - How to connect a part of a [React](https://facebook.github.io/react/) application to Algolia
- - How to configure your Algolia credentials
+<div class="highlight-key-part">
+  <div class="highlight-key-part__title">In this section we've seen:</div>
 
- > To get more *under the hood* information about the `<InstantSearch>` wrapper
- > component, [read our guide](guide/<InstantSearch>.html).
+   - How to connect a part of a [React](https://facebook.github.io/react/) application to Algolia
+
+   - How to configure your Algolia credentials
+
+  > To get more *under the hood* information about the `<InstantSearch>` wrapper
+  > component, [read our guide](guide/<InstantSearch>.html).
+</div>
 
 ## Load the Algolia theme
 
@@ -177,9 +184,13 @@ function Search() {
 }
 ```
 
-In this section we've seen:
- - how to display the results from Algolia
- - how to customize the display of those results
+<div class="highlight-key-part">
+  <div class="highlight-key-part__title">In this section we've seen:</div>
+
+   - how to display the results from Algolia
+
+   - how to customize the display of those results
+</div>
 
 ## Add a SearchBox
 
@@ -228,10 +239,15 @@ that matches the query. This pattern is very important in search, especially wit
 Algolia, so that the user knows what's going on. This way we create the search
 dialog between the user and the data.
 
-In this part, we've seen the following:
- - how to add a SearchBox to make queries into the records
- - how to highlight the matched part of the results
- - the importance of highlighting in a text-based search
+<div class="highlight-key-part">
+  <div class="highlight-key-part__title">In this section we've seen:</div>
+
+   - how to add a SearchBox to make queries into the records
+
+   - how to highlight the matched part of the results
+
+   - the importance of highlighting in a text-based search
+</div>
 
 ## Add RefinementList
 
@@ -266,10 +282,15 @@ attribute should be declared as a facet in the index configuration as well.
 
 The values displayed are computed by Algolia from the results.
 
-In this part, we've seen the following:
- - there are components for all types of refinements
- - the RefinementList works with facets
- - facets are computed from the results
+<div class="highlight-key-part">
+  <div class="highlight-key-part__title">In this section we've seen:</div>
+
+   - there are components for all types of refinements
+
+   - the RefinementList works with facets
+
+   - facets are computed from the results
+</div>
 
 ## Refine the search experience further
 
@@ -306,9 +327,13 @@ Current filters will display all the filters currently selected by the user.
 This gives the user a synthetic way of understanding the current search. `ClearAll`
 displays a button to remove all the filters.
 
-In this part, we've seen the following:
- - how to clear the filters
- - how to paginate the results
+<div class="highlight-key-part">
+  <div class="highlight-key-part__title">In this section we've seen:</div>
+
+   - how to clear the filters
+
+   - how to paginate the results
+</div>
 
 ## Next steps
 
