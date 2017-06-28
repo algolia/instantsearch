@@ -6,11 +6,12 @@ block content
   - var values = []
   if examples
       - values = examples
-  div(class="examples-container")
+  div(class="examples-container flex-container flex-dir-row pos-rel z-10")
     each val in values
-      div.example-tile
-        h2=val.title
-        a(href=`${examplesEndpoint}/${val.id}`)
-          figure
-            img(src=`examples/${val.id}/capture.png`)
-            figcaption=examplesCTA
+      div.flex-it-2.p-large
+        div.example-tile.elevation1.radius6.text-center.p-large
+          h2.inline.p-t-large=val.title
+          a(href=`${examplesEndpoint}/${val.id}`)
+            figure
+              img(src=`examples/${val.id}/capture.png`)
+              figcaption=examplesCTA

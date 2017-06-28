@@ -1,23 +1,20 @@
 .examples-container {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  position: relative;
+  padding: 40px 0 ;
 
-  z-index: 10;
-
-  padding: 40px 0 60px;
+  .flex-it-2 {
+    @include small-mq {
+      flex: 0 1 100% !important
+    }
+  }
 
   .example-tile {
-    flex: 0 1 47%;
     margin-bottom: 4em;
-    padding: 1em;
     background: #fefefe;
     border: 1px solid #ebebeb;
-    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.08);
-    border-radius: 3px;
     position: relative;
     text-align: center;
+
+
 
     a {
       display: block;

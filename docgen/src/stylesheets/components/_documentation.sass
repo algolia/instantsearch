@@ -46,6 +46,13 @@ $offset-height: 60px
     margin-top: 32px
     font-size: 24px
     color: #201c38
+    position: relative
+    z-index: 10
+
+    /* Because this title doesn't have content, remove the anchor */
+    &#struct-HTMLElement:hover a
+      display: none
+
 
   h4
     font-size: 18px
@@ -128,7 +135,6 @@ $offset-height: 60px
 
       button
         float: right
-        cursor: copy
         background: #f1f4fd
         border: none
         padding: 2px 8px
