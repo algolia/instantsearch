@@ -1,5 +1,4 @@
-.documentation-section,
-.examples-section {
+.documentation-section, .examples-section {
   .container {
     article {
       width: 100%;
@@ -21,16 +20,14 @@
   }
 
   .guide-nav-left {
-    float: left
+    float: left;
   }
 
   .guide-nav-right {
-      float: right
+    float: right;
   }
 
-  p,
-  ul,
-  ol {
+  p, ul, ol {
     font-size: 16px;
     line-height: 22px;
   }
@@ -46,7 +43,7 @@
     &:first-of-type {
       margin-top: 0;
 
-      .content &{
+      .content & {
         margin-top: -10px;
       }
     }
@@ -64,7 +61,6 @@
   .api-entry {
     font-weight: bold;
     position: relative;
-
 
     code {
       font-size: 100%;
@@ -88,7 +84,6 @@
       font-style: normal;
     }
   }
-
 
   .css-class {
     white-space: nowrap;
@@ -128,9 +123,7 @@
       }
     }
 
-    p,
-    ul,
-    ol {
+    p, ul, ol {
       font-size: 16px;
       line-height: 22px;
 
@@ -152,7 +145,7 @@
             content: '-';
             float: left;
             margin-right: 6px;
-            color: $greyish
+            color: $greyish;
           }
         }
       }
@@ -193,7 +186,6 @@
 
       tbody {
         border: 1px solid #ccc;
-
       }
 
       tr {
@@ -204,8 +196,7 @@
         flex-direction: row;
         flex-wrap: wrap;
 
-        &:not(:last-child),
-        &:not(:only-child) {
+        &:not(:last-child), &:not(:only-child) {
           border-bottom: 1px solid #ccc;
         }
 
@@ -235,7 +226,6 @@
           flex: 1;
           white-space: normal;
 
-
           &:first-child {
             margin-top: 0;
             flex-grow: 1;
@@ -245,7 +235,6 @@
 
             &:only-child {
               border: none;
-
             }
 
             &[colspan] {
@@ -258,16 +247,15 @@
             margin-bottom: 0;
           }
 
-          &+ td:empty {
+          & + td:empty {
             display: none;
           }
-          &+ td:nth-child(3):not(:empty) {
+          & + td:nth-child(3):not(:empty) {
             border-left: 1px solid #CCC;
           }
         }
       }
-      &+ h2,
-      &+ h3 {
+      & + h2, & + h3 {
         margin-top: 2em;
       }
 
@@ -286,11 +274,8 @@
           width: 100%;
         }
         tbody {
-
         }
         tr {
-
-
           border-left: 1px solid #ccc;
 
           th {
@@ -301,153 +286,148 @@
             }
           }
         }
-        tr td  {
+        tr td {
           border: none;
           overflow: auto;
 
-
           &:nth-of-type(2) {
-           border-left: 1px solid #cccccc;
-         }
-       }
+            border-left: 1px solid #cccccc;
+          }
+        }
 
-       th, td {
-        width: 50%;
-        float: left;
-      }
+        th, td {
+          width: 50%;
+          float: left;
+        }
 
-      tr:nth-child(even) {
-        background: #f8f8f8
+        tr:nth-child(even) {
+          background: #f8f8f8;
+        }
       }
     }
-  }
 
-
-  .anchor {
-    margin-left: .2em;
-    display: inline;
-    visibility: hidden;
-  }
-
-  .algolia-places {
-    color: #000000;
-  }
-
-  h2, h3, .api-entry {
     .anchor {
-      text-decoration: none;
-      position: absolute;
-      z-index: 2;
-      pointer-events: all;
-    }
-    .anchor:after{
-      content: '#';
-      color: $accent-color;
+      margin-left: .2em;
+      display: inline;
+      visibility: hidden;
     }
 
-    &:hover {
+    .algolia-places {
+      color: #000000;
+    }
+
+    h2, h3, .api-entry {
       .anchor {
-        visibility: visible;
+        text-decoration: none;
+        position: absolute;
+        z-index: 2;
+        pointer-events: all;
+      }
+      .anchor:after {
+        content: '#';
+        color: $accent-color;
+      }
+
+      &:hover {
+        .anchor {
+          visibility: visible;
+        }
+      }
+
+      &:target {
+        .anchor {
+          visibility: visible;
+        }
       }
     }
 
-    &:target {
-      .anchor {
-        visibility: visible;
-      }
+    img {
+      max-width: 50%;
+      margin: 0 25%;
     }
   }
 
-  img {
-    max-width: 50%;
-    margin: 0 25%;
-  }
-}
-
-tr.api-entry-values {
-  .api-entry-type {
-    white-space: nowrap;
-  }
-}
-
-.DocProps {
-  .Prop,
-  .Type .Entry {
-    padding: 1.2em 0.8em;
-    background-color: #EEE;
+  tr.api-entry-values {
+    .api-entry-type {
+      white-space: nowrap;
+    }
   }
 
-  .Prop:nth-child(even),
-  .Type .Entry:nth-child(even) {
-    background-color: #E5E5E5;
+  .DocProps {
+    .Prop, .Type .Entry {
+      padding: 1.2em 0.8em;
+      background-color: #EEE;
+    }
+
+    .Prop:nth-child(even), .Type .Entry:nth-child(even) {
+      background-color: #E5E5E5;
+    }
+
+    .Entry__head {
+      display: flex;
+      align-items: center;
+      padding-bottom: 1em;
+    }
+
+    .Entry__badge {
+      padding: .3em .5em;
+      font-size: 0.8em;
+      background-color: #7FDBFF;
+      margin-right: 0.5em;
+    }
+
+    .Entry__name {
+      font-weight: 700;
+      margin-right: 0.5em;
+    }
+
+    .Entry__description ~ .Entry__default {
+      padding-top: 1em;
+    }
+
+    .Entry__description p {
+      margin: 0;
+    }
+
+    .Entry__link {
+      display: none;
+      margin-left: 0.5em;
+    }
+
+    .Entry__head:hover .Entry__link {
+      display: inline;
+    }
+
+    .Prop__types {
+      padding-top: 1em;
+    }
+
+    .Type__head {
+      padding-bottom: 0.7em;
+    }
+
+    .Type__name {
+      font-weight: 700;
+    }
+
+    .Type__link {
+      display: none;
+    }
+
+    .Type__head:hover .Type__link {
+      display: inline;
+    }
+
+    .Type__entries {
+      font-size: 0.9em;
+      border: 1px solid #BBB;
+    }
   }
 
-  .Entry__head {
-    display: flex;
-    align-items: center;
-    padding-bottom: 1em;
-  }
-
-  .Entry__badge {
-    padding: .3em .5em;
-    font-size: 0.8em;
-    background-color: #7FDBFF;
-    margin-right: 0.5em;
-  }
-
-  .Entry__name {
-    font-weight: 700;
-    margin-right: 0.5em;
-  }
-
-  .Entry__description ~ .Entry__default {
-    padding-top: 1em;
-  }
-
-  .Entry__description p {
-    margin: 0;
-  }
-
-  .Entry__link {
-    display: none;
-    margin-left: 0.5em;
-  }
-
-  .Entry__head:hover .Entry__link {
-    display: inline;
-  }
-
-  .Prop__types {
-    padding-top: 1em;
-  }
-
-  .Type__head {
-    padding-bottom: 0.7em;
-  }
-
-  .Type__name {
-    font-weight: 700;
-  }
-
-  .Type__link {
-    display: none;
-  }
-
-  .Type__head:hover .Type__link {
-    display: inline;
-  }
-
-  .Type__entries {
-    font-size: 0.9em;
-    border: 1px solid #BBB;
-  }
-}
-
-@include small-mq {
+  @include small-mq {
     padding-top: 32px;
 
     .container {
-
       .documentation-container {
         left: 0;
         width: 100%;
@@ -477,6 +457,20 @@ tr.api-entry-values {
   margin-top: 20px;
   text-align: center;
   line-height: 42px;
+}
+
+.highlight-key-part {
+  background-color: rgba(5, 165, 209, 0.05);
+  font-size: 16px;
+  line-height: 22px;
+  color: #5c7080;
+  padding: 10px;
+  border-left: 4px solid #05A5D1;
+}
+
+.highlight-key-part__title {
+  font-size: 18px;
+  font-weight: 600;
 }
 
 @import "docs/method";
