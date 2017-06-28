@@ -8,7 +8,7 @@ include mixins/documentationjs/struct.pug
 include mixins/documentationjs/widget-usage.pug
 
 block navigation
-  - const headings = [{tag: 'h2', id: 'description', text: 'Description'}, {tag: 'h2', id:'usage', text:'Usage'}, {tag:'h2', id:'example', text: 'Example'}]
+  - const headings = [{tag: 'h2', id: 'description', text: 'Description'}, {tag: 'h2', id:'usage', text:'Usage'}, {tag:'h2', id:'structure', text: 'Options'}, {tag:'h2', id:'example', text: 'Example'}]
   +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
 
 block content
@@ -18,6 +18,9 @@ block content
     +description(jsdoc.description)
   h2#usage Usage
   +widgetUsage(jsdoc)
+
+  h2#structure Options
+    a.anchor(href=`${navPath}#structure`)
   each t in jsdoc.relatedTypes
     if t
       +struct(t, jsdoc.relatedTypes)
