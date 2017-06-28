@@ -5171,11 +5171,10 @@ figure figcaption {
         position: absolute;
         top: 50%;
         left: -20px;
-        -webkit-transform: translateY(-50%) scale(0);
-                transform: translateY(-50%) scale(0);
-        transition: -webkit-transform .2s ease .15s;
-        transition: transform .2s ease .15s;
-        transition: transform .2s ease .15s, -webkit-transform .2s ease .15s; }
+        opacity: 0;
+        -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
+        transition: opacity .2s ease 0.15s; }
       .sidebar li a.navItem-active {
         color: #201c38;
         font-weight: 600;
@@ -5185,11 +5184,7 @@ figure figcaption {
         transition: transform .2s ease;
         transition: transform .2s ease, -webkit-transform .2s ease; }
         .sidebar li a.navItem-active:before {
-          -webkit-transform: translateY(-50%) scale(1);
-                  transform: translateY(-50%) scale(1);
-          transition: -webkit-transform .2s ease;
-          transition: transform .2s ease;
-          transition: transform .2s ease, -webkit-transform .2s ease; }
+          opacity: 1; }
   @media (max-width: 768px) {
     .sidebar {
       width: calc(100% + 16px);
