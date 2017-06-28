@@ -1,11 +1,13 @@
 import {uniqBy, forEach, reduce, groupBy, findIndex, find, filter, isArray, isObject} from 'lodash';
 import documentation from 'documentation';
 import remark from 'remark';
-import html from 'remark-html';
+import md from '../mdRenderer';
 
 function formatMD(ast) {
   if (ast && ast.type === 'root') {
-    return remark().use(html).stringify(ast);
+    // 1. extract the raw markdown string from the remark AST
+    // 2. use our custom markdown renderer
+    return md.render(remark().stringify(ast));
   }
   return ast;
 };
