@@ -4750,11 +4750,7 @@ figure figcaption {
     font-size: 24px;
     color: #201c38;
     position: relative;
-    z-index: 10;
-    /* Because this title doesn't have content, remove the anchor */ }
-    .documentation-section h3#struct-HTMLElement:hover a,
-    .examples-section h3#struct-HTMLElement:hover a {
-      display: none; }
+    z-index: 10; }
   .documentation-section h4,
   .examples-section h4 {
     font-size: 18px;
