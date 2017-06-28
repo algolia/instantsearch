@@ -21,7 +21,7 @@ block content
   each t in jsdoc.relatedTypes
     if t
       +struct(t, jsdoc.relatedTypes)
-  if jsdoc.examples
+  if jsdoc.examples && jsdoc.examples.length > 0
     h2#example Example
       a.anchor(href=`${navPath}#example`)
     each example in jsdoc.examples
