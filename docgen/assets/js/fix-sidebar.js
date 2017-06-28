@@ -7,7 +7,6 @@
 export function fixSidebar({sidebarContainer, topOffset}) {
   const siderbarParent = sidebarContainer.parentElement;
   const boundaries = getStartStopBoundaries(siderbarParent, sidebarContainer, topOffset);
-  const sidebarBBox = sidebarContainer.getBoundingClientRect();
 
   siderbarParent.style.position = 'relative';
 
