@@ -2,7 +2,7 @@ include description.pug
 include type.pug
 
 mixin struct(t, relatedTypes)
-  if t.properties
+  if t.properties && t.kind !== 'external'
     h3(id=`struct-${t.name}`)=t.name
       a.anchor(href=`${navPath}#struct-${t.name}`)
     ul.struct-def
