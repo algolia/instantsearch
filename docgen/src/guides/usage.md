@@ -14,7 +14,7 @@ githubSource: docgen/src/guides/usage.md
 
 InstantSearch.js can be used either with a direct link in your webpage or with a packaging system.
 
-### Directly in your page
+## Directly in your page
 
 This method uses built bersion of **InstantSearch.js** from the [jsDeliver](https://www.jsdelivr.com/) CDN:
 
@@ -33,7 +33,7 @@ You will then have access to the `instantsearch` function in the global scope (w
 
 The jsDeliver CDN is highly available with [over 110 locations](https://www.jsdelivr.com/features/network-map) in the world.
 
-### With a build system
+## With a build system
 
 If you have a JavaScript build system, you can install **InstantSearch.js** from NPM:
 
