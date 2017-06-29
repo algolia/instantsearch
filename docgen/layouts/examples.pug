@@ -12,8 +12,7 @@ block content
         div.example-tile.elevation1.radius6.text-center.p-large.pos-rel
           h2.inline.p-t-large=val.title
           figure
-            img(src=`examples/${val.id}/capture.png`)
+            img(src=`${examplesEndpoint}/${val.id}/capture.png`)
             figcaption
-              a(href=`${examplesEndpoint}/${val.id}`)=examplesCTA
-
-              a(href=`${examplesEndpoint}/${val.id}`) Download
+              a(href=`${examplesEndpoint}/${val.id}/`)=examplesCTA
+              a(href=`${examplesEndpoint}/${val.id}.zip`) Download
