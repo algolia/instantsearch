@@ -1,3 +1,13 @@
+<a name="4.0.6"></a>
+## [4.0.6](https://github.com/algolia/react-instantsearch/compare/v4.0.5...v4.0.6) (2017-06-29)
+
+
+### Bug Fixes
+
+* **store:** delay call to listener to prevent infinite loops (#143) ([0945958](https://github.com/algolia/react-instantsearch/commit/0945958))
+
+
+
 <a name="4.0.5"></a>
 ## [4.0.5](https://github.com/algolia/react-instantsearch/compare/v4.0.4...v4.0.5) (2017-06-26)
 
