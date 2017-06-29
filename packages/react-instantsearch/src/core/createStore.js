@@ -2,7 +2,7 @@ export default function createStore(initialState) {
   let state = initialState;
   const listeners = [];
   function dispatch() {
-    listeners.forEach(listener => listener());
+    listeners.forEach(listener => setTimeout(listener, 0));
   }
   return {
     getState() {
