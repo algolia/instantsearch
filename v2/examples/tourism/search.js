@@ -11,7 +11,8 @@ window.addEventListener('load', function() {
   search.addWidget(
     instantsearch.widgets.searchBox({
       container: '#q',
-      placeholder: 'Where are you going?'
+      placeholder: 'Where are you going?',
+      magnifier: false
     })
   );
 
@@ -63,7 +64,8 @@ window.addEventListener('load', function() {
       attributeName: 'room_type',
       operator: 'or',
       cssClasses: {item: ['col-sm-3']},
-      limit: 10
+      limit: 10,
+      sortBy: ['name:asc']
     })
   );
 

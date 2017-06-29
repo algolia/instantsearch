@@ -5264,12 +5264,12 @@ figure figcaption {
     background: #fefefe;
     border: 1px solid #ebebeb;
     position: relative;
-    text-align: center; }
+    text-align: center;
+    overflow: hidden; }
     .examples-container .example-tile a {
-      display: block;
-      width: 100%;
-      height: 100%;
-      position: relative; }
+      color: #fff;
+      line-height: 5;
+      padding: 0 1em; }
       @media (max-width: 768px) {
         .examples-container .example-tile a figcaption {
           white-space: nowrap;
@@ -5281,29 +5281,15 @@ figure figcaption {
           line-height: 1;
           font-size: 12px;
           top: 30px; } }
-    .examples-container .example-tile:after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      background: #fece4b;
-      opacity: 0;
-      z-index: 0;
-      border-radius: 3px;
-      transition: opacity 0.2s ease;
-      pointer-events: none; }
     .examples-container .example-tile figure img {
       width: 100%; }
     .examples-container .example-tile figcaption {
       width: 100%;
+      height: 100%;
       text-indent: 0;
       color: inherit;
       left: 0;
-      top: 50%;
-      -webkit-transform: translateY(-50%);
-              transform: translateY(-50%);
+      background: #fece4b;
       text-transform: uppercase;
       font-size: 1.6em;
       font-weight: bold;
@@ -5311,20 +5297,16 @@ figure figcaption {
       -webkit-transform: scale(0);
               transform: scale(0);
       z-index: 2;
-      line-height: 0;
+      line-height: 18;
       transition: -webkit-transform 0.2s ease;
       transition: transform 0.2s ease;
-      transition: transform 0.2s ease, -webkit-transform 0.2s ease; }
-    .examples-container .example-tile:hover:after {
-      opacity: 1;
-      content: 'See example';
-      font-size: 2em;
-      text-align: center;
-      line-height: 360px;
-      color: #fff; }
+      transition: transform 0.2s ease, -webkit-transform 0.2s ease;
+      position: absolute;
+      visibility: visible; }
     .examples-container .example-tile:hover figcaption {
       -webkit-transform: scale(1);
-              transform: scale(1); }
+              transform: scale(1);
+      top: 0; }
 
 .form-control {
   width: 100%;
