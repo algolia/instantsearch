@@ -19,7 +19,7 @@ mkdir -p docs
 
 
 # Package the examples in the website
-for example in docs_preview/examples/*; do
+for example in docs/examples/*; do
   if [ -d "$example" ]; then
     name=$(basename "$example")
     (cd "$example" && zip -r "../$name.zip" ./*)

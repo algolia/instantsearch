@@ -57,16 +57,31 @@ body {
     color: $aisdemo-color-gray-light;
   }
 
-  #q {
+  .ais-search-box {
     position: absolute;
-    top: 15px;
+    top: 0;
     left: 180px;
-    width: 50%;
-    border: 0;
-    box-shadow: none;
-    &:focus {
-      outline: none;
+    height: 100%;
+    width: 33%;
+
+    &--reset {
+      fill: #bfc7d8;
+      top: calc(50% - 12px / 2);
+      right: 0;
+      right: 13px;
+    }
+
+    #q {
+      position: absolute;
+      top: 15px;
+      width: 300px;
+      height: 40px;
+      border: 0;
       box-shadow: none;
+      &:focus {
+        outline: none;
+        box-shadow: none;
+      }
     }
   }
 }
@@ -179,12 +194,8 @@ body {
       border-color: $aisdemo-primary-color;
     }
 
-    .ais-range-slider--handle-lower {
-      transform: translateX(-50%);
-    }
-
-    .ais-range-slider--handle-upper {
-      transform: translateX(50%);
+    .rheostat-progress {
+      background-color: $aisdemo-primary-color !important;
     }
 
     .ais-range-slider--tooltip {
