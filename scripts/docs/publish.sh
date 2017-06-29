@@ -8,10 +8,10 @@ else
   currentBranch=$TRAVIS_BRANCH
 fi
 
-# if [ $currentBranch != 'master' ]; then
-#   printf "update-website: You must be on master"
-#   exit 1
-# fi
+if [ $currentBranch != 'master' ]; then
+  printf "update-website: You must be on master"
+  exit 1
+fi
 
 set -e # exit when error
 
