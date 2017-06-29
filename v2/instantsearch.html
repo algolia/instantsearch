@@ -280,16 +280,16 @@ look at the <a href="getting-started.html">getting started</a>.</p>
 </li><li class="type" id="struct-InstantSearchOptions-numberLocale"><strong>numberLocale</strong><a class="anchor" href="instantsearch.html#param-InstantSearchOptions-numberLocale"></a><code>[string]</code><p>The locale used to display numbers. This will be passed
 to <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString"><code>Number.prototype.toLocaleString()</code></a></p>
 </li><li class="type" id="struct-InstantSearchOptions-searchFunction"><strong>searchFunction</strong><a class="anchor" href="instantsearch.html#param-InstantSearchOptions-searchFunction"></a><code>[function]</code><p>A hook that will be called each time a search needs to be done, with the
-helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
+helper as a parameter. It’s your responsibility to call helper.search(). This option allows you to avoid doing
 searches at page load for example.</p>
 </li><li class="type" id="struct-InstantSearchOptions-createAlgoliaClient"><strong>createAlgoliaClient</strong><a class="anchor" href="instantsearch.html#param-InstantSearchOptions-createAlgoliaClient"></a><code>[function]</code><p>Allows you to provide your own algolia client instead of
 the one instantiated internally by instantsearch.js. Useful in situations where you need
 to setup complex mechanism on the client or if you need to share it easily.
 Usage:</p>
-<pre><code class="language-javascript">instantsearch({
-  // other parameters
-  createAlgoliaClient: function(algoliasearch, appId, apiKey) {
-    return anyCustomClient;
+<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-variable">instantsearch</span>({
+  <span class="cm-comment">// other parameters</span>
+  <span class="cm-property">createAlgoliaClient</span>: <span class="cm-keyword">function</span>(<span class="cm-def">algoliasearch</span>, <span class="cm-def">appId</span>, <span class="cm-def">apiKey</span>) {
+    <span class="cm-keyword">return</span> <span class="cm-variable">anyCustomClient</span>;
   }
 });
 </code></pre>
@@ -304,15 +304,15 @@ parameter to use in place of another. Keys are current query parameters
 and value the new value, e.g. <code>{ q: 'query' }</code>.</p>
 </li><li class="type" id="struct-UrlSyncOptions-threshold"><strong>threshold</strong><a class="anchor" href="instantsearch.html#param-UrlSyncOptions-threshold"></a><code>[number]</code><p>Idle time in ms after which a new
 state is created in the browser history. The default value is 700. The url is always updated at each keystroke
-but we only create a "previous search state" (activated when click on back button) every 700ms of idle time.</p>
+but we only create a “previous search state” (activated when click on back button) every 700ms of idle time.</p>
 </li><li class="type" id="struct-UrlSyncOptions-trackedParameters"><strong>trackedParameters</strong><a class="anchor" href="instantsearch.html#param-UrlSyncOptions-trackedParameters"></a><code>[Array&lt;string&gt;]</code><p>Parameters that will
 be synchronized in the URL. Default value is <code>['query', 'attribute:*', 'index', 'page', 'hitsPerPage']</code>. <code>attribute:*</code> means all the faceting attributes will be tracked. You
-can track only some of them by using [..., 'attribute:color', 'attribute:categories']. All other possible
+can track only some of them by using […, ‘attribute:color’, ‘attribute:categories’]. All other possible
 values are all the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters">attributes of the Helper SearchParameters</a>.</p>
-<p>There's a special <code>is_v</code> parameter that will get added everytime, it tracks the version of instantsearch.js
+<p>There’s a special <code>is_v</code> parameter that will get added everytime, it tracks the version of instantsearch.js
 linked to the url.</p>
 </li><li class="type" id="struct-UrlSyncOptions-useHash"><strong>useHash</strong><a class="anchor" href="instantsearch.html#param-UrlSyncOptions-useHash"></a><code>[boolean]</code><p>If set to true, the url will be
-hash based. Otherwise, it'll use the query parameters using the modern
+hash based. Otherwise, it’ll use the query parameters using the modern
 history API.</p>
 </li><li class="type" id="struct-UrlSyncOptions-getHistoryState"><strong>getHistoryState</strong><a class="anchor" href="instantsearch.html#param-UrlSyncOptions-getHistoryState"></a><code>[function]</code><p>Pass this function to override the
 default history API state we set to <code>null</code>. For example this could be used to force passing
