@@ -62,7 +62,8 @@ key.
 Here are examples of usage of `sortBy` using the previous sorting scheme:
 
 ```javascript
-search.addWidget(
+const yourSearch = instantsearch(/* parameters */);
+yourSearch.addWidget(
   instantsearch.widgets.refinementList({
     container: '#brands',
     attributeName: 'brand',
@@ -71,7 +72,7 @@ search.addWidget(
   })
 );
 
-search.addWidget(
+yourSearch.addWidget(
   instantsearch.widgets.menu({
     container: '#categories',
     attributeName: 'categories',

@@ -1,11 +1,13 @@
 import {uniqBy, forEach, reduce, groupBy, findIndex, find, filter, isArray, isObject} from 'lodash';
 import documentation from 'documentation';
 import remark from 'remark';
-import html from 'remark-html';
+import md from '../mdRenderer';
 
 function formatMD(ast) {
   if (ast && ast.type === 'root') {
-    return remark().use(html).stringify(ast);
+    // 1. extract the raw markdown string from the remark AST
+    // 2. use our custom markdown renderer
+    return md.render(remark().stringify(ast));
   }
   return ast;
 };
@@ -78,7 +80,6 @@ function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files)
     mode: '0764',
     contents: '',
     title: instantsearchFactory.name,
-    withHeadings: false,
     layout: `instantsearch.pug`,
     category: 'instantsearch',
     navWeight: 1,
@@ -114,7 +115,6 @@ function mapConnectors(connectors, symbols, files) {
       contents: '',
       title: symbol.name,
       mainTitle: 'connectors',
-      withHeadings: false,
       layout: `connector.pug`,
       category: 'connectors',
       navWeight: 1,
@@ -145,7 +145,6 @@ function mapWidgets(widgets, symbols, files) {
       contents: '',
       title: symbol.name,
       mainTitle: `widgets`,
-      withHeadings: false,
       layout: `widget.pug`,
       category: 'widgets',
       navWeight: 1,

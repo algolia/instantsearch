@@ -1,23 +1,22 @@
 
 script(src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js")
 
-section.hero-section.shrink
-  .container
-    .hero-container.text-left
-      if navPath !== 'index.html'
-        figcaption
-          if mainTitle
-            h1
-              | !{'<span style="font-weight: normal">' + mainTitle + ' /</span> '}
-              span=title
-          else
-            h1=title
-      else
-        .hero-content.text-center
-          h2.tagline
-            <img src="assets/img/logo-instantsearch.svg" width="390px" class="instantsearch-logo"/>
+section.hero.fill-titan
+  .container.z-10
+    .spacer80
+    h1.heading-text Build website search the right way
+    h2.color-logan.text-lg.text-thin InstantSearch.js makes it easy to design the perfect search experience using prepackaged search widgets or by creating your own!
+    .spacer32
+    a.btn.btn-static-theme.elevation0(href="getting-started.html").
+      Get started
+      <svg> <use xlink:href="#arrow-right"></svg>
 
-          h3 A library of UI widgets to help you build the best instant-search experience.
-
-          a(href="getting-started.html", class="btn btn-static-primary btn-lg btn-shadow-dark").
-            Get Started <i class="icon icon-arrow-right"></i>
+    .spacer80.hidden-sm
+  .row.z-10.m-l-none.m-r-none
+    .spacer40
+    .spacer40.hidden-md
+    figure
+      img(src="assets/img/instantsearch-medal.svg")
+    .spacer40.hidden-sm
+  .spacer120
+  .spacer40.hidden-sm

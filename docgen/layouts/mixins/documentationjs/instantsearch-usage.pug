@@ -5,6 +5,8 @@ mixin instantsearchUsage(fnSymbol)
     - const paramsType = fnSymbol.relatedTypes && fnSymbol.relatedTypes.find(t => t.name === paramTypeName);
     - if(!paramsType) console.log(fnSymbol.relatedTypes.map(t => t.name));
     - const properties = '\n' + paramsType.properties.map(p => `  ${p.name}: ${p.type.name}`).join(',\n');
+    .heading
+      | Usage
     pre.CodeMirror.cm-s-mdn-like
       code
         span.cm-keyword const 

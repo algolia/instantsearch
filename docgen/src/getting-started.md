@@ -9,7 +9,7 @@ editable: true
 githubSource: docgen/src/getting-started.md
 ---
 
-# Welcome to InstantSearch.js
+## Welcome to InstantSearch.js
 
 **InstantSearch.js** is a JavaScript library that lets you create an instant search results experience using Algolia’s REST API.
 
@@ -279,7 +279,7 @@ In this part, we’ve seen that:
   * facets are computed from the results
 
 
-## Refine the search experience further
+## Going further
 
 We now miss two elements in our search interface:
 

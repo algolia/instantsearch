@@ -19,7 +19,7 @@ output (templates).
 To go a step further in terms of customization, InstantSearch.js offers connectors
 that contains the logic of the widgets without their rendering.
 
-## Connectors
+## Introducing the connectors
 
 Connectors are the render-less counterparts of the widgets. They encapsulate
 all the logic needed for making search widgets. Each one of them is specialized
@@ -40,7 +40,7 @@ uses a dropdown for the rendering.
 
 Let's go step by step on how to write this custom widget.
 
-### How to create a custom menu with a dropdown
+## A custom menu with jQuery
 
 In this example we will create a new custom widget using [connectMenu](/connectors.html#connectMenu) connector.
 We will cover step by step on how to write a render function used by the connector.
@@ -49,7 +49,7 @@ For simplicity, we will write custom widgets with [jQuery](https://jquery.com/) 
 
 In the first three steps we focus on implementing the rendering function and then will it connect it to InstantSearch.
 
-#### 1. Set up the DOM
+## 1. Set up the DOM
 
 Since we use jQuery in these examples, we want to update only the changing parts of the markup at every render.
 
@@ -71,7 +71,7 @@ const customMenuRenderFn = function(renderParams, isFirstRendering) {
 If you use a rendering library such as React, you can omit this part because React will compute this for you.
 
 
-#### 2. Display the available dropdown options
+## 2. Display the available dropdown options
 
 Then, on every render we want to update and insert the available menu items as `<option>` DOM nodes:
 
@@ -106,7 +106,7 @@ const customMenuRenderFn = function(renderParams, isFirstRendering) {
 Now we have all the menu options displayed on the page but nothing is updating when the user selects a new option. Let's connect the dropdown to the search.
 
 
-#### 3. Make it interacts with the search results
+## 3. Make it interacts with the search results
 
 Menu connector comes with a `refine()` function in the first argument `renderParams` object.
 You need to call this `refine()` function every time an user select another option to *refine* the search results:
@@ -146,7 +146,7 @@ const customMenuRenderFn = function(renderParams, isFirstRendering) {
 Now every time an user selects a new option in the dropdown menu, it triggers new search to refine the search results!
 
 
-#### 4. Mount the custom menu dropdown widget on your page
+## 4. Mount the custom menu dropdown widget on your page
 
 We've just written the render function, we can now use it with the menu connector. This will create a new widget factory for our custom dropdown widget.
 
@@ -195,7 +195,7 @@ search.addWidget(
 
 This example works on a single DOM element, which means that you won't be able to re-use it for another attribute.
 
-#### 5. Make it reusable!
+## 5. Make it reusable!
 
 Connectors are meant to be reusable, it is important to be able to pass options to
 the rendering of each single widget instance when instantiating them.

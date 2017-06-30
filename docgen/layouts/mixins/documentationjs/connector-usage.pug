@@ -1,11 +1,13 @@
 mixin connectorUsage(fnSymbol)
+  .heading
+    | Usage
   - var rendererOptionsT = fnSymbol.params[0].type.params[0].name;
   - var widgetOptionT = fnSymbol.returns[0].type.params ? fnSymbol.returns[0].type.params[0].name : 'undefined';
   - var widgetName = rendererOptionsT.replace('RenderingOptions', '')
   pre.CodeMirror.cm-s-mdn-like
     code
-      span.cm-keyword const  
-      span.cm-def search 
+      span.cm-keyword const 
+      span.cm-def search
       | = 
       span.cm-variable instantsearch
       | (
@@ -13,7 +15,7 @@ mixin connectorUsage(fnSymbol)
       | );
       br
       br
-      span.cm-keyword const  
+      span.cm-keyword const 
       span.cm-variable make!{widgetName}
       span.cm-operator = 
       span.cm-variable instantsearch
