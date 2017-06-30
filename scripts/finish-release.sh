@@ -24,5 +24,4 @@ while true; do
 done
 
 curl --silent -L $CACHE_URL > /dev/null
-npm run docs:update-website
-npm run docs:update-website-search-index
+npm run docs:publish
