@@ -1,12 +1,13 @@
+import PropTypes from 'prop-types';
 import React from 'react';
+import hogan from 'hogan.js';
 
 import curry from 'lodash/curry';
 import cloneDeep from 'lodash/cloneDeep';
 import mapValues from 'lodash/mapValues';
-
-import hogan from 'hogan.js';
-
 import isEqual from 'lodash/isEqual';
+
+import {isReactElement} from '../lib/utils.js';
 
 export class PureTemplate extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -31,8 +32,8 @@ export class PureTemplate extends React.Component {
       return null;
     }
 
-    if (React.isValidElement(content)) {
-      return <div {...this.props.rootProps}>{content}</div>;
+    if (isReactElement(content)) {
+      throw new Error('Support for templates as React elements has been removed, please use react-instantsearch');
     }
 
     return <div {...this.props.rootProps} dangerouslySetInnerHTML={{__html: content}} />;
@@ -40,31 +41,31 @@ export class PureTemplate extends React.Component {
 }
 
 PureTemplate.propTypes = {
-  data: React.PropTypes.object,
-  rootProps: React.PropTypes.object,
-  templateKey: React.PropTypes.string,
-  templates: React.PropTypes.objectOf(React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.func,
+  data: PropTypes.object,
+  rootProps: PropTypes.object,
+  templateKey: PropTypes.string,
+  templates: PropTypes.objectOf(PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
   ])),
-  templatesConfig: React.PropTypes.shape({
-    helpers: React.PropTypes.objectOf(React.PropTypes.func),
+  templatesConfig: PropTypes.shape({
+    helpers: PropTypes.objectOf(PropTypes.func),
     // https://github.com/twitter/hogan.js/#compilation-options
-    compileOptions: React.PropTypes.shape({
-      asString: React.PropTypes.bool,
-      sectionTags: React.PropTypes.arrayOf(React.PropTypes.shape({
-        o: React.PropTypes.string,
-        c: React.PropTypes.string,
+    compileOptions: PropTypes.shape({
+      asString: PropTypes.bool,
+      sectionTags: PropTypes.arrayOf(PropTypes.shape({
+        o: PropTypes.string,
+        c: PropTypes.string,
       })),
-      delimiters: React.PropTypes.string,
-      disableLambda: React.PropTypes.bool,
+      delimiters: PropTypes.string,
+      disableLambda: PropTypes.bool,
     }),
   }),
-  transformData: React.PropTypes.oneOfType([
-    React.PropTypes.func,
-    React.PropTypes.objectOf(React.PropTypes.func),
+  transformData: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.objectOf(PropTypes.func),
   ]),
-  useCustomCompileOptions: React.PropTypes.objectOf(React.PropTypes.bool),
+  useCustomCompileOptions: PropTypes.objectOf(PropTypes.bool),
 };
 
 PureTemplate.defaultProps = {

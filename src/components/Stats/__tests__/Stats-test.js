@@ -1,9 +1,7 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
-import TestUtils from 'react-addons-test-utils';
-import Stats from '../Stats';
+import {createRenderer} from 'react-test-renderer/shallow';
+import {RawStats as Stats} from '../Stats';
 import Template from '../../Template';
 
 import expectJSX from 'expect-jsx';
@@ -13,7 +11,6 @@ describe('Stats', () => {
   let renderer;
 
   beforeEach(() => {
-    const {createRenderer} = TestUtils;
     renderer = createRenderer();
   });
 

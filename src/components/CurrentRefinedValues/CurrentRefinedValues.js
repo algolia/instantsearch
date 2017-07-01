@@ -1,13 +1,17 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Template from '../Template.js';
+
+import headerFooterHOC from '../../decorators/headerFooter.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
 
 import {isSpecialClick} from '../../lib/utils.js';
 import map from 'lodash/map';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 
-class CurrentRefinedValues extends React.Component {
+export class RawCurrentRefinedValues extends React.Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }
@@ -16,9 +20,15 @@ class CurrentRefinedValues extends React.Component {
     if (requestedPosition !== position) {
       return undefined;
     }
+
+    const {refinements, cssClasses} = this.props;
     return (
       <a
-        className={this.props.cssClasses.clearAll}
+        className={
+          refinements && refinements.length > 0
+            ? cssClasses.clearAll
+            : `${cssClasses.clearAll} ${cssClasses.clearAll}-disabled`
+        }
         href={this.props.clearAllURL}
         onClick={handleClick(this.props.clearAllClick)}
       >
@@ -109,29 +119,29 @@ function handleClick(cb) {
   };
 }
 
-CurrentRefinedValues.propTypes = {
-  attributes: React.PropTypes.object,
-  clearAllClick: React.PropTypes.func,
-  clearAllPosition: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.bool,
+RawCurrentRefinedValues.propTypes = {
+  attributes: PropTypes.object,
+  clearAllClick: PropTypes.func,
+  clearAllPosition: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
   ]),
-  clearAllURL: React.PropTypes.string,
-  clearRefinementClicks: React.PropTypes.arrayOf(
-    React.PropTypes.func
+  clearAllURL: PropTypes.string,
+  clearRefinementClicks: PropTypes.arrayOf(
+    PropTypes.func
   ),
-  clearRefinementURLs: React.PropTypes.arrayOf(
-    React.PropTypes.string
+  clearRefinementURLs: PropTypes.arrayOf(
+    PropTypes.string
   ),
-  cssClasses: React.PropTypes.shape({
-    clearAll: React.PropTypes.string,
-    list: React.PropTypes.string,
-    item: React.PropTypes.string,
-    link: React.PropTypes.string,
-    count: React.PropTypes.string,
+  cssClasses: PropTypes.shape({
+    clearAll: PropTypes.string,
+    list: PropTypes.string,
+    item: PropTypes.string,
+    link: PropTypes.string,
+    count: PropTypes.string,
   }).isRequired,
-  refinements: React.PropTypes.array,
-  templateProps: React.PropTypes.object.isRequired,
+  refinements: PropTypes.array,
+  templateProps: PropTypes.object.isRequired,
 };
 
-export default CurrentRefinedValues;
+export default autoHideContainerHOC(headerFooterHOC(RawCurrentRefinedValues));

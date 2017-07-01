@@ -1,4 +1,3 @@
-/* eslint-env mocha */
 
 beforeEach(function () {
   this.jsdom = require('jsdom-global')();

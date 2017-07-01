@@ -1,12 +1,13 @@
 /* eslint-disable max-len, no-extra-parens */
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class SearchBox extends React.Component {
   static propTypes = {
-    placeholder: React.PropTypes.string.isRequired,
-    onChange: React.PropTypes.func.isRequired,
-    onValidate: React.PropTypes.func.isRequired,
-    disabled: React.PropTypes.bool,
+    placeholder: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onValidate: PropTypes.func.isRequired,
+    disabled: PropTypes.bool,
   }
 
   clearInput() {

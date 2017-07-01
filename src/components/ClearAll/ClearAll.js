@@ -1,8 +1,12 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Template from '../Template.js';
 import {isSpecialClick} from '../../lib/utils.js';
 
-class ClearAll extends React.Component {
+import autoHideContainer from '../../decorators/autoHideContainer.js';
+import headerFooter from '../../decorators/headerFooter.js';
+
+export class RawClearAll extends React.Component {
   componentWillMount() {
     this.handleClick = this.handleClick.bind(this);
   }
@@ -19,17 +23,20 @@ class ClearAll extends React.Component {
       return;
     }
     e.preventDefault();
-    this.props.clearAll();
+    this.props.refine();
   }
 
   render() {
-    const data = {
-      hasRefinements: this.props.hasRefinements,
-    };
+    const {hasRefinements, cssClasses} = this.props;
+    const data = {hasRefinements};
 
     return (
       <a
-        className={this.props.cssClasses.link}
+        className={
+          hasRefinements
+            ? cssClasses.link
+            : `${cssClasses.link} ${cssClasses.link}-disabled`
+        }
         href={this.props.url}
         onClick={this.handleClick}
       >
@@ -42,14 +49,14 @@ class ClearAll extends React.Component {
   }
 }
 
-ClearAll.propTypes = {
-  clearAll: React.PropTypes.func.isRequired,
-  cssClasses: React.PropTypes.shape({
-    link: React.PropTypes.string,
+RawClearAll.propTypes = {
+  refine: PropTypes.func.isRequired,
+  cssClasses: PropTypes.shape({
+    link: PropTypes.string,
   }),
-  hasRefinements: React.PropTypes.bool.isRequired,
-  templateProps: React.PropTypes.object.isRequired,
-  url: React.PropTypes.string.isRequired,
+  hasRefinements: PropTypes.bool.isRequired,
+  templateProps: PropTypes.object.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
-export default ClearAll;
+export default autoHideContainer(headerFooter(RawClearAll));

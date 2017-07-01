@@ -9,48 +9,70 @@ $range-slider-bar-color: $blue-light;
 $range-slider-handle-bg: $white;
 
 @include block(range-slider) {
-  @include element(target) {
-    position: relative;
-    direction: ltr;
-    background: $range-slider-bg;
-    height: $range-slider-target-height;
-    margin-top: 2em;
-    margin-bottom: 2em;
+  .ais-range-slider--disabled {
+    cursor: not-allowed;
 
-    &[disabled="true"] {
+    .ais-range-slider--handle {
+      border-color: $range-slider-marker-bg;
       cursor: not-allowed;
+    }
 
-      .ais-range-slider--handle {
-        border-color: $range-slider-marker-bg;
-        cursor: not-allowed;
-      }
+    .rheostat-horizontal .rheostat-progress {
+      background-color: $range-slider-marker-bg;
     }
   }
 
-  @include element(base) {
-    height: 100%;
-    position: relative;
-    z-index: 1;
+  .rheostat {
+    overflow: visible;
+    margin-top: 2em;
+    margin-bottom: 2em;
+  }
+
+  .rheostat-background {
+    background-color: $range-slider-handle-bg;
     border-top: 1px solid $range-slider-marker-bg;
     border-bottom: 1px solid $range-slider-marker-bg;
     border-left: 2px solid $range-slider-marker-bg;
     border-right: 2px solid $range-slider-marker-bg;
+    position: relative;
   }
 
-  @include element(origin) {
-    position: absolute;
-    right: 0;
-    top: 0;
-    left: 0;
-    bottom: 0;
-  }
+  .rheostat-horizontal {
+    .rheostat-background {
+      height: 6px;
+      top: 0px;
+      width: 100%;
+    }
 
-  @include element(connect) {
-    background: $range-slider-bar-color;
-  }
+    .rheostat-progress {
+      background-color: $range-slider-bar-color;
+      position: absolute;
+      height: 4px;
+      top: 1px;
+    }
 
-  @include element(background) {
-    background: $range-slider-bg;
+    .rheostat-handle {
+      margin-left: -12px;
+      top: -7px;
+
+      .ais-range-slider--tooltip {
+        text-align: center;
+        margin-left: -10px;
+        width: 40px;
+      }
+    }
+
+    .rheostat-handle {
+      &:before,
+      &:after {
+        top: 7px;
+        height: 10px;
+        width: 1px;
+      }
+
+      &:before { left: 10px; }
+      &:after { left: 13px; }
+    }
   }
 
   @include element(handle) {
@@ -64,30 +86,11 @@ $range-slider-handle-bg: $white;
     cursor: pointer;
   }
 
-  @include element(handle-lower) {
-    left: -($range-slider-handle-size / 2);
-    bottom: ($range-slider-handle-size / 2 - $range-slider-target-height / 2);
-  }
-
-  @include element(handle-upper) {
-    right: $range-slider-handle-size / 2;
-    bottom: ($range-slider-handle-size / 2 - $range-slider-target-height / 2);
-  }
-
   @include element(tooltip) {
     position: absolute;
     background: $white;
     top: -$range-slider-handle-size - 2px;
     font-size: .8em;
-  }
-
-  @include element(pips) {
-    box-sizing: border-box;
-    position: absolute;
-    height: 3em;
-    top: 100%;
-    left: 0;
-    width: 100%;
   }
 
   @include element(value) {
@@ -98,10 +101,6 @@ $range-slider-handle-bg: $white;
     padding-top: 15px;
     font-size: .8em;
   }
-  @include element(value-sub) {
-    font-size: .8em;
-    padding-top: 15px;
-  }
 
   @include element(marker) {
     position: absolute;
@@ -109,24 +108,5 @@ $range-slider-handle-bg: $white;
     margin-left: -1px;
     width: 1px;
     height: 5px;
-  }
-  @include element(marker-sub) {
-    background: $range-slider-marker-bg;
-    width: 2px;
-    margin-left: -2px;
-    height: 7px + $range-slider-target-height;
-  }
-  @include element(marker-large) {
-    background: $range-slider-marker-bg;
-    width: 2px;
-    margin-left: -2px;
-    height: 12px;
-    &:first-child {
-      margin-left: 0;
-    }
-  }
-
-  .ais-range-slider--stacking .ais-range-slider--handle {
-    z-index: 20;
   }
 }

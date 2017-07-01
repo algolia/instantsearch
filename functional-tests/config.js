@@ -1,10 +1,20 @@
+import path from 'path';
+import {SaveScreenshot} from 'wdio-visual-regression-service/compare';
 import testServer from './testServer.js';
 import {clearAll, searchBox} from './utils.js';
-const INDEX_PAGE = process.env.INDEX_PAGE || 'index.html';
+const INDEX_PAGE = process.env.INDEX_PAGE || 'index';
+
+function screenshotName(context) {
+  const testName = context.test.title.replace(/ /g, '_');
+  const name = context.browser.name.toLocaleLowerCase().replace(/ /g, '_');
+  const {width, height} = context.meta.viewport;
+
+  return path.join(__dirname, 'screenshots', `${testName}_${name}_${width}x${height}.png`);
+}
 
 let conf = {
   specs: [
-    'functional-tests/specs/**',
+    './functional-tests/test.js',
   ],
   reporters: ['dot'],
   framework: 'mocha',
@@ -13,12 +23,21 @@ let conf = {
     timeout: 50000,
     compilers: ['js:babel-core/register'],
   },
-  baseUrl: 'http://localhost:9000',
+  baseUrl: `http://${process.env.CI === 'true' ? 'localhost' : '10.200.10.1'}:9000`,
+  services: [
+    'visual-regression',
+  ],
+  visualRegression: {
+    compare: new SaveScreenshot({
+      screenshotName,
+    }),
+    viewportChangePause: 300, // ms
+  },
   onPrepare() {
     return testServer.start();
   },
   before() {
-    browser.timeoutsImplicitWait(500);
+    browser.timeouts('implicit', 500);
     browser.url(`/${INDEX_PAGE}.html`);
     browser.waitForText('#hits', 30000);
 
@@ -37,7 +56,11 @@ let conf = {
 
 if (process.env.CI === 'true') {
   conf = {
-    services: ['sauce'],
+    ...conf,
+    services: [
+      ...conf.services,
+      'sauce',
+    ],
     user: process.env.SAUCE_USERNAME,
     key: process.env.SAUCE_ACCESS_KEY,
     maxInstances: 5,
@@ -84,12 +107,11 @@ if (process.env.CI === 'true') {
       //   platformName: 'iOS'
       // },
     ],
-    ...conf,
   };
 } else {
   conf = {
     host: '127.0.0.1',
-    port: 24444,
+    port: 4444,
     path: '/wd/hub',
     capabilities: [{browserName: 'firefox'}],
     ...conf,

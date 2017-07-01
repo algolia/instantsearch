@@ -1,50 +1,59 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
+import defaultTemplates from './defaultTemplates.js';
+
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
 } from '../../lib/utils.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import defaultTemplates from './defaultTemplates.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
 const bem = bemHelper('ais-hierarchical-menu');
-/**
- * Create a hierarchical menu using multiple attributes
- * @function hierarchicalMenu
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string[]} options.attributes Array of attributes to use to generate the hierarchy of the menu.
- * See the example for the convention to follow.
- * @param  {number} [options.limit=10] How much facet values to get [*]
- * @param  {string} [options.separator=">"] Separator used in the attributes to separate level values. [*]
- * @param  {string} [options.rootPath] Prefix path to use if the first level is not the root level.
- * @param  {string} [options.showParentLevel=false] Show the parent level of the current refined value
- * @param  {string[]|Function} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header=''] Header template (root level only)
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @param  {string|Function} [options.templates.footer=''] Footer template (root level only)
- * @param  {Function} [options.transformData.item] Method to change the object passed to the `item` template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [options.cssClasses.depth] CSS class to add to each item element to denote its depth. The actual level will be appended to the given class name (ie. if `depth` is given, the widget will add `depth0`, `depth1`, ... according to the level of each item).
- * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
- * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
+
+const renderer = ({
+  autoHideContainer,
+  collapsible,
+  cssClasses,
+  containerNode,
+  transformData,
+  templates,
+  renderState,
+}) => ({
+  createURL,
+  items,
+  refine,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && items.length === 0;
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={items}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+      toggleRefinement={refine}
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 hierarchicalMenu({
   container,
@@ -60,35 +69,105 @@ hierarchicalMenu({
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
-function hierarchicalMenu({
-    container,
-    attributes,
-    separator = ' > ',
-    rootPath = null,
-    showParentLevel = true,
-    limit = 10,
-    sortBy = ['name:asc'],
-    cssClasses: userCssClasses = {},
-    autoHideContainer = true,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-  } = {}) {
+/**
+ * @typedef {Object} HierarchicalMenuCSSClasses
+ * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [header] CSS class to add to the header element.
+ * @property {string|string[]} [body] CSS class to add to the body element.
+ * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [list] CSS class to add to the list element.
+ * @property {string|string[]} [item] CSS class to add to each item element.
+ * @property {string|string[]} [depth] CSS class to add to each item element to denote its depth. The actual level will be appended to the given class name (ie. if `depth` is given, the widget will add `depth0`, `depth1`, ... according to the level of each item).
+ * @property {string|string[]} [active] CSS class to add to each active element.
+ * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
+ * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
+ */
+
+/**
+ * @typedef {Object} HierarchicalMenuTemplates
+ * @property {string|function(object):string} [header=''] Header template (root level only).
+ * @property {string|function(object):string} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|function(object):string} [footer=''] Footer template (root level only).
+ */
+
+/**
+ * @typedef {Object} HierarchicalMenuTransforms
+ * @property {function(object):object} [item] Method to change the object passed to the `item`. template
+ */
+
+/**
+ * @typedef {Object} HierarchicalMenuWidgetOptions
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
+ * @property {number} [limit=10] How much facet values to get [*].
+ * @property {string} [separator=" > "] Separator used in the attributes to separate level values. [*].
+ * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
+ * @property {string} [showParentLevel=false] Show the parent level of the current refined value.
+ * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ *
+ * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {HierarchicalMenuTemplates} [templates] Templates to use for the widget.
+ * @property {HierarchicalMenuTransforms} [transformData] Set of functions to transform the data passed to the templates.
+ * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu.
+ * @property {HierarchicalMenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
+ * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
+ * property is `true`, then the widget is hidden during the first rendering.
+ */
+
+/**
+ * The hierarchical menu widget is used to create a navigation based on a hierarchy of facet attributes.
+ *
+ * It is commonly used for categories with subcategories.
+ *
+ * This widget requires the data to be formatted in a specific way. Each level should be represented
+ * as a single attribute. Each attribute represent a path in the hierarchy. Example:
+ *
+ * ```javascript
+ * {
+ *   "objectID": "123",
+ *   "name": "orange",
+ *   "categories": {
+ *     "lvl0": "fruits",
+ *     "lvl1": "fruits > citrus"
+ *   }
+ * }
+ * ```
+ *
+ * By default, the separator is ` > ` but it can be different and specified with the `separator` option.
+ * @type {WidgetFactory}
+ * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
+ * @return {Widget} A new HierarchicalMenu widget instance.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.hierarchicalMenu({
+ *     container: '#hierarchical-categories',
+ *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+ *     templates: {
+ *       header: 'Hierarchical categories'
+ *     }
+ *   })
+ * );
+ */
+export default function hierarchicalMenu({
+  container,
+  attributes,
+  separator = ' > ',
+  rootPath = null,
+  showParentLevel = true,
+  limit = 10,
+  sortBy = ['name:asc'],
+  cssClasses: userCssClasses = {},
+  autoHideContainer = true,
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+} = {}) {
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
-
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  // we need to provide a hierarchicalFacet name for the search state
-  // so that we can always map $hierarchicalFacetName => real attributes
-  // we use the first attribute name
-  const hierarchicalFacetName = attributes[0];
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -103,66 +182,27 @@ function hierarchicalMenu({
     count: cx(bem('count'), userCssClasses.count),
   };
 
-  return {
-    getConfiguration: currentConfiguration => ({
-      hierarchicalFacets: [{
-        name: hierarchicalFacetName,
-        attributes,
-        separator,
-        rootPath,
-        showParentLevel,
-      }],
-      maxValuesPerFacet: currentConfiguration.maxValuesPerFacet !== undefined ?
-        Math.max(currentConfiguration.maxValuesPerFacet, limit) :
-        limit,
-    }),
-    init({helper, templatesConfig}) {
-      this._toggleRefinement = facetValue => helper
-        .toggleRefinement(hierarchicalFacetName, facetValue)
-        .search();
+  const specializedRenderer = renderer({
+    autoHideContainer,
+    collapsible,
+    cssClasses,
+    containerNode,
+    transformData,
+    templates,
+    renderState: {},
+  });
 
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-    },
-    _prepareFacetValues(facetValues, state) {
-      return facetValues
-        .slice(0, limit)
-        .map(subValue => {
-          if (Array.isArray(subValue.data)) {
-            subValue.data = this._prepareFacetValues(subValue.data, state);
-          }
-
-          return subValue;
-        });
-    },
-    render({results, state, createURL}) {
-      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [];
-      facetValues = this._prepareFacetValues(facetValues, state);
-
-      // Bind createURL to this specific attribute
-      function _createURL(facetValue) {
-        return createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
-      }
-
-      ReactDOM.render(
-        <RefinementList
-          attributeNameKey="path"
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={facetValues}
-          shouldAutoHideContainer={facetValues.length === 0}
-          templateProps={this._templateProps}
-          toggleRefinement={this._toggleRefinement}
-        />,
-        containerNode
-      );
-    },
-  };
+  try {
+    const makeHierarchicalMenu = connectHierarchicalMenu(specializedRenderer);
+    return makeHierarchicalMenu({
+      attributes,
+      separator,
+      rootPath,
+      showParentLevel,
+      limit,
+      sortBy,
+    });
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default hierarchicalMenu;

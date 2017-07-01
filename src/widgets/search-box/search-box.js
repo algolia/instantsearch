@@ -1,41 +1,118 @@
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
 import forEach from 'lodash/forEach';
 import isString from 'lodash/isString';
 import isFunction from 'lodash/isFunction';
 import cx from 'classnames';
 import Hogan from 'hogan.js';
+
+import connectSearchBox from '../../connectors/search-box/connectSearchBox.js';
 import defaultTemplates from './defaultTemplates.js';
+
+import {
+  bemHelper,
+  getContainerNode,
+} from '../../lib/utils.js';
 
 const bem = bemHelper('ais-search-box');
 const KEY_ENTER = 13;
 const KEY_SUPPRESS = 8;
 
-/**
- * Instantiate a searchbox
- * @function searchBox
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} [options.placeholder] Input's placeholder [*]
- * @param  {boolean|Object} [options.poweredBy=false] Define if a "powered by Algolia" link should be added near the input
- * @param  {function|string} [options.poweredBy.template] Template used for displaying the link. Can accept a function or a Hogan string.
- * @param  {number} [options.poweredBy.cssClasses] CSS classes to add
- * @param  {string|string[]} [options.poweredBy.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.poweredBy.cssClasses.link] CSS class to add to the link element
- * @param  {boolean} [options.wrapInput=true] Wrap the input in a `div.ais-search-box`
- * @param  {boolean|string} [autofocus='auto'] autofocus on the input
- * @param  {boolean} [options.searchOnEnterKeyPressOnly=false] If set, trigger the search
- * once `<Enter>` is pressed only
- * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the
- * wrapping div (if `wrapInput` set to `true`)
- * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the input
- * @param  {function} [options.queryHook] A function that will be called every time a new search would be done. You
- * will get the query as first parameter and a search(query) function to call as the second parameter.
- * This queryHook can be used to debounce the number of searches done from the searchBox.
- * @return {Object}
- */
+const renderer = ({
+  containerNode,
+  cssClasses,
+  placeholder,
+  poweredBy,
+  templates,
+  autofocus,
+  searchOnEnterKeyPressOnly,
+  wrapInput,
+  reset,
+  magnifier,
+}) => ({
+  refine,
+  clear,
+  query,
+  onHistoryChange,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    const INPUT_EVENT = window.addEventListener ?
+      'input' :
+      'propertychange';
+    const input = createInput(containerNode);
+    const isInputTargeted = input === containerNode;
+    if (isInputTargeted) {
+      // To replace the node, we need to create an intermediate node
+      const placeholderNode = document.createElement('div');
+      input.parentNode.insertBefore(placeholderNode, input);
+      const parentNode = input.parentNode;
+      const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
+      parentNode.replaceChild(wrappedInput, placeholderNode);
+    } else {
+      const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
+      containerNode.appendChild(wrappedInput);
+    }
+    if (magnifier) addMagnifier(input, magnifier, templates);
+    if (reset) addReset(input, reset, templates, clear);
+    addDefaultAttributesToInput(placeholder, input, query, cssClasses);
+    // Optional "powered by Algolia" widget
+    if (poweredBy) {
+      addPoweredBy(input, poweredBy, templates);
+    }
+    // When the page is coming from BFCache
+    // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
+    // then we force the input value to be the current query
+    // Otherwise, this happens:
+    // - <input> autocomplete = off (default)
+    // - search $query
+    // - navigate away
+    // - use back button
+    // - input query is empty (because <input> autocomplete = off)
+    window.addEventListener('pageshow', () => {
+      input.value = query;
+    });
+
+    // Update value when query change outside of the input
+    onHistoryChange(fullState => {
+      input.value = fullState.query || '';
+    });
+
+    if (autofocus === true || autofocus === 'auto' && query === '') {
+      input.focus();
+      input.setSelectionRange(query.length, query.length);
+    }
+
+    // search on enter
+    if (searchOnEnterKeyPressOnly) {
+      addListener(input, INPUT_EVENT, e => {
+        refine(getValue(e), false);
+      });
+      addListener(input, 'keyup', e => {
+        if (e.keyCode === KEY_ENTER) refine(getValue(e));
+      });
+    } else {
+      addListener(input, INPUT_EVENT, getInputValueAndCall(refine));
+
+      // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
+      // can be removed as soon as we remove support for it
+      if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
+        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(refine)));
+      }
+    }
+  } else {
+    const input = getInput(containerNode);
+    const isFocused = document.activeElement === input;
+    if (!isFocused && query !== input.value) {
+      input.value = query;
+    }
+  }
+
+  const resetButtonContainer = containerNode.tagName === 'INPUT'
+    ? containerNode.parentNode
+    : containerNode;
+
+  // hide reset button when there is no query
+  const resetButton = resetButtonContainer.querySelector('button[type="reset"]');
+  resetButton.style.display = query && query.trim() ? 'block' : 'none';
+};
 
 const usage = `Usage:
 searchBox({
@@ -47,8 +124,79 @@ searchBox({
   [ autofocus ],
   [ searchOnEnterKeyPressOnly ],
   [ queryHook ]
+  [ reset=true || reset.{template, cssClasses.{root}} ]
 })`;
-function searchBox({
+
+/**
+ * @typedef {Object} SearchBoxPoweredByCSSClasses
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [link] CSS class to add to the link element.
+ */
+
+/**
+ * @typedef {Object} SearchBoxPoweredByOption
+ * @property {function|string} template Template used for displaying the link. Can accept a function or a Hogan string.
+ * @property {SearchBoxPoweredByCSSClasses} [cssClasses] CSS classes added to the powered-by badge.
+ */
+
+/**
+ * @typedef {Object} SearchBoxResetOption
+ * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
+ * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
+ */
+
+/**
+ * @typedef {Object} SearchBoxCSSClasses
+ * @property  {string|string[]} [root] CSS class to add to the
+ * wrapping `<div>` (if `wrapInput` set to `true`).
+ * @property  {string|string[]} [input] CSS class to add to the input.
+ */
+
+/**
+ * @typedef {Object} SearchBoxMagnifierOption
+ * @property {function|string} template Template used for displaying the magnifier. Can accept a function or a Hogan string.
+ * @property {{root: string}} [cssClasses] CSS classes added to the magnifier.
+ */
+
+/**
+ * @typedef {Object} SearchBoxWidgetOptions
+ * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property  {string} [placeholder] Input's placeholder.
+ * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
+ * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
+ * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
+ * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
+ * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
+ * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
+ * once `<Enter>` is pressed only.
+ * @property  {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
+ * @property  {function} [queryHook] A function that will be called every time a new search would be done. You
+ * will get the query as first parameter and a search(query) function to call as the second parameter.
+ * This queryHook can be used to debounce the number of searches done from the searchBox.
+ */
+
+/**
+ * The searchbox widget is used to let the user set a text based query.
+ *
+ * This is usually the  main entry point to start the search in an instantsearch context. For that
+ * reason is usually placed on top, and not hidden so that the user can start searching right
+ * away.
+ *
+ * @type {WidgetFactory}
+ * @param {SearchBoxWidgetOptions} $0 Options used to configure a SearchBox widget.
+ * @return {Widget} Creates a new instance of the SearchBox widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.searchBox({
+ *     container: '#q',
+ *     placeholder: 'Search for products',
+ *     autofocus: false,
+ *     poweredBy: true,
+ *     reset: false,
+ *   })
+ * );
+ */
+export default function searchBox({
   container,
   placeholder = '',
   cssClasses = {},
@@ -56,21 +204,15 @@ function searchBox({
   wrapInput = true,
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
+  reset = true,
+  magnifier = true,
   queryHook,
-}) {
-  // the 'input' event is triggered when the input value changes
-  // in any case: typing, copy pasting with mouse..
-  // 'onpropertychange' is the IE8 alternative until we support IE8
-  // but it's flawed: http://help.dottoro.com/ljhxklln.php
-  const INPUT_EVENT = window.addEventListener ?
-    'input' :
-    'propertychange';
-
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }
 
-  container = getContainerNode(container);
+  const containerNode = getContainerNode(container);
 
   // Only possible values are 'auto', true and false
   if (typeof autofocus !== 'boolean') {
@@ -82,193 +224,55 @@ function searchBox({
     poweredBy = {};
   }
 
-  return {
-    getInput() {
-      // Returns reference to targeted input if present, or create a new one
-      if (container.tagName === 'INPUT') {
-        return container;
-      }
-      return document.createElement('input');
-    },
-    wrapInput(input) {
-      // Wrap input in a .ais-search-box div
-      const wrapper = document.createElement('div');
-      const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
-      CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
-      wrapper.appendChild(input);
-      return wrapper;
-    },
-    addDefaultAttributesToInput(input, query) {
-      const defaultAttributes = {
-        autocapitalize: 'off',
-        autocomplete: 'off',
-        autocorrect: 'off',
-        placeholder,
-        role: 'textbox',
-        spellcheck: 'false',
-        type: 'text',
-        value: query,
-      };
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    placeholder,
+    poweredBy,
+    templates: defaultTemplates,
+    autofocus,
+    searchOnEnterKeyPressOnly,
+    wrapInput,
+    reset,
+    magnifier,
+  });
 
-      // Overrides attributes if not already set
-      forEach(defaultAttributes, (value, key) => {
-        if (input.hasAttribute(key)) {
-          return;
-        }
-        input.setAttribute(key, value);
-      });
+  try {
+    const makeWidget = connectSearchBox(specializedRenderer);
+    return makeWidget({queryHook});
+  } catch (e) {
+    throw new Error(usage);
+  }
+}
 
-      // Add classes
-      const CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
-      CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
-    },
-    addPoweredBy(input) {
-      // Default values
-      poweredBy = {
-        cssClasses: {},
-        template: defaultTemplates.poweredBy,
-        ...poweredBy,
-      };
+// the 'input' event is triggered when the input value changes
+// in any case: typing, copy pasting with mouse..
+// 'onpropertychange' is the IE8 alternative until we support IE8
+// but it's flawed: http://help.dottoro.com/ljhxklln.php
 
-      const poweredByCSSClasses = {
-        root: cx(bem('powered-by'), poweredBy.cssClasses.root),
-        link: cx(bem('powered-by-link'), poweredBy.cssClasses.link),
-      };
+function createInput(containerNode) {
+  // Returns reference to targeted input if present, or create a new one
+  if (containerNode.tagName === 'INPUT') {
+    return containerNode;
+  }
+  return document.createElement('input');
+}
 
-      const url = 'https://www.algolia.com/?' +
-        'utm_source=instantsearch.js&' +
-        'utm_medium=website&' +
-        `utm_content=${location.hostname}&` +
-        'utm_campaign=poweredby';
+function getInput(containerNode) {
+  // Returns reference to targeted input if present, or look for it inside
+  if (containerNode.tagName === 'INPUT') {
+    return containerNode;
+  }
+  return containerNode.querySelector('input');
+}
 
-      const templateData = {
-        cssClasses: poweredByCSSClasses,
-        url,
-      };
-
-      const template = poweredBy.template;
-      let stringNode;
-
-      if (isString(template)) {
-        stringNode = Hogan.compile(template).render(templateData);
-      }
-      if (isFunction(template)) {
-        stringNode = template(templateData);
-      }
-
-      // Crossbrowser way to create a DOM node from a string. We wrap in
-      // a `span` to make sure we have one and only one node.
-      const tmpNode = document.createElement('div');
-      tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
-      const htmlNode = tmpNode.firstChild;
-
-      input.parentNode.insertBefore(htmlNode, input.nextSibling);
-    },
-    init({state, helper, onHistoryChange}) {
-      const isInputTargeted = container.tagName === 'INPUT';
-      const input = this._input = this.getInput();
-      let previousQuery;
-
-      // Add all the needed attributes and listeners to the input
-      this.addDefaultAttributesToInput(input, state.query);
-
-      // always set the query every keystrokes when there's no queryHook
-      if (!queryHook) {
-        addListener(input, INPUT_EVENT, getInputValueAndCall(setQuery));
-      }
-
-      // search on enter
-      if (searchOnEnterKeyPressOnly) {
-        addListener(input, 'keyup', ifKey(KEY_ENTER, getInputValueAndCall(maybeSearch)));
-      } else {
-        addListener(input, INPUT_EVENT, getInputValueAndCall(maybeSearch));
-
-        // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
-        // can be removed as soon as we remove support for it
-        if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(setQuery)));
-          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(maybeSearch)));
-        }
-      }
-
-      function maybeSearch(query) {
-        if (queryHook) {
-          queryHook(query, setQueryAndSearch);
-          return;
-        }
-
-        search(query);
-      }
-
-      function setQuery(query) {
-        if (query !== helper.state.query) {
-          previousQuery = helper.state.query;
-          helper.setQuery(query);
-        }
-      }
-
-      function search(query) {
-        if (previousQuery !== undefined && previousQuery !== query) helper.search();
-      }
-
-      function setQueryAndSearch(query) {
-        setQuery(query);
-        search(query);
-      }
-
-      if (isInputTargeted) {
-        // To replace the node, we need to create an intermediate node
-        const placeholderNode = document.createElement('div');
-        input.parentNode.insertBefore(placeholderNode, input);
-        const parentNode = input.parentNode;
-        const wrappedInput = wrapInput ? this.wrapInput(input) : input;
-        parentNode.replaceChild(wrappedInput, placeholderNode);
-      } else {
-        const wrappedInput = wrapInput ? this.wrapInput(input) : input;
-        container.appendChild(wrappedInput);
-      }
-
-      // Optional "powered by Algolia" widget
-      if (poweredBy) {
-        this.addPoweredBy(input);
-      }
-
-      // Update value when query change outside of the input
-      onHistoryChange(fullState => {
-        input.value = fullState.query || '';
-      });
-
-      // When the page is coming from BFCache
-      // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
-      // then we force the input value to be the current query
-      // Otherwise, this happens:
-      // - <input> autocomplete = off (default)
-      // - search $query
-      // - navigate away
-      // - use back button
-      // - input query is empty (because <input> autocomplete = off)
-      window.addEventListener('pageshow', () => {
-        input.value = helper.state.query;
-      });
-
-      if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {
-        input.focus();
-        input.setSelectionRange(helper.state.query.length, helper.state.query.length);
-      }
-    },
-    render({helper}) {
-      // updating the query from the outside using the helper
-      // will fall in this case
-      // If the input is focused, we do not update it.
-      if (document.activeElement === this._input) {
-        return;
-      }
-
-      if (helper.state.query !== this._input.value) {
-        this._input.value = helper.state.query;
-      }
-    },
-  };
+function wrapInputFn(input, cssClasses) {
+  // Wrap input in a .ais-search-box div
+  const wrapper = document.createElement('div');
+  const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
+  CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
+  wrapper.appendChild(input);
+  return wrapper;
 }
 
 function addListener(el, type, fn) {
@@ -291,4 +295,114 @@ function getInputValueAndCall(func) {
   return actualEvent => func(getValue(actualEvent));
 }
 
-export default searchBox;
+function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
+  const defaultAttributes = {
+    autocapitalize: 'off',
+    autocomplete: 'off',
+    autocorrect: 'off',
+    placeholder,
+    role: 'textbox',
+    spellcheck: 'false',
+    type: 'text',
+    value: query,
+  };
+
+  // Overrides attributes if not already set
+  forEach(defaultAttributes, (value, key) => {
+    if (input.hasAttribute(key)) {
+      return;
+    }
+    input.setAttribute(key, value);
+  });
+
+  // Add classes
+  const CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
+  CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
+}
+
+function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
+  reset = {
+    cssClasses: {},
+    template: resetTemplate,
+    ...reset,
+  };
+
+  const resetCSSClasses = {root: cx(bem('reset'), reset.cssClasses.root)};
+  const stringNode = processTemplate(resetTemplate, {cssClasses: resetCSSClasses});
+
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.appendChild(htmlNode);
+
+  htmlNode.addEventListener('click', event => {
+    event.preventDefault();
+    clearFunction();
+  });
+}
+
+function addMagnifier(input, magnifier, {magnifier: magnifierTemplate}) {
+  magnifier = {
+    cssClasses: {},
+    template: magnifierTemplate,
+    ...magnifier,
+  };
+
+  const magnifierCSSClasses = {root: cx(bem('magnifier'), magnifier.cssClasses.root)};
+  const stringNode = processTemplate(magnifierTemplate, {cssClasses: magnifierCSSClasses});
+
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.appendChild(htmlNode);
+}
+
+function addPoweredBy(input, poweredBy, templates) {
+  // Default values
+  poweredBy = {
+    cssClasses: {},
+    template: templates.poweredBy,
+    ...poweredBy,
+  };
+
+  const poweredByCSSClasses = {
+    root: cx(bem('powered-by'), poweredBy.cssClasses.root),
+    link: cx(bem('powered-by-link'), poweredBy.cssClasses.link),
+  };
+
+  const url = 'https://www.algolia.com/?' +
+    'utm_source=instantsearch.js&' +
+    'utm_medium=website&' +
+    `utm_content=${location.hostname}&` +
+    'utm_campaign=poweredby';
+
+  const templateData = {
+    cssClasses: poweredByCSSClasses,
+    url,
+  };
+
+  const template = poweredBy.template;
+  const stringNode = processTemplate(template, templateData);
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.insertBefore(htmlNode, input.nextSibling);
+}
+
+// Crossbrowser way to create a DOM node from a string. We wrap in
+// a `span` to make sure we have one and only one node.
+function createNodeFromString(stringNode) {
+  const tmpNode = document.createElement('div');
+  tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
+  return tmpNode.firstChild;
+}
+
+function processTemplate(template, templateData) {
+  let result;
+
+  if (isString(template)) {
+    result = Hogan.compile(template).render(templateData);
+  } else if (isFunction(template)) {
+    result = template(templateData);
+  }
+
+  if (!isString(result)) {
+    throw new Error('Wrong template options for the SearchBox widget');
+  }
+
+  return result;
+}

@@ -1,51 +1,62 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import RefinementList from '../../components/RefinementList/RefinementList.js';
+import connectStarRating from '../../connectors/star-rating/connectStarRating.js';
+import defaultTemplates from './defaultTemplates.js';
+import defaultLabels from './defaultLabels.js';
+
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
 } from '../../lib/utils.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import defaultTemplates from './defaultTemplates.js';
-import defaultLabels from './defaultLabels.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
 const bem = bemHelper('ais-star-rating');
 
-/**
- * Instantiate a list of refinements based on a rating attribute
- * The ratings must be integer values. You can still keep the precise float value in another attribute
- * to be used in the custom ranking configuration. So that the actual hits ranking is precise.
- * @function starRating
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.attributeName Name of the attribute for filtering
- * @param  {number} [options.max] The maximum rating value
- * @param  {Object} [options.labels] Labels used by the default template
- * @param  {string} [options.labels.andUp] The label suffixed after each line
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link element
- * @param  {string|string[]} [options.cssClasses.disabledLink] CSS class to add to each disabled link (when using the default template)
- * @param  {string|string[]} [options.cssClasses.star] CSS class to add to each star element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.emptyStar] CSS class to add to each empty star element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
+const renderer = ({
+  containerNode,
+  cssClasses,
+  templates,
+  collapsible,
+  transformData,
+  autoHideContainer,
+  renderState,
+  labels,
+}) => ({
+  refine,
+  items,
+  createURL,
+  instantSearchInstance,
+  hasNoResults,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && hasNoResults;
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={items.map(item => ({...item, labels}))}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+      toggleRefinement={refine}
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 starRating({
   container,
@@ -58,26 +69,94 @@ starRating({
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
-function starRating({
-    container,
-    attributeName,
-    max = 5,
-    cssClasses: userCssClasses = {},
-    labels = defaultLabels,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-  }) {
-  const containerNode = getContainerNode(container);
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
 
-  if (!container || !attributeName) {
+/**
+ * @typedef {Object} StarWidgetLabels
+ * @property {string} [andUp] Label used to suffix the ratings.
+ */
+
+/**
+ * @typedef {Object} StarWidgetTemplates
+ * @property  {string|function} [header] Header template.
+ * @property  {string|function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property  {string|function} [footer] Footer template.
+ */
+
+/**
+ * @typedef {Object} StarWidgetCssClasses
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [header] CSS class to add to the header element.
+ * @property  {string|string[]} [body] CSS class to add to the body element.
+ * @property  {string|string[]} [footer] CSS class to add to the footer element.
+ * @property  {string|string[]} [list] CSS class to add to the list element.
+ * @property  {string|string[]} [item] CSS class to add to each item element.
+ * @property  {string|string[]} [link] CSS class to add to each link element.
+ * @property  {string|string[]} [disabledLink] CSS class to add to each disabled link (when using the default template).
+ * @property  {string|string[]} [count] CSS class to add to each counters
+ * @property  {string|string[]} [star] CSS class to add to each star element (when using the default template).
+ * @property  {string|string[]} [emptyStar] CSS class to add to each empty star element (when using the default template).
+ * @property  {string|string[]} [active] CSS class to add to each active element.
+ */
+
+/**
+ * @typedef {Object} StarWidgetCollapsibleOption
+ * @property {boolean} collapsed If set to true, the widget will be collapsed at first rendering.
+ */
+
+/**
+ * @typedef {Object} StarWidgetTransforms
+ * @property  {function} [item] Function to change the object passed to the `item` template.
+ */
+
+/**
+ * @typedef {Object} StarWidgetOptions
+ * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
+ * @property {string} attributeName Name of the attribute in your records that contains the ratings.
+ * @property {number} [max=5] The maximum rating value.
+ * @property {StarWidgetLabels} [labels] Labels used by the default template.
+ * @property {StarWidgetTemplates} [templates] Templates to use for the widget.
+ * @property {StarWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
+ * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
+ * @property {StarWidgetCssClasses} [cssClasses] CSS classes to add.
+ * @property {boolean|StarWidgetCollapsibleOption} [collapsible=false] If set to true, the widget can be collapsed. This parameter can also be
+ */
+
+/**
+ * Star rating is used for displaying grade like filters. The values are normalized within boundaries.
+ *
+ * The values must be **integers** in your records. Even though, the maximum value can be set (with `max`), the minimum is
+ * always 0.
+ * @type {WidgetFactory}
+ * @param {StarWidgetOptions} $0 StarRating widget options.
+ * @return {Widget} A new StarRating widget instance.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.starRating({
+ *     container: '#stars',
+ *     attributeName: 'rating',
+ *     max: 5,
+ *     labels: {
+ *       andUp: '& Up'
+ *     }
+ *   })
+ * );
+ */
+export default function starRating({
+  container,
+  attributeName,
+  max = 5,
+  cssClasses: userCssClasses = {},
+  labels = defaultLabels,
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+} = {}) {
+  if (!container) {
     throw new Error(usage);
   }
+
+  const containerNode = getContainerNode(container);
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -94,96 +173,21 @@ function starRating({
     active: cx(bem('item', 'active'), userCssClasses.active),
   };
 
-  return {
-    getConfiguration: () => ({disjunctiveFacets: [attributeName]}),
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    collapsible,
+    autoHideContainer,
+    renderState: {},
+    templates,
+    transformData,
+    labels,
+  });
 
-    init({templatesConfig, helper}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-      this._toggleRefinement = this._toggleRefinement.bind(this, helper);
-    },
-
-    render({helper, results, state, createURL}) {
-      const facetValues = [];
-      const allValues = {};
-      for (let v = max; v >= 0; --v) {
-        allValues[v] = 0;
-      }
-      results.getFacetValues(attributeName).forEach(facet => {
-        const val = Math.round(facet.name);
-        if (!val || val > max) {
-          return;
-        }
-        for (let v = val; v >= 1; --v) {
-          allValues[v] += facet.count;
-        }
-      });
-      const refinedStar = this._getRefinedStar(helper);
-      for (let star = max - 1; star >= 1; --star) {
-        const count = allValues[star];
-        if (refinedStar && star !== refinedStar && count === 0) {
-          // skip count==0 when at least 1 refinement is enabled
-          // eslint-disable-next-line no-continue
-          continue;
-        }
-        const stars = [];
-        for (let i = 1; i <= max; ++i) {
-          stars.push(i <= star);
-        }
-        facetValues.push({
-          stars,
-          name: String(star),
-          count,
-          isRefined: refinedStar === star,
-          labels,
-        });
-      }
-
-      // Bind createURL to this specific attribute
-      function _createURL(facetValue) {
-        return createURL(state.toggleRefinement(attributeName, facetValue));
-      }
-
-      ReactDOM.render(
-        <RefinementList
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={facetValues}
-          shouldAutoHideContainer={results.nbHits === 0}
-          templateProps={this._templateProps}
-          toggleRefinement={this._toggleRefinement}
-        />,
-        containerNode
-      );
-    },
-
-    _toggleRefinement(helper, facetValue) {
-      const isRefined = this._getRefinedStar(helper) === Number(facetValue);
-      helper.clearRefinements(attributeName);
-      if (!isRefined) {
-        for (let val = Number(facetValue); val <= max; ++val) {
-          helper.addDisjunctiveFacetRefinement(attributeName, val);
-        }
-      }
-      helper.search();
-    },
-
-    _getRefinedStar(helper) {
-      let refinedStar = undefined;
-      const refinements = helper.getRefinements(attributeName);
-      refinements.forEach(r => {
-        if (!refinedStar || Number(r.value) < refinedStar) {
-          refinedStar = Number(r.value);
-        }
-      });
-      return refinedStar;
-    },
-  };
+  try {
+    const makeWidget = connectStarRating(specializedRenderer);
+    return makeWidget({attributeName, max});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default starRating;

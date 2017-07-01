@@ -1,64 +1,79 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  isDomElement,
-  getContainerNode,
-  prepareTemplateProps,
-  getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
-} from '../../lib/utils.js';
 import cx from 'classnames';
+
 import isUndefined from 'lodash/isUndefined';
 import isBoolean from 'lodash/isBoolean';
 import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 import isFunction from 'lodash/isFunction';
-import isEmpty from 'lodash/isEmpty';
-import map from 'lodash/map';
 import reduce from 'lodash/reduce';
-import filter from 'lodash/filter';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer';
+
+import CurrentRefinedValuesWithHOCs from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
+import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
 import defaultTemplates from './defaultTemplates';
-import CurrentRefinedValuesComponent from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
+
+import {
+  isDomElement,
+  bemHelper,
+  getContainerNode,
+  prepareTemplateProps,
+} from '../../lib/utils.js';
 
 const bem = bemHelper('ais-current-refined-values');
 
-/**
- * Instantiate a list of current refinements with the possibility to clear them
- * @function currentRefinedValues
- * @param  {string|DOMElement}  options.container CSS Selector or DOMElement to insert the widget
- * @param  {Array}             [option.attributes] Attributes configuration
- * @param  {string}            [option.attributes[].name] Required attribute name
- * @param  {string}            [option.attributes[].label] Attribute label (passed to the item template)
- * @param  {string|Function}   [option.attributes[].template] Attribute specific template
- * @param  {Function}          [option.attributes[].transformData] Attribute specific transformData
- * @param  {boolean|string}    [option.clearAll='before'] Clear all position (one of ('before', 'after', false))
- * @param  {boolean}           [options.onlyListedAttributes=false] Only use declared attributes
- * @param  {Object}            [options.templates] Templates to use for the widget
- * @param  {string|Function}   [options.templates.header] Header template
- * @param  {string|Function}   [options.templates.item] Item template
- * @param  {string|Function}   [options.templates.clearAll] Clear all template
- * @param  {string|Function}   [options.templates.footer] Footer template
- * @param  {Function}          [options.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean}           [options.autoHideContainer=true] Hide the container when no current refinements
- * @param  {Object}            [options.cssClasses] CSS classes to be added
- * @param  {string}            [options.cssClasses.root] CSS classes added to the root element
- * @param  {string}            [options.cssClasses.header] CSS classes added to the header element
- * @param  {string}            [options.cssClasses.body] CSS classes added to the body element
- * @param  {string}            [options.cssClasses.clearAll] CSS classes added to the clearAll element
- * @param  {string}            [options.cssClasses.list] CSS classes added to the list element
- * @param  {string}            [options.cssClasses.item] CSS classes added to the item element
- * @param  {string}            [options.cssClasses.link] CSS classes added to the link element
- * @param  {string}            [options.cssClasses.count] CSS classes added to the count element
- * @param  {string}            [options.cssClasses.footer] CSS classes added to the footer element
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
+const renderer = ({
+  autoHideContainer,
+  clearAllPosition,
+  collapsible,
+  containerNode,
+  cssClasses,
+  renderState,
+  transformData,
+  templates,
+}) => ({
+  attributes,
+  clearAllClick,
+  clearAllURL,
+  refine,
+  createURL,
+  refinements,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && refinements && refinements.length === 0;
+
+  const clearRefinementClicks = refinements.map(refinement => refine.bind(null, refinement));
+  const clearRefinementURLs = refinements.map(refinement => createURL(refinement));
+
+  ReactDOM.render(
+    <CurrentRefinedValuesWithHOCs
+      attributes={attributes}
+      clearAllClick={clearAllClick}
+      clearAllPosition={clearAllPosition}
+      clearAllURL={clearAllURL}
+      clearRefinementClicks={clearRefinementClicks}
+      clearRefinementURLs={clearRefinementURLs}
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      refinements={refinements}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 currentRefinedValues({
   container,
@@ -69,30 +84,99 @@ currentRefinedValues({
   [ transformData.{item} ],
   [ autoHideContainer = true ],
   [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
-  [ collapsible=false ]
+  [ collapsible = false ]
+  [ clearsQuery = false ]
 })`;
-function currentRefinedValues({
-    container,
-    attributes = [],
-    onlyListedAttributes = false,
-    clearAll = 'before',
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-    cssClasses: userCssClasses = {},
-  }) {
-  const attributesOK = isArray(attributes) &&
-    reduce(
-      attributes,
-      (res, val) =>
-        res &&
-          isPlainObject(val) &&
-          isString(val.name) &&
-          (isUndefined(val.label) || isString(val.label)) &&
-          (isUndefined(val.template) || isString(val.template) || isFunction(val.template)) &&
-          (isUndefined(val.transformData) || isFunction(val.transformData)),
-      true);
+
+/**
+ * @typedef {Object} CurrentRefinedValuesCSSClasses
+ * @property {string} [root] CSS classes added to the root element.
+ * @property {string} [header] CSS classes added to the header element.
+ * @property {string} [body] CSS classes added to the body element.
+ * @property {string} [clearAll] CSS classes added to the clearAll element.
+ * @property {string} [list] CSS classes added to the list element.
+ * @property {string} [item] CSS classes added to the item element.
+ * @property {string} [link] CSS classes added to the link element.
+ * @property {string} [count] CSS classes added to the count element.
+ * @property {string} [footer] CSS classes added to the footer element.
+ */
+
+/**
+ * @typedef {Object} CurrentRefinedValuesAttributes
+ * @property {string} name Required attribute name.
+ * @property {string} label Attribute label (passed to the item template).
+ * @property {string|function(object):string} template Attribute specific template.
+ * @property {function(object):object} transformData Attribute specific transformData.
+ */
+
+/**
+ * @typedef {Object} CurrentRefinedValuesTemplates
+ * @property {string|function(object):string} [header] Header template.
+ * @property {string|function(object):string} [item] Item template.
+ * @property {string|function(object):string} [clearAll] Clear all template.
+ * @property {string|function(object):string} [footer] Footer template.
+ */
+
+/**
+ * @typedef {Object} CurrentRefinedValuesTransforms
+ * @property {function(object):object} [item] Method to change the object passed to the `item` template.
+ */
+
+/**
+ * @typedef {Object} CurrentRefinedValuesWidgetOptions
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget
+ * @property {CurrentRefinedValuesAttributes[]} [attributes = []] Label definitions for the
+ * different filters.
+ * @property {boolean} [onlyListedAttributes=false] Only use the declared attributes. By default, the widget
+ * displays the refinements for the whole search state. If true, the list of attributes in `attributes` is used.
+ * @property {'before'|'after'|boolean} [clearAll='before'] Defines the clear all button position.
+ * By default, it is placed before the set of current filters. If the value is false, the button
+ * won't be added in the widget.
+ * @property {CurrentRefinedValuesTemplates} [templates] Templates to use for the widget.
+ * @property {CurrentRefinedValuesTransforms} [transformData] Set of functions to transform
+ * the data passed to the templates.
+ * @property {boolean} [autoHideContainer=true] Hides the widget when there are no current refinements.
+ * @property {CurrentRefinedValuesCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
+ * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
+ * property is `true`, then the widget is hidden during the first rendering.
+ * @property {boolean} [clearsQuery=false] If true, the clear all button also clears the active search query.
+ */
+
+/**
+ * The current refined values widget has two purposes:
+ *
+ *  - give the user a synthetic view of the current filters.
+ *  - give the user the ability to remove a filter.
+ *
+ * This widget is usually in the top part of the search UI.
+ * @type {WidgetFactory}
+ * @param {CurrentRefinedValuesWidgetOptions} $0 The CurrentRefinedValues widget options.
+ * @returns {Object} A new CurrentRefinedValues widget instance.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.currentRefinedValues({
+ *     container: '#current-refined-values',
+ *     clearAll: 'after',
+ *     clearsQuery: true,
+ *   })
+ * );
+ */
+export default function currentRefinedValues({
+  container,
+  attributes = [],
+  onlyListedAttributes = false,
+  clearAll = 'before',
+  templates = defaultTemplates,
+  transformData,
+  autoHideContainer = true,
+  cssClasses: userCssClasses = {},
+  collapsible = false,
+  clearsQuery = false,
+}) {
+  const transformDataOK = isUndefined(transformData) ||
+    isFunction(transformData) ||
+    isPlainObject(transformData) && isFunction(transformData.item);
 
   const templatesKeys = ['header', 'item', 'clearAll', 'footer'];
   const templatesOK = isPlainObject(templates) &&
@@ -115,14 +199,9 @@ function currentRefinedValues({
          isString(val) || isArray(val),
       true);
 
-  const transformDataOK = isUndefined(transformData) ||
-    isFunction(transformData) ||
-    isPlainObject(transformData) && isFunction(transformData.item);
-
   const showUsage = false ||
     !(isString(container) || isDomElement(container)) ||
     !isArray(attributes) ||
-    !attributesOK ||
     !isBoolean(onlyListedAttributes) ||
     [false, 'before', 'after'].indexOf(clearAll) === -1 ||
     !isPlainObject(templates) ||
@@ -136,128 +215,33 @@ function currentRefinedValues({
   }
 
   const containerNode = getContainerNode(container);
-  let CurrentRefinedValues = headerFooterHOC(CurrentRefinedValuesComponent);
-  if (autoHideContainer === true) {
-    CurrentRefinedValues = autoHideContainerHOC(CurrentRefinedValues);
-  }
-
-  const attributeNames = map(attributes, attribute => attribute.name);
-  const restrictedTo = onlyListedAttributes ? attributeNames : [];
-
-  const attributesObj = reduce(attributes, (res, attribute) => {
-    res[attribute.name] = attribute;
-    return res;
-  }, {});
-
-  return {
-    init({helper}) {
-      this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
-    },
-
-    render({results, helper, state, templatesConfig, createURL}) {
-      const cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        clearAll: cx(bem('clear-all'), userCssClasses.clearAll),
-        list: cx(bem('list'), userCssClasses.list),
-        item: cx(bem('item'), userCssClasses.item),
-        link: cx(bem('link'), userCssClasses.link),
-        count: cx(bem('count'), userCssClasses.count),
-        footer: cx(bem('footer'), userCssClasses.footer),
-      };
-
-      const templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-
-      const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
-
-      const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
-      const clearRefinementURLs = refinements.map(refinement => createURL(clearRefinementFromState(state, refinement)));
-      const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
-
-      const shouldAutoHideContainer = refinements.length === 0;
-
-      ReactDOM.render(
-        <CurrentRefinedValues
-          attributes={attributesObj}
-          clearAllClick={this._clearRefinementsAndSearch}
-          clearAllPosition={clearAll}
-          clearAllURL={clearAllURL}
-          clearRefinementClicks={clearRefinementClicks}
-          clearRefinementURLs={clearRefinementURLs}
-          collapsible={collapsible}
-          cssClasses={cssClasses}
-          refinements={refinements}
-          shouldAutoHideContainer={shouldAutoHideContainer}
-          templateProps={templateProps}
-        />,
-        containerNode
-      );
-    },
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    clearAll: cx(bem('clear-all'), userCssClasses.clearAll),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    link: cx(bem('link'), userCssClasses.link),
+    count: cx(bem('count'), userCssClasses.count),
+    footer: cx(bem('footer'), userCssClasses.footer),
   };
-}
 
-function getRestrictedIndexForSort(attributeNames, otherAttributeNames, attributeName) {
-  const idx = attributeNames.indexOf(attributeName);
-  if (idx !== -1) {
-    return idx;
-  }
-  return attributeNames.length + otherAttributeNames.indexOf(attributeName);
-}
+  const specializedRenderer = renderer({
+    containerNode,
+    clearAllPosition: clearAll,
+    collapsible,
+    cssClasses,
+    autoHideContainer,
+    renderState: {},
+    templates,
+    transformData,
+  });
 
-function compareRefinements(attributeNames, otherAttributeNames, a, b) {
-  const idxa = getRestrictedIndexForSort(attributeNames, otherAttributeNames, a.attributeName);
-  const idxb = getRestrictedIndexForSort(attributeNames, otherAttributeNames, b.attributeName);
-  if (idxa === idxb) {
-    if (a.name === b.name) {
-      return 0;
-    }
-    return a.name < b.name ? -1 : 1;
-  }
-  return idxa < idxb ? -1 : 1;
-}
-
-function getFilteredRefinements(results, state, attributeNames, onlyListedAttributes) {
-  let refinements = getRefinements(results, state);
-  const otherAttributeNames = reduce(refinements, (res, refinement) => {
-    if (attributeNames.indexOf(refinement.attributeName) === -1 && res.indexOf(refinement.attributeName === -1)) {
-      res.push(refinement.attributeName);
-    }
-    return res;
-  }, []);
-  refinements = refinements.sort(compareRefinements.bind(null, attributeNames, otherAttributeNames));
-  if (onlyListedAttributes && !isEmpty(attributeNames)) {
-    refinements = filter(refinements, refinement => attributeNames.indexOf(refinement.attributeName) !== -1);
-  }
-  return refinements;
-}
-
-function clearRefinementFromState(state, refinement) {
-  switch (refinement.type) {
-  case 'facet':
-    return state.removeFacetRefinement(refinement.attributeName, refinement.name);
-  case 'disjunctive':
-    return state.removeDisjunctiveFacetRefinement(refinement.attributeName, refinement.name);
-  case 'hierarchical':
-    return state.clearRefinements(refinement.attributeName);
-  case 'exclude':
-    return state.removeExcludeRefinement(refinement.attributeName, refinement.name);
-  case 'numeric':
-    return state.removeNumericRefinement(refinement.attributeName, refinement.operator, refinement.numericValue);
-  case 'tag':
-    return state.removeTagRefinement(refinement.name);
-  default:
-    throw new Error(`clearRefinement: type ${refinement.type} is not handled`);
+  try {
+    const makeCurrentRefinedValues = connectCurrentRefinedValues(specializedRenderer);
+    return makeCurrentRefinedValues({attributes, onlyListedAttributes, clearAll, clearsQuery});
+  } catch (e) {
+    throw new Error(usage);
   }
 }
-
-function clearRefinement(helper, refinement) {
-  helper.setState(clearRefinementFromState(helper.state, refinement)).search();
-}
-
-export default currentRefinedValues;

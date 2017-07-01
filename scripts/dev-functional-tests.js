@@ -1,10 +1,10 @@
-/* eslint-disable no-console, no-magic-numbers */
+/* eslint-disable no-console */
 
+import {spawn} from 'child_process';
 import debounce from 'lodash/debounce';
 import watch from './dev-functional-tests-compile-watch.js';
 
-import {spawn} from 'child_process';
-
+const REBUILD_TIMEOUT = 1500;
 let wdio;
 const launch = debounce(() => {
   if (wdio) {
@@ -13,7 +13,7 @@ const launch = debounce(() => {
     wdio.kill('SIGINT'); // we need two of them, that's the way wdio works for killing process
   }
   wdio = spawn('wdio', ['functional-tests/wdio.conf.js'], {stdio: [null, process.stdout, null]});
-}, 1500, {
+}, REBUILD_TIMEOUT, {
   leading: true,
   trailing: true,
 });

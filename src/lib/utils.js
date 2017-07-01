@@ -19,14 +19,16 @@ export {
   prefixKeys,
   escapeRefinement,
   unescapeRefinement,
+  checkRendering,
+  isReactElement,
 };
 
 /**
  * Return the container. If it's a string, it is considered a
  * css selector and retrieves the first matching element. Otherwise
  * test if it validates that it's a correct DOMElement.
- * @param {string|DOMElement} selectorOrHTMLElement a selector or a node
- * @return {DOMElement} The resolved DOMElement
+ * @param {string|HTMLElement} selectorOrHTMLElement a selector or a node
+ * @return {HTMLElement} The resolved HTMLElement
  * @throws Error when the type is not correct
  */
 function getContainerNode(selectorOrHTMLElement) {
@@ -214,8 +216,12 @@ function getRefinements(results, state) {
   return res;
 }
 
-function clearRefinementsFromState(inputState, attributeNames) {
+function clearRefinementsFromState(inputState, attributeNames, clearsQuery = false) {
   let state = inputState;
+
+  if (clearsQuery) {
+    state = state.setQuery('');
+  }
 
   if (isEmpty(attributeNames)) {
     state = state.clearTags();
@@ -234,8 +240,8 @@ function clearRefinementsFromState(inputState, attributeNames) {
   return state;
 }
 
-function clearRefinementsAndSearch(helper, attributeNames) {
-  helper.setState(clearRefinementsFromState(helper.state, attributeNames)).search();
+function clearRefinementsAndSearch(helper, attributeNames, clearsQuery = false) {
+  helper.setState(clearRefinementsFromState(helper.state, attributeNames, clearsQuery)).search();
 }
 
 function prefixKeys(prefix, obj) {
@@ -256,4 +262,16 @@ function escapeRefinement(value) {
 
 function unescapeRefinement(value) {
   return String(value).replace(/^\\-/, '-');
+}
+
+function checkRendering(rendering, usage) {
+  if (rendering === undefined || typeof rendering !== 'function') {
+    throw new Error(usage);
+  }
+}
+
+const REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+
+function isReactElement(object) {
+  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
 }

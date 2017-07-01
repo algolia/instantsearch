@@ -1,60 +1,59 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import defaultTemplates from './defaultTemplates.js';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
+import connectToggle from '../../connectors/toggle/connectToggle.js';
+
 import {
   bemHelper,
   getContainerNode,
+  prepareTemplateProps,
 } from '../../lib/utils.js';
-import defaultTemplates from './defaultTemplates.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
-import currentToggle from './implementations/currentToggle';
-import legacyToggle from './implementations/legacyToggle';
 
 const bem = bemHelper('ais-toggle');
 
-// we cannot use helper. because the facet is not yet declared in the helper
-const hasFacetsRefinementsFor = (attributeName, searchParameters) =>
-  searchParameters &&
-  searchParameters.facetsRefinements &&
-  searchParameters.facetsRefinements[attributeName] !== undefined;
+const renderer = ({
+  containerNode,
+  cssClasses,
+  collapsible,
+  autoHideContainer,
+  renderState,
+  templates,
+  transformData,
+}) => ({
+  value,
+  createURL,
+  refine,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
 
-/**
- * Instantiate the toggling of a boolean facet filter on and off.
- * @function toggle
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.attributeName Name of the attribute for faceting (eg. "free_shipping")
- * @param  {string} options.label Human-readable name of the filter (eg. "Free Shipping")
- * @param  {Object} [options.values] Lets you define the values to filter on when toggling
- * @param  {string|number|boolean} [options.values.on=true] Value to filter on when checked
- * @param  {string|number|boolean} [options.values.off=undefined] Value to filter on when unchecked
- * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
- * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
- * having `false` has a value for the selected attribute.
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * count is always the number of hits that would be shown if you toggle the widget. We also provide
- * `onFacetValue` and `offFacetValue` objects with according counts.
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no results
- * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each
- * label element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each
- * checkbox element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
+  const shouldAutoHideContainer = autoHideContainer && (value.count === 0 || value.count === null);
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={[value]}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+      toggleRefinement={(name, isRefined) => refine({isRefined})}
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 toggle({
   container,
@@ -67,29 +66,108 @@ toggle({
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
-function toggle({
-    container,
-    attributeName,
-    label,
-    values: userValues = {on: true, off: undefined},
-    templates = defaultTemplates,
-    collapsible = false,
-    cssClasses: userCssClasses = {},
-    transformData,
-    autoHideContainer = true,
-  } = {}) {
-  const containerNode = getContainerNode(container);
 
-  if (!container || !attributeName || !label) {
+/**
+ * @typedef {Object} ToggleWidgetCSSClasses
+ * @property  {string|string[]} [root] CSS class to add to the root element.
+ * @property  {string|string[]} [header] CSS class to add to the header element.
+ * @property  {string|string[]} [body] CSS class to add to the body element.
+ * @property  {string|string[]} [footer] CSS class to add to the footer element.
+ * @property  {string|string[]} [list] CSS class to add to the list element.
+ * @property  {string|string[]} [item] CSS class to add to each item element.
+ * @property  {string|string[]} [active] CSS class to add to each active element.
+ * @property  {string|string[]} [label] CSS class to add to each
+ * label element (when using the default template).
+ * @property  {string|string[]} [checkbox] CSS class to add to each
+ * checkbox element (when using the default template).
+ * @property  {string|string[]} [count] CSS class to add to each count.
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetTransforms
+ * @property  {function(Object):Object} item Function to change the object passed to the `item`. template
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetTemplates
+ * @property  {string|function} header Header template.
+ * @property  {string|function} item Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * count is always the number of hits that would be shown if you toggle the widget. We also provide
+ * `onFacetValue` and `offFacetValue` objects with according counts.
+ * @property  {string|function} footer Footer template.
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetValues
+ * @property  {string|number|boolean} on Value to filter on when checked.
+ * @property  {string|number|boolean} off Value to filter on when unchecked.
+ * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
+ * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
+ * having `false` has a value for the selected attribute.
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetCollapsibleOption
+ * @property {boolean} collapsed If set to true, the widget will be collapsed at first rendering.
+ */
+
+/**
+ * @typedef {Object} ToggleWidgetOptions
+ * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
+ * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {string} label Human-readable name of the filter (eg. "Free Shipping").
+ * @property {ToggleWidgetValues} [values={on: true, off: undefined}] Values that the widget can set.
+ * @property {ToggleWidgetTemplates} [templates] Templates to use for the widget.
+ * @property {ToggleWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
+ * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
+ * @property {ToggleWidgetCSSClasses} [cssClasses] CSS classes to add.
+ * @property {boolean|ToggleWidgetCollapsibleOption} collapsible If set to true, the widget can be collapsed. This parameter can also be
+ * an object, with the property collapsed, if you want the toggle to be collapsed initially.
+ */
+
+/**
+ * The toggle widget lets the user either:
+ *  - switch between two values for a single facetted attribute (free_shipping / not_free_shipping)
+ *  - toggle a faceted value on and off (only 'canon' for brands)
+ *
+ * This widget is particularly useful if you have a boolean value in the records.
+ *
+ * The attribute has to in the list of attributes for faceting in the dashboard.
+ * @type {WidgetFactory}
+ * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
+ * @return {Widget} A new instance of the Toggle widget
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.toggle({
+ *     container: '#free-shipping',
+ *     attributeName: 'free_shipping',
+ *     label: 'Free Shipping',
+ *     values: {
+ *       on: true,
+ *       off: false
+ *     },
+ *     templates: {
+ *       header: 'Shipping'
+ *     }
+ *   })
+ * );
+ */
+export default function toggle({
+  container,
+  attributeName,
+  label,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  transformData,
+  autoHideContainer = true,
+  collapsible = false,
+  values: userValues = {on: true, off: undefined},
+} = {}) {
+  if (!container) {
     throw new Error(usage);
   }
 
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  const hasAnOffValue = userValues.off !== undefined;
+  const containerNode = getContainerNode(container);
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -104,37 +182,20 @@ function toggle({
     count: cx(bem('count'), userCssClasses.count),
   };
 
-  // store the computed options for usage in the two toggle implementations
-  const implemOptions = {
-    attributeName,
-    label,
-    userValues,
-    templates,
-    collapsible,
-    transformData,
-    hasAnOffValue,
+  const specializedRenderer = renderer({
     containerNode,
-    RefinementList,
     cssClasses,
-  };
+    collapsible,
+    autoHideContainer,
+    renderState: {},
+    templates,
+    transformData,
+  });
 
-  return {
-    getConfiguration(currentSearchParameters, searchParametersFromUrl) {
-      const useLegacyToggle =
-        hasFacetsRefinementsFor(attributeName, currentSearchParameters) ||
-        hasFacetsRefinementsFor(attributeName, searchParametersFromUrl);
-
-      const toggleImplementation = useLegacyToggle ?
-        legacyToggle(implemOptions) :
-        currentToggle(implemOptions);
-
-      this.init = toggleImplementation.init.bind(toggleImplementation);
-      this.render = toggleImplementation.render.bind(toggleImplementation);
-      return toggleImplementation.getConfiguration(currentSearchParameters, searchParametersFromUrl);
-    },
-    init() {},
-    render() {},
-  };
+  try {
+    const makeWidget = connectToggle(specializedRenderer);
+    return makeWidget({attributeName, label, values: userValues});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default toggle;

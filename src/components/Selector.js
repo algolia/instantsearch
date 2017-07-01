@@ -1,6 +1,10 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
-class Selector extends React.Component {
+import autoHideContainer from '../decorators/autoHideContainer.js';
+import headerFooter from '../decorators/headerFooter.js';
+
+export class RawSelector extends React.Component {
   componentWillMount() {
     this.handleChange = this.handleChange.bind(this);
   }
@@ -21,7 +25,7 @@ class Selector extends React.Component {
         {options.map(option =>
           <option
             className={this.props.cssClasses.item}
-            key={option.value}
+            key={option.label + option.value}
             value={option.value}>
               {option.label}
           </option>
@@ -31,31 +35,31 @@ class Selector extends React.Component {
   }
 }
 
-Selector.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string),
+RawSelector.propTypes = {
+  cssClasses: PropTypes.shape({
+    root: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
     ]),
-    item: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string),
+    item: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
     ]),
   }),
-  currentValue: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]).isRequired,
-  options: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      value: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.number,
-      ]).isRequired,
-      label: React.PropTypes.string.isRequired,
+  currentValue: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+      label: PropTypes.string.isRequired,
     })
   ).isRequired,
-  setValue: React.PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
-export default Selector;
+export default autoHideContainer(headerFooter(RawSelector));

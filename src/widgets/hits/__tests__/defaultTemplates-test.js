@@ -1,8 +1,4 @@
-/* eslint-env mocha */
-
-import expect from 'expect';
-
-import defaultTemplates from '../defaultTemplates';
+import defaultTemplates from '../defaultTemplates.js';
 
 describe('hits defaultTemplates', () => {
   it('has a `empty` default template', () => {

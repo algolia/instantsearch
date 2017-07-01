@@ -1,15 +1,14 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import {shallow} from 'enzyme';
 import expect from 'expect';
 import sinon from 'sinon';
-
-import RefinementList from '../RefinementList';
+import {RawRefinementList as RefinementList} from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
+const defaultProps = {
+  templateProps: {},
+  toggleRefinement: () => {},
+};
 
 describe('RefinementList', () => {
   let createURL;
@@ -17,6 +16,7 @@ describe('RefinementList', () => {
   function shallowRender(extraProps = {}) {
     createURL = sinon.spy();
     const props = {
+      ...defaultProps,
       createURL,
       facetValues: [],
       ...extraProps,
@@ -28,6 +28,7 @@ describe('RefinementList', () => {
     it('should add the `list` class to the root element', () => {
       // Given
       const props = {
+        ...defaultProps,
         cssClasses: {
           list: 'list',
         },
@@ -43,11 +44,12 @@ describe('RefinementList', () => {
     it('should set item classes to the refinements', () => {
       // Given
       const props = {
+        ...defaultProps,
         cssClasses: {
           item: 'item',
         },
         facetValues: [
-          {name: 'foo', isRefined: true},
+          {value: 'foo', isRefined: true},
         ],
       };
 
@@ -61,12 +63,13 @@ describe('RefinementList', () => {
     it('should set active classes to the active refinements', () => {
       // Given
       const props = {
+        ...defaultProps,
         cssClasses: {
           active: 'active',
         },
         facetValues: [
-          {name: 'foo', isRefined: true},
-          {name: 'bar', isRefined: false},
+          {value: 'foo', isRefined: true},
+          {value: 'bar', isRefined: false},
         ],
       };
 
@@ -84,9 +87,10 @@ describe('RefinementList', () => {
     it('should have the correct names', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: false},
         ],
       };
 
@@ -100,29 +104,13 @@ describe('RefinementList', () => {
       expect(secondItem.props().facetValueToRefine).toEqual('bar');
     });
 
-    it('understands attributeNameKey', () => {
-      // Given
-      const props = {
-        facetValues: [{name: 'no', youpiName: 'hello'}],
-        attributeNameKey: 'youpiName',
-      };
-
-      // When
-      const items = shallowRender(props).find(RefinementListItem);
-      const item = items.at(0);
-
-      // Then
-      expect(item.props().facetValueToRefine).toEqual('hello');
-      expect(createURL.calledOnce).toBe(true);
-      expect(createURL.args[0][0]).toBe('hello');
-    });
-
     it('should correctly set if refined or not', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: true},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: true},
         ],
       };
 
@@ -141,9 +129,10 @@ describe('RefinementList', () => {
     it('should pass the count to the templateData', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo', count: 42},
-          {name: 'bar', count: 16},
+          {value: 'foo', count: 42, isRefined: false},
+          {value: 'bar', count: 16, isRefined: false},
         ],
       };
 
@@ -159,78 +148,18 @@ describe('RefinementList', () => {
   });
 
   describe('showMore', () => {
-    it('displays a number of items equal to the limit when showMore: false', () => {
-      // Given
-      const props = {
-        facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
-        ],
-        showMore: false,
-        limitMin: 2,
-      };
-
-      // When
-      const actual = shallowRender(props).find(RefinementListItem);
-
-      // Then
-      expect(actual.length).toEqual(2);
-    });
-
-    it('displays a number of items equal to the limit when showMore: true but not enabled', () => {
-      // Given
-      const props = {
-        facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
-        ],
-        showMore: true,
-        limitMin: 2,
-        limitMax: 3,
-      };
-
-      // When
-      const actual = shallowRender(props).find(RefinementListItem);
-
-      // Then
-      expect(actual.length).toEqual(2);
-    });
-
-    it('displays a number of items equal to the showMore limit when showMore: true and enabled', () => {
-      // Given
-      const props = {
-        facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
-        ],
-        limitMin: 2,
-        limitMax: 3,
-        showMore: true,
-      };
-
-      // When
-      const root = shallowRender(props);
-      root.setState({isShowMoreOpen: true});
-      const actual = root.find(RefinementListItem);
-
-      // Then
-      expect(actual.length).toEqual(3);
-    });
-
     it('adds a showMore link when the feature is enabled', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: false},
+          {value: 'baz', isRefined: false},
         ],
         showMore: true,
-        limitMin: 2,
-        limitMax: 3,
+        isShowingMore: false,
+        canToggleShowMore: true,
       };
 
       // When
@@ -244,14 +173,14 @@ describe('RefinementList', () => {
     it('does not add a showMore link when the feature is disabled', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: false},
+          {value: 'baz', isRefined: false},
         ],
         showMore: false,
-        limitMin: 2,
-        limitMax: 3,
+        isShowingMore: false,
       };
 
       // When
@@ -262,75 +191,26 @@ describe('RefinementList', () => {
       expect(actual.length).toEqual(0);
     });
 
-    it('no showMore when: state = open -> values change -> values <= limitMin ', () => {
+    it('should displays showLess', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {value: 'foo', isRefined: false},
+          {value: 'bar', isRefined: false},
+          {value: 'baz', isRefined: false},
         ],
         showMore: true,
-        limitMin: 2,
-        limitMax: 5,
+        isShowingMore: true,
+        canToggleShowMore: true,
       };
 
       // When
       const root = shallowRender(props);
-      root.instance().handleClickShowMore();
-      root.setProps({facetValues: props.facetValues.slice(2)});
+      const actual = root.find('[templateKey="show-more-active"]');
 
       // Then
-      expect(root.find({templateKey: 'show-more-active'}).length).toEqual(0);
-    });
-
-    it('does not add a showMore link when the facet values length is equal to the minLimit', () => {
-      // Given
-      const props = {
-        facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
-        ],
-        showMore: true,
-        limitMin: 3,
-        limitMax: 4,
-      };
-
-      // When
-      const root = shallowRender(props);
-      const actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
-
-      // Then
-      expect(actual.length).toEqual(0);
-    });
-
-    it('changing the state will toggle the number of items displayed', () => {
-      // Given
-      const props = {
-        facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
-        ],
-        limitMin: 2,
-        limitMax: 3,
-        showMore: true,
-      };
-
-      // When
-      const root = shallowRender(props);
-
-      // Then: Not opened, initial number displayed
-      expect(root.find(RefinementListItem).length).toEqual(2);
-
-      // Then: Toggling the state, display the limitMax
-      root.setState({isShowMoreOpen: true});
-      expect(root.find(RefinementListItem).length).toEqual(3);
-
-      // Then: Toggling the state again, back to the limitMin
-      root.setState({isShowMoreOpen: false});
-      expect(root.find(RefinementListItem).length).toEqual(2);
+      expect(actual.length).toEqual(1);
     });
   });
 
@@ -338,13 +218,15 @@ describe('RefinementList', () => {
     it('should create a subList with the sub values', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
           {
-            name: 'foo',
+            value: 'foo',
             data: [
-              {name: 'bar'},
-              {name: 'baz'},
+              {value: 'bar', isRefined: false},
+              {value: 'baz', isRefined: false},
             ],
+            isRefined: false,
           },
         ],
       };
@@ -364,16 +246,18 @@ describe('RefinementList', () => {
     it('should add depth class for each depth', () => {
       // Given
       const props = {
+        ...defaultProps,
         cssClasses: {
           depth: 'depth-',
         },
         facetValues: [
           {
-            name: 'foo',
+            value: 'foo',
             data: [
-              {name: 'bar'},
-              {name: 'baz'},
+              {value: 'bar', isRefined: false},
+              {value: 'baz', isRefined: false},
             ],
+            isRefined: false,
           },
         ],
       };

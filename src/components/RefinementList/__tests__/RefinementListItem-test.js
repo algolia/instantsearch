@@ -1,12 +1,9 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
-import {createRenderer} from 'react-addons-test-utils';
+import {createRenderer} from 'react-dom/test-utils';
 import RefinementListItem from '../RefinementListItem';
 import Template from '../../Template';
 import sinon from 'sinon';
-
+import expect from 'expect';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 describe('RefinementListItem', () => {
@@ -16,6 +13,8 @@ describe('RefinementListItem', () => {
   beforeEach(() => {
     props = {
       facetValue: 'Hello',
+      facetValueToRefine: 'wi',
+      isRefined: false,
       handleClick: sinon.spy(),
       itemClassName: 'item class',
       templateData: {template: 'data'},
@@ -55,4 +54,3 @@ describe('RefinementListItem', () => {
     return renderer.getRenderOutput();
   }
 });
-

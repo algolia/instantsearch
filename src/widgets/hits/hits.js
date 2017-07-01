@@ -1,51 +1,118 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import Hits from '../../components/Hits.js';
+import connectHits from '../../connectors/hits/connectHits.js';
+import defaultTemplates from './defaultTemplates.js';
+
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
 } from '../../lib/utils.js';
-import cx from 'classnames';
-import Hits from '../../components/Hits.js';
-import defaultTemplates from './defaultTemplates.js';
 
 const bem = bemHelper('ais-hits');
 
-/**
- * Display the list of results (hits) from the current search
- * @function hits
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {number} [options.hitsPerPage=20] The number of hits to display per page [*]
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.empty=''] Template to use when there are no results.
- * @param  {string|Function} [options.templates.item=''] Template to use for each result. This template will receive an object containing a single record.
- * @param  {string|Function} [options.templates.allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
- * @param  {Object} [options.transformData] Method to change the object passed to the templates
- * @param  {Function} [options.transformData.empty] Method used to change the object passed to the `empty` template
- * @param  {Function} [options.transformData.item] Method used to change the object passed to the `item` template
- * @param  {Function} [options.transformData.allItems] Method used to change the object passed to the `allItems` template
- * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the wrapping element
- * @param  {string|string[]} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each result
- * @return {Object}
- */
-const usage = `
-Usage:
+const renderer = ({
+  renderState,
+  cssClasses,
+  containerNode,
+  transformData,
+  templates,
+}) => ({
+  hits, // eslint-disable-line
+  results,
+  templateProps,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  ReactDOM.render(
+    <Hits
+      cssClasses={cssClasses}
+      hits={hits}
+      results={results}
+      templateProps={renderState.templateProps}
+    />,
+    containerNode
+  );
+};
+
+const usage = `Usage:
 hits({
   container,
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty, allItems} ],
   [ transformData.{empty,item} | transformData.{empty, allItems} ],
-  [ hitsPerPage=20 ]
 })`;
-function hits({
-    container,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    transformData,
-    hitsPerPage = 20,
-  } = {}) {
+
+/**
+ * @typedef {Object} HitsCSSClasses
+ * @property {string|string[]} [root] CSS class to add to the wrapping element.
+ * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property {string|string[]} [item] CSS class to add to each result.
+ */
+
+/**
+ * @typedef {Object} HitsTemplates
+ * @property {string|function(object):string} [empty=''] Template to use when there are no results.
+ * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record.
+ * @property {string|function(object):string} [allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
+ */
+
+/**
+ * @typedef {Object} HitsTransforms
+ * @property {function(object):object} [empty] Method used to change the object passed to the `empty` template.
+ * @property {function(object):object} [item] Method used to change the object passed to the `item` template.
+ * @property {function(object):object} [allItems] Method used to change the object passed to the `allItems` template.
+ */
+
+/**
+ * @typedef {Object} HitsWidgetOptions
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property {HitsTemplates} [templates] Templates to use for the widget.
+ * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
+ * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
+ * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ */
+
+/**
+ * Display the list of results (hits) from the current search.
+ *
+ * This is a traditional display of the hits. It has to be implemented
+ * together with a pagination widget, to let the user browse the results
+ * beyond the first page.
+ * @type {WidgetFactory}
+ * @param {HitsWidgetOptions} $0 Options of the Hits widget.
+ * @return {Widget} A new instance of Hits widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.hits({
+ *     container: '#hits-container',
+ *     templates: {
+ *       empty: 'No results',
+ *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
+ *     },
+ *     escapeHits: true,
+ *   })
+ * );
+ */
+export default function hits({
+  container,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  transformData,
+  escapeHits = false,
+}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
   }
@@ -61,28 +128,18 @@ function hits({
     empty: cx(bem(null, 'empty'), userCssClasses.empty),
   };
 
-  return {
-    getConfiguration: () => ({hitsPerPage}),
-    init({templatesConfig}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-    },
-    render({results}) {
-      ReactDOM.render(
-        <Hits
-          cssClasses={cssClasses}
-          hits={results.hits}
-          results={results}
-          templateProps={this._templateProps}
-        />,
-        containerNode
-      );
-    },
-  };
-}
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    renderState: {},
+    transformData,
+    templates,
+  });
 
-export default hits;
+  try {
+    const makeHits = connectHits(specializedRenderer);
+    return makeHits({escapeHits});
+  } catch (e) {
+    throw new Error(usage);
+  }
+}

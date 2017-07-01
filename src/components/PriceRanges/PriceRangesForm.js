@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class PriceRangesForm extends React.Component {
@@ -59,24 +60,24 @@ class PriceRangesForm extends React.Component {
 }
 
 PriceRangesForm.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    button: React.PropTypes.string,
-    currency: React.PropTypes.string,
-    form: React.PropTypes.string,
-    input: React.PropTypes.string,
-    label: React.PropTypes.string,
-    separator: React.PropTypes.string,
+  cssClasses: PropTypes.shape({
+    button: PropTypes.string,
+    currency: PropTypes.string,
+    form: PropTypes.string,
+    input: PropTypes.string,
+    label: PropTypes.string,
+    separator: PropTypes.string,
   }),
-  currentRefinement: React.PropTypes.shape({
-    from: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    to: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+  currentRefinement: PropTypes.shape({
+    from: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    to: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }),
-  labels: React.PropTypes.shape({
-    button: React.PropTypes.string,
-    currency: React.PropTypes.string,
-    separator: React.PropTypes.string,
+  labels: PropTypes.shape({
+    button: PropTypes.string,
+    currency: PropTypes.string,
+    separator: PropTypes.string,
   }),
-  refine: React.PropTypes.func.isRequired,
+  refine: PropTypes.func.isRequired,
 };
 
 PriceRangesForm.defaultProps = {

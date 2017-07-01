@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
 import {isSpecialClick} from '../../lib/utils.js';
@@ -8,14 +9,13 @@ import isEqual from 'lodash/isEqual';
 
 import SearchBox from '../SearchBox';
 
-class RefinementList extends React.Component {
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
+
+export class RawRefinementList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isShowMoreOpen: false,
-    };
     this.handleItemClick = this.handleItemClick.bind(this);
-    this.handleClickShowMore = this.handleClickShowMore.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -33,21 +33,21 @@ class RefinementList extends React.Component {
     let subItems;
     const hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
-      subItems = <RefinementList
+      subItems = <RawRefinementList
                   {...this.props}
                   depth={this.props.depth + 1}
                   facetValues={facetValue.data}
                 />;
     }
 
-    const url = this.props.createURL(facetValue[this.props.attributeNameKey]);
+    const url = this.props.createURL(facetValue.value);
     const templateData = {...facetValue, url, cssClasses: this.props.cssClasses};
 
     const cssClassItem = cx(this.props.cssClasses.item, {
       [this.props.cssClasses.active]: facetValue.isRefined,
     });
 
-    let key = facetValue[this.props.attributeNameKey];
+    let {value: key} = facetValue;
     if (facetValue.isRefined !== undefined) {
       key += `/${facetValue.isRefined}`;
     }
@@ -58,7 +58,7 @@ class RefinementList extends React.Component {
 
     return (
       <RefinementListItem
-        facetValueToRefine={facetValue[this.props.attributeNameKey]}
+        facetValueToRefine={facetValue.value}
         handleClick={this.handleItemClick}
         isRefined={facetValue.isRefined}
         itemClassName={cssClassItem}
@@ -118,11 +118,6 @@ class RefinementList extends React.Component {
     this.refine(facetValueToRefine, isRefined);
   }
 
-  handleClickShowMore() {
-    const isShowMoreOpen = !this.state.isShowMoreOpen;
-    this.setState({isShowMoreOpen});
-  }
-
   componentWillReceiveProps(nextProps) {
     if (this.searchbox && !nextProps.isFromSearch) {
       this.searchbox.clearInput();
@@ -132,7 +127,7 @@ class RefinementList extends React.Component {
   refineFirstValue() {
     const firstValue = this.props.facetValues[0];
     if (firstValue) {
-      const actualValue = firstValue[this.props.attributeNameKey];
+      const actualValue = firstValue.value;
       this.props.toggleRefinement(actualValue);
     }
   }
@@ -144,25 +139,17 @@ class RefinementList extends React.Component {
       cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
     }
 
-    const limit = this.state.isShowMoreOpen ? this.props.limitMax : this.props.limitMin;
-    const displayedFacetValues = this.props.facetValues.slice(0, limit);
-    const displayShowMore = this.props.showMore === true &&
-      // "Show more"
-      this.props.facetValues.length > displayedFacetValues.length ||
-      // "Show less", but hide it if the result set changed
-      this.state.isShowMoreOpen && displayedFacetValues.length > this.props.limitMin;
-
-    const showMoreBtn = displayShowMore ?
+    const showMoreBtn = this.props.showMore === true && this.props.canToggleShowMore ?
         <Template
-          rootProps={{onClick: this.handleClickShowMore}}
-          templateKey={`show-more-${this.state.isShowMoreOpen ? 'active' : 'inactive'}`}
+          rootProps={{onClick: this.props.toggleShowMore}}
+          templateKey={`show-more-${this.props.isShowingMore ? 'active' : 'inactive'}`}
           {...this.props.templateProps}
         /> :
         undefined;
 
     const shouldDisableSearchInput =
       this.props.searchIsAlwaysActive !== true &&
-      !(this.props.isFromSearch || displayedFacetValues.length >= limit);
+      !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
     const searchInput = this.props.searchFacetValues ?
         <SearchBox ref={i => { this.searchbox = i; }}
           placeholder={this.props.searchPlaceholder}
@@ -180,7 +167,7 @@ class RefinementList extends React.Component {
     return (
       <div className={cx(cssClassList)}>
         {searchInput}
-        {displayedFacetValues.map(this._generateFacetItem, this)}
+        {this.props.facetValues.map(this._generateFacetItem, this)}
         {noResults}
         {showMoreBtn}
       </div>
@@ -188,33 +175,33 @@ class RefinementList extends React.Component {
   }
 }
 
-RefinementList.propTypes = {
-  Template: React.PropTypes.func,
-  attributeNameKey: React.PropTypes.string,
-  createURL: React.PropTypes.func,
-  cssClasses: React.PropTypes.shape({
-    active: React.PropTypes.string,
-    depth: React.PropTypes.string,
-    item: React.PropTypes.string,
-    list: React.PropTypes.string,
+RawRefinementList.propTypes = {
+  Template: PropTypes.func,
+  createURL: PropTypes.func,
+  cssClasses: PropTypes.shape({
+    active: PropTypes.string,
+    depth: PropTypes.string,
+    item: PropTypes.string,
+    list: PropTypes.string,
   }),
-  depth: React.PropTypes.number,
-  facetValues: React.PropTypes.array,
-  limitMax: React.PropTypes.number,
-  limitMin: React.PropTypes.number,
-  showMore: React.PropTypes.bool,
-  templateProps: React.PropTypes.object.isRequired,
-  toggleRefinement: React.PropTypes.func.isRequired,
-  searchFacetValues: React.PropTypes.func,
-  searchPlaceholder: React.PropTypes.string,
-  searchIsAlwaysActive: React.PropTypes.bool,
-  isFromSearch: React.PropTypes.bool,
+  depth: PropTypes.number,
+  facetValues: PropTypes.array,
+  templateProps: PropTypes.object.isRequired,
+  toggleRefinement: PropTypes.func.isRequired,
+  searchFacetValues: PropTypes.func,
+  searchPlaceholder: PropTypes.string,
+  isFromSearch: PropTypes.bool,
+  showMore: PropTypes.bool,
+  toggleShowMore: PropTypes.func,
+  isShowingMore: PropTypes.bool,
+  hasExhaustiveItems: PropTypes.bool,
+  canToggleShowMore: PropTypes.bool,
+  searchIsAlwaysActive: PropTypes.bool,
 };
 
-RefinementList.defaultProps = {
+RawRefinementList.defaultProps = {
   cssClasses: {},
   depth: 0,
-  attributeNameKey: 'name',
 };
 
-export default RefinementList;
+export default autoHideContainerHOC(headerFooterHOC(RawRefinementList));

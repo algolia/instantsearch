@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import forEach from 'lodash/forEach';
 import defaultsDeep from 'lodash/defaultsDeep';
@@ -144,31 +145,31 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
-  createURL: React.PropTypes.func,
-  cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.string,
-    item: React.PropTypes.string,
-    link: React.PropTypes.string,
-    page: React.PropTypes.string,
-    previous: React.PropTypes.string,
-    next: React.PropTypes.string,
-    first: React.PropTypes.string,
-    last: React.PropTypes.string,
-    active: React.PropTypes.string,
-    disabled: React.PropTypes.string,
+  createURL: PropTypes.func,
+  cssClasses: PropTypes.shape({
+    root: PropTypes.string,
+    item: PropTypes.string,
+    link: PropTypes.string,
+    page: PropTypes.string,
+    previous: PropTypes.string,
+    next: PropTypes.string,
+    first: PropTypes.string,
+    last: PropTypes.string,
+    active: PropTypes.string,
+    disabled: PropTypes.string,
   }),
-  currentPage: React.PropTypes.number,
-  labels: React.PropTypes.shape({
-    first: React.PropTypes.string,
-    last: React.PropTypes.string,
-    next: React.PropTypes.string,
-    previous: React.PropTypes.string,
+  currentPage: PropTypes.number,
+  labels: PropTypes.shape({
+    first: PropTypes.string,
+    last: PropTypes.string,
+    next: PropTypes.string,
+    previous: PropTypes.string,
   }),
-  nbHits: React.PropTypes.number,
-  nbPages: React.PropTypes.number,
-  padding: React.PropTypes.number,
-  setCurrentPage: React.PropTypes.func.isRequired,
-  showFirstLast: React.PropTypes.bool,
+  nbHits: PropTypes.number,
+  nbPages: PropTypes.number,
+  padding: PropTypes.number,
+  setCurrentPage: PropTypes.func.isRequired,
+  showFirstLast: PropTypes.bool,
 };
 
 Pagination.defaultProps = {

@@ -1,0 +1,26 @@
+.light-switcher {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 8px 16px;
+  padding-left: 32px;
+  border: 1px solid $portage;
+  font-size: 16px;
+  color: #7f8b9d;
+  line-height: 24px;
+  display: inline-block;
+  min-width: 236px;
+
+  &--light {
+    border-radius: 0;
+    border: none;
+    border-bottom: solid 2px $shamrock;
+    color: white;
+  }
+
+  &.location-switch {
+    background: url(image_path("pricing/icon-pin.svg"))no-repeat center left 8px,
+                url(image_path("pricing/icon-up-down.svg"))no-repeat center right 8px;
+    background-size: 19px, 8px;
+  }
+}

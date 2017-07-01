@@ -1,7 +1,4 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
 import {shallow} from 'enzyme';
 import Hits from '../Hits';
 import Template from '../Template';
@@ -10,6 +7,7 @@ describe('Hits', () => {
   function shallowRender(extraProps = {}) {
     const props = {
       cssClasses: {},
+      templateProps: {},
       ...extraProps,
     };
     return shallow(React.createElement(Hits, props));
@@ -59,6 +57,7 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
+            objectID: 'one',
             foo: 'bar',
           }],
         },
@@ -81,6 +80,7 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
+            objectID: 'one',
             foo: 'bar',
           }],
         },
@@ -107,6 +107,7 @@ describe('Hits', () => {
       // Given
       const results = {
         hits: [{
+          objectID: 'one',
           foo: 'bar',
         }],
       };
@@ -131,8 +132,10 @@ describe('Hits', () => {
     it('should add an item template for each hit', () => {
       // Given
       const hits = [{
+        objectID: 'one',
         foo: 'bar',
       }, {
+        objectID: 'two',
         foo: 'baz',
       }];
       const props = {
@@ -156,6 +159,7 @@ describe('Hits', () => {
     it('should set the item class to each item', () => {
       // Given
       const hits = [{
+        objectID: 'one',
         foo: 'bar',
       }];
       const props = {
@@ -183,8 +187,10 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
+            objectID: 'one',
             foo: 'bar',
           }, {
+            objectID: 'two',
             foo: 'baz',
           }],
         },
@@ -209,8 +215,10 @@ describe('Hits', () => {
     it('should pass each result data to each item template', () => {
       // Given
       const hits = [{
+        objectID: 'one',
         foo: 'bar',
       }, {
+        objectID: 'two',
         foo: 'baz',
       }];
       const props = {
@@ -234,8 +242,10 @@ describe('Hits', () => {
     it('should add the __hitIndex in the list to each item', () => {
       // Given
       const hits = [{
+        objectID: 'one',
         foo: 'bar',
       }, {
+        objectID: 'two',
         foo: 'baz',
       }];
       const props = {

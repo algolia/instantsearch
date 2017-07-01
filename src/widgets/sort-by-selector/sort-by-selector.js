@@ -1,29 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import findIndex from 'lodash/findIndex';
-import map from 'lodash/map';
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
 import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import SelectorComponent from '../../components/Selector.js';
+
+import Selector from '../../components/Selector.js';
+import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
+import {bemHelper, getContainerNode} from '../../lib/utils.js';
 
 const bem = bemHelper('ais-sort-by-selector');
-/**
- * Instantiate a dropdown element to choose the current targeted index
- * @function sortBySelector
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} options.indices Array of objects defining the different indices to choose from.
- * @param  {string} options.indices[0].name Name of the index to target
- * @param  {string} options.indices[0].label Label displayed in the dropdown
- * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent <select>
- * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each <option>
- * @return {Object}
- */
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  autoHideContainer,
+}) => ({
+  currentRefinement,
+  options,
+  refine,
+  hasNoResults,
+}, isFirstRendering) => {
+  if (isFirstRendering) return;
+
+  const shouldAutoHideContainer = autoHideContainer && hasNoResults;
+
+  ReactDOM.render(
+    <Selector
+      cssClasses={cssClasses}
+      currentValue={currentRefinement}
+      options={options}
+      setValue={refine}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 sortBySelector({
   container,
@@ -31,57 +41,74 @@ sortBySelector({
   [cssClasses.{root,item}={}],
   [autoHideContainer=false]
 })`;
-function sortBySelector({
-    container,
-    indices,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
-  } = {}) {
-  if (!container || !indices) {
+
+/**
+ * @typedef {Object} SortByWidgetCssClasses
+ * @property {string|string[]} [root] CSS classes added to the parent `<select>`.
+ * @property {string|string[]} [item] CSS classes added to each `<option>`.
+ */
+
+/**
+ * @typedef {Object} SortByIndexDefinition
+ * @property {string} name The name of the index in Algolia.
+ * @property {string} label The name of the index, for user usage.
+ */
+
+/**
+ * @typedef {Object} SortByWidgetOptions
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property {SortByIndexDefinition[]} indices Array of objects defining the different indices to choose from.
+ * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
+ * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
+ */
+
+/**
+ * Sort by selector is a widget used for letting the user choose between different
+ * indices that contains the same data with a different order / ranking formula.
+ *
+ * For the users it is like they are selecting a new sort order.
+ * @type {WidgetFactory}
+ * @param {SortByWidgetOptions} $0 Options for the SortBySelector widget
+ * @return {Widget} Creates a new instance of the SortBySelector widget.
+ * @example
+ * search.addWidget(
+ *   instantsearch.widgets.sortBySelector({
+ *     container: '#sort-by-container',
+ *     indices: [
+ *       {name: 'instant_search', label: 'Most relevant'},
+ *       {name: 'instant_search_price_asc', label: 'Lowest price'},
+ *       {name: 'instant_search_price_desc', label: 'Highest price'}
+ *     ]
+ *   })
+ * );
+ */
+export default function sortBySelector({
+  container,
+  indices,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = false,
+} = {}) {
+  if (!container) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
-  let Selector = SelectorComponent;
-  if (autoHideContainer === true) {
-    Selector = autoHideContainerHOC(Selector);
-  }
-
-  const selectorOptions = map(
-    indices,
-    index => ({label: index.label, value: index.name})
-  );
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
   };
 
-  return {
-    init({helper}) {
-      const currentIndex = helper.getIndex();
-      const isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
-      if (!isIndexInList) {
-        throw new Error(`[sortBySelector]: Index ${currentIndex} not present in \`indices\``);
-      }
-      this.setIndex = indexName => helper
-        .setIndex(indexName)
-        .search();
-    },
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    autoHideContainer,
+  });
 
-    render({helper, results}) {
-      ReactDOM.render(
-        <Selector
-          cssClasses={cssClasses}
-          currentValue={helper.getIndex()}
-          options={selectorOptions}
-          setValue={this.setIndex}
-          shouldAutoHideContainer={results.nbHits === 0}
-        />,
-        containerNode
-      );
-    },
-  };
+  try {
+    const makeWidget = connectSortBySelector(specializedRenderer);
+    return makeWidget({indices});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
-
-export default sortBySelector;

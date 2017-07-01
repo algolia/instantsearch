@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Hits from './Hits.js';
 
@@ -26,19 +27,19 @@ class InfiniteHits extends React.Component {
 }
 
 InfiniteHits.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.string,
-    item: React.PropTypes.string,
-    allItems: React.PropTypes.string,
-    empty: React.PropTypes.string,
-    showmore: React.PropTypes.string,
+  cssClasses: PropTypes.shape({
+    root: PropTypes.string,
+    item: PropTypes.string,
+    allItems: PropTypes.string,
+    empty: PropTypes.string,
+    showmore: PropTypes.string,
   }),
-  hits: React.PropTypes.object,
-  results: React.PropTypes.object,
-  showMore: React.PropTypes.function,
-  showMoreLabel: React.PropTypes.string,
-  templateProps: React.PropTypes.object.isRequired,
-  isLastPage: React.PropTypes.bool.isRequired,
+  hits: PropTypes.array,
+  results: PropTypes.object,
+  showMore: PropTypes.func,
+  showMoreLabel: PropTypes.string,
+  templateProps: PropTypes.object.isRequired,
+  isLastPage: PropTypes.bool.isRequired,
 };
 
 export default InfiniteHits;

@@ -1,0 +1,472 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Pagination should disable last page if already on it 1`] = `
+<ul
+  className="root"
+>
+  <li
+    className="item first"
+  >
+    <a
+      aria-label="First"
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+      href="[0]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item previous"
+  >
+    <a
+      aria-label="Previous"
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+      href="[18]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={14}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 14,
+        }
+      }
+      href="[13]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={15}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 15,
+        }
+      }
+      href="[14]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={16}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 16,
+        }
+      }
+      href="[15]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={17}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 17,
+        }
+      }
+      href="[16]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={18}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 18,
+        }
+      }
+      href="[17]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={19}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 19,
+        }
+      }
+      href="[18]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page active"
+  >
+    <a
+      aria-label={20}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 20,
+        }
+      }
+      href="[19]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item next disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+  <li
+    className="item last disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+</ul>
+`;
+
+exports[`Pagination should display the first/last link 1`] = `
+<ul
+  className="root"
+>
+  <li
+    className="item first disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+  <li
+    className="item previous disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+  <li
+    className="item page active"
+  >
+    <a
+      aria-label={1}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 1,
+        }
+      }
+      href="[0]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={2}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 2,
+        }
+      }
+      href="[1]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={3}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 3,
+        }
+      }
+      href="[2]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={4}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 4,
+        }
+      }
+      href="[3]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={5}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 5,
+        }
+      }
+      href="[4]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={6}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 6,
+        }
+      }
+      href="[5]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={7}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 7,
+        }
+      }
+      href="[6]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item next"
+  >
+    <a
+      aria-label="Next"
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+      href="[1]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item last"
+  >
+    <a
+      aria-label="Last"
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+      href="[19]"
+      onClick={[Function]}
+    />
+  </li>
+</ul>
+`;
+
+exports[`Pagination should render five elements 1`] = `
+<ul
+  className="root"
+>
+  <li
+    className="item previous disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+  <li
+    className="item page active"
+  >
+    <a
+      aria-label={1}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 1,
+        }
+      }
+      href="[0]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={2}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 2,
+        }
+      }
+      href="[1]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={3}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 3,
+        }
+      }
+      href="[2]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={4}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 4,
+        }
+      }
+      href="[3]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={5}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 5,
+        }
+      }
+      href="[4]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={6}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 6,
+        }
+      }
+      href="[5]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item page"
+  >
+    <a
+      aria-label={7}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 7,
+        }
+      }
+      href="[6]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item next"
+  >
+    <a
+      aria-label="Next"
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+      href="[1]"
+      onClick={[Function]}
+    />
+  </li>
+</ul>
+`;
