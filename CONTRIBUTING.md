@@ -6,8 +6,14 @@
 - [Development](#development)
 - [Code](#code)
 - [Test](#test)
+- [Functional tests](#functional-tests)
+  - [Local setup](#local-setup)
+  - [Local run](#local-run)
+  - [Debugging](#debugging)
 - [Lint](#lint)
 - [Release](#release)
+  - [Main version](#main-version)
+  - [Maintenance version](#maintenance-version)
 - [Update docs](#update-docs)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
