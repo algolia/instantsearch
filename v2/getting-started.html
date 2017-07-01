@@ -408,7 +408,7 @@ a feedback on the matching parts of the results.</p>
 <h2 id="add-a-refinementlist">Add a RefinementList <a class="anchor" href="getting-started.html#add-a-refinementlist" aria-hidden="true"></a></h2>
 <p>While the SearchBox is the way to go when it comes to textual search, you may also want to provide filters based on the structure of the records.</p>
 <p>Algolia provides a set of parameters for filtering by facets, numbers or geo location. <strong>InstantSearch.js</strong> packages those into a set of widgets and connectors.</p>
-<p>Since the dataset used here is an e-commerce one, let’s add a <a href="https://community.algolia.com/instantsearch.js/documentation/#refinementlist">RefinementList</a> to filter the products by categories:</p>
+<p>Since the dataset used here is an e-commerce one, let’s add a <a href="widgets/refinementList.html">RefinementList</a> to filter the products by categories:</p>
 <pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">&quot;search-box&quot;</span><span class="cm-tag cm-bracket">&gt;</span>
   <span class="cm-comment">&lt;!-- SearchBox widget will appear here --&gt;</span>
 <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
@@ -464,7 +464,7 @@ a feedback on the matching parts of the results.</p>
 <li>the ability to browse beyond the first page of results</li>
 <li>the ability to reset the filters</li>
 </ul>
-<p>Those two features are implemented respectively with the <a href="https://community.algolia.com/instantsearch.js/documentation/#pagination">pagination</a>, <a href="https://community.algolia.com/instantsearch.js/documentation/#clearall">clearAll</a> and <a href="https://community.algolia.com/instantsearch.js/documentation/#currentrefinedvalues">currentRefinedValues</a> widgets. Both have nice defaults which means that we can use them directly without further configuration.</p>
+<p>Those two features are implemented respectively with the <a href="widgets/pagination.html">pagination</a>, <a href="widgets/clearAll.html">clearAll</a> and <a href="widgets/currentRefinedValues.html">currentRefinedValues</a> widgets. Both have nice defaults which means that we can use them directly without further configuration.</p>
 <pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">&quot;current-refined-values&quot;</span><span class="cm-tag cm-bracket">&gt;</span>
   <span class="cm-comment">&lt;!-- CurrentRefinedValues widget will appear here --&gt;</span>
 <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
