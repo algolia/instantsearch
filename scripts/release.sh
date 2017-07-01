@@ -64,17 +64,13 @@ conventional-changelog --preset angular --infile CHANGELOG.md --same-file
 printf "\n\nRelease: generate TOCS"
 npm run doctoc
 
-# regenerate widgets jsdoc
-printf "\n\nRelease: regenerate widgets jsdoc"
-npm run docs:jsdoc
-
 # regenerate yarn.lock
 printf "Release: update yarn.lock"
 yarn
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js yarn.lock package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
+git add src/lib/version.js yarn.lock package.json CHANGELOG.md README.md CONTRIBUTING.md
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
