@@ -31,7 +31,7 @@ Therefore, you'll need the credentials to an Algolia index. To ease this getting
 
 It contains sample data for an e-commerce website.
 
-This guide also expects you to have a working website. You can also use our bootstrapped project by clicking [this link](/assets/getting-started-boilerplate.zip).
+This guide also expects you to have a working website. You can also use our bootstrapped project by clicking [this link](assets/getting-started-boilerplate.zip).
 
 
 ## Install `InstantSearch.js`
@@ -102,7 +102,7 @@ You can synchronise the current search with the browser url. It provides two ben
   * Working back/next browser buttons
   * Copy and share the current search url
 
-To configure this feature, pass `urlSync: true` option to `instantsearch()`. The urlSync option has more parameters ([see InstantSearch.js API documentation](/instantsearch.html)).
+To configure this feature, pass `urlSync: true` option to `instantsearch()`. The urlSync option has more parameters ([see InstantSearch.js API documentation](instantsearch.html)).
 
 Congrats 🎉 ! Your website is now connected to Algolia.
 
@@ -223,7 +223,7 @@ While the SearchBox is the way to go when it comes to textual search, you may al
 
 Algolia provides a set of parameters for filtering by facets, numbers or geo location. **InstantSearch.js** packages those into a set of widgets and connectors.
 
-Since the dataset used here is an e-commerce one, let’s add a [RefinementList](https://community.algolia.com/instantsearch.js/documentation/#refinementlist) to filter the products by categories:
+Since the dataset used here is an e-commerce one, let’s add a [RefinementList](widgets/refinementList.html) to filter the products by categories:
 
 ```html
 <div id="search-box">
@@ -286,7 +286,7 @@ We now miss two elements in our search interface:
   * the ability to browse beyond the first page of results
   * the ability to reset the filters
 
-Those two features are implemented respectively with the [pagination](https://community.algolia.com/instantsearch.js/documentation/#pagination), [clearAll](https://community.algolia.com/instantsearch.js/documentation/#clearall) and [currentRefinedValues](https://community.algolia.com/instantsearch.js/documentation/#currentrefinedvalues) widgets. Both have nice defaults which means that we can use them directly without further configuration.
+Those two features are implemented respectively with the [pagination](widgets/pagination.html), [clearAll](widgets/clearAll.html) and [currentRefinedValues](widgets/currentRefinedValues.html) widgets. Both have nice defaults which means that we can use them directly without further configuration.
 
 ```html
 <div id="current-refined-values">
