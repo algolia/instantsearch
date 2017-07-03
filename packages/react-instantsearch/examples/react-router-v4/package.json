@@ -11,7 +11,7 @@
     "react-dom": "^15.5.4",
     "react-instantsearch": "beta",
     "react-instantsearch-theme-algolia": "beta",
-    "react-router-dom": "next"
+    "react-router-dom": "^4.1.1"
   },
   "scripts": {
     "start": "react-scripts start"
