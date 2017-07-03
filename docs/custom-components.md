@@ -1,8 +1,8 @@
 Custom Components
 ---------
 
-You can build you own components when the provided ones are not sufficient. Since we try
-hard to provide as much possible an out-of-the-box experience, we would love to hear
+You can build your own components when the provided ones are not sufficient. Since we try
+hard as much as possible to provide an out-of-the-box experience, we would love to hear
 about your custom component use case before you try to build it.
 
 Let us know about your use case for a custom component via our [issue tracker](https://github.com/algolia/vue-instantsearch/issues).
@@ -46,9 +46,9 @@ This component will display the current search query.
 
 ## How it works
 
-By using the `component` mixin, the custom component will automatically be able to access `this.searchStore`.
+By using the `Component` mixin, the custom component will automatically be able to access `this.searchStore`.
 
-This is made possible because the `component` mixin `injects` the searchStore.
+This is made possible because the `Component` mixin `injects` the searchStore.
 You can read more about the inject/provide feature on the [Vue.js documentation](https://vuejs.org/v2/api/#provide-inject).
 
 The search store will be automatically fetched from a parent [Index component](/components/index.md) higher in the DOM tree.
@@ -64,7 +64,7 @@ To ensure consistency and re-usability for custom components, we recommend revie
 * Vue InstantSearch uses `ais` as a prefix for CSS classes, we recommend choosing a different prefix to avoid conflicts
 * We do not recommend the use of [`scoped`](https://vue-loader.vuejs.org/en/features/scoped-css.html) styles, it makes it very hard to override them.
 * Use the [BEM notation](http://getbem.com/introduction/) with only one depth level.
-* Think about reusability, ship the bare minimum style for your component to be disaplayed well. While allowing for easy customization.
+* Think about reusability: ship the bare minimum style for your component to be displayed well, while allowing for easy customization.
 
 ### Vue component
 
