@@ -1,11 +1,12 @@
 /* eslint import/no-commonjs: 0 */
+/* eslint camelcase: 0 */
+
 const path = require('path');
 const without = require('lodash/without');
 
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPluging = require('html-webpack-plugin');
-const BabiliPlugin = require('babili-webpack-plugin');
 const AutoDllPlugin = require('autodll-webpack-plugin');
 const HappyPack = require('happypack');
 
@@ -153,8 +154,18 @@ module.exports = {
         id: 'style',
       }),
 
-    // Minify JS && extract CSS on build
-    !__DEV__ && new BabiliPlugin(),
+    !__DEV__ && new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+        comparisons: false,
+      },
+      output: {
+        comments: false,
+        ascii_only: true,
+      },
+      sourceMap: true,
+    }),
+
     !__DEV__ && new ExtractTextPlugin('[name].[contenthash].css'),
   ]),
 };
