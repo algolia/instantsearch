@@ -138,7 +138,11 @@ class Range extends React.Component {
             $ {Math.trunc(this.state.currentValues.max)}
           </Text>
         </View>
-      : <Text>$ {Math.trunc(this.state.currentValues.min)}</Text>;
+      : <Text>
+          {this.props.min
+            ? `$ ${Math.trunc(this.state.currentValues.min)}`
+            : null}
+        </Text>;
     return (
       <View style={styles.container}>
         {content}
