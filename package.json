@@ -35,6 +35,7 @@
   ],
   "devDependencies": {
     "argos-cli": "^0.0.8",
+    "autodll-webpack-plugin": "^0.0.6",
     "autoprefixer": "^6.7.7",
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.24.0",
@@ -51,6 +52,7 @@
     "babel-register": "^6.24.0",
     "babel-template": "^6.23.0",
     "babel-types": "^6.23.0",
+    "babili-webpack-plugin": "^0.1.2",
     "bel": "^4.6.0",
     "collect-json": "^1.0.8",
     "compression": "^1.6.2",
@@ -68,15 +70,17 @@
     "expect": "^1.20.2",
     "expect-jsx": "^2.6.0",
     "express": "^4.15.2",
+    "extract-text-webpack-plugin": "^2.1.2",
     "gh-pages": "^1.0.0",
+    "happypack": "^4.0.0-beta.1",
+    "html-webpack-plugin": "^2.29.0",
     "http-server": "^0.9.0",
     "jest": "^19.0.2",
     "jsdom-global": "^2.1.1",
     "json": "^9.0.6",
     "mkdirp": "^0.5.1",
     "mversion": "^1.10.1",
-    "node-sass": "^4.5.0",
-    "postcss-cli": "^2.6.0",
+    "node-sass": "^4.5.3",
     "preact": "^8.1.0",
     "preact-compat": "^3.14.1",
     "pretty-bytes-cli": "^2.0.0",
@@ -94,8 +98,8 @@
     "wdio-sauce-service": "^0.4.0",
     "wdio-visual-regression-service": "^0.8.0",
     "webdriverio": "^4.8.0",
-    "webpack": "^1.14.0",
-    "webpack-dev-server": "^1.16.2"
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.5.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
