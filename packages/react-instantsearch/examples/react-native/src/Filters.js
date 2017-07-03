@@ -8,6 +8,7 @@ import {
   ListView,
   TouchableHighlight,
   Platform,
+  Keyboard,
 } from 'react-native';
 import { InstantSearch } from 'react-instantsearch/native';
 import {
@@ -52,6 +53,7 @@ class Filters extends Component {
     this.state = {
       searchState: this.props.searchState,
     };
+    Keyboard.dismiss();
   }
   onSearchStateChange(nextState) {
     const searchState = { ...this.state.searchState, ...nextState };

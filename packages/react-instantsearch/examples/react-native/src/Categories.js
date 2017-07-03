@@ -8,6 +8,7 @@ import {
   TextInput,
   Platform,
   TouchableHighlight,
+  Keyboard,
 } from 'react-native';
 import { InstantSearch } from 'react-instantsearch/native';
 import {
@@ -173,6 +174,7 @@ class Menu extends Component {
         onPress={() => {
           this.saveQuery('');
           this.props.refine(refinement.value);
+          Keyboard.dismiss();
         }}
         key={rowId}
       >
