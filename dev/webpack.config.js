@@ -122,7 +122,7 @@ module.exports = {
     }),
 
     // Build vendors in a seperate bundle which won't be re-builded on changes
-    new AutoDllPlugin({
+    __DEV__ && new AutoDllPlugin({
       inject: true,
       context: __dirname,
       filename: '[name].[hash].js',
