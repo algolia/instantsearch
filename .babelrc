@@ -6,9 +6,20 @@
     "production": {
       "plugins": [
         "transform-react-remove-prop-types",
-        "transform-react-constant-elements"
+        "transform-react-constant-elements",
+        "transform-react-inline-elements",
+        "transform-react-pure-class-to-function"
       ]
     }
   },
-  "presets": ["es2015", "react", "stage-2"]
+  "presets": [
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": "> 1%, last 2 versions"
+      }
+    }],
+    "react",
+    "stage-2"
+  ]
 }
