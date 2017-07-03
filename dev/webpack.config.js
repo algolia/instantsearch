@@ -138,11 +138,10 @@ module.exports = {
       },
     }),
 
-    __DEV__ &&
-      new HappyPack({
-        loaders: ['babel-loader?cacheDirectory=true'],
-        id: 'babel',
-      }),
+    new HappyPack({
+      loaders: ['babel-loader?cacheDirectory=true'],
+      id: 'babel',
+    }),
 
     __DEV__ &&
       new HappyPack({
