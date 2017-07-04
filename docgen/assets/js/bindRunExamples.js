@@ -1,4 +1,4 @@
-import instantsearch from "../../../index.js";
+import instantsearch from "../../../src/lib/main.js";
 import capitalize from "lodash/capitalize";
 
 window.instantsearch = instantsearch;

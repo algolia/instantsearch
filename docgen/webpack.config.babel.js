@@ -1,50 +1,61 @@
 import webpack from 'webpack';
-import {join} from 'path';
+import { join } from 'path';
 import autoprefixer from 'autoprefixer';
 import config from './config.js';
 
 export default {
-  entry: {
-    'js/main': join(__dirname, 'assets/js/main.js'),
-  },
   devtool: 'source-map',
+
+  entry: {
+    'js/main': join(__dirname, 'assets/js/main.js')
+  },
+
   output: {
     path: config.docsDist,
     publicPath: config.publicPath,
-    filename: '[name].js',
+    filename: '[name].js'
   },
+
   module: {
-    loaders: [
-      {
-        test: /\.json$/, loader: 'json',
-      },
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules\/(?!algolia-frontend-components\/components)/,
-        loader: 'babel',
+        use: 'babel-loader'
       },
       {
-        test: /\.scss$/,
-        loaders: ['style?insertAt=top', 'css', 'postcss', 'sass'],
-      },
-    ],
+        test: /\.s?(c|a)ss$/,
+        use: [
+          {loader: 'style-loader?insertAt=top', options: {sourceMap: true}},
+          {loader: 'css-loader', options: {sourceMap: true}},
+          {loader: 'postcss-loader', options: {sourceMap: true}},
+          {loader: 'sass-loader', options: {sourceMap: true}}
+        ]
+      }
+    ]
   },
 
-  postcss: [autoprefixer()],
   resolve: {
     alias: {
-      'react-instantsearch': join(__dirname, '../packages/react-instantsearch/'),
-      'react-instantsearch-theme-algolia': join(__dirname, '../packages/react-instantsearch-theme-algolia/'),
-    },
+      'react-instantsearch': join(
+        __dirname,
+        '../packages/react-instantsearch/'
+      ),
+      'react-instantsearch-theme-algolia': join(
+        __dirname,
+        '../packages/react-instantsearch-theme-algolia/'
+      )
+    }
   },
+
   // replace usage of process.env.NODE_ENV with the actual NODE_ENV from command line
   // when building. Some modules might be using it, this way we will reduce the code output when
   // NODE_ENV === 'production' and NODE_ENV=production was used to build
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
-    }),
-  ],
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
+    })
+  ]
 };
