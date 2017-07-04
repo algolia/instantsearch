@@ -1,5 +1,4 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import {connectSortBySelector} from '../../../../index.es6.js';
 
 const renderFn = ({
   options,
@@ -27,4 +26,4 @@ const renderFn = ({
   containerNode.find('select').html(optionsHTML);
 };
 
-export default instantsearch.connectors.connectSortBySelector(renderFn);
+export default connectSortBySelector(renderFn);

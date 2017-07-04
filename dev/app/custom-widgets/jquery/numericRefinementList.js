@@ -1,5 +1,4 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import {connectNumericRefinementList} from '../../../../index.es6.js';
 
 const renderFn = ({
   createURL,
@@ -59,4 +58,4 @@ const renderFn = ({
     });
 };
 
-export default instantsearch.connectors.connectNumericRefinementList(renderFn);
+export default connectNumericRefinementList(renderFn);

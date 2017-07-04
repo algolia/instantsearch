@@ -1,5 +1,4 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import {connectClearAll} from '../../../../index.es6.js';
 
 const renderFn = ({
   refine,
@@ -22,4 +21,4 @@ const renderFn = ({
   clearAllCTA.attr('disabled', !hasRefinements);
 };
 
-export default instantsearch.connectors.connectClearAll(renderFn);
+export default connectClearAll(renderFn);

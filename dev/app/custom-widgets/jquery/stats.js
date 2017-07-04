@@ -1,5 +1,4 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import {connectStats} from '../../../../index.es6.js';
 
 const renderFn = ({
   nbHits,
@@ -10,4 +9,4 @@ const renderFn = ({
   containerNode.html(`${nbHits} results found in ${processingTimeMS}ms`);
 };
 
-export default instantsearch.connectors.connectStats(renderFn);
+export default connectStats(renderFn);

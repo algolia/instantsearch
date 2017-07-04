@@ -1,5 +1,4 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import {connectMenu} from '../../../../index.es6.js';
 
 const renderFn = ({
   items,
@@ -54,4 +53,4 @@ const renderFn = ({
     });
 };
 
-export default instantsearch.connectors.connectMenu(renderFn);
+export default connectMenu(renderFn);

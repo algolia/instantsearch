@@ -1,5 +1,4 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import {connectCurrentRefinedValues} from '../../../../index.es6.js';
 
 const renderFn = ({
   clearAllClick,
@@ -104,4 +103,4 @@ const renderFn = ({
   }
 };
 
-export default instantsearch.connectors.connectCurrentRefinedValues(renderFn);
+export default connectCurrentRefinedValues(renderFn);

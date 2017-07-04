@@ -1,5 +1,5 @@
 /* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import {connectSearchBox} from '../../../../index.es6.js';
 
 function render(
   {
@@ -26,5 +26,4 @@ function render(
   }
 }
 
-export default instantsearch.connectors.connectSearchBox(render);
-
+export default connectSearchBox(render);

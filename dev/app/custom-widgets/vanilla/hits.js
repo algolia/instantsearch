@@ -1,6 +1,5 @@
-/* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
 import bel from 'bel';
+import {connectHits} from '../../../../index.es6.js';
 
 function render({hits, widgetParams: {containerNode}}) {
   const content = bel`<div>
@@ -34,4 +33,4 @@ function render({hits, widgetParams: {containerNode}}) {
   containerNode.appendChild(content);
 }
 
-export default instantsearch.connectors.connectHits(render);
+export default connectHits(render);
