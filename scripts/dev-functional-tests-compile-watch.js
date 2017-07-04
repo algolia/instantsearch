@@ -3,7 +3,7 @@
 import webpack from 'webpack';
 import watch from 'watch';
 import {join} from 'path';
-import config from './webpack.config.jsdelivr.babel.js';
+import config from './webpack.config.js';
 const compiler = webpack(config);
 
 export default cb => {
