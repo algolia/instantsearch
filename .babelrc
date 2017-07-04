@@ -5,14 +5,14 @@
     },
     "development": {
       "presets": [
-        ["env", { "modules": false, "targets": { "browsers": "> 1%, last 2 versions" } }],
+        ["env", { "targets": { "browsers": "> 1%, last 2 versions" } }],
         "react",
         "stage-2"
       ]
     },
     "production": {
       "presets": [
-        ["env", { "modules": "commonjs", "targets": { "browsers": "> 1%, last 2 versions" } }],
+        ["env", { "targets": { "browsers": "> 1%, last 2 versions" } }],
         "react",
         "stage-2"
       ],
