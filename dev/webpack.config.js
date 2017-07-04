@@ -2,7 +2,6 @@
 /* eslint camelcase: 0 */
 
 const path = require('path');
-const without = require('lodash/without');
 
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -123,21 +122,13 @@ module.exports = {
     }),
 
     // Build vendors in a seperate bundle which won't be re-builded on changes
-    __DEV__ && new AutoDllPlugin({
-      inject: true,
-      context: __dirname,
-      filename: '[name].[hash].js',
-      entry: {
-        vendor: without(
-          [
-            ...Object.keys(require('../package.json').dependencies),
-            'dev-novel',
-          ],
-          'uglify-js',
-          'clean-css-cli'
-        ),
-      },
-    }),
+    __DEV__ &&
+      new AutoDllPlugin({
+        inject: true,
+        context: __dirname,
+        filename: '[name].[hash].js',
+        entry: {vendor: Object.keys(require('../package.json').dependencies)},
+      }),
 
     new HappyPack({
       loaders: ['babel-loader?cacheDirectory=true'],
@@ -155,17 +146,18 @@ module.exports = {
         id: 'style',
       }),
 
-    !__DEV__ && new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        comparisons: false,
-      },
-      output: {
-        comments: false,
-        ascii_only: true,
-      },
-      sourceMap: true,
-    }),
+    !__DEV__ &&
+      new webpack.optimize.UglifyJsPlugin({
+        compress: {
+          warnings: false,
+          comparisons: false,
+        },
+        output: {
+          comments: false,
+          ascii_only: true,
+        },
+        sourceMap: true,
+      }),
 
     !__DEV__ && new ExtractTextPlugin('[name].[contenthash].css'),
   ]),
