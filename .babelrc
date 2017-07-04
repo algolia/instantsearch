@@ -1,6 +1,11 @@
 {
   "env": {
     "test": {
+      "presets": [
+        ["env", {"targets": { "node": "current" }}],
+        "react",
+        "stage-2"
+      ],
       "plugins": ["babel-plugin-rewire"]
     },
     "development": {
