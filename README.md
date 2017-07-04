@@ -10,7 +10,7 @@
 
 [![InstantSearch.js logo][logo]][website]
 
-InstantSearch.js family: **InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github].
+InstantSearch family: **InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github].
 
 ## InstantSearch.js
 
