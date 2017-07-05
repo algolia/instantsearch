@@ -18,6 +18,11 @@ wait
 
 echo "➡️  Bundle instantsearch.js to ES6 build './dist-es6-module' via babel-cli"
 BABEL_ENV="production-es6" babel -q index.es6.js -o dist-es6-module/index.js &
-BABEL_ENV="production-es6" babel src -d dist-es6-module/src --ignore *-test.js --quiet
+BABEL_ENV="production-es6" babel src -d dist-es6-module/src --ignore *-test.js --quiet &
+
+# * allow `import {connectXXX} from 'instantsearch.js/connectors'`
+# * allow `import {searchBox} from 'instantsearch.js/widgets'`
+echo "export * from './src/connectors/index';" >> ./dist-es6-module/connectors.js &
+echo "export * from './src/widgets/index';" >> ./dist-es6-module/widgets.js
 
 wait
