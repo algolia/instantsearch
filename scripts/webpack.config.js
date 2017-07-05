@@ -6,6 +6,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
+const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
 
 const extractCSS = new ExtractTextPlugin('instantsearch.min.css');
 const extractTheme = new ExtractTextPlugin('instantsearch-theme-algolia.min.css');
@@ -90,6 +91,9 @@ module.exports = {
     new webpack.BannerPlugin(
       `instantsearch.js ${VERSION} | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js`
     ),
+
+    // Generate un-minified js along with UglifyJsPlugin
+    new UnminifiedWebpackPlugin(),
 
     new HappyPack({
       loaders: ['babel-loader'],
