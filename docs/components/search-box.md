@@ -8,7 +8,7 @@ A search input with a clear and submit button.
 Basic usage:
 
 ```html
-<ais-search-box :placeholder="Find products..."></ais-search-box>
+<ais-search-box placeholder="Find products..."></ais-search-box>
 ```
 
 ## Props
