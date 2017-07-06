@@ -7,7 +7,7 @@
   "author": "Algolia <support@algolia.com>",
   "scripts": {
     "build": "./scripts/build.sh",
-    "dev": "./scripts/dev-docs.sh",
+    "dev": "./scripts/dev.sh",
     "staging": "./scripts/staging-deploy.sh",
     "doctoc": "doctoc --maxlevel 3 README.md CONTRIBUTING.md",
     "lint": "npm run lint:js && npm run lint:css",
