@@ -100,6 +100,7 @@ module.exports = {
       timings: true,
       chunks: false,
       chunkModules: false,
+      modules: false,
     },
   },
 
