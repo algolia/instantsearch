@@ -25,7 +25,6 @@ describe('connectMenu', () => {
         getFacetValues: jest.fn(() => []),
         getFacetByName: () => true,
         hits: [],
-        index: 'index',
       };
 
       props = getProvidedProps({ attributeName: 'ok' }, {}, {});
@@ -213,7 +212,6 @@ describe('connectMenu', () => {
         getFacetValues: jest.fn(() => []),
         getFacetByName: () => true,
         hits: [],
-        index: 'index',
       };
       results.getFacetValues.mockImplementation(() => [
         {
@@ -388,7 +386,6 @@ describe('connectMenu', () => {
         getFacetValues: jest.fn(() => []),
         getFacetByName: () => true,
         hits: [],
-        index: 'index',
       };
       results.getFacetValues.mockClear();
       results.getFacetValues.mockImplementation(() => [
@@ -465,7 +462,6 @@ describe('connectMenu', () => {
         first: {
           getFacetValues: jest.fn(() => []),
           getFacetByName: () => true,
-          index: 'first',
         },
       };
 
@@ -654,7 +650,6 @@ describe('connectMenu', () => {
         first: {
           getFacetValues: jest.fn(() => []),
           getFacetByName: () => true,
-          index: 'first',
         },
       };
       results.first.getFacetValues.mockImplementation(() => [

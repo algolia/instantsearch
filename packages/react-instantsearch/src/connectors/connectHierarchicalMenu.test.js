@@ -22,7 +22,6 @@ describe('connectHierarchicalMenu', () => {
         getFacetValues: jest.fn(),
         getFacetByName: () => true,
         hits: [],
-        index: 'index',
       };
 
       results.getFacetValues.mockImplementationOnce(() => ({}));
@@ -335,7 +334,6 @@ describe('connectHierarchicalMenu', () => {
         first: {
           getFacetValues: jest.fn(),
           getFacetByName: () => true,
-          index: 'first',
         },
       };
 

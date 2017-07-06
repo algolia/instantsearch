@@ -18,22 +18,29 @@ describe('connectPagination', () => {
     const cleanUp = connect.cleanUp.bind(context);
 
     it('provides the correct props to the component', () => {
-      const results = { nbPages: 666, hits: [], index: 'index' };
-      props = getProvidedProps({}, {}, { results });
+      props = getProvidedProps({}, {}, { results: { nbPages: 666, hits: [] } });
       expect(props).toEqual({
         currentRefinement: 1,
         nbPages: 666,
         canRefine: true,
       });
 
-      props = getProvidedProps({}, { page: 5 }, { results });
+      props = getProvidedProps(
+        {},
+        { page: 5 },
+        { results: { nbPages: 666, hits: [] } }
+      );
       expect(props).toEqual({
         currentRefinement: 5,
         nbPages: 666,
         canRefine: true,
       });
 
-      props = getProvidedProps({}, { page: '5' }, { results });
+      props = getProvidedProps(
+        {},
+        { page: '5' },
+        { results: { nbPages: 666, hits: [] } }
+      );
       expect(props).toEqual({
         currentRefinement: 5,
         nbPages: 666,
@@ -43,7 +50,7 @@ describe('connectPagination', () => {
       props = getProvidedProps(
         {},
         { page: '1' },
-        { results: { nbPages: 1, hits: [], index: 'index' } }
+        { results: { nbPages: 1, hits: [] } }
       );
       expect(props).toEqual({
         currentRefinement: 1,
@@ -99,8 +106,11 @@ describe('connectPagination', () => {
     const cleanUp = connect.cleanUp.bind(context);
 
     it('provides the correct props to the component', () => {
-      const results = { first: { nbPages: 666, index: 'first' } };
-      props = getProvidedProps({}, {}, { results });
+      props = getProvidedProps(
+        {},
+        {},
+        { results: { first: { nbPages: 666 } } }
+      );
       expect(props).toEqual({
         currentRefinement: 1,
         nbPages: 666,
@@ -110,7 +120,7 @@ describe('connectPagination', () => {
       props = getProvidedProps(
         {},
         { indices: { first: { page: 5 } } },
-        { results }
+        { results: { first: { nbPages: 666 } } }
       );
       expect(props).toEqual({
         currentRefinement: 5,
