@@ -1,7 +1,6 @@
 node_modules/
 dist/
 dist-es5-module/
-dist-es6-module/
 npm-debug.log
 .DS_Store
 docs/
@@ -12,3 +11,9 @@ dev/dist/*
 
 # Ignore Argos CI screenshots.
 functional-tests/screenshots/
+
+# Ignore ES6 build files
+dist-es6-module/
+instantsearch.js
+connectors.js
+widgets.js
