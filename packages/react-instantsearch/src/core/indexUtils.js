@@ -7,16 +7,12 @@ export function getIndex(context) {
 }
 
 export function getResults(searchResults, context) {
-  const index = getIndex(context);
   if (searchResults.results && !searchResults.results.hits) {
-    const results = searchResults.results[getIndex(context)];
-    return results && index === results.index
+    return searchResults.results[getIndex(context)]
       ? searchResults.results[getIndex(context)]
       : null;
   } else {
-    return searchResults.results && searchResults.results.index === index
-      ? searchResults.results
-      : null;
+    return searchResults.results ? searchResults.results : null;
   }
 }
 

@@ -230,20 +230,11 @@ describe('utility method for manipulating the search state', () => {
       });
     });
     it('get results', () => {
-      const searchResults = { results: { hits: ['some'], index: 'index' } };
+      const searchResults = { results: { hits: ['some'] } };
 
       const results = getResults(searchResults, context);
 
-      expect(results.hits).toEqual(['some']);
-    });
-    it('get no results if index name is different than context', () => {
-      const searchResults = {
-        results: { hits: ['some'], index: 'otherIndex' },
-      };
-
-      const results = getResults(searchResults, context);
-
-      expect(results).toBeNull();
+      expect(results).toEqual({ hits: ['some'] });
     });
   });
   describe('when there are multiple index', () => {
@@ -511,23 +502,19 @@ describe('utility method for manipulating the search state', () => {
     });
 
     it('get results', () => {
-      let searchResults = {
-        results: { first: { hits: 'results', index: 'first' } },
-      };
+      let searchResults = { results: { first: { some: 'results' } } };
 
-      let results = getResults(searchResults, {
-        ais: { mainTargetedIndex: 'first' },
-      });
+      let results = getResults(searchResults, context);
 
-      expect(results.hits).toEqual('results');
+      expect(results).toEqual({ some: 'results' });
 
-      searchResults = { results: { second: { some: 'results' } } };
+      searchResults = { results: { first: { some: 'results' } } };
 
       results = getResults(searchResults, {
         ais: { mainTargetedIndex: 'first' },
       });
 
-      expect(results).toBeNull();
+      expect(results).toEqual({ some: 'results' });
     });
   });
 });

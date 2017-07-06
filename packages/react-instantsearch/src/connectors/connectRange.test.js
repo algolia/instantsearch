@@ -39,7 +39,6 @@ describe('connectRange', () => {
         ],
         getFacetByName: () => true,
         hits: [],
-        index: 'index',
       };
       props = getProvidedProps({ attributeName: 'ok' }, {}, { results });
       expect(props).toEqual({
@@ -265,7 +264,6 @@ describe('connectRange', () => {
             { name: '2', count: 20 },
           ],
           getFacetByName: () => true,
-          index: 'first',
         },
       };
       props = getProvidedProps({ attributeName: 'ok' }, {}, { results });
