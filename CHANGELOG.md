@@ -1,3 +1,13 @@
+<a name="4.0.7"></a>
+## [4.0.7](https://github.com/algolia/react-instantsearch/compare/v4.0.6...v4.0.7) (2017-07-06)
+
+
+### Bug Fixes
+
+* **results:** revert commit that ensure hits are returned only if right indices (#149) ([df9aa25](https://github.com/algolia/react-instantsearch/commit/df9aa25))
+
+
+
 <a name="4.0.6"></a>
 ## [4.0.6](https://github.com/algolia/react-instantsearch/compare/v4.0.5...v4.0.6) (2017-06-29)
 
