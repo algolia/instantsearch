@@ -4,7 +4,6 @@
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "main": "dist-es5-module/index.js",
-  "module": "dist-es6-module/index.js",
   "author": "Algolia <support@algolia.com>",
   "scripts": {
     "build": "./scripts/build.sh",
@@ -33,7 +32,10 @@
   "files": [
     "dist",
     "dist-es5-module",
-    "dist-es6-module"
+    "dist-es6-module",
+    "instantsearch.js",
+    "connectors.js",
+    "widgets.js"
   ],
   "devDependencies": {
     "argos-cli": "^0.0.8",
