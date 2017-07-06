@@ -1,4 +1,5 @@
-import {connectStarRating} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const renderFn = ({
   items,
@@ -52,4 +53,4 @@ const renderFn = ({
     });
 };
 
-export default connectStarRating(renderFn);
+export default instantsearch.connectors.connectStarRating(renderFn);

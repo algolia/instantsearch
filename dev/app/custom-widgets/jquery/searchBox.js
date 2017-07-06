@@ -1,4 +1,5 @@
-import {connectSearchBox} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const renderFn = ({
   query,
@@ -12,4 +13,4 @@ const renderFn = ({
   }
 };
 
-export default connectSearchBox(renderFn);
+export default instantsearch.connectors.connectSearchBox(renderFn);

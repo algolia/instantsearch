@@ -1,4 +1,5 @@
-import {connectPriceRanges} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const getLabel = ({from, to} = {}) => {
   if (to === undefined) return `≥ $${from}`;
@@ -107,4 +108,4 @@ const renderFn = ({
   renderForm({containerNode, currentRefinement, refine});
 };
 
-export default connectPriceRanges(renderFn);
+export default instantsearch.connectors.connectPriceRanges(renderFn);

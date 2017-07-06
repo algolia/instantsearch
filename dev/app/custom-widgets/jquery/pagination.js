@@ -1,4 +1,5 @@
-import {connectPagination} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const renderFn = ({
   nbPages,
@@ -49,4 +50,4 @@ const renderFn = ({
   }
 };
 
-export default connectPagination(renderFn);
+export default instantsearch.connectors.connectPagination(renderFn);

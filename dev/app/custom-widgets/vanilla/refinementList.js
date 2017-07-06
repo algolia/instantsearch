@@ -1,4 +1,5 @@
-import {connectRefinementList} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 function render(
   {
@@ -60,4 +61,4 @@ function render(
   elements.forEach(el => ul.appendChild(el));
 }
 
-export default connectRefinementList(render);
+export default instantsearch.connectors.connectRefinementList(render);

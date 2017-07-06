@@ -1,4 +1,5 @@
-import {connectToggle} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const renderFn = ({
   value,
@@ -51,4 +52,4 @@ const renderFn = ({
   });
 };
 
-export default connectToggle(renderFn);
+export default instantsearch.connectors.connectToggle(renderFn);

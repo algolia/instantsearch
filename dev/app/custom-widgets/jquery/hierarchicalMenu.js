@@ -1,4 +1,5 @@
-import {connectHierarchicalMenu} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const formatMenuEntry = (createURL, lvl = 0) => item => {
   const countHTML = `
@@ -85,4 +86,4 @@ const renderFn = ({
   }
 };
 
-export default connectHierarchicalMenu(renderFn);
+export default instantsearch.connectors.connectHierarchicalMenu(renderFn);

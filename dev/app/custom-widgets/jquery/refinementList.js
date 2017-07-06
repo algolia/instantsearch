@@ -1,4 +1,5 @@
-import {connectRefinementList} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const renderFn = ({
   items,
@@ -65,4 +66,4 @@ const renderFn = ({
   }
 };
 
-export default connectRefinementList(renderFn);
+export default instantsearch.connectors.connectRefinementList(renderFn);

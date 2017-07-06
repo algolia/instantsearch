@@ -1,4 +1,5 @@
-import {connectInfiniteHits} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const renderFn = ({
   hits,
@@ -51,4 +52,4 @@ const renderFn = ({
   }
 };
 
-export default connectInfiniteHits(renderFn);
+export default instantsearch.connectors.connectInfiniteHits(renderFn);

@@ -1,4 +1,5 @@
-import {connectHits} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const renderFn = ({hits, widgetParams: {containerNode}}) => {
   containerNode.html(
@@ -32,4 +33,4 @@ const renderFn = ({hits, widgetParams: {containerNode}}) => {
   );
 };
 
-export default connectHits(renderFn);
+export default instantsearch.connectors.connectHits(renderFn);

@@ -1,11 +1,14 @@
-import {connectMenu} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+/* global $ */
+import instantsearch from '../../../../index.js';
 
+export default instantsearch.connectors.connectMenu(customMenuRendering);
 function customMenuRendering(opts, isFirstRendering) {
   const container = opts.widgetParams.containerNode;
 
   let input;
   if (isFirstRendering) {
-    input = window.$('<select></select>');
+    input = $('<select></select>');
     input.refine = opts.refine;
     input.on('change', e => {
       input.refine(e.target.value);
@@ -25,7 +28,7 @@ function customMenuRendering(opts, isFirstRendering) {
   );
   const isValueSelected = facetValues.find(f => f.isRefined);
 
-  const noValue = window.$(`<option value='' selected='${!isValueSelected}'></option>`);
+  const noValue = $(`<option value='' selected='${!isValueSelected}'></option>`);
 
   input.html('');
 
@@ -36,5 +39,3 @@ function customMenuRendering(opts, isFirstRendering) {
     });
   }
 }
-
-export default connectMenu(customMenuRendering);

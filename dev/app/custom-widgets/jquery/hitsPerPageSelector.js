@@ -1,4 +1,5 @@
-import {connectHitsPerPage} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
 const renderFn = ({
   items,
@@ -29,4 +30,4 @@ const renderFn = ({
     .on('change', e => { refine(e.target.value); });
 };
 
-export default connectHitsPerPage(renderFn);
+export default instantsearch.connectors.connectHitsPerPage(renderFn);

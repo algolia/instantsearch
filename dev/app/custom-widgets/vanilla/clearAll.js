@@ -1,6 +1,15 @@
-import {connectClearAll} from '../../../../index.es6.js';
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
 
-function render({refine, widgetParams}, isFirstRendering) {
+export default instantsearch.connectors.connectClearAll(render);
+
+function render(
+  {
+    refine,
+    widgetParams,
+  },
+  isFirstRendering,
+) {
   let button;
   if (isFirstRendering) {
     button = document.createElement('button');
@@ -9,5 +18,3 @@ function render({refine, widgetParams}, isFirstRendering) {
     button.addEventListener('click', () => refine());
   }
 }
-
-export default connectClearAll(render);
