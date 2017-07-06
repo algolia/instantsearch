@@ -8,7 +8,7 @@ A component to add facet refinements in the form of a list of checkboxes.
 Basic usage:
 
 ```html
-<ais-refinement-list :placeholder="Find products..."></ais-refinement-list>
+<ais-refinement-list attribute-name="brand"></ais-refinement-list>
 ```
 
 ## Props
