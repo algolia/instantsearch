@@ -58,3 +58,27 @@ import instantsearch from 'instantsearch.js';
 Afterwards, you need to manually load the companion [CSS file](http://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0/dist/instantsearch.min.css) into your page.
 
 You can also load into your page the [Algolia default theme](https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0/dist/instantsearch-theme-algolia.min.css) for the widgets to be styled.
+
+### Enable the power of tree shaking
+
+If you are using webpack2+ or rollup as build system, you are elligible for tree shaking.
+
+Tree shaking is a term commonly used in the JavaScript context for dead-code elimination, or more precisely, live-code import. (You can read more about tree shaking [in webpack documentation](https://webpack.js.org/guides/tree-shaking/)).
+
+With InstantSearch.js it's really simple to use, the example speaks for itself:
+
+```javascript
+// instantsearch() function without reference to the widgets or connectors
+import instantsearch from 'instantsearch.js/instantsearch';
+
+// import connectors individually
+import {connectSearchBox} from 'instantsearch.js/connectors';
+
+// import widgets individually
+import {searchBox} from 'instantsearch.js/widgets';
+
+const search = instantsearch({ ... });
+
+search.addWidget(searchBox({ ... }));
+search.addWidget(connectSearchBox(function() { ... })({ ... }))
+```
