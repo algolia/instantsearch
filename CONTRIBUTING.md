@@ -54,7 +54,7 @@ npm run release
 ### Beta release
 
 ```sh
-npm run release -- -b # or --beta
+npm run release -- --beta
 ```
 
 Append `-beta.x` where x is a number to the version for beta, so 4.0.0-beta.2 for example.
