@@ -39,6 +39,7 @@ const common = [
       reactPackage('src/connectors/*.js'),
       reactPackage('src/core/InstantSearch.js'),
       reactPackage('src/core/Index.js'),
+      reactPackage('src/core/findResultsState.js'),
     ],
     {
       ignore: '**/*.test.js',

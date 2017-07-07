@@ -253,6 +253,66 @@ describe('InstantSearch', () => {
     expect(ism.skipSearch.mock.calls.length).toBe(1);
   });
 
+  it('calls onSearchParameters with the right values if function provided', () => {
+    const ism = {
+      store: {},
+      widgetsManager: {},
+    };
+    createInstantSearchManager.mockImplementation(() => ism);
+    const onSearchParametersMock = jest.fn();
+    const getSearchParameters = jest.fn();
+    const context = { context: 'some' };
+    const props = { props: 'some' };
+    let wrapper = mount(
+      <InstantSearch
+        {...DEFAULT_PROPS}
+        onSearchParameters={onSearchParametersMock}
+      >
+        <div />
+      </InstantSearch>
+    );
+    let childContext = wrapper.instance().getChildContext();
+
+    childContext.ais.onSearchParameters(getSearchParameters, context, props);
+
+    expect(onSearchParametersMock.mock.calls.length).toBe(1);
+    expect(onSearchParametersMock.mock.calls[0][0]).toBe(getSearchParameters);
+    expect(onSearchParametersMock.mock.calls[0][1]).toEqual(context);
+    expect(onSearchParametersMock.mock.calls[0][2]).toEqual(props);
+    expect(onSearchParametersMock.mock.calls[0][3]).toEqual({});
+
+    wrapper = mount(
+      <InstantSearch
+        {...DEFAULT_PROPS}
+        onSearchParameters={onSearchParametersMock}
+        searchState={{ search: 'state' }}
+      >
+        <div />
+      </InstantSearch>
+    );
+
+    childContext = wrapper.instance().getChildContext();
+
+    childContext.ais.onSearchParameters(getSearchParameters, context, props);
+
+    expect(onSearchParametersMock.mock.calls.length).toBe(2);
+    expect(onSearchParametersMock.mock.calls[1][3]).toEqual({
+      search: 'state',
+    });
+
+    wrapper = mount(
+      <InstantSearch {...DEFAULT_PROPS}>
+        <div />
+      </InstantSearch>
+    );
+
+    childContext = wrapper.instance().getChildContext();
+
+    childContext.ais.onSearchParameters(getSearchParameters, context, props);
+
+    expect(onSearchParametersMock.mock.calls.length).toBe(2);
+  });
+
   describe('createHrefForState', () => {
     it('passes through to createURL when it is defined', () => {
       const widgetsIds = [];

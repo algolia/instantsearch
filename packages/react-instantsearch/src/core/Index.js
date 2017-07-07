@@ -49,6 +49,14 @@ class Index extends Component {
     });
   }
 
+  componentWillMount() {
+    this.context.ais.onSearchParameters(
+      this.getSearchParameters,
+      this.getChildContext(),
+      this.props
+    );
+  }
+
   componentWillUnmount() {
     this.unregisterWidget();
   }

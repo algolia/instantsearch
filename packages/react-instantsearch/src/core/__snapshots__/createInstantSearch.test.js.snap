@@ -8,7 +8,9 @@ Object {
   "children": undefined,
   "createURL": undefined,
   "indexName": "name",
+  "onSearchParameters": undefined,
   "onSearchStateChange": undefined,
+  "resultsState": undefined,
   "root": Object {
     "Root": "div",
   },

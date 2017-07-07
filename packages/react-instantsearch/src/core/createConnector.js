@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { has, isEqual } from 'lodash';
-
 import { shallowEqual, getDisplayName, removeEmptyKey } from './utils';
 
 /**
@@ -65,12 +64,15 @@ export default function createConnector(connectorDesc) {
         const { ais: { store, widgetsManager }, multiIndexContext } = context;
         this.state = {
           props: this.getProvidedProps(props),
+          canRender: false, //use to know if a component is rendered (browser), or not (server).
         };
 
         this.unsubscribe = store.subscribe(() => {
-          this.setState({
-            props: this.getProvidedProps(this.props),
-          });
+          if (this.state.canRender) {
+            this.setState({
+              props: this.getProvidedProps(this.props),
+            });
+          }
         });
 
         const getSearchParameters = hasSearchParameters
@@ -102,6 +104,22 @@ export default function createConnector(connectorDesc) {
             transitionState,
             multiIndexContext,
           });
+        }
+      }
+
+      componentDidMount() {
+        this.setState({
+          canRender: true,
+        });
+      }
+
+      componentWillMount() {
+        if (connectorDesc.getSearchParameters) {
+          this.context.ais.onSearchParameters(
+            connectorDesc.getSearchParameters,
+            this.context,
+            this.props
+          );
         }
       }
 

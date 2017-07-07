@@ -268,6 +268,7 @@ describe('createConnector', () => {
               update,
             },
             onSearchStateChange,
+            onSearchParameters: () => {},
           },
         },
       });
@@ -366,6 +367,7 @@ describe('createConnector', () => {
             widgetsManager: {
               registerWidget,
             },
+            onSearchParameters: () => {},
           },
         },
       });
@@ -379,6 +381,54 @@ describe('createConnector', () => {
       expect(getSearchParameters.mock.calls[0][1]).toEqual(props);
       expect(getSearchParameters.mock.calls[0][2]).toBe(state.widgets);
       expect(outputSP).toBe(sp);
+    });
+
+    it('calls onSearchParameters when mounted if getSearchParameters are defined', () => {
+      const getSearchParameters = jest.fn(() => null);
+      const onSearchParameters = jest.fn(() => null);
+      let Connected = createConnector({
+        displayName: 'CoolConnector',
+        getProvidedProps: () => null,
+        getSearchParameters,
+        getId,
+      })(() => null);
+      const state = {
+        widgets: {},
+      };
+      const registerWidget = jest.fn();
+      const props = { hello: 'there' };
+      const context = {
+        ais: {
+          store: {
+            getState: () => state,
+            subscribe: () => null,
+          },
+          onSearchParameters,
+          widgetsManager: {
+            registerWidget,
+          },
+        },
+      };
+      mount(<Connected {...props} />, {
+        context,
+      });
+
+      expect(onSearchParameters.mock.calls.length).toBe(1);
+      expect(onSearchParameters.mock.calls[0][0]).toBe(getSearchParameters);
+      expect(onSearchParameters.mock.calls[0][1]).toEqual(context);
+      expect(onSearchParameters.mock.calls[0][2]).toEqual(props);
+
+      Connected = createConnector({
+        displayName: 'CoolConnector',
+        getProvidedProps: () => null,
+        getId,
+      })(() => null);
+
+      mount(<Connected {...props} />, {
+        context,
+      });
+
+      expect(onSearchParameters.mock.calls.length).toBe(1);
     });
 
     it('calls update when props change', () => {

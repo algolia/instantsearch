@@ -53,7 +53,8 @@ export default function() {
             o.kind &&
             (o.kind === 'component' ||
               o.kind === 'widget' ||
-              o.kind === 'connector')
+              o.kind === 'connector' ||
+              o.kind === 'server-side-rendering')
         ),
         'kind'
       );
@@ -80,9 +81,9 @@ export default function() {
             stats: fileFromMetalsmith && fileFromMetalsmith.stats,
             filename: fileFromMetalsmith && fileFromMetalsmith.filename,
             title,
-            mainTitle: `${data.kind.charAt(0).toUpperCase()}${data.kind.slice(
-              1
-            )}s`, //
+            mainTitle: data.kind === 'server-side-rendering'
+              ? 'Server-side Rendering'
+              : `${data.kind.charAt(0).toUpperCase()}${data.kind.slice(1)}s`, //
             withHeadings: false,
             layout: `${data.kind}.pug`,
             category: data.kind,
