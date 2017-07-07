@@ -4,19 +4,33 @@
     // used for storybooks and regular build
     "development": {
       "presets": [
-        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        ["env", {
+          "targets": {
+            "browsers": ["last 2 versions", "ie >= 9"]
+          }
+        }],
         "react",
         "stage-2"
       ],
       "plugins": [
+        ["transform-runtime", {
+          "helpers": false,
+          "polyfill": false,
+          "regenerator": true
+        }],
         "transform-react-jsx-source",
-        "react-hot-loader/babel"
+        "react-hot-loader/babel",
+        "transform-regenerator",
       ]
     },
     // used for (require();) builds and node
     "commonjs": {
       "presets": [
-        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        ["env", {
+          "targets": {
+            "browsers": ["last 2 versions", "ie >= 9"]
+          }
+        }],
         "react",
         "stage-2",
         "babili"
@@ -25,7 +39,11 @@
     // jest sets node env so we can't use `development`
     "test": {
       "presets": [
-        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        ["env", {
+          "targets": {
+            "browsers": ["last 2 versions", "ie >= 9"]
+          }
+        }],
         "react",
         "stage-2"
       ]
@@ -33,7 +51,12 @@
     // used for es2015 modules build (import; export;)
     "es": {
       "presets": [
-        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] }, "modules": false }],
+        ["env", {
+          "targets": {
+            "browsers": ["last 2 versions", "ie >= 9"]
+          },
+          "modules": false
+        }],
         "react",
         "stage-2",
         "babili"

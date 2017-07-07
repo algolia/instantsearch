@@ -17,8 +17,11 @@ describe('Index', () => {
   const registerWidget = jest.fn();
   const widgetsManager = { registerWidget };
 
-  const context = {
-    ais: { widgetsManager },
+  let context = {
+    ais: {
+      widgetsManager,
+      onSearchParameters: () => {},
+    },
   };
 
   it('validates its props', () => {
@@ -60,5 +63,24 @@ describe('Index', () => {
     expect(childContext.multiIndexContext.targetedIndex).toBe(
       DEFAULT_PROPS.indexName
     );
+  });
+
+  it('calls onSearchParameters when mounted', () => {
+    const onSearchParameters = jest.fn();
+    context = {
+      ais: {
+        widgetsManager,
+        onSearchParameters,
+      },
+    };
+
+    mount(
+      <Index {...DEFAULT_PROPS}>
+        <div />
+      </Index>,
+      { context }
+    );
+
+    expect(onSearchParameters.mock.calls.length).toBe(1);
   });
 });

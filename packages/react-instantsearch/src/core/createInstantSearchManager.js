@@ -18,6 +18,7 @@ export default function createInstantSearchManager({
   initialState = {},
   algoliaClient,
   searchParameters = {},
+  resultsState,
 }) {
   const baseSP = new SearchParameters({
     ...searchParameters,
@@ -39,7 +40,7 @@ export default function createInstantSearchManager({
   const store = createStore({
     widgets: initialState,
     metadata: [],
-    results: null,
+    results: resultsState || null,
     error: null,
     searching: false,
     searchingForFacetValues: false,
