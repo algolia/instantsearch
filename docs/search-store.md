@@ -120,7 +120,7 @@ const store = /* Existing store instance */;
 
 store.stop();
 
-store.index = 'new_index';
+store.indexName = 'new_index';
 store.query = '';
 store.queryParameters({'distinct': true});
 
@@ -135,7 +135,7 @@ In this example, even if the state is mutated several times, only one call to Al
 import { createFromAlgoliaCredentials } from 'vue-instantsearch';
 
 const store = createFromAlgoliaCredentials('appId', 'search_apiKey');
-store.index = 'new_index';
+store.indexName = 'new_index';
 store.start();
 ```
 
