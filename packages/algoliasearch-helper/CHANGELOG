@@ -1,5 +1,9 @@
 CHANGELOG
 
+2.21.0 - 2017-07-08
+ * fix(events): events for all kinds of searches
+ * docs(jsdoc): fix misc spelling and typos
+
 2.20.1 - 2017-03-11
  * fix(build): Remove es2015 module
 
