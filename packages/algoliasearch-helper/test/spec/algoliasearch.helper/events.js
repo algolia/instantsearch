@@ -111,3 +111,67 @@ test('search event should be emitted once when the search is triggered and befor
 
   t.end();
 });
+
+test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function(t) {
+  var clientMock = {addAlgoliaAgent: function() {}};
+  var helper = algoliaSearchHelper(clientMock, 'Index', {
+    disjunctiveFacets: ['city'],
+    facets: ['tower']
+  });
+
+  var count = 0;
+
+  helper.on('searchOnce', function() {
+    count++;
+  });
+
+  clientMock.search = function() {
+    t.equal(
+      count,
+      1,
+      'When the client search function is called the searchOnce' +
+      ' event should have been sent exactly once.');
+  };
+
+  t.equal(count, 0, 'before search');
+
+  helper.searchOnce({}, function() {});
+  t.equal(count, 1, 'final search does trigger the search event');
+
+  t.end();
+});
+
+test('searchForFacetValues event should be emitted once when the search is triggered using' +
+     ' searchForFacetValues and before the request is sent', function(t) {
+  var clientMock = {addAlgoliaAgent: function() {}};
+  var helper = algoliaSearchHelper(clientMock, 'Index', {
+    disjunctiveFacets: ['city'],
+    facets: ['tower']
+  });
+
+  var count = 0;
+
+  helper.on('searchForFacetValues', function() {
+    count++;
+  });
+
+  clientMock.initIndex = function() {
+    return {
+      searchForFacetValues: function() {
+        t.equal(
+          count,
+          1,
+          'When the client search function is called the searchOnce' +
+          ' event should have been sent exactly once.');
+        return Promise.resolve();
+      }
+    };
+  };
+
+  t.equal(count, 0, 'before search');
+
+  helper.searchForFacetValues();
+  t.equal(count, 1, 'final search does trigger the search event');
+
+  t.end();
+});

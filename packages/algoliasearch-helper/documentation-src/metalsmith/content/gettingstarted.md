@@ -278,8 +278,8 @@ values that are meaningful for the current other parameters. Try typing
 This kind of facets are called *conjunctive facets* but they are not the only
 kind of filtering that you can apply with the helper. You can also do:
 
- - disjunctive facetting (for making multiple choices filters)
- - hierarchical facetting (for making hierarchical navigations)
+ - disjunctive faceting (for making multiple choices filters)
+ - hierarchical faceting (for making hierarchical navigations)
  - numerical filtering
  - tag filtering
 

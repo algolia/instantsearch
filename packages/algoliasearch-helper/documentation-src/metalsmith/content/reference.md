@@ -12,7 +12,9 @@ during the search cycle with events:
  - `search`: when the search is sent to Algolia
  - `result`: when the results are retrieved from Algolia
  - `error`: when Algolia sends back an error
- - `searchQueueEmpty`: when there is no more on going searches
+ - `searchQueueEmpty`: when there is no more pending searches
+ - `searchForFacetValues`: when a search is sent to Algolia using `searchForFacetValues`
+ - `searchOnce`: when a search is sent to Algolia using `searchOnce`
 
 You can also read the current parameters of the search using the AlgoliaSearchHelper
 but it might not be the one you expect according to the last results received.
@@ -115,7 +117,7 @@ var helper = AlgoliasearchHelper(client, indexName, {
 ```
 
 The values that can be used for filtering are retrieved with
-the answer from Algolia. They are accesisble using the
+the answer from Algolia. They are accessible using the
 [getFacetValues](#SearchResults#getFacetValues) methods on the
 [SearchResults](#SearchResults) object.
 
@@ -160,7 +162,7 @@ var helper = AlgoliasearchHelper(client, indexName, {
 ```
 
 The values that can be used for filtering are retrieved with
-the answer from Algolia. They are accesisble using the
+the answer from Algolia. They are accessible using the
 [getFacetValues](#SearchResults#getFacetValues) methods on the
 [SearchResults](#SearchResults) object.
 
@@ -425,6 +427,9 @@ Algolia.
 {{> jsdoc jsdoc/helper/event:search}}
 {{> jsdoc jsdoc/helper/event:result}}
 {{> jsdoc jsdoc/helper/event:error}}
+{{> jsdoc jsdoc/helper/event:searchQueueEmpty}}
+{{> jsdoc jsdoc/helper/event:searchOnce}}
+{{> jsdoc jsdoc/helper/event:searchForFacetValues}}
 
 ### Client management
 

@@ -29,7 +29,7 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @typedef SearchResults.Facet
  * @type {object}
  * @property {string} name name of the attribute in the record
- * @property {object} data the facetting data: value, number of entries
+ * @property {object} data the faceting data: value, number of entries
  * @property {object} stats undefined unless facet_stats is retrieved from algolia
  */
 
@@ -38,7 +38,7 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @type {object}
  * @property {string} name name of the current value given the hierarchical level, trimmed.
  * If root node, you get the facet name
- * @property {number} count number of objets matching this hierarchical value
+ * @property {number} count number of objects matching this hierarchical value
  * @property {string} path the current hierarchical value full path
  * @property {boolean} isRefined `true` if the current value was refined, `false` otherwise
  * @property {HierarchicalFacet[]} data sub values for the current level
@@ -60,7 +60,7 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * `numeric`, `facet`, `exclude`, `disjunctive`, `hierarchical`
  * @property {string} attributeName name of the attribute used for filtering
  * @property {string} name the value of the filter
- * @property {number} numericValue the value as a number. Only for numeric fitlers.
+ * @property {number} numericValue the value as a number. Only for numeric filters.
  * @property {string} operator the operator used. Only for numeric filters.
  * @property {number} count the number of computed hits for this filter. Only on facets.
  * @property {boolean} exhaustive if the count is exhaustive
@@ -500,7 +500,7 @@ function SearchResults(state, results) {
 /**
  * Get a facet object with its name
  * @deprecated
- * @param {string} name name of the attribute facetted
+ * @param {string} name name of the faceted attribute
  * @return {SearchResults.Facet} the facet object
  */
 SearchResults.prototype.getFacetByName = function(name) {
@@ -515,7 +515,7 @@ SearchResults.prototype.getFacetByName = function(name) {
  * Get the facet values of a specified attribute from a SearchResults object.
  * @private
  * @param {SearchResults} results the search results to search in
- * @param {string} attribute name of the facetted attribute to search for
+ * @param {string} attribute name of the faceted attribute to search for
  * @return {array|object} facet values. For the hierarchical facets it is an object.
  */
 function extractNormalizedFacetValues(results, attribute) {
@@ -643,7 +643,7 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
 /**
  * Returns the facet stats if attribute is defined and the facet contains some.
  * Otherwise returns undefined.
- * @param {string} attribute name of the facetted attribute
+ * @param {string} attribute name of the faceted attribute
  * @return {object} The stats of the facet
  */
 SearchResults.prototype.getFacetStats = function(attribute) {
