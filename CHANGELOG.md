@@ -1,3 +1,18 @@
+<a name="4.1.0-beta.0"></a>
+# [4.1.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v4.0.7...v4.1.0-beta.0) (2017-07-10)
+
+
+### Bug Fixes
+
+* **argos:** address flakyness (#152) ([84ef8f1](https://github.com/algolia/react-instantsearch/commit/84ef8f1))
+
+
+### Features
+
+* **server-side rendering:** Add API features for server-side rendering ([86b14d1](https://github.com/algolia/react-instantsearch/commit/86b14d1))
+
+
+
 <a name="4.0.7"></a>
 ## [4.0.7](https://github.com/algolia/react-instantsearch/compare/v4.0.6...v4.0.7) (2017-07-06)
 
