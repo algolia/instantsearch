@@ -1,14 +1,43 @@
 {
   "env": {
     "test": {
+      "presets": [
+        ["env", {"targets": { "node": "current" }}],
+        "react",
+        "stage-2"
+      ],
       "plugins": ["babel-plugin-rewire"]
     },
+    "development": {
+      "presets": [
+        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        "react",
+        "stage-2"
+      ]
+    },
     "production": {
+      "presets": [
+        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        "react",
+        "stage-2"
+      ],
       "plugins": [
         "transform-react-remove-prop-types",
-        "transform-react-constant-elements"
+        "transform-react-constant-elements",
+        "transform-react-pure-class-to-function"
+      ]
+    },
+    "production-es6": {
+      "presets": [
+        ["env", { "modules": false, "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        "react",
+        "stage-2"
+      ],
+      "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements",
+        "transform-react-pure-class-to-function"
       ]
     }
-  },
-  "presets": ["es2015", "react", "stage-2"]
+  }
 }
