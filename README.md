@@ -10,7 +10,7 @@
 
 [![InstantSearch.js logo][logo]][website]
 
-InstantSearch projects: **InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github].
+InstantSearch family: **InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github].
 
 ## InstantSearch.js
 
@@ -22,7 +22,7 @@ This repository holds the code for the InstantSearch.js project.
 
 ## Documentation
 
-There's a dedicated documentation available at <https://community.algolia.com/instantsearch.js>.
+There's a dedicated documentation available at <https://community.algolia.com/instantsearch.js/v2>.
 
 ## Contributing, dev, release
 
