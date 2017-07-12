@@ -2,7 +2,6 @@
 /* eslint-disable no-console */
 
 import createStore from './createStore';
-jest.useFakeTimers();
 
 describe('createStore', () => {
   describe('getState', () => {
@@ -18,10 +17,7 @@ describe('createStore', () => {
       const initialState = {};
       const store = createStore(initialState);
       const newState = {};
-
       store.setState(newState);
-      jest.runAllTimers();
-
       expect(store.getState()).toBe(newState);
     });
   });
@@ -35,7 +31,6 @@ describe('createStore', () => {
       const newState = {};
       expect(listener.mock.calls.length).toBe(0);
       store.setState(newState);
-      jest.runAllTimers();
       expect(listener.mock.calls.length).toBe(1);
     });
 
@@ -47,12 +42,10 @@ describe('createStore', () => {
       const newState = {};
       expect(listener.mock.calls.length).toBe(0);
       store.setState(newState);
-      jest.runAllTimers();
       expect(listener.mock.calls.length).toBe(1);
       unsubscribe();
       const newerState = {};
       store.setState(newerState);
-      jest.runAllTimers();
       expect(listener.mock.calls.length).toBe(1);
     });
   });
