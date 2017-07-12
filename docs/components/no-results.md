@@ -8,7 +8,7 @@ A convenience component that will only be showed when no results are to be yield
 Basic usage:
 
 ```html
-<no-results></no-results>
+<ais-no-results></ais-no-results>
 ```
 
 Overriding the default content:
