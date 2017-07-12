@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "4.1.0-beta.0",
+  "version": "4.1.0-beta.1",
   "scripts": {
     "boot": "./scripts/boot.sh",
     "upgrade-deps": "./scripts/upgrade-deps.sh",
