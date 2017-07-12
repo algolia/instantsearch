@@ -42,7 +42,7 @@ Let's go step by step on how to write this custom widget.
 
 ## A custom menu with jQuery
 
-In this example we will create a new custom widget using [connectMenu](/connectors.html#connectMenu) connector.
+In this example we will create a new custom widget using [connectMenu](connectors/connectMenu.html) connector.
 We will cover step by step on how to write a render function used by the connector.
 
 For simplicity, we will write custom widgets with [jQuery](https://jquery.com/) to manipulate the DOM.
