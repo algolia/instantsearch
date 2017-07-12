@@ -1,3 +1,8 @@
+<a name="4.1.0-beta.1"></a>
+# [4.1.0-beta.1](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.0...v4.1.0-beta.1) (2017-07-12)
+
+
+
 <a name="4.1.0-beta.0"></a>
 # [4.1.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v4.0.7...v4.1.0-beta.0) (2017-07-10)
 
