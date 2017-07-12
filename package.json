@@ -105,8 +105,8 @@
     ]
   },
   "dependencies": {
-    "algoliasearch": "^3.22.1",
-    "algoliasearch-helper": "^2.20.1",
+    "algoliasearch": "^3.24.0",
+    "algoliasearch-helper": "^2.21.0",
     "classnames": "^2.2.5",
     "clean-css-cli": "^4.0.9",
     "events": "^1.1.0",
@@ -115,7 +115,7 @@
     "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "rheostat": "^2.1.0",
+    "rheostat": "^2.1.1",
     "to-factory": "^1.0.0",
     "uglify-js": "2"
   },

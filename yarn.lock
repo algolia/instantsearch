@@ -86,19 +86,18 @@ ajv@^5.0.0:
     json-schema-traverse "^0.3.0"
     json-stable-stringify "^1.0.1"
 
-algoliasearch-helper@^2.20.1:
-  version "2.20.1"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.20.1.tgz#140bfd5e9059f2982907c02a99634c647396a590"
+algoliasearch-helper@^2.21.0:
+  version "2.21.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.21.0.tgz#8c439e4df115a7418f8b8851dc3732777f042681"
   dependencies:
     events "^1.1.0"
     lodash "^4.13.1"
-    marked "^0.3.5"
     qs "^6.2.1"
     util "^0.10.3"
 
-algoliasearch@^3.22.1:
-  version "3.23.0"
-  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.23.0.tgz#8ad8125d349a21fac6117017528c2a3b0e20ee5f"
+algoliasearch@^3.24.0:
+  version "3.24.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.24.0.tgz#d0a6ac2963b781d2fb059a3a853fe18765673346"
   dependencies:
     agentkeepalive "^2.2.0"
     debug "^2.6.8"
@@ -5447,7 +5446,7 @@ marked-terminal@^1.6.2:
     lodash.assign "^4.2.0"
     node-emoji "^1.4.1"
 
-marked@^0.3.5, marked@^0.3.6:
+marked@^0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.6.tgz#b2c6c618fccece4ef86c4fc6cb8a7cbf5aeda8d7"
 
@@ -7285,9 +7284,12 @@ rgb2hex@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/rgb2hex/-/rgb2hex-0.1.0.tgz#ccd55f860ae0c5c4ea37504b958e442d8d12325b"
 
-rheostat@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/rheostat/-/rheostat-2.1.0.tgz#0dfa569a3cd9cdd5639ad7bb06b3499b96af68ca"
+rheostat@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/rheostat/-/rheostat-2.1.1.tgz#8279490098251b22ce483e419127bbbdd12218c1"
+  dependencies:
+    object.assign "^4.0.4"
+    prop-types "^15.5.10"
 
 right-align@^0.1.1:
   version "0.1.3"
