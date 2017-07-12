@@ -7284,9 +7284,12 @@ rgb2hex@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/rgb2hex/-/rgb2hex-0.1.0.tgz#ccd55f860ae0c5c4ea37504b958e442d8d12325b"
 
-rheostat@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/rheostat/-/rheostat-2.1.0.tgz#0dfa569a3cd9cdd5639ad7bb06b3499b96af68ca"
+rheostat@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/rheostat/-/rheostat-2.1.1.tgz#8279490098251b22ce483e419127bbbdd12218c1"
+  dependencies:
+    object.assign "^4.0.4"
+    prop-types "^15.5.10"
 
 right-align@^0.1.1:
   version "0.1.3"

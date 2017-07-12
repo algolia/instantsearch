@@ -44,7 +44,7 @@ yarn dev:docs
 
 Go to <http://localhost:8080> for the example playground.
 
-Go to <http://localhost:4000> for the documentation website.
+Go to <http://localhost:3000> for the documentation website.
 
 ## Code
 
