@@ -24,6 +24,10 @@ This repository holds the code for the InstantSearch.js project.
 
 There's a dedicated documentation available at <https://community.algolia.com/instantsearch.js/v2>.
 
+## Support
+
+We currently support the last two versions of major browsers. (IE10+)
+
 ## Contributing, dev, release
 
 We welcome all contributors, from casual to regular. You are only
