@@ -1,6 +1,11 @@
 import expect from 'expect';
 import {searchBox, prepareScreenshot} from './utils.js';
 
+const hide = [
+  '.ais-stats--body', // Flaky X ms information.
+  '.media-object', // Flaky jpg rendering
+];
+
 describe('searchBox', () => {
   describe('when there is no query', () => {
     beforeEach(() => searchBox.clear());
@@ -10,9 +15,7 @@ describe('searchBox', () => {
     it('triggers an empty search', () => {
       expect(browser.getText('#hits')).toNotContain('MP3');
       prepareScreenshot();
-      browser.checkDocument({
-        hide: ['.ais-stats--body'], // Flaky X ms information.
-      });
+      browser.checkDocument({ hide });
     });
   });
 
@@ -24,9 +27,7 @@ describe('searchBox', () => {
     it('triggers a new search', () => {
       expect(browser.getText('#hits')).toContain('MP3');
       prepareScreenshot();
-      browser.checkDocument({
-        hide: ['.ais-stats--body'], // Flaky X ms information.
-      });
+      browser.checkDocument({ hide });
     });
   });
 });
