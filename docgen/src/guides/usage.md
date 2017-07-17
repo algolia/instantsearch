@@ -59,7 +59,7 @@ Afterwards, you need to manually load the companion [CSS file](http://cdn.jsdeli
 
 You can also load into your page the [Algolia default theme](https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0/dist/instantsearch-theme-algolia.min.css) for the widgets to be styled.
 
-### Enable the power of tree shaking
+### Optimize your build with tree shaking
 
 If you are using webpack2+ or rollup as build system, you are elligible for tree shaking.
 
