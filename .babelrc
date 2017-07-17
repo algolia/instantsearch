@@ -10,14 +10,14 @@
     },
     "development": {
       "presets": [
-        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 10"] } }],
         "react",
         "stage-2"
       ]
     },
     "production": {
       "presets": [
-        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 10"] } }],
         "react",
         "stage-2"
       ],
@@ -29,7 +29,7 @@
     },
     "production-es6": {
       "presets": [
-        ["env", { "modules": false, "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+        ["env", { "modules": false, "targets": { "browsers": ["last 2 versions", "ie >= 10"] } }],
         "react",
         "stage-2"
       ],
