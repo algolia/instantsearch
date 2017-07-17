@@ -15,6 +15,27 @@
 @import 'stats';
 @import 'toggle';
 
+.ais-clear-all,
+.ais-current-refined-values,
+.ais-hierarchical-menu,
+.ais-menu,
+.ais-pagination,
+.ais-price-ranges,
+.ais-range-slider,
+.ais-refinement-list,
+.ais-search-box,
+.ais-star-rating,
+.ais-stats,
+.ais-toggle {
+  box-sizing: border-box;
+
+  & > *,
+  & > *:after,
+  & > *:before {
+    box-sizing: border-box;
+  }
+}
+
 .ais-header {
   border-bottom: 2px solid #eee;
   font-size: .8em;
