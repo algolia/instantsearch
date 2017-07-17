@@ -18,7 +18,7 @@ prop where you can completely reorder or filter items.
 
 ## Example
 
-The following example will show you how to change the default sort order of the [`<RefinementList/>`](widgets/RefinementList.html) widget.
+The following example will show you how to change the default sort order of the [`<RefinementList>`](widgets/RefinementList.html) widget.
 
 ```jsx
 import {InstantSearch, RefinementList} from 'react-instantsearch/dom';

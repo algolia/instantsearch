@@ -12,7 +12,7 @@ Whenever you want to:
 * share a single SearchBox
 * build an autocomplete menu targeting different indices
 
-You can use multiple [`<Index>`](widgets/<Index>.html) instances.
+You can use multiple [`<Index>`](widgets/<Index>.html) components.
 
 The `<Index>` component takes one prop, the targeted index name.
 
