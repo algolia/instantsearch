@@ -18,9 +18,9 @@ If you are looking for an example using another solution, read how to do custom 
 
 ## Three steps custom implementation
 
-We provide a new API entry, `createIntantSearch`, available under `'react-instantsearch/server'`.
+We provide a new API entry, `createInstantSearch`, available under `'react-instantsearch/server'`.
 
-When called, `createIntantSearch` returns:
+When called, `createInstantSearch` returns:
 
 * A dedicated [`<InstantSearch>`](widgets/InstantSearch.html) component accepting a `resultsState` prop containing the Algolia results.
 * A `findResultsState` function to retrieve a `resultsState`.
