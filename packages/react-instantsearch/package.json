@@ -18,18 +18,18 @@
     "url": "https://github.com/algolia/react-instantsearch/"
   },
   "dependencies": {
-    "algoliasearch": "^3.21.1",
-    "algoliasearch-helper": "2.19.0",
+    "algoliasearch": "^3.24.0",
+    "algoliasearch-helper": "^2.21.0",
     "classnames": "^2.2.5",
     "lodash": "^4.17.4",
-    "prop-types": "^15.5.8"
+    "prop-types": "^15.5.10"
   },
   "license": "MIT",
   "devDependencies": {
-    "enzyme": "^2.8.1",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
-    "react-native": "^0.41.2",
-    "react-test-renderer": "^15.5.4"
+    "enzyme": "^2.9.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-native": "^0.46.3",
+    "react-test-renderer": "^15.6.1"
   }
 }

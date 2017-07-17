@@ -13,11 +13,11 @@
     "build-and-publish": "./scripts/build-and-publish.sh"
   },
   "devDependencies": {
-    "autoprefixer": "^6.7.5",
+    "autoprefixer": "^7.1.2",
     "cssnano": "^3.10.0",
-    "node-sass": "^4.5.0",
-    "postcss": "^5.2.15",
-    "postcss-scss": "^0.4.1"
+    "node-sass": "^4.5.3",
+    "postcss": "^6.0.6",
+    "postcss-scss": "^1.0.2"
   },
   "author": {
     "name": "Algolia, Inc.",

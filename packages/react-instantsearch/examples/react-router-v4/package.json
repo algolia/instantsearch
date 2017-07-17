@@ -1,7 +1,7 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "^0.8.5"
+    "react-scripts": "^1.0.10"
   },
   "dependencies": {
     "lodash": "^4.16.6",
@@ -11,7 +11,7 @@
     "react-dom": "^15.5.4",
     "react-instantsearch": "beta",
     "react-instantsearch-theme-algolia": "beta",
-    "react-router-dom": "^4.1.1"
+    "react-router-dom": "^4.1.2"
   },
   "scripts": {
     "start": "react-scripts start"
