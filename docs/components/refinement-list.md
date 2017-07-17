@@ -13,12 +13,12 @@ Basic usage:
 
 ## Props
 
-| Name          | Type              | Default                                        | Description                                    |
-|:--------------|:------------------|:-----------------------------------------------|:-----------------------------------------------|
-| attributeName | String            |                                                | The attribute name to refine on                |
-| operator      | `'and'` or `'or'` | `'or'`                                         | Apply operator on refinement                   |
-| limit         | Number            | `10`                                           | The number of values to display                |
-| sortBy        | Array             | `['isRefined:desc', 'count:desc', 'name:asc']` | The sorting strategy for the refinement values |
+| Name           | Type              | Default                                        | Description                                    |
+|:---------------|:------------------|:-----------------------------------------------|:-----------------------------------------------|
+| attribute-name | String            |                                                | The attribute name to refine on                |
+| operator       | `'and'` or `'or'` | `'or'`                                         | Apply operator on refinement                   |
+| limit          | Number            | `10`                                           | The number of values to display                |
+| sort-by        | Array             | `['isRefined:desc', 'count:desc', 'name:asc']` | The sorting strategy for the refinement values |
 
 ## Slots
 

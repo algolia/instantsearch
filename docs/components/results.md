@@ -22,10 +22,10 @@ Basic usage:
 
 ## Props
 
-| Name           | Type    | Default | Description                                                                    |
-|:---------------|:--------|:--------|:-------------------------------------------------------------------------------|
-| stack          | Boolean | `false` | If true, will append results of next page to current results when page changes |
-| resultsPerPage | Number  | ``      | The number of results to display                                               |
+| Name             | Type    | Default | Description                                                                    |
+|:-----------------|:--------|:--------|:-------------------------------------------------------------------------------|
+| stack            | Boolean | `false` | If true, will append results of next page to current results when page changes |
+| results-per-page | Number  | ``      | The number of results to display                                               |
 
 
 ## Slots

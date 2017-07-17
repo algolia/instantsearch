@@ -8,22 +8,22 @@ A component to filter results based on a rating.
 Basic usage:
 
 ```html
-<ais-rating :attributeName="rating"></ais-rating>
+<ais-rating :attribute-name="rating"></ais-rating>
 ```
 
 Custom boundaries:
 
 ```html
-<ais-rating :attributeName="score" :max="10"></ais-rating>
+<ais-rating :attribute-name="score" :max="10"></ais-rating>
 ```
 
 ## Props
 
-| Name          | Type   | Default | Description                     |
-|:--------------|:-------|:--------|:--------------------------------|
-| attributeName | String |         | The attribute name to refine on |
-| min           | Number | `1`     | Apply operator on refinement    |
-| max           | Number | `5`     | The number of values to display |
+| Name           | Type   | Default | Description                     |
+|:---------------|:-------|:--------|:--------------------------------|
+| attribute-name | String |         | The attribute name to refine on |
+| min            | Number | `1`     | Apply operator on refinement    |
+| max            | Number | `5`     | The number of values to display |
 
 ## Slots
 

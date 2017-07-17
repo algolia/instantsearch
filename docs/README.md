@@ -76,14 +76,14 @@ Open the `src/App.vue` component. Then replace the whole beginning of the file, 
 ```html
 <template>
   <ais-index
-    appId="latency"
-    apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
-    indexName="bestbuy"
+    app-id="latency"
+    api-key="3d9875e51fbd20c7754e65422f7ce5e1"
+    index-name="bestbuy"
   >
     <ais-search-box />
     <ais-results>
       <template scope="{ result }">
-        <h2><ais-highlight :result="result" attributeName="name" /></h2>
+        <h2><ais-highlight :result="result" attribute-name="name" /></h2>
       </template>
     </ais-results>
   </ais-index>
@@ -104,9 +104,9 @@ All search components needs to be wrapped in an Index component.
 
 ```html
 <ais-index
-  appId="latency"
-  apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
-  indexName="bestbuy"
+  app-id="latency"
+  api-key="3d9875e51fbd20c7754e65422f7ce5e1"
+  index-name="bestbuy"
 >
   <!-- Search components go here -->
 </ais-index>

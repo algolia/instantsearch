@@ -105,10 +105,10 @@ Here is the same example as above with a different syntax, binding the `query`.
 <!-- App.vue -->
 <template>
   <input v-model="query">
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="first" :query-parameters="{query: query}">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first" :query-parameters="{ query: query }">
     <ais-results />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="second" :query-parameters="{query: query}">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second" :query-parameters="{ query: query }">
     <ais-results />
   </ais-index>
 </template>
