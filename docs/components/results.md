@@ -25,7 +25,7 @@ Basic usage:
 | Name             | Type    | Default | Description                                                                    |
 |:-----------------|:--------|:--------|:-------------------------------------------------------------------------------|
 | stack            | Boolean | `false` | If true, will append results of next page to current results when page changes |
-| results-per-page | Number  | ``      | The number of results to display                                               |
+| results-per-page | Number  | `20`    | The number of results to display                                               |
 
 
 ## Slots
