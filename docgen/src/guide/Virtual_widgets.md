@@ -30,8 +30,8 @@ const App = () =>
 ```
 
 **Notes**:
-* The `<Hoodies/>` component is what we call a virtual widget.
-* Virtual widgets allows you to pre refine any widget without rendering anything.
+* The `<Hoodies>` component is what we call a virtual widget.
+* Virtual widgets allow you to pre refine any widget without rendering anything.
 * The [search state guide](guide/Search_state.html) details all widgets and connectors state values..
 
 <div class="guide-nav">

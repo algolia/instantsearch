@@ -6,13 +6,13 @@ category: guide
 navWeight: 68
 ---
 
-You can allow the user to search inside lists of items like [`<RefinementList/>`](widgets/RefinementList.html), [`<Menu/>`](widgets/Menu.html) widgets
-or [`connectRefinementList`](connectors/connectRefinementList.html) and [`<connectMenu/>`](widgets/Menu.html) connectors.
+You can allow the user to search inside lists of items like [`<RefinementList>`](widgets/RefinementList.html), [`<Menu>`](widgets/Menu.html) widgets
+or [`connectRefinementList`](connectors/connectRefinementList.html) and [`connectMenu`](widgets/Menu.html) connectors.
 
 ## Using widgets
 Use the `withSearchBox` prop to add a nice search box to supported widgets:
-- [`<RefinementList/>`](widgets/RefinementList.html)
-- [`<Menu/>`](widgets/Menu.html)
+- [`<RefinementList>`](widgets/RefinementList.html)
+- [`<Menu>`](widgets/Menu.html)
 
 ```jsx
 <RefinementList attributeName="products" withSearchBox />
