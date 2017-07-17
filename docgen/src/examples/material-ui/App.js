@@ -320,7 +320,10 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
               subtitle={<Highlight attributeName="name" hit={hit} />}
             />
             <div style={imageHolderStyle}>
-              <img src={hit.image} style={{ maxWidth: 120, maxHeight: 120 }} />
+              <img
+                src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${hit.image}`}
+                style={{ maxWidth: 120, maxHeight: 120 }}
+              />
             </div>
             <CardTitle
               title={

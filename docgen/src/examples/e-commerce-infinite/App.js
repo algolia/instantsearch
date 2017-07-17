@@ -174,7 +174,11 @@ const Hit = ({ item }) => {
   return (
     <article className="hit">
       <div className="product-picture-wrapper">
-        <div className="product-picture"><img src={`${item.image}`} /></div>
+        <div className="product-picture">
+          <img
+            src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${item.image}`}
+          />
+        </div>
       </div>
       <div className="product-desc-wrapper">
         <div className="product-name">
