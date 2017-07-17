@@ -1,14 +1,14 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "^0.8.5"
+    "react-scripts": "^1.0.10"
   },
   "dependencies": {
     "google-map-react": "^0.24.0",
-    "prop-types": "^15.5.8",
-    "qs": "^6.3.0",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "prop-types": "^15.5.10",
+    "qs": "^6.5.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "react-instantsearch": "beta",
     "react-instantsearch-theme-algolia": "beta"
   },

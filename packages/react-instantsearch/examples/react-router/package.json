@@ -1,17 +1,17 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "^0.9.2"
+    "react-scripts": "^1.0.10"
   },
   "dependencies": {
-    "lodash": "^4.16.6",
-    "prop-types": "^15.5.8",
-    "qs": "^6.3.1",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "lodash": "^4.17.4",
+    "prop-types": "^15.5.10",
+    "qs": "^6.5.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "react-instantsearch": "beta",
     "react-instantsearch-theme-algolia": "beta",
-    "react-router": "^3.0.0"
+    "react-router": "^4.1.2"
   },
   "scripts": {
     "start": "react-scripts start"

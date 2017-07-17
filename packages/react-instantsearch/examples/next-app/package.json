@@ -6,14 +6,14 @@
     "start": "next start"
   },
   "dependencies": {
-    "css-loader": "^0.28.1",
+    "css-loader": "^0.28.4",
     "next": "^2.4.7",
     "prop-types": "^15.5.10",
-    "qs": "^6.4.0",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
+    "qs": "^6.5.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
     "react-instantsearch": "beta",
     "react-instantsearch-theme-algolia": "beta",
-    "style-loader": "^0.17.0"
+    "style-loader": "^0.18.2"
   }
 }
