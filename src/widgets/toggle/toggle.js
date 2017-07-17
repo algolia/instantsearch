@@ -132,7 +132,7 @@ toggle({
  *
  * This widget is particularly useful if you have a boolean value in the records.
  *
- * The attribute has to in the list of attributes for faceting in the dashboard.
+ * The attribute has to be in the list of attributes for faceting in the dashboard.
  * @type {WidgetFactory}
  * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
  * @return {Widget} A new instance of the Toggle widget
