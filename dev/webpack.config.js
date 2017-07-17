@@ -126,9 +126,9 @@ module.exports = {
     __DEV__ &&
       new AutoDllPlugin({
         inject: true,
-        context: __dirname,
+        context: path.join(__dirname, '..'),
         filename: '[name].[hash].js',
-        entry: {vendor: Object.keys(require('../package.json').dependencies)},
+        entry: {vendor: [...Object.keys(require('../package.json').dependencies), 'dev-novel']},
       }),
 
     new HappyPack({
