@@ -1,6 +1,3 @@
 module.exports = {
-  "extends": ["algolia"],
-  "env": {
-    "jest": true
-  }
-};
+  extends: ['algolia', 'algolia/jest', 'algolia/react']
+}
