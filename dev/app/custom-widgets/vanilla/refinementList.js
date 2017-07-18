@@ -2,16 +2,8 @@
 import instantsearch from '../../../../index.js';
 
 function render(
-  {
-    items,
-    refine,
-    canRefine,
-    widgetParams: {
-      containerNode,
-    },
-    currentRefinement,
-  },
-  isFirstRendering,
+  { items, refine, widgetParams: { containerNode } },
+  isFirstRendering
 ) {
   let ul;
   if (isFirstRendering) {

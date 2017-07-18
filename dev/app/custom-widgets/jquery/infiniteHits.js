@@ -5,9 +5,10 @@ const renderFn = ({
   hits,
   showMore,
   isLastPage,
-  widgetParams: {containerNode},
+  widgetParams: { containerNode },
 }) => {
-  const hitsHTML = hits.map(hit => `
+  const hitsHTML = hits.map(
+    hit => `
     <div class="hit">
       <div class="media">
         <a
@@ -25,15 +26,14 @@ const renderFn = ({
           <h4>${hit._highlightResult.name.value}</h4>
           <p>${hit._highlightResult.description.value}</p>
 
-          ${
-            hit.free_shipping
+          ${hit.free_shipping
             ? '<span class="badge pull-right">Free shipping</span>'
-            : ''
-          }
+            : ''}
         </div>
       </div>
     </div>
-  `);
+  `
+  );
 
   containerNode.find('button[data-show-more]').off('click');
   containerNode.html(hitsHTML);

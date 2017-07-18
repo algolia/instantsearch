@@ -2,7 +2,7 @@
 import instantsearch from '../../../../index.js';
 import bel from 'bel';
 
-function render({hits, widgetParams: {containerNode}}) {
+function render({ hits, widgetParams: { containerNode } }) {
   const content = bel`<div>
     ${hits.map(hit => {
       const title = bel`<h4></h4>`;
@@ -21,7 +21,9 @@ function render({hits, widgetParams: {containerNode}}) {
                 <h3 class="pull-right text-right text-info">$${hit.price}</h3>
                 <h4>${title}</h4>
                 <p>${description}</p>
-                ${hit.free_shipping ? bel`<span class="badge pull-right">Free Shipping</span>` : ''}
+                ${hit.free_shipping
+                  ? bel`<span class="badge pull-right">Free Shipping</span>`
+                  : ''}
               </div>
             </div>
             <a href="#">Go back to top</a>

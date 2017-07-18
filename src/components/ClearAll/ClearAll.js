@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Template from '../Template.js';
-import {isSpecialClick} from '../../lib/utils.js';
+import { isSpecialClick } from '../../lib/utils.js';
 
 import autoHideContainer from '../../decorators/autoHideContainer.js';
 import headerFooter from '../../decorators/headerFooter.js';
@@ -12,8 +12,10 @@ export class RawClearAll extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.props.url !== nextProps.url ||
-      this.props.hasRefinements !== nextProps.hasRefinements;
+    return (
+      this.props.url !== nextProps.url ||
+      this.props.hasRefinements !== nextProps.hasRefinements
+    );
   }
 
   handleClick(e) {
@@ -27,8 +29,8 @@ export class RawClearAll extends React.Component {
   }
 
   render() {
-    const {hasRefinements, cssClasses} = this.props;
-    const data = {hasRefinements};
+    const { hasRefinements, cssClasses } = this.props;
+    const data = { hasRefinements };
 
     return (
       <a
@@ -45,7 +47,8 @@ export class RawClearAll extends React.Component {
           templateKey="link"
           {...this.props.templateProps}
         />
-      </a>);
+      </a>
+    );
   }
 }
 

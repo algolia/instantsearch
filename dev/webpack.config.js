@@ -17,16 +17,16 @@ module.exports = {
 
   entry: __DEV__
     ? {
-      bundle: [
-        'webpack-dev-server/client?http://localhost:8080',
-        'webpack/hot/only-dev-server',
-        './dev/app',
-      ],
-      instantsearch: './index.js',
-    }
+        bundle: [
+          'webpack-dev-server/client?http://localhost:8080',
+          'webpack/hot/only-dev-server',
+          './dev/app',
+        ],
+        instantsearch: './index.js',
+      }
     : {
-      bundle: './dev/app',
-    },
+        bundle: './dev/app',
+      },
 
   output: {
     path: path.join(__dirname, 'dist'),
@@ -52,15 +52,15 @@ module.exports = {
         use: __DEV__
           ? 'happypack/loader?id=style'
           : ExtractTextPlugin.extract({
-            fallback: 'style-loader',
-            use: [
-              {
-                loader: 'css-loader',
-                options: {sourceMap: true, minimize: true},
-              },
-                {loader: 'sass-loader', options: {sourceMap: true}},
-            ],
-          }),
+              fallback: 'style-loader',
+              use: [
+                {
+                  loader: 'css-loader',
+                  options: { sourceMap: true, minimize: true },
+                },
+                { loader: 'sass-loader', options: { sourceMap: true } },
+              ],
+            }),
       },
       __DEV__ && {
         test: require.resolve('react'),
@@ -77,7 +77,7 @@ module.exports = {
   resolve: {
     modules: ['node_modules', path.join(__dirname, '..', 'node_modules')],
     alias: {
-      'react': 'preact-compat',
+      react: 'preact-compat',
       'react-dom': 'preact-compat',
     },
   },
@@ -105,14 +105,14 @@ module.exports = {
   },
 
   plugins: clean([
-    new webpack.LoaderOptionsPlugin({debug: __DEV__}),
+    new webpack.LoaderOptionsPlugin({ debug: __DEV__ }),
 
     // HOT MODULE FOR DEV
     __DEV__ && new webpack.HotModuleReplacementPlugin(),
     __DEV__ && new webpack.NoEmitOnErrorsPlugin(),
 
     new webpack.DefinePlugin({
-      'process.env': {NODE_ENV: JSON.stringify(process.env.NODE_ENV)},
+      'process.env': { NODE_ENV: JSON.stringify(process.env.NODE_ENV) },
     }),
 
     // Generate an `index.html` with all the scripts and styles included
@@ -128,7 +128,12 @@ module.exports = {
         inject: true,
         context: path.join(__dirname, '..'),
         filename: '[name].[hash].js',
-        entry: {vendor: [...Object.keys(require('../package.json').dependencies), 'dev-novel']},
+        entry: {
+          vendor: [
+            ...Object.keys(require('../package.json').dependencies),
+            'dev-novel',
+          ],
+        },
       }),
 
     new HappyPack({
@@ -140,9 +145,9 @@ module.exports = {
       new HappyPack({
         loaders: [
           'style-loader',
-          {loader: 'css-loader', options: {sourceMap: true}},
-          {loader: 'postcss-loader', options: {sourceMap: true}},
-          {loader: 'sass-loader', options: {sourceMap: true}},
+          { loader: 'css-loader', options: { sourceMap: true } },
+          { loader: 'postcss-loader', options: { sourceMap: true } },
+          { loader: 'sass-loader', options: { sourceMap: true } },
         ],
         id: 'style',
       }),

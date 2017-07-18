@@ -20,12 +20,10 @@ const renderer = ({
   containerNode,
   transformData,
   templates,
-}) => ({
-  hits, // eslint-disable-line
-  results,
-  templateProps,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  { hits: receivedHits, results, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -39,7 +37,7 @@ const renderer = ({
   ReactDOM.render(
     <Hits
       cssClasses={cssClasses}
-      hits={hits}
+      hits={receivedHits}
       results={results}
       templateProps={renderState.templateProps}
     />,
@@ -138,7 +136,7 @@ export default function hits({
 
   try {
     const makeHits = connectHits(specializedRenderer);
-    return makeHits({escapeHits});
+    return makeHits({ escapeHits });
   } catch (e) {
     throw new Error(usage);
   }

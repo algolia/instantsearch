@@ -3,12 +3,22 @@ import React from 'react';
 import Hits from './Hits.js';
 
 class InfiniteHits extends React.Component {
-
   render() {
-    const {cssClasses, hits, results, showMore, showMoreLabel, templateProps} = this.props;
-    const btn = this.props.isLastPage ?
-     <button disabled>{showMoreLabel}</button> :
-     <button onClick={showMore}>{showMoreLabel}</button>;
+    const {
+      cssClasses,
+      hits,
+      results,
+      showMore,
+      showMoreLabel,
+      templateProps,
+    } = this.props;
+    const btn = this.props.isLastPage
+      ? <button disabled>
+          {showMoreLabel}
+        </button>
+      : <button onClick={showMore}>
+          {showMoreLabel}
+        </button>;
 
     return (
       <div>

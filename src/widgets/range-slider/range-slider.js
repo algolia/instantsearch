@@ -28,12 +28,10 @@ const renderer = ({
   collapsible,
   renderState,
   templates,
-}) => ({
-  refine,
-  range: {min, max},
-  start,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  { refine, range: { min, max }, start, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -50,17 +48,17 @@ const renderer = ({
 
   ReactDOM.render(
     <Slider
-      cssClasses={ cssClasses }
-      refine={ refine }
-      min={ min }
-      max={ max }
-      values={ [minValue, maxValue] }
-      tooltips={ tooltips }
-      step={ step }
-      pips={ pips }
-      shouldAutoHideContainer={ shouldAutoHideContainer }
-      collapsible={ collapsible }
-      templateProps={ renderState.templateProps }
+      cssClasses={cssClasses}
+      refine={refine}
+      min={min}
+      max={max}
+      values={[minValue, maxValue]}
+      tooltips={tooltips}
+      step={step}
+      pips={pips}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      collapsible={collapsible}
+      templateProps={renderState.templateProps}
     />,
     containerNode
   );
@@ -150,19 +148,21 @@ rangeSlider({
  *   })
  * );
  */
-export default function rangeSlider({
-  container,
-  attributeName,
-  min,
-  max,
-  templates = defaultTemplates,
-  cssClasses: userCssClasses = {},
-  step = 1,
-  pips = true,
-  precision = 2,
-  tooltips = true,
-  autoHideContainer = true,
-} = {}) {
+export default function rangeSlider(
+  {
+    container,
+    attributeName,
+    min,
+    max,
+    templates = defaultTemplates,
+    cssClasses: userCssClasses = {},
+    step = 1,
+    pips = true,
+    precision = 2,
+    tooltips = true,
+    autoHideContainer = true,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -188,7 +188,7 @@ export default function rangeSlider({
 
   try {
     const makeWidget = connectRangeSlider(specializedRenderer);
-    return makeWidget({attributeName, min, max, precision});
+    return makeWidget({ attributeName, min, max, precision });
   } catch (e) {
     throw new Error(usage);
   }

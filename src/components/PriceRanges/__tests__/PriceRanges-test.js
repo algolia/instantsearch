@@ -1,6 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
-import {RawPriceRanges as PriceRanges} from '../PriceRanges';
+import { RawPriceRanges as PriceRanges } from '../PriceRanges';
 import renderer from 'react-test-renderer';
 import TestUtils from 'react-dom/test-utils';
 
@@ -71,9 +71,9 @@ describe('PriceRanges', () => {
         // Given
         const component = getComponentWithMockRendering(props);
 
-        const tree = renderer.create(
-          component.getItemFromFacetValue(facetValue)
-        ).toJSON();
+        const tree = renderer
+          .create(component.getItemFromFacetValue(facetValue))
+          .toJSON();
         expect(tree).toMatchSnapshot();
       });
       it('should display one active range item correctly', () => {
@@ -81,9 +81,9 @@ describe('PriceRanges', () => {
         const component = getComponentWithMockRendering(props);
         facetValue.isRefined = true;
 
-        const tree = renderer.create(
-          component.getItemFromFacetValue(facetValue)
-        ).toJSON();
+        const tree = renderer
+          .create(component.getItemFromFacetValue(facetValue))
+          .toJSON();
         expect(tree).toMatchSnapshot();
       });
     });
@@ -91,18 +91,18 @@ describe('PriceRanges', () => {
     describe('refine', () => {
       it('should call refine from props', () => {
         // Given
-        const mockEvent = {preventDefault: sinon.spy()};
+        const mockEvent = { preventDefault: sinon.spy() };
         const props = {
           refine: sinon.spy(),
         };
         const component = getComponentWithMockRendering(props);
 
         // When
-        component.refine({from: 1, to: 10}, mockEvent);
+        component.refine({ from: 1, to: 10 }, mockEvent);
 
         // Then
         expect(mockEvent.preventDefault.called).toBe(true);
-        expect(props.refine.calledWith({from: 1, to: 10})).toBe(true);
+        expect(props.refine.calledWith({ from: 1, to: 10 })).toBe(true);
       });
     });
 
@@ -111,15 +111,13 @@ describe('PriceRanges', () => {
         // Given
         const props = {
           cssClasses: {},
-          labels: {button: 'hello'},
+          labels: { button: 'hello' },
           currency: '$',
           refine() {},
-          facetValues: [{from: 0, to: 10}, {from: 10, to: 20}],
+          facetValues: [{ from: 0, to: 10 }, { from: 10, to: 20 }],
         };
         const component = getComponentWithMockRendering(props);
-        const tree = renderer.create(
-          component.getForm()
-        ).toJSON();
+        const tree = renderer.create(component.getForm()).toJSON();
         expect(tree).toMatchSnapshot();
       });
     });
@@ -129,11 +127,14 @@ describe('PriceRanges', () => {
     it('should have the right number of items', () => {
       const props = {
         ...defaultProps,
-        facetValues: [{from: 0, to: 10}, {from: 1, to: 10}, {from: 2, to: 10}, {from: 3, to: 10}],
+        facetValues: [
+          { from: 0, to: 10 },
+          { from: 1, to: 10 },
+          { from: 2, to: 10 },
+          { from: 3, to: 10 },
+        ],
       };
-      const tree = renderer.create(
-        <PriceRanges {...props} />
-      ).toJSON();
+      const tree = renderer.create(<PriceRanges {...props} />).toJSON();
       expect(tree).toMatchSnapshot();
     });
     it('should wrap the output in a list CSS class', () => {
@@ -142,11 +143,14 @@ describe('PriceRanges', () => {
         cssClasses: {
           list: 'list',
         },
-        facetValues: [{from: 0, to: 10}, {from: 1, to: 10}, {from: 2, to: 10}, {from: 3, to: 10}],
+        facetValues: [
+          { from: 0, to: 10 },
+          { from: 1, to: 10 },
+          { from: 2, to: 10 },
+          { from: 3, to: 10 },
+        ],
       };
-      const tree = renderer.create(
-        <PriceRanges {...props} />
-      ).toJSON();
+      const tree = renderer.create(<PriceRanges {...props} />).toJSON();
       expect(tree).toMatchSnapshot();
     });
     it('starts a refine on click', () => {
@@ -154,14 +158,16 @@ describe('PriceRanges', () => {
       const mockRefined = stubMethod('refine');
       const props = {
         ...defaultProps,
-        facetValues: [{from: 1, to: 10, isRefined: false}],
+        facetValues: [{ from: 1, to: 10, isRefined: false }],
         templateProps: {
           templates: {
             item: 'item',
           },
         },
       };
-      const component = TestUtils.renderIntoDocument(<PriceRanges {...props} />);
+      const component = TestUtils.renderIntoDocument(
+        <PriceRanges {...props} />
+      );
       const link = TestUtils.findRenderedDOMComponentWithTag(component, 'a');
 
       // When

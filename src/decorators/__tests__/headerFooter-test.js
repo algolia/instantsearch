@@ -1,7 +1,7 @@
 import React from 'react';
 import expect from 'expect';
-import {shallow} from 'enzyme';
-import {createRenderer} from 'react-test-renderer/shallow';
+import { shallow } from 'enzyme';
+import { createRenderer } from 'react-test-renderer/shallow';
 
 import headerFooter from '../headerFooter';
 import Template from '../../components/Template';
@@ -41,8 +41,7 @@ describe('headerFooter', () => {
         body: 'body',
       },
       collapsible: false,
-      templateProps: {
-      },
+      templateProps: {},
     };
     renderer = createRenderer();
   });
@@ -76,7 +75,10 @@ describe('headerFooter', () => {
     };
     expect(out).toEqualJSX(
       <div className="ais-root root">
-        <Template rootProps={{className: 'ais-header', onClick: null}} {...templateProps} />
+        <Template
+          rootProps={{ className: 'ais-header', onClick: null }}
+          {...templateProps}
+        />
         <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
@@ -105,7 +107,10 @@ describe('headerFooter', () => {
         <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
-        <Template rootProps={{className: 'ais-footer', onClick: null}} {...templateProps} />
+        <Template
+          rootProps={{ className: 'ais-footer', onClick: null }}
+          {...templateProps}
+        />
       </div>
     );
   });
@@ -143,25 +148,37 @@ describe('headerFooter', () => {
       const out = render(defaultProps);
       expect(out).toEqualJSX(
         <div className="ais-root root ais-root__collapsible">
-          <Template rootProps={{className: 'ais-header', onClick() {}}} {...headerTemplateProps} />
+          <Template
+            rootProps={{ className: 'ais-header', onClick() {} }}
+            {...headerTemplateProps}
+          />
           <div className="ais-body body">
             <TestComponent {...defaultProps} />
           </div>
-          <Template rootProps={{className: 'ais-footer', onClick: null}} {...footerTemplateProps} />
+          <Template
+            rootProps={{ className: 'ais-footer', onClick: null }}
+            {...footerTemplateProps}
+          />
         </div>
       );
     });
 
     it('when collapsed', () => {
-      defaultProps.collapsible = {collapsed: true};
+      defaultProps.collapsible = { collapsed: true };
       const out = render(defaultProps);
       expect(out).toEqualJSX(
         <div className="ais-root root ais-root__collapsible ais-root__collapsed">
-          <Template rootProps={{className: 'ais-header', onClick() {}}} {...headerTemplateProps} />
+          <Template
+            rootProps={{ className: 'ais-header', onClick() {} }}
+            {...headerTemplateProps}
+          />
           <div className="ais-body body">
             <TestComponent {...defaultProps} />
           </div>
-          <Template rootProps={{className: 'ais-footer', onClick: null}} {...footerTemplateProps} />
+          <Template
+            rootProps={{ className: 'ais-footer', onClick: null }}
+            {...footerTemplateProps}
+          />
         </div>
       );
     });
@@ -189,8 +206,8 @@ describe('headerFooter', () => {
 
       // When
       const actual = shallowRender(props);
-      const header = actual.find({templateKey: 'header'});
-      const footer = actual.find({templateKey: 'footer'});
+      const header = actual.find({ templateKey: 'header' });
+      const footer = actual.find({ templateKey: 'footer' });
 
       // Then
       expect(header.props().data.foo).toEqual('bar');

@@ -1,6 +1,6 @@
 import find from 'lodash/find';
 
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customRangeSlider = connectRangeSlider(function render(params, isFirstRendering) {
@@ -82,14 +82,17 @@ export default function connectRangeSlider(renderFn) {
         };
 
         const hasUserBounds = userMin !== undefined || userMax !== undefined;
-        const boundsNotAlreadyDefined = !originalConf ||
-          originalConf.numericRefinements &&
-          originalConf.numericRefinements[attributeName] === undefined;
+        const boundsNotAlreadyDefined =
+          !originalConf ||
+          (originalConf.numericRefinements &&
+            originalConf.numericRefinements[attributeName] === undefined);
 
         if (hasUserBounds && boundsNotAlreadyDefined) {
-          conf.numericRefinements = {[attributeName]: {}};
-          if (userMin !== undefined) conf.numericRefinements[attributeName]['>='] = [userMin];
-          if (userMax !== undefined) conf.numericRefinements[attributeName]['<='] = [userMax];
+          conf.numericRefinements = { [attributeName]: {} };
+          if (userMin !== undefined)
+            conf.numericRefinements[attributeName]['>='] = [userMin];
+          if (userMax !== undefined)
+            conf.numericRefinements[attributeName]['<='] = [userMax];
         }
 
         return conf;
@@ -117,20 +120,31 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      init({helper, instantSearchInstance}) {
+      init({ helper, instantSearchInstance }) {
         this._refine = bounds => newValues => {
           const currentValues = [
             helper.getNumericRefinement(attributeName, '>='),
             helper.getNumericRefinement(attributeName, '<='),
           ];
 
-          if (currentValues[0] !== newValues[0] || currentValues[1] !== newValues[1]) {
+          if (
+            currentValues[0] !== newValues[0] ||
+            currentValues[1] !== newValues[1]
+          ) {
             helper.clearRefinements(attributeName);
             if (!bounds.min || newValues[0] > bounds.min) {
-              helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
+              helper.addNumericRefinement(
+                attributeName,
+                '>=',
+                formatToNumber(newValues[0])
+              );
             }
             if (!bounds.max || newValues[1] < bounds.max) {
-              helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
+              helper.addNumericRefinement(
+                attributeName,
+                '<=',
+                formatToNumber(newValues[1])
+              );
             }
             helper.search();
           }
@@ -142,37 +156,49 @@ export default function connectRangeSlider(renderFn) {
         };
         const currentRefinement = this._getCurrentRefinement(helper);
 
-        renderFn({
-          refine: this._refine(stats),
-          range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
-          start: [currentRefinement.min, currentRefinement.max],
-          format: sliderFormatter,
-          widgetParams,
-          instantSearchInstance,
-        }, true);
+        renderFn(
+          {
+            refine: this._refine(stats),
+            range: { min: Math.floor(stats.min), max: Math.ceil(stats.max) },
+            start: [currentRefinement.min, currentRefinement.max],
+            format: sliderFormatter,
+            widgetParams,
+            instantSearchInstance,
+          },
+          true
+        );
       },
 
-      render({results, helper, instantSearchInstance}) {
+      render({ results, helper, instantSearchInstance }) {
         const facetsFromResults = results.disjunctiveFacets || [];
-        const facet = find(facetsFromResults, ({name}) => name === attributeName);
-        const stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
-          min: null,
-          max: null,
-        };
+        const facet = find(
+          facetsFromResults,
+          ({ name }) => name === attributeName
+        );
+        const stats =
+          facet !== undefined && facet.stats !== undefined
+            ? facet.stats
+            : {
+                min: null,
+                max: null,
+              };
 
         if (userMin !== undefined) stats.min = userMin;
         if (userMax !== undefined) stats.max = userMax;
 
         const currentRefinement = this._getCurrentRefinement(helper);
 
-        renderFn({
-          refine: this._refine(stats),
-          range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
-          start: [currentRefinement.min, currentRefinement.max],
-          format: sliderFormatter,
-          widgetParams,
-          instantSearchInstance,
-        }, false);
+        renderFn(
+          {
+            refine: this._refine(stats),
+            range: { min: Math.floor(stats.min), max: Math.ceil(stats.max) },
+            start: [currentRefinement.min, currentRefinement.max],
+            format: sliderFormatter,
+            widgetParams,
+            instantSearchInstance,
+          },
+          false
+        );
       },
     };
   };

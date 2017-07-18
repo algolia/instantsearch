@@ -23,11 +23,7 @@ const renderer = ({
   labels,
   currency,
   autoHideContainer,
-}) => ({
-  refine,
-  items,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => ({ refine, items, instantSearchInstance }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -130,16 +126,18 @@ priceRanges({
  *   })
  * );
  */
-export default function priceRanges({
-  container,
-  attributeName,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  collapsible = false,
-  labels: userLabels = {},
-  currency: userCurrency = '$',
-  autoHideContainer = true,
-} = {}) {
+export default function priceRanges(
+  {
+    container,
+    attributeName,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    collapsible = false,
+    labels: userLabels = {},
+    currency: userCurrency = '$',
+    autoHideContainer = true,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -170,9 +168,8 @@ export default function priceRanges({
   };
 
   // before we had opts.currency, you had to pass labels.currency
-  const currency = userLabels.currency !== undefined
-    ? userLabels.currency
-    : userCurrency;
+  const currency =
+    userLabels.currency !== undefined ? userLabels.currency : userCurrency;
 
   const specializedRenderer = renderer({
     containerNode,
@@ -187,7 +184,7 @@ export default function priceRanges({
 
   try {
     const makeWidget = connectPriceRanges(specializedRenderer);
-    return makeWidget({attributeName});
+    return makeWidget({ attributeName });
   } catch (e) {
     throw new Error(usage);
   }

@@ -36,7 +36,7 @@ describe('searchBox()', () => {
   describe('bad usage', () => {
     it('throws an error if container is not defined', () => {
       expect(() => {
-        searchBox({container: null});
+        searchBox({ container: null });
       }).toThrow(/Usage:/);
     });
   });
@@ -46,33 +46,35 @@ describe('searchBox()', () => {
 
     beforeEach(() => {
       container = document.createElement('div');
-      opts = {container};
+      opts = { container };
     });
 
     it('adds an input inside the div', () => {
       widget = searchBox(opts);
-      widget.init({state, helper, onHistoryChange});
+      widget.init({ state, helper, onHistoryChange });
       const inputs = container.getElementsByTagName('input');
       expect(inputs.length).toEqual(1);
     });
 
     it('add a reset button inside the div', () => {
       widget = searchBox(opts);
-      widget.init({state, helper, onHistoryChange});
+      widget.init({ state, helper, onHistoryChange });
       const button = container.getElementsByTagName('button');
       expect(button.length).toEqual(1);
     });
 
     it('add a magnifier inside the div', () => {
       widget = searchBox(opts);
-      widget.init({state, helper, onHistoryChange});
-      const magnifier = container.getElementsByClassName('ais-search-box--magnifier');
+      widget.init({ state, helper, onHistoryChange });
+      const magnifier = container.getElementsByClassName(
+        'ais-search-box--magnifier'
+      );
       expect(magnifier.length).toEqual(1);
     });
 
     it('sets default HTML attribute to the input', () => {
       widget = searchBox(opts);
-      widget.init({state, helper, onHistoryChange});
+      widget.init({ state, helper, onHistoryChange });
       const input = container.getElementsByTagName('input')[0];
       expect(input.getAttribute('autocapitalize')).toEqual('off');
       expect(input.getAttribute('autocomplete')).toEqual('off');
@@ -91,9 +93,13 @@ describe('searchBox()', () => {
       };
 
       widget = searchBox(opts);
-      widget.init({state, helper, onHistoryChange});
-      const actualRootClasses = container.querySelector('input').parentNode.getAttribute('class');
-      const actualInputClasses = container.querySelector('input').getAttribute('class');
+      widget.init({ state, helper, onHistoryChange });
+      const actualRootClasses = container
+        .querySelector('input')
+        .parentNode.getAttribute('class');
+      const actualInputClasses = container
+        .querySelector('input')
+        .getAttribute('class');
       const expectedRootClasses = 'ais-search-box root-class cx';
       const expectedInputClasses = 'ais-search-box--input input-class';
 
@@ -105,8 +111,8 @@ describe('searchBox()', () => {
   describe('targeting an input', () => {
     it('reuse the existing input', () => {
       container = document.body.appendChild(document.createElement('input'));
-      widget = searchBox({container});
-      widget.init({state, helper, onHistoryChange});
+      widget = searchBox({ container });
+      widget.init({ state, helper, onHistoryChange });
       expect(container.tagName).toEqual('INPUT');
       expect(container.getAttribute('autocapitalize')).toEqual('off');
       expect(container.getAttribute('autocomplete')).toEqual('off');
@@ -119,18 +125,25 @@ describe('searchBox()', () => {
     });
 
     it('passes HTML attributes', () => {
-      container = createHTMLNodeFromString('<input id="foo" class="my-class" placeholder="Search" />');
-      widget = searchBox({container});
-      widget.init({state, helper, onHistoryChange});
+      container = createHTMLNodeFromString(
+        '<input id="foo" class="my-class" placeholder="Search" />'
+      );
+      widget = searchBox({ container });
+      widget.init({ state, helper, onHistoryChange });
       expect(container.getAttribute('id')).toEqual('foo');
-      expect(container.getAttribute('class')).toEqual('my-class ais-search-box--input');
+      expect(container.getAttribute('class')).toEqual(
+        'my-class ais-search-box--input'
+      );
       expect(container.getAttribute('placeholder')).toEqual('Search');
     });
 
     it('supports cssClasses', () => {
       container = createHTMLNodeFromString('<input class="my-class" />');
-      widget = searchBox({container, cssClasses: {root: 'root-class', input: 'input-class'}});
-      widget.init({state, helper, onHistoryChange});
+      widget = searchBox({
+        container,
+        cssClasses: { root: 'root-class', input: 'input-class' },
+      });
+      widget.init({ state, helper, onHistoryChange });
 
       const actualRootClasses = container.parentNode.getAttribute('class');
       const actualInputClasses = container.getAttribute('class');
@@ -146,10 +159,10 @@ describe('searchBox()', () => {
     it('when targeting a div', () => {
       // Given
       container = document.createElement('div');
-      widget = searchBox({container});
+      widget = searchBox({ container });
 
       // When
-      widget.init({state, helper, onHistoryChange});
+      widget.init({ state, helper, onHistoryChange });
 
       // Then
       const wrapper = container.querySelectorAll('div.ais-search-box')[0];
@@ -162,10 +175,10 @@ describe('searchBox()', () => {
     it('when targeting an input', () => {
       // Given
       container = document.body.appendChild(document.createElement('input'));
-      widget = searchBox({container});
+      widget = searchBox({ container });
 
       // When
-      widget.init({state, helper, onHistoryChange});
+      widget.init({ state, helper, onHistoryChange });
 
       // Then
       const wrapper = container.parentNode;
@@ -175,10 +188,10 @@ describe('searchBox()', () => {
     it('can be disabled with wrapInput:false', () => {
       // Given
       container = document.createElement('div');
-      widget = searchBox({container, wrapInput: false});
+      widget = searchBox({ container, wrapInput: false });
 
       // When
-      widget.init({state, helper, onHistoryChange});
+      widget.init({ state, helper, onHistoryChange });
 
       // Then
       const wrapper = container.querySelectorAll('div.ais-search-box');
@@ -196,8 +209,8 @@ describe('searchBox()', () => {
     beforeEach(() => {
       container = document.createElement('div');
       $ = container.querySelectorAll.bind(container);
-      defaultWidgetOptions = {container};
-      defaultInitOptions = {state, helper, onHistoryChange};
+      defaultWidgetOptions = { container };
+      defaultInitOptions = { state, helper, onHistoryChange };
     });
 
     it('should be hidden when there is no query', () => {
@@ -246,8 +259,8 @@ describe('searchBox()', () => {
     beforeEach(() => {
       container = document.createElement('div');
       $ = container.querySelectorAll.bind(container);
-      defaultWidgetOptions = {container};
-      defaultInitOptions = {state, helper, onHistoryChange};
+      defaultWidgetOptions = { container };
+      defaultInitOptions = { state, helper, onHistoryChange };
     });
 
     it('should not add the element with default options', () => {
@@ -445,7 +458,7 @@ describe('searchBox()', () => {
 
     describe('instant search', () => {
       beforeEach(() => {
-        widget = searchBox({container});
+        widget = searchBox({ container });
       });
 
       it('performs a search on any change', () => {
@@ -467,7 +480,7 @@ describe('searchBox()', () => {
 
     describe('non-instant search and input event', () => {
       beforeEach(() => {
-        widget = searchBox({container, searchOnEnterKeyPressOnly: true});
+        widget = searchBox({ container, searchOnEnterKeyPressOnly: true });
         simulateInputEvent('test', 'tes', widget, helper, state, container);
       });
 
@@ -483,8 +496,15 @@ describe('searchBox()', () => {
     describe('using a queryHook', () => {
       it('calls the queryHook', () => {
         const queryHook = sinon.spy();
-        widget = searchBox({container, queryHook});
-        simulateInputEvent('queryhook input', 'tes', widget, helper, state, container);
+        widget = searchBox({ container, queryHook });
+        simulateInputEvent(
+          'queryhook input',
+          'tes',
+          widget,
+          helper,
+          state,
+          container
+        );
         expect(queryHook.calledOnce).toBe(true);
         expect(queryHook.firstCall.args[0]).toBe('queryhook input');
         expect(queryHook.firstCall.args[1]).toBeA(Function);
@@ -492,7 +512,7 @@ describe('searchBox()', () => {
 
       it('does not perform a search by default', () => {
         const queryHook = sinon.spy();
-        widget = searchBox({container, queryHook});
+        widget = searchBox({ container, queryHook });
         simulateInputEvent('test', 'tes', widget, helper, state, container);
         expect(helper.setQuery.calledOnce).toBe(false);
         expect(helper.search.called).toBe(false);
@@ -500,7 +520,7 @@ describe('searchBox()', () => {
 
       it('when calling the provided search function', () => {
         const queryHook = sinon.spy((query, search) => search(query));
-        widget = searchBox({container, queryHook});
+        widget = searchBox({ container, queryHook });
         simulateInputEvent('oh rly?', 'tes', widget, helper, state, container);
         expect(helper.setQuery.calledOnce).toBe(true);
         expect(helper.setQuery.firstCall.args[0]).toBe('oh rly?');
@@ -508,8 +528,10 @@ describe('searchBox()', () => {
       });
 
       it('can override the query', () => {
-        const queryHook = sinon.spy((originalQuery, search) => search('hi mom!'));
-        widget = searchBox({container, queryHook});
+        const queryHook = sinon.spy((originalQuery, search) =>
+          search('hi mom!')
+        );
+        widget = searchBox({ container, queryHook });
         simulateInputEvent('come.on.', 'tes', widget, helper, state, container);
         expect(helper.setQuery.firstCall.args[0]).toBe('hi mom!');
       });
@@ -523,7 +545,7 @@ describe('searchBox()', () => {
 
     describe('instant search', () => {
       beforeEach(() => {
-        widget = searchBox({container});
+        widget = searchBox({ container });
       });
 
       it('do not perform the search on keyup event (should be done by input event)', () => {
@@ -534,9 +556,9 @@ describe('searchBox()', () => {
 
     describe('non-instant search', () => {
       beforeEach(() => {
-        widget = searchBox({container, searchOnEnterKeyPressOnly: true});
+        widget = searchBox({ container, searchOnEnterKeyPressOnly: true });
         helper.state.query = 'tes';
-        widget.init({state: helper.state, helper, onHistoryChange});
+        widget.init({ state: helper.state, helper, onHistoryChange });
       });
 
       it('performs the search on keyup if <ENTER>', () => {
@@ -553,18 +575,18 @@ describe('searchBox()', () => {
         // we have to set it ourselves
         helper.state.query = container.value;
 
-        const e2 = new window.Event('keyup', {keyCode: 13});
-        Object.defineProperty(e2, 'keyCode', {get: () => 13});
+        const e2 = new window.Event('keyup', { keyCode: 13 });
+        Object.defineProperty(e2, 'keyCode', { get: () => 13 });
         container.dispatchEvent(e2);
 
         expect(helper.setQuery.callCount).toBe(1);
         expect(helper.search.callCount).toBe(1);
       });
 
-      it('doesn\'t perform the search on keyup if not <ENTER>', () => {
+      it("doesn't perform the search on keyup if not <ENTER>", () => {
         container.value = 'test';
-        const event = new window.Event('keyup', {keyCode: 42});
-        Object.defineProperty(event, 'keyCode', {get: () => 42});
+        const event = new window.Event('keyup', { keyCode: 42 });
+        Object.defineProperty(event, 'keyCode', { get: () => 42 });
         container.dispatchEvent(event);
 
         expect(helper.setQuery.callCount).toBe(0);
@@ -576,21 +598,27 @@ describe('searchBox()', () => {
   it('updates the input on history update', () => {
     let cb;
     container = document.body.appendChild(document.createElement('input'));
-    widget = searchBox({container});
-    widget.init({state, helper, onHistoryChange: fn => { cb = fn; }});
+    widget = searchBox({ container });
+    widget.init({
+      state,
+      helper,
+      onHistoryChange: fn => {
+        cb = fn;
+      },
+    });
     expect(container.value).toBe('');
     container.blur();
-    cb({query: 'iphone'});
+    cb({ query: 'iphone' });
     expect(container.value).toBe('iphone');
   });
 
   it('handles external updates', () => {
     container = document.body.appendChild(document.createElement('input'));
     container.value = 'initial';
-    widget = searchBox({container});
-    widget.init({state, helper, onHistoryChange});
+    widget = searchBox({ container });
+    widget.init({ state, helper, onHistoryChange });
     container.blur();
-    widget.render({helper: {state: {query: 'new value'}}});
+    widget.render({ helper: { state: { query: 'new value' } } });
     expect(container.value).toBe('new value');
   });
 
@@ -598,9 +626,9 @@ describe('searchBox()', () => {
     container = document.body.appendChild(document.createElement('input'));
     container.value = 'initial';
     container.focus();
-    widget = searchBox({container});
-    widget.init({state, helper, onHistoryChange});
-    widget.render({helper: {state: {query: 'new value'}}});
+    widget = searchBox({ container });
+    widget.init({ state, helper, onHistoryChange });
+    widget.render({ helper: { state: { query: 'new value' } } });
     expect(container.value).toBe('initial');
   });
 
@@ -613,14 +641,14 @@ describe('searchBox()', () => {
 
     describe('when auto', () => {
       beforeEach(() => {
-        widget = searchBox({container, autofocus: 'auto'});
+        widget = searchBox({ container, autofocus: 'auto' });
       });
 
       it('is called if search is empty', () => {
         // Given
         helper.state.query = '';
         // When
-        widget.init({state, helper, onHistoryChange});
+        widget.init({ state, helper, onHistoryChange });
         // Then
         expect(container.focus.called).toEqual(true);
       });
@@ -629,7 +657,7 @@ describe('searchBox()', () => {
         // Given
         helper.state.query = 'foo';
         // When
-        widget.init({state, helper, onHistoryChange});
+        widget.init({ state, helper, onHistoryChange });
         // Then
         expect(container.focus.called).toEqual(false);
       });
@@ -637,14 +665,14 @@ describe('searchBox()', () => {
 
     describe('when true', () => {
       beforeEach(() => {
-        widget = searchBox({container, autofocus: true});
+        widget = searchBox({ container, autofocus: true });
       });
 
       it('is called if search is empty', () => {
         // Given
         helper.state.query = '';
         // When
-        widget.init({state, helper, onHistoryChange});
+        widget.init({ state, helper, onHistoryChange });
         // Then
         expect(container.focus.called).toEqual(true);
       });
@@ -653,7 +681,7 @@ describe('searchBox()', () => {
         // Given
         helper.state.query = 'foo';
         // When
-        widget.init({state, helper, onHistoryChange});
+        widget.init({ state, helper, onHistoryChange });
         // Then
         expect(container.focus.called).toEqual(true);
       });
@@ -662,7 +690,7 @@ describe('searchBox()', () => {
         // Given
         helper.state.query = 'foo';
         // When
-        widget.init({state, helper, onHistoryChange});
+        widget.init({ state, helper, onHistoryChange });
         // Then
         expect(container.setSelectionRange.calledWith(3, 3)).toEqual(true);
       });
@@ -670,14 +698,14 @@ describe('searchBox()', () => {
 
     describe('when false', () => {
       beforeEach(() => {
-        widget = searchBox({container, autofocus: false});
+        widget = searchBox({ container, autofocus: false });
       });
 
       it('is not called if search is empty', () => {
         // Given
         helper.state.query = '';
         // When
-        widget.init({state, helper, onHistoryChange});
+        widget.init({ state, helper, onHistoryChange });
         // Then
         expect(container.focus.called).toEqual(false);
       });
@@ -686,7 +714,7 @@ describe('searchBox()', () => {
         // Given
         helper.state.query = 'foo';
         // When
-        widget.init({state, helper, onHistoryChange});
+        widget.init({ state, helper, onHistoryChange });
         // Then
         expect(container.focus.called).toEqual(false);
       });
@@ -698,15 +726,22 @@ function simulateKeyUpEvent(args, widget, helper, state, container) {
   // Given
   helper.state.query = 'foo';
   // When
-  widget.init({state, helper, onHistoryChange});
+  widget.init({ state, helper, onHistoryChange });
   // Then
   const event = new window.Event('keyup', args);
-  Object.defineProperty(event, 'keyCode', {get: () => args.keyCode});
+  Object.defineProperty(event, 'keyCode', { get: () => args.keyCode });
   container.dispatchEvent(event);
 }
 
 // eslint-disable-next-line max-params
-function simulateInputEvent(query, stateQuery, widget, helper, state, container) {
+function simulateInputEvent(
+  query,
+  stateQuery,
+  widget,
+  helper,
+  state,
+  container
+) {
   if (query === undefined) {
     query = 'test';
   }
@@ -719,7 +754,7 @@ function simulateInputEvent(query, stateQuery, widget, helper, state, container)
   }
 
   // When
-  widget.init({state: helper.state, helper, onHistoryChange});
+  widget.init({ state: helper.state, helper, onHistoryChange });
 
   // Then
   container.value = query;

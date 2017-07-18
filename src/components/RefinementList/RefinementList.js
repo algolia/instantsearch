@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cx from 'classnames';
-import {isSpecialClick} from '../../lib/utils.js';
+import { isSpecialClick } from '../../lib/utils.js';
 
 import Template from '../Template.js';
 import RefinementListItem from './RefinementListItem.js';
@@ -20,7 +20,10 @@ export class RawRefinementList extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const isStateDifferent = nextState !== this.state;
-    const isFacetValuesDifferent = !isEqual(this.props.facetValues, nextProps.facetValues);
+    const isFacetValuesDifferent = !isEqual(
+      this.props.facetValues,
+      nextProps.facetValues
+    );
     const shouldUpdate = isStateDifferent || isFacetValuesDifferent;
     return shouldUpdate;
   }
@@ -33,21 +36,27 @@ export class RawRefinementList extends React.Component {
     let subItems;
     const hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
-      subItems = <RawRefinementList
-                  {...this.props}
-                  depth={this.props.depth + 1}
-                  facetValues={facetValue.data}
-                />;
+      subItems = (
+        <RawRefinementList
+          {...this.props}
+          depth={this.props.depth + 1}
+          facetValues={facetValue.data}
+        />
+      );
     }
 
     const url = this.props.createURL(facetValue.value);
-    const templateData = {...facetValue, url, cssClasses: this.props.cssClasses};
+    const templateData = {
+      ...facetValue,
+      url,
+      cssClasses: this.props.cssClasses,
+    };
 
     const cssClassItem = cx(this.props.cssClasses.item, {
       [this.props.cssClasses.active]: facetValue.isRefined,
     });
 
-    let {value: key} = facetValue;
+    let { value: key } = facetValue;
     if (facetValue.isRefined !== undefined) {
       key += `/${facetValue.isRefined}`;
     }
@@ -86,7 +95,7 @@ export class RawRefinementList extends React.Component {
   //
   // Finally, we always stop propagation of the event to avoid multiple levels RefinementLists to fail: click
   // on child would click on parent also
-  handleItemClick({facetValueToRefine, originalEvent, isRefined}) {
+  handleItemClick({ facetValueToRefine, originalEvent, isRefined }) {
     if (isSpecialClick(originalEvent)) {
       // do not alter the default browser behavior
       // if one special key is down
@@ -101,8 +110,11 @@ export class RawRefinementList extends React.Component {
     let parent = originalEvent.target;
 
     while (parent !== originalEvent.currentTarget) {
-      if (parent.tagName === 'LABEL' && (parent.querySelector('input[type="checkbox"]')
-          || parent.querySelector('input[type="radio"]'))) {
+      if (
+        parent.tagName === 'LABEL' &&
+        (parent.querySelector('input[type="checkbox"]') ||
+          parent.querySelector('input[type="radio"]'))
+      ) {
         return;
       }
 
@@ -139,30 +151,38 @@ export class RawRefinementList extends React.Component {
       cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
     }
 
-    const showMoreBtn = this.props.showMore === true && this.props.canToggleShowMore ?
-        <Template
-          rootProps={{onClick: this.props.toggleShowMore}}
-          templateKey={`show-more-${this.props.isShowingMore ? 'active' : 'inactive'}`}
-          {...this.props.templateProps}
-        /> :
-        undefined;
+    const showMoreBtn =
+      this.props.showMore === true && this.props.canToggleShowMore
+        ? <Template
+            rootProps={{ onClick: this.props.toggleShowMore }}
+            templateKey={`show-more-${this.props.isShowingMore
+              ? 'active'
+              : 'inactive'}`}
+            {...this.props.templateProps}
+          />
+        : undefined;
 
     const shouldDisableSearchInput =
       this.props.searchIsAlwaysActive !== true &&
       !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
-    const searchInput = this.props.searchFacetValues ?
-        <SearchBox ref={i => { this.searchbox = i; }}
+    const searchInput = this.props.searchFacetValues
+      ? <SearchBox
+          ref={i => {
+            this.searchbox = i;
+          }}
           placeholder={this.props.searchPlaceholder}
           onChange={this.props.searchFacetValues}
           onValidate={() => this.refineFirstValue()}
-          disabled={shouldDisableSearchInput}/> : null;
+          disabled={shouldDisableSearchInput}
+        />
+      : null;
 
-    const noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ?
-      <Template
-        templateKey={'noResults'}
-        {...this.props.templateProps}
-      /> :
-      null;
+    const noResults =
+      this.props.searchFacetValues &&
+      this.props.isFromSearch &&
+      this.props.facetValues.length === 0
+        ? <Template templateKey={'noResults'} {...this.props.templateProps} />
+        : null;
 
     return (
       <div className={cx(cssClassList)}>

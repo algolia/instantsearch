@@ -24,10 +24,12 @@ class PriceRangesForm extends React.Component {
   getInput(type) {
     return (
       <label className={this.props.cssClasses.label}>
-        <span className={this.props.cssClasses.currency}>{this.props.labels.currency} </span>
+        <span className={this.props.cssClasses.currency}>
+          {this.props.labels.currency}{' '}
+        </span>
         <input
           className={this.props.cssClasses.input}
-          onChange={e => this.setState({[type]: e.target.value})}
+          onChange={e => this.setState({ [type]: e.target.value })}
           ref={type}
           type="number"
           value={this.state[type]}
@@ -37,10 +39,12 @@ class PriceRangesForm extends React.Component {
   }
 
   handleSubmit(event) {
-    const from = this.refs.from.value !== '' ?
-      parseInt(this.refs.from.value, 10) : undefined;
-    const to = this.refs.to.value !== '' ?
-      parseInt(this.refs.to.value, 10) : undefined;
+    const from =
+      this.refs.from.value !== ''
+        ? parseInt(this.refs.from.value, 10)
+        : undefined;
+    const to =
+      this.refs.to.value !== '' ? parseInt(this.refs.to.value, 10) : undefined;
     this.props.refine(from, to, event);
   }
 
@@ -49,11 +53,19 @@ class PriceRangesForm extends React.Component {
     const toInput = this.getInput('to');
     const onSubmit = this.handleSubmit;
     return (
-      <form className={this.props.cssClasses.form} onSubmit={onSubmit} ref="form">
+      <form
+        className={this.props.cssClasses.form}
+        onSubmit={onSubmit}
+        ref="form"
+      >
         {fromInput}
-        <span className={this.props.cssClasses.separator}> {this.props.labels.separator} </span>
+        <span className={this.props.cssClasses.separator}>
+          {' '}{this.props.labels.separator}{' '}
+        </span>
         {toInput}
-        <button className={this.props.cssClasses.button} type="submit">{this.props.labels.button}</button>
+        <button className={this.props.cssClasses.button} type="submit">
+          {this.props.labels.button}
+        </button>
       </form>
     );
   }

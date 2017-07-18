@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import expect from 'expect';
-import {createRenderer} from 'react-test-renderer/shallow';
+import { createRenderer } from 'react-test-renderer/shallow';
 import autoHideContainer from '../autoHideContainer';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -10,7 +10,11 @@ import sinon from 'sinon';
 
 class TestComponent extends React.Component {
   render() {
-    return <div>{this.props.hello}</div>;
+    return (
+      <div>
+        {this.props.hello}
+      </div>
+    );
   }
 }
 
@@ -28,10 +32,8 @@ describe('autoHideContainer', () => {
     renderer.render(<AutoHide shouldAutoHideContainer {...props} />);
     const out = renderer.getRenderOutput();
     expect(out).toEqualJSX(
-      <div style={{display: 'none'}}>
-        <TestComponent
-          hello="son"
-          shouldAutoHideContainer />
+      <div style={{ display: 'none' }}>
+        <TestComponent hello="son" shouldAutoHideContainer />
       </div>
     );
   });
@@ -45,7 +47,7 @@ describe('autoHideContainer', () => {
     beforeEach(() => {
       AutoHide = autoHideContainer(TestComponent);
       container = document.createElement('div');
-      props = {hello: 'mom', shouldAutoHideContainer: false};
+      props = { hello: 'mom', shouldAutoHideContainer: false };
       component = ReactDOM.render(<AutoHide {...props} />, container);
     });
 

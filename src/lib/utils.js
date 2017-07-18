@@ -57,12 +57,18 @@ function getContainerNode(selectorOrHTMLElement) {
  * @return {boolean} true if o is a DOMElement
  */
 function isDomElement(o) {
-  return o instanceof window.HTMLElement || Boolean(o) && o.nodeType > 0;
+  return o instanceof window.HTMLElement || (Boolean(o) && o.nodeType > 0);
 }
 
 function isSpecialClick(event) {
   const isMiddleClick = event.button === 1;
-  return isMiddleClick || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
+  return (
+    isMiddleClick ||
+    event.altKey ||
+    event.ctrlKey ||
+    event.metaKey ||
+    event.shiftKey
+  );
 }
 
 /**
@@ -119,30 +125,37 @@ function prepareTemplateProps({
 }
 
 function prepareTemplates(defaultTemplates = {}, templates = {}) {
-  const allKeys = uniq([...(keys(defaultTemplates)), ...(keys(templates))]);
+  const allKeys = uniq([...keys(defaultTemplates), ...keys(templates)]);
 
-  return reduce(allKeys, (config, key) => {
-    const defaultTemplate = defaultTemplates[key];
-    const customTemplate = templates[key];
-    const isCustomTemplate = customTemplate !== undefined && customTemplate !== defaultTemplate;
+  return reduce(
+    allKeys,
+    (config, key) => {
+      const defaultTemplate = defaultTemplates[key];
+      const customTemplate = templates[key];
+      const isCustomTemplate =
+        customTemplate !== undefined && customTemplate !== defaultTemplate;
 
-    config.templates[key] = isCustomTemplate ? customTemplate : defaultTemplate;
-    config.useCustomCompileOptions[key] = isCustomTemplate;
+      config.templates[key] = isCustomTemplate
+        ? customTemplate
+        : defaultTemplate;
+      config.useCustomCompileOptions[key] = isCustomTemplate;
 
-    return config;
-  }, {templates: {}, useCustomCompileOptions: {}});
+      return config;
+    },
+    { templates: {}, useCustomCompileOptions: {} }
+  );
 }
 
 function getRefinement(state, type, attributeName, name, resultsFacets) {
-  const res = {type, attributeName, name};
-  let facet = find(resultsFacets, {name: attributeName});
+  const res = { type, attributeName, name };
+  let facet = find(resultsFacets, { name: attributeName });
   let count;
   if (type === 'hierarchical') {
     const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
     const splitted = name.split(facetDeclaration.separator);
     res.name = splitted[splitted.length - 1];
     for (let i = 0; facet !== undefined && i < splitted.length; ++i) {
-      facet = find(facet.data, {name: splitted[i]});
+      facet = find(facet.data, { name: splitted[i] });
     }
     count = get(facet, 'count');
   } else {
@@ -163,13 +176,15 @@ function getRefinements(results, state) {
 
   forEach(state.facetsRefinements, (refinements, attributeName) => {
     forEach(refinements, name => {
-      res.push(getRefinement(state, 'facet', attributeName, name, results.facets));
+      res.push(
+        getRefinement(state, 'facet', attributeName, name, results.facets)
+      );
     });
   });
 
   forEach(state.facetsExcludes, (refinements, attributeName) => {
     forEach(refinements, name => {
-      res.push({type: 'exclude', attributeName, name, exclude: true});
+      res.push({ type: 'exclude', attributeName, name, exclude: true });
     });
   });
 
@@ -191,7 +206,15 @@ function getRefinements(results, state) {
 
   forEach(state.hierarchicalFacetsRefinements, (refinements, attributeName) => {
     forEach(refinements, name => {
-      res.push(getRefinement(state, 'hierarchical', attributeName, name, results.hierarchicalFacets));
+      res.push(
+        getRefinement(
+          state,
+          'hierarchical',
+          attributeName,
+          name,
+          results.hierarchicalFacets
+        )
+      );
     });
   });
 
@@ -210,13 +233,17 @@ function getRefinements(results, state) {
   });
 
   forEach(state.tagRefinements, name => {
-    res.push({type: 'tag', attributeName: '_tags', name});
+    res.push({ type: 'tag', attributeName: '_tags', name });
   });
 
   return res;
 }
 
-function clearRefinementsFromState(inputState, attributeNames, clearsQuery = false) {
+function clearRefinementsFromState(
+  inputState,
+  attributeNames,
+  clearsQuery = false
+) {
   let state = inputState;
 
   if (clearsQuery) {
@@ -240,8 +267,16 @@ function clearRefinementsFromState(inputState, attributeNames, clearsQuery = fal
   return state;
 }
 
-function clearRefinementsAndSearch(helper, attributeNames, clearsQuery = false) {
-  helper.setState(clearRefinementsFromState(helper.state, attributeNames, clearsQuery)).search();
+function clearRefinementsAndSearch(
+  helper,
+  attributeNames,
+  clearsQuery = false
+) {
+  helper
+    .setState(
+      clearRefinementsFromState(helper.state, attributeNames, clearsQuery)
+    )
+    .search();
 }
 
 function prefixKeys(prefix, obj) {
@@ -270,8 +305,14 @@ function checkRendering(rendering, usage) {
   }
 }
 
-const REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+const REACT_ELEMENT_TYPE =
+  (typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element')) ||
+  0xeac7;
 
 function isReactElement(object) {
-  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+  return (
+    typeof object === 'object' &&
+    object !== null &&
+    object.$$typeof === REACT_ELEMENT_TYPE
+  );
 }

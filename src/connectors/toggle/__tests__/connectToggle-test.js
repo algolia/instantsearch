@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectToggle from '../connectToggle.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectToggle', () => {
   it('Renders during init and render', () => {
@@ -36,13 +36,14 @@ describe('connectToggle', () => {
       onHistoryChange: () => {},
     });
 
-    { // should call the rendering once with isFirstRendering to true
+    {
+      // should call the rendering once with isFirstRendering to true
       expect(rendering.callCount).toBe(1);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {value, widgetParams} = rendering.lastCall.args[0];
+      const { value, widgetParams } = rendering.lastCall.args[0];
       expect(value).toEqual({
         name: label,
         count: null,
@@ -66,27 +67,30 @@ describe('connectToggle', () => {
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        facets: {
-          isShippingFree: {
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            isShippingFree: {
             'true': 45, // eslint-disable-line
             'false': 40, // eslint-disable-line
+            },
           },
+          nbHits: 85,
         },
-        nbHits: 85,
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Should call the rendering a second time, with isFirstRendering to false
+    {
+      // Should call the rendering a second time, with isFirstRendering to false
       expect(rendering.callCount).toBe(2);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {value} = rendering.lastCall.args[0];
+      const { value } = rendering.lastCall.args[0];
       expect(value).toEqual({
         name: label,
         count: 45,
@@ -126,10 +130,13 @@ describe('connectToggle', () => {
       onHistoryChange: () => {},
     });
 
-    { // first rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
+    {
+      // first rendering
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(
+        undefined
+      );
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, value} = renderOptions;
+      const { refine, value } = renderOptions;
       expect(value).toEqual({
         name: label,
         count: null,
@@ -145,31 +152,40 @@ describe('connectToggle', () => {
           count: 0,
         },
       });
-      refine({isRefined: value.isRefined});
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
-      refine({isRefined: !value.isRefined});
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
+      refine({ isRefined: value.isRefined });
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'true',
+      ]);
+      refine({ isRefined: !value.isRefined });
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(
+        undefined
+      );
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        facets: {
-          isShippingFree: {
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            isShippingFree: {
             'true': 45, // eslint-disable-line
             'false': 40, // eslint-disable-line
+            },
           },
+          nbHits: 85,
         },
-        nbHits: 85,
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Second rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
+    {
+      // Second rendering
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(
+        undefined
+      );
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, value} = renderOptions;
+      const { refine, value } = renderOptions;
       expect(value).toEqual({
         name: label,
         count: 45,
@@ -185,36 +201,44 @@ describe('connectToggle', () => {
           count: 85,
         },
       });
-      refine({isRefined: value.isRefined});
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
+      refine({ isRefined: value.isRefined });
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'true',
+      ]);
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        facets: {
-          isShippingFree: {
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            isShippingFree: {
             'true': 45, // eslint-disable-line
+            },
           },
+          nbHits: 85,
         },
-        nbHits: 85,
-      }, {
-        facets: {
-          isShippingFree: {
+        {
+          facets: {
+            isShippingFree: {
             'true': 45, // eslint-disable-line
             'false': 40, // eslint-disable-line
+            },
           },
+          nbHits: 85,
         },
-        nbHits: 85,
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Third rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
+    {
+      // Third rendering
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'true',
+      ]);
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, value} = renderOptions;
+      const { refine, value } = renderOptions;
       expect(value).toEqual({
         name: label,
         count: 85,
@@ -231,7 +255,9 @@ describe('connectToggle', () => {
         },
       });
       refine(value);
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(
+        undefined
+      );
     }
   });
 
@@ -260,10 +286,13 @@ describe('connectToggle', () => {
       onHistoryChange: () => {},
     });
 
-    { // first rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
+    {
+      // first rendering
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'false',
+      ]);
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, value} = renderOptions;
+      const { refine, value } = renderOptions;
 
       expect(value).toEqual({
         name: label,
@@ -280,38 +309,48 @@ describe('connectToggle', () => {
           count: 0,
         },
       });
-      refine({isRefined: value.isRefined});
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
-      refine({isRefined: !value.isRefined});
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
+      refine({ isRefined: value.isRefined });
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'true',
+      ]);
+      refine({ isRefined: !value.isRefined });
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'false',
+      ]);
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        facets: {
-          isShippingFree: {
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            isShippingFree: {
             'false': 40, // eslint-disable-line
+            },
           },
+          nbHits: 40,
         },
-        nbHits: 40,
-      }, {
-        facets: {
-          isShippingFree: {
+        {
+          facets: {
+            isShippingFree: {
             'true': 45, // eslint-disable-line
             'false': 40, // eslint-disable-line
+            },
           },
+          nbHits: 85,
         },
-        nbHits: 85,
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Second rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
+    {
+      // Second rendering
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'false',
+      ]);
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, value} = renderOptions;
+      const { refine, value } = renderOptions;
       expect(value).toEqual({
         name: label,
         // the value is the one that is not selected
@@ -328,36 +367,44 @@ describe('connectToggle', () => {
           count: 40,
         },
       });
-      refine({isRefined: value.isRefined});
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
+      refine({ isRefined: value.isRefined });
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'true',
+      ]);
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        facets: {
-          isShippingFree: {
+      results: new SearchResults(helper.state, [
+        {
+          facets: {
+            isShippingFree: {
             'true': 45, // eslint-disable-line
+            },
           },
+          nbHits: 85,
         },
-        nbHits: 85,
-      }, {
-        facets: {
-          isShippingFree: {
+        {
+          facets: {
+            isShippingFree: {
             'true': 45, // eslint-disable-line
             'false': 40, // eslint-disable-line
+            },
           },
+          nbHits: 85,
         },
-        nbHits: 85,
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Third rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
+    {
+      // Third rendering
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'true',
+      ]);
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, value} = renderOptions;
+      const { refine, value } = renderOptions;
       expect(value).toEqual({
         name: label,
         count: 40,
@@ -373,8 +420,10 @@ describe('connectToggle', () => {
           count: 40,
         },
       });
-      refine({isRefined: value.isRefined});
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
+      refine({ isRefined: value.isRefined });
+      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+        'false',
+      ]);
     }
   });
 });

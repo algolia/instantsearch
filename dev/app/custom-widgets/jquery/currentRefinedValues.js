@@ -1,14 +1,17 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const renderFn = ({
-  clearAllClick,
-  clearAllURL,
-  createURL,
-  refine,
-  refinements,
-  widgetParams: {containerNode},
-}, isFirstRendering) => {
+const renderFn = (
+  {
+    clearAllClick,
+    clearAllURL,
+    createURL,
+    refine,
+    refinements,
+    widgetParams: { containerNode },
+  },
+  isFirstRendering
+) => {
   // append initial markup on first rendering
   // ----------------------------------------
   if (isFirstRendering) {
@@ -23,9 +26,7 @@ const renderFn = ({
   if (refinements && refinements.length > 0) {
     // append clear all link
     // ---------------------
-    containerNode
-      .find('#custom-crv-clear-all-container')
-      .html(`
+    containerNode.find('#custom-crv-clear-all-container').html(`
         <a
           href="${clearAllURL}"
           class="ais-current-refined-values--clear-all"
@@ -46,27 +47,33 @@ const renderFn = ({
     // ---------------------------
     const list = refinements
       .map(value => {
-        const {computedLabel, count} = value;
+        const { computedLabel, count } = value;
 
-        const afterCount = count ?
-          `<span class="pull-right facet-count">${count}</span>`
+        const afterCount = count
+          ? `<span class="pull-right facet-count">${count}</span>`
           : '';
 
         switch (true) {
-        case value.attributeName === 'price_range':
-          return `Price range: ${computedLabel.replace(/(\d+)/g, '$$$1')} ${afterCount}`;
+          case value.attributeName === 'price_range':
+            return `Price range: ${computedLabel.replace(
+              /(\d+)/g,
+              '$$$1'
+            )} ${afterCount}`;
 
-        case value.attributeName === 'price':
-          return `Price: ${computedLabel.replace(/(\d+)/g, '$$$1')}`;
+          case value.attributeName === 'price':
+            return `Price: ${computedLabel.replace(/(\d+)/g, '$$$1')}`;
 
-        case value.attributeName === 'free_shipping':
-          return computedLabel === 'true' ? `Free shipping ${afterCount}` : '';
+          case value.attributeName === 'free_shipping':
+            return computedLabel === 'true'
+              ? `Free shipping ${afterCount}`
+              : '';
 
-        default:
-          return `${computedLabel} ${afterCount}`;
+          default:
+            return `${computedLabel} ${afterCount}`;
         }
       })
-      .map((content, index) => `
+      .map(
+        (content, index) => `
         <li>
           <a
             href="${createURL(refinements[index])}"
@@ -75,22 +82,19 @@ const renderFn = ({
             ${content}
           </a>
         </li>
-      `);
+      `
+      );
 
     containerNode.find('ul').html(list.join(''));
 
     // bind click events on links
     // --------------------------
-    containerNode
-      .find('li > a')
-      .each(function(index) {
-        window.$(this)
-          .off('click')
-          .on('click', e => {
-            e.preventDefault();
-            refine(refinements[index]);
-          });
+    containerNode.find('li > a').each(function(index) {
+      window.$(this).off('click').on('click', e => {
+        e.preventDefault();
+        refine(refinements[index]);
       });
+    });
 
     // show container
     // --------------

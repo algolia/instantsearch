@@ -1,6 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
-import {RawClearAll as ClearAll} from '../ClearAll';
+import { RawClearAll as ClearAll } from '../ClearAll';
 import renderer from 'react-test-renderer';
 
 describe('ClearAll', () => {
@@ -19,9 +19,7 @@ describe('ClearAll', () => {
   };
 
   it('should render <ClearAll />', () => {
-    const tree = renderer.create(
-      <ClearAll {...defaultProps} />
-    ).toJSON();
+    const tree = renderer.create(<ClearAll {...defaultProps} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -32,13 +30,13 @@ describe('ClearAll', () => {
     const preventDefault = sinon.spy();
     const component = new ClearAll(props);
     ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach(e => {
-      const event = {preventDefault};
+      const event = { preventDefault };
       event[e] = true;
       component.handleClick(event);
       expect(props.refine.called).toBe(false, 'clearAll never called');
       expect(preventDefault.called).toBe(false, 'preventDefault never called');
     });
-    component.handleClick({preventDefault});
+    component.handleClick({ preventDefault });
     expect(props.refine.calledOnce).toBe(true, 'clearAll called once');
     expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
   });

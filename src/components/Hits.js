@@ -16,14 +16,18 @@ class Hits extends React.Component {
         <Template
           data={data}
           key={data.objectID}
-          rootProps={{className: this.props.cssClasses.item}}
+          rootProps={{ className: this.props.cssClasses.item }}
           templateKey="item"
           {...this.props.templateProps}
         />
       );
     });
 
-    return <div className={this.props.cssClasses.root}>{renderedHits}</div>;
+    return (
+      <div className={this.props.cssClasses.root}>
+        {renderedHits}
+      </div>
+    );
   }
 
   renderAllResults() {
@@ -35,7 +39,7 @@ class Hits extends React.Component {
     return (
       <Template
         data={this.props.results}
-        rootProps={{className}}
+        rootProps={{ className }}
         templateKey="allItems"
         {...this.props.templateProps}
       />
@@ -50,7 +54,7 @@ class Hits extends React.Component {
     return (
       <Template
         data={this.props.results}
-        rootProps={{className}}
+        rootProps={{ className }}
         templateKey="empty"
         {...this.props.templateProps}
       />
@@ -59,7 +63,10 @@ class Hits extends React.Component {
 
   render() {
     const hasResults = this.props.results.hits.length > 0;
-    const hasAllItemsTemplate = hasKey(this.props, 'templateProps.templates.allItems');
+    const hasAllItemsTemplate = hasKey(
+      this.props,
+      'templateProps.templates.allItems'
+    );
 
     if (!hasResults) {
       return this.renderNoResults();
@@ -88,7 +95,7 @@ Hits.propTypes = {
 };
 
 Hits.defaultProps = {
-  results: {hits: []},
+  results: { hits: [] },
 };
 
 export default Hits;

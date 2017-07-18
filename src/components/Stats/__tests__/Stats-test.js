@@ -1,7 +1,7 @@
 import React from 'react';
 import expect from 'expect';
-import {createRenderer} from 'react-test-renderer/shallow';
-import {RawStats as Stats} from '../Stats';
+import { createRenderer } from 'react-test-renderer/shallow';
+import { RawStats as Stats } from '../Stats';
 import Template from '../../Template';
 
 import expectJSX from 'expect-jsx';
@@ -23,10 +23,7 @@ describe('Stats', () => {
       hasOneResult: false,
     };
     expect(out).toEqualJSX(
-      <Template
-        data={getProps(defaultProps)}
-        templateKey="body"
-      />
+      <Template data={getProps(defaultProps)} templateKey="body" />
     );
   });
 

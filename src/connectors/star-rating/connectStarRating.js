@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customStarRating = connectStarRating(function render(params, isFirstRendering) {
@@ -107,10 +107,7 @@ export default function connectStarRating(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {
-      attributeName,
-      max = 5,
-    } = widgetParams;
+    const { attributeName, max = 5 } = widgetParams;
 
     if (!attributeName) {
       throw new Error(usage);
@@ -118,24 +115,28 @@ export default function connectStarRating(renderFn) {
 
     return {
       getConfiguration() {
-        return {disjunctiveFacets: [attributeName]};
+        return { disjunctiveFacets: [attributeName] };
       },
 
-      init({helper, createURL, instantSearchInstance}) {
+      init({ helper, createURL, instantSearchInstance }) {
         this._toggleRefinement = this._toggleRefinement.bind(this, helper);
-        this._createURL = state => facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
+        this._createURL = state => facetValue =>
+          createURL(state.toggleRefinement(attributeName, facetValue));
 
-        renderFn({
-          instantSearchInstance,
-          items: [],
-          hasNoResults: true,
-          refine: this._toggleRefinement,
-          createURL: this._createURL(helper.state),
-          widgetParams,
-        }, true);
+        renderFn(
+          {
+            instantSearchInstance,
+            items: [],
+            hasNoResults: true,
+            refine: this._toggleRefinement,
+            createURL: this._createURL(helper.state),
+            widgetParams,
+          },
+          true
+        );
       },
 
-      render({helper, results, state, instantSearchInstance}) {
+      render({ helper, results, state, instantSearchInstance }) {
         const facetValues = [];
         const allValues = {};
         for (let v = max; v >= 0; --v) {
@@ -171,14 +172,17 @@ export default function connectStarRating(renderFn) {
           });
         }
 
-        renderFn({
-          instantSearchInstance,
-          items: facetValues,
-          hasNoResults: results.nbHits === 0,
-          refine: this._toggleRefinement,
-          createURL: this._createURL(state),
-          widgetParams,
-        }, false);
+        renderFn(
+          {
+            instantSearchInstance,
+            items: facetValues,
+            hasNoResults: results.nbHits === 0,
+            refine: this._toggleRefinement,
+            createURL: this._createURL(state),
+            widgetParams,
+          },
+          false
+        );
       },
 
       _toggleRefinement(helper, facetValue) {

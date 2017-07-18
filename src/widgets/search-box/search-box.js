@@ -7,10 +7,7 @@ import Hogan from 'hogan.js';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox.js';
 import defaultTemplates from './defaultTemplates.js';
 
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils.js';
 
 const bem = bemHelper('ais-search-box');
 const KEY_ENTER = 13;
@@ -27,16 +24,9 @@ const renderer = ({
   wrapInput,
   reset,
   magnifier,
-}) => ({
-  refine,
-  clear,
-  query,
-  onHistoryChange,
-}, isFirstRendering) => {
+}) => ({ refine, clear, query, onHistoryChange }, isFirstRendering) => {
   if (isFirstRendering) {
-    const INPUT_EVENT = window.addEventListener ?
-      'input' :
-      'propertychange';
+    const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
     const input = createInput(containerNode);
     const isInputTargeted = input === containerNode;
     if (isInputTargeted) {
@@ -75,7 +65,7 @@ const renderer = ({
       input.value = fullState.query || '';
     });
 
-    if (autofocus === true || autofocus === 'auto' && query === '') {
+    if (autofocus === true || (autofocus === 'auto' && query === '')) {
       input.focus();
       input.setSelectionRange(query.length, query.length);
     }
@@ -94,7 +84,11 @@ const renderer = ({
       // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
       // can be removed as soon as we remove support for it
       if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(refine)));
+        addListener(
+          input,
+          'keyup',
+          ifKey(KEY_SUPPRESS, getInputValueAndCall(refine))
+        );
       }
     }
   } else {
@@ -105,12 +99,15 @@ const renderer = ({
     }
   }
 
-  const resetButtonContainer = containerNode.tagName === 'INPUT'
-    ? containerNode.parentNode
-    : containerNode;
+  const resetButtonContainer =
+    containerNode.tagName === 'INPUT'
+      ? containerNode.parentNode
+      : containerNode;
 
   // hide reset button when there is no query
-  const resetButton = resetButtonContainer.querySelector('button[type="reset"]');
+  const resetButton = resetButtonContainer.querySelector(
+    'button[type="reset"]'
+  );
   resetButton.style.display = query && query.trim() ? 'block' : 'none';
 };
 
@@ -196,18 +193,20 @@ searchBox({
  *   })
  * );
  */
-export default function searchBox({
-  container,
-  placeholder = '',
-  cssClasses = {},
-  poweredBy = false,
-  wrapInput = true,
-  autofocus = 'auto',
-  searchOnEnterKeyPressOnly = false,
-  reset = true,
-  magnifier = true,
-  queryHook,
-} = {}) {
+export default function searchBox(
+  {
+    container,
+    placeholder = '',
+    cssClasses = {},
+    poweredBy = false,
+    wrapInput = true,
+    autofocus = 'auto',
+    searchOnEnterKeyPressOnly = false,
+    reset = true,
+    magnifier = true,
+    queryHook,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -239,7 +238,7 @@ export default function searchBox({
 
   try {
     const makeWidget = connectSearchBox(specializedRenderer);
-    return makeWidget({queryHook});
+    return makeWidget({ queryHook });
   } catch (e) {
     throw new Error(usage);
   }
@@ -288,7 +287,8 @@ function getValue(e) {
 }
 
 function ifKey(expectedKeyCode, func) {
-  return actualEvent => actualEvent.keyCode === expectedKeyCode && func(actualEvent);
+  return actualEvent =>
+    actualEvent.keyCode === expectedKeyCode && func(actualEvent);
 }
 
 function getInputValueAndCall(func) {
@@ -320,15 +320,17 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
 }
 
-function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
+function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
   reset = {
     cssClasses: {},
     template: resetTemplate,
     ...reset,
   };
 
-  const resetCSSClasses = {root: cx(bem('reset'), reset.cssClasses.root)};
-  const stringNode = processTemplate(resetTemplate, {cssClasses: resetCSSClasses});
+  const resetCSSClasses = { root: cx(bem('reset'), reset.cssClasses.root) };
+  const stringNode = processTemplate(resetTemplate, {
+    cssClasses: resetCSSClasses,
+  });
 
   const htmlNode = createNodeFromString(stringNode);
   input.parentNode.appendChild(htmlNode);
@@ -339,15 +341,19 @@ function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
   });
 }
 
-function addMagnifier(input, magnifier, {magnifier: magnifierTemplate}) {
+function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
   magnifier = {
     cssClasses: {},
     template: magnifierTemplate,
     ...magnifier,
   };
 
-  const magnifierCSSClasses = {root: cx(bem('magnifier'), magnifier.cssClasses.root)};
-  const stringNode = processTemplate(magnifierTemplate, {cssClasses: magnifierCSSClasses});
+  const magnifierCSSClasses = {
+    root: cx(bem('magnifier'), magnifier.cssClasses.root),
+  };
+  const stringNode = processTemplate(magnifierTemplate, {
+    cssClasses: magnifierCSSClasses,
+  });
 
   const htmlNode = createNodeFromString(stringNode);
   input.parentNode.appendChild(htmlNode);
@@ -366,7 +372,8 @@ function addPoweredBy(input, poweredBy, templates) {
     link: cx(bem('powered-by-link'), poweredBy.cssClasses.link),
   };
 
-  const url = 'https://www.algolia.com/?' +
+  const url =
+    'https://www.algolia.com/?' +
     'utm_source=instantsearch.js&' +
     'utm_medium=website&' +
     `utm_content=${location.hostname}&` +

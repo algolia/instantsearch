@@ -17,7 +17,7 @@ describe('Pagination', () => {
       disabled: 'disabled',
     },
     createURL: (...args) => JSON.stringify(args),
-    labels: {first: '', last: '', next: '', previous: ''},
+    labels: { first: '', last: '', next: '', previous: '' },
     currentPage: 0,
     nbHits: 200,
     nbPages: 20,
@@ -26,23 +26,21 @@ describe('Pagination', () => {
   };
 
   it('should render five elements', () => {
-    const tree = renderer.create(
-      <Pagination {...defaultProps} />
-    ).toJSON();
+    const tree = renderer.create(<Pagination {...defaultProps} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('should display the first/last link', () => {
-    const tree = renderer.create(
-      <Pagination {...defaultProps} showFirstLast />
-    ).toJSON();
+    const tree = renderer
+      .create(<Pagination {...defaultProps} showFirstLast />)
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('should disable last page if already on it', () => {
-    const tree = renderer.create(
-      <Pagination {...defaultProps} showFirstLast currentPage={19} />
-    ).toJSON();
+    const tree = renderer
+      .create(<Pagination {...defaultProps} showFirstLast currentPage={19} />)
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -53,14 +51,20 @@ describe('Pagination', () => {
     const preventDefault = sinon.spy();
     const component = new Pagination(props);
     ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach(e => {
-      const event = {preventDefault};
+      const event = { preventDefault };
       event[e] = true;
       component.handleClick(42, event);
-      expect(props.setCurrentPage.called).toBe(false, 'setCurrentPage never called');
+      expect(props.setCurrentPage.called).toBe(
+        false,
+        'setCurrentPage never called'
+      );
       expect(preventDefault.called).toBe(false, 'preventDefault never called');
     });
-    component.handleClick(42, {preventDefault});
-    expect(props.setCurrentPage.calledOnce).toBe(true, 'setCurrentPage called once');
+    component.handleClick(42, { preventDefault });
+    expect(props.setCurrentPage.calledOnce).toBe(
+      true,
+      'setCurrentPage called once'
+    );
     expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
   });
 });

@@ -1,6 +1,6 @@
 import some from 'lodash/some';
 
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
@@ -107,7 +107,7 @@ export default function connectHitsPerPage(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {items: userItems} = widgetParams;
+    const { items: userItems } = widgetParams;
     let items = userItems;
 
     if (!items) {
@@ -115,7 +115,7 @@ export default function connectHitsPerPage(renderFn) {
     }
 
     return {
-      init({helper, state, instantSearchInstance}) {
+      init({ helper, state, instantSearchInstance }) {
         const isCurrentInOptions = some(
           items,
           item => Number(state.hitsPerPage) === Number(item.value)
@@ -125,49 +125,56 @@ export default function connectHitsPerPage(renderFn) {
           if (state.hitsPerPage === undefined) {
             if (window.console) {
               window.console.warn(
-  `[Warning][hitsPerPageSelector] hitsPerPage not defined.
+                `[Warning][hitsPerPageSelector] hitsPerPage not defined.
   You should probably set the value \`hitsPerPage\`
   using the searchParameters attribute of the instantsearch constructor.`
               );
             }
           } else if (window.console) {
             window.console.warn(
-  `[Warning][hitsPerPageSelector] No item in \`items\`
+              `[Warning][hitsPerPageSelector] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
             );
           }
 
-          items = [{value: undefined, label: ''}, ...items];
+          items = [{ value: undefined, label: '' }, ...items];
         }
 
-        this.setHitsPerPage = value => helper
-          .setQueryParameter('hitsPerPage', value)
-          .search();
+        this.setHitsPerPage = value =>
+          helper.setQueryParameter('hitsPerPage', value).search();
 
-        renderFn({
-          items: this._transformItems(state),
-          refine: this.setHitsPerPage,
-          hasNoResults: true,
-          widgetParams,
-          instantSearchInstance,
-        }, true);
+        renderFn(
+          {
+            items: this._transformItems(state),
+            refine: this.setHitsPerPage,
+            hasNoResults: true,
+            widgetParams,
+            instantSearchInstance,
+          },
+          true
+        );
       },
 
-      render({state, results, instantSearchInstance}) {
+      render({ state, results, instantSearchInstance }) {
         const hasNoResults = results.nbHits === 0;
 
-        renderFn({
-          items: this._transformItems(state),
-          refine: this.setHitsPerPage,
-          hasNoResults,
-          widgetParams,
-          instantSearchInstance,
-        }, false);
+        renderFn(
+          {
+            items: this._transformItems(state),
+            refine: this.setHitsPerPage,
+            hasNoResults,
+            widgetParams,
+            instantSearchInstance,
+          },
+          false
+        );
       },
 
-      _transformItems({hitsPerPage}) {
-        return items.map(item =>
-          ({...item, isRefined: Number(item.value) === Number(hitsPerPage)}));
+      _transformItems({ hitsPerPage }) {
+        return items.map(item => ({
+          ...item,
+          isRefined: Number(item.value) === Number(hitsPerPage),
+        }));
       },
     };
   };

@@ -7,16 +7,23 @@ import cloneDeep from 'lodash/cloneDeep';
 import mapValues from 'lodash/mapValues';
 import isEqual from 'lodash/isEqual';
 
-import {isReactElement} from '../lib/utils.js';
+import { isReactElement } from '../lib/utils.js';
 
 export class PureTemplate extends React.Component {
   shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props.data, nextProps.data) || this.props.templateKey !== nextProps.templateKey;
+    return (
+      !isEqual(this.props.data, nextProps.data) ||
+      this.props.templateKey !== nextProps.templateKey
+    );
   }
 
   render() {
-    const useCustomCompileOptions = this.props.useCustomCompileOptions[this.props.templateKey];
-    const compileOptions = useCustomCompileOptions ? this.props.templatesConfig.compileOptions : {};
+    const useCustomCompileOptions = this.props.useCustomCompileOptions[
+      this.props.templateKey
+    ];
+    const compileOptions = useCustomCompileOptions
+      ? this.props.templatesConfig.compileOptions
+      : {};
 
     const content = renderTemplate({
       templates: this.props.templates,
@@ -33,10 +40,17 @@ export class PureTemplate extends React.Component {
     }
 
     if (isReactElement(content)) {
-      throw new Error('Support for templates as React elements has been removed, please use react-instantsearch');
+      throw new Error(
+        'Support for templates as React elements has been removed, please use react-instantsearch'
+      );
     }
 
-    return <div {...this.props.rootProps} dangerouslySetInnerHTML={{__html: content}} />;
+    return (
+      <div
+        {...this.props.rootProps}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
   }
 }
 
@@ -44,19 +58,20 @@ PureTemplate.propTypes = {
   data: PropTypes.object,
   rootProps: PropTypes.object,
   templateKey: PropTypes.string,
-  templates: PropTypes.objectOf(PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ])),
+  templates: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.string, PropTypes.func])
+  ),
   templatesConfig: PropTypes.shape({
     helpers: PropTypes.objectOf(PropTypes.func),
     // https://github.com/twitter/hogan.js/#compilation-options
     compileOptions: PropTypes.shape({
       asString: PropTypes.bool,
-      sectionTags: PropTypes.arrayOf(PropTypes.shape({
-        o: PropTypes.string,
-        c: PropTypes.string,
-      })),
+      sectionTags: PropTypes.arrayOf(
+        PropTypes.shape({
+          o: PropTypes.string,
+          c: PropTypes.string,
+        })
+      ),
       delimiters: PropTypes.string,
       disableLambda: PropTypes.bool,
     }),
@@ -96,30 +111,46 @@ function transformData(fn, templateKey, originalData) {
       data = originalData;
     }
   } else {
-    throw new Error(`transformData must be a function or an object, was ${typeFn} (key : ${templateKey})`);
+    throw new Error(
+      `transformData must be a function or an object, was ${typeFn} (key : ${templateKey})`
+    );
   }
 
   const dataType = typeof data;
   const expectedType = typeof originalData;
   if (dataType !== expectedType) {
-    throw new Error(`\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`);
+    throw new Error(
+      `\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`
+    );
   }
   return data;
 }
 
-function renderTemplate({templates, templateKey, compileOptions, helpers, data}) {
+function renderTemplate({
+  templates,
+  templateKey,
+  compileOptions,
+  helpers,
+  data,
+}) {
   const template = templates[templateKey];
   const templateType = typeof template;
   const isTemplateString = templateType === 'string';
   const isTemplateFunction = templateType === 'function';
 
   if (!isTemplateString && !isTemplateFunction) {
-    throw new Error(`Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`);
+    throw new Error(
+      `Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`
+    );
   } else if (isTemplateFunction) {
     return template(data);
   } else {
-    const transformedHelpers = transformHelpersToHogan(helpers, compileOptions, data);
-    const preparedData = {...data, helpers: transformedHelpers};
+    const transformedHelpers = transformHelpersToHogan(
+      helpers,
+      compileOptions,
+      data
+    );
+    const preparedData = { ...data, helpers: transformedHelpers };
     return hogan.compile(template, compileOptions).render(preparedData);
   }
 }
@@ -141,14 +172,14 @@ function transformHelpersToHogan(helpers, compileOptions, data) {
 // Resolve transformData before Template, so transformData is always called
 // even if the data is the same. Allowing you to dynamically inject conditions in
 // transformData that will force re-rendering
-const withTransformData =
-  TemplateToWrap =>
-    props => {
-      const data = props.data === undefined ? {} : props.data; // eslint-disable-line react/prop-types
-      return <TemplateToWrap
-        {...props}
-        data={transformData(props.transformData, props.templateKey, data)} // eslint-disable-line react/prop-types
-      />;
-    };
+const withTransformData = TemplateToWrap => props => {
+  const data = props.data === undefined ? {} : props.data; // eslint-disable-line react/prop-types
+  return (
+    <TemplateToWrap
+      {...props}
+      data={transformData(props.transformData, props.templateKey, data)} // eslint-disable-line react/prop-types
+    />
+  );
+};
 
 export default withTransformData(PureTemplate);

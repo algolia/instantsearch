@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectNumericSelector from '../connectNumericSelector.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectNumericSelector', () => {
   it('Renders during init and render', () => {
@@ -14,9 +14,9 @@ describe('connectNumericSelector', () => {
     const rendering = sinon.stub();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
-      {name: '10', value: 10},
-      {name: '20', value: 20},
-      {name: '30', value: 30},
+      { name: '10', value: 10 },
+      { name: '20', value: 20 },
+      { name: '30', value: 30 },
     ];
     const widget = makeWidget({
       attributeName: 'numerics',
@@ -58,7 +58,7 @@ describe('connectNumericSelector', () => {
     });
 
     widget.render({
-      results: new SearchResults(helper.state, [{nbHits: 0}]),
+      results: new SearchResults(helper.state, [{ nbHits: 0 }]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -82,9 +82,9 @@ describe('connectNumericSelector', () => {
     const rendering = sinon.stub();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
-      {name: '10', value: 10},
-      {name: '20', value: 20},
-      {name: '30', value: 30},
+      { name: '10', value: 10 },
+      { name: '20', value: 20 },
+      { name: '30', value: 30 },
     ];
     const widget = makeWidget({
       attributeName: 'numerics',
@@ -99,13 +99,18 @@ describe('connectNumericSelector', () => {
       },
     });
 
-    expect(widget.getConfiguration({}, {
-      numericRefinements: {
-        numerics: {
-          '=': [30],
-        },
-      },
-    })).toEqual({
+    expect(
+      widget.getConfiguration(
+        {},
+        {
+          numericRefinements: {
+            numerics: {
+              '=': [30],
+            },
+          },
+        }
+      )
+    ).toEqual({
       numericRefinements: {
         numerics: {
           '=': [30],
@@ -118,9 +123,9 @@ describe('connectNumericSelector', () => {
     const rendering = sinon.stub();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
-      {name: '10', value: 10},
-      {name: '20', value: 20},
-      {name: '30', value: 30},
+      { name: '10', value: 10 },
+      { name: '20', value: 20 },
+      { name: '30', value: 30 },
     ];
     const widget = makeWidget({
       attributeName: 'numerics',
@@ -139,14 +144,22 @@ describe('connectNumericSelector', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {refine} = firstRenderingOptions;
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [10]});
+    const { refine } = firstRenderingOptions;
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [10],
+    });
     refine(listOptions[1].name);
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [20]});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [20],
+    });
     refine(listOptions[2].name);
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [30]});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [30],
+    });
     refine(listOptions[0].name);
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [10]});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [10],
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -156,23 +169,31 @@ describe('connectNumericSelector', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {refine: renderSetValue} = secondRenderingOptions;
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [10]});
+    const { refine: renderSetValue } = secondRenderingOptions;
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [10],
+    });
     renderSetValue(listOptions[1].name);
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [20]});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [20],
+    });
     renderSetValue(listOptions[2].name);
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [30]});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [30],
+    });
     renderSetValue(listOptions[0].name);
-    expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [10]});
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [10],
+    });
   });
 
   it('provides isRefined for the currently selected value', () => {
     const rendering = sinon.stub();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
-      {name: '10', value: 10},
-      {name: '20', value: 20},
-      {name: '30', value: 30},
+      { name: '10', value: 10 },
+      { name: '20', value: 20 },
+      { name: '30', value: 30 },
     ];
     const widget = makeWidget({
       attributeName: 'numerics',

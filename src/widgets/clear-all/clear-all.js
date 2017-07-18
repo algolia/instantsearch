@@ -15,12 +15,17 @@ import defaultTemplates from './defaultTemplates.js';
 
 const bem = bemHelper('ais-clear-all');
 
-const renderer = ({containerNode, cssClasses, collapsible, autoHideContainer, renderState, templates}) => ({
-  refine,
-  hasRefinements,
-  createURL,
-  instantSearchInstance,
-}, isFirstRendering) => {
+const renderer = ({
+  containerNode,
+  cssClasses,
+  collapsible,
+  autoHideContainer,
+  renderState,
+  templates,
+}) => (
+  { refine, hasRefinements, createURL, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -138,7 +143,7 @@ export default function clearAll({
 
   try {
     const makeWidget = connectClearAll(specializedRenderer);
-    return makeWidget({excludeAttributes, clearsQuery});
+    return makeWidget({ excludeAttributes, clearsQuery });
   } catch (e) {
     throw new Error(usage);
   }

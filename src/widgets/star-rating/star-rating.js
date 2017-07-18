@@ -24,13 +24,10 @@ const renderer = ({
   autoHideContainer,
   renderState,
   labels,
-}) => ({
-  refine,
-  items,
-  createURL,
-  instantSearchInstance,
-  hasNoResults,
-}, isFirstRendering) => {
+}) => (
+  { refine, items, createURL, instantSearchInstance, hasNoResults },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -48,7 +45,7 @@ const renderer = ({
       collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={items.map(item => ({...item, labels}))}
+      facetValues={items.map(item => ({ ...item, labels }))}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
@@ -141,17 +138,19 @@ starRating({
  *   })
  * );
  */
-export default function starRating({
-  container,
-  attributeName,
-  max = 5,
-  cssClasses: userCssClasses = {},
-  labels = defaultLabels,
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-  autoHideContainer = true,
-} = {}) {
+export default function starRating(
+  {
+    container,
+    attributeName,
+    max = 5,
+    cssClasses: userCssClasses = {},
+    labels = defaultLabels,
+    templates = defaultTemplates,
+    collapsible = false,
+    transformData,
+    autoHideContainer = true,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -186,7 +185,7 @@ export default function starRating({
 
   try {
     const makeWidget = connectStarRating(specializedRenderer);
-    return makeWidget({attributeName, max});
+    return makeWidget({ attributeName, max });
   } catch (e) {
     throw new Error(usage);
   }

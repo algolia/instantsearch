@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import { shallow } from 'enzyme';
 import Hits from '../Hits';
 import Template from '../Template';
 
@@ -56,10 +56,12 @@ describe('Hits', () => {
       // Given
       const props = {
         results: {
-          hits: [{
-            objectID: 'one',
-            foo: 'bar',
-          }],
+          hits: [
+            {
+              objectID: 'one',
+              foo: 'bar',
+            },
+          ],
         },
         templateProps: {
           templates: {
@@ -79,10 +81,12 @@ describe('Hits', () => {
       // Given
       const props = {
         results: {
-          hits: [{
-            objectID: 'one',
-            foo: 'bar',
-          }],
+          hits: [
+            {
+              objectID: 'one',
+              foo: 'bar',
+            },
+          ],
         },
         templateProps: {
           templates: {
@@ -106,10 +110,12 @@ describe('Hits', () => {
     it('should pass the list of all results to the template', () => {
       // Given
       const results = {
-        hits: [{
-          objectID: 'one',
-          foo: 'bar',
-        }],
+        hits: [
+          {
+            objectID: 'one',
+            foo: 'bar',
+          },
+        ],
       };
       const props = {
         results,
@@ -131,15 +137,18 @@ describe('Hits', () => {
   describe('individual item templates', () => {
     it('should add an item template for each hit', () => {
       // Given
-      const hits = [{
-        objectID: 'one',
-        foo: 'bar',
-      }, {
-        objectID: 'two',
-        foo: 'baz',
-      }];
+      const hits = [
+        {
+          objectID: 'one',
+          foo: 'bar',
+        },
+        {
+          objectID: 'two',
+          foo: 'baz',
+        },
+      ];
       const props = {
-        results: {hits},
+        results: { hits },
         hits,
         templateProps: {
           templates: {
@@ -158,12 +167,14 @@ describe('Hits', () => {
 
     it('should set the item class to each item', () => {
       // Given
-      const hits = [{
-        objectID: 'one',
-        foo: 'bar',
-      }];
+      const hits = [
+        {
+          objectID: 'one',
+          foo: 'bar',
+        },
+      ];
       const props = {
-        results: {hits},
+        results: { hits },
         hits,
         templateProps: {
           templates: {
@@ -186,13 +197,16 @@ describe('Hits', () => {
       // Given
       const props = {
         results: {
-          hits: [{
-            objectID: 'one',
-            foo: 'bar',
-          }, {
-            objectID: 'two',
-            foo: 'baz',
-          }],
+          hits: [
+            {
+              objectID: 'one',
+              foo: 'bar',
+            },
+            {
+              objectID: 'two',
+              foo: 'baz',
+            },
+          ],
         },
         templateProps: {
           templates: {
@@ -214,15 +228,18 @@ describe('Hits', () => {
 
     it('should pass each result data to each item template', () => {
       // Given
-      const hits = [{
-        objectID: 'one',
-        foo: 'bar',
-      }, {
-        objectID: 'two',
-        foo: 'baz',
-      }];
+      const hits = [
+        {
+          objectID: 'one',
+          foo: 'bar',
+        },
+        {
+          objectID: 'two',
+          foo: 'baz',
+        },
+      ];
       const props = {
-        results: {hits},
+        results: { hits },
         hits,
         templateProps: {
           templates: {
@@ -232,7 +249,7 @@ describe('Hits', () => {
       };
 
       // When
-      const actual = shallowRender(props).find({templateKey: 'item'});
+      const actual = shallowRender(props).find({ templateKey: 'item' });
 
       // Then
       expect(actual.at(0).props().data.foo).toEqual('bar');
@@ -241,15 +258,18 @@ describe('Hits', () => {
 
     it('should add the __hitIndex in the list to each item', () => {
       // Given
-      const hits = [{
-        objectID: 'one',
-        foo: 'bar',
-      }, {
-        objectID: 'two',
-        foo: 'baz',
-      }];
+      const hits = [
+        {
+          objectID: 'one',
+          foo: 'bar',
+        },
+        {
+          objectID: 'two',
+          foo: 'baz',
+        },
+      ];
       const props = {
-        results: {hits},
+        results: { hits },
         hits,
         templateProps: {
           templates: {
@@ -259,7 +279,7 @@ describe('Hits', () => {
       };
 
       // When
-      const actual = shallowRender(props).find({templateKey: 'item'});
+      const actual = shallowRender(props).find({ templateKey: 'item' });
 
       // Then
       expect(actual.at(0).props().data.__hitIndex).toEqual(0);
@@ -268,15 +288,18 @@ describe('Hits', () => {
 
     it('should use the objectID as the DOM key', () => {
       // Given
-      const hits = [{
-        objectID: 'BAR',
-        foo: 'bar',
-      }, {
-        objectID: 'BAZ',
-        foo: 'baz',
-      }];
+      const hits = [
+        {
+          objectID: 'BAR',
+          foo: 'bar',
+        },
+        {
+          objectID: 'BAZ',
+          foo: 'baz',
+        },
+      ];
       const props = {
-        results: {hits},
+        results: { hits },
         hits,
         templateProps: {
           templates: {
@@ -286,7 +309,7 @@ describe('Hits', () => {
       };
 
       // When
-      const actual = shallowRender(props).find({templateKey: 'item'});
+      const actual = shallowRender(props).find({ templateKey: 'item' });
 
       // Then
       expect(actual.at(0).key()).toEqual('BAR');
