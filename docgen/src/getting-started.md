@@ -13,7 +13,7 @@ githubSource: docgen/src/getting-started.md
 
 **InstantSearch.js** is a JavaScript library that lets you create an instant search results experience using Algolia’s REST API.
 
-In this tutorial, you'll lean how to:
+In this tutorial, you'll learn how to:
 
   * import `instantsearch.js` on your website
   * display results from Algolia
@@ -51,13 +51,13 @@ We also provide you a default Algolia theme for the widgets to be effectively st
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.0/dist/instantsearch-theme-algolia.min.css">
 ```
 
-You will then have access to the `instantsearch` function in the global scope (window).
+You will then have access to the `instantsearch` function in the global scope (`window`).
 
 The jsDeliver CDN is highly available with [over 110 locations](https://www.jsdelivr.com/features/network-map) in the world.
 
 ### From NPM/Yarn
 
-If you have a JavaScript build system, you can install **instantsearch.js** from NPM:
+If you have a JavaScript build system, you can install **InstantSearch.js** from NPM:
 
 ```javascript
 // `npm install instantsearch.js --save` OR
@@ -102,15 +102,15 @@ You can synchronise the current search with the browser url. It provides two ben
   * Working back/next browser buttons
   * Copy and share the current search url
 
-To configure this feature, pass `urlSync: true` option to `instantsearch()`. The urlSync option has more parameters ([see InstantSearch.js API documentation](instantsearch.html)).
+To configure this feature, pass `urlSync: true` option to `instantsearch()`. The `urlSync` option has more parameters ([see InstantSearch.js API documentation](instantsearch.html)).
 
 Congrats 🎉 ! Your website is now connected to Algolia.
 
 ## Display results
 
-The core of a search experience is to display results. By default, **instantsearch.js** will do a query at the start of the page and will retrieve the most relevant hits.
+The core of a search experience is to display results. By default, **InstantSearch.js** will do a query at the start of the page and will retrieve the most relevant hits.
 
-To display results, we are the hits widget will be used. This widget will display all the results returned by Algolia, and it will update when there are new results.
+To display results, the hits widget will be used. This widget will display all the results returned by Algolia, and it will update when there are new results.
 
 A key aspect of InstantSearch.js, is that you need to provide a container for each widget. This will tell instantsearch where to display the widget. Here, we need to define first the container of our results:
 
@@ -120,7 +120,7 @@ A key aspect of InstantSearch.js, is that you need to provide a container for ea
 </div>
 ```
 
-Once you’ve set the place where the widget will be rendered, you need to add to your instantsearch instance, using `addWidget`:
+Once you’ve set the place where the widget will be rendered, you need to add it to your instantsearch instance, using `addWidget`:
 
 ```html
 <script>
@@ -211,7 +211,7 @@ Now that we’ve added the results, we can start querying our index. To do this,
 </script>
 ```
 
-The search is now interactive and we see what matched in each of the products. Good thing for us, Algolia computes the matching part. For better control over what kind of data is returned, you should configure the [attributeToRetrieve](https://www.algolia.com/doc/rest#param-attributesToRetrieve) and [attributeToHighLight](https://www.algolia.com/doc/rest#param-attributesToHighlight) of your index
+The search is now interactive and we see what matched in each of the products. Good thing for us, Algolia computes the matching part. For better control over what kind of data is returned, you should configure the [attributeToRetrieve](https://www.algolia.com/doc/rest#param-attributesToRetrieve) and [attributeToHighlight](https://www.algolia.com/doc/rest#param-attributesToHighlight) of your index
 
 In this part, we’ve seen:
   * How to use the searchbox to query Algolia with text
@@ -353,7 +353,7 @@ In this part, we’ve seen:
 
 ## Wrapping up
 
-Congratulations, you now have a fully featured InstantSearch result page. But this is only the beginning! If you want to dig further into instantsearch.js, we suggest reading:
+Congratulations, you now have a fully featured InstantSearch result page. But this is only the beginning! If you want to dig further into InstantSearch.js, we suggest reading:
 
   * [the API of instantsearch()](instantsearch.html)
   * [more about the widgets and their API](widgets.html)
