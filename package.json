@@ -70,7 +70,7 @@
     "express": "^4.15.2",
     "gh-pages": "^1.0.0",
     "http-server": "^0.9.0",
-    "jest": "^19.0.2",
+    "jest": "^20.0.4",
     "jsdom-global": "^2.1.1",
     "json": "^9.0.6",
     "mkdirp": "^0.5.1",
@@ -106,7 +106,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.24.0",
-    "algoliasearch-helper": "^2.21.0",
+    "algoliasearch-helper": "^2.21.1",
     "classnames": "^2.2.5",
     "clean-css-cli": "^4.0.9",
     "events": "^1.1.0",

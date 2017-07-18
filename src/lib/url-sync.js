@@ -201,8 +201,9 @@ class URLSync {
  */
 function urlSync(options = {}) {
   const useHash = options.useHash || false;
+  const customUrlUtils = options.urlUtils;
 
-  const urlUtils = useHash ? hashUrlUtils : modernUrlUtils;
+  const urlUtils = customUrlUtils || (useHash ? hashUrlUtils : modernUrlUtils);
 
   return new URLSync(urlUtils, options);
 }
