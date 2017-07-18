@@ -13,11 +13,11 @@ Basic usage:
 
 ## Props
 
-| Name        | Type   | Default    | Description            |
-|:------------|:-------|:-----------|:-----------------------|
-| placeholder | String | `''`       | The input placeholder  |
-| submitTitle | String | `'search'` | The submit button text |
-| clearTitle  | String | `'clear'`  | The clear button text  |
+| Name         | Type   | Default    | Description            |
+|:-------------|:-------|:-----------|:-----------------------|
+| placeholder  | String | `''`       | The input placeholder  |
+| submit-title | String | `'search'` | The submit button text |
+| clear-title  | String | `'clear'`  | The clear button text  |
 
 ## Slots
 
