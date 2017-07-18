@@ -9,12 +9,12 @@ import Selector from '../../../components/Selector';
 describe('sortBySelector call', () => {
   it('throws an exception when no options', () => {
     const container = document.createElement('div');
-    expect(sortBySelector.bind(null, {container})).toThrow(/^Usage/);
+    expect(sortBySelector.bind(null, { container })).toThrow(/^Usage/);
   });
 
   it('throws an exception when no indices', () => {
     const indices = [];
-    expect(sortBySelector.bind(null, {indices})).toThrow(/^Usage/);
+    expect(sortBySelector.bind(null, { indices })).toThrow(/^Usage/);
   });
 });
 
@@ -31,21 +31,21 @@ describe('sortBySelector()', () => {
 
   beforeEach(() => {
     autoHideContainer = sinon.stub().returns(Selector);
-    ReactDOM = {render: sinon.spy()};
+    ReactDOM = { render: sinon.spy() };
 
     sortBySelector.__Rewire__('ReactDOM', ReactDOM);
     sortBySelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
 
     container = document.createElement('div');
     indices = [
-      {name: 'index-a', label: 'Index A'},
-      {name: 'index-b', label: 'Index B'},
+      { name: 'index-a', label: 'Index A' },
+      { name: 'index-b', label: 'Index B' },
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],
       item: 'custom-item',
     };
-    widget = sortBySelector({container, indices, cssClasses});
+    widget = sortBySelector({ container, indices, cssClasses });
     helper = {
       getIndex: sinon.stub().returns('index-a'),
       setIndex: sinon.stub().returnsThis(),
@@ -56,16 +56,16 @@ describe('sortBySelector()', () => {
       hits: [],
       nbHits: 0,
     };
-    widget.init({helper});
+    widget.init({ helper });
   });
 
-  it('doesn\'t configure anything', () => {
+  it("doesn't configure anything", () => {
     expect(widget.getConfiguration).toEqual(undefined);
   });
 
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {
-    widget.render({helper, results});
-    widget.render({helper, results});
+    widget.render({ helper, results });
+    widget.render({ helper, results });
     props = {
       shouldAutoHideContainer: false,
       cssClasses: {
@@ -74,15 +74,22 @@ describe('sortBySelector()', () => {
       },
       currentValue: 'index-a',
       options: [
-        {value: 'index-a', label: 'Index A'},
-        {value: 'index-b', label: 'Index B'},
+        { value: 'index-a', label: 'Index A' },
+        { value: 'index-b', label: 'Index B' },
       ],
       setValue: () => {},
     };
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...props} />);
+    expect(ReactDOM.render.calledTwice).toBe(
+      true,
+      'ReactDOM.render called twice'
+    );
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
+      <Selector {...props} />
+    );
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Selector {...props} />);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
+      <Selector {...props} />
+    );
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
@@ -94,16 +101,16 @@ describe('sortBySelector()', () => {
 
   it('should throw if there is no name attribute in a passed object', () => {
     indices.length = 0;
-    indices.push({label: 'Label without a name'});
+    indices.push({ label: 'Label without a name' });
     expect(() => {
-      widget.init({helper});
+      widget.init({ helper });
     }).toThrow(/Index index-a not present/);
   });
 
   it('must include the current index at initialization time', () => {
     helper.getIndex = sinon.stub().returns('non-existing-index');
     expect(() => {
-      widget.init({helper});
+      widget.init({ helper });
     }).toThrow(/Index non-existing-index not present/);
   });
 

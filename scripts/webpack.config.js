@@ -9,9 +9,11 @@ const HappyPack = require('happypack');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
 
 const extractCSS = new ExtractTextPlugin('instantsearch.min.css');
-const extractTheme = new ExtractTextPlugin('instantsearch-theme-algolia.min.css');
+const extractTheme = new ExtractTextPlugin(
+  'instantsearch-theme-algolia.min.css'
+);
 
-const {NODE_ENV = 'development', VERSION = 'UNRELEASED'} = process.env;
+const { NODE_ENV = 'development', VERSION = 'UNRELEASED' } = process.env;
 
 module.exports = {
   devtool: 'source-map',
@@ -63,14 +65,14 @@ module.exports = {
   resolve: {
     modules: ['node_modules', path.join(__dirname, '..', 'node_modules')],
     alias: {
-      'react': 'preact-compat',
+      react: 'preact-compat',
       'react-dom': 'preact-compat',
     },
   },
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {NODE_ENV: JSON.stringify(NODE_ENV)},
+      'process.env': { NODE_ENV: JSON.stringify(NODE_ENV) },
     }),
 
     new webpack.optimize.AggressiveMergingPlugin(),
@@ -102,9 +104,9 @@ module.exports = {
 
     new HappyPack({
       loaders: [
-        {loader: 'css-loader', options: {minimize: true, sourceMap: true}},
-        {loader: 'postcss-loader', options: {sourceMap: true}},
-        {loader: 'sass-loader', options: {sourceMap: true}},
+        { loader: 'css-loader', options: { minimize: true, sourceMap: true } },
+        { loader: 'postcss-loader', options: { sourceMap: true } },
+        { loader: 'sass-loader', options: { sourceMap: true } },
       ],
       id: 'style',
     }),

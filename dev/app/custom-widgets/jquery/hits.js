@@ -1,9 +1,10 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const renderFn = ({hits, widgetParams: {containerNode}}) => {
+const renderFn = ({ hits, widgetParams: { containerNode } }) => {
   containerNode.html(
-    hits.map(hit => `
+    hits.map(
+      hit => `
       <div class="hit">
         <div class="media">
           <a
@@ -21,15 +22,14 @@ const renderFn = ({hits, widgetParams: {containerNode}}) => {
             <h4>${hit._highlightResult.name.value}</h4>
             <p>${hit._highlightResult.description.value}</p>
 
-            ${
-              hit.free_shipping
+            ${hit.free_shipping
               ? '<span class="badge pull-right">Free shipping</span>'
-              : ''
-            }
+              : ''}
           </div>
         </div>
       </div>
-    `)
+    `
+    )
   );
 };
 

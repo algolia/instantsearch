@@ -1,16 +1,15 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const renderFn = ({
-  items,
-  createURL,
-  refine,
-  currentRefinement,
-  widgetParams: {
-    containerNode,
-    title = 'Rating',
+const renderFn = (
+  {
+    items,
+    createURL,
+    refine,
+    widgetParams: { containerNode, title = 'Rating' },
   },
-}, isFirstRendering) => {
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     const markup = `
       <div class="facet-title">${title}</div>
@@ -19,38 +18,41 @@ const renderFn = ({
     containerNode.append(markup);
   }
 
-  containerNode
-    .find('li[data-refine-value]')
-    .each(function() { window.$(this).off('click'); });
+  containerNode.find('li[data-refine-value]').each(function() {
+    window.$(this).off('click');
+  });
 
-  const list = items.map(item => `
+  const list = items.map(
+    item => `
     <li data-refine-value="${item.value}"
       ${item.isRefined ? 'style="font-weight: bold;"' : ''}
     >
       <a href="${createURL(item.value)}">
         ${item.stars
-            .map(star => `<span class="ais-star-rating--star${star === false ? '__empty' : ''}"></span>`)
-            .join('')}
+          .map(
+            star =>
+              `<span class="ais-star-rating--star${star === false
+                ? '__empty'
+                : ''}"></span>`
+          )
+          .join('')}
 
         & up (${item.count})
       </a>
     </li>
-  `);
+  `
+  );
 
-  containerNode
-    .find('ul')
-    .html(list);
+  containerNode.find('ul').html(list);
 
-  containerNode
-    .find('li[data-refine-value]')
-    .each(function() {
-      window.$(this).on('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
+  containerNode.find('li[data-refine-value]').each(function() {
+    window.$(this).on('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
 
-        refine(window.$(this).data('refine-value'));
-      });
+      refine(window.$(this).data('refine-value'));
     });
+  });
 };
 
 export default instantsearch.connectors.connectStarRating(renderFn);

@@ -109,7 +109,7 @@ export default function connectToggle(renderFn) {
     const {
       attributeName,
       label,
-      values: userValues = {on: true, off: undefined},
+      values: userValues = { on: true, off: undefined },
     } = widgetParams;
 
     if (!attributeName || !label) {
@@ -127,7 +127,7 @@ export default function connectToggle(renderFn) {
         };
       },
 
-      toggleRefinement(helper, {isRefined} = {}) {
+      toggleRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
@@ -145,12 +145,19 @@ export default function connectToggle(renderFn) {
         helper.search();
       },
 
-      init({state, helper, createURL, instantSearchInstance}) {
-        this._createURL = isCurrentlyRefined => () => createURL(
-          state
-            .removeDisjunctiveFacetRefinement(attributeName, isCurrentlyRefined ? on : off)
-            .addDisjunctiveFacetRefinement(attributeName, isCurrentlyRefined ? off : on)
-        );
+      init({ state, helper, createURL, instantSearchInstance }) {
+        this._createURL = isCurrentlyRefined => () =>
+          createURL(
+            state
+              .removeDisjunctiveFacetRefinement(
+                attributeName,
+                isCurrentlyRefined ? on : off
+              )
+              .addDisjunctiveFacetRefinement(
+                attributeName,
+                isCurrentlyRefined ? off : on
+              )
+          );
 
         this.toggleRefinement = this.toggleRefinement.bind(this, helper);
 
@@ -184,21 +191,30 @@ export default function connectToggle(renderFn) {
           offFacetValue,
         };
 
-        renderFn({
-          value,
-          createURL: this._createURL(value.isRefined),
-          refine: this.toggleRefinement,
-          instantSearchInstance,
-          widgetParams,
-        }, true);
+        renderFn(
+          {
+            value,
+            createURL: this._createURL(value.isRefined),
+            refine: this.toggleRefinement,
+            instantSearchInstance,
+            widgetParams,
+          },
+          true
+        );
       },
 
-      render({helper, results, state, instantSearchInstance}) {
-        const isRefined = helper.state.isDisjunctiveFacetRefined(attributeName, on);
+      render({ helper, results, state, instantSearchInstance }) {
+        const isRefined = helper.state.isDisjunctiveFacetRefined(
+          attributeName,
+          on
+        );
         const offValue = off === undefined ? false : off;
         const allFacetValues = results.getFacetValues(attributeName);
 
-        const onData = find(allFacetValues, ({name}) => name === unescapeRefinement(on));
+        const onData = find(
+          allFacetValues,
+          ({ name }) => name === unescapeRefinement(on)
+        );
         const onFacetValue = {
           name: label,
           isRefined: onData !== undefined ? onData.isRefined : false,
@@ -206,14 +222,18 @@ export default function connectToggle(renderFn) {
         };
 
         const offData = hasAnOffValue
-          ? find(allFacetValues, ({name}) => name === unescapeRefinement(offValue))
+          ? find(
+              allFacetValues,
+              ({ name }) => name === unescapeRefinement(offValue)
+            )
           : undefined;
         const offFacetValue = {
           name: label,
           isRefined: offData !== undefined ? offData.isRefined : false,
-          count: offData === undefined
-            ? allFacetValues.reduce((total, {count}) => total + count, 0)
-            : offData.count,
+          count:
+            offData === undefined
+              ? allFacetValues.reduce((total, { count }) => total + count, 0)
+              : offData.count,
         };
 
         // what will we show by default,
@@ -229,15 +249,18 @@ export default function connectToggle(renderFn) {
           offFacetValue,
         };
 
-        renderFn({
-          value,
-          state,
-          createURL: this._createURL(value.isRefined),
-          refine: this.toggleRefinement,
-          helper,
-          instantSearchInstance,
-          widgetParams,
-        }, false);
+        renderFn(
+          {
+            value,
+            state,
+            createURL: this._createURL(value.isRefined),
+            refine: this.toggleRefinement,
+            helper,
+            instantSearchInstance,
+            widgetParams,
+          },
+          false
+        );
       },
     };
   };

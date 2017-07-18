@@ -16,21 +16,25 @@ function replaceWithEmAndEscape(value) {
 }
 
 function recursiveEscape(input) {
-  return reduce(input, (output, value, key) => {
-    if (typeof value.value === 'string') {
-      value.value = replaceWithEmAndEscape(value.value);
-    }
+  return reduce(
+    input,
+    (output, value, key) => {
+      if (typeof value.value === 'string') {
+        value.value = replaceWithEmAndEscape(value.value);
+      }
 
-    if (isPlainObject(value.value)) {
-      value.value = mapValues(value.value, replaceWithEmAndEscape);
-    }
+      if (isPlainObject(value.value)) {
+        value.value = mapValues(value.value, replaceWithEmAndEscape);
+      }
 
-    if (isArray(value.value)) {
-      value.value = value.value.map(replaceWithEmAndEscape);
-    }
+      if (isArray(value.value)) {
+        value.value = value.value.map(replaceWithEmAndEscape);
+      }
 
-    return {...output, [key]: value};
-  }, {});
+      return { ...output, [key]: value };
+    },
+    {}
+  );
 }
 
 export default function escapeHits(hits) {

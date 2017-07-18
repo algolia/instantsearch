@@ -32,15 +32,18 @@ const renderer = ({
   renderState,
   transformData,
   templates,
-}) => ({
-  attributes,
-  clearAllClick,
-  clearAllURL,
-  refine,
-  createURL,
-  refinements,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  {
+    attributes,
+    clearAllClick,
+    clearAllURL,
+    refine,
+    createURL,
+    refinements,
+    instantSearchInstance,
+  },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -51,10 +54,15 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && refinements && refinements.length === 0;
+  const shouldAutoHideContainer =
+    autoHideContainer && refinements && refinements.length === 0;
 
-  const clearRefinementClicks = refinements.map(refinement => refine.bind(null, refinement));
-  const clearRefinementURLs = refinements.map(refinement => createURL(refinement));
+  const clearRefinementClicks = refinements.map(refinement =>
+    refine.bind(null, refinement)
+  );
+  const clearRefinementURLs = refinements.map(refinement =>
+    createURL(refinement)
+  );
 
   ReactDOM.render(
     <CurrentRefinedValuesWithHOCs
@@ -174,32 +182,46 @@ export default function currentRefinedValues({
   collapsible = false,
   clearsQuery = false,
 }) {
-  const transformDataOK = isUndefined(transformData) ||
+  const transformDataOK =
+    isUndefined(transformData) ||
     isFunction(transformData) ||
-    isPlainObject(transformData) && isFunction(transformData.item);
+    (isPlainObject(transformData) && isFunction(transformData.item));
 
   const templatesKeys = ['header', 'item', 'clearAll', 'footer'];
-  const templatesOK = isPlainObject(templates) &&
+  const templatesOK =
+    isPlainObject(templates) &&
     reduce(
       templates,
       (res, val, key) =>
         res &&
-          templatesKeys.indexOf(key) !== -1 &&
-          (isString(val) || isFunction(val)),
+        templatesKeys.indexOf(key) !== -1 &&
+        (isString(val) || isFunction(val)),
       true
     );
 
-  const userCssClassesKeys = ['root', 'header', 'body', 'clearAll', 'list', 'item', 'link', 'count', 'footer'];
-  const userCssClassesOK = isPlainObject(userCssClasses) &&
+  const userCssClassesKeys = [
+    'root',
+    'header',
+    'body',
+    'clearAll',
+    'list',
+    'item',
+    'link',
+    'count',
+    'footer',
+  ];
+  const userCssClassesOK =
+    isPlainObject(userCssClasses) &&
     reduce(
       userCssClasses,
       (res, val, key) =>
-        res &&
-         userCssClassesKeys.indexOf(key) !== -1 &&
-         isString(val) || isArray(val),
-      true);
+        (res && userCssClassesKeys.indexOf(key) !== -1 && isString(val)) ||
+        isArray(val),
+      true
+    );
 
-  const showUsage = false ||
+  const showUsage =
+    false ||
     !(isString(container) || isDomElement(container)) ||
     !isArray(attributes) ||
     !isBoolean(onlyListedAttributes) ||
@@ -239,8 +261,15 @@ export default function currentRefinedValues({
   });
 
   try {
-    const makeCurrentRefinedValues = connectCurrentRefinedValues(specializedRenderer);
-    return makeCurrentRefinedValues({attributes, onlyListedAttributes, clearAll, clearsQuery});
+    const makeCurrentRefinedValues = connectCurrentRefinedValues(
+      specializedRenderer
+    );
+    return makeCurrentRefinedValues({
+      attributes,
+      onlyListedAttributes,
+      clearAll,
+      clearsQuery,
+    });
   } catch (e) {
     throw new Error(usage);
   }

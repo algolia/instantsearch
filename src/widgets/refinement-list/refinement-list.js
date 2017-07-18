@@ -27,19 +27,22 @@ const renderer = ({
   autoHideContainer,
   showMoreConfig,
   searchForFacetValues,
-}) => ({
-  refine,
-  items,
-  createURL,
-  searchForItems,
-  isFromSearch,
-  instantSearchInstance,
-  canRefine,
-  toggleShowMore,
-  isShowingMore,
-  hasExhaustiveItems,
-  canToggleShowMore,
-}, isFirstRendering) => {
+}) => (
+  {
+    refine,
+    items,
+    createURL,
+    searchForItems,
+    isFromSearch,
+    instantSearchInstance,
+    canRefine,
+    toggleShowMore,
+    isShowingMore,
+    hasExhaustiveItems,
+    canToggleShowMore,
+  },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -52,7 +55,7 @@ const renderer = ({
 
   // Pass count of currently selected items to the header template
   const headerFooterData = {
-    header: {refinedFacetsCount: filter(items, {isRefined: true}).length},
+    header: { refinedFacetsCount: filter(items, { isRefined: true }).length },
   };
 
   ReactDOM.render(
@@ -66,7 +69,9 @@ const renderer = ({
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
       searchFacetValues={searchForFacetValues ? searchForItems : undefined}
-      searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
+      searchPlaceholder={
+        searchForFacetValues.placeholder || 'Search for other...'
+      }
       isFromSearch={isFromSearch}
       showMore={showMoreConfig !== null}
       toggleShowMore={toggleShowMore}
@@ -207,20 +212,22 @@ refinementList({
  *   })
  * );
  */
-export default function refinementList({
-  container,
-  attributeName,
-  operator = 'or',
-  sortBy = ['isRefined', 'count:desc', 'name:asc'],
-  limit = 10,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-  autoHideContainer = true,
-  showMore = false,
-  searchForFacetValues = false,
-} = {}) {
+export default function refinementList(
+  {
+    container,
+    attributeName,
+    operator = 'or',
+    sortBy = ['isRefined', 'count:desc', 'name:asc'],
+    limit = 10,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    collapsible = false,
+    transformData,
+    autoHideContainer = true,
+    showMore = false,
+    searchForFacetValues = false,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -230,11 +237,19 @@ export default function refinementList({
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
 
-  const showMoreLimit = showMoreConfig && showMoreConfig.limit || limit;
+  const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || limit;
   const containerNode = getContainerNode(container);
-  const showMoreTemplates = showMoreConfig ? prefixKeys('show-more-', showMoreConfig.templates) : {};
-  const searchForValuesTemplates = searchForFacetValues ? searchForFacetValues.templates : {};
-  const allTemplates = {...templates, ...showMoreTemplates, ...searchForValuesTemplates};
+  const showMoreTemplates = showMoreConfig
+    ? prefixKeys('show-more-', showMoreConfig.templates)
+    : {};
+  const searchForValuesTemplates = searchForFacetValues
+    ? searchForFacetValues.templates
+    : {};
+  const allTemplates = {
+    ...templates,
+    ...showMoreTemplates,
+    ...searchForValuesTemplates,
+  };
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),

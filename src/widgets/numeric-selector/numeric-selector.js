@@ -5,23 +5,14 @@ import cx from 'classnames';
 import Selector from '../../components/Selector.js';
 import connectNumericSelector from '../../connectors/numeric-selector/connectNumericSelector.js';
 
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils.js';
 
 const bem = bemHelper('ais-numeric-selector');
 
-const renderer = ({
-  containerNode,
-  autoHideContainer,
-  cssClasses,
-}) => ({
-  currentRefinement,
-  refine,
-  hasNoResults,
-  options,
-}, isFirstRendering) => {
+const renderer = ({ containerNode, autoHideContainer, cssClasses }) => (
+  { currentRefinement, refine, hasNoResults, options },
+  isFirstRendering
+) => {
   if (isFirstRendering) return;
 
   ReactDOM.render(
@@ -103,11 +94,15 @@ export default function numericSelector({
     item: cx(bem('item'), userCssClasses.item),
   };
 
-  const specializedRenderer = renderer({autoHideContainer, containerNode, cssClasses});
+  const specializedRenderer = renderer({
+    autoHideContainer,
+    containerNode,
+    cssClasses,
+  });
 
   try {
     const makeNumericSelector = connectNumericSelector(specializedRenderer);
-    return makeNumericSelector({operator, attributeName, options});
+    return makeNumericSelector({ operator, attributeName, options });
   } catch (e) {
     throw new Error(usage);
   }

@@ -7,7 +7,7 @@ import cx from 'classnames';
 import Pagination from '../../components/Pagination/Pagination.js';
 import connectPagination from '../../connectors/pagination/connectPagination.js';
 
-import {bemHelper, getContainerNode} from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils.js';
 
 const defaultLabels = {
   previous: '‹',
@@ -26,13 +26,10 @@ const renderer = ({
   padding,
   autoHideContainer,
   scrollToNode,
-}) => ({
-  createURL,
-  currentRefinement,
-  nbHits,
-  nbPages,
-  refine,
-}, isFirstRendering) => {
+}) => (
+  { createURL, currentRefinement, nbHits, nbPages, refine },
+  isFirstRendering
+) => {
   if (isFirstRendering) return;
 
   const setCurrrentPage = pageNumber => {
@@ -129,16 +126,18 @@ pagination({
  *   })
  * );
  */
-export default function pagination({
-  container,
-  labels: userLabels = defaultLabels,
-  cssClasses: userCssClasses = {},
-  maxPages,
-  padding = 3,
-  showFirstLast = true,
-  autoHideContainer = true,
-  scrollTo: userScrollTo = 'body',
-} = {}) {
+export default function pagination(
+  {
+    container,
+    labels: userLabels = defaultLabels,
+    cssClasses: userCssClasses = {},
+    maxPages,
+    padding = 3,
+    showFirstLast = true,
+    autoHideContainer = true,
+    scrollTo: userScrollTo = 'body',
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -175,7 +174,7 @@ export default function pagination({
 
   try {
     const makeWidget = connectPagination(specializedRenderer);
-    return makeWidget({maxPages});
+    return makeWidget({ maxPages });
   } catch (e) {
     throw new Error(usage);
   }

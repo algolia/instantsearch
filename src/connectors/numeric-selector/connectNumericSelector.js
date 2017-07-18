@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {
@@ -96,11 +96,7 @@ export default function connectNumericSelector(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {
-      attributeName,
-      options,
-      operator = '=',
-    } = widgetParams;
+    const { attributeName, options, operator = '=' } = widgetParams;
 
     if (!attributeName || !options) {
       throw new Error(usage);
@@ -117,7 +113,7 @@ export default function connectNumericSelector(renderFn) {
         };
       },
 
-      init({helper, instantSearchInstance}) {
+      init({ helper, instantSearchInstance }) {
         this._refine = value => {
           helper.clearRefinements(attributeName);
           if (value !== undefined) {
@@ -126,25 +122,31 @@ export default function connectNumericSelector(renderFn) {
           helper.search();
         };
 
-        renderFn({
-          currentRefinement: this._getRefinedValue(helper.state),
-          options,
-          refine: this._refine,
-          hasNoResults: true,
-          instantSearchInstance,
-          widgetParams,
-        }, true);
+        renderFn(
+          {
+            currentRefinement: this._getRefinedValue(helper.state),
+            options,
+            refine: this._refine,
+            hasNoResults: true,
+            instantSearchInstance,
+            widgetParams,
+          },
+          true
+        );
       },
 
-      render({helper, results, instantSearchInstance}) {
-        renderFn({
-          currentRefinement: this._getRefinedValue(helper.state),
-          options,
-          refine: this._refine,
-          hasNoResults: results.nbHits === 0,
-          instantSearchInstance,
-          widgetParams,
-        }, false);
+      render({ helper, results, instantSearchInstance }) {
+        renderFn(
+          {
+            currentRefinement: this._getRefinedValue(helper.state),
+            options,
+            refine: this._refine,
+            hasNoResults: results.nbHits === 0,
+            instantSearchInstance,
+            widgetParams,
+          },
+          false
+        );
       },
 
       _getRefinedValue(state) {
@@ -154,12 +156,12 @@ export default function connectNumericSelector(renderFn) {
         // is not sending a SearchParameters. There's no way given how we built the helper
         // to initialize a true partial state where only the refinements are present
         return state &&
-          state.numericRefinements &&
-          state.numericRefinements[attributeName] !== undefined &&
-          state.numericRefinements[attributeName][operator] !== undefined &&
-          state.numericRefinements[attributeName][operator][0] !== undefined ? // could be 0
-          state.numericRefinements[attributeName][operator][0] :
-          options[0].value;
+        state.numericRefinements &&
+        state.numericRefinements[attributeName] !== undefined &&
+        state.numericRefinements[attributeName][operator] !== undefined &&
+        state.numericRefinements[attributeName][operator][0] !== undefined // could be 0
+          ? state.numericRefinements[attributeName][operator][0]
+          : options[0].value;
       },
     };
   };

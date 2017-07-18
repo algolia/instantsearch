@@ -29,9 +29,9 @@ search.addWidget(
   instantsearch.widgets.sortBySelector({
     container: '#sort-by-selector',
     indices: [
-      {name: 'instant_search', label: 'Most relevant'},
-      {name: 'instant_search_price_asc', label: 'Lowest price'},
-      {name: 'instant_search_price_desc', label: 'Highest price'},
+      { name: 'instant_search', label: 'Most relevant' },
+      { name: 'instant_search_price_asc', label: 'Lowest price' },
+      { name: 'instant_search_price_desc', label: 'Highest price' },
     ],
     cssClasses: {
       select: 'form-control',
@@ -43,9 +43,9 @@ search.addWidget(
   instantsearch.widgets.hitsPerPageSelector({
     container: '#hits-per-page-selector',
     items: [
-      {value: 6, label: '6 per page'},
-      {value: 12, label: '12 per page'},
-      {value: 24, label: '24 per page'},
+      { value: 6, label: '6 per page' },
+      { value: 12, label: '12 per page' },
+      { value: 24, label: '24 per page' },
     ],
     cssClasses: {
       select: 'form-control',
@@ -99,16 +99,25 @@ search.addWidget(
       {
         name: 'price',
         label: 'Price',
-        transformData: function(data) { data.label = data.label + ''; return data; },
+        transformData: function(data) {
+          data.label = data.label + '';
+          return data;
+        },
       },
       {
         name: 'price_range',
         label: 'Price range',
-        transformData: function(data) { data.label = data.label.replace(/(\d+)/g, '$$$1'); return data; },
+        transformData: function(data) {
+          data.label = data.label.replace(/(\d+)/g, '$$$1');
+          return data;
+        },
       },
       {
         name: 'free_shipping',
-        transformData: function(data) { if (data.label === 'true') data.label = 'Free shipping'; return data; },
+        transformData: function(data) {
+          if (data.label === 'true') data.label = 'Free shipping';
+          return data;
+        },
       },
     ],
   })
@@ -138,11 +147,11 @@ search.addWidget(
     attributeName: 'price',
     operator: 'or',
     options: [
-      {name: 'All'},
-      {end: 4, name: 'less than 4'},
-      {start: 4, end: 4, name: '4'},
-      {start: 5, end: 10, name: 'between 5 and 10'},
-      {start: 10, name: 'more than 10'},
+      { name: 'All' },
+      { end: 4, name: 'less than 4' },
+      { start: 4, end: 4, name: '4' },
+      { start: 5, end: 10, name: 'between 5 and 10' },
+      { start: 10, name: 'more than 10' },
     ],
     cssClasses: {
       header: 'facet-title',
@@ -173,7 +182,9 @@ search.addWidget(
       header: 'Price ranges',
     },
     transformData: function(data) {
-      data.label = data.label.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
+      data.label = data.label
+        .replace(/(\d+) - (\d+)/, '$$$1 - $$$2')
+        .replace(/> (\d+)/, '> $$$1');
       return data;
     },
   })
@@ -236,7 +247,11 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.hierarchicalMenu({
     container: '#hierarchical-categories',
-    attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+    attributes: [
+      'hierarchicalCategories.lvl0',
+      'hierarchicalCategories.lvl1',
+      'hierarchicalCategories.lvl2',
+    ],
     cssClasses: {
       header: 'facet-title',
       list: 'hierarchical-categories-list',
@@ -279,10 +294,10 @@ search.addWidget(
     operator: '>=',
     attributeName: 'popularity',
     options: [
-      {label: 'Default', value: 0},
-      {label: 'Top 10', value: 9991},
-      {label: 'Top 100', value: 9901},
-      {label: 'Top 500', value: 9501},
+      { label: 'Default', value: 0 },
+      { label: 'Top 10', value: 9991 },
+      { label: 'Top 100', value: 9901 },
+      { label: 'Top 500', value: 9501 },
     ],
   })
 );

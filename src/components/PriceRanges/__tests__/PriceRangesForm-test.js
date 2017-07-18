@@ -28,9 +28,7 @@ describe('PriceRangesForm', () => {
         },
       };
 
-      const tree = renderer.create(
-        <PriceRangesForm {...props} />
-      ).toJSON();
+      const tree = renderer.create(<PriceRangesForm {...props} />).toJSON();
       expect(tree).toMatchSnapshot();
     });
   });
@@ -39,7 +37,10 @@ describe('PriceRangesForm', () => {
     it('starts a refine on submit', () => {
       // Given
       const refine = sinon.spy();
-      const handleSubmitMock = sinon.spy(PriceRangesForm.prototype, 'handleSubmit');
+      const handleSubmitMock = sinon.spy(
+        PriceRangesForm.prototype,
+        'handleSubmit'
+      );
       const component = TestUtils.renderIntoDocument(
         <PriceRangesForm
           currentRefinement={{

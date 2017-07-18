@@ -4,7 +4,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectHitsPerPage from '../connectHitsPerPage.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectHitsPerPage', () => {
   it('Renders during init and render', () => {
@@ -14,8 +14,8 @@ describe('connectHitsPerPage', () => {
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
-        {value: 3, label: '3 items per page'},
-        {value: 10, label: '10 items per page'},
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
       ],
     });
 
@@ -42,8 +42,8 @@ describe('connectHitsPerPage', () => {
     expect(rendering.lastCall.args[1]).toBe(true);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
       items: [
-        {value: 3, label: '3 items per page'},
-        {value: 10, label: '10 items per page'},
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
       ],
     });
 
@@ -59,8 +59,8 @@ describe('connectHitsPerPage', () => {
     expect(rendering.lastCall.args[1]).toBe(false);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
       items: [
-        {value: 3, label: '3 items per page'},
-        {value: 10, label: '10 items per page'},
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
       ],
     });
   });
@@ -70,9 +70,9 @@ describe('connectHitsPerPage', () => {
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
-        {value: 3, label: '3 items per page'},
-        {value: 10, label: '10 items per page'},
-        {value: 11, label: ''},
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+        { value: 11, label: '' },
       ],
     });
 
@@ -89,7 +89,7 @@ describe('connectHitsPerPage', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {refine} = firstRenderingOptions;
+    const { refine } = firstRenderingOptions;
     expect(helper.getQueryParameter('hitsPerPage')).toBe(11);
     refine(3);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(3);
@@ -102,7 +102,7 @@ describe('connectHitsPerPage', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {refine: renderSetValue} = secondRenderingOptions;
+    const { refine: renderSetValue } = secondRenderingOptions;
     expect(helper.getQueryParameter('hitsPerPage')).toBe(3);
     renderSetValue(10);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(10);
@@ -115,9 +115,9 @@ describe('connectHitsPerPage', () => {
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
-        {value: 3, label: '3 items per page'},
-        {value: 10, label: '10 items per page'},
-        {value: 7, label: ''},
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+        { value: 7, label: '' },
       ],
     });
 
@@ -153,8 +153,8 @@ describe('connectHitsPerPage', () => {
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
-        {value: 3, label: '3 items per page'},
-        {value: 10, label: '10 items per page'},
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
       ],
     });
 

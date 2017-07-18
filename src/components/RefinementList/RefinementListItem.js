@@ -23,10 +23,7 @@ class RefinementListItem extends React.Component {
 
   render() {
     return (
-      <div
-        className={this.props.itemClassName}
-        onClick={this.handleClick}
-      >
+      <div className={this.props.itemClassName} onClick={this.handleClick}>
         <Template
           data={this.props.templateData}
           templateKey={this.props.templateKey}
@@ -39,10 +36,7 @@ class RefinementListItem extends React.Component {
 }
 
 RefinementListItem.propTypes = {
-  facetValueToRefine: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  facetValueToRefine: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   handleClick: PropTypes.func.isRequired,
   isRefined: PropTypes.bool.isRequired,
   itemClassName: PropTypes.string,

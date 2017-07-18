@@ -22,12 +22,10 @@ const renderer = ({
   renderState,
   templates,
   transformData,
-}) => ({
-  value,
-  createURL,
-  refine,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  { value, createURL, refine, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -38,7 +36,8 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && (value.count === 0 || value.count === null);
+  const shouldAutoHideContainer =
+    autoHideContainer && (value.count === 0 || value.count === null);
 
   ReactDOM.render(
     <RefinementList
@@ -48,7 +47,7 @@ const renderer = ({
       facetValues={[value]}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
-      toggleRefinement={(name, isRefined) => refine({isRefined})}
+      toggleRefinement={(name, isRefined) => refine({ isRefined })}
     />,
     containerNode
   );
@@ -152,17 +151,19 @@ toggle({
  *   })
  * );
  */
-export default function toggle({
-  container,
-  attributeName,
-  label,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  transformData,
-  autoHideContainer = true,
-  collapsible = false,
-  values: userValues = {on: true, off: undefined},
-} = {}) {
+export default function toggle(
+  {
+    container,
+    attributeName,
+    label,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    transformData,
+    autoHideContainer = true,
+    collapsible = false,
+    values: userValues = { on: true, off: undefined },
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -194,7 +195,7 @@ export default function toggle({
 
   try {
     const makeWidget = connectToggle(specializedRenderer);
-    return makeWidget({attributeName, label, values: userValues});
+    return makeWidget({ attributeName, label, values: userValues });
   } catch (e) {
     throw new Error(usage);
   }

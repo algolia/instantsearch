@@ -1,13 +1,16 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const renderFn = ({
-  items,
-  refine,
-  canRefine,
-  createURL,
-  widgetParams: {containerNode, title},
-}, isFirstRendering) => {
+const renderFn = (
+  {
+    items,
+    refine,
+    canRefine,
+    createURL,
+    widgetParams: { containerNode, title },
+  },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     const markup = `
       <div class="facet-title">${title}</div>
@@ -18,10 +21,13 @@ const renderFn = ({
   }
 
   // remove event listeners if any before attaching new ones
-  window.$('li[data-refine-value]').each(function() { window.$(this).off(); });
+  window.$('li[data-refine-value]').each(function() {
+    window.$(this).off();
+  });
 
   if (canRefine) {
-    const list = items.map(item => `
+    const list = items.map(
+      item => `
       <li
         data-refine-value="${item.value}"
         class="facet-value checkbox clearfix"
@@ -37,9 +43,7 @@ const renderFn = ({
             href="${createURL(item.value)}"
             style="text-decoration: none; color: #000;"
           >
-            ${item.isRefined
-              ? `<strong>${item.label}</strong>`
-              : item.label}
+            ${item.isRefined ? `<strong>${item.label}</strong>` : item.label}
           </a>
 
           <span class="facet-count pull-right">
@@ -47,22 +51,19 @@ const renderFn = ({
           </span>
         </label>
       </li>
-    `);
+    `
+    );
 
-    containerNode
-      .find('ul')
-      .html(list.join(''));
+    containerNode.find('ul').html(list.join(''));
 
-    containerNode
-      .find('li[data-refine-value]')
-      .each(function() {
-        window.$(this).on('click', e => {
-          e.preventDefault();
-          e.stopPropagation();
+    containerNode.find('li[data-refine-value]').each(function() {
+      window.$(this).on('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
 
-          refine(window.$(this).data('refine-value'));
-        });
+        refine(window.$(this).data('refine-value'));
       });
+    });
   }
 };
 

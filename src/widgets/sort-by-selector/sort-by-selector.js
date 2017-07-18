@@ -4,20 +4,14 @@ import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
 import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
-import {bemHelper, getContainerNode} from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils.js';
 
 const bem = bemHelper('ais-sort-by-selector');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  autoHideContainer,
-}) => ({
-  currentRefinement,
-  options,
-  refine,
-  hasNoResults,
-}, isFirstRendering) => {
+const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
+  { currentRefinement, options, refine, hasNoResults },
+  isFirstRendering
+) => {
   if (isFirstRendering) return;
 
   const shouldAutoHideContainer = autoHideContainer && hasNoResults;
@@ -82,12 +76,14 @@ sortBySelector({
  *   })
  * );
  */
-export default function sortBySelector({
-  container,
-  indices,
-  cssClasses: userCssClasses = {},
-  autoHideContainer = false,
-} = {}) {
+export default function sortBySelector(
+  {
+    container,
+    indices,
+    cssClasses: userCssClasses = {},
+    autoHideContainer = false,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -107,7 +103,7 @@ export default function sortBySelector({
 
   try {
     const makeWidget = connectSortBySelector(specializedRenderer);
-    return makeWidget({indices});
+    return makeWidget({ indices });
   } catch (e) {
     throw new Error(usage);
   }

@@ -21,13 +21,10 @@ const renderer = ({
   templates,
   transformData,
   showMoreLabel,
-}) => ({
-  hits,
-  results,
-  showMore,
-  isLastPage,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  { hits, results, showMore, isLastPage, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -113,14 +110,16 @@ infiniteHits({
  *   })
  * );
  */
-export default function infiniteHits({
-  container,
-  cssClasses: userCssClasses = {},
-  showMoreLabel = 'Show more results',
-  templates = defaultTemplates,
-  transformData,
-  escapeHits = false,
-} = {}) {
+export default function infiniteHits(
+  {
+    container,
+    cssClasses: userCssClasses = {},
+    showMoreLabel = 'Show more results',
+    templates = defaultTemplates,
+    transformData,
+    escapeHits = false,
+  } = {}
+) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
   }
@@ -144,7 +143,7 @@ export default function infiniteHits({
 
   try {
     const makeInfiniteHits = connectInfiniteHits(specializedRenderer);
-    return makeInfiniteHits({escapeHits});
+    return makeInfiniteHits({ escapeHits });
   } catch (e) {
     throw new Error(usage);
   }

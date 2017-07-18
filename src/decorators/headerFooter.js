@@ -23,10 +23,11 @@ function headerFooter(ComposedComponent) {
         body: cx('ais-body', this.props.cssClasses.body),
       };
 
-      this._footerElement = this._getElement({type: 'footer'});
+      this._footerElement = this._getElement({ type: 'footer' });
     }
-    _getElement({type, handleClick = null}) {
-      const templates = this.props.templateProps && this.props.templateProps.templates;
+    _getElement({ type, handleClick = null }) {
+      const templates =
+        this.props.templateProps && this.props.templateProps.templates;
       if (!templates || !templates[type]) {
         return null;
       }
@@ -35,9 +36,10 @@ function headerFooter(ComposedComponent) {
       const templateData = getKey(this.props, `headerFooterData.${type}`);
 
       return (
-        <Template {...this.props.templateProps}
+        <Template
+          {...this.props.templateProps}
           data={templateData}
-          rootProps={{className, onClick: handleClick}}
+          rootProps={{ className, onClick: handleClick }}
           templateKey={type}
           transformData={null}
         />
@@ -72,9 +74,7 @@ function headerFooter(ComposedComponent) {
       return (
         <div className={cssClasses.root}>
           {headerElement}
-          <div
-            className={cssClasses.body}
-          >
+          <div className={cssClasses.body}>
             <ComposedComponent {...this.props} />
           </div>
           {this._footerElement}

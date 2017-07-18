@@ -8,17 +8,17 @@ import generateRanges from '../../../connectors/price-ranges/generate-ranges.js'
 import PriceRanges from '../../../components/PriceRanges/PriceRanges.js';
 import defaultTemplates from '../defaultTemplates.js';
 
-const instantSearchInstance = {templatesConfig: undefined};
+const instantSearchInstance = { templatesConfig: undefined };
 
 describe('priceRanges call', () => {
   it('throws an exception when no container', () => {
     const attributeName = '';
-    expect(priceRanges.bind(null, {attributeName})).toThrow(/^Usage:/);
+    expect(priceRanges.bind(null, { attributeName })).toThrow(/^Usage:/);
   });
 
   it('throws an exception when no attributeName', () => {
     const container = document.createElement('div');
-    expect(priceRanges.bind(null, {container})).toThrow(/^Usage:/);
+    expect(priceRanges.bind(null, { container })).toThrow(/^Usage:/);
   });
 });
 
@@ -32,12 +32,16 @@ describe('priceRanges()', () => {
   let createURL;
 
   beforeEach(() => {
-    ReactDOM = {render: sinon.spy()};
+    ReactDOM = { render: sinon.spy() };
 
     priceRanges.__Rewire__('ReactDOM', ReactDOM);
 
     container = document.createElement('div');
-    widget = priceRanges({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
+    widget = priceRanges({
+      container,
+      attributeName: 'aNumAttr',
+      cssClasses: { root: ['root', 'cx'] },
+    });
     results = {
       hits: [1],
       nbHits: 1,
@@ -51,7 +55,7 @@ describe('priceRanges()', () => {
   });
 
   it('adds the attribute as a facet', () => {
-    expect(widget.getConfiguration()).toEqual({facets: ['aNumAttr']});
+    expect(widget.getConfiguration()).toEqual({ facets: ['aNumAttr'] });
   });
 
   describe('without refinements', () => {
@@ -105,45 +109,74 @@ describe('priceRanges()', () => {
           templates: defaultTemplates,
           templatesConfig: undefined,
           transformData: undefined,
-          useCustomCompileOptions: {header: false, footer: false, item: false},
+          useCustomCompileOptions: {
+            header: false,
+            footer: false,
+            item: false,
+          },
         },
       };
-      widget.init({helper, instantSearchInstance});
+      widget.init({ helper, instantSearchInstance });
     });
 
     it('calls twice ReactDOM.render(<PriceRanges props />, container)', () => {
-      widget.render({results, helper, state, createURL});
-      widget.render({results, helper, state, createURL});
+      widget.render({ results, helper, state, createURL });
+      widget.render({ results, helper, state, createURL });
 
-      expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<PriceRanges {...props} />);
+      expect(ReactDOM.render.calledTwice).toBe(
+        true,
+        'ReactDOM.render called twice'
+      );
+      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
+        <PriceRanges {...props} />
+      );
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<PriceRanges {...props} />);
+      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
+        <PriceRanges {...props} />
+      );
       expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
     });
 
     it('calls getRefinements to check if there are some refinements', () => {
-      widget.render({results, helper, state, createURL});
-      expect(helper.getRefinements.calledOnce).toBe(true, 'getRefinements called once');
+      widget.render({ results, helper, state, createURL });
+      expect(helper.getRefinements.calledOnce).toBe(
+        true,
+        'getRefinements called once'
+      );
     });
 
     it('refines on the lower bound', () => {
-      widget._refine({from: 10, to: undefined});
-      expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
-      expect(helper.addNumericRefinement.calledOnce).toBe(true, 'helper.addNumericRefinement called once');
+      widget._refine({ from: 10, to: undefined });
+      expect(helper.clearRefinements.calledOnce).toBe(
+        true,
+        'helper.clearRefinements called once'
+      );
+      expect(helper.addNumericRefinement.calledOnce).toBe(
+        true,
+        'helper.addNumericRefinement called once'
+      );
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');
     });
 
     it('refines on the upper bound', () => {
-      widget._refine({fromt: undefined, to: 10});
-      expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
+      widget._refine({ fromt: undefined, to: 10 });
+      expect(helper.clearRefinements.calledOnce).toBe(
+        true,
+        'helper.clearRefinements called once'
+      );
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');
     });
 
     it('refines on the 2 bounds', () => {
-      widget._refine({from: 10, to: 20});
-      expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
-      expect(helper.addNumericRefinement.calledTwice).toBe(true, 'helper.addNumericRefinement called twice');
+      widget._refine({ from: 10, to: 20 });
+      expect(helper.clearRefinements.calledOnce).toBe(
+        true,
+        'helper.clearRefinements called once'
+      );
+      expect(helper.addNumericRefinement.calledTwice).toBe(
+        true,
+        'helper.addNumericRefinement called twice'
+      );
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');
     });
   });

@@ -7,25 +7,18 @@ import find from 'lodash/find';
 import Selector from '../../components/Selector.js';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
 
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils.js';
 
 const bem = bemHelper('ais-hits-per-page-selector');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  autoHideContainer,
-}) => ({
-  items,
-  refine,
-  hasNoResults,
-}, isFirstRendering) => {
+const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
+  { items, refine, hasNoResults },
+  isFirstRendering
+) => {
   if (isFirstRendering) return;
 
-  const {value: currentValue} = find(items, ({isRefined}) => isRefined) || {};
+  const { value: currentValue } =
+    find(items, ({ isRefined }) => isRefined) || {};
 
   ReactDOM.render(
     <Selector
@@ -85,12 +78,14 @@ hitsPerPageSelector({
  *   })
  * );
  */
-export default function hitsPerPageSelector({
-  container,
-  items,
-  cssClasses: userCssClasses = {},
-  autoHideContainer = false,
-} = {}) {
+export default function hitsPerPageSelector(
+  {
+    container,
+    items,
+    cssClasses: userCssClasses = {},
+    autoHideContainer = false,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -110,7 +105,7 @@ export default function hitsPerPageSelector({
 
   try {
     const makeHitsPerPageSelector = connectHitsPerPage(specializedRenderer);
-    return makeHitsPerPageSelector({items});
+    return makeHitsPerPageSelector({ items });
   } catch (e) {
     throw new Error(usage);
   }

@@ -27,11 +27,17 @@ export class RawPriceRanges extends React.Component {
     let currentRefinement;
     if (this.props.facetValues.length === 1) {
       currentRefinement = {
-        from: this.props.facetValues[0].from !== undefined ? this.props.facetValues[0].from : '',
-        to: this.props.facetValues[0].to !== undefined ? this.props.facetValues[0].to : '',
+        from:
+          this.props.facetValues[0].from !== undefined
+            ? this.props.facetValues[0].from
+            : '',
+        to:
+          this.props.facetValues[0].to !== undefined
+            ? this.props.facetValues[0].to
+            : '',
       };
     } else {
-      currentRefinement = {from: '', to: ''};
+      currentRefinement = { from: '', to: '' };
     }
 
     return (
@@ -45,10 +51,9 @@ export class RawPriceRanges extends React.Component {
   }
 
   getItemFromFacetValue(facetValue) {
-    const cssClassItem = cx(
-      this.props.cssClasses.item,
-      {[this.props.cssClasses.active]: facetValue.isRefined}
-    );
+    const cssClassItem = cx(this.props.cssClasses.item, {
+      [this.props.cssClasses.active]: facetValue.isRefined,
+    });
     const key = `${facetValue.from}_${facetValue.to}`;
     const handleClick = this.refine.bind(this, facetValue);
     const data = {
@@ -62,7 +67,11 @@ export class RawPriceRanges extends React.Component {
           href={facetValue.url}
           onClick={handleClick}
         >
-          <Template data={data} templateKey="item" {...this.props.templateProps} />
+          <Template
+            data={data}
+            templateKey="item"
+            {...this.props.templateProps}
+          />
         </a>
       </div>
     );
@@ -77,7 +86,9 @@ export class RawPriceRanges extends React.Component {
     return (
       <div>
         <div className={this.props.cssClasses.list}>
-          {this.props.facetValues.map(facetValue => this.getItemFromFacetValue(facetValue))}
+          {this.props.facetValues.map(facetValue =>
+            this.getItemFromFacetValue(facetValue)
+          )}
         </div>
         {this.getForm()}
       </div>

@@ -5,7 +5,7 @@ import connectCurrentRefinedValues from '../connectCurrentRefinedValues.js';
 
 describe('connectCurrentRefinedValues', () => {
   it('Renders during init and render', () => {
-    const helper = jsHelper({addAlgoliaAgent: () => {}});
+    const helper = jsHelper({ addAlgoliaAgent: () => {} });
     helper.search = sinon.stub();
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
@@ -58,7 +58,7 @@ describe('connectCurrentRefinedValues', () => {
   it('Provide a function to clear the refinement', () => {
     // For each refinements we get a function that we can call
     // for removing a single refinement
-    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', {
+    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
       facets: ['myFacet'],
     });
     helper.search = sinon.stub();
@@ -100,12 +100,12 @@ describe('connectCurrentRefinedValues', () => {
   });
 
   it('should clear also the search query', () => {
-    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', {});
+    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {});
     helper.search = jest.fn();
 
     const rendering = jest.fn();
     const makeWidget = connectCurrentRefinedValues(rendering);
-    const widget = makeWidget({clearsQuery: true});
+    const widget = makeWidget({ clearsQuery: true });
 
     helper.setQuery('foobar');
     expect(helper.state.query).toBe('foobar');
@@ -120,7 +120,7 @@ describe('connectCurrentRefinedValues', () => {
     // clear current refined values + query
     expect(rendering).toBeCalled();
 
-    const [{clearAllClick}] = rendering.mock.calls[0];
+    const [{ clearAllClick }] = rendering.mock.calls[0];
     clearAllClick();
 
     expect(helper.search).toBeCalled();

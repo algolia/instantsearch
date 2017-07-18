@@ -5,7 +5,7 @@ const SearchResults = algoliasearchHelper.SearchResults;
 
 import connectMenu from '../connectMenu.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectMenu', () => {
   let rendering;
@@ -16,25 +16,15 @@ describe('connectMenu', () => {
   });
 
   it('throws on bad usage', () => {
-    expect(
-      connectMenu
-    ).toThrow();
+    expect(connectMenu).toThrow();
 
-    expect(
-      () => connectMenu({})
-    ).toThrow();
+    expect(() => connectMenu({})).toThrow();
 
-    expect(
-      () => connectMenu(() => {})()
-    ).toThrow();
+    expect(() => connectMenu(() => {})()).toThrow();
 
-    expect(
-      () => connectMenu({limit: 10})
-    ).toThrow();
+    expect(() => connectMenu({ limit: 10 })).toThrow();
 
-    expect(
-      () => connectMenu(() => {})({limit: 10})
-    ).toThrow();
+    expect(() => connectMenu(() => {})({ limit: 10 })).toThrow();
   });
 
   describe('options configuring the helper', () => {
@@ -44,10 +34,12 @@ describe('connectMenu', () => {
       });
 
       expect(widget.getConfiguration({})).toEqual({
-        hierarchicalFacets: [{
-          name: 'myFacet',
-          attributes: ['myFacet'],
-        }],
+        hierarchicalFacets: [
+          {
+            name: 'myFacet',
+            attributes: ['myFacet'],
+          },
+        ],
         maxValuesPerFacet: 10,
       });
     });
@@ -59,10 +51,12 @@ describe('connectMenu', () => {
       });
 
       expect(widget.getConfiguration({})).toEqual({
-        hierarchicalFacets: [{
-          name: 'myFacet',
-          attributes: ['myFacet'],
-        }],
+        hierarchicalFacets: [
+          {
+            name: 'myFacet',
+            attributes: ['myFacet'],
+          },
+        ],
         maxValuesPerFacet: 20,
       });
     });
@@ -78,10 +72,12 @@ describe('connectMenu', () => {
 
     const config = widget.getConfiguration({});
     expect(config).toEqual({
-      hierarchicalFacets: [{
-        name: 'myFacet',
-        attributes: ['myFacet'],
-      }],
+      hierarchicalFacets: [
+        {
+          name: 'myFacet',
+          attributes: ['myFacet'],
+        },
+      ],
       maxValuesPerFacet: 9,
     });
 
@@ -134,7 +130,11 @@ describe('connectMenu', () => {
       attributeName: 'category',
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'value');
@@ -147,7 +147,7 @@ describe('connectMenu', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {refine} = firstRenderingOptions;
+    const { refine } = firstRenderingOptions;
     refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
     refine('value');
@@ -161,7 +161,7 @@ describe('connectMenu', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {refine: renderRefine} = secondRenderingOptions;
+    const { refine: renderRefine } = secondRenderingOptions;
     renderRefine('value');
     expect(helper.hasRefinements('category')).toBe(false);
     renderRefine('value');
@@ -173,7 +173,11 @@ describe('connectMenu', () => {
       attributeName: 'category',
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -192,21 +196,24 @@ describe('connectMenu', () => {
     expect(firstRenderingOptions.items).toEqual([]);
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [],
-        facets: {
-          category: {
-            Decoration: 880,
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              Decoration: 880,
+            },
           },
         },
-      }, {
-        facets: {
-          category: {
-            Decoration: 880,
-            Outdoor: 47,
+        {
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
           },
         },
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -233,8 +240,8 @@ describe('connectMenu', () => {
 
   describe('showMore', () => {
     it('should throw when `showMoreLimit` is lower than `limit`', () => {
-      expect(
-        () => connectMenu(() => {})({
+      expect(() =>
+        connectMenu(() => {})({
           attributeName: 'myFacet',
           limit: 10,
           showMoreLimit: 1,
@@ -250,10 +257,12 @@ describe('connectMenu', () => {
       });
 
       expect(widget.getConfiguration({})).toEqual({
-        hierarchicalFacets: [{
-          name: 'myFacet',
-          attributes: ['myFacet'],
-        }],
+        hierarchicalFacets: [
+          {
+            name: 'myFacet',
+            attributes: ['myFacet'],
+          },
+        ],
         maxValuesPerFacet: 20,
       });
     });
@@ -306,21 +315,24 @@ describe('connectMenu', () => {
       });
 
       widget.render({
-        results: new SearchResults(helper.state, [{
-          hits: [],
-          facets: {
-            category: {
-              Decoration: 880,
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                Decoration: 880,
+              },
             },
           },
-        }, {
-          facets: {
-            category: {
-              Decoration: 880,
-              Outdoor: 47,
+          {
+            facets: {
+              category: {
+                Decoration: 880,
+                Outdoor: 47,
+              },
             },
           },
-        }]),
+        ]),
         state: helper.state,
         helper,
         createURL: () => '#',
@@ -365,20 +377,23 @@ describe('connectMenu', () => {
       });
 
       widget.render({
-        results: new SearchResults(helper.state, [{
-          hits: [],
-          facets: {
-            category: {
-              Decoration: 880,
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                Decoration: 880,
+              },
             },
           },
-        }, {
-          facets: {
-            category: {
-              Decoration: 880,
+          {
+            facets: {
+              category: {
+                Decoration: 880,
+              },
             },
           },
-        }]),
+        ]),
         state: helper.state,
         helper,
         createURL: () => '#',

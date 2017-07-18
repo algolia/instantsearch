@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customRefinementList = connectRefinementList(function render(params) {
@@ -27,11 +27,19 @@ search.addWidget(
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html
 `;
 
-export const checkUsage = ({attributeName, operator, usageMessage, showMoreLimit, limit}) => {
+export const checkUsage = ({
+  attributeName,
+  operator,
+  usageMessage,
+  showMoreLimit,
+  limit,
+}) => {
   const noAttributeName = attributeName === undefined;
-  const invalidOperator = !(/^(and|or)$/).test(operator);
-  const invalidShowMoreLimit = showMoreLimit !== undefined ?
-    isNaN(showMoreLimit) || showMoreLimit < limit : false;
+  const invalidOperator = !/^(and|or)$/.test(operator);
+  const invalidShowMoreLimit =
+    showMoreLimit !== undefined
+      ? isNaN(showMoreLimit) || showMoreLimit < limit
+      : false;
 
   if (noAttributeName || invalidOperator || invalidShowMoreLimit) {
     throw new Error(usageMessage);
@@ -145,84 +153,105 @@ export default function connectRefinementList(renderFn) {
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
     } = widgetParams;
 
-    checkUsage({attributeName, operator, usage, limit, showMoreLimit});
+    checkUsage({ attributeName, operator, usage, limit, showMoreLimit });
 
-    const formatItems = ({name: label, ...item}) =>
-      ({...item, label, value: label, highlighted: label});
+    const formatItems = ({ name: label, ...item }) => ({
+      ...item,
+      label,
+      value: label,
+      highlighted: label,
+    });
 
-    const render = ({items, state, createURL,
-                    helperSpecializedSearchFacetValues,
-                    refine, isFromSearch, isFirstSearch,
-                    isShowingMore, toggleShowMore, hasExhaustiveItems,
-                    instantSearchInstance}) => {
+    const render = ({
+      items,
+      state,
+      createURL,
+      helperSpecializedSearchFacetValues,
+      refine,
+      isFromSearch,
+      isFirstSearch,
+      isShowingMore,
+      toggleShowMore,
+      hasExhaustiveItems,
+      instantSearchInstance,
+    }) => {
       // Compute a specific createURL method able to link to any facet value state change
-      const _createURL = facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
+      const _createURL = facetValue =>
+        createURL(state.toggleRefinement(attributeName, facetValue));
 
       // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
       // function
-      const searchFacetValues = helperSpecializedSearchFacetValues &&
+      const searchFacetValues =
+        helperSpecializedSearchFacetValues &&
         helperSpecializedSearchFacetValues(
           state,
           createURL,
           helperSpecializedSearchFacetValues,
           refine,
-          instantSearchInstance,
+          instantSearchInstance
         );
 
-      renderFn({
-        createURL: _createURL,
-        items,
-        refine,
-        searchForItems: searchFacetValues,
-        instantSearchInstance,
-        isFromSearch,
-        canRefine: isFromSearch || items.length > 0,
-        widgetParams,
-        isShowingMore,
-        canToggleShowMore: isShowingMore || !hasExhaustiveItems,
-        toggleShowMore,
-        hasExhaustiveItems,
-      }, isFirstSearch);
+      renderFn(
+        {
+          createURL: _createURL,
+          items,
+          refine,
+          searchForItems: searchFacetValues,
+          instantSearchInstance,
+          isFromSearch,
+          canRefine: isFromSearch || items.length > 0,
+          widgetParams,
+          isShowingMore,
+          canToggleShowMore: isShowingMore || !hasExhaustiveItems,
+          toggleShowMore,
+          hasExhaustiveItems,
+        },
+        isFirstSearch
+      );
     };
 
     let lastResultsFromMainSearch;
     let searchForFacetValues;
     let refine;
 
-    const createSearchForFacetValues = helper =>
-      (state, createURL, helperSpecializedSearchFacetValues, toggleRefinement, instantSearchInstance) =>
-      query => {
-        if (query === '' && lastResultsFromMainSearch) {
-          // render with previous data from the helper.
+    const createSearchForFacetValues = helper => (
+      state,
+      createURL,
+      helperSpecializedSearchFacetValues,
+      toggleRefinement,
+      instantSearchInstance
+    ) => query => {
+      if (query === '' && lastResultsFromMainSearch) {
+        // render with previous data from the helper.
+        render({
+          items: lastResultsFromMainSearch,
+          state,
+          createURL,
+          helperSpecializedSearchFacetValues,
+          refine: toggleRefinement,
+          isFromSearch: false,
+          isFirstSearch: false,
+          instantSearchInstance,
+          hasExhaustiveItems: false, // SFFV should not be used with show more
+        });
+      } else {
+        helper.searchForFacetValues(attributeName, query).then(results => {
+          const facetValues = results.facetHits;
+
           render({
-            items: lastResultsFromMainSearch,
+            items: facetValues,
             state,
             createURL,
             helperSpecializedSearchFacetValues,
             refine: toggleRefinement,
-            isFromSearch: false,
+            isFromSearch: true,
             isFirstSearch: false,
             instantSearchInstance,
             hasExhaustiveItems: false, // SFFV should not be used with show more
           });
-        } else {
-          helper.searchForFacetValues(attributeName, query).then(results => {
-            const facetValues = results.facetHits;
-
-            render({
-              items: facetValues,
-              state,
-              createURL,
-              helperSpecializedSearchFacetValues,
-              refine: toggleRefinement,
-              isFromSearch: true,
-              isFirstSearch: false,
-              instantSearchInstance,
-              hasExhaustiveItems: false, // SFFV should not be used with show more
-            });
-          });
-        }
-      };
+        });
+      }
+    };
 
     return {
       isShowingMore: false,
@@ -230,7 +259,9 @@ export default function connectRefinementList(renderFn) {
       // Provide the same function to the `renderFn` so that way the user
       // has to only bind it once when `isFirstRendering` for instance
       toggleShowMore() {},
-      cachedToggleShowMore() { this.toggleShowMore(); },
+      cachedToggleShowMore() {
+        this.toggleShowMore();
+      },
 
       createToggleShowMore(renderOptions) {
         return () => {
@@ -245,26 +276,34 @@ export default function connectRefinementList(renderFn) {
 
       getConfiguration: (configuration = {}) => {
         const widgetConfiguration = {
-          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attributeName],
+          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [
+            attributeName,
+          ],
         };
 
         if (limit !== undefined) {
           const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
           if (showMoreLimit === undefined) {
-            widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit);
+            widgetConfiguration.maxValuesPerFacet = Math.max(
+              currentMaxValuesPerFacet,
+              limit
+            );
           } else {
-            widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit, showMoreLimit);
+            widgetConfiguration.maxValuesPerFacet = Math.max(
+              currentMaxValuesPerFacet,
+              limit,
+              showMoreLimit
+            );
           }
         }
 
         return widgetConfiguration;
       },
-      init({helper, createURL, instantSearchInstance}) {
+      init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
-        refine = facetValue => helper
-          .toggleRefinement(attributeName, facetValue)
-          .search();
+        refine = facetValue =>
+          helper.toggleRefinement(attributeName, facetValue).search();
 
         searchForFacetValues = createSearchForFacetValues(helper);
 
@@ -283,9 +322,14 @@ export default function connectRefinementList(renderFn) {
         });
       },
       render(renderOptions) {
-        const {results, state, createURL, instantSearchInstance} = renderOptions;
+        const {
+          results,
+          state,
+          createURL,
+          instantSearchInstance,
+        } = renderOptions;
         const items = results
-          .getFacetValues(attributeName, {sortBy})
+          .getFacetValues(attributeName, { sortBy })
           .slice(0, this.getLimit())
           .map(formatItems);
 

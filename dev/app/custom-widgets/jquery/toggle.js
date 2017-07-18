@@ -1,15 +1,15 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const renderFn = ({
-  value,
-  createURL,
-  refine,
-  widgetParams: {
-    title = 'Toggle',
-    containerNode,
+const renderFn = (
+  {
+    value,
+    createURL,
+    refine,
+    widgetParams: { title = 'Toggle', containerNode },
   },
-}, isFirstRendering) => {
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     const markup = `
       <div class="facet-title">${title}</div>

@@ -1,8 +1,8 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import { shallow } from 'enzyme';
 import expect from 'expect';
 import sinon from 'sinon';
-import {RawRefinementList as RefinementList} from '../RefinementList';
+import { RawRefinementList as RefinementList } from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 
 const defaultProps = {
@@ -48,9 +48,7 @@ describe('RefinementList', () => {
         cssClasses: {
           item: 'item',
         },
-        facetValues: [
-          {value: 'foo', isRefined: true},
-        ],
+        facetValues: [{ value: 'foo', isRefined: true }],
       };
 
       // When
@@ -68,14 +66,14 @@ describe('RefinementList', () => {
           active: 'active',
         },
         facetValues: [
-          {value: 'foo', isRefined: true},
-          {value: 'bar', isRefined: false},
+          { value: 'foo', isRefined: true },
+          { value: 'bar', isRefined: false },
         ],
       };
 
       // When
-      const activeItem = shallowRender(props).find({isRefined: true});
-      const inactiveItem = shallowRender(props).find({isRefined: false});
+      const activeItem = shallowRender(props).find({ isRefined: true });
+      const inactiveItem = shallowRender(props).find({ isRefined: false });
 
       // Then
       expect(activeItem.props().itemClassName).toContain('active');
@@ -89,8 +87,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: false},
+          { value: 'foo', isRefined: false },
+          { value: 'bar', isRefined: false },
         ],
       };
 
@@ -109,8 +107,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: true},
+          { value: 'foo', isRefined: false },
+          { value: 'bar', isRefined: true },
         ],
       };
 
@@ -131,8 +129,8 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', count: 42, isRefined: false},
-          {value: 'bar', count: 16, isRefined: false},
+          { value: 'foo', count: 42, isRefined: false },
+          { value: 'bar', count: 16, isRefined: false },
         ],
       };
 
@@ -153,9 +151,9 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: false},
-          {value: 'baz', isRefined: false},
+          { value: 'foo', isRefined: false },
+          { value: 'bar', isRefined: false },
+          { value: 'baz', isRefined: false },
         ],
         showMore: true,
         isShowingMore: false,
@@ -175,9 +173,9 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: false},
-          {value: 'baz', isRefined: false},
+          { value: 'foo', isRefined: false },
+          { value: 'bar', isRefined: false },
+          { value: 'baz', isRefined: false },
         ],
         showMore: false,
         isShowingMore: false,
@@ -185,7 +183,9 @@ describe('RefinementList', () => {
 
       // When
       const root = shallowRender(props);
-      const actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
+      const actual = root
+        .find('Template')
+        .filter({ templateKey: 'show-more-inactive' });
 
       // Then
       expect(actual.length).toEqual(0);
@@ -196,9 +196,9 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         facetValues: [
-          {value: 'foo', isRefined: false},
-          {value: 'bar', isRefined: false},
-          {value: 'baz', isRefined: false},
+          { value: 'foo', isRefined: false },
+          { value: 'bar', isRefined: false },
+          { value: 'baz', isRefined: false },
         ],
         showMore: true,
         isShowingMore: true,
@@ -223,8 +223,8 @@ describe('RefinementList', () => {
           {
             value: 'foo',
             data: [
-              {value: 'bar', isRefined: false},
-              {value: 'baz', isRefined: false},
+              { value: 'bar', isRefined: false },
+              { value: 'baz', isRefined: false },
             ],
             isRefined: false,
           },
@@ -254,8 +254,8 @@ describe('RefinementList', () => {
           {
             value: 'foo',
             data: [
-              {value: 'bar', isRefined: false},
-              {value: 'baz', isRefined: false},
+              { value: 'bar', isRefined: false },
+              { value: 'baz', isRefined: false },
             ],
             isRefined: false,
           },
