@@ -236,6 +236,63 @@ describe('searchBox()', () => {
       expect(helper.setQuery.called).toBe(true);
       expect(helper.search.called).toBe(true);
     });
+
+    it('should let the user define its own string template', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        reset: {
+          template: '<button type="reset">Foobar</button>',
+        },
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect(container.innerHTML).toContain('Foobar');
+    });
+
+    it('should not exist when it is disabled', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        reset: false,
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect($('button[type="reset"]').length).toEqual(0);
+    });
+  });
+
+  describe('magnifier', () => {
+    let defaultInitOptions;
+    let defaultWidgetOptions;
+
+    beforeEach(() => {
+      container = document.createElement('div');
+      defaultWidgetOptions = {container};
+      defaultInitOptions = {state, helper, onHistoryChange};
+    });
+
+    it('should let the user define its own string template', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        magnifier: {
+          template: '<div>Foobar</button>',
+        },
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect(container.innerHTML).toContain('Foobar');
+    });
   });
 
   describe('poweredBy', () => {
