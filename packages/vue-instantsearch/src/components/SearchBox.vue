@@ -1,7 +1,7 @@
 <template>
   <form role="search" action="" @submit.prevent="onFormSubmit">
     <slot>
-      <ais-input :placeholder="placeholder"></ais-input>
+      <ais-input :search-store="searchStore" :placeholder="placeholder" :autofocus="autofocus"></ais-input>
       <button type="submit" :class="bem('submit')">
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 40 40">
           <title>{{ submitTitle }}</title>
@@ -11,7 +11,7 @@
           />
         </svg>
       </button>
-      <ais-clear>
+      <ais-clear :search-store="searchStore">
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
           <title>{{ clearTitle }}</title>
           <path
@@ -42,6 +42,10 @@ export default {
     clearTitle: {
       type: String,
       default: 'clear',
+    },
+    autofocus: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
