@@ -1,0 +1,14 @@
+{
+  "name": "create-instantsearch-app",
+  "version": "1.0.0",
+  "description": "Build Algolia InstantSearch app at the speed of thoughts ⚡️",
+  "main": "index.js",
+  "author": "Alexandre Stanislawski <alexandre.stanislawski@algolia.com>",
+  "license": "MIT",
+  "bin": {
+    "create-instantsearch-app": "bin/create-instantsearch-app.js"
+  },
+  "dependencies": {
+    "shelljs": "^0.7.8"
+  }
+}
