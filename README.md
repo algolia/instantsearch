@@ -27,3 +27,11 @@ Create a new project:
 ```sh
 create-instantsearch-app [name-of-your-new-app]
 ```
+
+### Using Yarn
+
+With yarn you don't have an install step, just use:
+
+```sh
+yarn create instantsearch-app
+```
