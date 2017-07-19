@@ -1,5 +1,5 @@
 <template>
-  <ul :class="bem()">
+  <ul :class="bem()" v-show="totalResults > 0">
     <li :class="[bem('item', 'first'), page === 1 ? bem('item', 'disabled') : '']">
       <a href="#" @click.prevent="goToFirstPage">
         <slot name="first">&lt;&lt;</slot>
@@ -83,6 +83,9 @@ export default {
       }
 
       return pages;
+    },
+    totalResults() {
+      return this.searchStore.totalResults;
     },
   },
   methods: {
