@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`accepts custom padding 1`] = `
+
+<ul class="ais-pagination">
+  <li class="ais-pagination__item ais-pagination__item--first">
+    <a href="#">
+      &lt;&lt;
+    </a>
+  </li>
+  <li class="ais-pagination__item ais-pagination__item--previous">
+    <a href="#">
+      &lt;
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      3
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      4
+    </a>
+  </li>
+  <li class="ais-pagination__item ais-pagination__item ais-pagination__item--active">
+    <a href="#">
+      5
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      6
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      7
+    </a>
+  </li>
+  <li class="ais-pagination__item ais-pagination__item--next">
+    <a href="#">
+      &gt;
+    </a>
+  </li>
+  <li class="ais-pagination__item ais-pagination__item--last">
+    <a href="#">
+      &gt;&gt;
+    </a>
+  </li>
+</ul>
+
+`;
+
+exports[`renders proper HTML 1`] = `
+
+<ul class="ais-pagination">
+  <li class="ais-pagination__item ais-pagination__item--first">
+    <a href="#">
+      &lt;&lt;
+    </a>
+  </li>
+  <li class="ais-pagination__item ais-pagination__item--previous">
+    <a href="#">
+      &lt;
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      1
+    </a>
+  </li>
+  <li class="ais-pagination__item ais-pagination__item ais-pagination__item--active">
+    <a href="#">
+      2
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      3
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      4
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      5
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      6
+    </a>
+  </li>
+  <li class="ais-pagination__item">
+    <a href="#">
+      7
+    </a>
+  </li>
+  <li class="ais-pagination__item ais-pagination__item--next">
+    <a href="#">
+      &gt;
+    </a>
+  </li>
+  <li class="ais-pagination__item ais-pagination__item--last">
+    <a href="#">
+      &gt;&gt;
+    </a>
+  </li>
+</ul>
+
+`;
