@@ -11,8 +11,10 @@
   "dependencies": {
     "colors": "^1.1.2",
     "commander": "^2.11.0",
-    "prompt": "^1.0.0",
-    "shelljs": "^0.7.8"
+    "jstransformer-handlebars": "^1.0.0",
+    "metalsmith": "^2.3.0",
+    "metalsmith-in-place": "^2.0.1",
+    "prompt": "^1.0.0"
   },
   "repository": {
     "type": "git",

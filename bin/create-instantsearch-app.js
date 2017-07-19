@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 const process = require('process');
+const path = require('path');
 const program = require('commander');
 const prompt = require('prompt');
 const colors = require('colors');
@@ -45,7 +46,8 @@ prompt.get(prompts, function(err, config) {
     console.log('\nProject creation cancelled 😢'.red);
     process.exit(0);
   } else {
-    config.targetFolderName = targetFolderName;
+    config.name = targetFolderName;
+    config.targetFolderName = path.join(process.cwd(), targetFolderName);
     createProject(config);
     console.log('Project successfully created 🚀'.green.bold);
   }
