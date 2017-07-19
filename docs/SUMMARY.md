@@ -20,6 +20,7 @@
 
 ### Components
   * [Index](components/index.md)
+  * [Input](components/input.md)
   * [Search Box](components/search-box.md)
   * [Results](components/results.md)
   * [No Results](components/no-results.md)
