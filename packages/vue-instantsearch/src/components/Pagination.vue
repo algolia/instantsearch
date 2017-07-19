@@ -87,7 +87,11 @@ export default {
   },
   methods: {
     goToPage(page) {
-      this.searchStore.page = Math.min(this.totalPages, page);
+      let p = page;
+      if (page <= 1) {
+        p = 1;
+      }
+      this.searchStore.page = Math.min(this.totalPages, p);
     },
     goToFirstPage() {
       this.goToPage(1);
