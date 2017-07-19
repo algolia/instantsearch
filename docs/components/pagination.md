@@ -3,6 +3,8 @@ Vue InstantSearch Pagination
 
 A component to navigate between results pages.
 
+If there are no results in the current search context, pagination will be hidden.
+
 ## Usage
 
 Basic usage:
