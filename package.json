@@ -1,6 +1,6 @@
 {
   "name": "create-instantsearch-app",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Build Algolia InstantSearch app at the speed of thoughts ⚡️",
   "main": "index.js",
   "author": "Algolia inc.",
