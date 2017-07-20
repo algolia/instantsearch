@@ -13343,7 +13343,7 @@ function vanillaSortFn(order, data) {
  * @example
  * helper.on('results', function(content){
  *   //get values ordered only by name ascending using the string predicate
- *   content.getFacetValues('city', {sortBy: ['name:asc']);
+ *   content.getFacetValues('city', {sortBy: ['name:asc']});
  *   //get values  ordered only by count ascending using a function
  *   content.getFacetValues('city', {
  *     // this is equivalent to ['count:asc']
@@ -14748,26 +14748,26 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
   }
 
   this._currentNbQueries -= (queryId - this._lastQueryIdReceived);
-  if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
-
   this._lastQueryIdReceived = queryId;
 
   if (err) {
     this.emit('error', err);
-    return;
+
+    if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
+  } else {
+    if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
+
+    var results = content.results;
+    forEach(states, function(s) {
+      var state = s.state;
+      var queriesCount = s.queriesCount;
+      var helper = s.helper;
+      var specificResults = results.splice(0, queriesCount);
+
+      var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
+      helper.emit('result', formattedResponse, state);
+    });
   }
-
-  var results = content.results;
-  forEach(states, function(s) {
-    var state = s.state;
-    var queriesCount = s.queriesCount;
-    var helper = s.helper;
-
-    var specificResults = results.splice(0, queriesCount);
-
-    var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
-    helper.emit('result', formattedResponse, state);
-  });
 };
 
 AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters, numericFilters, tagFilters) {
@@ -15284,6 +15284,7 @@ var mapValues = require('lodash/mapValues');
 var isString = require('lodash/isString');
 var isPlainObject = require('lodash/isPlainObject');
 var isArray = require('lodash/isArray');
+var isEmpty = require('lodash/isEmpty');
 var invert = require('lodash/invert');
 
 var encode = require('qs/lib/utils').encode;
@@ -15423,7 +15424,7 @@ exports.getQueryStringFromState = function(state, options) {
 
   var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
   var sort = bind(sortQueryStringValues, null, prefixRegexp, invertedMapping);
-  if (moreAttributes) {
+  if (!isEmpty(moreAttributes)) {
     var stateQs = qs.stringify(encodedState, {encode: safe, sort: sort});
     var moreQs = qs.stringify(moreAttributes, {encode: safe});
     if (!stateQs) return moreQs;
@@ -15433,10 +15434,10 @@ exports.getQueryStringFromState = function(state, options) {
   return qs.stringify(encodedState, {encode: safe, sort: sort});
 };
 
-},{"./SearchParameters":291,"./SearchParameters/shortener":292,"lodash/bind":216,"lodash/forEach":225,"lodash/invert":233,"lodash/isArray":235,"lodash/isPlainObject":247,"lodash/isString":248,"lodash/map":255,"lodash/mapKeys":256,"lodash/mapValues":257,"lodash/pick":265,"qs":282,"qs/lib/utils":285}],300:[function(require,module,exports){
+},{"./SearchParameters":291,"./SearchParameters/shortener":292,"lodash/bind":216,"lodash/forEach":225,"lodash/invert":233,"lodash/isArray":235,"lodash/isEmpty":239,"lodash/isPlainObject":247,"lodash/isString":248,"lodash/map":255,"lodash/mapKeys":256,"lodash/mapValues":257,"lodash/pick":265,"qs":282,"qs/lib/utils":285}],300:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.21.0';
+module.exports = '2.21.1';
 
 },{}]},{},[1])(1)
 });

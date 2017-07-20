@@ -1,5 +1,12 @@
 CHANGELOG
 
+2.21.1 - 2017-07-20
+ * fix(events): We need searchEmptyQueue before result to avoid inconsistency
+ * chore(ci): fix build so that tests can be executed
+ * fix(url): When there are no "other attributes" should not render last &
+ * fix(pending-search): dispatch error event before searchQueueEmpty
+ * chore(doc): typo in example
+
 2.21.0 - 2017-07-08
  * fix(events): events for all kinds of searches
  * docs(jsdoc): fix misc spelling and typos
