@@ -15,6 +15,16 @@
 @import 'stats';
 @import 'toggle';
 
+[class^=ais-] {
+  box-sizing: border-box;
+
+  & > *,
+  & > *:after,
+  & > *:before {
+    box-sizing: border-box;
+  }
+}
+
 .ais-header {
   border-bottom: 2px solid #eee;
   font-size: .8em;
