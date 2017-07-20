@@ -1250,26 +1250,24 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
   }
 
   this._currentNbQueries -= (queryId - this._lastQueryIdReceived);
-  if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
-
   this._lastQueryIdReceived = queryId;
 
   if (err) {
     this.emit('error', err);
-    return;
+  } else {
+    var results = content.results;
+    forEach(states, function(s) {
+      var state = s.state;
+      var queriesCount = s.queriesCount;
+      var helper = s.helper;
+      var specificResults = results.splice(0, queriesCount);
+
+      var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
+      helper.emit('result', formattedResponse, state);
+    });
   }
-
-  var results = content.results;
-  forEach(states, function(s) {
-    var state = s.state;
-    var queriesCount = s.queriesCount;
-    var helper = s.helper;
-
-    var specificResults = results.splice(0, queriesCount);
-
-    var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
-    helper.emit('result', formattedResponse, state);
-  });
+  
+  if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 };
 
 AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters, numericFilters, tagFilters) {
