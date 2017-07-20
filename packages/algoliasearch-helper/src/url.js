@@ -20,6 +20,7 @@ var mapValues = require('lodash/mapValues');
 var isString = require('lodash/isString');
 var isPlainObject = require('lodash/isPlainObject');
 var isArray = require('lodash/isArray');
+var isEmpty = require('lodash/isEmpty');
 var invert = require('lodash/invert');
 
 var encode = require('qs/lib/utils').encode;
@@ -159,7 +160,7 @@ exports.getQueryStringFromState = function(state, options) {
 
   var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
   var sort = bind(sortQueryStringValues, null, prefixRegexp, invertedMapping);
-  if (moreAttributes) {
+  if (!isEmpty(moreAttributes)) {
     var stateQs = qs.stringify(encodedState, {encode: safe, sort: sort});
     var moreQs = qs.stringify(moreAttributes, {encode: safe});
     if (!stateQs) return moreQs;
