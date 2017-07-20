@@ -1254,7 +1254,11 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
 
   if (err) {
     this.emit('error', err);
+
+    if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
   } else {
+    if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
+
     var results = content.results;
     forEach(states, function(s) {
       var state = s.state;
@@ -1266,8 +1270,6 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
       helper.emit('result', formattedResponse, state);
     });
   }
-  
-  if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 };
 
 AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters, numericFilters, tagFilters) {
