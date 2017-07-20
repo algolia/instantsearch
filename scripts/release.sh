@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-[ -z $HOTFIX ] && HOTFIX='0'
-
 set -e # exit when error
 
 if [[ -n $(npm owner add `npm whoami`) ]]; then
@@ -10,8 +8,8 @@ if [[ -n $(npm owner add `npm whoami`) ]]; then
 fi
 
 currentBranch=`git rev-parse --abbrev-ref HEAD`
-if [ $currentBranch != 'master' ]; then
-  printf "Release: You must be on master\n"
+if [ $currentBranch != 'develop' ]; then
+  printf "Release: You must be on develop\n"
   exit 1
 fi
 
@@ -21,14 +19,11 @@ if [[ -n $(git status --porcelain) ]]; then
 fi
 
 printf "\n\nRelease: update working tree"
+git checkout master
 git pull origin master
 git fetch origin --tags
-
-if [ $HOTFIX == '0' ]; then
-  printf "\n\nRelease: merge develop branch"
-  git fetch origin develop
-  git merge origin/develop
-fi
+git fetch origin develop
+git merge origin/develop
 
 printf "Release: install dependencies"
 yarn
@@ -85,7 +80,6 @@ git checkout develop
 git pull origin develop
 git merge master
 git push origin develop
-git checkout master
 
 printf "Release:
 Package was published to npm.
