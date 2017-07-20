@@ -602,7 +602,7 @@ function vanillaSortFn(order, data) {
  * @example
  * helper.on('results', function(content){
  *   //get values ordered only by name ascending using the string predicate
- *   content.getFacetValues('city', {sortBy: ['name:asc']);
+ *   content.getFacetValues('city', {sortBy: ['name:asc']});
  *   //get values  ordered only by count ascending using a function
  *   content.getFacetValues('city', {
  *     // this is equivalent to ['count:asc']
