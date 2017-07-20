@@ -190,6 +190,7 @@ export default function createInstantSearchManager({
       ...store.getState(),
       metadata,
       searching: true,
+      error: null,
     });
 
     // Since the `getSearchParameters` method of widgets also depends on props,
@@ -216,6 +217,7 @@ export default function createInstantSearchManager({
       widgets: nextSearchState,
       metadata,
       searching: true,
+      error: null,
     });
 
     search();
