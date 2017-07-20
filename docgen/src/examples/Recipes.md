@@ -6,7 +6,7 @@ category: examples
 navWeight: 1000
 examplesCTA: 'Read the code'
 examples: [{
-    id: 'react-router',
+    id: 'react-router-v3',
     title: 'Usage with react-router v3.'
   }, {
     id: 'react-native',
@@ -18,7 +18,7 @@ examples: [{
     id: 'multi-index',
     title: 'Requests on multiple indices at once.'
   }, {
-    id: 'react-router-v4',
+    id: 'react-router',
     title: 'Usage with react-router v4.'
   }, {
     id: 'geo-search',

@@ -10,6 +10,6 @@ yarn upgrade-interactive &&
 (cd packages/react-instantsearch/examples/next-app && npm-check -u) &&
 (cd packages/react-instantsearch/examples/multi-index && npm-check -u) &&
 (cd packages/react-instantsearch/examples/react-native && npm-check -u) &&
+(cd packages/react-instantsearch/examples/react-router-v3 && npm-check -u) &&
 (cd packages/react-instantsearch/examples/react-router && npm-check -u) &&
-(cd packages/react-instantsearch/examples/react-router-v4 && npm-check -u) &&
 (cd packages/react-instantsearch/examples/server-side-rendering && npm-check -u)
