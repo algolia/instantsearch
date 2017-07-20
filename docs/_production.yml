@@ -2,3 +2,4 @@
 baseurl: "/instantsearch.js"
 instantsearch_css: "https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.css"
 instantsearch_js: "https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.js"
+host: https://community.algolia.com
