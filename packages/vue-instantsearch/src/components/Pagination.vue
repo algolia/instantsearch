@@ -90,10 +90,7 @@ export default {
   },
   methods: {
     goToPage(page) {
-      let p = page;
-      if (page <= 1) {
-        p = 1;
-      }
+      const p = Math.max(1, page);
       this.searchStore.page = Math.min(this.totalPages, p);
     },
     goToFirstPage() {
