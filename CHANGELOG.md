@@ -1,3 +1,13 @@
+<a name="4.1.0-beta.2"></a>
+# [4.1.0-beta.2](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.1...v4.1.0-beta.2) (2017-07-20)
+
+
+### Bug Fixes
+
+* **error:** reset error if next query is successful (#175) ([ff50a07](https://github.com/algolia/react-instantsearch/commit/ff50a07))
+
+
+
 <a name="4.1.0-beta.1"></a>
 # [4.1.0-beta.1](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.0...v4.1.0-beta.1) (2017-07-12)
 
