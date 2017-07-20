@@ -105,13 +105,15 @@ const renderer = ({
     }
   }
 
-  const resetButtonContainer = containerNode.tagName === 'INPUT'
-    ? containerNode.parentNode
-    : containerNode;
+  if (reset) {
+    const resetButtonContainer = containerNode.tagName === 'INPUT'
+      ? containerNode.parentNode
+      : containerNode;
 
-  // hide reset button when there is no query
-  const resetButton = resetButtonContainer.querySelector('button[type="reset"]');
-  resetButton.style.display = query && query.trim() ? 'block' : 'none';
+    // hide reset button when there is no query
+    const resetButton = resetButtonContainer.querySelector('button[type="reset"]');
+    resetButton.style.display = query && query.trim() ? 'block' : 'none';
+  }
 };
 
 const usage = `Usage:
@@ -328,7 +330,7 @@ function addReset(input, reset, {reset: resetTemplate}, clearFunction) {
   };
 
   const resetCSSClasses = {root: cx(bem('reset'), reset.cssClasses.root)};
-  const stringNode = processTemplate(resetTemplate, {cssClasses: resetCSSClasses});
+  const stringNode = processTemplate(reset.template, {cssClasses: resetCSSClasses});
 
   const htmlNode = createNodeFromString(stringNode);
   input.parentNode.appendChild(htmlNode);
@@ -347,7 +349,7 @@ function addMagnifier(input, magnifier, {magnifier: magnifierTemplate}) {
   };
 
   const magnifierCSSClasses = {root: cx(bem('magnifier'), magnifier.cssClasses.root)};
-  const stringNode = processTemplate(magnifierTemplate, {cssClasses: magnifierCSSClasses});
+  const stringNode = processTemplate(magnifier.template, {cssClasses: magnifierCSSClasses});
 
   const htmlNode = createNodeFromString(stringNode);
   input.parentNode.appendChild(htmlNode);
