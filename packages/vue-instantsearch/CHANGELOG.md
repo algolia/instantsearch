@@ -1,3 +1,36 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/algolia/vue-instantsearch/compare/v0.2.1...v0.3.0) (2017-07-21)
+
+
+### Bug Fixes
+
+* **pagination:** ensure page never drops below first page ([e851553](https://github.com/algolia/vue-instantsearch/commit/e851553))
+* **pagination:** hide pagination if there are not results ([f4dac58](https://github.com/algolia/vue-instantsearch/commit/f4dac58))
+* **store:** catch errors on facet values retrieval ([a51a547](https://github.com/algolia/vue-instantsearch/commit/a51a547))
+* **store:** make sure serialization contains hl tags ([4e8a7de](https://github.com/algolia/vue-instantsearch/commit/4e8a7de))
+* **store:** reject wait sync if error occurs ([9568ddf](https://github.com/algolia/vue-instantsearch/commit/9568ddf))
+
+
+### Features
+
+* **sanitize-results:** add a module to sanitize results ([e78cacd](https://github.com/algolia/vue-instantsearch/commit/e78cacd))
+* **search-box:** add autofocus capabilities ([0c91334](https://github.com/algolia/vue-instantsearch/commit/0c91334))
+* **store:** allow to use custom highlight tags ([c77f336](https://github.com/algolia/vue-instantsearch/commit/c77f336))
+* **store:** escape results when fetched ([61341a9](https://github.com/algolia/vue-instantsearch/commit/61341a9))
+
+
+### Performance Improvements
+
+* **store:** cache sanitized results ([62858b2](https://github.com/algolia/vue-instantsearch/commit/62858b2))
+
+
+### BREAKING CHANGES
+
+* Highlight and Snippet components no longer accept `tag-name` nor `escape-html`
+as props. Highlighted values are now escaped as responses are received.
+The highlighting tags can now be configured on the store itself.
+
+
 <a name="0.2.1"></a>
 ## [0.2.1](https://github.com/algolia/vue-instantsearch/compare/v0.2.0...v0.2.1) (2017-05-29)
 
@@ -102,6 +135,3 @@
 ### Performance Improvements
 
 * **store:** use Algolia light client ([4a58b57](https://github.com/algolia/vue-instantsearch/commit/4a58b57))
-
-
-
