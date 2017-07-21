@@ -34,7 +34,8 @@ const onHelperResult = function(response) {
     response.hits,
     HIGHLIGHT_PRE_TAG,
     HIGHLIGHT_POST_TAG,
-    'em'
+    this.highlightPreTag,
+    this.highlightPostTag
   );
 };
 
@@ -51,6 +52,8 @@ export class Store {
     this._stoppedCounter = 1;
 
     this.algoliaHelper = helper;
+    this._highlightPreTag = '<em>';
+    this._highlightPostTag = '</em>';
   }
 
   set algoliaHelper(helper) {
@@ -85,11 +88,19 @@ export class Store {
   }
 
   get highlightPreTag() {
-    return this._helper.getQueryParameter('highlightPreTag');
+    return this._highlightPreTag;
+  }
+
+  set highlightPreTag(tag) {
+    this._highlightPreTag = tag;
   }
 
   get highlightPostTag() {
-    return this._helper.getQueryParameter('highlightPostTag');
+    return this._highlightPostTag;
+  }
+
+  set highlightPostTag(tag) {
+    this._highlightPostTag = tag;
   }
 
   set algoliaClient(algoliaClient) {

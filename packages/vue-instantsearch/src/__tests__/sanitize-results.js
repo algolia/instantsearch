@@ -11,23 +11,20 @@ test('it ensures results are provided in the correct format', () => {
 });
 
 test('it ensures tags are provided in the correct format', () => {
+  const expectedException = new TypeError(
+    'safePreTag and safePostTag should be provided as strings.'
+  );
   expect(() => {
     sanitizeResults([]);
-  }).toThrow(
-    new TypeError('preTag and postTag should be provided as strings.')
-  );
+  }).toThrow(expectedException);
 
   expect(() => {
     sanitizeResults([], 'pre');
-  }).toThrow(
-    new TypeError('preTag and postTag should be provided as strings.')
-  );
+  }).toThrow(expectedException);
 
   expect(() => {
     sanitizeResults([], {}, 'post');
-  }).toThrow(
-    new TypeError('preTag and postTag should be provided as strings.')
-  );
+  }).toThrow(expectedException);
 });
 
 test('it should escape HTML of highlighted values', () => {

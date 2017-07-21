@@ -1,12 +1,20 @@
 import escapeHtml from 'escape-html';
 
-export default function(results, preTag, postTag, tagName = 'em') {
+export default function(
+  results,
+  safePreTag,
+  safePostTag,
+  preTag = '<em>',
+  postTag = '</em>'
+) {
   if (!Array.isArray(results)) {
     throw new TypeError('Results should be provided as an array.');
   }
 
-  if (typeof preTag !== 'string' || typeof postTag !== 'string') {
-    throw new TypeError('preTag and postTag should be provided as strings.');
+  if (typeof safePreTag !== 'string' || typeof safePostTag !== 'string') {
+    throw new TypeError(
+      'safePreTag and safePostTag should be provided as strings.'
+    );
   }
 
   const sanitized = [];
@@ -14,18 +22,20 @@ export default function(results, preTag, postTag, tagName = 'em') {
     if ('_highlightResult' in result) {
       result._highlightResult = sanitizeHighlights(
         result._highlightResult,
+        safePreTag,
+        safePostTag,
         preTag,
-        postTag,
-        tagName
+        postTag
       );
     }
 
     if ('_snippetResult' in result) {
       result._snippetResult = sanitizeHighlights(
         result._snippetResult,
+        safePreTag,
+        safePostTag,
         preTag,
-        postTag,
-        tagName
+        postTag
       );
     }
 
@@ -35,12 +45,18 @@ export default function(results, preTag, postTag, tagName = 'em') {
   return sanitized;
 }
 
-const sanitizeHighlights = function(data, preTag, postTag, tagName) {
+const sanitizeHighlights = function(
+  data,
+  safePreTag,
+  safePostTag,
+  preTag,
+  postTag
+) {
   if (containsValue(data)) {
     const sanitized = Object.assign({}, data, {
       value: escapeHtml(data.value)
-        .replace(new RegExp(preTag, 'g'), `<${tagName}>`)
-        .replace(new RegExp(postTag, 'g'), `</${tagName}>`),
+        .replace(new RegExp(safePreTag, 'g'), preTag)
+        .replace(new RegExp(safePostTag, 'g'), postTag),
     });
 
     return sanitized;
@@ -49,7 +65,9 @@ const sanitizeHighlights = function(data, preTag, postTag, tagName) {
   if (Array.isArray(data)) {
     const child = [];
     data.forEach(item => {
-      child.push(sanitizeHighlights(item, preTag, postTag, tagName));
+      child.push(
+        sanitizeHighlights(item, safePreTag, safePostTag, preTag, postTag)
+      );
     });
 
     return child;
@@ -59,7 +77,13 @@ const sanitizeHighlights = function(data, preTag, postTag, tagName) {
     const keys = Object.keys(data);
     const child = {};
     keys.forEach(key => {
-      child[key] = sanitizeHighlights(data[key], preTag, postTag, tagName);
+      child[key] = sanitizeHighlights(
+        data[key],
+        safePreTag,
+        safePostTag,
+        preTag,
+        postTag
+      );
     });
 
     return child;
