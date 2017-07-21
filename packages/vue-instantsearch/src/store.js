@@ -376,22 +376,24 @@ export class Store {
   }
 
   waitUntilInSync() {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (this._helper.hasPendingRequests() === false) {
         resolve();
         return;
       }
 
-      // Todo: we need to de-register the one that is not being triggered.
-      this._helper.once('searchQueueEmpty', () => {
+      const resolvePromise = () => {
+        this._helper.removeListener('error', rejectPromise);
         resolve();
-      });
-      this._helper.once('error', error => {
-        throw new Error(error.message);
-        // Todo: implement rejection once this has a solution
-        // https://github.com/algolia/algoliasearch-helper-js/issues/502
-        // reject(error);
-      });
+      };
+
+      const rejectPromise = error => {
+        this._helper.removeListener('searchQueueEmpty', resolvePromise);
+        reject(error);
+      };
+
+      this._helper.once('searchQueueEmpty', resolvePromise);
+      this._helper.once('error', rejectPromise);
     });
   }
 }
