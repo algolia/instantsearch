@@ -13,8 +13,8 @@ import {
 import Component from './component';
 
 import Index from './components/Index.vue';
-import Highlight from './components/Highlight.vue';
-import Snippet from './components/Snippet.vue';
+import Highlight from './components/Highlight';
+import Snippet from './components/Snippet';
 import Input from './components/Input.vue';
 import Results from './components/Results.vue';
 import Stats from './components/Stats.vue';

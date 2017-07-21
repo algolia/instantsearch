@@ -1,15 +1,11 @@
 import Vue from 'vue';
-import {
-  Snippet,
-  HIGHLIGHT_PRE_TAG,
-  HIGHLIGHT_POST_TAG,
-} from 'vue-instantsearch';
+import { Snippet } from 'vue-instantsearch';
 
 test('renders proper HTML', () => {
   const result = {
     _snippetResult: {
       attr: {
-        value: `con${HIGHLIGHT_PRE_TAG}ten${HIGHLIGHT_POST_TAG}t`,
+        value: `con<em>ten</em>t`,
       },
     },
   };
@@ -21,89 +17,6 @@ test('renders proper HTML', () => {
         props: {
           attributeName: 'attr',
           result,
-        },
-      });
-    },
-    components: {
-      Snippet,
-    },
-  }).$mount();
-
-  expect(vm.$el.outerHTML).toMatchSnapshot();
-});
-
-test('accepts custom highlighting tag', () => {
-  const result = {
-    _snippetResult: {
-      attr: {
-        value: `con${HIGHLIGHT_PRE_TAG}ten${HIGHLIGHT_POST_TAG}t`,
-      },
-    },
-  };
-
-  const vm = new Vue({
-    template: '<snippet attributeName="attr" :result="result">',
-    render(h) {
-      return h('snippet', {
-        props: {
-          attributeName: 'attr',
-          result,
-          tagName: 'em',
-        },
-      });
-    },
-    components: {
-      Snippet,
-    },
-  }).$mount();
-
-  expect(vm.$el.outerHTML).toMatchSnapshot();
-});
-
-test('protects against XSS', () => {
-  const result = {
-    _snippetResult: {
-      attr: {
-        value: "<script>alert('test');</script>",
-      },
-    },
-  };
-
-  const vm = new Vue({
-    template: '<snippet attributeName="attr" :result="result">',
-    render(h) {
-      return h('snippet', {
-        props: {
-          attributeName: 'attr',
-          result,
-        },
-      });
-    },
-    components: {
-      Snippet,
-    },
-  }).$mount();
-
-  expect(vm.$el.outerHTML).toMatchSnapshot();
-});
-
-test('allows unsafe output', () => {
-  const result = {
-    _snippetResult: {
-      attr: {
-        value: '<strong>un-escaped output</strong>',
-      },
-    },
-  };
-
-  const vm = new Vue({
-    template: '<snippet attributeName="attr" :result="result">',
-    render(h) {
-      return h('snippet', {
-        props: {
-          attributeName: 'attr',
-          result,
-          escapeHtml: false,
         },
       });
     },

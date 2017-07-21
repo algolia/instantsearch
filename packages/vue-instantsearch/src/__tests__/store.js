@@ -5,8 +5,6 @@ import {
   FACET_AND,
   FACET_OR,
   FACET_TREE,
-  HIGHLIGHT_PRE_TAG,
-  HIGHLIGHT_POST_TAG,
   assertValidFacetType,
   createFromAlgoliaCredentials,
   createFromAlgoliaClient,
@@ -30,14 +28,6 @@ test('FACET_OR should be "or"', () => {
 
 test('FACET_TREE should be "tree"', () => {
   expect(FACET_TREE).toBe('tree');
-});
-
-test('HIGHLIGHT_PRE_TAG should be "__ais-highlight__"', () => {
-  expect(HIGHLIGHT_PRE_TAG).toBe('__ais-highlight__');
-});
-
-test('HIGHLIGHT_POST_TAG should be "__/ais-highlight__"', () => {
-  expect(HIGHLIGHT_POST_TAG).toBe('__/ais-highlight__');
 });
 
 test('can assert that a facet type is valid', () => {
@@ -86,11 +76,11 @@ describe('Store', () => {
     );
   });
 
-  test('should always use custom highlighting tags', () => {
+  test('should use "em" as default highlighting tag', () => {
     const store = createStore();
 
-    expect(store.highlightPreTag).toEqual(HIGHLIGHT_PRE_TAG);
-    expect(store.highlightPostTag).toEqual(HIGHLIGHT_POST_TAG);
+    expect(store.highlightPreTag).toEqual('<em>');
+    expect(store.highlightPostTag).toEqual('</em>');
   });
 
   test('can retrieve index name', () => {
@@ -332,5 +322,77 @@ describe('Store', () => {
     store.searchParameters = newSearchParameters;
 
     expect(store._helper.getPage()).toEqual(4);
+  });
+
+  test('should allow to fetch sanitized results', () => {
+    const store = createStore();
+    const response = {
+      hits: [
+        {
+          objectID: '1',
+          name: 'test',
+          _highlightResult: {
+            name: {
+              value:
+                "__ais-highlight__te__/ais-highlight__st<script>alert('test')</script>",
+              matchLevel: 'full',
+            },
+          },
+        },
+      ],
+    };
+
+    store._helper.emit('result', response);
+
+    expect(store.results).toEqual([
+      {
+        objectID: '1',
+        name: 'test',
+        _highlightResult: {
+          name: {
+            value:
+              '<em>te</em>st&lt;script&gt;alert(&#39;test&#39;)&lt;/script&gt;',
+            matchLevel: 'full',
+          },
+        },
+      },
+    ]);
+  });
+
+  test('should accept custom highlighting tags', () => {
+    const store = createStore();
+    store.highlightPreTag = '<mark class="hl">';
+    store.highlightPostTag = '</mark>';
+    const response = {
+      hits: [
+        {
+          objectID: '1',
+          name: 'test',
+          _highlightResult: {
+            name: {
+              value:
+                "__ais-highlight__te__/ais-highlight__st<script>alert('test')</script>",
+              matchLevel: 'full',
+            },
+          },
+        },
+      ],
+    };
+
+    store._helper.emit('result', response);
+
+    expect(store.results).toEqual([
+      {
+        objectID: '1',
+        name: 'test',
+        _highlightResult: {
+          name: {
+            value:
+              '<mark class="hl">te</mark>st&lt;script&gt;alert(&#39;test&#39;)&lt;/script&gt;',
+            matchLevel: 'full',
+          },
+        },
+      },
+    ]);
   });
 });

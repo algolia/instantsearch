@@ -6,6 +6,8 @@ import {
   unserialize as unserializeHelper,
 } from './helper-serializer';
 
+import sanitizeResults from './sanitize-results';
+
 export const FACET_AND = 'and';
 export const FACET_OR = 'or';
 export const FACET_TREE = 'tree';
@@ -27,6 +29,16 @@ const onHelperChange = function() {
   }
 };
 
+const onHelperResult = function(response) {
+  this._results = sanitizeResults(
+    response.hits,
+    HIGHLIGHT_PRE_TAG,
+    HIGHLIGHT_POST_TAG,
+    this.highlightPreTag,
+    this.highlightPostTag
+  );
+};
+
 export class Store {
   constructor(helper) {
     if (!(helper instanceof algoliaHelper.AlgoliaSearchHelper)) {
@@ -39,12 +51,16 @@ export class Store {
     // without trigger multiple queries.
     this._stoppedCounter = 1;
 
+    this._highlightPreTag = '<em>';
+    this._highlightPostTag = '</em>';
+
     this.algoliaHelper = helper;
   }
 
   set algoliaHelper(helper) {
     if (this._helper) {
       this._helper.removeListener('change', onHelperChange);
+      this._helper.removeListener('result', onHelperResult);
     }
 
     this._helper = helper;
@@ -56,7 +72,14 @@ export class Store {
     this._helper.setQueryParameter('highlightPostTag', HIGHLIGHT_POST_TAG);
     this._helper.setPage(page);
 
+    if (this._helper.lastResults) {
+      onHelperResult.apply(this, [this._helper.lastResults]);
+    } else {
+      this._results = [];
+    }
+
     this._helper.on('change', onHelperChange.bind(this));
+    this._helper.on('result', onHelperResult.bind(this));
 
     this._helper.getClient().addAlgoliaAgent(`vue-instantsearch ${version}`);
   }
@@ -66,11 +89,19 @@ export class Store {
   }
 
   get highlightPreTag() {
-    return this._helper.getQueryParameter('highlightPreTag');
+    return this._highlightPreTag;
+  }
+
+  set highlightPreTag(tag) {
+    this._highlightPreTag = tag;
   }
 
   get highlightPostTag() {
-    return this._helper.getQueryParameter('highlightPostTag');
+    return this._highlightPostTag;
+  }
+
+  set highlightPostTag(tag) {
+    this._highlightPostTag = tag;
   }
 
   set algoliaClient(algoliaClient) {
@@ -133,11 +164,7 @@ export class Store {
   }
 
   get results() {
-    if (!this._helper.lastResults) {
-      return [];
-    }
-
-    return this._helper.lastResults.hits;
+    return this._results;
   }
 
   get page() {
@@ -336,7 +363,11 @@ export class Store {
   }
 
   serialize() {
-    return serializeHelper(this._helper);
+    return {
+      helper: serializeHelper(this._helper),
+      highlightPreTag: this.highlightPreTag,
+      highlightPostTag: this.highlightPostTag,
+    };
   }
 
   // Todo: find a better name for this function.
@@ -379,7 +410,11 @@ export const createFromAlgoliaClient = client => {
 };
 
 export const createFromSerialized = data => {
-  const helper = unserializeHelper(data);
+  const helper = unserializeHelper(data.helper);
 
-  return new Store(helper);
+  const store = new Store(helper);
+  store.highlightPreTag = data.highlightPreTag;
+  store.highlightPostTag = data.highlightPostTag;
+
+  return store;
 };
