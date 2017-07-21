@@ -72,6 +72,16 @@ exports[`Template using helpers call the relevant function 1`] = `
 />
 `;
 
+exports[`Template using helpers sets the function context (\`this\`) to the template \`data\` 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it supports ",
+    }
+  }
+/>
+`;
+
 exports[`Template without helpers can configure compilation options 1`] = `
 <div
   dangerouslySetInnerHTML={
