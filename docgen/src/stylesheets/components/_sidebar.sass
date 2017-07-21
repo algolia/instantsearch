@@ -63,12 +63,13 @@ $sidebarTopOffset: 60px;
 
   @include small-mq
     width: calc(100% + 16px)
-    height: calc(100%)
+    margin-top: 0
+    height: 100vh
     max-width: 320px
     position: fixed
     overflow: auto
     left: 0
-    top: 50px
+    top: 50px !important
     border: none
     padding-top: 0
     background: #fefefe
@@ -85,17 +86,12 @@ $sidebarTopOffset: 60px;
     .sidebar-header
       max-width: calc(100% - 1em)
 
-
     &.Showed
       transform: translateX(0)
-
 
     .sidebar-container
       width: 100%
       max-width: 100%
-
-
-
 
 .sidebar-opener
   position: fixed
@@ -120,17 +116,11 @@ $sidebarTopOffset: 60px;
   @include small-mq
     display: block
 
-
   &:active
     transform: scale(0.9)
-
 
   &.Showed
     transform: rotate(-180deg)
     transform-origin: center center
     background-image: url(../assets/img/open-doc-menu_icon.svg),  linear-gradient(284deg, darken(#fcb43a, 15%), darken(#fedd4e, 15%))
     left: 340px
-
-
-
-
