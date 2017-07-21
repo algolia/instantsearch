@@ -51,9 +51,10 @@ export class Store {
     // without trigger multiple queries.
     this._stoppedCounter = 1;
 
-    this.algoliaHelper = helper;
     this._highlightPreTag = '<em>';
     this._highlightPostTag = '</em>';
+
+    this.algoliaHelper = helper;
   }
 
   set algoliaHelper(helper) {
@@ -72,7 +73,7 @@ export class Store {
     this._helper.setPage(page);
 
     if (this._helper.lastResults) {
-      onHelperResult(this._helper.lastResults);
+      onHelperResult.apply(this, [this._helper.lastResults]);
     } else {
       this._results = [];
     }
@@ -362,7 +363,11 @@ export class Store {
   }
 
   serialize() {
-    return serializeHelper(this._helper);
+    return {
+      helper: serializeHelper(this._helper),
+      highlightPreTag: this.highlightPreTag,
+      highlightPostTag: this.highlightPostTag,
+    };
   }
 
   // Todo: find a better name for this function.
@@ -405,7 +410,11 @@ export const createFromAlgoliaClient = client => {
 };
 
 export const createFromSerialized = data => {
-  const helper = unserializeHelper(data);
+  const helper = unserializeHelper(data.helper);
 
-  return new Store(helper);
+  const store = new Store(helper);
+  store.highlightPreTag = data.highlightPreTag;
+  store.highlightPostTag = data.highlightPostTag;
+
+  return store;
 };
