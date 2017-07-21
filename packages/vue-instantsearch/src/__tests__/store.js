@@ -76,7 +76,7 @@ describe('Store', () => {
     );
   });
 
-  test('should use "em" as default default highlighting tag', () => {
+  test('should use "em" as default highlighting tag', () => {
     const store = createStore();
 
     expect(store.highlightPreTag).toEqual('<em>');
