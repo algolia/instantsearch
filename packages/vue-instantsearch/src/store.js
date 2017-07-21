@@ -6,6 +6,8 @@ import {
   unserialize as unserializeHelper,
 } from './helper-serializer';
 
+import sanitizeResults from './sanitize-results';
+
 export const FACET_AND = 'and';
 export const FACET_OR = 'or';
 export const FACET_TREE = 'tree';
@@ -137,7 +139,12 @@ export class Store {
       return [];
     }
 
-    return this._helper.lastResults.hits;
+    return sanitizeResults(
+      this._helper.lastResults.hits,
+      HIGHLIGHT_PRE_TAG,
+      HIGHLIGHT_POST_TAG,
+      'em'
+    );
   }
 
   get page() {

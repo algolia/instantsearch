@@ -333,4 +333,38 @@ describe('Store', () => {
 
     expect(store._helper.getPage()).toEqual(4);
   });
+
+  test('should allow to fetch sanitized results', () => {
+    const store = createStore();
+    store._helper.lastResults = {
+      hits: [
+        {
+          objectID: '1',
+          name: 'test',
+          _highlightResult: {
+            name: {
+              value:
+                "__ais-highlight__te__/ais-highlight__st<script>alert('test')</script>",
+              matchLevel: 'full',
+            },
+          },
+        },
+      ],
+    };
+
+    const results = store.results;
+    expect(results).toEqual([
+      {
+        objectID: '1',
+        name: 'test',
+        _highlightResult: {
+          name: {
+            value:
+              '<em>te</em>st&lt;script&gt;alert(&#39;test&#39;)&lt;/script&gt;',
+            matchLevel: 'full',
+          },
+        },
+      },
+    ]);
+  });
 });
