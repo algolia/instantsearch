@@ -283,12 +283,15 @@ export class Store {
       return [];
     }
 
-    // Todo: make sure the attribute is already added.
-    // Todo: Not sure this should be here because will make it very hard to debug I suppose.
+    let values;
+    try {
+      values = this._helper.lastResults.getFacetValues(attribute, {
+        sortBy,
+      });
+    } catch (e) {
+      values = [];
+    }
 
-    const values = this._helper.lastResults.getFacetValues(attribute, {
-      sortBy,
-    });
     if (limit === -1) {
       return values;
     }
