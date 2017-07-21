@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`urlSync mechanics Generates urls on change 1`] = `"q=query&idx=&p=0"`;
