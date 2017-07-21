@@ -29,6 +29,15 @@ const onHelperChange = function() {
   }
 };
 
+const onHelperResult = function(response) {
+  this._results = sanitizeResults(
+    response.hits,
+    HIGHLIGHT_PRE_TAG,
+    HIGHLIGHT_POST_TAG,
+    'em'
+  );
+};
+
 export class Store {
   constructor(helper) {
     if (!(helper instanceof algoliaHelper.AlgoliaSearchHelper)) {
@@ -47,6 +56,7 @@ export class Store {
   set algoliaHelper(helper) {
     if (this._helper) {
       this._helper.removeListener('change', onHelperChange);
+      this._helper.removeListener('result', onHelperResult);
     }
 
     this._helper = helper;
@@ -58,7 +68,14 @@ export class Store {
     this._helper.setQueryParameter('highlightPostTag', HIGHLIGHT_POST_TAG);
     this._helper.setPage(page);
 
+    if (this._helper.lastResults) {
+      onHelperResult(this._helper.lastResults);
+    } else {
+      this._results = [];
+    }
+
     this._helper.on('change', onHelperChange.bind(this));
+    this._helper.on('result', onHelperResult.bind(this));
 
     this._helper.getClient().addAlgoliaAgent(`vue-instantsearch ${version}`);
   }
@@ -135,16 +152,7 @@ export class Store {
   }
 
   get results() {
-    if (!this._helper.lastResults) {
-      return [];
-    }
-
-    return sanitizeResults(
-      this._helper.lastResults.hits,
-      HIGHLIGHT_PRE_TAG,
-      HIGHLIGHT_POST_TAG,
-      'em'
-    );
+    return this._results;
   }
 
   get page() {

@@ -336,7 +336,7 @@ describe('Store', () => {
 
   test('should allow to fetch sanitized results', () => {
     const store = createStore();
-    store._helper.lastResults = {
+    const response = {
       hits: [
         {
           objectID: '1',
@@ -352,8 +352,9 @@ describe('Store', () => {
       ],
     };
 
-    const results = store.results;
-    expect(results).toEqual([
+    store._helper.emit('result', response);
+
+    expect(store.results).toEqual([
       {
         objectID: '1',
         name: 'test',
