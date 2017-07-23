@@ -65,9 +65,14 @@
         "url": "guides/customization.html"
       },
       {
+        "name": "Integrate OpenSearch",
+        "url": "guides/opensearch.html"
+      },
+      {
         "name": "Migrate from V1",
         "url": "guides/migration.html"
       }
+
     ]
   },
   {
@@ -107,19 +112,19 @@
   },
   {
     "name": "Customize widgets",
-    "url": "/guides/customization.html"
+    "url": "guides/customization.html"
   },
   {
     "name": "Migrate from V1",
-    "url": "/guides/migration.html"
+    "url": "guides/migration.html"
   },
   {
     "name": "instantsearch()",
-    "url": "/instantsearch.html"
+    "url": "instantsearch.html"
   },
   {
     "name": "Widgets",
-    "url": "/widgets.html"
+    "url": "widgets.html"
   },
   {
     "name": "Connectors",
