@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "babel-node start.js",
+    "build:dev": "babel-node build.js",
     "build": "NODE_ENV='production' babel-node build.js"
   },
   "dependencies": {

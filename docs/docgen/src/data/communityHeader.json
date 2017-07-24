@@ -63,7 +63,7 @@
   },{
     "name": "Github",
     "image": "<img src='assets/img/github-icon.svg'/>",
-    "url": "https://github.com/algolia/vue-instantsearch-website/"
+    "url": "https://github.com/algolia/vue-instantsearch/"
   }],
   "mobileMenu": [{
     "name": "Getting Started",
@@ -79,7 +79,7 @@
   },{
     "name": "Github",
     "image": "<img src='assets/img/github-icon.svg'/>",
-    "url": "https://github.com/algolia/vue-instantsearch-website/"
+    "url": "https://github.com/algolia/vue-instantsearch/"
   }],
   "docSearch": {
     "input_selector": "searchbox",
