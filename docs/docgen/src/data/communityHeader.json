@@ -58,8 +58,9 @@
     "dropdownItems": null
   },
   {
-    "name": "<span class='hidden-sm'>Demo</span>",
-    "url": "https://github.com/algolia/vue-instantsearch-examples"
+    "name": "<span class='hidden-sm'>Examples</span>",
+    "url": "examples/bootstrap.html"
+
   },{
     "name": "Github",
     "image": "<img src='assets/img/github-icon.svg'/>",
@@ -74,8 +75,8 @@
     "url": "components/clear.html"
   },
   {
-    "name": "Demos",
-    "url": "https://github.com/algolia/vue-instantsearch-examples"
+    "name": "Examples",
+    "url": "examples/bootstrap.html"
   },{
     "name": "Github",
     "image": "<img src='assets/img/github-icon.svg'/>",

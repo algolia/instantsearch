@@ -1,6 +1,13 @@
-Bootstrap example
 ---
-
+title: Bootstrap
+mainTitle: Examples
+layout: main.pug
+category: Examples
+withHeadings: true
+navWeight: 100
+editable: true
+githubSource: docs/docgen/src/examples/bootstrap.md
+---
 [Bootstrap](http://getbootstrap.com/) is a CSS framework, it integrates well with
 Vue InstantSearch since you can [override CSS class names](styling.md).
 
