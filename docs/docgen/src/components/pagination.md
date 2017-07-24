@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/pagination.md
+githubSource: docs/docgen/src/components/pagination.md
 ---
 
 A component to navigate between results pages.

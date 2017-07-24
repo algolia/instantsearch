@@ -6,7 +6,7 @@ category: Getting started
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/cutsom-components.md
+githubSource: docs/docgen/src/getting-started/custom-components.md
 ---
 
 You can build your own components when the provided ones are not sufficient. Since we try

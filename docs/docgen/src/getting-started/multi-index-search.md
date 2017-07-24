@@ -6,7 +6,7 @@ category: Getting started
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/multi-index-search.md
+githubSource: docs/docgen/src/getting-started/multi-index-search.md
 ---
 
 In this guide, you will learn how to get results from multiple indices simultaneously.

@@ -6,7 +6,7 @@ category: Getting started
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/server-side-rendering.md
+githubSource: docs/docgen/src/getting-started/server-side-rendering.md
 ---
 
 We have a full example: https://github.com/algolia/vue-instantsearch-examples/tree/master/examples/ssr

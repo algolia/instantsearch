@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/clear.md
+githubSource: docs/docgen/src/components/clear.md
 ---
 
 A button that clears the `query`, the `active refinements`, or both when pressed.

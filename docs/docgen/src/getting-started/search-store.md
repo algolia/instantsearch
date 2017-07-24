@@ -6,7 +6,7 @@ category: Getting started
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/search-store.md
+githubSource: docs/docgen/src/getting-started/search-store.md
 ---
 
 The search store of Vue InstantSearch allows you to:

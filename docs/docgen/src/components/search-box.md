@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/search-box.md
+githubSource: docs/docgen/src/components/search-box.md
 ---
 
 A search input with a clear and submit button.

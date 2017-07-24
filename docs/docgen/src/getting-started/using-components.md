@@ -6,7 +6,7 @@ category: Getting started
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/using-components.md
+githubSource: docs/docgen/src/getting-started/using-components.md
 ---
 
 Vue InstantSearch comes pre-packaged with many components necessary to build a full-featured search experience.

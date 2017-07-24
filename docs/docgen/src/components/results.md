@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/results.md
+githubSource: docs/docgen/src/components/results.md
 ---
 
 A component to format and render the search results.

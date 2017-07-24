@@ -6,7 +6,7 @@ category: Getting started
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/best-practices.md
+githubSource: docs/docgen/src/getting-started/best-practices.md
 ---
 
 This page is a placeholder for best practices we recommend you to review while implementing Vue InstantSearch.
