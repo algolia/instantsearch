@@ -8,8 +8,8 @@ import {fixSidebar, followSidebarNavigation} from './fix-sidebar.js';
 var alg = require('algolia-frontend-components/javascripts.js');
 
 const docSearch = {
-  apiKey: 'e47d19f42b12dcc310b1eb10a524379d',
-  indexName: 'instantsearch-ios',
+  apiKey: '12c01249da71b9bc9805e1d4690a7e00',
+  indexName: 'vue-instantsearch',
   inputSelector: '#searchbox',
 };
 
