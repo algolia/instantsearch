@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/rating.md
+githubSource: docs/docgen/src/components/rating.md
 ---
 
 A component to filter results based on a rating.

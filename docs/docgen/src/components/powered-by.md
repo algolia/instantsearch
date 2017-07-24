@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/powered-by.md
+githubSource: docs/docgen/src/components/powered-by.md
 ---
 
 A component that helps you quickly add the "powered by Algolia" mention that is required if you have a free plan.

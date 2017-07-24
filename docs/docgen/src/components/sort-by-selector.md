@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/sort-by-selector.md
+githubSource: docs/docgen/src/components/sort-by-selector.md
 ---
 
 A component that lets the user change the sorting by changing the index the search is operated on.

@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/price-range.md
+githubSource: docs/docgen/src/components/price-range.md
 ---
 
 A component that lets users filter results based on a given minimum and maximum price.

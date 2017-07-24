@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/index.md
+githubSource: docs/docgen/src/components/index.md
 ---
 
 A wrapper component that allows to configure the credentials and the query parameters for the search.

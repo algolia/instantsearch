@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/results-per-page-selector.md
+githubSource: docs/docgen/src/components/results-per-page-selector.md
 ---
 
 A component that lets the user change the number of results to be displayed per page.

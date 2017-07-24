@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/stats.md
+githubSource: docs/docgen/src/components/stats.md
 ---
 
 A component that displays the total number of results found and the processing time in milliseconds.

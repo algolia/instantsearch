@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/refinement-list.md
+githubSource: docs/docgen/src/components/refinement-list.md
 ---
 
 A component to add facet refinements in the form of a list of checkboxes.

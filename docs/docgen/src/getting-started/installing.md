@@ -6,7 +6,7 @@ category: Getting started
 withHeadings: true
 navWeight: 900
 editable: true
-githubSource: docgen/src/installing.md
+githubSource: docs/docgen/src/getting-started/installing.md
 ---
 
 Vue InstantSearch is available through npm or as a standalone file to

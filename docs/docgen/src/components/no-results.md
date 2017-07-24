@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 100
 editable: true
-githubSource: docgen/src/components/no-results.md
+githubSource: docs/docgen/src/components/no-results.md
 ---
 
 A convenience component that will only be showed when no results are to be yielded.
