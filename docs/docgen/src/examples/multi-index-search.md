@@ -1,4 +1,12 @@
-Multi-index search example
+---
+title: Multi index search
+mainTitle: Examples
+layout: main.pug
+category: Examples
+withHeadings: true
+navWeight: 100
+editable: true
+githubSource: docs/docgen/src/examples/multi-index-search.md
 ---
 
 In this example we showcase how to search simultaneously on multiple indices as you search into 1 input.

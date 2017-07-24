@@ -1,6 +1,13 @@
-Standalone build example
 ---
-
+title: UMD
+mainTitle: Examples
+layout: main.pug
+category: Examples
+withHeadings: true
+navWeight: 100
+editable: true
+githubSource: docs/docgen/src/examples/umd.md
+---
 Using the standalone build is quick way to play with Vue InstantSearch.
 
 Just import the library:

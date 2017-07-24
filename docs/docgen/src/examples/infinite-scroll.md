@@ -1,4 +1,12 @@
-Infinite scroll example
+---
+title: Infinite scroll
+mainTitle: Examples
+layout: main.pug
+category: Examples
+withHeadings: true
+navWeight: 100
+editable: true
+githubSource: docs/docgen/src/examples/infinite-scroll.md
 ---
 
 In this example, we use a [third party library](https://github.com/Akryum/vue-observe-visibility) that allows us to detect when an element becomes available.
