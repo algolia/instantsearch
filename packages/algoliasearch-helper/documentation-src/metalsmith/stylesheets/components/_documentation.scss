@@ -10,6 +10,13 @@
     }
   }
 
+  blockquote {
+    background: $pale-grey;
+    margin: 0;
+    padding: 1px 32px;
+    border-radius: 5px;
+  }
+
   p,
   ul,
   ol {
