@@ -15,6 +15,6 @@ var header = algoliaComponents.communityHeader(content, {
 
 export default {
   docsDist:  rootPath('docs'),
-  publicPath: prod ? '/vue-instantsearch-website/' : '/',
+  publicPath: prod ? '/vue-instantsearch/' : '/',
   header: header
 };
