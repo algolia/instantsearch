@@ -4,6 +4,7 @@
 
 - [InstantSearch.js](#instantsearchjs)
 - [Documentation](#documentation)
+- [Support](#support)
 - [Contributing, dev, release](#contributing-dev-release)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
