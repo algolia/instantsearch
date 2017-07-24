@@ -122,3 +122,7 @@ body {
 #clear-all {
   font-size: 300%;
 }
+
+.media-object {
+  visibility: hidden;
+}
