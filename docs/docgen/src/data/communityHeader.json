@@ -48,7 +48,7 @@
   },
   "sideMenu": [{
     "name": "<span class='hidden-sm'>Getting Started</span>",
-    "url": "getting-started/installing.html",
+    "url": "getting-started/getting-started.html",
     "dropdownItems": null
   },
   {
