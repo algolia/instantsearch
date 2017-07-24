@@ -1,0 +1,17 @@
+sudo: false
+language: node_js
+node_js:
+  - "6.9.1"
+
+install:
+  - yarn
+
+before_deploy:
+  - yarn build
+
+deploy:
+  provider: surge
+  project: ./docs
+  domain: vue-instantsearch-website.surge.sh
+  skip_cleanup: true
+  on: master

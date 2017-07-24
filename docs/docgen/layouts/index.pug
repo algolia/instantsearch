@@ -1,0 +1,145 @@
+extends archetypes/single-column.pug
+
+block content
+  section.row.fill-white.p-xlarge.m-l-none.m-r-none.section-best-practices.m-t-n-large
+    .container.m-t-n-large
+      .col-md-12.z-10.text-center.pos-rel.screen-mockup.m-t-n-large
+        img.m800.m-t-n-large.img-responsive.pos-rel.m-l-r-auto(src="assets/img/demo-aeki.svg", width="520")
+        .spacer32
+        .spacer120.visible-sm
+        .row.m600.text-center.m-l-r-auto
+          h3.no-p-t.m-t-none.text-thin Declarative
+          .spacer16.visible-sm
+          .spacer24
+          p.color-logan.text-regular.text-normal Create beautiful search experiences with customizable UI components. You simply specify props on your UI components and InstantSearch takes care of the rest.
+
+
+  section.row.fill-titan.p-xlarge.m-l-none.m-r-none.pos-rel.section-infinite-possibilities
+    .container
+      .inline.spacer40.hidden-sm
+      .col-md-12.z-10
+        .col-md-6.p-r-xlarge
+          header
+            h3.no-p-t.m-t-none.text-thin Infinite possibilities
+          .spacer16.visible-sm
+          img.section-illustration.visible-sm(src="assets/img/infinite-components.svg", alt="Illustration infinite-possibilities", width="525")
+          .spacer24
+          p.color-logan.text-regular.text-normal Build the ideal search experience you’ve imagined for your users by customizing our existing widgets or building your own.
+          .spacer24
+          a.btn.btn-static-theme.b-n.elevation0(href="examples.html", title="instantSearch.js examples").
+            Learn more
+            <svg><use xlink:href="#arrow-right"></svg>
+
+        .col-md-6.hidden-sm
+          img.section-illustration(src="assets/img/infinite-components.svg", alt="Illustration infinite-possibilities", width="525")
+
+      .inline.spacer80
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+
+  section.row.fill-white.p-xlarge.m-l-none.m-r-none.pos-rel.section-framework
+    .container
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+      .col-md-12.z-10
+        .col-md-6.p-r-xlarge
+          img.section-illustration(src="assets/img/server-side-rendering.svg", alt="Illustration Server size rendering", width="380")
+        .col-md-6
+          .spacer64
+          header
+            h3.no-p-t.m-t-none.text-thin Server Side Rendering
+          .spacer24
+          p.color-logan.text-regular.text-normal Fully integrate your search with your server side rendering setup.
+
+          .spacer24
+          a.btn.btn-static-theme.b-n.elevation0(href="/getting-started/server-side-rendering.html", title="Get started with server-side rendering").
+            Get started
+            <svg> <use xlink:href="#arrow-right"></svg>
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+      .inline.spacer120
+
+  section.row.fill-titan.p-xlarge.start-section.m-l-none.m-r-none.pos-rel
+    .container
+      .inline.spacer40
+      .inline.spacer40.hidden-sm
+      .col-md-12.z-10.text-center.row
+        header
+          h3.no-p-t.m-t-none.text-thin Get started
+        .spacer40
+        .row.h300
+          p.color-logan.text-regular.text-normal Seamlessly build search experiences into your Vue applications.
+
+
+          .spacer32
+          a.btn.btn-static-theme.elevation0(href="getting-started/installing.html").
+            Get started
+            <svg> <use xlink:href="#arrow-right"></svg>
+
+
+      .inline.spacer40.hidden-sm
+
+  section.row.fill-white.p-xlarge.discover-section.m-l-none.m-r-none.pos-rel
+    .container
+      .inline.spacer80
+      .col-md-12.z-10.text-center.row
+        header
+          h3.no-p-t.m-t-none.text-thin Discover the<br/>InstantSearch family
+
+        .spacer80
+        .row.h100.logos-container
+          .col-md-12
+            //- .col-md-4.col-md-offset-4
+            //-   .card.p-large.h100.fill-white.elevation1.radius6.text-left
+            //-     a(href="#")
+            //-       figure
+            //-         img(src="assets/img/InstantSearch-Generic.svg", alt="Logo InstantSearch")
+            //-         figcaption InstantSearch
+
+          .spacer32.inline
+          .col-md-12
+            .col-md-6.pos-rel.p-b-large.col-md-offset-2
+              div.heading.w100p.text-left
+                small.color-logan InstantSearch for native
+          .col-md-12.mobile-projects
+            .col-md-4.col-md-offset-2
+              .card.fill-white.elevation1.radius6.p-large.h100.text-left
+                a(href="https://community.algolia.com/instantsearch-android/")
+                  figure
+                    img(src="assets/img/InstantSearch-Android.svg", alt="Logo InstantSearch Android")
+                    figcaption InstantSearch for Android
+            .col-md-4
+              .card.fill-white.elevation1.radius6.p-large.h100.text-left
+                a(href="https://community.algolia.com/instantsearch-ios/")
+                  figure
+                    img(src="assets/img/InstantSearch-IOS.svg", alt="Logo InstantSearch Swift")
+                    figcaption InstantSearch for Swift
+
+        .spacer40.inline
+        .row.desktop-projects
+          .col-md-10.p-b-large.col-md-offset-2
+            div.heading.w100p.text-left.m-l-large
+              small.color-logan InstantSearch for web
+          .col-md-8.col-md-offset-2
+            .col-md-6
+              .card.fill-white.elevation1.radius6.p-large.h100.text-left
+                a(href="https://community.algolia.com/instantsearch.js/v2")
+                  figure
+                    img(src="assets/img/InstantSearch-JavaScript.svg", alt="Logo InstantSearch Javascript")
+                    figcaption InstantSearch for Javascript
+            .col-md-6
+              .card.fill-white.elevation1.radius6.p-large.h100.text-left
+                a(href="https://community.algolia.com/instantsearch.js/react/")
+                  figure
+                    img(src="assets/img/InstantSearch-React.svg", alt="Logo InstantSearch React")
+                    figcaption InstantSearch for React
+          //- .col-md-4
+          //-   .card.fill-white.elevation1.radius6.p-large.h100.text-left
+          //-     a(href="#")
+          //-       figure
+          //-         img(src="assets/img/InstantSearch-Vue.svg", alt="Logo InstantSearch Vue")
+          //-         figcaption InstantSearch for Vue
+
+      .inline.spacer80
+
+
