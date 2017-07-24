@@ -3,9 +3,3 @@ yarn-error.log
 node_modules/
 coverage
 .DS_store
-
-# Output of documentation
-_book/
-book.pdf
-book.epub
-book.mobi

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-es5-module/
+docs/
+npm-debug.log
+.DS_Store
+!scripts/docs/
+dev/instantsearch-theme-algolia.css
+
+# Ignore Argos CI screenshots.
+functional-tests/screenshots/

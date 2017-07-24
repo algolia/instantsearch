@@ -1,0 +1,14 @@
+{
+  "env": {
+    "test": {
+      "plugins": ["babel-plugin-rewire"]
+    },
+    "production": {
+      "plugins": [
+        "transform-react-remove-prop-types",
+        "transform-react-constant-elements"
+      ]
+    }
+  },
+  "presets": ["es2015", "react", "stage-2"]
+}
