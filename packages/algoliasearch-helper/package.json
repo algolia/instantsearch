@@ -42,6 +42,7 @@
     "url": "https://github.com/algolia/algoliasearch-helper-js.git"
   },
   "devDependencies": {
+    "algolia-frontend-components": "^0.0.33",
     "algoliasearch": "^3.20.2",
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",

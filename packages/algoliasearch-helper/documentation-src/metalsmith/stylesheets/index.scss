@@ -8,8 +8,7 @@
         'vendors/helpers',
         'vendors/animations';
 
-@import "components/header",
-        "components/footer",
+@import "components/footer",
         "components/home",
         'components/code-highlight',
         'components/icons',
@@ -26,4 +25,6 @@
         'components/footer',
         'components/visual-helper',
         'components/clipboard';
+
+@import './../node_modules/algolia-frontend-components/components/communityHeader/communityHeader';
 
