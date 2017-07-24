@@ -68,7 +68,7 @@
   }],
   "mobileMenu": [{
     "name": "Getting Started",
-    "url": "getting-started/installing.html"
+    "url": "getting-started/getting-started.html"
   },
   {
     "name": "Components",
