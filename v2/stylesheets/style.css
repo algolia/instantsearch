@@ -4955,6 +4955,9 @@ figure figcaption {
     .documentation-section,
     .examples-section {
       padding-top: 32px; }
+      .documentation-section .editThisPage,
+      .examples-section .editThisPage {
+        display: none; }
       .documentation-section .container .documentation-container,
       .examples-section .container .documentation-container {
         left: 0;
@@ -5187,12 +5190,13 @@ figure figcaption {
   @media (max-width: 768px) {
     .sidebar {
       width: calc(100% + 16px);
-      height: calc(100%);
+      margin-top: 0;
+      height: 100vh;
       max-width: 320px;
       position: fixed;
       overflow: auto;
       left: 0;
-      top: 50px;
+      top: 50px !important;
       border: none;
       padding-top: 0;
       background: #fefefe;

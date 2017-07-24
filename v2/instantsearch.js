@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.0.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.0.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -93,7 +93,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _InstantSearch2 = _interopRequireDefault(_InstantSearch);
 	
-	var _version = __webpack_require__(343);
+	var _version = __webpack_require__(344);
 	
 	var _version2 = _interopRequireDefault(_version);
 	
@@ -122,9 +122,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * 'index', 'page', 'hitsPerPage']`. `attribute:*` means all the faceting attributes will be tracked. You
 	 * can track only some of them by using [..., 'attribute:color', 'attribute:categories']. All other possible
 	 * values are all the [attributes of the Helper SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
-	 *
-	 * There's a special `is_v` parameter that will get added everytime, it tracks the version of instantsearch.js
-	 * linked to the url.
 	 * @property {boolean} [useHash] If set to true, the url will be
 	 * hash based. Otherwise, it'll use the query parameters using the modern
 	 * history API.
@@ -389,7 +386,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	
 	/**
-	 * Event triggered when the search is sent to Algolia
+	 * Event triggered when a main search is sent to Algolia
 	 * @event AlgoliaSearchHelper#event:search
 	 * @property {SearchParameters} state the parameters used for this search
 	 * @property {SearchResults} lastResults the results from the previous search. `null` if
@@ -397,6 +394,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @example
 	 * helper.on('search', function(state, lastResults) {
 	 *   console.log('Search sent');
+	 * });
+	 */
+	
+	/**
+	 * Event triggered when a search using `searchForFacetValues` is sent to Algolia
+	 * @event AlgoliaSearchHelper#event:searchForFacetValues
+	 * @property {SearchParameters} state the parameters used for this search
+	 * it is the first search.
+	 * @property {string} facet the facet searched into
+	 * @property {string} query the query used to search in the facets
+	 * @example
+	 * helper.on('searchForFacetValues', function(state, facet, query) {
+	 *   console.log('searchForFacetValues sent');
+	 * });
+	 */
+	
+	/**
+	 * Event triggered when a search using `searchOnce` is sent to Algolia
+	 * @event AlgoliaSearchHelper#event:searchOnce
+	 * @property {SearchParameters} state the parameters used for this search
+	 * it is the first search.
+	 * @example
+	 * helper.on('searchOnce', function(state) {
+	 *   console.log('searchOnce sent');
 	 * });
 	 */
 	
@@ -474,7 +495,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Start the search with the parameters set in the state. When the
 	 * method is called, it triggers a `search` event. The results will
-	 * be available through the `result` event. If an error occcurs, an
+	 * be available through the `result` event. If an error occurs, an
 	 * `error` will be fired instead.
 	 * @return {AlgoliaSearchHelper}
 	 * @fires search
@@ -515,7 +536,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * // This example uses the callback API
 	 * var state = helper.searchOnce({hitsPerPage: 1},
 	 *   function(error, content, state) {
-	 *     // if an error occured it will be passed in error, otherwise its value is null
+	 *     // if an error occurred it will be passed in error, otherwise its value is null
 	 *     // content contains the results formatted as a SearchResults
 	 *     // state is the instance of SearchParameters used for this search
 	 *   });
@@ -539,6 +560,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var self = this;
 	
 	  this._currentNbQueries++;
+	
+	  this.emit('searchOnce', tempState);
 	
 	  if (cb) {
 	    return this.client.search(
@@ -574,7 +597,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type {object}
 	 * @property {string} value the facet value
 	 * @property {string} highlighted the facet value highlighted with the query string
-	 * @property {number} count number of occurence of this facet value
+	 * @property {number} count number of occurrence of this facet value
 	 * @property {boolean} isRefined true if the value is already refined
 	 */
 	
@@ -583,18 +606,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * [`searchForFacetValues()`](reference.html#AlgoliaSearchHelper#searchForFacetValues)
 	 * promise.
 	 * @typedef FacetSearchResult
-	 * @type {objet}
+	 * @type {object}
 	 * @property {FacetSearchHit} facetHits the results for this search for facet values
-	 * @property {number} processingTimeMS time taken by the query insde the engine
+	 * @property {number} processingTimeMS time taken by the query inside the engine
 	 */
 	
 	/**
-	 * Search for facet values based on an query and the name of a facetted attribute. This
-	 * triggers a search and will retrun a promise. On top of using the query, it also sends
-	 * the parameters from the state so that the search is narrowed to only the possible values.
+	 * Search for facet values based on an query and the name of a faceted attribute. This
+	 * triggers a search and will return a promise. On top of using the query, it also sends
+	 * the parameters from the state so that the search is narrowed down to only the possible values.
 	 *
 	 * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
-	 * @param {string} facet the name of the facetted attribute
+	 * @param {string} facet the name of the faceted attribute
 	 * @param {string} query the string query for the search
 	 * @param {number} maxFacetHits the maximum number values returned. Should be > 0 and <= 100
 	 * @return {promise<FacetSearchResult>} the results of the search
@@ -608,6 +631,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this._currentNbQueries++;
 	  var self = this;
 	
+	  this.emit('searchForFacetValues', state, facet, query);
 	  return index.searchForFacetValues(algoliaQuery).then(function addIsRefined(content) {
 	    self._currentNbQueries--;
 	    if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
@@ -684,7 +708,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Adds a disjunctive filter to a facetted attribute with the `value` provided. If the
+	 * Adds a disjunctive filter to a faceted attribute with the `value` provided. If the
 	 * filter is already set, it doesn't change the filters.
 	 *
 	 * This method resets the current page to 0.
@@ -745,7 +769,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Adds a filter to a facetted attribute with the `value` provided. If the
+	 * Adds a filter to a faceted attribute with the `value` provided. If the
 	 * filter is already set, it doesn't change the filters.
 	 *
 	 * This method resets the current page to 0.
@@ -770,7 +794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	
 	/**
-	 * Adds a an exclusion filter to a facetted attribute with the `value` provided. If the
+	 * Adds a an exclusion filter to a faceted attribute with the `value` provided. If the
 	 * filter is already set, it doesn't change the filters.
 	 *
 	 * This method resets the current page to 0.
@@ -813,7 +837,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Removes an numeric filter to an attribute with the `operator` and `value` provided. If the
 	 * filter is not set, it doesn't change the filters.
 	 *
-	 * Some parameters are optionnals, triggering different behaviors:
+	 * Some parameters are optional, triggering different behavior:
 	 *  - if the value is not provided, then all the numeric value will be removed for the
 	 *  specified attribute/operator couple.
 	 *  - if the operator is not provided either, then all the numeric filter on this attribute
@@ -834,7 +858,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Removes a disjunctive filter to a facetted attribute with the `value` provided. If the
+	 * Removes a disjunctive filter to a faceted attribute with the `value` provided. If the
 	 * filter is not set, it doesn't change the filters.
 	 *
 	 * If the value is omitted, then this method will remove all the filters for the
@@ -876,7 +900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Removes a filter to a facetted attribute with the `value` provided. If the
+	 * Removes a filter to a faceted attribute with the `value` provided. If the
 	 * filter is not set, it doesn't change the filters.
 	 *
 	 * If the value is omitted, then this method will remove all the filters for the
@@ -903,7 +927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Removes an exclusion filter to a facetted attribute with the `value` provided. If the
+	 * Removes an exclusion filter to a faceted attribute with the `value` provided. If the
 	 * filter is not set, it doesn't change the filters.
 	 *
 	 * If the value is omitted, then this method will remove all the filters for the
@@ -946,7 +970,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Adds or removes an exclusion filter to a facetted attribute with the `value` provided. If
+	 * Adds or removes an exclusion filter to a faceted attribute with the `value` provided. If
 	 * the value is set then it removes it, otherwise it adds the filter.
 	 *
 	 * This method resets the current page to 0.
@@ -970,7 +994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Adds or removes a filter to a facetted attribute with the `value` provided. If
+	 * Adds or removes a filter to a faceted attribute with the `value` provided. If
 	 * the value is set then it removes it, otherwise it adds the filter.
 	 *
 	 * This method can be used for conjunctive, disjunctive and hierarchical filters.
@@ -989,7 +1013,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Adds or removes a filter to a facetted attribute with the `value` provided. If
+	 * Adds or removes a filter to a faceted attribute with the `value` provided. If
 	 * the value is set then it removes it, otherwise it adds the filter.
 	 *
 	 * This method can be used for conjunctive, disjunctive and hierarchical filters.
@@ -1146,7 +1170,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/**
 	 * Get the current search state stored in the helper. This object is immutable.
-	 * @param {string[]} [filters] optionnal filters to retrieve only a subset of the state
+	 * @param {string[]} [filters] optional filters to retrieve only a subset of the state
 	 * @return {SearchParameters|object} if filters is specified a plain object is
 	 * returned containing only the requested fields, otherwise return the unfiltered
 	 * state
@@ -1218,7 +1242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * string.
 	 * @deprecated
 	 * @param {string} queryString the query string containing the informations to url the state
-	 * @param {object} options optionnal parameters :
+	 * @param {object} options optional parameters :
 	 *  - prefix : prefix used for the algolia parameters
 	 *  - triggerChange : if set to true the state update will trigger a change event
 	 */
@@ -1311,11 +1335,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * Check if a value is excluded for a specific facetted attribute. If the value
+	 * Check if a value is excluded for a specific faceted attribute. If the value
 	 * is omitted then the function checks if there is any excluding refinements.
 	 *
-	 * @param  {string}  facet name of the attribute for used for facetting
-	 * @param  {string}  [value] optionnal value. If passed will test that this value
+	 * @param  {string}  facet name of the attribute for used for faceting
+	 * @param  {string}  [value] optional value. If passed will test that this value
 	   * is filtering the given facet.
 	 * @return {boolean} true if refined
 	 * @example
@@ -1418,7 +1442,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * See also SearchResults#getRefinements
 	 *
-	 * @param {string} facetName attribute name used for facetting
+	 * @param {string} facetName attribute name used for faceting
 	 * @return {Array.<FacetRefinement|NumericRefinement>} All Refinement are objects that contain a value, and
 	 * a type. Numeric also contains an operator.
 	 * @example
@@ -1564,7 +1588,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/**
 	 * Transform the responses as sent by the server and transform them into a user
-	 * usable objet that merge the results of all the batch requests. It will dispatch
+	 * usable object that merge the results of all the batch requests. It will dispatch
 	 * over the different helper + derived helpers (when there are some).
 	 * @private
 	 * @param {array.<{SearchParameters, AlgoliaQueries, AlgoliaSearchHelper}>}
@@ -1583,26 +1607,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  this._currentNbQueries -= (queryId - this._lastQueryIdReceived);
-	  if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
-	
 	  this._lastQueryIdReceived = queryId;
 	
 	  if (err) {
 	    this.emit('error', err);
-	    return;
+	
+	    if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
+	  } else {
+	    if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
+	
+	    var results = content.results;
+	    forEach(states, function(s) {
+	      var state = s.state;
+	      var queriesCount = s.queriesCount;
+	      var helper = s.helper;
+	      var specificResults = results.splice(0, queriesCount);
+	
+	      var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
+	      helper.emit('result', formattedResponse, state);
+	    });
 	  }
-	
-	  var results = content.results;
-	  forEach(states, function(s) {
-	    var state = s.state;
-	    var queriesCount = s.queriesCount;
-	    var helper = s.helper;
-	
-	    var specificResults = results.splice(0, queriesCount);
-	
-	    var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
-	    helper.emit('result', formattedResponse, state);
-	  });
 	};
 	
 	AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters, numericFilters, tagFilters) {
@@ -1698,7 +1722,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	/**
-	 * This method returns if there is currently at least one on-going search.
+	 * This method returns true if there is currently at least one on-going search.
 	 * @return {boolean} true if there is a search pending
 	 */
 	AlgoliaSearchHelper.prototype.hasPendingRequests = function() {
@@ -1710,7 +1734,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type {object}
 	 * @property {number[]} value the numbers that are used for filtering this attribute with
 	 * the operator specified.
-	 * @property {string} operator the facetting data: value, number of entries
+	 * @property {string} operator the faceting data: value, number of entries
 	 * @property {string} type will be 'numeric'
 	 */
 	
@@ -1883,7 +1907,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * filters selected for the associated facet name.
 	   *
 	   * When querying algolia, the values stored in this attribute will
-	   * be translated into the `facetFiters` attribute.
+	   * be translated into the `facetFilters` attribute.
 	   * @member {Object.<string, SearchParameters.FacetList>}
 	   */
 	  this.facetsRefinements = params.facetsRefinements || {};
@@ -1896,7 +1920,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * filters excluded for the associated facet name.
 	   *
 	   * When querying algolia, the values stored in this attribute will
-	   * be translated into the `facetFiters` attribute.
+	   * be translated into the `facetFilters` attribute.
 	   * @member {Object.<string, SearchParameters.FacetList>}
 	   */
 	  this.facetsExcludes = params.facetsExcludes || {};
@@ -1909,7 +1933,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * filters selected for the associated facet name.
 	   *
 	   * When querying algolia, the values stored in this attribute will
-	   * be translated into the `facetFiters` attribute.
+	   * be translated into the `facetFilters` attribute.
 	   * @member {Object.<string, SearchParameters.FacetList>}
 	   */
 	  this.disjunctiveFacetsRefinements = params.disjunctiveFacetsRefinements || {};
@@ -1941,10 +1965,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * The key is the name of the facet, and the `FacetList` contains all
 	   * filters selected for the associated facet name. The FacetList values
 	   * are structured as a string that contain the values for each level
-	   * seperated by the configured separator.
+	   * separated by the configured separator.
 	   *
 	   * When querying algolia, the values stored in this attribute will
-	   * be translated into the `facetFiters` attribute.
+	   * be translated into the `facetFilters` attribute.
 	   * @member {Object.<string, SearchParameters.FacetList>}
 	   */
 	  this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
@@ -1989,7 +2013,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	  this.hitsPerPage = params.hitsPerPage;
 	  /**
-	   * Number of values for each facetted attribute
+	   * Number of values for each faceted attribute
 	   * @member {number}
 	   * @see https://www.algolia.com/doc/rest#param-maxValuesPerFacet
 	   */
@@ -2354,7 +2378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Remove all refinements (disjunctive + conjunctive + excludes + numeric filters)
 	   * @method
-	   * @param {undefined|string|SearchParameters.clearCallback} [attribute] optionnal string or function
+	   * @param {undefined|string|SearchParameters.clearCallback} [attribute] optional string or function
 	   * - If not given, means to clear all the filters.
 	   * - If `string`, means to clear all refinements for the `attribute` named filter.
 	   * - If `function`, means to clear all the refinements that return truthy values.
@@ -2424,9 +2448,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  /**
 	   * Facets setter
-	   * The facets are the simple facets, used for conjunctive (and) facetting.
+	   * The facets are the simple facets, used for conjunctive (and) faceting.
 	   * @method
-	   * @param {string[]} facets all the attributes of the algolia records used for conjunctive facetting
+	   * @param {string[]} facets all the attributes of the algolia records used for conjunctive faceting
 	   * @return {SearchParameters}
 	   */
 	  setFacets: function setFacets(facets) {
@@ -2438,7 +2462,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Disjunctive facets setter
 	   * Change the list of disjunctive (or) facets the helper chan handle.
 	   * @method
-	   * @param {string[]} facets all the attributes of the algolia records used for disjunctive facetting
+	   * @param {string[]} facets all the attributes of the algolia records used for disjunctive faceting
 	   * @return {SearchParameters}
 	   */
 	  setDisjunctiveFacets: function setDisjunctiveFacets(facets) {
@@ -2515,7 +2539,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  /**
 	   * Get the list of conjunctive refinements for a single facet
-	   * @param {string} facetName name of the attribute used for facetting
+	   * @param {string} facetName name of the attribute used for faceting
 	   * @return {string[]} list of refinements
 	   */
 	  getConjunctiveRefinements: function(facetName) {
@@ -2526,7 +2550,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  /**
 	   * Get the list of disjunctive refinements for a single facet
-	   * @param {string} facetName name of the attribute used for facetting
+	   * @param {string} facetName name of the attribute used for faceting
 	   * @return {string[]} list of refinements
 	   */
 	  getDisjunctiveRefinements: function(facetName) {
@@ -2539,7 +2563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  /**
 	   * Get the list of hierarchical refinements for a single facet
-	   * @param {string} facetName name of the attribute used for facetting
+	   * @param {string} facetName name of the attribute used for faceting
 	   * @return {string[]} list of refinements
 	   */
 	  getHierarchicalRefinement: function(facetName) {
@@ -2549,7 +2573,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  /**
 	   * Get the list of exclude refinements for a single facet
-	   * @param {string} facetName name of the attribute used for facetting
+	   * @param {string} facetName name of the attribute used for faceting
 	   * @return {string[]} list of refinements
 	   */
 	  getExcludeRefinements: function(facetName) {
@@ -2594,7 +2618,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  /**
 	   * Get the list of numeric refinements for a single facet
-	   * @param {string} facetName name of the attribute used for facetting
+	   * @param {string} facetName name of the attribute used for faceting
 	   * @return {SearchParameters.OperatorList[]} list of refinements
 	   */
 	  getNumericRefinements: function(facetName) {
@@ -2613,7 +2637,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Clear numeric filters.
 	   * @method
 	   * @private
-	   * @param {string|SearchParameters.clearCallback} [attribute] optionnal string or function
+	   * @param {string|SearchParameters.clearCallback} [attribute] optional string or function
 	   * - If not given, means to clear all the filters.
 	   * - If `string`, means to clear all refinements for the `attribute` named filter.
 	   * - If `function`, means to clear all the refinements that return truthy values.
@@ -2696,7 +2720,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Add a refinement on a "normal" facet
 	   * @method
-	   * @param {string} facet attribute to apply the facetting on
+	   * @param {string} facet attribute to apply the faceting on
 	   * @param {string} value value of the attribute (will be converted to string)
 	   * @return {SearchParameters}
 	   */
@@ -2730,7 +2754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Adds a refinement on a disjunctive facet.
 	   * @method
-	   * @param {string} facet attribute to apply the facetting on
+	   * @param {string} facet attribute to apply the faceting on
 	   * @param {string} value value of the attribute (will be converted to string)
 	   * @return {SearchParameters}
 	   */
@@ -2818,9 +2842,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Remove a refinement set on facet. If a value is provided, it will clear the
 	   * refinement for the given value, otherwise it will clear all the refinement
-	   * values for the facetted attribute.
+	   * values for the faceted attribute.
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {string} [value] value used to filter
 	   * @return {SearchParameters}
 	   */
@@ -2837,7 +2861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Remove a negative refinement on a facet
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {string} value value used to filter
 	   * @return {SearchParameters}
 	   */
@@ -2854,7 +2878,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Remove a refinement on a disjunctive facet
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {string} value value used to filter
 	   * @return {SearchParameters}
 	   */
@@ -2920,7 +2944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Switch the refinement applied over a facet/value
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {value} value value used for filtering
 	   * @return {SearchParameters}
 	   */
@@ -2936,7 +2960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Switch the refinement applied over a facet/value
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {value} value value used for filtering
 	   * @return {SearchParameters}
 	   */
@@ -2952,7 +2976,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Switch the refinement applied over a facet/value
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {value} value value used for filtering
 	   * @return {SearchParameters}
 	   */
@@ -2970,7 +2994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Switch the refinement applied over a facet/value
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {value} value value used for filtering
 	   * @return {SearchParameters}
 	   */
@@ -3090,8 +3114,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Returns true if the facet is refined, either for a specific value or in
 	   * general.
 	   * @method
-	   * @param {string} facet name of the attribute for used for facetting
-	   * @param {string} value, optionnal value. If passed will test that this value
+	   * @param {string} facet name of the attribute for used for faceting
+	   * @param {string} value, optional value. If passed will test that this value
 	   * is filtering the given facet.
 	   * @return {boolean} returns true if refined
 	   */
@@ -3106,8 +3130,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * excluded.
 	   *
 	   * @method
-	   * @param {string} facet name of the attribute for used for facetting
-	   * @param {string} [value] optionnal value. If passed will test that this value
+	   * @param {string} facet name of the attribute for used for faceting
+	   * @param {string} [value] optional value. If passed will test that this value
 	   * is filtering the given facet.
 	   * @return {boolean} returns true if refined
 	   */
@@ -3121,8 +3145,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Returns true if the facet contains a refinement, or if a value passed is a
 	   * refinement for the facet.
 	   * @method
-	   * @param {string} facet name of the attribute for used for facetting
-	   * @param {string} value optionnal, will test if the value is used for refinement
+	   * @param {string} facet name of the attribute for used for faceting
+	   * @param {string} value optional, will test if the value is used for refinement
 	   * if there is one, otherwise will test if the facet contains any refinement
 	   * @return {boolean}
 	   */
@@ -3137,8 +3161,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * Returns true if the facet contains a refinement, or if a value passed is a
 	   * refinement for the facet.
 	   * @method
-	   * @param {string} facet name of the attribute for used for facetting
-	   * @param {string} value optionnal, will test if the value is used for refinement
+	   * @param {string} facet name of the attribute for used for faceting
+	   * @param {string} value optional, will test if the value is used for refinement
 	   * if there is one, otherwise will test if the facet contains any refinement
 	   * @return {boolean}
 	   */
@@ -3197,7 +3221,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Returns the list of all disjunctive facets refined
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {value} value value used for filtering
 	   * @return {string[]}
 	   */
@@ -3215,7 +3239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * Returns the list of all disjunctive facets refined
 	   * @method
-	   * @param {string} facet name of the attribute used for facetting
+	   * @param {string} facet name of the attribute used for faceting
 	   * @param {value} value value used for filtering
 	   * @return {string[]}
 	   */
@@ -11078,7 +11102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param {RefinementList} refinementList the initial list
 	   * @param {string} attribute the attribute to refine
 	   * @param {string} value the value of the refinement, if the value is not a string it will be converted
-	   * @return {RefinementList} a new and updated prefinement list
+	   * @return {RefinementList} a new and updated refinement list
 	   */
 	  addRefinement: function addRefinement(refinementList, attribute, value) {
 	    if (lib.isRefined(refinementList, attribute, value)) {
@@ -11135,13 +11159,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	  },
 	  /**
 	   * Clear all or parts of a RefinementList. Depending on the arguments, three
-	   * behaviors can happen:
+	   * kinds of behavior can happen:
 	   *  - if no attribute is provided: clears the whole list
 	   *  - if an attribute is provided as a string: clears the list for the specific attribute
 	   *  - if an attribute is provided as a function: discards the elements for which the function returns true
 	   * @param {RefinementList} refinementList the initial list
 	   * @param {string} [attribute] the attribute or function to discard
-	   * @param {string} [refinementType] optionnal parameter to give more context to the attribute function
+	   * @param {string} [refinementType] optional parameter to give more context to the attribute function
 	   * @return {RefinementList} a new and updated refinement list
 	   */
 	  clearRefinement: function clearRefinement(refinementList, attribute, refinementType) {
@@ -11224,7 +11248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @typedef SearchResults.Facet
 	 * @type {object}
 	 * @property {string} name name of the attribute in the record
-	 * @property {object} data the facetting data: value, number of entries
+	 * @property {object} data the faceting data: value, number of entries
 	 * @property {object} stats undefined unless facet_stats is retrieved from algolia
 	 */
 	
@@ -11233,7 +11257,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @type {object}
 	 * @property {string} name name of the current value given the hierarchical level, trimmed.
 	 * If root node, you get the facet name
-	 * @property {number} count number of objets matching this hierarchical value
+	 * @property {number} count number of objects matching this hierarchical value
 	 * @property {string} path the current hierarchical value full path
 	 * @property {boolean} isRefined `true` if the current value was refined, `false` otherwise
 	 * @property {HierarchicalFacet[]} data sub values for the current level
@@ -11255,7 +11279,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * `numeric`, `facet`, `exclude`, `disjunctive`, `hierarchical`
 	 * @property {string} attributeName name of the attribute used for filtering
 	 * @property {string} name the value of the filter
-	 * @property {number} numericValue the value as a number. Only for numeric fitlers.
+	 * @property {number} numericValue the value as a number. Only for numeric filters.
 	 * @property {string} operator the operator used. Only for numeric filters.
 	 * @property {number} count the number of computed hits for this filter. Only on facets.
 	 * @property {boolean} exhaustive if the count is exhaustive
@@ -11695,7 +11719,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Get a facet object with its name
 	 * @deprecated
-	 * @param {string} name name of the attribute facetted
+	 * @param {string} name name of the faceted attribute
 	 * @return {SearchResults.Facet} the facet object
 	 */
 	SearchResults.prototype.getFacetByName = function(name) {
@@ -11710,7 +11734,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * Get the facet values of a specified attribute from a SearchResults object.
 	 * @private
 	 * @param {SearchResults} results the search results to search in
-	 * @param {string} attribute name of the facetted attribute to search for
+	 * @param {string} attribute name of the faceted attribute to search for
 	 * @return {array|object} facet values. For the hierarchical facets it is an object.
 	 */
 	function extractNormalizedFacetValues(results, attribute) {
@@ -11797,7 +11821,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @example
 	 * helper.on('results', function(content){
 	 *   //get values ordered only by name ascending using the string predicate
-	 *   content.getFacetValues('city', {sortBy: ['name:asc']);
+	 *   content.getFacetValues('city', {sortBy: ['name:asc']});
 	 *   //get values  ordered only by count ascending using a function
 	 *   content.getFacetValues('city', {
 	 *     // this is equivalent to ['count:asc']
@@ -11838,7 +11862,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Returns the facet stats if attribute is defined and the facet contains some.
 	 * Otherwise returns undefined.
-	 * @param {string} attribute name of the facetted attribute
+	 * @param {string} attribute name of the faceted attribute
 	 * @return {object} The stats of the facet
 	 */
 	SearchResults.prototype.getFacetStats = function(attribute) {
@@ -15723,6 +15747,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var isString = __webpack_require__(206);
 	var isPlainObject = __webpack_require__(192);
 	var isArray = __webpack_require__(20);
+	var isEmpty = __webpack_require__(203);
 	var invert = __webpack_require__(292);
 	
 	var encode = __webpack_require__(297).encode;
@@ -15862,7 +15887,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
 	  var sort = bind(sortQueryStringValues, null, prefixRegexp, invertedMapping);
-	  if (moreAttributes) {
+	  if (!isEmpty(moreAttributes)) {
 	    var stateQs = qs.stringify(encodedState, {encode: safe, sort: sort});
 	    var moreQs = qs.stringify(moreAttributes, {encode: safe});
 	    if (!stateQs) return moreQs;
@@ -16878,7 +16903,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	module.exports = '2.20.1';
+	module.exports = '2.21.1';
 
 
 /***/ }),
@@ -16925,7 +16950,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _urlSync2 = _interopRequireDefault(_urlSync);
 	
-	var _version = __webpack_require__(343);
+	var _version = __webpack_require__(344);
 	
 	var _version2 = _interopRequireDefault(_version);
 	
@@ -17617,7 +17642,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  // either we have a callback
 	  // either we are using promises
-	  if (initialOpts.callback) {
+	  if (typeof initialOpts.callback === 'function') {
 	    promise.then(function okCb(content) {
 	      exitPromise(function() {
 	        initialOpts.callback(null, content);
@@ -21264,7 +21289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	module.exports = '3.23.0';
+	module.exports = '3.24.0';
 
 
 /***/ }),
@@ -21463,10 +21488,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _algoliasearchHelper2 = _interopRequireDefault(_algoliasearchHelper);
 	
-	var _version = __webpack_require__(343);
-	
-	var _version2 = _interopRequireDefault(_version);
-	
 	var _url = __webpack_require__(290);
 	
 	var _url2 = _interopRequireDefault(_url);
@@ -21475,7 +21496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _isEqual2 = _interopRequireDefault(_isEqual);
 	
-	var _assign = __webpack_require__(344);
+	var _assign = __webpack_require__(343);
 	
 	var _assign2 = _interopRequireDefault(_assign);
 	
@@ -21484,7 +21505,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	var AlgoliaSearchHelper = _algoliasearchHelper2.default.AlgoliaSearchHelper;
-	var majorVersionNumber = _version2.default.split('.')[0];
 	
 	function timerMaker(t0) {
 	  var t = t0;
@@ -21571,7 +21591,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	// IE <= 11 has no location.origin or buggy
 	function getLocationOrigin() {
 	  // eslint-disable-next-line max-len
-	  return window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+	  var port = window.location.port ? ':' + window.location.port : '';
+	  return window.location.protocol + '//' + window.location.hostname + port;
 	}
 	
 	// see InstantSearch.js file for urlSync options
@@ -21639,8 +21660,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var currentQueryString = this.urlUtils.readUrl();
 	      var foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString, { mapping: this.mapping });
-	      // eslint-disable-next-line camelcase
-	      foreignConfig.is_v = majorVersionNumber;
 	
 	      var qs = _url2.default.getQueryStringFromState(state.filter(this.trackedParameters), {
 	        moreAttributes: foreignConfig,
@@ -21661,12 +21680,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: function createURL(state, _ref3) {
 	      var absolute = _ref3.absolute;
 	
-	      var currentQueryString = this.urlUtils.readUrl();
 	      var filteredState = state.filter(this.trackedParameters);
-	      var foreignConfig = _algoliasearchHelper2.default.url.getUnrecognizedParametersInQueryString(currentQueryString, { mapping: this.mapping });
-	      // Add instantsearch version to reconciliate old url with newer versions
-	      // eslint-disable-next-line camelcase
-	      foreignConfig.is_v = majorVersionNumber;
+	
 	      var relative = this.urlUtils.createURL(_algoliasearchHelper2.default.url.getQueryStringFromState(filteredState, { mapping: this.mapping }));
 	
 	      return absolute ? getFullURL(relative) : relative;
@@ -21711,8 +21726,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	
 	  var useHash = options.useHash || false;
+	  var customUrlUtils = options.urlUtils;
 	
-	  var urlUtils = useHash ? hashUrlUtils : modernUrlUtils;
+	  var urlUtils = customUrlUtils || (useHash ? hashUrlUtils : modernUrlUtils);
 	
 	  return new URLSync(urlUtils, options);
 	}
@@ -21721,17 +21737,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 343 */
-/***/ (function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = '2.0.0';
-
-/***/ }),
-/* 344 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var assignValue = __webpack_require__(159),
@@ -21793,6 +21798,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	module.exports = assign;
 
+
+/***/ }),
+/* 344 */
+/***/ (function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = '2.0.2';
 
 /***/ }),
 /* 345 */
@@ -33742,11 +33758,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    }
 	
-	    var resetButtonContainer = containerNode.tagName === 'INPUT' ? containerNode.parentNode : containerNode;
+	    if (reset) {
+	      var resetButtonContainer = containerNode.tagName === 'INPUT' ? containerNode.parentNode : containerNode;
 	
-	    // hide reset button when there is no query
-	    var resetButton = resetButtonContainer.querySelector('button[type="reset"]');
-	    resetButton.style.display = query && query.trim() ? 'block' : 'none';
+	      // hide reset button when there is no query
+	      var resetButton = resetButtonContainer.querySelector('button[type="reset"]');
+	      resetButton.style.display = query && query.trim() ? 'block' : 'none';
+	    }
 	  };
 	};
 	
@@ -33971,7 +33989,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, reset);
 	
 	  var resetCSSClasses = { root: (0, _classnames2.default)(bem('reset'), reset.cssClasses.root) };
-	  var stringNode = processTemplate(resetTemplate, { cssClasses: resetCSSClasses });
+	  var stringNode = processTemplate(reset.template, { cssClasses: resetCSSClasses });
 	
 	  var htmlNode = createNodeFromString(stringNode);
 	  input.parentNode.appendChild(htmlNode);
@@ -33991,7 +34009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, magnifier);
 	
 	  var magnifierCSSClasses = { root: (0, _classnames2.default)(bem('magnifier'), magnifier.cssClasses.root) };
-	  var stringNode = processTemplate(magnifierTemplate, { cssClasses: magnifierCSSClasses });
+	  var stringNode = processTemplate(magnifier.template, { cssClasses: magnifierCSSClasses });
 	
 	  var htmlNode = createNodeFromString(stringNode);
 	  input.parentNode.appendChild(htmlNode);
@@ -34544,6 +34562,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _propTypes = __webpack_require__(378);
+	
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+	
 	var _SliderConstants = __webpack_require__(441);
 	
 	var SliderConstants = _interopRequireWildcard(_SliderConstants);
@@ -34563,6 +34585,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* globals document */
+	/* eslint react/no-array-index-key: 1 */
 	
 	function getClassName(props) {
 	  var orientation = props.orientation === 'vertical' ? 'rheostat-vertical' : 'rheostat-horizontal';
@@ -34572,8 +34595,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var has = Object.prototype.hasOwnProperty;
 	
-	var PropTypeArrOfNumber = _react.PropTypes.arrayOf(_react.PropTypes.number);
-	var PropTypeReactComponent = _react.PropTypes.oneOfType([_react.PropTypes.func, _react.PropTypes.string]);
+	var PropTypeArrOfNumber = _propTypes2['default'].arrayOf(_propTypes2['default'].number);
+	var PropTypeReactComponent = _propTypes2['default'].oneOfType([_propTypes2['default'].func, _propTypes2['default'].string]);
 	
 	function getHandleFor(ev) {
 	  return Number(ev.currentTarget.getAttribute('data-handle-key'));
@@ -34590,7 +34613,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Button() {
 	    _classCallCheck(this, Button);
 	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Button).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (Button.__proto__ || Object.getPrototypeOf(Button)).apply(this, arguments));
 	  }
 	
 	  _createClass(Button, [{
@@ -34609,39 +34632,39 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var propTypes = {
 	  // the algorithm to use
-	  algorithm: _react.PropTypes.shape({
-	    getValue: _react.PropTypes.func,
-	    getPosition: _react.PropTypes.func
+	  algorithm: _propTypes2['default'].shape({
+	    getValue: _propTypes2['default'].func,
+	    getPosition: _propTypes2['default'].func
 	  }),
 	  // any children you pass in
-	  children: _react.PropTypes.any,
+	  children: _propTypes2['default'].any,
 	  // standard class name you'd like to apply to the root element
-	  className: _react.PropTypes.string,
+	  className: _propTypes2['default'].string,
 	  // prevent the slider from moving when clicked
-	  disabled: _react.PropTypes.bool,
+	  disabled: _propTypes2['default'].bool,
 	  // a custom handle you can pass in
 	  handle: PropTypeReactComponent,
 	  // the maximum possible value
-	  max: _react.PropTypes.number,
+	  max: _propTypes2['default'].number,
 	  // the minimum possible value
-	  min: _react.PropTypes.number,
+	  min: _propTypes2['default'].number,
 	  // called on click
-	  onClick: _react.PropTypes.func,
+	  onClick: _propTypes2['default'].func,
 	  // called whenever the user is done changing values on the slider
-	  onChange: _react.PropTypes.func,
+	  onChange: _propTypes2['default'].func,
 	  // called on key press
-	  onKeyPress: _react.PropTypes.func,
+	  onKeyPress: _propTypes2['default'].func,
 	  // called when you finish dragging a handle
-	  onSliderDragEnd: _react.PropTypes.func,
+	  onSliderDragEnd: _propTypes2['default'].func,
 	  // called every time the slider is dragged and the value changes
-	  onSliderDragMove: _react.PropTypes.func,
+	  onSliderDragMove: _propTypes2['default'].func,
 	  // called when you start dragging a handle
-	  onSliderDragStart: _react.PropTypes.func,
+	  onSliderDragStart: _propTypes2['default'].func,
 	  // called whenever the user is actively changing the values on the slider
 	  // (dragging, clicked, keypress)
-	  onValuesUpdated: _react.PropTypes.func,
+	  onValuesUpdated: _propTypes2['default'].func,
 	  // the orientation
-	  orientation: _react.PropTypes.oneOf(['horizontal', 'vertical']),
+	  orientation: _propTypes2['default'].oneOf(['horizontal', 'vertical']),
 	  // a component for rendering the pits
 	  pitComponent: PropTypeReactComponent,
 	  // the points that pits are rendered on
@@ -34649,7 +34672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // a custom progress bar you can pass in
 	  progressBar: PropTypeReactComponent,
 	  // should we snap?
-	  snap: _react.PropTypes.bool,
+	  snap: _propTypes2['default'].bool,
 	  // the points we should snap to
 	  snapPoints: PropTypeArrOfNumber,
 	  // the values
@@ -34677,12 +34700,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Rheostat(props) {
 	    _classCallCheck(this, Rheostat);
 	
-	    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Rheostat).call(this, props));
+	    var _this2 = _possibleConstructorReturn(this, (Rheostat.__proto__ || Object.getPrototypeOf(Rheostat)).call(this, props));
 	
-	    var _this2$props = _this2.props;
-	    var max = _this2$props.max;
-	    var min = _this2$props.min;
-	    var values = _this2$props.values;
+	    var _this2$props = _this2.props,
+	        max = _this2$props.max,
+	        min = _this2$props.min,
+	        values = _this2$props.values;
 	
 	    _this2.state = {
 	      className: getClassName(_this2.props),
@@ -34862,10 +34885,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      function getSnapPosition(positionPercent) {
 	        if (!this.props.snap) return positionPercent;
 	
-	        var _props = this.props;
-	        var algorithm = _props.algorithm;
-	        var max = _props.max;
-	        var min = _props.min;
+	        var _props = this.props,
+	            algorithm = _props.algorithm,
+	            max = _props.max,
+	            min = _props.min;
 	
 	
 	        var value = algorithm.getValue(positionPercent, min, max);
@@ -34883,14 +34906,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	      function getNextPositionForKey(idx, keyCode) {
 	        var _stepMultiplier;
 	
-	        var _state = this.state;
-	        var handlePos = _state.handlePos;
-	        var values = _state.values;
-	        var _props2 = this.props;
-	        var algorithm = _props2.algorithm;
-	        var max = _props2.max;
-	        var min = _props2.min;
-	        var snapPoints = _props2.snapPoints;
+	        var _state = this.state,
+	            handlePos = _state.handlePos,
+	            values = _state.values;
+	        var _props2 = this.props,
+	            algorithm = _props2.algorithm,
+	            max = _props2.max,
+	            min = _props2.min,
+	            snapPoints = _props2.snapPoints;
 	
 	
 	        var shouldSnap = this.props.snap;
@@ -34968,9 +34991,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this3 = this;
 	
 	        var handlePos = this.state.handlePos;
-	        var _props3 = this.props;
-	        var max = _props3.max;
-	        var min = _props3.min;
+	        var _props3 = this.props,
+	            max = _props3.max,
+	            min = _props3.min;
 	
 	
 	        var actualPosition = this.validatePosition(idx, proposedPosition);
@@ -35112,9 +35135,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'handleSlide',
 	    value: function () {
 	      function handleSlide(x, y) {
-	        var _state2 = this.state;
-	        var idx = _state2.slidingIndex;
-	        var sliderBox = _state2.sliderBox;
+	        var _state2 = this.state,
+	            idx = _state2.slidingIndex,
+	            sliderBox = _state2.sliderBox;
 	
 	
 	        var positionPercent = this.props.orientation === 'vertical' ? (y - sliderBox.top) / sliderBox.height * SliderConstants.PERCENT_FULL : (x - sliderBox.left) / sliderBox.width * SliderConstants.PERCENT_FULL;
@@ -35241,12 +35264,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'validatePosition',
 	    value: function () {
 	      function validatePosition(idx, proposedPosition) {
-	        var _state3 = this.state;
-	        var handlePos = _state3.handlePos;
-	        var handleDimensions = _state3.handleDimensions;
+	        var _state3 = this.state,
+	            handlePos = _state3.handlePos,
+	            handleDimensions = _state3.handleDimensions;
 	
 	
-	        return Math.max(Math.min(proposedPosition, handlePos[idx + 1] !== undefined ? handlePos[idx + 1] - handleDimensions : SliderConstants.PERCENT_FULL), handlePos[idx - 1] !== undefined ? handlePos[idx - 1] + handleDimensions : SliderConstants.PERCENT_EMPTY);
+	        return Math.max(Math.min(proposedPosition, handlePos[idx + 1] !== undefined ? handlePos[idx + 1] - handleDimensions : SliderConstants.PERCENT_FULL // 100% is the highest value
+	        ), handlePos[idx - 1] !== undefined ? handlePos[idx - 1] + handleDimensions : SliderConstants.PERCENT_EMPTY // 0% is the lowest value
+	        );
 	      }
 	
 	      return validatePosition;
@@ -35255,11 +35280,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'validateValues',
 	    value: function () {
 	      function validateValues(proposedValues, props) {
-	        var _ref = props || this.props;
-	
-	        var max = _ref.max;
-	        var min = _ref.min;
-	
+	        var _ref = props || this.props,
+	            max = _ref.max,
+	            min = _ref.min;
 	
 	        return proposedValues.map(function (value, idx, values) {
 	          var realValue = Math.max(Math.min(value, max), min);
@@ -35281,9 +35304,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'canMove',
 	    value: function () {
 	      function canMove(idx, proposedPosition) {
-	        var _state4 = this.state;
-	        var handlePos = _state4.handlePos;
-	        var handleDimensions = _state4.handleDimensions;
+	        var _state4 = this.state,
+	            handlePos = _state4.handlePos,
+	            handleDimensions = _state4.handleDimensions;
 	
 	
 	        if (proposedPosition < SliderConstants.PERCENT_EMPTY) return false;
@@ -35347,9 +35370,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return;
 	        }
 	
-	        var max = nextProps.max;
-	        var min = nextProps.min;
-	        var values = nextProps.values;
+	        var max = nextProps.max,
+	            min = nextProps.min,
+	            values = nextProps.values;
 	
 	
 	        var nextValues = this.validateValues(values, nextProps);
@@ -35372,17 +35395,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      function render() {
 	        var _this9 = this;
 	
-	        var _props4 = this.props;
-	        var algorithm = _props4.algorithm;
-	        var children = _props4.children;
-	        var disabled = _props4.disabled;
-	        var Handle = _props4.handle;
-	        var max = _props4.max;
-	        var min = _props4.min;
-	        var orientation = _props4.orientation;
-	        var PitComponent = _props4.pitComponent;
-	        var pitPoints = _props4.pitPoints;
-	        var ProgressBar = _props4.progressBar;
+	        var _props4 = this.props,
+	            algorithm = _props4.algorithm,
+	            children = _props4.children,
+	            disabled = _props4.disabled,
+	            Handle = _props4.handle,
+	            max = _props4.max,
+	            min = _props4.min,
+	            orientation = _props4.orientation,
+	            PitComponent = _props4.pitComponent,
+	            pitPoints = _props4.pitPoints,
+	            ProgressBar = _props4.progressBar;
 	
 	
 	        return (
@@ -36386,7 +36409,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * This widget is particularly useful if you have a boolean value in the records.
 	 *
-	 * The attribute has to in the list of attributes for faceting in the dashboard.
+	 * The attribute has to be in the list of attributes for faceting in the dashboard.
 	 * @type {WidgetFactory}
 	 * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
 	 * @return {Widget} A new instance of the Toggle widget
