@@ -12,12 +12,11 @@ export default createConnector({
 
   propTypes: {},
 
-  getProvidedProps() {
-    const url =
-      'https://www.algolia.com/?' +
+  getProvidedProps(props) {
+    const url = 'https://www.algolia.com/?' +
       'utm_source=react-instantsearch&' +
       'utm_medium=website&' +
-      `utm_content=${location.hostname}&` +
+      `utm_content=${props.canRender ? location.hostname : ''}&` +
       'utm_campaign=poweredby';
     return { url };
   },
