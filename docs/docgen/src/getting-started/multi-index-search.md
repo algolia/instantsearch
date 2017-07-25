@@ -33,7 +33,7 @@ multi-index search.
 
 ## How it works
 
-Every [search store](search-store.md) is in charge of fetching the results from a single
+Every [search store](getting-started/search-store.html) is in charge of fetching the results from a single
 Algolia index.
 
 To implement a search experience that fetches results from two indices,
@@ -42,7 +42,7 @@ you need to have two search stores.
 **Tip: you can fetch results from as many indices as you want. 💥**
 
 As a reminder, before diving into some code, every time you use an [Index
-component](components/index.md), a search store is automatically instantiated.
+component](components/index.html), a search store is automatically instantiated.
 
 ## Independent Multi-Index searches
 
