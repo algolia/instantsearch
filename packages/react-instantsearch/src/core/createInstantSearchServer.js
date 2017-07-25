@@ -9,6 +9,7 @@ import ReactDom from 'react-dom/server';
 import { getIndex, hasMultipleIndex } from './indexUtils';
 import { isEmpty } from 'lodash';
 import cis from './createInstantSearch';
+import highlightTags from './highlightTags.js';
 
 const createInstantSearch = function(algoliasearch) {
   const InstantSearch = cis(algoliasearch, {
@@ -48,7 +49,7 @@ const createInstantSearch = function(algoliasearch) {
             searchParameter.props,
             searchParameter.searchState
           ),
-        new SearchParameters({ index: indexName })
+        new SearchParameters({ index: indexName, ...highlightTags })
       );
 
     const mergedSearchParameters = searchParameters
