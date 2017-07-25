@@ -33,7 +33,6 @@ $offset-height: 60px
   h2
     font-size: 28px
     padding-right: 1em
-    margin-top: 32px
     padding-bottom: 8px
 
     &:first-of-type
@@ -43,7 +42,6 @@ $offset-height: 60px
       font-size: 22px
 
   h3
-    margin-top: 32px
     font-size: 24px
     color: #201c38
     position: relative
@@ -52,7 +50,6 @@ $offset-height: 60px
   h4
     font-size: 18px
     font-weight: normal
-    margin-top: 2em
 
   .api tr td:first-child
     vertical-align: top
@@ -115,6 +112,8 @@ $offset-height: 60px
         margin-top: 0
       & h2:first-child
         font-size: 35px
+        &:before
+          height: 0
       a
         color: $accent-color
 
@@ -186,7 +185,7 @@ $offset-height: 60px
         content: ""
         display: block
         height: $offset-height
-        margin: (-$offset-height) 0 0
+        // margin: (-$offset-height) 0 0
 
     .anchor
       margin-left: .2em
