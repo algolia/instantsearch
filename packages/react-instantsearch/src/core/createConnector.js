@@ -45,9 +45,7 @@ export default function createConnector(connectorDesc) {
 
   return Composed =>
     class Connector extends Component {
-      static displayName = `${connectorDesc.displayName}(${getDisplayName(
-        Composed
-      )})`;
+      static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
       static defaultClassNames = Composed.defaultClassNames;
       static propTypes = connectorDesc.propTypes;
       static defaultProps = connectorDesc.defaultProps;
@@ -62,15 +60,19 @@ export default function createConnector(connectorDesc) {
         super(props, context);
 
         const { ais: { store, widgetsManager }, multiIndexContext } = context;
+        const canRender = false;
         this.state = {
-          props: this.getProvidedProps(props),
-          canRender: false, //use to know if a component is rendered (browser), or not (server).
+          props: this.getProvidedProps({ ...props, canRender }),
+          canRender, //use to know if a component is rendered (browser), or not (server).
         };
 
         this.unsubscribe = store.subscribe(() => {
           if (this.state.canRender) {
             this.setState({
-              props: this.getProvidedProps(this.props),
+              props: this.getProvidedProps({
+                ...this.props,
+                canRender: this.state.canRender,
+              }),
             });
           }
         });
