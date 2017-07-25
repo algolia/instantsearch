@@ -1,5 +1,3 @@
-CHANGELOG
-
 2.21.1 - 2017-07-20
  * fix(events): We need searchEmptyQueue before result to avoid inconsistency
  * chore(ci): fix build so that tests can be executed

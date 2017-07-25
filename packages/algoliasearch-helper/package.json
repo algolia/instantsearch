@@ -23,7 +23,9 @@
     "test-node": "clear && node test/run",
     "test:watch": "onchange '{src,test}/**/*.js' 'index.js' -- npm run test-node",
     "test:perf": "node ./test/perf/index.js",
-    "release": "git clean dist/ -f && git checkout dist/ && npm install && ./scripts/release.js && npm run build"
+    "release": "git clean dist/ -f && git checkout dist/ && npm install && ./scripts/release.js && npm run build",
+    "changelog:view-last": "conventional-changelog -u -n scripts/conventional-changelog/ | less",
+    "changelog:update": "conventional-changelog -i CHANGELOG -s -u -n scripts/conventional-changelog/"
   },
   "gh-pages-deploy": {
     "staticpath": "documentation",
@@ -55,6 +57,7 @@
     "bulkify": "^1.2.0",
     "chalk": "^1.1.3",
     "collect-json": "^1.0.8",
+    "conventional-changelog-cli": "^1.3.2",
     "dateformat": "^1.0.12",
     "dmd": "^1.4.1",
     "doctoc": "^1.2.0",
