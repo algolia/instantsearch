@@ -1,35 +1,36 @@
 ---
 title: Using components
-mainTitle: Getting started
+mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 100
+navWeight: 3
 editable: true
 githubSource: docs/docgen/src/getting-started/using-components.md
 ---
 
 Vue InstantSearch comes pre-packaged with many components necessary to build a full-featured search experience.
 
-If provided components do not fit your needs, let us know via [GitHub](https://github.com/algolia/vue-instantsearch/issues) and then have a look at how to [create custom components](custom-components.md).
+If provided components do not fit your needs, let us know via [GitHub](https://github.com/algolia/vue-instantsearch/issues) and then have a look at how to [create custom components](getting-started/custom-components.html).
 
 ## Available components
 
-* [Index](components/index.md)
-* [Search Box](components/search-box.md)
-* [Results](components/results.md)
-* [No Results](components/no-results.md)
-* [Refinement List](components/refinement-list.md)
-* [Pagination](components/pagination.md)
-* [Clear](components/clear.md)
-* [Highlight](components/highlight.md)
-* [Snippet](components/snippet.md)
-* [Stats](components/stats.md)
-* [Powered By](components/powered-by.md)
-* [Price Range](components/price-range.md)
-* [Results per Page Selector](components/results-per-page-selector.md)
-* [Sort by Selector](components/sort-by-selector.md)
-* [Rating](components/rating.md)
+* [Index](components/index.html)
+* [Input](components/input.html)
+* [Search Box](components/search-box.html)
+* [Results](components/results.html)
+* [No Results](components/no-results.html)
+* [Refinement List](components/refinement-list.html)
+* [Pagination](components/pagination.html)
+* [Clear](components/clear.html)
+* [Highlight](components/highlight.html)
+* [Snippet](components/snippet.html)
+* [Stats](components/stats.html)
+* [Powered By](components/powered-by.html)
+* [Price Range](components/price-range.html)
+* [Results per Page Selector](components/results-per-page-selector.html)
+* [Sort by Selector](components/sort-by-selector.html)
+* [Rating](components/rating.html)
 
 ## Registering components
 
@@ -56,7 +57,7 @@ new Vue({
 The line `Vue.use(InstantSearch);` registers all components at once and make them available
 in templates.
 
-**Info: When using the [standalone build](./installing.md#TODO), all components are automatically imported.**
+**Info:** When using the [standalone build](getting-started/installing.html#using-a-tag), all components are automatically imported.
 
 ### Only the used components
 
@@ -71,7 +72,7 @@ import App from './App.vue'
 import { Index, SearchBox, Results, Pagination } from 'vue-instantsearch';
 
 Vue.component('ais-index', Index);
-Vue.component('ais-searchBox', SearchBox);
+Vue.component('ais-search-box', SearchBox);
 Vue.component('ais-results', Results);
 Vue.component('ais-pagination', Pagination);
 
@@ -91,7 +92,7 @@ When manually importing components, you can change that naming and assign a cust
 
 ## Using components
 
-All search components must be wrapped in an [`Index`](components/index.md) component.
+All search components must be wrapped in an [`Index`](components/index.html) component.
 
 ```html
 <template>
@@ -105,11 +106,11 @@ All search components must be wrapped in an [`Index`](components/index.md) compo
 </template>
 ```
 
-To read why a search component needs to be wrapped into an Index component, have a look at the [custom components](custom-components.md) page.
+To read why a search component needs to be wrapped into an Index component, have a look at the [custom components](getting-started/custom-components.html) page.
 
 ### Avoiding the use of an `Index` component
 
-You might not want to use a wrapping `Index` component or maybe you want to do some [server-side rendering](server-side-rendering.md).
+You might not want to use a wrapping `Index` component or maybe you want to do some [server-side rendering](getting-started/server-side-rendering.html).
 
 In those cases, you can manually tie components to a search store by passing a `searchStore` property to them:
 
@@ -137,6 +138,6 @@ In those cases, you can manually tie components to a search store by passing a `
 </script>
 ```
 
-**Info: The Index component also accepts the searchStore as parameter. Here we used that to avoid us to repeat the Algolia credentials.**
+**Info:** The Index component also accepts the searchStore as parameter. Here we used that to avoid us to repeat the Algolia credentials.
 
-**Best practice: Wrapping your search components with an `Index` component makes it easier to reason about the code. All the logic is then declared inside of the template instead of being spread between templates and methods or objects. If you do not need to manually inject a search store, we recommend you stick with using the Index component.**
+**Best practice:** Wrapping your search components with an `Index` component makes it easier to reason about the code. All the logic is then declared inside of the template instead of being spread between templates and methods or objects. If you do not need to manually inject a search store, we recommend you stick with using the Index component.

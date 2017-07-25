@@ -4,7 +4,7 @@ mainTitle: Components
 layout: main.pug
 category: Components
 withHeadings: true
-navWeight: 100
+navWeight: 4
 editable: true
 githubSource: docs/docgen/src/components/results.md
 ---
@@ -30,10 +30,10 @@ Basic usage:
 
 ## Props
 
-| Name           | Type    | Default | Description                                                                    |
-|:---------------|:--------|:--------|:-------------------------------------------------------------------------------|
-| stack          | Boolean | `false` | If true, will append results of next page to current results when page changes |
-| resultsPerPage | Number  | ``      | The number of results to display                                               |
+| Name             | Type    | Default | Description                                                                    |
+|:-----------------|:--------|:--------|:-------------------------------------------------------------------------------|
+| stack            | Boolean | `false` | If true, will append results of next page to current results when page changes |
+| results-per-page | Number  | ``      | The number of results to display                                               |
 
 
 ## Slots

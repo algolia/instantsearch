@@ -1,17 +1,17 @@
 ---
 title: Multi index search
-mainTitle: Getting started
+mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 100
+navWeight: 8
 editable: true
 githubSource: docs/docgen/src/getting-started/multi-index-search.md
 ---
 
 In this guide, you will learn how to get results from multiple indices simultaneously.
 
-We have a [live multi-index search example](examples/multi-index-search.md) for you to quickly grasp what we are talking about.
+We have a [live multi-index search example](examples/multi-index-search.html) for you to quickly grasp what we are talking about.
 
 ## When to use multi-index search
 
@@ -33,7 +33,7 @@ multi-index search.
 
 ## How it works
 
-Every [search store](search-store.md) is in charge of fetching the results from a single
+Every [search store](getting-started/search-store.html) is in charge of fetching the results from a single
 Algolia index.
 
 To implement a search experience that fetches results from two indices,
@@ -42,7 +42,7 @@ you need to have two search stores.
 **Tip: you can fetch results from as many indices as you want. 💥**
 
 As a reminder, before diving into some code, every time you use an [Index
-component](components/index.md), a search store is automatically instantiated.
+component](components/index.html), a search store is automatically instantiated.
 
 ## Independent Multi-Index searches
 
@@ -51,11 +51,11 @@ Let's take a look at what a minimalistic example of multi-index search looks lik
 ```html
 <!-- App.vue -->
 <template>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="first">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first">
     <ais-search-box />
     <ais-results />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="second">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second">
     <ais-search-box />
     <ais-results />
   </ais-index>
@@ -68,16 +68,16 @@ In this example, we display results from two indices, but we are still using two
 
 Here's how to bind a single input displaying results from multiple indices:
 
-**Note: For now it's not feasible to bind the provided [Search Box component](components/search-box.html) directly to different indices, we are working on that**
+**Note:** For now it's not feasible to bind the provided [Search Box component](components/search-box.html) directly to different indices, we are working on that
 
 ```html
 <!-- App.vue -->
 <template>
   <input v-model="query">
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="first" :query="query">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first" :query="query">
     <ais-results />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="second" :query="query">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second" :query="query">
     <ais-results />
   </ais-index>
 </template>
@@ -113,10 +113,10 @@ Here is the same example as above with a different syntax, binding the `query`.
 <!-- App.vue -->
 <template>
   <input v-model="query">
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="first" :query-parameters="{query: query}">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first" :query-parameters="{query: query}">
     <ais-results />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="second" :query-parameters="{query: query}">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second" :query-parameters="{query: query}">
     <ais-results />
   </ais-index>
 </template>

@@ -1,10 +1,10 @@
 ---
 title: Installing the library
-mainTitle: Getting started
+mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 900
+navWeight: 2
 editable: true
 githubSource: docs/docgen/src/getting-started/installing.md
 ---
@@ -22,7 +22,7 @@ npm install vue-instantsearch --save
 ## Using a `<script>` tag
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vue-instantsearch@0.2.1/dist/vue-instantsearch.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-instantsearch@0.3.0/dist/vue-instantsearch.js"></script>
 ```
 
 Have a look at how to use the standalone UMD build in our codepen example: [codepen.io/rayrutjes/pen/BRgyGV](https://codepen.io/rayrutjes/pen/BRgyGV).

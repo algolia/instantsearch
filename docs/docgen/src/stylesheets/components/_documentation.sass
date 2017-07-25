@@ -33,7 +33,6 @@ $offset-height: 60px
   h2
     font-size: 28px
     padding-right: 1em
-    margin-top: 32px
     padding-bottom: 8px
 
     &:first-of-type
@@ -43,7 +42,6 @@ $offset-height: 60px
       font-size: 22px
 
   h3
-    margin-top: 32px
     font-size: 24px
     color: #201c38
     position: relative
@@ -52,7 +50,6 @@ $offset-height: 60px
   h4
     font-size: 18px
     font-weight: normal
-    margin-top: 2em
 
   .api tr td:first-child
     vertical-align: top
@@ -78,6 +75,9 @@ $offset-height: 60px
     padding-left: 60px
     padding-top: 60px
 
+    p img
+      max-width: 100%
+
     p, li
       color: rgba(32, 28, 56, 0.8)
       line-height: 2
@@ -92,7 +92,6 @@ $offset-height: 60px
 
       li
         clear: both
-        margin-bottom: 10px
 
       ul
         font-weight: normal
@@ -111,6 +110,12 @@ $offset-height: 60px
     .content
       & p:first-child
         margin-top: 0
+      & h2:first-child
+        font-size: 35px
+        &:before
+          height: 0
+      a
+        color: $accent-color
 
     .heading
       background: #fff
@@ -180,7 +185,7 @@ $offset-height: 60px
         content: ""
         display: block
         height: $offset-height
-        margin: (-$offset-height) 0 0
+        // margin: (-$offset-height) 0 0
 
     .anchor
       margin-left: .2em
@@ -220,10 +225,8 @@ $offset-height: 60px
           margin-top: 0
 
     .editThisPage
-      position: absolute
       font-size: 12px
-      right: 0
-      top: 12px
+      float: right
       padding: 3px 6px
       border: 1px solid darken($accent-color, 20%)
       color: darken($accent-color, 20%)

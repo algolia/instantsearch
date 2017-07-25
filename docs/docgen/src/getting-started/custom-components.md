@@ -1,10 +1,10 @@
 ---
 title: Custom Components
-mainTitle: Getting started
+mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 100
+navWeight: 4
 editable: true
 githubSource: docs/docgen/src/getting-started/custom-components.md
 ---
@@ -17,7 +17,7 @@ Let us know about your use case for a custom component via our [issue tracker](h
 
 ## What is a custom component
 
-A custom component is a Vue.js component that has access to the [search store](search-store.md).
+A custom component is a Vue.js component that has access to the [search store](getting-started/search-store.html).
 
 It can:
 
@@ -59,9 +59,9 @@ By using the `Component` mixin, the custom component will automatically be able 
 This is made possible because the `Component` mixin `injects` the searchStore.
 You can read more about the inject/provide feature on the [Vue.js documentation](https://vuejs.org/v2/api/#provide-inject).
 
-The search store will be automatically fetched from a parent [Index component](/components/index.md) higher in the DOM tree.
+The search store will be automatically fetched from a parent [Index component](components/index.html) higher in the DOM tree.
 
-As a reminder, you can also [provide your custom searchStore to any custom component](components.md#manually-inject-the-search-store-into-components) as a property.
+As a reminder, you can also [provide your custom searchStore to any custom component](getting-started/search-store.html#manually-inject-the-search-store-into-components) as a property.
 
 ## Best practices
 

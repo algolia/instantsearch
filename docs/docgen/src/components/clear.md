@@ -4,7 +4,7 @@ mainTitle: Components
 layout: main.pug
 category: Components
 withHeadings: true
-navWeight: 100
+navWeight: 8
 editable: true
 githubSource: docs/docgen/src/components/clear.md
 ---
@@ -32,21 +32,21 @@ Overriding the default button text:
 Only clear the search query:
 
 ```html
-<ais-clear :clearsFacets="false"></ais-clear>
+<ais-clear :clears-facets="false"></ais-clear>
 ```
 
 Only clear the facet refinements:
 
 ```html
-<ais-clear :clearsQuery="false"></ais-clear>
+<ais-clear :clears-query="false"></ais-clear>
 ```
 
 ## Props
 
-| Name         | Type    | Default | Description                                                                       |
-|:-------------|:--------|:--------|:----------------------------------------------------------------------------------|
-| clearsQuery  | boolean | `true`  | If `true`, when the button is clicked, the `query` will be emptied.               |
-| clearsFacets | boolean | `true`  | If `true`, when the button is clicked, all the facet refinements will be removed. |
+| Name          | Type    | Default | Description                                                                       |
+|:--------------|:--------|:--------|:----------------------------------------------------------------------------------|
+| clears-query  | boolean | `true`  | If `true`, when the button is clicked, the `query` will be emptied.               |
+| clears-facets | boolean | `true`  | If `true`, when the button is clicked, all the facet refinements will be removed. |
 
 ## Slots
 

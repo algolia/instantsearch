@@ -5,4 +5,7 @@ block navigation
   +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
 
 block content
-  .content!=contents
+
+  .content
+    h2=title
+    !=contents

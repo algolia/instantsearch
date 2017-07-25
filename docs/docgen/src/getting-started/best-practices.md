@@ -1,10 +1,10 @@
 ---
 title: Best practices
-mainTitle: Getting started
+mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 100
+navWeight: 6
 editable: true
 githubSource: docs/docgen/src/getting-started/best-practices.md
 ---

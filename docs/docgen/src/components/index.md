@@ -4,7 +4,7 @@ mainTitle: Components
 layout: main.pug
 category: Components
 withHeadings: true
-navWeight: 100
+navWeight: 1
 editable: true
 githubSource: docs/docgen/src/components/index.md
 ---
@@ -18,9 +18,9 @@ This component automatically provides the search state to all its children.
 Basic usage:
 
 ```html
-<ais-index indexName="your_indexName"
-           appId="YourAppID"
-           apiKey="YourSearchAPIKey"
+<ais-index index-name="your_indexName"
+           app-id="YourAppID"
+           api-key="YourSearchAPIKey"
 >
   <!-- Add your InstantSearch components here. -->
 </ais-index>
@@ -29,10 +29,10 @@ Basic usage:
 Provide search query parameters:
 
 ```html
-<ais-index indexName="your_indexName"
-           appId="YourAppID"
-           apiKey="YourSearchAPIKey"
-           :queryParameters="{
+<ais-index index-name="your_indexName"
+           app-id="YourAppID"
+           api-key="YourSearchAPIKey"
+           :query-parameters="{
              distinct: true,
              attributeForDistinct: 'product_id'
            }"
@@ -44,13 +44,13 @@ Provide search query parameters:
 
 ## Props
 
-| Name            | Type   | Default | Description                                                                                                                                        |
-|:----------------|:-------|:--------|:---------------------------------------------------------------------------------------------------------------------------------------------------|
-| apiKey          | String | ``      | The API key                                                                                                                                        |
-| appId           | String | ``      | The application ID                                                                                                                                 |
-| indexName       | String | ``      | The index name                                                                                                                                     |
-| query           | String | ``      | The search query                                                                                                                                   |
-| queryParameters | Object | ``      | The search query parameters. Available options are [documented here](https://www.algolia.com/doc/api-client/javascript/search/#search-parameters). |
+| Name             | Type   | Default | Description                                                                                                                                        |
+|:-----------------|:-------|:--------|:---------------------------------------------------------------------------------------------------------------------------------------------------|
+| api-key          | String | ``      | The API key                                                                                                                                        |
+| app-id           | String | ``      | The application ID                                                                                                                                 |
+| index-name       | String | ``      | The index name                                                                                                                                     |
+| query            | String | ``      | The search query                                                                                                                                   |
+| query-parameters | Object | ``      | The search query parameters. Available options are [documented here](https://www.algolia.com/doc/api-client/javascript/search/#search-parameters). |
 
 ## Slots
 

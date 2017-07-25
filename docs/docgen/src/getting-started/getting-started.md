@@ -1,10 +1,10 @@
 ---
 title: Getting started
-mainTitle: Getting started
+mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 1000
+navWeight: 1
 editable: true
 githubSource: docs/docgen/src/getting-started/getting-started.md
 ---
@@ -76,7 +76,7 @@ new Vue({
 });
 ```
 
-From now on, you can use all [Vue InstantSearch components](using-components.md) in your templates throughout the whole application.
+From now on, you can use all [Vue InstantSearch components](getting-started/using-components.html) in your templates throughout the whole application.
 
 ## Create your first search experience
 
@@ -87,14 +87,14 @@ Open the `src/App.vue` component. Then replace the whole beginning of the file, 
 ```html
 <template>
   <ais-index
-    appId="latency"
-    apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
-    indexName="bestbuy"
+    app-id="latency"
+    api-key="3d9875e51fbd20c7754e65422f7ce5e1"
+    index-name="bestbuy"
   >
     <ais-search-box />
     <ais-results>
       <template scope="{ result }">
-        <h2><ais-highlight :result="result" attributeName="name" /></h2>
+        <h2><ais-highlight :result="result" attribute-name="name" /></h2>
       </template>
     </ais-results>
   </ais-index>
@@ -115,9 +115,9 @@ All search components needs to be wrapped in an Index component.
 
 ```html
 <ais-index
-  appId="latency"
-  apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
-  indexName="bestbuy"
+  app-id="latency"
+  api-key="3d9875e51fbd20c7754e65422f7ce5e1"
+  index-name="bestbuy"
 >
   <!-- Search components go here -->
 </ais-index>
@@ -127,21 +127,21 @@ You should configure the Index component with the application ID and API search 
 
 The job of the Index component is to hold the state of the search, and to provide it to child components.
 
-**Info: Alternatively you can [manually inject a search store](search-store.md), for example to support server-side rendering.**
+**Info: Alternatively you can [manually inject a search store](getting-started/search-store.html), for example to support server-side rendering.**
 
 ### Algolia demo credentials
 
 For the purpose of the demo, we provided you with some default Algolia credentials:
 
- - `appId`: `latency`
- - `searchKey`: `3d9875e51fbd20c7754e65422f7ce5e1`
- - `indexName`: `bestbuy`
+ - `app-id`: `latency`
+ - `search-key`: `3d9875e51fbd20c7754e65422f7ce5e1`
+ - `index-name`: `bestbuy`
 
 When you will be ready to go further, you can [create your own Algolia account](https://www.algolia.com/users/sign_up) and [find your credentials](https://www.algolia.com/api-keys) in the Algolia dashboard.
 
 ### The Search Box component
 
-The [Search Box component](components/search-box.md) renders a text input.
+The [Search Box component](components/search-box.html) renders a text input.
 
 The text input value is bound to the query of the current search.
 
@@ -151,7 +151,7 @@ Every time the query changes, the search store will contact Algolia to get the n
 
 ### The Results component
 
-The [Results component](components/results.md) will loop over all results returned
+The [Results component](components/results.html) will loop over all results returned
 by the Algolia response, and display them.
 
 The component has a [default slot](https://vuejs.org/v2/guide/components.html#Single-Slot) so that you can easily define your custom template for the rendering of every single result.
