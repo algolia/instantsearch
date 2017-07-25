@@ -1,6 +1,6 @@
 import sidebar from './sidebar.js';
 import dropdowns from './dropdowns.js';
-import move from './mover.js';
+// import move from './mover.js';
 import activateClipboard from './activateClipboard.js';
 // import bindRunExamples from './bindRunExamples.js';
 import {fixSidebar, followSidebarNavigation} from './fix-sidebar.js';
@@ -19,7 +19,7 @@ const container = document.querySelector('.documentation-container');
 const codeSamples = document.querySelectorAll('.code-sample');
 
 dropdowns();
-move();
+// move();
 activateClipboard(codeSamples);
 
 
@@ -30,4 +30,3 @@ if(sidebarContainer) {
   fixSidebar({sidebarContainer, topOffset: headerHeight});
   followSidebarNavigation(sidebarContainer.querySelectorAll('a'), contentContainer.querySelectorAll('h2'));
 }
-

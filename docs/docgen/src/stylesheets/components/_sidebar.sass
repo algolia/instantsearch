@@ -5,6 +5,8 @@ $sidebarTopOffset: 60px;
   height: calc(100vh - 56px - #{$sidebarTopOffset})
   margin-top: $sidebarTopOffset
   padding-bottom: 30px
+  overflow-y: auto
+  overflow-x: visible
 
   &.fixed
     position: fixed
@@ -17,14 +19,17 @@ $sidebarTopOffset: 60px;
 
   li
     display: inline-block
-    height: 40px
+
     margin: 0
     padding: 0
     width: 100%
 
     &.navItem-active > a
-      color: #201c38
+      color: $accent-color
       font-weight: 600
+
+    &.level-h2 > a
+      font-size: 15px
 
     ul
       padding-left: 1em !important
@@ -37,29 +42,30 @@ $sidebarTopOffset: 60px;
       color: rgba(32, 28, 56, 0.8)
       font-family: OpenSans, helvetica, sans-serif
       transition: transform .2s ease
-      padding: 10px 0
+      padding: 5px 0
+      font-size: 13px
 
       &:hover
         text-decoration: underline
 
-      &:before
-        content: ''
-        display: block
-        width: 10px
-        height: 10px
-        background: $accent-color
-        border-radius: 100%
-        position: absolute
-        top: 50%
-        left: -20px
-        opacity: 0
-        transform:  translateY(-50%)
-        transition: opacity .2s ease 0.15s
+      // &:before
+      //   content: ''
+      //   display: block
+      //   width: 10px
+      //   height: 10px
+      //   background: $accent-color
+      //   border-radius: 100%
+      //   position: absolute
+      //   top: 50%
+      //   left: -15px
+      //   opacity: 0
+      //   transform:  translateY(-50%)
+      //   transition: opacity .2s ease 0.15s
 
       &.navItem-active
-        color: #201c38
+        color: $accent-color
         font-weight: 600
-        transform: translateX(20px)
+        transform: translateX(0px)
         transition: transform .2s ease
 
         &:before
