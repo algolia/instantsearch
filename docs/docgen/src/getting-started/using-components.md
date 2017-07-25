@@ -138,6 +138,6 @@ In those cases, you can manually tie components to a search store by passing a `
 </script>
 ```
 
-**Info: The Index component also accepts the searchStore as parameter. Here we used that to avoid us to repeat the Algolia credentials.**
+**Info:** The Index component also accepts the searchStore as parameter. Here we used that to avoid us to repeat the Algolia credentials.
 
-**Best practice: Wrapping your search components with an `Index` component makes it easier to reason about the code. All the logic is then declared inside of the template instead of being spread between templates and methods or objects. If you do not need to manually inject a search store, we recommend you stick with using the Index component.**
+**Best practice:** Wrapping your search components with an `Index` component makes it easier to reason about the code. All the logic is then declared inside of the template instead of being spread between templates and methods or objects. If you do not need to manually inject a search store, we recommend you stick with using the Index component.
