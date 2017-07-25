@@ -11,7 +11,7 @@ githubSource: docs/docgen/src/getting-started/getting-started.md
 
 ## Welcome to Vue InstantSearch
 
-**WARNING: This project is currently in BETA.**
+**WARNING:** This project is currently in BETA.
 
 Vue InstantSearch is the ultimate toolbox for creating instant-search
 experiences using [Vue.js](https://vuejs.org/) and [Algolia](https://www.algolia.com/).
@@ -20,33 +20,34 @@ experiences using [Vue.js](https://vuejs.org/) and [Algolia](https://www.algolia
 
 We will use the official [vue-cli](https://vuejs.org/v2/guide/installation.html#CLI) to bootstrap a new Vue project, along with the [webpack-simple template](https://github.com/vuejs/vue-cli#official-templates).
 
-```sh
-npm install --global vue-cli
-vue init webpack-simple vue-instantsearch-getting-started
-# Default settings are enough, hit `Enter ⏎` at every question
+```shell
+$ npm install --global vue-cli
+$ vue init webpack-simple vue-instantsearch-getting-started
 ```
+
+**info:** Default settings are enough, hit `Enter ⏎` at every question
 
 Then install the dependencies of your new project:
 
-```sh
-cd vue-instantsearch-getting-started
-npm install
+```shell
+$ cd vue-instantsearch-getting-started
+$ npm install
 ```
 
 ## Install `vue-instantsearch`
 
 Add Vue InstantSearch as a dependency, it's published on [npm](https://www.npmjs.com):
 
-```sh
-npm install --save vue-instantsearch
+```shell
+$ npm install --save vue-instantsearch
 ```
 
 ## Run the development environement
 
 When `vue-cli` bootstraped the project, it added some [npm scripts](https://docs.npmjs.com/misc/scripts) to your project, like a `dev` one. Let's use it:
 
-```sh
-npm run dev
+```shell
+$ npm run dev
 ```
 
 This should open a new tab in your browser with this inside:
@@ -63,7 +64,7 @@ components are available in our templates.
 
 Open the `src/main.js` entry point and replace the existing content with the following:
 
-```js
+```javascript
 import Vue from 'vue';
 import App from './App.vue'
 import InstantSearch from 'vue-instantsearch';
@@ -127,7 +128,7 @@ You should configure the Index component with the application ID and API search 
 
 The job of the Index component is to hold the state of the search, and to provide it to child components.
 
-**Info: Alternatively you can [manually inject a search store](getting-started/search-store.html), for example to support server-side rendering.**
+**Info:** Alternatively you can [manually inject a search store](getting-started/search-store.html), for example to support server-side rendering.
 
 ### Algolia demo credentials
 
@@ -147,7 +148,7 @@ The text input value is bound to the query of the current search.
 
 Every time the query changes, the search store will contact Algolia to get the new results for the new query.
 
-**Info: The Search Box component is wrapped into a `<form>` element and provides a reset and submit button by default. These [good search practices are explained here](https://blog.algolia.com/mobile-search-ux-tips/).**
+**Info:** The Search Box component is wrapped into a `<form>` element and provides a reset and submit button by default. These [good search practices are explained here](https://blog.algolia.com/mobile-search-ux-tips/).
 
 ### The Results component
 
@@ -156,7 +157,7 @@ by the Algolia response, and display them.
 
 The component has a [default slot](https://vuejs.org/v2/guide/components.html#Single-Slot) so that you can easily define your custom template for the rendering of every single result.
 
-**Info: By default, if no slot is provided, the component will display every `objectID` of every result.**
+**Info:** By default, if no slot is provided, the component will display every `objectID` of every result.
 
 The slot provided by the Results components is [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots).
 

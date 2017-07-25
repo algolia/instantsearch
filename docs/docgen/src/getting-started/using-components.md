@@ -40,7 +40,7 @@ There are 2 ways of registering components, all at once or one by one.
 
 Vue InstantSearch is shipped as a Vue plugin.
 
-```js
+```javascript
 // src/main.js
 import Vue from 'vue';
 import App from './App.vue'
@@ -65,7 +65,7 @@ The previous approach is nice and easy, but it has the drawback of including cod
 
 An alternative approach is to register components when we need them:
 
-```js
+```javascript
 // src/main.js
 import Vue from 'vue';
 import App from './App.vue'

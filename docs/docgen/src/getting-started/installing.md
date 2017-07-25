@@ -14,8 +14,8 @@ be used in a `<script>` tag.
 
 ## Via `npm`
 
-```sh
-npm install vue-instantsearch --save
+```shell
+$ npm install vue-instantsearch --save
 # yarn add vue-instantsearch
 ```
 
