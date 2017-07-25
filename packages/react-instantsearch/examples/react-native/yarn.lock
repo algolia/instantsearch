@@ -4356,9 +4356,9 @@ react-test-renderer@16.0.0-alpha.12:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
 
-react-test-renderer@16.0.0-alpha.6:
-  version "16.0.0-alpha.6"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.0.0-alpha.6.tgz#c032def0dc8319cee39caa4e4373a60019cb3786"
+react-test-renderer@16.0.0-alpha.13:
+  version "16.0.0-alpha.13"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.0.0-alpha.13.tgz#fdc494a2df36119fd83ae39571c9a142a9d3b023"
   dependencies:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
