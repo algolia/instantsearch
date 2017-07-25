@@ -1,6 +1,6 @@
 {
   "pinVersions": true,
   "semanticCommits": true,
-  "depTypes": [{ "depType": "dependencies", "pinVersions": false }],
+  "depTypes": [{ "depType": "dependencies", "pinVersions": false, "semanticPrefix": "chore(deps): " }],
   "ignoreDeps": ["jsdoc-parse", "react-native"]
 }
