@@ -19,13 +19,20 @@ Basic usage:
 <ais-search-box placeholder="Find products..."></ais-search-box>
 ```
 
+With autofocus:
+
+```html
+<ais-search-box :autofocus="true"></ais-search-box>
+```
+
 ## Props
 
-| Name        | Type   | Default    | Description            |
-|:------------|:-------|:-----------|:-----------------------|
-| placeholder | String | `''`       | The input placeholder  |
-| submitTitle | String | `'search'` | The submit button text |
-| clearTitle  | String | `'clear'`  | The clear button text  |
+| Name        | Type    | Default    | Description                                              |
+|:------------|:--------|:-----------|:---------------------------------------------------------|
+| placeholder | String  | `''`       | The input placeholder                                    |
+| submitTitle | String  | `'search'` | The submit button text                                   |
+| clearTitle  | String  | `'clear'`  | The clear button text                                    |
+| autofocus   | Boolean | `false`    | Wether to automatically focus on the input when rendered |
 
 ## Slots
 
