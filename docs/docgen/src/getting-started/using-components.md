@@ -16,6 +16,7 @@ If provided components do not fit your needs, let us know via [GitHub](https://g
 ## Available components
 
 * [Index](components/index.md)
+* [Input](components/input.md)
 * [Search Box](components/search-box.md)
 * [Results](components/results.md)
 * [No Results](components/no-results.md)
