@@ -1,7 +1,7 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "^1.0.10"
+    "react-scripts": "1.0.10"
   },
   "dependencies": {
     "lodash": "^4.17.4",
