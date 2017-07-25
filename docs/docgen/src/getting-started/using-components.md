@@ -72,7 +72,7 @@ import App from './App.vue'
 import { Index, SearchBox, Results, Pagination } from 'vue-instantsearch';
 
 Vue.component('ais-index', Index);
-Vue.component('ais-searchBox', SearchBox);
+Vue.component('ais-search-box', SearchBox);
 Vue.component('ais-results', Results);
 Vue.component('ais-pagination', Pagination);
 

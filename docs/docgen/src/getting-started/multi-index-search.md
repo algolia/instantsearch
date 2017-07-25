@@ -51,11 +51,11 @@ Let's take a look at what a minimalistic example of multi-index search looks lik
 ```html
 <!-- App.vue -->
 <template>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="first">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first">
     <ais-search-box />
     <ais-results />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="second">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second">
     <ais-search-box />
     <ais-results />
   </ais-index>
@@ -74,10 +74,10 @@ Here's how to bind a single input displaying results from multiple indices:
 <!-- App.vue -->
 <template>
   <input v-model="query">
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="first" :query="query">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first" :query="query">
     <ais-results />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="second" :query="query">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second" :query="query">
     <ais-results />
   </ais-index>
 </template>
@@ -113,10 +113,10 @@ Here is the same example as above with a different syntax, binding the `query`.
 <!-- App.vue -->
 <template>
   <input v-model="query">
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="first" :query-parameters="{query: query}">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first" :query-parameters="{query: query}">
     <ais-results />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index="second" :query-parameters="{query: query}">
+  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second" :query-parameters="{query: query}">
     <ais-results />
   </ais-index>
 </template>

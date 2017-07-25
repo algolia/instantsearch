@@ -87,14 +87,14 @@ Open the `src/App.vue` component. Then replace the whole beginning of the file, 
 ```html
 <template>
   <ais-index
-    appId="latency"
-    apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
-    indexName="bestbuy"
+    app-id="latency"
+    api-key="3d9875e51fbd20c7754e65422f7ce5e1"
+    index-name="bestbuy"
   >
     <ais-search-box />
     <ais-results>
       <template scope="{ result }">
-        <h2><ais-highlight :result="result" attributeName="name" /></h2>
+        <h2><ais-highlight :result="result" attribute-name="name" /></h2>
       </template>
     </ais-results>
   </ais-index>
@@ -115,9 +115,9 @@ All search components needs to be wrapped in an Index component.
 
 ```html
 <ais-index
-  appId="latency"
-  apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
-  indexName="bestbuy"
+  app-id="latency"
+  api-key="3d9875e51fbd20c7754e65422f7ce5e1"
+  index-name="bestbuy"
 >
   <!-- Search components go here -->
 </ais-index>
@@ -133,9 +133,9 @@ The job of the Index component is to hold the state of the search, and to provid
 
 For the purpose of the demo, we provided you with some default Algolia credentials:
 
- - `appId`: `latency`
- - `searchKey`: `3d9875e51fbd20c7754e65422f7ce5e1`
- - `indexName`: `bestbuy`
+ - `app-id`: `latency`
+ - `search-key`: `3d9875e51fbd20c7754e65422f7ce5e1`
+ - `index-name`: `bestbuy`
 
 When you will be ready to go further, you can [create your own Algolia account](https://www.algolia.com/users/sign_up) and [find your credentials](https://www.algolia.com/api-keys) in the Algolia dashboard.
 
