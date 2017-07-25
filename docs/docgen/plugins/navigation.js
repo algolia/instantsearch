@@ -31,7 +31,7 @@ export default function() {
             a.navWeight === b.navWeight) {
           return a.title.localeCompare(b.title);
         } else {
-          return b.navWeight - a.navWeight;
+          return a.navWeight - b.navWeight;
         }
       });
       data.navPath = path;

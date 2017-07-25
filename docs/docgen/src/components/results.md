@@ -4,7 +4,7 @@ mainTitle: Components
 layout: main.pug
 category: Components
 withHeadings: true
-navWeight: 100
+navWeight: 4
 editable: true
 githubSource: docs/docgen/src/components/results.md
 ---
