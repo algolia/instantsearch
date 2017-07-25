@@ -157,22 +157,26 @@ by the Algolia response, and display them.
 
 The component has a [default slot](https://vuejs.org/v2/guide/components.html#Single-Slot) so that you can easily define your custom template for the rendering of every single result.
 
-**Info:** By default, if no slot is provided, the component will display every `objectID` of every result.
+**Info:** By default, if no slot is provided, the component will display the `objectID` of every result.
 
-The slot provided by the Results components is [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots).
+The slot provided by the Results components is a [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots).
 
 A scoped slot means that the template can access data passed to the slot.
 
 This is illustrated by this snippet:
 
 ```html
-<template scope="parameters.result">
+<template scope="parameters">
+  <h1>{{ parameters.result.name }}</h1>
+</template>
 ```
 
 or with an ES6 syntax:
 
 ```html
 <template scope="{ result }">
+  <h1>{{ result.name }}</h1>
+</template>
 ```
 
 Now that `result` is available, we can customize the html inside the template.
