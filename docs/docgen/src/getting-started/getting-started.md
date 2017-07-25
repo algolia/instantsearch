@@ -166,13 +166,17 @@ A scoped slot means that the template can access data passed to the slot.
 This is illustrated by this snippet:
 
 ```html
-<template scope="parameters.result">
+<template scope="parameters">
+  <h1>{{ parameters.result.name }}</h1>
+</template>
 ```
 
 or with an ES6 syntax:
 
 ```html
 <template scope="{ result }">
+  <h1>{{ result.name }}</h1>
+</template>
 ```
 
 Now that `result` is available, we can customize the html inside the template.
