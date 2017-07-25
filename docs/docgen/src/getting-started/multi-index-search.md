@@ -1,6 +1,6 @@
 ---
 title: Multi index search
-mainTitle: Getting started
+mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true

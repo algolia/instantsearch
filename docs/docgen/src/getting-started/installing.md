@@ -1,6 +1,6 @@
 ---
 title: Installing the library
-mainTitle: Getting started
+mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
