@@ -1,3 +1,21 @@
+<a name="4.1.0-beta.3"></a>
+# [4.1.0-beta.3](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.2...v4.1.0-beta.3) (2017-07-25)
+
+
+### Bug Fixes
+
+* **error:** reset error when receiving results of a query (not when sending it) (#179) ([bb12c29](https://github.com/algolia/react-instantsearch/commit/bb12c29))
+* **highlight:** wrong parsing between client and server (#183) ([2daae70](https://github.com/algolia/react-instantsearch/commit/2daae70))
+* **poweredBy:** SSR compatibility (#181) ([ec0fa8a](https://github.com/algolia/react-instantsearch/commit/ec0fa8a))
+
+
+### BREAKING CHANGES
+
+* **highlight:** We remove the timestamp present in our highlight preTag and postTag. If you were using regex to parse the
+highlighting results then you'll need to adapt it as now it's only "ais-highlight".
+
+
+
 <a name="4.1.0-beta.2"></a>
 # [4.1.0-beta.2](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.1...v4.1.0-beta.2) (2017-07-20)
 
