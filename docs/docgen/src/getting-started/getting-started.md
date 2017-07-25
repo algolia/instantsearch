@@ -4,7 +4,7 @@ mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 1000
+navWeight: 1
 editable: true
 githubSource: docs/docgen/src/getting-started/getting-started.md
 ---

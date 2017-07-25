@@ -4,7 +4,7 @@ mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 900
+navWeight: 2
 editable: true
 githubSource: docs/docgen/src/getting-started/installing.md
 ---

@@ -4,7 +4,7 @@ mainTitle: Essentials
 layout: main.pug
 category: Getting started
 withHeadings: true
-navWeight: 100
+navWeight: 4
 editable: true
 githubSource: docs/docgen/src/getting-started/custom-components.md
 ---
