@@ -2,11 +2,20 @@ $sidebarTopOffset: 60px;
 
 .sidebar
   width: $sidebar-width
-  height: calc(100vh - 56px - #{$sidebarTopOffset})
-  margin-top: $sidebarTopOffset
+  height: calc(100vh - #{$sidebarTopOffset})
+  margin-top: 0
+  // margin-top: $sidebarTopOffset
+  padding-top: $sidebarTopOffset
   padding-bottom: 30px
   overflow-y: auto
   overflow-x: visible
+
+  .sidebar-container
+    margin-bottom: 20px
+
+    .sidebar-header
+      font-size: 17px
+      margin-bottom: 0
 
   &.fixed
     position: fixed
@@ -14,8 +23,8 @@ $sidebarTopOffset: 60px;
 
   ul
     list-style: none
-    padding: 0 !important
-    margin: 0 !important
+    padding: 0
+    margin: 0
 
   li
     display: inline-block
@@ -95,17 +104,12 @@ $sidebarTopOffset: 60px;
     .sidebar-header
       max-width: calc(100% - 1em)
 
-
     &.Showed
       transform: translateX(0)
-
 
     .sidebar-container
       width: 100%
       max-width: 100%
-
-
-
 
 .sidebar-opener
   position: fixed

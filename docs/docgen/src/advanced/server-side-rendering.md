@@ -1,12 +1,12 @@
 ---
 title: Server side rendering
-mainTitle: Essentials
+mainTitle: Advanced
 layout: main.pug
-category: Getting started
+category: Advanced
 withHeadings: true
-navWeight: 7
+navWeight: 2
 editable: true
-githubSource: docs/docgen/src/getting-started/server-side-rendering.md
+githubSource: docs/docgen/src/advanced/server-side-rendering.md
 ---
 
 We have a full example: https://github.com/algolia/vue-instantsearch-examples/tree/master/examples/ssr

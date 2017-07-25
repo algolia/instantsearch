@@ -1,12 +1,12 @@
 ---
 title: Multi index search
-mainTitle: Essentials
+mainTitle: Advanced
 layout: main.pug
-category: Getting started
+category: Advanced
 withHeadings: true
-navWeight: 8
+navWeight: 1
 editable: true
-githubSource: docs/docgen/src/getting-started/multi-index-search.md
+githubSource: docs/docgen/src/advanced/multi-index-search.md
 ---
 
 In this guide, you will learn how to get results from multiple indices simultaneously.

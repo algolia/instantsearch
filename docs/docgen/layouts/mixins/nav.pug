@@ -15,10 +15,7 @@ mixin navRec(currentPath, navItems, title, depth, headings)
       - var className = ['sidebar-element', ('level-h' + depth), (isCurrentFile ? 'navItem-active' : 'navItem'), currentPath.split('/')[0]];
       - var activeClass = isCurrentFile ? 'navItem-active' : '';
       li(class=className)
-        if navItem.title === 'InstantSearch'
-          a(href=navItem.path class=activeClass)='<InstantSearch>'
-        else
-          a(href=navItem.path class=activeClass)=navItem.title
+        a(href=navItem.path class=activeClass)=navItem.title
         ul
           if(isCurrentFile)
             +navContent(headings, depth, currentPath)
