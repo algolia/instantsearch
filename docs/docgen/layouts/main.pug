@@ -2,7 +2,10 @@ extends archetypes/content-with-menu.pug
 include mixins/nav.pug
 
 block navigation
-  +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
+  +nav(navPath, essentials, 'Essentials', withHeadings && headings || [])
+  +nav(navPath, advanced, 'Advanced', withHeadings && headings || [])
+  +nav(navPath, examples, 'Examples', withHeadings && headings || [])
+  +nav(navPath, components, 'Components' || title, withHeadings && headings || [])
 
 block content
 

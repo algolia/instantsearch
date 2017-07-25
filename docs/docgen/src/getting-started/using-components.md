@@ -110,7 +110,7 @@ To read why a search component needs to be wrapped into an Index component, have
 
 ### Avoiding the use of an `Index` component
 
-You might not want to use a wrapping `Index` component or maybe you want to do some [server-side rendering](getting-started/server-side-rendering.html).
+You might not want to use a wrapping `Index` component or maybe you want to do some [server-side rendering](advanced/server-side-rendering.html).
 
 In those cases, you can manually tie components to a search store by passing a `searchStore` property to them:
 

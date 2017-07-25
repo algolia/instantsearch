@@ -31,7 +31,7 @@ There are many reasons to manually create search stores, here are some of them:
 
 - A search component is [not wrapped into an Index component](components.md#manually-inject-the-search-store-into-components)
 - You want to watch search store parameters or results to affect other parts of the application
-- You want to do [render the initial application vue on the server side](getting-started/server-side-rendering.html)
+- You want to do [render the initial application vue on the server side](advanced/server-side-rendering.html)
 - You are [developing a custom component](getting-started/custom-components.html)
 
 ## How to manually create a search store
@@ -88,7 +88,7 @@ The search store has a method `serialize()` that returns a plain JavaScript obje
 
 This object can later be used to re-construct the search store and put it in the state it was the moment it was serialized.
 
-This is especially useful when [implementing server side rendering](getting-started/server-side-rendering.html), where you need to share the backend store state with your frontend.
+This is especially useful when [implementing server side rendering](advanced/server-side-rendering.html), where you need to share the backend store state with your frontend.
 
 ```js
 import { createFromAlgoliaCredentials, createFromSerialized } from 'vue-instantsearch';

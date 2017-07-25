@@ -18,22 +18,27 @@ export default function() {
       });
     });
 
+    for (let categoryName in categories) {
+      categories[categoryName] = categories[categoryName].sort((a, b) => {
+       if (a.title && b.title && a.navWeight === b.navWeight) {
+         return a.title.localeCompare(b.title);
+       } else {
+         return a.navWeight - b.navWeight;
+       }
+     });
+    }
+
     // Then we go through all the files again to attach in the navigation attribute
     // all the related documents
     forEach(files, (data, path) => {
       if (!path.match(/\.html$/)) return;
       const category = data.category || 'other';
-      // The navigation is sorted by weight first. A document with weigth is always more important
-      // than one without.
-      // Then navigation is sorted by title.
-      data.navigation = categories[category].sort((a, b) => {
-        if (a.title && b.title &&
-            a.navWeight === b.navWeight) {
-          return a.title.localeCompare(b.title);
-        } else {
-          return a.navWeight - b.navWeight;
-        }
-      });
+
+      data.essentials = categories['Getting started'];
+      data.advanced = categories['Advanced'];
+      data.examples = categories['Examples'];
+      data.components = categories['Components'];
+
       data.navPath = path;
     });
 
