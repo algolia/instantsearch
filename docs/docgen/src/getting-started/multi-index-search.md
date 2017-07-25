@@ -11,7 +11,7 @@ githubSource: docs/docgen/src/getting-started/multi-index-search.md
 
 In this guide, you will learn how to get results from multiple indices simultaneously.
 
-We have a [live multi-index search example](examples/multi-index-search.md) for you to quickly grasp what we are talking about.
+We have a [live multi-index search example](examples/multi-index-search.html) for you to quickly grasp what we are talking about.
 
 ## When to use multi-index search
 
@@ -68,7 +68,7 @@ In this example, we display results from two indices, but we are still using two
 
 Here's how to bind a single input displaying results from multiple indices:
 
-**Note: For now it's not feasible to bind the provided [Search Box component](components/search-box.html) directly to different indices, we are working on that**
+**Note:** For now it's not feasible to bind the provided [Search Box component](components/search-box.html) directly to different indices, we are working on that
 
 ```html
 <!-- App.vue -->

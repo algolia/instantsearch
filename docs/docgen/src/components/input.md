@@ -12,7 +12,7 @@ githubSource: docs/docgen/src/components/input.md
 A simple text input that will update the search store query as its value changes.
 
 If you need fully featured search input, with a reset and submit button, please
-checkout the [SearchBox component](search-box.md).
+checkout the [SearchBox component](components/search-box.html).
 
 ## Usage
 

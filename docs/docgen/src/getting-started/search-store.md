@@ -19,7 +19,7 @@ The search store of Vue InstantSearch allows you to:
 
 Before going further, it is important to realize that directly interacting with the search store is not mandatory but an advanced use of Vue InstantSearch.
 
-If you use [provided components](using-components.md), wrapped into an [Index](./components/index.md) component, then search stores are created and used automatically by components.
+If you use [provided components](getting-started/using-components.html), wrapped into an [Index](components/index.html) component, then search stores are created and used automatically by components.
 
 In that case, it is the responsibility of the `Index` component to make sure a search store is successfully made available to child components.
 
@@ -31,8 +31,8 @@ There are many reasons to manually create search stores, here are some of them:
 
 - A search component is [not wrapped into an Index component](components.md#manually-inject-the-search-store-into-components)
 - You want to watch search store parameters or results to affect other parts of the application
-- You want to do [render the initial application vue on the server side](server-side-rendering.md)
-- You are [developing a custom component](custom-components.md)
+- You want to do [render the initial application vue on the server side](getting-started/server-side-rendering.html)
+- You are [developing a custom component](getting-started/custom-components.html)
 
 ## How to manually create a search store
 
@@ -88,7 +88,7 @@ The search store has a method `serialize()` that returns a plain JavaScript obje
 
 This object can later be used to re-construct the search store and put it in the state it was the moment it was serialized.
 
-This is especially useful when [implementing server side rendering](server-side-rendering.md), where you need to share the backend store state with your frontend.
+This is especially useful when [implementing server side rendering](getting-started/server-side-rendering.html), where you need to share the backend store state with your frontend.
 
 ```js
 import { createFromAlgoliaCredentials, createFromSerialized } from 'vue-instantsearch';
@@ -137,7 +137,7 @@ store.start();
 
 In this example, even if the state is mutated several times, only one call to Algolia will be made after the Store is resumed by the `start()` call.
 
-**Important: When you manually create a search store, it is stopped by default. You need to manually call `start()` to trigger the first call. This gives you full control over the initial state of the store before the first call to Algolia is sent.**
+**Important:** When you manually create a search store, it is stopped by default. You need to manually call `start()` to trigger the first call. This gives you full control over the initial state of the store before the first call to Algolia is sent.
 
 ```js
 import { createFromAlgoliaCredentials } from 'vue-instantsearch';

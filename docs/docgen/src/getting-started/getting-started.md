@@ -76,7 +76,7 @@ new Vue({
 });
 ```
 
-From now on, you can use all [Vue InstantSearch components](using-components.md) in your templates throughout the whole application.
+From now on, you can use all [Vue InstantSearch components](getting-started/using-components.html) in your templates throughout the whole application.
 
 ## Create your first search experience
 
@@ -127,7 +127,7 @@ You should configure the Index component with the application ID and API search 
 
 The job of the Index component is to hold the state of the search, and to provide it to child components.
 
-**Info: Alternatively you can [manually inject a search store](search-store.md), for example to support server-side rendering.**
+**Info: Alternatively you can [manually inject a search store](getting-started/search-store.html), for example to support server-side rendering.**
 
 ### Algolia demo credentials
 
@@ -141,7 +141,7 @@ When you will be ready to go further, you can [create your own Algolia account](
 
 ### The Search Box component
 
-The [Search Box component](components/search-box.md) renders a text input.
+The [Search Box component](components/search-box.html) renders a text input.
 
 The text input value is bound to the query of the current search.
 
@@ -151,7 +151,7 @@ Every time the query changes, the search store will contact Algolia to get the n
 
 ### The Results component
 
-The [Results component](components/results.md) will loop over all results returned
+The [Results component](components/results.html) will loop over all results returned
 by the Algolia response, and display them.
 
 The component has a [default slot](https://vuejs.org/v2/guide/components.html#Single-Slot) so that you can easily define your custom template for the rendering of every single result.
