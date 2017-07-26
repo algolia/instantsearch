@@ -50,13 +50,14 @@ const Header = () =>
         width={40}
       />
     </a>
-    <a href="./" className="logo">aeki</a>
+    <a href="./" className="logo">
+      aeki
+    </a>
     <ConnectedSearchBox />
   </header>;
 
 const Facets = () =>
   <aside>
-
     <ClearAll
       translations={{
         reset: 'Clear all filters',
@@ -154,7 +155,9 @@ function CustomHits({ hits, refine, hasMore }) {
     ? <button onClick={refine} className="btn btn-primary btn-block">
         Load more
       </button>
-    : <button disabled className="btn btn-primary btn-block">Load more</button>;
+    : <button disabled className="btn btn-primary btn-block">
+        Load more
+      </button>;
   return (
     <main id="hits">
       {hits.map((hit, idx) => <Hit item={hit} key={idx} />)}
@@ -189,7 +192,9 @@ const Hit = ({ item }) => {
         </div>
         <div className="ais-StarRating__ratingLink">
           {icons}
-          <div className="product-price">${item.price}</div>
+          <div className="product-price">
+            ${item.price}
+          </div>
         </div>
       </div>
     </article>

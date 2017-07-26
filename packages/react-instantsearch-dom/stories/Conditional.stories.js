@@ -17,9 +17,15 @@ stories
       },
     })(({ noResults, query }) => {
       const content = noResults
-        ? <div>No results has been found for {query}</div>
+        ? <div>
+            No results has been found for {query}
+          </div>
         : <div>Some results</div>;
-      return <div>{content}</div>;
+      return (
+        <div>
+          {content}
+        </div>
+      );
     });
     return (
       <WrapWithHits linkedStoryGroup="Conditional">
@@ -35,9 +41,15 @@ stories
       },
     })(({ query }) => {
       const content = query
-        ? <div>The query {query} exists</div>
+        ? <div>
+            The query {query} exists
+          </div>
         : <div>No query</div>;
-      return <div>{content}</div>;
+      return (
+        <div>
+          {content}
+        </div>
+      );
     });
     return (
       <WrapWithHits linkedStoryGroup="Conditional">

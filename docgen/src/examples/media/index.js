@@ -5,7 +5,9 @@ import { AppContainer } from 'react-hot-loader';
 import App from './App.js';
 
 ReactDOM.render(
-  <AppContainer><App /></AppContainer>,
+  <AppContainer>
+    <App />
+  </AppContainer>,
   document.querySelector('#app')
 );
 

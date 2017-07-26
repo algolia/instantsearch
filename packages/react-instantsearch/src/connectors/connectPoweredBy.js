@@ -13,7 +13,8 @@ export default createConnector({
   propTypes: {},
 
   getProvidedProps(props) {
-    const url = 'https://www.algolia.com/?' +
+    const url =
+      'https://www.algolia.com/?' +
       'utm_source=react-instantsearch&' +
       'utm_medium=website&' +
       `utm_content=${props.canRender ? location.hostname : ''}&` +

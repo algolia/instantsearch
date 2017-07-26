@@ -51,13 +51,8 @@ class HierarchicalMenu extends Component {
         onClick={() => refine(item.value)}
         href={createURL(item.value)}
       >
-        <span {...cx('itemLabel')}>
-          {item.label}
-        </span>
-        {' '}
-        <span {...cx('itemCount')}>
-          {item.count}
-        </span>
+        <span {...cx('itemLabel')}>{item.label}</span>{' '}
+        <span {...cx('itemCount')}>{item.count}</span>
       </Link>
     );
   };

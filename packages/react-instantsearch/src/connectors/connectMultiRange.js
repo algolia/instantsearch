@@ -69,12 +69,14 @@ function itemHasRefinement(attributeName, results, value) {
     ? results.getFacetStats(attributeName)
     : null;
   const range = value.split(':');
-  const start = Number(range[0]) === 0 || value === ''
-    ? Number.NEGATIVE_INFINITY
-    : Number(range[0]);
-  const end = Number(range[1]) === 0 || value === ''
-    ? Number.POSITIVE_INFINITY
-    : Number(range[1]);
+  const start =
+    Number(range[0]) === 0 || value === ''
+      ? Number.NEGATIVE_INFINITY
+      : Number(range[0]);
+  const end =
+    Number(range[1]) === 0 || value === ''
+      ? Number.POSITIVE_INFINITY
+      : Number(range[1]);
   return !(
     Boolean(stats) &&
     (isRefinementsRangeIncludesInsideItemRange(stats, start, end) ||
@@ -145,9 +147,10 @@ export default createConnector({
       };
     });
 
-    const stats = results && results.getFacetByName(attributeName)
-      ? results.getFacetStats(attributeName)
-      : null;
+    const stats =
+      results && results.getFacetByName(attributeName)
+        ? results.getFacetStats(attributeName)
+        : null;
     const refinedItem = find(items, item => item.isRefined === true);
     if (!items.some(item => item.value === '')) {
       items.push({

@@ -58,7 +58,6 @@ class App extends Component {
         onSearchStateChange={this.onSearchStateChange.bind(this)}
         createURL={this.createURL.bind(this)}
       >
-
         <div>
           <div
             style={{
@@ -85,7 +84,6 @@ class App extends Component {
               <RefinementList attributeName="colors" />
               <p>Range Ratings</p>
               <StarRating attributeName="rating" max={6} />
-
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>

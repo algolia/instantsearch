@@ -53,15 +53,13 @@ export default createConnector({
 
     const { hits, page, nbPages } = results;
 
+    // If it is the same page we do not touch the page result list
     if (page === 0) {
       this._allResults = hits;
-    } else {
-      if (page > this.previousPage) {
-        this._allResults = [...this._allResults, ...hits];
-      } else if (page < this.previousPage) {
-        this._allResults = hits;
-      }
-      // If it is the same page we do not touch the page result list
+    } else if (page > this.previousPage) {
+      this._allResults = [...this._allResults, ...hits];
+    } else if (page < this.previousPage) {
+      this._allResults = hits;
     }
 
     const lastPageIndex = nbPages - 1;

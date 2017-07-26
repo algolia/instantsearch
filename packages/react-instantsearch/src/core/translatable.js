@@ -9,9 +9,10 @@ export default function translatable(defaultTranslations) {
     function Translatable(props) {
       const { translations, ...otherProps } = props;
       const translate = (key, ...params) => {
-        const translation = translations && has(translations, key)
-          ? translations[key]
-          : defaultTranslations[key];
+        const translation =
+          translations && has(translations, key)
+            ? translations[key]
+            : defaultTranslations[key];
         if (typeof translation === 'function') {
           return translation(...params);
         }

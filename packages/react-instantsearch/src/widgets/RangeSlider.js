@@ -74,6 +74,7 @@ export default connectRange(() =>
     one easily:
     <a
       target="_blank"
+      rel="noopener noreferrer"
       href="https://community.algolia.com/react-instantsearch/widgets/RangeSlider.html"
     >
       https://community.algolia.com/react-instantsearch/widgets/RangeSlider.html

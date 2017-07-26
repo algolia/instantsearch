@@ -72,7 +72,7 @@ describe('connectInfiniteHits', () => {
           hitsPerPage: 8,
           nbPages: 10,
         },
-      }); //re-render with the same property
+      }); // re-render with the same property
       expect(res3.hits).toEqual([...hits, ...hits2, ...hits3]);
       expect(res3.hasMore).toBe(true);
     });
@@ -220,7 +220,7 @@ describe('connectInfiniteHits', () => {
         results: {
           second: { hits: hits3, page: 2, hitsPerPage: 8, nbPages: 10 },
         },
-      }); //re-render with the same property
+      }); // re-render with the same property
       expect(res3.hits).toEqual([...hits, ...hits2, ...hits3]);
       expect(res3.hasMore).toBe(true);
     });

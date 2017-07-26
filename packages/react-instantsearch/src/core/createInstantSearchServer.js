@@ -54,20 +54,17 @@ const createInstantSearch = function(algoliasearch) {
 
     const mergedSearchParameters = searchParameters
       .filter(searchParameter => hasMultipleIndex(searchParameter.context))
-      .reduce(
-        (acc, searchParameter) => {
-          const index = getIndex(searchParameter.context);
-          const sp = searchParameter.getSearchParameters.call(
-            { context: searchParameter.context },
-            acc[index] ? acc[index] : sharedSearchParameters,
-            searchParameter.props,
-            searchParameter.searchState
-          );
-          acc[index] = sp;
-          return acc;
-        },
-        {}
-      );
+      .reduce((acc, searchParameter) => {
+        const index = getIndex(searchParameter.context);
+        const sp = searchParameter.getSearchParameters.call(
+          { context: searchParameter.context },
+          acc[index] ? acc[index] : sharedSearchParameters,
+          searchParameter.props,
+          searchParameter.searchState
+        );
+        acc[index] = sp;
+        return acc;
+      }, {});
 
     searchParameters = [];
 
@@ -91,16 +88,13 @@ const createInstantSearch = function(algoliasearch) {
       return undefined;
     }
     return Array.isArray(results)
-      ? results.reduce(
-          (acc, result) => {
-            acc[result.state.index] = new SearchResults(
-              new SearchParameters(result.state),
-              result._originalResponse.results
-            );
-            return acc;
-          },
-          []
-        )
+      ? results.reduce((acc, result) => {
+          acc[result.state.index] = new SearchResults(
+            new SearchParameters(result.state),
+            result._originalResponse.results
+          );
+          return acc;
+        }, [])
       : new SearchResults(
           new SearchParameters(results.state),
           results._originalResponse.results

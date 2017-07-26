@@ -85,15 +85,16 @@ export default createConnector({
     return {
       id,
       index: getIndex(this.context),
-      items: currentRefinement === null
-        ? []
-        : [
-            {
-              label: `${id}: ${currentRefinement}`,
-              value: nextState => refine(props, nextState, '', this.context),
-              currentRefinement,
-            },
-          ],
+      items:
+        currentRefinement === null
+          ? []
+          : [
+              {
+                label: `${id}: ${currentRefinement}`,
+                value: nextState => refine(props, nextState, '', this.context),
+                currentRefinement,
+              },
+            ],
     };
   },
 });

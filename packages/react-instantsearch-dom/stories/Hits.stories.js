@@ -25,8 +25,12 @@ function Product({ hit }) {
   return (
     <div>
       <Highlight attributeName="name" hit={hit} />
-      <p><Highlight attributeName="type" hit={hit} /></p>
-      <p><Snippet attributeName="description" hit={hit} /></p>
+      <p>
+        <Highlight attributeName="type" hit={hit} />
+      </p>
+      <p>
+        <Snippet attributeName="description" hit={hit} />
+      </p>
     </div>
   );
 }

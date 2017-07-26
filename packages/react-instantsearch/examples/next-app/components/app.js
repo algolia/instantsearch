@@ -10,7 +10,7 @@ import {
 } from 'react-instantsearch/dom';
 import { InstantSearch } from './instantsearch';
 
-const HitComponent = ({ hit }) => (
+const HitComponent = ({ hit }) =>
   <div className="hit">
     <div>
       <div className="hit-picture">
@@ -34,8 +34,7 @@ const HitComponent = ({ hit }) => (
         <Highlight attributeName="description" hit={hit} />
       </div>
     </div>
-  </div>
-);
+  </div>;
 
 HitComponent.propTypes = {
   hit: PropTypes.object,
@@ -77,9 +76,7 @@ export default class extends React.Component {
           <Pagination />
           <div>
             See{' '}
-            <a
-              href="https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/next-app"
-            >
+            <a href="https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/next-app">
               source code
             </a>{' '}
             on github

@@ -219,16 +219,17 @@ class Hits extends Component {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
-    const hits = this.props.hits.length > 0
-      ? <View style={styles.items}>
-          <ListView
-            dataSource={ds.cloneWithRows(this.props.hits)}
-            renderRow={this._renderRow}
-            renderSeparator={this._renderSeparator}
-            onEndReached={this.onEndReached.bind(this)}
-          />
-        </View>
-      : null;
+    const hits =
+      this.props.hits.length > 0
+        ? <View style={styles.items}>
+            <ListView
+              dataSource={ds.cloneWithRows(this.props.hits)}
+              renderRow={this._renderRow}
+              renderSeparator={this._renderSeparator}
+              onEndReached={this.onEndReached.bind(this)}
+            />
+          </View>
+        : null;
     return hits;
   }
 
@@ -263,7 +264,6 @@ class Hits extends Component {
           />
         </View>
       </View>
-
     </View>;
 
   _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) =>
@@ -284,24 +284,27 @@ Hits.propTypes = {
 
 const ConnectedHits = connectInfiniteHits(Hits);
 const ConnectedStats = connectStats(({ nbHits }) =>
-  <Text style={{ paddingLeft: 8 }}>{nbHits} products found</Text>
+  <Text style={{ paddingLeft: 8 }}>
+    {nbHits} products found
+  </Text>
 );
 
 const ConnectedSortBy = connectSortBy(
   ({ refine, items, currentRefinement }) => {
-    const icon = Platform.OS === 'ios'
-      ? <IosIcon
-          size={13}
-          name="ios-arrow-down"
-          color="#000"
-          style={styles.sortByArrow}
-        />
-      : <MaterialIcon
-          size={20}
-          name="arrow-drop-down"
-          color="#000"
-          style={styles.sortByArrow}
-        />;
+    const icon =
+      Platform.OS === 'ios'
+        ? <IosIcon
+            size={13}
+            name="ios-arrow-down"
+            color="#000"
+            style={styles.sortByArrow}
+          />
+        : <MaterialIcon
+            size={20}
+            name="arrow-drop-down"
+            color="#000"
+            style={styles.sortByArrow}
+          />;
     return (
       <View style={styles.sortBy}>
         <ModalDropdown
@@ -342,10 +345,12 @@ const Filters = connectCurrentRefinements(
   ({ items, searchState, onSearchStateChange }) =>
     <Button
       onPress={() =>
+        /* eslint-disable new-cap */
         Actions.Filters({
           searchState,
           onSearchStateChange,
         })}
+      /* eslint-enable new-cap */
       title={`Filters (${items.length})`}
       color="#162331"
     />

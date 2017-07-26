@@ -164,16 +164,14 @@ const MaterialUiSearchBox = ({ currentRefinement, refine }) => {
         className="material-icons"
         onTouchTap={() => refine('')}
       >
-        {' '}
-        clear{' '}
+        {' '}clear{' '}
       </FontIcon>
     : null;
 
   return (
     <div style={style}>
       <FontIcon style={{ color: 'lightgrey' }} className="material-icons">
-        {' '}
-        search{' '}
+        {' '}search{' '}
       </FontIcon>
       <TextField
         value={currentRefinement}
@@ -225,7 +223,9 @@ const MaterialUiCheckBoxRefinementList = ({
 const MaterialUiNestedList = function({ id, items, refine }) {
   return (
     <List>
-      <Subheader style={{ fontSize: 18 }}>{id.toUpperCase()}</Subheader>
+      <Subheader style={{ fontSize: 18 }}>
+        {id.toUpperCase()}
+      </Subheader>
       {items.map((item, idx) => {
         const nestedElements = item.items
           ? item.items.map((child, childIdx) =>

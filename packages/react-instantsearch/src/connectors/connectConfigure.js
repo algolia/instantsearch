@@ -30,12 +30,12 @@ export default createConnector({
   cleanUp(props, searchState) {
     const id = getId();
     const index = getIndex(this.context);
-    const subState = hasMultipleIndex(this.context) && searchState.indices
-      ? searchState.indices[index]
-      : searchState;
-    const configureKeys = subState && subState[id]
-      ? Object.keys(subState[id])
-      : [];
+    const subState =
+      hasMultipleIndex(this.context) && searchState.indices
+        ? searchState.indices[index]
+        : searchState;
+    const configureKeys =
+      subState && subState[id] ? Object.keys(subState[id]) : [];
     const configureState = configureKeys.reduce((acc, item) => {
       if (!props[item]) {
         acc[item] = subState[id][item];

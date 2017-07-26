@@ -111,7 +111,7 @@ describe('utility method for manipulating the search state', () => {
         },
       };
 
-      expect.assertions(5); //async assertions
+      expect.assertions(5); // async assertions
 
       let expectedRefinement = value => expect(value).toEqual('refinement');
 
@@ -348,7 +348,7 @@ describe('utility method for manipulating the search state', () => {
         },
       };
 
-      expect.assertions(7); //async assertions
+      expect.assertions(7); // async assertions
 
       let expectedRefinement = value => expect(value).toEqual('refinement');
 

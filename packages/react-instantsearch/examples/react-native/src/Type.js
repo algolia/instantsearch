@@ -123,15 +123,16 @@ class RefinementList extends Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
     const { items, searchForItems } = this.props;
-    const facets = items.length > 0
-      ? <ListView
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(items)}
-          renderRow={this._renderRow}
-          renderSeparator={this._renderSeparator}
-          keyboardShouldPersistTaps={'always'}
-        />
-      : null;
+    const facets =
+      items.length > 0
+        ? <ListView
+            enableEmptySections={true}
+            dataSource={ds.cloneWithRows(items)}
+            renderRow={this._renderRow}
+            renderSeparator={this._renderSeparator}
+            keyboardShouldPersistTaps={'always'}
+          />
+        : null;
     return (
       <View style={styles.searchBoxContainer}>
         <TextInput

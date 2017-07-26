@@ -227,35 +227,41 @@ export default createConnector({
     return {
       id,
       index: getIndex(this.context),
-      items: getCurrentRefinement(props, searchState, context).length > 0
-        ? [
-            {
-              attributeName: props.attributeName,
-              label: `${props.attributeName}: `,
-              currentRefinement: getCurrentRefinement(
-                props,
-                searchState,
-                context
-              ),
-              value: nextState => refine(props, nextState, [], context),
-              items: getCurrentRefinement(
-                props,
-                searchState,
-                context
-              ).map(item => ({
-                label: `${item}`,
-                value: nextState => {
-                  const nextSelectedItems = getCurrentRefinement(
-                    props,
-                    nextState,
-                    context
-                  ).filter(other => other !== item);
-                  return refine(props, searchState, nextSelectedItems, context);
-                },
-              })),
-            },
-          ]
-        : [],
+      items:
+        getCurrentRefinement(props, searchState, context).length > 0
+          ? [
+              {
+                attributeName: props.attributeName,
+                label: `${props.attributeName}: `,
+                currentRefinement: getCurrentRefinement(
+                  props,
+                  searchState,
+                  context
+                ),
+                value: nextState => refine(props, nextState, [], context),
+                items: getCurrentRefinement(
+                  props,
+                  searchState,
+                  context
+                ).map(item => ({
+                  label: `${item}`,
+                  value: nextState => {
+                    const nextSelectedItems = getCurrentRefinement(
+                      props,
+                      nextState,
+                      context
+                    ).filter(other => other !== item);
+                    return refine(
+                      props,
+                      searchState,
+                      nextSelectedItems,
+                      context
+                    );
+                  },
+                })),
+              },
+            ]
+          : [],
     };
   },
 });

@@ -28,10 +28,12 @@ export default connectStats(({ nbHits, searchState, onSearchStateChange }) =>
     <Button
       title={`See ${nbHits} products`}
       onPress={() =>
+        /* eslint-disable new-cap */
         Actions.Home({
           searchState,
           onSearchStateChange,
         })}
+      /* eslint-enable new-cap */
       color="#162331"
     />
     <Spinner
