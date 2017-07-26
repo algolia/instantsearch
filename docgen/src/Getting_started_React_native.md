@@ -102,7 +102,7 @@ We don't provide any widgets for React native yet, but you’ll still be able to
 
 Connectors are higher order components. They encapsulate the logic for a specific kind of widget and they provide a way to interact with the InstantSearch context.
 
-**Checkout our dedicated [connectors guide](guide/connectors.html). to learn more about them**
+**Check out our dedicated [connectors guide](guide/Connectors.html). to learn more about them**
 
 To display results, we are going to use the [connectInfiniteHits](connectors/connectInfiniteHits.html) connector.
 This connector will give you all the results returned by Algolia, and it will update when there are new results. It will also keep track of all the accumulated hits while the user is scrolling.
