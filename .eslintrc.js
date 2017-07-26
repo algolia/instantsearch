@@ -1,3 +1,6 @@
 module.exports = {
-  extends: ['algolia'],
+  extends: ['algolia/react', 'algolia/jest'],
+  rules: {
+    'no-param-reassign': 'off',
+  },
 };

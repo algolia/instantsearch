@@ -52,7 +52,6 @@ const Header = () =>
 
 const Facets = () =>
   <aside>
-
     <ClearAll
       translations={{
         reset: 'Clear all filters',
@@ -85,7 +84,9 @@ const Facets = () =>
 
 const SideBarSection = ({ title, children }) =>
   <section className="facet-wrapper">
-    <div className="facet-category-title facet">{title}</div>
+    <div className="facet-category-title facet">
+      {title}
+    </div>
     {children}
   </section>;
 
@@ -108,7 +109,9 @@ const Hit = ({ hit }) => {
         </div>
         <div className="ais-StarRating__ratingLink">
           {icons}
-          <div className="product-price">${hit.price}</div>
+          <div className="product-price">
+            ${hit.price}
+          </div>
         </div>
       </div>
     </article>
@@ -151,7 +154,9 @@ const CustomResults = createConnector({
           <Stats />
         </section>
         <Hits itemComponent={Hit} />
-        <footer><Pagination showLast={true} /></footer>
+        <footer>
+          <Pagination showLast={true} />
+        </footer>
       </div>
     );
   }

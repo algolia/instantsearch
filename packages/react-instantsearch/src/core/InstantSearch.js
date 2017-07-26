@@ -156,7 +156,12 @@ class InstantSearch extends Component {
     const childrenCount = Children.count(this.props.children);
     const { Root, props } = this.props.root;
     if (childrenCount === 0) return null;
-    else return <Root {...props}>{this.props.children}</Root>;
+    else
+      return (
+        <Root {...props}>
+          {this.props.children}
+        </Root>
+      );
   }
 }
 

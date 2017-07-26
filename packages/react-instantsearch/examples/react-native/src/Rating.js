@@ -133,7 +133,9 @@ class Rating extends Component {
           emptyStarColor={selected ? 'white' : 'gray'}
         />
         <Text style={{ color: selected ? 'white' : 'black' }}> and up! </Text>
-        <Text style={{ color: selected ? 'white' : 'black' }}>({count})</Text>
+        <Text style={{ color: selected ? 'white' : 'black' }}>
+          ({count})
+        </Text>
       </View>
     </TouchableHighlight>;
 

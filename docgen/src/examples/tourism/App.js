@@ -47,7 +47,9 @@ function Header() {
             width={40}
           />
         </a>
-        <a href="./" className="logo">BnB</a>
+        <a href="./" className="logo">
+          BnB
+        </a>
         <i className="fa fa-search" />
         <SearchBox />
       </header>
@@ -60,7 +62,6 @@ function Filters() {
     <div className="container-fluid">
       <div className="row">
         <div className="col-sm-7 aisdemo--left-column">
-
           <div className="aisdemo-filters">
             <DatesAndGuest />
             <Capacity />
@@ -129,9 +130,8 @@ function HitsMap({ hits }) {
       se: { lat: 85, lng: -180 },
     }
   );
-  const boundsConfig = hits.length > 0
-    ? fitBounds(boundingPoints, availableSpace)
-    : {};
+  const boundsConfig =
+    hits.length > 0 ? fitBounds(boundingPoints, availableSpace) : {};
   const markers = hits.map(hit =>
     <CustomMarker lat={hit.lat} lng={hit.lng} key={hit.objectID} />
   );
@@ -181,7 +181,11 @@ function Capacity() {
 }
 
 function OptionCapacity({ label, value }) {
-  return <option value={value}>{label}</option>;
+  return (
+    <option value={value}>
+      {label}
+    </option>
+  );
 }
 
 OptionCapacity.propTypes = {
@@ -265,7 +269,9 @@ const RoomType = connectRefinementList(({ items, refine }) => {
               defaultChecked={item.isRefined ? 'checked' : ''}
             />
             {item.label}
-            <span className="ais-refinement-list--count">{item.count}</span>
+            <span className="ais-refinement-list--count">
+              {item.count}
+            </span>
           </label>
         </div>
       </div>
@@ -295,7 +301,11 @@ function Price() {
 
 const MyHits = connectHits(({ hits }) => {
   const hs = hits.map(hit => <HitComponent key={hit.objectID} hit={hit} />);
-  return <div id="hits">{hs}</div>;
+  return (
+    <div id="hits">
+      {hs}
+    </div>
+  );
 });
 
 function HitComponent({ hit }) {
@@ -318,14 +328,8 @@ function HitComponent({ hit }) {
 function HitDescription({ hit }) {
   return (
     <p>
-      {hit.room_type}
-      {' '}
-      -
-      {' '}
-      <Highlight attributeName="city" hit={hit} />
-      ,
-      {' '}
-      <Highlight attributeName="country" hit={hit} />
+      {hit.room_type} - <Highlight attributeName="city" hit={hit} />
+      , <Highlight attributeName="country" hit={hit} />
     </p>
   );
 }
@@ -343,8 +347,8 @@ function Results() {
       <div className="row">
         <Pagination />
         <div className="thank-you">
-          Data from <a href="https://www.airbnb.com/">airbnb.com</a>,
-          user pics from <a href="https://randomuser.me/">randomuser.me</a>
+          Data from <a href="https://www.airbnb.com/">airbnb.com</a>, user pics
+          from <a href="https://randomuser.me/">randomuser.me</a>
         </div>
       </div>
     </div>
@@ -404,8 +408,12 @@ class Range extends Component {
             onValuesUpdated={this.onValuesUpdated}
           />
           <div className="rheostat-values">
-            <div>{currentValues.min}</div>
-            <div>{currentValues.max}</div>
+            <div>
+              {currentValues.min}
+            </div>
+            <div>
+              {currentValues.max}
+            </div>
           </div>
         </div>
       : null;

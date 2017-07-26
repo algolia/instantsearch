@@ -18,7 +18,8 @@ jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
       this.emit('error', { count: count++ }, state);
     }
   };
-  Helper.prototype.searchForFacetValues = () => Promise.reject('error');
+  Helper.prototype.searchForFacetValues = () =>
+    Promise.reject(new Error('error'));
   return Helper;
 });
 
@@ -112,7 +113,7 @@ describe('createInstantSearchManager errors', () => {
 
         return Promise.resolve().then(() => {
           const store = ism.store.getState();
-          expect(store.error).toEqual('error');
+          expect(store.error.message).toEqual('error');
           expect(store.searchingForFacetValues).toBe(false);
         });
       });

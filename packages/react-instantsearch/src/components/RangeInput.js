@@ -71,7 +71,9 @@ class RangeInput extends Component {
               onChange={e => this.setState({ from: e.target.value })}
             />
           </label>
-          <span {...cx('separator')}>{translate('separator')}</span>
+          <span {...cx('separator')}>
+            {translate('separator')}
+          </span>
           <label {...cx('labelMax')}>
             <input
               {...cx('inputMax')}

@@ -113,9 +113,12 @@ class List extends Component {
       selectItem,
     } = this.props;
 
-    const noResults = items.length === 0 && this.state.query !== ''
-      ? <div {...cx('noResults')}>{translate('noResults')}</div>
-      : null;
+    const noResults =
+      items.length === 0 && this.state.query !== ''
+        ? <div {...cx('noResults')}>
+            {translate('noResults')}
+          </div>
+        : null;
     return (
       <div {...cx('SearchBox')}>
         <SearchBox

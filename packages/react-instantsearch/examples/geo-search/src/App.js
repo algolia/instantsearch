@@ -50,9 +50,10 @@ class App extends Component {
     }, updateAfter);
 
     // when a new query is performed, removed the aroundLatLng property.
-    const aroundLatLng = this.state.searchState.query !== searchState.query
-      ? null
-      : this.state.aroundLatLng;
+    const aroundLatLng =
+      this.state.searchState.query !== searchState.query
+        ? null
+        : this.state.aroundLatLng;
     this.setState({ searchState, aroundLatLng });
   };
 
@@ -128,9 +129,8 @@ function HitsMap({ hits, onLatLngChange }) {
       se: { lat: 85, lng: -180 },
     }
   );
-  const boundsConfig = hits.length > 0
-    ? fitBounds(boundingPoints, availableSpace)
-    : {};
+  const boundsConfig =
+    hits.length > 0 ? fitBounds(boundingPoints, availableSpace) : {};
   const markers = hits.map(hit =>
     <CustomMarker lat={hit.lat} lng={hit.lng} key={hit.objectID} />
   );

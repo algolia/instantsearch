@@ -66,8 +66,12 @@ class Range extends Component {
             onValuesUpdated={this.onValuesUpdated}
           />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div>{currentValues.min}</div>
-            <div>{currentValues.max}</div>
+            <div>
+              {currentValues.min}
+            </div>
+            <div>
+              {currentValues.max}
+            </div>
           </div>
         </div>
       : null;

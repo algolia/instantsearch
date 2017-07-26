@@ -26,7 +26,9 @@ const AutoComplete = connectAutoComplete(
       getSuggestionValue={hit => hit.name}
       renderSuggestion={hit =>
         <div>
-          <div>{hit.name}</div>
+          <div>
+            {hit.name}
+          </div>
         </div>}
       inputProps={{
         placeholder: 'Type a product',

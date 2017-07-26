@@ -76,8 +76,7 @@ class RefinementList extends Component {
           )}
         >
           {label}
-        </span>
-        {' '}
+        </span>{' '}
         <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
           {item.count}
         </span>

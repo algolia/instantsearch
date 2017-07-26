@@ -20,11 +20,9 @@ export default function createIndex(root) {
 
     render() {
       return (
-        <Index
-          indexName={this.props.indexName}
-          root={root}
-          children={this.props.children}
-        />
+        <Index indexName={this.props.indexName} root={root}>
+          {this.props.children}
+        </Index>
       );
     }
   };

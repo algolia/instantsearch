@@ -122,7 +122,9 @@ const Product = ({ hit }) => {
       <div className="multi-index_hit-content">
         <div>
           <Highlight attributeName="name" hit={hit} />
-          <span> - ${hit.price}</span>
+          <span>
+            {' '}- ${hit.price}
+          </span>
         </div>
         <div className="multi-index_hit-description">
           <Highlight attributeName="brand" hit={hit} />

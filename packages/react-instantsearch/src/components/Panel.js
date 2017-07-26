@@ -28,7 +28,9 @@ class Panel extends Component {
   render() {
     return (
       <div {...cx('root', !this.state.canRefine && 'noRefinement')}>
-        <h5 {...cx('title')}>{this.props.title}</h5>
+        <h5 {...cx('title')}>
+          {this.props.title}
+        </h5>
         {this.props.children}
       </div>
     );

@@ -43,9 +43,8 @@ export default function parseAlgoliaHit({
 function parseHighlightedAttribute({ preTag, postTag, highlightedValue }) {
   const splitByPreTag = highlightedValue.split(preTag);
   const firstValue = splitByPreTag.shift();
-  const elements = firstValue === ''
-    ? []
-    : [{ value: firstValue, isHighlighted: false }];
+  const elements =
+    firstValue === '' ? [] : [{ value: firstValue, isHighlighted: false }];
 
   if (postTag === preTag) {
     let isHighlighted = true;

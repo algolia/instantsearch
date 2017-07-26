@@ -45,7 +45,9 @@ export default function createConnector(connectorDesc) {
 
   return Composed =>
     class Connector extends Component {
-      static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
+      static displayName = `${connectorDesc.displayName}(${getDisplayName(
+        Composed
+      )})`;
       static defaultClassNames = Composed.defaultClassNames;
       static propTypes = connectorDesc.propTypes;
       static defaultProps = connectorDesc.defaultProps;
@@ -63,7 +65,7 @@ export default function createConnector(connectorDesc) {
         const canRender = false;
         this.state = {
           props: this.getProvidedProps({ ...props, canRender }),
-          canRender, //use to know if a component is rendered (browser), or not (server).
+          canRender, // use to know if a component is rendered (browser), or not (server).
         };
 
         this.unsubscribe = store.subscribe(() => {
@@ -152,7 +154,7 @@ export default function createConnector(connectorDesc) {
       componentWillUnmount() {
         this.unsubscribe();
         if (isWidget) {
-          this.unregisterWidget(); //will schedule an update
+          this.unregisterWidget(); // will schedule an update
           if (hasCleanUp) {
             const newState = connectorDesc.cleanUp.call(
               this,

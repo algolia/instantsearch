@@ -52,13 +52,14 @@ const Header = () =>
         width={40}
       />
     </a>
-    <a href="./" className="logo">aeki</a>
+    <a href="./" className="logo">
+      aeki
+    </a>
     <ConnectedSearchBox />
   </header>;
 
 const Facets = () =>
   <aside>
-
     <ClearAll
       translations={{
         reset: 'Clear all filters',
@@ -185,7 +186,9 @@ const Hit = ({ item }) => {
         </div>
         <div className="ais-StarRating__ratingLink">
           {icons}
-          <div className="product-price">${item.price}</div>
+          <div className="product-price">
+            ${item.price}
+          </div>
         </div>
       </div>
     </article>
@@ -228,7 +231,9 @@ const CustomResults = createConnector({
           <Stats />
         </section>
         <ConnectedHits />
-        <footer><Pagination showLast={true} /></footer>
+        <footer>
+          <Pagination showLast={true} />
+        </footer>
       </div>
     );
   }

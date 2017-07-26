@@ -81,7 +81,7 @@ export default createConnector({
     defaultRefinement: PropTypes.string,
     transformItems: PropTypes.func,
     withSearchBox: PropTypes.bool,
-    searchForFacetValues: PropTypes.bool, //@deprecated
+    searchForFacetValues: PropTypes.bool, // @deprecated
   },
 
   defaultProps: {
@@ -154,9 +154,14 @@ export default createConnector({
           isRefined: v.isRefined,
         }));
 
-    const sortedItems = withSearchBox && !isFromSearch
-      ? orderBy(items, ['isRefined', 'count', 'label'], ['desc', 'desc', 'asc'])
-      : items;
+    const sortedItems =
+      withSearchBox && !isFromSearch
+        ? orderBy(
+            items,
+            ['isRefined', 'count', 'label'],
+            ['desc', 'desc', 'asc']
+          )
+        : items;
     const transformedItems = props.transformItems
       ? props.transformItems(sortedItems)
       : sortedItems;
@@ -219,16 +224,17 @@ export default createConnector({
     return {
       id,
       index: getIndex(this.context),
-      items: currentRefinement === null
-        ? []
-        : [
-            {
-              label: `${props.attributeName}: ${currentRefinement}`,
-              attributeName: props.attributeName,
-              value: nextState => refine(props, nextState, '', this.context),
-              currentRefinement,
-            },
-          ],
+      items:
+        currentRefinement === null
+          ? []
+          : [
+              {
+                label: `${props.attributeName}: ${currentRefinement}`,
+                attributeName: props.attributeName,
+                value: nextState => refine(props, nextState, '', this.context),
+                currentRefinement,
+              },
+            ],
     };
   },
 });

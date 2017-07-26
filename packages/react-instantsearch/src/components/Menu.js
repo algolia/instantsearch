@@ -57,8 +57,7 @@ class Menu extends Component {
       >
         <span {...cx('itemLabel', item.isRefined && 'itemLabelSelected')}>
           {label}
-        </span>
-        {' '}
+        </span>{' '}
         <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
           {item.count}
         </span>

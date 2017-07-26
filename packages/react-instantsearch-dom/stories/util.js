@@ -110,8 +110,12 @@ const CustomHits = connectHits(({ hits }) =>
         <div className="hit-content">
           <div>
             <Highlight attributeName="name" hit={hit} />
-            <span> - ${hit.price}</span>
-            <span> - {hit.rating} stars</span>
+            <span>
+              {' '}- ${hit.price}
+            </span>
+            <span>
+              {' '}- {hit.rating} stars
+            </span>
           </div>
           <div className="hit-type">
             <Highlight attributeName="type" hit={hit} />

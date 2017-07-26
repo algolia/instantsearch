@@ -47,7 +47,9 @@ const Header = () =>
         width="40"
       />
     </a>
-    <a href="./" className="logo">You<i className="fa fa-youtube-play" /></a>
+    <a href="./" className="logo">
+      You<i className="fa fa-youtube-play" />
+    </a>
     <SearchBox />
   </header>;
 
@@ -73,7 +75,11 @@ const SearchBox = connectSearchBox(({ currentRefinement, refine }) =>
 const Facets = () =>
   <aside>
     <ul className="nav nav-list panel">
-      <li><a href="./"><i className="fa fa-home" /> Home</a></li>
+      <li>
+        <a href="./">
+          <i className="fa fa-home" /> Home
+        </a>
+      </li>
       <li className="separator" />
     </ul>
     <Panel title="Genres" id="genres">
@@ -83,14 +89,15 @@ const Facets = () =>
       <StarRating attributeName="rating" max={5} />
     </Panel>
     <div className="thank-you">
-      {' '}
-      Data courtesy of <a href="https://www.imdb.com/">imdb.com</a>
+      {' '}Data courtesy of <a href="https://www.imdb.com/">imdb.com</a>
     </div>
   </aside>;
 
 const Panel = ({ title, children, id }) =>
   <div id={id}>
-    <h5><i className="fa fa-chevron-right" /> {title}</h5>
+    <h5>
+      <i className="fa fa-chevron-right" /> {title}
+    </h5>
     {children}
   </div>;
 
@@ -107,7 +114,10 @@ const Stars = ({ rating }) => {
     </span>
   );
 };
-const Genre = ({ name }) => <span className="badge">{name}</span>;
+const Genre = ({ name }) =>
+  <span className="badge">
+    {name}
+  </span>;
 const Genres = ({ genres }) =>
   <p className="genre">
     {genres.map((genre, idx) => <Genre name={genre} key={idx} />)}
@@ -128,7 +138,9 @@ const Hit = hit => {
           <Highlight attributeName="title" hit={hit.hit} />
           <Stars rating={rating} />
         </h4>
-        <p className="year">{year}</p>
+        <p className="year">
+          {year}
+        </p>
         <Genres genres={genre} />
       </div>
     </div>
@@ -137,10 +149,16 @@ const Hit = hit => {
 
 const Results = connectSearchBox(() =>
   <article>
-    <div id="stats" className="text-right text-muted"><Stats /></div>
+    <div id="stats" className="text-right text-muted">
+      <Stats />
+    </div>
     <hr />
-    <div id="hits"><Hits hitComponent={Hit} /></div>
-    <div id="pagination" className="text-center"><Pagination /></div>
+    <div id="hits">
+      <Hits hitComponent={Hit} />
+    </div>
+    <div id="pagination" className="text-center">
+      <Pagination />
+    </div>
   </article>
 );
 
@@ -156,8 +174,12 @@ const RefinementListLinks = connectRefinementList(
             refine(item.value);
           }}
         >
-          <span> {item.label}</span>
-          <span className="badge pull-right">{item.count}</span>
+          <span>
+            {' '}{item.label}
+          </span>
+          <span className="badge pull-right">
+            {item.count}
+          </span>
         </a>
       </div>
     );

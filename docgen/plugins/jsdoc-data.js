@@ -73,7 +73,7 @@ export default function() {
               filename === join(data.meta.path, data.meta.filename)
           );
 
-          files[buildFilename] = cachedFiles[buildFilename] = {
+          cachedFiles[buildFilename] = {
             ...data,
             ...customTags,
             mode: '0764',
@@ -81,16 +81,18 @@ export default function() {
             stats: fileFromMetalsmith && fileFromMetalsmith.stats,
             filename: fileFromMetalsmith && fileFromMetalsmith.filename,
             title,
-            mainTitle: data.kind === 'server-side-rendering'
-              ? 'Server-side Rendering'
-              : `${data.kind.charAt(0).toUpperCase()}${data.kind.slice(1)}s`, //
+            mainTitle:
+              data.kind === 'server-side-rendering'
+                ? 'Server-side Rendering'
+                : `${data.kind.charAt(0).toUpperCase()}${data.kind.slice(1)}s`, //
             withHeadings: false,
             layout: `${data.kind}.pug`,
             category: data.kind,
-            navWeight: data.name === 'InstantSearch' || data.name === 'Index'
-              ? 1000
-              : 0,
+            navWeight:
+              data.name === 'InstantSearch' || data.name === 'Index' ? 1000 : 0,
           };
+
+          files[buildFilename] = cachedFiles[buildFilename];
         });
       });
 

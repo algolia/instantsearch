@@ -47,9 +47,8 @@ export default createConnector({
 
   refine(props, searchState, items) {
     // `value` corresponds to our internal clear function computed in each connector metadata.
-    const refinementsToClear = items instanceof Array
-      ? items.map(item => item.value)
-      : [items];
+    const refinementsToClear =
+      items instanceof Array ? items.map(item => item.value) : [items];
     return refinementsToClear.reduce((res, clear) => clear(res), searchState);
   },
 });

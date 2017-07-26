@@ -30,15 +30,12 @@ class App extends Component {
 
   onSearchStateChange = searchState => {
     clearTimeout(this.debouncedSetState);
-    this.debouncedSetState = setTimeout(
-      () => {
-        this.props.history.push(
-          searchStateToUrl(this.props, searchState),
-          searchState
-        );
-      },
-      updateAfter
-    );
+    this.debouncedSetState = setTimeout(() => {
+      this.props.history.push(
+        searchStateToUrl(this.props, searchState),
+        searchState
+      );
+    }, updateAfter);
     this.setState({ searchState });
   };
 
@@ -52,7 +49,6 @@ class App extends Component {
         onSearchStateChange={this.onSearchStateChange.bind(this)}
         createURL={createURL}
       >
-
         <div>
           <div
             style={{
@@ -79,7 +75,6 @@ class App extends Component {
               <RefinementList attributeName="colors" />
               <p>Range Ratings</p>
               <StarRating attributeName="rating" max={6} />
-
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
