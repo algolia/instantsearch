@@ -51,6 +51,23 @@ if (currentBranch === 'master') {
 
 const strategy = currentBranch === 'develop' ? 'stable' : 'beta';
 
+// called if process aborted before publish,
+// nothing is pushed nor published remove local changes
+function rollback(newVersion) {
+  if (strategy === 'stable') {
+    // reset master
+    execSync('git reset --hard origin master');
+    execSync('git checkout develop');
+  } else {
+    // remove last commit
+    execSync('git reset --hard HEAD~1');
+  }
+
+  // remove local created tag
+  execSync(`git tag -d v${newVersion}`);
+  process.exit(1);
+}
+
 inquirer
   .prompt([
     {
@@ -169,7 +186,7 @@ inquirer
             },
           ])
           .then(({ publishNpm }) => {
-            if (!publishNpm) process.exit(0); // TODO: revert changes
+            if (!publishNpm) rollback(newVersion);
 
             console.log(colors.blue('Push to github, publish on npm'));
             if (strategy === 'stable') {
