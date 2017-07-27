@@ -295,14 +295,28 @@ function SearchResults(state, results) {
   this.serverUsed = mainSubResponse.serverUsed;
   /**
    * Boolean that indicates if the computation of the counts did time out.
+   * @deprecated
    * @member {boolean}
    */
   this.timeoutCounts = mainSubResponse.timeoutCounts;
   /**
    * Boolean that indicates if the computation of the hits did time out.
+   * @deprecated
    * @member {boolean}
    */
   this.timeoutHits = mainSubResponse.timeoutHits;
+
+  /**
+   * True if the counts of the facets is exhaustive
+   * @member {boolean}
+   */
+  this.exhaustiveFacetsCount = mainSubResponse.exhaustiveFacetsCount;
+
+  /**
+   * True if the number of hits is exhaustive
+   * @member {boolean}
+   */
+  this.exhaustiveNbHits = mainSubResponse.exhaustiveNbHits;
 
   /**
    * disjunctive facets results

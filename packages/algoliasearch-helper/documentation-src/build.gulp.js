@@ -21,6 +21,8 @@ var webpack = require('webpack-stream');
 
 var st = require('st');
 
+var a = require('algolia-frontend-components');
+
 var webpackConfig = require('./webpack.config.js');
 
 var src = {
@@ -36,58 +38,83 @@ var documentationRoot = path.join(projectRoot, 'documentation');
 var jsRoot = path.join(documentationRoot, 'js');
 var cssRoot = path.join(documentationRoot, 'css');
 
-
 var customMarkedRenderer = new marked.Renderer();
 var oldHeadingRenderer = customMarkedRenderer.heading;
 customMarkedRenderer.heading = function(text, level) {
-  if(level > 3) {
+  if (level > 3) {
     return '<h' + level + '>' + text + '</h' + level + '>';
   }
   return oldHeadingRenderer.apply(this, arguments);
 };
+
+var header = a.communityHeader({
+  menu:{
+    project: {
+      label: "algoliasearch-helper",
+      url: "https://community.algolia.com/algoliasearch-helper-js/"
+    }
+  },
+  sideMenu: [
+    { name: "Getting started", dropdownItems: null, url: "gettingstarted.html" },
+    { name: "Concepts", url: "concepts.html" },
+    { name: "Reference", url: "reference.html" },
+    { name: "Examples", url: "examples.html"}
+  ],
+  mobileMenu: [
+    { name: "Getting started", url: "gettingstarted.html" },
+    { name: "Concepts", url: "concepts.html" },
+    { name: "Reference", url: "reference.html" },
+    { name: "Examples", url: "examples.html"}
+  ],
+  docSearch: null
+});
+
 function makeMetalsmithBuilder() {
   var project = require('../package.json');
   var builder = metalsmith(projectRoot);
-  return builder.metadata({pkg: project})
-                .ignore('.*')
-                .clean(false)
-                .source(src.content)
-                .destination(documentationRoot)
-                .use(jsdoc({
-                  src: 'src/algoliasearch.helper.js',
-                  namespace: 'helper'
-                }))
-                .use(jsdoc({
-                  src: 'src/SearchResults/index.js',
-                  namespace: 'results'
-                }))
-                .use(jsdoc({
-                  src: 'src/SearchParameters/index.js',
-                  namespace: 'state'
-                }))
-                .use(jsdoc({
-                  src: 'src/url.js',
-                  namespace: 'url'
-                }))
-                .use(jsdoc({
-                  src: 'index.js',
-                  namespace: 'main'
-                }))
-                .use(inPlace({
-                  engine: 'handlebars',
-                  partials: 'documentation-src/metalsmith/partials',
-                  exposeConsolidate: registerHandleBarHelpers
-                }))
-                .use(metallic())
-                .use(markdown({
-                  gfm: true,
-                  renderer: customMarkedRenderer
-                }))
-                .use(headings('h2, h3'))
-                .use(layouts({
-                  engine: 'jade',
-                  directory: src.layouts
-                }));
+  return builder.metadata({
+      pkg: project,
+      header: header
+    })
+    .ignore('.*')
+    .clean(false)
+    .source(src.content)
+    .destination(documentationRoot)
+    .use(jsdoc({
+      src: 'src/algoliasearch.helper.js',
+      namespace: 'helper'
+    }))
+    .use(jsdoc({
+      src: 'src/SearchResults/index.js',
+      namespace: 'results'
+    }))
+    .use(jsdoc({
+      src: 'src/SearchParameters/index.js',
+      namespace: 'state'
+    }))
+    .use(jsdoc({
+      src: 'src/url.js',
+      namespace: 'url'
+    }))
+    .use(jsdoc({
+      src: 'index.js',
+      namespace: 'main'
+    }))
+    .use(inPlace({
+      engine: 'handlebars',
+      partials: 'documentation-src/metalsmith/partials',
+      exposeConsolidate: registerHandleBarHelpers
+    }))
+    .use(metallic())
+    .use(markdown({
+      gfm: true,
+      renderer: customMarkedRenderer
+    }))
+    .use(headings('h2, h3'))
+    .use(layouts({
+      engine: 'jade',
+      directory: src.layouts
+    }));
 }
 gulp.task('doc:content', function(cb) {
   makeMetalsmithBuilder().build(function(err) {
@@ -108,8 +135,8 @@ gulp.task('doc:content:watch', function(cb) {
 
 function gulpStyle() {
   return gulp.src(src.stylesheets)
-             .pipe(sass().on('error', sass.logError))
-             .pipe(gulp.dest(cssRoot));
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest(cssRoot));
 }
 gulp.task('doc:style', gulpStyle);
 gulp.task('doc:style:watch', function() {
@@ -118,8 +145,8 @@ gulp.task('doc:style:watch', function() {
 
 gulp.task('doc:js', function() {
   return gulp.src(src.js + 'main.js')
-             .pipe(webpack(webpackConfig))
-             .pipe(gulp.dest(jsRoot));
+    .pipe(webpack(webpackConfig))
+    .pipe(gulp.dest(jsRoot));
 });
 
 gulp.task('doc:js:watch', function() {
@@ -128,9 +155,9 @@ gulp.task('doc:js:watch', function() {
     devtool: 'eval-source-map'
   });
   return gulp.src(src.js + 'main.js')
-             .pipe(webpack(configWithWatch))
-             .pipe(gulp.dest(jsRoot))
-             .pipe(livereload());
+    .pipe(webpack(configWithWatch))
+    .pipe(gulp.dest(jsRoot))
+    .pipe(livereload());
 });
 
 gulp.task('doc:all:watch', ['doc:content', 'doc:js', 'doc:style'], function() {
@@ -146,7 +173,7 @@ gulp.task('doc:all:watch', ['doc:content', 'doc:js', 'doc:style'], function() {
 
 gulp.task('doc:server', function(done) {
   http.createServer(
-    st({path: documentationRoot, index: 'index.html', cache: false})
+    st({ path: documentationRoot, index: 'index.html', cache: false })
   ).listen(8083, done);
 });
 
