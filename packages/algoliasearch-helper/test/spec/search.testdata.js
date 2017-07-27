@@ -158,6 +158,7 @@ function getData() {
         ],
         'params': 'query=&hitsPerPage=20&page=0&facets=%5B%5D&facetFilters=%5B%5B%22city%3AParis%22%2C%22city%3ANew%20York%22%5D%5D',
         'exhaustiveFacetsCount': true,
+        'exhaustiveNbHits': true,
         'nbHits': 4,
         'query': '',
         'processingTimeMS': 2,
@@ -179,6 +180,7 @@ function getData() {
           }
         },
         'exhaustiveFacetsCount': false,
+        'exhaustiveNbHits': true,
         'nbHits': 5,
         'hits': [
           {
@@ -366,7 +368,9 @@ function getData() {
       }
     ],
     'hierarchicalFacets': [],
-    'facets': []
+    'facets': [],
+    'exhaustiveFacetsCount': true,
+    'exhaustiveNbHits': true
   };
 
   return {

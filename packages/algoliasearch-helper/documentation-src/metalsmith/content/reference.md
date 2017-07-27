@@ -475,8 +475,8 @@ are implemented on top of Algolia API such as faceting.
 
 {{> jsdoc jsdoc/results/processingTimeMS}}
 {{> jsdoc jsdoc/results/serverUsed}}
-{{> jsdoc jsdoc/results/timeoutCounts}}
-{{> jsdoc jsdoc/results/timeoutHits}}
+{{> jsdoc jsdoc/results/exhaustiveFacetsCount}}
+{{> jsdoc jsdoc/results/exhaustiveNbHits}}
 
 ## Types
 
