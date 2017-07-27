@@ -63,7 +63,9 @@ const common = [
     return false;
   }),
   documentationjs({rootJSFile: rootPath('src/lib/main.js')}),
-  inPlace(),
+  inPlace({
+    pattern: "**/*.hbs"
+  }),
   markdown,
   headings('h2'),
   nav(),
