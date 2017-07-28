@@ -78,7 +78,7 @@ class RefinementList extends Component {
           {label}
         </span>{' '}
         <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
-          {item.count}
+          {item.count.toLocaleString()}
         </span>
       </label>
     );
