@@ -16,7 +16,7 @@ A component that displays the total number of results found and the processing t
 Basic usage:
 
 ```html
-<ais-stats />
+<ais-stats></ais-stats>
 ```
 
 Custom text:
