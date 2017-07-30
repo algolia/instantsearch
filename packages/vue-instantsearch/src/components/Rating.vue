@@ -110,7 +110,7 @@ export default {
             newStar.count = count;
           }
         });
-        return star;
+        return newStar;
       });
 
       return stars.slice(this.min, this.max);
