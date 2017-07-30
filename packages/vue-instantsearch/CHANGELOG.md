@@ -1,3 +1,13 @@
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/algolia/vue-instantsearch/compare/v0.3.1...v0.3.2) (2017-07-30)
+
+
+### Bug Fixes
+
+* **rating:** correct star counts ([a499be4](https://github.com/algolia/vue-instantsearch/commit/a499be4))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/algolia/vue-instantsearch/compare/v0.3.0...v0.3.1) (2017-07-26)
 
