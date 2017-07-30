@@ -7,13 +7,13 @@ First of all, thanks for contributing! You can check out the issues tagged with 
 You'll first need to install the dependencies:
 
 ```sh
-yarn install
+$ yarn install
 ```
 
 Then we recommend that you run:
 
 ```sh
-yarn watch
+$ yarn watch
 ```
 
 This will watch the files for changes and build the CommonJS bundle that is required by the tests.
@@ -21,15 +21,14 @@ It will the run the test on that newly generated build.
 
 ## Documentation
 
-You can either directly click on "EDIT ON GITHUB" links on the live documentation: http://vue-instantsearch.netlify.com/.
+You can either directly click on "EDIT ON GITHUB" links on the live documentation: https://community.algolia.com/vue-instantsearch/.
 
 Or you can run the documentation locally:
 
 ```sh
-npm run docs:watch
+$ npm run docs:watch
 ```
 
 ### Deploying documentation
 
-The documentation is automatically deployed by [netlify](https://www.netlify.com/) when
-code is merged on the master branch.
+The documentation is automatically deployed by [netlify](https://www.netlify.com/) on pull requests.
