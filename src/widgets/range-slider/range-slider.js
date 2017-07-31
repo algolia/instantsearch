@@ -130,6 +130,7 @@ rangeSlider({
  * results based on a single numeric range.
  *
  * @type {WidgetFactory}
+ * @category filter
  * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.
  * @example

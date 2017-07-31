@@ -159,6 +159,7 @@ currentRefinedValues({
  *
  * This widget is usually in the top part of the search UI.
  * @type {WidgetFactory}
+ * @category filter
  * @param {CurrentRefinedValuesWidgetOptions} $0 The CurrentRefinedValues widget options.
  * @returns {Object} A new CurrentRefinedValues widget instance.
  * @example

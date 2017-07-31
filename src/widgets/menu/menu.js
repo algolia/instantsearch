@@ -142,6 +142,7 @@ menu({
 /**
  * Create a menu out of a facet
  * @type {WidgetFactory}
+ * @category filter
  * @param {MenuWidgetOptions} $0 The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.
  * @example

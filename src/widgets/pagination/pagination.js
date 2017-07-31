@@ -113,6 +113,7 @@ pagination({
  * because it is simpler to use, and it is more convenient in a mobile context.
  * See the infinite hits widget, for more informations.
  * @type {WidgetFactory}
+ * @category navigation
  * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
  * @return {Widget} A new instance of Pagination widget.
  * @example

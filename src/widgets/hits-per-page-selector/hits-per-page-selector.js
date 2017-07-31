@@ -64,6 +64,7 @@ hitsPerPageSelector({
  * The hitsPerPageSelector widget gives the user the ability to change the number of results
  * displayed in the hits widget.
  * @type {WidgetFactory}
+ * @category basic
  * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the HitPerPageSelector widget.
  * @return {Widget} A new instance of the HitPerPageSelector widget.
  * @example

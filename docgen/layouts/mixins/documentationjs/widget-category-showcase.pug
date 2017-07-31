@@ -1,0 +1,13 @@
+mixin widgetCategoryShowCase(category, symbols, title)
+  - const categorySymbols = symbols[category];
+  if categorySymbols
+    h2(id=category)=title
+      a.anchor(href=`${navPath}#${category}`)
+    for symbol in categorySymbols
+      - const match = /container: '#(\S+)'/.exec(symbol.examples[0].description)
+      h3=symbol.name
+      if(match)
+        div(id=match[1]).example-tile.elevation1.radius6.p-large.pos-rel
+        script!=symbol.examples[0].description
+      else
+        div.example-tile.elevation1.radius6.p-large.pos-rel This widget does not have a displayed output.

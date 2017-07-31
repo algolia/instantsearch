@@ -180,6 +180,7 @@ searchBox({
  * away.
  *
  * @type {WidgetFactory}
+ * @category basic
  * @param {SearchBoxWidgetOptions} $0 Options used to configure a SearchBox widget.
  * @return {Widget} Creates a new instance of the SearchBox widget.
  * @example

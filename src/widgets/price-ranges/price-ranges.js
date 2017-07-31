@@ -108,6 +108,7 @@ priceRanges({
  * displayed in a list.
  *
  * @type {WidgetFactory}
+ * @category filter
  * @param {PriceRangeWidgetOptions} $0 The PriceRanges widget options.
  * @return {Widget} A new instance of PriceRanges widget.
  * @example

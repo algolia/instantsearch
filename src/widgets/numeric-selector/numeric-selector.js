@@ -60,6 +60,7 @@ const usage = `Usage: numericSelector({
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page.
  * @type {WidgetFactory}
+ * @category filter
  * @param {NumericSelectorWidgetOptions} $0 The NumericSelector widget options.
  * @return {Widget} A new instance of NumericSelector widget.
  * @example
