@@ -23,6 +23,25 @@ export default {
       },
     },
   },
+  beforeCreate() {
+    let source = this; // eslint-disable-line consistent-this
+    const provideKey = '_searchStore';
+
+    while (source) {
+      if (source._provided && provideKey in source._provided) {
+        break;
+      }
+      source = source.$parent;
+    }
+
+    if (!source) {
+      if (!this._provided) {
+        this._provided = {};
+      }
+
+      this._provided[provideKey] = undefined;
+    }
+  },
   methods: {
     bem(element, modifier) {
       if (!this.blockClassName) {
