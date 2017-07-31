@@ -6,15 +6,15 @@
  */
 export function fixSidebar({sidebarContainer, topOffset}) {
   const siderbarParent = sidebarContainer.parentElement;
-  const boundaries = getStartStopBoundaries(siderbarParent, sidebarContainer, topOffset);
+  let boundaries = getStartStopBoundaries(siderbarParent, sidebarContainer, topOffset);
 
   siderbarParent.style.position = 'relative';
 
   const positionSidebar = () => {
     const currentScroll = window.pageYOffset;
     const {start, stop} = boundaries;
-    if(currentScroll > boundaries.start) {
-      if(currentScroll > boundaries.stop) {
+    if(currentScroll > start) {
+      if(currentScroll > stop) {
         sidebarContainer.style.position = 'absolute';
         sidebarContainer.style.bottom = `0`;
         sidebarContainer.classList.remove('fixed');
@@ -28,9 +28,19 @@ export function fixSidebar({sidebarContainer, topOffset}) {
     }
   };
 
-  window.addEventListener('load', positionSidebar);
-  document.addEventListener('DOMContentLoaded', positionSidebar);
+  const updateBoundaries = () => {
+    boundaries = getStartStopBoundaries(siderbarParent, sidebarContainer, topOffset);
+  }
+
+  window.addEventListener('load', updateBoundaries);
+  document.addEventListener('DOMContentLoaded', updateBoundaries);
+
   document.addEventListener('scroll', positionSidebar);
+
+  window.updateBoundaries = updateBoundaries; // DOES NOT WORK :(
+
+  updateBoundaries();
+  positionSidebar();
 }
 
 /**
