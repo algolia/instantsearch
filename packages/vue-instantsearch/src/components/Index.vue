@@ -10,6 +10,12 @@ import algoliaComponent from '../component';
 export default {
   mixins: [algoliaComponent],
   props: {
+    searchStore: {
+      type: Object,
+      default() {
+        return this._searchStore;
+      },
+    },
     apiKey: {
       type: String,
       default() {

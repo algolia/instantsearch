@@ -4,16 +4,15 @@ export default {
     searchStore: {
       type: Object,
       default() {
-        return this._searchStore;
-      },
-      validator(value) {
-        if (typeof value !== 'object') {
-          throw new Error(
-            'It looks like you forgot to wrap your Algolia search component inside of an <ais-index> component. You can also pass the store as a prop to your component.'
+        if (typeof this._searchStore !== 'object') {
+          const tag = this.$options._componentTag;
+          throw new TypeError(
+            `It looks like you forgot to wrap your Algolia search component 
+            "<${tag}>" inside of an "<ais-index>" component. You can also pass a 
+            search store as a prop to your component.`
           );
         }
-
-        return true;
+        return this._searchStore;
       },
     },
     classNames: {
