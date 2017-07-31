@@ -103,6 +103,7 @@
     "react-autosuggest": "^9.3.1",
     "react-dom": "^15.6.1",
     "react-hot-loader": "^3.0.0-beta.7",
+    "react-instantsearch": "4.0.9",
     "react-tap-event-plugin": "^2.0.1",
     "recursive-readdir": "^2.2.1",
     "replace-in-file": "^2.5.3",

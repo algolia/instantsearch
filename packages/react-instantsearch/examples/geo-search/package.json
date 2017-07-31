@@ -9,7 +9,7 @@
     "qs": "^6.5.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-instantsearch": "beta",
+    "react-instantsearch": "4.1.0-beta.3",
     "react-instantsearch-theme-algolia": "beta"
   },
   "scripts": {

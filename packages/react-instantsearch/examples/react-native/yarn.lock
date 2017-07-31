@@ -4284,7 +4284,7 @@ react-dom@16.0.0-alpha.13:
     object-assign "^4.1.0"
     prop-types "^15.5.6"
 
-react-instantsearch@beta:
+react-instantsearch@4.1.0-beta.3:
   version "4.1.0-beta.3"
   resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.1.0-beta.3.tgz#5c9f3ebaabe6761b30f6ea454a90ba66e4a7f45a"
   dependencies:
@@ -5560,7 +5560,7 @@ webidl-conversions@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.1.tgz#8015a17ab83e7e1b311638486ace81da6ce206a0"
 
-"websql@github:expo/node-websql#18.0.0":
+websql@expo/node-websql#18.0.0:
   version "0.4.4"
   resolved "https://codeload.github.com/expo/node-websql/tar.gz/e364fa65146a9e2157a19e5c719e7702c2b6b87a"
   dependencies:
