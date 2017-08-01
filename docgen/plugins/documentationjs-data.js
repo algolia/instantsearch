@@ -74,7 +74,7 @@ function filterSymbolsByType(type, symbols) {
 
 function groupSymbolsByCategories(symbols) {
   return groupBy(symbols, (s) => {
-    const tag = filter(s.tags, {title: 'category'})[0];
+    const [ tag ] = filter(s.tags, {title: 'category'});
     return tag && tag.description || 'other';
   });
 }

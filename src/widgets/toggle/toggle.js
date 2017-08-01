@@ -144,7 +144,6 @@ toggle({
  *     label: 'Free Shipping',
  *     values: {
  *       on: true,
- *       off: false
  *     },
  *     templates: {
  *       header: 'Shipping'
