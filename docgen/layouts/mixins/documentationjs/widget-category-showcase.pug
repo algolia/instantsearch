@@ -5,7 +5,9 @@ mixin widgetCategoryShowCase(category, symbols, title)
       a.anchor(href=`${navPath}#${category}`)
     for symbol in categorySymbols
       - const match = /container: '#(\S+)'/.exec(symbol.examples[0].description)
-      h3=symbol.name
+      h3(id=`${category}-${symbol.name}`)=symbol.name
+        a.anchor(href=`${navPath}#${category}-${symbol.name}`)
+      a(href=`widgets/${symbol.name}.html`) Full documentation
       if(match)
         div(id=match[1]).example-tile.elevation1.radius6.p-large.pos-rel
         script!=symbol.examples[0].description
