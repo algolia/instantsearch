@@ -6,7 +6,7 @@ block head
   script(src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.0.2/dist/instantsearch.min.js")
 
 block navigation
-  - const customHeadings = [{tag: 'h2', id: 'basic', text: 'Most common widgets'}, {tag: 'h2', id: 'navigation', text: 'Navigational widgets'}, {tag: 'h2', id: 'filter', text: 'Filtering widgets'}, {tag: 'h2', id: 'sort', text: 'Sorting widgets'}, {tag: 'h2', id: 'metadata', text: 'Metadata widgets'}, {tag: 'h2', id: 'analytics', text: 'Analytics widgets'}]
+  - const customHeadings = [{tag: 'h2', id: 'basic', text: 'Most common widgets'}, {tag: 'h2', id: 'navigation', text: 'Navigational widgets'}, {tag: 'h2', id: 'filter', text: 'Filtering widgets'}, {tag: 'h2', id: 'clear-filter', text: 'Clearing widgets'}, {tag: 'h2', id: 'sort', text: 'Sorting widgets'}, {tag: 'h2', id: 'metadata', text: 'Metadata widgets'}, {tag: 'h2', id: 'analytics', text: 'Analytics widgets'}]
   +nav(navPath, navigation, mainTitle || title, headings.concat(customHeadings))
 
 block content
