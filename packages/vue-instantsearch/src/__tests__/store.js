@@ -124,7 +124,7 @@ describe('Store', () => {
     expect(addAlgoliaAgent).toBeCalledWith(`vue-instantsearch ${version}`);
   });
 
-  test('should throw an error upon adding a facet of unkown type', () => {
+  test('should throw an error upon adding a facet of unknown type', () => {
     const store = createStore();
     expect(() => {
       store.addFacet('attribute', 'unknown');
@@ -270,7 +270,7 @@ describe('Store', () => {
       attributesToRetrieve: ['objectID'],
     };
 
-    // Make sure distinct parameter is gone when overrided with undefined.
+    // Make sure distinct parameter is gone when overridden with undefined.
     expect(store.queryParameters).not.toHaveProperty('distinct');
 
     store.queryParameters = {
@@ -280,7 +280,7 @@ describe('Store', () => {
     };
     store.addFacet('price');
 
-    // Make sure distinct parameter is gone when overrided with null.
+    // Make sure distinct parameter is gone when overridden with null.
     expect(store.queryParameters).not.toHaveProperty('distinct');
   });
 

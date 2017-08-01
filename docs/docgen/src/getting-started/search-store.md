@@ -68,7 +68,7 @@ Note that there is no reason to provide your own client if you are not reusing i
 
 ### Create a search store from an Algolia helper instance
 
-The [Algolia helper](https://github.com/algolia/algoliasearch-helper-js) is a JavaScript library that is built on top of the Algolia API client. Its goal is to expose a simple API to achieve advanced queries while also exposing utility methods and behaviours like keeping track of the last result.
+The [Algolia helper](https://github.com/algolia/algoliasearch-helper-js) is a JavaScript library that is built on top of the Algolia API client. Its goal is to expose a simple API to achieve advanced queries while also exposing utility methods and behavior like keeping track of the last result.
 
 As for the Algolia client, if you do not have an existing Algolia helper in your application, there should be no reason for you to instantiate the search store like showcased below.
 

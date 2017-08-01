@@ -18,7 +18,7 @@ export const serialize = function(helper) {
   return serialized;
 };
 
-export const unserialize = function(data) {
+export const deserialize = function(data) {
   const client = algoliaClient(data.appId, data.apiKey);
   const helper = algoliaHelper(
     client,

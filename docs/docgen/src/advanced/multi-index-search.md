@@ -46,7 +46,7 @@ component](components/index.html), a search store is automatically instantiated.
 
 ## Independent Multi-Index searches
 
-Let's take a look at what a minimalistic example of multi-index search looks like:
+Let's take a look at what a minimal example of multi-index search looks like:
 
 ```html
 <!-- App.vue -->

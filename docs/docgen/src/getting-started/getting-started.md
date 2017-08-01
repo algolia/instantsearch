@@ -42,9 +42,9 @@ Add Vue InstantSearch as a dependency, it's published on [npm](https://www.npmjs
 $ npm install --save vue-instantsearch
 ```
 
-## Run the development environement
+## Run the development environment
 
-When `vue-cli` bootstraped the project, it added some [npm scripts](https://docs.npmjs.com/misc/scripts) to your project, like a `dev` one. Let's use it:
+When `vue-cli` bootstrapped the project, it added some [npm scripts](https://docs.npmjs.com/misc/scripts) to your project, like a `dev` one. Let's use it:
 
 ```shell
 $ npm run dev

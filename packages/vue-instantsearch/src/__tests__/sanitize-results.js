@@ -125,7 +125,7 @@ test('it should replace pre-post tags in highlighted values', () => {
   ]);
 });
 
-test('it should replace multiple occurences of pre-post tags in highlighted values', () => {
+test('it should replace multiple occurrences of pre-post tags in highlighted values', () => {
   const results = [
     {
       name: 'name',

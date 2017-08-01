@@ -3,7 +3,7 @@ import algoliaHelper from 'algoliasearch-helper';
 import { version } from '../package.json';
 import {
   serialize as serializeHelper,
-  unserialize as unserializeHelper,
+  deserialize as deserializeHelper,
 } from './helper-serializer';
 
 import sanitizeResults from './sanitize-results';
@@ -199,6 +199,7 @@ export class Store {
     return this._helper.lastResults.processingTimeMS;
   }
 
+  // todo: change to goToFirstPage()
   goTofirstPage() {
     this.page = 0;
   }
@@ -415,7 +416,7 @@ export const createFromAlgoliaClient = client => {
 };
 
 export const createFromSerialized = data => {
-  const helper = unserializeHelper(data.helper);
+  const helper = deserializeHelper(data.helper);
 
   const store = new Store(helper);
   store.highlightPreTag = data.highlightPreTag;
