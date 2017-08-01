@@ -2,20 +2,20 @@
   <div :class="bem()" v-if="show">
     <slot name="header"></slot>
 
-    <a href="#" @click.default="clear" :class="bem('clear')" v-if="currentValue">
+    <a href="#" @click.prevent="clear" :class="bem('clear')" v-if="currentValue">
       <slot name="clear">Clear</slot>
     </a>
 
-    <div v-for="facet in facetValues" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']" >
+    <div v-for="(facet, key) in facetValues" :key="key" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']" >
       <a href="#" @click.prevent="toggleRefinement(facet)">
         <slot :value="facet.value"
               :min="min"
               :max="max"
               :count="facet.count"
         >
-          <template v-for="n in max">
-            <span v-if="n <= facet.value" :class="bem('star')">&#9733;</span>
-            <span v-else :class="bem('star', 'empty')">&#9734;</span>
+          <template v-for="(n, key) in max">
+            <span v-if="n <= facet.value" :class="bem('star')" :key="key">&#9733;</span>
+            <span v-else :class="bem('star', 'empty')" :key="key">&#9734;</span>
           </template>
           &nbsp;&amp; up
           <span :class="bem('count')">{{facet.count}}</span>

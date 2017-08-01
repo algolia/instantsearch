@@ -10,7 +10,7 @@
         <slot name="previous">&lt;</slot>
       </a>
     </li>
-    <li v-for="item in pages" :class="[bem('item'), page === item ? bem('item', 'active') : '']" >
+    <li v-for="(item, key) in pages" :key="key" :class="[bem('item'), page === item ? bem('item', 'active') : '']" >
       <a href="#" @click.prevent="goToPage(item)">
         <slot :value="item" :active="item === page">
           {{ item }}
