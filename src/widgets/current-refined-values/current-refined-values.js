@@ -168,6 +168,13 @@ currentRefinedValues({
  *     container: '#current-refined-values',
  *     clearAll: 'after',
  *     clearsQuery: true,
+ *     attributes: [
+ *       {name: 'free_shipping', label: 'Free shipping'},
+ *       {name: 'price', label: 'Price'},
+ *       {name: 'brand', label: 'Brand'},
+ *       {name: 'category', label: 'Category'},
+ *     ],
+ *     onlyListedAttributes: true,
  *   })
  * );
  */
