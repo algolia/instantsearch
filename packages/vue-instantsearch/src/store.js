@@ -12,31 +12,30 @@ export const FACET_AND = 'and';
 export const FACET_OR = 'or';
 export const FACET_TREE = 'tree';
 
-export const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
-export const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
+const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
+const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
 
-export const assertValidFacetType = function(type) {
-  if (type === FACET_AND) return;
-  if (type === FACET_OR) return;
-  if (type === FACET_TREE) return;
+export const createFromAlgoliaCredentials = (appID, apiKey) => {
+  const client = algolia(appID, apiKey);
+  const helper = algoliaHelper(client);
 
-  throw new Error(`Invalid facet type ${type}.`);
+  return new Store(helper);
 };
 
-const onHelperChange = function() {
-  if (this._stoppedCounter === 0) {
-    this.refresh();
-  }
+export const createFromAlgoliaClient = client => {
+  const helper = algoliaHelper(client);
+
+  return new Store(helper);
 };
 
-const onHelperResult = function(response) {
-  this._results = sanitizeResults(
-    response.hits,
-    HIGHLIGHT_PRE_TAG,
-    HIGHLIGHT_POST_TAG,
-    this.highlightPreTag,
-    this.highlightPostTag
-  );
+export const createFromSerialized = data => {
+  const helper = deserializeHelper(data.helper);
+
+  const store = new Store(helper);
+  store.highlightPreTag = data.highlightPreTag;
+  store.highlightPostTag = data.highlightPostTag;
+
+  return store;
 };
 
 export class Store {
@@ -124,7 +123,6 @@ export class Store {
     return this.algoliaClient.applicationID;
   }
 
-  // Todo: maybe freeze / unfreeze, pause / resume are better names
   start() {
     if (this._stoppedCounter < 1) {
       this._stoppedCounter = 0;
@@ -197,23 +195,6 @@ export class Store {
     }
 
     return this._helper.lastResults.processingTimeMS;
-  }
-
-  // todo: change to goToFirstPage()
-  goTofirstPage() {
-    this.page = 0;
-  }
-
-  goToPreviousPage() {
-    this._helper.previousPage();
-  }
-
-  goToNextPage() {
-    this._helper.nextPage();
-  }
-
-  goToLastPage() {
-    this.page = this.nbPages - 1;
   }
 
   addFacet(attribute, type = FACET_AND) {
@@ -402,25 +383,26 @@ export class Store {
   }
 }
 
-export const createFromAlgoliaCredentials = (appID, apiKey) => {
-  const client = algolia(appID, apiKey);
-  const helper = algoliaHelper(client);
+export const assertValidFacetType = function(type) {
+  if (type === FACET_AND) return;
+  if (type === FACET_OR) return;
+  if (type === FACET_TREE) return;
 
-  return new Store(helper);
+  throw new Error(`Invalid facet type ${type}.`);
 };
 
-export const createFromAlgoliaClient = client => {
-  const helper = algoliaHelper(client);
-
-  return new Store(helper);
+const onHelperChange = function() {
+  if (this._stoppedCounter === 0) {
+    this.refresh();
+  }
 };
 
-export const createFromSerialized = data => {
-  const helper = deserializeHelper(data.helper);
-
-  const store = new Store(helper);
-  store.highlightPreTag = data.highlightPreTag;
-  store.highlightPostTag = data.highlightPostTag;
-
-  return store;
+const onHelperResult = function(response) {
+  this._results = sanitizeResults(
+    response.hits,
+    HIGHLIGHT_PRE_TAG,
+    HIGHLIGHT_POST_TAG,
+    this.highlightPreTag,
+    this.highlightPostTag
+  );
 };
