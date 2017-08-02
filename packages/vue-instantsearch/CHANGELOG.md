@@ -1,3 +1,33 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/algolia/vue-instantsearch/compare/v0.3.2...v0.4.0) (2017-08-02)
+
+
+### Bug Fixes
+
+* **component:** avoid raising injection failure warning ([3185548](https://github.com/algolia/vue-instantsearch/commit/3185548))
+* **index:** trigger error message when index context is missing ([edbabdd](https://github.com/algolia/vue-instantsearch/commit/edbabdd))
+* **powered-by:** ensure search store is not required ([bc0a19f](https://github.com/algolia/vue-instantsearch/commit/bc0a19f))
+* **spelling:** run most code through a spell checker (#226) ([640fec3](https://github.com/algolia/vue-instantsearch/commit/640fec3))
+
+
+### Code Refactoring
+
+* **store:** do not expose highlighting tags ([d3ee912](https://github.com/algolia/vue-instantsearch/commit/d3ee912))
+* **store:** remove pagination utility methods ([3bdf759](https://github.com/algolia/vue-instantsearch/commit/3bdf759)), closes [#228](https://github.com/algolia/vue-instantsearch/issues/228)
+
+
+### Features
+
+* add keys to all for loops ([a36a493](https://github.com/algolia/vue-instantsearch/commit/a36a493))
+
+
+### BREAKING CHANGES
+
+* **store:** pagination utility methods have been removed. This includes `goToFirstPage`, `goToPreviousPage`, `goToNextPage` and `goToLastPage`.
+* **store:** HIGHLIGHT_PRE_TAG and HIGHLIGHT_POST_TAG are no longer exported.
+
+
+
 <a name="0.3.2"></a>
 ## [0.3.2](https://github.com/algolia/vue-instantsearch/compare/v0.3.1...v0.3.2) (2017-07-30)
 
