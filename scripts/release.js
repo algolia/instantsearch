@@ -186,7 +186,7 @@ inquirer
             },
           ])
           .then(({ publishNpm }) => {
-            if (!publishNpm) rollback(newVersion);
+            if (!publishNpm) return rollback(newVersion);
 
             console.log(colors.blue('Push to github, publish on npm'));
             if (strategy === 'stable') {
@@ -209,6 +209,8 @@ inquirer
               A job on travis-ci will be automatically launched to finalize the release.
               `)
             );
+
+            return process.exit(0);
           });
       });
   });
