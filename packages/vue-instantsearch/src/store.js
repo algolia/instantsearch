@@ -12,8 +12,8 @@ export const FACET_AND = 'and';
 export const FACET_OR = 'or';
 export const FACET_TREE = 'tree';
 
-export const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
-export const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
+const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
+const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
 
 export const assertValidFacetType = function(type) {
   if (type === FACET_AND) return;
