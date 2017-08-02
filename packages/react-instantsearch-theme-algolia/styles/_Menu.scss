@@ -1,5 +1,5 @@
 .ais-Menu__root {
-  max-width: 300px
+  max-width: 300px;
 }
 
 .ais-Menu__items {
@@ -34,7 +34,7 @@
 }
 
 .ais-Menu__itemCount {
-  @include counterStyle()
+  @include counterStyle();
 }
 
 .ais-Menu__showMore {
@@ -46,13 +46,13 @@
   @include disabled();
 }
 
-.ais-Menu__itemLinkSelected{
+.ais-Menu__itemLinkSelected {
 }
 
-.ais-Menu__itemCountSelected{
+.ais-Menu__itemCountSelected {
 }
 
-.ais-Menu__itemLabelSelected{
+.ais-Menu__itemLabelSelected {
 }
 
 .ais-Menu__SearchBox {

@@ -13,7 +13,8 @@
   display: inline-block;
 }
 
-.ais-RangeInput__inputMin, .ais-RangeInput__inputMax {
+.ais-RangeInput__inputMin,
+.ais-RangeInput__inputMax {
   font-weight: normal;
   padding: 6px 8px;
   font-size: 14px;
@@ -38,7 +39,7 @@
 }
 
 .ais-RangeInput__submit {
-  @include button()
+  @include button();
 }
 
 .ais-RangeInput__separator {

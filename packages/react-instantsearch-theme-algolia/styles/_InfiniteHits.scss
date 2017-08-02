@@ -1,7 +1,7 @@
 .ais-InfiniteHits__root {
 }
 
-.ais-InfiniteHits__root button{
+.ais-InfiniteHits__root button {
   @include buttonTernary();
   @include buttonLink();
 }

@@ -8,7 +8,7 @@
       $value: $value * 1.3333 * 1px;
     } @else if unit($value) == '%' {
       $value: $value * 16 / 100% * 1px;
-    };
+    }
     $value: round($value);
     @if ($value % 2 != 0) {
       $value: $value + 1;
@@ -37,7 +37,6 @@
   $icon-clear: 'sbx-icon-clear-1',
   $icon-clear-size: $font-size / 1.1
 ) {
-
   &__root {
     display: inline-block;
     position: relative;
@@ -63,11 +62,17 @@
     background: $input-background;
     box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
     padding: 0;
-    padding-right: if($icon-position == 'right', even-px($input-height) + even-px($icon-clear-size) + 8px, even-px($input-height * .8))
-              + if($icon-background-opacity == 0, 0, even-px($font-size));
-    padding-left: if($icon-position == 'right',
-              even-px($font-size / 2) + even-px($border-radius / 2),
-              even-px($input-height) + if($icon-background-opacity == 0, 0, even-px($font-size * 1.2)));
+    padding-right: if(
+        $icon-position == 'right',
+        even-px($input-height) + even-px($icon-clear-size) + 8px,
+        even-px($input-height * .8)
+      ) + if($icon-background-opacity == 0, 0, even-px($font-size));
+    padding-left: if(
+      $icon-position == 'right',
+      even-px($font-size / 2) + even-px($border-radius / 2),
+      even-px($input-height) +
+        if($icon-background-opacity == 0, 0, even-px($font-size * 1.2))
+    );
     width: 100%;
     height: 100%;
     vertical-align: middle;
@@ -92,7 +97,6 @@
     &::placeholder {
       color: lighten($placeholder-color, 20%);
     }
-
   }
 
   &__submit {
@@ -107,10 +111,15 @@
     }
     margin: 0;
     border: 0;
-    border-radius: if($icon-position == 'right', 0 $border-radius $border-radius 0, $border-radius 0 0 $border-radius);
+    border-radius: if(
+      $icon-position == 'right',
+      0 $border-radius $border-radius 0,
+      $border-radius 0 0 $border-radius
+    );
     background-color: rgba($icon-background, $icon-background-opacity);
     padding: 0;
-    width: even-px($input-height) + if($icon-background-opacity == 0, 0, even-px($font-size / 2));
+    width: even-px($input-height) +
+      if($icon-background-opacity == 0, 0, even-px($font-size / 2));
     height: 100%;
     vertical-align: middle;
     text-align: center;
@@ -147,9 +156,12 @@
     display: none;
     position: absolute;
     top: (even-px($input-height) - even-px($icon-clear-size)) / 2 - 4px;
-    right: if($icon-position == 'right',
-      even-px($input-height) + if($icon-background-opacity == 0, 0 , even-px($font-size)),
-      (even-px($input-height) - even-px($icon-clear-size)) / 2 - 4px);
+    right: if(
+      $icon-position == 'right',
+      even-px($input-height) +
+        if($icon-background-opacity == 0, 0, even-px($font-size)),
+       (even-px($input-height) - even-px($icon-clear-size)) / 2 - 4px
+    );
     margin: 0;
     border: 0;
     background: none;
@@ -177,7 +189,7 @@
     animation-duration: 250ms;
   }
 
-  @at-root{
+  @at-root {
     @keyframes sbx-reset-in {
       0% {
         opacity: 0;
