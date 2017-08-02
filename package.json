@@ -5,6 +5,7 @@
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "main": "dist-es5-module/index.js",
   "author": "Algolia <support@algolia.com>",
+  "module": "./es/index.js",
   "scripts": {
     "build": "./scripts/build.sh",
     "dev": "./scripts/dev.sh",
