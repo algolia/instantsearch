@@ -10,7 +10,7 @@ githubSource: docgen/src/guides/no-result.md
 ---
 ## Designing the no results page
 
-When the query returns no results, it is important to let the user know that their query led to no results.
+When a query returns no results, it is important to let the user know that their query led to no results.
 
 By doing so, we’re acknowledging that not all queries lead to some result and with some additional hints we can let them continue to use the search. This way, there is less chance that the user will leave the website to do a search to an external search engine.
 
@@ -35,7 +35,7 @@ search.addWidget(instantsearch.widgets.hits({
 }));
 ```
 
-When there is no results, the user will see a paragraph that says: "No results were found with your current filters. Try to remove some filters or change the search query.".
+When there are no results, the user will see a paragraph that says: "No results were found with your current filters. Try to remove some filters or change the search query.".
 
 ## Let the user clear all the filters
 
