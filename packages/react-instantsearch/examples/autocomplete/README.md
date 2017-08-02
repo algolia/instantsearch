@@ -6,7 +6,13 @@ You will find two use cases:
 * How to build an autocomplete displaying hits from different indices
 * How to build @-mentions using [ant](https://ant.design) as the external component
 
-To start the example:
+## Clone the example
+
+```
+curl https://codeload.github.com/algolia/react-instantsearch/tar.gz/master | tar -xz --strip=2 react-instantsearch-master/packages/react-instantsearch/examples/autocomplete
+```
+
+## Start the example
 
 ```sh
 yarn install --no-lockfile
