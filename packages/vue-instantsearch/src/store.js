@@ -124,7 +124,6 @@ export class Store {
     return this.algoliaClient.applicationID;
   }
 
-  // Todo: maybe freeze / unfreeze, pause / resume are better names
   start() {
     if (this._stoppedCounter < 1) {
       this._stoppedCounter = 0;
