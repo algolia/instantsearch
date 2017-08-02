@@ -5,7 +5,7 @@
 
 .ais-StarRating__ratingIcon:before {
   content: '\2605';
-  color: #FBAE00;
+  color: #fbae00;
 }
 
 .ais-StarRating__ratingIconEmpty:before {
@@ -13,27 +13,27 @@
   color: #bfc7d8;
   opacity: 0.5;
 }
-.ais-StarRating__ratingLink{
+.ais-StarRating__ratingLink {
   text-decoration: none;
   color: #55606e;
   font-weight: 400;
   margin-top: 6px;
 }
-.ais-StarRating__ratingLinkSelected{
+.ais-StarRating__ratingLinkSelected {
   color: $main-color;
 }
 
-.ais-StarRating__ratingCountDisabled{
-  display:none;
+.ais-StarRating__ratingCountDisabled {
+  display: none;
 }
 
-.ais-StarRating__ratingIconEmptyDisabled:before{
-  color: #C9C9C9;
+.ais-StarRating__ratingIconEmptyDisabled:before {
+  color: #c9c9c9;
   opacity: 1;
 }
 
-.ais-StarRating__ratingIconDisabled:before{
-  color: #A9A9A9;
+.ais-StarRating__ratingIconDisabled:before {
+  color: #a9a9a9;
 }
 
 .ais-StarRating__ratingLabel {
@@ -52,14 +52,14 @@
 .ais-StarRating__ratingIconEmptySelected {
 }
 
-.ais-StarRating__ratingCount{
-  @include counterStyle()
+.ais-StarRating__ratingCount {
+  @include counterStyle();
 }
 
 .ais-StarRating__ratingCountSelected {
   font-weight: 600;
 }
 
-.ais-StarRating__ratingLinkDisabled{
+.ais-StarRating__ratingLinkDisabled {
   @include disabled();
 }

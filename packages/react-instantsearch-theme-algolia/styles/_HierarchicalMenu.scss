@@ -3,7 +3,6 @@
   // *:after {outline: 1px solid red}
 }
 
-
 .ais-HierarchicalMenu__items {
   color: $main-color;
   width: 100%;
@@ -40,7 +39,7 @@
 .ais-HierarchicalMenu__itemParent {
 }
 
-.ais-HierarchicalMenu__itemSelectedParent > .ais-HierarchicalMenu__itemLink   {
+.ais-HierarchicalMenu__itemSelectedParent > .ais-HierarchicalMenu__itemLink {
   @include openCaret();
 }
 
@@ -59,7 +58,6 @@
 .ais-HierarchicalMenu__itemItems {
   padding-left: 14px;
   font-weight: normal;
-
 
   .ais-HierarchicalMenu__item:after,
   .ais-HierarchicalMenu__itemLink:after {

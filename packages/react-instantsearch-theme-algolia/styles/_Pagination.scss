@@ -1,11 +1,11 @@
-.ais-Pagination__root{
+.ais-Pagination__root {
   background-color: #ffffff;
   box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #d4d8e3;
   width: auto;
   display: inline-block;
   border-radius: 4px;
-  padding: 8px 16px ;
+  padding: 8px 16px;
 }
 
 .ais-Pagination__item {
@@ -16,12 +16,11 @@
   text-align: center;
   font-size: 14px;
 
-
   &:hover {
     background: rgba(#2751af, 0.1);
 
     .ais-Pagination__itemLink {
-      color: $main-color
+      color: $main-color;
     }
   }
 }
@@ -33,7 +32,6 @@
   .ais-Pagination__itemLink {
     color: currentColor;
     font-weight: normal;
-
   }
 }
 

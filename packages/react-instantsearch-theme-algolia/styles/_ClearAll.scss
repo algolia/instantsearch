@@ -3,7 +3,6 @@
   @include buttonSecondary();
 }
 
-.ais-ClearAll__root:disabled{
+.ais-ClearAll__root:disabled {
   @include disabled();
 }
-
