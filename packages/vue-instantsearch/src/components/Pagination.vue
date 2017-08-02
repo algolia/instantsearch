@@ -90,8 +90,13 @@ export default {
   },
   methods: {
     goToPage(page) {
-      const p = Math.max(1, page);
-      this.searchStore.page = Math.min(this.totalPages, p);
+      let p = Math.max(1, page);
+      p = Math.min(this.totalPages, p);
+      if (this.searchStore.page === p) {
+        return;
+      }
+      this.searchStore.page = p;
+      this.$emit('page-change');
     },
     goToFirstPage() {
       this.goToPage(1);
