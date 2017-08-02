@@ -13,7 +13,4 @@ dev/dist/*
 functional-tests/screenshots/
 
 # Ignore ES6 build files
-dist-es6-module/
-instantsearch.js
-connectors.js
-widgets.js
+es/

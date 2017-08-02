@@ -69,13 +69,13 @@ With InstantSearch.js it's really simple to use, the example speaks for itself:
 
 ```javascript
 // instantsearch() function without reference to the widgets or connectors
-import instantsearch from 'instantsearch.js/instantsearch';
+import instantsearch from 'instantsearch.js/es';
 
 // import connectors individually
-import {connectSearchBox} from 'instantsearch.js/connectors';
+import {connectSearchBox} from 'instantsearch.js/es/connectors';
 
 // import widgets individually
-import {searchBox} from 'instantsearch.js/widgets';
+import {searchBox} from 'instantsearch.js/es/widgets';
 
 const search = instantsearch({ ... });
 
