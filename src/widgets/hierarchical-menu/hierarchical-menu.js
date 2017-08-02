@@ -134,6 +134,7 @@ hierarchicalMenu({
  *
  * By default, the separator is ` > ` but it can be different and specified with the `separator` option.
  * @type {WidgetFactory}
+ * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.
  * @example

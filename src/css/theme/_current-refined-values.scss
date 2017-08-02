@@ -16,6 +16,11 @@
   &--link {
     color: $light-blue;
     text-decoration: none;
+
+    &:hover {
+      color: $dark-blue;
+      text-decoration: none;
+    }
   }
 
   &--count {

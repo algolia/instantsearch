@@ -159,6 +159,7 @@ currentRefinedValues({
  *
  * This widget is usually in the top part of the search UI.
  * @type {WidgetFactory}
+ * @category clear-filter
  * @param {CurrentRefinedValuesWidgetOptions} $0 The CurrentRefinedValues widget options.
  * @returns {Object} A new CurrentRefinedValues widget instance.
  * @example
@@ -167,6 +168,13 @@ currentRefinedValues({
  *     container: '#current-refined-values',
  *     clearAll: 'after',
  *     clearsQuery: true,
+ *     attributes: [
+ *       {name: 'free_shipping', label: 'Free shipping'},
+ *       {name: 'price', label: 'Price'},
+ *       {name: 'brand', label: 'Brand'},
+ *       {name: 'category', label: 'Category'},
+ *     ],
+ *     onlyListedAttributes: true,
  *   })
  * );
  */

@@ -124,6 +124,7 @@ starRating({
  * The values must be **integers** in your records. Even though, the maximum value can be set (with `max`), the minimum is
  * always 0.
  * @type {WidgetFactory}
+ * @category filter
  * @param {StarWidgetOptions} $0 StarRating widget options.
  * @return {Widget} A new StarRating widget instance.
  * @example

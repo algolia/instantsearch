@@ -133,6 +133,7 @@ toggle({
  *
  * The attribute has to be in the list of attributes for faceting in the dashboard.
  * @type {WidgetFactory}
+ * @category filter
  * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
  * @return {Widget} A new instance of the Toggle widget
  * @example
@@ -143,7 +144,6 @@ toggle({
  *     label: 'Free Shipping',
  *     values: {
  *       on: true,
- *       off: false
  *     },
  *     templates: {
  *       header: 'Shipping'

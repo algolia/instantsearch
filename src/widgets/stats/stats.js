@@ -122,6 +122,7 @@ stats({
  * By default, it will display the **number of hits** and the time taken to compute the
  * results inside the engine.
  * @type {WidgetFactory}
+ * @category metadata
  * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatories: `container`,
  * @return {Widget} A new stats widget instance
  * @example

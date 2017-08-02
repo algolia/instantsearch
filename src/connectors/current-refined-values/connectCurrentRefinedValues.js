@@ -42,13 +42,23 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
+ * @typedef {Object} CurrentRefinement
+ * @property {"facet"|"exclude"|"disjunctive"|"hierarchical"|"numeric"} type Type of refinement
+ * @property {string} attributeName Attribute on which the refinement is applied
+ * @property {string} name value of the refinement
+ * @property {number} [numericValue] value if the attribute is numeric and used with a numeric filter
+ * @property {boolean} [exhaustive] `true` if the count is exhaustive, only if applicable
+ * @property {number} [count] number of items found, if applicable
+ */
+
+/**
  * @typedef {Object} CurrentRefinedValuesRenderingOptions
  * @property {Object.<string, object>} attributes Original `CurrentRefinedValuesWidgetOptions.attributes` mapped by keys.
  * @property {function} clearAllClick Clears all the currently refined values.
  * @property {function} clearAllURL Generate a URL which leads to a state where all the refinements have been cleared.
  * @property {function(item)} refine Clears a single refinement.
  * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
- * @property {Object[]} refinements All the current refinements.
+ * @property {CurrentRefinement[]} refinements All the current refinements.
  * @property {Object} widgetParams All original `CustomCurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
  */
 
