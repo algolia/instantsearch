@@ -12,9 +12,11 @@ githubSource: docgen/src/guides/no-result.md
 
 When the query returns no results, it is important to let the user know that their query led to no results.
 
-By doing so, we’re acknowledging that not all queries lead to some result and with some additional hints we can let them continue to use the application. This way, there is less chance that the user will leave the website to do a search to an external search engine.
+By doing so, we’re acknowledging that not all queries lead to some result and with some additional hints we can let them continue to use the search. This way, there is less chance that the user will leave the website to do a search to an external search engine.
 
-There are a few strategies that can be implemented from the very simple to some more complex strategies. This guide will walk you through one that can be easily implemented with InstantSearch.js: we’ll first improve the message that we provide to the user and then we’ll add a button to let the user clear the filters.
+There are various strategies that can be implemented for the no-result. This guide will walk you through one that can be easily implemented with InstantSearch.js:
+  - first we'll improve the message that we provide to the user
+  - then we’ll add a button to let the user clear the filters
 
 ## Display a message
 
@@ -25,9 +27,9 @@ In order to do that, we can use the InstantSeach.js’ Hits widget option [templ
 ```javascript
 const search = instantsearch(/* parameters */);
 search.addWidget(instantsearch.widgets.hits({
-  container: ‘hits’,
+  container: 'hits',
   templates: {
-    empty: ‘<p class="info”>No results were found with your current filters. Try to remove some filters or change the search query.</p>’,
+    empty: '<p class="info">No results were found with your current filters. Try to remove some filters or change the search query.</p>',
     item: yourItemTemplate
   },
 }));
@@ -57,12 +59,12 @@ We do this by customizing again the no-result template and adding it a clear all
 ```javascript
 const search = instantsearch(/* parameters */);
 search.addWidget(instantsearch.widgets.hits({
-  container: ‘hits’,
+  container: 'hits',
   templates: {
-    empty: ‘<p class="info”>No results were found with your current filters. <br/> <a class=”button” href=”.”>Clear all the filters</a></p>’,
-    item: yourItemTemplate},
-  })
-);
+    empty: '<p class="info">No results were found with your current filters. <br/> <a class="button" href=".">Clear all the filters</a></p>',
+    item: yourItemTemplate
+  },
+}));
 ```
 
 The secret of this last part is to use `.` as the href of the "clear all the filters" link. You can go further and make this link look like a button.
