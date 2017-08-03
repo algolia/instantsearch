@@ -30,25 +30,25 @@ to know:
 
 This article will end with a simple example of custom widget.
 
-## The widgets lifecycle and API
+## The widget lifecycle and API
 
 InstantSearch.js defines the widget lifecycle of the widgets in 3 steps:
 
- - the configuration step during which the initial search configuration is computed
- - the init step that happens before the first search
- - the render phase that happens after each result from Algolia
+ - the configuration step, during which the initial search configuration is computed
+ - the init step, which happens before the first search
+ - the render step, which happens after each result from Algolia
 
 Thoses steps translate directly into the widget API. Widgets are defined as plain
 JS objects with 3 methods:
 
- - `getConfiguration`, optional, returns the necessary subpart of the configuration specific,
+ - `getConfiguration` (optional), returns the necessary subpart of the configuration, specific
     to this widget
  - `init`, optional, used to setup the widget (good place to first setup the initial DOM).
     Called before the first search.
  - `render`, optional, used to update the widget with the new information from the results.
     Called after each time results come back from Algolia
 
-And in the code, this looks like:
+If we translate this to code, this looks like:
 
 ```javascript
 const search = instantsearch();
@@ -80,9 +80,9 @@ A widget is valid as long as it implements at least `search` or `init`.
 The previous API is only the reading part of the widgets. To be able to transform
 user interaction into search parameters we need to be able to modify the state.
 
-The whole search state is held in InstantSearch.js by an instance of the
-[JS Helper](https://community.algolia.com/algoliasearch-helper-js/). This
-instance of the helper is accessible at the `init` and `render` phases.
+The whole search state is held by an instance of the 
+[JS Helper](https://community.algolia.com/algoliasearch-helper-js/) in InstantSearch.js. 
+This instance of the helper is accessible at the `init` and `render` phases.
 
 The helper is used to change the parameters of the search. It provides methods
 to change each parts of it. After changing the parameters, you should use the
@@ -99,7 +99,7 @@ You can also read more about the features offered by this library in the
 
 ## Example
 
-To give you an idea of the power of this API, let's have a look at a minimalist
+To give you an idea of the power of this API, let's have a look at a minimal
 implementation of a search UI with a searchbox and hits.
 
 In this example, the widgets are not reusable and will assume that
