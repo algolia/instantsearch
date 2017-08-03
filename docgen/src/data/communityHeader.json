@@ -73,6 +73,10 @@
         "url": "guides/opensearch.html"
       },
       {
+        "name": "Create new widgets",
+        "url": "guides/custom-widget.html"
+      },
+      {
         "name": "Migrate from V1",
         "url": "guides/migration.html"
       }
