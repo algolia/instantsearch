@@ -65,6 +65,10 @@
         "url": "guides/customization.html"
       },
       {
+        "name": "Design the no result page",
+        "url": "guides/no-result.html"
+      },
+      {
         "name": "Integrate OpenSearch",
         "url": "guides/opensearch.html"
       },
@@ -113,6 +117,10 @@
   {
     "name": "Customize widgets",
     "url": "guides/customization.html"
+  },
+  {
+    "name": "Design the no result page",
+    "url": "guides/no-result.html"
   },
   {
     "name": "Migrate from V1",
