@@ -4,8 +4,9 @@
     <slot name="header"></slot>
 
     <div v-for="(facet, key) in facetValues" :key="key" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']">
-      <label>
+      <label :class="bem('label')">
         <input type="checkbox"
+               :class="bem('checkbox')"
                v-model="facet.isRefined"
                @change="toggleRefinement(facet)"
                :value="facet.name"
