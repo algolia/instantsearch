@@ -15,10 +15,10 @@ githubSource: docgen/src/guides/custom-widget.md
 InstantSearch.js comes with [many widgets](widgets.html), by default. If those
 widgets are not enough, they can be customized using the [connectors](connectors.html).
 
-However, it is hard to think of all the use-cases possible, and that's
-why it is possible to create your own widget. Making widgets is the most advanced
-way of customizing your search experience, and it is not as easy as using the
-widgets or the connectors. If you think that your needs are common, don't hesitate
+You might find yourself in a situation where both widgets and connectors are not sufficient,
+that's why it is possible to create your own widget. Making widgets is the most advanced
+way of customizing your search experience and it requires a deeper knowledge of InstantSearch.js
+and Algolia. If you think that your needs are common, don't hesitate
 to [open an issue](https://github.com/algolia/instantsearch.js/issues) or come
 discuss it on the [forum](https://discourse.algolia.com/).
 
@@ -28,7 +28,7 @@ to know:
  - the widget lifecycle
  - how to interact with the search state
 
-This article will end with a simple example of custom widget.
+There's a simple example of a custom widget at the end of this guide.
 
 ## The widget lifecycle and API
 
@@ -54,21 +54,21 @@ If we translate this to code, this looks like:
 const search = instantsearch();
 search.addWidget({
   getConfiguration: function() {
-    // should return an helper configuration object, like the searchParameters
+    // must return an helper configuration object, like the searchParameters
     // on the instantsearch constructor
   },
   init: function(initOptions) {
     // initOptions contains three keys:
-    // - helper: to modify the search state and propagate the user interaction
-    // - state: which is the state of the search at this point
-    // - templatesConfig: the configuration of the templates
+    //   - helper: to modify the search state and propagate the user interaction
+    //   - state: which is the state of the search at this point
+    //   - templatesConfig: the configuration of the templates
   },
   render: function(renderOptions) {
     // renderOptions contains four keys:
-    // - results: the results from the last request
-    // - helper: to modify the search state and propagate the user interaction
-    // - state: the state at this point
-    // - createURL: if the url sync is active, will make it possible to create new URLs
+    //   - results: the results from the last request
+    //   - helper: to modify the search state and propagate the user interaction
+    //   - state: the state at this point
+    //   - createURL: if the url sync is active, will make it possible to create new URLs
   }
 });
 ```
@@ -77,7 +77,7 @@ A widget is valid as long as it implements at least `search` or `init`.
 
 ## Interacting with the Search State
 
-The previous API is only the reading part of the widgets. To be able to transform
+The previous custom widget API boilerplate is the reading part of the widgets. To be able to transform
 user interaction into search parameters we need to be able to modify the state.
 
 The whole search state is held by an instance of the 
@@ -88,7 +88,7 @@ The helper is used to change the parameters of the search. It provides methods
 to change each parts of it. After changing the parameters, you should use the
 [`search`](https://community.algolia.com/algoliasearch-helper-js/reference.html#AlgoliaSearchHelper#search)
 method to trigger a new search. This search is then handled by Algolia
-and when the results come back, instantsearch will dispatch the new results to
+and when the results come back, InstantSearch will dispatch the new results to
 all the widgets.
 
 Mastering the creation of new widgets is closely linked to using the JS Helper,
@@ -97,7 +97,7 @@ and have a look at the [getting started](https://community.algolia.com/algoliase
 You can also read more about the features offered by this library in the
 [reference API](https://community.algolia.com/algoliasearch-helper-js/reference.html).
 
-## Example
+## Full custom widget example
 
 To give you an idea of the power of this API, let's have a look at a minimal
 implementation of a search UI with a searchbox and hits.
