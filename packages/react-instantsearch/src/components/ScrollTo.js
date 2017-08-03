@@ -6,11 +6,12 @@ class ScrollTo extends Component {
   static propTypes = {
     value: PropTypes.any,
     children: PropTypes.node,
+    hasNotChanged: PropTypes.bool,
   };
 
   componentDidUpdate(prevProps) {
-    const { value } = this.props;
-    if (value !== prevProps.value) {
+    const { value, hasNotChanged } = this.props;
+    if (value !== prevProps.value && hasNotChanged) {
       const el = findDOMNode(this);
       el.scrollIntoView();
     }
