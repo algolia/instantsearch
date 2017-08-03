@@ -20,8 +20,8 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @themeKey ais-RefinementList__itemCheckboxSelected - the selected item checkbox
  * @themeKey ais-RefinementList__itemLabel - the item label
  * @themeKey ais-RefinementList__itemLabelSelected - the selected item label
- * @themeKey RefinementList__itemCount - the item count
- * @themeKey RefinementList__itemCountSelected - the selected item count
+ * @themeKey ais-RefinementList__itemCount - the item count
+ * @themeKey ais-RefinementList__itemCountSelected - the selected item count
  * @themeKey ais-RefinementList__showMore - the button that let the user toggle more results
  * @themeKey ais-RefinementList__noRefinement - present when there is no refinement
  * @themeKey ais-RefinementList__SearchBox - the container of the search for facet values searchbox. See [the SearchBox documentation](widgets/SearchBox.html#classnames) for the classnames and translation keys of the SearchBox.
