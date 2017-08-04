@@ -122,6 +122,7 @@ printf "\n\nRelease: Package was published to npm."
 for d in packages/react-instantsearch/examples/* ; do 
     cd $d
     yarn upgrade react-instantsearch@$newVersion
+    yarn upgrade react-instantsearch-theme-algolia@$newVersion
     cd ../../../..
 done
 
