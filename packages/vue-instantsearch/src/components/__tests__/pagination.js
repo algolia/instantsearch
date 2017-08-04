@@ -89,3 +89,27 @@ test('it should be hidden if there are no results in the current context', () =>
 
   expect(vm.$el.outerHTML).toMatchSnapshot();
 });
+
+test('it should emit a "page-change" event when page changes', () => {
+  const searchStore = {
+    page: 1,
+    totalPages: 20,
+    totalResults: 4000,
+  };
+  const Component = Vue.extend(Pagination);
+  const vm = new Component({
+    propsData: {
+      searchStore,
+    },
+  });
+
+  const onPageChange = jest.fn();
+  vm.$on('page-change', onPageChange);
+
+  vm.$mount();
+
+  expect(onPageChange).not.toHaveBeenCalled();
+
+  vm.$el.getElementsByTagName('li')[3].getElementsByTagName('a')[0].click();
+  expect(onPageChange).toHaveBeenCalledTimes(1);
+});
