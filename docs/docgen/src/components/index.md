@@ -44,22 +44,23 @@ Provide search query parameters:
 
 ## Props
 
-| Name             | Type   | Default | Description                                                                                                                                        |
-|:-----------------|:-------|:--------|:---------------------------------------------------------------------------------------------------------------------------------------------------|
-| api-key          | String | ``      | The API key                                                                                                                                        |
-| app-id           | String | ``      | The application ID                                                                                                                                 |
-| index-name       | String | ``      | The index name                                                                                                                                     |
-| query            | String | ``      | The search query                                                                                                                                   |
-| query-parameters | Object | ``      | The search query parameters. Available options are [documented here](https://www.algolia.com/doc/api-client/javascript/search/#search-parameters). |
+| Name             | Type    | Default | Description                                                                                                                                        |
+|------------------|---------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| api-key          | String  | ``      | The API key                                                                                                                                        |
+| app-id           | String  | ``      | The application ID                                                                                                                                 |
+| index-name       | String  | ``      | The index name                                                                                                                                     |
+| query            | String  | ``      | The search query                                                                                                                                   |
+| query-parameters | Object  | ``      | The search query parameters. Available options are [documented here](https://www.algolia.com/doc/api-client/javascript/search/#search-parameters). |
+| cache            | Boolean | `true`  | Wether to cache results or not. See: https://www.algolia.com/doc/tutorials/getting-started/quick-start-with-the-api-client/javascript/#cache       |
 
 ## Slots
 
 | Name    | Description                                                                      |
-|:--------|:---------------------------------------------------------------------------------|
+|---------|----------------------------------------------------------------------------------|
 | default | Can contain anything. All InstantSearch components will have the index injected. |
 
 ## CSS Classes
 
 | ClassName | Description     |
-|:----------|:----------------|
+|-----------|-----------------|
 | ais-index | Container class |
