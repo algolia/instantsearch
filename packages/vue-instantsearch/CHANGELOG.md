@@ -1,3 +1,14 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/algolia/vue-instantsearch/compare/v0.4.0...v0.5.0) (2017-08-05)
+
+
+### Features
+
+* **pagination:** emit "page-change" event after page has changed ([a259cc5](https://github.com/algolia/vue-instantsearch/commit/a259cc5))
+* **refinement-list:** add BEM classes for labels and checkboxes ([5c4f463](https://github.com/algolia/vue-instantsearch/commit/5c4f463))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/algolia/vue-instantsearch/compare/v0.3.2...v0.4.0) (2017-08-02)
 
