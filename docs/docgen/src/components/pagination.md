@@ -25,16 +25,22 @@ Customize the number of pages to display around the active one:
 <ais-pagination :padding="5"></ais-pagination>
 ```
 
+Scroll to the top of the page after a page was changed:
+
+```html
+<ais-pagination v-on:page-change="window.scrollTo(0, 0)"></ais-pagination>
+```
+
 ## Props
 
 | Name    | Type   | Default | Description                                       |
-|:--------|:-------|:--------|:--------------------------------------------------|
+|---------|--------|---------|---------------------------------------------------|
 | padding | Number | `3`     | Number of pages to display around the active page |
 
 ## Slots
 
 | Name     | Props        | Default                           | Description        |
-|:---------|:-------------|:----------------------------------|:-------------------|
+|----------|--------------|-----------------------------------|--------------------|
 | first    |              | `&lt;&lt;`                        | First page text    |
 | previous |              | `&lt;`                            | Previous page text |
 | default  | active, item | {% raw %}`{{ item }}`{% endraw %} | Page text          |
@@ -44,10 +50,16 @@ Customize the number of pages to display around the active one:
 ## CSS Classes
 
 | ClassName                      | Description        |
-|:-------------------------------|:-------------------|
+|--------------------------------|--------------------|
 | ais-pagination                 | Container class    |
 | ais-pagination__item           | Page link item     |
 | ais-pagination__item--first    | First link item    |
 | ais-pagination__item--previous | Previous link item |
 | ais-pagination__item--next     | Next link item     |
 | ais-pagination__item--last     | Last link item     |
+
+## Events
+
+| Event name  | Description                                                                                  |
+|-------------|----------------------------------------------------------------------------------------------|
+| page-change | Triggered right after a page was changed due to an action taken on the pagination component. |
