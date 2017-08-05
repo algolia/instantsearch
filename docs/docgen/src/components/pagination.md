@@ -27,8 +27,21 @@ Customize the number of pages to display around the active one:
 
 Scroll to the top of the page after a page was changed:
 
-```html
-<ais-pagination v-on:page-change="window.scrollTo(0, 0)"></ais-pagination>
+```vue
+<template>
+    <!-- ... -->
+    <ais-pagination v-on:page-change="onPageChange"></ais-pagination>
+    <!-- ... -->
+</template>
+<script>
+  export default {
+    methods: {
+      onPageChange() {
+        window.scrollTo(0,0);
+      }
+    }
+  }
+</script>
 ```
 
 ## Props
@@ -41,11 +54,11 @@ Scroll to the top of the page after a page was changed:
 
 | Name     | Props        | Default      | Description        |
 |----------|--------------|--------------|--------------------|
-| first    |              | `&lt;&lt;`   | First page text    |
-| previous |              | `&lt;`       | Previous page text |
+| first    |              | `<<`         | First page text    |
+| previous |              | `<`          | Previous page text |
 | default  | active, item | `{{ item }}` | Page text          |
-| next     |              | `&gt;`       | Next page text     |
-| last     |              | `&gt;&gt;`   | Last page text     |
+| next     |              | `>`          | Next page text     |
+| last     |              | `>>`         | Last page text     |
 
 ## CSS Classes
 
