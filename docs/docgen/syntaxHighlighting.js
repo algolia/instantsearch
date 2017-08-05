@@ -6,6 +6,7 @@ import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/shell/shell';
+import 'codemirror/mode/vue/vue';
 import escape from 'escape-html';
 
 export default function highlight(source, lang = 'javascript', inline = false) {
