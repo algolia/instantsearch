@@ -9,7 +9,7 @@ editable: true
 githubSource: docs/docgen/src/advanced/vue-router-url-sync.md
 ---
 
-In this guide, you will learn how to synchronize your InstantSearch experience with the [official Vue-Router](https://github.com/vuejs/vue-router).
+In this guide you will learn how to synchronize your InstantSearch experience with the [official Vue-Router](https://github.com/vuejs/vue-router).
 
 There are two things you will want to setup in order to have the Vue router play nicely with InstantSearch.
 
@@ -26,12 +26,17 @@ A fully working example of synchronizing the Vue router with Vue InstantSearch c
 In the example app linked above, we register one route that looks like this:
 
 ```javascript
-{
-  name: 'search',
-  path: '/search',
-  component: Search,
-  props: route => ({ query: route.query.q }),
-}
+const router = new VueRouter({
+  routes: [
+    {
+      name: 'search',
+      path: '/search',
+      component: Search,
+      props: route => ({ query: route.query.q }),
+    },
+    // ...
+  ],
+});
 ```
 
 This route will pass down the `query` parameter as a prop to the `Search` component.
@@ -70,9 +75,7 @@ Now, every time the route changes, the search store query will be updated with t
 
 ## Keep Vue router in sync with Vue router
 
-Previous section helped us making sure that when a route changes, the search state is also updated.
-
-Here you will learn how to push new state to the router in order to keep URL's in sync with the current search state as users interact with it.
+The previous section made our search state aware of the route, here we will learn how to push new state to the router in order to keep URLs in sync with the current search state as users interact with it.
 
 In our `Search.vue` file, we [manually instantiated the search store](/getting-started/search-store.html#how-to-manually-create-a-search-store) and exposed it to our template by adding it to `data`.
 
