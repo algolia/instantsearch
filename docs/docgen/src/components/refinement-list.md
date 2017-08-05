@@ -24,7 +24,7 @@ Basic usage:
 ## Props
 
 | Name           | Type              | Default                                        | Description                                    |
-|:---------------|:------------------|:-----------------------------------------------|:-----------------------------------------------|
+|----------------|-------------------|------------------------------------------------|------------------------------------------------|
 | attribute-name | String            |                                                | The attribute name to refine on                |
 | operator       | `'and'` or `'or'` | `'or'`                                         | Apply operator on refinement                   |
 | limit          | Number            | `10`                                           | The number of values to display                |
@@ -33,7 +33,7 @@ Basic usage:
 ## Slots
 
 | Name    | Props                | Description                                                                                     |
-|:--------|:---------------------|:------------------------------------------------------------------------------------------------|
+|---------|----------------------|-------------------------------------------------------------------------------------------------|
 | default | value, active, count | The text to display for a refinement value                                                      |
 | header  |                      | Allows to add content at the top of the component which will be hidden when the component is    |
 | footer  |                      | Allows to add content at the bottom of the component which will be hidden when the component is |
@@ -41,8 +41,10 @@ Basic usage:
 ## CSS Classes
 
 | ClassName                         | Description                 |
-|:----------------------------------|:----------------------------|
+|-----------------------------------|-----------------------------|
 | ais-refinement-list               | Container class             |
+| ais-refinement-list__label        | The label element           |
+| ais-refinement-list__checkbox     | The checkbox element        |
 | ais-refinement-list__item         | A refinement option         |
 | ais-refinement-list__item--active | An active refinement option |
 | ais-refinement-list__value        | A refinement option value   |
