@@ -1,7 +1,7 @@
 <template>
   <select :class="bem()" v-model="indexName">
     <slot v-for="index in indices" :indexName="index.name" :label="index.label">
-      <option :value="index.name">
+      <option :value="index.name" :key="index.name">
         {{ index.label }}
       </option>
     </slot>

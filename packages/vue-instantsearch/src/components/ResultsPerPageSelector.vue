@@ -1,7 +1,7 @@
 <template>
   <select :class="bem()" v-model="resultsPerPage">
-    <template v-for="(option, key) in options">
-      <option :value="option" :key="key"><slot :option="option">{{ option }}</slot></option>
+    <template v-for="option in options">
+      <option :value="option" :key="option"><slot :option="option">{{ option }}</slot></option>
     </template>
   </select>
 </template>
