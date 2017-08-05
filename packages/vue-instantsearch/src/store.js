@@ -53,6 +53,8 @@ export class Store {
     this._highlightPreTag = '<em>';
     this._highlightPostTag = '</em>';
 
+    this._cacheEnabled = true;
+
     this.algoliaHelper = helper;
   }
 
@@ -355,9 +357,23 @@ export class Store {
     };
   }
 
-  // Todo: find a better name for this function.
   refresh() {
+    if (this._cacheEnabled === false) {
+      this.clearCache();
+    }
     this._helper.search();
+  }
+
+  enableCache() {
+    this._cacheEnabled = true;
+  }
+
+  disableCache() {
+    this._cacheEnabled = false;
+  }
+
+  clearCache() {
+    this.algoliaClient.clearCache();
   }
 
   waitUntilInSync() {

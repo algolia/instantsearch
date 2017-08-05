@@ -395,4 +395,34 @@ describe('Store', () => {
       },
     ]);
   });
+
+  test('should not clean client cache by default', () => {
+    const store = createStore();
+
+    const clearCache = jest.fn();
+    store._helper = {
+      search: jest.fn(),
+      getClient: {
+        clearCache,
+      },
+    };
+
+    store.refresh();
+    expect(clearCache).not.toHaveBeenCalled();
+  });
+
+  test('should allow to disable caching queries', () => {
+    const store = createStore();
+
+    const clearCache = jest.fn();
+    store._helper = {
+      search: jest.fn(),
+      getClient() {
+        return { clearCache };
+      },
+    };
+    store.disableCache();
+    store.refresh();
+    expect(clearCache).toHaveBeenCalledTimes(1);
+  });
 });

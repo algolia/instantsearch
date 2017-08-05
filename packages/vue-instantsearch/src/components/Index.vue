@@ -56,6 +56,10 @@ export default {
     queryParameters: {
       type: Object,
     },
+    cache: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -83,6 +87,12 @@ export default {
 
     if (this.queryParameters) {
       this._localSearchStore.queryParameters = this.queryParameters;
+    }
+
+    if (this.cache) {
+      this._localSearchStore.enableCache();
+    } else {
+      this._localSearchStore.disableCache();
     }
 
     return {
