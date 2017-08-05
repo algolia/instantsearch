@@ -39,13 +39,13 @@ Scroll to the top of the page after a page was changed:
 
 ## Slots
 
-| Name     | Props        | Default                           | Description        |
-|----------|--------------|-----------------------------------|--------------------|
-| first    |              | `&lt;&lt;`                        | First page text    |
-| previous |              | `&lt;`                            | Previous page text |
-| default  | active, item | {% raw %}`{{ item }}`{% endraw %} | Page text          |
-| next     |              | `&gt;`                            | Next page text     |
-| last     |              | `&gt;&gt;`                        | Last page text     |
+| Name     | Props        | Default      | Description        |
+|----------|--------------|--------------|--------------------|
+| first    |              | `&lt;&lt;`   | First page text    |
+| previous |              | `&lt;`       | Previous page text |
+| default  | active, item | `{{ item }}` | Page text          |
+| next     |              | `&gt;`       | Next page text     |
+| last     |              | `&gt;&gt;`   | Last page text     |
 
 ## CSS Classes
 
