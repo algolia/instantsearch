@@ -3,7 +3,7 @@
 
     <slot name="header"></slot>
 
-    <div v-for="(facet, key) in facetValues" :key="key" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']">
+    <div v-for="facet in facetValues" :key="facet.name" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']">
       <label :class="bem('label')">
         <input type="checkbox"
                :class="bem('checkbox')"
