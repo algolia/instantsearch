@@ -26,7 +26,6 @@
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
     "build:cjs": "rollup -c ./build/rollup.cjs.config.js",
-    "build:cjs:watch": "yarn run build:cjs -- -w",
     "build:es": "rollup -c ./build/rollup.es.config.js",
     "build:umd": "rollup -c ./build/rollup.umd.config.js",
     "docs:build": "cd docs/docgen && yarn && yarn build",
