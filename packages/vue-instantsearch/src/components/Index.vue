@@ -19,7 +19,6 @@ export default {
     apiKey: {
       type: String,
       default() {
-        // Todo: add validator callback in case no search store is injected
         if (this._searchStore) {
           return this._searchStore.algoliaApiKey;
         }
@@ -30,7 +29,6 @@ export default {
     appId: {
       type: String,
       default() {
-        // Todo: add validator callback in case no search store is injected
         if (this._searchStore) {
           return this._searchStore.algoliaAppId;
         }
@@ -41,7 +39,6 @@ export default {
     indexName: {
       type: String,
       default() {
-        // Todo: add validator callback in case no search store is injected
         if (this._searchStore) {
           return this._searchStore.indexName;
         }
@@ -74,7 +71,6 @@ export default {
       );
     } else {
       this._localSearchStore = this.searchStore;
-      // Todo: check if is started and stop it.
     }
 
     if (this.indexName) {
