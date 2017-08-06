@@ -16,7 +16,7 @@ exports[`renders proper HTML 1`] = `
       </span>
     </label>
   </div>
-  <div class="ais-refinement-list__item ais-refinement-list__item ais-refinement-list__item--active">
+  <div class="ais-refinement-list__item ais-refinement-list__item--active">
     <label class="ais-refinement-list__label">
       <input type="checkbox"
              class="ais-refinement-list__checkbox"
