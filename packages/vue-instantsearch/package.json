@@ -26,15 +26,13 @@
   "scripts": {
     "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
     "build:cjs": "rollup -c ./build/rollup.cjs.config.js",
-    "build:cjs:watch": "yarn run build:cjs -- -w",
     "build:es": "rollup -c ./build/rollup.es.config.js",
     "build:umd": "rollup -c ./build/rollup.umd.config.js",
     "docs:build": "cd docs/docgen && yarn && yarn build",
     "docs:build:dev": "cd docs/docgen && yarn && yarn build:dev",
     "docs:watch": "cd docs/docgen && yarn && yarn dev",
     "docs:deploy": "cd docs && yarn && yarn deploy",
-    "watch": "concurrently --raw --kill-others \"yarn run test:watch\" \"yarn run build:cjs:watch\"",
-    "test": "yarn run build:cjs && yarn run lint && jest --verbose --coverage",
+    "test": "yarn run lint && jest --verbose --coverage",
     "test:update": "jest --verbose --updateSnapshot",
     "test:watch": "jest --verbose --watchAll --notify",
     "lint": "eslint --ext .js,.vue .",
@@ -65,6 +63,7 @@
     "eslint-plugin-prettier": "^2.1.2",
     "jest": "^20.0.3",
     "jest-serializer-html": "^4.0.0",
+    "jest-vue-preprocessor": "^1.1.0",
     "prettier": "^1.4.4",
     "rollup": "^0.41.5",
     "rollup-plugin-buble": "^0.15.0",
@@ -79,11 +78,15 @@
     "vue": "^2.2.2"
   },
   "jest": {
-    "collectCoverageFrom": [
-      "dist/vue-instantsearch.common.js"
+    "moduleFileExtensions": [
+      "js", "vue"
     ],
     "snapshotSerializers": [
       "jest-serializer-html"
-    ]
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
+    }
   }
 }

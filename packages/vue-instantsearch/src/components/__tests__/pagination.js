@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Pagination } from 'vue-instantsearch';
+import Pagination from '../Pagination.vue';
 
 test('renders proper HTML', () => {
   const searchStore = {

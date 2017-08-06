@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { RefinementList } from 'vue-instantsearch';
+import RefinementList from '../RefinementList.vue';
 
 const getFacetValues = jest.fn(() => [
   {

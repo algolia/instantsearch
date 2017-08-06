@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Snippet } from 'vue-instantsearch';
+import Snippet from '../Snippet';
 
 test('renders proper HTML', () => {
   const result = {

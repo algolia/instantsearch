@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Clear } from 'vue-instantsearch';
+import Clear from '../Clear.vue';
 
 describe('Clear component', () => {
   const Component = Vue.extend(Clear);
