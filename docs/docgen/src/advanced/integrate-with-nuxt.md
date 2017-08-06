@@ -9,7 +9,7 @@ editable: true
 githubSource: docs/docgen/src/advanced/integrate-with-nuxt.md
 ---
 
-[Nuxt.js](https://nuxtjs.org) is a framework built on top of Vue.js that helps you built applications robust applications.
+[Nuxt.js](https://nuxtjs.org) is a framework built on top of Vue.js that helps you build robust applications.
 Nuxt.js has a strong focus in making sure your application can be [server side rendered](https://nuxtjs.org/guide/#server-rendered).
 
 In this guide, you will learn how to bootstrap a Nuxt.js project and then how to integrate Vue InstantSearch.
@@ -23,7 +23,7 @@ $ npm install --global vue-cli
 $ vue init nuxt/starter nuxt-app
 ```
 
-**info:** Default settings are enough, hit `Enter ⏎` at every question
+**hint:** Default settings are enough, hit `Enter ⏎` at every question
 
 Then install the dependencies of your new project:
 
@@ -91,17 +91,17 @@ You can go ahead and create a search page by creating a new file called `pages/s
 </template>
 ```
 
-Now, if you head to `http://localhost:3000/search`, you should see your search experiences.
+Now, if you head to `http://localhost:3000/search`, you should see your search experience.
 
-The only issue with the current implementation, is that the results are fetched from the browser, and it would be better if they were fetched from the server side.
+The only issue with the current implementation, is that the results are fetched from the browser, and it would be better if they were already filled the first time we open this page.
 
 ### Make search results server side rendered
 
 Nuxt.js let's you provide a handy `asyncData` method to your component so that the server can wait for your data.
-It then passes that data to the frontend by serializing it as javascript.
+It then passes that data to the frontend by serializing it as javaScript.
 
 You will want to operate the initial query to Algolia, fetch the results and render the search experience with those results.
-That way, even if the browser does not support Javascript, results still display.
+That way, even if the browser does not support JavaScript, results still display.
 This can also be a nice performance gain for first rendering of the page and allows you to cache the results with features provided by the HTTP(S) protocol.
 
 Here is what you need to do to enable your server to pre-render results:
@@ -152,8 +152,8 @@ In the `asyncData` method, multiple things happen:
 2. you then wait for the query to be done so that you got all the results in the store with `store.waitUntilInSync()` method
 3. you return the serialized version of the store so that it can be passed to the frontend `return { serializedSearchStore: searchStore.serialize() }`
 
-Next step is making sure to expose the `searchStore` to the template.
-To do so, you simply need to deserialize the previously serialized store with the [`createFromSerialized` factory method](getting-started/search-store.html#create-a-search-store-from-a-previously-serialized-store).
+The next step is exposing the `searchStore` to the template.
+To do that, you need to deserialize the previously serialized store with the [`createFromSerialized` factory method](getting-started/search-store.html#create-a-search-store-from-a-previously-serialized-store).
 The best place to do so is the [`created` Vue lifecycle hook](https://vuejs.org/v2/api/#created) because it is the only hook that:
 - is triggered both in frontend and server side
 - has access to observed `data` via the usage of `this`
@@ -168,10 +168,3 @@ data () {
   }
 },
 ```
-
-
-
-
-
-
-
