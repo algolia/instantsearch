@@ -311,20 +311,19 @@ export class Store {
   }
 
   set queryParameters(parameters) {
-    /* eslint-disable no-param-reassign */
-    // Todo: this should be rewritten to be non-mutating method
+    const params = Object.assign({}, parameters);
     this.stop();
-    for (const parameter in parameters) {
-      if (parameters[parameter] === null) {
-        parameters[parameter] = undefined;
+    for (const parameter in params) {
+      if (params[parameter] === null) {
+        params[parameter] = undefined;
       }
-      this._helper.setQueryParameter(parameter, parameters[parameter]);
+      this._helper.setQueryParameter(parameter, params[parameter]);
     }
 
     // Make sure page starts at 1.
-    if ('page' in parameters) {
-      this.page = parameters.page;
-      delete parameters.page;
+    if ('page' in params) {
+      this.page = params.page;
+      delete params.page;
     }
     this.start();
   }
