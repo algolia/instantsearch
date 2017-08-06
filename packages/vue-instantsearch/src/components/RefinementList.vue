@@ -58,7 +58,7 @@ export default {
       blockClassName: 'ais-refinement-list',
     };
   },
-  mounted() {
+  created() {
     this.searchStore.addFacet(this.attributeName, this.operator);
   },
   destroyed() {

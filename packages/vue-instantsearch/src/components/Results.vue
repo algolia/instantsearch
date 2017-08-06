@@ -30,7 +30,7 @@ export default {
       blockClassName: 'ais-results',
     };
   },
-  mounted() {
+  created() {
     this.updateResultsPerPage();
   },
   watch: {

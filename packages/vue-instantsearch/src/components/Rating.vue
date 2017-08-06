@@ -51,7 +51,7 @@ export default {
       blockClassName: 'ais-rating',
     };
   },
-  mounted() {
+  created() {
     this.searchStore.addFacet(this.attributeName, FACET_OR);
   },
   destroyed() {
