@@ -1,4 +1,4 @@
-import InstantSearch from 'vue-instantsearch';
+import InstantSearch from '../instantsearch';
 
 test('Should register all components when installed', () => {
   const component = jest.fn();

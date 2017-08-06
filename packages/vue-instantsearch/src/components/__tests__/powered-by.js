@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { PoweredBy } from 'vue-instantsearch';
+import PoweredBy from '../PoweredBy.vue';
 
 describe('PoweredBy component', () => {
   test('includes the hostname in the URL', () => {

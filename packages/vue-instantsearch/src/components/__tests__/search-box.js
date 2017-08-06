@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { SearchBox } from 'vue-instantsearch';
+import SearchBox from '../SearchBox.vue';
 
 describe('SearchBox component', () => {
   test('renders proper HTML', () => {

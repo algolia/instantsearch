@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Results } from 'vue-instantsearch';
+import Results from '../Results.vue';
 
 test('renders proper HTML', () => {
   const searchStore = {

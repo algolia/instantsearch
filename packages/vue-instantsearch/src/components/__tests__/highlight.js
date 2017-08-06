@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { Highlight } from 'vue-instantsearch';
+import Highlight from '../Highlight';
 
 test('renders proper HTML', () => {
   const result = {

@@ -1,5 +1,6 @@
 import Vue from 'vue';
-import { TreeMenu, FACET_TREE } from 'vue-instantsearch';
+import { FACET_TREE } from '../../store';
+import TreeMenu from '../TreeMenu.vue';
 
 const getFacetValues = jest.fn(attributeName => ({
   name: attributeName,
