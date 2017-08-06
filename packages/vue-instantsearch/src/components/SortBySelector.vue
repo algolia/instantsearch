@@ -33,7 +33,7 @@ export default {
       },
     },
   },
-  mounted() {
+  created() {
     let match = false;
     for (const index in this.indices) {
       if (this.indices[index].name === this.indexName) {
