@@ -17,7 +17,7 @@ const Pit = ({style, children}) => {
       }) }
     >
       { shouldDisplayValue
-          ? <div className="ais-range-slider--value">{ Math.round(children * 100) / 100 }</div>
+          ? <div className="ais-range-slider--value">{ Math.round(children) }</div>
           : null }
     </div>
   );
