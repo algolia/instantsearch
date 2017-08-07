@@ -4,10 +4,9 @@ import cx from 'classnames';
 
 import includes from 'lodash/includes';
 
-const Pit = ({style, children}) => {
-  // first, end & middle
+const Pit = ({style, children, valuesToShow = [0, 50, 100]}) => {
   const positionValue = Math.round(parseFloat(style.left));
-  const shouldDisplayValue = includes([0, 50, 100], positionValue);
+  const shouldDisplayValue = includes(valuesToShow, positionValue);
 
   return (
     <div
@@ -32,6 +31,7 @@ Pit.propTypes = {
     position: PropTypes.string.isRequired,
     left: PropTypes.string.isRequired,
   }),
+  valuesToShow: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default Pit;

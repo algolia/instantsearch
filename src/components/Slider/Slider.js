@@ -24,6 +24,7 @@ class Slider extends Component {
       PropTypes.bool,
       PropTypes.object,
     ]),
+    valuesToShow: PropTypes.arrayOf(PropTypes.number),
     step: PropTypes.number.isRequired,
     tooltips: PropTypes.oneOfType([
       PropTypes.bool,
@@ -90,7 +91,7 @@ class Slider extends Component {
   }
 
   render() {
-    const {tooltips, step, pips, values} = this.props;
+    const {tooltips, step, pips, values, valuesToShow} = this.props;
 
     const {min, max} = this.isDisabled
       ? {min: this.props.min, max: this.props.max + 0.001}
@@ -108,7 +109,7 @@ class Slider extends Component {
           onChange={ this.handleChange }
           min={ min }
           max={ max }
-          pitComponent={ Pit }
+          pitComponent={ props => <Pit valuesToShow={valuesToShow} {...props} /> }
           pitPoints={ pitPoints }
           snap={ true }
           snapPoints={ snapPoints }
