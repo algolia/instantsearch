@@ -38,6 +38,9 @@ export {
   default as connectScrollTo,
 } from './src/connectors/connectScrollTo.js';
 export {
+  default as connectBreadcrumb,
+} from './src/connectors/connectBreadcrumb.js';
+export {
   default as connectSearchBox,
 } from './src/connectors/connectSearchBox.js';
 export { default as connectSortBy } from './src/connectors/connectSortBy.js';
