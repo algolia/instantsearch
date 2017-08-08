@@ -7,7 +7,7 @@
   "main": "index.js",
   "module": "es/index.js",
   "description": "⚡ Lightning-fast search for React and React Native apps, by Algolia",
-  "version": "4.1.0-beta.4",
+  "version": "4.1.0-beta.5",
   "scripts": {
     "build": "./scripts/build.sh",
     "build-and-publish": "./scripts/build-and-publish.sh"

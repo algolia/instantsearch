@@ -1,3 +1,18 @@
+<a name="4.1.0-beta.5"></a>
+# [4.1.0-beta.5](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.4...v4.1.0-beta.5) (2017-08-08)
+
+
+### Bug Fixes
+
+* **SSR:** clean SP before rendering agan (#238) ([e765886](https://github.com/algolia/react-instantsearch/commit/e765886))
+
+
+### Features
+
+* **Breadcrumb:** add a new widget & connector (#228) ([7f8f3ae](https://github.com/algolia/react-instantsearch/commit/7f8f3ae))
+
+
+
 <a name="4.1.0-beta.4"></a>
 # [4.1.0-beta.4](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.3...v4.1.0-beta.4) (2017-08-03)
 
