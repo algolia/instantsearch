@@ -42,7 +42,7 @@ With autofocus:
 
 ## CSS Classes
 
-| ClassName              | Description       |
-|:-----------------------|:------------------|
-| ais-search-box         | Container class   |
-| ais-search-box__submit | The submit button |
+| ClassName                | Description       |
+|:-------------------------|:------------------|
+| `ais-search-box`         | Container class   |
+| `ais-search-box__submit` | The submit button |

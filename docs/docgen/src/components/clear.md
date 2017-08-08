@@ -56,7 +56,7 @@ Only clear the facet refinements:
 
 ## CSS Classes
 
-| ClassName        | Description       |
-|:-----------------|:------------------|
-| ais-clear        | Button class      |
-| ais-clear__label | Button text class |
+| ClassName          | Description       |
+|:-------------------|:------------------|
+| `ais-clear`        | Button class      |
+| `ais-clear__label` | Button text class |

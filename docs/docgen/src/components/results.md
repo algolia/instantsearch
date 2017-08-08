@@ -63,6 +63,6 @@ This will totally replace the existing default template and given you access to 
 
 ## CSS Classes
 
-| ClassName   | Description     |
-|-------------|-----------------|
-| ais-results | Container class |
+| ClassName     | Description     |
+|---------------|-----------------|
+| `ais-results` | Container class |

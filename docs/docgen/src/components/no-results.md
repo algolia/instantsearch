@@ -37,7 +37,7 @@ Overriding the default content:
 
 ## CSS Classes
 
-| ClassName             | Description       |
-|:----------------------|:------------------|
-| ais-no-results        | Container class   |
-| ais-no-results__query | The current query |
+| ClassName               | Description       |
+|:------------------------|:------------------|
+| `ais-no-results`        | Container class   |
+| `ais-no-results__query` | The current query |

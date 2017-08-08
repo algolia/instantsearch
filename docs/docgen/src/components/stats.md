@@ -39,6 +39,6 @@ Custom text:
 
 ## CSS Classes
 
-| ClassName | Description     |
-|:----------|:----------------|
-| ais-stats | Container class |
+| ClassName   | Description     |
+|:------------|:----------------|
+| `ais-stats` | Container class |

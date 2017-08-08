@@ -30,6 +30,6 @@ Basic usage:
 
 ## CSS Classes
 
-| ClassName     | Description     |
-|:--------------|:----------------|
-| ais-highlight | Container class |
+| ClassName       | Description     |
+|:----------------|:----------------|
+| `ais-highlight` | Container class |

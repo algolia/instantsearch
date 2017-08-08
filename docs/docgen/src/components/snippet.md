@@ -32,6 +32,6 @@ Basic usage:
 
 ## CSS Classes
 
-| ClassName   | Description     |
-|:------------|:----------------|
-| ais-snippet | Container class |
+| ClassName     | Description     |
+|:--------------|:----------------|
+| `ais-snippet` | Container class |

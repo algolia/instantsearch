@@ -44,13 +44,13 @@ Custom boundaries:
 
 ## CSS Classes
 
-| ClassName                | Description                 |
-|:-------------------------|:----------------------------|
-| ais-rating               | Container class             |
-| ais-rating__clear        | The clear button text       |
-| ais-rating__item         | A refinement option         |
-| ais-rating__item--active | An active refinement option |
-| ais-rating__value        | A refinement option value   |
-| ais-rating__count        | A refinement option count   |
-| ais-rating__star         | A star                      |
-| ais-rating__star--empty  | An empty star               |
+| ClassName                  | Description                 |
+|:---------------------------|:----------------------------|
+| `ais-rating`               | Container class             |
+| `ais-rating__clear`        | The clear button text       |
+| `ais-rating__item`         | A refinement option         |
+| `ais-rating__item--active` | An active refinement option |
+| `ais-rating__value`        | A refinement option value   |
+| `ais-rating__count`        | A refinement option count   |
+| `ais-rating__star`         | A star                      |
+| `ais-rating__star--empty`  | An empty star               |

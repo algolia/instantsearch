@@ -62,6 +62,6 @@ Customize the option rendering:
 
 ## CSS Classes
 
-| ClassName            | Description             |
-|:---------------------|:------------------------|
-| ais-sort-by-selector | The select input class. |
+| ClassName              | Description             |
+|:-----------------------|:------------------------|
+| `ais-sort-by-selector` | The select input class. |

@@ -35,6 +35,6 @@ i.e.
 
 ## CSS Classes
 
-| ClassName | Description     |
-|:----------|:----------------|
-| ais-input | Container class |
+| ClassName   | Description     |
+|:------------|:----------------|
+| `ais-input` | Container class |

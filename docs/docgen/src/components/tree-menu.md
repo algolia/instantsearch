@@ -60,11 +60,11 @@ Basic usage:
 
 ## CSS Classes
 
-| ClassName                   | Description                 |
-|-----------------------------|-----------------------------|
-| ais-tree-menu               | Container class             |
-| ais-tree-menu__list         | The root level list class   |
-| ais-tree-menu__item         | A refinement option         |
-| ais-tree-menu__item--active | An active refinement option |
-| ais-tree-menu__value        | A refinement option value   |
-| ais-tree-menu__count        | A refinement option count   |
+| ClassName                     | Description                 |
+|-------------------------------|-----------------------------|
+| `ais-tree-menu`               | Container class             |
+| `ais-tree-menu__list`         | The root level list class   |
+| `ais-tree-menu__item`         | A refinement option         |
+| `ais-tree-menu__item--active` | An active refinement option |
+| `ais-tree-menu__value`        | A refinement option value   |
+| `ais-tree-menu__count`        | A refinement option count   |

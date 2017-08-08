@@ -40,12 +40,12 @@ Basic usage:
 
 ## CSS Classes
 
-| ClassName                         | Description                 |
-|-----------------------------------|-----------------------------|
-| ais-refinement-list               | Container class             |
-| ais-refinement-list__label        | The label element           |
-| ais-refinement-list__checkbox     | The checkbox element        |
-| ais-refinement-list__item         | A refinement option         |
-| ais-refinement-list__item--active | An active refinement option |
-| ais-refinement-list__value        | A refinement option value   |
-| ais-refinement-list__count        | A refinement option count   |
+| ClassName                           | Description                 |
+|-------------------------------------|-----------------------------|
+| `ais-refinement-list`               | Container class             |
+| `ais-refinement-list__label`        | The label element           |
+| `ais-refinement-list__checkbox`     | The checkbox element        |
+| `ais-refinement-list__item`         | A refinement option         |
+| `ais-refinement-list__item--active` | An active refinement option |
+| `ais-refinement-list__value`        | A refinement option value   |
+| `ais-refinement-list__count`        | A refinement option count   |

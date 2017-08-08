@@ -39,12 +39,12 @@ Basic usage:
 
 ## CSS Classes
 
-| ClassName                        | Description                                      |
-|:---------------------------------|:-------------------------------------------------|
-| ais-price-range                  | Container class.                                 |
-| ais-price-range__currency        | Wraps the currency symbol.                       |
-| ais-price-range__currency--left  | When the currency is displayed before the input. |
-| ais-price-range__currency--right | When the currency is displayed after the input.  |
-| ais-price-range__input           | Min and max input element's class.               |
-| ais-price-range__input--from     | Min input element's class.                       |
-| ais-price-range__input--to       | Max input element's class.                       |
+| ClassName                          | Description                                      |
+|:-----------------------------------|:-------------------------------------------------|
+| `ais-price-range`                  | Container class.                                 |
+| `ais-price-range__currency`        | Wraps the currency symbol.                       |
+| `ais-price-range__currency--left`  | When the currency is displayed before the input. |
+| `ais-price-range__currency--right` | When the currency is displayed after the input.  |
+| `ais-price-range__input`           | Min and max input element's class.               |
+| `ais-price-range__input--from`     | Min input element's class.                       |
+| `ais-price-range__input--to`       | Max input element's class.                       |

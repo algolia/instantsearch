@@ -62,14 +62,14 @@ Scroll to the top of the page after a page was changed:
 
 ## CSS Classes
 
-| ClassName                      | Description        |
-|--------------------------------|--------------------|
-| ais-pagination                 | Container class    |
-| ais-pagination__item           | Page link item     |
-| ais-pagination__item--first    | First link item    |
-| ais-pagination__item--previous | Previous link item |
-| ais-pagination__item--next     | Next link item     |
-| ais-pagination__item--last     | Last link item     |
+| ClassName                        | Description        |
+|----------------------------------|--------------------|
+| `ais-pagination`                 | Container class    |
+| `ais-pagination__item`           | Page link item     |
+| `ais-pagination__item--first`    | First link item    |
+| `ais-pagination__item--previous` | Previous link item |
+| `ais-pagination__item--next`     | Next link item     |
+| `ais-pagination__item--last`     | Last link item     |
 
 ## Events
 

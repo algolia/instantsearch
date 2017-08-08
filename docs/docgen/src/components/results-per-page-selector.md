@@ -34,6 +34,6 @@ Basic usage:
 
 ## CSS Classes
 
-| ClassName                     | Description             |
-|:------------------------------|:------------------------|
-| ais-results-per-page-selector | The select input class. |
+| ClassName                       | Description             |
+|:--------------------------------|:------------------------|
+| `ais-results-per-page-selector` | The select input class. |

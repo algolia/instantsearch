@@ -61,6 +61,6 @@ Provide search query parameters:
 
 ## CSS Classes
 
-| ClassName | Description     |
-|-----------|-----------------|
-| ais-index | Container class |
+| ClassName   | Description     |
+|-------------|-----------------|
+| `ais-index` | Container class |
