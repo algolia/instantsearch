@@ -16,7 +16,7 @@
     "autocomplete"
   ],
   "license": "MIT",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "files": [
     "dist"
   ],
@@ -79,7 +79,8 @@
   },
   "jest": {
     "moduleFileExtensions": [
-      "js", "vue"
+      "js",
+      "vue"
     ],
     "snapshotSerializers": [
       "jest-serializer-html"

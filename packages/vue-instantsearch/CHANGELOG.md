@@ -1,3 +1,37 @@
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/algolia/vue-instantsearch/compare/v0.5.0...v0.6.0) (2017-08-08)
+
+
+### Bug Fixes
+
+* **refinement-list:** remove duplicated class ([728314c](https://github.com/algolia/vue-instantsearch/commit/728314c))
+* **sort-by-selector:** make SSR ready ([e50c38a](https://github.com/algolia/vue-instantsearch/commit/e50c38a))
+* **store:** avoid mutating query parameters ([cb8cfb7](https://github.com/algolia/vue-instantsearch/commit/cb8cfb7))
+* make all components SSR ready ([4db0720](https://github.com/algolia/vue-instantsearch/commit/4db0720))
+
+
+### Features
+
+* **index:** add a prop to enable/disable cache ([268c0b6](https://github.com/algolia/vue-instantsearch/commit/268c0b6))
+* **index:** add a prop to toggle auto search on load ([3c85017](https://github.com/algolia/vue-instantsearch/commit/3c85017))
+* **store:** add methods to interact with cache ([98406fb](https://github.com/algolia/vue-instantsearch/commit/98406fb))
+* **store:** do not automatically refresh when using start() ([cda198c](https://github.com/algolia/vue-instantsearch/commit/cda198c))
+* **store:** do not register facet if already existing ([6370bd1](https://github.com/algolia/vue-instantsearch/commit/6370bd1))
+
+
+### Performance Improvements
+
+* use unique keys in all v-for loops ([fdbf56a](https://github.com/algolia/vue-instantsearch/commit/fdbf56a))
+
+
+### BREAKING CHANGES
+
+* **store:** using `store.start()` will no longer trigger an Algolia call.
+if you were using `store.stop()`/`store.start()` you should now
+also call `store.refresh()` if you want your store to stay in sync with Algolia.
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/algolia/vue-instantsearch/compare/v0.4.0...v0.5.0) (2017-08-05)
 
