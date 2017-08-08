@@ -57,6 +57,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    autoSearch: {
+      type: Boolean,
+      default: true,
+    }
   },
   data() {
     return {
@@ -97,6 +101,9 @@ export default {
   },
   mounted() {
     this._localSearchStore.start();
+    if (this.autoSearch) {
+      this._localSearchStore.refresh();
+    }
   },
   watch: {
     indexName() {
