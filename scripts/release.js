@@ -10,9 +10,11 @@ const shell = require('shelljs');
 shell.fatal = true;
 
 // check if user can publish new version to npm
-try {
-  shell.exec('$(npm owner add `npm whoami`)');
-} catch (e) {
+const { code: isNotOwner } = shell.exec('$(npm owner add `npm whoami`)', {
+  silent: true,
+});
+
+if (isNotOwner) {
   shell.echo(
     colors.red(`
     You are not an owner of the npm repository,
