@@ -8,11 +8,13 @@ export const serialize = function(helper) {
 
   const client = helper.getClient();
 
+  const response = helper.lastResults ? helper.lastResults._rawResults : null;
+
   const serialized = {
     searchParameters: Object.assign({}, helper.state),
     appId: client.applicationID,
     apiKey: client.apiKey,
-    response: helper.lastResults._rawResults,
+    response,
   };
 
   return serialized;
@@ -25,10 +27,13 @@ export const deserialize = function(data) {
     data.searchParameters.index,
     data.searchParameters
   );
-  helper.lastResults = new algoliaHelper.SearchResults(
-    helper.state,
-    data.response
-  );
+
+  if (data.response) {
+    helper.lastResults = new algoliaHelper.SearchResults(
+      helper.state,
+      data.response
+    );
+  }
 
   return helper;
 };
