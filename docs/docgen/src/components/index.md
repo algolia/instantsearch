@@ -52,6 +52,7 @@ Provide search query parameters:
 | query            | String  | ``      | The search query                                                                                                                                   |
 | query-parameters | Object  | ``      | The search query parameters. Available options are [documented here](https://www.algolia.com/doc/api-client/javascript/search/#search-parameters). |
 | cache            | Boolean | `true`  | Wether to cache results or not. See: https://www.algolia.com/doc/tutorials/getting-started/quick-start-with-the-api-client/javascript/#cache       |
+| auto-search      | Boolean | `true`  | Wether to initiate a query to Algolia when this component is mounted                                                                               |
 
 ## Slots
 
