@@ -14,6 +14,7 @@ describe('createInstantSearchServer', () => {
     search: () => Promise.resolve({ results: [{ query: 'query' }] }),
   };
   const algoliaClientFactory = jest.fn(() => algoliaClient);
+  const getSearchParametersCall = jest.fn();
   const {
     InstantSearch: CustomInstantSearch,
     findResultsState,
@@ -21,17 +22,20 @@ describe('createInstantSearchServer', () => {
   const Connected = createConnector({
     displayName: 'CoolConnector',
     getProvidedProps: () => null,
-    getSearchParameters: (searchParameters, props, searchState) =>
-      isEmpty(searchState)
+    getSearchParameters: (searchParameters, props, searchState) => {
+      getSearchParametersCall();
+      return isEmpty(searchState)
         ? searchParameters.setIndex(searchParameters.index)
         : searchParameters.setIndex(
             searchState.index
               ? searchState.index
               : searchState.indices[searchParameters.index].index
-          ),
+          );
+    },
     getMetadata: () => null,
     getId: () => 'id',
   })(() => null);
+
   beforeEach(() => {
     algoliaClient.addAlgoliaAgent.mockClear();
     algoliaClientFactory.mockClear();
@@ -56,6 +60,21 @@ describe('createInstantSearchServer', () => {
     });
 
     describe('find results', () => {
+      it('searchParameters should be cleaned each time', () => {
+        const App = () =>
+          <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
+            <Connected />
+          </CustomInstantSearch>;
+
+        expect.assertions(1);
+        return findResultsState(App).then(() => {
+          getSearchParametersCall.mockClear();
+          findResultsState(App).then(() => {
+            expect(getSearchParametersCall).toHaveBeenCalledTimes(2);
+          });
+        });
+      });
+
       it('without search state', () => {
         const App = () =>
           <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
@@ -125,6 +144,22 @@ describe('createInstantSearchServer', () => {
     });
 
     describe('find results', () => {
+      it('searchParameters should be cleaned each time', () => {
+        const App = () =>
+          <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
+            <Connected />
+          </CustomInstantSearch>;
+
+        expect.assertions(1);
+
+        return findResultsState(App).then(() => {
+          getSearchParametersCall.mockClear();
+          findResultsState(App).then(() => {
+            expect(getSearchParametersCall).toHaveBeenCalledTimes(2);
+          });
+        });
+      });
+
       it('without search state', () => {
         const App = () =>
           <CustomInstantSearch appId="app" apiKey="key" indexName="index1">

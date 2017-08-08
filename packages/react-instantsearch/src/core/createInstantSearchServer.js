@@ -38,6 +38,7 @@ const createInstantSearch = function(algoliasearch) {
   };
 
   const findResultsState = function(App, props) {
+    searchParameters = [];
     ReactDom.renderToString(<App {...props} />);
     const sharedSearchParameters = searchParameters
       .filter(searchParameter => !hasMultipleIndex(searchParameter.context))
@@ -65,8 +66,6 @@ const createInstantSearch = function(algoliasearch) {
         acc[index] = sp;
         return acc;
       }, {});
-
-    searchParameters = [];
 
     if (isEmpty(mergedSearchParameters)) {
       const helper = algoliasearchHelper(client, sharedSearchParameters.index);
