@@ -32,19 +32,16 @@ test('renders proper HTML', () => {
   expect(vm.$el.outerHTML).toMatchSnapshot();
 });
 
-test('should add a facet to the store when mounted', () => {
+test('should add a facet to the store when created', () => {
   const Component = Vue.extend(RefinementList);
   const addFacetMock = jest.fn();
   const store = Object.assign({}, searchStore, { addFacet: addFacetMock });
-  const vm = new Component({
+  new Component({ // eslint-disable-line
     propsData: {
       attributeName: 'color',
       searchStore: store,
     },
   });
-
-  expect(addFacetMock).not.toBeCalled();
-  vm.$mount();
   expect(addFacetMock).toBeCalledWith('color', 'or');
 });
 

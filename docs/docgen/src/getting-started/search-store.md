@@ -133,11 +133,13 @@ store.query = '';
 store.queryParameters({'distinct': true});
 
 store.start();
+store.refresh();
 ```
 
-In this example, even if the state is mutated several times, only one call to Algolia will be made after the Store is resumed by the `start()` call.
+In this example, even if the state is mutated several times, only one call to Algolia will be made after the Store is resumed by the `start()` and `refresh()` calls.
 
-**Important:** When you manually create a search store, it is stopped by default. You need to manually call `start()` to trigger the first call. This gives you full control over the initial state of the store before the first call to Algolia is sent.
+**Important:** When you manually create a search store, it is stopped by default. You need to manually call `start()` and `refresh()` to trigger the first call. This gives you full control over the initial state of the store before the first call to Algolia is sent.
+If you pass the store as a prop to an `<ais-index>` component though, it will be started and refreshed when mounted.
 
 ```javascript
 import { createFromAlgoliaCredentials } from 'vue-instantsearch';
@@ -145,6 +147,7 @@ import { createFromAlgoliaCredentials } from 'vue-instantsearch';
 const store = createFromAlgoliaCredentials('appId', 'search_apiKey');
 store.indexName = 'new_index';
 store.start();
+store.refresh();
 ```
 
 In the example above, the first query will be sent to Algolia after `store.start()` has been called.

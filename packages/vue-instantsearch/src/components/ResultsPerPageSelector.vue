@@ -33,7 +33,7 @@ export default {
       },
     },
   },
-  mounted() {
+  created() {
     if (this.options.indexOf(this.searchStore.resultsPerPage) === -1) {
       this.searchStore.resultsPerPage = this.options[0];
     }

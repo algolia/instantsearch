@@ -421,6 +421,7 @@ describe('Store', () => {
         return { clearCache };
       },
     };
+    store.start();
     store.disableCache();
     store.refresh();
     expect(clearCache).toHaveBeenCalledTimes(1);

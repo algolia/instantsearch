@@ -31,7 +31,7 @@ export default {
       blockClassName: 'ais-tree-menu',
     };
   },
-  mounted() {
+  created() {
     this.searchStore.addFacet(
       {
         name: this.attribute,

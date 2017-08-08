@@ -95,6 +95,7 @@ export default {
         }
 
         this.searchStore.start();
+        this.searchStore.refresh();
       },
     },
     to: {
@@ -125,6 +126,7 @@ export default {
           this.searchStore.addNumericRefinement(this.attributeName, '<', value);
         }
         this.searchStore.start();
+        this.searchStore.refresh();
       },
     },
   },
