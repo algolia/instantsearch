@@ -77,7 +77,7 @@ To ensure consistency and re-usability for custom components, we recommend revie
 ### Vue component
 
 * Use the `Component` mixin that we provide. This will make sure your component can resolve the `searchStore` if not provided. It ensures the `searchStore` prop is available in your component at any time.
-* If you need to mutate the `searchStore` multiple times, please use `searchStore.stop()` and `searchStore.start()`, so that other components don't update their rendering on every intermediary state mutation.
+* If you need to mutate the `searchStore` multiple times, please use `searchStore.stop()` and `searchStore.start()`, so that other components don't update their rendering on every intermediary state mutation. Do not forget the `searchStore.refresh()` if you want to sync the store afterwards.
 * Make sure that when the component is mounted, you catch up with the `searchStore`. You can optionally mutate the state of the `searchStore` at this stage.
 * When a component is `unmounted` or `destroyed`, make sure that you leave the `searchStore` in a state that does not include things you might have added (facets / filters / etc.).
 * Make sure your component gracefully handles any state of the `searchStore`.
