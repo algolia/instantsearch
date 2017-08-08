@@ -60,7 +60,7 @@ export default {
     autoSearch: {
       type: Boolean,
       default: true,
-    }
+    },
   },
   data() {
     return {
