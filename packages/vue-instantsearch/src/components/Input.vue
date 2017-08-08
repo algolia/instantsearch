@@ -32,6 +32,7 @@ export default {
         // without triggering in between ghost queries.
         this.$nextTick(function() {
           this.searchStore.start();
+          this.searchStore.refresh();
         });
       },
     },

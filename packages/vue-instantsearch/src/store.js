@@ -131,10 +131,6 @@ export class Store {
     } else {
       this._stoppedCounter--;
     }
-
-    if (this._stoppedCounter === 0) {
-      this.refresh();
-    }
   }
 
   stop() {
@@ -228,6 +224,7 @@ export class Store {
       this._helper.setState(state);
     }
     this.start();
+    this.refresh();
   }
 
   removeFacet(attribute) {
@@ -343,6 +340,7 @@ export class Store {
       delete params.page;
     }
     this.start();
+    this.refresh();
   }
 
   get queryParameters() {
@@ -374,6 +372,9 @@ export class Store {
   }
 
   refresh() {
+    if (this._stoppedCounter !== 0) {
+      return;
+    }
     if (this._cacheEnabled === false) {
       this.clearCache();
     }
@@ -424,9 +425,7 @@ export const assertValidFacetType = function(type) {
 };
 
 const onHelperChange = function() {
-  if (this._stoppedCounter === 0) {
-    this.refresh();
-  }
+  this.refresh();
 };
 
 const onHelperResult = function(response) {

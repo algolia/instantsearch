@@ -7,6 +7,7 @@ describe('Clear component', () => {
   const stop = jest.fn();
   const start = jest.fn();
   const clearRefinements = jest.fn();
+  const refresh = jest.fn();
 
   const searchStore = {
     query: 'whatever',
@@ -14,12 +15,14 @@ describe('Clear component', () => {
     stop,
     start,
     clearRefinements,
+    refresh,
   };
 
   beforeEach(() => {
     stop.mockClear();
     start.mockClear();
     clearRefinements.mockClear();
+    refresh.mockClear();
     searchStore.query = 'whatever';
     searchStore.activeRefinements = ['whatever'];
   });
@@ -34,6 +37,7 @@ describe('Clear component', () => {
     expect(stop).toHaveBeenCalledTimes(1);
     expect(clearRefinements).toHaveBeenCalledTimes(1);
     expect(start).toHaveBeenCalledTimes(1);
+    expect(refresh).toHaveBeenCalledTimes(1);
   });
 
   test('can disable query clearing', () => {
@@ -46,6 +50,7 @@ describe('Clear component', () => {
     expect(stop).toHaveBeenCalledTimes(1);
     expect(clearRefinements).toHaveBeenCalledTimes(1);
     expect(start).toHaveBeenCalledTimes(1);
+    expect(refresh).toHaveBeenCalledTimes(1);
   });
 
   test('can disable facets clearing', () => {
@@ -58,6 +63,7 @@ describe('Clear component', () => {
     expect(stop).toHaveBeenCalledTimes(1);
     expect(clearRefinements).not.toHaveBeenCalled();
     expect(start).toHaveBeenCalledTimes(1);
+    expect(refresh).toHaveBeenCalledTimes(1);
   });
 
   test('has proper HTML rendering', () => {

@@ -55,6 +55,7 @@ export default {
         this.searchStore.clearRefinements();
       }
       this.searchStore.start();
+      this.searchStore.refresh();
     },
   },
 };
