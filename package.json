@@ -33,10 +33,7 @@
   "files": [
     "dist",
     "dist-es5-module",
-    "dist-es6-module",
-    "instantsearch.js",
-    "connectors.js",
-    "widgets.js"
+    "es"
   ],
   "devDependencies": {
     "argos-cli": "^0.0.8",
