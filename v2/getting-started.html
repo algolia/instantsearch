@@ -351,7 +351,7 @@
       <span class="cm-property">container</span>: <span class="cm-string">&#39;#hits&#39;</span>,
       <span class="cm-property">templates</span>: {
         <span class="cm-property">empty</span>: <span class="cm-string">&#39;No results&#39;</span>,
-        <span class="cm-property">item</span>: <span class="cm-string">&#39;&lt;em&gt;Hit &lt;/em&gt;: &#39;</span>
+        <span class="cm-property">item</span>: <span class="cm-string">&#39;&lt;em&gt;Hit {{objectID}}&lt;/em&gt;: {{{_highlightResult.name.value}}}&#39;</span>
       }
     })
   );
