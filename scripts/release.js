@@ -19,6 +19,9 @@ if (isNotOwner) {
     colors.red(`
     You are not an owner of the npm repository,
     ask for it before trying to bundle a release.
+
+    Please also make sure you started the release
+    process with 'npm run release' and not 'yarn run release'.
   `)
   );
   process.exit(1);
