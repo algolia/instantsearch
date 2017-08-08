@@ -200,7 +200,9 @@ export class Store {
   }
 
   addFacet(attribute, type = FACET_AND) {
-    assertValidFacetType(type);
+    if (this.hasFacet(attribute, type)) {
+      return;
+    }
 
     this.stop();
 
@@ -242,6 +244,21 @@ export class Store {
     }
 
     this._helper.setState(state);
+  }
+
+  hasFacet(attribute, type = FACET_AND) {
+    assertValidFacetType(type);
+
+    switch (type) {
+      case FACET_AND:
+        return this._helper.state.isConjunctiveFacet(attribute);
+      case FACET_OR:
+        return this._helper.state.isDisjunctiveFacet(attribute);
+      case FACET_TREE:
+        return this._helper.state.isHierarchicalFacet(attribute);
+      default:
+        throw new TypeError(`${type} could not be handled.`);
+    }
   }
 
   addFacetRefinement(attribute, value) {
