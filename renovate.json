@@ -1,6 +1,13 @@
 {
   "pinVersions": true,
   "semanticCommits": true,
-  "depTypes": [{ "depType": "dependencies", "pinVersions": false, "semanticPrefix": "chore(deps): " }],
-  "ignoreDeps": ["jsdoc-parse", "react-native"]
+  "depTypes": [
+    {
+      "depType": "dependencies",
+      "pinVersions": false,
+      "semanticPrefix": "chore(deps): "
+    }
+  ],
+  "ignoreDeps": ["jsdoc-parse", "react-native"],
+  "schedule": ["after 7pm on thursday"]
 }
