@@ -12,8 +12,8 @@ export const FACET_AND = 'and';
 export const FACET_OR = 'or';
 export const FACET_TREE = 'tree';
 
-const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
-const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
+export const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
+export const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
 
 export const createFromAlgoliaCredentials = (appID, apiKey) => {
   const client = algolia(appID, apiKey);
@@ -50,8 +50,8 @@ export class Store {
     // without trigger multiple queries.
     this._stoppedCounter = 1;
 
-    this._highlightPreTag = '<em>';
-    this._highlightPostTag = '</em>';
+    this._highlightPreTag = undefined;
+    this._highlightPostTag = undefined;
 
     this._cacheEnabled = true;
 
@@ -325,41 +325,47 @@ export class Store {
   }
 
   set queryParameters(parameters) {
-    const params = Object.assign({}, parameters);
-    this.stop();
-    for (const parameter in params) {
-      if (params[parameter] === null) {
-        params[parameter] = undefined;
-      }
-      this._helper.setQueryParameter(parameter, params[parameter]);
-    }
-
-    // Make sure page starts at 1.
-    if ('page' in params) {
-      this.page = params.page;
-      delete params.page;
-    }
-    this.start();
-    this.refresh();
+    this.searchParameters = parameters;
   }
 
   get queryParameters() {
-    const parameters = this._helper.state.getQueryParams();
-    parameters.page = this.page;
-
-    return parameters;
+    return this.searchParameters;
   }
 
   get searchParameters() {
-    return Object.assign({}, this._helper.state, { page: this.page });
+    return Object.assign({}, this._helper.state, {
+      page: this.page,
+      highlightPreTag: this.highlightPreTag,
+      highlightPostTag: this.highlightPostTag,
+    });
   }
 
   set searchParameters(searchParameters) {
     const params = Object.assign({}, searchParameters);
+    const paramKeys = Object.keys(params);
+    paramKeys.forEach(key => {
+      if (params[key] === null) {
+        params[key] = undefined;
+      }
+    });
+
     if (params.page !== undefined) {
       params.page = params.page - 1;
     }
-    const newSearchParameters = algoliaHelper.SearchParameters.make(params);
+
+    if ('highlightPreTag' in params) {
+      this.highlightPreTag = params.highlightPreTag;
+      delete params.highlightPreTag;
+    }
+
+    if ('highlightPostTag' in params) {
+      this.highlightPostTag = params.highlightPostTag;
+      delete params.highlightPostTag;
+    }
+
+    const newSearchParameters = algoliaHelper.SearchParameters.make(
+      Object.assign({}, this._helper.state, params)
+    );
     this._helper.setState(newSearchParameters);
   }
 
