@@ -281,27 +281,27 @@ describe('Store', () => {
     );
   });
 
-  test('should accept new search parameters', () => {
+  test('should accept new query parameters', () => {
     const store = createStore();
 
-    const newSearchParameters = { distinct: true };
+    const newQueryParameters = { distinct: true };
 
-    store.searchParameters = newSearchParameters;
+    store.queryParameters = newQueryParameters;
 
-    expect(store.searchParameters).toEqual(
-      expect.objectContaining(newSearchParameters)
+    expect(store.queryParameters).toEqual(
+      expect.objectContaining(newQueryParameters)
     );
   });
 
   test('highlighting tags set via query parameters should not leak to the helper', () => {
     const store = createStore();
 
-    const newSearchParameters = {
+    const newQueryParameters = {
       highlightPreTag: '<mark>',
       highlightPostTag: '</mark>',
     };
 
-    store.searchParameters = newSearchParameters;
+    store.queryParameters = newQueryParameters;
 
     expect(store._helper.state).toEqual(
       expect.objectContaining({
@@ -316,7 +316,7 @@ describe('Store', () => {
     store.highlightPreTag = '<mark>';
     store.highlightPostTag = '</mark>';
 
-    expect(store.searchParameters).toEqual(
+    expect(store.queryParameters).toEqual(
       expect.objectContaining({
         highlightPreTag: '<mark>',
         highlightPostTag: '</mark>',
@@ -324,27 +324,27 @@ describe('Store', () => {
     );
   });
 
-  test('page search parameter should start at 1', () => {
+  test('page query parameter should start at 1', () => {
     const store = createStore();
 
-    expect(store.searchParameters).toHaveProperty('page', 1);
+    expect(store.queryParameters).toHaveProperty('page', 1);
 
     store._helper.setPage(2);
-    expect(store.searchParameters).toHaveProperty('page', 3);
+    expect(store.queryParameters).toHaveProperty('page', 3);
 
-    const newSearchParameters = Object.assign({}, store.searchParameters, {
+    const newQueryParameters = Object.assign({}, store.queryParameters, {
       page: 5,
     });
 
-    store.searchParameters = newSearchParameters;
+    store.queryParameters = newQueryParameters;
 
     expect(store._helper.getPage()).toEqual(4);
   });
 
-  test('search parameters should not contain internal highlighting tags', () => {
+  test('query parameters should not contain internal highlighting tags', () => {
     const store = createStore();
 
-    expect(store.searchParameters).toEqual(
+    expect(store.queryParameters).toEqual(
       expect.objectContaining({
         highlightPreTag: undefined,
         highlightPostTag: undefined,

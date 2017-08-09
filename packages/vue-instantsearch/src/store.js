@@ -324,15 +324,7 @@ export class Store {
     return this._helper.state.query;
   }
 
-  set queryParameters(parameters) {
-    this.searchParameters = parameters;
-  }
-
   get queryParameters() {
-    return this.searchParameters;
-  }
-
-  get searchParameters() {
     return Object.assign({}, this._helper.state, {
       page: this.page,
       highlightPreTag: this.highlightPreTag,
@@ -340,7 +332,7 @@ export class Store {
     });
   }
 
-  set searchParameters(searchParameters) {
+  set queryParameters(searchParameters) {
     const params = Object.assign({}, searchParameters);
     const paramKeys = Object.keys(params);
     paramKeys.forEach(key => {
