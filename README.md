@@ -2,7 +2,7 @@
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
-InstantSearch projects: **React InstantSearch** | [InstantSearch.js][instantsearch.js-github] | [InstantSearch Android][instantsearch-android-github].
+InstantSearch projects: **React InstantSearch** | [InstantSearch.js][instantsearch.js-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github].
 
 ## React InstantSearch
 
@@ -34,6 +34,7 @@ one command away to start the developer environment, [read our CONTRIBUTING guid
 [algolia-website]: https://www.algolia.com/
 [instantsearch.js-github]: https://github.com/algolia/instantsearch.js
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
+[instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
 [travis-svg]: https://img.shields.io/travis/algolia/react-instantsearch/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/algolia/react-instantsearch
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
