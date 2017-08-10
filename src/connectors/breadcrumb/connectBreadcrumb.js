@@ -10,13 +10,7 @@ var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRender
   //   widgetParams,
   // }
 });
-search.addWidget(
-  customBreadcrumb({
-    [ separator = ' > ' ],
-    [ rootURL = null ],
-    [ transformData ]
-  })
-);
+search.addWidget(customBreadcrumb());
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectBreadcrumb.html
 `;
 
@@ -38,25 +32,18 @@ function prepareItems(obj) {
 }
 
 export default function connectBreadcrumb(renderFn) {
-  return ({ separator = '>', rootURL, transformData } = {}) => ({
+  return () => ({
     init() {
-      renderFn({
-        items: [],
-        refine: () => {},
-        separator,
-        rootURL,
-        transformData,
-      });
+      renderFn(
+        {
+          items: [],
+          refine: () => {},
+        },
+        true
+      );
     },
 
     render({ results, state }) {
-      // 1. trouver le nom du facet hierarchical
-      // 2. récupérer les "raw" items des search results (results.getFacetValues([nom facet hierarchical]))
-      // 3. appliquer la function recursive sur ces items ()
-      //
-      // HINT: https://github.com/algolia/poc-walmart-mx/blob/7b2e3a14d6ce6419e2a6140a822a767a96f25c9a/sources/views/nested-list.jsx#L55-L56
-
-      // const items = [];
       if (
         !state.hierarchicalFacets ||
         (Array.isArray(state.hierarchicalFacets) &&
@@ -73,9 +60,6 @@ export default function connectBreadcrumb(renderFn) {
       renderFn({
         items,
         refine: () => {},
-        separator,
-        rootURL,
-        transformData,
       });
     },
   });
