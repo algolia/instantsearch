@@ -1,5 +1,5 @@
 mixin widgetCategoryShowCase(category, symbols, title)
-  - const categorySymbols = symbols[category];
+  - const categorySymbols = symbols && symbols[category];
   if categorySymbols
     h2(id=category)=title
       a.anchor(href=`${navPath}#${category}`)
