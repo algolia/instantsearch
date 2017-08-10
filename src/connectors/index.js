@@ -40,3 +40,6 @@ export {
 } from './star-rating/connectStarRating.js';
 export { default as connectStats } from './stats/connectStats.js';
 export { default as connectToggle } from './toggle/connectToggle.js';
+export {
+  default as connectBreadcrumb,
+} from './breadcrumb/connectBreadcrumb.js';
