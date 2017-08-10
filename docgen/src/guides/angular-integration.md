@@ -82,7 +82,7 @@ In order to display results, we are going to use the [connectors](https://commun
 Start by creating a new component in your Angular application for the hits:
 
 ```sh
-$ ng generate component components/hits -is -it
+$ ng generate component components/hits --inline-style --inline-template
 ```
 
 In your new created component, let's inject the `InstantSearchService` we created before:
@@ -214,7 +214,7 @@ This is pretty cool, but it's not usable without a search box, let's build a sea
 Create a new component for the SearchBox:
 
 ```sh
-$ ng generate component components/search-box -it -is
+$ ng generate component components/search-box --inline-template --inline-style
 ```
 
 In your freshly create component, we need to inject the `InstantSearchService` and connect the state of the component to the search with the [connectSearchBox](https://community.algolia.com/instantsearch.js/v2/connectors/connectSearchBox.html) connector like we did for the Hits component:
@@ -287,7 +287,7 @@ When you’re searching through data, not everything is easy to know about. That
 So just like the other components, we will start with the bootstrapping command:
 
 ```sh
-$ ng generate component components/refinement-list -it -is
+$ ng generate component components/refinement-list --inline-template --inline-style
 ```
 
 In that component, we’ll import the connectRefinementList first like this:
