@@ -106,7 +106,7 @@
     "wdio-visual-regression-service": "^0.8.0",
     "webdriverio": "^4.8.0",
     "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.0"
+    "webpack-dev-server": "^2.7.1"
   },
   "jest": {
     "testPathIgnorePatterns": [
