@@ -44,3 +44,4 @@ export { default as starRating } from '../widgets/star-rating/star-rating.js';
 export { default as stats } from '../widgets/stats/stats.js';
 export { default as toggle } from '../widgets/toggle/toggle.js';
 export { default as analytics } from '../widgets/analytics/analytics.js';
+export { default as breadcrumb } from '../widgets/breadcrumb/breadcrumb.js';
