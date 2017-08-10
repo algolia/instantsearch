@@ -4,11 +4,11 @@ import cx from 'classnames';
 
 import includes from 'lodash/includes';
 
-const Pit = ({style, children}) => {
+const Pit = ({style, children, precision = 2}) => {
   // first, end & middle
   const positionValue = Math.round(parseFloat(style.left));
   const shouldDisplayValue = includes([0, 50, 100], positionValue);
-
+  const decimal = Math.pow(10, precision);
   return (
     <div
       style={ {...style, marginLeft: positionValue === 100 ? '-2px' : 0} }
@@ -17,7 +17,7 @@ const Pit = ({style, children}) => {
       }) }
     >
       { shouldDisplayValue
-          ? <div className="ais-range-slider--value">{ Math.round(children) }</div>
+        ? <div className="ais-range-slider--value">{ Math.round(children * decimal) / decimal }</div>
           : null }
     </div>
   );
@@ -32,6 +32,7 @@ Pit.propTypes = {
     position: PropTypes.string.isRequired,
     left: PropTypes.string.isRequired,
   }),
+  precision: PropTypes.number,
 };
 
 export default Pit;
