@@ -20,7 +20,7 @@ function prepareItems(obj) {
       result.push({
         name: currentItem.name,
         value: currentItem.path,
-        count: currentItem.count,
+        count: currentItem.count
       });
       if (Array.isArray(currentItem.data)) {
         const children = prepareItems(currentItem);
@@ -32,12 +32,15 @@ function prepareItems(obj) {
 }
 
 export default function connectBreadcrumb(renderFn) {
+  const canRefine = false;
   return () => ({
     init() {
       renderFn(
         {
           items: [],
           refine: () => {},
+          // added ML = to be modified
+          canRefine
         },
         true
       );
@@ -56,11 +59,19 @@ export default function connectBreadcrumb(renderFn) {
 
       const facetsValues = results.getFacetValues(facetName);
       const items = prepareItems(facetsValues);
+      const canRefine = items.length > 0;
+      // console.log("ITEMS", items.length);
+      // console.log("canRefine", canRefine);
 
-      renderFn({
-        items,
-        refine: () => {},
-      });
-    },
+      renderFn(
+        {
+          items,
+          refine: () => {},
+          // added
+          canRefine
+        },
+        false
+      );
+    }
   });
 }

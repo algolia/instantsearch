@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
+import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 
-import { connectBreadcrumb } from '../../connectors';
-import { getContainerNode } from '../../lib/utils';
+import { connectBreadcrumb } from "../../connectors";
+import { getContainerNode } from "../../lib/utils";
 
 const usage = `Usage:
 breadcrumb({
@@ -22,12 +22,14 @@ const renderer = ({
   separator,
   rootURL,
   transformData,
-  containerNode,
-}) => ({ items, refine }, isFirstRendering) => {
+  containerNode
+}) => ({ items, refine, canRefine }, isFirstRendering) => {
   if (isFirstRendering) return;
 
-  const shouldAutoHideContainer = autoHideContainer && items.length === 0;
-
+  // const shouldAutoHideContainer = autoHideContainer && items.length === 0;
+  // with canRefine
+  console.log("canRefine from breadcrumb.js", canRefine);
+  const shouldAutoHideContainer = autoHideContainer && !canRefine;
   ReactDOM.render(
     <Breadcrumb
       separator={separator}
@@ -44,9 +46,9 @@ export default function breadcrumb(
   {
     container,
     autoHideContainer = true,
-    separator = '>',
+    separator = " > ",
     rootURL = null,
-    transformData,
+    transformData
   } = {}
 ) {
   if (!container) {
@@ -61,7 +63,7 @@ export default function breadcrumb(
     rootURL,
     transformData,
     containerNode,
-    renderState: {},
+    renderState: {}
   });
 
   try {
