@@ -26,16 +26,18 @@ class Breadcrumb extends PureComponent {
     // console.log("canRefine", this.props.canRefine);
     // console.log("canRefine from BC react", canRefine);
     console.log("items", items);
+
     const breadcrumb = items.map((item, idx) => {
-      // const isLast = idx === items.length - 1;
-      // const separator = isLast ? "" : this.props.separator;
+      const isLast = idx === items.length - 1;
+
+      const separator = isLast ? "" : this.props.separator;
       return (
         <span key={idx}>
           <span>
             {item.name}
           </span>
           <span>
-            {this.props.separator}
+            {separator}
           </span>
         </span>
       );
