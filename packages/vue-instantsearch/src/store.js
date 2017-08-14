@@ -50,8 +50,8 @@ export class Store {
     // without trigger multiple queries.
     this._stoppedCounter = 1;
 
-    this._highlightPreTag = undefined;
-    this._highlightPostTag = undefined;
+    this._highlightPreTag = '<em>';
+    this._highlightPostTag = '</em>';
 
     this._cacheEnabled = true;
 

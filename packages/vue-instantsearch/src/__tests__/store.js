@@ -81,8 +81,8 @@ describe('Store', () => {
   test('should default highlighting tags should be undefined', () => {
     const store = createStore();
 
-    expect(store.highlightPreTag).toEqual(undefined);
-    expect(store.highlightPostTag).toEqual(undefined);
+    expect(store.highlightPreTag).toEqual('<em>');
+    expect(store.highlightPostTag).toEqual('</em>');
   });
 
   test('can retrieve index name', () => {
@@ -346,8 +346,8 @@ describe('Store', () => {
 
     expect(store.queryParameters).toEqual(
       expect.objectContaining({
-        highlightPreTag: undefined,
-        highlightPostTag: undefined,
+        highlightPreTag: '<em>',
+        highlightPostTag: '</em>',
       })
     );
   });
