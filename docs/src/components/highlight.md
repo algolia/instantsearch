@@ -15,10 +15,29 @@ but adds some sugar on top of it to prevent XSS attacks.
 
 ## Usage
 
-Basic usage:
+**Basic usage:**
 
 ```html
 <ais-highlight :result="result" attribute-name="description"></ais-highlight>
+```
+
+**Access a nested property:**
+
+Given an record like:
+
+```json
+{
+    "objectID": 1,
+    "meta": {
+        "title": "my title"
+    }
+}
+```
+
+You can access the highlighted version by specifying the path by separating levels with dots:
+
+```html
+<ais-highlight :result="result" attribute-name="meta.title"></ais-highlight>
 ```
 
 ## Props
