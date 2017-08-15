@@ -1,6 +1,13 @@
 import Vue from 'vue';
 import Snippet from '../Snippet';
 
+function restoreTestProcessEnv() {
+  process.env.NODE_ENV = 'test';
+}
+
+afterEach(restoreTestProcessEnv);
+
+
 test('renders proper HTML', () => {
   const result = {
     _snippetResult: {
@@ -28,7 +35,8 @@ test('renders proper HTML', () => {
   expect(vm.$el.outerHTML).toMatchSnapshot();
 });
 
-test('should render an empty string if attribute is not snippeted', () => {
+test('should render an empty string in production if attribute is not snippeted', () => {
+  process.env.NODE_ENV = 'production';
   const result = {
     _snippetResult: {},
   };
@@ -49,4 +57,29 @@ test('should render an empty string if attribute is not snippeted', () => {
   }).$mount();
 
   expect(vm.$el.outerHTML).toMatchSnapshot();
+});
+
+test('should throw an error when not in production if attribute is not snippeted', () => {
+  global.console = { error: jest.fn() };
+
+  const result = {
+    _snippetResult: {},
+  };
+
+  new Vue({
+    template: '<snippet attributeName="attr" :result="result">',
+    render(h) {
+      return h('snippet', {
+        props: {
+          attributeName: 'attr',
+          result,
+        },
+      });
+    },
+    components: {
+      Snippet,
+    },
+  }).$mount();
+
+  expect(global.console.error).toHaveBeenCalled();
 });

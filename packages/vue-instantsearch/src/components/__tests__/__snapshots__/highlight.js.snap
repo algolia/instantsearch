@@ -12,7 +12,7 @@ exports[`renders proper HTML 1`] = `
 
 `;
 
-exports[`should render an empty string if attribute is not highlighted 1`] = `
+exports[`should render an empty string in production if attribute is not highlighted 1`] = `
 
 <span class="ais-highlight">
 </span>
