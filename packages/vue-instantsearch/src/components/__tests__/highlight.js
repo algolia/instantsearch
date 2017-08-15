@@ -17,7 +17,6 @@ test('renders proper HTML', () => {
   };
 
   const vm = new Vue({
-    template: '<highlight attributeName="attr" :result="result">',
     render(h) {
       return h('highlight', {
         props: {
@@ -41,7 +40,6 @@ test('should render an empty string in production if attribute is not highlighte
   };
 
   const vm = new Vue({
-    template: '<highlight attributeName="attr" :result="result">',
     render(h) {
       return h('highlight', {
         props: {
@@ -66,7 +64,6 @@ test('should throw an error when not in production if attribute is not highlight
   };
 
   new Vue({
-    template: '<highlight attributeName="attr" :result="result">',
     render(h) {
       return h('highlight', {
         props: {
@@ -81,4 +78,32 @@ test('should throw an error when not in production if attribute is not highlight
   }).$mount();
 
   expect(global.console.error).toHaveBeenCalled();
+});
+
+test('allows usage of dot delimited path to access nested attribute', () => {
+  const result = {
+    _highlightResult: {
+      attr: {
+        nested: {
+          value: `nested <em>val</em>`,
+        },
+      },
+    },
+  };
+
+  const vm = new Vue({
+    render(h) {
+      return h('highlight', {
+        props: {
+          attributeName: 'attr.nested',
+          result,
+        },
+      });
+    },
+    components: {
+      Highlight,
+    },
+  }).$mount();
+
+  expect(vm.$el.outerHTML).toMatchSnapshot();
 });

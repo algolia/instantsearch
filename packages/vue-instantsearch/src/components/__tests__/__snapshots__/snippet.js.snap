@@ -1,5 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`allows usage of dot delimited path to access nested attribute 1`] = `
+
+<span class="ais-snippet">
+  nested
+  <em>
+    val
+  </em>
+</span>
+
+`;
+
 exports[`renders proper HTML 1`] = `
 
 <span class="ais-snippet">

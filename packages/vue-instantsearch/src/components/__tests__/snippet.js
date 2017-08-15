@@ -17,7 +17,6 @@ test('renders proper HTML', () => {
   };
 
   const vm = new Vue({
-    template: '<snippet attributeName="attr" :result="result">',
     render(h) {
       return h('snippet', {
         props: {
@@ -41,7 +40,6 @@ test('should render an empty string in production if attribute is not snippeted'
   };
 
   const vm = new Vue({
-    template: '<snippet attributeName="attr" :result="result">',
     render(h) {
       return h('snippet', {
         props: {
@@ -59,14 +57,13 @@ test('should render an empty string in production if attribute is not snippeted'
 });
 
 test('should throw an error when not in production if attribute is not snippeted', () => {
-  global.console = { error: jest.fn() };
+  global.console.error = jest.fn();
 
   const result = {
     _snippetResult: {},
   };
 
   new Vue({
-    template: '<snippet attributeName="attr" :result="result">',
     render(h) {
       return h('snippet', {
         props: {
@@ -81,4 +78,32 @@ test('should throw an error when not in production if attribute is not snippeted
   }).$mount();
 
   expect(global.console.error).toHaveBeenCalled();
+});
+
+test('allows usage of dot delimited path to access nested attribute', () => {
+  const result = {
+    _snippetResult: {
+      attr: {
+        nested: {
+          value: `nested <em>val</em>`,
+        },
+      },
+    },
+  };
+
+  const vm = new Vue({
+    render(h) {
+      return h('snippet', {
+        props: {
+          attributeName: 'attr.nested',
+          result,
+        },
+      });
+    },
+    components: {
+      Snippet,
+    },
+  }).$mount();
+
+  expect(vm.$el.outerHTML).toMatchSnapshot();
 });
