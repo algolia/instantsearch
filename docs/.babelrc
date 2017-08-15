@@ -1,14 +1,13 @@
 {
+  "presets": [
+    ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+    "latest",
+    "stage-2"
+  ],
   "env": {
-    "test": {
-      "plugins": ["babel-plugin-rewire"]
-    },
-    "production": {
+    "development": {
       "plugins": [
-        "transform-react-remove-prop-types",
-        "transform-react-constant-elements"
       ]
     }
-  },
-  "presets": ["es2015", "react", "stage-2"]
+  }
 }
