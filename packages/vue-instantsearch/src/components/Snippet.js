@@ -17,6 +17,11 @@ export default {
     let attributeValue = '';
     if (result._snippetResult && result._snippetResult[attributeName]) {
       attributeValue = result._snippetResult[attributeName].value;
+    } else if (process.env.NODE_ENV !== 'production') {
+      throw new Error(
+        `The "${attributeName}" attribute is currently not configured to be snippeted in Algolia.
+        See https://www.algolia.com/doc/api-reference/api-parameters/attributesToSnippet/.`
+      );
     }
 
     return h('span', {
