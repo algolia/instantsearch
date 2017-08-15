@@ -7,7 +7,6 @@ function restoreTestProcessEnv() {
 
 afterEach(restoreTestProcessEnv);
 
-
 test('renders proper HTML', () => {
   const result = {
     _snippetResult: {
