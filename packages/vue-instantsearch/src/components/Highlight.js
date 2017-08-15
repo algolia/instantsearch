@@ -17,6 +17,11 @@ export default {
     let attributeValue = '';
     if (result._highlightResult && result._highlightResult[attributeName]) {
       attributeValue = result._highlightResult[attributeName].value;
+    } else if (process.env.NODE_ENV !== 'production') {
+      throw new Error(
+        `The "${attributeName}" attribute is currently not configured to be highlighted in Algolia.
+        See https://www.algolia.com/doc/api-reference/api-parameters/attributesToHighlight/.`
+      );
     }
 
     return h('span', {
