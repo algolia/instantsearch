@@ -1,3 +1,34 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/algolia/vue-instantsearch/compare/v0.6.0...v0.7.0) (2017-08-15)
+
+
+### Bug Fixes
+
+* **helper-serializer:** allow to serialize a helper that has no results ([cf2add9](https://github.com/algolia/vue-instantsearch/commit/cf2add9))
+
+
+### Code Refactoring
+
+* **store:** remove searchParameters getter and setter ([c146b16](https://github.com/algolia/vue-instantsearch/commit/c146b16))
+
+
+### Features
+
+* **store:** improve query parameters merge strategy ([0472627](https://github.com/algolia/vue-instantsearch/commit/0472627))
+
+
+### Reverts
+
+* **store:** have highlighting tags return the current value ([3d65391](https://github.com/algolia/vue-instantsearch/commit/3d65391))
+
+
+### BREAKING CHANGES
+
+* **store:** if you previously used the `store.searchParameters` getters and setters of the store,
+you should now use `store.queryParameters` instead.
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/algolia/vue-instantsearch/compare/v0.5.0...v0.6.0) (2017-08-08)
 
