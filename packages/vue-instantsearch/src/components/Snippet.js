@@ -1,6 +1,4 @@
-const getProp = (obj, path) =>
-  path.split('.').reduce((acc, part) => acc && acc[part], obj);
-
+import { getPropertyByPath } from '../util/object';
 export default {
   functional: true,
   props: {
@@ -18,7 +16,7 @@ export default {
     const attributeName = ctx.props.attributeName;
 
     const attributePath = `_snippetResult.${attributeName}.value`;
-    const attributeValue = getProp(result, attributePath);
+    const attributeValue = getPropertyByPath(result, attributePath);
 
     if (process.env.NODE_ENV !== 'production' && attributeValue === undefined) {
       throw new Error(
