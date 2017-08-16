@@ -8,36 +8,39 @@ import classNames from './classNames.js';
 
 const cx = classNames('Pagination');
 
-function getPagesDisplayedCount(padding, total) {
-  return Math.min(2 * padding + 1, total);
+// Determines the size of the widget (the number of pages displayed - that the user can directly click on)
+function calculateSize(padding, maxPages) {
+  return Math.min(2 * padding + 1, maxPages);
 }
 
-function calculatePaddingLeft(current, padding, total, totalDisplayedPages) {
-  if (current <= padding) {
-    return current;
+function calculatePaddingLeft(currentPage, padding, maxPages, size) {
+  if (currentPage <= padding) {
+    return currentPage;
   }
 
-  if (current >= total - padding) {
-    return totalDisplayedPages - (total - current);
+  if (currentPage >= maxPages - padding) {
+    return size - (maxPages - currentPage);
   }
 
-  return padding;
+  return padding + 1;
 }
 
-function getPages(page, total, padding) {
-  const totalDisplayedPages = getPagesDisplayedCount(padding, total);
-  if (totalDisplayedPages === total) return range(1, total + 1);
+// Retrieve the correct page range to populate the widget
+function getPages(currentPage, maxPages, padding) {
+  const size = calculateSize(padding, maxPages);
+  // If the widget size is equal to the max number of pages, return the entire page range
+  if (size === maxPages) return range(1, maxPages + 1);
 
   const paddingLeft = calculatePaddingLeft(
-    page,
+    currentPage,
     padding,
-    total,
-    totalDisplayedPages
+    maxPages,
+    size
   );
-  const paddingRight = totalDisplayedPages - paddingLeft;
+  const paddingRight = size - paddingLeft;
 
-  const first = page - paddingLeft;
-  const last = page + paddingRight;
+  const first = currentPage - paddingLeft;
+  const last = currentPage + paddingRight;
   return range(first + 1, last + 1);
 }
 
@@ -53,15 +56,10 @@ class Pagination extends Component {
     listComponent: PropTypes.func,
 
     showFirst: PropTypes.bool,
-
     showPrevious: PropTypes.bool,
-
     showNext: PropTypes.bool,
-
     showLast: PropTypes.bool,
-
     pagesPadding: PropTypes.number,
-
     maxPages: PropTypes.number,
   };
 

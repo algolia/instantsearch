@@ -319,4 +319,84 @@ describe('Pagination', () => {
     expect(canRefine.mock.calls[1][0]).toEqual(false);
     expect(wrapper.find('.ais-Pagination__noRefinement').length).toBe(1);
   });
+
+  describe('pagesPadding behaviour', () => {
+    it('should be adjusted when currentPage < padding (at the very beginning)', () => {
+      const refine = jest.fn();
+      const wrapper = mount(
+        <Pagination
+          {...REQ_PROPS}
+          nbPages={18}
+          showLast
+          pagesPadding={2}
+          currentRefinement={2}
+          refine={refine}
+        />
+      );
+      const pages = wrapper.find('.ais-Pagination__itemPage');
+      const pageSelected = wrapper.find('.ais-Pagination__itemLinkSelected');
+      // Since pagesPadding = 2, the Pagination widget's size should be 5
+      expect(pages.length).toBe(5);
+
+      expect(pages.first().text()).toEqual('1');
+
+      expect(pageSelected.first().text()).toEqual('2');
+      expect(pages.at(1).text()).toEqual('2');
+
+      expect(pages.at(2).text()).toEqual('3');
+      expect(pages.at(3).text()).toEqual('4');
+      expect(pages.at(4).text()).toEqual('5');
+    });
+    it('should be adjusted when currentPage < maxPages - padding (at the end)', () => {
+      const refine = jest.fn();
+      const wrapper = mount(
+        <Pagination
+          {...REQ_PROPS}
+          nbPages={18}
+          showLast
+          pagesPadding={2}
+          currentRefinement={18}
+          refine={refine}
+        />
+      );
+      const pages = wrapper.find('.ais-Pagination__itemPage');
+      const pageSelected = wrapper.find('.ais-Pagination__itemLinkSelected');
+      // Since pagesPadding = 2, the Pagination widget's size should be 5
+      expect(pages.length).toBe(5);
+
+      expect(pages.first().text()).toEqual('14');
+      expect(pages.at(1).text()).toEqual('15');
+      expect(pages.at(2).text()).toEqual('16');
+      expect(pages.at(3).text()).toEqual('17');
+
+      expect(pageSelected.first().text()).toEqual('18');
+      expect(pages.at(4).text()).toEqual('18');
+    });
+    it('should render the correct padding in every other case', () => {
+      const refine = jest.fn();
+      const wrapper = mount(
+        <Pagination
+          {...REQ_PROPS}
+          nbPages={18}
+          showLast
+          pagesPadding={2}
+          currentRefinement={8}
+          refine={refine}
+        />
+      );
+      const pages = wrapper.find('.ais-Pagination__itemPage');
+      const pageSelected = wrapper.find('.ais-Pagination__itemLinkSelected');
+      // Since pagesPadding = 2, the Pagination widget's size should be 5
+      expect(pages.length).toBe(5);
+
+      expect(pages.first().text()).toEqual('6');
+      expect(pages.at(1).text()).toEqual('7');
+
+      expect(pageSelected.first().text()).toEqual('8');
+      expect(pages.at(2).text()).toEqual('8');
+
+      expect(pages.at(3).text()).toEqual('9');
+      expect(pages.at(4).text()).toEqual('10');
+    });
+  });
 });
