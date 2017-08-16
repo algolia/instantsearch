@@ -34,7 +34,9 @@ function prepareItems(obj) {
 export default function connectBreadcrumb(renderFn) {
   const canRefine = false;
   return () => ({
-    init() {
+    init({ helper }) {
+      this._refine = facetValue => helper.toggleRefinement(facetValue).search();
+
       renderFn(
         {
           items: [],
