@@ -56,7 +56,7 @@ class PoweredBy extends Component {
           href={url}
           target="_blank"
           {...cx('algoliaLink')}
-          ariaLabel="Algolia"
+          aria-label="Algolia"
         >
           <AlgoliaLogo />
         </a>
