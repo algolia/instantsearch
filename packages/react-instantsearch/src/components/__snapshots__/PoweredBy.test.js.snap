@@ -11,7 +11,7 @@ exports[`PoweredBy applies translations 1`] = `
      
   </span>
   <a
-    ariaLabel="Algolia"
+    aria-label="Algolia"
     className="ais-PoweredBy__algoliaLink"
     href="url"
     target="_blank"
@@ -67,7 +67,7 @@ exports[`PoweredBy default 1`] = `
      
   </span>
   <a
-    ariaLabel="Algolia"
+    aria-label="Algolia"
     className="ais-PoweredBy__algoliaLink"
     href="url"
     target="_blank"
