@@ -10,7 +10,12 @@ var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRender
   //   widgetParams,
   // }
 });
-search.addWidget(customBreadcrumb());
+search.addWidget(customBreadcrumb({
+  attributes,
+    [ separator = ' > ' ],
+    [ rootURL = null ],
+  })
+);
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectBreadcrumb.html
 `;
 
@@ -32,48 +37,67 @@ function prepareItems(obj) {
 }
 
 export default function connectBreadcrumb(renderFn) {
-  const canRefine = false;
-  return () => ({
-    init({ helper }) {
-      this._refine = facetValue => helper.toggleRefinement(facetValue).search();
+  return (widgetParams = {}) => {
+    const { attributes, separator = " > ", rootURL = null } = widgetParams;
+    let canRefine = false;
+    const [hierarchicalFacetName] = attributes;
 
-      renderFn(
-        {
-          items: [],
-          refine: () => {},
-          // added ML = to be modified
-          canRefine
-        },
-        true
-      );
-    },
+    return {
+      getConfiguration: currentConfiguration => ({
+        hierarchicalFacets: [
+          {
+            name: hierarchicalFacetName,
+            attributes,
+            separator
+          }
+        ]
+      }),
+      init({ helper }) {
+        this._refine = function(facetValue) {
+          console.log("refining " + facetValue);
+          console.log(hierarchicalFacetName);
+          helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+        };
 
-    render({ results, state }) {
-      if (
-        !state.hierarchicalFacets ||
-        (Array.isArray(state.hierarchicalFacets) &&
-          state.hierarchicalFacets.length === 0)
-      ) {
-        throw new Error(usage);
+        renderFn(
+          {
+            items: [],
+            refine: this._refine,
+            // added ML = to be modified
+            canRefine
+          },
+          true
+        );
+      },
+
+      render({ results, state }) {
+        if (
+          !state.hierarchicalFacets ||
+          (Array.isArray(state.hierarchicalFacets) &&
+            state.hierarchicalFacets.length === 0)
+        ) {
+          throw new Error(usage);
+        }
+
+        const [{ name: facetName }] = state.hierarchicalFacets;
+
+        const facetsValues = results.getFacetValues(facetName);
+        const items = prepareItems(facetsValues);
+        canRefine = items.length > 0;
+        // console.log("ITEMS", items.length);
+        // console.log("canRefine", canRefine);
+
+        renderFn(
+          {
+            items,
+            refine: this._refine,
+            // added
+            canRefine,
+            widgetParams
+          },
+          false
+        );
       }
-
-      const [{ name: facetName }] = state.hierarchicalFacets;
-
-      const facetsValues = results.getFacetValues(facetName);
-      const items = prepareItems(facetsValues);
-      const canRefine = items.length > 0;
-      // console.log("ITEMS", items.length);
-      // console.log("canRefine", canRefine);
-
-      renderFn(
-        {
-          items,
-          refine: () => {},
-          // added
-          canRefine
-        },
-        false
-      );
-    }
-  });
+    };
+  };
 }

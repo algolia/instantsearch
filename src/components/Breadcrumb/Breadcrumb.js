@@ -33,7 +33,7 @@ class Breadcrumb extends PureComponent {
       const separator = isLast ? "" : this.props.separator;
       return (
         <span key={idx}>
-          <span onClick={() => console.log("onClick", item.value)}>
+          <span onClick={isLast ? null : () => refine(item.value)}>
             <span>
               {item.name} ({item.count})
             </span>

@@ -9,6 +9,7 @@ import { getContainerNode } from "../../lib/utils";
 const usage = `Usage:
 breadcrumb({
   container,
+  attributes,
   [ separator=' > ' ],
   [ rootURL ],
   [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
@@ -45,6 +46,7 @@ const renderer = ({
 export default function breadcrumb(
   {
     container,
+    attributes,
     autoHideContainer = true,
     separator = " > ",
     rootURL = null,
@@ -68,7 +70,7 @@ export default function breadcrumb(
 
   try {
     const makeBreadcrumb = connectBreadcrumb(specializedRenderer);
-    return makeBreadcrumb();
+    return makeBreadcrumb({ attributes });
   } catch (e) {
     throw new Error(usage);
   }

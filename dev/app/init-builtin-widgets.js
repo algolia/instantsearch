@@ -15,7 +15,12 @@ export default () => {
 
       window.search.addWidget(
         instantsearch.widgets.breadcrumb({
-          container: "#breadcrumb"
+          container: "#breadcrumb",
+          attributes: [
+            "hierarchicalCategories.lvl0",
+            "hierarchicalCategories.lvl1",
+            "hierarchicalCategories.lvl2"
+          ]
         })
       );
 

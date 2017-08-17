@@ -1,4 +1,4 @@
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from "../../lib/utils.js";
 
 const usage = `Usage:
 var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
@@ -72,11 +72,11 @@ export default function connectHierarchicalMenu(renderFn) {
   return (widgetParams = {}) => {
     const {
       attributes,
-      separator = ' > ',
+      separator = " > ",
       rootPath = null,
       showParentLevel = true,
       limit = 10,
-      sortBy = ['name:asc'],
+      sortBy = ["name:asc"]
     } = widgetParams;
 
     if (!attributes || !attributes.length) {
@@ -96,18 +96,21 @@ export default function connectHierarchicalMenu(renderFn) {
             attributes,
             separator,
             rootPath,
-            showParentLevel,
-          },
+            showParentLevel
+          }
         ],
         maxValuesPerFacet:
           currentConfiguration.maxValuesPerFacet !== undefined
             ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
-            : limit,
+            : limit
       }),
 
       init({ helper, createURL, instantSearchInstance }) {
-        this._refine = facetValue =>
+        this._refine = function(facetValue) {
+          console.log("refining menu " + facetValue);
+          console.log("name menu " + hierarchicalFacetName);
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+        };
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
@@ -122,7 +125,7 @@ export default function connectHierarchicalMenu(renderFn) {
             items: [],
             refine: this._refine,
             instantSearchInstance,
-            widgetParams,
+            widgetParams
           },
           true
         );
@@ -158,11 +161,11 @@ export default function connectHierarchicalMenu(renderFn) {
             items,
             refine: this._refine,
             instantSearchInstance,
-            widgetParams,
+            widgetParams
           },
           false
         );
-      },
+      }
     };
   };
 }
