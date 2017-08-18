@@ -7,6 +7,9 @@ import SnippetComponent from '../components/Snippet.js';
  * Read more about it in the [Highlighting results](guide/Highlighting_results.html) guide.
  * @name Snippet
  * @kind widget
+ * @requirements To use this widget, the attribute name passed to the `attributeName` prop must be 
+ * present in "Attributes to snippet" on the Algolia dashboard or configured as `attributesToSnippet` 
+ * via a set settings call to the Algolia API.
  * @propType {string} attributeName - the location of the highlighted snippet attribute in the hit
  * @propType {object} hit - the hit object containing the highlighted snippet attribute
  * @propType {string} [tagName='em'] - the tag to be used for highlighted parts of the attribute

@@ -26,7 +26,10 @@ to use the Highlighter. The Highlight and the Snippet widgets takes two props:
 
 **Notes:**
 * Use the `<Highlight>` widget when you want to display the regular value of an attribute.
-* Use the `<Snippet>` widget when you want to display the snippet version of an attribute.
+* Use the `<Snippet>` widget when you want to display the snippet version of an attribute. 
+  To use this widget, the attribute name passed to the `attributeName` prop must be present in 
+  "Attributes to snippet" on the Algolia dashboard or configured as `attributesToSnippet` 
+  via a set settings call to the Algolia API.
 
 Here is an example in which we create a custom Hit widget for results that have a
 `description` field that is highlighted.
