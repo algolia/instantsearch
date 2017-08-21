@@ -47,7 +47,7 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @themeKey ais-HierarchicalMenu__item - Id for a single list item
  * @themeKey ais-HierarchicalMenu__itemSelected - Id for the selected items in the list
  * @themeKey ais-HierarchicalMenu__itemParent - Id for the elements that have a sub list displayed
- * @themeKey HierarchicalMenu__itemSelectedParent - Id for parents that have currently a child selected
+ * @themeKey ais-HierarchicalMenu__itemSelectedParent - Id for parents that have currently a child selected
  * @themeKey ais-HierarchicalMenu__itemLink - the link containing the label and the count
  * @themeKey ais-HierarchicalMenu__itemLabel - the label of the entry
  * @themeKey ais-HierarchicalMenu__itemCount - the count of the entry
