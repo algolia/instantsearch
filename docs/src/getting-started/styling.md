@@ -100,11 +100,9 @@ i.e. render results in a `table` instead of in `<div>`s
 </ais-results>
 ```
 
-**Important:** The template provided in a component having the `inline-template` attribute has access to the scope of the component. In the previous example, `results` is referencing the variable exposed by the `Results` component.
+It is recommended to not over-use this `inline-template` feature because it makes it hard to reason about the current scope. In the previous example, the `results` variable is provided by the `Results` component, not the current scope.
 
-It is recommended to not over-use this feature because it makes it harder to reason about the current scope.
-
-As an alternative, you can extend an existing component.
+As an alternative of using `inline-template`s, you can extend an existing component.
 
 ## Extending a component
 
