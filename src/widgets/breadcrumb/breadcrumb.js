@@ -1,10 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import cx from "classnames";
 
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 
 import { connectBreadcrumb } from "../../connectors";
-import { getContainerNode } from "../../lib/utils";
+import { bemHelper, getContainerNode } from "../../lib/utils";
+
+const bem = bemHelper("ais-breadcrumb");
 
 const usage = `Usage:
 breadcrumb({
@@ -12,8 +15,7 @@ breadcrumb({
   attributes,
   [ separator=' > ' ],
   [ rootURL ],
-  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
-  [ templates.{header, item, footer} ],
+  [ cssClasses.{root , item, itemDisabled, label, labelRoot, link, linkRoot, count, separator, noRefinement}={} ],
   [ transformData.{item} ],
   [ autoHideContainer=true ],
 })`;
@@ -50,7 +52,8 @@ export default function breadcrumb(
     autoHideContainer = true,
     separator = " > ",
     rootURL = null,
-    transformData
+    transformData,
+    cssClasses: userCssClasses = {}
   } = {}
 ) {
   if (!container) {
@@ -59,9 +62,23 @@ export default function breadcrumb(
 
   const containerNode = getContainerNode(container);
 
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    item: cx(bem("item"), userCssClasses.item),
+    itemDisabled: cx(bem("itemDisabled"), userCssClasses.itemDisabled),
+    label: cx(bem("label"), userCssClasses.label),
+    labelRoot: cx(bem("labelRoot"), userCssClasses.labelRoot),
+    link: cx(bem("link"), userCssClasses.link),
+    linkRoot: cx(bem("linkRoot"), userCssClasses.linkRoot),
+    count: cx(bem("count"), userCssClasses.count),
+    separator: cx(bem("separator"), userCssClasses.separator),
+    noRefinement: cx(bem("noRefinement"), userCssClasses.noRefinement)
+  };
+
   const specializedRenderer = renderer({
     autoHideContainer,
     separator,
+    cssClasses,
     rootURL,
     transformData,
     containerNode,

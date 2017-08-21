@@ -22,7 +22,7 @@ class Breadcrumb extends PureComponent {
   };
 
   render() {
-    const { createURL, items, refine, translate } = this.props;
+    const { createURL, items, refine, translate, cssClasses } = this.props;
     // console.log("canRefine", this.props.canRefine);
     // console.log("canRefine from BC react", canRefine);
     console.log("items", items);
@@ -35,7 +35,10 @@ class Breadcrumb extends PureComponent {
         <span key={idx}>
           <span onClick={isLast ? null : () => refine(item.value)}>
             <span>
-              {item.name} ({item.count})
+              {item.name}
+              <span>
+                ({item.count})
+              </span>
             </span>
           </span>
           <span>
@@ -46,9 +49,9 @@ class Breadcrumb extends PureComponent {
     });
     console.log("Breadcrumb", breadcrumb);
     return (
-      <pre>
+      <div className={cssClasses.root}>
         {breadcrumb}
-      </pre>
+      </div>
     );
   }
 }
