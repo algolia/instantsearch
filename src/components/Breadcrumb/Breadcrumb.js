@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import autoHideContainerHOC from "../../decorators/autoHideContainer.js";
+// import autoHideContainerHOC from "../../decorators/autoHideContainer.js";
 
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
@@ -27,21 +27,25 @@ class Breadcrumb extends PureComponent {
     // console.log("canRefine from BC react", canRefine);
     console.log("items", items);
 
+    // const rootPath
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
-
       const separator = isLast ? "" : this.props.separator;
+      const itemCssClass = !isLast ? cssClasses.item : cssClasses.itemDisabled;
       return (
         <span key={idx}>
-          <span onClick={isLast ? null : () => refine(item.value)}>
-            <span>
+          <span
+            className={itemCssClass}
+            onClick={isLast ? null : () => refine(item.value)}
+          >
+            <span className={cssClasses.label}>
               {item.name}
-              <span>
-                ({item.count})
-              </span>
+            </span>
+            <span className={cssClasses.count}>
+              {item.count}
             </span>
           </span>
-          <span>
+          <span className={cssClasses.separator}>
             {separator}
           </span>
         </span>

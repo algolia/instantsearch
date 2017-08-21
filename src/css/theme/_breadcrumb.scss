@@ -1,0 +1,20 @@
+.ais-breadcrumb--itemDisabled,
+.ais-breadcrumb--label,
+.ais-bbreadcrumb--separator,
+.ais-breadcrumb--rootLabel {
+    color: #3369e7;
+}
+
+.ais-breadcrumb--item {
+    font-weight: bold;
+}
+
+.ais-breadcrumb--itemDisabled,
+.ais-breadcrumb--separator {
+    font-weight: normal;
+}
+
+.ais-breadcrumb--item,
+.ais-breadcrumb--count {
+    display: inline;
+}

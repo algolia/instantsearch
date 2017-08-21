@@ -23,6 +23,7 @@ breadcrumb({
 const renderer = ({
   autoHideContainer,
   separator,
+  cssClasses,
   rootURL,
   transformData,
   containerNode
@@ -39,6 +40,7 @@ const renderer = ({
       rootURL={rootURL}
       items={items}
       refine={refine}
+      cssClasses={cssClasses}
       shouldAutoHideContainer={shouldAutoHideContainer}
     />,
     containerNode
@@ -63,7 +65,7 @@ export default function breadcrumb(
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
+    root: cx(bem("root"), userCssClasses.root),
     item: cx(bem("item"), userCssClasses.item),
     itemDisabled: cx(bem("itemDisabled"), userCssClasses.itemDisabled),
     label: cx(bem("label"), userCssClasses.label),

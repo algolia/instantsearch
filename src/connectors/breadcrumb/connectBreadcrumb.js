@@ -63,7 +63,6 @@ export default function connectBreadcrumb(renderFn) {
           {
             items: [],
             refine: this._refine,
-            // added ML = to be modified
             canRefine
           },
           true
@@ -84,14 +83,11 @@ export default function connectBreadcrumb(renderFn) {
         const facetsValues = results.getFacetValues(facetName);
         const items = prepareItems(facetsValues);
         canRefine = items.length > 0;
-        // console.log("ITEMS", items.length);
-        // console.log("canRefine", canRefine);
 
         renderFn(
           {
             items,
             refine: this._refine,
-            // added
             canRefine,
             widgetParams
           },
