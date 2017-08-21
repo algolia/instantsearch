@@ -1,5 +1,5 @@
-import escapeHits, {tagConfig} from '../../lib/escape-highlight.js';
-import {checkRendering} from '../../lib/utils.js';
+import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {
@@ -82,30 +82,35 @@ export default function connectInfiniteHits(renderFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHits
-          ? tagConfig
-          : undefined;
+        return widgetParams.escapeHits ? tagConfig : undefined;
       },
 
-      init({instantSearchInstance, helper}) {
+      init({ instantSearchInstance, helper }) {
         this.showMore = getShowMore(helper);
 
-        renderFn({
-          hits: hitsCache,
-          results: undefined,
-          showMore: this.showMore,
-          isLastPage: true,
-          instantSearchInstance,
-          widgetParams,
-        }, true);
+        renderFn(
+          {
+            hits: hitsCache,
+            results: undefined,
+            showMore: this.showMore,
+            isLastPage: true,
+            instantSearchInstance,
+            widgetParams,
+          },
+          true
+        );
       },
 
-      render({results, state, instantSearchInstance}) {
+      render({ results, state, instantSearchInstance }) {
         if (state.page === 0) {
           hitsCache = [];
         }
 
-        if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
+        if (
+          widgetParams.escapeHits &&
+          results.hits &&
+          results.hits.length > 0
+        ) {
           results.hits = escapeHits(results.hits);
         }
 
@@ -113,14 +118,17 @@ export default function connectInfiniteHits(renderFn) {
 
         const isLastPage = results.nbPages <= results.page + 1;
 
-        renderFn({
-          hits: hitsCache,
-          results,
-          showMore: this.showMore,
-          isLastPage,
-          instantSearchInstance,
-          widgetParams,
-        }, false);
+        renderFn(
+          {
+            hits: hitsCache,
+            results,
+            showMore: this.showMore,
+            isLastPage,
+            instantSearchInstance,
+            widgetParams,
+          },
+          false
+        );
       },
     };
   };

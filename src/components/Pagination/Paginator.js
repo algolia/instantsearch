@@ -8,12 +8,17 @@ class Paginator {
   }
 
   pages() {
-    const {total, currentPage, padding} = this;
+    const { total, currentPage, padding } = this;
 
     const totalDisplayedPages = this.nbPagesDisplayed(padding, total);
     if (totalDisplayedPages === total) return range(0, total);
 
-    const paddingLeft = this.calculatePaddingLeft(currentPage, padding, total, totalDisplayedPages);
+    const paddingLeft = this.calculatePaddingLeft(
+      currentPage,
+      padding,
+      total,
+      totalDisplayedPages
+    );
     const paddingRight = totalDisplayedPages - paddingLeft;
 
     const first = currentPage - paddingLeft;

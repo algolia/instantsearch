@@ -1,5 +1,5 @@
 import React from 'react';
-import {RawSelector as Selector} from '../Selector';
+import { RawSelector as Selector } from '../Selector';
 import renderer from 'react-test-renderer';
 
 describe('Selector', () => {
@@ -11,11 +11,12 @@ describe('Selector', () => {
         root: 'custom-root',
         item: 'custom-item',
       },
-      options: [{value: 'index-a', label: 'Index A'}, {value: 'index-b', label: 'Index B'}],
+      options: [
+        { value: 'index-a', label: 'Index A' },
+        { value: 'index-b', label: 'Index B' },
+      ],
     };
-    const tree = renderer.create(
-      <Selector {...props} />
-    ).toJSON();
+    const tree = renderer.create(<Selector {...props} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -27,11 +28,12 @@ describe('Selector', () => {
         root: 'custom-root',
         item: 'custom-item',
       },
-      options: [{value: 10, label: '10 results per page'}, {value: 20, label: '20 results per page'}],
+      options: [
+        { value: 10, label: '10 results per page' },
+        { value: 20, label: '20 results per page' },
+      ],
     };
-    const tree = renderer.create(
-      <Selector {...props} />
-    ).toJSON();
+    const tree = renderer.create(<Selector {...props} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

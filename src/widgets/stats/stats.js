@@ -22,15 +22,18 @@ const renderer = ({
   renderState,
   templates,
   transformData,
-}) => ({
-  hitsPerPage,
-  nbHits,
-  nbPages,
-  page,
-  processingTimeMS,
-  query,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  {
+    hitsPerPage,
+    nbHits,
+    nbPages,
+    page,
+    processingTimeMS,
+    query,
+    instantSearchInstance,
+  },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -119,6 +122,7 @@ stats({
  * By default, it will display the **number of hits** and the time taken to compute the
  * results inside the engine.
  * @type {WidgetFactory}
+ * @category metadata
  * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatories: `container`,
  * @return {Widget} A new stats widget instance
  * @example
@@ -128,14 +132,16 @@ stats({
  *   })
  * );
  */
-export default function stats({
-  container,
-  cssClasses: userCssClasses = {},
-  autoHideContainer = true,
-  collapsible = false,
-  transformData,
-  templates = defaultTemplates,
-} = {}) {
+export default function stats(
+  {
+    container,
+    cssClasses: userCssClasses = {},
+    autoHideContainer = true,
+    collapsible = false,
+    transformData,
+    templates = defaultTemplates,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }

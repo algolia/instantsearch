@@ -1,5 +1,5 @@
 import find from 'lodash/find';
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {
@@ -97,46 +97,58 @@ export default function connectSortBySelector(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {indices} = widgetParams;
+    const { indices } = widgetParams;
 
     if (!indices) {
       throw new Error(usage);
     }
 
-    const selectorOptions = indices.map(({label, name}) => ({label, value: name}));
+    const selectorOptions = indices.map(({ label, name }) => ({
+      label,
+      value: name,
+    }));
 
     return {
-      init({helper, instantSearchInstance}) {
+      init({ helper, instantSearchInstance }) {
         const currentIndex = helper.getIndex();
-        const isIndexInList = find(indices, ({name}) => name === currentIndex);
+        const isIndexInList = find(
+          indices,
+          ({ name }) => name === currentIndex
+        );
 
         if (!isIndexInList) {
-          throw new Error(`[sortBySelector]: Index ${currentIndex} not present in \`indices\``);
+          throw new Error(
+            `[sortBySelector]: Index ${currentIndex} not present in \`indices\``
+          );
         }
 
-        this.setIndex = indexName => helper
-          .setIndex(indexName)
-          .search();
+        this.setIndex = indexName => helper.setIndex(indexName).search();
 
-        renderFn({
-          currentRefinement: currentIndex,
-          options: selectorOptions,
-          refine: this.setIndex,
-          hasNoResults: true,
-          widgetParams,
-          instantSearchInstance,
-        }, true);
+        renderFn(
+          {
+            currentRefinement: currentIndex,
+            options: selectorOptions,
+            refine: this.setIndex,
+            hasNoResults: true,
+            widgetParams,
+            instantSearchInstance,
+          },
+          true
+        );
       },
 
-      render({helper, results, instantSearchInstance}) {
-        renderFn({
-          currentRefinement: helper.getIndex(),
-          options: selectorOptions,
-          refine: this.setIndex,
-          hasNoResults: results.nbHits === 0,
-          widgetParams,
-          instantSearchInstance,
-        }, false);
+      render({ helper, results, instantSearchInstance }) {
+        renderFn(
+          {
+            currentRefinement: helper.getIndex(),
+            options: selectorOptions,
+            refine: this.setIndex,
+            hasNoResults: results.nbHits === 0,
+            widgetParams,
+            instantSearchInstance,
+          },
+          false
+        );
       },
     };
   };

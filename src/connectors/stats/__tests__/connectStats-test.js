@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectStats from '../connectStats.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectStats', () => {
   it('Renders during init and render', () => {
@@ -30,44 +30,63 @@ describe('connectStats', () => {
       onHistoryChange: () => {},
     });
 
-    { // should call the rendering once with isFirstRendering to true
+    {
+      // should call the rendering once with isFirstRendering to true
       expect(rendering.callCount).toBe(1);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {hitsPerPage, nbHits, nbPages, page, processingTimeMS, query, widgetParams} = rendering.lastCall.args[0];
+      const {
+        hitsPerPage,
+        nbHits,
+        nbPages,
+        page,
+        processingTimeMS,
+        query,
+        widgetParams,
+      } = rendering.lastCall.args[0];
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(0);
       expect(nbPages).toBe(0);
       expect(page).toBe(helper.state.page);
       expect(processingTimeMS).toBe(-1);
       expect(query).toBe(helper.state.query);
-      expect(widgetParams).toEqual({foo: 'bar'});
+      expect(widgetParams).toEqual({ foo: 'bar' });
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [{One: 'record'}],
-        nbPages: 1,
-        nbHits: 1,
-        hitsPerPage: helper.state.hitsPerPage,
-        page: helper.state.page,
-        query: helper.state.query,
-        processingTimeMS: 12,
-      }]),
+      results: new SearchResults(helper.state, [
+        {
+          hits: [{ One: 'record' }],
+          nbPages: 1,
+          nbHits: 1,
+          hitsPerPage: helper.state.hitsPerPage,
+          page: helper.state.page,
+          query: helper.state.query,
+          processingTimeMS: 12,
+        },
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Should call the rendering a second time, with isFirstRendering to false
+    {
+      // Should call the rendering a second time, with isFirstRendering to false
       expect(rendering.callCount).toBe(2);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {hitsPerPage, nbHits, nbPages, page, processingTimeMS, query} = rendering.lastCall.args[0];
+      const {
+        hitsPerPage,
+        nbHits,
+        nbPages,
+        page,
+        processingTimeMS,
+        query,
+      } = rendering.lastCall.args[0];
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(1);
       expect(nbPages).toBe(1);

@@ -24,7 +24,12 @@ search.addWidget(
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectClearAll.html
 `;
 
-const refine = ({helper, clearAttributes, hasRefinements, clearsQuery}) => () => {
+const refine = ({
+  helper,
+  clearAttributes,
+  hasRefinements,
+  clearsQuery,
+}) => () => {
   if (hasRefinements) {
     clearRefinementsAndSearch(helper, clearAttributes, clearsQuery);
   }
@@ -89,56 +94,76 @@ export default function connectClearAll(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {excludeAttributes = [], clearsQuery = false} = widgetParams;
+    const { excludeAttributes = [], clearsQuery = false } = widgetParams;
 
     return {
       // Provide the same function to the `renderFn` so that way the user
       // has to only bind it once when `isFirstRendering` for instance
       _refine() {},
-      _cachedRefine() { this._refine(); },
+      _cachedRefine() {
+        this._refine();
+      },
 
-      init({helper, instantSearchInstance, createURL}) {
+      init({ helper, instantSearchInstance, createURL }) {
         this._cachedRefine = this._cachedRefine.bind(this);
 
         const clearAttributes = getRefinements({}, helper.state)
           .map(one => one.attributeName)
           .filter(one => excludeAttributes.indexOf(one) === -1);
 
-        const hasRefinements = clearsQuery ?
-          clearAttributes.length !== 0 || helper.state.query !== '' :
-          clearAttributes.length !== 0;
-        const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
+        const hasRefinements = clearsQuery
+          ? clearAttributes.length !== 0 || helper.state.query !== ''
+          : clearAttributes.length !== 0;
+        const preparedCreateURL = () =>
+          createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
 
-        this._refine = refine({helper, clearAttributes, hasRefinements, clearsQuery});
-
-        renderFn({
-          refine: this._cachedRefine,
+        this._refine = refine({
+          helper,
+          clearAttributes,
           hasRefinements,
-          createURL: preparedCreateURL,
-          instantSearchInstance,
-          widgetParams,
-        }, true);
+          clearsQuery,
+        });
+
+        renderFn(
+          {
+            refine: this._cachedRefine,
+            hasRefinements,
+            createURL: preparedCreateURL,
+            instantSearchInstance,
+            widgetParams,
+          },
+          true
+        );
       },
 
-      render({results, state, createURL, helper, instantSearchInstance}) {
+      render({ results, state, createURL, helper, instantSearchInstance }) {
         const clearAttributes = getRefinements(results, state)
           .map(one => one.attributeName)
           .filter(one => excludeAttributes.indexOf(one) === -1);
 
-        const hasRefinements = clearsQuery ?
-          clearAttributes.length !== 0 || helper.state.query !== '' :
-          clearAttributes.length !== 0;
-        const preparedCreateURL = () => createURL(clearRefinementsFromState(state, [], clearsQuery));
+        const hasRefinements = clearsQuery
+          ? clearAttributes.length !== 0 || helper.state.query !== ''
+          : clearAttributes.length !== 0;
+        const preparedCreateURL = () =>
+          createURL(clearRefinementsFromState(state, [], clearsQuery));
 
-        this._refine = refine({helper, clearAttributes, hasRefinements, clearsQuery});
-
-        renderFn({
-          refine: this._cachedRefine,
+        this._refine = refine({
+          helper,
+          clearAttributes,
           hasRefinements,
-          createURL: preparedCreateURL,
-          instantSearchInstance,
-          widgetParams,
-        }, false);
+          clearsQuery,
+        });
+
+        renderFn(
+          {
+            refine: this._cachedRefine,
+            hasRefinements,
+            createURL: preparedCreateURL,
+            instantSearchInstance,
+            widgetParams,
+          },
+          false
+        );
       },
     };
   };

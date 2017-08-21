@@ -3,13 +3,7 @@ import instantsearch from '../../../../index.js';
 
 export default instantsearch.connectors.connectClearAll(render);
 
-function render(
-  {
-    refine,
-    widgetParams,
-  },
-  isFirstRendering,
-) {
+function render({ refine, widgetParams }, isFirstRendering) {
   let button;
   if (isFirstRendering) {
     button = document.createElement('button');

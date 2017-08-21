@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectSearchBox from '../connectSearchBox.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectSearchBox', () => {
   it('Renders during init and render', () => {
@@ -30,15 +30,16 @@ describe('connectSearchBox', () => {
       onHistoryChange: () => {},
     });
 
-    { // should call the rendering once with isFirstRendering to true
+    {
+      // should call the rendering once with isFirstRendering to true
       expect(rendering.callCount).toBe(1);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {query, widgetParams} = rendering.lastCall.args[0];
+      const { query, widgetParams } = rendering.lastCall.args[0];
       expect(query).toBe(helper.state.query);
-      expect(widgetParams).toEqual({foo: 'bar'});
+      expect(widgetParams).toEqual({ foo: 'bar' });
     }
 
     widget.render({
@@ -48,15 +49,16 @@ describe('connectSearchBox', () => {
       createURL: () => '#',
     });
 
-    { // Should call the rendering a second time, with isFirstRendering to false
+    {
+      // Should call the rendering a second time, with isFirstRendering to false
       expect(rendering.callCount).toBe(2);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {query, widgetParams} = rendering.lastCall.args[0];
+      const { query, widgetParams } = rendering.lastCall.args[0];
       expect(query).toBe(helper.state.query);
-      expect(widgetParams).toEqual({foo: 'bar'});
+      expect(widgetParams).toEqual({ foo: 'bar' });
     }
   });
 
@@ -76,10 +78,11 @@ describe('connectSearchBox', () => {
       onHistoryChange: () => {},
     });
 
-    { // first rendering
+    {
+      // first rendering
       expect(helper.state.query).toBe('');
       const renderOptions = rendering.lastCall.args[0];
-      const {refine} = renderOptions;
+      const { refine } = renderOptions;
       refine('bip');
       expect(helper.state.query).toBe('bip');
       expect(helper.search.callCount).toBe(1);
@@ -92,10 +95,11 @@ describe('connectSearchBox', () => {
       createURL: () => '#',
     });
 
-    { // Second rendering
+    {
+      // Second rendering
       expect(helper.state.query).toBe('bip');
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, query} = renderOptions;
+      const { refine, query } = renderOptions;
       expect(query).toBe('bip');
       refine('bop');
       expect(helper.state.query).toBe('bop');
@@ -119,10 +123,11 @@ describe('connectSearchBox', () => {
       onHistoryChange: () => {},
     });
 
-    { // first rendering
+    {
+      // first rendering
       expect(helper.state.query).toBe('');
       const renderOptions = rendering.lastCall.args[0];
-      const {refine} = renderOptions;
+      const { refine } = renderOptions;
       refine('bip');
       expect(helper.state.query).toBe('bip');
       expect(helper.search.callCount).toBe(1);
@@ -135,10 +140,11 @@ describe('connectSearchBox', () => {
       createURL: () => '#',
     });
 
-    { // Second rendering
+    {
+      // Second rendering
       expect(helper.state.query).toBe('bip');
       const renderOptions = rendering.lastCall.args[0];
-      const {clear, query} = renderOptions;
+      const { clear, query } = renderOptions;
       expect(query).toBe('bip');
       clear();
       expect(helper.state.query).toBe('');
@@ -152,7 +158,9 @@ describe('connectSearchBox', () => {
 
     // letSearchThrough will control if the provided function should be called
     let letSearchThrough = false;
-    const queryHook = sinon.spy((q, search) => { if (letSearchThrough) search(q); });
+    const queryHook = sinon.spy((q, search) => {
+      if (letSearchThrough) search(q);
+    });
 
     const widget = makeWidget({
       queryHook,
@@ -168,9 +176,10 @@ describe('connectSearchBox', () => {
       onHistoryChange: () => {},
     });
 
-    { // first rendering
+    {
+      // first rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {refine} = renderOptions;
+      const { refine } = renderOptions;
 
       refine('bip');
       expect(queryHook.callCount).toBe(1);
@@ -194,9 +203,10 @@ describe('connectSearchBox', () => {
       createURL: () => '#',
     });
 
-    { // Second rendering
+    {
+      // Second rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {refine} = renderOptions;
+      const { refine } = renderOptions;
 
       refine('bop');
       expect(queryHook.callCount).toBe(3);

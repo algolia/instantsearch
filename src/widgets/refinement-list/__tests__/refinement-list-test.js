@@ -4,7 +4,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 import refinementList from '../refinement-list.js';
-const instantSearchInstance = {templatesConfig: {}};
+const instantSearchInstance = { templatesConfig: {} };
 
 describe('refinementList()', () => {
   let autoHideContainer;
@@ -17,7 +17,7 @@ describe('refinementList()', () => {
   beforeEach(() => {
     container = document.createElement('div');
 
-    ReactDOM = {render: sinon.spy()};
+    ReactDOM = { render: sinon.spy() };
     refinementList.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returnsArg(0);
     refinementList.__Rewire__('autoHideContainerHOC', autoHideContainer);
@@ -28,7 +28,7 @@ describe('refinementList()', () => {
   describe('instantiated with wrong parameters', () => {
     it('should fail if no container', () => {
       // Given
-      options = {container: undefined, attributeName: 'foo'};
+      options = { container: undefined, attributeName: 'foo' };
 
       // Then
       expect(() => {
@@ -45,15 +45,19 @@ describe('refinementList()', () => {
     let createURL;
 
     function renderWidget(userOptions) {
-      widget = refinementList({...options, ...userOptions});
-      widget.init({helper, createURL, instantSearchInstance});
-      return widget.render({results, helper, state});
+      widget = refinementList({ ...options, ...userOptions });
+      widget.init({ helper, createURL, instantSearchInstance });
+      return widget.render({ results, helper, state });
     }
 
     beforeEach(() => {
-      options = {container, attributeName: 'attributeName'};
-      results = {getFacetValues: sinon.stub().returns([{name: 'foo'}, {name: 'bar'}])};
-      state = {toggleRefinement: sinon.spy()};
+      options = { container, attributeName: 'attributeName' };
+      results = {
+        getFacetValues: sinon
+          .stub()
+          .returns([{ name: 'foo' }, { name: 'bar' }]),
+      };
+      state = { toggleRefinement: sinon.spy() };
       createURL = () => '#';
     });
 
@@ -74,7 +78,7 @@ describe('refinementList()', () => {
         };
 
         // When
-        renderWidget({cssClasses});
+        renderWidget({ cssClasses });
         const actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
 
         // Then
@@ -94,11 +98,14 @@ describe('refinementList()', () => {
     describe('autoHideContainer', () => {
       it('should set shouldAutoHideContainer to false if there are facetValues', () => {
         // Given
-        results.getFacetValues = sinon.stub().returns([{name: 'foo'}, {name: 'bar'}]);
+        results.getFacetValues = sinon
+          .stub()
+          .returns([{ name: 'foo' }, { name: 'bar' }]);
 
         // When
         renderWidget();
-        const actual = ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
+        const actual =
+          ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
 
         // Then
         expect(actual).toBe(false);
@@ -109,7 +116,8 @@ describe('refinementList()', () => {
 
         // When
         renderWidget();
-        const actual = ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
+        const actual =
+          ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
 
         // Then
         expect(actual).toBe(true);
@@ -119,16 +127,20 @@ describe('refinementList()', () => {
     describe('header', () => {
       it('should pass the refined count to the header data', () => {
         // Given
-        const facetValues = [{
-          name: 'foo',
-          isRefined: true,
-        }, {
-          name: 'bar',
-          isRefined: true,
-        }, {
-          name: 'baz',
-          isRefined: false,
-        }];
+        const facetValues = [
+          {
+            name: 'foo',
+            isRefined: true,
+          },
+          {
+            name: 'bar',
+            isRefined: true,
+          },
+          {
+            name: 'baz',
+            isRefined: false,
+          },
+        ];
         results.getFacetValues = sinon.stub().returns(facetValues);
 
         // When
@@ -141,17 +153,20 @@ describe('refinementList()', () => {
 
       it('should dynamically update the header template on subsequent renders', () => {
         // Given
-        const widgetOptions = {container, attributeName: 'type'};
-        const initOptions = {helper, createURL, instantSearchInstance};
-        const facetValues = [{
-          name: 'foo',
-          isRefined: true,
-        }, {
-          name: 'bar',
-          isRefined: false,
-        }];
+        const widgetOptions = { container, attributeName: 'type' };
+        const initOptions = { helper, createURL, instantSearchInstance };
+        const facetValues = [
+          {
+            name: 'foo',
+            isRefined: true,
+          },
+          {
+            name: 'bar',
+            isRefined: false,
+          },
+        ];
         results.getFacetValues = sinon.stub().returns(facetValues);
-        const renderOptions = {results, helper, state};
+        const renderOptions = { results, helper, state };
 
         // When
         widget = refinementList(widgetOptions);
@@ -175,21 +190,36 @@ describe('refinementList()', () => {
 
   describe('show more', () => {
     it('should return a configuration with the highest limit value (default value)', () => {
-      const opts = {container, attributeName: 'attributeName', limit: 1, showMore: {}};
+      const opts = {
+        container,
+        attributeName: 'attributeName',
+        limit: 1,
+        showMore: {},
+      };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});
       expect(partialConfig.maxValuesPerFacet).toBe(100);
     });
 
     it('should return a configuration with the highest limit value (custom value)', () => {
-      const opts = {container, attributeName: 'attributeName', limit: 1, showMore: {limit: 99}};
+      const opts = {
+        container,
+        attributeName: 'attributeName',
+        limit: 1,
+        showMore: { limit: 99 },
+      };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});
       expect(partialConfig.maxValuesPerFacet).toBe(opts.showMore.limit);
     });
 
     it('should not accept a show more limit that is < limit', () => {
-      const opts = {container, attributeName: 'attributeName', limit: 100, showMore: {limit: 1}};
+      const opts = {
+        container,
+        attributeName: 'attributeName',
+        limit: 100,
+        showMore: { limit: 1 },
+      };
       expect(() => refinementList(opts)).toThrow();
     });
   });

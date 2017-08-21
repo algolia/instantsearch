@@ -6,7 +6,7 @@ import Template from '../Template.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer';
 
-import {isSpecialClick} from '../../lib/utils.js';
+import { isSpecialClick } from '../../lib/utils.js';
 import map from 'lodash/map';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
@@ -21,7 +21,7 @@ export class RawCurrentRefinedValues extends React.Component {
       return undefined;
     }
 
-    const {refinements, cssClasses} = this.props;
+    const { refinements, cssClasses } = this.props;
     return (
       <a
         className={
@@ -39,23 +39,30 @@ export class RawCurrentRefinedValues extends React.Component {
 
   _refinementElement(refinement, i) {
     const attribute = this.props.attributes[refinement.attributeName] || {};
-    const templateData = getTemplateData(attribute, refinement, this.props.cssClasses);
+    const templateData = getTemplateData(
+      attribute,
+      refinement,
+      this.props.cssClasses
+    );
     const customTemplateProps = getCustomTemplateProps(attribute);
-    const key = refinement.attributeName +
+    const key =
+      refinement.attributeName +
       (refinement.operator ? refinement.operator : ':') +
       (refinement.exclude ? refinement.exclude : '') +
       refinement.name;
     return (
-      <div
-        className={this.props.cssClasses.item}
-        key={key}
-      >
+      <div className={this.props.cssClasses.item} key={key}>
         <a
           className={this.props.cssClasses.link}
           href={this.props.clearRefinementURLs[i]}
           onClick={handleClick(this.props.clearRefinementClicks[i])}
         >
-          <Template data={templateData} templateKey="item" {...this.props.templateProps} {...customTemplateProps} />
+          <Template
+            data={templateData}
+            templateKey="item"
+            {...this.props.templateProps}
+            {...customTemplateProps}
+          />
         </a>
       </div>
     );
@@ -122,17 +129,10 @@ function handleClick(cb) {
 RawCurrentRefinedValues.propTypes = {
   attributes: PropTypes.object,
   clearAllClick: PropTypes.func,
-  clearAllPosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.bool,
-  ]),
+  clearAllPosition: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   clearAllURL: PropTypes.string,
-  clearRefinementClicks: PropTypes.arrayOf(
-    PropTypes.func
-  ),
-  clearRefinementURLs: PropTypes.arrayOf(
-    PropTypes.string
-  ),
+  clearRefinementClicks: PropTypes.arrayOf(PropTypes.func),
+  clearRefinementURLs: PropTypes.arrayOf(PropTypes.string),
   cssClasses: PropTypes.shape({
     clearAll: PropTypes.string,
     list: PropTypes.string,

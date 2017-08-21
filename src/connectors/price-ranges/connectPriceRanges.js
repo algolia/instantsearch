@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 import generateRanges from './generate-ranges.js';
 
 const usage = `Usage:
@@ -101,7 +101,7 @@ export default function connectPriceRanges(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {attributeName} = widgetParams;
+    const { attributeName } = widgetParams;
 
     if (!attributeName) {
       throw new Error(usage);
@@ -109,7 +109,7 @@ export default function connectPriceRanges(renderFn) {
 
     return {
       getConfiguration() {
-        return {facets: [attributeName]};
+        return { facets: [attributeName] };
       },
 
       _generateRanges(results) {
@@ -133,14 +133,18 @@ export default function connectPriceRanges(renderFn) {
             to = Math.ceil(v.value[0]);
           }
         });
-        return [{from, to, isRefined: true}];
+        return [{ from, to, isRefined: true }];
       },
 
-      _refine(helper, {from, to}) {
+      _refine(helper, { from, to }) {
         const facetValues = this._extractRefinedRange(helper);
 
         helper.clearRefinements(attributeName);
-        if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
+        if (
+          facetValues.length === 0 ||
+          facetValues[0].from !== from ||
+          facetValues[0].to !== to
+        ) {
           if (typeof from !== 'undefined') {
             helper.addNumericRefinement(attributeName, '>=', Math.floor(from));
           }
@@ -152,18 +156,21 @@ export default function connectPriceRanges(renderFn) {
         helper.search();
       },
 
-      init({helper, instantSearchInstance}) {
+      init({ helper, instantSearchInstance }) {
         this._refine = this._refine.bind(this, helper);
 
-        renderFn({
-          instantSearchInstance,
-          items: [],
-          refine: this._refine,
-          widgetParams,
-        }, true);
+        renderFn(
+          {
+            instantSearchInstance,
+            items: [],
+            refine: this._refine,
+            widgetParams,
+          },
+          true
+        );
       },
 
-      render({results, helper, state, createURL, instantSearchInstance}) {
+      render({ results, helper, state, createURL, instantSearchInstance }) {
         let facetValues;
 
         if (results && results.hits && results.hits.length > 0) {
@@ -180,22 +187,33 @@ export default function connectPriceRanges(renderFn) {
           let newState = state.clearRefinements(attributeName);
           if (!facetValue.isRefined) {
             if (facetValue.from !== undefined) {
-              newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(facetValue.from));
+              newState = newState.addNumericRefinement(
+                attributeName,
+                '>=',
+                Math.floor(facetValue.from)
+              );
             }
             if (facetValue.to !== undefined) {
-              newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(facetValue.to));
+              newState = newState.addNumericRefinement(
+                attributeName,
+                '<=',
+                Math.ceil(facetValue.to)
+              );
             }
           }
           facetValue.url = createURL(newState);
           return facetValue;
         });
 
-        renderFn({
-          items: facetValues,
-          refine: this._refine,
-          widgetParams,
-          instantSearchInstance,
-        }, false);
+        renderFn(
+          {
+            items: facetValues,
+            refine: this._refine,
+            widgetParams,
+            instantSearchInstance,
+          },
+          false
+        );
       },
     };
   };

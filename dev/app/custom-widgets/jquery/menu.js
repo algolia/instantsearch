@@ -13,8 +13,11 @@ function customMenuRendering(opts, isFirstRendering) {
     input.on('change', e => {
       input.refine(e.target.value);
     });
-    container.html('<div class="ais-toggle--header facet-title ais-header">Custom categories</div>')
-             .append(input);
+    container
+      .html(
+        '<div class="ais-toggle--header facet-title ais-header">Custom categories</div>'
+      )
+      .append(input);
   } else {
     input = container.find('select');
   }
@@ -22,13 +25,17 @@ function customMenuRendering(opts, isFirstRendering) {
   input.refine = opts.refine;
 
   const facetValues = opts.items.slice(0, opts.widgetParams.limit || 10);
-  const facetOptions = facetValues.map(f => f.isRefined ?
-      $(`<option value='${f.value}' selected>${f.label}</option>`) :
-      $(`<option value='${f.value}'>${f.label}</option>`)
+  const facetOptions = facetValues.map(
+    f =>
+      f.isRefined
+        ? $(`<option value='${f.value}' selected>${f.label}</option>`)
+        : $(`<option value='${f.value}'>${f.label}</option>`)
   );
   const isValueSelected = facetValues.find(f => f.isRefined);
 
-  const noValue = $(`<option value='' selected='${!isValueSelected}'></option>`);
+  const noValue = $(
+    `<option value='' selected='${!isValueSelected}'></option>`
+  );
 
   input.html('');
 

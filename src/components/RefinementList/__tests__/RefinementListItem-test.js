@@ -1,5 +1,5 @@
 import React from 'react';
-import {createRenderer} from 'react-dom/test-utils';
+import { createRenderer } from 'react-dom/test-utils';
 import RefinementListItem from '../RefinementListItem';
 import Template from '../../Template';
 import sinon from 'sinon';
@@ -17,10 +17,10 @@ describe('RefinementListItem', () => {
       isRefined: false,
       handleClick: sinon.spy(),
       itemClassName: 'item class',
-      templateData: {template: 'data'},
+      templateData: { template: 'data' },
       templateKey: 'item key',
-      templateProps: {template: 'props'},
-      subItems: <div/>,
+      templateProps: { template: 'props' },
+      subItems: <div />,
     };
     renderer = createRenderer();
   });
@@ -29,10 +29,7 @@ describe('RefinementListItem', () => {
     const out = render(props);
 
     expect(out).toEqualJSX(
-      <div
-        className={props.itemClassName}
-        onClick={props.handleClick}
-      >
+      <div className={props.itemClassName} onClick={props.handleClick}>
         <Template
           data={props.templateData}
           templateKey={props.templateKey}

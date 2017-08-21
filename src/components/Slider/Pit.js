@@ -4,21 +4,26 @@ import cx from 'classnames';
 
 import includes from 'lodash/includes';
 
-const Pit = ({style, children}) => {
+const Pit = ({ style, children }) => {
   // first, end & middle
   const positionValue = Math.round(parseFloat(style.left));
   const shouldDisplayValue = includes([0, 50, 100], positionValue);
 
   return (
     <div
-      style={ {...style, marginLeft: positionValue === 100 ? '-2px' : 0} }
-      className={ cx('ais-range-slider--marker ais-range-slider--marker-horizontal', {
-        'ais-range-slider--marker-large': shouldDisplayValue,
-      }) }
+      style={{ ...style, marginLeft: positionValue === 100 ? '-2px' : 0 }}
+      className={cx(
+        'ais-range-slider--marker ais-range-slider--marker-horizontal',
+        {
+          'ais-range-slider--marker-large': shouldDisplayValue,
+        }
+      )}
     >
-      { shouldDisplayValue
-          ? <div className="ais-range-slider--value">{ Math.round(children * 100) / 100 }</div>
-          : null }
+      {shouldDisplayValue
+        ? <div className="ais-range-slider--value">
+            {Math.round(children * 100) / 100}
+          </div>
+        : null}
     </div>
   );
 };

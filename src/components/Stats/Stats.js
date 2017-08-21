@@ -7,8 +7,10 @@ import headerFooterHOC from '../../decorators/headerFooter.js';
 
 export class RawStats extends React.Component {
   shouldComponentUpdate(nextProps) {
-    return this.props.nbHits !== nextProps.hits ||
-      this.props.processingTimeMS !== nextProps.processingTimeMS;
+    return (
+      this.props.nbHits !== nextProps.hits ||
+      this.props.processingTimeMS !== nextProps.processingTimeMS
+    );
   }
 
   render() {

@@ -22,12 +22,10 @@ const renderer = ({
   transformData,
   templates,
   renderState,
-}) => ({
-  createURL,
-  items,
-  refine,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  { createURL, items, refine, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -136,6 +134,7 @@ hierarchicalMenu({
  *
  * By default, the separator is ` > ` but it can be different and specified with the `separator` option.
  * @type {WidgetFactory}
+ * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.
  * @example
@@ -149,20 +148,22 @@ hierarchicalMenu({
  *   })
  * );
  */
-export default function hierarchicalMenu({
-  container,
-  attributes,
-  separator = ' > ',
-  rootPath = null,
-  showParentLevel = true,
-  limit = 10,
-  sortBy = ['name:asc'],
-  cssClasses: userCssClasses = {},
-  autoHideContainer = true,
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-} = {}) {
+export default function hierarchicalMenu(
+  {
+    container,
+    attributes,
+    separator = ' > ',
+    rootPath = null,
+    showParentLevel = true,
+    limit = 10,
+    sortBy = ['name:asc'],
+    cssClasses: userCssClasses = {},
+    autoHideContainer = true,
+    templates = defaultTemplates,
+    collapsible = false,
+    transformData,
+  } = {}
+) {
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
   }

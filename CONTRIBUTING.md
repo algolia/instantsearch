@@ -111,7 +111,7 @@ SAUCE_USERNAME=[your login] SAUCE_ACCESS_KEY=[your api key] CI=true yarn run tes
 ```
 
 You can then inspect the status of tests from your dashboard. Check the browsers for which tests are
-failing. If some are IE or Edge you can download a virtual machine image from the 
+failing. If some are IE or Edge you can download a virtual machine image from the
 [Microsoft website](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/).
 
 Update the config of the dev server (instantsearch.js/scripts/dev.sh) so that you can access
@@ -139,16 +139,20 @@ Files are automatically formatted with prettier.
 For the main version, go on master (`git checkout master`) and use:
 
 ```sh
-yarn run release
+npm run release
 ```
+
+**Be sure to use `$ npm run` instead of `$ yarn run` to avoid issues**
 
 ### Maintenance version
 
 For the maintenance version, go on maintenance (`git checkout maintenance`) and use:
 
 ```sh
-yarn run release-maintenance
+npm run release-maintenance
 ```
+
+**Be sure to use `$ npm run` instead of `$ yarn run` to avoid issues**
 
 ## Update docs
 

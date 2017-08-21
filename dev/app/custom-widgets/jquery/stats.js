@@ -1,11 +1,10 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const renderFn = ({
-  nbHits,
-  processingTimeMS,
-  widgetParams: {containerNode},
-}, isFirstRendering) => {
+const renderFn = (
+  { nbHits, processingTimeMS, widgetParams: { containerNode } },
+  isFirstRendering
+) => {
   if (isFirstRendering) return;
   containerNode.html(`${nbHits} results found in ${processingTimeMS}ms`);
 };

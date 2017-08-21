@@ -24,6 +24,7 @@ analytics({
  * This is a headless widget, which means that it does not have a rendered output in the
  * UI.
  * @type {WidgetFactory}
+ * @category analytics
  * @param {AnalyticsWidgetOptions} $0 The Analytics widget options.
  * @return {Widget} A new instance of the Analytics widget.
  * @example
@@ -57,12 +58,14 @@ analytics({
  *   })
  * );
  */
-function analytics({
-  pushFunction,
-  delay = 3000,
-  triggerOnUIInteraction = false,
-  pushInitialSearch = true,
-} = {}) {
+function analytics(
+  {
+    pushFunction,
+    delay = 3000,
+    triggerOnUIInteraction = false,
+    pushInitialSearch = true,
+  } = {}
+) {
   if (!pushFunction) {
     throw new Error(usage);
   }
@@ -74,7 +77,11 @@ function analytics({
     for (const p in obj) {
       if (obj.hasOwnProperty(p)) {
         const values = obj[p].join('+');
-        str.push(`${encodeURIComponent(p)}=${encodeURIComponent(p)}_${encodeURIComponent(values)}`);
+        str.push(
+          `${encodeURIComponent(p)}=${encodeURIComponent(
+            p
+          )}_${encodeURIComponent(values)}`
+        );
       }
     }
 
@@ -101,7 +108,8 @@ function analytics({
         } else if (filter.hasOwnProperty('=')) {
           const equals = [];
           for (const equal in filter['=']) {
-            if (filter['='].hasOwnProperty(equal)) { // eslint-disable-line max-depth
+            // eslint-disable-next-line max-depth
+            if (filter['='].hasOwnProperty(equal)) {
               equals.push(filter['='][equal]);
             }
           }
@@ -122,14 +130,18 @@ function analytics({
 
     let formattedParams = [];
 
-    const serializedRefinements = serializeRefinements(Object.assign(
-      {},
-      state.state.disjunctiveFacetsRefinements,
-      state.state.facetsRefinements,
-      state.state.hierarchicalFacetsRefinements
-    ));
+    const serializedRefinements = serializeRefinements(
+      Object.assign(
+        {},
+        state.state.disjunctiveFacetsRefinements,
+        state.state.facetsRefinements,
+        state.state.hierarchicalFacetsRefinements
+      )
+    );
 
-    const serializedNumericRefinements = serializeNumericRefinements(state.state.numericRefinements);
+    const serializedNumericRefinements = serializeNumericRefinements(
+      state.state.numericRefinements
+    );
 
     if (serializedRefinements !== '') {
       formattedParams.push(serializedRefinements);
@@ -169,14 +181,14 @@ function analytics({
         });
       }
     },
-    render({results, state}) {
+    render({ results, state }) {
       if (isInitialSearch === true) {
         isInitialSearch = false;
 
         return;
       }
 
-      cachedState = {results, state};
+      cachedState = { results, state };
 
       if (pushTimeout) {
         clearTimeout(pushTimeout);

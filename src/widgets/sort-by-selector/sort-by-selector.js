@@ -4,20 +4,14 @@ import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
 import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
-import {bemHelper, getContainerNode} from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils.js';
 
 const bem = bemHelper('ais-sort-by-selector');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  autoHideContainer,
-}) => ({
-  currentRefinement,
-  options,
-  refine,
-  hasNoResults,
-}, isFirstRendering) => {
+const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
+  { currentRefinement, options, refine, hasNoResults },
+  isFirstRendering
+) => {
   if (isFirstRendering) return;
 
   const shouldAutoHideContainer = autoHideContainer && hasNoResults;
@@ -68,6 +62,7 @@ sortBySelector({
  *
  * For the users it is like they are selecting a new sort order.
  * @type {WidgetFactory}
+ * @category sort
  * @param {SortByWidgetOptions} $0 Options for the SortBySelector widget
  * @return {Widget} Creates a new instance of the SortBySelector widget.
  * @example
@@ -82,12 +77,14 @@ sortBySelector({
  *   })
  * );
  */
-export default function sortBySelector({
-  container,
-  indices,
-  cssClasses: userCssClasses = {},
-  autoHideContainer = false,
-} = {}) {
+export default function sortBySelector(
+  {
+    container,
+    indices,
+    cssClasses: userCssClasses = {},
+    autoHideContainer = false,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -107,7 +104,7 @@ export default function sortBySelector({
 
   try {
     const makeWidget = connectSortBySelector(specializedRenderer);
-    return makeWidget({indices});
+    return makeWidget({ indices });
   } catch (e) {
     throw new Error(usage);
   }

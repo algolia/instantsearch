@@ -1,7 +1,7 @@
 ---
 title: Introduction
 mainTitle: Widgets
-layout: main.pug
+layout: widget-showcase.pug
 category: widgets
 withHeadings: true
 navWeight: 100
@@ -25,7 +25,8 @@ const search = instantsearch(/* parameters here */);
 search.addWidget(instantsearch.searchbox(/* searchbox parameters */));
 ```
 
-## Common parameters
+In the next sections we showcase the widgets InstantSearch.js provides. If you want to learn
+more about the API, have a look at the [common widget API](widget-common-api.html).
 
 Most widgets share a common set of options. Here is a list of the one
 that you'll encounter using the different widgets.
@@ -139,7 +140,7 @@ search.addWidget(instantsearch.refinementList({
   container: '#categories',
   attribute: 'categories',
   collapsible: true,
-});
+}));
 
 // OR for an initially collapsed refinement list
 
@@ -148,7 +149,7 @@ search.addWidget(instantsearch.refinementList({
   container: '#categories',
   attribute: 'categories',
   collapsible: { collapsed: true },
-});
+}));
 ```
 
 ### autoHideContainer
@@ -166,4 +167,5 @@ search.addWidget(instantsearch.refinementList({
   container: '#categories',
   attribute: 'categories',
   autoHideContainer: true,
-});
+}));
+```

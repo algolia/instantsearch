@@ -20,7 +20,7 @@ describe('pagination()', () => {
   let cssClasses;
 
   beforeEach(() => {
-    ReactDOM = {render: sinon.spy()};
+    ReactDOM = { render: sinon.spy() };
     pagination.__Rewire__('ReactDOM', ReactDOM);
 
     container = document.createElement('div');
@@ -36,14 +36,19 @@ describe('pagination()', () => {
       active: 'active',
       disabled: 'disabled',
     };
-    widget = pagination({container, scrollTo: false, cssClasses});
-    results = {hits: [{first: 'hit', second: 'hit'}], nbHits: 200, hitsPerPage: 10, nbPages: 20};
+    widget = pagination({ container, scrollTo: false, cssClasses });
+    results = {
+      hits: [{ first: 'hit', second: 'hit' }],
+      nbHits: 200,
+      hitsPerPage: 10,
+      nbPages: 20,
+    };
     helper = {
       setPage: sinon.spy(),
       search: sinon.spy(),
       getPage: () => 0,
     };
-    widget.init({helper});
+    widget.init({ helper });
   });
 
   it('configures nothing', () => {
@@ -57,13 +62,20 @@ describe('pagination()', () => {
   });
 
   it('calls twice ReactDOM.render(<Pagination props />, container)', () => {
-    widget.render({results, helper, state: {page: 0}});
-    widget.render({results, helper, state: {page: 0}});
+    widget.render({ results, helper, state: { page: 0 } });
+    widget.render({ results, helper, state: { page: 0 } });
 
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Pagination {...getProps()} />);
+    expect(ReactDOM.render.calledTwice).toBe(
+      true,
+      'ReactDOM.render called twice'
+    );
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
+      <Pagination {...getProps()} />
+    );
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Pagination {...getProps()} />);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
+      <Pagination {...getProps()} />
+    );
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
@@ -79,19 +91,25 @@ describe('pagination()', () => {
     });
 
     it('should not scroll', () => {
-      widget = pagination({container, scrollTo: false});
-      widget.init({helper});
+      widget = pagination({ container, scrollTo: false });
+      widget.init({ helper });
       widget.refine(helper, 2);
-      expect(scrollIntoView.calledOnce).toBe(false, 'scrollIntoView never called');
+      expect(scrollIntoView.calledOnce).toBe(
+        false,
+        'scrollIntoView never called'
+      );
     });
 
     it('should scroll to body', () => {
-      widget = pagination({container});
-      widget.init({helper});
-      widget.render({results, helper, state: {page: 0}});
-      const {props: {setCurrentPage}} = ReactDOM.render.firstCall.args[0];
+      widget = pagination({ container });
+      widget.init({ helper });
+      widget.render({ results, helper, state: { page: 0 } });
+      const { props: { setCurrentPage } } = ReactDOM.render.firstCall.args[0];
       setCurrentPage(2);
-      expect(scrollIntoView.calledOnce).toBe(true, 'scrollIntoView called once');
+      expect(scrollIntoView.calledOnce).toBe(
+        true,
+        'scrollIntoView called once'
+      );
     });
 
     afterEach(() => {
@@ -120,7 +138,7 @@ describe('pagination()', () => {
       },
       currentPage: 0,
       shouldAutoHideContainer: false,
-      labels: {first: '«', last: '»', next: '›', previous: '‹'},
+      labels: { first: '«', last: '»', next: '›', previous: '‹' },
       nbHits: results.nbHits,
       nbPages: results.nbPages,
       padding: 3,
@@ -140,7 +158,7 @@ describe('pagination MaxPage', () => {
   let paginationOptions;
 
   beforeEach(() => {
-    ReactDOM = {render: sinon.spy()};
+    ReactDOM = { render: sinon.spy() };
     pagination.__Rewire__('ReactDOM', ReactDOM);
 
     container = document.createElement('div');
@@ -156,8 +174,13 @@ describe('pagination MaxPage', () => {
       active: 'active',
       disabled: 'disabled',
     };
-    results = {hits: [{first: 'hit', second: 'hit'}], nbHits: 300, hitsPerPage: 10, nbPages: 30};
-    paginationOptions = {container, scrollTo: false, cssClasses};
+    results = {
+      hits: [{ first: 'hit', second: 'hit' }],
+      nbHits: 300,
+      hitsPerPage: 10,
+      nbPages: 30,
+    };
+    paginationOptions = { container, scrollTo: false, cssClasses };
   });
 
   it('does to have any default', () => {

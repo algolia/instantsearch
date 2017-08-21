@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customSearchBox = connectSearchBox(function render(params, isFirstRendering) {
@@ -75,7 +75,7 @@ export default function connectSearchBox(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {queryHook} = widgetParams;
+    const { queryHook } = widgetParams;
 
     function clear(helper) {
       return function() {
@@ -86,9 +86,11 @@ export default function connectSearchBox(renderFn) {
 
     return {
       _clear() {},
-      _cachedClear() { this._clear(); },
+      _cachedClear() {
+        this._clear();
+      },
 
-      init({helper, onHistoryChange, instantSearchInstance}) {
+      init({ helper, onHistoryChange, instantSearchInstance }) {
         this._cachedClear = this._cachedClear.bind(this);
         this._clear = clear(helper);
 
@@ -100,37 +102,44 @@ export default function connectSearchBox(renderFn) {
               previousQuery = helper.state.query;
               helper.setQuery(q);
             }
-            if (doSearch && previousQuery !== undefined && previousQuery !== q) helper.search();
+            if (doSearch && previousQuery !== undefined && previousQuery !== q)
+              helper.search();
           };
 
-          return queryHook ?
-            q => queryHook(q, setQueryAndSearch) :
-            setQueryAndSearch;
+          return queryHook
+            ? q => queryHook(q, setQueryAndSearch)
+            : setQueryAndSearch;
         })();
 
         this._onHistoryChange = onHistoryChange;
 
-        renderFn({
-          query: helper.state.query,
-          onHistoryChange: this._onHistoryChange,
-          refine: this._refine,
-          clear: this._cachedClear,
-          widgetParams,
-          instantSearchInstance,
-        }, true);
+        renderFn(
+          {
+            query: helper.state.query,
+            onHistoryChange: this._onHistoryChange,
+            refine: this._refine,
+            clear: this._cachedClear,
+            widgetParams,
+            instantSearchInstance,
+          },
+          true
+        );
       },
 
-      render({helper, instantSearchInstance}) {
+      render({ helper, instantSearchInstance }) {
         this._clear = clear(helper);
 
-        renderFn({
-          query: helper.state.query,
-          onHistoryChange: this._onHistoryChange,
-          refine: this._refine,
-          clear: this._cachedClear,
-          widgetParams,
-          instantSearchInstance,
-        }, false);
+        renderFn(
+          {
+            query: helper.state.query,
+            onHistoryChange: this._onHistoryChange,
+            refine: this._refine,
+            clear: this._cachedClear,
+            widgetParams,
+            instantSearchInstance,
+          },
+          false
+        );
       },
     };
   };

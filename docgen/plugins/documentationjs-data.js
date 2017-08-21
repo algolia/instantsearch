@@ -49,6 +49,8 @@ export default function({rootJSFile}) {
       mapConnectors(filterSymbolsByType('Connector', mdFormattedSymbols), mdFormattedSymbols, files),
       mapWidgets(filterSymbolsByType('WidgetFactory', mdFormattedSymbols), mdFormattedSymbols, files),
 
+      metalsmith.metadata().widgetSymbols = groupSymbolsByCategories(filterSymbolsByType('WidgetFactory', mdFormattedSymbols));
+
       console.log('after documentationjs');
       done();
     }, (e) => done);
@@ -70,8 +72,14 @@ function filterSymbolsByType(type, symbols) {
   });
 }
 
+function groupSymbolsByCategories(symbols) {
+  return groupBy(symbols, (s) => {
+    const [ tag ] = filter(s.tags, {title: 'category'});
+    return tag && tag.description || 'other';
+  });
+}
+
 function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files) {
-  // console.log(JSON.stringify(InstantSearchSymbol.params, null, 2));
   const fileName = 'instantsearch.html';
 
   const githubSource = InstantSearch.context.file.split('instantsearch.js')[1];
@@ -99,7 +107,6 @@ function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files)
 
 function mapConnectors(connectors, symbols, files) {
   return forEach(connectors, symbol => {
-    // console.log(symbol.name);
     const fileName = `connectors/${symbol.name}.html`;
 
     const symbolWithRelatedType = {
@@ -128,7 +135,6 @@ function mapConnectors(connectors, symbols, files) {
 
 function mapWidgets(widgets, symbols, files) {
   return forEach(widgets, symbol => {
-    // console.log(symbol.name);
     const fileName = `widgets/${symbol.name}.html`;
 
     const relatedTypes = findRelatedTypes(symbol, symbols);

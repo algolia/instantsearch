@@ -4,3 +4,8 @@ docs/
 docs.old/
 docgen/
 node_modules/
+
+dist-es6-module/
+instantsearch.js
+connectors.js
+widgets.js

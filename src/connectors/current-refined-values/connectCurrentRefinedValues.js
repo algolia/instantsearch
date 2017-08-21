@@ -42,13 +42,23 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
+ * @typedef {Object} CurrentRefinement
+ * @property {"facet"|"exclude"|"disjunctive"|"hierarchical"|"numeric"} type Type of refinement
+ * @property {string} attributeName Attribute on which the refinement is applied
+ * @property {string} name value of the refinement
+ * @property {number} [numericValue] value if the attribute is numeric and used with a numeric filter
+ * @property {boolean} [exhaustive] `true` if the count is exhaustive, only if applicable
+ * @property {number} [count] number of items found, if applicable
+ */
+
+/**
  * @typedef {Object} CurrentRefinedValuesRenderingOptions
  * @property {Object.<string, object>} attributes Original `CurrentRefinedValuesWidgetOptions.attributes` mapped by keys.
  * @property {function} clearAllClick Clears all the currently refined values.
  * @property {function} clearAllURL Generate a URL which leads to a state where all the refinements have been cleared.
  * @property {function(item)} refine Clears a single refinement.
  * @property {function(item): string} createURL Creates an individual url where a single refinement is cleared.
- * @property {Object[]} refinements All the current refinements.
+ * @property {CurrentRefinement[]} refinements All the current refinements.
  * @property {Object} widgetParams All original `CustomCurrentRefinedValuesWidgetOptions` forwarded to the `renderFn`.
  */
 
@@ -148,19 +158,24 @@ export default function connectCurrentRefinedValues(renderFn) {
       clearsQuery = false,
     } = widgetParams;
 
-    const attributesOK = isArray(attributes) &&
+    const attributesOK =
+      isArray(attributes) &&
       reduce(
         attributes,
         (res, val) =>
           res &&
-            isPlainObject(val) &&
-            isString(val.name) &&
-            (isUndefined(val.label) || isString(val.label)) &&
-            (isUndefined(val.template) || isString(val.template) || isFunction(val.template)) &&
-            (isUndefined(val.transformData) || isFunction(val.transformData)),
-        true);
+          isPlainObject(val) &&
+          isString(val.name) &&
+          (isUndefined(val.label) || isString(val.label)) &&
+          (isUndefined(val.template) ||
+            isString(val.template) ||
+            isFunction(val.template)) &&
+          (isUndefined(val.transformData) || isFunction(val.transformData)),
+        true
+      );
 
-    const showUsage = false ||
+    const showUsage =
+      false ||
       !isArray(attributes) ||
       !attributesOK ||
       !isBoolean(onlyListedAttributes);
@@ -172,59 +187,95 @@ export default function connectCurrentRefinedValues(renderFn) {
     const attributeNames = map(attributes, attribute => attribute.name);
     const restrictedTo = onlyListedAttributes ? attributeNames : [];
 
-    const attributesObj = reduce(attributes, (res, attribute) => {
-      res[attribute.name] = attribute;
-      return res;
-    }, {});
+    const attributesObj = reduce(
+      attributes,
+      (res, attribute) => {
+        res[attribute.name] = attribute;
+        return res;
+      },
+      {}
+    );
 
     return {
+      init({ helper, createURL, instantSearchInstance }) {
+        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(
+          null,
+          helper,
+          restrictedTo,
+          clearsQuery
+        );
 
-      init({helper, createURL, instantSearchInstance}) {
-        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo, clearsQuery);
+        const clearAllURL = createURL(
+          clearRefinementsFromState(helper.state, restrictedTo, clearsQuery)
+        );
 
-        const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo, clearsQuery));
+        const refinements = getFilteredRefinements(
+          {},
+          helper.state,
+          attributeNames,
+          onlyListedAttributes
+        );
 
-        const refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes);
+        const _createURL = refinement =>
+          createURL(clearRefinementFromState(helper.state, refinement));
+        const _clearRefinement = refinement =>
+          clearRefinement(helper, refinement);
 
-        const _createURL = refinement => createURL(clearRefinementFromState(helper.state, refinement));
-        const _clearRefinement = refinement => clearRefinement(helper, refinement);
-
-        renderFn({
-          attributes: attributesObj,
-          clearAllClick: this._clearRefinementsAndSearch,
-          clearAllURL,
-          refine: _clearRefinement,
-          createURL: _createURL,
-          refinements,
-          instantSearchInstance,
-          widgetParams,
-        }, true);
+        renderFn(
+          {
+            attributes: attributesObj,
+            clearAllClick: this._clearRefinementsAndSearch,
+            clearAllURL,
+            refine: _clearRefinement,
+            createURL: _createURL,
+            refinements,
+            instantSearchInstance,
+            widgetParams,
+          },
+          true
+        );
       },
 
-      render({results, helper, state, createURL, instantSearchInstance}) {
-        const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo, clearsQuery));
+      render({ results, helper, state, createURL, instantSearchInstance }) {
+        const clearAllURL = createURL(
+          clearRefinementsFromState(state, restrictedTo, clearsQuery)
+        );
 
-        const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
+        const refinements = getFilteredRefinements(
+          results,
+          state,
+          attributeNames,
+          onlyListedAttributes
+        );
 
-        const _createURL = refinement => createURL(clearRefinementFromState(helper.state, refinement));
-        const _clearRefinement = refinement => clearRefinement(helper, refinement);
+        const _createURL = refinement =>
+          createURL(clearRefinementFromState(helper.state, refinement));
+        const _clearRefinement = refinement =>
+          clearRefinement(helper, refinement);
 
-        renderFn({
-          attributes: attributesObj,
-          clearAllClick: this._clearRefinementsAndSearch,
-          clearAllURL,
-          refine: _clearRefinement,
-          createURL: _createURL,
-          refinements,
-          instantSearchInstance,
-          widgetParams,
-        }, false);
+        renderFn(
+          {
+            attributes: attributesObj,
+            clearAllClick: this._clearRefinementsAndSearch,
+            clearAllURL,
+            refine: _clearRefinement,
+            createURL: _createURL,
+            refinements,
+            instantSearchInstance,
+            widgetParams,
+          },
+          false
+        );
       },
     };
   };
 }
 
-function getRestrictedIndexForSort(attributeNames, otherAttributeNames, attributeName) {
+function getRestrictedIndexForSort(
+  attributeNames,
+  otherAttributeNames,
+  attributeName
+) {
   const idx = attributeNames.indexOf(attributeName);
   if (idx !== -1) {
     return idx;
@@ -233,8 +284,16 @@ function getRestrictedIndexForSort(attributeNames, otherAttributeNames, attribut
 }
 
 function compareRefinements(attributeNames, otherAttributeNames, a, b) {
-  const idxa = getRestrictedIndexForSort(attributeNames, otherAttributeNames, a.attributeName);
-  const idxb = getRestrictedIndexForSort(attributeNames, otherAttributeNames, b.attributeName);
+  const idxa = getRestrictedIndexForSort(
+    attributeNames,
+    otherAttributeNames,
+    a.attributeName
+  );
+  const idxb = getRestrictedIndexForSort(
+    attributeNames,
+    otherAttributeNames,
+    b.attributeName
+  );
   if (idxa === idxb) {
     if (a.name === b.name) {
       return 0;
@@ -244,37 +303,69 @@ function compareRefinements(attributeNames, otherAttributeNames, a, b) {
   return idxa < idxb ? -1 : 1;
 }
 
-function getFilteredRefinements(results, state, attributeNames, onlyListedAttributes) {
+function getFilteredRefinements(
+  results,
+  state,
+  attributeNames,
+  onlyListedAttributes
+) {
   let refinements = getRefinements(results, state);
-  const otherAttributeNames = reduce(refinements, (res, refinement) => {
-    if (attributeNames.indexOf(refinement.attributeName) === -1 && res.indexOf(refinement.attributeName === -1)) {
-      res.push(refinement.attributeName);
-    }
-    return res;
-  }, []);
-  refinements = refinements.sort(compareRefinements.bind(null, attributeNames, otherAttributeNames));
+  const otherAttributeNames = reduce(
+    refinements,
+    (res, refinement) => {
+      if (
+        attributeNames.indexOf(refinement.attributeName) === -1 &&
+        res.indexOf(refinement.attributeName === -1)
+      ) {
+        res.push(refinement.attributeName);
+      }
+      return res;
+    },
+    []
+  );
+  refinements = refinements.sort(
+    compareRefinements.bind(null, attributeNames, otherAttributeNames)
+  );
   if (onlyListedAttributes && !isEmpty(attributeNames)) {
-    refinements = filter(refinements, refinement => attributeNames.indexOf(refinement.attributeName) !== -1);
+    refinements = filter(
+      refinements,
+      refinement => attributeNames.indexOf(refinement.attributeName) !== -1
+    );
   }
   return refinements.map(computeLabel);
 }
 
 function clearRefinementFromState(state, refinement) {
   switch (refinement.type) {
-  case 'facet':
-    return state.removeFacetRefinement(refinement.attributeName, refinement.name);
-  case 'disjunctive':
-    return state.removeDisjunctiveFacetRefinement(refinement.attributeName, refinement.name);
-  case 'hierarchical':
-    return state.clearRefinements(refinement.attributeName);
-  case 'exclude':
-    return state.removeExcludeRefinement(refinement.attributeName, refinement.name);
-  case 'numeric':
-    return state.removeNumericRefinement(refinement.attributeName, refinement.operator, refinement.numericValue);
-  case 'tag':
-    return state.removeTagRefinement(refinement.name);
-  default:
-    throw new Error(`clearRefinement: type ${refinement.type} is not handled`);
+    case 'facet':
+      return state.removeFacetRefinement(
+        refinement.attributeName,
+        refinement.name
+      );
+    case 'disjunctive':
+      return state.removeDisjunctiveFacetRefinement(
+        refinement.attributeName,
+        refinement.name
+      );
+    case 'hierarchical':
+      return state.clearRefinements(refinement.attributeName);
+    case 'exclude':
+      return state.removeExcludeRefinement(
+        refinement.attributeName,
+        refinement.name
+      );
+    case 'numeric':
+      return state.removeNumericRefinement(
+        refinement.attributeName,
+        refinement.operator,
+        refinement.numericValue
+      );
+    case 'tag':
+      return state.removeTagRefinement(refinement.name);
+    default:
+      throw new Error(
+        `clearRefinement: type ${refinement.type} is not handled`
+      );
   }
 }
 

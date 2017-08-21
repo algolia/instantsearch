@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectSortBySelector from '../connectSortBySelector.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectSortBySelector', () => {
   it('Renders during init and render', () => {
@@ -15,10 +15,10 @@ describe('connectSortBySelector', () => {
     const makeWidget = connectSortBySelector(rendering);
 
     const indices = [
-      {label: 'Sort products by relevance', name: 'relevance'},
-      {label: 'Sort products by price', name: 'priceASC'},
+      { label: 'Sort products by relevance', name: 'relevance' },
+      { label: 'Sort products by price', name: 'priceASC' },
     ];
-    const widget = makeWidget({indices});
+    const widget = makeWidget({ indices });
 
     expect(widget.getConfiguration).toBe(undefined);
 
@@ -32,18 +32,23 @@ describe('connectSortBySelector', () => {
       onHistoryChange: () => {},
     });
 
-    { // should call the rendering once with isFirstRendering to true
+    {
+      // should call the rendering once with isFirstRendering to true
       expect(rendering.callCount).toBe(1);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {currentRefinement, options, widgetParams} = rendering.lastCall.args[0];
+      const {
+        currentRefinement,
+        options,
+        widgetParams,
+      } = rendering.lastCall.args[0];
       expect(currentRefinement).toBe(helper.state.index);
-      expect(widgetParams).toEqual({indices});
+      expect(widgetParams).toEqual({ indices });
       expect(options).toEqual([
-        {label: 'Sort products by relevance', value: 'relevance'},
-        {label: 'Sort products by price', value: 'priceASC'},
+        { label: 'Sort products by relevance', value: 'relevance' },
+        { label: 'Sort products by price', value: 'priceASC' },
       ]);
     }
 
@@ -54,17 +59,18 @@ describe('connectSortBySelector', () => {
       createURL: () => '#',
     });
 
-    { // Should call the rendering a second time, with isFirstRendering to false
+    {
+      // Should call the rendering a second time, with isFirstRendering to false
       expect(rendering.callCount).toBe(2);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {currentRefinement, options} = rendering.lastCall.args[0];
+      const { currentRefinement, options } = rendering.lastCall.args[0];
       expect(currentRefinement).toBe(helper.state.index);
       expect(options).toEqual([
-        {label: 'Sort products by relevance', value: 'relevance'},
-        {label: 'Sort products by price', value: 'priceASC'},
+        { label: 'Sort products by relevance', value: 'relevance' },
+        { label: 'Sort products by price', value: 'priceASC' },
       ]);
     }
   });
@@ -74,8 +80,8 @@ describe('connectSortBySelector', () => {
     const makeWidget = connectSortBySelector(rendering);
 
     const indices = [
-      {label: 'Sort products by relevance', name: 'relevance'},
-      {label: 'Sort products by price', name: 'priceASC'},
+      { label: 'Sort products by relevance', name: 'relevance' },
+      { label: 'Sort products by price', name: 'priceASC' },
     ];
     const widget = makeWidget({
       indices,
@@ -91,10 +97,11 @@ describe('connectSortBySelector', () => {
       onHistoryChange: () => {},
     });
 
-    { // first rendering
+    {
+      // first rendering
       expect(helper.state.index).toBe(indices[0].name);
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, currentRefinement} = renderOptions;
+      const { refine, currentRefinement } = renderOptions;
       expect(currentRefinement).toBe(helper.state.index);
       refine('bip');
       expect(helper.state.index).toBe('bip');
@@ -108,10 +115,11 @@ describe('connectSortBySelector', () => {
       createURL: () => '#',
     });
 
-    { // Second rendering
+    {
+      // Second rendering
       expect(helper.state.index).toBe('bip');
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, currentRefinement} = renderOptions;
+      const { refine, currentRefinement } = renderOptions;
       expect(currentRefinement).toBe('bip');
       refine('bop');
       expect(helper.state.index).toBe('bop');

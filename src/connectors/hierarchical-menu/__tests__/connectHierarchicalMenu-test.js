@@ -32,7 +32,7 @@ describe('connectHierarchicalMenu', () => {
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', config);
+    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -72,7 +72,11 @@ describe('connectHierarchicalMenu', () => {
       attributes: ['category', 'sub_category'],
     });
 
-    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      { addAlgoliaAgent: () => {} },
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'value');
@@ -85,7 +89,7 @@ describe('connectHierarchicalMenu', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {refine} = firstRenderingOptions;
+    const { refine } = firstRenderingOptions;
     refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
     refine('value');
@@ -99,7 +103,7 @@ describe('connectHierarchicalMenu', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {refine: renderToggleRefinement} = secondRenderingOptions;
+    const { refine: renderToggleRefinement } = secondRenderingOptions;
     renderToggleRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
     renderToggleRefinement('value');
@@ -113,7 +117,11 @@ describe('connectHierarchicalMenu', () => {
       attributes: ['category', 'subCategory'],
     });
 
-    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', widget.getConfiguration({}));
+    const helper = jsHelper(
+      { addAlgoliaAgent: () => {} },
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -132,25 +140,28 @@ describe('connectHierarchicalMenu', () => {
     expect(firstRenderingOptions.items).toEqual([]);
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [],
-        facets: {
-          category: {
-            Decoration: 880,
-          },
-          subCategory: {
-            'Decoration > Candle holders & candles': 193,
-            'Decoration > Frames & pictures': 173,
-          },
-        },
-      }, {
-        facets: {
-          category: {
-            Decoration: 880,
-            Outdoor: 47,
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+            subCategory: {
+              'Decoration > Candle holders & candles': 193,
+              'Decoration > Frames & pictures': 173,
+            },
           },
         },
-      }]),
+        {
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
+          },
+        },
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',

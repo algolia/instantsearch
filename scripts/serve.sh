@@ -10,9 +10,4 @@
 # folder through a local web server.
 
 yarn
-node-sass -o ./dist/ ./src/css --output-style expanded
-node-sass -o ./dist/ --watch ./src/css --output-style expanded &
-NODE_ENV=production webpack --config ./scripts/webpack.config.serve.babel.js -w &
-sleep 3 &&
-http-server dist/ &
-wait
+NODE_ENV=production webpack-dev-server --config ./scripts/webpack.config.js --content-base dist/

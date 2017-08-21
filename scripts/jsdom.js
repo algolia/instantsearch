@@ -1,8 +1,7 @@
-
-beforeEach(function () {
+beforeEach(function() {
   this.jsdom = require('jsdom-global')();
 });
 
-afterEach(function () {
+afterEach(function() {
   this.jsdom();
 });

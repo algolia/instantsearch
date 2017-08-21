@@ -1,7 +1,7 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const getLabel = ({from, to} = {}) => {
+const getLabel = ({ from, to } = {}) => {
   if (to === undefined) return `≥ $${from}`;
   if (from === undefined) return `≤ $${to}`;
   return `$${from} - $${to}`;
@@ -9,40 +9,38 @@ const getLabel = ({from, to} = {}) => {
 
 // Available price ranges for results
 // ----------------------------------
-const renderList = ({containerNode, items, refine}) => {
-  containerNode
-    .find('ul > li')
-    .each(function() { window.$(this).off(); });
+const renderList = ({ containerNode, items, refine }) => {
+  containerNode.find('ul > li').each(function() {
+    window.$(this).off();
+  });
 
-  const list = items.map(item => `
+  const list = items.map(
+    item => `
     <li class="facet-value">
       <a href="${item.url}">
         ${getLabel(item)}
       </a>
     </li>
-  `);
+  `
+  );
 
-  containerNode
-    .find('ul')
-    .html(list);
+  containerNode.find('ul').html(list);
 
-  containerNode
-    .find('ul > li')
-    .each(function(index) {
-      window.$(this).on('click', e => {
-        e.preventDefault();
-        e.stopPropagation();
+  containerNode.find('ul > li').each(function(index) {
+    window.$(this).on('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
 
-        const {from, to} = items[index];
-        refine({from, to});
-      });
+      const { from, to } = items[index];
+      refine({ from, to });
     });
+  });
 };
 
 // Custom values form
 // ------------------
-const renderForm = ({containerNode, currentRefinement}) => {
-  const {from, to} = currentRefinement || {};
+const renderForm = ({ containerNode, currentRefinement }) => {
+  const { from, to } = currentRefinement || {};
   containerNode.find('form').html(`
     <label>
       <span>$ </span>
@@ -73,23 +71,33 @@ const renderForm = ({containerNode, currentRefinement}) => {
   `);
 };
 
-const handleFormSubmit = ({refine, containerNode}) => e => {
+const handleFormSubmit = ({ refine, containerNode }) => e => {
   e.preventDefault();
 
-  const [{value: fromInputValue}, {value: toInputValue}] = containerNode.find('input[type="number"]');
+  const [
+    { value: fromInputValue },
+    { value: toInputValue },
+  ] = containerNode.find('input[type="number"]');
 
-  const from = !isNaN(parseFloat(fromInputValue)) ? parseFloat(fromInputValue) : undefined;
-  const to = !isNaN(parseFloat(toInputValue)) ? parseFloat(toInputValue) : undefined;
+  const from = !isNaN(parseFloat(fromInputValue))
+    ? parseFloat(fromInputValue)
+    : undefined;
+  const to = !isNaN(parseFloat(toInputValue))
+    ? parseFloat(toInputValue)
+    : undefined;
 
-  if (from || to) refine({from, to});
+  if (from || to) refine({ from, to });
 };
 
-const renderFn = ({
-  items,
-  refine,
-  currentRefinement,
-  widgetParams: {containerNode, title = 'Price ranges'},
-}, isFirstRendering) => {
+const renderFn = (
+  {
+    items,
+    refine,
+    currentRefinement,
+    widgetParams: { containerNode, title = 'Price ranges' },
+  },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     const markup = `
       <div class="facet-title">${title}</div>
@@ -101,11 +109,11 @@ const renderFn = ({
     // bind form action on first render
     containerNode
       .find('form')
-      .on('submit', handleFormSubmit({refine, containerNode}));
+      .on('submit', handleFormSubmit({ refine, containerNode }));
   }
 
-  renderList({containerNode, items, refine});
-  renderForm({containerNode, currentRefinement, refine});
+  renderList({ containerNode, items, refine });
+  renderForm({ containerNode, currentRefinement, refine });
 };
 
 export default instantsearch.connectors.connectPriceRanges(renderFn);

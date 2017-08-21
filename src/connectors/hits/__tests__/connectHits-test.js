@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectHits from '../connectHits.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectHits', () => {
   it('Renders during init and render', () => {
@@ -13,7 +13,7 @@ describe('connectHits', () => {
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget({escapeHits: true});
+    const widget = makeWidget({ escapeHits: true });
 
     expect(widget.getConfiguration()).toEqual({
       highlightPreTag: '__ais-highlight__',
@@ -37,7 +37,9 @@ describe('connectHits', () => {
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({escapeHits: true});
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      escapeHits: true,
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -49,7 +51,9 @@ describe('connectHits', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({escapeHits: true});
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      escapeHits: true,
+    });
   });
 
   it('Provides the hits and the whole results', () => {
@@ -71,12 +75,11 @@ describe('connectHits', () => {
     expect(firstRenderingOptions.hits).toEqual([]);
     expect(firstRenderingOptions.results).toBe(undefined);
 
-    const hits = [
-      {fake: 'data'},
-      {sample: 'infos'},
-    ];
+    const hits = [{ fake: 'data' }, { sample: 'infos' }];
 
-    const results = new SearchResults(helper.state, [{hits: [].concat(hits)}]);
+    const results = new SearchResults(helper.state, [
+      { hits: [].concat(hits) },
+    ]);
     widget.render({
       results,
       state: helper.state,
@@ -92,7 +95,7 @@ describe('connectHits', () => {
   it('escape highlight properties if requested', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget({escapeHits: true});
+    const widget = makeWidget({ escapeHits: true });
 
     const helper = jsHelper(fakeClient, '', {});
     helper.search = sinon.stub();
@@ -118,7 +121,7 @@ describe('connectHits', () => {
       },
     ];
 
-    const results = new SearchResults(helper.state, [{hits}]);
+    const results = new SearchResults(helper.state, [{ hits }]);
     widget.render({
       results,
       state: helper.state,

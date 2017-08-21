@@ -17,7 +17,7 @@ class PaginationLink extends React.Component {
   }
 
   render() {
-    const {cssClasses, label, ariaLabel, url, isDisabled} = this.props;
+    const { cssClasses, label, ariaLabel, url, isDisabled } = this.props;
 
     let tagName = 'span';
     let attributes = {
@@ -33,8 +33,8 @@ class PaginationLink extends React.Component {
       attributes = {
         ...attributes,
         'aria-label': ariaLabel,
-        'href': url,
-        'onClick': this.handleClick,
+        href: url,
+        onClick: this.handleClick,
       };
     }
 
@@ -49,20 +49,15 @@ class PaginationLink extends React.Component {
 }
 
 PaginationLink.propTypes = {
-  ariaLabel: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
+  ariaLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   cssClasses: PropTypes.shape({
     item: PropTypes.string,
     link: PropTypes.string,
   }),
   handleClick: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool,
-  label: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]).isRequired,
+  label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   pageNumber: PropTypes.number,
   url: PropTypes.string,
 };

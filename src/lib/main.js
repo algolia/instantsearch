@@ -88,7 +88,8 @@ import * as widgets from '../widgets/index.js';
  */
 const instantsearch = toFactory(InstantSearch);
 
-instantsearch.createQueryString = algoliasearchHelper.url.getQueryStringFromState;
+instantsearch.createQueryString =
+  algoliasearchHelper.url.getQueryStringFromState;
 instantsearch.connectors = connectors;
 instantsearch.widgets = widgets;
 instantsearch.version = version;
