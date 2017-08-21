@@ -4781,9 +4781,9 @@ figure figcaption {
     min-height: 1000px;
     padding-left: 60px;
     padding-top: 60px; }
-    .documentation-section .documentation-container p, .documentation-section .documentation-container li,
+    .documentation-section .documentation-container p, .documentation-section .documentation-container li:not(.ais-pagination--item),
     .examples-section .documentation-container p,
-    .examples-section .documentation-container li {
+    .examples-section .documentation-container li:not(.ais-pagination--item) {
       color: rgba(32, 28, 56, 0.8);
       line-height: 2;
       font-size: 16px;
@@ -4795,10 +4795,10 @@ figure figcaption {
     .examples-section .documentation-container ol {
       font-size: 16px;
       line-height: 22px; }
-      .documentation-section .documentation-container ul li,
-      .documentation-section .documentation-container ol li,
-      .examples-section .documentation-container ul li,
-      .examples-section .documentation-container ol li {
+      .documentation-section .documentation-container ul li:not(.ais-pagination--item),
+      .documentation-section .documentation-container ol li:not(.ais-pagination--item),
+      .examples-section .documentation-container ul li:not(.ais-pagination--item),
+      .examples-section .documentation-container ol li:not(.ais-pagination--item) {
         clear: both;
         margin-bottom: 10px; }
       .documentation-section .documentation-container ul ul,
@@ -4808,15 +4808,15 @@ figure figcaption {
         font-weight: normal;
         font-size: 14px;
         position: relative; }
-        .documentation-section .documentation-container ul ul li,
-        .documentation-section .documentation-container ol ul li,
-        .examples-section .documentation-container ul ul li,
-        .examples-section .documentation-container ol ul li {
+        .documentation-section .documentation-container ul ul li:not(.ais-pagination--item),
+        .documentation-section .documentation-container ol ul li:not(.ais-pagination--item),
+        .examples-section .documentation-container ul ul li:not(.ais-pagination--item),
+        .examples-section .documentation-container ol ul li:not(.ais-pagination--item) {
           line-height: 26px; }
-          .documentation-section .documentation-container ul ul li:before,
-          .documentation-section .documentation-container ol ul li:before,
-          .examples-section .documentation-container ul ul li:before,
-          .examples-section .documentation-container ol ul li:before {
+          .documentation-section .documentation-container ul ul li:not(.ais-pagination--item):before,
+          .documentation-section .documentation-container ol ul li:not(.ais-pagination--item):before,
+          .examples-section .documentation-container ul ul li:not(.ais-pagination--item):before,
+          .examples-section .documentation-container ol ul li:not(.ais-pagination--item):before {
             content: '-';
             float: left;
             margin-right: 6px;
@@ -5476,6 +5476,14 @@ div.cm-s-mdn-like .CodeMirror-activeline-background {
 div.cm-s-mdn-like span.CodeMirror-matchingbracket {
   outline: 1px solid grey;
   color: inherit; }
+
+.cm-s-mdn-like .cm-positive {
+  color: #690;
+  background: #efe; }
+
+.cm-s-mdn-like .cm-negative {
+  color: red;
+  background: #fee; }
 
 .screen-mockup {
   top: -200px; }
