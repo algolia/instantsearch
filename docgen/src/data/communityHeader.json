@@ -79,8 +79,11 @@
       {
         "name": "Migrate from V1",
         "url": "guides/migration.html"
+      },
+      {
+        "name": "Integrate with Angular (2+)",
+        "url": "guides/angular-integration.html"
       }
-
     ]
   },
   {
