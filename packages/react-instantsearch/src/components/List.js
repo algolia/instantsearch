@@ -5,7 +5,7 @@ import SearchBox from '../components/SearchBox';
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
     value: PropTypes.any,
-    label: PropTypes.string.isRequired,
+    label: PropTypes.node.isRequired,
     items: (...args) => itemsPropType(...args),
   })
 );
