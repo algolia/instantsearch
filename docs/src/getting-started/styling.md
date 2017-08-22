@@ -11,7 +11,7 @@ githubSource: docs/src/getting-started/styling.md
 
 Vue InstantSearch does not come with any styling but makes sure you can adapt the look & feel to your existing design.
 
-Here you will learn about the different provided options.
+Here you will learn about the available options.
 
 ## HTML Classes
 
@@ -21,8 +21,8 @@ Class names follow the BEM syntax `${block}__${element}--${modifier}`.
 All class names are prefixed with the `ais-` string to avoid any conflict with existing class names.
 `ais` stands for "Algolia Instant-Search".
 
-i.e. `ais-pagination__item` represents a single page element inside of the `Pagination component`.
-If that page is also the current page, the element will also have a the same class name suffixed with the `active` modifier: `ais-pagination__item--active`.
+For example, `ais-pagination__item` represents a single page element inside the `Pagination component`.
+If that page is also the current page, the element will also have the same class name suffixed with the `active` modifier: `ais-pagination__item--active`.
 
 It is up to you to take advantage of existing class names to make the search experience fit into your existing layout.
 
@@ -32,9 +32,9 @@ All class names are listed on the dedicated documentation page of every componen
 
 You can override existing class names with your own ones.
 
-To do so, you need to provide an object as the `class-names` property, that will map default class names to the ones of your choice.
+To do so, you need to provide an object as the `class-names` property, which will map default class names to the ones of your choice.
 
-i.e.
+For example:
 
 ```html
 <ais-pagination :class-names="{
@@ -45,7 +45,7 @@ i.e.
 </ais-pagination>
 ```
 
-This will keep non replaced class names, but replace custom classes where applicable.
+This will replace custom classes where applicable, while leaving untouched the rest of the class names.
 
 ## Using slots
 
@@ -85,7 +85,7 @@ In that case, you can replace the entire template of a component.
 
 You can tell Vue.js to override the template by specifying an `inline-template` attribute on a component.
 
-i.e. render results in a `table` instead of in `<div>`s
+For example, render results in a `table` instead of in `<div>`s
 
 ```html
 <ais-results inline-template>
@@ -100,16 +100,16 @@ i.e. render results in a `table` instead of in `<div>`s
 </ais-results>
 ```
 
-It is recommended to not over-use this `inline-template` feature because it makes it hard to reason about the current scope. In the previous example, the `results` variable is provided by the `Results` component, not the current scope.
+It is recommended to not overuse this `inline-template` feature because it makes it hard to know about the current scope. In the previous example, the `results` variable is provided by the `Results` component, not the current scope.
 
-As an alternative of using `inline-template`s, you can extend an existing component.
+As an alternative to using an `inline-template`, you can extend an existing component.
 
 ## Extending a component
 
 By extending a component, you can override its default template. 
 You can also customize the behavior of the component, but that is out of the scope of this section.
 
-Here is how you could implement a `TableResults.vue` component that would display results in a table than instead of in `div`s.
+Here is how you could implement a `TableResults.vue` component that would display results in a table instead of in `div`s.
 
 
 ```vue
