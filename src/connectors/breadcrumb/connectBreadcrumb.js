@@ -19,6 +19,25 @@ search.addWidget(customBreadcrumb({
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectBreadcrumb.html
 `;
 
+/**
+ * @typedef {Object} CustomHierarchicalMenuWidgetOptions
+ * @property {string} [separator = ' > '] Symbol used in the attributes to separate level values.
+ * @property {string} [rootURL = null] The root element’s URL (the originating page).
+ * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
+ */
+
+/**
+ * @typedef {Object} HierarchicalMenuRenderingOptions
+ * @property {function(item.value): string} createURL Creates an url for the next state for a clicked item.
+ * @property {HierarchicalMenuItem[]} items Values to be rendered.
+ * @property {function(item.value)} refine Sets the path of the hierarchical filter and triggers a new search.
+ * @property {Object} widgetParams All original `CustomBreadcrumbWidgetOptions` forwarded to the `renderFn`.
+ */
+
+/** 
+ * Description + Example to be completed
+ */
+
 function prepareItems(obj) {
   return obj.data.reduce((result, currentItem) => {
     if (currentItem.isRefined) {
