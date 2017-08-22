@@ -9,26 +9,26 @@ editable: true
 githubSource: docs/src/advanced/multi-index-search.md
 ---
 
-In this guide, you will learn how to get results from multiple indices simultaneously.
+In this guide, you'll learn how to get results out of searching from multiple indices simultaneously.
 
-We have a [live multi-index search example](examples/multi-index-search.html) for you to quickly grasp what we are talking about.
+Take a look at a [live multi-index search example](examples/multi-index-search.html) to quickly grasp what we are talking about.
 
 ## When to use multi-index search
 
 You will need multi-index search when, in the same UI, you want to display results
 coming from different indices.
 
-Here are two reasons to store your data into multiple indices:
+Here are two reasons to store your data in multiple indices:
 
-- Have different ranking rules or settings depending on the type of data inside of the index
-- Make it easier to display only the results of a given type in a given area of your page
+- To have different ranking rules or settings depending on the type of data inside the index
+- To make it easier to display only the results of a given type in a given area of your page
 
-If you don't need specific settings for part of your index and that you expect
-to see all results inter-mixed in the same area of your page, then chances are
-you do not need to implement multi-index search experience.
+If you don't need specific settings for part of your index, and you expect
+to see all results inter-mixed on the same area of your page, then chances are
+you won't need to implement a multi-index search experience.
 
-If you end up finding yourself trying to manually merge records coming
-from different indices, it probably means you missed an opportunity to use
+However, if you end up finding yourself trying to manually merge records coming
+from different indices, you have probably missed an opportunity to use 
 multi-index search.
 
 ## How it works
@@ -68,7 +68,7 @@ In this example, we display results from two indices, but we are still using two
 
 Here's how to bind a single input displaying results from multiple indices:
 
-**Note:** For now it's not feasible to bind the provided [Search Box component](components/search-box.html) directly to different indices, we are working on that
+**Note:** For now it's not possible to bind the provided [Search Box component](components/search-box.html) directly to different indices, as we have not yet implemented that.
 
 ```html
 <!-- App.vue -->
