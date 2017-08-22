@@ -35,7 +35,7 @@ If provided components do not fit your needs, let us know via [GitHub](https://g
 
 ## Registering components
 
-There are 2 ways of registering components, all at once or one by one.
+There are 2 ways to register components: all at once or one by one.
 
 ### All components at once
 
@@ -55,7 +55,7 @@ new Vue({
 });
 ```
 
-The line `Vue.use(InstantSearch);` registers all components at once and make them available
+The line `Vue.use(InstantSearch);` registers all components at once and makes them available
 in templates.
 
 **Info:** When using the [standalone build](getting-started/installing.html#using-a-tag), all components are automatically imported.
@@ -89,7 +89,7 @@ With this approach, only the four manually imported components will be part of y
 
 When using `Vue.use(InstantSearch);`, all components are registered with the `ais-` prefix, which stands for Algolia's InstantSearch. Example: `ais-search-box`.
 
-When manually importing components, you can change that naming and assign a custom tag name.
+When manually importing components, you can change that naming convention and assign a custom tag name.
 
 ## Using components
 
@@ -107,11 +107,11 @@ All search components must be wrapped in an [`Index`](components/index.html) com
 </template>
 ```
 
-To read why a search component needs to be wrapped into an Index component, have a look at the [custom components](getting-started/custom-components.html) page.
+To read why a search component needs to be wrapped in an Index component, have a look at the [custom components](getting-started/custom-components.html) page.
 
 ### Avoiding the use of an `Index` component
 
-You might not want to use a wrapping `Index` component or maybe you want to do some [server-side rendering](advanced/server-side-rendering.html).
+You might not want to use a wrapping `Index` component, or maybe you'll want to do some [server-side rendering](advanced/server-side-rendering.html).
 
 In those cases, you can manually tie components to a search store by passing a `searchStore` property to them:
 
@@ -139,6 +139,6 @@ In those cases, you can manually tie components to a search store by passing a `
 </script>
 ```
 
-**Info:** The Index component also accepts the searchStore as parameter. Here we used that to avoid us to repeat the Algolia credentials.
+**Info:** The Index component also accepts the searchStore as parameter. Here we used that to avoid repeating the Algolia credentials.
 
-**Best practice:** Wrapping your search components with an `Index` component makes it easier to reason about the code. All the logic is then declared inside of the template instead of being spread between templates and methods or objects. If you do not need to manually inject a search store, we recommend you stick with using the Index component.
+**Best practice:** Wrapping your search components with an `Index` component makes it easier to think about the code. All the logic is then declared inside of the template instead of being spread between templates and methods or objects. If you do not need to manually inject a search store, we recommend sticking with the Index component.
