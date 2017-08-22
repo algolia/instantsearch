@@ -39,19 +39,9 @@ function prepareItems(obj) {
 export default function connectBreadcrumb(renderFn) {
   return (widgetParams = {}) => {
     const { attributes, separator = " > ", rootURL = null } = widgetParams;
-    let canRefine = false;
     const [hierarchicalFacetName] = attributes;
 
     return {
-      getConfiguration: currentConfiguration => ({
-        hierarchicalFacets: [
-          {
-            name: hierarchicalFacetName,
-            attributes,
-            separator
-          }
-        ]
-      }),
       init({ helper }) {
         this._refine = function(facetValue) {
           console.log("refining " + facetValue);
@@ -63,7 +53,7 @@ export default function connectBreadcrumb(renderFn) {
           {
             items: [],
             refine: this._refine,
-            canRefine
+            canRefine: false
           },
           true
         );
@@ -82,13 +72,12 @@ export default function connectBreadcrumb(renderFn) {
 
         const facetsValues = results.getFacetValues(facetName);
         const items = prepareItems(facetsValues);
-        canRefine = items.length > 0;
 
         renderFn(
           {
             items,
             refine: this._refine,
-            canRefine,
+            canRefine: items.length > 0,
             widgetParams
           },
           false

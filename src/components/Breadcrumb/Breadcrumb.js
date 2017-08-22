@@ -22,12 +22,37 @@ class Breadcrumb extends PureComponent {
   };
 
   render() {
-    const { createURL, items, refine, translate, cssClasses } = this.props;
-    // console.log("canRefine", this.props.canRefine);
-    // console.log("canRefine from BC react", canRefine);
-    console.log("items", items);
+    const {
+      createURL,
+      items,
+      refine,
+      translate,
+      cssClasses,
+      canRefine
+    } = this.props;
+    console.log("canRefine", this.props.canRefine);
+    console.log("canRefine from BC react", canRefine);
+    // console.log("items", items);
 
-    // const rootPath
+    const rootPath = canRefine
+      ? <span>
+          <span
+            className={cssClasses.root}
+            onClick={isLast ? null : () => refine(item.value)}
+          >
+            <span className={cssClasses.labelRoot}>
+              {item.name}
+            </span>
+            <span className={cssClasses.count}>
+              {item.count}
+            </span>
+          </span>
+          <span className={cssClasses.separator}>
+            {separator}
+          </span>
+        </span>
+      : null;
+
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
       const separator = isLast ? "" : this.props.separator;
@@ -36,7 +61,16 @@ class Breadcrumb extends PureComponent {
         <span key={idx}>
           <span
             className={itemCssClass}
-            onClick={isLast ? null : () => refine(item.value)}
+            onClick={
+              isLast
+                ? null
+                : () =>
+                    refine(
+                      items.length - 1 === idx
+                        ? item.value
+                        : items[idx + 1].value
+                    )
+            }
           >
             <span className={cssClasses.label}>
               {item.name}
@@ -54,6 +88,7 @@ class Breadcrumb extends PureComponent {
     console.log("Breadcrumb", breadcrumb);
     return (
       <div className={cssClasses.root}>
+        {rootPath}
         {breadcrumb}
       </div>
     );
