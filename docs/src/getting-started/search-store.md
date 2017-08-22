@@ -11,7 +11,7 @@ githubSource: docs/src/getting-started/search-store.md
 
 The search store of Vue InstantSearch allows you to:
 
-- Perform search calls to Algolia
+- Perform search calls on Algolia
 - Change search parameters
 - Retrieve search results
 
@@ -19,19 +19,19 @@ The search store of Vue InstantSearch allows you to:
 
 Before going further, it is important to realize that directly interacting with the search store is not mandatory but an advanced use of Vue InstantSearch.
 
-If you use [provided components](getting-started/using-components.html), wrapped into an [Index](components/index.html) component, then search stores are created and used automatically by components.
+If you use [provided components](getting-started/using-components.html), wrapped in an [Index](components/index.html) component, then search stores are created and used automatically by components.
 
 In that case, it is the responsibility of the `Index` component to make sure a search store is successfully made available to child components.
 
 It does so by leveraging the [provide/inject feature](https://vuejs.org/v2/api/#provide-inject) of Vue.js.
 
-## When you will need to directly create search stores
+## When you'll need to directly create search stores
 
 There are many reasons to manually create search stores, here are some of them:
 
-- A search component is [not wrapped into an Index component](components.md#manually-inject-the-search-store-into-components)
-- You want to watch search store parameters or results to affect other parts of the application
-- You want to do [render the initial application vue on the server side](advanced/server-side-rendering.html)
+- A search component is [not wrapped in an Index component](components.md#manually-inject-the-search-store-into-components)
+- You want to see how search store parameters or results affect other parts of the application
+- You want to [render the initial application vue on the server side](advanced/server-side-rendering.html)
 - You are [developing a custom component](getting-started/custom-components.html)
 
 ## How to manually create a search store
@@ -40,9 +40,9 @@ There are several ways to create a new search store.
 
 ### Create a search store from Algolia credentials
 
-The easiest way to create a search store, is by using the `createFromAlgoliaCredentials` factory method. In that case, all you need is the Algolia application ID and the search API key. These information can both be found on your [Algolia dashboard](https://www.algolia.com/dashboard), on the "API keys" screen.
+The easiest way to create a search store is to use the `createFromAlgoliaCredentials` factory method. In that case, all you'll need is the Algolia application ID and the search API key, both of which can be found on your [Algolia dashboard](https://www.algolia.com/dashboard), on the "API keys" screen.
 
-**Security notice: Make sure you always use search only API keys. Using the Admin API key in a frontend application would let any user have full control over your Algolia application.**
+**Security notice: Make sure you always use search only API keys. Using the Admin API key in a frontend application will give any user full control over your Algolia application.**
 
 ```javascript
 import { createFromAlgoliaCredentials } from 'vue-instantsearch';
@@ -68,9 +68,9 @@ Note that there is no reason to provide your own client if you are not reusing i
 
 ### Create a search store from an Algolia helper instance
 
-The [Algolia helper](https://github.com/algolia/algoliasearch-helper-js) is a JavaScript library that is built on top of the Algolia API client. Its goal is to expose a simple API to achieve advanced queries while also exposing utility methods and behavior like keeping track of the last result.
+The [Algolia helper](https://github.com/algolia/algoliasearch-helper-js) is a JavaScript library that is built on top of the Algolia API client. Its goal is to enable a simple API to achieve advanced queries while also providing utility methods and behavior like keeping track of the last result.
 
-As for the Algolia client, if you do not have an existing Algolia helper in your application, there should be no reason for you to instantiate the search store like showcased below.
+You can include it as follows:
 
 ```javascript
 import algoliaClient from 'algoliasearch';
@@ -81,6 +81,8 @@ const client = algoliaClient('appId', 'apiKey');
 const helper = algoliaHelper(client);
 const searchStore = new Store(helper);
 ```
+
+Note: As for the Algolia client, if you do not have an existing Algolia helper in your application, there should be no reason for you to instantiate the search store as showcased above.
 
 ### Create a search store from a previously serialized store
 
@@ -101,7 +103,7 @@ const reconstructedSearchStore = createFromSerialized(serializedData);
 
 ## Understanding how the search store synchronizes with Algolia
 
-Every time the state of the store is mutated, it will produce a new call to the Algolia API.
+Every time the state of the store is mutated, it will send a new call to the Algolia API.
 The moment the response comes back, the state is updated and all components observing the results will be able to re-render if needed.
 
 ```javascript
@@ -112,7 +114,7 @@ store.resultsPerPage = 10;
 // Triggers a call to Algolia with page set to 3 and resultsPerPage set to 10.
 ```
 
-There are times though you will not want the store to perform Algolia requests right after a query parameter changed.
+There are times though you will not want the store to perform Algolia requests right after a query parameter has changed.
 
 Here are some examples where you want to "batch" mutations, and only trigger a call to the Algolia API once you have finished mutating the state:
 
