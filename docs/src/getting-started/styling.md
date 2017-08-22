@@ -11,7 +11,7 @@ githubSource: docs/src/getting-started/styling.md
 
 Vue InstantSearch does not come with any styling but makes sure you can adapt the look & feel to your existing design.
 
-Here you will learn about the different provided options.
+Here you will learn about the available options.
 
 ## HTML Classes
 
@@ -21,8 +21,8 @@ Class names follow the BEM syntax `${block}__${element}--${modifier}`.
 All class names are prefixed with the `ais-` string to avoid any conflict with existing class names.
 `ais` stands for "Algolia Instant-Search".
 
-i.e. `ais-pagination__item` represents a single page element inside of the `Pagination component`.
-If that page is also the current page, the element will also have a the same class name suffixed with the `active` modifier: `ais-pagination__item--active`.
+For example, `ais-pagination__item` represents a single page element inside the `Pagination component`.
+If that page is also the current page, the element will also have the same class name suffixed with the `active` modifier: `ais-pagination__item--active`.
 
 It is up to you to take advantage of existing class names to make the search experience fit into your existing layout.
 
@@ -32,9 +32,9 @@ All class names are listed on the dedicated documentation page of every componen
 
 You can override existing class names with your own ones.
 
-To do so, you need to provide an object as the `class-names` property, that will map default class names to the ones of your choice.
+To do so, you need to provide an object as the `class-names` property, which will map default class names to the ones of your choice.
 
-i.e.
+For example:
 
 ```html
 <ais-pagination :class-names="{
@@ -45,7 +45,7 @@ i.e.
 </ais-pagination>
 ```
 
-This will keep non replaced class names, but replace custom classes where applicable.
+This will replace custom classes where applicable, while leaving untouched the rest of the class names.
 
 ## Using slots
 
