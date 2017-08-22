@@ -9,7 +9,7 @@ editable: true
 githubSource: docs/src/getting-started/best-practices.md
 ---
 
-This page is a placeholder for best practices we recommend you to review while implementing Vue InstantSearch.
+On this page you'll find the recommended best practices for implementing Vue InstantSearch.
 
 ## Security
 
