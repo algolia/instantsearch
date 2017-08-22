@@ -18,14 +18,14 @@ experiences using [Vue.js](https://vuejs.org/) and [Algolia](https://www.algolia
 
 ## Setup a new Vue project
 
-We will use the official [vue-cli](https://vuejs.org/v2/guide/installation.html#CLI) to bootstrap a new Vue project, along with the [webpack-simple template](https://github.com/vuejs/vue-cli#official-templates).
+We'll use the official [vue-cli](https://vuejs.org/v2/guide/installation.html#CLI) to bootstrap a new Vue project, along with the [webpack-simple template](https://github.com/vuejs/vue-cli#official-templates).
 
 ```shell
 $ npm install --global vue-cli
 $ vue init webpack-simple vue-instantsearch-getting-started
 ```
 
-**info:** Default settings are enough, hit `Enter ⏎` at every question
+**Info:** Default settings are enough, hit `Enter ⏎` at every question.
 
 Then install the dependencies of your new project:
 
@@ -54,7 +54,7 @@ This should open a new tab in your browser with this inside:
 
 ![Screenshot showing the new tab preview when npm run dev starts](images/getting-started-npm-run-dev.png).
 
-Leave the `dev` script running, we will update the code and it will reload your browser
+Leave the `dev` script running, we will update the code and it will reload in your browser
 automatically.
 
 ## Use the InstantSearch plugin
@@ -104,13 +104,13 @@ Open the `src/App.vue` component. Then replace the whole beginning of the file, 
 </template>
 ```
 
-Save, see the result in browser and play with it:
+Save, and see the result in the browser. Play with it!
 
 ![Animated screenshot showing a first search experience](images/first-search-experience.gif).
 
 ## How it works
 
-In this section you will learn a bit more about what you just implemented.
+In this section you'll learn a bit more about what you just implemented.
 
 ### The Index component
 
@@ -134,13 +134,13 @@ The job of the Index component is to hold the state of the search, and to provid
 
 ### Algolia demo credentials
 
-For the purpose of the demo, we provided you with some default Algolia credentials:
+For the demo, we provided you with some default Algolia credentials:
 
  - `app-id`: `latency`
  - `search-key`: `3d9875e51fbd20c7754e65422f7ce5e1`
  - `index-name`: `bestbuy`
 
-When you will be ready to go further, you can [create your own Algolia account](https://www.algolia.com/users/sign_up) and [find your credentials](https://www.algolia.com/api-keys) in the Algolia dashboard.
+When you are ready to go further, you can [create your own Algolia account](https://www.algolia.com/users/sign_up) and [find your credentials](https://www.algolia.com/api-keys) in the Algolia dashboard.
 
 ### The Search Box component
 
@@ -161,7 +161,7 @@ The component has a [default slot](https://vuejs.org/v2/guide/components.html#Si
 
 **Info:** By default, if no slot is provided, the component will display the `objectID` of every result.
 
-The slot provided by the Results components is a [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots).
+The slot provided by the Results component is a [scoped slot](https://vuejs.org/v2/guide/components.html#Scoped-Slots).
 
 A scoped slot means that the template can access data passed to the slot.
 
