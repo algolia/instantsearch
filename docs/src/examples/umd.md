@@ -8,7 +8,7 @@ navWeight: 100
 editable: true
 githubSource: docs/src/examples/umd.md
 ---
-Using the standalone build is quick way to play with Vue InstantSearch.
+Using the standalone build is a quick way to play with Vue InstantSearch.
 
 Just import the library:
 
