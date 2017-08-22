@@ -12,7 +12,7 @@ import InfiniteHitsComponent from '../components/InfiniteHits.js';
  * @propType {Component} hitComponent - Component used for rendering each hit from
  *   the results. If it is not provided the rendering defaults to displaying the
  *   hit in its JSON form. The component will be called with a `hit` prop.
- * @themeKey root - the root of the component
+ * @themeKey ais-InfiniteHits__root - the root of the component
  * @translationKey loadMore - the label of load more button
  * @example
  * import React from 'react';
