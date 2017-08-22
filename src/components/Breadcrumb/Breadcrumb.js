@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-// import autoHideContainerHOC from "../../decorators/autoHideContainer.js";
+import autoHideContainerHOC from "../../decorators/autoHideContainer.js";
+import headerFooterHOC from "../../decorators/headerFooter.js";
 
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
@@ -95,4 +96,5 @@ class Breadcrumb extends PureComponent {
   }
 }
 
-export default Breadcrumb;
+export default autoHideContainerHOC(headerFooterHOC(Breadcrumb));
+// export default Breadcrumb;
