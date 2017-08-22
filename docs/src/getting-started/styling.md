@@ -85,7 +85,7 @@ In that case, you can replace the entire template of a component.
 
 You can tell Vue.js to override the template by specifying an `inline-template` attribute on a component.
 
-i.e. render results in a `table` instead of in `<div>`s
+For example, render results in a `table` instead of in `<div>`s
 
 ```html
 <ais-results inline-template>
@@ -100,16 +100,16 @@ i.e. render results in a `table` instead of in `<div>`s
 </ais-results>
 ```
 
-It is recommended to not over-use this `inline-template` feature because it makes it hard to reason about the current scope. In the previous example, the `results` variable is provided by the `Results` component, not the current scope.
+It is recommended to not overuse this `inline-template` feature because it makes it hard to know about the current scope. In the previous example, the `results` variable is provided by the `Results` component, not the current scope.
 
-As an alternative of using `inline-template`s, you can extend an existing component.
+As an alternative to using an `inline-template`, you can extend an existing component.
 
 ## Extending a component
 
 By extending a component, you can override its default template. 
 You can also customize the behavior of the component, but that is out of the scope of this section.
 
-Here is how you could implement a `TableResults.vue` component that would display results in a table than instead of in `div`s.
+Here is how you could implement a `TableResults.vue` component that would display results in a table instead of in `div`s.
 
 
 ```vue
