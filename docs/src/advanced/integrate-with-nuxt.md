@@ -10,20 +10,20 @@ githubSource: docs/src/advanced/integrate-with-nuxt.md
 ---
 
 [Nuxt.js](https://nuxtjs.org) is a framework built on top of Vue.js that helps you build robust applications.
-Nuxt.js has a strong focus in making sure your application can be [server side rendered](https://nuxtjs.org/guide/#server-rendered).
+Nuxt.js has a strong focus on making sure your application can be [server side rendered](https://nuxtjs.org/guide/#server-rendered).
 
 In this guide, you will learn how to bootstrap a Nuxt.js project and then how to integrate Vue InstantSearch.
 
 ## Bootstrapping a Nuxt.js project
 
-We recommend you to use the official [vue-cli](https://vuejs.org/v2/guide/installation.html#CLI) to bootstrap your Nuxt.js project, along with the [nuxt/starter template](https://github.com/nuxt/nuxt.js/tree/dev/start).
+We recommend using the official [vue-cli](https://vuejs.org/v2/guide/installation.html#CLI) to bootstrap your Nuxt.js project, along with the [nuxt/starter template](https://github.com/nuxt/nuxt.js/tree/dev/start).
 
 ```shell
 $ npm install --global vue-cli
 $ vue init nuxt/starter nuxt-app
 ```
 
-**hint:** Default settings are enough, hit `Enter ⏎` at every question
+**Hint:** Default settings are enough, hit `Enter ⏎` at every question.
 
 Then install the dependencies of your new project:
 
@@ -32,7 +32,7 @@ $ cd nuxt-app
 $ npm install
 ```
 
-You can now have Nuxt watch the changes in your project, and serve your application on `http://localhost:3000` by running:
+You can now have Nuxt track the changes in your project and host your application on `http://localhost:3000` by running:
 
 ```shell
 $ npm run dev
@@ -91,18 +91,18 @@ You can go ahead and create a search page by creating a new file called `pages/s
 </template>
 ```
 
-Now, if you head to `http://localhost:3000/search`, you should see your search experience.
+Now, if you head to `http://localhost:3000/search`, you should be able to see your search experience.
 
-The only issue with the current implementation, is that the results are fetched from the browser, and it would be better if they were already filled the first time we open this page.
+The only issue with the current implementation is that the results are fetched from the browser, whereas it would be better if they were already filled the first time we open this page.
 
 ### Make search results server side rendered
 
 Nuxt.js let's you provide a handy `asyncData` method to your component so that the server can wait for your data.
 It then passes that data to the frontend by serializing it as javaScript.
 
-You will want to operate the initial query to Algolia, fetch the results and render the search experience with those results.
-That way, even if the browser does not support JavaScript, results still display.
-This can also be a nice performance gain for first rendering of the page and allows you to cache the results with features provided by the HTTP(S) protocol.
+You'll want to operate the initial query to Algolia, fetch the results and render the search experience with those results.
+That way, even if the browser does not support JavaScript, results will still display.
+This adds a nice performance gain by first rendering the page while caching the results, using features provided by the HTTP(S) protocol.
 
 Here is what you need to do to enable your server to pre-render results:
 
@@ -149,7 +149,7 @@ This allows you to have a better control over the lifecycle of the search.
 
 In the `asyncData` method, multiple things happen:
 1. you first manually start the store which will launch the first query to Algolia `searchStore.start()`
-2. you then wait for the query to be done so that you got all the results in the store with `store.waitUntilInSync()` method
+2. you then wait for the query to be done so that you get all the results in the store with `store.waitUntilInSync()` method
 3. you return the serialized version of the store so that it can be passed to the frontend `return { serializedSearchStore: searchStore.serialize() }`
 
 The next step is exposing the `searchStore` to the template.
