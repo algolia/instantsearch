@@ -1,3 +1,15 @@
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/algolia/vue-instantsearch/compare/v0.7.0...v1.0.0) (2017-08-23)
+
+
+### Features
+
+* **highlight:** get attribute value by dot separated path ([6ddc7c7](https://github.com/algolia/vue-instantsearch/commit/6ddc7c7))
+* **highlight:** throw error if missing config in Algolia ([09d8d3d](https://github.com/algolia/vue-instantsearch/commit/09d8d3d))
+* **snippet:** throw error if missing configuration in Algolia ([6988cb2](https://github.com/algolia/vue-instantsearch/commit/6988cb2))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/algolia/vue-instantsearch/compare/v0.6.0...v0.7.0) (2017-08-15)
 
