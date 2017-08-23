@@ -11877,7 +11877,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.1.0';
+exports.default = '2.1.1';
 
 /***/ }),
 /* 180 */
