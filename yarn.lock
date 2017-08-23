@@ -2450,6 +2450,10 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   dependencies:
     cssom "0.3.x"
 
+cssunminifier@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/cssunminifier/-/cssunminifier-0.0.2.tgz#96e8708e8fa79fa05ffa8db8984a299220e49abc"
+
 ctype@0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/ctype/-/ctype-0.5.3.tgz#82c18c2461f74114ef16c135224ad0b9144ca12f"
