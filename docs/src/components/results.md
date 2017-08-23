@@ -58,8 +58,8 @@ This will totally replace the existing default template and give you access to t
 | Name    | Props  | Default                                                                                         | Description     |
 |---------|--------|-------------------------------------------------------------------------------------------------|-----------------|
 | default | result | Displays the objectID                                                                           | First page text |
-| header  |        | Add content at the top of the component. Will be hidden when the component is hidden            |                 |
-| footer  |        | Add content at the bottom of the component. Will be hidden when the component is hidden         |                 |
+| header  |        | Add content to the top of the component, which will be hidden when the component is hidden      |                 |
+| footer  |        | Add content to the bottom of the component, which will be hidden when the component is hidden   |                 |
 
 ## CSS Classes
 
