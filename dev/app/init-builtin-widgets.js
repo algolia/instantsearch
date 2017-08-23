@@ -32,7 +32,7 @@ export default () => {
             "hierarchicalCategories.lvl1",
             "hierarchicalCategories.lvl2"
           ],
-          rootPath: ""
+          rootPath: "Video Games"
         })
       );
     })

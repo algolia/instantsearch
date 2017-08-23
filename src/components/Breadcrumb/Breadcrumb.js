@@ -35,12 +35,10 @@ class Breadcrumb extends PureComponent {
     console.log("canRefine from BC react", canRefine);
     // console.log("items", items);
 
+    /* 
     const rootPath = canRefine
       ? <span>
-          <span
-            className={cssClasses.root}
-            onClick={isLast ? null : () => refine(item.value)}
-          >
+          <span onClick={isLast ? null : () => refine(item.value)}>
             <span className={cssClasses.labelRoot}>
               {item.name}
             </span>
@@ -53,6 +51,7 @@ class Breadcrumb extends PureComponent {
           </span>
         </span>
       : null;
+    */
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
@@ -88,8 +87,8 @@ class Breadcrumb extends PureComponent {
     });
     console.log("Breadcrumb", breadcrumb);
     return (
-      <div className={cssClasses.root}>
-        {rootPath}
+      //add rootPath
+      <div>
         {breadcrumb}
       </div>
     );
