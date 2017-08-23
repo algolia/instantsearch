@@ -9,7 +9,7 @@ editable: true
 githubSource: docs/src/components/index.md
 ---
 
-A wrapper component that allows to configure the credentials and the query parameters for the search.
+A wrapper component that allows you to configure the credentials and query parameters for the search.
 
 This component automatically provides the search state to all its children.
 
