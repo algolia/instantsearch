@@ -42,8 +42,8 @@ Render results in a table:
   </table>
 </ais-results>
 ```
-**hint:** in this case, you actually need to use a [special Vue `inline-template` attribute](https://vuejs.org/v2/guide/components.html#Inline-Templates).
-This will totally replace the existing default template and given you access to the `Results` component instance.
+**Hint:** In this case, you actually need to use a [special Vue `inline-template` attribute](https://vuejs.org/v2/guide/components.html#Inline-Templates).
+This will totally replace the existing default template and give you access to the `Results` component instance.
 
 ## Props
 
@@ -58,8 +58,8 @@ This will totally replace the existing default template and given you access to 
 | Name    | Props  | Default                                                                                         | Description     |
 |---------|--------|-------------------------------------------------------------------------------------------------|-----------------|
 | default | result | Displays the objectID                                                                           | First page text |
-| header  |        | Allows to add content at the top of the component which will be hidden when the component is    |                 |
-| footer  |        | Allows to add content at the bottom of the component which will be hidden when the component is |                 |
+| header  |        | Add content at the top of the component. Will be hidden when the component is hidden            |                 |
+| footer  |        | Add content at the bottom of the component. Will be hidden when the component is hidden         |                 |
 
 ## CSS Classes
 
