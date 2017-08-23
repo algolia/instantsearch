@@ -9,9 +9,9 @@ editable: true
 githubSource: docs/src/advanced/vue-router-url-sync.md
 ---
 
-In this guide you will learn how to synchronize your InstantSearch experience with the [official Vue-Router](https://github.com/vuejs/vue-router).
+In this guide you'll learn how to synchronize your InstantSearch experience with the [official Vue-Router](https://github.com/vuejs/vue-router).
 
-There are two things you will want to setup in order to have the Vue router play nicely with InstantSearch.
+There are two things you'll want to setup in order to have the Vue router play nicely with InstantSearch.
 
 1. Extract some parameters from the router and initialize the search store with it. That way, on the initial load of the search experience, it will display results based on the current route.
 
@@ -43,7 +43,7 @@ This route will pass down the `query` parameter as a prop to the `Search` compon
 
 Every time the 'search' named route matches, it will extract the `q` url query parameter and pass it as a property down to the `Search` component.
 
-**info:** You can read more about how to pass properties to your components in the official [Vue router documentation](https://router.vuejs.org/en/essentials/passing-props.html).
+**Info:** You can read more about how to pass properties to your components in the official [Vue router documentation](https://router.vuejs.org/en/essentials/passing-props.html).
 
 In the `Search.vue` file, we can see that we actually accept this prop coming in from the router:
 
@@ -61,7 +61,7 @@ export default {
 
 We also make sure the property is initialized to an empty string by providing the `default: ''` option.
 
-Now that the query is coming injected by the router into our `Search` component, we need to tell the `Index` component to bind to it.
+Now that the query has been injected by the router into our `Search` component, we need to tell the `Index` component to bind to it.
 
 ```html
 <template>
@@ -75,7 +75,7 @@ Now, every time the route changes, the search store query will be updated with t
 
 ## Keep Vue router in sync with Vue router
 
-The previous section made our search state aware of the route, here we will learn how to push new state to the router in order to keep URLs in sync with the current search state as users interact with it.
+The previous section made our search state aware of the route. Here we will learn how to push the new state to the router in order to keep URLs in sync with the current search state as users interact with it.
 
 In our `Search.vue` file, we [manually instantiated the search store](/getting-started/search-store.html#how-to-manually-create-a-search-store) and exposed it to our template by adding it to `data`.
 
