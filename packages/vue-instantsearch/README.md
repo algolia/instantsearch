@@ -1,7 +1,5 @@
 [![Vue InstantSearch logo][logo]][website]
 
-**WARNING: Vue InstantSearch is currently in BETA**
-
 InstantSearch projects: **Vue InstantSearch**
 | [InstantSearch.js][instantsearch.js-github]
 | [React InstantSearch][react-instantsearch-github]
@@ -31,6 +29,8 @@ npm install --save vue-instantsearch
 # with yarn
 yarn add vue-instantsearch
 ```
+
+To learn more about the usage, follow our [getting started guide](https://community.algolia.com/vue-instantsearch/getting-started/getting-started.html).
 
 ## Contributing, dev, release
 
