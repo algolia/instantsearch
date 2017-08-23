@@ -38,9 +38,9 @@ Custom boundaries:
 | Name    | Props                  | Description                                                                                     |
 |:--------|:-----------------------|:------------------------------------------------------------------------------------------------|
 | default | value, min, max, count | The refinement options                                                                          |
-| header  |                        | Allows to add content at the top of the component which will be hidden when the component is    |
+| header  |                        | Add content to the top of the component, which will be hidden when the component is hidden    |
+| footer  |                        | Add content to the bottom of the component, which will be hidden when the component is hidden |
 | clear   |                        | Clear the active rating refinement                                                              |
-| footer  |                        | Allows to add content at the bottom of the component which will be hidden when the component is |
 
 ## CSS Classes
 
