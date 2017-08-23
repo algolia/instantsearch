@@ -30,6 +30,8 @@ npm install --save vue-instantsearch
 yarn add vue-instantsearch
 ```
 
+To learn more about the usage, follow our [getting started guide](https://community.algolia.com/vue-instantsearch/getting-started/getting-started.html).
+
 ## Contributing, dev, release
 
 We welcome all contributors, from casual to regular. You are only
