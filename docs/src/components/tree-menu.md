@@ -55,8 +55,8 @@ Basic usage:
 | Name    | Props                | Description                                                                                     |
 |---------|----------------------|-------------------------------------------------------------------------------------------------|
 | default | value, active, count | The text to display for a refinement value                                                      |
-| header  |                      | Add content to the top of the component, which will be hidden when the component is hidden    |
-| footer  |                      | Add content to the bottom of the component, which will be hidden when the component is hidden |
+| header  |                      | Add content to the top of the component, which will be hidden when the component is hidden      |
+| footer  |                      | Add content to the bottom of the component, which will be hidden when the component is hidden   |
 
 ## CSS Classes
 
