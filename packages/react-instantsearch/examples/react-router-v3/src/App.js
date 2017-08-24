@@ -21,6 +21,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { searchState: { ...qs.parse(props.router.location.query) } };
+    this.onSearchStateChange = this.onSearchStateChange.bind(this);
+    this.createURL = this.createURL.bind(this);
   }
 
   componentWillReceiveProps() {
@@ -46,7 +48,9 @@ class App extends Component {
     }
   }
 
-  createURL = state => `?${qs.stringify(state)}`;
+  createURL(state) {
+    return `?${qs.stringify(state)}`;
+  }
 
   render() {
     return (
@@ -55,8 +59,8 @@ class App extends Component {
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
         indexName="ikea"
         searchState={this.state.searchState}
-        onSearchStateChange={this.onSearchStateChange.bind(this)}
-        createURL={this.createURL.bind(this)}
+        onSearchStateChange={this.onSearchStateChange}
+        createURL={this.createURL}
       >
         <div>
           <div

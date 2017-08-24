@@ -1,7 +1,10 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "1.0.10"
+    "react-scripts": "1.0.10",
+    "identity-obj-proxy": "^3.0.0",
+    "jest-environment-jsdom-11.0.0": "^20.0.9",
+    "react-test-renderer": "^15.6.1"
   },
   "dependencies": {
     "google-map-react": "^0.24.0",
@@ -13,7 +16,15 @@
     "react-instantsearch-theme-algolia": "4.1.0-beta.5"
   },
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "test": "jest"
+  },
+  "jest": {
+    "notify": false,
+    "testEnvironment": "jest-environment-jsdom-11.0.0",
+    "moduleNameMapper": {
+      "\\.(css)$": "identity-obj-proxy"
+    }
   },
   "main": "index.js",
   "license": "MIT"

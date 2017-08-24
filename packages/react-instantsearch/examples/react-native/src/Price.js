@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Platform } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { InstantSearch } from 'react-instantsearch/native';
 import {
   connectRefinementList,
@@ -15,12 +15,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
     flexGrow: 1,
-    ...Platform.select({
-      ios: {
-        marginTop: 63,
-      },
-      android: { marginTop: 50 },
-    }),
   },
   container: {
     alignItems: 'center',

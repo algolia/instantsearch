@@ -1,7 +1,9 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "1.0.10"
+    "react-scripts": "1.0.10",
+    "identity-obj-proxy": "^3.0.0",
+    "react-test-renderer": "^15.6.1"
   },
   "dependencies": {
     "antd": "^2.12.1",
@@ -14,7 +16,14 @@
     "react-instantsearch-theme-algolia": "4.1.0-beta.5"
   },
   "scripts": {
-    "start": "react-scripts start"
+    "start": "react-scripts start",
+    "test": "jest"
+  },
+  "jest": {
+    "notify": false,
+    "moduleNameMapper": {
+      "\\.(css)$": "identity-obj-proxy"
+    }
   },
   "main": "index.js",
   "license": "MIT"
