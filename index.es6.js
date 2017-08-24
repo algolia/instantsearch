@@ -2,8 +2,8 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import toFactory from 'to-factory';
 
-import InstantSearch from './dist-es6-module/lib/InstantSearch.js';
-import version from './dist-es6-module/lib/version.js';
+import InstantSearch from './lib/InstantSearch.js';
+import version from './lib/version.js';
 
 // import instantsearch from 'instantsearch.js';
 // -> provides instantsearch object without connectors and widgets
