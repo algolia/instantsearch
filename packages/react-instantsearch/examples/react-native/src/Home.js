@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ModalDropdown from 'react-native-modal-dropdown';
 import {
   StyleSheet,
   Text,
@@ -27,8 +26,7 @@ import {
 import Highlight from './components/Highlight';
 import Spinner from './components/Spinner';
 import StarRating from 'react-native-star-rating';
-import IosIcon from 'react-native-vector-icons/Ionicons';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { Dropdown } from 'react-native-material-dropdown';
 
 import { Actions } from 'react-native-router-flux';
 
@@ -36,12 +34,6 @@ const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   maincontainer: {
-    ...Platform.select({
-      ios: {
-        marginTop: 63,
-      },
-      android: { marginTop: 50 },
-    }),
     flex: 1,
   },
   items: {
@@ -49,7 +41,7 @@ const styles = StyleSheet.create({
       ios: {
         height: height - 170,
       },
-      android: { height: height - 185 },
+      android: { height: height - 165 },
     }),
   },
   item: {
@@ -71,9 +63,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 8,
-  },
-  sortByArrow: {
-    paddingLeft: 3,
   },
   searchBoxContainer: {
     backgroundColor: '#162331',
@@ -289,56 +278,20 @@ const ConnectedStats = connectStats(({ nbHits }) =>
   </Text>
 );
 
-const ConnectedSortBy = connectSortBy(
-  ({ refine, items, currentRefinement }) => {
-    const icon =
-      Platform.OS === 'ios'
-        ? <IosIcon
-            size={13}
-            name="ios-arrow-down"
-            color="#000"
-            style={styles.sortByArrow}
-          />
-        : <MaterialIcon
-            size={20}
-            name="arrow-drop-down"
-            color="#000"
-            style={styles.sortByArrow}
-          />;
-    return (
-      <View style={styles.sortBy}>
-        <ModalDropdown
-          animated={false}
-          defaultValue={
-            items.find(item => item.value === currentRefinement).label
-          }
-          onSelect={(index, value) =>
-            refine(items.find(item => item.label === value).value)}
-          options={items.map(item => item.label)}
-          renderRow={item => {
-            const itemValue = items.find(i => i.label === item).value;
-            return (
-              <Text
-                style={{
-                  fontSize: 13,
-                  fontWeight: itemValue === currentRefinement ? 'bold' : '200',
-                  padding: 10,
-                }}
-              >
-                {item}
-              </Text>
-            );
-          }}
-          dropdownStyle={{
-            width: 200,
-            height: 110,
-          }}
-          textStyle={{ fontSize: 15 }}
-        />
-        {icon}
-      </View>
-    );
-  }
+const ConnectedSortBy = connectSortBy(({ refine, items, currentRefinement }) =>
+  <View style={styles.sortBy}>
+    <Dropdown
+      data={items}
+      onChangeText={value => refine(value)}
+      containerStyle={{
+        width: 110,
+        height: 30,
+        bottom: 30,
+      }}
+      label=""
+      value={items.find(item => item.value === currentRefinement).label}
+    />
+  </View>
 );
 
 const Filters = connectCurrentRefinements(

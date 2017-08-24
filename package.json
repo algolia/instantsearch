@@ -15,6 +15,7 @@
     "lint:fix": "eslint . --fix",
     "docs:doctoc": "doctoc --maxlevel 1 README.md",
     "test": "./scripts/test.sh",
+    "test:recipes": "./scripts/test:recipes.sh",
     "test:build": "NODE_ENV=production ./scripts/test:build.sh",
     "test:regressions": "webpack --config test/regressions/webpack.config.js && rm -rf test/screenshots && happo run && babel-node ./test/regressions/normalize.js",
     "argos": "argos upload test/screenshots --token $ARGOS_TOKEN || true",
@@ -121,7 +122,8 @@
     "node": "7.10.0"
   },
   "jest": {
-    "notify": false
+    "notify": false,
+    "testPathIgnorePatterns": ["/packages/react-instantsearch/examples"]
   },
   "license": "MIT",
   "author": {

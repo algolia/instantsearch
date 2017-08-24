@@ -26,9 +26,10 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { searchState: qs.parse(props.location.search.slice(1)) };
+    this.onSearchStateChange = this.onSearchStateChange.bind(this);
   }
 
-  onSearchStateChange = searchState => {
+  onSearchStateChange(searchState) {
     clearTimeout(this.debouncedSetState);
     this.debouncedSetState = setTimeout(() => {
       this.props.history.push(
@@ -37,7 +38,7 @@ class App extends Component {
       );
     }, updateAfter);
     this.setState({ searchState });
-  };
+  }
 
   render() {
     return (

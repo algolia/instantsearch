@@ -31,14 +31,14 @@ class App extends Component {
   }
 
   // when a click on the map is performed, the query is reset and the aroundLatLng property updated.
-  onLatLngChange = ({ lat, lng }) => {
+  onLatLngChange({ lat, lng }) {
     this.setState({
       searchState: { ...this.state.searchState, query: '' },
       aroundLatLng: `${lat},${lng}`,
     });
-  };
+  }
 
-  onSearchStateChange = searchState => {
+  onSearchStateChange(searchState) {
     // update the URL when there is a new search state.
     clearTimeout(this.debouncedSetState);
     this.debouncedSetState = setTimeout(() => {
@@ -55,7 +55,7 @@ class App extends Component {
         ? null
         : this.state.aroundLatLng;
     this.setState({ searchState, aroundLatLng });
-  };
+  }
 
   render() {
     const configuration = this.state.aroundLatLng
@@ -130,7 +130,9 @@ function HitsMap({ hits, onLatLngChange }) {
     }
   );
   const boundsConfig =
-    hits.length > 0 ? fitBounds(boundingPoints, availableSpace) : {};
+    hits.length > 0
+      ? fitBounds(boundingPoints, availableSpace)
+      : { zoom: 11, center: { lat: -85, lng: 180 } };
   const markers = hits.map(hit =>
     <CustomMarker lat={hit.lat} lng={hit.lng} key={hit.objectID} />
   );

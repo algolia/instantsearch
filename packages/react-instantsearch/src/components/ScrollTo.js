@@ -12,6 +12,7 @@ class ScrollTo extends Component {
   componentDidUpdate(prevProps) {
     const { value, hasNotChanged } = this.props;
     if (value !== prevProps.value && hasNotChanged) {
+      // eslint-disable-next-line react/no-find-dom-node
       const el = findDOMNode(this);
       el.scrollIntoView();
     }

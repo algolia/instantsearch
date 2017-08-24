@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "start": "yarn build && cd dist && node server.js",
-    "build": "webpack"
+    "build": "webpack",
+    "test": "jest"
   },
   "devDependencies": {
     "babel-core": "6.25.0",
@@ -19,6 +20,7 @@
     "json-loader": "0.5.7",
     "node-sass": "4.5.3",
     "sass-loader": "6.0.6",
+    "react-test-renderer": "^15.6.1",
     "webpack": "3.5.3",
     "webpack-node-externals": "1.6.0"
   },

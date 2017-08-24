@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "jest-expo": "19.0.2",
-    "react-native-scripts": "1.0.0",
-    "react-test-renderer": "16.0.0-alpha.13"
+    "babel-preset-react-native": "^2.1.0",
+    "jest": "^20.0.4",
+    "jest-cli": "^20.0.4",
+    "jest-expo": "~20.0.0",
+    "react-native-scripts": "^1.1.0",
+    "react-test-renderer": "16.0.0-beta.5"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
@@ -16,22 +19,26 @@
     "test": "node node_modules/jest/bin/jest.js --watch"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!react|@expo|expo|@ptomasroos|react-native-router-flux)"
+    ]
   },
   "dependencies": {
-    "@ptomasroos/react-native-multi-slider": "^0.0.8",
-    "expo": "^19.0.0",
+    "@ptomasroos/react-native-multi-slider": "^0.0.10",
+    "expo": "^20.0.0",
     "lodash": "^4.17.4",
-    "native-base": "^2.2.1",
+    "native-base": "^2.1.3",
     "prop-types": "^15.5.8",
-    "react": "16.0.0-alpha.13",
-    "react-dom": "16.0.0-alpha.13",
+    "react": "16.0.0-beta.5",
+    "react-dom": "16.0.0-beta.5",
     "react-instantsearch": "4.1.0-beta.5",
     "react-instantsearch-theme-algolia": "4.1.0-beta.5",
-    "react-native": "^0.46.3",
+    "react-native": "^0.47.2",
+    "react-native-material-dropdown": "^0.3.1",
     "react-native-modal-dropdown": "^0.4.4",
-    "react-native-router-flux": "^3.41.0",
-    "react-native-star-rating": "^1.0.7",
-    "react-native-vector-icons": "^4.0.1"
+    "react-native-router-flux": "^4.0.0-beta.15",
+    "react-native-star-rating": "^1.0.8",
+    "react-native-vector-icons": "^4.3.0"
   }
 }

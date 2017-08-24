@@ -3,7 +3,11 @@
   "scripts": {
     "dev": "next",
     "build": "NODE_ENV=development next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "react-test-renderer": "^15.6.1"
   },
   "dependencies": {
     "css-loader": "^0.28.4",
