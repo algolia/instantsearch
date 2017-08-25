@@ -4,6 +4,8 @@ import forEach from 'lodash/forEach';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { isSpecialClick } from '../../lib/utils.js';
 
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+
 import Paginator from './Paginator.js';
 import PaginationLink from './PaginationLink.js';
 
@@ -180,4 +182,4 @@ Pagination.defaultProps = {
   nbPages: 0,
 };
 
-export default Pagination;
+export default autoHideContainerHOC(Pagination);
