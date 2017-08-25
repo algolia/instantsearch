@@ -21,7 +21,7 @@
     "node-sass": "4.5.3",
     "sass-loader": "6.0.6",
     "react-test-renderer": "15.6.1",
-    "webpack": "3.5.3",
+    "webpack": "3.5.5",
     "webpack-node-externals": "1.6.0"
   },
   "dependencies": {
