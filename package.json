@@ -80,7 +80,7 @@
     "lodash": "^4.17.4",
     "markdown-it": "^8.3.1",
     "markdown-it-anchor": "^4.0.0",
-    "material-ui": "^0.18.6",
+    "material-ui": "^0.19.0",
     "metalsmith": "^2.3.0",
     "metalsmith-headings": "^0.2.0",
     "metalsmith-layouts": "^1.8.1",
