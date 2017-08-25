@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "babel-preset-react-native": "2.1.0",
+    "babel-preset-react-native": "3.0.1",
     "jest": "20.0.4",
     "jest-cli": "20.0.4",
     "jest-expo": "20.0.0",
