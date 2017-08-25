@@ -19,7 +19,7 @@ describe('connectHitsPerPage', () => {
       ],
     });
 
-    expect(widget.getConfiguration).toEqual(undefined);
+    expect(typeof widget.getConfiguration).toEqual('function');
 
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
@@ -62,6 +62,36 @@ describe('connectHitsPerPage', () => {
         { value: 3, label: '3 items per page' },
         { value: 10, label: '10 items per page' },
       ],
+    });
+  });
+
+  it('Configures the search with the default hitsPerPage provided', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page', default: true },
+      ],
+    });
+
+    expect(widget.getConfiguration()).toEqual({
+      hitsPerPage: 10,
+    });
+  });
+
+  it('Configures the search with the first item value provided', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+      ],
+    });
+
+    expect(widget.getConfiguration()).toEqual({
+      hitsPerPage: 3,
     });
   });
 
