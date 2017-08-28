@@ -113,7 +113,7 @@ exports[`react-router recipe App renders without crashing 1`] = `
            
         </span>
         <a
-          ariaLabel="Algolia"
+          aria-label="Algolia"
           className="ais-PoweredBy__algoliaLink"
           href="https://www.algolia.com/?utm_source=react-instantsearch&utm_medium=website&utm_content=&utm_campaign=poweredby"
           target="_blank"
