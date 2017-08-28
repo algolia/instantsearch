@@ -8,7 +8,7 @@ navWeight: 52
 
 [Algolia pricing](https://www.algolia.com/pricing) structure is based on operations and records.
 
-This guide explains you how does using InstantSearch has an impact on your operations count.
+This guide explains how using InstantSearch has an impact on your operations count.
 
 Everytime you press a key in InstantSearch using the SearchBox, we count one operation.
 Then given the widgets you will be adding to your search interface, you will have more operations
