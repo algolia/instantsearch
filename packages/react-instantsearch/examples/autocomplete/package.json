@@ -1,8 +1,8 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "1.0.11",
     "identity-obj-proxy": "3.0.0",
+    "react-scripts": "1.0.11",
     "react-test-renderer": "15.6.1"
   },
   "dependencies": {
@@ -12,8 +12,8 @@
     "react": "^15.6.1",
     "react-autosuggest": "^9.3.1",
     "react-dom": "^15.6.1",
-    "react-instantsearch": "4.1.0-beta.5",
-    "react-instantsearch-theme-algolia": "4.1.0-beta.5"
+    "react-instantsearch": "4.1.0",
+    "react-instantsearch-theme-algolia": "4.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
