@@ -1,3 +1,16 @@
+<a name="4.1.0"></a>
+# [4.1.0](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.5...v4.1.0) (2017-08-28)
+
+
+### Bug Fixes
+
+* **Highlighting:** revert breaking change (#245) ([045ee06](https://github.com/algolia/react-instantsearch/commit/045ee06))
+* **List:** adds support for any type of renderable element (#266) ([d848bb6](https://github.com/algolia/react-instantsearch/commit/d848bb6))
+* **Pagination:** fixed the offset ([3c0fff2](https://github.com/algolia/react-instantsearch/commit/3c0fff2))
+* **PoweredBy:** aria-* tags are not camelcased (#261) ([dc4a5bb](https://github.com/algolia/react-instantsearch/commit/dc4a5bb))
+
+
+
 <a name="4.1.0-beta.5"></a>
 # [4.1.0-beta.5](https://github.com/algolia/react-instantsearch/compare/v4.1.0-beta.4...v4.1.0-beta.5) (2017-08-08)
 
