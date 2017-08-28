@@ -5210,13 +5210,13 @@ react-error-overlay@^1.0.10:
     settle-promise "1.0.0"
     source-map "0.5.6"
 
-react-instantsearch-theme-algolia@4.1.0-beta.5:
-  version "4.1.0-beta.5"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-theme-algolia/-/react-instantsearch-theme-algolia-4.1.0-beta.5.tgz#dd11bbb1819b35633f2a737548deccfd4e90cd4f"
+react-instantsearch-theme-algolia@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-theme-algolia/-/react-instantsearch-theme-algolia-4.1.0.tgz#1401d56d2374febf3c56920c2ef6354c8dd333d1"
 
-react-instantsearch@4.1.0-beta.5:
-  version "4.1.0-beta.5"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.1.0-beta.5.tgz#84e52254a7c3c3c846bfb44758c6e321905a9fa8"
+react-instantsearch@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.1.0.tgz#b5934477b8e781a1c70d68a9a27ef085b3473131"
   dependencies:
     algoliasearch "^3.24.0"
     algoliasearch-helper "^2.21.0"

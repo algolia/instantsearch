@@ -1,9 +1,9 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "1.0.11",
     "identity-obj-proxy": "3.0.0",
     "jest-environment-jsdom-11.0.0": "20.0.9",
+    "react-scripts": "1.0.11",
     "react-test-renderer": "15.6.1"
   },
   "dependencies": {
@@ -12,8 +12,8 @@
     "qs": "^6.3.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-instantsearch": "4.1.0-beta.5",
-    "react-instantsearch-theme-algolia": "4.1.0-beta.5",
+    "react-instantsearch": "4.1.0",
+    "react-instantsearch-theme-algolia": "4.1.0",
     "react-router-dom": "^4.1.2"
   },
   "scripts": {
