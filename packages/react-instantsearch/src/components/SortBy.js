@@ -20,10 +20,6 @@ class SortBy extends Component {
     transformItems: PropTypes.func,
   };
 
-  onChange = e => {
-    this.props.refine(e.target.value);
-  };
-
   render() {
     const { refine, items, currentRefinement } = this.props;
     return (
