@@ -2,9 +2,10 @@
 title: Integrate with Angular (2+)
 mainTitle: Guides
 layout: main.pug
+category: guides
 name: integrate-angular
 withHeadings: true
-navHeight: 20
+navWeight: 9
 editable: true
 githubSource: docgen/src/guides/angular-integration.md
 ---
