@@ -22,7 +22,7 @@
   and `npm start`.
 
   We have a simple online template for you to use as a base to explain your bug or issue:
-  https://jsfiddle.net/vvoyer/0wm3donb/4/
+  https://jsfiddle.net/vvoyer/88e40wtv/4/
 
   If you are requesting a new feature, we need to understand WHY would you
   need this feature (your use case) or how you are limited with the current API.
