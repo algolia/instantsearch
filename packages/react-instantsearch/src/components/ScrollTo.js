@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
-import { Component, Children } from 'react';
-import { findDOMNode } from 'react-dom';
+import React, { Component } from 'react';
+import classNames from './classNames.js';
+
+const cx = classNames('ScrollTo');
 
 class ScrollTo extends Component {
   static propTypes = {
@@ -12,14 +14,16 @@ class ScrollTo extends Component {
   componentDidUpdate(prevProps) {
     const { value, hasNotChanged } = this.props;
     if (value !== prevProps.value && hasNotChanged) {
-      // eslint-disable-next-line react/no-find-dom-node
-      const el = findDOMNode(this);
-      el.scrollIntoView();
+      this.el.scrollIntoView();
     }
   }
 
   render() {
-    return Children.only(this.props.children);
+    return (
+      <div ref={ref => (this.el = ref)} {...cx('root')}>
+        {this.props.children}
+      </div>
+    );
   }
 }
 
