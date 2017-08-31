@@ -58,7 +58,13 @@ const usage = `Usage: numericSelector({
  */
 
 /**
- * Instantiate a dropdown element to choose the number of hits to display per page.
+ * This filtering widget lets the user choose between numerical refinements from a dropdown menu.
+ *
+ * ## Requirements
+ * The attribute passed to `attributeName` must be declared as an [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
+ * Algolia settings.
+ *
+ * The values inside this attribute must be JavaScript numbers and not strings.
  * @type {WidgetFactory}
  * @category filter
  * @param {NumericSelectorWidgetOptions} $0 The NumericSelector widget options.

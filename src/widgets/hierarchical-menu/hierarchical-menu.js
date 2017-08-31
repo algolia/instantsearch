@@ -118,21 +118,41 @@ hierarchicalMenu({
  *
  * It is commonly used for categories with subcategories.
  *
- * This widget requires the data to be formatted in a specific way. Each level should be represented
- * as a single attribute. Each attribute represent a path in the hierarchy. Example:
+ * All attributes (lvl0, lvl1 here) must be declared as [attributes for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
+ * Algolia settings.
  *
- * ```javascript
- * {
- *   "objectID": "123",
- *   "name": "orange",
- *   "categories": {
- *     "lvl0": "fruits",
- *     "lvl1": "fruits > citrus"
- *   }
- * }
- * ```
- *
- * By default, the separator is ` > ` but it can be different and specified with the `separator` option.
+ * By default, the separator we expect is ` > ` (with spaces) but you can use
+ * a different one by using the `separator` option.
+ * @requirements fsafsafsafa
+*  ## Requirements
+*
+* Your objects must be formatted in a specific way to be
+* able to display hierarchical menus. Here's an exampl:
+*
+* ```javascript
+* {
+*   "objectID": "123",
+*   "name": "orange",
+*   "categories": {
+*     "lvl0": "fruits",
+*     "lvl1": "fruits > citrus"
+*   }
+* }
+* ```
+*
+* Every level must be specified entirely.
+* It's also possible to have multiple values per level, example:
+*
+* ```javascript
+* {
+*   "objectID": "123",
+*   "name": "orange",
+*   "categories": {
+*     "lvl0": ["fruits", "vitamins"],
+*     "lvl1": ["fruits > citrus", "vitamins > C"]
+*   }
+* }
+* ```
  * @type {WidgetFactory}
  * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.

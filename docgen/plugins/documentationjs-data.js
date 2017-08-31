@@ -37,6 +37,7 @@ export default function({rootJSFile}) {
     const out = documentation.build(rootJSFile, {}).then((symbols) => {
       // transform all md like structure to html --> type: 'root' using formatMD
       const mdFormattedSymbols = formatAllMD(symbols);
+      console.log(mdFormattedSymbols.filter(symbol => symbol.context.file === '/Users/vvo/Dev/Algolia/instantsearch.js/src/widgets/hierarchical-menu/hierarchical-menu.js').map(symbol => symbol.tags))
 
       mapInstantSearch(
         [
