@@ -61,6 +61,17 @@ export default function connectBreadcrumb(renderFn) {
     const [hierarchicalFacetName] = attributes;
 
     return {
+      getConfiguration: currentConfiguration => ({
+        hierarchicalFacets: [
+          {
+            name: hierarchicalFacetName,
+            attributes,
+            separator
+            // rootPath,
+          }
+        ]
+      }),
+
       init({ helper }) {
         this._refine = function(facetValue) {
           console.log("refining " + facetValue);

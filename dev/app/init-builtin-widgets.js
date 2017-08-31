@@ -24,17 +24,26 @@ export default () => {
         })
       );
 
-      window.search.addWidget(
-        instantsearch.widgets.hierarchicalMenu({
-          container: "#hierarchicalMenu",
-          attributes: [
+      window.search.addWidget({
+        init({ helper }) {
+          helper.toggleRefinement(
             "hierarchicalCategories.lvl0",
-            "hierarchicalCategories.lvl1",
-            "hierarchicalCategories.lvl2"
-          ],
-          rootPath: "Video Games"
-        })
-      );
+            "Cameras & Camcorders > Digital Cameras"
+          );
+        }
+      });
+
+      // window.search.addWidget(
+      //   instantsearch.widgets.hierarchicalMenu({
+      //     container: "#hierarchicalMenu",
+      //     attributes: [
+      //       "hierarchicalCategories.lvl0",
+      //       "hierarchicalCategories.lvl1",
+      //       "hierarchicalCategories.lvl2"
+      //     ],
+      //     rootPath: ""
+      //   })
+      // );
     })
   );
 
