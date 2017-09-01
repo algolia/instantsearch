@@ -139,9 +139,11 @@ function mapWidgets(widgets, symbols, files) {
     const fileName = `widgets/${symbol.name}.html`;
 
     const relatedTypes = findRelatedTypes(symbol, symbols);
+    const requirements = symbol.tags.find(t => t.title === 'requirements') || {description: ''};
 
     const symbolWithRelatedType = {
       ...symbol,
+      requirements: md.render(requirements.description),
       relatedTypes,
     };
 

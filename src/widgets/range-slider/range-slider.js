@@ -129,9 +129,10 @@ rangeSlider({
  * The range slider is a widget which provides a user-friendly way to filter the
  * results based on a single numeric range.
  *
- * ## Requirements
- * The attribute passed to `attributeName` must be declared as an [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
- * Algolia settings.
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
  *
  * The values inside this attribute must be JavaScript numbers and not strings.
  *

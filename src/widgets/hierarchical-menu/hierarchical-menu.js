@@ -123,36 +123,34 @@ hierarchicalMenu({
  *
  * By default, the separator we expect is ` > ` (with spaces) but you can use
  * a different one by using the `separator` option.
- * @requirements fsafsafsafa
-*  ## Requirements
-*
-* Your objects must be formatted in a specific way to be
-* able to display hierarchical menus. Here's an exampl:
-*
-* ```javascript
-* {
-*   "objectID": "123",
-*   "name": "orange",
-*   "categories": {
-*     "lvl0": "fruits",
-*     "lvl1": "fruits > citrus"
-*   }
-* }
-* ```
-*
-* Every level must be specified entirely.
-* It's also possible to have multiple values per level, example:
-*
-* ```javascript
-* {
-*   "objectID": "123",
-*   "name": "orange",
-*   "categories": {
-*     "lvl0": ["fruits", "vitamins"],
-*     "lvl1": ["fruits > citrus", "vitamins > C"]
-*   }
-* }
-* ```
+ * @requirements
+ * Your objects must be formatted in a specific way to be
+ * able to display hierarchical menus. Here's an exampl:
+ *
+ * ```javascript
+ * {
+ *   "objectID": "123",
+ *   "name": "orange",
+ *   "categories": {
+ *     "lvl0": "fruits",
+ *     "lvl1": "fruits > citrus"
+ *   }
+ * }
+ * ```
+ *
+ * Every level must be specified entirely.
+ * It's also possible to have multiple values per level, example:
+ *
+ * ```javascript
+ * {
+ *   "objectID": "123",
+ *   "name": "orange",
+ *   "categories": {
+ *     "lvl0": ["fruits", "vitamins"],
+ *     "lvl1": ["fruits > citrus", "vitamins > C"]
+ *   }
+ * }
+ * ```
  * @type {WidgetFactory}
  * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.

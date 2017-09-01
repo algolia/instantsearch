@@ -19,9 +19,13 @@ block content
     a.anchor(href=`${navPath}#description`)
   p
     +description(jsdoc.description)
-  h2#description Requirements
-    a.anchor(href=`${navPath}#requirements`)
-  p=jsdoc.tags.requirements.description
+
+  if jsdoc.requirements
+    h2#requirements Requirements
+      a.anchor(href=`${navPath}#requirements`)
+    p
+      +description(jsdoc.requirements)
+
   h2#usage Usage
     a.anchor(href=`${navPath}#usage`)
   +widgetUsage(jsdoc)

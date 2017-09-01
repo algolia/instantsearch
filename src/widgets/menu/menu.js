@@ -142,11 +142,10 @@ menu({
 /**
  * Create a menu out of a facet
  *
- * ## Requirements
- *
- * The attribute passed to `attributeName` must be declared as an [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
- * Algolia settings.
- *
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
  * @type {WidgetFactory}
  * @category filter
  * @param {MenuWidgetOptions} $0 The Menu widget options.
