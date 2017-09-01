@@ -18,7 +18,7 @@ body {
 }
 
 .topbar {
-  background: #222F3F;
+  background: rgb(254, 207, 80);
   padding: 10px;
   height: 60px;
   width: 100%;
@@ -28,7 +28,7 @@ body {
   margin-right: 16px;
   font-size: 30px;
   font-weight: bold;
-  color: #FFFFFF;
+  color: rgb(62, 57, 107);
 }
 
 .wrapper {
@@ -37,7 +37,7 @@ body {
 }
 
 .left {
-  border-right: 1px solid #EEE;
+  border-right: 1px solid #eee;
   padding: 20px;
   min-width: 320px;
 }
@@ -60,14 +60,20 @@ body {
 .ais-hits {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 .ais-hits--item {
-  flex-grow: 1;
-  width: 24%;
+  flex: 0 0 30%;
   padding: 10px 20px 20px;
   margin-bottom: 10px;
   margin-right: 10px;
-  border: solid 1px #EEE;
+  border: solid 1px #eee;
   box-shadow: 0 0 3px #f6f6f6;
+  color: #333;
+}
+
+.ais-hits--item em {
+  font-style: normal;
+  background-color: rgba(254, 207, 80, .3);
 }

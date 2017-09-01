@@ -17,7 +17,12 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.hits({
-    container: '#hits'
+    container: '#hits',
+    {{#if attributeName}}
+    templates: {
+      item: '<div class="hit">\{{{_highlightResult.{{attributeName}}.value}}}</div>'
+    }
+    {{/if}}
   })
 );
 
