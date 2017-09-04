@@ -98,8 +98,8 @@ const WrapWithHits = ({
 
 const CustomHits = connectHits(({ hits }) =>
   <div className="hits">
-    {hits.map((hit, idx) =>
-      <div key={idx} className="hit">
+    {hits.map(hit =>
+      <div key={hit.objectID} className="hit">
         <div>
           <div className="hit-picture">
             <img

@@ -160,7 +160,7 @@ function CustomHits({ hits, refine, hasMore }) {
       </button>;
   return (
     <main id="hits">
-      {hits.map((hit, idx) => <Hit item={hit} key={idx} />)}
+      {hits.map(hit => <Hit item={hit} key={hit.objectID} />)}
       {loadMoreButton}
     </main>
   );

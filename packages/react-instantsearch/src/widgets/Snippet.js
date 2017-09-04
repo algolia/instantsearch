@@ -18,9 +18,15 @@ import SnippetComponent from '../components/Snippet.js';
  *
  * import { connectHits, Snippet, InstantSearch } from 'react-instantsearch/dom';
  *
- * const CustomHits = connectHits(hits => {
- *  return hits.map((hit) => <p><Snippet attributeName="description" hit={hit}/></p>);
- * });
+ * const CustomHits = connectHits(({ hits }) =>
+ * <div>
+ *   {hits.map(hit =>
+ *     <p key={hit.objectID}>
+ *       <Snippet attributeName="description" hit={hit} />
+ *     </p>
+ *   )}
+ * </div>
+ * );
  *
  * export default function App() {
  *  return (
