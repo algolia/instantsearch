@@ -110,7 +110,7 @@ numericRefinementList({
  * The numeric refinement list is a widget that displays a list of numeric filters in a list. Those numeric filters
  * are pre-configured with creating the widget.
  *
- * ## Requirements
+ * @requirements
  * The attribute passed to `attributeName` must be declared as an [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
  * Algolia settings.
  *
