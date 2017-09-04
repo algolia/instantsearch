@@ -125,7 +125,7 @@ hierarchicalMenu({
  * a different one by using the `separator` option.
  * @requirements
  * Your objects must be formatted in a specific way to be
- * able to display hierarchical menus. Here's an exampl:
+ * able to display hierarchical menus. Here's an example:
  *
  * ```javascript
  * {
@@ -139,7 +139,7 @@ hierarchicalMenu({
  * ```
  *
  * Every level must be specified entirely.
- * It's also possible to have multiple values per level, example:
+ * It's also possible to have multiple values per level, for example:
  *
  * ```javascript
  * {

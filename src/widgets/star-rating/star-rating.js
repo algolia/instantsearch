@@ -128,9 +128,8 @@ starRating({
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
- * The values inside this attribute must be JavaScript numbers and not strings.
+ * The values inside this attribute must be JavaScript numbers (not strings).
  *
- * @requirements adsa
  * @type {WidgetFactory}
  * @category filter
  * @param {StarWidgetOptions} $0 StarRating widget options.

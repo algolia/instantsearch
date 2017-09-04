@@ -140,7 +140,8 @@ menu({
  */
 
 /**
- * Create a menu out of a facet
+ * Create a menu based on a facet. A menu displays facet values and let the user selects only one value at a time.
+ * It also displays an empty value which lets the user "unselect" any previous selection.
  *
  * @requirements
  * The attribute passed to `attributeName` must be declared as an

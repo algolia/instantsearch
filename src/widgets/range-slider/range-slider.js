@@ -134,7 +134,7 @@ rangeSlider({
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
- * The values inside this attribute must be JavaScript numbers and not strings.
+ * The values inside this attribute must be JavaScript numbers (not strings).
  *
  * @type {WidgetFactory}
  * @category filter

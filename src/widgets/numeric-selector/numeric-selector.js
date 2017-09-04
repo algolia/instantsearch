@@ -58,7 +58,7 @@ const usage = `Usage: numericSelector({
  */
 
 /**
- * This filtering widget lets the user choose between numerical refinements from a dropdown menu.
+ * This widget lets the user choose between numerical refinements from a dropdown menu.
  *
  * @requirements
  * The attribute passed to `attributeName` must be declared as an

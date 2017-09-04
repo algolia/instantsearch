@@ -107,7 +107,7 @@ numericRefinementList({
  */
 
 /**
- * The numeric refinement list is a widget that display a list of numeric filters in a list. Those numeric filters
+ * The numeric refinement list is a widget that displays a list of numeric filters in a list. Those numeric filters
  * are pre-configured with creating the widget.
  *
  * ## Requirements
