@@ -3,9 +3,14 @@ import ReactDOM from "react-dom";
 import cx from "classnames";
 
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
+import defaultTemplates from "./defaultTemplates.js";
 
 import { connectBreadcrumb } from "../../connectors";
-import { bemHelper, getContainerNode } from "../../lib/utils";
+import {
+  bemHelper,
+  getContainerNode,
+  prepareTemplateProps
+} from "../../lib/utils";
 
 const bem = bemHelper("ais-breadcrumb");
 
@@ -22,17 +27,31 @@ breadcrumb({
 
 const renderer = ({
   autoHideContainer,
-  separator,
   cssClasses,
+  separator,
+  renderState,
   rootURL,
   transformData,
+  templates,
   containerNode
-}) => ({ items, refine, canRefine }, isFirstRendering) => {
-  if (isFirstRendering) return;
+}) => (
+  { items, refine, canRefine, instantSearchInstance },
+  isFirstRendering
+) => {
+  if (isFirstRendering) {
+    console.log("default templates", defaultTemplates);
+
+    renderState.templateProps = prepareTemplateProps({
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+      defaultTemplates
+    });
+    console.log("renderstate", renderState);
+    return;
+  }
 
   // const shouldAutoHideContainer = autoHideContainer && items.length === 0;
   // with canRefine
-  console.log("canRefine from breadcrumb.js", canRefine);
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
   ReactDOM.render(
     <Breadcrumb
@@ -42,6 +61,7 @@ const renderer = ({
       refine={refine}
       cssClasses={cssClasses}
       shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
     />,
     containerNode
   );
@@ -55,6 +75,7 @@ export default function breadcrumb(
     separator = " > ",
     rootURL = null,
     transformData,
+    templates = defaultTemplates,
     cssClasses: userCssClasses = {}
   } = {}
 ) {
@@ -84,6 +105,7 @@ export default function breadcrumb(
     rootURL,
     transformData,
     containerNode,
+    templates,
     renderState: {}
   });
 

@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+import Template from "../Template.js";
 import autoHideContainerHOC from "../../decorators/autoHideContainer.js";
-import headerFooterHOC from "../../decorators/headerFooter.js";
 
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
@@ -19,6 +19,7 @@ class Breadcrumb extends PureComponent {
     refine: PropTypes.func.isRequired,
     rootURL: PropTypes.string,
     separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    templateProps: PropTypes.object.isRequired,
     translate: PropTypes.func
   };
 
@@ -31,9 +32,6 @@ class Breadcrumb extends PureComponent {
       cssClasses,
       canRefine
     } = this.props;
-    console.log("canRefine", this.props.canRefine);
-    console.log("canRefine from BC react", canRefine);
-    // console.log("items", items);
 
     /* 
     const rootPath = canRefine
@@ -55,10 +53,13 @@ class Breadcrumb extends PureComponent {
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
-      const separator = isLast ? "" : this.props.separator;
       const itemCssClass = !isLast ? cssClasses.item : cssClasses.itemDisabled;
+      // function onClick here
       return (
         <span key={idx}>
+          <span className={cssClasses.separator}>
+            {this.props.separator}
+          </span>
           <span
             className={itemCssClass}
             onClick={
@@ -79,21 +80,16 @@ class Breadcrumb extends PureComponent {
               {item.count}
             </span>
           </span>
-          <span className={cssClasses.separator}>
-            {separator}
-          </span>
         </span>
       );
     });
-    console.log("Breadcrumb", breadcrumb);
     return (
-      //add rootPath
       <div>
+        <Template templateKey="home" {...this.props.templateProps} />
         {breadcrumb}
       </div>
     );
   }
 }
 
-export default autoHideContainerHOC(headerFooterHOC(Breadcrumb));
-// export default Breadcrumb;
+export default autoHideContainerHOC(Breadcrumb);

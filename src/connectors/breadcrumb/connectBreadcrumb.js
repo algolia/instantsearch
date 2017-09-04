@@ -1,3 +1,6 @@
+import find from "lodash/find";
+import isEqual from "lodash/isequal";
+
 const usage = `Usage:
 var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {
   // params = {
@@ -61,21 +64,39 @@ export default function connectBreadcrumb(renderFn) {
     const [hierarchicalFacetName] = attributes;
 
     return {
-      getConfiguration: currentConfiguration => ({
-        hierarchicalFacets: [
-          {
-            name: hierarchicalFacetName,
-            attributes,
-            separator
-            // rootPath,
+      getConfiguration: currentConfiguration => {
+        if (currentConfiguration.hierarchicalFacets) {
+          const facetSet = find(
+            currentConfiguration.hierarchicalFacets,
+            ({ name }) => name === hierarchicalFacetName
+          );
+          if (facetSet) {
+            if (
+              !isEqual(facetSet.attributes, attributes) ||
+              facetSet.separator !== separator
+            ) {
+              console.warn(
+                "using Breadcrumb & HierarchicalMenu on the same facet with different options"
+              );
+            }
+            return {};
           }
-        ]
-      }),
+        }
 
-      init({ helper }) {
+        return {
+          hierarchicalFacets: [
+            {
+              name: hierarchicalFacetName,
+              attributes,
+              separator
+              // rootPath,
+            }
+          ]
+        };
+      },
+
+      init({ helper, instantSearchInstance }) {
         this._refine = function(facetValue) {
-          console.log("refining " + facetValue);
-          console.log(hierarchicalFacetName);
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
         };
 
@@ -83,13 +104,19 @@ export default function connectBreadcrumb(renderFn) {
           {
             items: [],
             refine: this._refine,
-            canRefine: false
+            canRefine: false,
+            instantSearchInstance
           },
           true
         );
       },
 
-      render({ results, state }) {
+      render({ results, state, instantSearchInstance }) {
+        console.log("STATE", state);
+        console.log(
+          "HierarchicalFacets is an array? ",
+          Array.isArray(state.hierarchicalFacets)
+        );
         if (
           !state.hierarchicalFacets ||
           (Array.isArray(state.hierarchicalFacets) &&
@@ -108,7 +135,8 @@ export default function connectBreadcrumb(renderFn) {
             items,
             refine: this._refine,
             canRefine: items.length > 0,
-            widgetParams
+            widgetParams,
+            instantSearchInstance
           },
           false
         );
