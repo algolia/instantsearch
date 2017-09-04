@@ -314,8 +314,8 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
   return (
     <div>
       <main id="hits" style={containerCardStyle}>
-        {hits.map((hit, idx) =>
-          <Card key={idx} style={cardStyle}>
+        {hits.map(hit =>
+          <Card key={hit.objectID} style={cardStyle}>
             <CardHeader
               subtitle={<Highlight attributeName="name" hit={hit} />}
             />

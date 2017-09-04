@@ -82,8 +82,8 @@ const AutoComplete = connectAutoComplete(
 );
 
 const CustomCategoriesOrBrands = connectHits(({ hits }) => {
-  const categoryOrBrand = hits.map((hit, idx) =>
-    <CategoryOrBrand hit={hit} key={idx} />
+  const categoryOrBrand = hits.map(hit =>
+    <CategoryOrBrand hit={hit} key={hit.objectID} />
   );
   return (
     <div className="multi-index_hits">
@@ -102,7 +102,7 @@ CategoryOrBrand.propTypes = {
 };
 
 const CustomProducts = connectHits(({ hits }) => {
-  const products = hits.map((hit, idx) => <Product hit={hit} key={idx} />);
+  const products = hits.map(hit => <Product hit={hit} key={hit.objectID} />);
   return (
     <div className="multi-index_hits">
       {products}

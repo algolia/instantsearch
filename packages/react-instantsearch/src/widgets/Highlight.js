@@ -15,9 +15,15 @@ import HighlightComponent from '../components/Highlight.js';
  *
  * import { connectHits, Highlight, InstantSearch } from 'react-instantsearch/dom';
  *
- * const CustomHits = connectHits(hits => {
- *  return hits.map((hit) => <p><Highlight attributeName="description" hit={hit}/></p>);
- * });
+ * const CustomHits = connectHits(({ hits }) =>
+ * <div>
+ *   {hits.map(hit =>
+ *     <p key={hit.objectID}>
+ *       <Highlight attributeName="description" hit={hit} />
+ *     </p>
+ *   )}
+ * </div>
+ * );
  *
  * export default function App() {
  *  return (
