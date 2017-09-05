@@ -6,6 +6,7 @@ import filter from 'lodash/filter';
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
 import defaultTemplates from './defaultTemplates.js';
+import sffvDefaultTemplates from './defaultTemplates.searchForFacetValue.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
 
 import {
@@ -253,7 +254,7 @@ export default function refinementList(
     ? prefixKeys('show-more-', showMoreConfig.templates)
     : {};
   const searchForValuesTemplates = searchForFacetValues
-    ? searchForFacetValues.templates
+    ? searchForFacetValues.templates || sffvDefaultTemplates
     : {};
   const allTemplates = {
     ...templates,

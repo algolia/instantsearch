@@ -294,6 +294,25 @@ export default () => {
       })
     )
     .add(
+      'with search inside items (using the default noResults template)',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.refinementList({
+            container,
+            attributeName: 'brand',
+            operator: 'or',
+            limit: 10,
+            templates: {
+              header: 'Searchable brands',
+            },
+            searchForFacetValues: {
+              placeholder: 'Find other brands...',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with operator `and`',
       wrapWithHits(container => {
         window.search.addWidget(
