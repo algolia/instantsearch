@@ -131,7 +131,11 @@ toggle({
  *
  * This widget is particularly useful if you have a boolean value in the records.
  *
- * The attribute has to be in the list of attributes for faceting in the dashboard.
+ * @erequirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
+ *
  * @type {WidgetFactory}
  * @category filter
  * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
