@@ -11,9 +11,9 @@ import PaginationLink from './PaginationLink.js';
 
 import cx from 'classnames';
 
-class Pagination extends React.Component {
+export class RawPagination extends React.Component {
   constructor(props) {
-    super(defaultsDeep(props, Pagination.defaultProps));
+    super(defaultsDeep(props, RawPagination.defaultProps));
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -148,7 +148,7 @@ class Pagination extends React.Component {
   }
 }
 
-Pagination.propTypes = {
+RawPagination.propTypes = {
   createURL: PropTypes.func,
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
@@ -176,10 +176,10 @@ Pagination.propTypes = {
   showFirstLast: PropTypes.bool,
 };
 
-Pagination.defaultProps = {
+RawPagination.defaultProps = {
   nbHits: 0,
   currentPage: 0,
   nbPages: 0,
 };
 
-export default autoHideContainerHOC(Pagination);
+export default autoHideContainerHOC(RawPagination);
