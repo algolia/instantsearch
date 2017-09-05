@@ -121,8 +121,15 @@ starRating({
 /**
  * Star rating is used for displaying grade like filters. The values are normalized within boundaries.
  *
- * The values must be **integers** in your records. Even though, the maximum value can be set (with `max`), the minimum is
- * always 0.
+ * The maximum value can be set (with `max`), the minimum is always 0.
+ *
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
+ *
+ * The values inside this attribute must be JavaScript numbers (not strings).
+ *
  * @type {WidgetFactory}
  * @category filter
  * @param {StarWidgetOptions} $0 StarRating widget options.
