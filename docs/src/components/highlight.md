@@ -40,6 +40,18 @@ You can access the highlighted version by specifying the path by separating leve
 <ais-highlight :result="result" attribute-name="meta.title"></ais-highlight>
 ```
 
+**Advanced use cases:**
+
+For more complex data structures, it will be necessary to leverage the [_highlightResult](https://www.algolia.com/doc/guides/searching/highlighting-snippeting/#response-information) object directly. For example, consider the case of an array of keywords:
+
+```html
+<ais-results>
+  <template scope="{ result }">
+    <p v-for="keyword in result._highlightResult.keywords" v-html="keyword.value"></p>
+  </template>
+</ais-results>
+```
+
 ## Props
 
 | Name           | Required | Type   | Default | Description                                             |
