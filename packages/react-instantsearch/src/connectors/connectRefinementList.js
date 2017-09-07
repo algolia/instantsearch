@@ -97,7 +97,10 @@ export default createConnector({
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
-    defaultRefinement: PropTypes.arrayOf(PropTypes.string),
+    defaultRefinement: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
     withSearchBox: PropTypes.bool,
     searchForFacetValues: PropTypes.bool, // @deprecated
     transformItems: PropTypes.func,
