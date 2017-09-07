@@ -118,6 +118,13 @@ export default function connectHitsPerPage(renderFn) {
 
     return {
       getConfiguration() {
+        if (items.filter(item => item.default).length > 1 && window.console) {
+          window.console.warn(
+            `[Warning][hitsPerPageSelector] more than one default value is specified in \`items[]\`
+  The first one will be picked, you should probably set only one default value`
+          );
+        }
+
         const defaultHitsPerPage = items.find(item => item.default);
         return defaultHitsPerPage
           ? { hitsPerPage: defaultHitsPerPage.value }
