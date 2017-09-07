@@ -39,6 +39,21 @@ export function refineValue(
         )
       : refineMultiIndex(searchState, nextRefinement, context, resetPage);
   } else {
+    /* 
+      If we have a multi index page with shared widgets we should also reset their page to 1
+      see: https://github.com/algolia/react-instantsearch/issues/310
+    */
+    if (searchState.indices) {
+      Object.keys(searchState.indices).forEach(targetedIndex => {
+        searchState = refineValue(
+          searchState,
+          { page: 1 },
+          { multiIndexContext: { targetedIndex } },
+          true,
+          namespace
+        );
+      });
+    }
     return namespace
       ? refineSingleIndexWithNamespace(
           searchState,
