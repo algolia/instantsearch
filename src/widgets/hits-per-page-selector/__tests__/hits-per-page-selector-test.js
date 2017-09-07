@@ -56,8 +56,9 @@ describe('hitsPerPageSelector()', () => {
     };
   });
 
-  it("doesn't configure anything", () => {
-    expect(widget.getConfiguration).toEqual(undefined);
+  it('does configure the default hits per page if specified', () => {
+    expect(typeof widget.getConfiguration).toEqual('function');
+    expect(widget.getConfiguration()).toEqual({});
   });
 
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {

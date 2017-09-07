@@ -20,6 +20,7 @@ describe('connectHitsPerPage', () => {
     });
 
     expect(typeof widget.getConfiguration).toEqual('function');
+    expect(widget.getConfiguration()).toEqual({});
 
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
@@ -80,7 +81,7 @@ describe('connectHitsPerPage', () => {
     });
   });
 
-  it('Configures the search with the first item value provided', () => {
+  it('Does not configures the search when there is no default value', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
@@ -90,9 +91,7 @@ describe('connectHitsPerPage', () => {
       ],
     });
 
-    expect(widget.getConfiguration()).toEqual({
-      hitsPerPage: 3,
-    });
+    expect(widget.getConfiguration()).toEqual({});
   });
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
