@@ -238,7 +238,7 @@ describe('utility method for manipulating the search state', () => {
     });
   });
   describe('when there are multiple index', () => {
-    const context = { multiIndexContext: { targetedIndex: 'first' } };
+    let context = { multiIndexContext: { targetedIndex: 'first' } };
     it('refine with no namespace', () => {
       let searchState = {};
       let nextRefinement = { refinement: 'refinement' };
@@ -515,6 +515,21 @@ describe('utility method for manipulating the search state', () => {
       });
 
       expect(results).toEqual({ some: 'results' });
+    });
+
+    it('refine shared widgets should reset indices page to 1', () => {
+      context = {};
+      let searchState = {
+        indices: { first: { page: 3 }, second: { page: 3 } },
+      };
+      const nextRefinement = { query: 'new' };
+
+      searchState = refineValue(searchState, nextRefinement, context);
+
+      expect(searchState).toEqual({
+        query: 'new',
+        indices: { first: { page: 1 }, second: { page: 1 } },
+      });
     });
   });
 });
