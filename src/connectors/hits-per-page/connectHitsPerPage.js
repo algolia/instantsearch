@@ -118,10 +118,10 @@ export default function connectHitsPerPage(renderFn) {
 
     return {
       getConfiguration() {
-        const { value: defaultHitsPerPage } =
-          items.find(item => item.default) || items[0];
-
-        return { hitsPerPage: defaultHitsPerPage };
+        const defaultHitsPerPage = items.find(item => item.default);
+        return defaultHitsPerPage
+          ? { hitsPerPage: defaultHitsPerPage.value }
+          : {};
       },
 
       init({ helper, state, instantSearchInstance }) {
