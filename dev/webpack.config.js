@@ -130,7 +130,9 @@ module.exports = {
         filename: '[name].[hash].js',
         entry: {
           vendor: [
-            ...Object.keys(require('../package.json').dependencies),
+            ...Object.keys(require('../package.json').dependencies).filter(
+              pkg => !pkg.includes('rheostat')
+            ),
             'dev-novel',
           ],
         },
