@@ -2,16 +2,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import forEach from 'lodash/forEach';
 import defaultsDeep from 'lodash/defaultsDeep';
-import {isSpecialClick} from '../../lib/utils.js';
+import { isSpecialClick } from '../../lib/utils.js';
+
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
 import Paginator from './Paginator.js';
 import PaginationLink from './PaginationLink.js';
 
 import cx from 'classnames';
 
-class Pagination extends React.Component {
+export class RawPagination extends React.Component {
   constructor(props) {
-    super(defaultsDeep(props, Pagination.defaultProps));
+    super(defaultsDeep(props, RawPagination.defaultProps));
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -100,14 +102,16 @@ class Pagination extends React.Component {
     forEach(pager.pages(), pageNumber => {
       const isActive = pageNumber === pager.currentPage;
 
-      pages.push(this.pageLink({
-        ariaLabel: pageNumber + 1,
-        additionalClassName: this.props.cssClasses.page,
-        isActive,
-        label: pageNumber + 1,
-        pageNumber,
-        createURL,
-      }));
+      pages.push(
+        this.pageLink({
+          ariaLabel: pageNumber + 1,
+          additionalClassName: this.props.cssClasses.page,
+          isActive,
+          label: pageNumber + 1,
+          pageNumber,
+          createURL,
+        })
+      );
     });
 
     return pages;
@@ -144,7 +148,7 @@ class Pagination extends React.Component {
   }
 }
 
-Pagination.propTypes = {
+RawPagination.propTypes = {
   createURL: PropTypes.func,
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
@@ -172,10 +176,10 @@ Pagination.propTypes = {
   showFirstLast: PropTypes.bool,
 };
 
-Pagination.defaultProps = {
+RawPagination.defaultProps = {
   nbHits: 0,
   currentPage: 0,
   nbPages: 0,
 };
 
-export default Pagination;
+export default autoHideContainerHOC(RawPagination);

@@ -3,19 +3,25 @@ import forEach from 'lodash/forEach';
 import expect from 'expect';
 
 describe('instantsearch()', () => {
-   // to ensure the global.window is set
+  // to ensure the global.window is set
 
   it('includes a version', () => {
     expect(instantsearch.version).toBeA('string');
   });
 
   it('statically creates a URL', () => {
-    expect(instantsearch.createQueryString({hitsPerPage: 42})).toEqual('hPP=42');
+    expect(instantsearch.createQueryString({ hitsPerPage: 42 })).toEqual(
+      'hPP=42'
+    );
   });
 
   it('statically creates a complex URL', () => {
-    expect(instantsearch.createQueryString({hitsPerPage: 42, facetsRefinements: {category: 'Home'}}))
-      .toEqual('hPP=42&fR[category]=Home');
+    expect(
+      instantsearch.createQueryString({
+        hitsPerPage: 42,
+        facetsRefinements: { category: 'Home' },
+      })
+    ).toEqual('hPP=42&fR[category]=Home');
   });
 
   it('includes the widget functions', () => {
@@ -26,7 +32,10 @@ describe('instantsearch()', () => {
 
   it('includes the connectors functions', () => {
     forEach(instantsearch.connectors, connector => {
-      expect(typeof connector).toEqual('function', 'A connector must be a function');
+      expect(typeof connector).toEqual(
+        'function',
+        'A connector must be a function'
+      );
     });
   });
 });

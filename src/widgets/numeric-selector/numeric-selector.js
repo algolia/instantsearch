@@ -5,23 +5,14 @@ import cx from 'classnames';
 import Selector from '../../components/Selector.js';
 import connectNumericSelector from '../../connectors/numeric-selector/connectNumericSelector.js';
 
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils.js';
 
 const bem = bemHelper('ais-numeric-selector');
 
-const renderer = ({
-  containerNode,
-  autoHideContainer,
-  cssClasses,
-}) => ({
-  currentRefinement,
-  refine,
-  hasNoResults,
-  options,
-}, isFirstRendering) => {
+const renderer = ({ containerNode, autoHideContainer, cssClasses }) => (
+  { currentRefinement, refine, hasNoResults, options },
+  isFirstRendering
+) => {
   if (isFirstRendering) return;
 
   ReactDOM.render(
@@ -67,8 +58,16 @@ const usage = `Usage: numericSelector({
  */
 
 /**
- * Instantiate a dropdown element to choose the number of hits to display per page.
+ * This widget lets the user choose between numerical refinements from a dropdown menu.
+ *
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
+ *
+ * The values inside this attribute must be JavaScript numbers and not strings.
  * @type {WidgetFactory}
+ * @category filter
  * @param {NumericSelectorWidgetOptions} $0 The NumericSelector widget options.
  * @return {Widget} A new instance of NumericSelector widget.
  * @example
@@ -103,11 +102,15 @@ export default function numericSelector({
     item: cx(bem('item'), userCssClasses.item),
   };
 
-  const specializedRenderer = renderer({autoHideContainer, containerNode, cssClasses});
+  const specializedRenderer = renderer({
+    autoHideContainer,
+    containerNode,
+    cssClasses,
+  });
 
   try {
     const makeNumericSelector = connectNumericSelector(specializedRenderer);
-    return makeNumericSelector({operator, attributeName, options});
+    return makeNumericSelector({ operator, attributeName, options });
   } catch (e) {
     throw new Error(usage);
   }

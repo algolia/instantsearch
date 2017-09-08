@@ -33,8 +33,7 @@ export default {
 
       server.once('listening', () => resolve(server));
       server.once('error', reject);
-    }
-  ),
+    }),
   stop: () => {
     server.close();
   },

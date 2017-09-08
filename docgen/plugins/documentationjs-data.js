@@ -1,7 +1,14 @@
+import path from 'path';
+
 import {uniqBy, forEach, reduce, groupBy, findIndex, find, filter, isArray, isObject} from 'lodash';
 import documentation from 'documentation';
 import remark from 'remark';
 import md from '../mdRenderer';
+
+const baseDir = path.resolve(process.cwd(), '..');
+function getGithubSource(symbol) {
+  return symbol.context.file.split(baseDir)[1].substring(1);
+}
 
 function formatMD(ast) {
   if (ast && ast.type === 'root') {
@@ -49,6 +56,8 @@ export default function({rootJSFile}) {
       mapConnectors(filterSymbolsByType('Connector', mdFormattedSymbols), mdFormattedSymbols, files),
       mapWidgets(filterSymbolsByType('WidgetFactory', mdFormattedSymbols), mdFormattedSymbols, files),
 
+      metalsmith.metadata().widgetSymbols = groupSymbolsByCategories(filterSymbolsByType('WidgetFactory', mdFormattedSymbols));
+
       console.log('after documentationjs');
       done();
     }, (e) => done);
@@ -70,11 +79,15 @@ function filterSymbolsByType(type, symbols) {
   });
 }
 
-function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files) {
-  // console.log(JSON.stringify(InstantSearchSymbol.params, null, 2));
-  const fileName = 'instantsearch.html';
+function groupSymbolsByCategories(symbols) {
+  return groupBy(symbols, (s) => {
+    const [ tag ] = filter(s.tags, {title: 'category'});
+    return tag && tag.description || 'other';
+  });
+}
 
-  const githubSource = InstantSearch.context.file.split('instantsearch.js')[1];
+function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files) {
+  const fileName = 'instantsearch.html';
 
   files[fileName] = {
     mode: '0764',
@@ -93,22 +106,18 @@ function mapInstantSearch([instantsearchFactory, InstantSearch], symbols, files)
     },
     withHeadings: true,
     editable: true,
-    githubSource: githubSource,
+    githubSource: getGithubSource(InstantSearch),
   };
 }
 
 function mapConnectors(connectors, symbols, files) {
   return forEach(connectors, symbol => {
-    // console.log(symbol.name);
     const fileName = `connectors/${symbol.name}.html`;
 
     const symbolWithRelatedType = {
       ...symbol,
       relatedTypes: findRelatedTypes(symbol, symbols),
     };
-
-    const githubSource = 'http://github.com/algolia/instantsearch.js/edit/master' +
-      symbolWithRelatedType.context.file.split('instantsearch.js')[1];
 
     files[fileName] = {
       mode: '0764',
@@ -121,24 +130,23 @@ function mapConnectors(connectors, symbols, files) {
       jsdoc: symbolWithRelatedType,
       withHeadings: true,
       editable: true,
-      githubSource: githubSource,
+      githubSource: getGithubSource(symbolWithRelatedType),
     };
   });
 }
 
 function mapWidgets(widgets, symbols, files) {
   return forEach(widgets, symbol => {
-    // console.log(symbol.name);
     const fileName = `widgets/${symbol.name}.html`;
 
     const relatedTypes = findRelatedTypes(symbol, symbols);
+    const requirements = symbol.tags.find(t => t.title === 'requirements') || {description: ''};
 
     const symbolWithRelatedType = {
       ...symbol,
+      requirements: md.render(requirements.description),
       relatedTypes,
     };
-
-    const githubSource = symbolWithRelatedType.context.file.split('instantsearch.js/')[1];
 
     files[fileName] = {
       mode: '0764',
@@ -151,7 +159,7 @@ function mapWidgets(widgets, symbols, files) {
       jsdoc: symbolWithRelatedType,
       withHeadings: true,
       editable: true,
-      githubSource: githubSource,
+      githubSource: getGithubSource(symbolWithRelatedType),
     };
   });
 }

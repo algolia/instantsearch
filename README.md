@@ -11,7 +11,7 @@
 
 [![InstantSearch.js logo][logo]][website]
 
-InstantSearch family: **InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github].
+InstantSearch family: **InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github].
 
 ## InstantSearch.js
 
@@ -39,3 +39,4 @@ one command away to start the developer environment, [read our CONTRIBUTING guid
 [algolia-website]: https://www.algolia.com/
 [react-instantsearch-github]: https://github.com/algolia/react-instantsearch/
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
+[instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios

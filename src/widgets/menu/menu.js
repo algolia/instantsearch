@@ -25,16 +25,19 @@ const renderer = ({
   templates,
   transformData,
   showMoreConfig,
-}) => ({
-  refine,
-  items,
-  createURL,
-  canRefine,
-  instantSearchInstance,
-  isShowingMore,
-  toggleShowMore,
-  canToggleShowMore,
-}, isFirstRendering) => {
+}) => (
+  {
+    refine,
+    items,
+    createURL,
+    canRefine,
+    instantSearchInstance,
+    isShowingMore,
+    toggleShowMore,
+    canToggleShowMore,
+  },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -45,22 +48,25 @@ const renderer = ({
     return;
   }
 
-  const facetValues = items.map(facetValue => ({...facetValue, url: createURL(facetValue.name)}));
+  const facetValues = items.map(facetValue => ({
+    ...facetValue,
+    url: createURL(facetValue.name),
+  }));
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
   ReactDOM.render(
     <RefinementList
-      collapsible={ collapsible }
-      createURL={ createURL }
-      cssClasses={ cssClasses }
-      facetValues={ facetValues }
-      shouldAutoHideContainer={ shouldAutoHideContainer }
-      showMore={ showMoreConfig !== null }
-      templateProps={ renderState.templateProps }
-      toggleRefinement={ refine }
-      toggleShowMore={ toggleShowMore }
-      isShowingMore={ isShowingMore }
-      canToggleShowMore={ canToggleShowMore }
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      showMore={showMoreConfig !== null}
+      templateProps={renderState.templateProps}
+      toggleRefinement={refine}
+      toggleShowMore={toggleShowMore}
+      isShowingMore={isShowingMore}
+      canToggleShowMore={canToggleShowMore}
     />,
     containerNode
   );
@@ -134,8 +140,15 @@ menu({
  */
 
 /**
- * Create a menu out of a facet
+ * Create a menu based on a facet. A menu displays facet values and let the user selects only one value at a time.
+ * It also displays an empty value which lets the user "unselect" any previous selection.
+ *
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
  * @type {WidgetFactory}
+ * @category filter
  * @param {MenuWidgetOptions} $0 The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.
  * @example
@@ -173,9 +186,12 @@ export default function menu({
 
   const containerNode = getContainerNode(container);
 
-  const showMoreLimit = showMoreConfig && showMoreConfig.limit || undefined;
-  const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
-  const allTemplates = showMoreTemplates ? {...templates, ...showMoreTemplates} : templates;
+  const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || undefined;
+  const showMoreTemplates =
+    showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
+  const allTemplates = showMoreTemplates
+    ? { ...templates, ...showMoreTemplates }
+    : templates;
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -202,7 +218,7 @@ export default function menu({
 
   try {
     const makeWidget = connectMenu(specializedRenderer);
-    return makeWidget({attributeName, limit, sortBy, showMoreLimit});
+    return makeWidget({ attributeName, limit, sortBy, showMoreLimit });
   } catch (e) {
     throw new Error(usage);
   }

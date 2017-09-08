@@ -7,7 +7,7 @@ const appId = 'appId';
 const apiKey = 'apiKey';
 const indexName = 'lifecycle';
 
-describe.only('InstantSearch lifecycle', () => {
+describe('InstantSearch lifecycle', () => {
   it('calls the provided searchFunction when used', () => {
     const searchFunctionSpy = sinon.spy(h => {
       h.setQuery('test').search();

@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customMenu = connectMenu(function render(params, isFirstRendering) {
@@ -55,7 +55,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * already displaying more than `limit` items)
  */
 
- /**
+/**
   * **Menu** connector provides the logic to build a widget that will give the user the ability to choose a single value for a specific facet. The typical usage of menu is for navigation in categories.
   *
   * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
@@ -114,10 +114,7 @@ export default function connectMenu(renderFn) {
       showMoreLimit,
     } = widgetParams;
 
-    if (
-      !attributeName ||
-      !isNaN(showMoreLimit) && showMoreLimit < limit
-    ) {
+    if (!attributeName || (!isNaN(showMoreLimit) && showMoreLimit < limit)) {
       throw new Error(usage);
     }
 
@@ -127,12 +124,14 @@ export default function connectMenu(renderFn) {
       // Provide the same function to the `renderFn` so that way the user
       // has to only bind it once when `isFirstRendering` for instance
       toggleShowMore() {},
-      cachedToggleShowMore() { this.toggleShowMore(); },
+      cachedToggleShowMore() {
+        this.toggleShowMore();
+      },
 
-      createToggleShowMore({results, instantSearchInstance}) {
+      createToggleShowMore({ results, instantSearchInstance }) {
         return () => {
           this.isShowingMore = !this.isShowingMore;
-          this.render({results, instantSearchInstance});
+          this.render({ results, instantSearchInstance });
         };
       },
 
@@ -142,60 +141,79 @@ export default function connectMenu(renderFn) {
 
       getConfiguration(configuration) {
         const widgetConfiguration = {
-          hierarchicalFacets: [{
-            name: attributeName,
-            attributes: [attributeName],
-          }],
+          hierarchicalFacets: [
+            {
+              name: attributeName,
+              attributes: [attributeName],
+            },
+          ],
         };
 
         const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-        widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, showMoreLimit || limit);
+        widgetConfiguration.maxValuesPerFacet = Math.max(
+          currentMaxValuesPerFacet,
+          showMoreLimit || limit
+        );
 
         return widgetConfiguration;
       },
 
-      init({helper, createURL, instantSearchInstance}) {
+      init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         this._createURL = facetValue =>
           createURL(helper.state.toggleRefinement(attributeName, facetValue));
 
-        this._refine = facetValue => helper
-          .toggleRefinement(attributeName, facetValue)
-          .search();
+        this._refine = facetValue =>
+          helper.toggleRefinement(attributeName, facetValue).search();
 
-        renderFn({
-          items: [],
-          createURL: this._createURL,
-          refine: this._refine,
-          instantSearchInstance,
-          canRefine: false,
-          widgetParams,
-          isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
-          canToggleShowMore: false,
-        }, true);
+        renderFn(
+          {
+            items: [],
+            createURL: this._createURL,
+            refine: this._refine,
+            instantSearchInstance,
+            canRefine: false,
+            widgetParams,
+            isShowingMore: this.isShowingMore,
+            toggleShowMore: this.cachedToggleShowMore,
+            canToggleShowMore: false,
+          },
+          true
+        );
       },
 
-      render({results, instantSearchInstance}) {
-        const facetItems = results.getFacetValues(attributeName, {sortBy}).data || [];
+      render({ results, instantSearchInstance }) {
+        const facetItems =
+          results.getFacetValues(attributeName, { sortBy }).data || [];
         const items = facetItems
           .slice(0, this.getLimit())
-          .map(({name: label, path: value, ...item}) => ({...item, label, value}));
+          .map(({ name: label, path: value, ...item }) => ({
+            ...item,
+            label,
+            value,
+          }));
 
-        this.toggleShowMore = this.createToggleShowMore({results, instantSearchInstance});
-
-        renderFn({
-          items,
-          createURL: this._createURL,
-          refine: this._refine,
+        this.toggleShowMore = this.createToggleShowMore({
+          results,
           instantSearchInstance,
-          canRefine: items.length > 0,
-          widgetParams,
-          isShowingMore: this.isShowingMore,
-          toggleShowMore: this.cachedToggleShowMore,
-          canToggleShowMore: this.isShowingMore || facetItems.length > this.getLimit(),
-        }, false);
+        });
+
+        renderFn(
+          {
+            items,
+            createURL: this._createURL,
+            refine: this._refine,
+            instantSearchInstance,
+            canRefine: items.length > 0,
+            widgetParams,
+            isShowingMore: this.isShowingMore,
+            toggleShowMore: this.cachedToggleShowMore,
+            canToggleShowMore:
+              this.isShowingMore || facetItems.length > this.getLimit(),
+          },
+          false
+        );
       },
     };
   };

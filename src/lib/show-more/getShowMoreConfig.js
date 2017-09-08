@@ -12,7 +12,7 @@ export default function getShowMoreConfig(showMoreOptions) {
     return defaultShowMoreConfig;
   }
 
-  const config = {...showMoreOptions};
+  const config = { ...showMoreOptions };
   if (!showMoreOptions.templates) {
     config.templates = defaultShowMoreConfig.templates;
   }

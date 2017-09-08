@@ -22,13 +22,10 @@ const renderer = ({
   renderState,
   transformData,
   templates,
-}) => ({
-  createURL,
-  instantSearchInstance,
-  refine,
-  items,
-  hasNoResults,
-}, isFirstRendering) => {
+}) => (
+  { createURL, instantSearchInstance, refine, items, hasNoResults },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -110,9 +107,17 @@ numericRefinementList({
  */
 
 /**
- * The numeric refinement list is a widget that display a list of numeric filters in a list. Those numeric filters
+ * The numeric refinement list is a widget that displays a list of numeric filters in a list. Those numeric filters
  * are pre-configured with creating the widget.
+ *
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
+ * Algolia settings.
+ *
+ * The values inside this attribute must be JavaScript numbers and not strings.
+ *
  * @type {WidgetFactory}
+ * @category filter
  * @param {NumericRefinementListWidgetOptions} $0 The NumericRefinementList widget options
  * @return {Widget} Creates a new instance of the NumericRefinementList widget.
  * @example
@@ -132,16 +137,18 @@ numericRefinementList({
  *   })
  * );
  */
-export default function numericRefinementList({
-  container,
-  attributeName,
-  options,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-  autoHideContainer = true,
-} = {}) {
+export default function numericRefinementList(
+  {
+    container,
+    attributeName,
+    options,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    collapsible = false,
+    transformData,
+    autoHideContainer = true,
+  } = {}
+) {
   if (!container || !attributeName || !options) {
     throw new Error(usage);
   }
@@ -170,8 +177,10 @@ export default function numericRefinementList({
     templates,
   });
   try {
-    const makeNumericRefinementList = connectNumericRefinementList(specializedRenderer);
-    return makeNumericRefinementList({attributeName, options});
+    const makeNumericRefinementList = connectNumericRefinementList(
+      specializedRenderer
+    );
+    return makeNumericRefinementList({ attributeName, options });
   } catch (e) {
     throw new Error(usage);
   }

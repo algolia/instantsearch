@@ -6,6 +6,7 @@ import filter from 'lodash/filter';
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
 import defaultTemplates from './defaultTemplates.js';
+import sffvDefaultTemplates from './defaultTemplates.searchForFacetValue.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
 
 import {
@@ -27,19 +28,22 @@ const renderer = ({
   autoHideContainer,
   showMoreConfig,
   searchForFacetValues,
-}) => ({
-  refine,
-  items,
-  createURL,
-  searchForItems,
-  isFromSearch,
-  instantSearchInstance,
-  canRefine,
-  toggleShowMore,
-  isShowingMore,
-  hasExhaustiveItems,
-  canToggleShowMore,
-}, isFirstRendering) => {
+}) => (
+  {
+    refine,
+    items,
+    createURL,
+    searchForItems,
+    isFromSearch,
+    instantSearchInstance,
+    canRefine,
+    toggleShowMore,
+    isShowingMore,
+    hasExhaustiveItems,
+    canToggleShowMore,
+  },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -52,7 +56,7 @@ const renderer = ({
 
   // Pass count of currently selected items to the header template
   const headerFooterData = {
-    header: {refinedFacetsCount: filter(items, {isRefined: true}).length},
+    header: { refinedFacetsCount: filter(items, { isRefined: true }).length },
   };
 
   ReactDOM.render(
@@ -66,7 +70,9 @@ const renderer = ({
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
       searchFacetValues={searchForFacetValues ? searchForItems : undefined}
-      searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
+      searchPlaceholder={
+        searchForFacetValues.placeholder || 'Search for other...'
+      }
       isFromSearch={isFromSearch}
       showMore={showMoreConfig !== null}
       toggleShowMore={toggleShowMore}
@@ -191,7 +197,17 @@ refinementList({
  *
  * This widget also implements search for facet values, which is a mini search inside the
  * values of the facets. This makes easy to deal with uncommon facet values.
+ *
+ * @requirements
+ *
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
+ *
+ * If you also want to use search for facet values on this attribute, then [declare it accordingly](https://www.algolia.com/doc/guides/searching/faceting/#search-for-facet-values).
+ *
  * @type {WidgetFactory}
+ * @category filter
  * @param {RefinementListWidgetOptions} $0 The RefinementList widget options that you use to customize the widget.
  * @return {Widget} Creates a new instance of the RefinementList widget.
  * @example
@@ -207,20 +223,22 @@ refinementList({
  *   })
  * );
  */
-export default function refinementList({
-  container,
-  attributeName,
-  operator = 'or',
-  sortBy = ['isRefined', 'count:desc', 'name:asc'],
-  limit = 10,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-  autoHideContainer = true,
-  showMore = false,
-  searchForFacetValues = false,
-} = {}) {
+export default function refinementList(
+  {
+    container,
+    attributeName,
+    operator = 'or',
+    sortBy = ['isRefined', 'count:desc', 'name:asc'],
+    limit = 10,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    collapsible = false,
+    transformData,
+    autoHideContainer = true,
+    showMore = false,
+    searchForFacetValues = false,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -230,11 +248,19 @@ export default function refinementList({
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
 
-  const showMoreLimit = showMoreConfig && showMoreConfig.limit || limit;
+  const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || limit;
   const containerNode = getContainerNode(container);
-  const showMoreTemplates = showMoreConfig ? prefixKeys('show-more-', showMoreConfig.templates) : {};
-  const searchForValuesTemplates = searchForFacetValues ? searchForFacetValues.templates : {};
-  const allTemplates = {...templates, ...showMoreTemplates, ...searchForValuesTemplates};
+  const showMoreTemplates = showMoreConfig
+    ? prefixKeys('show-more-', showMoreConfig.templates)
+    : {};
+  const searchForValuesTemplates = searchForFacetValues
+    ? searchForFacetValues.templates || sffvDefaultTemplates
+    : {};
+  const allTemplates = {
+    ...templates,
+    ...showMoreTemplates,
+    ...searchForValuesTemplates,
+  };
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),

@@ -5,7 +5,7 @@ const SearchResults = algoliasearchHelper.SearchResults;
 
 import connectRefinementList from '../connectRefinementList.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectRefinementList', () => {
   let rendering;
@@ -16,28 +16,24 @@ describe('connectRefinementList', () => {
   });
 
   it('throws on bad usage', () => {
-    expect(
-      connectRefinementList
-    ).toThrow();
+    expect(connectRefinementList).toThrow();
 
-    expect(
-      () => connectRefinementList({
+    expect(() =>
+      connectRefinementList({
         operator: 'and',
       })
     ).toThrow();
 
-    expect(
-      () => connectRefinementList(() => {})()
-    ).toThrow();
+    expect(() => connectRefinementList(() => {})()).toThrow();
 
-    expect(
-      () => connectRefinementList(() => {})({
+    expect(() =>
+      connectRefinementList(() => {})({
         operator: 'and',
       })
     ).toThrow();
 
-    expect(
-      () => connectRefinementList(() => {})({
+    expect(() =>
+      connectRefinementList(() => {})({
         attributeName: 'company',
         operator: 'YUP',
       })
@@ -50,10 +46,9 @@ describe('connectRefinementList', () => {
         attributeName: 'myFacet',
       });
 
-      expect(widget.getConfiguration())
-        .toEqual({
-          disjunctiveFacets: ['myFacet'],
-        });
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['myFacet'],
+      });
     });
 
     it('`limit`', () => {
@@ -62,17 +57,18 @@ describe('connectRefinementList', () => {
         limit: 20,
       });
 
-      expect(widget.getConfiguration())
-        .toEqual({
-          disjunctiveFacets: ['myFacet'],
-          maxValuesPerFacet: 20,
-        });
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 20,
+      });
 
-      expect(widget.getConfiguration({maxValuesPerFacet: 100}))
-        .toEqual({
+      expect(widget.getConfiguration({ maxValuesPerFacet: 100 })).toEqual(
+        {
           disjunctiveFacets: ['myFacet'],
           maxValuesPerFacet: 100,
-        }, 'Can read the previous maxValuesPerFacet value');
+        },
+        'Can read the previous maxValuesPerFacet value'
+      );
     });
 
     it('`operator="and"`', () => {
@@ -81,10 +77,9 @@ describe('connectRefinementList', () => {
         operator: 'and',
       });
 
-      expect(widget.getConfiguration())
-        .toEqual({
-          facets: ['myFacet'],
-        });
+      expect(widget.getConfiguration()).toEqual({
+        facets: ['myFacet'],
+      });
     });
   });
 
@@ -151,7 +146,11 @@ describe('connectRefinementList', () => {
       attributeName: 'category',
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'value');
@@ -164,7 +163,7 @@ describe('connectRefinementList', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {refine} = firstRenderingOptions;
+    const { refine } = firstRenderingOptions;
     refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
     refine('value');
@@ -178,7 +177,7 @@ describe('connectRefinementList', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {refine: renderToggleRefinement} = secondRenderingOptions;
+    const { refine: renderToggleRefinement } = secondRenderingOptions;
     renderToggleRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
     renderToggleRefinement('value');
@@ -192,7 +191,11 @@ describe('connectRefinementList', () => {
       showMoreLimit: 10,
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     widget.init({
@@ -203,22 +206,25 @@ describe('connectRefinementList', () => {
     });
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [],
-        facets: {
-          category: {
-            c1: 880,
-            c2: 47,
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
           },
         },
-      }, {
-        facets: {
-          category: {
-            c1: 880,
-            c2: 47,
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
           },
         },
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -228,14 +234,18 @@ describe('connectRefinementList', () => {
     expect(secondRenderingOptions.canToggleShowMore).toBe(false);
   });
 
-  it('If there are too few items then canToggleShowMore is false', () => {
+  it('If there are enough items then canToggleShowMore is true', () => {
     const widget = makeWidget({
       attributeName: 'category',
       limit: 1,
       showMoreLimit: 10,
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     widget.init({
@@ -246,22 +256,25 @@ describe('connectRefinementList', () => {
     });
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [],
-        facets: {
-          category: {
-            c1: 880,
-            c2: 47,
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
           },
         },
-      }, {
-        facets: {
-          category: {
-            c1: 880,
-            c2: 47,
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
           },
         },
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -285,7 +298,11 @@ describe('connectRefinementList', () => {
       showMoreLimit: 3,
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     widget.init({
@@ -296,26 +313,29 @@ describe('connectRefinementList', () => {
     });
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [],
-        facets: {
-          category: {
-            c1: 880,
-            c2: 47,
-            c3: 880,
-            c4: 47,
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
           },
         },
-      }, {
-        facets: {
-          category: {
-            c1: 880,
-            c2: 47,
-            c3: 880,
-            c4: 47,
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+              c3: 880,
+              c4: 47,
+            },
           },
         },
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -361,52 +381,17 @@ describe('connectRefinementList', () => {
     ]);
   });
 
-  it('Provide a function to clear the refinements at each step', () => {
-    const widget = makeWidget({
-      attributeName: 'category',
-    });
-
-    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
-    helper.search = sinon.stub();
-
-    helper.toggleRefinement('category', 'value');
-
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      onHistoryChange: () => {},
-    });
-
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    const {refine} = firstRenderingOptions;
-    refine('value');
-    expect(helper.hasRefinements('category')).toBe(false);
-    refine('value');
-    expect(helper.hasRefinements('category')).toBe(true);
-
-    widget.render({
-      results: new SearchResults(helper.state, [{}, {}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
-
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    const {refine: renderToggleRefinement} = secondRenderingOptions;
-    renderToggleRefinement('value');
-    expect(helper.hasRefinements('category')).toBe(false);
-    renderToggleRefinement('value');
-    expect(helper.hasRefinements('category')).toBe(true);
-  });
-
   it('hasExhaustiveItems indicates if the items provided are exhaustive', () => {
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
     helper.search = sinon.stub();
 
     widget.init({
@@ -419,20 +404,23 @@ describe('connectRefinementList', () => {
     expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [],
-        facets: {
-          category: {
-            c1: 880,
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
           },
         },
-      }, {
-        facets: {
-          category: {
-            c1: 880,
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
           },
         },
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -441,24 +429,27 @@ describe('connectRefinementList', () => {
     expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [],
-        facets: {
-          category: {
-            c1: 880,
-            c2: 34,
-            c3: 440,
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 34,
+              c3: 440,
+            },
           },
         },
-      }, {
-        facets: {
-          category: {
-            c1: 880,
-            c2: 34,
-            c3: 440,
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 34,
+              c3: 440,
+            },
           },
         },
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',

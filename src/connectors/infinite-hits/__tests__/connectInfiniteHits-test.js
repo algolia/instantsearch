@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectInfiniteHits from '../connectInfiniteHits.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectInfiniteHits', () => {
   it('Renders during init and render', () => {
@@ -46,9 +46,11 @@ describe('connectInfiniteHits', () => {
     });
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [],
-      }]),
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+        },
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -82,11 +84,8 @@ describe('connectInfiniteHits', () => {
     expect(firstRenderingOptions.hits).toEqual([]);
     expect(firstRenderingOptions.results).toBe(undefined);
 
-    const hits = [
-      {fake: 'data'},
-      {sample: 'infos'},
-    ];
-    const results = new SearchResults(helper.state, [{hits}]);
+    const hits = [{ fake: 'data' }, { sample: 'infos' }];
+    const results = new SearchResults(helper.state, [{ hits }]);
     widget.render({
       results,
       state: helper.state,
@@ -95,20 +94,19 @@ describe('connectInfiniteHits', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {showMore} = secondRenderingOptions;
+    const { showMore } = secondRenderingOptions;
     expect(secondRenderingOptions.hits).toEqual(hits);
     expect(secondRenderingOptions.results).toEqual(results);
     showMore();
     expect(helper.search.callCount).toBe(1);
 
     // the results should accumulate if there is an increment in page
-    const otherHits = [
-      {fake: 'data 2'},
-      {sample: 'infos 2'},
-    ];
-    const otherResults = new SearchResults(helper.state, [{
-      hits: otherHits,
-    }]);
+    const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
+    const otherResults = new SearchResults(helper.state, [
+      {
+        hits: otherHits,
+      },
+    ]);
     widget.render({
       results: otherResults,
       state: helper.state,
@@ -124,13 +122,12 @@ describe('connectInfiniteHits', () => {
 
     // If the page goes back to 0, the hits cache should be flushed
 
-    const thirdHits = [
-      {fake: 'data 3'},
-      {sample: 'infos 3'},
-    ];
-    const thirdResults = new SearchResults(helper.state, [{
-      hits: thirdHits,
-    }]);
+    const thirdHits = [{ fake: 'data 3' }, { sample: 'infos 3' }];
+    const thirdResults = new SearchResults(helper.state, [
+      {
+        hits: thirdHits,
+      },
+    ]);
     widget.render({
       results: thirdResults,
       state: helper.state,
@@ -146,7 +143,7 @@ describe('connectInfiniteHits', () => {
   it('escape highlight properties if requested', () => {
     const rendering = sinon.stub();
     const makeWidget = connectInfiniteHits(rendering);
-    const widget = makeWidget({escapeHits: true});
+    const widget = makeWidget({ escapeHits: true });
 
     const helper = jsHelper(fakeClient, '', {});
     helper.search = sinon.stub();
@@ -172,7 +169,7 @@ describe('connectInfiniteHits', () => {
       },
     ];
 
-    const results = new SearchResults(helper.state, [{hits}]);
+    const results = new SearchResults(helper.state, [{ hits }]);
     widget.render({
       results,
       state: helper.state,

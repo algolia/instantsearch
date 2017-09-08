@@ -22,12 +22,10 @@ const renderer = ({
   renderState,
   templates,
   transformData,
-}) => ({
-  value,
-  createURL,
-  refine,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  { value, createURL, refine, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -38,7 +36,8 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && (value.count === 0 || value.count === null);
+  const shouldAutoHideContainer =
+    autoHideContainer && (value.count === 0 || value.count === null);
 
   ReactDOM.render(
     <RefinementList
@@ -48,7 +47,7 @@ const renderer = ({
       facetValues={[value]}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
-      toggleRefinement={(name, isRefined) => refine({isRefined})}
+      toggleRefinement={(name, isRefined) => refine({ isRefined })}
     />,
     containerNode
   );
@@ -132,8 +131,13 @@ toggle({
  *
  * This widget is particularly useful if you have a boolean value in the records.
  *
- * The attribute has to be in the list of attributes for faceting in the dashboard.
+ * @erequirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
+ *
  * @type {WidgetFactory}
+ * @category filter
  * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
  * @return {Widget} A new instance of the Toggle widget
  * @example
@@ -144,7 +148,6 @@ toggle({
  *     label: 'Free Shipping',
  *     values: {
  *       on: true,
- *       off: false
  *     },
  *     templates: {
  *       header: 'Shipping'
@@ -152,17 +155,19 @@ toggle({
  *   })
  * );
  */
-export default function toggle({
-  container,
-  attributeName,
-  label,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  transformData,
-  autoHideContainer = true,
-  collapsible = false,
-  values: userValues = {on: true, off: undefined},
-} = {}) {
+export default function toggle(
+  {
+    container,
+    attributeName,
+    label,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    transformData,
+    autoHideContainer = true,
+    collapsible = false,
+    values: userValues = { on: true, off: undefined },
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -194,7 +199,7 @@ export default function toggle({
 
   try {
     const makeWidget = connectToggle(specializedRenderer);
-    return makeWidget({attributeName, label, values: userValues});
+    return makeWidget({ attributeName, label, values: userValues });
   } catch (e) {
     throw new Error(usage);
   }

@@ -1,12 +1,10 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const renderFn = ({
-  query,
-  onHistoryChange,
-  refine,
-  widgetParams: {inputNode},
-}, isFirstRendering) => {
+const renderFn = (
+  { query, refine, widgetParams: { inputNode } },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     inputNode.on('keyup', () => refine(inputNode.val()));
     inputNode.val(query);

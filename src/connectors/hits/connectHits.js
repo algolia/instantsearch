@@ -1,5 +1,5 @@
-import escapeHits, {tagConfig} from '../../lib/escape-highlight.js';
-import {checkRendering} from '../../lib/utils.js';
+import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customHits = connectHits(function render(params, isFirstRendering) {
@@ -60,31 +60,35 @@ export default function connectHits(renderFn) {
 
   return (widgetParams = {}) => ({
     getConfiguration() {
-      return widgetParams.escapeHits
-        ? tagConfig
-        : undefined;
+      return widgetParams.escapeHits ? tagConfig : undefined;
     },
 
-    init({instantSearchInstance}) {
-      renderFn({
-        hits: [],
-        results: undefined,
-        instantSearchInstance,
-        widgetParams,
-      }, true);
+    init({ instantSearchInstance }) {
+      renderFn(
+        {
+          hits: [],
+          results: undefined,
+          instantSearchInstance,
+          widgetParams,
+        },
+        true
+      );
     },
 
-    render({results, instantSearchInstance}) {
+    render({ results, instantSearchInstance }) {
       if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
         results.hits = escapeHits(results.hits);
       }
 
-      renderFn({
-        hits: results.hits,
-        results,
-        instantSearchInstance,
-        widgetParams,
-      }, false);
+      renderFn(
+        {
+          hits: results.hits,
+          results,
+          instantSearchInstance,
+          widgetParams,
+        },
+        false
+      );
     },
   });
 }

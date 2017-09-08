@@ -109,7 +109,7 @@ const common = [
 export const start = [
   webpackEntryMetadata(webpackStartConfig),
   ...common,
-  onlyChanged,
+  // onlyChanged,
   layouts('pug'),
 ];
 

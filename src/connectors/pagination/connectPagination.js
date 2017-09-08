@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customPagination = connectPagination(function render(params, isFirstRendering) {
@@ -90,10 +90,10 @@ export default function connectPagination(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {maxPages} = widgetParams;
+    const { maxPages } = widgetParams;
 
     return {
-      init({helper, createURL, instantSearchInstance}) {
+      init({ helper, createURL, instantSearchInstance }) {
         this.refine = page => {
           helper.setPage(page);
           helper.search();
@@ -101,33 +101,37 @@ export default function connectPagination(renderFn) {
 
         this.createURL = state => page => createURL(state.setPage(page));
 
-        renderFn({
-          createURL: this.createURL(helper.state),
-          currentRefinement: helper.getPage() || 0,
-          nbHits: 0,
-          nbPages: 0,
-          refine: this.refine,
-          widgetParams,
-          instantSearchInstance,
-        }, true);
+        renderFn(
+          {
+            createURL: this.createURL(helper.state),
+            currentRefinement: helper.getPage() || 0,
+            nbHits: 0,
+            nbPages: 0,
+            refine: this.refine,
+            widgetParams,
+            instantSearchInstance,
+          },
+          true
+        );
       },
 
-      getMaxPage({nbPages}) {
-        return maxPages !== undefined
-          ? Math.min(maxPages, nbPages)
-          : nbPages;
+      getMaxPage({ nbPages }) {
+        return maxPages !== undefined ? Math.min(maxPages, nbPages) : nbPages;
       },
 
-      render({results, state, instantSearchInstance}) {
-        renderFn({
-          createURL: this.createURL(state),
-          currentRefinement: state.page,
-          refine: this.refine,
-          nbHits: results.nbHits,
-          nbPages: this.getMaxPage(results),
-          widgetParams,
-          instantSearchInstance,
-        }, false);
+      render({ results, state, instantSearchInstance }) {
+        renderFn(
+          {
+            createURL: this.createURL(state),
+            currentRefinement: state.page,
+            refine: this.refine,
+            nbHits: results.nbHits,
+            nbPages: this.getMaxPage(results),
+            widgetParams,
+            instantSearchInstance,
+          },
+          false
+        );
       },
     };
   };

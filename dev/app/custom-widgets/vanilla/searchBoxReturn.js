@@ -1,16 +1,8 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-function render(
-  {
-    query,
-    onHistoryChange,
-    refine,
-    widgetParams,
-  },
-  isFirstRendering,
-) {
-  const {node} = widgetParams;
+function render({ refine, widgetParams }, isFirstRendering) {
+  const { node } = widgetParams;
 
   if (isFirstRendering) {
     const containingForm = document.createElement('form');
@@ -27,4 +19,3 @@ function render(
 }
 
 export default instantsearch.connectors.connectSearchBox(render);
-

@@ -17,20 +17,22 @@ describe('numericSelector()', () => {
   let results;
 
   beforeEach(() => {
-    ReactDOM = {render: sinon.spy()};
+    ReactDOM = { render: sinon.spy() };
 
     numericSelector.__Rewire__('ReactDOM', ReactDOM);
 
     container = document.createElement('div');
-    options = [
-      {value: 1, label: 'first'},
-      {value: 2, label: 'second'},
-    ];
+    options = [{ value: 1, label: 'first' }, { value: 2, label: 'second' }];
     cssClasses = {
       root: ['custom-root', 'cx'],
       item: 'custom-item',
     };
-    widget = numericSelector({container, options, attributeName: 'aNumAttr', cssClasses});
+    widget = numericSelector({
+      container,
+      options,
+      attributeName: 'aNumAttr',
+      cssClasses,
+    });
     expectedProps = {
       shouldAutoHideContainer: false,
       cssClasses: {
@@ -38,10 +40,7 @@ describe('numericSelector()', () => {
         item: 'ais-numeric-selector--item custom-item',
       },
       currentValue: 1,
-      options: [
-        {value: 1, label: 'first'},
-        {value: 2, label: 'second'},
-      ],
+      options: [{ value: 1, label: 'first' }, { value: 2, label: 'second' }],
       setValue: () => {},
     };
     helper = {
@@ -53,7 +52,7 @@ describe('numericSelector()', () => {
       hits: [],
       nbHits: 0,
     };
-    widget.init({helper});
+    widget.init({ helper });
     helper.addNumericRefinement.reset();
   });
 
@@ -85,13 +84,20 @@ describe('numericSelector()', () => {
   });
 
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {
-    widget.render({helper, results, state: helper.state});
-    widget.render({helper, results, state: helper.state});
+    widget.render({ helper, results, state: helper.state });
+    widget.render({ helper, results, state: helper.state });
 
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...expectedProps} />);
+    expect(ReactDOM.render.calledTwice).toBe(
+      true,
+      'ReactDOM.render called twice'
+    );
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
+      <Selector {...expectedProps} />
+    );
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Selector {...expectedProps} />);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
+      <Selector {...expectedProps} />
+    );
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
@@ -104,20 +110,31 @@ describe('numericSelector()', () => {
       },
     };
     expectedProps.currentValue = 20;
-    widget.render({helper, results, state: helper.state});
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...expectedProps} />);
+    widget.render({ helper, results, state: helper.state });
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
+      <Selector {...expectedProps} />
+    );
   });
 
   it('sets the underlying numeric refinement', () => {
     widget._refine(2);
-    expect(helper.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
+    expect(helper.addNumericRefinement.calledOnce).toBe(
+      true,
+      'addNumericRefinement called once'
+    );
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
   it('cancels the underlying numeric refinement', () => {
     widget._refine(undefined);
-    expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
-    expect(helper.addNumericRefinement.called).toBe(false, 'addNumericRefinement never called');
+    expect(helper.clearRefinements.calledOnce).toBe(
+      true,
+      'clearRefinements called once'
+    );
+    expect(helper.addNumericRefinement.called).toBe(
+      false,
+      'addNumericRefinement never called'
+    );
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 

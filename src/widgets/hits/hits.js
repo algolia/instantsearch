@@ -20,12 +20,10 @@ const renderer = ({
   containerNode,
   transformData,
   templates,
-}) => ({
-  hits, // eslint-disable-line
-  results,
-  templateProps,
-  instantSearchInstance,
-}, isFirstRendering) => {
+}) => (
+  { hits: receivedHits, results, instantSearchInstance },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -39,7 +37,7 @@ const renderer = ({
   ReactDOM.render(
     <Hits
       cssClasses={cssClasses}
-      hits={hits}
+      hits={receivedHits}
       results={results}
       templateProps={renderState.templateProps}
     />,
@@ -92,6 +90,7 @@ hits({
  * together with a pagination widget, to let the user browse the results
  * beyond the first page.
  * @type {WidgetFactory}
+ * @category basic
  * @param {HitsWidgetOptions} $0 Options of the Hits widget.
  * @return {Widget} A new instance of Hits widget.
  * @example
@@ -138,7 +137,7 @@ export default function hits({
 
   try {
     const makeHits = connectHits(specializedRenderer);
-    return makeHits({escapeHits});
+    return makeHits({ escapeHits });
   } catch (e) {
     throw new Error(usage);
   }

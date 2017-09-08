@@ -24,13 +24,10 @@ const renderer = ({
   autoHideContainer,
   renderState,
   labels,
-}) => ({
-  refine,
-  items,
-  createURL,
-  instantSearchInstance,
-  hasNoResults,
-}, isFirstRendering) => {
+}) => (
+  { refine, items, createURL, instantSearchInstance, hasNoResults },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
@@ -48,7 +45,7 @@ const renderer = ({
       collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={items.map(item => ({...item, labels}))}
+      facetValues={items.map(item => ({ ...item, labels }))}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
@@ -124,9 +121,17 @@ starRating({
 /**
  * Star rating is used for displaying grade like filters. The values are normalized within boundaries.
  *
- * The values must be **integers** in your records. Even though, the maximum value can be set (with `max`), the minimum is
- * always 0.
+ * The maximum value can be set (with `max`), the minimum is always 0.
+ *
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
+ *
+ * The values inside this attribute must be JavaScript numbers (not strings).
+ *
  * @type {WidgetFactory}
+ * @category filter
  * @param {StarWidgetOptions} $0 StarRating widget options.
  * @return {Widget} A new StarRating widget instance.
  * @example
@@ -141,17 +146,19 @@ starRating({
  *   })
  * );
  */
-export default function starRating({
-  container,
-  attributeName,
-  max = 5,
-  cssClasses: userCssClasses = {},
-  labels = defaultLabels,
-  templates = defaultTemplates,
-  collapsible = false,
-  transformData,
-  autoHideContainer = true,
-} = {}) {
+export default function starRating(
+  {
+    container,
+    attributeName,
+    max = 5,
+    cssClasses: userCssClasses = {},
+    labels = defaultLabels,
+    templates = defaultTemplates,
+    collapsible = false,
+    transformData,
+    autoHideContainer = true,
+  } = {}
+) {
   if (!container) {
     throw new Error(usage);
   }
@@ -186,7 +193,7 @@ export default function starRating({
 
   try {
     const makeWidget = connectStarRating(specializedRenderer);
-    return makeWidget({attributeName, max});
+    return makeWidget({ attributeName, max });
   } catch (e) {
     throw new Error(usage);
   }

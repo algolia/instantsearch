@@ -3,10 +3,6 @@
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.babel.js';
 
-const {
-  optimize: {OccurenceOrderPlugin, UglifyJsPlugin},
-} = webpack;
-
 export default {
   ...webpackConfig,
   output: {
@@ -14,11 +10,16 @@ export default {
     filename: '[name].[hash]-build.js', // hash names in production
   },
   plugins: [
-    new OccurenceOrderPlugin(), // spelling mistake fixed in webpack 2.0
-    new UglifyJsPlugin({
+    new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
+        warnings: false,
+        comparisons: false,
       },
+      output: {
+        comments: false,
+        ascii_only: true,
+      },
+      sourceMap: true,
     }),
     ...webpackConfig.plugins,
   ],

@@ -65,8 +65,12 @@ const modernUrlUtils = {
   onpopstate(cb) {
     window.addEventListener('popstate', cb);
   },
-  pushState(qs, {getHistoryState}) {
-    window.history.pushState(getHistoryState(), '', getFullURL(this.createURL(qs)));
+  pushState(qs, { getHistoryState }) {
+    window.history.pushState(
+      getHistoryState(),
+      '',
+      getFullURL(this.createURL(qs))
+    );
   },
   createURL(qs) {
     return this.character + qs + document.location.hash;
@@ -86,8 +90,10 @@ function getFullURL(relative) {
 // IE <= 11 has no location.origin or buggy
 function getLocationOrigin() {
   // eslint-disable-next-line max-len
-  const port = window.location.port ? `:${window.location.port}` : '';
-  return `${window.location.protocol}//${window.location.hostname}${port}`;
+  return `${window.location.protocol}//${window.location.hostname}${window
+    .location.port
+    ? `:${window.location.port}`
+    : ''}`;
 }
 
 // see InstantSearch.js file for urlSync options
@@ -99,14 +105,19 @@ class URLSync {
     this.mapping = options.mapping || {};
     this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
-    this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
+    this.trackedParameters = options.trackedParameters || [
+      'query',
+      'attribute:*',
+      'index',
+      'page',
+      'hitsPerPage',
+    ];
     this.firstRender = true;
 
-    this.searchParametersFromUrl = AlgoliaSearchHelper
-      .getConfigurationFromQueryString(
-        this.urlUtils.readUrl(),
-        {mapping: this.mapping}
-      );
+    this.searchParametersFromUrl = AlgoliaSearchHelper.getConfigurationFromQueryString(
+      this.urlUtils.readUrl(),
+      { mapping: this.mapping }
+    );
   }
 
   getConfiguration(currentConfiguration) {
@@ -114,14 +125,14 @@ class URLSync {
     // like hierarchicalFacet.rootPath are then triggering a default refinement that would
     // be not present if it was not going trough the SearchParameters constructor
     this.originalConfig = algoliasearchHelper(
-      {addAlgoliaAgent() {}},
+      { addAlgoliaAgent() {} },
       currentConfiguration.index,
       currentConfiguration
     ).state;
     return this.searchParametersFromUrl;
   }
 
-  render({helper}) {
+  render({ helper }) {
     if (this.firstRender) {
       this.firstRender = false;
       this.onHistoryChange(this.onPopState.bind(this, helper));
@@ -142,8 +153,10 @@ class URLSync {
 
   renderURLFromState(state) {
     const currentQueryString = this.urlUtils.readUrl();
-    const foreignConfig = AlgoliaSearchHelper
-      .getForeignConfigurationInQueryString(currentQueryString, {mapping: this.mapping});
+    const foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(
+      currentQueryString,
+      { mapping: this.mapping }
+    );
 
     const qs = urlHelper.getQueryStringFromState(
       state.filter(this.trackedParameters),
@@ -156,18 +169,20 @@ class URLSync {
 
     clearTimeout(this.urlUpdateTimeout);
     this.urlUpdateTimeout = setTimeout(() => {
-      this.urlUtils.pushState(qs, {getHistoryState: this.getHistoryState});
+      this.urlUtils.pushState(qs, { getHistoryState: this.getHistoryState });
     }, this.threshold);
   }
 
   // External API's
 
-  createURL(state, {absolute}) {
+  createURL(state, { absolute }) {
     const filteredState = state.filter(this.trackedParameters);
 
-    const relative = this
-      .urlUtils
-      .createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState, {mapping: this.mapping}));
+    const relative = this.urlUtils.createURL(
+      algoliasearchHelper.url.getQueryStringFromState(filteredState, {
+        mapping: this.mapping,
+      })
+    );
 
     return absolute ? getFullURL(relative) : relative;
   }
@@ -175,7 +190,10 @@ class URLSync {
   onHistoryChange(fn) {
     this.urlUtils.onpopstate(() => {
       const qs = this.urlUtils.readUrl();
-      const partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, {mapping: this.mapping});
+      const partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(
+        qs,
+        { mapping: this.mapping }
+      );
       const fullState = assign({}, this.originalConfig, partialState);
       fn(fullState);
     });

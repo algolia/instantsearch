@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectRangeSlider from '../connectRangeSlider.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectRangeSlider', () => {
   it('Renders during init and render', () => {
@@ -34,14 +34,15 @@ describe('connectRangeSlider', () => {
       onHistoryChange: () => {},
     });
 
-    { // should call the rendering once with isFirstRendering to true
+    {
+      // should call the rendering once with isFirstRendering to true
       expect(rendering.callCount).toBe(1);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {range, start, widgetParams} = rendering.lastCall.args[0];
-      expect(range).toEqual({min: 0, max: 0});
+      const { range, start, widgetParams } = rendering.lastCall.args[0];
+      expect(range).toEqual({ min: 0, max: 0 });
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
         attributeName,
@@ -49,34 +50,37 @@ describe('connectRangeSlider', () => {
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [{test: 'oneTime'}],
-        facets: {price: {10: 1, 20: 1, 30: 1}},
+      results: new SearchResults(helper.state, [
+        {
+          hits: [{ test: 'oneTime' }],
+          facets: { price: { 10: 1, 20: 1, 30: 1 } },
         facets_stats: { // eslint-disable-line
-          price: {
-            avg: 20,
-            max: 30,
-            min: 10,
-            sum: 60,
+            price: {
+              avg: 20,
+              max: 30,
+              min: 10,
+              sum: 60,
+            },
           },
+          nbHits: 1,
+          nbPages: 1,
+          page: 0,
         },
-        nbHits: 1,
-        nbPages: 1,
-        page: 0,
-      }]),
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Should call the rendering a second time, with isFirstRendering to false
+    {
+      // Should call the rendering a second time, with isFirstRendering to false
       expect(rendering.callCount).toBe(2);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(false);
 
       // should provide good values for the first rendering
-      const {range, start} = rendering.lastCall.args[0];
-      expect(range).toEqual({min: 10, max: 30});
+      const { range, start } = rendering.lastCall.args[0];
+      expect(range).toEqual({ min: 10, max: 30 });
       expect(start).toEqual([-Infinity, Infinity]);
     }
   });
@@ -86,21 +90,23 @@ describe('connectRangeSlider', () => {
 
     const attributeName = 'price';
 
-    expect(makeWidget({attributeName, min: 0}).getConfiguration()).toEqual({
+    expect(makeWidget({ attributeName, min: 0 }).getConfiguration()).toEqual({
       disjunctiveFacets: [attributeName],
       numericRefinements: {
-        [attributeName]: {'>=': [0]},
+        [attributeName]: { '>=': [0] },
       },
     });
 
-    expect(makeWidget({attributeName, max: 100}).getConfiguration()).toEqual({
+    expect(makeWidget({ attributeName, max: 100 }).getConfiguration()).toEqual({
       disjunctiveFacets: [attributeName],
       numericRefinements: {
-        [attributeName]: {'<=': [100]},
+        [attributeName]: { '<=': [100] },
       },
     });
 
-    expect(makeWidget({attributeName, min: 0, max: 100}).getConfiguration()).toEqual({
+    expect(
+      makeWidget({ attributeName, min: 0, max: 100 }).getConfiguration()
+    ).toEqual({
       disjunctiveFacets: [attributeName],
       numericRefinements: {
         [attributeName]: {
@@ -130,11 +136,12 @@ describe('connectRangeSlider', () => {
       onHistoryChange: () => {},
     });
 
-    { // first rendering
+    {
+      // first rendering
       expect(helper.getNumericRefinement('price', '>=')).toEqual(undefined);
       expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
       const renderOptions = rendering.lastCall.args[0];
-      const {refine} = renderOptions;
+      const { refine } = renderOptions;
       refine([10, 30]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
@@ -142,31 +149,35 @@ describe('connectRangeSlider', () => {
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [{test: 'oneTime'}],
-        facets: {price: {10: 1, 20: 1, 30: 1}},
+      results: new SearchResults(helper.state, [
+        {
+          hits: [{ test: 'oneTime' }],
+          facets: { price: { 10: 1, 20: 1, 30: 1 } },
         facets_stats: { // eslint-disable-line
-          price: {
-            avg: 20,
-            max: 30,
-            min: 10,
-            sum: 60,
+            price: {
+              avg: 20,
+              max: 30,
+              min: 10,
+              sum: 60,
+            },
           },
+          nbHits: 1,
+          nbPages: 1,
+          page: 0,
         },
-        nbHits: 1,
-        nbPages: 1,
-        page: 0,
-      }, {}]),
+        {},
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Second rendering
+    {
+      // Second rendering
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
       const renderOptions = rendering.lastCall.args[0];
-      const {refine} = renderOptions;
+      const { refine } = renderOptions;
       refine([23, 27]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([23]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([27]);

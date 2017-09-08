@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customStats = connectState(function render(params, isFirstRendering) {
@@ -57,30 +57,36 @@ export default function connectStats(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => ({
-    init({helper, instantSearchInstance}) {
-      renderFn({
-        instantSearchInstance,
-        hitsPerPage: helper.state.hitsPerPage,
-        nbHits: 0,
-        nbPages: 0,
-        page: helper.state.page,
-        processingTimeMS: -1,
-        query: helper.state.query,
-        widgetParams,
-      }, true);
+    init({ helper, instantSearchInstance }) {
+      renderFn(
+        {
+          instantSearchInstance,
+          hitsPerPage: helper.state.hitsPerPage,
+          nbHits: 0,
+          nbPages: 0,
+          page: helper.state.page,
+          processingTimeMS: -1,
+          query: helper.state.query,
+          widgetParams,
+        },
+        true
+      );
     },
 
-    render({results, instantSearchInstance}) {
-      renderFn({
-        instantSearchInstance,
-        hitsPerPage: results.hitsPerPage,
-        nbHits: results.nbHits,
-        nbPages: results.nbPages,
-        page: results.page,
-        processingTimeMS: results.processingTimeMS,
-        query: results.query,
-        widgetParams,
-      }, false);
+    render({ results, instantSearchInstance }) {
+      renderFn(
+        {
+          instantSearchInstance,
+          hitsPerPage: results.hitsPerPage,
+          nbHits: results.nbHits,
+          nbPages: results.nbPages,
+          page: results.page,
+          processingTimeMS: results.processingTimeMS,
+          query: results.query,
+          widgetParams,
+        },
+        false
+      );
     },
   });
 }

@@ -6,7 +6,7 @@ import Stats from '../../../components/Stats/Stats';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-const instantSearchInstance = {templatesConfig: undefined};
+const instantSearchInstance = { templatesConfig: undefined };
 
 describe('stats call', () => {
   it('should throw when called without container', () => {
@@ -21,11 +21,11 @@ describe('stats()', () => {
   let results;
 
   beforeEach(() => {
-    ReactDOM = {render: sinon.spy()};
+    ReactDOM = { render: sinon.spy() };
     stats.__Rewire__('ReactDOM', ReactDOM);
 
     container = document.createElement('div');
-    widget = stats({container, cssClasses: {body: ['body', 'cx']}});
+    widget = stats({ container, cssClasses: { body: ['body', 'cx'] } });
     results = {
       hits: [{}, {}],
       nbHits: 20,
@@ -37,7 +37,7 @@ describe('stats()', () => {
     };
 
     widget.init({
-      helper: {state: {}},
+      helper: { state: {} },
       instantSearchInstance,
     });
   });
@@ -47,8 +47,8 @@ describe('stats()', () => {
   });
 
   it('calls twice ReactDOM.render(<Stats props />, container)', () => {
-    widget.render({results, instantSearchInstance});
-    widget.render({results, instantSearchInstance});
+    widget.render({ results, instantSearchInstance });
+    widget.render({ results, instantSearchInstance });
     const props = {
       cssClasses: {
         body: 'ais-stats--body body cx',
@@ -67,7 +67,10 @@ describe('stats()', () => {
       shouldAutoHideContainer: false,
       templateProps: ReactDOM.render.firstCall.args[0].props.templateProps,
     };
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
+    expect(ReactDOM.render.calledTwice).toBe(
+      true,
+      'ReactDOM.render called twice'
+    );
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Stats {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Stats {...props} />);

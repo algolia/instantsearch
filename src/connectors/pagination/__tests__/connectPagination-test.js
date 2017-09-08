@@ -5,7 +5,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectPagination from '../connectPagination.js';
 
-const fakeClient = {addAlgoliaAgent: () => {}};
+const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectPagination', () => {
   it('connectPagination - Renders during init and render', () => {
@@ -30,7 +30,8 @@ describe('connectPagination', () => {
       onHistoryChange: () => {},
     });
 
-    { // should call the rendering once with isFirstRendering to true
+    {
+      // should call the rendering once with isFirstRendering to true
       expect(rendering.callCount).toBe(1);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(true);
@@ -46,18 +47,21 @@ describe('connectPagination', () => {
     }
 
     widget.render({
-      results: new SearchResults(helper.state, [{
-        hits: [{test: 'oneTime'}],
-        nbHits: 1,
-        nbPages: 1,
-        page: 0,
-      }]),
+      results: new SearchResults(helper.state, [
+        {
+          hits: [{ test: 'oneTime' }],
+          nbHits: 1,
+          nbPages: 1,
+          page: 0,
+        },
+      ]),
       state: helper.state,
       helper,
       createURL: () => '#',
     });
 
-    { // Should call the rendering a second time, with isFirstRendering to false
+    {
+      // Should call the rendering a second time, with isFirstRendering to false
       expect(rendering.callCount).toBe(2);
       const isFirstRendering = rendering.lastCall.args[1];
       expect(isFirstRendering).toBe(false);
@@ -86,9 +90,10 @@ describe('connectPagination', () => {
       onHistoryChange: () => {},
     });
 
-    { // first rendering
+    {
+      // first rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {refine} = renderOptions;
+      const { refine } = renderOptions;
       refine(2);
       expect(helper.getPage()).toBe(2);
       expect(helper.search.callCount).toBe(1);
@@ -101,9 +106,10 @@ describe('connectPagination', () => {
       createURL: () => '#',
     });
 
-    { // Second rendering
+    {
+      // Second rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {refine} = renderOptions;
+      const { refine } = renderOptions;
       refine(7);
       expect(helper.getPage()).toBe(7);
       expect(helper.search.callCount).toBe(2);

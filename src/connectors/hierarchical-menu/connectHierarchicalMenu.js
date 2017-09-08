@@ -1,4 +1,4 @@
-import {checkRendering} from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
@@ -52,7 +52,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object} widgetParams All original `CustomHierarchicalMenuWidgetOptions` forwarded to the `renderFn`.
  */
 
- /**
+/**
   * **HierarchicalMenu** connector provides the logic to build a custom widget
   * that will give the user the ability to explore facets in a tree-like structure.
   *
@@ -90,66 +90,78 @@ export default function connectHierarchicalMenu(renderFn) {
 
     return {
       getConfiguration: currentConfiguration => ({
-        hierarchicalFacets: [{
-          name: hierarchicalFacetName,
-          attributes,
-          separator,
-          rootPath,
-          showParentLevel,
-        }],
-        maxValuesPerFacet: currentConfiguration.maxValuesPerFacet !== undefined ?
-          Math.max(currentConfiguration.maxValuesPerFacet, limit) :
-          limit,
+        hierarchicalFacets: [
+          {
+            name: hierarchicalFacetName,
+            attributes,
+            separator,
+            rootPath,
+            showParentLevel,
+          },
+        ],
+        maxValuesPerFacet:
+          currentConfiguration.maxValuesPerFacet !== undefined
+            ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
+            : limit,
       }),
 
-      init({helper, createURL, instantSearchInstance}) {
-        this._refine = facetValue => helper
-          .toggleRefinement(hierarchicalFacetName, facetValue)
-          .search();
+      init({ helper, createURL, instantSearchInstance }) {
+        this._refine = facetValue =>
+          helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
-          return createURL(helper.state.toggleRefinement(hierarchicalFacetName, facetValue));
+          return createURL(
+            helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
+          );
         }
 
-        renderFn({
-          createURL: _createURL,
-          items: [],
-          refine: this._refine,
-          instantSearchInstance,
-          widgetParams,
-        }, true);
+        renderFn(
+          {
+            createURL: _createURL,
+            items: [],
+            refine: this._refine,
+            instantSearchInstance,
+            widgetParams,
+          },
+          true
+        );
       },
 
       _prepareFacetValues(facetValues, state) {
         return facetValues
           .slice(0, limit)
-          .map(({name: label, path: value, ...subValue}) => {
+          .map(({ name: label, path: value, ...subValue }) => {
             if (Array.isArray(subValue.data)) {
               subValue.data = this._prepareFacetValues(subValue.data, state);
             }
-            return {...subValue, label, value};
+            return { ...subValue, label, value };
           });
       },
 
-      render({results, state, createURL, instantSearchInstance}) {
+      render({ results, state, createURL, instantSearchInstance }) {
         const items = this._prepareFacetValues(
-          results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [],
+          results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [],
           state
         );
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
-          return createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
+          return createURL(
+            state.toggleRefinement(hierarchicalFacetName, facetValue)
+          );
         }
 
-        renderFn({
-          createURL: _createURL,
-          items,
-          refine: this._refine,
-          instantSearchInstance,
-          widgetParams,
-        }, false);
+        renderFn(
+          {
+            createURL: _createURL,
+            items,
+            refine: this._refine,
+            instantSearchInstance,
+            widgetParams,
+          },
+          false
+        );
       },
     };
   };
