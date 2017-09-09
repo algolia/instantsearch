@@ -6,7 +6,7 @@ category: Getting started
 withHeadings: true
 navWeight: 2
 editable: true
-githubSource: docs/src/getting-started/installing.md
+githubSource: docs/src/getting-started/installing.md.hbs
 ---
 
 Vue InstantSearch is available through npm or as a standalone file to
@@ -22,7 +22,7 @@ $ npm install vue-instantsearch --save
 ## Using a `<script>` tag
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vue-instantsearch@1.0.0/dist/vue-instantsearch.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-instantsearch@{{ pkg.version }}/dist/vue-instantsearch.js"></script>
 ```
 
 Have a look at how to use the standalone UMD build in our codepen example: [codepen.io/rayrutjes/pen/BRgyGV](https://codepen.io/rayrutjes/pen/BRgyGV).
