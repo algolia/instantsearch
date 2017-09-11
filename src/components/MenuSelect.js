@@ -16,25 +16,23 @@ class MenuSelect extends Component {
     templateProps: PropTypes.object.isRequired,
   };
 
-  get selectValue() {
-    const selectValue = this.props.items.find(({ isRefined }) => isRefined);
-    return selectValue || { value: 'all' };
-  }
-
   handleSelectChange = ({ target: { value } }) => {
-    this.props.refine(value === 'all' ? this.selectValue.value : value);
+    this.props.refine(value);
   };
 
   render() {
     const { cssClasses, templateProps, items } = this.props;
+    const { value: selectedValue } = items.find(item => item.isRefined) || {
+      value: '',
+    };
 
     return (
       <select
         className={cssClasses.select}
-        value={this.selectValue.value}
+        value={selectedValue}
         onChange={this.handleSelectChange}
       >
-        <option value="all" className={cssClasses.option}>
+        <option value="" className={cssClasses.option}>
           <Template templateKey="seeAllOption" {...templateProps} />
         </option>
 
