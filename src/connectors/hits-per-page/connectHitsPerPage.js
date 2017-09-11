@@ -116,16 +116,16 @@ export default function connectHitsPerPage(renderFn) {
       throw new Error(usage);
     }
 
+    const defaultValues = items.filter(item => item.default);
+    if (defaultValues.length > 1) {
+      throw new Error(
+        `[Error][hitsPerPageSelector] more than one default value is specified in \`items[]\`
+The first one will be picked, you should probably set only one default value`
+      );
+    }
+
     return {
       getConfiguration() {
-        const defaultValues = items.filter(item => item.default);
-        if (defaultValues.length > 1) {
-          throw new Error(
-            `[Error][hitsPerPageSelector] more than one default value is specified in \`items[]\`
-  The first one will be picked, you should probably set only one default value`
-          );
-        }
-
         return defaultValues.length > 0
           ? { hitsPerPage: defaultValues[0].value }
           : {};
