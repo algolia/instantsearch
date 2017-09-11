@@ -7,6 +7,17 @@ import connectHitsPerPage from '../connectHitsPerPage.js';
 const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectHitsPerPage', () => {
+  it('should throw when there is two default items defined', () => {
+    expect(() => {
+      connectHitsPerPage(() => {})({
+        items: [
+          { value: 3, label: '3 items per page', default: true },
+          { value: 10, label: '10 items per page', default: true },
+        ],
+      });
+    }).toThrow(/^\[Error\]/);
+  });
+
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
