@@ -33,7 +33,7 @@ class MenuSelect extends Component {
         onChange={this.handleSelectChange}
       >
         <option value="" className={cssClasses.option}>
-          <Template templateKey="seeAllOption" {...templateProps} />
+          <Template templateKey="seeAllOption" templates={templateProps} />
         </option>
 
         {items.map(item =>
@@ -42,7 +42,11 @@ class MenuSelect extends Component {
             value={item.value}
             className={cssClasses.option}
           >
-            <Template data={item} templateKey="item" {...templateProps} />
+            <Template
+              data={item}
+              templateKey="item"
+              templates={templateProps}
+            />
           </option>
         )}
       </select>
