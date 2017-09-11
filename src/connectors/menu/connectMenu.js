@@ -152,7 +152,9 @@ export default function connectMenu(renderFn) {
         };
       },
 
-      cachedRefine() {},
+      cachedRefine(facetValue) {
+        this._refine(facetValue);
+      },
 
       getConfiguration(configuration) {
         const widgetConfiguration = {
@@ -179,7 +181,7 @@ export default function connectMenu(renderFn) {
         this._createURL = facetValue =>
           createURL(helper.state.toggleRefinement(attributeName, facetValue));
 
-        this.cachedRefine = this.refine({ helper, items: [] });
+        this._refine = this.refine({ helper, items: [] });
 
         renderFn(
           {
@@ -213,7 +215,7 @@ export default function connectMenu(renderFn) {
           instantSearchInstance,
         });
 
-        this.cachedRefine = this.refine({ helper, items });
+        this._refine = this.refine({ helper, items });
 
         renderFn(
           {
