@@ -4,6 +4,7 @@ import msWebpack from 'ms-webpack';
 import navigation from 'metalsmith-navigation';
 import nav from './plugins/navigation.js';
 import sass from 'metalsmith-sass';
+import inPlace from 'metalsmith-in-place';
 
 import assets from './plugins/assets.js';
 import helpers from './plugins/helpers.js';
@@ -46,6 +47,7 @@ const common = [
     // otherwise, keep file
     return false;
   }),
+  inPlace(),
   markdown,
   headings('h2'),
   nav(),
