@@ -139,6 +139,21 @@ export default function connectMenu(renderFn) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
+      refine({ helper, items }) {
+        return facetValue => {
+          if (!facetValue) {
+            facetValue =
+              items.length > 0
+                ? items.find(item => item.isRefined).value
+                : null;
+          }
+
+          helper.toggleRefinement(attributeName, facetValue).search();
+        };
+      },
+
+      cachedRefine() {},
+
       getConfiguration(configuration) {
         const widgetConfiguration = {
           hierarchicalFacets: [
@@ -164,14 +179,13 @@ export default function connectMenu(renderFn) {
         this._createURL = facetValue =>
           createURL(helper.state.toggleRefinement(attributeName, facetValue));
 
-        this._refine = facetValue =>
-          helper.toggleRefinement(attributeName, facetValue).search();
+        this.cachedRefine = this.refine({ helper, items: [] });
 
         renderFn(
           {
             items: [],
             createURL: this._createURL,
-            refine: this._refine,
+            refine: this.cachedRefine,
             instantSearchInstance,
             canRefine: false,
             widgetParams,
@@ -183,7 +197,7 @@ export default function connectMenu(renderFn) {
         );
       },
 
-      render({ results, instantSearchInstance }) {
+      render({ helper, results, instantSearchInstance }) {
         const facetItems =
           results.getFacetValues(attributeName, { sortBy }).data || [];
         const items = facetItems
@@ -199,11 +213,13 @@ export default function connectMenu(renderFn) {
           instantSearchInstance,
         });
 
+        this.cachedRefine = this.refine({ helper, items });
+
         renderFn(
           {
             items,
             createURL: this._createURL,
-            refine: this._refine,
+            refine: this.cachedRefine,
             instantSearchInstance,
             canRefine: items.length > 0,
             widgetParams,
