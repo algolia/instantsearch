@@ -1,4 +1,7 @@
-import { checkRendering } from "../../lib/utils.js";
+import find from 'lodash/find';
+import isEqual from 'lodash/isequal';
+
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
@@ -72,11 +75,11 @@ export default function connectHierarchicalMenu(renderFn) {
   return (widgetParams = {}) => {
     const {
       attributes,
-      separator = " > ",
+      separator = ' > ',
       rootPath = null,
       showParentLevel = true,
       limit = 10,
-      sortBy = ["name:asc"]
+      sortBy = ['name:asc'],
     } = widgetParams;
 
     if (!attributes || !attributes.length) {
@@ -89,33 +92,52 @@ export default function connectHierarchicalMenu(renderFn) {
     const [hierarchicalFacetName] = attributes;
 
     return {
-      getConfiguration: currentConfiguration => ({
-        hierarchicalFacets: [
-          {
-            name: hierarchicalFacetName,
-            attributes,
-            separator,
-            rootPath,
-            showParentLevel
+      getConfiguration: currentConfiguration => {
+        if (currentConfiguration.hierarchicalFacets) {
+          let facetSet = find(
+            currentConfiguration.hierarchicalFacets,
+            ({ name }) => name === hierarchicalFacetName,
+          );
+          if (
+            facetSet &&
+            !(
+              isEqual(facetSet.attributes, attributes) &&
+              facetSet.separator === separator
+            )
+          ) {
+            console.warn(
+              'using Breadcrumb & HierarchicalMenu on the same facet with different options',
+            );
           }
-        ],
-        maxValuesPerFacet:
-          currentConfiguration.maxValuesPerFacet !== undefined
-            ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
-            : limit
-      }),
+          return;
+        }
+
+        return {
+          hierarchicalFacets: [
+            {
+              name: hierarchicalFacetName,
+              attributes,
+              separator,
+              rootPath,
+              showParentLevel,
+            },
+          ],
+          maxValuesPerFacet:
+            currentConfiguration.maxValuesPerFacet !== undefined
+              ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
+              : limit,
+        };
+      },
 
       init({ helper, createURL, instantSearchInstance }) {
         this._refine = function(facetValue) {
-          console.log("refining menu " + facetValue);
-          console.log("name menu " + hierarchicalFacetName);
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
         };
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
-            helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
+            helper.state.toggleRefinement(hierarchicalFacetName, facetValue),
           );
         }
 
@@ -125,9 +147,9 @@ export default function connectHierarchicalMenu(renderFn) {
             items: [],
             refine: this._refine,
             instantSearchInstance,
-            widgetParams
+            widgetParams,
           },
-          true
+          true,
         );
       },
 
@@ -145,13 +167,13 @@ export default function connectHierarchicalMenu(renderFn) {
       render({ results, state, createURL, instantSearchInstance }) {
         const items = this._prepareFacetValues(
           results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [],
-          state
+          state,
         );
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
-            state.toggleRefinement(hierarchicalFacetName, facetValue)
+            state.toggleRefinement(hierarchicalFacetName, facetValue),
           );
         }
 
@@ -161,11 +183,11 @@ export default function connectHierarchicalMenu(renderFn) {
             items,
             refine: this._refine,
             instantSearchInstance,
-            widgetParams
+            widgetParams,
           },
-          false
+          false,
         );
-      }
+      },
     };
   };
 }
