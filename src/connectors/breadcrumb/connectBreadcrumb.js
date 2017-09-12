@@ -1,5 +1,5 @@
-import find from "lodash/find";
-import isEqual from "lodash/isequal";
+import find from 'lodash/find';
+import isEqual from 'lodash/isequal';
 
 const usage = `Usage:
 var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {
@@ -47,7 +47,6 @@ function prepareItems(obj) {
       result.push({
         name: currentItem.name,
         value: currentItem.path,
-        count: currentItem.count
       });
       if (Array.isArray(currentItem.data)) {
         const children = prepareItems(currentItem);
@@ -60,7 +59,7 @@ function prepareItems(obj) {
 
 export default function connectBreadcrumb(renderFn) {
   return (widgetParams = {}) => {
-    const { attributes, separator = " > ", rootURL = null } = widgetParams;
+    const { attributes, separator = ' > ', rootURL = null } = widgetParams;
     const [hierarchicalFacetName] = attributes;
 
     return {
@@ -68,7 +67,7 @@ export default function connectBreadcrumb(renderFn) {
         if (currentConfiguration.hierarchicalFacets) {
           const facetSet = find(
             currentConfiguration.hierarchicalFacets,
-            ({ name }) => name === hierarchicalFacetName
+            ({ name }) => name === hierarchicalFacetName,
           );
           if (facetSet) {
             if (
@@ -76,7 +75,7 @@ export default function connectBreadcrumb(renderFn) {
               facetSet.separator !== separator
             ) {
               console.warn(
-                "using Breadcrumb & HierarchicalMenu on the same facet with different options"
+                'using Breadcrumb & HierarchicalMenu on the same facet with different options',
               );
             }
             return {};
@@ -88,16 +87,27 @@ export default function connectBreadcrumb(renderFn) {
             {
               name: hierarchicalFacetName,
               attributes,
-              separator
+              separator,
               // rootPath,
-            }
-          ]
+            },
+          ],
         };
       },
 
       init({ helper, instantSearchInstance }) {
         this._refine = function(facetValue) {
-          helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+          if (!facetValue) {
+            const breadcrumb = helper.getHierarchicalFacetBreadcrumb(
+              hierarchicalFacetName,
+            );
+            if (breadcrumb.length > 0) {
+              helper
+                .toggleRefinement(hierarchicalFacetName, breadcrumb[0])
+                .search();
+            }
+          } else {
+            helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+          }
         };
 
         renderFn(
@@ -105,18 +115,14 @@ export default function connectBreadcrumb(renderFn) {
             items: [],
             refine: this._refine,
             canRefine: false,
-            instantSearchInstance
+            instantSearchInstance,
+            widgetParams,
           },
-          true
+          true,
         );
       },
 
       render({ results, state, instantSearchInstance }) {
-        console.log("STATE", state);
-        console.log(
-          "HierarchicalFacets is an array? ",
-          Array.isArray(state.hierarchicalFacets)
-        );
         if (
           !state.hierarchicalFacets ||
           (Array.isArray(state.hierarchicalFacets) &&
@@ -136,11 +142,11 @@ export default function connectBreadcrumb(renderFn) {
             refine: this._refine,
             canRefine: items.length > 0,
             widgetParams,
-            instantSearchInstance
+            instantSearchInstance,
           },
-          false
+          false,
         );
-      }
+      },
     };
   };
 }
