@@ -1,14 +1,13 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import Template from "../Template.js";
-import autoHideContainerHOC from "../../decorators/autoHideContainer.js";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import Template from '../Template.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
     name: PropTypes.string,
     value: PropTypes.string,
-    count: PropTypes.number
-  })
+  }),
 );
 
 class Breadcrumb extends PureComponent {
@@ -20,7 +19,7 @@ class Breadcrumb extends PureComponent {
     rootURL: PropTypes.string,
     separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     templateProps: PropTypes.object.isRequired,
-    translate: PropTypes.func
+    translate: PropTypes.func,
   };
 
   render() {
@@ -30,38 +29,24 @@ class Breadcrumb extends PureComponent {
       refine,
       translate,
       cssClasses,
-      canRefine
+      canRefine,
     } = this.props;
-
-    /* 
-    const rootPath = canRefine
-      ? <span>
-          <span onClick={isLast ? null : () => refine(item.value)}>
-            <span className={cssClasses.labelRoot}>
-              {item.name}
-            </span>
-            <span className={cssClasses.count}>
-              {item.count}
-            </span>
-          </span>
-          <span className={cssClasses.separator}>
-            {separator}
-          </span>
-        </span>
-      : null;
-    */
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
-      const itemCssClass = !isLast ? cssClasses.item : cssClasses.itemDisabled;
-      // function onClick here
+      const labelClassNames = isLast
+        ? [cssClasses.disabledLabel, cssClasses.label]
+        : cssClasses.label;
+
       return (
-        <span key={idx}>
-          <span className={cssClasses.separator}>
-            {this.props.separator}
-          </span>
+        <div key={idx} className={cssClasses.item}>
+          <Template
+            rootProps={{ className: cssClasses.separator }}
+            templateKey="separator"
+            {...this.props.templateProps}
+          />
           <span
-            className={itemCssClass}
+            className={labelClassNames}
             onClick={
               isLast
                 ? null
@@ -69,23 +54,34 @@ class Breadcrumb extends PureComponent {
                     refine(
                       items.length - 1 === idx
                         ? item.value
-                        : items[idx + 1].value
+                        : items[idx + 1].value,
                     )
             }
           >
-            <span className={cssClasses.label}>
-              {item.name}
-            </span>
-            <span className={cssClasses.count}>
-              {item.count}
-            </span>
+            {item.name}
           </span>
-        </span>
+        </div>
       );
     });
+
+    console.log('canRefine', canRefine);
+    console.log('items.length', items.length);
+    const homeClassNames =
+      items.length > 0
+        ? cssClasses.home
+        : [cssClasses.disabledLabel, cssClasses.home];
+    console.log('homeClassNames => ', homeClassNames);
+
     return (
-      <div>
-        <Template templateKey="home" {...this.props.templateProps} />
+      <div className={cssClasses.root}>
+        <Template
+          templateKey="home"
+          {...this.props.templateProps}
+          rootProps={{
+            className: homeClassNames,
+            onClick: () => refine(null),
+          }}
+        />
         {breadcrumb}
       </div>
     );
