@@ -1,20 +1,16 @@
-.ais-breadcrumb--itemDisabled,
 .ais-breadcrumb--label,
-.ais-bbreadcrumb--separator,
-.ais-breadcrumb--rootLabel {
+.ais-breadcrumb--separator,
+.ais-breadcrumb--home,
+{
+    display: inline;
     color: #3369e7;
 }
 
 .ais-breadcrumb--item {
-    font-weight: bold;
+    display: inline;
 }
 
-.ais-breadcrumb--itemDisabled,
-.ais-breadcrumb--separator {
-    font-weight: normal;
-}
-
-.ais-breadcrumb--item,
-.ais-breadcrumb--count {
+.ais-breadcrumb--disabledLabel {
+    color: rgb(68, 68, 68);
     display: inline;
 }

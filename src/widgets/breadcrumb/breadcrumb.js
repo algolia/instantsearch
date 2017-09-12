@@ -1,18 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import cx from "classnames";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import cx from 'classnames';
 
-import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
-import defaultTemplates from "./defaultTemplates.js";
+import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
+import defaultTemplates from './defaultTemplates.js';
 
-import { connectBreadcrumb } from "../../connectors";
+import { connectBreadcrumb } from '../../connectors';
 import {
   bemHelper,
   getContainerNode,
-  prepareTemplateProps
-} from "../../lib/utils";
+  prepareTemplateProps,
+} from '../../lib/utils';
 
-const bem = bemHelper("ais-breadcrumb");
+const bem = bemHelper('ais-breadcrumb');
 
 const usage = `Usage:
 breadcrumb({
@@ -33,25 +33,20 @@ const renderer = ({
   rootURL,
   transformData,
   templates,
-  containerNode
+  containerNode,
 }) => (
   { items, refine, canRefine, instantSearchInstance },
-  isFirstRendering
+  isFirstRendering,
 ) => {
   if (isFirstRendering) {
-    console.log("default templates", defaultTemplates);
-
     renderState.templateProps = prepareTemplateProps({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
-      defaultTemplates
+      defaultTemplates,
     });
-    console.log("renderstate", renderState);
     return;
   }
 
-  // const shouldAutoHideContainer = autoHideContainer && items.length === 0;
-  // with canRefine
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
   ReactDOM.render(
     <Breadcrumb
@@ -62,8 +57,9 @@ const renderer = ({
       cssClasses={cssClasses}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
+      canRefine={canRefine}
     />,
-    containerNode
+    containerNode,
   );
 };
 
@@ -71,13 +67,13 @@ export default function breadcrumb(
   {
     container,
     attributes,
-    autoHideContainer = true,
-    separator = " > ",
+    autoHideContainer = false,
+    separator = ' > ',
     rootURL = null,
     transformData,
     templates = defaultTemplates,
-    cssClasses: userCssClasses = {}
-  } = {}
+    cssClasses: userCssClasses = {},
+  } = {},
 ) {
   if (!container) {
     throw new Error(usage);
@@ -86,16 +82,12 @@ export default function breadcrumb(
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem("root"), userCssClasses.root),
-    item: cx(bem("item"), userCssClasses.item),
-    itemDisabled: cx(bem("itemDisabled"), userCssClasses.itemDisabled),
-    label: cx(bem("label"), userCssClasses.label),
-    labelRoot: cx(bem("labelRoot"), userCssClasses.labelRoot),
-    link: cx(bem("link"), userCssClasses.link),
-    linkRoot: cx(bem("linkRoot"), userCssClasses.linkRoot),
-    count: cx(bem("count"), userCssClasses.count),
-    separator: cx(bem("separator"), userCssClasses.separator),
-    noRefinement: cx(bem("noRefinement"), userCssClasses.noRefinement)
+    root: cx(bem('root'), userCssClasses.root),
+    home: cx(bem('home'), userCssClasses.home),
+    label: cx(bem('label'), userCssClasses.label),
+    disabledLabel: cx(bem('disabledLabel'), userCssClasses.disabledLabel),
+    item: cx(bem('item'), userCssClasses.item),
+    separator: cx(bem('separator'), userCssClasses.separator),
   };
 
   const specializedRenderer = renderer({
@@ -106,7 +98,7 @@ export default function breadcrumb(
     transformData,
     containerNode,
     templates,
-    renderState: {}
+    renderState: {},
   });
 
   try {

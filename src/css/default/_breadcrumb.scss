@@ -1,33 +1,16 @@
-.ais-breadcrumb--itemDisabled,
 .ais-breadcrumb--label,
-.ais-breadcrumb--item,
 .ais-breadcrumb--separator,
-.ais-breadcrumb--rootLabel,
-.ais-breadcrumb--count {
+.ais-breadcrumb--home,
+{
+    display: inline;
     color: #3369e7;
-    font-size: 14px;
 }
 
 .ais-breadcrumb--item {
-    font-weight: bold;
+    display: inline;
 }
 
-.ais-breadcrumb--count {
-    background: rgba(39, 81, 175, 0.1);
-    border-radius: 31px;
-    color: #3e82f7;
-    padding: 2px 10px;
-    margin: 3px;
-    font-size: 12px;
-}
-
-.ais-breadcrumb--itemDisabled,
-.ais-breadcrumb--separator,
-.ais-breadcrumb--count {
-    font-weight: normal;
-}
-
-.ais-breadcrumb--item,
-.ais-breadcrumb--count {
+.ais-breadcrumb--disabledLabel {
+    color: rgb(68, 68, 68);
     display: inline;
 }
