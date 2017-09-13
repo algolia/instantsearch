@@ -14,11 +14,11 @@
 @import 'star-rating';
 @import 'stats';
 @import 'toggle';
-
+@import 'breadcrumb';
 .ais-header {
-  border-bottom: 2px solid #eee;
-  font-size: .8em;
-  margin: 0 0 6px;
-  padding: 0 0 6px;
-  text-transform: uppercase;
+    border-bottom: 2px solid #eee;
+    font-size: .8em;
+    margin: 0 0 6px;
+    padding: 0 0 6px;
+    text-transform: uppercase;
 }
