@@ -7,6 +7,17 @@ import connectHitsPerPage from '../connectHitsPerPage.js';
 const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectHitsPerPage', () => {
+  it('should throw when there is two default items defined', () => {
+    expect(() => {
+      connectHitsPerPage(() => {})({
+        items: [
+          { value: 3, label: '3 items per page', default: true },
+          { value: 10, label: '10 items per page', default: true },
+        ],
+      });
+    }).toThrow(/^\[Error\]/);
+  });
+
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
@@ -19,7 +30,8 @@ describe('connectHitsPerPage', () => {
       ],
     });
 
-    expect(widget.getConfiguration).toEqual(undefined);
+    expect(typeof widget.getConfiguration).toEqual('function');
+    expect(widget.getConfiguration()).toEqual({});
 
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
@@ -63,6 +75,34 @@ describe('connectHitsPerPage', () => {
         { value: 10, label: '10 items per page' },
       ],
     });
+  });
+
+  it('Configures the search with the default hitsPerPage provided', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page', default: true },
+      ],
+    });
+
+    expect(widget.getConfiguration()).toEqual({
+      hitsPerPage: 10,
+    });
+  });
+
+  it('Does not configures the search when there is no default value', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+      ],
+    });
+
+    expect(widget.getConfiguration()).toEqual({});
   });
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
