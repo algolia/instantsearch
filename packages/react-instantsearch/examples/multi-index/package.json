@@ -10,8 +10,8 @@
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-instantsearch": "4.1.0",
-    "react-instantsearch-theme-algolia": "4.1.0"
+    "react-instantsearch": "4.1.1",
+    "react-instantsearch-theme-algolia": "4.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
