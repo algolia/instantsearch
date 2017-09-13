@@ -211,15 +211,10 @@ describe('Template', () => {
   it('forward rootProps to the first node', () => {
     function fn() {}
 
-    const props = getProps({});
-    const tree = renderer
-      .create(
-        <PureTemplate
-          rootProps={{ className: 'hey', onClick: fn }}
-          {...props}
-        />
-      )
-      .toJSON();
+    const props = getProps({
+      rootProps: { className: 'hey', onClick: fn },
+    });
+    const tree = renderer.create(<PureTemplate {...props} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -232,6 +227,7 @@ describe('Template', () => {
       container = document.createElement('div');
       props = getProps({
         data: { hello: 'mom' },
+        rootProps: { className: 'myCssClass' },
       });
       component = ReactDOM.render(<PureTemplate {...props} />, container);
       sinon.spy(component, 'render');
@@ -254,12 +250,25 @@ describe('Template', () => {
       ReactDOM.render(<PureTemplate {...props} />, container);
       expect(component.render.called).toBe(true);
     });
+
+    it('calls render when rootProps changes', () => {
+      props.rootProps = { className: 'myCssClass mySecondCssClass' };
+      ReactDOM.render(<PureTemplate {...props} />, container);
+      expect(component.render.called).toBe(true);
+    });
+
+    it('does not call render when rootProps remain unchanged', () => {
+      props.rootProps = { className: 'myCssClass' };
+      ReactDOM.render(<PureTemplate {...props} />, container);
+      expect(component.render.called).toBe(false);
+    });
   });
 
   function getProps({
     templates = { test: '' },
     data = {},
     templateKey = 'test',
+    rootProps = {},
     useCustomCompileOptions = {},
     templatesConfig = { helper: {}, compileOptions: {} },
     transformData = null,
@@ -268,6 +277,7 @@ describe('Template', () => {
       templates,
       data,
       templateKey,
+      rootProps,
       useCustomCompileOptions,
       templatesConfig,
       transformData,
