@@ -34,9 +34,11 @@ class Breadcrumb extends PureComponent {
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
-      const labelClassNames = isLast
+      let labelClassNames = isLast
         ? [cssClasses.disabledLabel, cssClasses.label]
-        : cssClasses.label;
+        : [cssClasses.label];
+
+      labelClassNames = labelClassNames.join(' ');
 
       return (
         <div key={idx} className={cssClasses.item}>
@@ -68,7 +70,7 @@ class Breadcrumb extends PureComponent {
     console.log('items.length', items.length);
     const homeClassNames =
       items.length > 0
-        ? cssClasses.home
+        ? [cssClasses.home, cssClasses.item]
         : [cssClasses.disabledLabel, cssClasses.home];
     console.log('homeClassNames => ', homeClassNames);
 
@@ -78,7 +80,7 @@ class Breadcrumb extends PureComponent {
           templateKey="home"
           {...this.props.templateProps}
           rootProps={{
-            className: homeClassNames,
+            className: homeClassNames.join(' '),
             onClick: () => refine(null),
           }}
         />
