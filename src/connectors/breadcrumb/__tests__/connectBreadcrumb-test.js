@@ -96,6 +96,115 @@ describe('connectBreadcrumb', () => {
     expect(partialConfiguration).toEqual({});
   });
 
+  it('provides the correct facet values', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectBreadcrumb(rendering);
+    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+
+    const config = widget.getConfiguration({});
+    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items).toEqual([]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+            subCategory: {
+              'Decoration > Candle holders & candles': 193,
+              'Decoration > Frames & pictures': 173,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items).toEqual([
+      { name: 'Decoration', value: 'Decoration' },
+    ]);
+  });
+
+  it('toggles the refine function when passed the special value null', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectBreadcrumb(rendering);
+    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+
+    const config = widget.getConfiguration({});
+    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items).toEqual([]);
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+            subCategory: {
+              'Decoration > Candle holders & candles': 193,
+              'Decoration > Frames & pictures': 173,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    const refine = rendering.mock.calls[1][0].refine;
+    expect(helper.getHierarchicalFacetBreadcrumb('category')).toEqual([
+      'Decoration',
+    ]);
+    refine(null);
+    expect(helper.getHierarchicalFacetBreadcrumb('category')).toEqual([]);
+  });
+
   it('Provides a configuration if none exists', () => {
     const makeWidget = connectBreadcrumb(() => {});
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
