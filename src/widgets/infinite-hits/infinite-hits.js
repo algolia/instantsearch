@@ -55,28 +55,29 @@ infiniteHits({
   container,
   [ escapeHits = false ],
   [ showMoreLabel ],
-  [ cssClasses.{root,empty,item}={} ],
+  [ cssClasses.{root,empty,item,showmore}={} ],
   [ templates.{empty,item} | templates.{empty} ],
   [ transformData.{empty,item} | transformData.{empty} ],
 })`;
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
- * @property  {string|function} [empty=""] Template used when there are no results.
- * @property  {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
+ * @property {string|function} [empty=""] Template used when there are no results.
+ * @property {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
  */
 
 /**
  * @typedef {Object} InfiniteHitsTransforms
- * @property  {function} [empty] Method used to change the object passed to the `empty` template.
- * @property  {function} [item] Method used to change the object passed to the `item` template.
+ * @property {function} [empty] Method used to change the object passed to the `empty` template.
+ * @property {function} [item] Method used to change the object passed to the `item` template.
  */
 
 /**
  * @typedef {object} InfiniteHitsCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the wrapping element.
- * @property  {string|string[]} [empty] CSS class to add to the wrapping element when no results.
- * @property  {string|string[]} [item] CSS class to add to each result.
+ * @property {string|string[]} [root] CSS class to add to the wrapping element.
+ * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property {string|string[]} [item] CSS class to add to each result.
+ * @property {string|string[]} [showmore] CSS class to add to the show more button.
  */
 
 /**

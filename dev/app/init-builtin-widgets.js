@@ -99,17 +99,44 @@ export default () => {
     })
   );
 
-  storiesOf('InfiniteHits').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.infiniteHits({
-          container,
-          showMoreLabel: 'Show more',
-        })
-      );
-    })
-  );
+  storiesOf('InfiniteHits')
+    .add(
+      'default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.infiniteHits({
+            container,
+            showMoreLabel: 'Show more',
+            templates: {
+              item: '{{name}}',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with custom css classes',
+      wrapWithHits(container => {
+        const style = window.document.createElement('style');
+        window.document.head.appendChild(style);
+        style.sheet.insertRule(
+          '.button button{border: 1px solid black; background: #fff;}'
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.infiniteHits({
+            container,
+            showMoreLabel: 'Show more',
+            cssClasses: {
+              showmore: 'button',
+            },
+            templates: {
+              item: '{{name}}',
+            },
+          })
+        );
+      })
+    );
 
   storiesOf('Pagination').add(
     'default',
