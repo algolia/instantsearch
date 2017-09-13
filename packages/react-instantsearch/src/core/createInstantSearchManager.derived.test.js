@@ -55,21 +55,26 @@ describe('createInstantSearchManager', () => {
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('first query 1'),
+          context: {},
+          props: {},
         });
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('second query 1'),
-          multiIndexContext: { targetedIndex: 'second' },
+          context: { multiIndexContext: { targetedIndex: 'second' } },
+          props: {},
         });
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setPage(3),
-          multiIndexContext: { targetedIndex: 'first' },
+          context: { multiIndexContext: { targetedIndex: 'first' } },
+          props: {},
         });
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setIndex('second'),
-          multiIndexContext: { targetedIndex: 'second' },
+          context: { multiIndexContext: { targetedIndex: 'second' } },
+          props: { indexName: 'second' },
         });
 
         expect(ism.store.getState().results).toBe(null);
@@ -127,18 +132,23 @@ describe('createInstantSearchManager', () => {
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('first query 1'),
+          context: {},
+          props: {},
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('second query 1'),
-          multiIndexContext: { targetedIndex: 'second' },
+          context: { multiIndexContext: { targetedIndex: 'second' } },
+          props: {},
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setPage(3),
-          multiIndexContext: { targetedIndex: 'first' },
+          context: { multiIndexContext: { targetedIndex: 'first' } },
+          props: {},
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setIndex('second'),
-          multiIndexContext: { targetedIndex: 'second' },
+          context: { multiIndexContext: { targetedIndex: 'second' } },
+          props: { indexName: 'second' },
         });
 
         ism.onExternalStateUpdate({});
@@ -170,18 +180,23 @@ describe('createInstantSearchManager', () => {
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('first query 1'),
+          context: {},
+          props: {},
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('second query 1'),
-          multiIndexContext: { targetedIndex: 'second' },
+          context: { multiIndexContext: { targetedIndex: 'second' } },
+          props: {},
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setPage(3),
-          multiIndexContext: { targetedIndex: 'first' },
+          context: { multiIndexContext: { targetedIndex: 'first' } },
+          props: {},
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setIndex('second'),
-          multiIndexContext: { targetedIndex: 'second' },
+          context: { multiIndexContext: { targetedIndex: 'second' } },
+          props: { indexName: 'second' },
         });
 
         ism.onExternalStateUpdate({});
@@ -222,15 +237,18 @@ describe('createInstantSearchManager', () => {
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('second query 2'),
-          multiIndexContext: { targetedIndex: 'second' },
+          context: { multiIndexContext: { targetedIndex: 'second' } },
+          props: {},
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setPage(3),
-          multiIndexContext: { targetedIndex: 'first' },
+          context: { multiIndexContext: { targetedIndex: 'first' } },
+          props: {},
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setIndex('second'),
-          multiIndexContext: { targetedIndex: 'second' },
+          context: { multiIndexContext: { targetedIndex: 'second' } },
+          props: {},
         });
 
         ism.onExternalStateUpdate({});

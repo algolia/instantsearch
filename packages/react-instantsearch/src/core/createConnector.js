@@ -61,7 +61,7 @@ export default function createConnector(connectorDesc) {
       constructor(props, context) {
         super(props, context);
 
-        const { ais: { store, widgetsManager }, multiIndexContext } = context;
+        const { ais: { store, widgetsManager } } = context;
         const canRender = false;
         this.state = {
           props: this.getProvidedProps({ ...props, canRender }),
@@ -78,37 +78,44 @@ export default function createConnector(connectorDesc) {
             });
           }
         });
-
-        const getSearchParameters = hasSearchParameters
-          ? searchParameters =>
-              connectorDesc.getSearchParameters.call(
-                this,
-                searchParameters,
-                this.props,
-                store.getState().widgets
-              )
-          : null;
-        const getMetadata = hasMetadata
-          ? nextWidgetsState =>
-              connectorDesc.getMetadata.call(this, this.props, nextWidgetsState)
-          : null;
-        const transitionState = hasTransitionState
-          ? (prevWidgetsState, nextWidgetsState) =>
-              connectorDesc.transitionState.call(
-                this,
-                this.props,
-                prevWidgetsState,
-                nextWidgetsState
-              )
-          : null;
         if (isWidget) {
-          this.unregisterWidget = widgetsManager.registerWidget({
-            getSearchParameters,
-            getMetadata,
-            transitionState,
-            multiIndexContext,
-          });
+          this.unregisterWidget = widgetsManager.registerWidget(this);
         }
+      }
+
+      getMetadata(nextWidgetsState) {
+        if (hasMetadata) {
+          return connectorDesc.getMetadata.call(
+            this,
+            this.props,
+            nextWidgetsState
+          );
+        }
+        return {};
+      }
+
+      getSearchParameters(searchParameters) {
+        if (hasSearchParameters) {
+          return connectorDesc.getSearchParameters.call(
+            this,
+            searchParameters,
+            this.props,
+            this.context.ais.store.getState().widgets
+          );
+        }
+        return null;
+      }
+
+      transitionState(prevWidgetsState, nextWidgetsState) {
+        if (hasTransitionState) {
+          return connectorDesc.transitionState.call(
+            this,
+            this.props,
+            prevWidgetsState,
+            nextWidgetsState
+          );
+        }
+        return nextWidgetsState;
       }
 
       componentDidMount() {

@@ -41,7 +41,12 @@ const createInstantSearch = function(algoliasearch) {
     searchParameters = [];
     ReactDom.renderToString(<App {...props} />);
     const sharedSearchParameters = searchParameters
-      .filter(searchParameter => !hasMultipleIndex(searchParameter.context))
+      .filter(
+        searchParameter =>
+          !hasMultipleIndex(searchParameter.context) &&
+          (searchParameter.props.indexName === indexName ||
+            !searchParameter.props.indexName)
+      )
       .reduce(
         (acc, searchParameter) =>
           searchParameter.getSearchParameters.call(
@@ -71,13 +76,30 @@ const createInstantSearch = function(algoliasearch) {
       const helper = algoliasearchHelper(client, sharedSearchParameters.index);
       return helper.searchOnce(sharedSearchParameters);
     } else {
-      const search = Object.keys(mergedSearchParameters).map(key => {
-        const helper = algoliasearchHelper(
-          client,
-          mergedSearchParameters[key].index
+      const helper = algoliasearchHelper(client, sharedSearchParameters.index);
+      const search = [];
+      if (mergedSearchParameters[indexName]) {
+        search.push(
+          helper.searchOnce({
+            ...sharedSearchParameters,
+            ...mergedSearchParameters[sharedSearchParameters.index],
+            index: mergedSearchParameters[sharedSearchParameters.index].index,
+          })
         );
-        return helper.searchOnce(mergedSearchParameters[key]);
-      });
+        delete mergedSearchParameters[indexName];
+      } else {
+        search.push(helper.searchOnce(sharedSearchParameters));
+      }
+      search.push(
+        ...Object.keys(mergedSearchParameters).map(key => {
+          const derivedHelper = algoliasearchHelper(
+            client,
+            mergedSearchParameters[key].index
+          );
+          return derivedHelper.searchOnce(mergedSearchParameters[key]);
+        })
+      );
+
       return Promise.all(search);
     }
   };

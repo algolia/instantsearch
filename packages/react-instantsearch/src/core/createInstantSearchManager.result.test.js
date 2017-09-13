@@ -50,6 +50,8 @@ describe('createInstantSearchManager', () => {
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('search'),
+          props: {},
+          context: {},
         });
 
         expect(ism.store.getState().results).toBe(null);
