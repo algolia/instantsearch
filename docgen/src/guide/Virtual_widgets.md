@@ -7,8 +7,9 @@ navWeight: 65
 ---
 
 A lot of websites have "category pages" where the search context is already refined without the user having
-to do it. For example an online shop for clothes could have a page like `https://www.clothes.com/hoodies`
-that shows hoodies:
+to do it. This allows for the search results to be constrained to only the specific results that you would like to display.
+For example an online shop for clothes could have a page like `https://www.clothes.com/hoodies`
+that shows hoodies and only hoodies:
 
 ```jsx
 import {InstantSearch, SearchBox} from 'react-instantsearch/dom';
@@ -28,6 +29,7 @@ const App = () =>
     <Menu attributeName="fruits" defaultRefinement="Orange" />
   </InstantSearch>;
 ```
+In this case, we are using the `VirtualMenu` to pre refine our results (within the `clothes` search, only display `hoodies`). Think of the `VirtualMenu` as a hidden filter where we define attributes and values that will always be applied to our search results
 
 **Notes**:
 * The `<Hoodies>` component is what we call a virtual widget.
