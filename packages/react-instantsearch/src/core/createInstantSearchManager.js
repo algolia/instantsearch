@@ -69,7 +69,11 @@ export default function createInstantSearchManager({
     const sharedParameters = widgetsManager
       .getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(widget => !widget.multiIndexContext)
+      .filter(
+        widget =>
+          !widget.context.multiIndexContext &&
+          (widget.props.indexName === indexName || !widget.props.indexName)
+      )
       .reduce(
         (res, widget) => widget.getSearchParameters(res),
         initialSearchParameters
@@ -81,11 +85,14 @@ export default function createInstantSearchManager({
       .filter(widget => Boolean(widget.getSearchParameters))
       .filter(
         widget =>
-          widget.multiIndexContext &&
-          widget.multiIndexContext.targetedIndex !== indexName
+          (widget.context.multiIndexContext &&
+            widget.context.multiIndexContext.targetedIndex !== indexName) ||
+          (widget.props.indexName && widget.props.indexName !== indexName)
       )
       .reduce((indices, widget) => {
-        const targetedIndex = widget.multiIndexContext.targetedIndex;
+        const targetedIndex = widget.context.multiIndexContext
+          ? widget.context.multiIndexContext.targetedIndex
+          : widget.props.indexName;
         const index = indices.find(i => i.targetedIndex === targetedIndex);
         if (index) {
           index.widgets.push(widget);
@@ -100,8 +107,9 @@ export default function createInstantSearchManager({
       .filter(widget => Boolean(widget.getSearchParameters))
       .filter(
         widget =>
-          widget.multiIndexContext &&
-          widget.multiIndexContext.targetedIndex === indexName
+          (widget.context.multiIndexContext &&
+            widget.context.multiIndexContext.targetedIndex === indexName) ||
+          (widget.props.indexName && widget.props.indexName === indexName)
       )
       .reduce(
         (res, widget) => widget.getSearchParameters(res),
@@ -118,7 +126,6 @@ export default function createInstantSearchManager({
         mainIndexParameters,
         derivatedWidgets,
       } = getSearchParameters(helper.state);
-
       Object.keys(derivedHelpers).forEach(key => derivedHelpers[key].detach());
       derivedHelpers = {};
 

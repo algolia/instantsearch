@@ -51,6 +51,8 @@ describe('createInstantSearchManager errors', () => {
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('search'),
+          context: {},
+          props: {},
         });
 
         expect(ism.store.getState().error).toBe(null);
@@ -130,6 +132,8 @@ describe('createInstantSearchManager errors', () => {
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('search'),
+          context: {},
+          props: {},
         });
 
         expect(ism.store.getState().error).toBe(null);

@@ -160,7 +160,7 @@ describe('createInstantSearchServer', () => {
         });
       });
 
-      it('without search state', () => {
+      it('without search state - first api', () => {
         const App = () =>
           <CustomInstantSearch appId="app" apiKey="key" indexName="index1">
             <CustomIndex indexName="index2">
@@ -180,7 +180,25 @@ describe('createInstantSearchServer', () => {
         });
       });
 
-      it('with search state', () => {
+      it('without search state - second api', () => {
+        const App = () =>
+          <CustomInstantSearch appId="app" apiKey="key" indexName="index1">
+            <CustomIndex indexName="index2">
+              <Connected />
+            </CustomIndex>
+            <Connected />
+          </CustomInstantSearch>;
+
+        expect.assertions(3);
+
+        return findResultsState(App).then(data => {
+          expect(data.length).toBe(2);
+          expect(data.find(d => d.state.index === 'index1')).toBeTruthy();
+          expect(data.find(d => d.state.index === 'index2')).toBeTruthy();
+        });
+      });
+
+      it('with search state - first api', () => {
         const App = props =>
           <CustomInstantSearch
             appId="app"
@@ -194,6 +212,40 @@ describe('createInstantSearchServer', () => {
             <CustomIndex indexName="index1">
               <Connected />
             </CustomIndex>
+          </CustomInstantSearch>;
+
+        expect.assertions(3);
+
+        return findResultsState(App, {
+          searchState: {
+            indices: {
+              index1: { index: 'index1 new name' },
+              index2: { index: 'index2 new name' },
+            },
+          },
+        }).then(data => {
+          expect(data.length).toBe(2);
+          expect(
+            data.find(d => d.state.index === 'index1 new name')
+          ).toBeTruthy();
+          expect(
+            data.find(d => d.state.index === 'index2 new name')
+          ).toBeTruthy();
+        });
+      });
+
+      it('with search state - second api', () => {
+        const App = props =>
+          <CustomInstantSearch
+            appId="app"
+            apiKey="key"
+            indexName="index1"
+            searchState={props.searchState}
+          >
+            <CustomIndex indexName="index2">
+              <Connected />
+            </CustomIndex>
+            <Connected />
           </CustomInstantSearch>;
 
         expect.assertions(3);

@@ -40,13 +40,7 @@ class Index extends Component {
      It means that with only <Index> present a new query will be sent to Algolia.
      That way you don't need a virtual hits widget to use the connectAutoComplete. 
     */
-    this.unregisterWidget = widgetsManager.registerWidget({
-      getSearchParameters: searchParameters =>
-        this.getSearchParameters(searchParameters, this.props),
-      multiIndexContext: {
-        targetedIndex: this.props.indexName,
-      },
-    });
+    this.unregisterWidget = widgetsManager.registerWidget(this);
   }
 
   componentWillMount() {
@@ -55,6 +49,12 @@ class Index extends Component {
       this.getChildContext(),
       this.props
     );
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.indexName !== nextProps.indexName) {
+      this.context.ais.widgetsManager.update();
+    }
   }
 
   componentWillUnmount() {
@@ -70,7 +70,9 @@ class Index extends Component {
   }
 
   getSearchParameters(searchParameters, props) {
-    return searchParameters.setIndex(props.indexName);
+    return searchParameters.setIndex(
+      this.props ? this.props.indexName : props.indexName
+    );
   }
 
   render() {
