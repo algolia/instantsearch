@@ -28,7 +28,7 @@ class Slider extends Component {
   };
 
   get isDisabled() {
-    return this.props.min === this.props.max;
+    return this.props.min >= this.props.max;
   }
 
   handleChange = ({ min, max, values }) => {
