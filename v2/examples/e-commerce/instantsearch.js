@@ -11877,7 +11877,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.1.3';
+exports.default = '2.1.4';
 
 /***/ }),
 /* 180 */
@@ -35485,7 +35485,7 @@ var Slider = function (_Component) {
   }, {
     key: 'isDisabled',
     get: function get() {
-      return this.props.min === this.props.max;
+      return this.props.min >= this.props.max;
     }
   }]);
 
@@ -35635,8 +35635,6 @@ var Button = function (_React$Component) {
   return Button;
 }(_react2['default'].Component);
 
-console.log('WESH')
-
 var propTypes = {
   // the algorithm to use
   algorithm: _propTypes2['default'].shape({
@@ -35644,7 +35642,7 @@ var propTypes = {
     getPosition: _propTypes2['default'].func
   }),
   // any children you pass in
-  children: _propTypes2['default'].any,
+  children: _propTypes2['default'].node,
   // standard class name you'd like to apply to the root element
   className: _propTypes2['default'].string,
   // prevent the slider from moving when clicked
@@ -35689,11 +35687,20 @@ var propTypes = {
 var defaultProps = {
   algorithm: _linear2['default'],
   className: '',
+  children: null,
   disabled: false,
   handle: Button,
   max: SliderConstants.PERCENT_FULL,
   min: SliderConstants.PERCENT_EMPTY,
+  onClick: null,
+  onChange: null,
+  onKeyPress: null,
+  onSliderDragEnd: null,
+  onSliderDragMove: null,
+  onSliderDragStart: null,
+  onValuesUpdated: null,
   orientation: 'horizontal',
+  pitComponent: null,
   pitPoints: [],
   progressBar: 'div',
   snap: false,
@@ -35710,6 +35717,7 @@ var Rheostat = function (_React$Component2) {
     var _this2 = _possibleConstructorReturn(this, (Rheostat.__proto__ || Object.getPrototypeOf(Rheostat)).call(this, props));
 
     var _this2$props = _this2.props,
+        algorithm = _this2$props.algorithm,
         max = _this2$props.max,
         min = _this2$props.min,
         values = _this2$props.values;
@@ -35717,7 +35725,7 @@ var Rheostat = function (_React$Component2) {
     _this2.state = {
       className: getClassName(_this2.props),
       handlePos: values.map(function (value) {
-        return _this2.props.algorithm.getPosition(value, min, max);
+        return algorithm.getPosition(value, min, max);
       }),
       handleDimensions: 0,
       mousePos: null,
@@ -35758,15 +35766,26 @@ var Rheostat = function (_React$Component2) {
     key: 'componentWillReceiveProps',
     value: function () {
       function componentWillReceiveProps(nextProps) {
-        var minMaxChanged = nextProps.min !== this.props.min || nextProps.max !== this.props.max;
+        var _props = this.props,
+            className = _props.className,
+            disabled = _props.disabled,
+            min = _props.min,
+            max = _props.max,
+            orientation = _props.orientation;
+        var _state = this.state,
+            values = _state.values,
+            slidingIndex = _state.slidingIndex;
 
-        var valuesChanged = this.state.values.length !== nextProps.values.length || this.state.values.some(function (value, idx) {
+
+        var minMaxChanged = nextProps.min !== min || nextProps.max !== max;
+
+        var valuesChanged = values.length !== nextProps.values.length || values.some(function (value, idx) {
           return nextProps.values[idx] !== value;
         });
 
-        var orientationChanged = nextProps.className !== this.props.className || nextProps.orientation !== this.props.orientation;
+        var orientationChanged = nextProps.className !== className || nextProps.orientation !== orientation;
 
-        var willBeDisabled = nextProps.disabled && !this.props.disabled;
+        var willBeDisabled = nextProps.disabled && !disabled;
 
         if (orientationChanged) {
           this.setState({
@@ -35776,7 +35795,7 @@ var Rheostat = function (_React$Component2) {
 
         if (minMaxChanged || valuesChanged) this.updateNewValues(nextProps);
 
-        if (willBeDisabled && this.state.slidingIndex !== null) {
+        if (willBeDisabled && slidingIndex !== null) {
           this.endSlide();
         }
       }
@@ -35787,11 +35806,13 @@ var Rheostat = function (_React$Component2) {
     key: 'getPublicState',
     value: function () {
       function getPublicState() {
-        return {
-          max: this.props.max,
-          min: this.props.min,
-          values: this.state.values
-        };
+        var _props2 = this.props,
+            min = _props2.min,
+            max = _props2.max;
+        var values = this.state.values;
+
+
+        return { max: max, min: min, values: values };
       }
 
       return getPublicState;
@@ -35892,10 +35913,10 @@ var Rheostat = function (_React$Component2) {
       function getSnapPosition(positionPercent) {
         if (!this.props.snap) return positionPercent;
 
-        var _props = this.props,
-            algorithm = _props.algorithm,
-            max = _props.max,
-            min = _props.min;
+        var _props3 = this.props,
+            algorithm = _props3.algorithm,
+            max = _props3.max,
+            min = _props3.min;
 
 
         var value = algorithm.getValue(positionPercent, min, max);
@@ -35913,14 +35934,14 @@ var Rheostat = function (_React$Component2) {
       function getNextPositionForKey(idx, keyCode) {
         var _stepMultiplier;
 
-        var _state = this.state,
-            handlePos = _state.handlePos,
-            values = _state.values;
-        var _props2 = this.props,
-            algorithm = _props2.algorithm,
-            max = _props2.max,
-            min = _props2.min,
-            snapPoints = _props2.snapPoints;
+        var _state2 = this.state,
+            handlePos = _state2.handlePos,
+            values = _state2.values;
+        var _props4 = this.props,
+            algorithm = _props4.algorithm,
+            max = _props4.max,
+            min = _props4.min,
+            snapPoints = _props4.snapPoints;
 
 
         var shouldSnap = this.props.snap;
@@ -35998,9 +36019,9 @@ var Rheostat = function (_React$Component2) {
         var _this3 = this;
 
         var handlePos = this.state.handlePos;
-        var _props3 = this.props,
-            max = _props3.max,
-            min = _props3.min;
+        var _props5 = this.props,
+            max = _props5.max,
+            min = _props5.min;
 
 
         var actualPosition = this.validatePosition(idx, proposedPosition);
@@ -36142,9 +36163,9 @@ var Rheostat = function (_React$Component2) {
     key: 'handleSlide',
     value: function () {
       function handleSlide(x, y) {
-        var _state2 = this.state,
-            idx = _state2.slidingIndex,
-            sliderBox = _state2.sliderBox;
+        var _state3 = this.state,
+            idx = _state3.slidingIndex,
+            sliderBox = _state3.sliderBox;
 
 
         var positionPercent = this.props.orientation === 'vertical' ? (y - sliderBox.top) / sliderBox.height * SliderConstants.PERCENT_FULL : (x - sliderBox.left) / sliderBox.width * SliderConstants.PERCENT_FULL;
@@ -36271,9 +36292,9 @@ var Rheostat = function (_React$Component2) {
     key: 'validatePosition',
     value: function () {
       function validatePosition(idx, proposedPosition) {
-        var _state3 = this.state,
-            handlePos = _state3.handlePos,
-            handleDimensions = _state3.handleDimensions;
+        var _state4 = this.state,
+            handlePos = _state4.handlePos,
+            handleDimensions = _state4.handleDimensions;
 
 
         return Math.max(Math.min(proposedPosition, handlePos[idx + 1] !== undefined ? handlePos[idx + 1] - handleDimensions : SliderConstants.PERCENT_FULL // 100% is the highest value
@@ -36311,9 +36332,9 @@ var Rheostat = function (_React$Component2) {
     key: 'canMove',
     value: function () {
       function canMove(idx, proposedPosition) {
-        var _state4 = this.state,
-            handlePos = _state4.handlePos,
-            handleDimensions = _state4.handleDimensions;
+        var _state5 = this.state,
+            handlePos = _state5.handlePos,
+            handleDimensions = _state5.handleDimensions;
 
 
         if (proposedPosition < SliderConstants.PERCENT_EMPTY) return false;
@@ -36339,7 +36360,9 @@ var Rheostat = function (_React$Component2) {
     key: 'fireChangeEvent',
     value: function () {
       function fireChangeEvent() {
-        if (this.props.onChange) this.props.onChange(this.getPublicState());
+        var onChange = this.props.onChange;
+
+        if (onChange) onChange(this.getPublicState());
       }
 
       return fireChangeEvent;
@@ -36356,7 +36379,9 @@ var Rheostat = function (_React$Component2) {
         var nextState = this.getNextState(idx, proposedPosition);
 
         this.setState(nextState, function () {
-          if (_this7.props.onValuesUpdated) _this7.props.onValuesUpdated(_this7.getPublicState());
+          var onValuesUpdated = _this7.props.onValuesUpdated;
+
+          if (onValuesUpdated) onValuesUpdated(_this7.getPublicState());
           if (onAfterSet) onAfterSet();
         });
       }
@@ -36372,21 +36397,25 @@ var Rheostat = function (_React$Component2) {
       function updateNewValues(nextProps) {
         var _this8 = this;
 
+        var slidingIndex = this.state.slidingIndex;
+
         // Don't update while the slider is sliding
-        if (this.state.slidingIndex !== null) {
+
+        if (slidingIndex !== null) {
           return;
         }
 
         var max = nextProps.max,
             min = nextProps.min,
             values = nextProps.values;
+        var algorithm = this.props.algorithm;
 
 
         var nextValues = this.validateValues(values, nextProps);
 
         this.setState({
           handlePos: nextValues.map(function (value) {
-            return _this8.props.algorithm.getPosition(value, min, max);
+            return algorithm.getPosition(value, min, max);
           }),
           values: nextValues
         }, function () {
@@ -36402,17 +36431,21 @@ var Rheostat = function (_React$Component2) {
       function render() {
         var _this9 = this;
 
-        var _props4 = this.props,
-            algorithm = _props4.algorithm,
-            children = _props4.children,
-            disabled = _props4.disabled,
-            Handle = _props4.handle,
-            max = _props4.max,
-            min = _props4.min,
-            orientation = _props4.orientation,
-            PitComponent = _props4.pitComponent,
-            pitPoints = _props4.pitPoints,
-            ProgressBar = _props4.progressBar;
+        var _props6 = this.props,
+            algorithm = _props6.algorithm,
+            children = _props6.children,
+            disabled = _props6.disabled,
+            Handle = _props6.handle,
+            max = _props6.max,
+            min = _props6.min,
+            orientation = _props6.orientation,
+            PitComponent = _props6.pitComponent,
+            pitPoints = _props6.pitPoints,
+            ProgressBar = _props6.progressBar;
+        var _state6 = this.state,
+            className = _state6.className,
+            handlePos = _state6.handlePos,
+            values = _state6.values;
 
 
         return (
@@ -36420,23 +36453,23 @@ var Rheostat = function (_React$Component2) {
           _react2['default'].createElement(
             'div',
             {
-              className: this.state.className,
+              className: className,
               ref: 'rheostat',
               onClick: !disabled && this.handleClick,
               style: { position: 'relative' }
             },
             _react2['default'].createElement('div', { className: 'rheostat-background' }),
-            this.state.handlePos.map(function (pos, idx) {
+            handlePos.map(function (pos, idx) {
               var handleStyle = orientation === 'vertical' ? { top: String(pos) + '%', position: 'absolute' } : { left: String(pos) + '%', position: 'absolute' };
 
               return _react2['default'].createElement(Handle, {
                 'aria-valuemax': _this9.getMaxValue(idx),
                 'aria-valuemin': _this9.getMinValue(idx),
-                'aria-valuenow': _this9.state.values[idx],
+                'aria-valuenow': values[idx],
                 'aria-disabled': disabled,
                 'data-handle-key': idx,
                 className: 'rheostat-handle',
-                key: idx,
+                key: 'handle-' + String(idx),
                 onClick: _this9.killEvent,
                 onKeyDown: !disabled && _this9.handleKeydown,
                 onMouseDown: !disabled && _this9.startMouseSlide,
@@ -36446,14 +36479,14 @@ var Rheostat = function (_React$Component2) {
                 tabIndex: 0
               });
             }),
-            this.state.handlePos.map(function (node, idx, arr) {
+            handlePos.map(function (node, idx, arr) {
               if (idx === 0 && arr.length > 1) {
                 return null;
               }
 
               return _react2['default'].createElement(ProgressBar, {
                 className: 'rheostat-progress',
-                key: idx,
+                key: 'progress-bar-' + String(idx),
                 style: _this9.getProgressStyle(idx)
               });
             }),
@@ -36463,7 +36496,7 @@ var Rheostat = function (_React$Component2) {
 
               return _react2['default'].createElement(
                 PitComponent,
-                { key: n, style: pitStyle },
+                { key: 'pit-' + String(n), style: pitStyle },
                 n
               );
             }),
@@ -36483,7 +36516,6 @@ Rheostat.propTypes = propTypes;
 Rheostat.defaultProps = defaultProps;
 
 exports['default'] = Rheostat;
-
 
 /***/ }),
 /* 446 */
