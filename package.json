@@ -126,7 +126,7 @@
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0",
     "prop-types": "^15.5.10",
-    "rheostat": "^2.1.0",
+    "rheostat": "algolia/rheostat#dist",
     "to-factory": "^1.0.0"
   },
   "license": "MIT"
