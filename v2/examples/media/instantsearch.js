@@ -32151,25 +32151,26 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n  [ showMoreLabel ],\n  [ cssClasses.{root,empty,item}={} ],\n  [ templates.{empty,item} | templates.{empty} ],\n  [ transformData.{empty,item} | transformData.{empty} ],\n})';
+var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n  [ showMoreLabel ],\n  [ cssClasses.{root,empty,item,showmore}={} ],\n  [ templates.{empty,item} | templates.{empty} ],\n  [ transformData.{empty,item} | transformData.{empty} ],\n})';
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
- * @property  {string|function} [empty=""] Template used when there are no results.
- * @property  {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
+ * @property {string|function} [empty=""] Template used when there are no results.
+ * @property {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
  */
 
 /**
  * @typedef {Object} InfiniteHitsTransforms
- * @property  {function} [empty] Method used to change the object passed to the `empty` template.
- * @property  {function} [item] Method used to change the object passed to the `item` template.
+ * @property {function} [empty] Method used to change the object passed to the `empty` template.
+ * @property {function} [item] Method used to change the object passed to the `item` template.
  */
 
 /**
  * @typedef {object} InfiniteHitsCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the wrapping element.
- * @property  {string|string[]} [empty] CSS class to add to the wrapping element when no results.
- * @property  {string|string[]} [item] CSS class to add to each result.
+ * @property {string|string[]} [root] CSS class to add to the wrapping element.
+ * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property {string|string[]} [item] CSS class to add to each result.
+ * @property {string|string[]} [showmore] CSS class to add to the show more button.
  */
 
 /**
@@ -35634,6 +35635,8 @@ var Button = function (_React$Component) {
   return Button;
 }(_react2['default'].Component);
 
+console.log('WESH')
+
 var propTypes = {
   // the algorithm to use
   algorithm: _propTypes2['default'].shape({
@@ -36480,6 +36483,7 @@ Rheostat.propTypes = propTypes;
 Rheostat.defaultProps = defaultProps;
 
 exports['default'] = Rheostat;
+
 
 /***/ }),
 /* 446 */
