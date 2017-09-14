@@ -1,3 +1,16 @@
+<a name="2.1.4"></a>
+## [2.1.4](https://github.com/algolia/instantsearch.js/compare/v2.1.3...v2.1.4) (2017-09-14)
+
+
+### Bug Fixes
+
+* **release-script:** Add the generation of changelog for the release ([#2333](https://github.com/algolia/instantsearch.js/issues/2333)) ([9a2f70b](https://github.com/algolia/instantsearch.js/commit/9a2f70b))
+* **slider:** edge case when min > max ([#2336](https://github.com/algolia/instantsearch.js/issues/2336)) ([8830ab0](https://github.com/algolia/instantsearch.js/commit/8830ab0))
+* **slider:** Fix range slider dev env ([#2320](https://github.com/algolia/instantsearch.js/issues/2320)) ([e78de70](https://github.com/algolia/instantsearch.js/commit/e78de70))
+* **slider:** use algolia fork of rheostat ([#2335](https://github.com/algolia/instantsearch.js/issues/2335)) ([9eae009](https://github.com/algolia/instantsearch.js/commit/9eae009))
+
+
+
 <a name="2.1.3"></a>
 ## [2.1.3](https://github.com/algolia/instantsearch.js/compare/v2.1.2...v2.1.3) (2017-09-05)
 
