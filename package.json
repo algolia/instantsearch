@@ -23,7 +23,7 @@
     "docs:storybook-start": "start-storybook -p 6006 -c ./storybook -s ./storybook/public",
     "docs:storybook-build-production": "build-storybook -s ./storybook/public -o docs-production/react-instantsearch/storybook -c ./storybook"
   },
-  "dependencies": {
+  "devDependencies": {
     "@storybook/addon-actions": "^3.1.9",
     "@storybook/addon-knobs": "^3.1.9",
     "@storybook/addon-options": "^3.1.6",
