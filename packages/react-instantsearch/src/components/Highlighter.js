@@ -29,11 +29,7 @@ export default function Highlighter({
       </HighlightedTag>
     );
   });
-  return (
-    <span className="ais-Highlight">
-      {reactHighlighted}
-    </span>
-  );
+  return <span className="ais-Highlight">{reactHighlighted}</span>;
 }
 
 Highlighter.propTypes = {

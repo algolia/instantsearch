@@ -105,7 +105,7 @@ class Rating extends Component {
     return { max, min: lowerBound, count, selected };
   }
 
-  _renderRow = ({ max, min, count, selected }) =>
+  _renderRow = ({ max, min, count, selected }) => (
     <TouchableHighlight
       style={{ backgroundColor: selected ? '#162331' : 'white' }}
       onPress={() =>
@@ -126,20 +126,20 @@ class Rating extends Component {
           emptyStarColor={selected ? 'white' : 'gray'}
         />
         <Text style={{ color: selected ? 'white' : 'black' }}> and up! </Text>
-        <Text style={{ color: selected ? 'white' : 'black' }}>
-          ({count})
-        </Text>
+        <Text style={{ color: selected ? 'white' : 'black' }}>({count})</Text>
       </View>
-    </TouchableHighlight>;
+    </TouchableHighlight>
+  );
 
-  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) =>
+  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => (
     <View
       key={`${sectionID}-${rowID}`}
       style={{
         height: adjacentRowHighlighted ? 4 : 1,
         backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
       }}
-    />;
+    />
+  );
 
   render() {
     const { refine, min, max, count, createURL } = this.props;

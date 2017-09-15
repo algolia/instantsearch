@@ -38,47 +38,39 @@ class Breadcrumb extends Component {
 
   render() {
     const { canRefine, createURL, items, refine, translate } = this.props;
-    const rootPath = canRefine
-      ? <span {...cx('item')}>
-          <a
-            {...cx('itemLink', 'itemLinkRoot')}
-            onClick={() => (!this.props.rootURL ? refine() : null)}
-            href={this.props.rootURL ? this.props.rootURL : createURL()}
-          >
-            <span {...cx('rootLabel')}>
-              {translate('rootLabel')}
-            </span>
-          </a>
-          <span {...cx('separator')}>
-            {this.props.separator}
-          </span>
-        </span>
-      : null;
+    const rootPath = canRefine ? (
+      <span {...cx('item')}>
+        <a
+          {...cx('itemLink', 'itemLinkRoot')}
+          onClick={() => (!this.props.rootURL ? refine() : null)}
+          href={this.props.rootURL ? this.props.rootURL : createURL()}
+        >
+          <span {...cx('rootLabel')}>{translate('rootLabel')}</span>
+        </a>
+        <span {...cx('separator')}>{this.props.separator}</span>
+      </span>
+    ) : null;
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
       const separator = isLast ? '' : this.props.separator;
-      return !isLast
-        ? <span {...cx('item')} key={idx}>
-            <Link
-              {...cx('itemLink')}
-              onClick={() => refine(item.value)}
-              href={createURL(item.value)}
-              key={idx}
-            >
-              <span {...cx('itemLabel')}>
-                {item.label}
-              </span>
-            </Link>
-            <span {...cx('separator')}>
-              {separator}
-            </span>
-          </span>
-        : <span {...cx('itemLink', 'itemDisabled', 'item')} key={idx}>
-            <span {...cx('itemLabel')}>
-              {item.label}
-            </span>
-          </span>;
+      return !isLast ? (
+        <span {...cx('item')} key={idx}>
+          <Link
+            {...cx('itemLink')}
+            onClick={() => refine(item.value)}
+            href={createURL(item.value)}
+            key={idx}
+          >
+            <span {...cx('itemLabel')}>{item.label}</span>
+          </Link>
+          <span {...cx('separator')}>{separator}</span>
+        </span>
+      ) : (
+        <span {...cx('itemLink', 'itemDisabled', 'item')} key={idx}>
+          <span {...cx('itemLabel')}>{item.label}</span>
+        </span>
+      );
     });
 
     return (

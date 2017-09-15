@@ -47,7 +47,12 @@ describe('HitsPerPage', () => {
 
     const selectedValue = wrapper.find('.ais-HitsPerPage__root');
     expect(selectedValue.find('option').length).toBe(4);
-    expect(selectedValue.find('option').first().text()).toBe('2 hits per page');
+    expect(
+      selectedValue
+        .find('option')
+        .first()
+        .text()
+    ).toBe('2 hits per page');
 
     selectedValue.find('select').simulate('change', { target: { value: '6' } });
 
@@ -68,6 +73,11 @@ describe('HitsPerPage', () => {
 
     const selectedValue = wrapper.find('.ais-HitsPerPage__root');
     expect(selectedValue.find('option').length).toBe(4);
-    expect(selectedValue.find('option').first().text()).toBe('2');
+    expect(
+      selectedValue
+        .find('option')
+        .first()
+        .text()
+    ).toBe('2');
   });
 });

@@ -16,16 +16,12 @@ stories
         return { query: searchState.query, noResults };
       },
     })(({ noResults, query }) => {
-      const content = noResults
-        ? <div>
-            No results has been found for {query}
-          </div>
-        : <div>Some results</div>;
-      return (
-        <div>
-          {content}
-        </div>
+      const content = noResults ? (
+        <div>No results has been found for {query}</div>
+      ) : (
+        <div>Some results</div>
       );
+      return <div>{content}</div>;
     });
     return (
       <WrapWithHits linkedStoryGroup="Conditional">
@@ -40,16 +36,12 @@ stories
         return { query: searchState.query };
       },
     })(({ query }) => {
-      const content = query
-        ? <div>
-            The query {query} exists
-          </div>
-        : <div>No query</div>;
-      return (
-        <div>
-          {content}
-        </div>
+      const content = query ? (
+        <div>The query {query} exists</div>
+      ) : (
+        <div>No query</div>
       );
+      return <div>{content}</div>;
     });
     return (
       <WrapWithHits linkedStoryGroup="Conditional">

@@ -10,17 +10,17 @@ const stories = storiesOf('Menu', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () =>
+  .add('default', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu attributeName="category" />
     </WrapWithHits>
-  )
-  .add('with default selected item', () =>
+  ))
+  .add('with default selected item', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu attributeName="category" defaultRefinement="Eating" />
     </WrapWithHits>
-  )
-  .add('with show more', () =>
+  ))
+  .add('with show more', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu
         attributeName="category"
@@ -29,8 +29,8 @@ stories
         showMore={true}
       />
     </WrapWithHits>
-  )
-  .add('with search inside items', () =>
+  ))
+  .add('with search inside items', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu
         attributeName="category"
@@ -43,8 +43,8 @@ stories
           )}
       />
     </WrapWithHits>
-  )
-  .add('with the sort strategy changed', () =>
+  ))
+  .add('with the sort strategy changed', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Menu
         attributeName="category"
@@ -52,15 +52,15 @@ stories
           orderBy(items, ['label', 'count'], ['asc', 'desc'])}
       />
     </WrapWithHits>
-  )
-  .add('with panel', () =>
+  ))
+  .add('with panel', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
       <Panel title="Category">
         <Menu attributeName="category" />
       </Panel>
     </WrapWithHits>
-  )
-  .add('with panel but no available refinement', () =>
+  ))
+  .add('with panel but no available refinement', () => (
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
@@ -73,8 +73,8 @@ stories
         </div>
       </Panel>
     </WrapWithHits>
-  )
-  .add('playground', () =>
+  ))
+  .add('playground', () => (
     <WrapWithHits linkedStoryGroup="Menu">
       <Menu
         attributeName="category"
@@ -84,4 +84,4 @@ stories
         showMore={boolean('showMore', true)}
       />
     </WrapWithHits>
-  );
+  ));

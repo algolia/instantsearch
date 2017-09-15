@@ -122,7 +122,10 @@ describe('StarRating', () => {
 
   it('should display the right number of stars', () => {
     const wrapper = mount(starRating);
-    wrapper.find('.ais-StarRating__ratingLink').last().simulate('click');
+    wrapper
+      .find('.ais-StarRating__ratingLink')
+      .last()
+      .simulate('click');
 
     const selectedLink = wrapper.find('.ais-StarRating__ratingLinkSelected');
 

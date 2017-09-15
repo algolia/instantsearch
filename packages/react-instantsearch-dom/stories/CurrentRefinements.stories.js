@@ -14,7 +14,7 @@ const stories = storiesOf('CurrentRefinements', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () =>
+  .add('default', () => (
     <WrapWithHits linkedStoryGroup="CurrentRefinements">
       <div>
         <CurrentRefinements />
@@ -26,8 +26,8 @@ stories
         </div>
       </div>
     </WrapWithHits>
-  )
-  .add('with toggle', () =>
+  ))
+  .add('with toggle', () => (
     <WrapWithHits linkedStoryGroup="CurrentRefinements">
       <div>
         <CurrentRefinements />
@@ -38,8 +38,8 @@ stories
         />
       </div>
     </WrapWithHits>
-  )
-  .add('with panel', () =>
+  ))
+  .add('with panel', () => (
     <WrapWithHits linkedStoryGroup="CurrentRefinements">
       <Panel title="Current Refinements">
         <CurrentRefinements />
@@ -51,11 +51,11 @@ stories
         </div>
       </Panel>
     </WrapWithHits>
-  )
-  .add('with panel but no refinement', () =>
+  ))
+  .add('with panel but no refinement', () => (
     <WrapWithHits linkedStoryGroup="CurrentRefinements">
       <Panel title="Current Refinements">
         <CurrentRefinements />
       </Panel>
     </WrapWithHits>
-  );
+  ));

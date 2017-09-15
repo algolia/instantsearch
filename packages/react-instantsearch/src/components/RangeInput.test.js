@@ -67,8 +67,14 @@ describe('RangeInput', () => {
 
     refine.mockClear();
 
-    wrapper.find('input').first().simulate('change', { target: { value: 89 } });
-    wrapper.find('input').last().simulate('change', { target: { value: 99 } });
+    wrapper
+      .find('input')
+      .first()
+      .simulate('change', { target: { value: 89 } });
+    wrapper
+      .find('input')
+      .last()
+      .simulate('change', { target: { value: 99 } });
 
     wrapper
       .find('.ais-RangeInput__root')
@@ -95,8 +101,14 @@ describe('RangeInput', () => {
 
     const formChildren = wrapper.find('.ais-RangeInput__submit');
 
-    wrapper.find('input').first().simulate('change', { target: { value: '' } });
-    wrapper.find('input').last().simulate('change', { target: { value: '' } });
+    wrapper
+      .find('input')
+      .first()
+      .simulate('change', { target: { value: '' } });
+    wrapper
+      .find('input')
+      .last()
+      .simulate('change', { target: { value: '' } });
 
     wrapper
       .find('.ais-RangeInput__root')

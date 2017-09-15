@@ -9,7 +9,7 @@ const stories = storiesOf('ClearAll', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('with refinements to clear', () =>
+  .add('with refinements to clear', () => (
     <WrapWithHits linkedStoryGroup="ClearAll">
       <div>
         <ClearAll />
@@ -21,13 +21,13 @@ stories
         </div>
       </div>
     </WrapWithHits>
-  )
-  .add('nothing to clear', () =>
+  ))
+  .add('nothing to clear', () => (
     <WrapWithHits linkedStoryGroup="ClearAll">
       <ClearAll />
     </WrapWithHits>
-  )
-  .add('clear all refinements and the query', () =>
+  ))
+  .add('clear all refinements and the query', () => (
     <WrapWithHits linkedStoryGroup="ClearAll">
       <ClearAll
         clearsQuery
@@ -35,4 +35,4 @@ stories
       />
       <RefinementList attributeName="category" defaultRefinement={['Dining']} />
     </WrapWithHits>
-  );
+  ));

@@ -46,9 +46,11 @@ class Menu extends Component {
 
   renderItem = (item, resetQuery) => {
     const { createURL } = this.props;
-    const label = this.props.isFromSearch
-      ? <Highlight attributeName="label" hit={item} />
-      : item.label;
+    const label = this.props.isFromSearch ? (
+      <Highlight attributeName="label" hit={item} />
+    ) : (
+      item.label
+    );
     return (
       <Link
         {...cx('itemLink', item.isRefined && 'itemLinkSelected')}

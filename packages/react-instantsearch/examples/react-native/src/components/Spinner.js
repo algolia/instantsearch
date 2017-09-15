@@ -13,7 +13,7 @@ export default createConnector({
       bottom: props.bottom ? props.bottom : height - 20,
     };
   },
-})(({ loading, left, bottom }) =>
+})(({ loading, left, bottom }) => (
   <View
     style={{
       position: 'absolute',
@@ -24,4 +24,4 @@ export default createConnector({
   >
     <ActivityIndicator animating={loading} />
   </View>
-);
+));

@@ -209,20 +209,20 @@ class Hits extends Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
     const hits =
-      this.props.hits.length > 0
-        ? <View style={styles.items}>
-            <ListView
-              dataSource={ds.cloneWithRows(this.props.hits)}
-              renderRow={this._renderRow}
-              renderSeparator={this._renderSeparator}
-              onEndReached={this.onEndReached.bind(this)}
-            />
-          </View>
-        : null;
+      this.props.hits.length > 0 ? (
+        <View style={styles.items}>
+          <ListView
+            dataSource={ds.cloneWithRows(this.props.hits)}
+            renderRow={this._renderRow}
+            renderSeparator={this._renderSeparator}
+            onEndReached={this.onEndReached.bind(this)}
+          />
+        </View>
+      ) : null;
     return hits;
   }
 
-  _renderRow = (hit, sectionId, rowId) =>
+  _renderRow = (hit, sectionId, rowId) => (
     <View style={styles.item} key={rowId}>
       <Image style={{ height: 100, width: 100 }} source={{ uri: hit.image }} />
       <View style={styles.itemContent}>
@@ -240,9 +240,7 @@ class Hits extends Component {
             highlightProperty="_highlightResult"
           />
         </Text>
-        <Text style={styles.itemPrice}>
-          ${hit.price}
-        </Text>
+        <Text style={styles.itemPrice}>${hit.price}</Text>
         <View style={styles.starRating}>
           <StarRating
             disabled={true}
@@ -253,16 +251,18 @@ class Hits extends Component {
           />
         </View>
       </View>
-    </View>;
+    </View>
+  );
 
-  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) =>
+  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => (
     <View
       key={`${sectionID}-${rowID}`}
       style={{
         height: adjacentRowHighlighted ? 4 : 1,
         backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
       }}
-    />;
+    />
+  );
 }
 
 Hits.propTypes = {
@@ -272,30 +272,30 @@ Hits.propTypes = {
 };
 
 const ConnectedHits = connectInfiniteHits(Hits);
-const ConnectedStats = connectStats(({ nbHits }) =>
-  <Text style={{ paddingLeft: 8 }}>
-    {nbHits} products found
-  </Text>
-);
+const ConnectedStats = connectStats(({ nbHits }) => (
+  <Text style={{ paddingLeft: 8 }}>{nbHits} products found</Text>
+));
 
-const ConnectedSortBy = connectSortBy(({ refine, items, currentRefinement }) =>
-  <View style={styles.sortBy}>
-    <Dropdown
-      data={items}
-      onChangeText={value => refine(value)}
-      containerStyle={{
-        width: 110,
-        height: 30,
-        bottom: 30,
-      }}
-      label=""
-      value={items.find(item => item.value === currentRefinement).label}
-    />
-  </View>
+const ConnectedSortBy = connectSortBy(
+  ({ refine, items, currentRefinement }) => (
+    <View style={styles.sortBy}>
+      <Dropdown
+        data={items}
+        onChangeText={value => refine(value)}
+        containerStyle={{
+          width: 110,
+          height: 30,
+          bottom: 30,
+        }}
+        label=""
+        value={items.find(item => item.value === currentRefinement).label}
+      />
+    </View>
+  )
 );
 
 const Filters = connectCurrentRefinements(
-  ({ items, searchState, onSearchStateChange }) =>
+  ({ items, searchState, onSearchStateChange }) => (
     <Button
       onPress={() =>
         /* eslint-disable new-cap */
@@ -307,6 +307,7 @@ const Filters = connectCurrentRefinements(
       title={`Filters (${items.length})`}
       color="#162331"
     />
+  )
 );
 const VirtualRange = connectRange(() => null);
 const VirtualRefinementList = connectRefinementList(() => null);

@@ -110,39 +110,37 @@ class Range extends React.Component {
   };
 
   render() {
-    const slider = this.props.min
-      ? <MultiSlider
-          values={[
-            Math.trunc(this.state.currentValues.min),
-            Math.trunc(this.state.currentValues.max),
-          ]}
-          min={Math.trunc(this.props.min)}
-          max={Math.trunc(this.props.max)}
-          onValuesChange={this.sliderOneValuesChange}
-          onValuesChangeFinish={this.sliderOneValuesChangeFinish}
-        />
-      : null;
+    const slider = this.props.min ? (
+      <MultiSlider
+        values={[
+          Math.trunc(this.state.currentValues.min),
+          Math.trunc(this.state.currentValues.max),
+        ]}
+        min={Math.trunc(this.props.min)}
+        max={Math.trunc(this.props.max)}
+        onValuesChange={this.sliderOneValuesChange}
+        onValuesChangeFinish={this.sliderOneValuesChangeFinish}
+      />
+    ) : null;
     const content =
-      this.props.min !== this.props.max
-        ? <View style={styles.container}>
-            <Text style={{ marginTop: 5 }}>
-              $ {Math.trunc(this.state.currentValues.min)}
-            </Text>
-            {slider}
-            <Text style={{ marginTop: 5 }}>
-              $ {Math.trunc(this.state.currentValues.max)}
-            </Text>
-          </View>
-        : <Text>
-            {this.props.min
-              ? `$ ${Math.trunc(this.state.currentValues.min)}`
-              : null}
-          </Text>;
-    return (
-      <View style={styles.container}>
-        {content}
-      </View>
-    );
+      this.props.min !== this.props.max ? (
+        <View style={styles.container}>
+          <Text style={{ marginTop: 5 }}>
+            $ {Math.trunc(this.state.currentValues.min)}
+          </Text>
+          {slider}
+          <Text style={{ marginTop: 5 }}>
+            $ {Math.trunc(this.state.currentValues.max)}
+          </Text>
+        </View>
+      ) : (
+        <Text>
+          {this.props.min
+            ? `$ ${Math.trunc(this.state.currentValues.min)}`
+            : null}
+        </Text>
+      );
+    return <View style={styles.container}>{content}</View>;
   }
 }
 

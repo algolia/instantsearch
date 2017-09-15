@@ -8,22 +8,22 @@ const stories = storiesOf('RangeSlider', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () =>
+  .add('default', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
       <Range attributeName="price" />
     </WrapWithHits>
-  )
-  .add('providing default value', () =>
+  ))
+  .add('providing default value', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
       <Range attributeName="price" defaultRefinement={{ min: 50, max: 200 }} />
     </WrapWithHits>
-  )
-  .add('custom min/max bounds', () =>
+  ))
+  .add('custom min/max bounds', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
       <Range attributeName="price" min={30} max={100} />
     </WrapWithHits>
-  )
-  .add('playground', () =>
+  ))
+  .add('playground', () => (
     <WrapWithHits linkedStoryGroup="RangeSlider">
       <Range
         attributeName="price"
@@ -32,4 +32,4 @@ stories
         max={number('max', 400)}
       />
     </WrapWithHits>
-  );
+  ));

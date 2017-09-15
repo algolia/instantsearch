@@ -5,7 +5,7 @@ import 'antd/lib/mention/style/css';
 import { InstantSearch } from 'react-instantsearch/dom';
 import { connectAutoComplete } from 'react-instantsearch/connectors';
 
-const AsyncMention = ({ hits, refine }) =>
+const AsyncMention = ({ hits, refine }) => (
   <Mention
     style={{ width: 500, height: 100 }}
     prefix="@"
@@ -13,7 +13,8 @@ const AsyncMention = ({ hits, refine }) =>
     placeholder="give someone an @-mention here"
     suggestions={hits.map(hit => hit.name)}
     onSearchChange={query => refine(query)}
-  />;
+  />
+);
 
 AsyncMention.propTypes = {
   hits: PropTypes.array,
@@ -22,13 +23,14 @@ AsyncMention.propTypes = {
 
 const ConnectedAsyncMention = connectAutoComplete(AsyncMention);
 
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="actors"
   >
     <ConnectedAsyncMention />
-  </InstantSearch>;
+  </InstantSearch>
+);
 
 export default App;

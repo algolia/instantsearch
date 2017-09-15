@@ -156,17 +156,21 @@ class SearchBox extends Component {
     const { translate, autoFocus } = this.props;
     const query = this.getQuery();
 
-    const submitComponent = this.props.submitComponent
-      ? this.props.submitComponent
-      : <svg role="img" width="1em" height="1em">
-          <use xlinkHref="#sbx-icon-search-13" />
-        </svg>;
+    const submitComponent = this.props.submitComponent ? (
+      this.props.submitComponent
+    ) : (
+      <svg role="img" width="1em" height="1em">
+        <use xlinkHref="#sbx-icon-search-13" />
+      </svg>
+    );
 
-    const resetComponent = this.props.resetComponent
-      ? this.props.resetComponent
-      : <svg role="img" width="1em" height="1em">
-          <use xlinkHref="#sbx-icon-clear-3" />
-        </svg>;
+    const resetComponent = this.props.resetComponent ? (
+      this.props.resetComponent
+    ) : (
+      <svg role="img" width="1em" height="1em">
+        <use xlinkHref="#sbx-icon-clear-3" />
+      </svg>
+    );
 
     const searchInputEvents = Object.keys(this.props).reduce((props, prop) => {
       if (

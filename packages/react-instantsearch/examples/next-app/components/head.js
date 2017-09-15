@@ -6,12 +6,10 @@ const defaultDescription = '';
 const defaultOGURL = '';
 const defaultOGImage = '';
 
-export const Head = props =>
+export const Head = props => (
   <NextHead>
     <meta charSet="UTF-8" />
-    <title>
-      {props.title || ''}
-    </title>
+    <title>{props.title || ''}</title>
     <meta
       name="description"
       content={props.description || defaultDescription}
@@ -38,7 +36,8 @@ export const Head = props =>
       href="https://unpkg.com/react-instantsearch-theme-algolia@3.0.0/style.min.css"
     />
     <link rel="stylesheet" href="../static/instantsearch.css" />
-  </NextHead>;
+  </NextHead>
+);
 
 Head.propTypes = {
   title: string,

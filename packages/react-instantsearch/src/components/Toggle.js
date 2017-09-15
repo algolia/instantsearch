@@ -26,9 +26,7 @@ class Toggle extends Component {
           checked={currentRefinement}
           onChange={this.onChange}
         />
-        <span {...cx('label')}>
-          {label}
-        </span>
+        <span {...cx('label')}>{label}</span>
       </label>
     );
   }
