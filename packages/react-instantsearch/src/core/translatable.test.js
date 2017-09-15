@@ -14,7 +14,9 @@ describe('translatable', () => {
       thing: n => `${n} things`,
     };
     const Translated = translatable(defaultTranslations)(Dummy);
-    const { translate } = shallow(<Translated />).find(Dummy).props();
+    const { translate } = shallow(<Translated />)
+      .find(Dummy)
+      .props();
     expect(translate('sup')).toBe('hey');
     expect(translate('thing', 20)).toBe('20 things');
   });

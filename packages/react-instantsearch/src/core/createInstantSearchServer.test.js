@@ -61,10 +61,11 @@ describe('createInstantSearchServer', () => {
 
     describe('find results', () => {
       it('searchParameters should be cleaned each time', () => {
-        const App = () =>
+        const App = () => (
           <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
             <Connected />
-          </CustomInstantSearch>;
+          </CustomInstantSearch>
+        );
 
         expect.assertions(1);
         return findResultsState(App).then(() => {
@@ -76,10 +77,11 @@ describe('createInstantSearchServer', () => {
       });
 
       it('without search state', () => {
-        const App = () =>
+        const App = () => (
           <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
             <Connected />
-          </CustomInstantSearch>;
+          </CustomInstantSearch>
+        );
 
         expect.assertions(3);
 
@@ -91,7 +93,7 @@ describe('createInstantSearchServer', () => {
       });
 
       it('with search state', () => {
-        const App = props =>
+        const App = props => (
           <CustomInstantSearch
             appId="app"
             apiKey="key"
@@ -99,7 +101,8 @@ describe('createInstantSearchServer', () => {
             searchState={props.searchState}
           >
             <Connected />
-          </CustomInstantSearch>;
+          </CustomInstantSearch>
+        );
 
         expect.assertions(3);
 
@@ -145,10 +148,11 @@ describe('createInstantSearchServer', () => {
 
     describe('find results', () => {
       it('searchParameters should be cleaned each time', () => {
-        const App = () =>
+        const App = () => (
           <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
             <Connected />
-          </CustomInstantSearch>;
+          </CustomInstantSearch>
+        );
 
         expect.assertions(1);
 
@@ -161,7 +165,7 @@ describe('createInstantSearchServer', () => {
       });
 
       it('without search state - first api', () => {
-        const App = () =>
+        const App = () => (
           <CustomInstantSearch appId="app" apiKey="key" indexName="index1">
             <CustomIndex indexName="index2">
               <Connected />
@@ -169,7 +173,8 @@ describe('createInstantSearchServer', () => {
             <CustomIndex indexName="index1">
               <Connected />
             </CustomIndex>
-          </CustomInstantSearch>;
+          </CustomInstantSearch>
+        );
 
         expect.assertions(3);
 
@@ -181,13 +186,14 @@ describe('createInstantSearchServer', () => {
       });
 
       it('without search state - second api', () => {
-        const App = () =>
+        const App = () => (
           <CustomInstantSearch appId="app" apiKey="key" indexName="index1">
             <CustomIndex indexName="index2">
               <Connected />
             </CustomIndex>
             <Connected />
-          </CustomInstantSearch>;
+          </CustomInstantSearch>
+        );
 
         expect.assertions(3);
 
@@ -199,7 +205,7 @@ describe('createInstantSearchServer', () => {
       });
 
       it('with search state - first api', () => {
-        const App = props =>
+        const App = props => (
           <CustomInstantSearch
             appId="app"
             apiKey="key"
@@ -212,7 +218,8 @@ describe('createInstantSearchServer', () => {
             <CustomIndex indexName="index1">
               <Connected />
             </CustomIndex>
-          </CustomInstantSearch>;
+          </CustomInstantSearch>
+        );
 
         expect.assertions(3);
 
@@ -235,7 +242,7 @@ describe('createInstantSearchServer', () => {
       });
 
       it('with search state - second api', () => {
-        const App = props =>
+        const App = props => (
           <CustomInstantSearch
             appId="app"
             apiKey="key"
@@ -246,7 +253,8 @@ describe('createInstantSearchServer', () => {
               <Connected />
             </CustomIndex>
             <Connected />
-          </CustomInstantSearch>;
+          </CustomInstantSearch>
+        );
 
         expect.assertions(3);
 

@@ -161,11 +161,7 @@ class StarRating extends Component {
         })
       );
     }
-    return (
-      <div {...cx('root', !canRefine && 'noRefinement')}>
-        {items}
-      </div>
-    );
+    return <div {...cx('root', !canRefine && 'noRefinement')}>{items}</div>;
   }
 }
 

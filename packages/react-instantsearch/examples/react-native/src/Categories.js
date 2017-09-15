@@ -119,15 +119,15 @@ class Menu extends Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
     const { items, searchForItems } = this.props;
-    const facets = this
-      ? <ListView
-          enableEmptySections={true}
-          dataSource={ds.cloneWithRows(items)}
-          renderRow={this._renderRow}
-          renderSeparator={this._renderSeparator}
-          keyboardShouldPersistTaps={'always'}
-        />
-      : null;
+    const facets = this ? (
+      <ListView
+        enableEmptySections={true}
+        dataSource={ds.cloneWithRows(items)}
+        renderRow={this._renderRow}
+        renderSeparator={this._renderSeparator}
+        keyboardShouldPersistTaps={'always'}
+      />
+    ) : null;
     return (
       <View style={styles.searchBoxContainer}>
         <View style={{ flexDirection: 'row' }}>
@@ -153,16 +153,20 @@ class Menu extends Component {
   }
 
   _renderRow = (refinement, sectionId, rowId) => {
-    const icon = refinement.isRefined
-      ? <Icon name="circle" color="#e29b0b" />
-      : <Icon name="circle-thin" color="#000" />;
-    const label = this.props.isFromSearch
-      ? <Highlight
-          attributeName="label"
-          hit={refinement}
-          highlightProperty="_highlightResult"
-        />
-      : refinement.label;
+    const icon = refinement.isRefined ? (
+      <Icon name="circle" color="#e29b0b" />
+    ) : (
+      <Icon name="circle-thin" color="#000" />
+    );
+    const label = this.props.isFromSearch ? (
+      <Highlight
+        attributeName="label"
+        hit={refinement}
+        highlightProperty="_highlightResult"
+      />
+    ) : (
+      refinement.label
+    );
     return (
       <TouchableHighlight
         onPress={() => {
@@ -182,14 +186,15 @@ class Menu extends Component {
     );
   };
 
-  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) =>
+  _renderSeparator = (sectionID, rowID, adjacentRowHighlighted) => (
     <View
       key={`${sectionID}-${rowID}`}
       style={{
         height: adjacentRowHighlighted ? 4 : 1,
         backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
       }}
-    />;
+    />
+  );
 }
 
 Menu.propTypes = {

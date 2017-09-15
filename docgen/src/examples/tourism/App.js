@@ -22,7 +22,7 @@ import Rheostat from 'rheostat';
 
 import { withUrlSync } from '../urlSync';
 
-const App = props =>
+const App = props => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
@@ -35,7 +35,8 @@ const App = props =>
     <Header />
     <Filters />
     <Results />
-  </InstantSearch>;
+  </InstantSearch>
+);
 
 function Header() {
   return (
@@ -132,9 +133,9 @@ function HitsMap({ hits }) {
   );
   const boundsConfig =
     hits.length > 0 ? fitBounds(boundingPoints, availableSpace) : {};
-  const markers = hits.map(hit =>
+  const markers = hits.map(hit => (
     <CustomMarker lat={hit.lat} lng={hit.lng} key={hit.objectID} />
-  );
+  ));
   const options = {
     minZoomOverride: true,
     minZoom: 2,
@@ -181,11 +182,7 @@ function Capacity() {
 }
 
 function OptionCapacity({ label, value }) {
-  return (
-    <option value={value}>
-      {label}
-    </option>
-  );
+  return <option value={value}>{label}</option>;
 }
 
 OptionCapacity.propTypes = {
@@ -269,9 +266,7 @@ const RoomType = connectRefinementList(({ items, refine }) => {
               defaultChecked={item.isRefined ? 'checked' : ''}
             />
             {item.label}
-            <span className="ais-refinement-list--count">
-              {item.count}
-            </span>
+            <span className="ais-refinement-list--count">{item.count}</span>
           </label>
         </div>
       </div>
@@ -281,9 +276,7 @@ const RoomType = connectRefinementList(({ items, refine }) => {
   return (
     <div className="row aisdemo-filter">
       <div className="col-sm-2 aisdemo-filter-title">Room Type</div>
-      <div id="room_types col-sm-3">
-        {hitComponents}
-      </div>
+      <div id="room_types col-sm-3">{hitComponents}</div>
     </div>
   );
 });
@@ -301,11 +294,7 @@ function Price() {
 
 const MyHits = connectHits(({ hits }) => {
   const hs = hits.map(hit => <HitComponent key={hit.objectID} hit={hit} />);
-  return (
-    <div id="hits">
-      {hs}
-    </div>
-  );
+  return <div id="hits">{hs}</div>;
 });
 
 function HitComponent({ hit }) {
@@ -398,25 +387,21 @@ class Range extends Component {
   render() {
     const { min, max, currentRefinement } = this.props;
     const { currentValues } = this.state;
-    return min !== max
-      ? <div>
-          <Rheostat
-            min={min}
-            max={max}
-            values={[currentRefinement.min, currentRefinement.max]}
-            onChange={this.onChange}
-            onValuesUpdated={this.onValuesUpdated}
-          />
-          <div className="rheostat-values">
-            <div>
-              {currentValues.min}
-            </div>
-            <div>
-              {currentValues.max}
-            </div>
-          </div>
+    return min !== max ? (
+      <div>
+        <Rheostat
+          min={min}
+          max={max}
+          values={[currentRefinement.min, currentRefinement.max]}
+          onChange={this.onChange}
+          onValuesUpdated={this.onValuesUpdated}
+        />
+        <div className="rheostat-values">
+          <div>{currentValues.min}</div>
+          <div>{currentValues.max}</div>
         </div>
-      : null;
+      </div>
+    ) : null;
   }
 }
 

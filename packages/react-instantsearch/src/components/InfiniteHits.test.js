@@ -22,10 +22,7 @@ describe('Hits', () => {
     expect(tree.toJSON()).toMatchSnapshot();
   });
 
-  const Hit = ({ hit }) =>
-    <div>
-      {JSON.stringify(hit)}
-    </div>;
+  const Hit = ({ hit }) => <div>{JSON.stringify(hit)}</div>;
   Hit.propTypes = { hit: PropTypes.object };
 
   it('calls refine when the load more button is clicked', () => {

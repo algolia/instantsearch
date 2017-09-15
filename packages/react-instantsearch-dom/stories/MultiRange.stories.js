@@ -13,7 +13,7 @@ const stories = storiesOf('MultiRange', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () =>
+  .add('default', () => (
     <WrapWithHits linkedStoryGroup="MultiRange">
       <MultiRange
         attributeName="price"
@@ -25,8 +25,8 @@ stories
         ]}
       />
     </WrapWithHits>
-  )
-  .add('with a default range selected', () =>
+  ))
+  .add('with a default range selected', () => (
     <WrapWithHits linkedStoryGroup="MultiRange">
       <MultiRange
         attributeName="price"
@@ -39,8 +39,8 @@ stories
         defaultRefinement=":10"
       />
     </WrapWithHits>
-  )
-  .add('with some non selectable ranges', () =>
+  ))
+  .add('with some non selectable ranges', () => (
     <WrapWithHits searchBox={false} linkedStoryGroup="MultiRange">
       <MultiRange
         attributeName="price"
@@ -52,8 +52,8 @@ stories
         ]}
       />
     </WrapWithHits>
-  )
-  .add('with panel', () =>
+  ))
+  .add('with panel', () => (
     <WrapWithHits linkedStoryGroup="MultiRange">
       <Panel title="Price">
         <MultiRange
@@ -67,8 +67,8 @@ stories
         />
       </Panel>
     </WrapWithHits>
-  )
-  .add('with panel but no available refinements', () =>
+  ))
+  .add('with panel but no available refinements', () => (
     <WrapWithHits searchBox={false} linkedStoryGroup="MultiRange">
       <Panel title="Price">
         <Configure filters="price>200000" />
@@ -83,4 +83,4 @@ stories
         />
       </Panel>
     </WrapWithHits>
-  );
+  ));

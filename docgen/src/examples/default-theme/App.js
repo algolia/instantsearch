@@ -19,7 +19,7 @@ import {
 import { withUrlSync } from '../urlSync';
 import 'react-instantsearch-theme-algolia/style.scss';
 
-const App = props =>
+const App = props => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
@@ -34,9 +34,10 @@ const App = props =>
       <Facets />
       <CustomResults />
     </div>
-  </InstantSearch>;
+  </InstantSearch>
+);
 
-const Header = () =>
+const Header = () => (
   <header className="content-wrapper header">
     <a
       href="https://community.algolia.com/react-instantsearch/"
@@ -48,9 +49,10 @@ const Header = () =>
       />
     </a>
     <SearchBox />
-  </header>;
+  </header>
+);
 
-const Facets = () =>
+const Facets = () => (
   <aside>
     <ClearAll
       translations={{
@@ -80,15 +82,15 @@ const Facets = () =>
     <div className="thank-you">
       Data courtesy of <a href="http://www.ikea.com/">ikea.com</a>
     </div>
-  </aside>;
+  </aside>
+);
 
-const SideBarSection = ({ title, children }) =>
+const SideBarSection = ({ title, children }) => (
   <section className="facet-wrapper">
-    <div className="facet-category-title facet">
-      {title}
-    </div>
+    <div className="facet-category-title facet">{title}</div>
     {children}
-  </section>;
+  </section>
+);
 
 const Hit = ({ hit }) => {
   const icons = [];
@@ -109,9 +111,7 @@ const Hit = ({ hit }) => {
         </div>
         <div className="ais-StarRating__ratingLink">
           {icons}
-          <div className="product-price">
-            ${hit.price}
-          </div>
+          <div className="product-price">${hit.price}</div>
         </div>
       </div>
     </article>

@@ -9,7 +9,7 @@ const stories = storiesOf('HitsPerPage', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () =>
+  .add('default', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="HitsPerPage">
       <HitsPerPage
         defaultRefinement={4}
@@ -21,16 +21,16 @@ stories
         ]}
       />
     </WrapWithHits>
-  )
-  .add('without label', () =>
+  ))
+  .add('without label', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="HitsPerPage">
       <HitsPerPage
         defaultRefinement={4}
         items={[{ value: 2 }, { value: 4 }, { value: 6 }, { value: 8 }]}
       />
     </WrapWithHits>
-  )
-  .add('inside a panel', () =>
+  ))
+  .add('inside a panel', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="HitsPerPage">
       <Panel title="Hits to display">
         <HitsPerPage
@@ -44,8 +44,8 @@ stories
         />
       </Panel>
     </WrapWithHits>
-  )
-  .add('playground', () =>
+  ))
+  .add('playground', () => (
     <WrapWithHits linkedStoryGroup="HitsPerPage">
       <HitsPerPage
         defaultRefinement={number('default hits per page', 4)}
@@ -57,4 +57,4 @@ stories
         ]}
       />
     </WrapWithHits>
-  );
+  ));

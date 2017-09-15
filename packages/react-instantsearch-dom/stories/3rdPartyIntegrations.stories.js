@@ -7,11 +7,11 @@ import Rheostat from 'rheostat';
 
 const stories = storiesOf('Integration With Other Libraries', module);
 
-stories.add('Airbnb Rheostat', () =>
+stories.add('Airbnb Rheostat', () => (
   <WrapWithHits linkedStoryGroup="3rdPartyIntegrations">
     <ConnectedRange attributeName="price" />
   </WrapWithHits>
-);
+));
 
 class Range extends Component {
   static propTypes = {
@@ -56,25 +56,21 @@ class Range extends Component {
   render() {
     const { min, max, currentRefinement } = this.props;
     const { currentValues } = this.state;
-    return min !== max
-      ? <div>
-          <Rheostat
-            min={min}
-            max={max}
-            values={[currentRefinement.min, currentRefinement.max]}
-            onChange={this.onChange}
-            onValuesUpdated={this.onValuesUpdated}
-          />
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div>
-              {currentValues.min}
-            </div>
-            <div>
-              {currentValues.max}
-            </div>
-          </div>
+    return min !== max ? (
+      <div>
+        <Rheostat
+          min={min}
+          max={max}
+          values={[currentRefinement.min, currentRefinement.max]}
+          onChange={this.onChange}
+          onValuesUpdated={this.onValuesUpdated}
+        />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div>{currentValues.min}</div>
+          <div>{currentValues.max}</div>
         </div>
-      : null;
+      </div>
+    ) : null;
   }
 }
 

@@ -15,7 +15,7 @@ const VirtualHierarchicalMenu = connectHierarchicalMenu(() => null);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () =>
+  .add('default', () => (
     <div>
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
         <Breadcrumb
@@ -30,8 +30,8 @@ stories
         />
       </WrapWithHits>
     </div>
-  )
-  .add('with panel', () =>
+  ))
+  .add('with panel', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
       <Panel title="Category">
         <Breadcrumb
@@ -45,8 +45,8 @@ stories
         defaultRefinement="Cooking > Bakeware"
       />
     </WrapWithHits>
-  )
-  .add('with custom component', () =>
+  ))
+  .add('with custom component', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
       <Breadcrumb
         attributes={['category', 'sub_category', 'sub_sub_category']}
@@ -58,8 +58,8 @@ stories
         defaultRefinement="Winter holidays > Toys & play"
       />
     </WrapWithHits>
-  )
-  .add('playground', () =>
+  ))
+  .add('playground', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
       <Panel title="Category">
         <Breadcrumb
@@ -75,4 +75,4 @@ stories
         defaultRefinement="Cooking > Bakeware"
       />
     </WrapWithHits>
-  );
+  ));

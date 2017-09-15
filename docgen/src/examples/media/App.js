@@ -19,7 +19,7 @@ import {
 } from 'react-instantsearch/connectors';
 import { withUrlSync } from '../urlSync';
 
-const App = props =>
+const App = props => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
@@ -34,9 +34,10 @@ const App = props =>
       <Facets />
       <Results />
     </section>
-  </InstantSearch>;
+  </InstantSearch>
+);
 
-const Header = () =>
+const Header = () => (
   <header className="row">
     <a
       href="https://community.algolia.com/react-instantsearch/"
@@ -51,9 +52,10 @@ const Header = () =>
       You<i className="fa fa-youtube-play" />
     </a>
     <SearchBox />
-  </header>;
+  </header>
+);
 
-const SearchBox = connectSearchBox(({ currentRefinement, refine }) =>
+const SearchBox = connectSearchBox(({ currentRefinement, refine }) => (
   <div className="searchbox-container">
     <div className="input-group">
       <input
@@ -70,9 +72,9 @@ const SearchBox = connectSearchBox(({ currentRefinement, refine }) =>
       </span>
     </div>
   </div>
-);
+));
 
-const Facets = () =>
+const Facets = () => (
   <aside>
     <ul className="nav nav-list panel">
       <li>
@@ -89,20 +91,24 @@ const Facets = () =>
       <StarRating attributeName="rating" max={5} />
     </Panel>
     <div className="thank-you">
-      {' '}Data courtesy of <a href="https://www.imdb.com/">imdb.com</a>
+      {' '}
+      Data courtesy of <a href="https://www.imdb.com/">imdb.com</a>
     </div>
-  </aside>;
+  </aside>
+);
 
-const Panel = ({ title, children, id }) =>
+const Panel = ({ title, children, id }) => (
   <div id={id}>
     <h5>
       <i className="fa fa-chevron-right" /> {title}
     </h5>
     {children}
-  </div>;
+  </div>
+);
 
-const Star = ({ active }) =>
-  <span className={`star${active ? '' : '__empty'}`} />;
+const Star = ({ active }) => (
+  <span className={`star${active ? '' : '__empty'}`} />
+);
 const Stars = ({ rating }) => {
   const stars = [];
   for (let i = 1; i <= 5; ++i) {
@@ -114,14 +120,12 @@ const Stars = ({ rating }) => {
     </span>
   );
 };
-const Genre = ({ name }) =>
-  <span className="badge">
-    {name}
-  </span>;
-const Genres = ({ genres }) =>
+const Genre = ({ name }) => <span className="badge">{name}</span>;
+const Genres = ({ genres }) => (
   <p className="genre">
     {genres.map((genre, idx) => <Genre name={genre} key={idx} />)}
-  </p>;
+  </p>
+);
 
 const Hit = hit => {
   const { image, rating, year, genre } = hit.hit;
@@ -138,16 +142,14 @@ const Hit = hit => {
           <Highlight attributeName="title" hit={hit.hit} />
           <Stars rating={rating} />
         </h4>
-        <p className="year">
-          {year}
-        </p>
+        <p className="year">{year}</p>
         <Genres genres={genre} />
       </div>
     </div>
   );
 };
 
-const Results = connectSearchBox(() =>
+const Results = connectSearchBox(() => (
   <article>
     <div id="stats" className="text-right text-muted">
       <Stats />
@@ -160,11 +162,11 @@ const Results = connectSearchBox(() =>
       <Pagination />
     </div>
   </article>
-);
+));
 
 const RefinementListLinks = connectRefinementList(
   ({ items, refine, createURL }) => {
-    const hitComponents = items.map(item =>
+    const hitComponents = items.map(item => (
       <div className={item.isRefined ? ' active' : ''} key={item.label}>
         <a
           className="item"
@@ -174,21 +176,13 @@ const RefinementListLinks = connectRefinementList(
             refine(item.value);
           }}
         >
-          <span>
-            {' '}{item.label}
-          </span>
-          <span className="badge pull-right">
-            {item.count}
-          </span>
+          <span> {item.label}</span>
+          <span className="badge pull-right">{item.count}</span>
         </a>
       </div>
-    );
+    ));
 
-    return (
-      <div className="nav nav-list">
-        {hitComponents}
-      </div>
-    );
+    return <div className="nav nav-list">{hitComponents}</div>;
   }
 );
 

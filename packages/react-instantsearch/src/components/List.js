@@ -59,13 +59,13 @@ class List extends Component {
   };
 
   renderItem = (item, resetQuery) => {
-    const items =
-      item.items &&
+    const items = item.items && (
       <div {...this.props.cx('itemItems')}>
         {item.items
           .slice(0, this.getLimit())
           .map(child => this.renderItem(child, item))}
-      </div>;
+      </div>
+    );
 
     return (
       <div
@@ -114,11 +114,9 @@ class List extends Component {
     } = this.props;
 
     const noResults =
-      items.length === 0 && this.state.query !== ''
-        ? <div {...cx('noResults')}>
-            {translate('noResults')}
-          </div>
-        : null;
+      items.length === 0 && this.state.query !== '' ? (
+        <div {...cx('noResults')}>{translate('noResults')}</div>
+      ) : null;
     return (
       <div {...cx('SearchBox')}>
         <SearchBox
@@ -147,9 +145,7 @@ class List extends Component {
     const searchBox = withSearchBox ? this.renderSearchBox() : null;
     if (items.length === 0) {
       return (
-        <div {...cx('root', !canRefine && 'noRefinement')}>
-          {searchBox}
-        </div>
+        <div {...cx('root', !canRefine && 'noRefinement')}>{searchBox}</div>
       );
     }
 

@@ -124,51 +124,44 @@ class Refinements extends React.Component {
     );
     const refinementValue = item ? this.mapping[refinement].value(item) : '-';
     const filtersRow =
-      refinement !== 'ClearAll'
-        ? <TouchableHighlight
-            onPress={() => {
-              Actions[refinement]({
-                searchState: this.props.searchState,
-                onSearchStateChange: this.props.onSearchStateChange,
-              });
-            }}
-          >
-            <View style={styles.filtersRow}>
-              <View style={{ flex: 4 }}>
-                <Text style={{ fontWeight: 'bold' }}>
-                  {refinement}
-                </Text>
-                <Text style={{ paddingTop: 5 }}>
-                  {refinementValue}
-                </Text>
-              </View>
-              <View>
-                <Icon name="pencil" size={20} />
-              </View>
+      refinement !== 'ClearAll' ? (
+        <TouchableHighlight
+          onPress={() => {
+            Actions[refinement]({
+              searchState: this.props.searchState,
+              onSearchStateChange: this.props.onSearchStateChange,
+            });
+          }}
+        >
+          <View style={styles.filtersRow}>
+            <View style={{ flex: 4 }}>
+              <Text style={{ fontWeight: 'bold' }}>{refinement}</Text>
+              <Text style={{ paddingTop: 5 }}>{refinementValue}</Text>
             </View>
-          </TouchableHighlight>
-        : <TouchableHighlight
-            onPress={() => this.props.refine(this.props.items)}
-          >
             <View>
-              <Text style={styles.clearAll}>CLEAR ALL</Text>
+              <Icon name="pencil" size={20} />
             </View>
-          </TouchableHighlight>;
-    return (
-      <View>
-        {filtersRow}
-      </View>
-    );
+          </View>
+        </TouchableHighlight>
+      ) : (
+        <TouchableHighlight onPress={() => this.props.refine(this.props.items)}>
+          <View>
+            <Text style={styles.clearAll}>CLEAR ALL</Text>
+          </View>
+        </TouchableHighlight>
+      );
+    return <View>{filtersRow}</View>;
   };
 
-  _renderSeparator = (sectionID, rowId, adjacentRowHighlighted) =>
+  _renderSeparator = (sectionID, rowId, adjacentRowHighlighted) => (
     <View
       key={`${sectionID}-${rowId}`}
       style={{
         height: adjacentRowHighlighted ? 4 : 1,
         backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
       }}
-    />;
+    />
+  );
   render() {
     const ds = new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2,

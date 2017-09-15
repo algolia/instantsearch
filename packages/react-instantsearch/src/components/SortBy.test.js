@@ -24,7 +24,12 @@ describe('SortBy behavior', () => {
 
     const selectedValue = wrapper.find('.ais-SortBy__root');
     expect(selectedValue.find('option').length).toBe(4);
-    expect(selectedValue.find('option').first().text()).toBe('index name 1');
+    expect(
+      selectedValue
+        .find('option')
+        .first()
+        .text()
+    ).toBe('index name 1');
 
     selectedValue
       .find('select')
@@ -52,6 +57,11 @@ describe('SortBy behavior', () => {
 
     const selectedValue = wrapper.find('.ais-SortBy__root');
     expect(selectedValue.find('option').length).toBe(4);
-    expect(selectedValue.find('option').first().text()).toBe('index1');
+    expect(
+      selectedValue
+        .find('option')
+        .first()
+        .text()
+    ).toBe('index1');
   });
 });

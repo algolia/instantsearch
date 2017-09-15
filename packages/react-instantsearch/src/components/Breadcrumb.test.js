@@ -112,7 +112,12 @@ describe('Breadcrumb', () => {
 
     items.first().simulate('click');
     expect(refine.mock.calls.length).toBe(0);
-    expect(wrapper.find('a').first().prop('href')).toEqual('www.algolia.com');
+    expect(
+      wrapper
+        .find('a')
+        .first()
+        .prop('href')
+    ).toEqual('www.algolia.com');
 
     wrapper.unmount();
   });

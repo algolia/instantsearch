@@ -4,7 +4,7 @@ import { connectAutoComplete } from 'react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
 import 'react-instantsearch-theme-algolia/style.css';
 
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
@@ -14,22 +14,22 @@ const App = () =>
     <Configure hitsPerPage={1} />
     <Index indexName="bestbuy" />
     <Index indexName="airbnb" />
-  </InstantSearch>;
+  </InstantSearch>
+);
 
 const AutoComplete = connectAutoComplete(
-  ({ hits, currentRefinement, refine }) =>
+  ({ hits, currentRefinement, refine }) => (
     <Autosuggest
       suggestions={hits}
       multiSection={true}
       onSuggestionsFetchRequested={({ value }) => refine(value)}
       onSuggestionsClearRequested={() => refine('')}
       getSuggestionValue={hit => hit.name}
-      renderSuggestion={hit =>
+      renderSuggestion={hit => (
         <div>
-          <div>
-            {hit.name}
-          </div>
-        </div>}
+          <div>{hit.name}</div>
+        </div>
+      )}
       inputProps={{
         placeholder: 'Type a product',
         value: currentRefinement,
@@ -38,6 +38,7 @@ const AutoComplete = connectAutoComplete(
       renderSectionTitle={section => section.index}
       getSectionSuggestions={section => section.hits}
     />
+  )
 );
 
 export default App;

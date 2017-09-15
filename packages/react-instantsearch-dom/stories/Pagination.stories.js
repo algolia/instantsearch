@@ -13,12 +13,12 @@ const stories = storiesOf('Pagination', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () =>
+  .add('default', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
       <Pagination />
     </WrapWithHits>
-  )
-  .add('with all props', () =>
+  ))
+  .add('with all props', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
       <Pagination
         showFirst={true}
@@ -29,15 +29,15 @@ stories
         maxPages={3}
       />
     </WrapWithHits>
-  )
-  .add('with panel', () =>
+  ))
+  .add('with panel', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
       <Panel title="Pages">
         <Pagination />
       </Panel>
     </WrapWithHits>
-  )
-  .add('with panel but no refinement', () =>
+  ))
+  .add('with panel but no refinement', () => (
     <WrapWithHits
       searchBox={false}
       hasPlayground={true}
@@ -50,8 +50,8 @@ stories
         </div>
       </Panel>
     </WrapWithHits>
-  )
-  .add('playground', () =>
+  ))
+  .add('playground', () => (
     <WrapWithHits linkedStoryGroup="Pagination">
       <Pagination
         showFirst={boolean('show First', true)}
@@ -62,4 +62,4 @@ stories
         maxPages={number('max Pages', 3)}
       />
     </WrapWithHits>
-  );
+  ));

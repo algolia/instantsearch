@@ -58,9 +58,11 @@ class App extends Component {
   }
 
   render() {
-    const configuration = this.state.aroundLatLng
-      ? <Configure aroundLatLng={this.state.aroundLatLng} />
-      : <Configure aroundLatLngViaIP={true} aroundRadius="all" />;
+    const configuration = this.state.aroundLatLng ? (
+      <Configure aroundLatLng={this.state.aroundLatLng} />
+    ) : (
+      <Configure aroundLatLngViaIP={true} aroundRadius="all" />
+    );
     return (
       <InstantSearch
         appId="latency"
@@ -133,9 +135,9 @@ function HitsMap({ hits, onLatLngChange }) {
     hits.length > 0
       ? fitBounds(boundingPoints, availableSpace)
       : { zoom: 11, center: { lat: -85, lng: 180 } };
-  const markers = hits.map(hit =>
+  const markers = hits.map(hit => (
     <CustomMarker lat={hit.lat} lng={hit.lng} key={hit.objectID} />
-  );
+  ));
   const options = {
     minZoomOverride: true,
     minZoom: 2,

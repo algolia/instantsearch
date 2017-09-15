@@ -14,10 +14,6 @@ export default connectHighlight(
         );
       return part.value;
     });
-    return (
-      <Text>
-        {highligtedHit}
-      </Text>
-    );
+    return <Text>{highligtedHit}</Text>;
   }
 );

@@ -13,12 +13,12 @@ const stories = storiesOf('RangeInput', module);
 stories.addDecorator(withKnobs);
 
 stories
-  .add('default', () =>
+  .add('default', () => (
     <WrapWithHits linkedStoryGroup="RangeInput">
       <RangeInput attributeName="price" />
     </WrapWithHits>
-  )
-  .add('playground', () =>
+  ))
+  .add('playground', () => (
     <WrapWithHits linkedStoryGroup="RangeInput">
       <RangeInput
         attributeName="price"
@@ -30,15 +30,15 @@ stories
         })}
       />
     </WrapWithHits>
-  )
-  .add('with panel', () =>
+  ))
+  .add('with panel', () => (
     <WrapWithHits linkedStoryGroup="RangeInput">
       <Panel title="Price">
         <RangeInput attributeName="price" />
       </Panel>
     </WrapWithHits>
-  )
-  .add('with panel but no refinement', () =>
+  ))
+  .add('with panel but no refinement', () => (
     <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput">
       <Panel title="Price">
         <RangeInput attributeName="price" />
@@ -47,4 +47,4 @@ stories
         </div>
       </Panel>
     </WrapWithHits>
-  );
+  ));
