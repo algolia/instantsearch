@@ -5039,9 +5039,9 @@ react-native-drawer-layout@1.3.2:
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
 
-"react-native-drawer@git+https://github.com/GeekyAnts/react-native-drawer.git":
+"react-native-drawer@https://github.com/GeekyAnts/react-native-drawer":
   version "2.3.0"
-  resolved "git+https://github.com/GeekyAnts/react-native-drawer.git#8d9078516d177c9cb02d2579a6860706d2370d25"
+  resolved "https://github.com/GeekyAnts/react-native-drawer#8d9078516d177c9cb02d2579a6860706d2370d25"
   dependencies:
     prop-types "^15.5.8"
     tween-functions "^1.0.1"
@@ -5058,9 +5058,9 @@ react-native-gesture-handler@^1.0.0-alpha.14:
   dependencies:
     prop-types "^15.5.10"
 
-"react-native-keyboard-aware-scroll-view@git+https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view.git":
+"react-native-keyboard-aware-scroll-view@https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view":
   version "0.2.9"
-  resolved "git+https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view.git#f4805f254d6cc8e3329f5fb224944401f66655db"
+  resolved "https://github.com/GeekyAnts/react-native-keyboard-aware-scroll-view#f4805f254d6cc8e3329f5fb224944401f66655db"
   dependencies:
     create-react-class "^15.6.0"
     prop-types "^15.5.10"
@@ -5077,14 +5077,14 @@ react-native-material-buttons@^0.4.0:
     prop-types "^15.5.9"
     react-native-material-ripple "^0.7.0"
 
-react-native-material-dropdown@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/react-native-material-dropdown/-/react-native-material-dropdown-0.3.1.tgz#3ca8bb0e913213f57b99288ed2b8ac6e32627f63"
+react-native-material-dropdown@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-material-dropdown/-/react-native-material-dropdown-0.4.0.tgz#0b1e3e0f4f42e1ceeafe853721f7db7287ef7fed"
   dependencies:
     prop-types "^15.5.9"
     react-native-material-buttons "^0.4.0"
     react-native-material-ripple "^0.7.0"
-    react-native-material-textfield "^0.8.0"
+    react-native-material-textfield "^0.9.0"
 
 react-native-material-ripple@^0.7.0:
   version "0.7.5"
@@ -5092,9 +5092,9 @@ react-native-material-ripple@^0.7.0:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-material-textfield@^0.8.0:
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/react-native-material-textfield/-/react-native-material-textfield-0.8.4.tgz#267f3a46e9257a25a6b719ebaf34131019f901a0"
+react-native-material-textfield@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-material-textfield/-/react-native-material-textfield-0.9.0.tgz#ff83903df90eaf635f4a73c09682996bcbec383f"
   dependencies:
     prop-types "^15.5.9"
 
@@ -6475,7 +6475,7 @@ webidl-conversions@^4.0.0:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
 
-"websql@github:expo/node-websql#18.0.0":
+websql@expo/node-websql#18.0.0:
   version "0.4.4"
   resolved "https://codeload.github.com/expo/node-websql/tar.gz/e364fa65146a9e2157a19e5c719e7702c2b6b87a"
   dependencies:
