@@ -7601,9 +7601,9 @@ rgb2hex@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/rgb2hex/-/rgb2hex-0.1.0.tgz#ccd55f860ae0c5c4ea37504b958e442d8d12325b"
 
-rheostat@^2.1.0:
+rheostat@algolia/rheostat#dist:
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/rheostat/-/rheostat-2.1.1.tgz#8279490098251b22ce483e419127bbbdd12218c1"
+  resolved "https://codeload.github.com/algolia/rheostat/tar.gz/00fa03bc93efe0fee4257efc7403360001038a71"
   dependencies:
     object.assign "^4.0.4"
     prop-types "^15.5.10"
