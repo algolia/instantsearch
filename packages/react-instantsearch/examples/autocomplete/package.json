@@ -2,7 +2,7 @@
   "private": true,
   "devDependencies": {
     "identity-obj-proxy": "3.0.0",
-    "react-scripts": "1.0.12",
+    "react-scripts": "1.0.13",
     "react-test-renderer": "15.6.1"
   },
   "dependencies": {
