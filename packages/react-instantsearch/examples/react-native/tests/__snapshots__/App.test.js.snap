@@ -239,7 +239,6 @@ exports[`renders correctly 1`] = `
                         >
                           <TextInput
                             autoCapitalize="sentences"
-                            blurOnSubmit={true}
                             data={
                               Array [
                                 Object {
@@ -263,6 +262,7 @@ exports[`renders correctly 1`] = `
                             editable={false}
                             itemColor="rgba(0, 0, 0, .54)"
                             itemCount={4}
+                            itemPadding={8}
                             onBlur={[Function]}
                             onChange={[Function]}
                             onChangeText={[Function]}
