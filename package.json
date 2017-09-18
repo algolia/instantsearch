@@ -73,7 +73,7 @@
     "happo-target-firefox": "5.0.0-rc.8",
     "happypack": "4.0.0",
     "hasha": "3.0.0",
-    "jest-cli": "20.0.4",
+    "jest-cli": "21.1.0",
     "jsdoc-parse": "^1.2.7",
     "json": "9.0.6",
     "jstransformer-markdown-it": "2.0.0",
