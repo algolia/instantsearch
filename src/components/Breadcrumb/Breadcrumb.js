@@ -7,83 +7,72 @@ const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
     name: PropTypes.string,
     value: PropTypes.string,
-  }),
+  })
 );
 
 class Breadcrumb extends PureComponent {
   static propTypes = {
-    canRefine: PropTypes.bool,
     createURL: PropTypes.func,
+    cssClasses: PropTypes.objectOf(PropTypes.string),
     items: itemsPropType,
     refine: PropTypes.func.isRequired,
-    rootURL: PropTypes.string,
     separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     templateProps: PropTypes.object.isRequired,
     translate: PropTypes.func,
   };
 
   render() {
-    const {
-      createURL,
-      items,
-      refine,
-      translate,
-      cssClasses,
-      canRefine,
-    } = this.props;
+    const { createURL, items, refine, cssClasses } = this.props;
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
-      let labelClassNames = isLast
-        ? [cssClasses.disabledLabel, cssClasses.label]
-        : [cssClasses.label];
-
-      labelClassNames = labelClassNames.join(' ');
-
-      return (
-        <div key={idx} className={cssClasses.item}>
-          <Template
-            rootProps={{ className: cssClasses.separator }}
-            templateKey="separator"
-            {...this.props.templateProps}
-          />
-          <span
-            className={labelClassNames}
-            onClick={
-              isLast
-                ? null
-                : () =>
-                    refine(
-                      items.length - 1 === idx
-                        ? item.value
-                        : items[idx + 1].value,
-                    )
-            }
+      const label = isLast
+        ? <a className={`${cssClasses.disabledLabel} ${cssClasses.label}`}>
+            {item.name}
+          </a>
+        : <a
+            className={cssClasses.label}
+            href={createURL(items[idx + 1].value)}
+            onClick={e => {
+              e.preventDefault();
+              refine(items[idx + 1].value);
+            }}
           >
             {item.name}
-          </span>
-        </div>
-      );
+          </a>;
+
+      return [
+        <Template
+          key={item.name + idx}
+          rootProps={{ className: cssClasses.separator }}
+          templateKey="separator"
+          {...this.props.templateProps}
+        />,
+        label,
+      ];
     });
 
-    console.log('canRefine', canRefine);
-    console.log('items.length', items.length);
     const homeClassNames =
       items.length > 0
-        ? [cssClasses.home, cssClasses.item]
-        : [cssClasses.disabledLabel, cssClasses.home];
-    console.log('homeClassNames => ', homeClassNames);
+        ? [cssClasses.home, cssClasses.label]
+        : [cssClasses.disabledLabel, cssClasses.home, cssClasses.label];
+
+    const homeOnClickHandler = e => {
+      e.preventDefault();
+      refine(null);
+    };
+
+    const homeUrl = createURL(null);
 
     return (
       <div className={cssClasses.root}>
-        <Template
-          templateKey="home"
-          {...this.props.templateProps}
-          rootProps={{
-            className: homeClassNames.join(' '),
-            onClick: () => refine(null),
-          }}
-        />
+        <a
+          className={homeClassNames.join(' ')}
+          href={homeUrl}
+          onClick={homeOnClickHandler}
+        >
+          <Template templateKey="home" {...this.props.templateProps} />
+        </a>
         {breadcrumb}
       </div>
     );
