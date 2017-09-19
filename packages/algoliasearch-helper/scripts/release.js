@@ -18,13 +18,16 @@ colors.setTheme({
 
 const packageJson = require('../package.json');
 
+const {showChangelog, getChangelog, updateChangelog} = require('./lib/conventionalChangelog.js');
+
 shell.echo(`Algoliasearch-Helper release script`);
 
 checkEnvironment();
 mergeDevIntoMaster();
-showChangelog();
+showChangelog(shell);
 promptVersion(packageJson.version, (version) => {
   bumpVersion(version, () => {
+    updateChangelog(shell);
     commitNewFiles(version);
     publish();
     goBackToDevelop();
@@ -55,12 +58,6 @@ function mergeDevIntoMaster() {
   shell.exec('git checkout master', {silent: true});
   shell.exec('git merge origin master', {silent: true});
   shell.exec('git merge --no-ff --no-edit develop', {silent: true});
-}
-
-function showChangelog() {
-  shell.echo('\nNext version changelog:');
-  const changelog = shell.exec('conventional-changelog -u -n scripts/conventional-changelog/', {silent: true});
-  shell.echo(changelog.white);
 }
 
 function promptVersion(currentVersion, cb) {
@@ -107,7 +104,7 @@ function bumpVersion(newVersion, cb) {
 
 function commitNewFiles(version) {
   shell.echo('Commiting files');
-  const changelog = shell.exec('conventional-changelog -u -n scripts/conventional-changelog/', {silent: true}).trim().split('\n');
+  const changelog = getChangelog(shell);
   changelog.splice(1, 0, '');
   shell.exec(`git commit -a -m "${changelog.join('\n')}"`, {silent: true});
 

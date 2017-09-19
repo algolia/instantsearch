@@ -1,3 +1,12 @@
+2.21.2 - 2017-07-27
+ * chore(cdn): update jsdelivr URL https://github.com/algolia/algoliasearch-helper-js/commit/5f663802dcb92a62e3e434dec1b68917973af3b5
+ * chore(doc): update header https://github.com/algolia/algoliasearch-helper-js/commit/a5399fb9614d124716369b9f7acd339719c4ab63
+ * chore(release): new release script (#525) https://github.com/algolia/algoliasearch-helper-js/commit/ef0c7e24b58c4ced1ad8ec47335b2aff064094ef
+ * chore(tool): Correctly detect branch in release.js https://github.com/algolia/algoliasearch-helper-js/commit/9dd8cc749eeb880faef8678e3dd66fda55545e9b
+ * chore(tooling): conventional changelog integration (#523) https://github.com/algolia/algoliasearch-helper-js/commit/1c4d097389d5dc7dc34099fedb27f5f7fbb621de
+ * fix(SearchResults): add exhaustiveNbHits and exhaustiveFacetsCount https://github.com/algolia/algoliasearch-helper-js/commit/fad31fbb2ba32f472ca28a8a88faff08a0900e80, closes https://github.com/algolia/algoliasearch-helper-js/issues/489
+ * 2.21.2 - 2017-07-27 https://github.com/algolia/algoliasearch-helper-js/commit/baa6387cc361b86803e7b62ebce32eae348e1135
+
 2.21.1 - 2017-07-20
  * fix(events): We need searchEmptyQueue before result to avoid inconsistency
  * chore(ci): fix build so that tests can be executed
