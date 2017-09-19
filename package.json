@@ -36,7 +36,7 @@
     "es"
   ],
   "devDependencies": {
-    "argos-cli": "^0.0.8",
+    "argos-cli": "0.0.9",
     "autodll-webpack-plugin": "^0.2.1",
     "autoprefixer": "^7.1.1",
     "babel-cli": "^6.24.0",
