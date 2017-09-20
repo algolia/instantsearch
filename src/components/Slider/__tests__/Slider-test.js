@@ -21,4 +21,22 @@ describe('Slider', () => {
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
+
+  it('should render without pips', () => {
+    const tree = renderer
+      .create(
+        <Slider
+          refine={() => undefined}
+          min={0}
+          max={500}
+          values={[0, 0]}
+          pips={false}
+          step={2}
+          tooltips={true}
+          shouldAutoHideContainer={false}
+        />
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 });
