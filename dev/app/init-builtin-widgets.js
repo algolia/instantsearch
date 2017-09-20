@@ -501,6 +501,18 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'as a Select DOM element',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.menuSelect({
+            container,
+            attributeName: 'categories',
+            limit: 10,
+          })
+        );
+      })
     );
 
   storiesOf('RangeSlider').add(

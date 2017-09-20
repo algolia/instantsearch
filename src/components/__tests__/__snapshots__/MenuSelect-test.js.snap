@@ -1,0 +1,123 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
+<div
+  style={
+    Object {
+      "display": "",
+    }
+  }
+>
+  <div
+    className="ais-root"
+  >
+    <div
+      className="ais-body"
+    >
+      <select
+        className={undefined}
+        onChange={[Function]}
+        value=""
+      >
+        <option
+          className={undefined}
+          value=""
+        >
+          <div
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "See all",
+              }
+            }
+          />
+        </option>
+        <option
+          className={undefined}
+          value="foo"
+        >
+          <div
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "foo ()",
+              }
+            }
+          />
+        </option>
+        <option
+          className={undefined}
+          value="bar"
+        >
+          <div
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "bar ()",
+              }
+            }
+          />
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MenuSelect should render with custom css classes 1`] = `
+<div
+  style={
+    Object {
+      "display": "",
+    }
+  }
+>
+  <div
+    className="ais-root"
+  >
+    <div
+      className="ais-body"
+    >
+      <select
+        className="foo"
+        onChange={[Function]}
+        value=""
+      >
+        <option
+          className="bar"
+          value=""
+        >
+          <div
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "See all",
+              }
+            }
+          />
+        </option>
+        <option
+          className="bar"
+          value="foo"
+        >
+          <div
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "foo ()",
+              }
+            }
+          />
+        </option>
+        <option
+          className="bar"
+          value="bar"
+        >
+          <div
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "bar ()",
+              }
+            }
+          />
+        </option>
+      </select>
+    </div>
+  </div>
+</div>
+`;
