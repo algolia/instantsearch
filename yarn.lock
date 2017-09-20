@@ -1309,13 +1309,13 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bel@4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/bel/-/bel-4.6.0.tgz#3ade16e236ab2204d8d1c66eac4bd573793ac999"
+bel@5.1.2:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/bel/-/bel-5.1.2.tgz#3d6625eeabe4014338714bc49eacf5f253ea78d3"
   dependencies:
-    global "^4.3.0"
     hyperx "^2.3.0"
-    on-load "^3.2.0"
+    is-electron "^2.0.0"
+    pelo "0.0.3"
 
 big.js@^3.1.3:
   version "3.2.0"
@@ -3920,7 +3920,7 @@ glob@~3.1.21:
     inherits "1"
     minimatch "~0.2.11"
 
-global@^4.3.0, global@^4.3.2, global@~4.3.0:
+global@^4.3.2, global@~4.3.0:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/global/-/global-4.3.2.tgz#e76989268a6c74c38908b1305b10fc0e394e9d0f"
   dependencies:
@@ -4628,6 +4628,10 @@ is-domain@0.0.1:
 is-dotfile@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/is-dotfile/-/is-dotfile-1.0.3.tgz#a6a2f32ffd2dfb04f5ca25ecd0f6b83cf798a1e1"
+
+is-electron@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/is-electron/-/is-electron-2.1.0.tgz#37dd2e9e7167efa8bafce86c0c25762bc4b851fa"
 
 is-equal-shallow@^0.1.3:
   version "0.1.3"
@@ -6031,10 +6035,6 @@ nan@^2.3.0, nan@^2.3.2:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.7.0.tgz#d95bf721ec877e08db276ed3fc6eb78f9083ad46"
 
-nanoassert@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/nanoassert/-/nanoassert-1.1.0.tgz#4f3152e09540fde28c76f44b19bbcd1d5a42478d"
-
 native-promise-only@^0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/native-promise-only/-/native-promise-only-0.8.1.tgz#20a318c30cb45f71fe7adfbf7b21c99c1472ef11"
@@ -6392,13 +6392,6 @@ on-headers@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/on-headers/-/on-headers-1.0.1.tgz#928f5d0f470d49342651ea6794b0857c100693f7"
 
-on-load@^3.2.0:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/on-load/-/on-load-3.3.1.tgz#8b38f5b78e884ee457c0516999d301d814b0fea0"
-  dependencies:
-    global "^4.3.0"
-    nanoassert "^1.1.0"
-
 once@^1.3.0, once@^1.3.3, once@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
@@ -6667,6 +6660,10 @@ pbkdf2@^3.0.3:
     ripemd160 "^2.0.1"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
+
+pelo@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/pelo/-/pelo-0.0.3.tgz#fb6b26b0612036db02b918feaab3e8c0c4cb597c"
 
 performance-now@^0.2.0:
   version "0.2.0"
