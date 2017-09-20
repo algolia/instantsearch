@@ -47,7 +47,7 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
 /**
  * @typedef SearchResults.FacetValue
  * @type {object}
- * @property {string} value the facet value itself
+ * @property {string} name the facet value itself
  * @property {number} count times this facet appears in the results
  * @property {boolean} isRefined is the facet currently selected
  * @property {boolean} isExcluded is the facet currently excluded (only for conjunctive facets)
