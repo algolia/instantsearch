@@ -220,4 +220,45 @@ describe('connectRangeSlider', () => {
       expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
     }
   });
+
+  it('should refine on boundaries when no min/max defined', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectRangeSlider(rendering);
+
+    const attributeName = 'price';
+    const widget = makeWidget({ attributeName });
+
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration());
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    {
+      expect(helper.getNumericRefinement('price', '>=')).toEqual(undefined);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
+
+      const renderOptions = rendering.lastCall.args[0];
+      const { refine } = renderOptions;
+
+      refine([undefined, 100]);
+      expect(helper.getNumericRefinement('price', '>=')).toEqual(undefined);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([100]);
+      expect(helper.search.callCount).toBe(1);
+
+      refine([0, undefined]);
+      expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
+      expect(helper.search.callCount).toBe(2);
+
+      refine([0, 100]);
+      expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([100]);
+      expect(helper.search.callCount).toBe(3);
+    }
+  });
 });

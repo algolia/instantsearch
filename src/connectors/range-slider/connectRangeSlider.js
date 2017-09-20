@@ -132,10 +132,14 @@ export default function connectRangeSlider(renderFn) {
             currentValues[1] !== newValues[1]
           ) {
             helper.clearRefinements(attributeName);
+
+            const hasMin = bounds.min !== null && bounds.min !== undefined;
+            const minValueChanged =
+              newValues[0] !== null && newValues[0] !== undefined;
+
             if (
-              bounds.min === null ||
-              bounds.min === undefined ||
-              newValues[0] > bounds.min
+              (hasMin && minValueChanged && bounds.min < newValues[0]) ||
+              (!hasMin && minValueChanged)
             ) {
               helper.addNumericRefinement(
                 attributeName,
@@ -143,10 +147,14 @@ export default function connectRangeSlider(renderFn) {
                 formatToNumber(newValues[0])
               );
             }
+
+            const hasMax = bounds.max !== null && bounds.max !== undefined;
+            const maxValueChanged =
+              newValues[1] !== null && newValues[1] !== undefined;
+
             if (
-              bounds.max === null ||
-              bounds.max === undefined ||
-              newValues[1] < bounds.max
+              (hasMax && maxValueChanged && bounds.max > newValues[1]) ||
+              (!hasMax && maxValueChanged)
             ) {
               helper.addNumericRefinement(
                 attributeName,
