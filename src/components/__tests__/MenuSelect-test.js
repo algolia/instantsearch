@@ -9,7 +9,7 @@ describe('MenuSelect', () => {
     const props = {
       items: [{ value: 'foo', label: 'foo' }, { value: 'bar', label: 'bar' }],
       refine: () => {},
-      templateProps: defaultTemplates,
+      templateProps: { templates: defaultTemplates },
       shouldAutoHideContainer: false,
     };
     const tree = renderer.create(<MenuSelect {...props} />).toJSON();
@@ -20,7 +20,7 @@ describe('MenuSelect', () => {
     const props = {
       items: [{ value: 'foo', label: 'foo' }, { value: 'bar', label: 'bar' }],
       refine: () => {},
-      templateProps: defaultTemplates,
+      templateProps: { templates: defaultTemplates },
       shouldAutoHideContainer: false,
       cssClasses: {
         select: 'foo',
