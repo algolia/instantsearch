@@ -139,21 +139,18 @@ export default function connectMenu(renderFn) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
-      refine({ helper, items }) {
+      refine(helper) {
         return facetValue => {
-          if (!facetValue) {
-            facetValue =
-              items.length > 0
-                ? items.find(item => item.isRefined).value
-                : null;
-          }
-
-          helper.toggleRefinement(attributeName, facetValue).search();
+          const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
+            attributeName
+          );
+          helper
+            .toggleRefinement(
+              attributeName,
+              facetValue ? facetValue : refinedItem
+            )
+            .search();
         };
-      },
-
-      cachedRefine(facetValue) {
-        this._refine(facetValue);
       },
 
       getConfiguration(configuration) {
@@ -181,13 +178,13 @@ export default function connectMenu(renderFn) {
         this._createURL = facetValue =>
           createURL(helper.state.toggleRefinement(attributeName, facetValue));
 
-        this._refine = this.refine({ helper, items: [] });
+        this.refine = this.refine(helper);
 
         renderFn(
           {
             items: [],
             createURL: this._createURL,
-            refine: this.cachedRefine,
+            refine: this.refine,
             instantSearchInstance,
             canRefine: false,
             widgetParams,
@@ -199,7 +196,7 @@ export default function connectMenu(renderFn) {
         );
       },
 
-      render({ helper, results, instantSearchInstance }) {
+      render({ results, instantSearchInstance }) {
         const facetItems =
           results.getFacetValues(attributeName, { sortBy }).data || [];
         const items = facetItems
@@ -215,13 +212,11 @@ export default function connectMenu(renderFn) {
           instantSearchInstance,
         });
 
-        this._refine = this.refine({ helper, items });
-
         renderFn(
           {
             items,
             createURL: this._createURL,
-            refine: this.cachedRefine,
+            refine: this.refine,
             instantSearchInstance,
             canRefine: items.length > 0,
             widgetParams,
