@@ -132,14 +132,22 @@ export default function connectRangeSlider(renderFn) {
             currentValues[1] !== newValues[1]
           ) {
             helper.clearRefinements(attributeName);
-            if (!bounds.min || newValues[0] > bounds.min) {
+            if (
+              bounds.min === null ||
+              bounds.min === undefined ||
+              newValues[0] > bounds.min
+            ) {
               helper.addNumericRefinement(
                 attributeName,
                 '>=',
                 formatToNumber(newValues[0])
               );
             }
-            if (!bounds.max || newValues[1] < bounds.max) {
+            if (
+              bounds.max === null ||
+              bounds.max === undefined ||
+              newValues[1] < bounds.max
+            ) {
               helper.addNumericRefinement(
                 attributeName,
                 '<=',

@@ -516,6 +516,7 @@ export default () => {
           instantsearch.widgets.rangeSlider({
             container,
             attributeName: 'price',
+            min: 0,
             max: 500,
             pips: false,
             step: 10,
