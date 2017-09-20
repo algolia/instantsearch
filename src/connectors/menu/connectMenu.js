@@ -178,13 +178,13 @@ export default function connectMenu(renderFn) {
         this._createURL = facetValue =>
           createURL(helper.state.toggleRefinement(attributeName, facetValue));
 
-        this.refine = this.refine(helper);
+        this._refine = this.refine(helper);
 
         renderFn(
           {
             items: [],
             createURL: this._createURL,
-            refine: this.refine,
+            refine: this._refine,
             instantSearchInstance,
             canRefine: false,
             widgetParams,
@@ -216,7 +216,7 @@ export default function connectMenu(renderFn) {
           {
             items,
             createURL: this._createURL,
-            refine: this.refine,
+            refine: this._refine,
             instantSearchInstance,
             canRefine: items.length > 0,
             widgetParams,
