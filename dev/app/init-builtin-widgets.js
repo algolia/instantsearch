@@ -500,27 +500,48 @@ export default () => {
       })
     );
 
-  storiesOf('RangeSlider').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.rangeSlider({
-          container,
-          attributeName: 'price',
-          templates: {
-            header: 'Price',
-          },
-          max: 500,
-          step: 10,
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
+  storiesOf('RangeSlider')
+    .add(
+      'default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
             },
-          },
-        })
-      );
-    })
-  );
+            max: 500,
+            step: 10,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'without pips',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            min: 0,
+            max: 500,
+            pips: false,
+            step: 10,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    );
 
   storiesOf('HierarchicalMenu')
     .add(
