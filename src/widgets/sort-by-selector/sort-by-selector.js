@@ -104,7 +104,7 @@ export default function sortBySelector(
 
   try {
     const makeWidget = connectSortBySelector(specializedRenderer);
-    return makeWidget({ indices });
+    return Object.assign(makeWidget({ indices }), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }

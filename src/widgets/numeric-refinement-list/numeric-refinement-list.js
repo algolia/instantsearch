@@ -180,7 +180,10 @@ export default function numericRefinementList(
     const makeNumericRefinementList = connectNumericRefinementList(
       specializedRenderer
     );
-    return makeNumericRefinementList({ attributeName, options });
+    return Object.assign(
+      makeNumericRefinementList({ attributeName, options }),
+      { containerNode }
+    );
   } catch (e) {
     throw new Error(usage);
   }

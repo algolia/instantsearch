@@ -137,7 +137,7 @@ export default function hits({
 
   try {
     const makeHits = connectHits(specializedRenderer);
-    return makeHits({ escapeHits });
+    return Object.assign(makeHits({ escapeHits }), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }

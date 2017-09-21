@@ -191,7 +191,7 @@ export default function priceRanges(
 
   try {
     const makeWidget = connectPriceRanges(specializedRenderer);
-    return makeWidget({ attributeName });
+    return Object.assign(makeWidget({ attributeName }), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }

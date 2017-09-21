@@ -144,7 +144,9 @@ export default function clearAll({
 
   try {
     const makeWidget = connectClearAll(specializedRenderer);
-    return makeWidget({ excludeAttributes, clearsQuery });
+    return Object.assign(makeWidget({ excludeAttributes, clearsQuery }), {
+      containerNode,
+    });
   } catch (e) {
     throw new Error(usage);
   }

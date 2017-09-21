@@ -168,7 +168,7 @@ export default function stats(
 
   try {
     const makeWidget = connectStats(specializedRenderer);
-    return makeWidget();
+    return Object.assign(makeWidget(), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }
