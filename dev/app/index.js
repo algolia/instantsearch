@@ -4,6 +4,7 @@ import { registerDisposer, start } from 'dev-novel';
 import initBuiltInWidgets from './init-builtin-widgets.js';
 import initVanillaWidgets from './init-vanilla-widgets.js';
 import initJqueryWidgets from './init-jquery-widgets.js';
+import initUnmountWidgets from './init-unmount-widgets.js';
 
 import '../style.css';
 import '../../src/css/instantsearch.scss';
@@ -22,6 +23,9 @@ switch (true) {
     break;
   case q.includes('widgets=jquery'):
     initJqueryWidgets();
+    break;
+  case q.includes('widgets=unmount'):
+    initUnmountWidgets();
     break;
   default:
     initBuiltInWidgets();
