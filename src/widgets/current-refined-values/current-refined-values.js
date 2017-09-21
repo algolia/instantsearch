@@ -273,15 +273,13 @@ export default function currentRefinedValues({
       specializedRenderer
     );
     return Object.assign(
-      makeCurrentRefinedValues(
-        {
-          attributes,
-          onlyListedAttributes,
-          clearAll,
-          clearsQuery,
-        },
-        { containerNode }
-      )
+      makeCurrentRefinedValues({
+        attributes,
+        onlyListedAttributes,
+        clearAll,
+        clearsQuery,
+      }),
+      { containerNode }
     );
   } catch (e) {
     throw new Error(usage);
