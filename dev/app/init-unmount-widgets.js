@@ -1,5 +1,5 @@
 /* eslint-disable import/default */
-import { storiesOf } from 'dev-novel';
+import { action, storiesOf } from 'dev-novel';
 import instantsearch from '../../index.js';
 
 import wrapWithHits from './wrap-with-hits.js';
@@ -20,7 +20,7 @@ function wrapWithUnmount(getWidget, params) {
       </div>
     `;
 
-    const widget = getWidget('#widgetContainer');
+    const widget = getWidget(document.getElementById('widgetContainer'));
 
     window.search.addWidget(widget);
 
@@ -47,6 +47,25 @@ function wrapWithUnmount(getWidget, params) {
 }
 
 export default () => {
+  storiesOf('Analytics').add(
+    'default',
+    wrapWithUnmount(container => {
+      const description = document.createElement('p');
+      description.innerText = 'Search for something, look into Action Logger';
+      container.appendChild(description);
+
+      return instantsearch.widgets.analytics({
+        pushFunction(formattedParameters, state, results) {
+          action('pushFunction[formattedParameters]')(formattedParameters);
+          action('pushFunction[state]')(state);
+          action('pushFunction[results]')(results);
+        },
+        triggerOnUIInteraction: true,
+        pushInitialSearch: false,
+      });
+    })
+  );
+
   storiesOf('ClearAll').add(
     'default',
     wrapWithUnmount(

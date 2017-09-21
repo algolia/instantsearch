@@ -97,7 +97,7 @@ Usage: instantsearch({
       this.widgets.splice(this.widgets.indexOf(widget), 1);
 
       // un-mount widget from DOM
-      widget.containerNode.innerHTML = '';
+      if (widget.containerNode) widget.containerNode.innerHTML = '';
 
       // remove configuration set by the widget
       const configuration =
