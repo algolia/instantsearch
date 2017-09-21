@@ -6,6 +6,7 @@ import forEach from 'lodash/forEach';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
+import has from 'lodash/has';
 import { EventEmitter } from 'events';
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
@@ -88,6 +89,94 @@ Usage: instantsearch({
     }
 
     this.widgets.push(widget);
+  }
+
+  removeWidget(widget) {
+    if (this.widgets.includes(widget)) {
+      // remove from `this.widgets[]`
+      this.widgets.splice(this.widgets.indexOf(widget), 1);
+
+      // un-mount widget from DOM
+      widget.containerNode.innerHTML = '';
+
+      // remove configuration set by the widget
+      const configuration =
+        (typeof widget.getConfiguration === 'function' &&
+          widget.getConfiguration(this.searchParameters)) ||
+        {};
+
+      // transform helper state to plain object
+      const nextState = { ...this.helper.getState() };
+      const removedFacets = [];
+
+      if (configuration.facets) {
+        configuration.facets.forEach(facet => {
+          nextState.facets.splice(nextState.facets.indexOf(facet), 1);
+          removedFacets.push(facet);
+        });
+      }
+
+      // remove `hierarchicalFacets`
+      if (configuration.hierarchicalFacets) {
+        configuration.hierarchicalFacets.forEach(({ name }) => {
+          nextState.hierarchicalFacets.splice(
+            nextState.hierarchicalFacets.findIndex(f => f.name === name),
+            1
+          );
+
+          removedFacets.push(name);
+        });
+      }
+
+      // remove `disjunctiveFacets`
+      if (configuration.disjunctiveFacets) {
+        configuration.disjunctiveFacets.forEach(facet => {
+          nextState.disjunctiveFacets.splice(
+            nextState.disjunctiveFacets.indexOf(facet),
+            1
+          );
+
+          removedFacets.push(facet);
+        });
+      }
+
+      // remove `numericRefinements`
+      if (configuration.numericRefinements) {
+        Object.keys(configuration.numericRefinements).forEach(facet => {
+          removedFacets.push(facet);
+        });
+      }
+
+      // remove `maxValuesPerFacet`
+      if (nextState.maxValuesPerFacet === configuration.maxValuesPerFacet) {
+        nextState.maxValuesPerFacet = undefined;
+      }
+
+      // un-refine removed facets
+      removedFacets.forEach(facet => {
+        if (has(nextState.numericRefinements, facet))
+          delete nextState.numericRefinements[facet];
+
+        if (has(nextState.disjunctiveFacetsRefinements, facet))
+          delete nextState.disjunctiveFacetsRefinements[facet];
+
+        if (has(nextState.hierarchicalFacetsRefinements, facet))
+          delete nextState.hierarchicalFacetsRefinements[facet];
+
+        if (has(nextState.facetsRefinements, facet))
+          delete nextState.facetsRefinements[facet];
+      });
+
+      // re-compute remaining widgets to the state
+      // in a case two widgets were using the same configuration but we removed one
+      this.searchParameters = this.widgets.reduce(
+        enhanceConfiguration({}),
+        nextState
+      );
+
+      // re-trigger a search with the new state
+      this.helper.setState(this.searchParameters).search();
+    }
   }
 
   /**
