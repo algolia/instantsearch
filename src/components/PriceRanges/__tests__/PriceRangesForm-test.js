@@ -60,7 +60,7 @@ describe('PriceRangesForm', () => {
 
       // Then
       expect(handleSubmitMock.calledOnce).toBe(true);
-      expect(refine.calledWith(10, 20)).toBe(true);
+      expect(refine.calledWith({ from: 10, to: 20 })).toBe(true);
     });
   });
 });
