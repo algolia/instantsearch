@@ -59,10 +59,6 @@ const renderer = ({
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `Usage:
 pagination({
   container,
@@ -178,9 +174,8 @@ export default function pagination(
   });
 
   try {
-    const makeWidget = connectPagination(
-      specializedRenderer,
-      disposer(containerNode)
+    const makeWidget = connectPagination(specializedRenderer, () =>
+      ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeWidget({ maxPages });
   } catch (e) {

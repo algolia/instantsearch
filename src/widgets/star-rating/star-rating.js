@@ -54,10 +54,6 @@ const renderer = ({
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `Usage:
 starRating({
   container,
@@ -196,9 +192,8 @@ export default function starRating(
   });
 
   try {
-    const makeWidget = connectStarRating(
-      specializedRenderer,
-      disposer(containerNode)
+    const makeWidget = connectStarRating(specializedRenderer, () =>
+      ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attributeName, max });
   } catch (e) {

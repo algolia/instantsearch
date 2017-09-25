@@ -64,10 +64,6 @@ const renderer = ({
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `Usage:
 rangeSlider({
   container,
@@ -199,9 +195,8 @@ export default function rangeSlider(
   });
 
   try {
-    const makeWidget = connectRangeSlider(
-      specializedRenderer,
-      disposer(containerNode)
+    const makeWidget = connectRangeSlider(specializedRenderer, () =>
+      ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attributeName, min, max, precision });
   } catch (e) {

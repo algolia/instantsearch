@@ -50,10 +50,6 @@ const renderer = ({
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `Usage:
 numericRefinementList({
   container,
@@ -183,7 +179,7 @@ export default function numericRefinementList(
   try {
     const makeNumericRefinementList = connectNumericRefinementList(
       specializedRenderer,
-      disposer(containerNode)
+      () => ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeNumericRefinementList({ attributeName, options });
   } catch (e) {

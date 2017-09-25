@@ -63,10 +63,6 @@ const renderer = ({
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `Usage:
 stats({
   container,
@@ -171,9 +167,8 @@ export default function stats(
   });
 
   try {
-    const makeWidget = connectStats(
-      specializedRenderer,
-      disposer(containerNode)
+    const makeWidget = connectStats(specializedRenderer, () =>
+      ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeWidget();
   } catch (e) {

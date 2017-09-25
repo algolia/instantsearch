@@ -49,10 +49,6 @@ const renderer = ({
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `
 Usage:
 infiniteHits({
@@ -148,9 +144,8 @@ export default function infiniteHits(
   });
 
   try {
-    const makeInfiniteHits = connectInfiniteHits(
-      specializedRenderer,
-      disposer(containerNode)
+    const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
+      ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeInfiniteHits({ escapeHits });
   } catch (e) {

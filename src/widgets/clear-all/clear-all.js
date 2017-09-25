@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
 import cx from 'classnames';
+
+import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
 
 import {
   bemHelper,
@@ -49,10 +50,6 @@ const renderer = ({
     />,
     containerNode
   );
-};
-
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
 };
 
 const usage = `Usage:
@@ -147,9 +144,8 @@ export default function clearAll({
   });
 
   try {
-    const makeWidget = connectClearAll(
-      specializedRenderer,
-      disposer(containerNode)
+    const makeWidget = connectClearAll(specializedRenderer, () =>
+      ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeWidget({ excludeAttributes, clearsQuery });
   } catch (e) {

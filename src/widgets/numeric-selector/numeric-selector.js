@@ -27,10 +27,6 @@ const renderer = ({ containerNode, autoHideContainer, cssClasses }) => (
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `Usage: numericSelector({
   container,
   attributeName,
@@ -115,7 +111,7 @@ export default function numericSelector({
   try {
     const makeNumericSelector = connectNumericSelector(
       specializedRenderer,
-      disposer(containerNode)
+      () => ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeNumericSelector({ operator, attributeName, options });
   } catch (e) {

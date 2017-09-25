@@ -52,10 +52,6 @@ const renderer = ({
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `Usage:
 hierarchicalMenu({
   container,
@@ -218,7 +214,7 @@ export default function hierarchicalMenu(
   try {
     const makeHierarchicalMenu = connectHierarchicalMenu(
       specializedRenderer,
-      disposer(containerNode)
+      () => ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeHierarchicalMenu({
       attributes,

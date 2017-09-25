@@ -72,10 +72,6 @@ const renderer = ({
   );
 };
 
-const disposer = containerNode => () => {
-  ReactDOM.unmountComponentAtNode(containerNode);
-};
-
 const usage = `Usage:
 menu({
   container,
@@ -221,9 +217,8 @@ export default function menu({
   });
 
   try {
-    const makeWidget = connectMenu(
-      specializedRenderer,
-      disposer(containerNode)
+    const makeWidget = connectMenu(specializedRenderer, () =>
+      ReactDOM.unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attributeName, limit, sortBy, showMoreLimit });
   } catch (e) {
