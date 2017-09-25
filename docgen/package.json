@@ -19,7 +19,7 @@
     "clipboard": "^1.6.1",
     "codemirror": "^5.22.0",
     "compression": "^1.6.2",
-    "documentation": "^4.0.0-rc.1",
+    "documentation": "^5.0.0",
     "json-loader": "^0.5.4",
     "jstransformer-handlebars": "^1.0.0",
     "markdown-it": "^8.2.2",
