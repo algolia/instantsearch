@@ -176,7 +176,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
           .removeHierarchicalFacet(hierarchicalFacetName);
 
         if (nextState.maxValuesPerFacet === limit) {
-          nextState.maxValuesPerFacet = undefined;
+          nextState.setQueryParameters('maxValuesPerFacet', undefined);
         }
 
         return nextState;
