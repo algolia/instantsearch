@@ -6,55 +6,45 @@ category: guide
 navWeight: 40
 ---
 
-Using our connector and [`createConnector`](guide/Custom_connectors.html) approach, you can conditionally display content based on the search state.
+When no results are found you might want to display some specific contents helping the user go back
+to a search that was successful. 
+
+To help you do conditional rendering based on the `searchState` and the 
+`searchResults` of InstantSearch, we provide the [`connectStateResults`](connectors/connectStateResults.html) connector. 
 
 ## Displaying content when the query is empty
 
 ```jsx
-const Content = createConnector({
-    displayName: 'ConditionalQuery',
-    getProvidedProps(props, searchState) {
-      return {query: searchState.query};
-    },
- })(({query}) => {
-    const content = query
-      ? <div>The query {query} exists</div>
-      : <div>No query</div>;
-    return <div>{content}</div>;
- });
+const Content = connectStateResults(
+  ({ searchState }) =>
+    searchState && searchState.query
+      ? <div>
+          The query {searchState.query} exists
+        </div>
+      : <div>No query</div>
+);
 ```
 
 ## Displaying content when there's no results
 
 ```jsx
-const content = createConnector({
-    displayName: 'ConditionalResults',
-    getProvidedProps(props, searchState, searchResults) {
-      const noResults = searchResults.results ? searchResults.results.nbHits === 0 : false;
-      return {query: searchState.query, noResults};
-    },
- })(({noResults, query}) => {
-    const content = noResults
-      ? <div>No results found for {query}</div>
-      : <div>Some results</div>;
-    return <div>{content}</div>;
- });
+const Content = connectStateResults(
+  ({ searchState, searchResults }) =>
+    searchResults && searchResults.nbHits !== 0
+      ? <div>Some results</div>
+      : <div>
+          No results has been found for {searchState.query}
+        </div>
+);
 ```
 
 ## Displaying content when there's an error
 
 ```jsx
-const content = createConnector({
-    displayName: 'ConditionalError',
-    getProvidedProps(props, searchState, searchResults) {
-      return {error: searchResults.error};
-    },
- })(({error}) => {
-    const content = error
-      ? <div>An error occurred: {error.message}</div>
-      : <div>Some results</div>;
-    return <div>{content}</div>;
- });
+const Content = connectStateResults(
+  ({ error }) =>
+    error ? <div>Some error</div> : <div>No error</div>
+);
 ```
 
 ## Displaying content when loading
@@ -62,34 +52,92 @@ const content = createConnector({
 In slow user network situations you might want to know when the search results are loading.
 
 ```jsx
-const content = createConnector({
-    displayName: 'ConditionalError',
-    getProvidedProps(props, searchState, searchResults) {
-      return {loading: searchResults.searching};
-    },
-})(({loading}) => {
-    const content = loading
-      ? <div>We are loading</div>
-      : <div>Search finished</div>;
-    return <div>{content}</div>;
- });
+const Content = connectStateResults(
+  ({ searching }) =>
+    searching ? <div>We are searching</div> : <div>Search finished</div>
+);
 ```
 
 Alternatively, if you're using the search in List feature then you can know when the search results are loading by doing: 
 
 ```jsx
-const content = createConnector({
-    displayName: 'ConditionalError',
-    getProvidedProps(props, searchState, searchResults) {
-      return {loading: searchResults.searchingForFacetValues};
-    },
-})(({loading}) => {
-    const content = loading
-      ? <div>We are loading</div>
-      : <div>Search finished</div>;
-    return <div>{content}</div>;
- });
+const Content = connectStateResults(
+  ({ searchingForFacetValues }) =>
+    searchingForFacetValues ? <div>We are searching</div> : <div>Search finished</div>
+);
 ```
+
+## Conditional display when dealing with multi indices
+
+If you're using the `<Index>` API and want to apply some conditional rendering you have access to the `searchResults` but also to all the results of every used indices looking at `allSearchResults`. 
+
+```jsx
+const App = () => (
+  <InstantSearch appId="" apiKey="" indexName="first">
+    <SearchBox />
+    <AllResults>
+      <div>
+        <Index indexName="first">
+          <IndexResults>
+            <div>
+              <div>first: </div>
+              <Hits />
+            </div>
+          </IndexResults>
+        </Index>
+        <Index indexName="second">
+          <IndexResults>
+            <div>
+              <div>second: </div>
+              <Hits />
+            </div>
+          </IndexResults>
+        </Index>
+        <Index indexName="third">
+          <IndexResults>
+            <div>
+              <div>third: </div>
+              <Hits />
+            </div>
+          </IndexResults>
+        </Index>
+      </div>
+    </AllResults>
+  </InstantSearch>
+);
+
+const IndexResults = connectStateResults(
+  ({ searchState, searchResults, children }) =>
+    searchResults && searchResults.nbHits !== 0 ? (
+      children
+    ) : (
+      <div>
+        No results has been found for {searchState.query} and index{' '}
+        {searchResults ? searchResults.index : ''}
+      </div>
+    )
+);
+
+const AllResults = connectStateResults(({ allSearchResults, children }) => {
+  const noResults =
+    allSearchResults &&
+    Object.values(allSearchResults).reduce(
+      (acc, results) => results.nbHits === 0,
+      false
+    );
+  return noResults ? (
+    <div>
+      <div>No results in category, products or brand</div>
+      <Index indexName="first" />
+      <Index indexName="second" />
+      <Index indexName="third" />
+    </div>
+  ) : (
+    children
+  );
+});
+```
+
 
 <div class="guide-nav">
     <div class="guide-nav-left">

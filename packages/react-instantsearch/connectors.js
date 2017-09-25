@@ -46,3 +46,6 @@ export {
 export { default as connectSortBy } from './src/connectors/connectSortBy.js';
 export { default as connectStats } from './src/connectors/connectStats.js';
 export { default as connectToggle } from './src/connectors/connectToggle.js';
+export {
+  default as connectStateResults,
+} from './src/connectors/connectStateResults.js';
