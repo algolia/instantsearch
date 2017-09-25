@@ -95,7 +95,9 @@ Usage: instantsearch({
       !this.widgets.includes(widget) ||
       typeof widget.dispose !== 'function'
     ) {
-      throw new Error('Widget definition is missing dispose method');
+      throw new Error(
+        'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
+      );
     }
 
     this.widgets.splice(this.widgets.indexOf(widget), 1);
