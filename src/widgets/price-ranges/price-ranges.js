@@ -50,6 +50,10 @@ const renderer = ({
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 priceRanges({
   container,
@@ -190,7 +194,10 @@ export default function priceRanges(
   });
 
   try {
-    const makeWidget = connectPriceRanges(specializedRenderer);
+    const makeWidget = connectPriceRanges(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeWidget({ attributeName });
   } catch (e) {
     throw new Error(usage);

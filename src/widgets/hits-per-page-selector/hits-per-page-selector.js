@@ -32,6 +32,10 @@ const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 hitsPerPageSelector({
   container,
@@ -105,7 +109,10 @@ export default function hitsPerPageSelector(
   });
 
   try {
-    const makeHitsPerPageSelector = connectHitsPerPage(specializedRenderer);
+    const makeHitsPerPageSelector = connectHitsPerPage(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeHitsPerPageSelector({ items });
   } catch (e) {
     throw new Error(usage);

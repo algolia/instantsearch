@@ -85,6 +85,10 @@ const renderer = ({
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 refinementList({
   container,
@@ -288,7 +292,10 @@ export default function refinementList(
   });
 
   try {
-    const makeWidget = connectRefinementList(specializedRenderer);
+    const makeWidget = connectRefinementList(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeWidget({
       attributeName,
       operator,

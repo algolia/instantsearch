@@ -53,6 +53,10 @@ const renderer = ({
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 toggle({
   container,
@@ -198,7 +202,10 @@ export default function toggle(
   });
 
   try {
-    const makeWidget = connectToggle(specializedRenderer);
+    const makeWidget = connectToggle(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeWidget({ attributeName, label, values: userValues });
   } catch (e) {
     throw new Error(usage);

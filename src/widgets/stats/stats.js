@@ -63,6 +63,10 @@ const renderer = ({
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 stats({
   container,
@@ -167,7 +171,10 @@ export default function stats(
   });
 
   try {
-    const makeWidget = connectStats(specializedRenderer);
+    const makeWidget = connectStats(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeWidget();
   } catch (e) {
     throw new Error(usage);

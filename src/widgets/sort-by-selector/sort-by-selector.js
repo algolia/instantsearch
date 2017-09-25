@@ -28,6 +28,10 @@ const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 sortBySelector({
   container,
@@ -103,7 +107,10 @@ export default function sortBySelector(
   });
 
   try {
-    const makeWidget = connectSortBySelector(specializedRenderer);
+    const makeWidget = connectSortBySelector(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeWidget({ indices });
   } catch (e) {
     throw new Error(usage);

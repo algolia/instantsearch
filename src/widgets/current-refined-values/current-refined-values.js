@@ -82,6 +82,10 @@ const renderer = ({
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 currentRefinedValues({
   container,
@@ -270,7 +274,8 @@ export default function currentRefinedValues({
 
   try {
     const makeCurrentRefinedValues = connectCurrentRefinedValues(
-      specializedRenderer
+      specializedRenderer,
+      disposer(containerNode)
     );
     return makeCurrentRefinedValues({
       attributes,

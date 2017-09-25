@@ -51,6 +51,10 @@ const renderer = ({
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 clearAll({
   container,
@@ -143,7 +147,10 @@ export default function clearAll({
   });
 
   try {
-    const makeWidget = connectClearAll(specializedRenderer);
+    const makeWidget = connectClearAll(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeWidget({ excludeAttributes, clearsQuery });
   } catch (e) {
     throw new Error(usage);

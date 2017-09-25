@@ -45,6 +45,10 @@ const renderer = ({
   );
 };
 
+const disposer = containerNode => () => {
+  ReactDOM.unmountComponentAtNode(containerNode);
+};
+
 const usage = `Usage:
 hits({
   container,
@@ -136,7 +140,7 @@ export default function hits({
   });
 
   try {
-    const makeHits = connectHits(specializedRenderer);
+    const makeHits = connectHits(specializedRenderer, disposer(containerNode));
     return makeHits({ escapeHits });
   } catch (e) {
     throw new Error(usage);
