@@ -185,7 +185,7 @@ describe('connectRangeSlider', () => {
     }
   });
 
-  it('should add numeric refinement when refining min boundary', () => {
+  it('should add numeric refinement when refining min boundary without previous configuation', () => {
     const rendering = sinon.stub();
     const makeWidget = connectRangeSlider(rendering);
 
@@ -193,6 +193,45 @@ describe('connectRangeSlider', () => {
     const widget = makeWidget({ attributeName, min: 0, max: 500 });
 
     const helper = jsHelper(fakeClient, '', widget.getConfiguration());
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    {
+      // first rendering
+      expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
+
+      const renderOptions = rendering.lastCall.args[0];
+      const { refine } = renderOptions;
+      refine([10, 30]);
+
+      expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
+      expect(helper.search.callCount).toBe(1);
+
+      refine([0, undefined]);
+      expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
+    }
+  });
+
+  it('should add numeric refinement when refining min boundary with previous configuration', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectRangeSlider(rendering);
+
+    const attributeName = 'price';
+    const widget = makeWidget({ attributeName, min: 0, max: 500 });
+    const configuration = widget.getConfiguration({
+      indexName: 'movie',
+    });
+
+    const helper = jsHelper(fakeClient, '', configuration);
     helper.search = sinon.stub();
 
     widget.init({

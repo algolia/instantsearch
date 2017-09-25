@@ -82,12 +82,12 @@ export default function connectRangeSlider(renderFn) {
         };
 
         const hasUserBounds = userMin !== undefined || userMax !== undefined;
-        const boundsNotAlreadyDefined =
-          !originalConf ||
-          (originalConf.numericRefinements &&
-            originalConf.numericRefinements[attributeName] === undefined);
+        const boundsAlreadyDefined =
+          originalConf &&
+          originalConf.numericRefinements &&
+          originalConf.numericRefinements[attributeName] !== undefined;
 
-        if (hasUserBounds && boundsNotAlreadyDefined) {
+        if (hasUserBounds && !boundsAlreadyDefined) {
           conf.numericRefinements = { [attributeName]: {} };
           if (userMin !== undefined)
             conf.numericRefinements[attributeName]['>='] = [userMin];
