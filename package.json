@@ -81,7 +81,7 @@
     "happypack": "4.0.0",
     "html-webpack-plugin": "2.30.1",
     "inquirer": "3.3.0",
-    "jest": "20.0.4",
+    "jest": "21.1.0",
     "jsdom-global": "2.1.1",
     "json": "9.0.6",
     "mkdirp": "0.5.1",
