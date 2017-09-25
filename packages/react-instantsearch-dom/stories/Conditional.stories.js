@@ -1,28 +1,20 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { createConnector } from '../packages/react-instantsearch';
+import { connectStateResults } from '../packages/react-instantsearch/connectors';
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Conditionals', module);
 
 stories
   .add('NoResults/HasResults', () => {
-    const Content = createConnector({
-      displayName: 'ConditionalResults',
-      getProvidedProps(props, searchState, searchResults) {
-        const noResults = searchResults.results
-          ? searchResults.results.nbHits === 0
-          : false;
-        return { query: searchState.query, noResults };
-      },
-    })(({ noResults, query }) => {
-      const content = noResults ? (
-        <div>No results has been found for {query}</div>
-      ) : (
-        <div>Some results</div>
-      );
-      return <div>{content}</div>;
-    });
+    const Content = connectStateResults(
+      ({ searchState, searchResults }) =>
+        searchResults && searchResults.nbHits !== 0 ? (
+          <div>Some results</div>
+        ) : (
+          <div>No results has been found for {searchState.query}</div>
+        )
+    );
     return (
       <WrapWithHits linkedStoryGroup="Conditional">
         <Content />
@@ -30,19 +22,25 @@ stories
     );
   })
   .add('NoQuery/HasQuery', () => {
-    const Content = createConnector({
-      displayName: 'ConditionalQuery',
-      getProvidedProps(props, searchState) {
-        return { query: searchState.query };
-      },
-    })(({ query }) => {
-      const content = query ? (
-        <div>The query {query} exists</div>
-      ) : (
-        <div>No query</div>
-      );
-      return <div>{content}</div>;
-    });
+    const Content = connectStateResults(
+      ({ searchState }) =>
+        searchState && searchState.query ? (
+          <div>The query {searchState.query} exists</div>
+        ) : (
+          <div>No query</div>
+        )
+    );
+    return (
+      <WrapWithHits linkedStoryGroup="Conditional">
+        <Content />
+      </WrapWithHits>
+    );
+  })
+  .add('NoLoading/HasQuery', () => {
+    const Content = connectStateResults(
+      ({ searching }) =>
+        searching ? <div>searching</div> : <div>No searching</div>
+    );
     return (
       <WrapWithHits linkedStoryGroup="Conditional">
         <Content />

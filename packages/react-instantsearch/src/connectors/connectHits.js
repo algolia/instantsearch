@@ -19,8 +19,9 @@ import { getResults } from '../core/indexUtils';
  * @example
  * import React from 'react';
  *
- * import { connectHits, Highlight, InstantSearch } from 'react-instantsearch/dom';
- *
+ * import { Highlight, InstantSearch } from 'react-instantsearch/dom';
+ * import { connectHits } from 'react-instantsearch/connectors';
+
  * const CustomHits = connectHits(({ hits }) =>
  * <div>
  *   {hits.map(hit =>
