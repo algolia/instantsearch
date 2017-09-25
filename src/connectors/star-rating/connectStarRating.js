@@ -55,6 +55,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * with `items.value`.
  * @type {Connector}
  * @param {function(StarRatingRenderingOptions, boolean)} renderFn Rendering function for the custom **StarRating** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomStarRatingWidgetOptions)} Re-usable widget factory for a custom **StarRating** widget.
  * @example
  * // custom `renderFn` to render the custom StarRating widget
@@ -103,7 +104,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectStarRating(renderFn) {
+export default function connectStarRating(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -183,6 +184,17 @@ export default function connectStarRating(renderFn) {
           },
           false
         );
+      },
+
+      dispose(helper) {
+        unmountFn();
+
+        const nextState = helper
+          .getState()
+          .removeDisjunctiveFacetRefinement(attributeName)
+          .removeDisjunctiveFacet(attributeName);
+
+        return nextState;
       },
 
       _toggleRefinement(helper, facetValue) {

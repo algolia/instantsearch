@@ -88,6 +88,7 @@ export const checkUsage = ({
   * function to select an item.
  * @type {Connector}
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.
  * @example
  * // custom `renderFn` to render the custom RefinementList widget
@@ -141,7 +142,7 @@ export const checkUsage = ({
  *   })
  * );
  */
-export default function connectRefinementList(renderFn) {
+export default function connectRefinementList(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -299,6 +300,7 @@ export default function connectRefinementList(renderFn) {
 
         return widgetConfiguration;
       },
+
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
@@ -321,6 +323,7 @@ export default function connectRefinementList(renderFn) {
           hasExhaustiveItems: true,
         });
       },
+
       render(renderOptions) {
         const {
           results,
@@ -352,6 +355,22 @@ export default function connectRefinementList(renderFn) {
           toggleShowMore: this.cachedToggleShowMore,
           hasExhaustiveItems,
         });
+      },
+
+      dispose(helper) {
+        unmountFn();
+
+        if (operator === 'and') {
+          return helper
+            .getState()
+            .removeFacetRefinement(attributeName)
+            .removeFacet(attributeName);
+        } else {
+          return helper
+            .getState()
+            .removeDisjunctiveFacetRefinement(attributeName)
+            .removeDisjunctiveFacet(attributeName);
+        }
       },
     };
   };

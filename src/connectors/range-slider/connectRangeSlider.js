@@ -51,9 +51,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * information about the min and max bounds for the current result set.
  * @type {Connector}
  * @param {function(RangeSliderRenderingOptions, boolean)} renderFn Rendering function for the custom **RangeSlider** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRangeSliderWidgetOptions)} Re-usable widget factory for a custom **RangeSlider** widget.
  */
-export default function connectRangeSlider(renderFn) {
+export default function connectRangeSlider(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -199,6 +200,17 @@ export default function connectRangeSlider(renderFn) {
           },
           false
         );
+      },
+
+      dispose(helper) {
+        unmountFn();
+
+        const nextState = helper
+          .getState()
+          .removeNumericRefinement(attributeName)
+          .removeDisjunctiveFacet(attributeName);
+
+        return nextState;
       },
     };
   };

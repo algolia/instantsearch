@@ -50,6 +50,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * It provides a `refine(value)` function to trigger a new search with selected option.
  * @type {Connector}
  * @param {function(NumericSelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericSelector** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomNumericSelectorWidgetOptions)} Re-usable widget factory for a custom **NumericSelector** widget.
  * @example
  * // custom `renderFn` to render the custom NumericSelector widget
@@ -92,7 +93,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectNumericSelector(renderFn) {
+export default function connectNumericSelector(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -149,6 +150,16 @@ export default function connectNumericSelector(renderFn) {
         );
       },
 
+      dispose(helper) {
+        unmountFn();
+
+        const nextState = helper
+          .getState()
+          .removeNumericRefinement(attributeName);
+
+        return nextState;
+      },
+
       _getRefinedValue(state) {
         // This is reimplementing state.getNumericRefinement
         // But searchParametersFromUrl is not an actual SearchParameters object
@@ -156,10 +167,10 @@ export default function connectNumericSelector(renderFn) {
         // is not sending a SearchParameters. There's no way given how we built the helper
         // to initialize a true partial state where only the refinements are present
         return state &&
-        state.numericRefinements &&
-        state.numericRefinements[attributeName] !== undefined &&
-        state.numericRefinements[attributeName][operator] !== undefined &&
-        state.numericRefinements[attributeName][operator][0] !== undefined // could be 0
+          state.numericRefinements &&
+          state.numericRefinements[attributeName] !== undefined &&
+          state.numericRefinements[attributeName][operator] !== undefined &&
+          state.numericRefinements[attributeName][operator][0] !== undefined // could be 0
           ? state.numericRefinements[attributeName][operator][0]
           : options[0].value;
       },

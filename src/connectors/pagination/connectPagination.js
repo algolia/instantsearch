@@ -40,6 +40,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *
  * @type {Connector}
  * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomPaginationWidgetOptions)} Re-usable widget factory for a custom **Pagination** widget.
  * @example
  * // custom `renderFn` to render the custom Pagination widget
@@ -86,7 +87,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectPagination(renderFn) {
+export default function connectPagination(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -132,6 +133,10 @@ export default function connectPagination(renderFn) {
           },
           false
         );
+      },
+
+      dispose() {
+        unmountFn();
       },
     };
   };

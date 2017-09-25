@@ -64,9 +64,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
   *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/feat/instantsearch.js/v2/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
   * @type {Connector}
   * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
+  * @param {function} unmountFn Unmount function called when the widget is disposed.
   * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
   */
-export default function connectHierarchicalMenu(renderFn) {
+export default function connectHierarchicalMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -162,6 +163,23 @@ export default function connectHierarchicalMenu(renderFn) {
           },
           false
         );
+      },
+
+      dispose(helper) {
+        // unmount widget from DOM
+        unmountFn();
+
+        // compute nextState for the search
+        const nextState = helper
+          .getState()
+          .removeHierarchicalFacetRefinement(hierarchicalFacetName)
+          .removeHierarchicalFacet(hierarchicalFacetName);
+
+        if (nextState.maxValuesPerFacet === limit) {
+          nextState.maxValuesPerFacet = undefined;
+        }
+
+        return nextState;
       },
     };
   };

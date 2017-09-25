@@ -34,6 +34,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * **Hits** connector provides the logic to create custom widgets that will render the results retrieved from Algolia.
  * @type {Connector}
  * @param {function(HitsRenderingOptions, boolean)} renderFn Rendering function for the custom **Hits** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomHitsWidgetOptions)} Re-usable widget factory for a custom **Hits** widget.
  * @example
  * // custom `renderFn` to render the custom Hits widget
@@ -55,7 +56,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectHits(renderFn) {
+export default function connectHits(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => ({
@@ -89,6 +90,10 @@ export default function connectHits(renderFn) {
         },
         false
       );
+    },
+
+    dispose() {
+      unmountFn();
     },
   });
 }

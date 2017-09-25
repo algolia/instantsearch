@@ -60,6 +60,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *
  * @type {Connector}
  * @param {function(ToggleRenderingOptions, boolean)} renderFn Rendering function for the custom **Toggle** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomToggleWidgetOptions)} Re-usable widget factory for a custom **Toggle** widget.
  * @example
  * // custom `renderFn` to render the custom ClearAll widget
@@ -102,7 +103,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectToggle(renderFn) {
+export default function connectToggle(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -261,6 +262,17 @@ export default function connectToggle(renderFn) {
           },
           false
         );
+      },
+
+      dispose(helper) {
+        unmountFn();
+
+        const nextState = helper
+          .getState()
+          .removeDisjunctiveFacetRefinement(attributeName)
+          .removeDisjunctiveFacet(attributeName);
+
+        return nextState;
       },
     };
   };

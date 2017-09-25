@@ -62,6 +62,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @function connectNumericRefinementList
  * @type {Connector}
  * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericRefinementList** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomNumericRefinementListWidgetOptions)} Re-usable widget factory for a custom **NumericRefinementList** widget.
  * @example
  * // custom `renderFn` to render the custom NumericRefinementList widget
@@ -110,7 +111,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectNumericRefinementList(renderFn) {
+export default function connectNumericRefinementList(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -166,6 +167,11 @@ export default function connectNumericRefinementList(renderFn) {
           },
           false
         );
+      },
+
+      dispose(helper) {
+        unmountFn();
+        return helper.getState().clearRefinements(attributeName);
       },
     };
   };
