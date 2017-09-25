@@ -523,6 +523,28 @@ export default () => {
       })
     )
     .add(
+      'disabled',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
+            },
+            min: 100,
+            max: 50,
+            step: 10,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
       'without pips',
       wrapWithHits(container => {
         window.search.addWidget(
