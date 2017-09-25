@@ -1,3 +1,13 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/algolia/vue-instantsearch/compare/v1.0.0...v1.0.1) (2017-09-25)
+
+
+### Bug Fixes
+
+* **instantsearch:** allow to treeshake es module ([f419329](https://github.com/algolia/vue-instantsearch/commit/f419329))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/algolia/vue-instantsearch/compare/v0.7.0...v1.0.0) (2017-08-23)
 
