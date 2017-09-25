@@ -357,17 +357,15 @@ export default function connectRefinementList(renderFn, unmountFn) {
         });
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         unmountFn();
 
         if (operator === 'and') {
-          return helper
-            .getState()
+          return state
             .removeFacetRefinement(attributeName)
             .removeFacet(attributeName);
         } else {
-          return helper
-            .getState()
+          return state
             .removeDisjunctiveFacetRefinement(attributeName)
             .removeDisjunctiveFacet(attributeName);
         }

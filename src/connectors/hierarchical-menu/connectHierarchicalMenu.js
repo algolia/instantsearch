@@ -165,13 +165,12 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         );
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         // unmount widget from DOM
         unmountFn();
 
         // compute nextState for the search
-        const nextState = helper
-          .getState()
+        const nextState = state
           .removeHierarchicalFacetRefinement(hierarchicalFacetName)
           .removeHierarchicalFacet(hierarchicalFacetName);
 

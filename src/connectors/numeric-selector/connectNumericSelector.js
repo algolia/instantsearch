@@ -150,14 +150,9 @@ export default function connectNumericSelector(renderFn, unmountFn) {
         );
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         unmountFn();
-
-        const nextState = helper
-          .getState()
-          .removeNumericRefinement(attributeName);
-
-        return nextState;
+        return state.removeNumericRefinement(attributeName);
       },
 
       _getRefinedValue(state) {

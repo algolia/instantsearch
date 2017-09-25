@@ -153,9 +153,9 @@ export default function connectSortBySelector(renderFn, unmountFn) {
         );
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         unmountFn();
-        return helper.getState().setIndex(this.initialIndex);
+        return state.setIndex(this.initialIndex);
       },
     };
   };

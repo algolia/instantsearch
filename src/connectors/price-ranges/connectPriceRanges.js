@@ -217,11 +217,10 @@ export default function connectPriceRanges(renderFn, unmountFn) {
         );
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         unmountFn();
 
-        const nextState = helper
-          .getState()
+        const nextState = state
           .removeFacetRefinement(attributeName)
           .removeFacet(attributeName);
 

@@ -186,11 +186,10 @@ export default function connectStarRating(renderFn, unmountFn) {
         );
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         unmountFn();
 
-        const nextState = helper
-          .getState()
+        const nextState = state
           .removeDisjunctiveFacetRefinement(attributeName)
           .removeDisjunctiveFacet(attributeName);
 

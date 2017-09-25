@@ -102,7 +102,10 @@ Usage: instantsearch({
 
     this.widgets.splice(this.widgets.indexOf(widget), 1);
 
-    const nextState = widget.dispose(this.helper);
+    const nextState = widget.dispose({
+      helper: this.helper,
+      state: this.helper.getState(),
+    });
 
     // re-compute remaining widgets to the state
     // in a case two widgets were using the same configuration but we removed one

@@ -264,11 +264,10 @@ export default function connectToggle(renderFn, unmountFn) {
         );
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         unmountFn();
 
-        const nextState = helper
-          .getState()
+        const nextState = state
           .removeDisjunctiveFacetRefinement(attributeName)
           .removeDisjunctiveFacet(attributeName);
 

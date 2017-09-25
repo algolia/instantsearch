@@ -143,9 +143,9 @@ export default function connectSearchBox(renderFn, unmountFn) {
         );
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         unmountFn();
-        return helper.getState().setQuery('');
+        return state.setQuery('');
       },
     };
   };

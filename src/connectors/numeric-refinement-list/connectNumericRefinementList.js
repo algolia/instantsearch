@@ -169,9 +169,9 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
         );
       },
 
-      dispose(helper) {
+      dispose({ state }) {
         unmountFn();
-        return helper.getState().clearRefinements(attributeName);
+        return state.clearRefinements(attributeName);
       },
     };
   };
