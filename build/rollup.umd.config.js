@@ -8,7 +8,7 @@ import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
 
 export default {
-  entry: 'src/instantsearch.js',
+  entry: 'src/instantsearch.umd.js',
   moduleName: 'VueInstantSearch',
   exports: 'named',
   plugins: [
