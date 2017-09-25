@@ -90,6 +90,31 @@ Usage: instantsearch({
     this.widgets.push(widget);
   }
 
+  removeWidget(widget) {
+    if (
+      !this.widgets.includes(widget) ||
+      typeof widget.dispose !== 'function'
+    ) {
+      throw new Error('Widget definition is missing dispose method');
+    }
+
+    this.widgets.splice(this.widgets.indexOf(widget), 1);
+
+    const nextState = widget.dispose(this.helper);
+
+    // re-compute remaining widgets to the state
+    // in a case two widgets were using the same configuration but we removed one
+    if (nextState) {
+      this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+        ...nextState,
+      });
+
+      this.helper.setState(nextState);
+    }
+
+    this.helper.search();
+  }
+
   /**
    * The start methods ends the initialization of InstantSearch.js and triggers the
    * first search. This method should be called after all widgets have been added
