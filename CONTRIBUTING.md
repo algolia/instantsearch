@@ -28,6 +28,15 @@ A note about the branches used in this project:
 You should do the dev and PR according to the target version. No new features
 will be done on the maintenance version.
 
+Once you make a pull request, a bot will comment with a link to a development version of the website. On it you can find
+
+1. The generated documentation 
+    - for example: https://deploy-preview-2383--algolia-instantsearch.netlify.com/
+    - source: https://github.com/algolia/instantsearch.js/tree/develop/docgen
+2. A playground for the widgets
+    - for example: https://deploy-preview-2383--algolia-instantsearch.netlify.com/dev-novel/
+    - source: https://github.com/algolia/instantsearch.js/tree/develop/dev
+
 ### Requirements
 
 To run this project, you will need:
@@ -158,5 +167,5 @@ npm run release-maintenance
 
 Documentation website is automatically updated by Travis when master is merged.
 
-[logo]: ./docs/readme-logo.png
+[logo]: https://community.algolia.com/instantsearch.js/v2/assets/img/InstantSearch-JavaScript.svg
 [website]: https://community.algolia.com/instantsearch.js
