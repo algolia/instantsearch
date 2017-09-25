@@ -484,8 +484,19 @@
   -webkit-transform: translate(0, 6px);
           transform: translate(0, 6px);
   will-change: opacity, transform;
-  text-align: left;
-  overflow: hidden; }
+  text-align: left; }
+
+.algc-navigation__menu .algc-menu__sublist:before {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: -4px;
+  height: 12px;
+  width: 12px;
+  border-radius: 3px;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  background-color: #FFF; }
 
 .algc-navigation__menu .algc-menu__sublist li:not(:last-child) {
   border-bottom: solid 1px #eee; }

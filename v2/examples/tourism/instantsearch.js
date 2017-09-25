@@ -7703,7 +7703,30 @@ var hexTable = (function () {
     return array;
 }());
 
-exports.arrayToObject = function (source, options) {
+var compactQueue = function compactQueue(queue) {
+    var obj;
+
+    while (queue.length) {
+        var item = queue.pop();
+        obj = item.obj[item.prop];
+
+        if (Array.isArray(obj)) {
+            var compacted = [];
+
+            for (var j = 0; j < obj.length; ++j) {
+                if (typeof obj[j] !== 'undefined') {
+                    compacted.push(obj[j]);
+                }
+            }
+
+            item.obj[item.prop] = compacted;
+        }
+    }
+
+    return obj;
+};
+
+exports.arrayToObject = function arrayToObject(source, options) {
     var obj = options && options.plainObjects ? Object.create(null) : {};
     for (var i = 0; i < source.length; ++i) {
         if (typeof source[i] !== 'undefined') {
@@ -7714,7 +7737,7 @@ exports.arrayToObject = function (source, options) {
     return obj;
 };
 
-exports.merge = function (target, source, options) {
+exports.merge = function merge(target, source, options) {
     if (!source) {
         return target;
     }
@@ -7784,7 +7807,7 @@ exports.decode = function (str) {
     }
 };
 
-exports.encode = function (str) {
+exports.encode = function encode(str) {
     // This code was originally written by Brian White (mscdex) for the io.js core querystring library.
     // It has been adapted here for stricter adherence to RFC 3986
     if (str.length === 0) {
@@ -7798,7 +7821,7 @@ exports.encode = function (str) {
         var c = string.charCodeAt(i);
 
         if (
-            c === 0x2D    // -
+            c === 0x2D // -
             || c === 0x2E // .
             || c === 0x5F // _
             || c === 0x7E // ~
@@ -7836,46 +7859,33 @@ exports.encode = function (str) {
     return out;
 };
 
-exports.compact = function (obj, references) {
-    if (typeof obj !== 'object' || obj === null) {
-        return obj;
-    }
+exports.compact = function compact(value) {
+    var queue = [{ obj: { o: value }, prop: 'o' }];
+    var refs = [];
 
-    var refs = references || [];
-    var lookup = refs.indexOf(obj);
-    if (lookup !== -1) {
-        return refs[lookup];
-    }
+    for (var i = 0; i < queue.length; ++i) {
+        var item = queue[i];
+        var obj = item.obj[item.prop];
 
-    refs.push(obj);
-
-    if (Array.isArray(obj)) {
-        var compacted = [];
-
-        for (var i = 0; i < obj.length; ++i) {
-            if (obj[i] && typeof obj[i] === 'object') {
-                compacted.push(exports.compact(obj[i], refs));
-            } else if (typeof obj[i] !== 'undefined') {
-                compacted.push(obj[i]);
+        var keys = Object.keys(obj);
+        for (var j = 0; j < keys.length; ++j) {
+            var key = keys[j];
+            var val = obj[key];
+            if (typeof val === 'object' && val !== null && refs.indexOf(val) === -1) {
+                queue.push({ obj: obj, prop: key });
+                refs.push(val);
             }
         }
-
-        return compacted;
     }
 
-    var keys = Object.keys(obj);
-    keys.forEach(function (key) {
-        obj[key] = exports.compact(obj[key], refs);
-    });
-
-    return obj;
+    return compactQueue(queue);
 };
 
-exports.isRegExp = function (obj) {
+exports.isRegExp = function isRegExp(obj) {
     return Object.prototype.toString.call(obj) === '[object RegExp]';
 };
 
-exports.isBuffer = function (obj) {
+exports.isBuffer = function isBuffer(obj) {
     if (obj === null || typeof obj === 'undefined') {
         return false;
     }
@@ -11877,7 +11887,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.1.4';
+exports.default = '2.1.5';
 
 /***/ }),
 /* 180 */
@@ -13766,6 +13776,9 @@ var usage = 'Usage:\nvar customPagination = connectPagination(function render(pa
  * **Pagination** connector provides the logic to build a widget that will let the user
  * choose the current page of the results.
  *
+ * When using the pagination with Algolia, you should be aware that the engine won't provide you pages
+ * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
+ *
  * @type {Connector}
  * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
  * @return {function(CustomPaginationWidgetOptions)} Re-usable widget factory for a custom **Pagination** widget.
@@ -14218,10 +14231,18 @@ function connectRangeSlider(renderFn) {
 
             if (currentValues[0] !== newValues[0] || currentValues[1] !== newValues[1]) {
               helper.clearRefinements(attributeName);
-              if (!bounds.min || newValues[0] > bounds.min) {
+
+              var hasMin = bounds.min !== null && bounds.min !== undefined;
+              var minValueChanged = newValues[0] !== null && newValues[0] !== undefined;
+
+              if (hasMin && minValueChanged && bounds.min < newValues[0] || !hasMin && minValueChanged) {
                 helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
               }
-              if (!bounds.max || newValues[1] < bounds.max) {
+
+              var hasMax = bounds.max !== null && bounds.max !== undefined;
+              var maxValueChanged = newValues[1] !== null && newValues[1] !== undefined;
+
+              if (hasMax && maxValueChanged && bounds.max > newValues[1] || !hasMax && maxValueChanged) {
                 helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
               }
               helper.search();
@@ -23004,7 +23025,7 @@ module.exports = function (object, opts) {
     var serializeDate = typeof options.serializeDate === 'function' ? options.serializeDate : defaults.serializeDate;
     var encodeValuesOnly = typeof options.encodeValuesOnly === 'boolean' ? options.encodeValuesOnly : defaults.encodeValuesOnly;
     if (typeof options.format === 'undefined') {
-        options.format = formats.default;
+        options.format = formats['default'];
     } else if (!Object.prototype.hasOwnProperty.call(formats.formatters, options.format)) {
         throw new TypeError('Unknown format option provided.');
     }
@@ -23128,36 +23149,38 @@ var parseValues = function parseQueryStringValues(str, options) {
     return obj;
 };
 
-var parseObject = function parseObjectRecursive(chain, val, options) {
-    if (!chain.length) {
-        return val;
-    }
+var parseObject = function (chain, val, options) {
+    var leaf = val;
 
-    var root = chain.shift();
+    for (var i = chain.length - 1; i >= 0; --i) {
+        var obj;
+        var root = chain[i];
 
-    var obj;
-    if (root === '[]') {
-        obj = [];
-        obj = obj.concat(parseObject(chain, val, options));
-    } else {
-        obj = options.plainObjects ? Object.create(null) : {};
-        var cleanRoot = root.charAt(0) === '[' && root.charAt(root.length - 1) === ']' ? root.slice(1, -1) : root;
-        var index = parseInt(cleanRoot, 10);
-        if (
-            !isNaN(index)
-            && root !== cleanRoot
-            && String(index) === cleanRoot
-            && index >= 0
-            && (options.parseArrays && index <= options.arrayLimit)
-        ) {
+        if (root === '[]') {
             obj = [];
-            obj[index] = parseObject(chain, val, options);
+            obj = obj.concat(leaf);
         } else {
-            obj[cleanRoot] = parseObject(chain, val, options);
+            obj = options.plainObjects ? Object.create(null) : {};
+            var cleanRoot = root.charAt(0) === '[' && root.charAt(root.length - 1) === ']' ? root.slice(1, -1) : root;
+            var index = parseInt(cleanRoot, 10);
+            if (
+                !isNaN(index)
+                && root !== cleanRoot
+                && String(index) === cleanRoot
+                && index >= 0
+                && (options.parseArrays && index <= options.arrayLimit)
+            ) {
+                obj = [];
+                obj[index] = leaf;
+            } else {
+                obj[cleanRoot] = leaf;
+            }
         }
+
+        leaf = obj;
     }
 
-    return obj;
+    return leaf;
 };
 
 var parseKeys = function parseQueryStringKeys(givenKey, val, options) {
@@ -27337,7 +27360,7 @@ function getDocumentProtocol() {
 "use strict";
 
 
-module.exports = '3.24.3';
+module.exports = '3.24.4';
 
 
 /***/ }),
@@ -29752,6 +29775,7 @@ var preact = {
 	options: options
 };
 
+
 /* unused harmony default export */ var _unused_webpack_default_export = (preact);
 //# sourceMappingURL=preact.esm.js.map
 
@@ -31804,7 +31828,7 @@ var usage = 'Usage:\nhits({\n  container,\n  [ cssClasses.{root,empty,item}={} ]
 /**
  * @typedef {Object} HitsTemplates
  * @property {string|function(object):string} [empty=''] Template to use when there are no results.
- * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record.
+ * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record. The record will have a new property `__hitIndex` for the position of the record in the list of displayed hits.
  * @property {string|function(object):string} [allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
  */
 
@@ -33454,6 +33478,10 @@ var usage = 'Usage:\npagination({\n  container,\n  [ cssClasses.{root,item,page,
  * only to display more items. The *show more* pattern is usually prefered
  * because it is simpler to use, and it is more convenient in a mobile context.
  * See the infinite hits widget, for more informations.
+ *
+ * When using the pagination with Algolia, you should be aware that the engine won't provide you pages
+ * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
+ *
  * @type {WidgetFactory}
  * @category navigation
  * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
@@ -34549,7 +34577,8 @@ var PriceRangesForm = function (_React$Component) {
     value: function handleSubmit(event) {
       var from = this.refs.from.value !== '' ? parseInt(this.refs.from.value, 10) : undefined;
       var to = this.refs.to.value !== '' ? parseInt(this.refs.to.value, 10) : undefined;
-      this.props.refine(from, to, event);
+
+      this.props.refine({ from: from, to: to }, event);
     }
   }, {
     key: 'render',
@@ -35463,7 +35492,7 @@ var Slider = function (_Component) {
           max = _ref5.max;
 
       var snapPoints = this.computeSnapPoints({ min: min, max: max, step: step });
-      var pitPoints = pips === true || pips === undefined || pips === false ? this.computeDefaultPitPoints({ min: min, max: max }) : pips;
+      var pitPoints = pips === false ? [] : this.computeDefaultPitPoints({ min: min, max: max });
 
       return _react2.default.createElement(
         'div',
