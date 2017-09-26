@@ -30,7 +30,7 @@ done
 cp dist/* docs
 
 # Build dev-novel
-NODE_ENV=development webpack --config dev/webpack.config.js
+NODE_ENV=production webpack --config dev/webpack.config.js
 
 # Move dev-novel to website-root
 mv dev/dist docs/dev-novel
