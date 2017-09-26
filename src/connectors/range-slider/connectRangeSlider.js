@@ -166,58 +166,58 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      init({ helper, instantSearchInstance }) {
-        this._refine = newValues => {
-          const currentValues = [
-            helper.getNumericRefinement(attributeName, '>='),
-            helper.getNumericRefinement(attributeName, '<='),
-          ];
+      _refine: helper => newValues => {
+        const currentValues = [
+          helper.getNumericRefinement(attributeName, '>='),
+          helper.getNumericRefinement(attributeName, '<='),
+        ];
+
+        if (
+          currentValues[0] !== newValues[0] ||
+          currentValues[1] !== newValues[1]
+        ) {
+          helper.clearRefinements();
+
+          const minValueChanged =
+            newValues[0] !== null && newValues[0] !== undefined;
 
           if (
-            currentValues[0] !== newValues[0] ||
-            currentValues[1] !== newValues[1]
+            (isMinBounds && minValueChanged && minBounds < newValues[0]) ||
+            (!isMinBounds && minValueChanged)
           ) {
-            helper.clearRefinements(attributeName);
-
-            const minValueChanged =
-              newValues[0] !== null && newValues[0] !== undefined;
-
-            if (
-              (isMinBounds && minValueChanged && minBounds < newValues[0]) ||
-              (!isMinBounds && minValueChanged)
-            ) {
-              helper.addNumericRefinement(
-                attributeName,
-                '>=',
-                formatToNumber(newValues[0])
-              );
-            }
-
-            const maxValueChanged =
-              newValues[1] !== null && newValues[1] !== undefined;
-
-            if (
-              (isMaxBounds && maxValueChanged && maxBounds > newValues[1]) ||
-              (!isMaxBounds && maxValueChanged)
-            ) {
-              helper.addNumericRefinement(
-                attributeName,
-                '<=',
-                formatToNumber(newValues[1])
-              );
-            }
-
-            helper.search();
+            helper.addNumericRefinement(
+              attributeName,
+              '>=',
+              formatToNumber(newValues[0])
+            );
           }
-        };
 
+          const maxValueChanged =
+            newValues[1] !== null && newValues[1] !== undefined;
+
+          if (
+            (isMaxBounds && maxValueChanged && maxBounds > newValues[1]) ||
+            (!isMaxBounds && maxValueChanged)
+          ) {
+            helper.addNumericRefinement(
+              attributeName,
+              '<=',
+              formatToNumber(newValues[1])
+            );
+          }
+
+          helper.search();
+        }
+      },
+
+      init({ helper, instantSearchInstance }) {
         const stats = {};
         const currentRange = this._getCurrentRange(stats);
         const currentRefinement = this._getCurrentRefinement(helper, stats);
 
         renderFn(
           {
-            refine: this._refine,
+            refine: this._refine(helper),
             range: currentRange,
             start: [currentRefinement.min, currentRefinement.max],
             format: sliderFormatter,
@@ -238,7 +238,7 @@ export default function connectRangeSlider(renderFn) {
 
         renderFn(
           {
-            refine: this._refine,
+            refine: this._refine(helper),
             range: currentRange,
             start: [currentRefinement.min, currentRefinement.max],
             format: sliderFormatter,
