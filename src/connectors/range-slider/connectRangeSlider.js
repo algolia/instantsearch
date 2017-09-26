@@ -166,43 +166,34 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      _refine: helper => newValues => {
-        const currentValues = [
+      _refine: helper => ([nextMin, nextMax] = []) => {
+        const [min, max] = [
           helper.getNumericRefinement(attributeName, '>='),
           helper.getNumericRefinement(attributeName, '<='),
         ];
 
-        if (
-          currentValues[0] !== newValues[0] ||
-          currentValues[1] !== newValues[1]
-        ) {
+        if (min !== nextMin || max !== nextMax) {
           helper.clearRefinements();
 
-          const minValueChanged =
-            newValues[0] !== null && newValues[0] !== undefined;
+          const isValidMinInput = nextMin !== null && nextMin !== undefined;
+          const isGreatherThanBounds = isMinBounds && minBounds <= nextMin;
 
-          if (
-            (isMinBounds && minValueChanged && minBounds <= newValues[0]) ||
-            (!isMinBounds && minValueChanged)
-          ) {
+          if (isValidMinInput && (!isMinBounds || isGreatherThanBounds)) {
             helper.addNumericRefinement(
               attributeName,
               '>=',
-              formatToNumber(newValues[0])
+              formatToNumber(nextMin)
             );
           }
 
-          const maxValueChanged =
-            newValues[1] !== null && newValues[1] !== undefined;
+          const isValidMaxInput = nextMax !== null && nextMax !== undefined;
+          const isLowerThanBounds = isMaxBounds && maxBounds >= nextMax;
 
-          if (
-            (isMaxBounds && maxValueChanged && maxBounds >= newValues[1]) ||
-            (!isMaxBounds && maxValueChanged)
-          ) {
+          if (isValidMaxInput && (!isMaxBounds || isLowerThanBounds)) {
             helper.addNumericRefinement(
               attributeName,
               '<=',
-              formatToNumber(newValues[1])
+              formatToNumber(nextMax)
             );
           }
 
