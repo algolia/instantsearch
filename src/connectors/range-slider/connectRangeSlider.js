@@ -34,9 +34,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} RangeSliderRenderingOptions
- * @property {function({min: number, max: number})} refine Sets a range to filter the results on. Both values
+ * @property {function(Array<number, number>)} refine Sets a range to filter the results on. Both values
  * are optional, and will default to the higher and lower bounds.
- * @property {{min: number, max: number}} numeric Results bounds without the current range filter.
+ * @property {{min: number, max: number}} range Results bounds without the current range filter.
  * @property {Array<number, number>} start Current numeric bounds of the search.
  * @property {{from: function, to: function}} formatter Transform for the rendering `from` and/or `to` values.
  * Both functions take a `number` as input and should output a `string`.
