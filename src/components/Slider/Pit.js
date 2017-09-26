@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 import cx from 'classnames';
 
 import includes from 'lodash/includes';
@@ -19,11 +19,11 @@ const Pit = ({ style, children }) => {
         }
       )}
     >
-      {shouldDisplayValue
-        ? <div className="ais-range-slider--value">
-            {Math.round(children * 100) / 100}
-          </div>
-        : null}
+      {shouldDisplayValue ? (
+        <div className="ais-range-slider--value">
+          {Math.round(children * 100) / 100}
+        </div>
+      ) : null}
     </div>
   );
 };

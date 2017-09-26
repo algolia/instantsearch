@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import Slider from '../../components/Slider/Slider.js';
@@ -46,7 +45,7 @@ const renderer = ({
   const minValue = start[0] === -Infinity ? min : start[0];
   const maxValue = start[1] === Infinity ? max : start[1];
 
-  ReactDOM.render(
+  render(
     <Slider
       cssClasses={cssClasses}
       refine={refine}

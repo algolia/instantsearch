@@ -4,7 +4,7 @@ import has from 'lodash/has';
 
 import PropTypes from 'prop-types';
 
-import React, { Component } from 'react';
+import React, { Component } from 'preact-compat';
 import Rheostat from 'rheostat';
 import cx from 'classnames';
 
