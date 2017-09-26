@@ -4,10 +4,13 @@ import cx from 'classnames';
 
 import includes from 'lodash/includes';
 
-const Pit = ({ style, children }) => {
+const Pit = ({ key, style, children }) => {
   // first, end & middle
   const positionValue = Math.round(parseFloat(style.left));
   const shouldDisplayValue = includes([0, 50, 100], positionValue);
+
+  const value = children ? children : key.replace('pit-', '');
+  const pitValue = Math.round(parseFloat(value, 10) * 100) / 100;
 
   return (
     <div
@@ -20,19 +23,15 @@ const Pit = ({ style, children }) => {
       )}
     >
       {shouldDisplayValue ? (
-        <div className="ais-range-slider--value">
-          {Math.round(children * 100) / 100}
-        </div>
+        <div className="ais-range-slider--value">{pitValue}</div>
       ) : null}
     </div>
   );
 };
 
 Pit.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.number.isRequired,
-    PropTypes.string.isRequired,
-  ]),
+  key: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   style: PropTypes.shape({
     position: PropTypes.string.isRequired,
     left: PropTypes.string.isRequired,
