@@ -3835,9 +3835,9 @@ eslint-plugin-prettier@2.3.1:
     fast-diff "^1.1.1"
     jest-docblock "^21.0.0"
 
-eslint-plugin-react@7.3.0:
-  version "7.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.3.0.tgz#ca9368da36f733fbdc05718ae4e91f778f38e344"
+eslint-plugin-react@7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.4.0.tgz#300a95861b9729c087d362dd64abcc351a74364a"
   dependencies:
     doctrine "^2.0.0"
     has "^1.0.1"
