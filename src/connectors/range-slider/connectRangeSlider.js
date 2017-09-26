@@ -101,26 +101,33 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      getConfiguration: originalConf => {
-        const conf = {
+      getConfiguration: currentConfiguration => {
+        const configuration = {
           disjunctiveFacets: [attributeName],
         };
 
-        const hasUserBounds = userMin !== undefined || userMax !== undefined;
-        const boundsAlreadyDefined =
-          originalConf &&
-          originalConf.numericRefinements &&
-          originalConf.numericRefinements[attributeName] !== undefined;
+        const isMinBound = userMin !== undefined && userMin !== null;
+        const isMaxBound = userMax !== undefined && userMax !== null;
+        const boundsDefined = isMinBound || isMaxBound;
 
-        if (hasUserBounds && !boundsAlreadyDefined) {
-          conf.numericRefinements = { [attributeName]: {} };
-          if (userMin !== undefined)
-            conf.numericRefinements[attributeName]['>='] = [userMin];
-          if (userMax !== undefined)
-            conf.numericRefinements[attributeName]['<='] = [userMax];
+        const boundsAlreadyDefined =
+          currentConfiguration &&
+          currentConfiguration.numericRefinements &&
+          currentConfiguration.numericRefinements[attributeName] !== undefined;
+
+        if (boundsDefined && !boundsAlreadyDefined) {
+          configuration.numericRefinements = { [attributeName]: {} };
+
+          if (isMinBound) {
+            configuration.numericRefinements[attributeName]['>='] = [userMin];
+          }
+
+          if (isMaxBound) {
+            configuration.numericRefinements[attributeName]['<='] = [userMax];
+          }
         }
 
-        return conf;
+        return configuration;
       },
 
       _getCurrentRefinement(helper, stats = {}) {

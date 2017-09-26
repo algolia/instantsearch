@@ -303,6 +303,64 @@ describe('connectRangeSlider', () => {
     }
   });
 
+  describe('getConfiguration', () => {
+    const attributeName = 'price';
+    const rendering = () => {};
+
+    it('expect to return default configuration', () => {
+      const currentConfiguration = {};
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const expectation = { disjunctiveFacets: ['price'] };
+      const actual = widget.getConfiguration(currentConfiguration);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return default configuration if previous one has already numeric refinements', () => {
+      const currentConfiguration = {
+        numericRefinements: {
+          price: {
+            '<=': [500],
+          },
+        },
+      };
+
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        max: 500,
+      });
+
+      const expectation = { disjunctiveFacets: ['price'] };
+      const actual = widget.getConfiguration(currentConfiguration);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return configuration with added numeric refinements', () => {
+      const currentConfiguration = {};
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        max: 500,
+      });
+
+      const expectation = {
+        disjunctiveFacets: ['price'],
+        numericRefinements: {
+          price: {
+            '<=': [500],
+          },
+        },
+      };
+
+      const actual = widget.getConfiguration(currentConfiguration);
+
+      expect(actual).toEqual(expectation);
+    });
+  });
+
   describe('_getCurrentRange', () => {
     const attributeName = 'price';
     const rendering = () => {};
