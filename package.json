@@ -106,7 +106,7 @@
     "prop-types": "15.5.10",
     "pug": "2.0.0-rc.4",
     "qs": "6.5.1",
-    "react": "15.6.1",
+    "react": "15.6.2",
     "react-addons-test-utils": "15.6.0",
     "react-autosuggest": "9.3.2",
     "react-dom": "15.6.1",

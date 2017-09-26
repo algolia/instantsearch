@@ -36,7 +36,7 @@
   "license": "MIT",
   "devDependencies": {
     "enzyme": "2.9.1",
-    "react": "15.6.1",
+    "react": "15.6.2",
     "react-dom": "15.6.1",
     "react-native": "^0.46.3",
     "react-test-renderer": "15.6.1"
