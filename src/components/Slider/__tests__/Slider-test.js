@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import Enhance, { Slider } from '../Slider';
 
 describe('Slider', () => {
-  it('should render correctly', () => {
+  it('expect to render correctly', () => {
     const tree = renderer
       .create(
         <Enhance
@@ -23,7 +23,7 @@ describe('Slider', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('should render without pips', () => {
+  it('expect to render without pips', () => {
     const tree = renderer
       .create(
         <Enhance
