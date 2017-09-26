@@ -126,7 +126,7 @@
     "webpack-hot-middleware": "2.19.1"
   },
   "engines": {
-    "node": "7.10.0"
+    "node": "8.2.1"
   },
   "jest": {
     "notify": false,
