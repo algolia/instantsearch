@@ -8,5 +8,11 @@
       "semanticPrefix": "chore(deps): "
     }
   ],
-  "ignoreDeps": ["jsdoc-parse", "react-native"]
+  "ignoreDeps": ["jsdoc-parse", "react-native"],
+  "packageRules": [
+    {
+      "packagePatterns": "^@storybook",
+      "groupName": ["@storybook packages"]
+    }
+  ]
 }
