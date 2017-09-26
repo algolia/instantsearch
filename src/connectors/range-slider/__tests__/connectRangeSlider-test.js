@@ -43,7 +43,7 @@ describe('connectRangeSlider', () => {
       // should provide good values for the first rendering
       const { range, start, widgetParams } = rendering.lastCall.args[0];
       expect(range).toEqual({ min: 0, max: 0 });
-      expect(start).toEqual([-Infinity, Infinity]);
+      expect(start).toEqual([0, 0]);
       expect(widgetParams).toEqual({
         attributeName,
       });
@@ -82,7 +82,7 @@ describe('connectRangeSlider', () => {
       // should provide good values for the first rendering
       const { range, start } = rendering.lastCall.args[0];
       expect(range).toEqual({ min: 10, max: 30 });
-      expect(start).toEqual([-Infinity, Infinity]);
+      expect(start).toEqual([10, 30]);
     }
   });
 
@@ -429,7 +429,7 @@ describe('connectRangeSlider', () => {
         },
       };
 
-      const expectation = { min: -Infinity, max: Infinity };
+      const expectation = { min: 0, max: 0 };
       const actual = widget._getCurrentRefinement(helper, stats);
 
       expect(actual).toEqual(expectation);
