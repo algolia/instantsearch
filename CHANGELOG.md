@@ -1,3 +1,14 @@
+<a name="2.1.6"></a>
+## [2.1.6](https://github.com/algolia/instantsearch.js/compare/v2.1.5...v2.1.6) (2017-09-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency documentation to v^5.0.0 ([#2355](https://github.com/algolia/instantsearch.js/issues/2355)) ([489647a](https://github.com/algolia/instantsearch.js/commit/489647a))
+* **searchbox:** use initial input value if provided in the dom ([#2342](https://github.com/algolia/instantsearch.js/issues/2342)) ([180902a](https://github.com/algolia/instantsearch.js/commit/180902a)), closes [#2289](https://github.com/algolia/instantsearch.js/issues/2289)
+
+
+
 <a name="2.1.5"></a>
 ## [2.1.5](https://github.com/algolia/instantsearch.js/compare/v2.1.4...v2.1.5) (2017-09-25)
 
