@@ -131,7 +131,7 @@ export default function connectRangeSlider(renderFn) {
         return configuration;
       },
 
-      _getCurrentRefinement(helper, stats = {}) {
+      _getCurrentRefinement: (helper, stats = {}) => {
         const minValues = helper.state.getNumericRefinement(
           attributeName,
           '>='
