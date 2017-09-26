@@ -1,3 +1,13 @@
+<a name="4.1.2"></a>
+## [4.1.2](https://github.com/algolia/react-instantsearch/compare/v4.1.1...v4.1.2) (2017-09-26)
+
+
+### Features
+
+* **Conditional:** add connectStateResults connector ([#357](https://github.com/algolia/react-instantsearch/issues/357)) ([462df5f](https://github.com/algolia/react-instantsearch/commit/462df5f))
+
+
+
 <a name="4.1.1"></a>
 ## [4.1.1](https://github.com/algolia/react-instantsearch/compare/v4.1.0...v4.1.1) (2017-09-13)
 
