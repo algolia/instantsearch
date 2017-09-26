@@ -51,6 +51,19 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'input with initial value',
+      wrapWithHits(container => {
+        container.innerHTML = '<input value="ok"/>';
+        const input = container.firstChild;
+        container.appendChild(input);
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container: input,
+          })
+        );
+      })
     );
 
   storiesOf('Stats').add(
