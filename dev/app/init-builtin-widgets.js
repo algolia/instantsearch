@@ -511,8 +511,6 @@ export default () => {
             templates: {
               header: 'Price',
             },
-            max: 500,
-            step: 10,
             tooltips: {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;
@@ -534,6 +532,22 @@ export default () => {
             },
             min: 100,
             max: 50,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with step',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
             step: 10,
             tooltips: {
               format(rawValue) {
@@ -551,10 +565,7 @@ export default () => {
           instantsearch.widgets.rangeSlider({
             container,
             attributeName: 'price',
-            min: 0,
-            max: 500,
             pips: false,
-            step: 10,
             tooltips: {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;
@@ -576,7 +587,6 @@ export default () => {
             },
             min: 10,
             max: 500,
-            step: 10,
             tooltips: {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;
