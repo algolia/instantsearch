@@ -8,8 +8,7 @@ if [ "$CI" = "true" ]
   else jest
 fi
 yarn lint
-# issue with happo due to storybook. Uncomment when fixed. 
-# yarn test:regressions
-# yarn argos
+yarn test:regressions
+yarn argos
 NODE_ENV=production yarn test:build
 yarn test:recipes
