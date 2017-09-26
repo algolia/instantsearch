@@ -366,53 +366,51 @@ describe('connectRangeSlider', () => {
     const rendering = () => {};
 
     it('expect to return default range', () => {
-      const bounds = {};
       const stats = {};
       const widget = connectRangeSlider(rendering)({
         attributeName,
       });
 
       const expectation = { min: 0, max: 0 };
-      const actual = widget._getCurrentRange(bounds, stats);
+      const actual = widget._getCurrentRange(stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return range from bounds', () => {
+      const stats = { min: 10, max: 500 };
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        min: 20,
+        max: 250,
+      });
+
+      const expectation = { min: 20, max: 250 };
+      const actual = widget._getCurrentRange(stats);
 
       expect(actual).toEqual(expectation);
     });
 
     it('expect to return range from stats', () => {
-      const bounds = {};
       const stats = { min: 10, max: 500 };
       const widget = connectRangeSlider(rendering)({
         attributeName,
       });
 
       const expectation = { min: 10, max: 500 };
-      const actual = widget._getCurrentRange(bounds, stats);
-
-      expect(actual).toEqual(expectation);
-    });
-
-    it('expect to return range from bounds', () => {
-      const bounds = { min: 20, max: 250 };
-      const stats = { min: 10, max: 500 };
-      const widget = connectRangeSlider(rendering)({
-        attributeName,
-      });
-
-      const expectation = { min: 20, max: 250 };
-      const actual = widget._getCurrentRange(bounds, stats);
+      const actual = widget._getCurrentRange(stats);
 
       expect(actual).toEqual(expectation);
     });
 
     it('expect to return rounded range values', () => {
-      const bounds = {};
       const stats = { min: 1.79, max: 499.99 };
       const widget = connectRangeSlider(rendering)({
         attributeName,
       });
 
       const expectation = { min: 1, max: 500 };
-      const actual = widget._getCurrentRange(bounds, stats);
+      const actual = widget._getCurrentRange(stats);
 
       expect(actual).toEqual(expectation);
     });

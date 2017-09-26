@@ -59,14 +59,17 @@ export default function connectRangeSlider(renderFn) {
   return (widgetParams = {}) => {
     const {
       attributeName,
-      min: userMin,
-      max: userMax,
+      min: minBounds,
+      max: maxBounds,
       precision = 2,
     } = widgetParams;
 
     if (!attributeName) {
       throw new Error(usage);
     }
+
+    const isMinBounds = minBounds !== undefined && minBounds !== null;
+    const isMaxBounds = maxBounds !== undefined && maxBounds !== null;
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
@@ -76,10 +79,10 @@ export default function connectRangeSlider(renderFn) {
     };
 
     return {
-      _getCurrentRange: (bounds = {}, stats = {}) => {
+      _getCurrentRange: (stats = {}) => {
         let min;
-        if (bounds.min !== undefined && bounds.min !== null) {
-          min = bounds.min;
+        if (isMinBounds) {
+          min = minBounds;
         } else if (stats.min !== undefined && stats.min !== null) {
           min = stats.min;
         } else {
@@ -87,8 +90,8 @@ export default function connectRangeSlider(renderFn) {
         }
 
         let max;
-        if (bounds.max !== undefined && bounds.max !== null) {
-          max = bounds.max;
+        if (isMaxBounds) {
+          max = maxBounds;
         } else if (stats.max !== undefined && stats.max !== null) {
           max = stats.max;
         } else {
@@ -106,24 +109,22 @@ export default function connectRangeSlider(renderFn) {
           disjunctiveFacets: [attributeName],
         };
 
-        const isMinBound = userMin !== undefined && userMin !== null;
-        const isMaxBound = userMax !== undefined && userMax !== null;
-        const boundsDefined = isMinBound || isMaxBound;
-
         const boundsAlreadyDefined =
           currentConfiguration &&
           currentConfiguration.numericRefinements &&
           currentConfiguration.numericRefinements[attributeName] !== undefined;
 
-        if (boundsDefined && !boundsAlreadyDefined) {
+        const isBoundsDefined = isMinBounds || isMaxBounds;
+
+        if (isBoundsDefined && !boundsAlreadyDefined) {
           configuration.numericRefinements = { [attributeName]: {} };
 
-          if (isMinBound) {
-            configuration.numericRefinements[attributeName]['>='] = [userMin];
+          if (isMinBounds) {
+            configuration.numericRefinements[attributeName]['>='] = [minBounds];
           }
 
-          if (isMaxBound) {
-            configuration.numericRefinements[attributeName]['<='] = [userMax];
+          if (isMaxBounds) {
+            configuration.numericRefinements[attributeName]['<='] = [maxBounds];
           }
         }
 
@@ -166,7 +167,7 @@ export default function connectRangeSlider(renderFn) {
       },
 
       init({ helper, instantSearchInstance }) {
-        this._refine = bounds => newValues => {
+        this._refine = newValues => {
           const currentValues = [
             helper.getNumericRefinement(attributeName, '>='),
             helper.getNumericRefinement(attributeName, '<='),
@@ -178,13 +179,12 @@ export default function connectRangeSlider(renderFn) {
           ) {
             helper.clearRefinements(attributeName);
 
-            const hasMin = bounds.min !== null && bounds.min !== undefined;
             const minValueChanged =
               newValues[0] !== null && newValues[0] !== undefined;
 
             if (
-              (hasMin && minValueChanged && bounds.min < newValues[0]) ||
-              (!hasMin && minValueChanged)
+              (isMinBounds && minValueChanged && minBounds < newValues[0]) ||
+              (!isMinBounds && minValueChanged)
             ) {
               helper.addNumericRefinement(
                 attributeName,
@@ -193,13 +193,12 @@ export default function connectRangeSlider(renderFn) {
               );
             }
 
-            const hasMax = bounds.max !== null && bounds.max !== undefined;
             const maxValueChanged =
               newValues[1] !== null && newValues[1] !== undefined;
 
             if (
-              (hasMax && maxValueChanged && bounds.max > newValues[1]) ||
-              (!hasMax && maxValueChanged)
+              (isMaxBounds && maxValueChanged && maxBounds > newValues[1]) ||
+              (!isMaxBounds && maxValueChanged)
             ) {
               helper.addNumericRefinement(
                 attributeName,
@@ -207,18 +206,18 @@ export default function connectRangeSlider(renderFn) {
                 formatToNumber(newValues[1])
               );
             }
+
             helper.search();
           }
         };
 
-        const bounds = { min: userMin, max: userMax };
         const stats = {};
-        const currentRange = this._getCurrentRange(bounds, stats);
+        const currentRange = this._getCurrentRange(stats);
         const currentRefinement = this._getCurrentRefinement(helper, stats);
 
         renderFn(
           {
-            refine: this._refine(bounds),
+            refine: this._refine,
             range: currentRange,
             start: [currentRefinement.min, currentRefinement.max],
             format: sliderFormatter,
@@ -230,17 +229,16 @@ export default function connectRangeSlider(renderFn) {
       },
 
       render({ results, helper, instantSearchInstance }) {
-        const bounds = { min: userMin, max: userMax };
         const facetsFromResults = results.disjunctiveFacets || [];
         const facet = find(facetsFromResults, _ => _.name === attributeName);
         const stats = facet && facet.stats;
 
-        const currentRange = this._getCurrentRange(bounds, stats);
+        const currentRange = this._getCurrentRange(stats);
         const currentRefinement = this._getCurrentRefinement(helper, stats);
 
         renderFn(
           {
-            refine: this._refine(bounds),
+            refine: this._refine,
             range: currentRange,
             start: [currentRefinement.min, currentRefinement.max],
             format: sliderFormatter,
