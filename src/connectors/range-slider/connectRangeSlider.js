@@ -104,33 +104,6 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      getConfiguration: currentConfiguration => {
-        const configuration = {
-          disjunctiveFacets: [attributeName],
-        };
-
-        const boundsAlreadyDefined =
-          currentConfiguration &&
-          currentConfiguration.numericRefinements &&
-          currentConfiguration.numericRefinements[attributeName] !== undefined;
-
-        const isBoundsDefined = isMinBounds || isMaxBounds;
-
-        if (isBoundsDefined && !boundsAlreadyDefined) {
-          configuration.numericRefinements = { [attributeName]: {} };
-
-          if (isMinBounds) {
-            configuration.numericRefinements[attributeName]['>='] = [minBounds];
-          }
-
-          if (isMaxBounds) {
-            configuration.numericRefinements[attributeName]['<='] = [maxBounds];
-          }
-        }
-
-        return configuration;
-      },
-
       _getCurrentRefinement: (helper, stats = {}) => {
         const minValues = helper.state.getNumericRefinement(
           attributeName,
@@ -199,6 +172,33 @@ export default function connectRangeSlider(renderFn) {
 
           helper.search();
         }
+      },
+
+      getConfiguration: currentConfiguration => {
+        const configuration = {
+          disjunctiveFacets: [attributeName],
+        };
+
+        const boundsAlreadyDefined =
+          currentConfiguration &&
+          currentConfiguration.numericRefinements &&
+          currentConfiguration.numericRefinements[attributeName] !== undefined;
+
+        const isBoundsDefined = isMinBounds || isMaxBounds;
+
+        if (isBoundsDefined && !boundsAlreadyDefined) {
+          configuration.numericRefinements = { [attributeName]: {} };
+
+          if (isMinBounds) {
+            configuration.numericRefinements[attributeName]['>='] = [minBounds];
+          }
+
+          if (isMaxBounds) {
+            configuration.numericRefinements[attributeName]['<='] = [maxBounds];
+          }
+        }
+
+        return configuration;
       },
 
       init({ helper, instantSearchInstance }) {
