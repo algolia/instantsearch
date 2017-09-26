@@ -182,7 +182,7 @@ export default function connectRangeSlider(renderFn) {
             newValues[0] !== null && newValues[0] !== undefined;
 
           if (
-            (isMinBounds && minValueChanged && minBounds < newValues[0]) ||
+            (isMinBounds && minValueChanged && minBounds <= newValues[0]) ||
             (!isMinBounds && minValueChanged)
           ) {
             helper.addNumericRefinement(
@@ -196,7 +196,7 @@ export default function connectRangeSlider(renderFn) {
             newValues[1] !== null && newValues[1] !== undefined;
 
           if (
-            (isMaxBounds && maxValueChanged && maxBounds > newValues[1]) ||
+            (isMaxBounds && maxValueChanged && maxBounds >= newValues[1]) ||
             (!isMaxBounds && maxValueChanged)
           ) {
             helper.addNumericRefinement(

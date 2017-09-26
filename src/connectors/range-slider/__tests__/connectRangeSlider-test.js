@@ -482,4 +482,319 @@ describe('connectRangeSlider', () => {
       expect(actual).toEqual(expectation);
     });
   });
+
+  describe('_refine', () => {
+    const attributeName = 'price';
+    const rendering = () => {};
+
+    it('expect to refine min and max from empty state', () => {
+      const values = [0, 500];
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        getNumericRefinement: jest.fn(() => []),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        0
+      );
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        500
+      );
+
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine min and max from non empty state', () => {
+      const values = [20, 480];
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        getNumericRefinement: jest.fn(
+          (_, operation) => (operation === '>=' ? 0 : 500)
+        ),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        20
+      );
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        480
+      );
+
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine min from empty state', () => {
+      const values = [0, null];
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        getNumericRefinement: jest.fn(() => []),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        0
+      );
+
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        expect.any(Number)
+      );
+
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine min from non empty state', () => {
+      const values = [20, 500];
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        getNumericRefinement: jest.fn(
+          (_, operation) => (operation === '>=' ? 0 : 500)
+        ),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        20
+      );
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        500
+      );
+
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine min when it is equal to bounds', () => {
+      const values = [20, 500];
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        min: 20,
+      });
+
+      const helper = {
+        getNumericRefinement: jest.fn(
+          (_, operation) => (operation === '>=' ? 50 : 500)
+        ),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        20
+      );
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        500
+      );
+
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine max from empty state', () => {
+      const values = [null, 250];
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        getNumericRefinement: jest.fn(() => []),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        expect.any(Number)
+      );
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        250
+      );
+
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine max from non empty state', () => {
+      const values = [0, 250];
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        getNumericRefinement: jest.fn(
+          (_, operation) => (operation === '>=' ? 0 : 500)
+        ),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        0
+      );
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        250
+      );
+
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine max when it is equal to bounds', () => {
+      const values = [20, 450];
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        max: 450,
+      });
+
+      const helper = {
+        getNumericRefinement: jest.fn(
+          (_, operation) => (operation === '>=' ? 20 : 500)
+        ),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        20
+      );
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        450
+      );
+
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it("expect to not refine when both min and max aren't changed", () => {
+      const values = [0, 500];
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        getNumericRefinement: jest.fn(
+          (_, operation) => (operation === '>=' ? 0 : 500)
+        ),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
+    });
+
+    it("expect to not refine min when it's out of bounds", () => {
+      const values = [0, 500];
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        min: 50,
+      });
+
+      const helper = {
+        getNumericRefinement: jest.fn(
+          (_, operation) => (operation === '>=' ? 50 : 500)
+        ),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it("expect to not refine max when it's out of bounds", () => {
+      const values = [0, 480];
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        max: 450,
+      });
+
+      const helper = {
+        getNumericRefinement: jest.fn(
+          (_, operation) => (operation === '>=' ? 0 : 450)
+        ),
+        addNumericRefinement: jest.fn(),
+        clearRefinements: jest.fn(),
+        search: jest.fn(),
+      };
+
+      widget._refine(helper)(values);
+
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+  });
 });
