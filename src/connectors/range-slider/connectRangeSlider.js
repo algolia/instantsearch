@@ -76,6 +76,31 @@ export default function connectRangeSlider(renderFn) {
     };
 
     return {
+      _getCurrentRange: (bounds = {}, stats = {}) => {
+        let min;
+        if (bounds.min !== undefined && bounds.min !== null) {
+          min = bounds.min;
+        } else if (stats.min !== undefined && stats.min !== null) {
+          min = stats.min;
+        } else {
+          min = 0;
+        }
+
+        let max;
+        if (bounds.max !== undefined && bounds.max !== null) {
+          max = bounds.max;
+        } else if (stats.max !== undefined && stats.max !== null) {
+          max = stats.max;
+        } else {
+          max = 0;
+        }
+
+        return {
+          min: Math.floor(min),
+          max: Math.ceil(max),
+        };
+      },
+
       getConfiguration: originalConf => {
         const conf = {
           disjunctiveFacets: [attributeName],
@@ -166,16 +191,15 @@ export default function connectRangeSlider(renderFn) {
           }
         };
 
-        const stats = {
-          min: userMin || null,
-          max: userMax || null,
-        };
+        const bounds = { min: userMin, max: userMax };
+        const stats = {};
+        const currentRange = this._getCurrentRange(bounds, stats);
         const currentRefinement = this._getCurrentRefinement(helper);
 
         renderFn(
           {
-            refine: this._refine(stats),
-            range: { min: Math.floor(stats.min), max: Math.ceil(stats.max) },
+            refine: this._refine(bounds),
+            range: currentRange,
             start: [currentRefinement.min, currentRefinement.max],
             format: sliderFormatter,
             widgetParams,
@@ -186,28 +210,18 @@ export default function connectRangeSlider(renderFn) {
       },
 
       render({ results, helper, instantSearchInstance }) {
+        const bounds = { min: userMin, max: userMax };
         const facetsFromResults = results.disjunctiveFacets || [];
-        const facet = find(
-          facetsFromResults,
-          ({ name }) => name === attributeName
-        );
-        const stats =
-          facet !== undefined && facet.stats !== undefined
-            ? facet.stats
-            : {
-                min: null,
-                max: null,
-              };
+        const facet = find(facetsFromResults, _ => _.name === attributeName);
+        const stats = facet && facet.stats;
 
-        if (userMin !== undefined) stats.min = userMin;
-        if (userMax !== undefined) stats.max = userMax;
-
+        const currentRange = this._getCurrentRange(bounds, stats);
         const currentRefinement = this._getCurrentRefinement(helper);
 
         renderFn(
           {
-            refine: this._refine(stats),
-            range: { min: Math.floor(stats.min), max: Math.ceil(stats.max) },
+            refine: this._refine(bounds),
+            range: currentRange,
             start: [currentRefinement.min, currentRefinement.max],
             format: sliderFormatter,
             widgetParams,

@@ -54,7 +54,8 @@ describe('connectRangeSlider', () => {
         {
           hits: [{ test: 'oneTime' }],
           facets: { price: { 10: 1, 20: 1, 30: 1 } },
-        facets_stats: { // eslint-disable-line
+          // eslint-disable-next-line camelcase
+          facets_stats: {
             price: {
               avg: 20,
               max: 30,
@@ -153,7 +154,8 @@ describe('connectRangeSlider', () => {
         {
           hits: [{ test: 'oneTime' }],
           facets: { price: { 10: 1, 20: 1, 30: 1 } },
-        facets_stats: { // eslint-disable-line
+          // eslint-disable-next-line camelcase
+          facets_stats: {
             price: {
               avg: 20,
               max: 30,
@@ -299,5 +301,62 @@ describe('connectRangeSlider', () => {
       expect(helper.getNumericRefinement('price', '<=')).toEqual([100]);
       expect(helper.search.callCount).toBe(3);
     }
+  });
+
+  describe('_getCurrentRange', () => {
+    const attributeName = 'price';
+    const rendering = () => {};
+
+    it('expect to return default range', () => {
+      const bounds = {};
+      const stats = {};
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const expectation = { min: 0, max: 0 };
+      const actual = widget._getCurrentRange(bounds, stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return range from stats', () => {
+      const bounds = {};
+      const stats = { min: 10, max: 500 };
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const expectation = { min: 10, max: 500 };
+      const actual = widget._getCurrentRange(bounds, stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return range from bounds', () => {
+      const bounds = { min: 20, max: 250 };
+      const stats = { min: 10, max: 500 };
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const expectation = { min: 20, max: 250 };
+      const actual = widget._getCurrentRange(bounds, stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return rounded range values', () => {
+      const bounds = {};
+      const stats = { min: 1.79, max: 499.99 };
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const expectation = { min: 1, max: 500 };
+      const actual = widget._getCurrentRange(bounds, stats);
+
+      expect(actual).toEqual(expectation);
+    });
   });
 });
