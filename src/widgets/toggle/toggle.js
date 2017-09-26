@@ -199,7 +199,10 @@ export default function toggle(
 
   try {
     const makeWidget = connectToggle(specializedRenderer);
-    return makeWidget({ attributeName, label, values: userValues });
+    return Object.assign(
+      makeWidget({ attributeName, label, values: userValues }),
+      { containerNode }
+    );
   } catch (e) {
     throw new Error(usage);
   }

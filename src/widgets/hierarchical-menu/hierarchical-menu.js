@@ -213,14 +213,17 @@ export default function hierarchicalMenu(
 
   try {
     const makeHierarchicalMenu = connectHierarchicalMenu(specializedRenderer);
-    return makeHierarchicalMenu({
-      attributes,
-      separator,
-      rootPath,
-      showParentLevel,
-      limit,
-      sortBy,
-    });
+    return Object.assign(
+      makeHierarchicalMenu({
+        attributes,
+        separator,
+        rootPath,
+        showParentLevel,
+        limit,
+        sortBy,
+      }),
+      { containerNode }
+    );
   } catch (e) {
     throw new Error(usage);
   }

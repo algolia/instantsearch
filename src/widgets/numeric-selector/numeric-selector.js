@@ -110,7 +110,10 @@ export default function numericSelector({
 
   try {
     const makeNumericSelector = connectNumericSelector(specializedRenderer);
-    return makeNumericSelector({ operator, attributeName, options });
+    return Object.assign(
+      makeNumericSelector({ operator, attributeName, options }),
+      { containerNode }
+    );
   } catch (e) {
     throw new Error(usage);
   }

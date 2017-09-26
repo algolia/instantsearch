@@ -254,7 +254,7 @@ export default function searchBox(
 
   try {
     const makeWidget = connectSearchBox(specializedRenderer);
-    return makeWidget({ queryHook });
+    return Object.assign(makeWidget({ queryHook }), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }

@@ -289,13 +289,16 @@ export default function refinementList(
 
   try {
     const makeWidget = connectRefinementList(specializedRenderer);
-    return makeWidget({
-      attributeName,
-      operator,
-      limit,
-      showMoreLimit,
-      sortBy,
-    });
+    return Object.assign(
+      makeWidget({
+        attributeName,
+        operator,
+        limit,
+        showMoreLimit,
+        sortBy,
+      }),
+      { containerNode }
+    );
   } catch (e) {
     throw new Error(e);
   }

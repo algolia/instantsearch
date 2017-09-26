@@ -196,7 +196,9 @@ export default function rangeSlider(
 
   try {
     const makeWidget = connectRangeSlider(specializedRenderer);
-    return makeWidget({ attributeName, min, max, precision });
+    return Object.assign(makeWidget({ attributeName, min, max, precision }), {
+      containerNode,
+    });
   } catch (e) {
     throw new Error(usage);
   }

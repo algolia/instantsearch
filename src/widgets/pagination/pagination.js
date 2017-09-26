@@ -179,7 +179,7 @@ export default function pagination(
 
   try {
     const makeWidget = connectPagination(specializedRenderer);
-    return makeWidget({ maxPages });
+    return Object.assign(makeWidget({ maxPages }), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }

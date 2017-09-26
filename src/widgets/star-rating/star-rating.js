@@ -193,7 +193,7 @@ export default function starRating(
 
   try {
     const makeWidget = connectStarRating(specializedRenderer);
-    return makeWidget({ attributeName, max });
+    return Object.assign(makeWidget({ attributeName, max }), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }

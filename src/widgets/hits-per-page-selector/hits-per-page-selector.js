@@ -106,7 +106,7 @@ export default function hitsPerPageSelector(
 
   try {
     const makeHitsPerPageSelector = connectHitsPerPage(specializedRenderer);
-    return makeHitsPerPageSelector({ items });
+    return Object.assign(makeHitsPerPageSelector({ items }), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }

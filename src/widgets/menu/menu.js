@@ -218,7 +218,10 @@ export default function menu({
 
   try {
     const makeWidget = connectMenu(specializedRenderer);
-    return makeWidget({ attributeName, limit, sortBy, showMoreLimit });
+    return Object.assign(
+      makeWidget({ attributeName, limit, sortBy, showMoreLimit }),
+      { containerNode }
+    );
   } catch (e) {
     throw new Error(usage);
   }

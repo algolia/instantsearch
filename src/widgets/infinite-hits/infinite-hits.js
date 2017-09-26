@@ -145,7 +145,7 @@ export default function infiniteHits(
 
   try {
     const makeInfiniteHits = connectInfiniteHits(specializedRenderer);
-    return makeInfiniteHits({ escapeHits });
+    return Object.assign(makeInfiniteHits({ escapeHits }), { containerNode });
   } catch (e) {
     throw new Error(usage);
   }
