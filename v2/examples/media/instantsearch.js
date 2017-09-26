@@ -11887,7 +11887,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.1.5';
+exports.default = '2.1.6';
 
 /***/ }),
 /* 180 */
@@ -34709,6 +34709,8 @@ var renderer = function renderer(_ref) {
       var INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
       var input = createInput(containerNode);
       var isInputTargeted = input === containerNode;
+      var queryFromInput = query;
+
       if (isInputTargeted) {
         // To replace the node, we need to create an intermediate node
         var placeholderNode = document.createElement('div');
@@ -34716,17 +34718,29 @@ var renderer = function renderer(_ref) {
         var parentNode = input.parentNode;
         var wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
         parentNode.replaceChild(wrappedInput, placeholderNode);
+
+        var initialInputValue = input.value;
+
+        // if the input contains a value, we provide it to the state
+        if (initialInputValue) {
+          queryFromInput = initialInputValue;
+          refine(initialInputValue, false);
+        }
       } else {
         var _wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
         containerNode.appendChild(_wrappedInput);
       }
+
       if (magnifier) addMagnifier(input, magnifier, templates);
       if (reset) addReset(input, reset, templates, clear);
-      addDefaultAttributesToInput(placeholder, input, query, cssClasses);
+
+      addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
+
       // Optional "powered by Algolia" widget
       if (poweredBy) {
         addPoweredBy(input, poweredBy, templates);
       }
+
       // When the page is coming from BFCache
       // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
       // then we force the input value to be the current query
@@ -34737,7 +34751,7 @@ var renderer = function renderer(_ref) {
       // - use back button
       // - input query is empty (because <input> autocomplete = off)
       window.addEventListener('pageshow', function () {
-        input.value = query;
+        input.value = queryFromInput;
       });
 
       // Update value when query change outside of the input
@@ -34745,9 +34759,9 @@ var renderer = function renderer(_ref) {
         input.value = fullState.query || '';
       });
 
-      if (autofocus === true || autofocus === 'auto' && query === '') {
+      if (autofocus === true || autofocus === 'auto' && queryFromInput === '') {
         input.focus();
-        input.setSelectionRange(query.length, query.length);
+        input.setSelectionRange(queryFromInput.length, queryFromInput.length);
       }
 
       // search on enter
