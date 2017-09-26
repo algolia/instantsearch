@@ -28,10 +28,7 @@ const renderer = ({
   collapsible,
   renderState,
   templates,
-}) => (
-  { refine, range: { min, max }, start, instantSearchInstance },
-  isFirstRendering
-) => {
+}) => ({ refine, range, start, instantSearchInstance }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -41,10 +38,8 @@ const renderer = ({
     return;
   }
 
+  const { min, max } = range;
   const shouldAutoHideContainer = autoHideContainer && min === max;
-
-  const minValue = start[0] === -Infinity ? min : start[0];
-  const maxValue = start[1] === Infinity ? max : start[1];
 
   ReactDOM.render(
     <Slider
@@ -52,7 +47,7 @@ const renderer = ({
       refine={refine}
       min={min}
       max={max}
-      values={[minValue, maxValue]}
+      values={start}
       tooltips={tooltips}
       step={step}
       pips={pips}

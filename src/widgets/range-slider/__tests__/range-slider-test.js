@@ -257,12 +257,14 @@ describe('rangeSlider', () => {
         const targetValue = stats.min + 1;
 
         const state0 = helper.state;
-        widget._refine(stats)([targetValue, stats.max]);
+        widget._refine(helper)([targetValue, stats.max]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
-          state0.addNumericRefinement(attributeName, '>=', targetValue)
+          state0
+            .addNumericRefinement(attributeName, '>=', targetValue)
+            .addNumericRefinement(attributeName, '<=', stats.max)
         );
       });
 
@@ -271,12 +273,14 @@ describe('rangeSlider', () => {
         const targetValue = stats.max - 1;
 
         const state0 = helper.state;
-        widget._refine(stats)([stats.min, targetValue]);
+        widget._refine(helper)([stats.min, targetValue]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
-          state0.addNumericRefinement(attributeName, '<=', targetValue)
+          state0
+            .addNumericRefinement(attributeName, '>=', stats.min)
+            .addNumericRefinement(attributeName, '<=', targetValue)
         );
       });
 
@@ -285,7 +289,7 @@ describe('rangeSlider', () => {
         const targetValue = [stats.min + 1, stats.max - 1];
 
         const state0 = helper.state;
-        widget._refine(stats)(targetValue);
+        widget._refine(helper)(targetValue);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
