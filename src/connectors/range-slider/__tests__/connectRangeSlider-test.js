@@ -359,4 +359,71 @@ describe('connectRangeSlider', () => {
       expect(actual).toEqual(expectation);
     });
   });
+
+  describe('_getCurrentRefinement', () => {
+    const attributeName = 'price';
+    const rendering = () => {};
+
+    it('expect to return default refinement', () => {
+      const stats = {};
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        state: {
+          getNumericRefinement: jest.fn(() => []),
+        },
+      };
+
+      const expectation = { min: -Infinity, max: Infinity };
+      const actual = widget._getCurrentRefinement(helper, stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return refinement from stats', () => {
+      const stats = { min: 10, max: 500 };
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        state: {
+          getNumericRefinement: jest.fn(() => []),
+        },
+      };
+
+      const expectation = { min: 10, max: 500 };
+      const actual = widget._getCurrentRefinement(helper, stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return refinement from helper', () => {
+      const stats = {};
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        state: {
+          getNumericRefinement: jest.fn(
+            (_, operation) => (operation === '>=' ? [10] : [100])
+          ),
+        },
+      };
+
+      const expectation = { min: 10, max: 100 };
+      const actual = widget._getCurrentRefinement(helper, stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return rounded refinement values', () => {
+      const stats = { min: 1.79, max: 499.99 };
+      const widget = connectRangeSlider(rendering)({ attributeName });
+      const helper = {
+        state: {
+          getNumericRefinement: jest.fn(() => []),
+        },
+      };
+
+      const expectation = { min: 1, max: 500 };
+      const actual = widget._getCurrentRefinement(helper, stats);
+
+      expect(actual).toEqual(expectation);
+    });
+  });
 });

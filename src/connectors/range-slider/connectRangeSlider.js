@@ -123,25 +123,38 @@ export default function connectRangeSlider(renderFn) {
         return conf;
       },
 
-      _getCurrentRefinement(helper) {
-        let min = helper.state.getNumericRefinement(attributeName, '>=');
-        let max = helper.state.getNumericRefinement(attributeName, '<=');
+      _getCurrentRefinement(helper, stats = {}) {
+        const minValues = helper.state.getNumericRefinement(
+          attributeName,
+          '>='
+        );
 
-        if (min && min.length) {
-          min = min[0];
+        const maxValues = helper.state.getNumericRefinement(
+          attributeName,
+          '<='
+        );
+
+        let min;
+        if (minValues && minValues.length) {
+          min = minValues[0];
+        } else if (stats.min !== undefined && stats.min !== null) {
+          min = stats.min;
         } else {
           min = -Infinity;
         }
 
-        if (max && max.length) {
-          max = max[0];
+        let max;
+        if (maxValues && maxValues.length) {
+          max = maxValues[0];
+        } else if (stats.max !== undefined && stats.max !== null) {
+          max = stats.max;
         } else {
           max = Infinity;
         }
 
         return {
-          min,
-          max,
+          min: Math.floor(min),
+          max: Math.ceil(max),
         };
       },
 
@@ -194,7 +207,7 @@ export default function connectRangeSlider(renderFn) {
         const bounds = { min: userMin, max: userMax };
         const stats = {};
         const currentRange = this._getCurrentRange(bounds, stats);
-        const currentRefinement = this._getCurrentRefinement(helper);
+        const currentRefinement = this._getCurrentRefinement(helper, stats);
 
         renderFn(
           {
@@ -216,7 +229,7 @@ export default function connectRangeSlider(renderFn) {
         const stats = facet && facet.stats;
 
         const currentRange = this._getCurrentRange(bounds, stats);
-        const currentRefinement = this._getCurrentRefinement(helper);
+        const currentRefinement = this._getCurrentRefinement(helper, stats);
 
         renderFn(
           {
