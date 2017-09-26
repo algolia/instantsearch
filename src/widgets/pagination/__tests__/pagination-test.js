@@ -21,7 +21,7 @@ describe('pagination()', () => {
 
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
-    pagination.__Rewire__('ReactDOM', ReactDOM);
+    pagination.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     cssClasses = {
@@ -159,7 +159,7 @@ describe('pagination MaxPage', () => {
 
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
-    pagination.__Rewire__('ReactDOM', ReactDOM);
+    pagination.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     cssClasses = {

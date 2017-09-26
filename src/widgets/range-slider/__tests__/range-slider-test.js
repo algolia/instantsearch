@@ -25,7 +25,7 @@ describe('rangeSlider', () => {
 
     beforeEach(() => {
       ReactDOM = { render: jest.fn() };
-      rangeSlider.__Rewire__('ReactDOM', ReactDOM);
+      rangeSlider.__Rewire__('render', ReactDOM.render);
 
       container = document.createElement('div');
       helper = new AlgoliasearchHelper(

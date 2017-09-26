@@ -49,7 +49,7 @@ describe('numericRefinementList()', () => {
 
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
-    numericRefinementList.__Rewire__('ReactDOM', ReactDOM);
+    numericRefinementList.__Rewire__('render', ReactDOM.render);
 
     options = [
       { name: 'All' },
