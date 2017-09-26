@@ -7,7 +7,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "react-test-renderer": "15.6.1"
+    "react-test-renderer": "15.6.2"
   },
   "dependencies": {
     "css-loader": "^0.28.4",
