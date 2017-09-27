@@ -82,7 +82,7 @@ describe('connectRangeSlider', () => {
       // should provide good values for the first rendering
       const { range, start } = rendering.lastCall.args[0];
       expect(range).toEqual({ min: 10, max: 30 });
-      expect(start).toEqual([10, 30]);
+      expect(start).toEqual([-Infinity, Infinity]);
     }
   });
 
@@ -502,7 +502,6 @@ describe('connectRangeSlider', () => {
     const rendering = () => {};
 
     it('expect to return default refinement', () => {
-      const stats = {};
       const widget = connectRangeSlider(rendering)({ attributeName });
       const helper = {
         state: {
@@ -511,28 +510,12 @@ describe('connectRangeSlider', () => {
       };
 
       const expectation = { min: -Infinity, max: Infinity };
-      const actual = widget._getCurrentRefinement(helper, stats);
-
-      expect(actual).toEqual(expectation);
-    });
-
-    it('expect to return refinement from stats', () => {
-      const stats = { min: 10, max: 500 };
-      const widget = connectRangeSlider(rendering)({ attributeName });
-      const helper = {
-        state: {
-          getNumericRefinement: jest.fn(() => []),
-        },
-      };
-
-      const expectation = { min: 10, max: 500 };
-      const actual = widget._getCurrentRefinement(helper, stats);
+      const actual = widget._getCurrentRefinement(helper);
 
       expect(actual).toEqual(expectation);
     });
 
     it('expect to return refinement from helper', () => {
-      const stats = {};
       const widget = connectRangeSlider(rendering)({ attributeName });
       const helper = {
         state: {
@@ -543,22 +526,23 @@ describe('connectRangeSlider', () => {
       };
 
       const expectation = { min: 10, max: 100 };
-      const actual = widget._getCurrentRefinement(helper, stats);
+      const actual = widget._getCurrentRefinement(helper);
 
       expect(actual).toEqual(expectation);
     });
 
     it('expect to return rounded refinement values', () => {
-      const stats = { min: 1.79, max: 499.99 };
       const widget = connectRangeSlider(rendering)({ attributeName });
       const helper = {
         state: {
-          getNumericRefinement: jest.fn(() => []),
+          getNumericRefinement: jest.fn(
+            (_, operation) => (operation === '>=' ? [10.9] : [99.1])
+          ),
         },
       };
 
-      const expectation = { min: 1, max: 500 };
-      const actual = widget._getCurrentRefinement(helper, stats);
+      const expectation = { min: 10, max: 100 };
+      const actual = widget._getCurrentRefinement(helper);
 
       expect(actual).toEqual(expectation);
     });

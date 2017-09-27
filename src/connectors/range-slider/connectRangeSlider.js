@@ -115,7 +115,7 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      _getCurrentRefinement: (helper, stats = {}) => {
+      _getCurrentRefinement: helper => {
         const [minValue] =
           helper.state.getNumericRefinement(attributeName, '>=') || [];
 
@@ -125,8 +125,6 @@ export default function connectRangeSlider(renderFn) {
         let min;
         if (minValue !== undefined && minValue !== null) {
           min = minValue;
-        } else if (stats.min !== undefined && stats.min !== null) {
-          min = stats.min;
         } else {
           min = -Infinity;
         }
@@ -134,8 +132,6 @@ export default function connectRangeSlider(renderFn) {
         let max;
         if (maxValue !== undefined && maxValue !== null) {
           max = maxValue;
-        } else if (stats.max !== undefined && stats.max !== null) {
-          max = stats.max;
         } else {
           max = Infinity;
         }
@@ -220,7 +216,7 @@ export default function connectRangeSlider(renderFn) {
       init({ helper, instantSearchInstance }) {
         const stats = {};
         const currentRange = this._getCurrentRange(stats);
-        const currentRefinement = this._getCurrentRefinement(helper, stats);
+        const currentRefinement = this._getCurrentRefinement(helper);
 
         renderFn(
           {
@@ -241,7 +237,7 @@ export default function connectRangeSlider(renderFn) {
         const stats = facet && facet.stats;
 
         const currentRange = this._getCurrentRange(stats);
-        const currentRefinement = this._getCurrentRefinement(helper, stats);
+        const currentRefinement = this._getCurrentRefinement(helper);
 
         renderFn(
           {
