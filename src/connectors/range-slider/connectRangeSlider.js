@@ -233,7 +233,7 @@ export default function connectRangeSlider(renderFn) {
 
       render({ results, helper, instantSearchInstance }) {
         const facetsFromResults = results.disjunctiveFacets || [];
-        const facet = find(facetsFromResults, _ => _.name === attributeName);
+        const facet = find(facetsFromResults, { name: attributeName });
         const stats = facet && facet.stats;
 
         const range = this._getCurrentRange(stats);
