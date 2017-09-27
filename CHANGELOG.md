@@ -1,3 +1,26 @@
+<a name="2.1.6"></a>
+## [2.1.6](https://github.com/algolia/instantsearch.js/compare/v2.1.5...v2.1.6) (2017-09-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency documentation to v^5.0.0 ([#2355](https://github.com/algolia/instantsearch.js/issues/2355)) ([489647a](https://github.com/algolia/instantsearch.js/commit/489647a))
+* **searchbox:** use initial input value if provided in the dom ([#2342](https://github.com/algolia/instantsearch.js/issues/2342)) ([180902a](https://github.com/algolia/instantsearch.js/commit/180902a)), closes [#2289](https://github.com/algolia/instantsearch.js/issues/2289)
+
+
+
+<a name="2.1.5"></a>
+## [2.1.5](https://github.com/algolia/instantsearch.js/compare/v2.1.4...v2.1.5) (2017-09-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency algolia-frontend-components to v^0.0.33 ([#2341](https://github.com/algolia/instantsearch.js/issues/2341)) ([16994d8](https://github.com/algolia/instantsearch.js/commit/16994d8))
+* **price-ranges:** update call to refine ([#2377](https://github.com/algolia/instantsearch.js/issues/2377)) ([34915d7](https://github.com/algolia/instantsearch.js/commit/34915d7))
+* **slider:** Fix range slider pips and value 0 ([#2350](https://github.com/algolia/instantsearch.js/issues/2350)) ([fa0dc09](https://github.com/algolia/instantsearch.js/commit/fa0dc09)), closes [#2343](https://github.com/algolia/instantsearch.js/issues/2343)
+
+
+
 <a name="2.1.4"></a>
 ## [2.1.4](https://github.com/algolia/instantsearch.js/compare/v2.1.3...v2.1.4) (2017-09-14)
 

@@ -112,6 +112,10 @@ pagination({
  * only to display more items. The *show more* pattern is usually prefered
  * because it is simpler to use, and it is more convenient in a mobile context.
  * See the infinite hits widget, for more informations.
+ *
+ * When using the pagination with Algolia, you should be aware that the engine won't provide you pages
+ * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
+ *
  * @type {WidgetFactory}
  * @category navigation
  * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.

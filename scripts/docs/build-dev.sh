@@ -29,4 +29,10 @@ done
 # Copy instantsearch.js builds to the website root
 cp dist/* docs
 
+# Build dev-novel
+NODE_ENV=production webpack --config dev/webpack.config.js
+
+# Move dev-novel to website-root
+mv dev/dist docs/dev-novel
+
 # echo '/ /instantsearch.js/ 301' > docs/_site_preview/_redirects

@@ -83,11 +83,9 @@ class Slider extends Component {
 
     return (
       <div {...props} className={className}>
-        {tooltips
-          ? <div className="ais-range-slider--tooltip">
-              {value}
-            </div>
-          : null}
+        {tooltips ? (
+          <div className="ais-range-slider--tooltip">{value}</div>
+        ) : null}
       </div>
     );
   };
@@ -101,9 +99,7 @@ class Slider extends Component {
 
     const snapPoints = this.computeSnapPoints({ min, max, step });
     const pitPoints =
-      pips === true || pips === undefined || pips === false
-        ? this.computeDefaultPitPoints({ min, max })
-        : pips;
+      pips === false ? [] : this.computeDefaultPitPoints({ min, max });
 
     return (
       <div className={this.isDisabled ? 'ais-range-slider--disabled' : ''}>
