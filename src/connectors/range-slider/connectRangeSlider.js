@@ -215,15 +215,15 @@ export default function connectRangeSlider(renderFn) {
 
       init({ helper, instantSearchInstance }) {
         const stats = {};
-        const currentRange = this._getCurrentRange(stats);
-        const currentRefinement = this._getCurrentRefinement(helper);
+        const range = this._getCurrentRange(stats);
+        const { min, max } = this._getCurrentRefinement(helper);
 
         renderFn(
           {
-            refine: this._refine(helper, currentRange),
-            range: currentRange,
-            start: [currentRefinement.min, currentRefinement.max],
+            refine: this._refine(helper, range),
+            start: [min, max],
             format: sliderFormatter,
+            range,
             widgetParams,
             instantSearchInstance,
           },
@@ -236,15 +236,15 @@ export default function connectRangeSlider(renderFn) {
         const facet = find(facetsFromResults, _ => _.name === attributeName);
         const stats = facet && facet.stats;
 
-        const currentRange = this._getCurrentRange(stats);
-        const currentRefinement = this._getCurrentRefinement(helper);
+        const range = this._getCurrentRange(stats);
+        const { min, max } = this._getCurrentRefinement(helper);
 
         renderFn(
           {
-            refine: this._refine(helper, currentRange),
-            range: currentRange,
-            start: [currentRefinement.min, currentRefinement.max],
+            refine: this._refine(helper, range),
+            start: [min, max],
             format: sliderFormatter,
+            range,
             widgetParams,
             instantSearchInstance,
           },
