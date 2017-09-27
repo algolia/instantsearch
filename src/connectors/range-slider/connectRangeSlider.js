@@ -139,32 +139,42 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      _refine: helper => ([nextMin, nextMax] = []) => {
+      _refine: (helper, range = {}) => ([nextMin, nextMax] = []) => {
+        const { min: rangeMin, max: rangeMax } = range;
+
         const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
         const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
 
-        if (min !== nextMin || max !== nextMax) {
+        const newNextMin =
+          !isMinBounds && rangeMin === nextMin ? undefined : nextMin;
+
+        const newNextMax =
+          !isMaxBounds && rangeMax === nextMax ? undefined : nextMax;
+
+        if (min !== newNextMin || max !== newNextMax) {
           helper.clearRefinements();
 
-          const isValidMinInput = nextMin !== null && nextMin !== undefined;
-          const isGreatherThanBounds = isMinBounds && minBounds <= nextMin;
+          const isValidMinInput =
+            newNextMin !== null && newNextMin !== undefined;
+          const isGreatherThanBounds = isMinBounds && minBounds <= newNextMin;
 
           if (isValidMinInput && (!isMinBounds || isGreatherThanBounds)) {
             helper.addNumericRefinement(
               attributeName,
               '>=',
-              formatToNumber(nextMin)
+              formatToNumber(newNextMin)
             );
           }
 
-          const isValidMaxInput = nextMax !== null && nextMax !== undefined;
-          const isLowerThanBounds = isMaxBounds && maxBounds >= nextMax;
+          const isValidMaxInput =
+            newNextMax !== null && newNextMax !== undefined;
+          const isLowerThanBounds = isMaxBounds && maxBounds >= newNextMax;
 
           if (isValidMaxInput && (!isMaxBounds || isLowerThanBounds)) {
             helper.addNumericRefinement(
               attributeName,
               '<=',
-              formatToNumber(nextMax)
+              formatToNumber(newNextMax)
             );
           }
 
@@ -206,7 +216,7 @@ export default function connectRangeSlider(renderFn) {
 
         renderFn(
           {
-            refine: this._refine(helper),
+            refine: this._refine(helper, currentRange),
             range: currentRange,
             start: [currentRefinement.min, currentRefinement.max],
             format: sliderFormatter,
@@ -227,7 +237,7 @@ export default function connectRangeSlider(renderFn) {
 
         renderFn(
           {
-            refine: this._refine(helper),
+            refine: this._refine(helper, currentRange),
             range: currentRange,
             start: [currentRefinement.min, currentRefinement.max],
             format: sliderFormatter,
