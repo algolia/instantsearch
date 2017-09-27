@@ -121,7 +121,7 @@ export default function connectRangeSlider(renderFn) {
         } else if (stats.min !== undefined && stats.min !== null) {
           min = stats.min;
         } else {
-          min = 0;
+          min = -Infinity;
         }
 
         let max;
@@ -130,7 +130,7 @@ export default function connectRangeSlider(renderFn) {
         } else if (stats.max !== undefined && stats.max !== null) {
           max = stats.max;
         } else {
-          max = 0;
+          max = Infinity;
         }
 
         return {
