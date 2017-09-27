@@ -140,10 +140,8 @@ export default function connectRangeSlider(renderFn) {
       },
 
       _refine: helper => ([nextMin, nextMax] = []) => {
-        const [min, max] = [
-          helper.getNumericRefinement(attributeName, '>='),
-          helper.getNumericRefinement(attributeName, '<='),
-        ];
+        const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
+        const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
 
         if (min !== nextMin || max !== nextMax) {
           helper.clearRefinements();

@@ -520,7 +520,7 @@ describe('connectRangeSlider', () => {
       const widget = connectRangeSlider(rendering)({ attributeName });
       const helper = {
         getNumericRefinement: jest.fn(
-          (_, operation) => (operation === '>=' ? 0 : 500)
+          (_, operation) => (operation === '>=' ? [0] : [500])
         ),
         addNumericRefinement: jest.fn(),
         clearRefinements: jest.fn(),
@@ -578,7 +578,7 @@ describe('connectRangeSlider', () => {
       const widget = connectRangeSlider(rendering)({ attributeName });
       const helper = {
         getNumericRefinement: jest.fn(
-          (_, operation) => (operation === '>=' ? 0 : 500)
+          (_, operation) => (operation === '>=' ? [0] : [500])
         ),
         addNumericRefinement: jest.fn(),
         clearRefinements: jest.fn(),
@@ -612,7 +612,7 @@ describe('connectRangeSlider', () => {
 
       const helper = {
         getNumericRefinement: jest.fn(
-          (_, operation) => (operation === '>=' ? 50 : 500)
+          (_, operation) => (operation === '>=' ? [50] : [500])
         ),
         addNumericRefinement: jest.fn(),
         clearRefinements: jest.fn(),
@@ -670,7 +670,7 @@ describe('connectRangeSlider', () => {
       const widget = connectRangeSlider(rendering)({ attributeName });
       const helper = {
         getNumericRefinement: jest.fn(
-          (_, operation) => (operation === '>=' ? 0 : 500)
+          (_, operation) => (operation === '>=' ? [0] : [500])
         ),
         addNumericRefinement: jest.fn(),
         clearRefinements: jest.fn(),
@@ -704,7 +704,7 @@ describe('connectRangeSlider', () => {
 
       const helper = {
         getNumericRefinement: jest.fn(
-          (_, operation) => (operation === '>=' ? 20 : 500)
+          (_, operation) => (operation === '>=' ? [20] : [500])
         ),
         addNumericRefinement: jest.fn(),
         clearRefinements: jest.fn(),
@@ -734,7 +734,7 @@ describe('connectRangeSlider', () => {
       const widget = connectRangeSlider(rendering)({ attributeName });
       const helper = {
         getNumericRefinement: jest.fn(
-          (_, operation) => (operation === '>=' ? 0 : 500)
+          (_, operation) => (operation === '>=' ? [0] : [500])
         ),
         addNumericRefinement: jest.fn(),
         clearRefinements: jest.fn(),
@@ -757,9 +757,7 @@ describe('connectRangeSlider', () => {
       });
 
       const helper = {
-        getNumericRefinement: jest.fn(
-          (_, operation) => (operation === '>=' ? 50 : 500)
-        ),
+        getNumericRefinement: jest.fn(),
         addNumericRefinement: jest.fn(),
         clearRefinements: jest.fn(),
         search: jest.fn(),
@@ -781,9 +779,7 @@ describe('connectRangeSlider', () => {
       });
 
       const helper = {
-        getNumericRefinement: jest.fn(
-          (_, operation) => (operation === '>=' ? 0 : 450)
-        ),
+        getNumericRefinement: jest.fn(),
         addNumericRefinement: jest.fn(),
         clearRefinements: jest.fn(),
         search: jest.fn(),
