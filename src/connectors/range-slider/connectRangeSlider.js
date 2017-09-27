@@ -189,7 +189,7 @@ export default function connectRangeSlider(renderFn) {
         }
       },
 
-      getConfiguration: currentConfiguration => {
+      getConfiguration(currentConfiguration) {
         const configuration = {
           disjunctiveFacets: [attributeName],
         };
@@ -200,8 +200,9 @@ export default function connectRangeSlider(renderFn) {
           currentConfiguration.numericRefinements[attributeName] !== undefined;
 
         const isBoundsDefined = isMinBounds || isMaxBounds;
+        const isAbleToRefine = this._isAbleToRefine(minBounds, maxBounds);
 
-        if (isBoundsDefined && !boundsAlreadyDefined) {
+        if (isBoundsDefined && !boundsAlreadyDefined && isAbleToRefine) {
           configuration.numericRefinements = { [attributeName]: {} };
 
           if (isMinBounds) {

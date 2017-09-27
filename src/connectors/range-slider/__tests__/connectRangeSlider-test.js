@@ -339,6 +339,20 @@ describe('connectRangeSlider', () => {
       expect(actual).toEqual(expectation);
     });
 
+    it("expect to return default configuration if the given bounds aren't valid", () => {
+      const currentConfiguration = {};
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        min: 1000,
+        max: 500,
+      });
+
+      const expectation = { disjunctiveFacets: ['price'] };
+      const actual = widget.getConfiguration(currentConfiguration);
+
+      expect(actual).toEqual(expectation);
+    });
+
     it('expect to return configuration with added numeric refinements', () => {
       const currentConfiguration = {};
       const widget = connectRangeSlider(rendering)({
