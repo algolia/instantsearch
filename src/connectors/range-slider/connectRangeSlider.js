@@ -105,19 +105,15 @@ export default function connectRangeSlider(renderFn) {
       },
 
       _getCurrentRefinement: (helper, stats = {}) => {
-        const minValues = helper.state.getNumericRefinement(
-          attributeName,
-          '>='
-        );
+        const [minValue] =
+          helper.state.getNumericRefinement(attributeName, '>=') || [];
 
-        const maxValues = helper.state.getNumericRefinement(
-          attributeName,
-          '<='
-        );
+        const [maxValue] =
+          helper.state.getNumericRefinement(attributeName, '<=') || [];
 
         let min;
-        if (minValues && minValues.length) {
-          min = minValues[0];
+        if (minValue !== undefined && minValue !== null) {
+          min = minValue;
         } else if (stats.min !== undefined && stats.min !== null) {
           min = stats.min;
         } else {
@@ -125,8 +121,8 @@ export default function connectRangeSlider(renderFn) {
         }
 
         let max;
-        if (maxValues && maxValues.length) {
-          max = maxValues[0];
+        if (maxValue !== undefined && maxValue !== null) {
+          max = maxValue;
         } else if (stats.max !== undefined && stats.max !== null) {
           max = stats.max;
         } else {
