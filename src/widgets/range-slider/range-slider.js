@@ -38,16 +38,22 @@ const renderer = ({
     return;
   }
 
-  const { min, max } = range;
-  const shouldAutoHideContainer = autoHideContainer && min === max;
+  const { min: minRange, max: maxRange } = range;
+  const shouldAutoHideContainer = autoHideContainer && minRange === maxRange;
+
+  const [minStart, maxStart] = start;
+  const values = [
+    minStart === -Infinity ? 0 : minStart,
+    maxStart === Infinity ? 0 : maxStart,
+  ];
 
   ReactDOM.render(
     <Slider
       cssClasses={cssClasses}
       refine={refine}
-      min={min}
-      max={max}
-      values={start}
+      min={minRange}
+      max={maxRange}
+      values={values}
       tooltips={tooltips}
       step={step}
       pips={pips}
