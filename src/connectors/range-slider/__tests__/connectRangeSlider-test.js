@@ -801,8 +801,8 @@ describe('connectRangeSlider', () => {
 
       widget._refine(helper)(values);
 
-      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
-      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.addNumericRefinement).not.toHaveBeenCalled();
+      expect(helper.addNumericRefinement).not.toHaveBeenCalled();
       expect(helper.clearRefinements).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
@@ -823,8 +823,18 @@ describe('connectRangeSlider', () => {
 
       widget._refine(helper)(values);
 
-      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
-      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        0
+      );
+
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        500
+      );
+
       expect(helper.clearRefinements).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
@@ -845,8 +855,18 @@ describe('connectRangeSlider', () => {
 
       widget._refine(helper)(values);
 
-      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
-      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith();
+      expect(helper.addNumericRefinement).toHaveBeenCalledWith(
+        attributeName,
+        '>=',
+        0
+      );
+
+      expect(helper.addNumericRefinement).not.toHaveBeenCalledWith(
+        attributeName,
+        '<=',
+        480
+      );
+
       expect(helper.clearRefinements).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
