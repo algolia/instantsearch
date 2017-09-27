@@ -79,7 +79,7 @@ export default function connectRangeSlider(renderFn) {
     };
 
     return {
-      _isAbleToRefine: (min, max) => {
+      _isAbleToRefine(min, max) {
         const isMinValid = min !== undefined && min !== null;
         const isMaxValid = max !== undefined && max !== null;
 
@@ -90,7 +90,7 @@ export default function connectRangeSlider(renderFn) {
         return isMinValid || isMaxValid;
       },
 
-      _getCurrentRange: (stats = {}) => {
+      _getCurrentRange(stats = {}) {
         let min;
         if (isMinBounds) {
           min = minBounds;
@@ -115,7 +115,7 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      _getCurrentRefinement: helper => {
+      _getCurrentRefinement(helper) {
         const [minValue] =
           helper.state.getNumericRefinement(attributeName, '>=') || [];
 
@@ -142,47 +142,49 @@ export default function connectRangeSlider(renderFn) {
         };
       },
 
-      _refine: (helper, range = {}) => ([nextMin, nextMax] = []) => {
-        const { min: rangeMin, max: rangeMax } = range;
+      _refine(helper, range = {}) {
+        return ([nextMin, nextMax] = []) => {
+          const { min: rangeMin, max: rangeMax } = range;
 
-        const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
-        const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
+          const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
+          const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
 
-        const newNextMin =
-          !isMinBounds && rangeMin === nextMin ? undefined : nextMin;
+          const newNextMin =
+            !isMinBounds && rangeMin === nextMin ? undefined : nextMin;
 
-        const newNextMax =
-          !isMaxBounds && rangeMax === nextMax ? undefined : nextMax;
+          const newNextMax =
+            !isMaxBounds && rangeMax === nextMax ? undefined : nextMax;
 
-        if (min !== newNextMin || max !== newNextMax) {
-          helper.clearRefinements();
+          if (min !== newNextMin || max !== newNextMax) {
+            helper.clearRefinements();
 
-          const isValidMinInput =
-            newNextMin !== null && newNextMin !== undefined;
-          const isGreatherThanBounds = isMinBounds && minBounds <= newNextMin;
+            const isValidMinInput =
+              newNextMin !== null && newNextMin !== undefined;
+            const isGreatherThanBounds = isMinBounds && minBounds <= newNextMin;
 
-          if (isValidMinInput && (!isMinBounds || isGreatherThanBounds)) {
-            helper.addNumericRefinement(
-              attributeName,
-              '>=',
-              formatToNumber(newNextMin)
-            );
+            if (isValidMinInput && (!isMinBounds || isGreatherThanBounds)) {
+              helper.addNumericRefinement(
+                attributeName,
+                '>=',
+                formatToNumber(newNextMin)
+              );
+            }
+
+            const isValidMaxInput =
+              newNextMax !== null && newNextMax !== undefined;
+            const isLowerThanBounds = isMaxBounds && maxBounds >= newNextMax;
+
+            if (isValidMaxInput && (!isMaxBounds || isLowerThanBounds)) {
+              helper.addNumericRefinement(
+                attributeName,
+                '<=',
+                formatToNumber(newNextMax)
+              );
+            }
+
+            helper.search();
           }
-
-          const isValidMaxInput =
-            newNextMax !== null && newNextMax !== undefined;
-          const isLowerThanBounds = isMaxBounds && maxBounds >= newNextMax;
-
-          if (isValidMaxInput && (!isMaxBounds || isLowerThanBounds)) {
-            helper.addNumericRefinement(
-              attributeName,
-              '<=',
-              formatToNumber(newNextMax)
-            );
-          }
-
-          helper.search();
-        }
+        };
       },
 
       getConfiguration(currentConfiguration) {
