@@ -79,6 +79,17 @@ export default function connectRangeSlider(renderFn) {
     };
 
     return {
+      _isAbleToRefine: (min, max) => {
+        const isMinValid = min !== undefined && min !== null;
+        const isMaxValid = max !== undefined && max !== null;
+
+        if (isMinValid && isMaxValid && min >= max) {
+          return false;
+        }
+
+        return isMinValid || isMaxValid;
+      },
+
       _getCurrentRange: (stats = {}) => {
         let min;
         if (isMinBounds) {

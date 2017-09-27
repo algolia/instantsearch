@@ -361,6 +361,73 @@ describe('connectRangeSlider', () => {
     });
   });
 
+  describe('_isAbleToRefine', () => {
+    const attributeName = 'price';
+    const rendering = () => {};
+
+    it('expect to return true when only min is provided', () => {
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const actual0 = widget._isAbleToRefine(10, null);
+      const actual1 = widget._isAbleToRefine(10, undefined);
+
+      expect(actual0).toBe(true);
+      expect(actual1).toBe(true);
+    });
+
+    it('expect to return true when only max is provided', () => {
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const actual0 = widget._isAbleToRefine(null, 10);
+      const actual1 = widget._isAbleToRefine(undefined, 10);
+
+      expect(actual0).toBe(true);
+      expect(actual1).toBe(true);
+    });
+
+    it('expect to return true when both are provided with min lower than max', () => {
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const actual = widget._isAbleToRefine(10, 20);
+
+      expect(actual).toBe(true);
+    });
+
+    it('expect to return false when both are provided with min greater or equal than max', () => {
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const actual0 = widget._isAbleToRefine(10, 10);
+      const actual1 = widget._isAbleToRefine(20, 10);
+
+      expect(actual0).toBe(false);
+      expect(actual1).toBe(false);
+    });
+
+    it('expect to return false when both are invalid', () => {
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+      });
+
+      const actual0 = widget._isAbleToRefine(null, null);
+      const actual1 = widget._isAbleToRefine(null, undefined);
+      const actual2 = widget._isAbleToRefine(undefined, null);
+      const actual3 = widget._isAbleToRefine(undefined, undefined);
+
+      expect(actual0).toBe(false);
+      expect(actual1).toBe(false);
+      expect(actual2).toBe(false);
+      expect(actual3).toBe(false);
+    });
+  });
+
   describe('_getCurrentRange', () => {
     const attributeName = 'price';
     const rendering = () => {};
