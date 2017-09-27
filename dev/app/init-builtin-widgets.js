@@ -548,7 +548,7 @@ export default () => {
           instantsearch.widgets.rangeSlider({
             container,
             attributeName: 'price',
-            step: 10,
+            step: 500,
             tooltips: {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;
