@@ -43,8 +43,8 @@ const renderer = ({
 
   const [minStart, maxStart] = start;
   const values = [
-    minStart === -Infinity ? 0 : minStart,
-    maxStart === Infinity ? 0 : maxStart,
+    minStart === -Infinity ? minRange : minStart,
+    maxStart === Infinity ? maxRange : maxStart,
   ];
 
   ReactDOM.render(
