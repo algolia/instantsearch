@@ -123,19 +123,8 @@ export default function connectRangeSlider(renderFn) {
         const [maxValue] =
           helper.state.getNumericRefinement(attributeName, '<=') || [];
 
-        let min;
-        if (_isFinite(minValue)) {
-          min = minValue;
-        } else {
-          min = -Infinity;
-        }
-
-        let max;
-        if (_isFinite(maxValue)) {
-          max = maxValue;
-        } else {
-          max = Infinity;
-        }
+        const min = _isFinite(minValue) ? minValue : -Infinity;
+        const max = _isFinite(maxValue) ? maxValue : Infinity;
 
         return {
           min: Math.floor(min),
