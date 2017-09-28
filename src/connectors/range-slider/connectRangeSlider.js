@@ -159,10 +159,14 @@ export default function connectRangeSlider(renderFn) {
             helper.clearRefinements();
 
             const isValidMinInput =
-              newNextMin !== null && newNextMin !== undefined;
-            const isGreatherThanBounds = isMinBounds && minBounds <= newNextMin;
+              newNextMin !== undefined && newNextMin !== null;
 
-            if (isValidMinInput && (!isMinBounds || isGreatherThanBounds)) {
+            const isValidMinRange = rangeMin !== undefined && rangeMin !== null;
+
+            const isGreatherThanRange =
+              isValidMinRange && rangeMin <= newNextMin;
+
+            if (isValidMinInput && (!isValidMinRange || isGreatherThanRange)) {
               helper.addNumericRefinement(
                 attributeName,
                 '>=',
@@ -171,10 +175,13 @@ export default function connectRangeSlider(renderFn) {
             }
 
             const isValidMaxInput =
-              newNextMax !== null && newNextMax !== undefined;
-            const isLowerThanBounds = isMaxBounds && maxBounds >= newNextMax;
+              newNextMax !== undefined && newNextMax !== null;
 
-            if (isValidMaxInput && (!isMaxBounds || isLowerThanBounds)) {
+            const isValidMaxRange = rangeMax !== undefined && rangeMax !== null;
+
+            const isLowerThanRange = isValidMaxRange && rangeMax >= newNextMax;
+
+            if (isValidMaxInput && (!isValidMaxRange || isLowerThanRange)) {
               helper.addNumericRefinement(
                 attributeName,
                 '<=',
@@ -222,7 +229,10 @@ export default function connectRangeSlider(renderFn) {
 
         renderFn(
           {
-            refine: this._refine(helper, range),
+            // On first render pass an empty range
+            // to be able to bypass the validation
+            // related to it
+            refine: this._refine(helper, {}),
             start: [min, max],
             format: sliderFormatter,
             range,
