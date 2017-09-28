@@ -1,4 +1,5 @@
 import find from 'lodash/find';
+import _isFinite from 'lodash/isFinite';
 
 import { checkRendering } from '../../lib/utils.js';
 
@@ -68,8 +69,8 @@ export default function connectRangeSlider(renderFn) {
       throw new Error(usage);
     }
 
-    const isMinBounds = minBounds !== undefined && minBounds !== null;
-    const isMaxBounds = maxBounds !== undefined && maxBounds !== null;
+    const isMinBounds = _isFinite(minBounds);
+    const isMaxBounds = _isFinite(maxBounds);
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
@@ -80,8 +81,8 @@ export default function connectRangeSlider(renderFn) {
 
     return {
       _isAbleToRefine(min, max) {
-        const isMinValid = min !== undefined && min !== null;
-        const isMaxValid = max !== undefined && max !== null;
+        const isMinValid = _isFinite(min);
+        const isMaxValid = _isFinite(max);
 
         if (isMinValid && isMaxValid && min >= max) {
           return false;
@@ -94,7 +95,7 @@ export default function connectRangeSlider(renderFn) {
         let min;
         if (isMinBounds) {
           min = minBounds;
-        } else if (stats.min !== undefined && stats.min !== null) {
+        } else if (_isFinite(stats.min)) {
           min = stats.min;
         } else {
           min = 0;
@@ -103,7 +104,7 @@ export default function connectRangeSlider(renderFn) {
         let max;
         if (isMaxBounds) {
           max = maxBounds;
-        } else if (stats.max !== undefined && stats.max !== null) {
+        } else if (_isFinite(stats.max)) {
           max = stats.max;
         } else {
           max = 0;
@@ -123,14 +124,14 @@ export default function connectRangeSlider(renderFn) {
           helper.state.getNumericRefinement(attributeName, '<=') || [];
 
         let min;
-        if (minValue !== undefined && minValue !== null) {
+        if (_isFinite(minValue)) {
           min = minValue;
         } else {
           min = -Infinity;
         }
 
         let max;
-        if (maxValue !== undefined && maxValue !== null) {
+        if (_isFinite(maxValue)) {
           max = maxValue;
         } else {
           max = Infinity;
@@ -158,11 +159,8 @@ export default function connectRangeSlider(renderFn) {
           if (min !== newNextMin || max !== newNextMax) {
             helper.clearRefinements();
 
-            const isValidMinInput =
-              newNextMin !== undefined && newNextMin !== null;
-
-            const isValidMinRange = rangeMin !== undefined && rangeMin !== null;
-
+            const isValidMinInput = _isFinite(newNextMin);
+            const isValidMinRange = _isFinite(rangeMin);
             const isGreatherThanRange =
               isValidMinRange && rangeMin <= newNextMin;
 
@@ -174,11 +172,8 @@ export default function connectRangeSlider(renderFn) {
               );
             }
 
-            const isValidMaxInput =
-              newNextMax !== undefined && newNextMax !== null;
-
-            const isValidMaxRange = rangeMax !== undefined && rangeMax !== null;
-
+            const isValidMaxInput = _isFinite(newNextMax);
+            const isValidMaxRange = _isFinite(rangeMax);
             const isLowerThanRange = isValidMaxRange && rangeMax >= newNextMax;
 
             if (isValidMaxInput && (!isValidMaxRange || isLowerThanRange)) {
