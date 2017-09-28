@@ -1,13 +1,13 @@
 /* eslint-disable import/default */
-import { action, storiesOf } from "dev-novel";
-import instantsearch from "../../index.js";
+import { action, storiesOf } from 'dev-novel';
+import instantsearch from '../../index.js';
 
-import wrapWithHits from "./wrap-with-hits.js";
+import wrapWithHits from './wrap-with-hits.js';
 
 export default () => {
-  storiesOf("Breadcrumb")
+  storiesOf('Breadcrumb')
     .add(
-      "default",
+      'default',
       wrapWithHits(container => {
         container.innerHTML = `
         <div id="hierarchicalMenu"></div>
@@ -16,43 +16,12 @@ export default () => {
 
         window.search.addWidget(
           instantsearch.widgets.breadcrumb({
-            container: "#breadcrumb",
+            container: '#breadcrumb',
             attributes: [
-              "hierarchicalCategories.lvl0",
-              "hierarchicalCategories.lvl1",
-              "hierarchicalCategories.lvl2"
-            ]
-          })
-        );
-
-        //Custom Widget to toggle refinement
-        window.search.addWidget({
-          init({ helper }) {
-            helper.toggleRefinement(
-              "hierarchicalCategories.lvl0",
-              "Cameras & Camcorders > Digital Cameras"
-            );
-          }
-        });
-      })
-    )
-    .add(
-      "with custom home label",
-      wrapWithHits(container => {
-        container.innerHTML = `
-        <div id="hierarchicalMenu"></div>
-        <div id="breadcrumb"></div>
-      `;
-
-        window.search.addWidget(
-          instantsearch.widgets.breadcrumb({
-            container: "#breadcrumb",
-            attributes: [
-              "hierarchicalCategories.lvl0",
-              "hierarchicalCategories.lvl1",
-              "hierarchicalCategories.lvl2"
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
             ],
-            templates: { home: "Home Page" }
           })
         );
 
@@ -60,15 +29,46 @@ export default () => {
         window.search.addWidget({
           init({ helper }) {
             helper.toggleRefinement(
-              "hierarchicalCategories.lvl0",
-              "Cameras & Camcorders > Digital Cameras"
+              'hierarchicalCategories.lvl0',
+              'Cameras & Camcorders > Digital Cameras'
             );
-          }
+          },
         });
       })
     )
     .add(
-      "with hierarchical menu",
+      'with custom home label',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="hierarchicalMenu"></div>
+        <div id="breadcrumb"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            templates: { home: 'Home Page' },
+          })
+        );
+
+        //Custom Widget to toggle refinement
+        window.search.addWidget({
+          init({ helper }) {
+            helper.toggleRefinement(
+              'hierarchicalCategories.lvl0',
+              'Cameras & Camcorders > Digital Cameras'
+            );
+          },
+        });
+      })
+    )
+    .add(
+      'with default selected item',
       wrapWithHits(container => {
         container.innerHTML = `
         <div id="breadcrumb"></div>
@@ -77,182 +77,216 @@ export default () => {
 
         window.search.addWidget(
           instantsearch.widgets.breadcrumb({
-            container: "#breadcrumb",
-            separator: " / ",
+            container: '#breadcrumb',
             attributes: [
-              "hierarchicalCategories.lvl0",
-              "hierarchicalCategories.lvl1",
-              "hierarchicalCategories.lvl2"
-            ]
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            rootPath: 'Cameras & Camcorders > Digital Cameras',
           })
         );
 
         window.search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
             showParentLevel: false,
-            container: "#hierarchicalMenu",
+            container: '#hierarchicalMenu',
             attributes: [
-              "hierarchicalCategories.lvl0",
-              "hierarchicalCategories.lvl1",
-              "hierarchicalCategories.lvl2"
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
             ],
-            rootPath: "Cameras & Camcorders"
+            rootPath: 'Cameras & Camcorders',
+          })
+        );
+      })
+    )
+    .add(
+      'with hierarchical menu',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="breadcrumb"></div>
+        <div id="hierarchicalMenu"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            separator: ' / ',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            showParentLevel: false,
+            container: '#hierarchicalMenu',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            rootPath: 'Cameras & Camcorders',
           })
         );
       })
     );
 
-  storiesOf("Analytics").add(
-    "default",
+  storiesOf('Analytics').add(
+    'default',
     wrapWithHits(container => {
-      const description = document.createElement("p");
-      description.innerText = "Search for something, look into Action Logger";
+      const description = document.createElement('p');
+      description.innerText = 'Search for something, look into Action Logger';
       container.appendChild(description);
 
       window.search.addWidget(
         instantsearch.widgets.analytics({
           pushFunction(formattedParameters, state, results) {
-            action("pushFunction[formattedParameters]")(formattedParameters);
-            action("pushFunction[state]")(state);
-            action("pushFunction[results]")(results);
+            action('pushFunction[formattedParameters]')(formattedParameters);
+            action('pushFunction[state]')(state);
+            action('pushFunction[results]')(results);
           },
           triggerOnUIInteraction: true,
-          pushInitialSearch: false
+          pushInitialSearch: false,
         })
       );
     })
   );
 
-  storiesOf("SearchBox")
+  storiesOf('SearchBox')
     .add(
-      "default",
+      'default',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container,
-            placeholder: "Search for products",
-            poweredBy: true
+            placeholder: 'Search for products',
+            poweredBy: true,
           })
         );
       })
     )
     .add(
-      "search on enter",
+      'search on enter',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container,
-            placeholder: "Search for products",
+            placeholder: 'Search for products',
             poweredBy: true,
-            searchOnEnterKeyPressOnly: true
+            searchOnEnterKeyPressOnly: true,
           })
         );
       })
     );
 
-  storiesOf("Stats").add(
-    "default",
+  storiesOf('Stats').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(instantsearch.widgets.stats({ container }));
     })
   );
 
-  storiesOf("SortBySelector").add(
-    "default",
+  storiesOf('SortBySelector').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.sortBySelector({
           container,
           indices: [
-            { name: "instant_search", label: "Most relevant" },
-            { name: "instant_search_price_asc", label: "Lowest price" },
-            { name: "instant_search_price_desc", label: "Highest price" }
-          ]
+            { name: 'instant_search', label: 'Most relevant' },
+            { name: 'instant_search_price_asc', label: 'Lowest price' },
+            { name: 'instant_search_price_desc', label: 'Highest price' },
+          ],
         })
       );
     })
   );
 
-  storiesOf("HitsPerPageSelector").add(
-    "default",
+  storiesOf('HitsPerPageSelector').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.hitsPerPageSelector({
           container,
           items: [
-            { value: 3, label: "3 per page" },
-            { value: 5, label: "5 per page" },
-            { value: 10, label: "10 per page" }
-          ]
+            { value: 3, label: '3 per page' },
+            { value: 5, label: '5 per page' },
+            { value: 10, label: '10 per page' },
+          ],
         })
       );
     })
   );
 
-  storiesOf("Hits").add(
-    "default",
+  storiesOf('Hits').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(instantsearch.widgets.hits({ container }));
     })
   );
 
-  storiesOf("InfiniteHits").add(
-    "default",
+  storiesOf('InfiniteHits').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.infiniteHits({
           container,
-          showMoreLabel: "Show more"
+          showMoreLabel: 'Show more',
         })
       );
     })
   );
 
-  storiesOf("Pagination").add(
-    "default",
+  storiesOf('Pagination').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.pagination({
           container,
-          maxPages: 20
+          maxPages: 20,
         })
       );
     })
   );
 
-  storiesOf("ClearAll")
+  storiesOf('ClearAll')
     .add(
-      "default",
+      'default',
       wrapWithHits(
         container => {
           window.search.addWidget(
             instantsearch.widgets.clearAll({
               container,
-              autoHideContainer: false
+              autoHideContainer: false,
             })
           );
         },
         {
           searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ["Apple"] },
-            disjunctiveFacets: ["brand"]
-          }
+            disjunctiveFacetsRefinements: { brand: ['Apple'] },
+            disjunctiveFacets: ['brand'],
+          },
         }
       )
     )
     .add(
-      "with nothing to clear",
+      'with nothing to clear',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.clearAll({
             container,
-            autoHideContainer: false
+            autoHideContainer: false,
           })
         );
       })
     )
     .add(
-      "with clear refinements and query",
+      'with clear refinements and query',
       wrapWithHits(
         container => {
           window.search.addWidget(
@@ -261,23 +295,23 @@ export default () => {
               autoHideContainer: false,
               clearsQuery: true,
               templates: {
-                link: "Clear refinements and query"
-              }
+                link: 'Clear refinements and query',
+              },
             })
           );
         },
         {
           searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ["Apple"] },
-            disjunctiveFacets: ["brand"]
-          }
+            disjunctiveFacetsRefinements: { brand: ['Apple'] },
+            disjunctiveFacets: ['brand'],
+          },
         }
       )
     );
 
-  storiesOf("CurrentRefinedValues")
+  storiesOf('CurrentRefinedValues')
     .add(
-      "default",
+      'default',
       wrapWithHits(
         container => {
           window.search.addWidget(
@@ -286,388 +320,388 @@ export default () => {
         },
         {
           searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ["Apple", "Samsung"] },
-            disjunctiveFacets: ["brand"]
-          }
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+          },
         }
       )
     )
     .add(
-      "with header",
+      'with header',
       wrapWithHits(
         container => {
           window.search.addWidget(
             instantsearch.widgets.currentRefinedValues({
               container,
               templates: {
-                header: "Current refinements"
-              }
+                header: 'Current refinements',
+              },
             })
           );
         },
         {
           searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ["Apple", "Samsung"] },
-            disjunctiveFacets: ["brand"]
-          }
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+          },
         }
       )
     )
     .add(
-      "with header but no refinements",
+      'with header but no refinements',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.currentRefinedValues({
             container,
             autoHideContainer: false,
             templates: {
-              header: "Current refinements"
-            }
+              header: 'Current refinements',
+            },
           })
         );
       })
     );
 
-  storiesOf("RefinementList")
+  storiesOf('RefinementList')
     .add(
-      "default",
+      'default',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: "brand",
-            operator: "or",
+            attributeName: 'brand',
+            operator: 'or',
             limit: 10,
             templates: {
-              header: "Brands"
-            }
+              header: 'Brands',
+            },
           })
         );
       })
     )
     .add(
-      "with show more",
+      'with show more',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: "brand",
-            operator: "or",
+            attributeName: 'brand',
+            operator: 'or',
             limit: 3,
             templates: {
-              header: "Brands with show more"
+              header: 'Brands with show more',
             },
             showMore: {
               templates: {
-                active: "<button>Show less</button>",
-                inactive: "<button>Show more</button>"
+                active: '<button>Show less</button>',
+                inactive: '<button>Show more</button>',
               },
-              limit: 10
-            }
+              limit: 10,
+            },
           })
         );
       })
     )
     .add(
-      "with search inside items",
+      'with search inside items',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: "brand",
-            operator: "or",
+            attributeName: 'brand',
+            operator: 'or',
             limit: 10,
             templates: {
-              header: "Searchable brands"
+              header: 'Searchable brands',
             },
             searchForFacetValues: {
-              placeholder: "Find other brands...",
+              placeholder: 'Find other brands...',
               templates: {
-                noResults: "No results"
-              }
-            }
+                noResults: 'No results',
+              },
+            },
           })
         );
       })
     )
     .add(
-      "with operator `and`",
+      'with operator `and`',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: "price_range",
-            operator: "and",
+            attributeName: 'price_range',
+            operator: 'and',
             limit: 10,
             cssClasses: {
-              header: "facet-title",
-              item: "facet-value checkbox",
-              count: "facet-count pull-right",
-              active: "facet-active"
+              header: 'facet-title',
+              item: 'facet-value checkbox',
+              count: 'facet-count pull-right',
+              active: 'facet-active',
             },
             templates: {
-              header: "Price ranges"
+              header: 'Price ranges',
             },
             transformData(data) {
               data.label = data.label
-                .replace(/(\d+) - (\d+)/, "$$$1 - $$$2")
-                .replace(/> (\d+)/, "> $$$1");
+                .replace(/(\d+) - (\d+)/, '$$$1 - $$$2')
+                .replace(/> (\d+)/, '> $$$1');
               return data;
-            }
+            },
           })
         );
       })
     );
 
-  storiesOf("StarRating").add(
-    "default",
+  storiesOf('StarRating').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.starRating({
           container,
-          attributeName: "rating",
+          attributeName: 'rating',
           max: 5,
           labels: {
-            andUp: "& Up"
+            andUp: '& Up',
           },
           templates: {
-            header: "Rating"
-          }
+            header: 'Rating',
+          },
         })
       );
     })
   );
 
-  storiesOf("NumericRefinementList").add(
-    "default",
+  storiesOf('NumericRefinementList').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.numericRefinementList({
           container,
-          attributeName: "price",
-          operator: "or",
+          attributeName: 'price',
+          operator: 'or',
           options: [
-            { name: "All" },
-            { end: 4, name: "less than 4" },
-            { start: 4, end: 4, name: "4" },
-            { start: 5, end: 10, name: "between 5 and 10" },
-            { start: 10, name: "more than 10" }
+            { name: 'All' },
+            { end: 4, name: 'less than 4' },
+            { start: 4, end: 4, name: '4' },
+            { start: 5, end: 10, name: 'between 5 and 10' },
+            { start: 10, name: 'more than 10' },
           ],
           cssClasses: {
-            header: "facet-title",
-            link: "facet-value",
-            count: "facet-count pull-right",
-            active: "facet-active"
+            header: 'facet-title',
+            link: 'facet-value',
+            count: 'facet-count pull-right',
+            active: 'facet-active',
           },
           templates: {
-            header: "Numeric refinement list (price)"
-          }
+            header: 'Numeric refinement list (price)',
+          },
         })
       );
     })
   );
 
-  storiesOf("Toggle")
+  storiesOf('Toggle')
     .add(
-      "with single value",
+      'with single value',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.toggle({
             container,
-            attributeName: "free_shipping",
-            label: "Free Shipping (toggle single value)",
+            attributeName: 'free_shipping',
+            label: 'Free Shipping (toggle single value)',
             templates: {
-              header: "Shipping"
-            }
+              header: 'Shipping',
+            },
           })
         );
       })
     )
     .add(
-      "with on & off values",
+      'with on & off values',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.toggle({
             container,
-            attributeName: "brand",
-            label: "Canon (not checked) or sony (checked)",
+            attributeName: 'brand',
+            label: 'Canon (not checked) or sony (checked)',
             values: {
-              on: "Sony",
-              off: "Canon"
+              on: 'Sony',
+              off: 'Canon',
             },
             templates: {
-              header: "Google or amazon (toggle two values)"
-            }
+              header: 'Google or amazon (toggle two values)',
+            },
           })
         );
       })
     );
 
-  storiesOf("Menu")
+  storiesOf('Menu')
     .add(
-      "Default",
+      'Default',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.menu({
             container,
-            attributeName: "categories"
+            attributeName: 'categories',
           })
         );
       })
     )
     .add(
-      "with show more and header",
+      'with show more and header',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.menu({
             container,
-            attributeName: "categories",
+            attributeName: 'categories',
             limit: 3,
             showMore: {
               templates: {
-                active: "<button>Show less</button>",
-                inactive: "<button>Show more</button>"
+                active: '<button>Show less</button>',
+                inactive: '<button>Show more</button>',
               },
-              limit: 10
+              limit: 10,
             },
             templates: {
-              header: "Categories (menu widget)"
-            }
+              header: 'Categories (menu widget)',
+            },
           })
         );
       })
     );
 
-  storiesOf("RangeSlider").add(
-    "default",
+  storiesOf('RangeSlider').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.rangeSlider({
           container,
-          attributeName: "price",
+          attributeName: 'price',
           templates: {
-            header: "Price"
+            header: 'Price',
           },
           max: 500,
           step: 10,
           tooltips: {
             format(rawValue) {
               return `$${Math.round(rawValue).toLocaleString()}`;
-            }
-          }
+            },
+          },
         })
       );
     })
   );
 
-  storiesOf("HierarchicalMenu")
+  storiesOf('HierarchicalMenu')
     .add(
-      "default",
+      'default',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
             container,
             attributes: [
-              "hierarchicalCategories.lvl0",
-              "hierarchicalCategories.lvl1",
-              "hierarchicalCategories.lvl2"
-            ]
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
           })
         );
       })
     )
     .add(
-      "only show current level",
+      'only show current level',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
             container,
             showParentLevel: false,
             attributes: [
-              "hierarchicalCategories.lvl0",
-              "hierarchicalCategories.lvl1",
-              "hierarchicalCategories.lvl2"
-            ]
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
           })
         );
       })
     )
     .add(
-      "with default selected item",
+      'with default selected item',
       wrapWithHits(
         container => {
           window.search.addWidget(
             instantsearch.widgets.hierarchicalMenu({
               container,
               attributes: [
-                "hierarchicalCategories.lvl0",
-                "hierarchicalCategories.lvl1",
-                "hierarchicalCategories.lvl2"
+                'hierarchicalCategories.lvl0',
+                'hierarchicalCategories.lvl1',
+                'hierarchicalCategories.lvl2',
               ],
-              rootPath: "Cameras & Camcorders"
+              rootPath: 'Cameras & Camcorders',
             })
           );
         },
         {
           searchParameters: {
             hierarchicalFacetsRefinements: {
-              "hierarchicalCategories.lvl0": [
-                "Cameras & Camcorders > Digital Cameras"
-              ]
-            }
-          }
+              'hierarchicalCategories.lvl0': [
+                'Cameras & Camcorders > Digital Cameras',
+              ],
+            },
+          },
         }
       )
     )
     .add(
-      "with header",
+      'with header',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
             container,
             attributes: [
-              "hierarchicalCategories.lvl0",
-              "hierarchicalCategories.lvl1",
-              "hierarchicalCategories.lvl2"
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
             ],
-            rootPath: "Cameras & Camcorders",
+            rootPath: 'Cameras & Camcorders',
             templates: {
-              header: "Hierarchical categories"
-            }
+              header: 'Hierarchical categories',
+            },
           })
         );
       })
     );
 
-  storiesOf("PriceRanges").add(
-    "default",
+  storiesOf('PriceRanges').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.priceRanges({
           container,
-          attributeName: "price",
+          attributeName: 'price',
           templates: {
-            header: "Price ranges"
-          }
+            header: 'Price ranges',
+          },
         })
       );
     })
   );
 
-  storiesOf("NumericSelector").add(
-    "default",
+  storiesOf('NumericSelector').add(
+    'default',
     wrapWithHits(container => {
       window.search.addWidget(
         instantsearch.widgets.numericSelector({
           container,
-          operator: ">=",
-          attributeName: "popularity",
+          operator: '>=',
+          attributeName: 'popularity',
           options: [
-            { label: "Default", value: 0 },
-            { label: "Top 10", value: 9991 },
-            { label: "Top 100", value: 9901 },
-            { label: "Top 500", value: 9501 }
-          ]
+            { label: 'Default', value: 0 },
+            { label: 'Top 10', value: 9991 },
+            { label: 'Top 100', value: 9901 },
+            { label: 'Top 500', value: 9501 },
+          ],
         })
       );
     })
