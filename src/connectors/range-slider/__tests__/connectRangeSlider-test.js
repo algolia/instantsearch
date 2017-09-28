@@ -339,7 +339,7 @@ describe('connectRangeSlider', () => {
       expect(actual).toEqual(expectation);
     });
 
-    it("expect to return default configuration if the given bounds aren't valid", () => {
+    it('expect to return default configuration if the given min bound are greater than max bound', () => {
       const currentConfiguration = {};
       const widget = connectRangeSlider(rendering)({
         attributeName,
@@ -353,18 +353,18 @@ describe('connectRangeSlider', () => {
       expect(actual).toEqual(expectation);
     });
 
-    it('expect to return configuration with added numeric refinements', () => {
+    it('expect to return configuration with min numeric refinement', () => {
       const currentConfiguration = {};
       const widget = connectRangeSlider(rendering)({
         attributeName,
-        max: 500,
+        min: 10,
       });
 
       const expectation = {
         disjunctiveFacets: ['price'],
         numericRefinements: {
           price: {
-            '<=': [500],
+            '>=': [10],
           },
         },
       };
@@ -373,72 +373,49 @@ describe('connectRangeSlider', () => {
 
       expect(actual).toEqual(expectation);
     });
-  });
 
-  describe('_isAbleToRefine', () => {
-    const attributeName = 'price';
-    const rendering = () => {};
-
-    it('expect to return true when only min is provided', () => {
+    it('expect to return configuration with max numeric refinement', () => {
+      const currentConfiguration = {};
       const widget = connectRangeSlider(rendering)({
         attributeName,
+        max: 10,
       });
 
-      const actual0 = widget._isAbleToRefine(10, null);
-      const actual1 = widget._isAbleToRefine(10, undefined);
+      const expectation = {
+        disjunctiveFacets: ['price'],
+        numericRefinements: {
+          price: {
+            '<=': [10],
+          },
+        },
+      };
 
-      expect(actual0).toBe(true);
-      expect(actual1).toBe(true);
+      const actual = widget.getConfiguration(currentConfiguration);
+
+      expect(actual).toEqual(expectation);
     });
 
-    it('expect to return true when only max is provided', () => {
+    it('expect to return configuration with both numeric refinements', () => {
+      const currentConfiguration = {};
       const widget = connectRangeSlider(rendering)({
         attributeName,
+        min: 10,
+        max: 500,
       });
 
-      const actual0 = widget._isAbleToRefine(null, 10);
-      const actual1 = widget._isAbleToRefine(undefined, 10);
+      const expectation = {
+        disjunctiveFacets: ['price'],
+        numericRefinements: {
+          price: {
+            '>=': [10],
+            '<=': [500],
+          },
+        },
+      };
 
-      expect(actual0).toBe(true);
-      expect(actual1).toBe(true);
-    });
+      const actual = widget.getConfiguration(currentConfiguration);
 
-    it('expect to return true when both are provided with min lower than max', () => {
-      const widget = connectRangeSlider(rendering)({
-        attributeName,
-      });
-
-      const actual = widget._isAbleToRefine(10, 20);
-
-      expect(actual).toBe(true);
-    });
-
-    it('expect to return false when both are provided with min greater or equal than max', () => {
-      const widget = connectRangeSlider(rendering)({
-        attributeName,
-      });
-
-      const actual0 = widget._isAbleToRefine(10, 10);
-      const actual1 = widget._isAbleToRefine(20, 10);
-
-      expect(actual0).toBe(false);
-      expect(actual1).toBe(false);
-    });
-
-    it('expect to return false when both are invalid', () => {
-      const widget = connectRangeSlider(rendering)({
-        attributeName,
-      });
-
-      const actual0 = widget._isAbleToRefine(null, null);
-      const actual1 = widget._isAbleToRefine(null, undefined);
-      const actual2 = widget._isAbleToRefine(undefined, null);
-      const actual3 = widget._isAbleToRefine(undefined, undefined);
-
-      expect(actual0).toBe(false);
-      expect(actual1).toBe(false);
-      expect(actual2).toBe(false);
-      expect(actual3).toBe(false);
+      expect(actual).toEqual(expectation);
     });
   });
 

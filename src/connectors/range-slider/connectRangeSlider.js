@@ -80,17 +80,6 @@ export default function connectRangeSlider(renderFn) {
     };
 
     return {
-      _isAbleToRefine(min, max) {
-        const isMinValid = _isFinite(min);
-        const isMaxValid = _isFinite(max);
-
-        if (isMinValid && isMaxValid && min >= max) {
-          return false;
-        }
-
-        return isMinValid || isMaxValid;
-      },
-
       _getCurrentRange(stats = {}) {
         let min;
         if (hasMinBound) {
@@ -183,13 +172,19 @@ export default function connectRangeSlider(renderFn) {
           disjunctiveFacets: [attributeName],
         };
 
+        const isBoundsDefined = hasMinBound || hasMaxBound;
+
         const boundsAlreadyDefined =
           currentConfiguration &&
           currentConfiguration.numericRefinements &&
           currentConfiguration.numericRefinements[attributeName] !== undefined;
 
-        const isBoundsDefined = hasMinBound || hasMaxBound;
-        const isAbleToRefine = this._isAbleToRefine(minBound, maxBound);
+        const isMinBoundValid = _isFinite(minBound);
+        const isMaxBoundValid = _isFinite(maxBound);
+        const isAbleToRefine =
+          isMinBoundValid && isMaxBoundValid
+            ? minBound < maxBound
+            : isMinBoundValid || isMaxBoundValid;
 
         if (isBoundsDefined && !boundsAlreadyDefined && isAbleToRefine) {
           configuration.numericRefinements = { [attributeName]: {} };
