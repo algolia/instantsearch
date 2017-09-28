@@ -585,7 +585,7 @@ export default () => {
             templates: {
               header: 'Price',
             },
-            min: 10,
+            min: 36,
             tooltips: {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;
@@ -605,7 +605,7 @@ export default () => {
             templates: {
               header: 'Price',
             },
-            max: 500,
+            max: 36,
             tooltips: {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;
