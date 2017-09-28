@@ -69,8 +69,8 @@ export default function connectRangeSlider(renderFn) {
       throw new Error(usage);
     }
 
-    const isMinBounds = _isFinite(minBounds);
-    const isMaxBounds = _isFinite(maxBounds);
+    const hasMinBound = _isFinite(minBounds);
+    const hasMaxBound = _isFinite(maxBounds);
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
@@ -93,7 +93,7 @@ export default function connectRangeSlider(renderFn) {
 
       _getCurrentRange(stats = {}) {
         let min;
-        if (isMinBounds) {
+        if (hasMinBound) {
           min = minBounds;
         } else if (_isFinite(stats.min)) {
           min = stats.min;
@@ -102,7 +102,7 @@ export default function connectRangeSlider(renderFn) {
         }
 
         let max;
-        if (isMaxBounds) {
+        if (hasMaxBound) {
           max = maxBounds;
         } else if (_isFinite(stats.max)) {
           max = stats.max;
@@ -140,10 +140,10 @@ export default function connectRangeSlider(renderFn) {
           const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
 
           const newNextMin =
-            !isMinBounds && rangeMin === nextMin ? undefined : nextMin;
+            !hasMinBound && rangeMin === nextMin ? undefined : nextMin;
 
           const newNextMax =
-            !isMaxBounds && rangeMax === nextMax ? undefined : nextMax;
+            !hasMaxBound && rangeMax === nextMax ? undefined : nextMax;
 
           if (min !== newNextMin || max !== newNextMax) {
             helper.clearRefinements();
@@ -188,17 +188,17 @@ export default function connectRangeSlider(renderFn) {
           currentConfiguration.numericRefinements &&
           currentConfiguration.numericRefinements[attributeName] !== undefined;
 
-        const isBoundsDefined = isMinBounds || isMaxBounds;
+        const isBoundsDefined = hasMinBound || hasMaxBound;
         const isAbleToRefine = this._isAbleToRefine(minBounds, maxBounds);
 
         if (isBoundsDefined && !boundsAlreadyDefined && isAbleToRefine) {
           configuration.numericRefinements = { [attributeName]: {} };
 
-          if (isMinBounds) {
+          if (hasMinBound) {
             configuration.numericRefinements[attributeName]['>='] = [minBounds];
           }
 
-          if (isMaxBounds) {
+          if (hasMaxBound) {
             configuration.numericRefinements[attributeName]['<='] = [maxBounds];
           }
         }
