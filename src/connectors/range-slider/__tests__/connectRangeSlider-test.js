@@ -486,7 +486,7 @@ describe('connectRangeSlider', () => {
         },
       };
 
-      const expectation = { min: -Infinity, max: Infinity };
+      const expectation = [-Infinity, Infinity];
       const actual = widget._getCurrentRefinement(helper);
 
       expect(actual).toEqual(expectation);
@@ -502,7 +502,7 @@ describe('connectRangeSlider', () => {
         },
       };
 
-      const expectation = { min: 10, max: 100 };
+      const expectation = [10, 100];
       const actual = widget._getCurrentRefinement(helper);
 
       expect(actual).toEqual(expectation);
@@ -518,7 +518,7 @@ describe('connectRangeSlider', () => {
         },
       };
 
-      const expectation = { min: 10, max: 100 };
+      const expectation = [10, 100];
       const actual = widget._getCurrentRefinement(helper);
 
       expect(actual).toEqual(expectation);

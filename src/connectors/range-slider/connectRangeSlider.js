@@ -115,10 +115,7 @@ export default function connectRangeSlider(renderFn) {
         const min = _isFinite(minValue) ? minValue : -Infinity;
         const max = _isFinite(maxValue) ? maxValue : Infinity;
 
-        return {
-          min: Math.floor(min),
-          max: Math.ceil(max),
-        };
+        return [Math.floor(min), Math.ceil(max)];
       },
 
       _refine(helper, range = {}) {
@@ -204,7 +201,7 @@ export default function connectRangeSlider(renderFn) {
       init({ helper, instantSearchInstance }) {
         const stats = {};
         const range = this._getCurrentRange(stats);
-        const { min, max } = this._getCurrentRefinement(helper);
+        const start = this._getCurrentRefinement(helper);
 
         renderFn(
           {
@@ -212,9 +209,9 @@ export default function connectRangeSlider(renderFn) {
             // to be able to bypass the validation
             // related to it
             refine: this._refine(helper, {}),
-            start: [min, max],
             format: sliderFormatter,
             range,
+            start,
             widgetParams,
             instantSearchInstance,
           },
@@ -228,14 +225,14 @@ export default function connectRangeSlider(renderFn) {
         const stats = facet && facet.stats;
 
         const range = this._getCurrentRange(stats);
-        const { min, max } = this._getCurrentRefinement(helper);
+        const start = this._getCurrentRefinement(helper);
 
         renderFn(
           {
             refine: this._refine(helper, range),
-            start: [min, max],
             format: sliderFormatter,
             range,
+            start,
             widgetParams,
             instantSearchInstance,
           },
