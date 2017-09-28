@@ -2,13 +2,13 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { shallow } from 'enzyme';
 
-import Enhance, { Slider } from '../Slider';
+import Slider, { RawSlider } from '../Slider';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {
     const tree = renderer
       .create(
-        <Enhance
+        <Slider
           refine={() => undefined}
           min={0}
           max={500}
@@ -26,7 +26,7 @@ describe('Slider', () => {
   it('expect to render without pips', () => {
     const tree = renderer
       .create(
-        <Enhance
+        <Slider
           refine={() => undefined}
           min={0}
           max={500}
@@ -53,7 +53,7 @@ describe('Slider', () => {
       shouldAutoHideContainer: false,
     };
 
-    shallow(<Slider {...props} />)
+    shallow(<RawSlider {...props} />)
       .find('Rheostat')
       .simulate('change', {
         values: [0, 100],

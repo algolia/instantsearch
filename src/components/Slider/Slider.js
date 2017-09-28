@@ -12,7 +12,7 @@ import Pit from './Pit.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
-export class Slider extends Component {
+export class RawSlider extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
@@ -111,4 +111,4 @@ export class Slider extends Component {
   }
 }
 
-export default autoHideContainerHOC(headerFooterHOC(Slider));
+export default autoHideContainerHOC(headerFooterHOC(RawSlider));
