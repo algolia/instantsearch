@@ -231,6 +231,7 @@ export default () => {
           searchParameters: {
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
             disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
           },
         }
       )
@@ -252,6 +253,7 @@ export default () => {
           searchParameters: {
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
             disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
           },
         }
       )
@@ -285,6 +287,7 @@ export default () => {
           searchParameters: {
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
             disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
           },
         }
       )
