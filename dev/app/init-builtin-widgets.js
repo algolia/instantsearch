@@ -269,6 +269,25 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with clearsQuery',
+      wrapWithHits(
+        container => {
+          window.search.addWidget(
+            instantsearch.widgets.currentRefinedValues({
+              container,
+              clearsQuery: true,
+            })
+          );
+        },
+        {
+          searchParameters: {
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+          },
+        }
+      )
     );
 
   storiesOf('RefinementList')

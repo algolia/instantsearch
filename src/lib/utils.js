@@ -171,8 +171,17 @@ function getRefinement(state, type, attributeName, name, resultsFacets) {
   return res;
 }
 
-function getRefinements(results, state) {
-  const res = [];
+function getRefinements(results, state, clearsQuery) {
+  const res =
+    clearsQuery && state.query !== ''
+      ? [
+          {
+            type: 'query',
+            name: state.query,
+            query: state.query,
+          },
+        ]
+      : [];
 
   forEach(state.facetsRefinements, (refinements, attributeName) => {
     forEach(refinements, name => {
