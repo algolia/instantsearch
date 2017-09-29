@@ -46,6 +46,49 @@ describe('rangeSlider', () => {
       rangeSlider.__ResetDependency__('headerFooterHOC');
     });
 
+    it('should render without results', () => {
+      widget = rangeSlider({
+        container,
+        attributeName,
+        cssClasses: { root: ['root', 'cx'] },
+      });
+
+      widget.init({ helper, instantSearchInstance });
+      widget.render({ results: [], helper });
+
+      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    it('should `shouldAutoHideContainer` when range min === max', () => {
+      const results = {
+        disjunctiveFacets: [
+          {
+            name: attributeName,
+            stats: {
+              min: 65,
+              max: 65,
+            },
+          },
+        ],
+      };
+
+      widget = rangeSlider({
+        container,
+        attributeName,
+        cssClasses: { root: ['root', 'cx'] },
+      });
+
+      widget.init({ helper, instantSearchInstance });
+      widget.render({ results, helper });
+
+      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+      expect(
+        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
+      ).toEqual(true);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    });
+
     describe('min option', () => {
       it('refines when no previous configuration', () => {
         widget = rangeSlider({ container, attributeName, min: 100 });
@@ -137,73 +180,28 @@ describe('rangeSlider', () => {
         });
       });
 
-      describe('render', () => {
-        it('will use the results min when only max is passed', () => {
-          const results = {
-            disjunctiveFacets: [
-              {
-                name: attributeName,
-                stats: {
-                  min: 1.99,
-                  max: 4999.98,
-                },
+      it('will use the results min when only max is passed', () => {
+        const results = {
+          disjunctiveFacets: [
+            {
+              name: attributeName,
+              stats: {
+                min: 1.99,
+                max: 4999.98,
               },
-            ],
-          };
-
-          widget = rangeSlider({ container, attributeName, max: 100 });
-          helper.setState(widget.getConfiguration());
-          widget.init({ helper, instantSearchInstance });
-          widget.render({ results, helper });
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0].props.min).toEqual(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-      });
-    });
-
-    it('should render without results', () => {
-      widget = rangeSlider({
-        container,
-        attributeName,
-        cssClasses: { root: ['root', 'cx'] },
-      });
-
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results: [], helper });
-
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
-    it('should `shouldAutoHideContainer` when range min === max', () => {
-      const results = {
-        disjunctiveFacets: [
-          {
-            name: attributeName,
-            stats: {
-              min: 65,
-              max: 65,
             },
-          },
-        ],
-      };
+          ],
+        };
 
-      widget = rangeSlider({
-        container,
-        attributeName,
-        cssClasses: { root: ['root', 'cx'] },
+        widget = rangeSlider({ container, attributeName, max: 100 });
+        helper.setState(widget.getConfiguration());
+        widget.init({ helper, instantSearchInstance });
+        widget.render({ results, helper });
+
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0].props.min).toEqual(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
-
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
-
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(
-        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
-      ).toEqual(true);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     describe('with results', () => {
