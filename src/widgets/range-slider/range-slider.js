@@ -42,9 +42,15 @@ const renderer = ({
   const shouldAutoHideContainer = autoHideContainer && minRange === maxRange;
 
   const [minStart, maxStart] = start;
+  const minFinite = minStart === -Infinity ? minRange : minStart;
+  const maxFinite = maxStart === Infinity ? maxRange : maxStart;
+
+  // Clamp values to the range for avoid extra rendering & refinement
+  // Should probably be done on the connector side, but we need to stay
+  // backward compatible so we still need to pass [-Infinity, Infinity]
   const values = [
-    minStart === -Infinity ? minRange : minStart,
-    maxStart === Infinity ? maxRange : maxStart,
+    minFinite > maxRange ? maxRange : minFinite,
+    maxFinite < minRange ? minRange : maxFinite,
   ];
 
   ReactDOM.render(

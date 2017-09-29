@@ -297,6 +297,38 @@ describe('rangeSlider', () => {
             .addNumericRefinement(attributeName, '<=', targetValue[1])
         );
       });
+
+      it("expect to clamp the min value to the max range when it's greater than range", () => {
+        widget = rangeSlider({
+          container,
+          attributeName,
+        });
+
+        widget.init({ helper, instantSearchInstance });
+
+        helper.addNumericRefinement(attributeName, '>=', 5550);
+        helper.addNumericRefinement(attributeName, '<=', 6000);
+
+        widget.render({ results, helper });
+
+        expect(ReactDOM.render.mock.calls[0][0].props.values[0]).toBe(5000);
+      });
+
+      it("expect to clamp the max value to the min range when it's lower than range", () => {
+        widget = rangeSlider({
+          container,
+          attributeName,
+        });
+
+        widget.init({ helper, instantSearchInstance });
+
+        helper.addNumericRefinement(attributeName, '>=', -50);
+        helper.addNumericRefinement(attributeName, '<=', 0);
+
+        widget.render({ results, helper });
+
+        expect(ReactDOM.render.mock.calls[0][0].props.values[1]).toBe(1);
+      });
     });
   });
 });
