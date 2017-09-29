@@ -502,14 +502,14 @@ describe('connectRangeSlider', () => {
       expect(actual).toEqual(expectation);
     });
 
-    it('expect to return rounded refinement values', () => {
+    it('expect to return float refinement values', () => {
       const widget = connectRangeSlider(rendering)({ attributeName });
       const helper = createHelper();
 
       helper.addNumericRefinement(attributeName, '>=', 10.9);
       helper.addNumericRefinement(attributeName, '<=', 99.1);
 
-      const expectation = [10, 100];
+      const expectation = [10.9, 99.1];
       const actual = widget._getCurrentRefinement(helper);
 
       expect(actual).toEqual(expectation);

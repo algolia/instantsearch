@@ -115,7 +115,7 @@ export default function connectRangeSlider(renderFn) {
         const min = _isFinite(minValue) ? minValue : -Infinity;
         const max = _isFinite(maxValue) ? maxValue : Infinity;
 
-        return [Math.floor(min), Math.ceil(max)];
+        return [min, max];
       },
 
       _refine(helper, range = {}) {
