@@ -210,9 +210,12 @@ export default function connectRangeSlider(renderFn) {
             // related to it
             refine: this._refine(helper, {}),
             format: sliderFormatter,
+            widgetParams: {
+              ...widgetParams,
+              precision,
+            },
             range,
             start,
-            widgetParams,
             instantSearchInstance,
           },
           true
@@ -231,9 +234,12 @@ export default function connectRangeSlider(renderFn) {
           {
             refine: this._refine(helper, range),
             format: sliderFormatter,
+            widgetParams: {
+              ...widgetParams,
+              precision,
+            },
             range,
             start,
-            widgetParams,
             instantSearchInstance,
           },
           false
