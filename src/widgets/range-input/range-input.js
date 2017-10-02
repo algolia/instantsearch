@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput.js';
-import connectRangeSlider from '../../connectors/range-slider/connectRangeSlider.js';
+import connectRange from '../../connectors/range/connectRange.js';
 import {
   bemHelper,
   prepareTemplateProps,
@@ -198,7 +198,7 @@ export default function rangeInput(
   });
 
   try {
-    const makeWidget = connectRangeSlider(specializedRenderer);
+    const makeWidget = connectRange(specializedRenderer);
 
     return makeWidget({
       attributeName,
