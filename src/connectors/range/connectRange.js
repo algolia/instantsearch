@@ -144,7 +144,7 @@ export default function connectRange(renderFn) {
           }
 
           if (min !== newNextMin || max !== newNextMax) {
-            helper.clearRefinements();
+            helper.clearRefinements(attributeName);
 
             const isValidMinRange = _isFinite(rangeMin);
             const isGreatherThanRange =

@@ -544,7 +544,7 @@ describe('connectRange', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -558,7 +558,7 @@ describe('connectRange', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -575,7 +575,7 @@ describe('connectRange', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -592,7 +592,7 @@ describe('connectRange', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -609,7 +609,7 @@ describe('connectRange', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -626,7 +626,7 @@ describe('connectRange', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([20]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([500]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -642,7 +642,7 @@ describe('connectRange', () => {
         undefined
       );
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -658,7 +658,7 @@ describe('connectRange', () => {
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -674,7 +674,7 @@ describe('connectRange', () => {
         undefined
       );
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -690,7 +690,7 @@ describe('connectRange', () => {
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -725,7 +725,7 @@ describe('connectRange', () => {
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
   });
