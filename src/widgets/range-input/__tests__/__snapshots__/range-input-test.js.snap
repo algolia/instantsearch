@@ -1,0 +1,266 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`rangeInput expect to render with custom classNames 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={false}
+  cssClasses={
+    Object {
+      "body": "ais-range-input--body custom-body",
+      "fieldset": "ais-range-input--fieldset custom-fieldset",
+      "footer": "ais-range-input--footer custom-footer",
+      "form": "ais-range-input--form custom-form",
+      "header": "ais-range-input--header custom-header",
+      "inputMax": "ais-range-input--inputMax custom-inputMax",
+      "inputMin": "ais-range-input--inputMin custom-inputMin",
+      "labelMax": "ais-range-input--labelMax custom-labelMax",
+      "labelMin": "ais-range-input--labelMin custom-labelMin",
+      "root": "ais-range-input custom-root",
+      "separator": "ais-range-input--separator custom-separator",
+      "submit": "ais-range-input--submit custom-submit",
+    }
+  }
+  labels={
+    Object {
+      "separator": "to",
+      "submit": "Go",
+    }
+  }
+  max={0}
+  min={0}
+  refine={[Function]}
+  shouldAutoHideContainer={true}
+  step={0.01}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  values={
+    Object {
+      "max": null,
+      "min": null,
+    }
+  }
+/>
+`;
+
+exports[`rangeInput expect to render with custom labels 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={false}
+  cssClasses={
+    Object {
+      "body": "ais-range-input--body",
+      "fieldset": "ais-range-input--fieldset",
+      "footer": "ais-range-input--footer",
+      "form": "ais-range-input--form",
+      "header": "ais-range-input--header",
+      "inputMax": "ais-range-input--inputMax",
+      "inputMin": "ais-range-input--inputMin",
+      "labelMax": "ais-range-input--labelMax",
+      "labelMin": "ais-range-input--labelMin",
+      "root": "ais-range-input",
+      "separator": "ais-range-input--separator",
+      "submit": "ais-range-input--submit",
+    }
+  }
+  labels={
+    Object {
+      "separator": "custom-separator",
+      "submit": "custom-submit",
+    }
+  }
+  max={0}
+  min={0}
+  refine={[Function]}
+  shouldAutoHideContainer={true}
+  step={0.01}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  values={
+    Object {
+      "max": null,
+      "min": null,
+    }
+  }
+/>
+`;
+
+exports[`rangeInput expect to render with refinement 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={false}
+  cssClasses={
+    Object {
+      "body": "ais-range-input--body",
+      "fieldset": "ais-range-input--fieldset",
+      "footer": "ais-range-input--footer",
+      "form": "ais-range-input--form",
+      "header": "ais-range-input--header",
+      "inputMax": "ais-range-input--inputMax",
+      "inputMin": "ais-range-input--inputMin",
+      "labelMax": "ais-range-input--labelMax",
+      "labelMin": "ais-range-input--labelMin",
+      "root": "ais-range-input",
+      "separator": "ais-range-input--separator",
+      "submit": "ais-range-input--submit",
+    }
+  }
+  labels={
+    Object {
+      "separator": "to",
+      "submit": "Go",
+    }
+  }
+  max={500}
+  min={10}
+  refine={[Function]}
+  shouldAutoHideContainer={false}
+  step={0.01}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  values={
+    Object {
+      "max": 475,
+      "min": 25,
+    }
+  }
+/>
+`;
+
+exports[`rangeInput expect to render with results 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={false}
+  cssClasses={
+    Object {
+      "body": "ais-range-input--body",
+      "fieldset": "ais-range-input--fieldset",
+      "footer": "ais-range-input--footer",
+      "form": "ais-range-input--form",
+      "header": "ais-range-input--header",
+      "inputMax": "ais-range-input--inputMax",
+      "inputMin": "ais-range-input--inputMin",
+      "labelMax": "ais-range-input--labelMax",
+      "labelMin": "ais-range-input--labelMin",
+      "root": "ais-range-input",
+      "separator": "ais-range-input--separator",
+      "submit": "ais-range-input--submit",
+    }
+  }
+  labels={
+    Object {
+      "separator": "to",
+      "submit": "Go",
+    }
+  }
+  max={500}
+  min={10}
+  refine={[Function]}
+  shouldAutoHideContainer={false}
+  step={0.01}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  values={
+    Object {
+      "max": null,
+      "min": null,
+    }
+  }
+/>
+`;
+
+exports[`rangeInput expect to render without results 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={false}
+  cssClasses={
+    Object {
+      "body": "ais-range-input--body",
+      "fieldset": "ais-range-input--fieldset",
+      "footer": "ais-range-input--footer",
+      "form": "ais-range-input--form",
+      "header": "ais-range-input--header",
+      "inputMax": "ais-range-input--inputMax",
+      "inputMin": "ais-range-input--inputMin",
+      "labelMax": "ais-range-input--labelMax",
+      "labelMin": "ais-range-input--labelMin",
+      "root": "ais-range-input",
+      "separator": "ais-range-input--separator",
+      "submit": "ais-range-input--submit",
+    }
+  }
+  labels={
+    Object {
+      "separator": "to",
+      "submit": "Go",
+    }
+  }
+  max={0}
+  min={0}
+  refine={[Function]}
+  shouldAutoHideContainer={true}
+  step={0.01}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  values={
+    Object {
+      "max": null,
+      "min": null,
+    }
+  }
+/>
+`;

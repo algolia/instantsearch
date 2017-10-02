@@ -33,6 +33,7 @@ export { default as pagination } from '../widgets/pagination/pagination.js';
 export {
   default as priceRanges,
 } from '../widgets/price-ranges/price-ranges.js';
+export { default as rangeInput } from '../widgets/range-input/range-input.js';
 export { default as searchBox } from '../widgets/search-box/search-box.js';
 export {
   default as rangeSlider,
