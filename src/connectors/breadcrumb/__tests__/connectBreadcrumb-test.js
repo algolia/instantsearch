@@ -209,11 +209,15 @@ describe('connectBreadcrumb', () => {
     const makeWidget = connectBreadcrumb(rendering);
     // 3 levels
     const widget = makeWidget({
-      attributes: ['category', 'sub_category', 'sub_sub_category'],
+      attributes: [
+        'hierarchicalCategories.lvl0',
+        'hierarchicalCategories.lvl1',
+        'hierarchicalCategories.lvl2',
+      ],
     });
 
     const config = widget.getConfiguration({});
-    console.log(JSON.stringify(config, null, 2));
+    // console.log(JSON.stringify(config, null, 2));
     const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
     helper.search = jest.fn();
 
@@ -227,68 +231,143 @@ describe('connectBreadcrumb', () => {
     expect(firstRenderingOptions.items).toEqual([]);
 
     helper.toggleFacetRefinement(
-      'category',
+      'hierarchicalCategories.lvl0',
       'Cameras & Camcorders > Digital Cameras > Digital SLR Cameras'
     );
 
-    console.log('helperstate', helper.state);
+    // console.log('helperstate', helper.state);
     // retrieve a querie with 3 levels and a simplified object
     widget.render({
       results: new SearchResults(helper.state, [
         {
-          hits: [],
-          facets: {
-            category: {
-              'Cameras & Camcorders': 880,
+          "hits" : [],
+          "page" : 0,
+          "nbPages" : 57,
+          "index" : "instant_search",
+          "processingTimeMS" : 1,
+          "nbHits" : 170,
+          "query" : "",
+          "hitsPerPage" : 3,
+          "params" : "query=&hitsPerPage=3&page=0&facets=%5B%22hierarchicalCategories.lvl0%22%2C%22hierarchicalCategories.lvl1%22%2C%22hierarchicalCategories.lvl2%22%5D&tagFilters=&facetFilters=%5B%5B%22hierarchicalCategories.lvl1%3ACameras%20%26%20Camcorders%20%3E%20Digital%20Cameras%22%5D%5D",
+          "exhaustiveFacetsCount" : true,
+          "exhaustiveNbHits" : true,
+          "facets" : {
+            "hierarchicalCategories.lvl1" : {
+              "Cameras & Camcorders > Digital Cameras" : 170
             },
-            subCategory: {
-              'Cameras & Camcorders > Digital Cameras': 170,
+            "hierarchicalCategories.lvl2" : {
+              "Cameras & Camcorders > Digital Cameras > Digital SLR Cameras" : 44,
+              "Cameras & Camcorders > Digital Cameras > Mirrorless Cameras" : 29,
+              "Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras" : 84
             },
-            subSubCategory: {
-              'Cameras & Camcorders > Digital Cameras > Point & Shoot Cameras': 84,
-              'Cameras & Camcorders > Digital Cameras > Digital SLR Cameras': 44,
-              'Cameras & Camcorders > Digital Cameras > Mirrorless Cameras': 29,
-            },
-          },
+            "hierarchicalCategories.lvl0" : {
+              "Cameras & Camcorders" : 170
+            }
+          }
         },
         {
-          facets: {
-            category: {
-              'Cameras & Camcorders': 880,
+          "exhaustiveFacetsCount" : true,
+          "params" : "query=&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&facets=%5B%22hierarchicalCategories.lvl0%22%2C%22hierarchicalCategories.lvl1%22%5D&facetFilters=%5B%5B%22hierarchicalCategories.lvl0%3ACameras%20%26%20Camcorders%22%5D%5D",
+          "facets" : {
+            "hierarchicalCategories.lvl0" : {
+              "Cameras & Camcorders" : 1369
             },
-            subCategory: {
-              Binoculars: 20,
-              'Cameras & Camcorders > Digital Cameras': 170,
-              Camcorders: 50,
-              'Memory Cards': 113,
-              Microscopes: 5,
-            },
+            "hierarchicalCategories.lvl1" : {
+              "Cameras & Camcorders > Camcorders" : 50,
+              "Cameras & Camcorders > Memory Cards" : 113,
+              "Cameras & Camcorders > Trail Cameras" : 5,
+              "Cameras & Camcorders > Microscopes" : 5,
+              "Cameras & Camcorders > Spotting Scopes" : 5,
+              "Cameras & Camcorders > Telescopes" : 15,
+              "Cameras & Camcorders > Monoculars" : 5,
+              "Cameras & Camcorders > Digital Cameras" : 170,
+              "Cameras & Camcorders > P&S Adapters & Chargers" : 1,
+              "Cameras & Camcorders > Binoculars" : 20,
+              "Cameras & Camcorders > Camcorder Accessories" : 173,
+              "Cameras & Camcorders > Digital Camera Accessories" : 804
+            }
           },
+          "exhaustiveNbHits" : true,
+          "hitsPerPage" : 1,
+          "index" : "instant_search",
+          "processingTimeMS" : 1,
+          "nbPages" : 1000,
+          "nbHits" : 1369,
+          "query" : "",
+          "page" : 0,
+          "hits" : []
         },
         {
-          facets: {
-            category: {
-              Appliances: 4306,
-              'Cameras & Camcorders': 880,
-              'Computers & Tablets': 3563,
-            },
+          "params" : "query=&hitsPerPage=1&page=0&attributesToRetrieve=%5B%5D&attributesToHighlight=%5B%5D&attributesToSnippet=%5B%5D&tagFilters=&facets=%5B%22hierarchicalCategories.lvl0%22%5D",
+          "exhaustiveFacetsCount" : true,
+          "exhaustiveNbHits" : true,
+          "facets" : {
+            "hierarchicalCategories.lvl0" : {
+              "Audio" : 1570,
+              "Computers & Tablets" : 3563,
+              "Movies & Music" : 18,
+              "Paper" : 65,
+              "MP Pending" : 3,
+              "Cameras & Camcorders" : 1369,
+              "Cell Phones" : 3291,
+              "Appliances" : 4306,
+              "Custom Parts" : 2,
+              "Health, Fitness & Beauty" : 923,
+              "Video Games" : 505,
+              "Office & School Supplies" : 617,
+              "Entertainment Gift Cards" : 46,
+              "Musical Instruments" : 312,
+              "MP Exclusives" : 1,
+              "Toys, Games & Drones" : 285,
+              "Name Brands" : 101,
+              "Batteries & Power" : 7,
+              "Star Wars" : 1,
+              "Geek Squad" : 2,
+              "DC Comics" : 1,
+              "Scanners, Faxes & Copiers" : 46,
+              "Furniture & Decor" : 91,
+              "Household Essentials" : 148,
+              "Car Electronics & GPS" : 1208,
+              "Magnolia Home Theater" : 33,
+              "Housewares" : 255,
+              "Smart Home" : 405,
+              "Beverage & Wine Coolers" : 1,
+              "TV & Home Theater" : 1201,
+              "Avengers: Age of Ultron" : 1,
+              "Exclusives" : 1,
+              "Gift Ideas" : 2,
+              "Carfi Instore Only" : 4,
+              "Office Electronics" : 328,
+              "Office Furniture & Storage" : 152,
+              "Wearable Technology" : 271,
+              "In-Store Only" : 2,
+              "Telephones & Communication" : 194
+            }
           },
-        },
+          "hitsPerPage" : 1,
+          "nbPages" : 1000,
+          "processingTimeMS" : 1,
+          "index" : "instant_search",
+          "query" : "",
+          "nbHits" : 21469,
+          "hits" : [],
+          "page" : 0
+        }
       ]),
       state: helper.state,
       helper,
       createURL: state => state,
     });
+
     const { createURL, items } = rendering.mock.calls[1][0];
-    const toto = items[0].value;
-    console.log('toto', items);
-    const stateForURL = createURL(toto);
+    const secondItemValue = items[0].value;
+    const stateForURL = createURL(secondItemValue);
     expect(stateForURL.hierarchicalFacetsRefinements).toEqual({
-      category: [toto],
+      'hierarchicalCategories.lvl0': [secondItemValue],
     });
     const stateForHome = createURL([]);
     expect(stateForHome.hierarchicalFacetsRefinements).toEqual({
-      category: [[]],
+      'hierarchicalCategories.lvl0': [[]],
     });
   });
 
