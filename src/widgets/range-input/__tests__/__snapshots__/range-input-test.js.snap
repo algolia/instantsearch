@@ -159,6 +159,59 @@ exports[`rangeInput expect to render with refinement 1`] = `
 />
 `;
 
+exports[`rangeInput expect to render with refinement at boundaries 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={false}
+  cssClasses={
+    Object {
+      "body": "ais-range-input--body",
+      "fieldset": "ais-range-input--fieldset",
+      "footer": "ais-range-input--footer",
+      "form": "ais-range-input--form",
+      "header": "ais-range-input--header",
+      "inputMax": "ais-range-input--inputMax",
+      "inputMin": "ais-range-input--inputMin",
+      "labelMax": "ais-range-input--labelMax",
+      "labelMin": "ais-range-input--labelMin",
+      "root": "ais-range-input",
+      "separator": "ais-range-input--separator",
+      "submit": "ais-range-input--submit",
+    }
+  }
+  labels={
+    Object {
+      "separator": "to",
+      "submit": "Go",
+    }
+  }
+  max={500}
+  min={10}
+  refine={[Function]}
+  shouldAutoHideContainer={false}
+  step={0.01}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  values={
+    Object {
+      "max": null,
+      "min": null,
+    }
+  }
+/>
+`;
+
 exports[`rangeInput expect to render with results 1`] = `
 <HeaderFooter-AutoHide
   collapsible={false}

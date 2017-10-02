@@ -194,6 +194,32 @@ describe('rangeInput', () => {
     });
   });
 
+  it('expect to render with refinement at boundaries', () => {
+    const container = createContainer();
+    const helper = createHelper();
+    const results = {};
+
+    helper.addNumericRefinement(attributeName, '>=', 10);
+    helper.addNumericRefinement(attributeName, '<=', 500);
+
+    const widget = rangeInput({
+      container,
+      attributeName,
+      min: 10,
+      max: 500,
+    });
+
+    widget.init({ helper, instantSearchInstance });
+    widget.render({ results, helper });
+
+    expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][0].props.values).toEqual({
+      min: null,
+      max: null,
+    });
+  });
+
   it('expect to render hidden', () => {
     const container = createContainer();
     const helper = createHelper();

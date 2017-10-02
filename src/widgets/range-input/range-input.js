@@ -34,18 +34,21 @@ const renderer = ({
     return;
   }
 
-  const { min, max } = range;
+  const { min: rangeMin, max: rangeMax } = range;
+  const [minValue, maxValue] = start;
+
   const step = 1 / 10 ** widgetParams.precision;
-  const shouldAutoHideContainer = autoHideContainer && min === max;
+  const shouldAutoHideContainer = autoHideContainer && rangeMin === rangeMax;
+
   const values = {
-    min: start[0] === -Infinity ? null : start[0],
-    max: start[1] === Infinity ? null : start[1],
+    min: minValue !== -Infinity && minValue !== rangeMin ? minValue : null,
+    max: maxValue !== Infinity && maxValue !== rangeMax ? maxValue : null,
   };
 
   ReactDOM.render(
     <RangeInput
-      min={min}
-      max={max}
+      min={rangeMin}
+      max={rangeMax}
       step={step}
       values={values}
       cssClasses={cssClasses}
