@@ -15,7 +15,6 @@ branches:
   only:
   - master
   - develop
-  - maintenance
   - "/^greenkeeper-.*$/"
 sudo: false
 env:

@@ -82,9 +82,13 @@ For the maintenance version, go on maintenance (`git checkout maintenance`) and 
 npm run release-maintenance
 ```
 
-## Update docs
+## Manually update v1/ docs
 
-Documentation website is automatically updated by Travis when master is merged.
+Generate a personal token from GitHub then
+
+```sh
+GH_TOKEN=... npm run docs:update-website
+```
 
 [logo]: ./docs/readme-logo.png
 [website]: https://community.algolia.com/instantsearch.js

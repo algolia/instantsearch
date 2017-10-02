@@ -68,7 +68,7 @@
     "expect-jsx": "2.6.0",
     "expose-loader": "0.7.3",
     "express": "4.14.1",
-    "gh-pages": "0.12.0",
+    "gh-pages": "1.0.0",
     "http-server": "0.9.0",
     "jsdoc-to-markdown": "1.3.7",
     "jsdom": "9.11.0",
