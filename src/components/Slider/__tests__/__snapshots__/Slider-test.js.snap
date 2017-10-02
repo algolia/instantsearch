@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Slider should render correctly 1`] = `
+exports[`Slider expect to render correctly 1`] = `
 <div
   style={
     Object {
@@ -465,7 +465,7 @@ exports[`Slider should render correctly 1`] = `
 </div>
 `;
 
-exports[`Slider should render without pips 1`] = `
+exports[`Slider expect to render without pips 1`] = `
 <div
   style={
     Object {
