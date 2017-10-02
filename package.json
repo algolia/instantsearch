@@ -60,7 +60,7 @@
     "compression": "1.7.0",
     "conventional-changelog-cli": "1.3.3",
     "css-loader": "0.28.7",
-    "cssunminifier": "0.0.2",
+    "csso-cli": "^1.1.0",
     "dev-novel": "0.0.4",
     "doctoc": "1.3.0",
     "enzyme": "2.9.1",
