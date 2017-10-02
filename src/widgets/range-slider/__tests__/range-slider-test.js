@@ -25,7 +25,7 @@ describe('rangeSlider', () => {
 
     beforeEach(() => {
       ReactDOM = { render: jest.fn() };
-      rangeSlider.__Rewire__('ReactDOM', ReactDOM);
+      rangeSlider.__Rewire__('render', ReactDOM.render);
 
       container = document.createElement('div');
       helper = new AlgoliasearchHelper(
@@ -44,6 +44,49 @@ describe('rangeSlider', () => {
       rangeSlider.__ResetDependency__('ReactDOM');
       rangeSlider.__ResetDependency__('autoHideContainerHOC');
       rangeSlider.__ResetDependency__('headerFooterHOC');
+    });
+
+    it('should render without results', () => {
+      widget = rangeSlider({
+        container,
+        attributeName,
+        cssClasses: { root: ['root', 'cx'] },
+      });
+
+      widget.init({ helper, instantSearchInstance });
+      widget.render({ results: [], helper });
+
+      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    it('should `shouldAutoHideContainer` when range min === max', () => {
+      const results = {
+        disjunctiveFacets: [
+          {
+            name: attributeName,
+            stats: {
+              min: 65,
+              max: 65,
+            },
+          },
+        ],
+      };
+
+      widget = rangeSlider({
+        container,
+        attributeName,
+        cssClasses: { root: ['root', 'cx'] },
+      });
+
+      widget.init({ helper, instantSearchInstance });
+      widget.render({ results, helper });
+
+      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+      expect(
+        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
+      ).toEqual(true);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     describe('min option', () => {
@@ -137,73 +180,28 @@ describe('rangeSlider', () => {
         });
       });
 
-      describe('render', () => {
-        it('will use the results min when only max is passed', () => {
-          const results = {
-            disjunctiveFacets: [
-              {
-                name: attributeName,
-                stats: {
-                  min: 1.99,
-                  max: 4999.98,
-                },
+      it('will use the results min when only max is passed', () => {
+        const results = {
+          disjunctiveFacets: [
+            {
+              name: attributeName,
+              stats: {
+                min: 1.99,
+                max: 4999.98,
               },
-            ],
-          };
-
-          widget = rangeSlider({ container, attributeName, max: 100 });
-          helper.setState(widget.getConfiguration());
-          widget.init({ helper, instantSearchInstance });
-          widget.render({ results, helper });
-
-          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-          expect(ReactDOM.render.mock.calls[0][0].props.min).toEqual(1);
-          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-        });
-      });
-    });
-
-    it('should render without results', () => {
-      widget = rangeSlider({
-        container,
-        attributeName,
-        cssClasses: { root: ['root', 'cx'] },
-      });
-
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results: [], helper });
-
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
-    it('should `shouldAutoHideContainer` when range min === max', () => {
-      const results = {
-        disjunctiveFacets: [
-          {
-            name: attributeName,
-            stats: {
-              min: 65,
-              max: 65,
             },
-          },
-        ],
-      };
+          ],
+        };
 
-      widget = rangeSlider({
-        container,
-        attributeName,
-        cssClasses: { root: ['root', 'cx'] },
+        widget = rangeSlider({ container, attributeName, max: 100 });
+        helper.setState(widget.getConfiguration());
+        widget.init({ helper, instantSearchInstance });
+        widget.render({ results, helper });
+
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0].props.min).toEqual(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
-
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
-
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(
-        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
-      ).toEqual(true);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     describe('with results', () => {
@@ -257,12 +255,14 @@ describe('rangeSlider', () => {
         const targetValue = stats.min + 1;
 
         const state0 = helper.state;
-        widget._refine(stats)([targetValue, stats.max]);
+        widget._refine(helper)([targetValue, stats.max]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
-          state0.addNumericRefinement(attributeName, '>=', targetValue)
+          state0
+            .addNumericRefinement(attributeName, '>=', targetValue)
+            .addNumericRefinement(attributeName, '<=', stats.max)
         );
       });
 
@@ -271,12 +271,14 @@ describe('rangeSlider', () => {
         const targetValue = stats.max - 1;
 
         const state0 = helper.state;
-        widget._refine(stats)([stats.min, targetValue]);
+        widget._refine(helper)([stats.min, targetValue]);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
-          state0.addNumericRefinement(attributeName, '<=', targetValue)
+          state0
+            .addNumericRefinement(attributeName, '>=', stats.min)
+            .addNumericRefinement(attributeName, '<=', targetValue)
         );
       });
 
@@ -285,7 +287,7 @@ describe('rangeSlider', () => {
         const targetValue = [stats.min + 1, stats.max - 1];
 
         const state0 = helper.state;
-        widget._refine(stats)(targetValue);
+        widget._refine(helper)(targetValue);
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
@@ -294,6 +296,38 @@ describe('rangeSlider', () => {
             .addNumericRefinement(attributeName, '>=', targetValue[0])
             .addNumericRefinement(attributeName, '<=', targetValue[1])
         );
+      });
+
+      it("expect to clamp the min value to the max range when it's greater than range", () => {
+        widget = rangeSlider({
+          container,
+          attributeName,
+        });
+
+        widget.init({ helper, instantSearchInstance });
+
+        helper.addNumericRefinement(attributeName, '>=', 5550);
+        helper.addNumericRefinement(attributeName, '<=', 6000);
+
+        widget.render({ results, helper });
+
+        expect(ReactDOM.render.mock.calls[0][0].props.values[0]).toBe(5000);
+      });
+
+      it("expect to clamp the max value to the min range when it's lower than range", () => {
+        widget = rangeSlider({
+          container,
+          attributeName,
+        });
+
+        widget.init({ helper, instantSearchInstance });
+
+        helper.addNumericRefinement(attributeName, '>=', -50);
+        helper.addNumericRefinement(attributeName, '<=', 0);
+
+        widget.render({ results, helper });
+
+        expect(ReactDOM.render.mock.calls[0][0].props.values[1]).toBe(1);
       });
     });
   });

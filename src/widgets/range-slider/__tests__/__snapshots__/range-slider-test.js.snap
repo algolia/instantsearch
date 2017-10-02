@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rangeSlider widget usage max option render will use the results min when only max is passed 1`] = `
+exports[`rangeSlider widget usage max option will use the results min when only max is passed 1`] = `
 <HeaderFooter-AutoHide
   collapsible={undefined}
   cssClasses={

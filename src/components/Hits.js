@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 import map from 'lodash/map';
 import Template from './Template.js';
 import hasKey from 'lodash/has';
@@ -23,11 +23,7 @@ class Hits extends React.Component {
       );
     });
 
-    return (
-      <div className={this.props.cssClasses.root}>
-        {renderedHits}
-      </div>
-    );
+    return <div className={this.props.cssClasses.root}>{renderedHits}</div>;
   }
 
   renderAllResults() {

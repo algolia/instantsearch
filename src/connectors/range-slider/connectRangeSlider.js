@@ -1,4 +1,5 @@
 import find from 'lodash/find';
+import _isFinite from 'lodash/isFinite';
 
 import { checkRendering } from '../../lib/utils.js';
 
@@ -34,9 +35,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} RangeSliderRenderingOptions
- * @property {function({min: number, max: number})} refine Sets a range to filter the results on. Both values
+ * @property {function(Array<number, number>)} refine Sets a range to filter the results on. Both values
  * are optional, and will default to the higher and lower bounds.
- * @property {{min: number, max: number}} numeric Results bounds without the current range filter.
+ * @property {{min: number, max: number}} range Results bounds without the current range filter.
  * @property {Array<number, number>} start Current numeric bounds of the search.
  * @property {{from: function, to: function}} formatter Transform for the rendering `from` and/or `to` values.
  * Both functions take a `number` as input and should output a `string`.
@@ -59,14 +60,17 @@ export default function connectRangeSlider(renderFn) {
   return (widgetParams = {}) => {
     const {
       attributeName,
-      min: userMin,
-      max: userMax,
+      min: minBound,
+      max: maxBound,
       precision = 2,
     } = widgetParams;
 
     if (!attributeName) {
       throw new Error(usage);
     }
+
+    const hasMinBound = _isFinite(minBound);
+    const hasMaxBound = _isFinite(maxBound);
 
     const formatToNumber = v => Number(Number(v).toFixed(precision));
 
@@ -76,108 +80,138 @@ export default function connectRangeSlider(renderFn) {
     };
 
     return {
-      getConfiguration: originalConf => {
-        const conf = {
-          disjunctiveFacets: [attributeName],
-        };
-
-        const hasUserBounds = userMin !== undefined || userMax !== undefined;
-        const boundsNotAlreadyDefined =
-          !originalConf ||
-          (originalConf.numericRefinements &&
-            originalConf.numericRefinements[attributeName] === undefined);
-
-        if (hasUserBounds && boundsNotAlreadyDefined) {
-          conf.numericRefinements = { [attributeName]: {} };
-          if (userMin !== undefined)
-            conf.numericRefinements[attributeName]['>='] = [userMin];
-          if (userMax !== undefined)
-            conf.numericRefinements[attributeName]['<='] = [userMax];
+      _getCurrentRange(stats = {}) {
+        let min;
+        if (hasMinBound) {
+          min = minBound;
+        } else if (_isFinite(stats.min)) {
+          min = stats.min;
+        } else {
+          min = 0;
         }
 
-        return conf;
-      },
-
-      _getCurrentRefinement(helper) {
-        let min = helper.state.getNumericRefinement(attributeName, '>=');
-        let max = helper.state.getNumericRefinement(attributeName, '<=');
-
-        if (min && min.length) {
-          min = min[0];
+        let max;
+        if (hasMaxBound) {
+          max = maxBound;
+        } else if (_isFinite(stats.max)) {
+          max = stats.max;
         } else {
-          min = -Infinity;
-        }
-
-        if (max && max.length) {
-          max = max[0];
-        } else {
-          max = Infinity;
+          max = 0;
         }
 
         return {
-          min,
-          max,
+          min: Math.floor(min),
+          max: Math.ceil(max),
         };
       },
 
-      init({ helper, instantSearchInstance }) {
-        this._refine = bounds => newValues => {
-          const currentValues = [
-            helper.getNumericRefinement(attributeName, '>='),
-            helper.getNumericRefinement(attributeName, '<='),
-          ];
+      _getCurrentRefinement(helper) {
+        const [minValue] =
+          helper.state.getNumericRefinement(attributeName, '>=') || [];
 
-          if (
-            currentValues[0] !== newValues[0] ||
-            currentValues[1] !== newValues[1]
-          ) {
-            helper.clearRefinements(attributeName);
+        const [maxValue] =
+          helper.state.getNumericRefinement(attributeName, '<=') || [];
 
-            const hasMin = bounds.min !== null && bounds.min !== undefined;
-            const minValueChanged =
-              newValues[0] !== null && newValues[0] !== undefined;
+        const min = _isFinite(minValue) ? minValue : -Infinity;
+        const max = _isFinite(maxValue) ? maxValue : Infinity;
 
-            if (
-              (hasMin && minValueChanged && bounds.min < newValues[0]) ||
-              (!hasMin && minValueChanged)
-            ) {
+        return [min, max];
+      },
+
+      _refine(helper, range = {}) {
+        return ([nextMin, nextMax] = []) => {
+          const { min: rangeMin, max: rangeMax } = range;
+
+          const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
+          const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
+
+          const newNextMin =
+            !hasMinBound && rangeMin === nextMin ? undefined : nextMin;
+
+          const newNextMax =
+            !hasMaxBound && rangeMax === nextMax ? undefined : nextMax;
+
+          if (min !== newNextMin || max !== newNextMax) {
+            helper.clearRefinements();
+
+            const isValidMinInput = _isFinite(newNextMin);
+            const isValidMinRange = _isFinite(rangeMin);
+            const isGreatherThanRange =
+              isValidMinRange && rangeMin <= newNextMin;
+
+            if (isValidMinInput && (!isValidMinRange || isGreatherThanRange)) {
               helper.addNumericRefinement(
                 attributeName,
                 '>=',
-                formatToNumber(newValues[0])
+                formatToNumber(newNextMin)
               );
             }
 
-            const hasMax = bounds.max !== null && bounds.max !== undefined;
-            const maxValueChanged =
-              newValues[1] !== null && newValues[1] !== undefined;
+            const isValidMaxInput = _isFinite(newNextMax);
+            const isValidMaxRange = _isFinite(rangeMax);
+            const isLowerThanRange = isValidMaxRange && rangeMax >= newNextMax;
 
-            if (
-              (hasMax && maxValueChanged && bounds.max > newValues[1]) ||
-              (!hasMax && maxValueChanged)
-            ) {
+            if (isValidMaxInput && (!isValidMaxRange || isLowerThanRange)) {
               helper.addNumericRefinement(
                 attributeName,
                 '<=',
-                formatToNumber(newValues[1])
+                formatToNumber(newNextMax)
               );
             }
+
             helper.search();
           }
         };
+      },
 
-        const stats = {
-          min: userMin || null,
-          max: userMax || null,
+      getConfiguration(currentConfiguration) {
+        const configuration = {
+          disjunctiveFacets: [attributeName],
         };
-        const currentRefinement = this._getCurrentRefinement(helper);
+
+        const isBoundsDefined = hasMinBound || hasMaxBound;
+
+        const boundsAlreadyDefined =
+          currentConfiguration &&
+          currentConfiguration.numericRefinements &&
+          currentConfiguration.numericRefinements[attributeName] !== undefined;
+
+        const isMinBoundValid = _isFinite(minBound);
+        const isMaxBoundValid = _isFinite(maxBound);
+        const isAbleToRefine =
+          isMinBoundValid && isMaxBoundValid
+            ? minBound < maxBound
+            : isMinBoundValid || isMaxBoundValid;
+
+        if (isBoundsDefined && !boundsAlreadyDefined && isAbleToRefine) {
+          configuration.numericRefinements = { [attributeName]: {} };
+
+          if (hasMinBound) {
+            configuration.numericRefinements[attributeName]['>='] = [minBound];
+          }
+
+          if (hasMaxBound) {
+            configuration.numericRefinements[attributeName]['<='] = [maxBound];
+          }
+        }
+
+        return configuration;
+      },
+
+      init({ helper, instantSearchInstance }) {
+        const stats = {};
+        const range = this._getCurrentRange(stats);
+        const start = this._getCurrentRefinement(helper);
 
         renderFn(
           {
-            refine: this._refine(stats),
-            range: { min: Math.floor(stats.min), max: Math.ceil(stats.max) },
-            start: [currentRefinement.min, currentRefinement.max],
+            // On first render pass an empty range
+            // to be able to bypass the validation
+            // related to it
+            refine: this._refine(helper, {}),
             format: sliderFormatter,
+            range,
+            start,
             widgetParams,
             instantSearchInstance,
           },
@@ -187,29 +221,18 @@ export default function connectRangeSlider(renderFn) {
 
       render({ results, helper, instantSearchInstance }) {
         const facetsFromResults = results.disjunctiveFacets || [];
-        const facet = find(
-          facetsFromResults,
-          ({ name }) => name === attributeName
-        );
-        const stats =
-          facet !== undefined && facet.stats !== undefined
-            ? facet.stats
-            : {
-                min: null,
-                max: null,
-              };
+        const facet = find(facetsFromResults, { name: attributeName });
+        const stats = facet && facet.stats;
 
-        if (userMin !== undefined) stats.min = userMin;
-        if (userMax !== undefined) stats.max = userMax;
-
-        const currentRefinement = this._getCurrentRefinement(helper);
+        const range = this._getCurrentRange(stats);
+        const start = this._getCurrentRefinement(helper);
 
         renderFn(
           {
-            refine: this._refine(stats),
-            range: { min: Math.floor(stats.min), max: Math.ceil(stats.max) },
-            start: [currentRefinement.min, currentRefinement.max],
+            refine: this._refine(helper, range),
             format: sliderFormatter,
+            range,
+            start,
             widgetParams,
             instantSearchInstance,
           },

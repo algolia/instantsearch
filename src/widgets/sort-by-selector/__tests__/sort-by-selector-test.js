@@ -33,7 +33,7 @@ describe('sortBySelector()', () => {
     autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = { render: sinon.spy() };
 
-    sortBySelector.__Rewire__('ReactDOM', ReactDOM);
+    sortBySelector.__Rewire__('render', ReactDOM.render);
     sortBySelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
 
     container = document.createElement('div');

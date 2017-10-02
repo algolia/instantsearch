@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
@@ -16,7 +15,7 @@ const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
 
   const shouldAutoHideContainer = autoHideContainer && hasNoResults;
 
-  ReactDOM.render(
+  render(
     <Selector
       cssClasses={cssClasses}
       currentValue={currentRefinement}

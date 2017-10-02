@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 
 import autoHideContainer from '../decorators/autoHideContainer.js';
 import headerFooter from '../decorators/headerFooter.js';
