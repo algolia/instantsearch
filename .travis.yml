@@ -17,8 +17,6 @@ branches:
   - develop
   - "/^greenkeeper-.*$/"
 sudo: false
-cache:
-  yarn: true
 env:
   global:
   - CXX=g++-4.8

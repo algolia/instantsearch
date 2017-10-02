@@ -31,7 +31,7 @@ if [ $HOTFIX == '0' ]; then
 fi
 
 printf "Release: install dependencies"
-yarn
+npm install
 
 currentVersion=`cat package.json | json version`
 
@@ -68,13 +68,13 @@ npm run doctoc
 printf "\n\nRelease: regenerate widgets jsdoc"
 npm run docs:jsdoc
 
-# regenerate yarn.lock
-printf "Release: update yarn.lock"
-yarn
+# regenerate package-lock.json
+printf "Release: update package-lock.json"
+npm install
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js yarn.lock package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
+git add src/lib/version.js package-lock.json package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 

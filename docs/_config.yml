@@ -3,6 +3,7 @@ description: instantsearch.js is a library of widgets designed to help you build
 twitter_username: algolia
 github_username: algolia
 host: 0.0.0.0
+baseurl: "/instantsearch.js/v1"
 
 incremental: true
 
@@ -14,8 +15,8 @@ navigation:
    url: /examples/
  - text: About
    url: /about/
- - text: React InstantSearch
-   url: /../react-instantsearch/
+ - text: InstantSearch.js V2
+   url: /v2/
 # Build settings
 markdown: kramdown
 

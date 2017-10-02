@@ -2,7 +2,7 @@
 
 set -ev # exit when error
 
-yarn
+npm install
 node-sass -o ./dev/ ./src/css --output-style expanded
 webpack --config dev/webpack.staging.config.babel.js --hot --inline --no-info
 
