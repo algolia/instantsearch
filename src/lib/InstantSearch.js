@@ -90,9 +90,15 @@ Usage: instantsearch({
     this.widgets.push(widget);
   }
 
-  removeWidget(widgets) {
+  removeWidget(widget) {
+    this.removeWidgets([widget]);
+  }
+
+  removeWidgets(widgets) {
     if (!Array.isArray(widgets)) {
-      widgets = [widgets];
+      throw new Error(
+        'You need to provide an array of widgets or call `removeWidget()`'
+      );
     }
 
     widgets.forEach(widget => {
