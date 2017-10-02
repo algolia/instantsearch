@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 
 class PriceRangesForm extends React.Component {
   constructor(props) {
@@ -61,7 +61,8 @@ class PriceRangesForm extends React.Component {
       >
         {fromInput}
         <span className={this.props.cssClasses.separator}>
-          {' '}{this.props.labels.separator}{' '}
+          {' '}
+          {this.props.labels.separator}{' '}
         </span>
         {toInput}
         <button className={this.props.cssClasses.button} type="submit">

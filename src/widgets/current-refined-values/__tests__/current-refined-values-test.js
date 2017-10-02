@@ -365,7 +365,7 @@ describe('currentRefinedValues()', () => {
 
     beforeEach(() => {
       ReactDOM = { render: sinon.spy() };
-      currentRefinedValues.__Rewire__('ReactDOM', ReactDOM);
+      currentRefinedValues.__Rewire__('render', ReactDOM.render);
 
       parameters = {
         container: document.createElement('div'),

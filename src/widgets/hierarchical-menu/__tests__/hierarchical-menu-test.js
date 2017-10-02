@@ -13,7 +13,7 @@ describe('hierarchicalMenu()', () => {
     attributes = ['hello', 'world'];
     options = {};
     ReactDOM = { render: sinon.spy() };
-    hierarchicalMenu.__Rewire__('ReactDOM', ReactDOM);
+    hierarchicalMenu.__Rewire__('render', ReactDOM.render);
   });
 
   describe('instantiated with wrong parameters', () => {

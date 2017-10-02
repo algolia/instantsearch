@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import find from 'lodash/find';
@@ -20,7 +19,7 @@ const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
   const { value: currentValue } =
     find(items, ({ isRefined }) => isRefined) || {};
 
-  ReactDOM.render(
+  render(
     <Selector
       cssClasses={cssClasses}
       currentValue={currentValue}
