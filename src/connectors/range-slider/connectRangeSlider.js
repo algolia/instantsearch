@@ -146,12 +146,14 @@ export default function connectRangeSlider(renderFn) {
           if (min !== newNextMin || max !== newNextMax) {
             helper.clearRefinements(attributeName);
 
-            const isValidMinInput = _isFinite(newNextMin);
             const isValidMinRange = _isFinite(rangeMin);
             const isGreatherThanRange =
               isValidMinRange && rangeMin <= newNextMin;
 
-            if (isValidMinInput && (!isValidMinRange || isGreatherThanRange)) {
+            if (
+              _isFinite(newNextMin) &&
+              (!isValidMinRange || isGreatherThanRange)
+            ) {
               helper.addNumericRefinement(
                 attributeName,
                 '>=',
@@ -159,11 +161,13 @@ export default function connectRangeSlider(renderFn) {
               );
             }
 
-            const isValidMaxInput = _isFinite(newNextMax);
             const isValidMaxRange = _isFinite(rangeMax);
             const isLowerThanRange = isValidMaxRange && rangeMax >= newNextMax;
 
-            if (isValidMaxInput && (!isValidMaxRange || isLowerThanRange)) {
+            if (
+              _isFinite(newNextMax) &&
+              (!isValidMaxRange || isLowerThanRange)
+            ) {
               helper.addNumericRefinement(
                 attributeName,
                 '<=',
