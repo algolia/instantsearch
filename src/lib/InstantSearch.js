@@ -90,32 +90,38 @@ Usage: instantsearch({
     this.widgets.push(widget);
   }
 
-  removeWidget(widget) {
-    if (
-      !this.widgets.includes(widget) ||
-      typeof widget.dispose !== 'function'
-    ) {
-      throw new Error(
-        'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
-      );
+  removeWidget(widgets) {
+    if (!Array.isArray(widgets)) {
+      widgets = [widgets];
     }
 
-    this.widgets.splice(this.widgets.indexOf(widget), 1);
+    widgets.forEach(widget => {
+      if (
+        !this.widgets.includes(widget) ||
+        typeof widget.dispose !== 'function'
+      ) {
+        throw new Error(
+          'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
+        );
+      }
 
-    const nextState = widget.dispose({
-      helper: this.helper,
-      state: this.helper.getState(),
-    });
+      this.widgets.splice(this.widgets.indexOf(widget), 1);
 
-    // re-compute remaining widgets to the state
-    // in a case two widgets were using the same configuration but we removed one
-    if (nextState) {
-      this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
-        ...nextState,
+      const nextState = widget.dispose({
+        helper: this.helper,
+        state: this.helper.getState(),
       });
 
-      this.helper.setState(nextState);
-    }
+      // re-compute remaining widgets to the state
+      // in a case two widgets were using the same configuration but we removed one
+      if (nextState) {
+        this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+          ...nextState,
+        });
+
+        this.helper.setState(nextState);
+      }
+    });
 
     this.helper.search();
   }
