@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import serializer from 'enzyme-to-json/serializer';
-import RangeInput, { RawRangeInput } from '../RangeInput';
+import { RawRangeInput } from '../RangeInput';
 
 expect.addSnapshotSerializer(serializer);
 
@@ -22,8 +22,8 @@ describe('RawRangeInput', () => {
       submit: 'submit',
     },
     labels: {
-      button: 'Go',
       separator: 'to',
+      submit: 'Go',
     },
     refine: () => {},
   };

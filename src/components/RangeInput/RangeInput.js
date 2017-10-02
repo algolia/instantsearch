@@ -85,7 +85,7 @@ export class RawRangeInput extends Component {
             className={cssClasses.submit}
             disabled={this.isDisabled}
           >
-            {labels.button}
+            {labels.submit}
           </button>
         </fieldset>
       </form>
@@ -112,8 +112,8 @@ RawRangeInput.propTypes = {
     submit: PropTypes.string.isRequired,
   }).isRequired,
   labels: PropTypes.shape({
-    button: PropTypes.string.isRequired,
     separator: PropTypes.string.isRequired,
+    submit: PropTypes.string.isRequired,
   }).isRequired,
   refine: PropTypes.func.isRequired,
 };
