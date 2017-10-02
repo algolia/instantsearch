@@ -696,7 +696,7 @@ describe('connectRange', () => {
       const range = { min: 10, max: 500 };
       const values = [null, 490];
       const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         min: 10,
       });
@@ -713,7 +713,7 @@ describe('connectRange', () => {
       const range = { min: 10, max: 500 };
       const values = [20, null];
       const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         max: 500,
       });
