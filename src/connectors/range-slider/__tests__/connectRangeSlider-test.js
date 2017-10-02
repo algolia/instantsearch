@@ -224,7 +224,7 @@ describe('connectRangeSlider', () => {
 
       refine([0, undefined]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
-      expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
     }
   });
 
@@ -263,7 +263,7 @@ describe('connectRangeSlider', () => {
 
       refine([0, undefined]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
-      expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
     }
   });
 
@@ -593,6 +593,40 @@ describe('connectRangeSlider', () => {
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
       expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine min when user bounds are set and value is not valid', () => {
+      const range = { min: 10, max: 500 };
+      const values = [null, 490];
+      const helper = createHelper();
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        min: 10,
+      });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine max when user bounds are set and value is not valid', () => {
+      const range = { min: 10, max: 500 };
+      const values = [20, null];
+      const helper = createHelper();
+      const widget = connectRangeSlider(rendering)({
+        attributeName,
+        max: 500,
+      });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([20]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([500]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 

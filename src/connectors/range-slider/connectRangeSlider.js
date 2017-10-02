@@ -125,11 +125,23 @@ export default function connectRangeSlider(renderFn) {
           const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
           const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
 
-          const newNextMin =
-            !hasMinBound && rangeMin === nextMin ? undefined : nextMin;
+          let newNextMin;
+          if (!hasMinBound && rangeMin === nextMin) {
+            newNextMin = undefined;
+          } else if (hasMinBound && !_isFinite(nextMin)) {
+            newNextMin = minBound;
+          } else {
+            newNextMin = nextMin;
+          }
 
-          const newNextMax =
-            !hasMaxBound && rangeMax === nextMax ? undefined : nextMax;
+          let newNextMax;
+          if (!hasMaxBound && rangeMax === nextMax) {
+            newNextMax = undefined;
+          } else if (hasMaxBound && !_isFinite(nextMax)) {
+            newNextMax = maxBound;
+          } else {
+            newNextMax = nextMax;
+          }
 
           if (min !== newNextMin || max !== newNextMax) {
             helper.clearRefinements(attributeName);
