@@ -26,14 +26,13 @@ will be done on the maintenance version.
 
 To run this project, you will need:
 
-- Node.js >= v7.10.0 and <= 8, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
-- yarn https://yarnpkg.com/en/
+- Node.js 8.6.0, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
 
 ## Development
 
 ```sh
-yarn
-yarn dev:docs
+npm install
+npm run dev:docs
 ```
 
 Go to <http://localhost:8080> for the example playground.
@@ -50,18 +49,18 @@ We have unit tests written with [Jest](https://facebook.github.io/jest/):
 
 Single run and linting:
 ```sh
-yarn test
+npm test
 ```
 
 Watch mode:
 ```sh
-yarn test:watch # unit tests watch mode, no lint
+npm run test:watch # unit tests watch mode, no lint
 ```
 
 ## Lint
 
 ```sh
-yarn lint
+npm run lint
 ```
 
 Files are automatically formatted with prettier.
@@ -72,7 +71,7 @@ Files are automatically formatted with prettier.
 For the main version, go on master (`git checkout master`) and use:
 
 ```sh
-yarn run release
+npm run release
 ```
 
 ### Maintenance version
@@ -80,7 +79,7 @@ yarn run release
 For the maintenance version, go on maintenance (`git checkout maintenance`) and use:
 
 ```sh
-yarn run release-maintenance
+npm run release-maintenance
 ```
 
 ## Update docs
