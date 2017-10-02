@@ -70,6 +70,7 @@ describe('sortBySelector()', () => {
       shouldAutoHideContainer: false,
       cssClasses: {
         root: 'ais-sort-by-selector custom-root cx',
+        select: 'ais-sort-by-selector',
         item: 'ais-sort-by-selector--item custom-item',
       },
       currentValue: 'index-a',

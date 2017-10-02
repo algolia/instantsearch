@@ -37,6 +37,7 @@ describe('numericSelector()', () => {
       shouldAutoHideContainer: false,
       cssClasses: {
         root: 'ais-numeric-selector custom-root cx',
+        select: 'ais-numeric-selector',
         item: 'ais-numeric-selector--item custom-item',
       },
       currentValue: 1,

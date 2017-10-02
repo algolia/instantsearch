@@ -32,13 +32,14 @@ const usage = `Usage:
 sortBySelector({
   container,
   indices,
-  [cssClasses.{root,item}={}],
+  [cssClasses.{root,select,item}={}],
   [autoHideContainer=false]
 })`;
 
 /**
  * @typedef {Object} SortByWidgetCssClasses
- * @property {string|string[]} [root] CSS classes added to the parent `<select>`.
+ * @property {string|string[]} [root] CSS classes added to the outer `<div>`.
+ * @property {string|string[]} [select] CSS classes added to the parent `<select>`.
  * @property {string|string[]} [item] CSS classes added to each `<option>`.
  */
 
@@ -93,6 +94,9 @@ export default function sortBySelector(
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
+    // We use the same class to avoid regression on existing website. It needs to be replaced
+    // eventually by `bem('select')
+    select: cx(bem(null), userCssClasses.select),
     item: cx(bem('item'), userCssClasses.item),
   };
 
