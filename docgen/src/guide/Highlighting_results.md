@@ -41,19 +41,21 @@ tag is `em`, mostly for legacy reasons.
 ```jsx
 import React from 'react';
 
-import {InstantSearch, Hits, Highlight} from 'InstantSearch';
+import { InstantSearch, Hits, Highlight } from 'react-instantsearch/dom';
 
-const Hit = ({hit}) =>
-<p>
-  <Highlight attributeName="description" hit={hit} tagName="mark"/>
-</p>;
+const Hit = ({ hit }) => (
+  <p>
+    <Highlight attributeName="description" hit={hit} tagName="mark" />
+  </p>
+);
 
 export default function App() {
   return (
     <InstantSearch
-       appId="latency"
-       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-       indexName="ikea">
+      appId="latency"
+      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+      indexName="ikea"
+    >
       <Hits hitComponent={Hit} />
     </InstantSearch>
   );
@@ -82,7 +84,11 @@ import { InstantSearch, Hits } from 'react-instantsearch/dom';
 
 const CustomHighlight = connectHighlight(
   ({ highlight, attributeName, hit, highlightProperty }) => {
-    const parsedHit = highlight({ attributeName, hit, highlightProperty: '_highlightResult' });
+    const parsedHit = highlight({
+      attributeName,
+      hit,
+      highlightProperty: '_highlightResult'
+    });
     const highlightedHits = parsedHit.map(part => {
       if (part.isHighlighted) return <mark>{part.value}</mark>;
       return part.value;
@@ -91,17 +97,19 @@ const CustomHighlight = connectHighlight(
   }
 );
 
-const Hit = ({hit}) =>
-<p>
-  <CustomHighlight attributeName="description" hit={hit}/>
-</p>;
+const Hit = ({ hit }) => (
+  <p>
+    <CustomHighlight attributeName="description" hit={hit} />
+  </p>
+);
 
 export default function App() {
   return (
     <InstantSearch
-       appId="latency"
-       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-       indexName="ikea">
+      appId="latency"
+      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+      indexName="ikea"
+    >
       <Hits hitComponent={Hit} />
     </InstantSearch>
   );
