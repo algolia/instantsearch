@@ -21,6 +21,7 @@ export {
   unescapeRefinement,
   checkRendering,
   isReactElement,
+  deprecate,
 };
 
 /**
@@ -324,4 +325,19 @@ function isReactElement(object) {
     object !== null &&
     object.$$typeof === REACT_ELEMENT_TYPE
   );
+}
+
+function deprecate(fn, message) {
+  let hasAlreadyPrint = false;
+
+  return function(...args) {
+    if (!hasAlreadyPrint) {
+      hasAlreadyPrint = true;
+
+      // eslint-disable-next-line no-console
+      console.warn(`[InstantSearch.js]: ${message}`);
+    }
+
+    return fn(...args);
+  };
 }

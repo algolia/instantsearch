@@ -1057,3 +1057,37 @@ describe('utils.clearRefinementsFromState', () => {
     );
   });
 });
+
+describe('utils.deprecate', () => {
+  const sum = (...args) => args.reduce((acc, _) => acc + _, 0);
+
+  it('expect to call initial function and print message', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    const fn = utils.deprecate(sum, 'message');
+
+    const expectation = fn(1, 2, 3);
+    const actual = 6;
+
+    expect(actual).toBe(expectation);
+    expect(warn).toHaveBeenCalled();
+
+    warn.mockReset();
+    warn.mockRestore();
+  });
+
+  it('expect to call initial function twice and print message once', () => {
+    const warn = jest.spyOn(global.console, 'warn');
+    const fn = utils.deprecate(sum, 'message');
+
+    const expectation0 = fn(1, 2, 3);
+    const expectation1 = fn(1, 2, 3);
+    const actual = 6;
+
+    expect(actual).toBe(expectation0);
+    expect(actual).toBe(expectation1);
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    warn.mockReset();
+    warn.mockRestore();
+  });
+});
