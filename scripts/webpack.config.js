@@ -8,10 +8,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
 
-const extractCSS = new ExtractTextPlugin('instantsearch.min.css');
-const extractTheme = new ExtractTextPlugin(
-  'instantsearch-theme-algolia.min.css'
-);
+const extractCSS = new ExtractTextPlugin('instantsearch.css');
+const extractTheme = new ExtractTextPlugin('instantsearch-theme-algolia.css');
 
 const { NODE_ENV = 'development', VERSION = 'UNRELEASED' } = process.env;
 
@@ -104,7 +102,7 @@ module.exports = {
 
     new HappyPack({
       loaders: [
-        { loader: 'css-loader', options: { minimize: true, sourceMap: true } },
+        { loader: 'css-loader', options: { minimize: false, sourceMap: true } },
         { loader: 'postcss-loader', options: { sourceMap: true } },
         { loader: 'sass-loader', options: { sourceMap: true } },
       ],
