@@ -1,5 +1,4 @@
 # waiting for https://github.com/imathis/guard-jekyll-plus/issues/49
-baseurl: "/instantsearch.js"
-instantsearch_css: "/instantsearch.js/instantsearch.min.css"
-instantsearch_js: "/instantsearch.js/instantsearch.min.js"
+instantsearch_css: "/instantsearch.js/v1/instantsearch.min.css"
+instantsearch_js: "/instantsearch.js/v1/instantsearch.min.js"
 host: https://community.algolia.com
