@@ -681,6 +681,114 @@ export default () => {
       })
     );
 
+  storiesOf('RangeInput')
+    .add(
+      'default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'disabled',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            min: 500,
+            max: 0,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'collapsible',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            collapsible: true,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with integer only',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            precision: 0,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with min boundary',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            min: 10,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with max boundary',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            max: 500,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with min & max boundaries',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            min: 10,
+            max: 500,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    );
+
   storiesOf('RangeSlider')
     .add(
       'default',
