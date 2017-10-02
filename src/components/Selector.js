@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 
 import autoHideContainer from '../decorators/autoHideContainer.js';
 import headerFooter from '../decorators/headerFooter.js';
@@ -22,7 +22,7 @@ export class RawSelector extends React.Component {
         onChange={this.handleChange}
         value={currentValue}
       >
-        {options.map(option =>
+        {options.map(option => (
           <option
             className={this.props.cssClasses.item}
             key={option.label + option.value}
@@ -30,7 +30,7 @@ export class RawSelector extends React.Component {
           >
             {option.label}
           </option>
-        )}
+        ))}
       </select>
     );
   }

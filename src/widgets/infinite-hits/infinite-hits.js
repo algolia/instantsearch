@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import InfiniteHits from '../../components/InfiniteHits.js';
@@ -35,7 +34,7 @@ const renderer = ({
     return;
   }
 
-  ReactDOM.render(
+  render(
     <InfiniteHits
       cssClasses={cssClasses}
       hits={hits}

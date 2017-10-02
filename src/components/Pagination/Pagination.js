@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 import forEach from 'lodash/forEach';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { isSpecialClick } from '../../lib/utils.js';

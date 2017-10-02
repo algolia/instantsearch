@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import Slider from '../../components/Slider/Slider.js';
@@ -28,10 +27,7 @@ const renderer = ({
   collapsible,
   renderState,
   templates,
-}) => (
-  { refine, range: { min, max }, start, instantSearchInstance },
-  isFirstRendering
-) => {
+}) => ({ refine, range, start, instantSearchInstance }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -41,18 +37,28 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && min === max;
+  const { min: minRange, max: maxRange } = range;
+  const shouldAutoHideContainer = autoHideContainer && minRange === maxRange;
 
-  const minValue = start[0] === -Infinity ? min : start[0];
-  const maxValue = start[1] === Infinity ? max : start[1];
+  const [minStart, maxStart] = start;
+  const minFinite = minStart === -Infinity ? minRange : minStart;
+  const maxFinite = maxStart === Infinity ? maxRange : maxStart;
 
-  ReactDOM.render(
+  // Clamp values to the range for avoid extra rendering & refinement
+  // Should probably be done on the connector side, but we need to stay
+  // backward compatible so we still need to pass [-Infinity, Infinity]
+  const values = [
+    minFinite > maxRange ? maxRange : minFinite,
+    maxFinite < minRange ? minRange : maxFinite,
+  ];
+
+  render(
     <Slider
       cssClasses={cssClasses}
       refine={refine}
-      min={min}
-      max={max}
-      values={[minValue, maxValue]}
+      min={minRange}
+      max={maxRange}
+      values={values}
       tooltips={tooltips}
       step={step}
       pips={pips}

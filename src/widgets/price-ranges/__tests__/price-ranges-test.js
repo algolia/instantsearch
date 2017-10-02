@@ -34,7 +34,7 @@ describe('priceRanges()', () => {
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
 
-    priceRanges.__Rewire__('ReactDOM', ReactDOM);
+    priceRanges.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     widget = priceRanges({
