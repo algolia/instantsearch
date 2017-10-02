@@ -154,6 +154,7 @@ export default function breadcrumb(
     autoHideContainer = false,
     container,
     cssClasses: userCssClasses = {},
+    rootPath = null,
     separator = ' > ',
     templates = defaultTemplates,
     transformData,
@@ -186,7 +187,7 @@ export default function breadcrumb(
 
   try {
     const makeBreadcrumb = connectBreadcrumb(specializedRenderer);
-    return makeBreadcrumb({ attributes });
+    return makeBreadcrumb({ attributes, rootPath });
   } catch (e) {
     throw new Error(usage);
   }
