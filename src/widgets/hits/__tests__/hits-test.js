@@ -23,7 +23,7 @@ describe('hits()', () => {
 
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
-    hits.__Rewire__('ReactDOM', ReactDOM);
+    hits.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     templateProps = {

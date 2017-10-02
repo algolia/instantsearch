@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import RefinementList from '../../components/RefinementList/RefinementList.js';
@@ -36,7 +35,7 @@ const renderer = ({
     return;
   }
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}

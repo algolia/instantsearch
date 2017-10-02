@@ -20,7 +20,7 @@ describe('clearAll()', () => {
     ReactDOM = { render: sinon.spy() };
     createURL = sinon.stub().returns('#all-cleared');
 
-    clearAll.__Rewire__('ReactDOM', ReactDOM);
+    clearAll.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     widget = clearAll({

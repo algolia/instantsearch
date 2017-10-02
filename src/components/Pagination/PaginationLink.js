@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 
 import isEqual from 'lodash/isEqual';
 
@@ -40,11 +40,7 @@ class PaginationLink extends React.Component {
 
     const element = React.createElement(tagName, attributes);
 
-    return (
-      <li className={cssClasses.item}>
-        {element}
-      </li>
-    );
+    return <li className={cssClasses.item}>{element}</li>;
   }
 }
 

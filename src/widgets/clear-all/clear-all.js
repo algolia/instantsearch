@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
 import cx from 'classnames';
 
@@ -37,7 +36,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
 
-  ReactDOM.render(
+  render(
     <ClearAllWithHOCs
       refine={refine}
       collapsible={collapsible}

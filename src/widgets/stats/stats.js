@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import Stats from '../../components/Stats/Stats.js';
@@ -46,7 +45,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
 
-  ReactDOM.render(
+  render(
     <Stats
       collapsible={collapsible}
       cssClasses={cssClasses}

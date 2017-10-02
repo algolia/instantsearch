@@ -22,7 +22,7 @@ describe('currentToggle()', () => {
     beforeEach(() => {
       ReactDOM = { render: sinon.spy() };
 
-      currentToggle.__Rewire__('ReactDOM', ReactDOM);
+      currentToggle.__Rewire__('render', ReactDOM.render);
 
       containerNode = document.createElement('div');
       label = 'Hello, ';

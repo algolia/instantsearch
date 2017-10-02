@@ -19,7 +19,7 @@ describe('numericSelector()', () => {
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
 
-    numericSelector.__Rewire__('ReactDOM', ReactDOM);
+    numericSelector.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     options = [{ value: 1, label: 'first' }, { value: 2, label: 'second' }];

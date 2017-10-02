@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import defaultTemplates from './defaultTemplates.js';
@@ -39,7 +38,7 @@ const renderer = ({
   const shouldAutoHideContainer =
     autoHideContainer && (value.count === 0 || value.count === null);
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
