@@ -43,12 +43,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CurrentRefinement
- * @property {"facet"|"exclude"|"disjunctive"|"hierarchical"|"numeric"} type Type of refinement
+ * @property {"facet"|"exclude"|"disjunctive"|"hierarchical"|"numeric"|"query"} type Type of refinement
  * @property {string} attributeName Attribute on which the refinement is applied
  * @property {string} name value of the refinement
  * @property {number} [numericValue] value if the attribute is numeric and used with a numeric filter
  * @property {boolean} [exhaustive] `true` if the count is exhaustive, only if applicable
  * @property {number} [count] number of items found, if applicable
+ * @property {string} [query] value of the query if the type is query
  */
 
 /**
@@ -213,7 +214,8 @@ export default function connectCurrentRefinedValues(renderFn) {
           {},
           helper.state,
           attributeNames,
-          onlyListedAttributes
+          onlyListedAttributes,
+          clearsQuery
         );
 
         const _createURL = refinement =>
@@ -245,7 +247,8 @@ export default function connectCurrentRefinedValues(renderFn) {
           results,
           state,
           attributeNames,
-          onlyListedAttributes
+          onlyListedAttributes,
+          clearsQuery
         );
 
         const _createURL = refinement =>
@@ -307,9 +310,10 @@ function getFilteredRefinements(
   results,
   state,
   attributeNames,
-  onlyListedAttributes
+  onlyListedAttributes,
+  clearsQuery
 ) {
-  let refinements = getRefinements(results, state);
+  let refinements = getRefinements(results, state, clearsQuery);
   const otherAttributeNames = reduce(
     refinements,
     (res, refinement) => {
@@ -362,6 +366,8 @@ function clearRefinementFromState(state, refinement) {
       );
     case 'tag':
       return state.removeTagRefinement(refinement.name);
+    case 'query':
+      return state.setQueryParameter('query', '');
     default:
       throw new Error(
         `clearRefinement: type ${refinement.type} is not handled`
