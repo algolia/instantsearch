@@ -23,9 +23,12 @@ const renderFn = (
 
   containerNode.find('select').html(itemsHTML);
 
-  containerNode.find('select').off('change').on('change', e => {
-    refine(e.target.value);
-  });
+  containerNode
+    .find('select')
+    .off('change')
+    .on('change', e => {
+      refine(e.target.value);
+    });
 };
 
 export default instantsearch.connectors.connectHitsPerPage(renderFn);
