@@ -252,7 +252,7 @@ describe('RawRangeInput', () => {
       component.find('form').simulate('submit', event);
 
       expect(event.preventDefault).toHaveBeenCalled();
-      expect(props.refine).toHaveBeenCalledWith([20, null]);
+      expect(props.refine).toHaveBeenCalledWith([20, undefined]);
     });
 
     it('expect to call refine with max only', () => {
@@ -278,7 +278,7 @@ describe('RawRangeInput', () => {
       component.find('form').simulate('submit', event);
 
       expect(event.preventDefault).toHaveBeenCalled();
-      expect(props.refine).toHaveBeenCalledWith([null, 480]);
+      expect(props.refine).toHaveBeenCalledWith([undefined, 480]);
     });
 
     it('expect to call refine without values', () => {
@@ -295,7 +295,7 @@ describe('RawRangeInput', () => {
       component.find('form').simulate('submit', event);
 
       expect(event.preventDefault).toHaveBeenCalled();
-      expect(props.refine).toHaveBeenCalledWith([null, null]);
+      expect(props.refine).toHaveBeenCalledWith([undefined, undefined]);
     });
   });
 });

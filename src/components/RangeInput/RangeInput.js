@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _isFinite from 'lodash/isFinite';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
@@ -30,16 +29,7 @@ export class RawRangeInput extends Component {
   onSubmit = event => {
     event.preventDefault();
 
-    const { min, max } = this.state;
-    const { refine } = this.props;
-
-    const minAsNumber = parseFloat(min);
-    const maxAsNumber = parseFloat(max);
-
-    refine([
-      _isFinite(minAsNumber) ? minAsNumber : null,
-      _isFinite(maxAsNumber) ? maxAsNumber : null,
-    ]);
+    this.props.refine([this.state.min, this.state.max]);
   };
 
   get isDisabled() {
