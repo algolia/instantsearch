@@ -30,7 +30,7 @@ class PriceRangesForm extends React.Component {
         <input
           className={this.props.cssClasses.input}
           onChange={e => this.setState({ [type]: e.target.value })}
-          ref={type}
+          ref={input => (this[type] = input)}
           type="number"
           value={this.state[type]}
         />
@@ -40,11 +40,8 @@ class PriceRangesForm extends React.Component {
 
   handleSubmit(event) {
     const from =
-      this.refs.from.value !== ''
-        ? parseInt(this.refs.from.value, 10)
-        : undefined;
-    const to =
-      this.refs.to.value !== '' ? parseInt(this.refs.to.value, 10) : undefined;
+      this.from.value !== '' ? parseInt(this.from.value, 10) : undefined;
+    const to = this.to.value !== '' ? parseInt(this.to.value, 10) : undefined;
 
     this.props.refine({ from, to }, event);
   }
@@ -57,7 +54,7 @@ class PriceRangesForm extends React.Component {
       <form
         className={this.props.cssClasses.form}
         onSubmit={onSubmit}
-        ref="form"
+        ref={form => (this.form = form)}
       >
         {fromInput}
         <span className={this.props.cssClasses.separator}>

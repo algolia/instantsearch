@@ -36,7 +36,7 @@ class MenuSelect extends Component {
           <Template templateKey="seeAllOption" {...templateProps} />
         </option>
 
-        {items.map(item =>
+        {items.map(item => (
           <option
             key={item.value}
             value={item.value}
@@ -44,7 +44,7 @@ class MenuSelect extends Component {
           >
             <Template data={item} templateKey="item" {...templateProps} />
           </option>
-        )}
+        ))}
       </select>
     );
   }
