@@ -114,8 +114,7 @@ const common = [
     pattern: 'v2/index.html',
     transform: path => {
       return 'index.html'
-    },
-    move: true
+    }
   }),
   // perfStop(),
 ];
