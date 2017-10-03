@@ -1,3 +1,34 @@
+<a name="2.2.0"></a>
+# [2.2.0](https://github.com/algolia/instantsearch.js/compare/v2.1.6...v2.2.0) (2017-10-03)
+
+
+### Bug Fixes
+
+* **build:** minify css with `csso` instead of unminify css ([#2419](https://github.com/algolia/instantsearch.js/issues/2419)) ([12f96b8](https://github.com/algolia/instantsearch.js/commit/12f96b8)), closes [#2375](https://github.com/algolia/instantsearch.js/issues/2375)
+* **clear-all:** display the query when clearsQuery is true ([#2414](https://github.com/algolia/instantsearch.js/issues/2414)) ([6921895](https://github.com/algolia/instantsearch.js/commit/6921895))
+* **range-slider:** Fix slider boundaries ([#2408](https://github.com/algolia/instantsearch.js/issues/2408)) ([bea43db](https://github.com/algolia/instantsearch.js/commit/bea43db)), closes [#2386](https://github.com/algolia/instantsearch.js/issues/2386)
+* **selector:** root classname is applied twice ([#2423](https://github.com/algolia/instantsearch.js/issues/2423)) ([44dca11](https://github.com/algolia/instantsearch.js/commit/44dca11)), closes [#2396](https://github.com/algolia/instantsearch.js/issues/2396) [#2397](https://github.com/algolia/instantsearch.js/issues/2397)
+* **webpack.dev:** sourcemaps in dev ([#2422](https://github.com/algolia/instantsearch.js/issues/2422)) ([ba6ca0a](https://github.com/algolia/instantsearch.js/commit/ba6ca0a))
+
+
+### Features
+
+* **menu-select:** add menu select widget ([#2316](https://github.com/algolia/instantsearch.js/issues/2316)) ([680f9bd](https://github.com/algolia/instantsearch.js/commit/680f9bd))
+
+
+
+<a name="2.2.0-beta.1"></a>
+# [2.2.0-beta.1](https://github.com/algolia/instantsearch.js/compare/v2.1.4...v2.2.0-beta.1) (2017-09-18)
+
+
+### Features
+
+* **analytics:** Push pagination ([#2337](https://github.com/algolia/instantsearch.js/issues/2337)) ([94ce086](https://github.com/algolia/instantsearch.js/commit/94ce086))
+* **hitsPerPageSelector:** default hits per page setting ([4efd43e](https://github.com/algolia/instantsearch.js/commit/4efd43e))
+* **hitsPerPageSelector:** default hits per page setting ([355f080](https://github.com/algolia/instantsearch.js/commit/355f080))
+
+
+
 <a name="2.1.6"></a>
 ## [2.1.6](https://github.com/algolia/instantsearch.js/compare/v2.1.5...v2.1.6) (2017-09-26)
 
