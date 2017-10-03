@@ -125,22 +125,25 @@ export default function connectRange(renderFn) {
           const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
           const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
 
+          const nextMinAsNumber = parseFloat(nextMin);
+          const nextMaxAsNumber = parseFloat(nextMax);
+
           let newNextMin;
-          if (!hasMinBound && rangeMin === nextMin) {
+          if (!hasMinBound && rangeMin === nextMinAsNumber) {
             newNextMin = undefined;
-          } else if (hasMinBound && !_isFinite(nextMin)) {
+          } else if (hasMinBound && !_isFinite(nextMinAsNumber)) {
             newNextMin = minBound;
           } else {
-            newNextMin = nextMin;
+            newNextMin = nextMinAsNumber;
           }
 
           let newNextMax;
-          if (!hasMaxBound && rangeMax === nextMax) {
+          if (!hasMaxBound && rangeMax === nextMaxAsNumber) {
             newNextMax = undefined;
-          } else if (hasMaxBound && !_isFinite(nextMax)) {
+          } else if (hasMaxBound && !_isFinite(nextMaxAsNumber)) {
             newNextMax = maxBound;
           } else {
-            newNextMax = nextMax;
+            newNextMax = nextMaxAsNumber;
           }
 
           if (min !== newNextMin || max !== newNextMax) {

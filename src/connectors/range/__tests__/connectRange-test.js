@@ -562,6 +562,68 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
+    it('expect to refine when values are parsable interger', () => {
+      const range = { min: 0, max: 500 };
+      const values = ['10', '490'];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine when values are parsable float', () => {
+      const range = { min: 0, max: 500 };
+      const values = ['10.50', '490.50'];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10.5]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490.5]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine to given min when user bounds are set and value is a parsable number', () => {
+      const range = { min: 10, max: 500 };
+      const values = ['20', 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({
+        attributeName,
+        min: 10,
+      });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([20]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine to given max when user bounds are set and value is a parsable number', () => {
+      const range = { min: 10, max: 500 };
+      const values = [20, '490'];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({
+        attributeName,
+        max: 500,
+      });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([20]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
     it('expect to refine min when user bounds are set and value is at range bound', () => {
       const range = { min: 10, max: 500 };
       const values = [10, 490];
@@ -596,7 +658,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to refine min when user bounds are set and value is not valid', () => {
+    it('expect to refine min when user bounds are set and value is not a parsable number', () => {
       const range = { min: 10, max: 500 };
       const values = [null, 490];
       const helper = createHelper();
@@ -613,7 +675,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to refine max when user bounds are set and value is not valid', () => {
+    it('expect to refine max when user bounds are set and value is not a parsable number', () => {
       const range = { min: 10, max: 500 };
       const values = [20, null];
       const helper = createHelper();
