@@ -251,14 +251,11 @@ describe('rangeInput', () => {
       attributeName,
     });
 
-    widget.init({ helper, instantSearchInstance });
-
     // Override _refine behavior to be able to check
     // if refine is correctly passed to the component
-    // Must be applied after init for now, because the
-    // refine function is bound to the instance in init
     widget._refine = () => refine;
 
+    widget.init({ helper, instantSearchInstance });
     widget.render({ results, helper });
 
     ReactDOM.render.mock.calls[0][0].props.refine([25, 475]);
