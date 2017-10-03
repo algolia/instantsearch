@@ -19,11 +19,10 @@ function itemTemplate({
   const computedLabel = label
     ? `${label} ${computedOperator || ':'} `
     : computedOperator;
+  const countValue = count === undefined ? 0 : count;
   const computedCount = query
     ? ''
-    : `<span class="${cssClasses.count}">${count === undefined
-        ? 0
-        : count}</span>`;
+    : `<span class="${cssClasses.count}">${countValue}</span>`;
   const computedExclude = exclude ? '-' : '';
   return `${computedLabel} ${computedExclude} ${name} ${computedCount}`;
 }
