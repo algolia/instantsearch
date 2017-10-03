@@ -7,8 +7,8 @@ mkdir -p dist dist-es5-module es
 
 echo "➡️  Bundle instantsearch.js to UMD build './dist' via webpack"
 NODE_ENV=production BABEL_ENV=production webpack --config scripts/webpack.config.js --hide-modules
-cssunminifier dist/instantsearch.min.css dist/instantsearch.css &
-cssunminifier dist/instantsearch-theme-algolia.min.css dist/instantsearch-theme-algolia.css
+csso dist/instantsearch.css dist/instantsearch.min.css --map file &
+csso dist/instantsearch-theme-algolia.css dist/instantsearch-theme-algolia.min.css --map file
 
 wait
 

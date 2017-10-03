@@ -1,7 +1,7 @@
 .ais-pagination {
   background: $white;
   box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-  border: solid 1px #d4d8e3;
+  border: solid 1px #D4D8E3;
   border-radius: $border-radius;
   display: inline-block;
   padding: 8px 16px;
@@ -18,7 +18,7 @@
     }
 
     &__disabled {
-      color: #bbb;
+      color: #BBB;
       opacity: .5;
       pointer-events: none;
       visibility: visible;
