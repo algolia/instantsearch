@@ -360,7 +360,8 @@ describe('connectBreadcrumb', () => {
     });
 
     const { createURL, items } = rendering.mock.calls[1][0];
-    const secondItemValue = items[0].value;
+    const secondItemValue = items[1].value;
+    console.log(items);
     const stateForURL = createURL(secondItemValue);
     expect(stateForURL.hierarchicalFacetsRefinements).toEqual({
       'hierarchicalCategories.lvl0': [secondItemValue],
