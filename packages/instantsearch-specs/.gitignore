@@ -1,0 +1,5 @@
+node_modules/
+css/
+public/
+npm-debug.log
+.DS_Store

@@ -1,0 +1,43 @@
+{{ partial "head.html" . }}
+
+<h1><strong>InstantSearch</strong>.css</h1>
+
+<div class="wrapper">
+  {{ partial "widgetsList.html" . }}
+
+  <main>
+    <label>
+      <small>Choose a CSS theme:</small>
+      <select name="" id="js-changeTheme">
+        <option value="">None</option>
+        <option value="/assets/css/{{ index .Site.Data.hashcss "instantsearch-reset.css" }}">Reset</option>
+        <option value="/assets/css/{{ index .Site.Data.hashcss "instantsearch-algolia.css" }}">Algolia</option>
+      </select>
+    </label>
+
+    <h2>{{ .Page.Title }}</h2>
+
+    <h3>Widget example</h3>
+
+    <div class="codeWrapper">{{ .Params.html | safeHTML }}</div>
+
+    <h3>HTML output</h3>
+
+    <pre id="js-pre"><code>{{ .Params.html }}</code></pre>
+
+    <h3>Classes list</h3>
+
+    <p><small><strong>Hint:</strong> hover classes to see their position.</small></p>
+
+    <table>
+      {{ range $element := .Params.classes }}
+        <tr class="js-hoverClass" data-value="{{ $element.name }}">
+          <td>{{ $element.name }}</td>
+          <td>{{ $element.description }}</td>
+        </tr>
+      {{ end }}
+    </table>
+  </main>
+</div>
+
+{{ partial "foot.html" . }}
