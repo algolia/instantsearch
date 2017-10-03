@@ -9,7 +9,7 @@ const makeTestUrlUtils = () => ({
   onpopstate(/* cb */) {
     // window.addEventListener('popstate', cb);
   },
-  pushState(qs/* , {getHistoryState} */) {
+  pushState(qs /* , {getHistoryState} */) {
     this.lastQs = qs;
     // window.history.pushState(getHistoryState(), '', getFullURL(this.createURL(qs)));
   },
@@ -24,10 +24,10 @@ const makeTestUrlUtils = () => ({
 
 describe('urlSync mechanics', () => {
   test('Generates urls on change', () => {
-    const helper = jsHelper({addAlgoliaAgent: () => {}});
+    const helper = jsHelper({ addAlgoliaAgent: () => {} });
     const urlUtils = makeTestUrlUtils();
-    const urlSyncWidget = urlSync({urlUtils, threshold: 0});
-    urlSyncWidget.render({helper});
+    const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });
+    urlSyncWidget.render({ helper });
 
     expect(urlUtils.lastQs).toEqual('');
     helper.setQuery('query');
@@ -38,10 +38,10 @@ describe('urlSync mechanics', () => {
     expect(urlUtils.lastQs).toMatchSnapshot();
   });
   test('Generated urls should not contain a version', () => {
-    const helper = jsHelper({addAlgoliaAgent: () => {}});
+    const helper = jsHelper({ addAlgoliaAgent: () => {} });
     const urlUtils = makeTestUrlUtils();
-    const urlSyncWidget = urlSync({urlUtils, threshold: 0});
-    urlSyncWidget.render({helper});
+    const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });
+    urlSyncWidget.render({ helper });
     helper.setQuery('query');
 
     jest.runOnlyPendingTimers();
