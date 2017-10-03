@@ -2,7 +2,7 @@
 import instantsearch from '../../../../index.js';
 
 function render(
-  {items, refine, widgetParams: {containerNode, title}},
+  { items, refine, widgetParams: { containerNode, title } },
   isFirstRendering
 ) {
   let select;

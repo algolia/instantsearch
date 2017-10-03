@@ -10,11 +10,7 @@ import sinon from 'sinon';
 
 class TestComponent extends React.Component {
   render() {
-    return (
-      <div>
-        {this.props.hello}
-      </div>
-    );
+    return <div>{this.props.hello}</div>;
   }
 }
 

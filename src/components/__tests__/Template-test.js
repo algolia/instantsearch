@@ -29,10 +29,7 @@ describe('Template', () => {
     it('throws an error when templates as functions returning a React element', () => {
       const props = getProps({
         templates: {
-          test: templateData =>
-            <p>
-              it doesnt works with {templateData.type}
-            </p>,
+          test: templateData => <p>it doesnt works with {templateData.type}</p>,
         }, // eslint-disable-line react/display-name
         data: { type: 'functions' },
       });
