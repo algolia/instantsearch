@@ -1,0 +1,150 @@
+// Quick and dirty layout for the PoC :]
+
+$dark: #282c34;
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: $dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1 {
+  margin: 0;
+  height: 150px;
+  line-height: 150px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: lighten($dark, 50%);
+  background-color: $dark;
+
+  strong {
+    font-weight: bold;
+    color: #fff;
+  }
+}
+
+.wrapper {
+  padding-top: 150px;
+  display: flex;
+  min-height: 100vh;
+}
+
+aside {
+  padding: 20px;
+  display: inline-block;
+  vertical-align: top;
+  background-color: #eee;
+  border-right: 1px solid #ddd;
+  width: 300px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li + li {
+    margin-top: 5px;
+  }
+
+  a {
+    color: $dark;
+  }
+}
+
+main {
+  padding: 20px;
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 300px);
+
+  > label:first-child {
+    padding: 0 0 20px;
+    display: block;
+    text-align: right;
+    border-bottom: 1px solid #ccc;
+  }
+}
+
+.codeWrapper {
+  padding: 20px;
+  background-color: #eee;
+  border: 1px solid #ddd;
+  overflow: auto;
+}
+
+pre {
+  position: relative;
+  font-size: 16px;
+  color: #fff;
+  background-color: $dark;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    bottom: 20px;
+    width: 20px;
+  }
+
+  &:before {
+    left: 0;
+    background: linear-gradient(to left, rgba($dark, 0), rgba($dark, 1) 70%);
+  }
+
+  &:after {
+    right: 0;
+    background: linear-gradient(to right, rgba($dark, 0), rgba($dark, 1) 70%);
+  }
+
+  code {
+    padding: 21px;
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  font-family: monospace;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+td {
+  padding: 10px;
+  white-space: nowrap;
+  border: 1px solid #ccc;
+
+  + td {
+    white-space: normal;
+    width: 100%;
+  }
+}
+
+.highlightedText {
+  position: relative;
+  background-color: lighten($dark, 15%);
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border: 1px solid lighten($dark, 50%);
+  }
+}
