@@ -89,21 +89,37 @@ export default () => {
     })
   );
 
-  storiesOf('HitsPerPageSelector').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.hitsPerPageSelector({
-          container,
-          items: [
-            { value: 3, label: '3 per page' },
-            { value: 5, label: '5 per page' },
-            { value: 10, label: '10 per page' },
-          ],
-        })
-      );
-    })
-  );
+  storiesOf('HitsPerPageSelector')
+    .add(
+      'default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hitsPerPageSelector({
+            container,
+            items: [
+              { value: 3, label: '3 per page' },
+              { value: 5, label: '5 per page' },
+              { value: 10, label: '10 per page' },
+            ],
+          })
+        );
+      })
+    )
+    .add(
+      'With default hitPerPage to 5',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hitsPerPageSelector({
+            container,
+            items: [
+              { value: 3, label: '3 per page' },
+              { value: 5, label: '5 per page', default: true },
+              { value: 10, label: '10 per page' },
+            ],
+          })
+        );
+      })
+    );
 
   storiesOf('Hits').add(
     'default',
@@ -517,6 +533,18 @@ export default () => {
             templates: {
               header: 'Categories (menu widget)',
             },
+          })
+        );
+      })
+    )
+    .add(
+      'as a Select DOM element',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.menuSelect({
+            container,
+            attributeName: 'categories',
+            limit: 10,
           })
         );
       })

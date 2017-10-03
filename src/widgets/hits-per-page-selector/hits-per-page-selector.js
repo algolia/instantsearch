@@ -50,6 +50,7 @@ hitsPerPageSelector({
  * @typedef {Object} HitsPerPageSelectorItems
  * @property {number} value number of hits to display per page.
  * @property {string} label Label to display in the option.
+ * @property {boolean} default The default hits per page on first search.
  */
 
 /**
@@ -63,6 +64,8 @@ hitsPerPageSelector({
 /**
  * The hitsPerPageSelector widget gives the user the ability to change the number of results
  * displayed in the hits widget.
+ *
+ * You can specify the default hits per page using a boolean in the items[] array. If none is specified, this first hits per page option will be picked.
  * @type {WidgetFactory}
  * @category basic
  * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the HitPerPageSelector widget.
@@ -72,7 +75,7 @@ hitsPerPageSelector({
  *   instantsearch.widgets.hitsPerPageSelector({
  *     container: '#hits-per-page-selector',
  *     items: [
- *       {value: 3, label: '3 per page'},
+ *       {value: 3, label: '3 per page', default: true},
  *       {value: 6, label: '6 per page'},
  *       {value: 12, label: '12 per page'},
  *     ]
