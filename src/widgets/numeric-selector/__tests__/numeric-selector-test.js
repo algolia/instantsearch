@@ -25,6 +25,7 @@ describe('numericSelector()', () => {
     options = [{ value: 1, label: 'first' }, { value: 2, label: 'second' }];
     cssClasses = {
       root: ['custom-root', 'cx'],
+      select: 'custom-select',
       item: 'custom-item',
     };
     widget = numericSelector({
@@ -37,7 +38,7 @@ describe('numericSelector()', () => {
       shouldAutoHideContainer: false,
       cssClasses: {
         root: 'ais-numeric-selector custom-root cx',
-        select: 'ais-numeric-selector',
+        select: 'ais-numeric-selector custom-select',
         item: 'ais-numeric-selector--item custom-item',
       },
       currentValue: 1,
