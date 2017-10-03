@@ -5,6 +5,7 @@ import navigation from 'metalsmith-navigation';
 import nav from './plugins/navigation.js';
 import sass from 'metalsmith-sass';
 import inPlace from 'metalsmith-in-place';
+import copy from 'metalsmith-copy';
 
 import assets from './plugins/assets.js';
 import helpers from './plugins/helpers.js';
@@ -102,6 +103,19 @@ const common = [
   }),
   // since we use @import, autoprefixer is used after sass
   autoprefixer,
+  copy({
+    pattern: '**',
+    transform: path => {
+      return `v2/${path}`;
+    },
+    move: true
+  }),
+  copy({
+    pattern: 'v2/index.html',
+    transform: path => {
+      return 'index.html'
+    }
+  }),
   // perfStop(),
 ];
 

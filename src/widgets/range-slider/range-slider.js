@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import Slider from '../../components/Slider/Slider.js';
@@ -53,7 +52,7 @@ const renderer = ({
     maxFinite < minRange ? minRange : maxFinite,
   ];
 
-  ReactDOM.render(
+  render(
     <Slider
       cssClasses={cssClasses}
       refine={refine}

@@ -30,7 +30,7 @@ will be done on the maintenance version.
 
 Once you make a pull request, a bot will comment with a link to a development version of the website. On it you can find
 
-1. The generated documentation 
+1. The generated documentation
     - for example: https://deploy-preview-2383--algolia-instantsearch.netlify.com/
     - source: https://github.com/algolia/instantsearch.js/tree/develop/docgen
 2. A playground for the widgets
@@ -48,7 +48,7 @@ To run this project, you will need:
 
 ```sh
 yarn
-yarn dev:docs
+yarn dev
 ```
 
 Go to <http://localhost:8080> for the example playground.

@@ -18,7 +18,7 @@ describe('refinementList()', () => {
     container = document.createElement('div');
 
     ReactDOM = { render: sinon.spy() };
-    refinementList.__Rewire__('ReactDOM', ReactDOM);
+    refinementList.__Rewire__('render', ReactDOM.render);
     autoHideContainer = sinon.stub().returnsArg(0);
     refinementList.__Rewire__('autoHideContainerHOC', autoHideContainer);
     headerFooter = sinon.stub().returnsArg(0);

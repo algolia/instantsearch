@@ -27,7 +27,7 @@ describe('hitsPerPageSelector()', () => {
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
 
-    hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
+    hitsPerPageSelector.__Rewire__('render', ReactDOM.render);
     consoleWarn = sinon.stub(window.console, 'warn');
 
     container = document.createElement('div');
@@ -37,6 +37,7 @@ describe('hitsPerPageSelector()', () => {
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],
+      select: 'custom-select',
       item: 'custom-item',
     };
     widget = hitsPerPageSelector({ container, items, cssClasses });

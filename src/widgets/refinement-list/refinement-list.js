@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import filter from 'lodash/filter';
 
@@ -59,7 +58,7 @@ const renderer = ({
     header: { refinedFacetsCount: filter(items, { isRefined: true }).length },
   };
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}

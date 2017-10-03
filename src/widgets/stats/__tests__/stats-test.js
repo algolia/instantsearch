@@ -22,7 +22,7 @@ describe('stats()', () => {
 
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
-    stats.__Rewire__('ReactDOM', ReactDOM);
+    stats.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     widget = stats({ container, cssClasses: { body: ['body', 'cx'] } });

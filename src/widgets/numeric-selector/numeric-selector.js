@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
@@ -15,7 +14,7 @@ const renderer = ({ containerNode, autoHideContainer, cssClasses }) => (
 ) => {
   if (isFirstRendering) return;
 
-  ReactDOM.render(
+  render(
     <Selector
       cssClasses={cssClasses}
       currentValue={currentRefinement}
@@ -31,7 +30,7 @@ const usage = `Usage: numericSelector({
   container,
   attributeName,
   options,
-  cssClasses.{root,item},
+  cssClasses.{root,select,item},
   autoHideContainer
 })`;
 
@@ -43,7 +42,8 @@ const usage = `Usage: numericSelector({
 
 /**
  * @typedef {Object} NumericSelectorCSSClasses
- * @property {string|string[]} [root] CSS classes added to the parent `<select>`.
+ * @property {string|string[]} [root] CSS classes added to the outer `<div>`.
+ * @property {string|string[]} [select] CSS classes added to the parent `<select>`.
  * @property {string|string[]} [item] CSS classes added to each `<option>`.
  */
 
@@ -99,6 +99,9 @@ export default function numericSelector({
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
+    // We use the same class to avoid regression on existing website. It needs to be replaced
+    // eventually by `bem('select')
+    select: cx(bem(null), userCssClasses.select),
     item: cx(bem('item'), userCssClasses.item),
   };
 

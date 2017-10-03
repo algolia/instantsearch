@@ -6,6 +6,7 @@ exports[`hitsPerPageSelector() calls twice ReactDOM.render(<Selector props />, c
     Object {
       "item": "ais-hits-per-page-selector--item custom-item",
       "root": "ais-hits-per-page-selector custom-root cx",
+      "select": "ais-hits-per-page-selector custom-select",
     }
   }
   currentValue={10}

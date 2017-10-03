@@ -8,7 +8,7 @@ ghpages.clean();
 let config = {
   silent: true,
   logger: msg => console.log(msg),
-  dest: 'v2'
+  only: ['**/*', '!v1/**/*', '!v1']
 };
 
 if (process.env.CI === 'true') {
