@@ -49,6 +49,10 @@ describe('RawRangeInput', () => {
     const component = shallowRender(props);
 
     expect(component).toMatchSnapshot();
+    expect(component.state()).toEqual({
+      min: 20,
+      max: 480,
+    });
   });
 
   it('expect to render with disabled state', () => {
@@ -79,6 +83,10 @@ describe('RawRangeInput', () => {
       component.instance().componentWillReceiveProps(nextProps);
 
       expect(component).toMatchSnapshot();
+      expect(component.state()).toEqual({
+        min: 20,
+        max: 480,
+      });
     });
 
     it('expect to update the state from given props', () => {
@@ -103,6 +111,10 @@ describe('RawRangeInput', () => {
       component.instance().componentWillReceiveProps(nextProps);
 
       expect(component).toMatchSnapshot();
+      expect(component.state()).toEqual({
+        min: 20,
+        max: 480,
+      });
     });
   });
 
@@ -121,6 +133,9 @@ describe('RawRangeInput', () => {
         });
 
       expect(component).toMatchSnapshot();
+      expect(component.state()).toEqual({
+        min: 20,
+      });
     });
 
     it('expect to update the state when max change', () => {
@@ -137,6 +152,9 @@ describe('RawRangeInput', () => {
         });
 
       expect(component).toMatchSnapshot();
+      expect(component.state()).toEqual({
+        max: 480,
+      });
     });
   });
 
