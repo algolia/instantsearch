@@ -12,29 +12,75 @@ body {
   box-sizing: border-box;
 }
 
-h1 {
-  margin: 0;
-  height: 150px;
-  line-height: 150px;
+header {
+  padding: 0 20px;
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  font-weight: normal;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: lighten($dark, 50%);
   background-color: $dark;
 
-  strong {
-    font-weight: bold;
-    color: #fff;
+  h1 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+
+    a {
+      color: lighten($dark, 50%);
+      text-decoration: none;
+    }
+
+    strong {
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li {
+    display: inline-block;
+
+    + li {
+      margin-left: 20px;
+    }
+
+    a {
+      color: #fff;
+      font-size: 12px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
   }
 }
 
+.cta {
+  margin-top: 25px;
+  padding: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  text-decoration: none;
+  color: #fff;
+  background-color: $dark;
+  border-radius: 3px;
+}
+
 .wrapper {
-  padding-top: 150px;
+  padding-top: 50px;
   display: flex;
   min-height: 100vh;
 }

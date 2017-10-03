@@ -8,12 +8,14 @@ const hoverClass = document.querySelectorAll('.js-hoverClass');
 // Store current CSS theme in localStorage
 
 customThemeStyleSheet.setAttribute('href', localStorageTheme);
-changeThemeSelect.value = localStorageTheme;
 
-changeThemeSelect.addEventListener('change', () => {
-  customThemeStyleSheet.setAttribute('href', changeThemeSelect.value);
-  localStorage.setItem('customTheme', changeThemeSelect.value);
-});
+if (changeThemeSelect) {
+  changeThemeSelect.value = localStorageTheme;
+  changeThemeSelect.addEventListener('change', () => {
+    customThemeStyleSheet.setAttribute('href', changeThemeSelect.value);
+    localStorage.setItem('customTheme', changeThemeSelect.value);
+  });
+}
 
 // Hover list of classes to highligh them
 
