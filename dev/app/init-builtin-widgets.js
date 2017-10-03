@@ -231,6 +231,7 @@ export default () => {
           searchParameters: {
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
             disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
           },
         }
       )
@@ -252,6 +253,7 @@ export default () => {
           searchParameters: {
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
             disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
           },
         }
       )
@@ -269,6 +271,26 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with clearsQuery',
+      wrapWithHits(
+        container => {
+          window.search.addWidget(
+            instantsearch.widgets.currentRefinedValues({
+              container,
+              clearsQuery: true,
+            })
+          );
+        },
+        {
+          searchParameters: {
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
+          },
+        }
+      )
     );
 
   storiesOf('RefinementList')

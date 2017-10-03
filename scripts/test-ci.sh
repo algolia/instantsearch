@@ -3,6 +3,7 @@
 set -ev # exit when error
 
 ./scripts/validate-pr-done-on-develop.sh
+npm run lint
 npm test
 
 # we need to build to run functional tests

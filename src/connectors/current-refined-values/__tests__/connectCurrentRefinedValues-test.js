@@ -126,4 +126,53 @@ describe('connectCurrentRefinedValues', () => {
     expect(helper.search).toBeCalled();
     expect(helper.state.query).toBe('');
   });
+
+  it('should provide the query as a refinement if clearsQuery is true', () => {
+    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {});
+    helper.search = jest.fn();
+
+    const rendering = jest.fn();
+    const makeWidget = connectCurrentRefinedValues(rendering);
+    const widget = makeWidget({ clearsQuery: true });
+
+    helper.setQuery('foobar');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    const refinements = firstRenderingOptions.refinements;
+    expect(refinements.length).toBe(1);
+    const value = refinements[0];
+    expect(value.type).toBe('query');
+    expect(value.name).toBe('foobar');
+    expect(value.query).toBe('foobar');
+    const refine = firstRenderingOptions.refine;
+    refine(value);
+    expect(helper.state.query).toBe('');
+
+    helper.setQuery('foobaz');
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    const secondRefinements = secondRenderingOptions.refinements;
+    expect(secondRefinements.length).toBe(1);
+    const secondValue = secondRefinements[0];
+    expect(secondValue.type).toBe('query');
+    expect(secondValue.name).toBe('foobaz');
+    expect(secondValue.query).toBe('foobaz');
+    const secondRefine = secondRenderingOptions.refine;
+    secondRefine(secondValue);
+    expect(helper.state.query).toBe('');
+  });
 });
