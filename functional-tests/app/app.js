@@ -299,6 +299,9 @@ search.addWidget(
       { label: 'Top 100', value: 9901 },
       { label: 'Top 500', value: 9501 },
     ],
+    cssClasses: {
+      select: 'form-control',
+    },
   })
 );
 

@@ -9,6 +9,7 @@ describe('Selector', () => {
       setValue: () => {},
       cssClasses: {
         root: 'custom-root',
+        select: 'custom-select',
         item: 'custom-item',
       },
       options: [
@@ -26,6 +27,7 @@ describe('Selector', () => {
       setValue: () => {},
       cssClasses: {
         root: 'custom-root',
+        select: 'custom-select',
         item: 'custom-item',
       },
       options: [

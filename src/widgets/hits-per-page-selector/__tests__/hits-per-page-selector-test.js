@@ -37,6 +37,7 @@ describe('hitsPerPageSelector()', () => {
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],
+      select: 'custom-select',
       item: 'custom-item',
     };
     widget = hitsPerPageSelector({ container, items, cssClasses });

@@ -2,7 +2,7 @@
 
 exports[`Selector should render <Selector/> with numbers 1`] = `
 <select
-  className="custom-root"
+  className="custom-select"
   onChange={[Function]}
   value={10}
 >
@@ -23,7 +23,7 @@ exports[`Selector should render <Selector/> with numbers 1`] = `
 
 exports[`Selector should render <Selector/> with strings 1`] = `
 <select
-  className="custom-root"
+  className="custom-select"
   onChange={[Function]}
   value="index-a"
 >

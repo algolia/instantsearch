@@ -18,7 +18,7 @@ export class RawSelector extends React.Component {
 
     return (
       <select
-        className={this.props.cssClasses.root}
+        className={this.props.cssClasses.select}
         onChange={this.handleChange}
         value={currentValue}
       >
@@ -39,6 +39,10 @@ export class RawSelector extends React.Component {
 RawSelector.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+    select: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
