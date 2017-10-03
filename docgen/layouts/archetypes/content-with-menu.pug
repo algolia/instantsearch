@@ -12,6 +12,9 @@ body.documentation
         if(editable)
           a.editThisPage(href=`http://github.com/algolia/instantsearch.js/edit/develop/${githubSource}`) Edit this page
         block content
+        hr
+        p
+          strong Can't find what you are looking for? #[a(href="https://github.com/algolia/instantsearch.js/issues/new?title=I could not find what I was looking for&body=Hi! I have a documentation issue on InstantSearch.js, I could not find what I was looking for which is: -- PLEASE FILL IN HERE --") Open an issue], we'll get back to you.
 
   include ../common/footer.pug
   script(src=webpack.assets['js/main.js'])
