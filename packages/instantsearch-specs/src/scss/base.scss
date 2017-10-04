@@ -116,10 +116,14 @@ main {
 
   > label:first-child {
     padding: 0 0 20px;
-    display: block;
-    text-align: right;
-    border-bottom: 1px solid #ccc;
+    float: right;
   }
+}
+
+h2 {
+  padding-top: 1em;
+  clear: both;
+  border-top: 1px solid #ccc;
 }
 
 .codeWrapper {
