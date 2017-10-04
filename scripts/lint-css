@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-sass-lint --verbose
+sass-lint --verbose --ignore 'docs/**/*'
