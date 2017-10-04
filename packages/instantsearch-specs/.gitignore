@@ -1,6 +1,4 @@
 node_modules/
 npm-debug.log
 .DS_Store
-
-/css/
 /public/
