@@ -2,11 +2,11 @@
 
 set -e # exit when error
 
-rm -rf public css
+rm -rf public css node_modules
 
 echo "➡️  Installing dependencies"
 
-brew install hugo && yarn
+yarn
 
 wait
 
