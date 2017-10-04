@@ -40,13 +40,13 @@ class Breadcrumb extends Component {
     const { canRefine, createURL, items, refine, translate } = this.props;
     const rootPath = canRefine ? (
       <span {...cx('item')}>
-        <a
+        <Link
           {...cx('itemLink', 'itemLinkRoot')}
           onClick={() => (!this.props.rootURL ? refine() : null)}
           href={this.props.rootURL ? this.props.rootURL : createURL()}
         >
           <span {...cx('rootLabel')}>{translate('rootLabel')}</span>
-        </a>
+        </Link>
         <span {...cx('separator')}>{this.props.separator}</span>
       </span>
     ) : null;

@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { mount } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
+Enzyme.configure({ adapter: new Adapter() });
 
 import RefinementList from './RefinementList';
 

@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { mount } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
+import Link from './Link';
+Enzyme.configure({ adapter: new Adapter() });
 
 import Pagination from './Pagination';
 
@@ -246,14 +249,16 @@ describe('Pagination', () => {
     const wrapper = mount(
       <Pagination {...DEFAULT_PROPS} refine={refine} showLast />
     );
+
     wrapper
-      .find('.ais-Pagination__itemLink')
+      .find(Link)
       .filterWhere(e => e.text() === '8')
       .simulate('click');
+
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual(8);
     wrapper
-      .find('.ais-Pagination__itemLink')
+      .find(Link)
       .filterWhere(e => e.text() === '9')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(2);
@@ -261,25 +266,25 @@ describe('Pagination', () => {
     expect(parameters.valueOf()).toBe(9);
     wrapper
       .find('.ais-Pagination__itemPrevious')
-      .find('.ais-Pagination__itemLink')
+      .find(Link)
       .simulate('click');
     expect(refine.mock.calls.length).toBe(3);
     expect(refine.mock.calls[2][0]).toEqual(8);
     wrapper
       .find('.ais-Pagination__itemNext')
-      .find('.ais-Pagination__itemLink')
+      .find(Link)
       .simulate('click');
     expect(refine.mock.calls.length).toBe(4);
     expect(refine.mock.calls[3][0]).toEqual(10);
     wrapper
       .find('.ais-Pagination__itemFirst')
-      .find('.ais-Pagination__itemLink')
+      .find(Link)
       .simulate('click');
     expect(refine.mock.calls.length).toBe(5);
     expect(refine.mock.calls[4][0]).toEqual(1);
     wrapper
       .find('.ais-Pagination__itemLast')
-      .find('.ais-Pagination__itemLink')
+      .find(Link)
       .simulate('click');
     expect(refine.mock.calls.length).toBe(6);
     expect(refine.mock.calls[5][0]).toEqual(20);
@@ -288,9 +293,7 @@ describe('Pagination', () => {
   it('ignores special clicks', () => {
     const refine = jest.fn();
     const wrapper = mount(<Pagination {...DEFAULT_PROPS} refine={refine} />);
-    const el = wrapper
-      .find('.ais-Pagination__itemLink')
-      .filterWhere(e => e.text() === '8');
+    const el = wrapper.find(Link).filterWhere(e => e.text() === '8');
     el.simulate('click', { button: 1 });
     el.simulate('click', { altKey: true });
     el.simulate('click', { ctrlKey: true });

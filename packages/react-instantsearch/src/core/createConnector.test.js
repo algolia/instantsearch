@@ -2,7 +2,9 @@
 /* eslint-disable no-console */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
+Enzyme.configure({ adapter: new Adapter() });
 
 import createConnector from './createConnector';
 
@@ -141,6 +143,8 @@ describe('createConnector', () => {
         },
       };
       listener();
+      wrapper.update();
+
       expect(getProvidedProps.mock.calls.length).toBe(2);
       const args = getProvidedProps.mock.calls[1];
       expect(args[0]).toEqual(props);

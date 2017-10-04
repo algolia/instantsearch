@@ -6,7 +6,8 @@
   },
   "main": "index.js",
   "module": "es/index.js",
-  "description": "⚡ Lightning-fast search for React and React Native apps, by Algolia",
+  "description":
+    "⚡ Lightning-fast search for React and React Native apps, by Algolia",
   "keywords": [
     "react",
     "search",
@@ -35,7 +36,8 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "enzyme": "2.9.1",
+    "enzyme": "3.0.0",
+    "enzyme-adapter-react-15": "1.0.0",
     "react": "15.6.2",
     "react-dom": "15.6.2",
     "react-native": "^0.46.3",
