@@ -3,6 +3,8 @@ options:
 files:
   include:
     '+(docgen|src)/**/*.scss'
+  ignore:
+    'docgen/src/stylesheets/vendors/**/*.scss'
 rules:
   # Extends
   extends-before-mixins: 1
