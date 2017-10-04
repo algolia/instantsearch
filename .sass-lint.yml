@@ -4,7 +4,8 @@ files:
   include:
     '+(docgen|src)/**/*.scss'
   ignore:
-    'docgen/src/stylesheets/vendors/**/*.scss'
+    - 'docgen/src/stylesheets/vendors/**/*.scss'
+    - 'docgen/node_modules/**/*.scss'
 rules:
   # Extends
   extends-before-mixins: 1
@@ -62,7 +63,7 @@ rules:
   empty-args: 1
   hex-length: 0
   hex-notation:
-    - 2
+    - 1
     -
       style: uppercase
   indentation: 1
