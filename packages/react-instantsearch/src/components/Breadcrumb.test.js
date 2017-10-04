@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { mount } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
+Enzyme.configure({ adapter: new Adapter() });
 
 import Breadcrumb from './Breadcrumb';
-
+import Link from './Link';
 describe('Breadcrumb', () => {
   it('outputs the default breadcrumb', () => {
     const tree = renderer
@@ -59,23 +61,40 @@ describe('Breadcrumb', () => {
       />
     );
 
-    const items = wrapper.find('.ais-Breadcrumb__itemLink');
-    expect(items.length).toBe(4);
+    const breadcrumb = wrapper.find('.ais-Breadcrumb__root');
 
-    items.first().simulate('click');
+    expect(breadcrumb.children().length).toBe(4);
+
+    breadcrumb
+      .children()
+      .first()
+      .find(Link)
+      .simulate('click');
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual();
 
-    items.at(1).simulate('click');
+    breadcrumb
+      .children()
+      .at(1)
+      .find(Link)
+      .simulate('click');
     expect(refine.mock.calls.length).toBe(2);
     expect(refine.mock.calls[1][0]).toEqual('white');
 
-    items.at(2).simulate('click');
+    breadcrumb
+      .children()
+      .at(2)
+      .find(Link)
+      .simulate('click');
     expect(refine.mock.calls.length).toBe(3);
     expect(refine.mock.calls[2][0]).toEqual('white > white1');
 
-    items.at(3).simulate('click');
-    expect(refine.mock.calls.length).toBe(3);
+    const lastItem = breadcrumb
+      .children()
+      .at(3)
+      .find(Link);
+
+    expect(lastItem.length).toBe(0);
 
     wrapper.unmount();
   });
@@ -107,10 +126,15 @@ describe('Breadcrumb', () => {
       />
     );
 
-    const items = wrapper.find('.ais-Breadcrumb__itemLink');
-    expect(items.length).toBe(4);
+    const breadcrumb = wrapper.find('.ais-Breadcrumb__root');
 
-    items.first().simulate('click');
+    expect(breadcrumb.children().length).toBe(4);
+
+    breadcrumb
+      .children()
+      .first()
+      .find(Link)
+      .simulate('click');
     expect(refine.mock.calls.length).toBe(0);
     expect(
       wrapper

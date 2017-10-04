@@ -3,8 +3,12 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { mount } from 'enzyme';
+import Enzyme, { mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
+Enzyme.configure({ adapter: new Adapter() });
+
 import Menu from './Menu';
+import Link from './Link';
 
 jest.mock('../widgets/Highlight', () => () => null);
 
@@ -131,7 +135,7 @@ describe('Menu', () => {
 
     expect(items.length).toBe(3);
 
-    const firstItem = items.first().find('.ais-Menu__itemLink');
+    const firstItem = items.first().find(Link);
 
     firstItem.simulate('click');
 
@@ -261,7 +265,7 @@ describe('Menu', () => {
       const firstItem = wrapper
         .find('.ais-Menu__item')
         .first()
-        .find('.ais-Menu__itemLink');
+        .find(Link);
       firstItem.simulate('click');
 
       expect(refine.mock.calls.length).toBe(1);

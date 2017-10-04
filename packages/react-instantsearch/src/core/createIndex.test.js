@@ -1,7 +1,9 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
 import React from 'react';
-import { shallow } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
+Enzyme.configure({ adapter: new Adapter() });
 
 import createIndex from './createIndex';
 import Index from './Index';

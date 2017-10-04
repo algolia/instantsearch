@@ -3,7 +3,10 @@
 import { createInstantSearch } from './createInstantSearchServer';
 import createConnector from './createConnector';
 import React from 'react';
-import { shallow } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
+Enzyme.configure({ adapter: new Adapter() });
+
 import createIndex from './createIndex';
 import { isEmpty } from 'lodash';
 import { SearchParameters } from 'algoliasearch-helper';
