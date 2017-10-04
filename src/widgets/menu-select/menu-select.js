@@ -107,7 +107,7 @@ menuSelect({
  * @example
  * search.addWidget(
  *   instantsearch.widgets.menuSelect({
- *     container: '#categories',
+ *     container: '#categories-menuSelect',
  *     attributeName: 'hierarchicalCategories.lvl0',
  *     limit: 10,
  *     templates: {
