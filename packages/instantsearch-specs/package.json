@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "./scripts/build.sh"
+    "build": "./scripts/build.sh",
+    "dev": "gulp & hugo server & wait"
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.0",
@@ -19,8 +20,13 @@
     "gulp-sass": "^3.1.0",
     "gulp-sourcemaps": "^2.6.1",
     "gulp-uglify": "^3.0.0",
+    "hugo": "^0.0.3",
     "run-sequence": "^2.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "engines": {
+    "node": "8.6.0",
+    "yarn": "1.1.0"
   }
 }

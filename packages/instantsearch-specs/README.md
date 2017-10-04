@@ -3,22 +3,16 @@
 ## Installation
 
 ```
-brew install hugo && npm install -g gulp-cli
+yarn
 ```
 
-## Launch demo site
+## Launch demo site + assets
 
 ```
-hugo server
+yarn dev
 ```
 
 Available at http://localhost:1313
-
-## Watch assets
-
-```
-gulp
-```
 
 ## Build demo site + assets
 
