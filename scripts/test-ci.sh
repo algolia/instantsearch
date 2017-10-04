@@ -9,7 +9,6 @@ npm test
 # we need to build to run functional tests
 NODE_ENV=production npm run build
 INDEX_PAGE=index npm run test:functional
-./scripts/validate-commit-msgs.sh
 
 # push the generated screenshots to Argos-CI.
 npm run argos
