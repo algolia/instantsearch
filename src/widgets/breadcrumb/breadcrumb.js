@@ -58,7 +58,7 @@ breadcrumb({
   container,
   attributes,
   [ autoHideContainer=true ],
-  [ cssClasses.{disabledLabel, home, item, label, root, separator}={} ],
+  [ cssClasses.{disabledLabel, home, label, root, separator}={} ],
   [ templates.{home, separator}]
   [ transformData.{item} ],
   
@@ -81,7 +81,7 @@ breadcrumb({
 
 /**
  * @typedef {Object} BreadcrumbTransforms
- * @property {function(object):object} [item] Method to change the object passed to the `item`. template
+ * @property {function(object):object} [item] Method to change the object passed to the `item` template
  */
 
 /**
@@ -92,16 +92,17 @@ breadcrumb({
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
  * @property {BreadcrumbTransforms} [transformData] Set of functions to transform the data passed to the templates.
- * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the breadcrumb.
+ * @property {boolean} [autoHideContainer=true] Hides the container when there are no items in the breadcrumb.
  * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  */
 
 /**
  * The breadcrumb widget is a secondary navigation scheme that allows the user to see where the current page is in relation to the website's hierarchy.
  * 
+ * It reduces the number of actions a user needs to take in order to get to a higher-level page and improve the findability of the app or website's sections and pages.
  * It is commonly used for websites with a large amount of data organized into categories with subcategories.
  *
- * All attributes (lvl0, lvl1 here) must be declared as [attributes for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
+ * All attributes (lvl0, lvl1 in this case) must be declared as [attributes for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
  * Algolia settings.
  *
  * @requirements
@@ -119,8 +120,8 @@ breadcrumb({
  * }
  * ```
  *
- * Every level must be specified entirely.
- * It's also possible to have multiple values per level, for example:
+ * Each level must be specified entirely.
+ * It's also possible to have multiple values per level, for instance:
  *
  * ```javascript
  * {
@@ -141,9 +142,8 @@ breadcrumb({
  *   instantsearch.widgets.Breadcrumb({
  *     container: '#breadcrumb',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
- *     templates: {
- *       header: {home: 'Home Page'}
- *     }
+ *     templates: { home: 'Home Page' }
+ *     rootPath: 'Cameras & Camcorders > Digital Cameras',
  *   })
  * );
  */

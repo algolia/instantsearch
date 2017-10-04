@@ -207,7 +207,6 @@ describe('connectBreadcrumb', () => {
   it('returns the correct URL version with 3 levels', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
-    // 3 levels
     const widget = makeWidget({
       attributes: [
         'hierarchicalCategories.lvl0',
@@ -217,7 +216,6 @@ describe('connectBreadcrumb', () => {
     });
 
     const config = widget.getConfiguration({});
-    // console.log(JSON.stringify(config, null, 2));
     const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
     helper.search = jest.fn();
 
@@ -234,8 +232,6 @@ describe('connectBreadcrumb', () => {
       'hierarchicalCategories.lvl0',
       'Cameras & Camcorders > Digital Cameras > Digital SLR Cameras'
     );
-    // console.log('helperstate', helper.state);
-    // retrieve a querie with 3 levels and a simplified object
     widget.render({
       results: new SearchResults(helper.state, [
         {

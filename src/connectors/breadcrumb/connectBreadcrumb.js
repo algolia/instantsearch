@@ -1,5 +1,6 @@
 import find from 'lodash/find';
 import isEqual from 'lodash/isEqual';
+import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {
@@ -35,26 +36,24 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
- * @typedef {Object} CustomBreadcrumbRenderingOptions
- * @property {function(item.value): string} createURL Creates an url for the next state for a clicked item.
- * @property {CustomBreadcrumbItem[]} items Values to be rendered.
+ * @typedef {Object} BreadcrumbRenderingOptions
+ * @property {function(item.value): string} createURL Creates an url for the next state for a clicked item. The special value `null` is used for the `Home` (or root) item of the breadcrumb and will return an empty array.
+ * @property {BreadcrumbItem[]} items Values to be rendered.
  * @property {function(item.value)} refine Sets the path of the hierarchical filter and triggers a new search.
  * @property {Object} widgetParams All original `CustomBreadcrumbWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
   * **Breadcrumb** connector provides the logic to build a custom widget
-  * that will give the user the ability to see the path in a hierarchical facet.
+  * that will give the user the ability to see the current path in a hierarchical facet.
   *
-  * This is commonly used for multi-level categorization of products on e-commerce
-  * websites.
+  * This is commonly used in websites that have a large amount of content organized in a hierarchical manner (usually e-commerce websites).
   * @type {Connector}
-  * @param {function(CustomBreadcrumbRenderingOptions, boolean)} renderFn Rendering function for the custom **Breadcrumb* widget.
+  * @param {function(BreadcrumbRenderingOptions, boolean)} renderFn Rendering function for the custom **Breadcrumb* widget.
   * @return {function(CustomBreadcrumbWidgetOptions)} Re-usable widget factory for a custom **Breadcrumb** widget.
   */
 export default function connectBreadcrumb(renderFn) {
-  // FIXME checkRendering
-
+  checkRendering(renderFn, usage);
   return (widgetParams = {}) => {
     const { attributes, separator = ' > ', rootPath = null } = widgetParams;
     const [hierarchicalFacetName] = attributes;
@@ -183,10 +182,6 @@ function prepareItems(obj) {
         result = result.concat(children);
       }
     }
-    // console.log(
-    //   'RESULT from prepareITEM BEFORE passing it in processArray',
-    //   result
-    // );
     return result;
   }, []);
 }
