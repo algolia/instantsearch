@@ -16,7 +16,7 @@ navigation:
  - text: About
    url: /about/
  - text: InstantSearch.js V2
-   url: https://community.algolia.com/instantsearch.js/v2/
+   url: ../v2/
 # Build settings
 markdown: kramdown
 
