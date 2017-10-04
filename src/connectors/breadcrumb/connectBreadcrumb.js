@@ -5,9 +5,9 @@ const usage = `Usage:
 var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {
   // params = {
   //   createURL,  
-  //   instantSearchInstance,
   //   items,
   //   refine,
+  //   instantSearchInstance,
   //   widgetParams,
   // }
 });
@@ -17,11 +17,11 @@ search.addWidget(
     [ rootPath = null ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectBreadcrumb.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectBreadcrumb.html
 `;
 
 /**
- * @typedef {Object} BreadcrumbItem
+ * @typedef {Object} CustomBreadcrumbItem
  * @property {string} name Name of the category or subcategory.
  * @property {string} value Value of breadcrumb item.
  */
@@ -35,9 +35,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  */
 
 /**
- * @typedef {Object} BreadcrumbRenderingOptions
+ * @typedef {Object} CustomBreadcrumbRenderingOptions
  * @property {function(item.value): string} createURL Creates an url for the next state for a clicked item.
- * @property {BreadcrumbItem[]} items Values to be rendered.
+ * @property {CustomBreadcrumbItem[]} items Values to be rendered.
  * @property {function(item.value)} refine Sets the path of the hierarchical filter and triggers a new search.
  * @property {Object} widgetParams All original `CustomBreadcrumbWidgetOptions` forwarded to the `renderFn`.
  */
@@ -49,10 +49,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
   * This is commonly used for multi-level categorization of products on e-commerce
   * websites.
   * @type {Connector}
-  * @param {function(BreadcrumbRenderingOptions)} renderFn Rendering function for the custom **Breadcrumb* widget.
+  * @param {function(CustomBreadcrumbRenderingOptions, boolean)} renderFn Rendering function for the custom **Breadcrumb* widget.
   * @return {function(CustomBreadcrumbWidgetOptions)} Re-usable widget factory for a custom **Breadcrumb** widget.
   */
 export default function connectBreadcrumb(renderFn) {
+  // FIXME checkRendering
+
   return (widgetParams = {}) => {
     const { attributes, separator = ' > ', rootPath = null } = widgetParams;
     const [hierarchicalFacetName] = attributes;
