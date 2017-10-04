@@ -32,10 +32,10 @@ class Breadcrumb extends PureComponent {
           </a>
         : <a
             className={cssClasses.label}
-            href={createURL(items[idx + 1].value)}
+            href={createURL(items[idx].value)}
             onClick={e => {
               e.preventDefault();
-              refine(items[idx + 1].value);
+              refine(items[idx].value);
             }}
           >
             {item.name}

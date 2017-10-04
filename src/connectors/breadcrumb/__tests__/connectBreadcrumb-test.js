@@ -147,7 +147,7 @@ describe('connectBreadcrumb', () => {
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toEqual([
-      { name: 'Decoration', value: 'Decoration' },
+      { name: 'Decoration', value: null },
     ]);
   });
 
@@ -362,14 +362,15 @@ describe('connectBreadcrumb', () => {
     });
     const { createURL, items } = rendering.mock.calls[1][0];
     const secondItemValue = items[1].value;
-    console.log(items);
+
     const stateForURL = createURL(secondItemValue);
+
     expect(stateForURL.hierarchicalFacetsRefinements).toEqual({
-      'hierarchicalCategories.lvl0': [secondItemValue],
+      'hierarchicalCategories.lvl0': ['Cameras & Camcorders > Digital Cameras'],
     });
-    const stateForHome = createURL([]);
+    const stateForHome = createURL(null);
     expect(stateForHome.hierarchicalFacetsRefinements).toEqual({
-      'hierarchicalCategories.lvl0': [[]],
+      'hierarchicalCategories.lvl0': [],
     });
   });
 
