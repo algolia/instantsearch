@@ -63,7 +63,7 @@ menuSelect({
 })`;
 
 /**
- * @typedef {Object} MenuCSSClasses
+ * @typedef {Object} MenuSelectCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
  * @property {string|string[]} [header] CSS class to add to the header element.
  * @property {string|string[]} [select] CSS class to add to the select element.
@@ -73,10 +73,10 @@ menuSelect({
 
 /**
  * @typedef {Object} MenuSelectTemplates
- * @property {string|Function} [header] Header template.
- * @property {string|Function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|function} [header] Header template.
+ * @property {string|function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
  * @property {string} [seeAllOption='See all'] Label of the see all option in the select.
- * @property {string|Function} [footer] Footer template.
+ * @property {string|function} [footer] Footer template.
  */
 
 /**
@@ -107,7 +107,7 @@ menuSelect({
  * @example
  * search.addWidget(
  *   instantsearch.widgets.menuSelect({
- *     container: '#categories',
+ *     container: '#categories-menuSelect',
  *     attributeName: 'hierarchicalCategories.lvl0',
  *     limit: 10,
  *     templates: {
