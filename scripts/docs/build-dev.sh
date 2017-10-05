@@ -19,7 +19,7 @@ mkdir -p docs
 
 
 # Package the examples in the website
-for example in docs/examples/*; do
+for example in docs/v2/examples/*; do
   if [ -d "$example" ]; then
     name=$(basename "$example")
     (cd "$example" && zip -r "../$name.zip" ./*)
@@ -27,6 +27,10 @@ for example in docs/examples/*; do
 done
 
 # Copy instantsearch.js builds to the website root
-cp dist/* docs
+cp dist/* docs/v2/
 
-# echo '/ /instantsearch.js/ 301' > docs/_site_preview/_redirects
+# Build dev-novel
+NODE_ENV=production webpack --config dev/webpack.config.js
+
+# Move dev-novel to website-root
+mv dev/dist docs/v2/dev-novel

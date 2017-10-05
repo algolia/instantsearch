@@ -1,6 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
-import Pagination from '../Pagination';
+import { RawPagination as Pagination } from '../Pagination';
 import renderer from 'react-test-renderer';
 
 describe('Pagination', () => {

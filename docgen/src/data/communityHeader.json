@@ -42,7 +42,7 @@
       "label": "InstantSearch.js",
       "logo": "",
       "caret": "",
-      "url":"https://community.algolia.com/instantsearch.js/v2/",
+      "url":"https://community.algolia.com/instantsearch.js/",
       "dropdownItems": []
     }
   },
@@ -79,8 +79,11 @@
       {
         "name": "Migrate from V1",
         "url": "guides/migration.html"
+      },
+      {
+        "name": "Integrate with Angular (2+)",
+        "url": "guides/angular-integration.html"
       }
-
     ]
   },
   {
@@ -105,10 +108,13 @@
   {
     "name": "<span class='hidden-sm'>Demos</span>",
     "url": "examples.html"
-  },{
+  },  {
+    "name": "v1 docs",
+    "url": "https://community.algolia.com/instantsearch.js/v1/"
+  }, {
     "name": "Github",
     "image": "<img src='assets/img/github-icon.svg'/>",
-    "url": "https://github.com/algolia/instantsearch.js/v2/"
+    "url": "https://github.com/algolia/instantsearch.js/"
   }],
   "mobileMenu": [{
     "name": "Getting Started",
@@ -145,6 +151,10 @@
   {
     "name": "Demos",
     "url": "examples.html"
+  },
+  {
+    "name": "v1 docs",
+    "url": "https://community.algolia.com/instantsearch.js/v1/"
   }],
   "docSearch": {
     "input_selector": "searchbox",

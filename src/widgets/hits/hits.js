@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import Hits from '../../components/Hits.js';
@@ -34,7 +33,7 @@ const renderer = ({
     return;
   }
 
-  ReactDOM.render(
+  render(
     <Hits
       cssClasses={cssClasses}
       hits={receivedHits}
@@ -63,7 +62,7 @@ hits({
 /**
  * @typedef {Object} HitsTemplates
  * @property {string|function(object):string} [empty=''] Template to use when there are no results.
- * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record.
+ * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record. The record will have a new property `__hitIndex` for the position of the record in the list of displayed hits.
  * @property {string|function(object):string} [allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
  */
 

@@ -2,6 +2,8 @@
 
 set -e # exit when error
 
+mkdir -p dist
+
 echo "➡️  Installing dependencies"
 
 (cd docgen && yarn) & yarn

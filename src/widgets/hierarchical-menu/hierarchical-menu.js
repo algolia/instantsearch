@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
@@ -38,7 +37,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && items.length === 0;
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
@@ -118,8 +117,14 @@ hierarchicalMenu({
  *
  * It is commonly used for categories with subcategories.
  *
- * This widget requires the data to be formatted in a specific way. Each level should be represented
- * as a single attribute. Each attribute represent a path in the hierarchy. Example:
+ * All attributes (lvl0, lvl1 here) must be declared as [attributes for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
+ * Algolia settings.
+ *
+ * By default, the separator we expect is ` > ` (with spaces) but you can use
+ * a different one by using the `separator` option.
+ * @requirements
+ * Your objects must be formatted in a specific way to be
+ * able to display hierarchical menus. Here's an example:
  *
  * ```javascript
  * {
@@ -132,7 +137,19 @@ hierarchicalMenu({
  * }
  * ```
  *
- * By default, the separator is ` > ` but it can be different and specified with the `separator` option.
+ * Every level must be specified entirely.
+ * It's also possible to have multiple values per level, for example:
+ *
+ * ```javascript
+ * {
+ *   "objectID": "123",
+ *   "name": "orange",
+ *   "categories": {
+ *     "lvl0": ["fruits", "vitamins"],
+ *     "lvl1": ["fruits > citrus", "vitamins > C"]
+ *   }
+ * }
+ * ```
  * @type {WidgetFactory}
  * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.

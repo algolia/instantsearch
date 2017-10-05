@@ -13,7 +13,7 @@ const __DEV__ = process.env.NODE_ENV === 'development';
 const clean = arr => arr.filter(item => item !== false);
 
 module.exports = {
-  devtool: __DEV__ ? 'cheap-eval-source-map' : 'source-map',
+  devtool: __DEV__ ? 'cheap-module-source-map' : 'source-map',
 
   entry: __DEV__
     ? {
@@ -130,7 +130,9 @@ module.exports = {
         filename: '[name].[hash].js',
         entry: {
           vendor: [
-            ...Object.keys(require('../package.json').dependencies),
+            ...Object.keys(require('../package.json').dependencies).filter(
+              pkg => !pkg.includes('rheostat')
+            ),
             'dev-novel',
           ],
         },

@@ -16,7 +16,7 @@ all the logic needed for making search widgets. Each one of them is specialized
 to make a certain type of widget.
 
 If you want to create a type of widget that is not available, you should then
-create a [custom widget]()
+create a [custom widget](guides/custom-widget.html).
 
 ## Anatomy of a connector
 

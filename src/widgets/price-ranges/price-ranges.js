@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import PriceRanges from '../../components/PriceRanges/PriceRanges.js';
@@ -35,7 +34,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && items.length === 0;
 
-  ReactDOM.render(
+  render(
     <PriceRanges
       collapsible={collapsible}
       cssClasses={cssClasses}
@@ -104,9 +103,15 @@ priceRanges({
  */
 
 /**
- * Price ranges widget let the user choose from of a set of predefined ranges. The ranges are
+ * Price ranges widget lets the user choose from of a set of predefined ranges. The ranges are
  * displayed in a list.
  *
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
+ *
+ * The values inside this attribute must be JavaScript numbers (not strings).
  * @type {WidgetFactory}
  * @category filter
  * @param {PriceRangeWidgetOptions} $0 The PriceRanges widget options.

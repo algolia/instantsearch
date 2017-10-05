@@ -26,6 +26,7 @@ export default (initWidget, opts = {}) => container => {
       container: '#results-search-box-container',
       placeholder: 'Search into our furnitures',
       poweredBy: false,
+      autofocus: false,
     })
   );
 

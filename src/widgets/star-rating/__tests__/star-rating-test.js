@@ -26,7 +26,7 @@ describe('starRating()', () => {
 
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
-    starRating.__Rewire__('ReactDOM', ReactDOM);
+    starRating.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     widget = starRating({

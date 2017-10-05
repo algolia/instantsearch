@@ -52,15 +52,15 @@ describe('PriceRangesForm', () => {
       );
 
       // When
-      component.refs.from.value = 10;
-      TestUtils.Simulate.change(component.refs.from);
-      component.refs.to.value = 20;
-      TestUtils.Simulate.change(component.refs.to);
-      TestUtils.Simulate.submit(component.refs.form);
+      component.from.value = 10;
+      TestUtils.Simulate.change(component.from);
+      component.to.value = 20;
+      TestUtils.Simulate.change(component.to);
+      TestUtils.Simulate.submit(component.form);
 
       // Then
       expect(handleSubmitMock.calledOnce).toBe(true);
-      expect(refine.calledWith(10, 20)).toBe(true);
+      expect(refine.calledWith({ from: 10, to: 20 })).toBe(true);
     });
   });
 });

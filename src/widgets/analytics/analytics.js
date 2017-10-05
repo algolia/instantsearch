@@ -13,8 +13,9 @@ analytics({
  * The `qs` parameter contains the parameters serialized as a query string. The `state` contains the
  * whole search state, and the `results` the last results received.
  * @property {number} [delay=3000] Number of milliseconds between last search key stroke and calling pushFunction.
- * @property {boolean} [triggerOnUIInteraction=false] Trigger pushFunction after click on page or. redirecting the page
- * @property {boolean} [pushInitialSearch=true] Trigger pushFunction after the initial search.
+ * @property {boolean} [triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
+ * @property {boolean} [pushInitialSearch=true] Trigger pushFunction after the initial search
+ * @property {boolean} [pushPagination=false] Trigger pushFunction on pagination
  */
 
 /**
@@ -64,6 +65,7 @@ function analytics(
     delay = 3000,
     triggerOnUIInteraction = false,
     pushInitialSearch = true,
+    pushPagination = false,
   } = {}
 ) {
   if (!pushFunction) {
@@ -153,7 +155,10 @@ function analytics(
 
     formattedParams = formattedParams.join('&');
 
-    const dataToSend = `Query: ${state.state.query}, ${formattedParams}`;
+    let dataToSend = `Query: ${state.state.query}, ${formattedParams}`;
+    if (pushPagination === true) {
+      dataToSend += `, Page: ${state.state.page}`;
+    }
 
     if (lastSentData !== dataToSend) {
       pushFunction(formattedParams, state.state, state.results);

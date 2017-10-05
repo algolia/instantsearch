@@ -31,9 +31,6 @@ import * as widgets from '../widgets/index.js';
  * 'index', 'page', 'hitsPerPage']`. `attribute:*` means all the faceting attributes will be tracked. You
  * can track only some of them by using [..., 'attribute:color', 'attribute:categories']. All other possible
  * values are all the [attributes of the Helper SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
- *
- * There's a special `is_v` parameter that will get added everytime, it tracks the version of instantsearch.js
- * linked to the url.
  * @property {boolean} [useHash] If set to true, the url will be
  * hash based. Otherwise, it'll use the query parameters using the modern
  * history API.

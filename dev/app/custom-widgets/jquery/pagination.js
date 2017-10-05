@@ -25,8 +25,10 @@ const renderFn = (
   });
 
   if (nbPages > 0) {
-    const pages = Array(...{ length: nbPages }).map(Number.call, Number).map(
-      page => `
+    const pages = Array(...{ length: nbPages })
+      .map(Number.call, Number)
+      .map(
+        page => `
         <li ${page === currentRefinement ? 'class="active"' : ''}>
           <a
             href="${createURL(page)}"
@@ -36,7 +38,7 @@ const renderFn = (
           </a>
         </li>
       `
-    );
+      );
 
     containerNode.find('ul.pagination').html(pages.join(''));
 

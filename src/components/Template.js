@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 import hogan from 'hogan.js';
 
 import curry from 'lodash/curry';

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Slider should render correctly 1`] = `
+exports[`Slider expect to render correctly 1`] = `
 <div
   style={
     Object {
@@ -458,6 +458,103 @@ exports[`Slider should render correctly 1`] = `
               500
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Slider expect to render without pips 1`] = `
+<div
+  style={
+    Object {
+      "display": "",
+    }
+  }
+>
+  <div
+    className="ais-root"
+  >
+    <div
+      className="ais-body"
+    >
+      <div
+        className=""
+      >
+        <div
+          className="rheostat rheostat-horizontal "
+          onClick={[Function]}
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="rheostat-background"
+          />
+          <div
+            aria-disabled={false}
+            aria-valuemax={500}
+            aria-valuemin={0}
+            aria-valuenow={0}
+            className="ais-range-slider--handle rheostat-handle ais-range-slider--handle-lower"
+            data-handle-key={0}
+            onClick={undefined}
+            onKeyDown={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+            role="slider"
+            style={
+              Object {
+                "left": "0%",
+                "position": "absolute",
+              }
+            }
+            tabIndex={0}
+          >
+            <div
+              className="ais-range-slider--tooltip"
+            >
+              0
+            </div>
+          </div>
+          <div
+            aria-disabled={false}
+            aria-valuemax={500}
+            aria-valuemin={0}
+            aria-valuenow={0}
+            className="ais-range-slider--handle rheostat-handle ais-range-slider--handle-upper"
+            data-handle-key={1}
+            onClick={undefined}
+            onKeyDown={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+            role="slider"
+            style={
+              Object {
+                "left": "0%",
+                "position": "absolute",
+              }
+            }
+            tabIndex={0}
+          >
+            <div
+              className="ais-range-slider--tooltip"
+            >
+              0
+            </div>
+          </div>
+          <div
+            className="rheostat-progress"
+            style={
+              Object {
+                "left": "0%",
+                "width": "0%",
+              }
+            }
+          />
         </div>
       </div>
     </div>

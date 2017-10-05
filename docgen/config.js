@@ -2,6 +2,7 @@ var algoliaComponents = require('algolia-frontend-components');
 var fs = require('fs');
 
 import {rootPath} from './path';
+import pkg from '../package.json';
 
 const prod = process.env.NODE_ENV === 'production';
 
@@ -15,6 +16,7 @@ var header = algoliaComponents.communityHeader(content, {
 
 export default {
   docsDist:  rootPath('docs'),
-  publicPath: prod ? '/instantsearch.js/v2/' : '/',
-  header: header
+  publicPath: prod ? '/instantsearch.js/v2/' : '/v2/',
+  header: header,
+  pkg
 };

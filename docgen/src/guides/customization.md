@@ -42,7 +42,7 @@ Let's go step by step on how to write this custom widget.
 
 ## A custom menu with jQuery
 
-In this example we will create a new custom widget using [connectMenu](/connectors.html#connectMenu) connector.
+In this example we will create a new custom widget using [connectMenu](connectors/connectMenu.html) connector.
 We will cover step by step on how to write a render function used by the connector.
 
 For simplicity, we will write custom widgets with [jQuery](https://jquery.com/) to manipulate the DOM.
@@ -261,6 +261,8 @@ With this steps we introduced a way to provide custom parameters:
 
 And voilà, we have covered how to write a simple custom widget using connectors 🎉 !
 
-Now you can [read more about connectors](/connectors.html) in the docs and create more advance usages with the same simplicity.
+Now you can [read more about connectors](../connectors.html) in the docs and create more advanced usages with the same simplicity.  
+
+
 
 Feel free to share with the [community](https://discourse.algolia.com) your custom widgets 🙏

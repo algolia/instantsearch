@@ -1,3 +1,98 @@
+<a name="2.1.6"></a>
+## [2.1.6](https://github.com/algolia/instantsearch.js/compare/v2.1.5...v2.1.6) (2017-09-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency documentation to v^5.0.0 ([#2355](https://github.com/algolia/instantsearch.js/issues/2355)) ([489647a](https://github.com/algolia/instantsearch.js/commit/489647a))
+* **searchbox:** use initial input value if provided in the dom ([#2342](https://github.com/algolia/instantsearch.js/issues/2342)) ([180902a](https://github.com/algolia/instantsearch.js/commit/180902a)), closes [#2289](https://github.com/algolia/instantsearch.js/issues/2289)
+
+
+
+<a name="2.1.5"></a>
+## [2.1.5](https://github.com/algolia/instantsearch.js/compare/v2.1.4...v2.1.5) (2017-09-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency algolia-frontend-components to v^0.0.33 ([#2341](https://github.com/algolia/instantsearch.js/issues/2341)) ([16994d8](https://github.com/algolia/instantsearch.js/commit/16994d8))
+* **price-ranges:** update call to refine ([#2377](https://github.com/algolia/instantsearch.js/issues/2377)) ([34915d7](https://github.com/algolia/instantsearch.js/commit/34915d7))
+* **slider:** Fix range slider pips and value 0 ([#2350](https://github.com/algolia/instantsearch.js/issues/2350)) ([fa0dc09](https://github.com/algolia/instantsearch.js/commit/fa0dc09)), closes [#2343](https://github.com/algolia/instantsearch.js/issues/2343)
+
+
+
+<a name="2.1.4"></a>
+## [2.1.4](https://github.com/algolia/instantsearch.js/compare/v2.1.3...v2.1.4) (2017-09-14)
+
+
+### Bug Fixes
+
+* **release-script:** Add the generation of changelog for the release ([#2333](https://github.com/algolia/instantsearch.js/issues/2333)) ([9a2f70b](https://github.com/algolia/instantsearch.js/commit/9a2f70b))
+* **slider:** edge case when min > max ([#2336](https://github.com/algolia/instantsearch.js/issues/2336)) ([8830ab0](https://github.com/algolia/instantsearch.js/commit/8830ab0))
+* **slider:** Fix range slider dev env ([#2320](https://github.com/algolia/instantsearch.js/issues/2320)) ([e78de70](https://github.com/algolia/instantsearch.js/commit/e78de70))
+* **slider:** use algolia fork of rheostat ([#2335](https://github.com/algolia/instantsearch.js/issues/2335)) ([9eae009](https://github.com/algolia/instantsearch.js/commit/9eae009))
+
+
+
+<a name="2.1.3"></a>
+## [2.1.3](https://github.com/algolia/instantsearch.js/compare/v2.1.2...v2.1.3) (2017-09-05)
+
+
+### Bug Fixes
+
+* **Pagination:** add `autohideContainerHOC` to <Pagination /> ([#2296](https://github.com/algolia/instantsearch.js/issues/2296)) ([545f076](https://github.com/algolia/instantsearch.js/commit/545f076))
+* **sffv:** no error when not providing noResults and no results ([#2310](https://github.com/algolia/instantsearch.js/issues/2310)) ([cc02b71](https://github.com/algolia/instantsearch.js/commit/cc02b71)), closes [#2087](https://github.com/algolia/instantsearch.js/issues/2087)
+
+
+
+<a name="2.1.2"></a>
+## [2.1.2](https://github.com/algolia/instantsearch.js/compare/v2.1.1...v2.1.2) (2017-08-24)
+
+
+### Bug Fixes
+
+* **es:** wrong path to files ([#2295](https://github.com/algolia/instantsearch.js/issues/2295)) ([a437e19](https://github.com/algolia/instantsearch.js/commit/a437e19))
+
+
+
+<a name="2.1.1"></a>
+## [2.1.1](https://github.com/algolia/instantsearch.js/compare/v2.1.0...v2.1.1) (2017-08-23)
+
+
+### Bug Fixes
+
+* **build:** provide unminified css as well ([#2292](https://github.com/algolia/instantsearch.js/issues/2292)) ([a79e067](https://github.com/algolia/instantsearch.js/commit/a79e067))
+
+
+
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/algolia/instantsearch.js/compare/v2.1.0-beta.4...v2.1.0) (2017-08-21)
+
+
+### Bug Fixes
+
+* **nvmrc:** upgrade nodejs version ([#2291](https://github.com/algolia/instantsearch.js/issues/2291)) ([94529d4](https://github.com/algolia/instantsearch.js/commit/94529d4))
+
+
+
+<a name="2.0.2"></a>
+## [2.0.2](https://github.com/algolia/instantsearch.js/compare/v2.0.1...v2.0.2) (2017-07-24)
+
+
+### Bug Fixes
+
+* **doc:** Cosmetic change ([48bb128](https://github.com/algolia/instantsearch.js/commit/48bb128))
+* **search-box:** fix magnifier and reset customization ([4adfade](https://github.com/algolia/instantsearch.js/commit/4adfade))
+* **theme:** enforce box-sizing: border-box ([e26e50d](https://github.com/algolia/instantsearch.js/commit/e26e50d))
+* **url-sync:** remove is_v from url ([f19a1d5](https://github.com/algolia/instantsearch.js/commit/f19a1d5)), closes [#2233](https://github.com/algolia/instantsearch.js/issues/2233)
+
+
+
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/algolia/instantsearch.js/compare/v2.0.0...v2.0.1) (2017-07-12)
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/algolia/instantsearch.js/compare/v1.11.15...v2.0.0) (2017-07-01)
 

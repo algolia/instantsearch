@@ -1,11 +1,9 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-import version from '../lib/version.js';
 import urlHelper from 'algoliasearch-helper/src/url';
 import isEqual from 'lodash/isEqual';
 import assign from 'lodash/assign';
 
 const AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
-const majorVersionNumber = version.split('.')[0];
 
 function timerMaker(t0) {
   let t = t0;
@@ -159,8 +157,6 @@ class URLSync {
       currentQueryString,
       { mapping: this.mapping }
     );
-    // eslint-disable-next-line camelcase
-    foreignConfig.is_v = majorVersionNumber;
 
     const qs = urlHelper.getQueryStringFromState(
       state.filter(this.trackedParameters),
@@ -180,15 +176,8 @@ class URLSync {
   // External API's
 
   createURL(state, { absolute }) {
-    const currentQueryString = this.urlUtils.readUrl();
     const filteredState = state.filter(this.trackedParameters);
-    const foreignConfig = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(
-      currentQueryString,
-      { mapping: this.mapping }
-    );
-    // Add instantsearch version to reconciliate old url with newer versions
-    // eslint-disable-next-line camelcase
-    foreignConfig.is_v = majorVersionNumber;
+
     const relative = this.urlUtils.createURL(
       algoliasearchHelper.url.getQueryStringFromState(filteredState, {
         mapping: this.mapping,
@@ -230,8 +219,9 @@ class URLSync {
  */
 function urlSync(options = {}) {
   const useHash = options.useHash || false;
+  const customUrlUtils = options.urlUtils;
 
-  const urlUtils = useHash ? hashUrlUtils : modernUrlUtils;
+  const urlUtils = customUrlUtils || (useHash ? hashUrlUtils : modernUrlUtils);
 
   return new URLSync(urlUtils, options);
 }

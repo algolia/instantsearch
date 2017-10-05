@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import defaultTemplates from './defaultTemplates.js';
@@ -54,7 +53,7 @@ const renderer = ({
   }));
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
@@ -126,10 +125,11 @@ menu({
 /**
  * @typedef {Object} MenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string} attributeName Name of the attribute for faceting/
+ * @property {string} attributeName Name of the attribute for faceting
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ * @property {MenuTemplates} [templates] Customize the output through templating.
  * @property {string} [limit=10] How many facets values to retrieve [*].
  * @property {boolean|MenuShowMoreOptions} [showMore=false] Limit the number of results and display a showMore button.
  * @property {MenuShowMoreTemplates} [templates] Templates to use for the widget.
@@ -140,7 +140,13 @@ menu({
  */
 
 /**
- * Create a menu out of a facet
+ * Create a menu based on a facet. A menu displays facet values and let the user selects only one value at a time.
+ * It also displays an empty value which lets the user "unselect" any previous selection.
+ *
+ * @requirements
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
  * @type {WidgetFactory}
  * @category filter
  * @param {MenuWidgetOptions} $0 The Menu widget options.

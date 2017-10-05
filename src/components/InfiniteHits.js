@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 import Hits from './Hits.js';
 
 class InfiniteHits extends React.Component {
@@ -12,13 +12,11 @@ class InfiniteHits extends React.Component {
       showMoreLabel,
       templateProps,
     } = this.props;
-    const btn = this.props.isLastPage
-      ? <button disabled>
-          {showMoreLabel}
-        </button>
-      : <button onClick={showMore}>
-          {showMoreLabel}
-        </button>;
+    const btn = this.props.isLastPage ? (
+      <button disabled>{showMoreLabel}</button>
+    ) : (
+      <button onClick={showMore}>{showMoreLabel}</button>
+    );
 
     return (
       <div>
@@ -28,9 +26,7 @@ class InfiniteHits extends React.Component {
           results={results}
           templateProps={templateProps}
         />
-        <div className={cssClasses.showmore}>
-          {btn}
-        </div>
+        <div className={cssClasses.showmore}>{btn}</div>
       </div>
     );
   }

@@ -9,6 +9,12 @@ const inquirer = require('inquirer');
 const shell = require('shelljs');
 shell.fatal = true;
 
+const {
+  updateChangelog,
+  getChangelog,
+  showChangelog,
+} = require('./conventionalChangelog.js');
+
 // check if user can publish new version to npm
 const { code: isNotOwner } = shell.exec('$(npm owner add `npm whoami`)', {
   silent: true,
@@ -124,6 +130,8 @@ inquirer
     `)
     );
 
+    showChangelog(shell);
+
     inquirer
       .prompt([
         {
@@ -156,17 +164,7 @@ inquirer
 
         // update changelog
         shell.echo(colors.blue('Update changelog'));
-        const changelog = shell
-          .exec('conventional-changelog -p angular')
-          .toString()
-          .trim();
-
-        shell.echo('\nNext version changelog:');
-        const changelogContent = shell.exec(
-          'conventional-changelog -u -n scripts/conventional-changelog/',
-          { silent: true }
-        );
-        shell.echo(colors.white(changelogContent));
+        const changelog = getChangelog(shell);
 
         // regenerate README TOC
         shell.echo(colors.blue('Generate TOCS'));
@@ -174,6 +172,11 @@ inquirer
 
         // regenerate yarn.lock
         shell.exec('yarn');
+
+        // Update the changelog if stable
+        if (strategy === 'stable') {
+          updateChangelog(shell);
+        }
 
         // git add and tag
         const commitMessage = `v${newVersion}\n\n${changelog}`;
@@ -207,6 +210,7 @@ inquirer
               shell.exec('git push origin master');
               shell.exec('git push origin --tags');
               shell.exec('npm publish');
+              shell.exec(`VERSION=${newVersion} npm run docs:publish`);
               shell.exec('git checkout develop');
               shell.exec('git pull origin develop');
               shell.exec('git merge master');
@@ -216,13 +220,6 @@ inquirer
               shell.exec('git push origin --tags');
               shell.exec('npm publish --tag beta');
             }
-
-            shell.echo(
-              colors.green(`
-              Package was published to npm.
-              A job on travis-ci will be automatically launched to finalize the release.
-              `)
-            );
 
             return process.exit(0);
           });

@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import filter from 'lodash/filter';
 
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
 import defaultTemplates from './defaultTemplates.js';
+import sffvDefaultTemplates from './defaultTemplates.searchForFacetValue.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
 
 import {
@@ -58,7 +58,7 @@ const renderer = ({
     header: { refinedFacetsCount: filter(items, { isRefined: true }).length },
   };
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
@@ -196,6 +196,15 @@ refinementList({
  *
  * This widget also implements search for facet values, which is a mini search inside the
  * values of the facets. This makes easy to deal with uncommon facet values.
+ *
+ * @requirements
+ *
+ * The attribute passed to `attributeName` must be declared as an
+ * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
+ * in your Algolia settings.
+ *
+ * If you also want to use search for facet values on this attribute, then [declare it accordingly](https://www.algolia.com/doc/guides/searching/faceting/#search-for-facet-values).
+ *
  * @type {WidgetFactory}
  * @category filter
  * @param {RefinementListWidgetOptions} $0 The RefinementList widget options that you use to customize the widget.
@@ -244,7 +253,7 @@ export default function refinementList(
     ? prefixKeys('show-more-', showMoreConfig.templates)
     : {};
   const searchForValuesTemplates = searchForFacetValues
-    ? searchForFacetValues.templates
+    ? searchForFacetValues.templates || sffvDefaultTemplates
     : {};
   const allTemplates = {
     ...templates,

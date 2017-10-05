@@ -49,6 +49,20 @@ export default () => {
     })
   );
 
+  storiesOf('Menu').add(
+    'select',
+    wrapWithHits(containerNode => {
+      window.search.addWidget(
+        vanillaWidgets.selectMenu({
+          containerNode,
+          attributeName: 'brand',
+          limit: 10,
+          title: 'Brands',
+        })
+      );
+    })
+  );
+
   storiesOf('RefinementList').add(
     'default',
     wrapWithHits(containerNode => {

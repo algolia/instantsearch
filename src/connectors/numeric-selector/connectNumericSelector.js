@@ -156,10 +156,10 @@ export default function connectNumericSelector(renderFn) {
         // is not sending a SearchParameters. There's no way given how we built the helper
         // to initialize a true partial state where only the refinements are present
         return state &&
-        state.numericRefinements &&
-        state.numericRefinements[attributeName] !== undefined &&
-        state.numericRefinements[attributeName][operator] !== undefined &&
-        state.numericRefinements[attributeName][operator][0] !== undefined // could be 0
+          state.numericRefinements &&
+          state.numericRefinements[attributeName] !== undefined &&
+          state.numericRefinements[attributeName][operator] !== undefined &&
+          state.numericRefinements[attributeName][operator][0] !== undefined // could be 0
           ? state.numericRefinements[attributeName][operator][0]
           : options[0].value;
       },

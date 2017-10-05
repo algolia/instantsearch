@@ -73,7 +73,7 @@ search.addWidget({
 });
 ```
 
-A widget is valid as long as it implements at least `search` or `init`.
+A widget is valid as long as it implements at least `render` or `init`.
 
 ## Interacting with the Search State
 
