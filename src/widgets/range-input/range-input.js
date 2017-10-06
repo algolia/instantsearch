@@ -37,7 +37,7 @@ const renderer = ({
   const { min: rangeMin, max: rangeMax } = range;
   const [minValue, maxValue] = start;
 
-  const step = 1 / 10 ** widgetParams.precision;
+  const step = 1 / Math.pow(10, widgetParams.precision);
   const shouldAutoHideContainer = autoHideContainer && rangeMin === rangeMax;
 
   const values = {
