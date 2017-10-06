@@ -74,7 +74,7 @@ menuSelect({
 /**
  * @typedef {Object} MenuSelectTemplates
  * @property {string|function} [header] Header template.
- * @property {string|function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|function(label: string, count: number, isRefined: boolean, value: string)} [item] Item template, provided with `label`, `count`, `isRefined` and `value` data properties.
  * @property {string} [seeAllOption='See all'] Label of the see all option in the select.
  * @property {string|function} [footer] Footer template.
  */
