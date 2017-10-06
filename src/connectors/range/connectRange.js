@@ -118,9 +118,9 @@ export default function connectRange(renderFn) {
         return [min, max];
       },
 
-      _refine(helper, range = {}) {
+      _refine(helper, currentRange = {}) {
         return ([nextMin, nextMax] = []) => {
-          const { min: rangeMin, max: rangeMax } = range;
+          const { min: currentRangeMin, max: currentRangeMax } = currentRange;
 
           const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
           const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
@@ -129,7 +129,7 @@ export default function connectRange(renderFn) {
           const nextMaxAsNumber = parseFloat(nextMax);
 
           let newNextMin;
-          if (!hasMinBound && rangeMin === nextMinAsNumber) {
+          if (!hasMinBound && currentRangeMin === nextMinAsNumber) {
             newNextMin = undefined;
           } else if (hasMinBound && !_isFinite(nextMinAsNumber)) {
             newNextMin = minBound;
@@ -138,7 +138,7 @@ export default function connectRange(renderFn) {
           }
 
           let newNextMax;
-          if (!hasMaxBound && rangeMax === nextMaxAsNumber) {
+          if (!hasMaxBound && currentRangeMax === nextMaxAsNumber) {
             newNextMax = undefined;
           } else if (hasMaxBound && !_isFinite(nextMaxAsNumber)) {
             newNextMax = maxBound;
@@ -149,13 +149,13 @@ export default function connectRange(renderFn) {
           if (min !== newNextMin || max !== newNextMax) {
             helper.clearRefinements(attributeName);
 
-            const isValidMinRange = _isFinite(rangeMin);
-            const isGreatherThanRange =
-              isValidMinRange && rangeMin <= newNextMin;
+            const isValidMinCurrentRange = _isFinite(currentRangeMin);
+            const isGreatherThanCurrentRange =
+              isValidMinCurrentRange && currentRangeMin <= newNextMin;
 
             if (
               _isFinite(newNextMin) &&
-              (!isValidMinRange || isGreatherThanRange)
+              (!isValidMinCurrentRange || isGreatherThanCurrentRange)
             ) {
               helper.addNumericRefinement(
                 attributeName,
@@ -164,12 +164,13 @@ export default function connectRange(renderFn) {
               );
             }
 
-            const isValidMaxRange = _isFinite(rangeMax);
-            const isLowerThanRange = isValidMaxRange && rangeMax >= newNextMax;
+            const isValidMaxCurrentRange = _isFinite(currentRangeMax);
+            const isLowerThanRange =
+              isValidMaxCurrentRange && currentRangeMax >= newNextMax;
 
             if (
               _isFinite(newNextMax) &&
-              (!isValidMaxRange || isLowerThanRange)
+              (!isValidMaxCurrentRange || isLowerThanRange)
             ) {
               helper.addNumericRefinement(
                 attributeName,
@@ -219,7 +220,7 @@ export default function connectRange(renderFn) {
 
       init({ helper, instantSearchInstance }) {
         const stats = {};
-        const range = this._getCurrentRange(stats);
+        const currentRange = this._getCurrentRange(stats);
         const start = this._getCurrentRefinement(helper);
 
         renderFn(
@@ -229,11 +230,11 @@ export default function connectRange(renderFn) {
             // related to it
             refine: this._refine(helper, {}),
             format: rangeFormatter,
+            range: currentRange,
             widgetParams: {
               ...widgetParams,
               precision,
             },
-            range,
             start,
             instantSearchInstance,
           },
@@ -246,18 +247,18 @@ export default function connectRange(renderFn) {
         const facet = find(facetsFromResults, { name: attributeName });
         const stats = facet && facet.stats;
 
-        const range = this._getCurrentRange(stats);
+        const currentRange = this._getCurrentRange(stats);
         const start = this._getCurrentRefinement(helper);
 
         renderFn(
           {
-            refine: this._refine(helper, range),
+            refine: this._refine(helper, currentRange),
             format: rangeFormatter,
+            range: currentRange,
             widgetParams: {
               ...widgetParams,
               precision,
             },
-            range,
             start,
             instantSearchInstance,
           },
