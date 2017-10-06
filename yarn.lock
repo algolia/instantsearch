@@ -8337,12 +8337,12 @@ postcss-zindex@^2.0.1:
     postcss "^5.0.4"
     uniqs "^2.0.0"
 
-postcss@6.0.12:
-  version "6.0.12"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.12.tgz#6b0155089d2d212f7bd6a0cecd4c58c007403535"
+postcss@6.0.13, postcss@^6.0.1, postcss@^6.0.11, postcss@^6.0.2, postcss@^6.0.3:
+  version "6.0.13"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.13.tgz#b9ecab4ee00c89db3ec931145bd9590bbf3f125f"
   dependencies:
     chalk "^2.1.0"
-    source-map "^0.5.7"
+    source-map "^0.6.1"
     supports-color "^4.4.0"
 
 postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0.14, postcss@^5.0.16, postcss@^5.0.2, postcss@^5.0.4, postcss@^5.0.5, postcss@^5.0.6, postcss@^5.0.8, postcss@^5.2.16:
@@ -8353,14 +8353,6 @@ postcss@^5.0.10, postcss@^5.0.11, postcss@^5.0.12, postcss@^5.0.13, postcss@^5.0
     js-base64 "^2.1.9"
     source-map "^0.5.6"
     supports-color "^3.2.3"
-
-postcss@^6.0.1, postcss@^6.0.11, postcss@^6.0.2, postcss@^6.0.3:
-  version "6.0.13"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-6.0.13.tgz#b9ecab4ee00c89db3ec931145bd9590bbf3f125f"
-  dependencies:
-    chalk "^2.1.0"
-    source-map "^0.6.1"
-    supports-color "^4.4.0"
 
 prelude-ls@~1.1.2:
   version "1.1.2"
@@ -9957,7 +9949,7 @@ source-map@0.5.6:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
 
-source-map@^0.5.3, source-map@^0.5.6, source-map@^0.5.7, source-map@~0.5.0, source-map@~0.5.1, source-map@~0.5.3, source-map@~0.5.6:
+source-map@^0.5.3, source-map@^0.5.6, source-map@~0.5.0, source-map@~0.5.1, source-map@~0.5.3, source-map@~0.5.6:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
 
