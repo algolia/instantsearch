@@ -36,7 +36,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "enzyme": "3.0.0",
+    "enzyme": "3.1.0",
     "enzyme-adapter-react-15": "1.0.0",
     "react": "15.6.2",
     "react-dom": "15.6.2",
