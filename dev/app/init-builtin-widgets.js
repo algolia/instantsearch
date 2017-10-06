@@ -728,13 +728,13 @@ export default () => {
       })
     )
     .add(
-      'with integer only',
+      'with floating number',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.rangeInput({
             container,
             attributeName: 'price',
-            precision: 0,
+            precision: 2,
             templates: {
               header: 'Range input',
             },
