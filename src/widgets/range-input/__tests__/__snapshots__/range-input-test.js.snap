@@ -29,7 +29,7 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
   min={0}
   refine={[Function]}
   shouldAutoHideContainer={true}
-  step={0.01}
+  step={1}
   templateProps={
     Object {
       "templates": Object {
@@ -82,7 +82,7 @@ exports[`rangeInput expect to render with custom labels 1`] = `
   min={0}
   refine={[Function]}
   shouldAutoHideContainer={true}
-  step={0.01}
+  step={1}
   templateProps={
     Object {
       "templates": Object {
@@ -135,7 +135,7 @@ exports[`rangeInput expect to render with refinement 1`] = `
   min={10}
   refine={[Function]}
   shouldAutoHideContainer={false}
-  step={0.01}
+  step={1}
   templateProps={
     Object {
       "templates": Object {
@@ -188,7 +188,7 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
   min={10}
   refine={[Function]}
   shouldAutoHideContainer={false}
-  step={0.01}
+  step={1}
   templateProps={
     Object {
       "templates": Object {
@@ -241,7 +241,7 @@ exports[`rangeInput expect to render with results 1`] = `
   min={10}
   refine={[Function]}
   shouldAutoHideContainer={false}
-  step={0.01}
+  step={1}
   templateProps={
     Object {
       "templates": Object {
@@ -294,7 +294,7 @@ exports[`rangeInput expect to render without results 1`] = `
   min={0}
   refine={[Function]}
   shouldAutoHideContainer={true}
-  step={0.01}
+  step={1}
   templateProps={
     Object {
       "templates": Object {
