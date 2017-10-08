@@ -88,6 +88,26 @@ Usage: instantsearch({
     }
 
     this.widgets.push(widget);
+
+    // Init the widget directly if instantsearch has been already started
+    if (this.started) {
+      this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+        ...this.helper.state,
+      });
+
+      if (widget.init) {
+        widget.init({
+          state: this.helper.state,
+          helper: this.helper,
+          templatesConfig: this.templatesConfig,
+          createURL: this._createAbsoluteURL,
+          onHistoryChange: this._onHistoryChange,
+          instantSearchInstance: this,
+        });
+      }
+
+      this.helper.setState(this.searchParameters).search();
+    }
   }
 
   removeWidget(widget) {
@@ -125,7 +145,7 @@ Usage: instantsearch({
           ...nextState,
         });
 
-        this.helper.setState(nextState);
+        this.helper.setState(this.searchParameters);
       }
     });
 
@@ -142,6 +162,8 @@ Usage: instantsearch({
   start() {
     if (!this.widgets)
       throw new Error('No widgets were added to instantsearch.js');
+
+    if (this.started) throw new Error('start() has been already called once');
 
     let searchParametersFromUrl;
 
@@ -193,6 +215,10 @@ Usage: instantsearch({
     this._init(helper.state, this.helper);
     this.helper.on('result', this._render.bind(this, this.helper));
     this.helper.search();
+
+    // track we started the search if we add more widgets,
+    // to init them directly after add
+    this.started = true;
   }
 
   createURL(params) {
