@@ -135,7 +135,7 @@ export default function menuSelect({
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     footer: cx(bem('footer'), userCssClasses.footer),
-    select: cx(bem('footer'), userCssClasses.footer),
+    select: cx(bem('select'), userCssClasses.select),
     option: cx(bem('option'), userCssClasses.option),
   };
 
