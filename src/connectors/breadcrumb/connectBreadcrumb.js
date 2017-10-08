@@ -58,20 +58,24 @@ export default function connectBreadcrumb(renderFn) {
     const { attributes, separator = ' > ', rootPath = null } = widgetParams;
     const [hierarchicalFacetName] = attributes;
 
+    if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
+      throw new Error(usage);
+    }
+
     return {
       getConfiguration: currentConfiguration => {
         if (currentConfiguration.hierarchicalFacets) {
-          const facetSet = find(
+          const isFacetSet = find(
             currentConfiguration.hierarchicalFacets,
             ({ name }) => name === hierarchicalFacetName
           );
-          if (facetSet) {
+          if (isFacetSet) {
             if (
-              !isEqual(facetSet.attributes, attributes) ||
-              facetSet.separator !== separator
+              !isEqual(isFacetSet.attributes, attributes) ||
+              isFacetSet.separator !== separator
             ) {
               console.warn(
-                'Using Breadcrumb & HierarchicalMenu on the same facet with different options'
+                'Using Breadcrumb & HierarchicalMenu on the same facet with different options. Adding that one will override the configuration of the HierarchicalMenu. Check your options.'
               );
             }
             return {};
@@ -103,8 +107,6 @@ export default function connectBreadcrumb(renderFn) {
                   breadcrumb[0]
                 )
               );
-            } else {
-              return undefined;
             }
           }
           return createURL(
@@ -141,18 +143,10 @@ export default function connectBreadcrumb(renderFn) {
       },
 
       render({ instantSearchInstance, results, state }) {
-        if (
-          !state.hierarchicalFacets ||
-          (Array.isArray(state.hierarchicalFacets) &&
-            state.hierarchicalFacets.length === 0)
-        ) {
-          throw new Error(usage);
-        }
-
         const [{ name: facetName }] = state.hierarchicalFacets;
 
         const facetsValues = results.getFacetValues(facetName);
-        const items = processArray(prepareItems(facetsValues));
+        const items = shiftItemsValues(prepareItems(facetsValues));
 
         renderFn(
           {
@@ -186,9 +180,9 @@ function prepareItems(obj) {
   }, []);
 }
 
-function processArray(array) {
+function shiftItemsValues(array) {
   return array.map((x, idx) => ({
     name: x.name,
-    value: idx + 1 == array.length ? null : array[idx + 1].value,
+    value: idx + 1 === array.length ? null : array[idx + 1].value,
   }));
 }

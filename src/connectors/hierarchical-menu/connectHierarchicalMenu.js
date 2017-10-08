@@ -94,19 +94,19 @@ export default function connectHierarchicalMenu(renderFn) {
     return {
       getConfiguration: currentConfiguration => {
         if (currentConfiguration.hierarchicalFacets) {
-          let facetSet = find(
+          let isFacetSet = find(
             currentConfiguration.hierarchicalFacets,
-            ({ name }) => name === hierarchicalFacetName,
+            ({ name }) => name === hierarchicalFacetName
           );
           if (
-            facetSet &&
+            isFacetSet &&
             !(
-              isEqual(facetSet.attributes, attributes) &&
-              facetSet.separator === separator
+              isEqual(isFacetSet.attributes, attributes) &&
+              isFacetSet.separator === separator
             )
           ) {
             console.warn(
-              'using Breadcrumb & HierarchicalMenu on the same facet with different options',
+              'using Breadcrumb & HierarchicalMenu on the same facet with different options'
             );
           }
           return;
@@ -137,7 +137,7 @@ export default function connectHierarchicalMenu(renderFn) {
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
-            helper.state.toggleRefinement(hierarchicalFacetName, facetValue),
+            helper.state.toggleRefinement(hierarchicalFacetName, facetValue)
           );
         }
 
@@ -149,7 +149,7 @@ export default function connectHierarchicalMenu(renderFn) {
             instantSearchInstance,
             widgetParams,
           },
-          true,
+          true
         );
       },
 
@@ -167,13 +167,13 @@ export default function connectHierarchicalMenu(renderFn) {
       render({ results, state, createURL, instantSearchInstance }) {
         const items = this._prepareFacetValues(
           results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [],
-          state,
+          state
         );
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
           return createURL(
-            state.toggleRefinement(hierarchicalFacetName, facetValue),
+            state.toggleRefinement(hierarchicalFacetName, facetValue)
           );
         }
 
@@ -185,7 +185,7 @@ export default function connectHierarchicalMenu(renderFn) {
             instantSearchInstance,
             widgetParams,
           },
-          false,
+          false
         );
       },
     };
