@@ -13,6 +13,9 @@ function wrapWithUnmount(getWidget, params) {
           <button id="unmount" style="float: left; margin-right: 10px; margin-top: 10px">
             Unmount widget
           </div>
+          <button id="remount" style="float: left; margin-right: 10px;">
+            Remount widget
+          </div>
           <button id="reload" style="float: left;">
             Reload
           </div>
@@ -31,6 +34,13 @@ function wrapWithUnmount(getWidget, params) {
         .removeEventListener('click', unmount, false);
     }
 
+    function remount() {
+      window.search.addWidget(widget);
+      document
+        .getElementById('remount')
+        .removeEventListener('click', remount, false);
+    }
+
     function reload() {
       window.location.reload();
       document
@@ -41,6 +51,10 @@ function wrapWithUnmount(getWidget, params) {
     document
       .getElementById('unmount')
       .addEventListener('click', unmount, false);
+
+    document
+      .getElementById('remount')
+      .addEventListener('click', remount, false);
 
     document.getElementById('reload').addEventListener('click', reload, false);
   }, params);
