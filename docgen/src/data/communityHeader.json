@@ -1,0 +1,152 @@
+{
+  "menu": {
+     "community": {
+      "style": "widelist",
+      "view": "integrations",
+      "label": "",
+      "caret": "",
+      "dropdownItems": [
+      {
+        "name": "InstantSearch.js",
+        "url": "https://community.algolia.com/instantsearch.js/v2",
+        "logo": "http://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_black.svg",
+        "backgroundColor": "#fecf50"
+      },
+      {
+        "name": "React InstantSearch",
+        "url": "https://community.algolia.com/instantsearch.js/react",
+        "logo": "https://community.algolia.com/img/logo-react-instantsearch.svg",
+        "backgroundColor": "linear-gradient(45deg, #3369e7, #00aeff), linear-gradient(#fafafa, #fafafa)"
+      },
+      {
+        "name": "Android InstantSearch",
+        "url": "https://community.algolia.com/instantsearch-android/",
+        "logo": "http://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_white.svg",
+        "backgroundColor": "linear-gradient(112deg, #21c7d0, #2dde98)"
+      },
+      {
+        "name": "Vue InstantSearch",
+        "url": "https://community.algolia.com/vue-instantsearch/",
+        "logo": "http://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_white.svg",
+        "backgroundColor": "linear-gradient(to right, #4DBA87, #2F9088)"
+      },
+      {
+        "name": "Wordpress",
+        "url": "https://community.algolia.com/wordpress/",
+        "logo": "https://community.algolia.com/wordpress/img/icons/wp-icon.svg",
+        "backgroundColor": "linear-gradient(to bottom right, #4041B2, #516ED1)"
+      }]
+    },
+    "project": {
+      "view": "links",
+      "label": "React InstantSearch",
+      "logo": "",
+      "caret": "",
+      "url":"https://community.algolia.com/react-instantsearch/",
+      "dropdownItems": []
+    }
+  },
+  "sideMenu": [{
+    "name": "<span class='hidden-sm'>Getting Started</span>",
+    "url": "",
+    "dropdownItems": [
+      {
+        "name": "React",
+        "url": "Getting_started.html"
+      },
+      {
+        "name": "React Native",
+        "url": "Getting_started_React_native.html"
+      }
+    ]
+  },
+  {
+    "name": "Learn",
+    "url": "",
+    "dropdownItems": [
+      {
+        "name": "Guides",
+        "url": "guide"
+      },
+      {
+        "name": "Videos",
+        "url": "videos"
+      }
+    ]
+  },
+  {
+    "name": "API",
+    "url": "",
+    "dropdownItems": [
+      {
+        "name": "&lt;InstantSearch>",
+        "url": "widgets/InstantSearch.html"
+      },
+      {
+        "name": "&lt;Index>",
+        "url": "widgets/<Index>.html"
+      },
+      {
+        "name": "Widgets",
+        "url": "widgets"
+      },
+      {
+        "name": "Connectors",
+        "url": "connectors"
+      },
+      {
+        "name": "Server-side Rendering",
+        "url": "Server-side-rendering"
+      }
+    ]
+  },
+  {
+    "name": "<span class='hidden-sm'>Examples</span>",
+    "url": "",
+    "dropdownItems": [
+      {
+        "name": "Demos",
+        "url": "examples/Demos.html"
+      },
+      {
+        "name": "Recipes",
+        "url": "examples/Recipes.html"
+      }]
+  },{
+    "name": "Github",
+    "image": "<img src='assets/img/github-icon.svg'/>",
+    "url": "https://github.com/algolia/react-instantsearch"
+  }],
+  "mobileMenu": [{
+    "name": "React",
+    "url": "Getting_started.html"
+  },{
+    "name": "React Native",
+    "url": "Getting_started_React_native.html"
+  },
+  {
+    "name": "API",
+    "url": "widgets/InstantSearch.html"
+  },
+  {
+    "name": "Guides",
+    "url": "guide/"
+  },
+  {
+    "name": "Videos",
+    "url": "videos/"
+  },
+  {
+    "name": "Examples",
+    "url": "examples/bootstrap.html"
+  },{
+    "name": "Github",
+    "image": "<img src='assets/img/github-icon.svg'/>",
+    "url": "https://github.com/algolia/react-instantsearch/"
+  }],
+  "docSearch": {
+    "input_selector": "searchbox",
+    "input_selector_placeholder": "Search the docs",
+    "input_mobile_selector": "mobile-searchbox"
+  }
+}

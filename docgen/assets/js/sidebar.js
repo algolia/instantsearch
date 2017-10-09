@@ -5,9 +5,7 @@ export default function sidebar(options) {
   list.classList.add('no-mobile');
 
   sidebarContainer.appendChild(list);
-  if (sidebarContainer.firstChild.classList.contains('sidebar-navScroll')) {
-    sidebarFollowScroll(sidebarContainer.firstChild);
-  }
+  sidebarFollowScroll(sidebarContainer.firstChild);
   activeLinks(sidebarContainer);
   scrollSpy(sidebarContainer, headersContainer);
 }
@@ -27,7 +25,10 @@ function sidebarFollowScroll(sidebarContainer) {
     if (currentScroll > sidebarTop - navHeight) {
       const fold = height - footerHeight - menuHeight - navHeight;
       if (currentScroll > fold) {
-        sidebarContainer.style.top = `${fold - currentScroll + navHeight}px`;
+        sidebarContainer.style.top = `${fold -
+          currentScroll +
+          navHeight -
+          200}px`;
       } else {
         sidebarContainer.style.top = null;
       }
@@ -53,9 +54,8 @@ function scrollSpy(sidebarContainer, headersContainer) {
       const currentHref = item.getAttribute('href');
       const anchorToFind = `#${header.getAttribute('id')}`;
       const isCurrentHeader =
-        currentHref.indexOf(anchorToFind) > 0 &&
         currentHref.indexOf(anchorToFind) ===
-          currentHref.length - anchorToFind.length;
+        currentHref.length - anchorToFind.length;
       if (isCurrentHeader) {
         item.classList.add('active');
       } else {
@@ -143,8 +143,8 @@ function getPositionsKeyElements($sidebar) {
   const title = $sidebar.querySelector('.sidebar-header');
   const bodyBBox = document.body.getBoundingClientRect();
   const sidebarTop = sidebarBBox.top - bodyBBox.top;
-  const footer = document.querySelector('.ac-footer');
-  const navigation = document.querySelector('.cm-navigation');
+  const footer = document.querySelector('#footer');
+  const navigation = document.querySelector('.algc-navigation');
   const menu = document.querySelector('.sidebar-container');
   const height = document.querySelector('html').getBoundingClientRect().height;
   const navHeight = navigation.offsetHeight;

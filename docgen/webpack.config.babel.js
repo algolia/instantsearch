@@ -55,7 +55,8 @@ export default {
         /\/react\//.test(module.context) ||
         /\/react-dom\//.test(module.context) ||
         /\/lodash\//.test(module.context) ||
-        /\/fbjs\//.test(module.context),
+        /\/fbjs\//.test(module.context) ||
+        /\/algolia-frontend-components\//.test(module.context),
     }),
     new HappyPack({
       loaders: ['babel-loader?cacheDirectory=true'],

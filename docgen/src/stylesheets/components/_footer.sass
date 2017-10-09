@@ -1,0 +1,103 @@
+
+$footer-shade-1: #2E2A51
+$footer-shade-2: #1F1C3F
+$footer-shade-3: #12102E
+
+// Footer CTA
+.footer-new-cta
+  background: url('../images/algolia-fast-bg.svg')no-repeat center center / cover
+  margin-bottom: -90px
+  padding-bottom: 60px
+  height: 750px
+
+  .homepage &
+    height: 940px
+
+  @media (min-width: $screen-md)
+    margin-top: -200px
+
+  @media (max-width: $screen-md)
+    height: 860px
+    text-align: center
+
+  @media (max-width: $screen-sm)
+    height: 820px
+
+    .stellar-container
+      width: 100% !important
+
+  @media (max-width: $screen-xs)
+    height: 960px
+
+  @include diagonal(-6deg, $white, 180px, before)
+    top: -80px
+    z-index: 1
+
+    @media (max-width: $screen-sm)
+      height: 80px
+      top: -40px
+
+  .button-holder
+    background: url('../images/light-speed.svg')no-repeat center top / contain
+    span.inline
+      float: right
+
+      @media (max-width: $screen-lg)
+        top: 4%
+
+      i.icon-search
+        vertical-align: middle
+
+
+    @media (max-width: ($screen-lg) )
+      background: url('../images/light-speed.svg')no-repeat right top / 92%
+
+    @media (max-width: ($screen-md) )
+      background: transparent
+      span.inline
+        width: 100%
+        text-align: center
+
+      .btn
+        margin: auto
+
+#footer
+  position: relative
+
+
+  @include diagonal(-4deg, $footer-shade-2, 130px, after)
+    bottom: 64px
+    left: 0
+
+  .credits
+    margin-top: 80px
+    text-align: center
+    position: relative
+    background-color: $footer-shade-3
+    color: $portage
+    z-index: 99
+    line-height: 40px
+    @include diagonal(-2deg, $footer-shade-3, 80px, before)
+      top: -40px
+      left: 0
+
+    @media (max-width: $screen-md)
+      margin-top: 40px
+
+
+
+.search-icon,
+.arrow-icon
+  margin-left: 1em
+  width: 22px
+  height: 42px
+  vertical-align: middle
+
+  @media (max-width: $screen-sm)
+    display: none
+
+
+.arrow-icon
+  width: 16px
+  use
+    fill: $bunting

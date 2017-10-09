@@ -18,8 +18,8 @@ can also inspect the underlying DOM and style accordingly.
 You can style icons colors too, for example the `SearchBox` ones:
 
 ```css
-.ais-SearchBox__reset svg, 
-.ais-SearchBox__button svg { 
+.ais-SearchBox__reset svg,
+.ais-SearchBox__button svg {
   fill: red
 }
 ```
