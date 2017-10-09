@@ -526,8 +526,11 @@ describe('connectRange', () => {
     const rendering = () => {};
     const createHelper = () => {
       const helper = jsHelper(fakeClient);
-      helper.clearRefinements = jest.fn();
       helper.search = jest.fn();
+      const initalClearRefinements = helper.clearRefinements;
+      helper.clearRefinements = jest.fn((...args) =>
+        initalClearRefinements.apply(helper, args)
+      );
 
       return helper;
     };
