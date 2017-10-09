@@ -132,7 +132,7 @@ export default function connectRangeSlider(renderFn) {
             !hasMaxBound && rangeMax === nextMax ? undefined : nextMax;
 
           if (min !== newNextMin || max !== newNextMax) {
-            helper.clearRefinements();
+            helper.clearRefinements(attributeName);
 
             const isValidMinInput = _isFinite(newNextMin);
             const isValidMinRange = _isFinite(rangeMin);
