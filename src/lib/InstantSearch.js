@@ -82,12 +82,24 @@ Usage: instantsearch({
    * @return {undefined} This method does not return anything
    */
   addWidget(widget) {
-    // Add the widget to the list of widget
-    if (widget.render === undefined && widget.init === undefined) {
-      throw new Error('Widget definition missing render or init method');
+    this.addWidgets([widget]);
+  }
+
+  addWidgets(widgets) {
+    if (!Array.isArray(widgets)) {
+      throw new Error(
+        'You need to provide an array of widgets or call `addWidget()`'
+      );
     }
 
-    this.widgets.push(widget);
+    widgets.forEach(widget => {
+      // Add the widget to the list of widget
+      if (widget.render === undefined && widget.init === undefined) {
+        throw new Error('Widget definition missing render or init method');
+      }
+
+      this.widgets.push(widget);
+    });
 
     // Init the widget directly if instantsearch has been already started
     if (this.started) {
@@ -95,16 +107,18 @@ Usage: instantsearch({
         ...this.helper.state,
       });
 
-      if (widget.init) {
-        widget.init({
-          state: this.helper.state,
-          helper: this.helper,
-          templatesConfig: this.templatesConfig,
-          createURL: this._createAbsoluteURL,
-          onHistoryChange: this._onHistoryChange,
-          instantSearchInstance: this,
-        });
-      }
+      widgets.forEach(widget => {
+        if (widget.init) {
+          widget.init({
+            state: this.helper.state,
+            helper: this.helper,
+            templatesConfig: this.templatesConfig,
+            createURL: this._createAbsoluteURL,
+            onHistoryChange: this._onHistoryChange,
+            instantSearchInstance: this,
+          });
+        }
+      });
 
       this.helper.setState(this.searchParameters).search();
     }
