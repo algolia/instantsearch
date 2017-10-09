@@ -28,7 +28,7 @@ describe('infiniteHits()', () => {
     helper.search = sinon.spy();
 
     ReactDOM = { render: sinon.spy() };
-    infiniteHits.__Rewire__('ReactDOM', ReactDOM);
+    infiniteHits.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     templateProps = {

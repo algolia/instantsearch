@@ -90,10 +90,13 @@ const renderFn = (
     // bind click events on links
     // --------------------------
     containerNode.find('li > a').each(function(index) {
-      window.$(this).off('click').on('click', e => {
-        e.preventDefault();
-        refine(refinements[index]);
-      });
+      window
+        .$(this)
+        .off('click')
+        .on('click', e => {
+          e.preventDefault();
+          refine(refinements[index]);
+        });
     });
 
     // show container

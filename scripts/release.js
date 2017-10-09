@@ -210,6 +210,7 @@ inquirer
               shell.exec('git push origin master');
               shell.exec('git push origin --tags');
               shell.exec('npm publish');
+              shell.exec(`VERSION=${newVersion} npm run docs:publish`);
               shell.exec('git checkout develop');
               shell.exec('git pull origin develop');
               shell.exec('git merge master');
@@ -219,13 +220,6 @@ inquirer
               shell.exec('git push origin --tags');
               shell.exec('npm publish --tag beta');
             }
-
-            shell.echo(
-              colors.green(`
-              Package was published to npm.
-              A job on travis-ci will be automatically launched to finalize the release.
-              `)
-            );
 
             return process.exit(0);
           });

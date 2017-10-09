@@ -15,6 +15,7 @@ var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRender
 search.addWidget(
   customHitsPerPage({
     items: [
+      {value: 5, label: '5 results per page', default: true},
       {value: 10, label: '10 results per page'},
       {value: 42, label: '42 results per page'},
     ],
@@ -34,6 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 * @typedef {Object} HitsPerPageWidgetOptionsItem
 * @property {number} value Number of hits to display per page.
 * @property {string} label Label to display in the option.
+* @property {boolean} default The default hits per page on first search.
 */
 
 /**
@@ -97,7 +99,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   customHitsPerPage({
  *     containerNode: $('#custom-hits-per-page-container'),
  *     items: [
- *       {value: 6, label: '6 per page'},
+ *       {value: 6, label: '6 per page', default: true},
  *       {value: 12, label: '12 per page'},
  *       {value: 24, label: '24 per page'},
  *     ],
@@ -115,7 +117,21 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
       throw new Error(usage);
     }
 
+    const defaultValues = items.filter(item => item.default);
+    if (defaultValues.length > 1) {
+      throw new Error(
+        `[Error][hitsPerPageSelector] more than one default value is specified in \`items[]\`
+The first one will be picked, you should probably set only one default value`
+      );
+    }
+
     return {
+      getConfiguration() {
+        return defaultValues.length > 0
+          ? { hitsPerPage: defaultValues[0].value }
+          : {};
+      },
+
       init({ helper, state, instantSearchInstance }) {
         const isCurrentInOptions = some(
           items,

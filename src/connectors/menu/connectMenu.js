@@ -140,6 +140,20 @@ export default function connectMenu(renderFn, unmountFn) {
         return this.isShowingMore ? showMoreLimit : limit;
       },
 
+      refine(helper) {
+        return facetValue => {
+          const [refinedItem] = helper.getHierarchicalFacetBreadcrumb(
+            attributeName
+          );
+          helper
+            .toggleRefinement(
+              attributeName,
+              facetValue ? facetValue : refinedItem
+            )
+            .search();
+        };
+      },
+
       getConfiguration(configuration) {
         const widgetConfiguration = {
           hierarchicalFacets: [
@@ -165,8 +179,7 @@ export default function connectMenu(renderFn, unmountFn) {
         this._createURL = facetValue =>
           createURL(helper.state.toggleRefinement(attributeName, facetValue));
 
-        this._refine = facetValue =>
-          helper.toggleRefinement(attributeName, facetValue).search();
+        this._refine = this.refine(helper);
 
         renderFn(
           {

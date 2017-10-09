@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import InfiniteHits from '../../components/InfiniteHits.js';
@@ -35,7 +34,7 @@ const renderer = ({
     return;
   }
 
-  ReactDOM.render(
+  render(
     <InfiniteHits
       cssClasses={cssClasses}
       hits={hits}
@@ -145,7 +144,7 @@ export default function infiniteHits(
 
   try {
     const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
-      ReactDOM.unmountComponentAtNode(containerNode)
+      unmountComponentAtNode(containerNode)
     );
     return makeInfiniteHits({ escapeHits });
   } catch (e) {

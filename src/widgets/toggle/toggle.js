@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import defaultTemplates from './defaultTemplates.js';
@@ -39,7 +38,7 @@ const renderer = ({
   const shouldAutoHideContainer =
     autoHideContainer && (value.count === 0 || value.count === null);
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
@@ -199,7 +198,7 @@ export default function toggle(
 
   try {
     const makeWidget = connectToggle(specializedRenderer, () =>
-      ReactDOM.unmountComponentAtNode(containerNode)
+      unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attributeName, label, values: userValues });
   } catch (e) {

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 import cx from 'classnames';
 import { isSpecialClick } from '../../lib/utils.js';
 
@@ -152,37 +152,39 @@ export class RawRefinementList extends React.Component {
     }
 
     const showMoreBtn =
-      this.props.showMore === true && this.props.canToggleShowMore
-        ? <Template
-            rootProps={{ onClick: this.props.toggleShowMore }}
-            templateKey={`show-more-${this.props.isShowingMore
-              ? 'active'
-              : 'inactive'}`}
-            {...this.props.templateProps}
-          />
-        : undefined;
+      this.props.showMore === true && this.props.canToggleShowMore ? (
+        <Template
+          rootProps={{ onClick: this.props.toggleShowMore }}
+          templateKey={`show-more-${this.props.isShowingMore
+            ? 'active'
+            : 'inactive'}`}
+          {...this.props.templateProps}
+        />
+      ) : (
+        undefined
+      );
 
     const shouldDisableSearchInput =
       this.props.searchIsAlwaysActive !== true &&
       !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
-    const searchInput = this.props.searchFacetValues
-      ? <SearchBox
-          ref={i => {
-            this.searchbox = i;
-          }}
-          placeholder={this.props.searchPlaceholder}
-          onChange={this.props.searchFacetValues}
-          onValidate={() => this.refineFirstValue()}
-          disabled={shouldDisableSearchInput}
-        />
-      : null;
+    const searchInput = this.props.searchFacetValues ? (
+      <SearchBox
+        ref={i => {
+          this.searchbox = i;
+        }}
+        placeholder={this.props.searchPlaceholder}
+        onChange={this.props.searchFacetValues}
+        onValidate={() => this.refineFirstValue()}
+        disabled={shouldDisableSearchInput}
+      />
+    ) : null;
 
     const noResults =
       this.props.searchFacetValues &&
       this.props.isFromSearch &&
-      this.props.facetValues.length === 0
-        ? <Template templateKey={'noResults'} {...this.props.templateProps} />
-        : null;
+      this.props.facetValues.length === 0 ? (
+        <Template templateKey={'noResults'} {...this.props.templateProps} />
+      ) : null;
 
     return (
       <div className={cx(cssClassList)}>

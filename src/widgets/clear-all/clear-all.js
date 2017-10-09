@@ -1,8 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import cx from 'classnames';
-
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
+import cx from 'classnames';
 
 import {
   bemHelper,
@@ -38,7 +36,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
 
-  ReactDOM.render(
+  render(
     <ClearAllWithHOCs
       refine={refine}
       collapsible={collapsible}
@@ -145,7 +143,7 @@ export default function clearAll({
 
   try {
     const makeWidget = connectClearAll(specializedRenderer, () =>
-      ReactDOM.unmountComponentAtNode(containerNode)
+      unmountComponentAtNode(containerNode)
     );
     return makeWidget({ excludeAttributes, clearsQuery });
   } catch (e) {

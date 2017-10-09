@@ -29,6 +29,8 @@ const renderer = ({
     const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
     const input = createInput(containerNode);
     const isInputTargeted = input === containerNode;
+    let queryFromInput = query;
+
     if (isInputTargeted) {
       // To replace the node, we need to create an intermediate node
       const placeholderNode = document.createElement('div');
@@ -36,17 +38,29 @@ const renderer = ({
       const parentNode = input.parentNode;
       const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
       parentNode.replaceChild(wrappedInput, placeholderNode);
+
+      const initialInputValue = input.value;
+
+      // if the input contains a value, we provide it to the state
+      if (initialInputValue) {
+        queryFromInput = initialInputValue;
+        refine(initialInputValue, false);
+      }
     } else {
       const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
       containerNode.appendChild(wrappedInput);
     }
+
     if (magnifier) addMagnifier(input, magnifier, templates);
     if (reset) addReset(input, reset, templates, clear);
-    addDefaultAttributesToInput(placeholder, input, query, cssClasses);
+
+    addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
+
     // Optional "powered by Algolia" widget
     if (poweredBy) {
       addPoweredBy(input, poweredBy, templates);
     }
+
     // When the page is coming from BFCache
     // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
     // then we force the input value to be the current query
@@ -57,7 +71,7 @@ const renderer = ({
     // - use back button
     // - input query is empty (because <input> autocomplete = off)
     window.addEventListener('pageshow', () => {
-      input.value = query;
+      input.value = queryFromInput;
     });
 
     // Update value when query change outside of the input
@@ -65,9 +79,9 @@ const renderer = ({
       input.value = fullState.query || '';
     });
 
-    if (autofocus === true || (autofocus === 'auto' && query === '')) {
+    if (autofocus === true || (autofocus === 'auto' && queryFromInput === '')) {
       input.focus();
-      input.setSelectionRange(query.length, query.length);
+      input.setSelectionRange(queryFromInput.length, queryFromInput.length);
     }
 
     // search on enter

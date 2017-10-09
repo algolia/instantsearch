@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import defaultTemplates from './defaultTemplates.js';
@@ -54,7 +53,7 @@ const renderer = ({
   }));
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
@@ -126,10 +125,11 @@ menu({
 /**
  * @typedef {Object} MenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string} attributeName Name of the attribute for faceting/
+ * @property {string} attributeName Name of the attribute for faceting
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ * @property {MenuTemplates} [templates] Customize the output through templating.
  * @property {string} [limit=10] How many facets values to retrieve [*].
  * @property {boolean|MenuShowMoreOptions} [showMore=false] Limit the number of results and display a showMore button.
  * @property {MenuShowMoreTemplates} [templates] Templates to use for the widget.
@@ -218,7 +218,7 @@ export default function menu({
 
   try {
     const makeWidget = connectMenu(specializedRenderer, () =>
-      ReactDOM.unmountComponentAtNode(containerNode)
+      unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attributeName, limit, sortBy, showMoreLimit });
   } catch (e) {

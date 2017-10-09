@@ -4,7 +4,8 @@ import has from 'lodash/has';
 
 import PropTypes from 'prop-types';
 
-import React, { Component } from 'react';
+import React, { Component } from 'preact-compat';
+
 import Rheostat from 'rheostat';
 import cx from 'classnames';
 
@@ -13,7 +14,7 @@ import Pit from './Pit.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
-class Slider extends Component {
+export class RawSlider extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
@@ -31,17 +32,9 @@ class Slider extends Component {
     return this.props.min >= this.props.max;
   }
 
-  handleChange = ({ min, max, values }) => {
-    // when Slider is disabled, we alter `min, max` values
-    // in order to render a "disabled state" Slider. Since we alter
-    // theses values, Rheostat trigger a "change" event which trigger a new
-    // search to Algolia with wrong values.
+  handleChange = ({ values }) => {
     if (!this.isDisabled) {
-      const { refine } = this.props;
-      refine([
-        min === values[0] ? undefined : values[0],
-        max === values[1] ? undefined : values[1],
-      ]);
+      this.props.refine(values);
     }
   };
 
@@ -83,11 +76,9 @@ class Slider extends Component {
 
     return (
       <div {...props} className={className}>
-        {tooltips
-          ? <div className="ais-range-slider--tooltip">
-              {value}
-            </div>
-          : null}
+        {tooltips ? (
+          <div className="ais-range-slider--tooltip">{value}</div>
+        ) : null}
       </div>
     );
   };
@@ -101,9 +92,7 @@ class Slider extends Component {
 
     const snapPoints = this.computeSnapPoints({ min, max, step });
     const pitPoints =
-      pips === true || pips === undefined || pips === false
-        ? this.computeDefaultPitPoints({ min, max })
-        : pips;
+      pips === false ? [] : this.computeDefaultPitPoints({ min, max });
 
     return (
       <div className={this.isDisabled ? 'ais-range-slider--disabled' : ''}>
@@ -124,4 +113,4 @@ class Slider extends Component {
   }
 }
 
-export default autoHideContainerHOC(headerFooterHOC(Slider));
+export default autoHideContainerHOC(headerFooterHOC(RawSlider));

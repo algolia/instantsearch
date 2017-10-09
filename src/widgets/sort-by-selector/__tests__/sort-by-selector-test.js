@@ -33,7 +33,7 @@ describe('sortBySelector()', () => {
     autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = { render: sinon.spy() };
 
-    sortBySelector.__Rewire__('ReactDOM', ReactDOM);
+    sortBySelector.__Rewire__('render', ReactDOM.render);
     sortBySelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
 
     container = document.createElement('div');
@@ -43,6 +43,7 @@ describe('sortBySelector()', () => {
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],
+      select: 'custom-select',
       item: 'custom-item',
     };
     widget = sortBySelector({ container, indices, cssClasses });
@@ -70,6 +71,7 @@ describe('sortBySelector()', () => {
       shouldAutoHideContainer: false,
       cssClasses: {
         root: 'ais-sort-by-selector custom-root cx',
+        select: 'ais-sort-by-selector custom-select',
         item: 'ais-sort-by-selector--item custom-item',
       },
       currentValue: 'index-a',

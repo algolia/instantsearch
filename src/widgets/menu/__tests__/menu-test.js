@@ -24,7 +24,7 @@ describe('menu', () => {
     };
     const createURL = () => '#';
     const ReactDOM = { render: sinon.spy() };
-    menu.__Rewire__('ReactDOM', ReactDOM);
+    menu.__Rewire__('render', ReactDOM.render);
     const widget = menu({
       container: document.createElement('div'),
       attributeName: 'test',

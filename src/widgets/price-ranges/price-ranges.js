@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import PriceRanges from '../../components/PriceRanges/PriceRanges.js';
@@ -35,7 +34,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && items.length === 0;
 
-  ReactDOM.render(
+  render(
     <PriceRanges
       collapsible={collapsible}
       cssClasses={cssClasses}
@@ -191,7 +190,7 @@ export default function priceRanges(
 
   try {
     const makeWidget = connectPriceRanges(specializedRenderer, () =>
-      ReactDOM.unmountComponentAtNode(containerNode)
+      unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attributeName });
   } catch (e) {

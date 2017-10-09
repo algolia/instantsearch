@@ -51,6 +51,19 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'input with initial value',
+      wrapWithHits(container => {
+        container.innerHTML = '<input value="ok"/>';
+        const input = container.firstChild;
+        container.appendChild(input);
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container: input,
+          })
+        );
+      })
     );
 
   storiesOf('Stats').add(
@@ -76,21 +89,37 @@ export default () => {
     })
   );
 
-  storiesOf('HitsPerPageSelector').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.hitsPerPageSelector({
-          container,
-          items: [
-            { value: 3, label: '3 per page' },
-            { value: 5, label: '5 per page' },
-            { value: 10, label: '10 per page' },
-          ],
-        })
-      );
-    })
-  );
+  storiesOf('HitsPerPageSelector')
+    .add(
+      'default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hitsPerPageSelector({
+            container,
+            items: [
+              { value: 3, label: '3 per page' },
+              { value: 5, label: '5 per page' },
+              { value: 10, label: '10 per page' },
+            ],
+          })
+        );
+      })
+    )
+    .add(
+      'With default hitPerPage to 5',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hitsPerPageSelector({
+            container,
+            items: [
+              { value: 3, label: '3 per page' },
+              { value: 5, label: '5 per page', default: true },
+              { value: 10, label: '10 per page' },
+            ],
+          })
+        );
+      })
+    );
 
   storiesOf('Hits').add(
     'default',
@@ -218,6 +247,7 @@ export default () => {
           searchParameters: {
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
             disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
           },
         }
       )
@@ -239,6 +269,7 @@ export default () => {
           searchParameters: {
             disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
             disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
           },
         }
       )
@@ -256,6 +287,26 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with clearsQuery',
+      wrapWithHits(
+        container => {
+          window.search.addWidget(
+            instantsearch.widgets.currentRefinedValues({
+              container,
+              clearsQuery: true,
+            })
+          );
+        },
+        {
+          searchParameters: {
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
+          },
+        }
+      )
     );
 
   storiesOf('RefinementList')
@@ -485,29 +536,156 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'as a Select DOM element',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.menuSelect({
+            container,
+            attributeName: 'categories',
+            limit: 10,
+          })
+        );
+      })
     );
 
-  storiesOf('RangeSlider').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.rangeSlider({
-          container,
-          attributeName: 'price',
-          templates: {
-            header: 'Price',
-          },
-          max: 500,
-          step: 10,
-          tooltips: {
-            format(rawValue) {
-              return `$${Math.round(rawValue).toLocaleString()}`;
+  storiesOf('RangeSlider')
+    .add(
+      'default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
             },
-          },
-        })
-      );
-    })
-  );
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'disabled',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
+            },
+            min: 100,
+            max: 50,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with step',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            step: 500,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'without pips',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            pips: false,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with min boundaries',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
+            },
+            min: 36,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with max boundaries',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
+            },
+            max: 36,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with min / max boundaries',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
+            },
+            min: 10,
+            max: 500,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    );
 
   storiesOf('HierarchicalMenu')
     .add(

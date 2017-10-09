@@ -1,6 +1,6 @@
 /* eslint-disable max-len, no-extra-parens */
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 
 export default class SearchBox extends React.Component {
   static propTypes = {

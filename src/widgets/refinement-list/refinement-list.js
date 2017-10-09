@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import filter from 'lodash/filter';
 
@@ -59,7 +58,7 @@ const renderer = ({
     header: { refinedFacetsCount: filter(items, { isRefined: true }).length },
   };
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
@@ -289,7 +288,7 @@ export default function refinementList(
 
   try {
     const makeWidget = connectRefinementList(specializedRenderer, () =>
-      ReactDOM.unmountComponentAtNode(containerNode)
+      unmountComponentAtNode(containerNode)
     );
     return makeWidget({
       attributeName,

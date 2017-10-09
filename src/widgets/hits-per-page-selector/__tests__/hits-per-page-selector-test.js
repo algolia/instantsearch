@@ -27,7 +27,7 @@ describe('hitsPerPageSelector()', () => {
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
 
-    hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
+    hitsPerPageSelector.__Rewire__('render', ReactDOM.render);
     consoleWarn = sinon.stub(window.console, 'warn');
 
     container = document.createElement('div');
@@ -37,6 +37,7 @@ describe('hitsPerPageSelector()', () => {
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],
+      select: 'custom-select',
       item: 'custom-item',
     };
     widget = hitsPerPageSelector({ container, items, cssClasses });
@@ -56,8 +57,23 @@ describe('hitsPerPageSelector()', () => {
     };
   });
 
-  it("doesn't configure anything", () => {
-    expect(widget.getConfiguration).toEqual(undefined);
+  it('does not configure the default hits per page if not specified', () => {
+    expect(typeof widget.getConfiguration).toEqual('function');
+    expect(widget.getConfiguration()).toEqual({});
+  });
+
+  it('does configures the default hits per page if specified', () => {
+    const widgetWithDefaults = hitsPerPageSelector({
+      container: document.createElement('div'),
+      items: [
+        { value: 10, label: '10 results' },
+        { value: 20, label: '20 results', default: true },
+      ],
+    });
+
+    expect(widgetWithDefaults.getConfiguration()).toEqual({
+      hitsPerPage: 20,
+    });
   });
 
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {

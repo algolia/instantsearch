@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React from 'preact-compat';
 
 import autoHideContainer from '../decorators/autoHideContainer.js';
 import headerFooter from '../decorators/headerFooter.js';
@@ -18,11 +18,11 @@ export class RawSelector extends React.Component {
 
     return (
       <select
-        className={this.props.cssClasses.root}
+        className={this.props.cssClasses.select}
         onChange={this.handleChange}
         value={currentValue}
       >
-        {options.map(option =>
+        {options.map(option => (
           <option
             className={this.props.cssClasses.item}
             key={option.label + option.value}
@@ -30,7 +30,7 @@ export class RawSelector extends React.Component {
           >
             {option.label}
           </option>
-        )}
+        ))}
       </select>
     );
   }
@@ -39,6 +39,10 @@ export class RawSelector extends React.Component {
 RawSelector.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string),
+    ]),
+    select: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),

@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import isUndefined from 'lodash/isUndefined';
@@ -64,7 +63,7 @@ const renderer = ({
     createURL(refinement)
   );
 
-  ReactDOM.render(
+  render(
     <CurrentRefinedValuesWithHOCs
       attributes={attributes}
       clearAllClick={clearAllClick}
@@ -271,7 +270,7 @@ export default function currentRefinedValues({
   try {
     const makeCurrentRefinedValues = connectCurrentRefinedValues(
       specializedRenderer,
-      () => ReactDOM.unmountComponentAtNode(containerNode)
+      () => unmountComponentAtNode(containerNode)
     );
     return makeCurrentRefinedValues({
       attributes,

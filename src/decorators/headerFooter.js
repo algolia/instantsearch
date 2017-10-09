@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
 
-import React from 'react';
+import React from 'preact-compat';
 
 import cx from 'classnames';
 import getKey from 'lodash/get';

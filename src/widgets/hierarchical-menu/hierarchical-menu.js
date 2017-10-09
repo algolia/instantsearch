@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
@@ -38,7 +37,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && items.length === 0;
 
-  ReactDOM.render(
+  render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
@@ -214,7 +213,7 @@ export default function hierarchicalMenu(
   try {
     const makeHierarchicalMenu = connectHierarchicalMenu(
       specializedRenderer,
-      () => ReactDOM.unmountComponentAtNode(containerNode)
+      () => unmountComponentAtNode(containerNode)
     );
     return makeHierarchicalMenu({
       attributes,

@@ -680,11 +680,12 @@ describe('searchBox()', () => {
   });
 
   it('does not update the input value when focused', () => {
-    container = document.body.appendChild(document.createElement('input'));
+    const input = document.createElement('input');
+    container = document.body.appendChild(input);
     container.value = 'initial';
-    container.focus();
     widget = searchBox({ container });
     widget.init({ state, helper, onHistoryChange });
+    input.focus();
     widget.render({ helper: { state: { query: 'new value' } } });
     expect(container.value).toBe('initial');
   });

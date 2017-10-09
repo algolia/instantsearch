@@ -38,6 +38,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * **Pagination** connector provides the logic to build a widget that will let the user
  * choose the current page of the results.
  *
+ * When using the pagination with Algolia, you should be aware that the engine won't provide you pages
+ * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
+ *
  * @type {Connector}
  * @param {function(PaginationRenderingOptions, boolean)} renderFn Rendering function for the custom **Pagination** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
