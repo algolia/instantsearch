@@ -24,7 +24,7 @@ describe('menuSelect', () => {
     };
     const createURL = () => '#';
     const ReactDOM = { render: sinon.spy() };
-    menuSelect.__Rewire__('ReactDOM', ReactDOM);
+    menuSelect.__Rewire__('render', ReactDOM.render);
     const widget = menuSelect({
       container: document.createElement('div'),
       attributeName: 'test',
@@ -33,6 +33,6 @@ describe('menuSelect', () => {
     widget.init({ helper, createURL, instantSearchInstance });
     widget.render({ results, createURL, state });
     expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    menuSelect.__ResetDependency__('ReactDOM');
+    menuSelect.__ResetDependency__('render');
   });
 });

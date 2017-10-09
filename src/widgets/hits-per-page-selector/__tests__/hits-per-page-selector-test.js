@@ -123,7 +123,7 @@ describe('hitsPerPageSelector()', () => {
   });
 
   afterEach(() => {
-    hitsPerPageSelector.__ResetDependency__('ReactDOM');
+    hitsPerPageSelector.__ResetDependency__('render');
     consoleWarn.restore();
   });
 });

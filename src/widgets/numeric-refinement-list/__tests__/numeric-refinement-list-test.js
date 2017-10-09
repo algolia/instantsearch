@@ -268,7 +268,7 @@ describe('numericRefinementList()', () => {
   });
 
   afterEach(() => {
-    numericRefinementList.__ResetDependency__('ReactDOM');
+    numericRefinementList.__ResetDependency__('render');
     numericRefinementList.__ResetDependency__('autoHideContainerHOC');
     numericRefinementList.__ResetDependency__('headerFooterHOC');
   });

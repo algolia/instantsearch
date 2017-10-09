@@ -136,7 +136,7 @@ describe('clearAll()', () => {
   });
 
   afterEach(() => {
-    clearAll.__ResetDependency__('ReactDOM');
+    clearAll.__ResetDependency__('render');
     clearAll.__ResetDependency__('defaultTemplates');
   });
 
