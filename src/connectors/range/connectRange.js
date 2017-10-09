@@ -107,10 +107,10 @@ export default function connectRange(renderFn) {
 
       _getCurrentRefinement(helper) {
         const [minValue] =
-          helper.state.getNumericRefinement(attributeName, '>=') || [];
+          helper.getNumericRefinement(attributeName, '>=') || [];
 
         const [maxValue] =
-          helper.state.getNumericRefinement(attributeName, '<=') || [];
+          helper.getNumericRefinement(attributeName, '<=') || [];
 
         const min = _isFinite(minValue) ? minValue : -Infinity;
         const max = _isFinite(maxValue) ? maxValue : Infinity;
