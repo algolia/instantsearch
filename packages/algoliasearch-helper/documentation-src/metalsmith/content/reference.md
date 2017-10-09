@@ -471,6 +471,10 @@ are implemented on top of Algolia API such as faceting.
 {{> jsdoc jsdoc/results/page}}
 {{> jsdoc jsdoc/results/parsedQuery}}
 
+### Query rules
+
+{{> jsdoc jsdoc/results/userData}}
+
 ### Technical metadata
 
 {{> jsdoc jsdoc/results/processingTimeMS}}
