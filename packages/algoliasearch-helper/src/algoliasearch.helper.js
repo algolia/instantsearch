@@ -806,7 +806,7 @@ AlgoliaSearchHelper.prototype.setQueryParameter = function(parameter, value) {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.setState = function(newState) {
-  this.state = new SearchParameters(newState);
+  this.state = SearchParameters.make(newState);
   this._change();
   return this;
 };
