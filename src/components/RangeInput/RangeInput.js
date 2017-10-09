@@ -47,8 +47,6 @@ export class RawRangeInput extends Component {
             <input
               className={cssClasses.inputMin}
               type="number"
-              min={min}
-              max={max}
               step={step}
               value={minValue}
               onChange={this.onChange('min')}
@@ -61,8 +59,6 @@ export class RawRangeInput extends Component {
             <input
               className={cssClasses.inputMax}
               type="number"
-              min={min}
-              max={max}
               step={step}
               value={maxValue}
               onChange={this.onChange('max')}
