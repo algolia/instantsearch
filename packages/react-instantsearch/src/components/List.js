@@ -29,7 +29,7 @@ class List extends Component {
     canRefine: PropTypes.bool,
   };
 
-  defaultProps = {
+  static defaultProps = {
     isFromSearch: false,
   };
 
