@@ -21,7 +21,7 @@ describe('connectStateResults', () => {
         searchingForFacetValues,
       };
 
-      props = getProvidedProps({}, searchState, searchResults);
+      props = getProvidedProps({ props: 'props' }, searchState, searchResults);
       expect(props).toEqual({
         searchState,
         searchResults: searchResults.results,
@@ -29,6 +29,7 @@ describe('connectStateResults', () => {
         error,
         searching,
         searchingForFacetValues,
+        props: { props: 'props' },
       });
     });
   });
@@ -55,7 +56,7 @@ describe('connectStateResults', () => {
         searchingForFacetValues,
       };
 
-      props = getProvidedProps({}, searchState, searchResults);
+      props = getProvidedProps({ props: 'props' }, searchState, searchResults);
       expect(props).toEqual({
         searchState,
         searchResults: searchResults.results.first,
@@ -63,6 +64,7 @@ describe('connectStateResults', () => {
         error,
         searching,
         searchingForFacetValues,
+        props: { props: 'props' },
       });
     });
   });
