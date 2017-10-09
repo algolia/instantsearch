@@ -26,9 +26,9 @@ to use the Highlighter. The Highlight and the Snippet widgets takes two props:
 
 **Notes:**
 * Use the `<Highlight>` widget when you want to display the regular value of an attribute.
-* Use the `<Snippet>` widget when you want to display the snippet version of an attribute. 
-  To use this widget, the attribute name passed to the `attributeName` prop must be present in 
-  "Attributes to snippet" on the Algolia dashboard or configured as `attributesToSnippet` 
+* Use the `<Snippet>` widget when you want to display the snippet version of an attribute.
+  To use this widget, the attribute name passed to the `attributeName` prop must be present in
+  "Attributes to snippet" on the Algolia dashboard or configured as `attributesToSnippet`
   via a set settings call to the Algolia API.
 
 Here is an example in which we create a custom Hit widget for results that have a
@@ -69,7 +69,7 @@ from the results. This function takes a single parameter object with three
 properties:
  - attributeName: the highlighted attribute name
  - hit: a single result object
- - highlightProperty: the path to the structure containing the highlighted attribute. The value is either `_highlightResult` or `_snippetResult` depending if you want to make an Highlight or Snippet widget. 
+ - highlightProperty: the path to the structure containing the highlighted attribute. The value is either `_highlightResult` or `_snippetResult` depending if you want to make an Highlight or Snippet widget.
 
 Those parameters are taken from the context in which the the custom component
 is used, therefore it's reasonable to have them as props.

@@ -1,0 +1,218 @@
+a
+  color: #00A7FF
+
+.home
+  @media (max-width: $screen-md)
+    .btn-static-theme
+      margin: auto
+      display: block
+  h3
+    font-size: 32px
+
+.screen-mockup
+  top: -260px
+  img
+    @media (max-width: $screen-lg)
+      width: 50vw !important
+
+  @media (max-height: 730px)
+    top: -120px
+
+  @media (max-width: $screen-sm)
+    top: -180px
+    img
+      max-width: 80% !important
+      width: inherit !important
+
+.section-best-practices
+  @media (max-width: $screen-sm)
+    .img-responsive
+      top: 100px
+
+.section-infinite-possibilities
+  @include diagonal(-4deg, /*$titan-white*/ $titan-white, 180px, after)
+    top: -80px
+    left: 0
+
+.section-framework
+  @include diagonal(-4deg, /*$titan-white*/ #FFF, 180px, after)
+    top: -80px
+    left: 0
+
+  .phone_illustration,
+  .computer_illustration
+    position: absolute
+
+  .computer_illustration
+    max-width: 720px
+    display: block
+    left: -200px
+
+  .phone_illustration
+    z-index: 4
+    max-width: 200px
+    left: 50%
+    top: 50px
+
+  @media (max-width: $screen-sm)
+    .phone_illustration,
+    .computer_illustration
+      transform: scale(0.5)
+
+.start-section
+  @include diagonal(-4deg, /*$titan-white*/ $titan-white, 180px, after)
+    top: -80px
+    left: 0
+
+  a
+    text-decoration: none
+
+  a:hover span
+    text-decoration: underline
+
+  .container .col-md-12
+    transform-style: preserve-3d
+    perspective: 1030px
+
+    .row
+      @media (max-width: $screen-sm)
+        height: auto !important
+
+  .card
+    margin: auto
+    width: 100%
+    top: 0
+    left: 0
+
+    @media (max-width: $screen-md)
+      transform: none !important
+
+
+.section-live
+  a
+    color: inherit
+
+    &:hover
+      text-decoration: none
+
+  .flex-it-3:hover .p-large
+    background: #f7f7f7 !important
+
+  .flex-container
+    padding: 0
+
+  @media (max-width: $screen-sm)
+    .flex-it-3
+      flex: 0 1 100%
+
+.discover-section
+  @include diagonal(-4deg, /*$titan-white*/ #FFF, 180px, after)
+    top: -80px
+    left: 0
+  .card
+    line-height: 60px
+
+  .card:hover
+    background: $titan-white !important
+
+  @media (max-width: $screen-sm)
+    .logos-container
+      height: auto !important
+
+    .card
+      margin-bottom: 1em
+
+    .col-md-12 .col-md-4,
+    .mobile-projects
+      padding: 0
+
+
+
+.content
+  .btn
+    @media (max-width: $screen-sm)
+      margin: auto
+      display: block
+      max-width: 280px
+
+    @media (max-width: $screen-xs)
+      width: 100%
+
+.home
+  &.content
+    margin-bottom: 300px
+
+  @media (max-width: $screen-sm)
+    .container,
+    .col-md-12,
+    .col-md-6,
+    .col-md-8.col-md-offset-2,
+    .col-md-10.col-md-offset-2
+      padding-left: 0 !important
+      padding-right: 0 !important
+      max-width: 100%
+    .col-md-10.col-md-offset-2 .m-l-large
+      margin-left: 0 !important
+    .col-md-12.row
+      margin: 0 !important
+
+    .section-illustration
+      display: block
+      max-width: 80%
+      margin: 2em auto
+
+    h3, p
+      text-align: center
+
+    .screen-mockup img
+      max-width: 600px
+
+.algc-navigation .algc-navigation__container
+  max-width: 1140px
+
+
+
+
+
+/// List
+ul.subtle-check-list
+  list-style: none
+  padding: 0
+  margin: 0
+  width: 200px
+  position: absolute
+  z-index: 9
+  right: 20px
+  width: 170px
+  top: 140px
+
+  li
+    display: inline-block
+    width: 100%
+    color: #00aeff
+    font-weight: 400
+    padding: 0 16px
+    height: 40px
+    min-width: 150px
+    margin-bottom: 20px
+    line-height: 40px
+    clear: both
+    background: rgba(255, 255, 255, 0.9)
+    border-radius: 18px
+    -webkit-box-shadow: 0 2px 10px 0 rgba(40, 120, 236, 0.2)
+    box-shadow: 0 2px 10px 0 rgba(40, 120, 236, 0.2)
+    text-transform: uppercase
+
+    svg
+      width: 12px
+      height: 36px
+      float: right
+
+      use
+        fill: $purple-heart
+        width: 12px
+
+  @media (max-width: $screen-sm)
+    left: 0
+    right: 0
+    margin: auto

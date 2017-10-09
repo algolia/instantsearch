@@ -1,0 +1,34 @@
+.examples-container
+  padding: 40px 0
+  .flex-it-2
+    +small-mq
+      flex: 0 1 100% !important
+  .flex-it-2 > div
+    background: #fefefe
+    border: 1px solid #ebebeb
+    position: relative
+    text-align: center
+    overflow: hidden
+
+    img
+      width: 100%
+
+    .links
+      width: 100%
+      height: 100%
+      text-indent: 0
+      color: inherit
+      left: 0
+      background: darken($accent-color, 0.95)
+      background: linear-gradient(to bottom right, $algolia-blue, darken($accent-color, 0.95))
+      color: #fff
+      transform: scale(0)
+      z-index: 2
+      line-height: 12
+      transition: transform 0.2s ease
+      position: absolute
+      visibility: visible
+    &:hover
+      .links
+        transform: scale(1)
+        top: 0

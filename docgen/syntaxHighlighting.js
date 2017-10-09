@@ -11,8 +11,14 @@ export default function highlight(source, lang) {
   if (lang === 'html') {
     lang = 'htmlmixed';
   }
-
-  const heading = lang === 'shell' ? 'Command' : 'Code';
+  if (lang === 'js') {
+    lang = 'jsx';
+  }
+  if (lang === 'shell') {
+    lang = 'shell';
+  }
+  // eslint-disable-next-line no-unused-var
+  const codeType = lang === 'shell' ? 'Command' : 'Code';
 
   // this is a synchronous callback API
   runMode(source, lang, (text, style) => {
@@ -23,16 +29,11 @@ export default function highlight(source, lang) {
       return;
     }
 
-    tokenizedSource += `<span class="cs-${style.replace(
+    tokenizedSource += `<span class="cm-${style.replace(
       / +/g,
-      ' cs-'
+      ' cm-'
     )}">${text}</span>`;
   });
 
-  return `<pre class="code-sample language-${lang}">
-  <div class="heading">${heading}</div>
-  <div class="code-wrap">
-    <code>${tokenizedSource}</code>
-  </div>
-</pre>`;
+  return `<pre class="code-sample cm-s-mdn-like codeMirror ${lang}" data-code-type="${codeType}"><div class="code-wrap"><code>${tokenizedSource}</code></div></pre>`;
 }

@@ -51,7 +51,7 @@ component, you'll get the following shape:
 ```js
 const searchState = {
   query: 'ora', //shared state between all indices
-  page: 2, //shared state between all indices 
+  page: 2, //shared state between all indices
   indices: {
     index1: {
       configure: {

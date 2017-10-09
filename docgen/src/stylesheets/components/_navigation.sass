@@ -1,0 +1,95 @@
+/**
+ * Algolia components - community header
+ * Light theme
+ */
+
+// Navigation
+.algc-navigation
+  background: $white
+  box-shadow: 0 10px 40px 0 rgba($bunting,0.07), 0 2px 9px 0 rgba($bunting,0.06)
+
+
+.algc-navigation__brands a,
+.algc-navigation__menu .algc-menu__list a
+  color: $bunting
+  font-weight: 400
+
+  &:hover
+    color: $deep-cove
+    text-decoration: none
+
+
+.algc-menu__search .algc-search__input button svg path
+  fill: $bunting !important
+
+
+.algc-menu__search--holder.open input[type="search"]
+  max-width: 240px
+  background: rgba($bunting, 0.1)
+  color: $bunting
+  transform: translate(-240px)
+
+  @media (max-width: $screen-sm)
+    transform: translate(-140px)
+
+  &::-webkit-input-placeholder
+    color: $bunting
+  &:-moz-placeholder
+    color: $bunting
+  &::-moz-placeholder
+    color: $bunting
+  &:-ms-input-placeholder
+    color: $bunting
+
+
+
+
+.algc-menu__search--holder.open button#search
+  transform: translate(calc(-240px + 4em), -50%)
+  @media (max-width: $screen-sm)
+    transform: translate(calc(-140px + 4em), -50%)
+
+.algc-navigation__brands svg.algc-arrowseparator path
+  fill: $logan
+
+
+// Dropdown
+.algc-navigation__menu .algc-menu__sublist:before
+  display: none
+
+.algc-dropdownroot
+  .algc-dropdownroot__dropdownarrow
+    background: #F7F7FF
+
+
+  &.activeDropdown .algc-dropdownroot__dropdownbg
+    box-shadow: 0 50px 100px rgba(50, 50, 93, 0.1), 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1), 0 -4px 16px rgba(50, 50, 93,0.1)
+
+
+.algc-dropdownroot__widelist li h4
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  width: 70%
+  display: block
+// Mobile
+.algc-openmobile
+  background: #332e58
+  border-radius: 6px
+
+.algc-mobilemenu
+  background: #f8faff
+  &:after
+    display: none
+
+  a
+    color: $bunting
+  .algc-mobilemenu__item:after
+    background: linear-gradient(76deg, rgba(#211e39, 0.01) 0%, rgba(#211e39, 0) 18%, #211e39 46%, rgba(#6a7599, 0.7) 93%, rgba(#6a7599, 0) 100%)
+
+
+
+@media only screen and (max-width: $screen-sm)
+  .algc-navigation__brands .algc-navigation__li.algc-navigation__li--community
+    width: 45px !important
+    overflow: hidden !important

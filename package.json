@@ -83,7 +83,7 @@
     "happypack": "4.0.0",
     "hasha": "3.0.0",
     "jest-cli": "21.2.1",
-    "jsdoc-parse": "^1.2.7",
+    "jsdoc-parse": "1.2.7",
     "json": "9.0.6",
     "jstransformer-markdown-it": "2.0.0",
     "lodash": "4.17.4",
@@ -139,5 +139,9 @@
   "author": {
     "name": "Algolia, Inc.",
     "url": "https://www.algolia.com"
+  },
+  "dependencies": {
+    "algolia-aerial": "^1.1.4",
+    "algolia-frontend-components": "^0.0.33"
   }
 }

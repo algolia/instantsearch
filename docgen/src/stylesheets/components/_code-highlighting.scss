@@ -1,0 +1,122 @@
+/*
+  MDN-LIKE Theme - Mozilla
+  Ported to CodeMirror by Peter Kroon <plakroon@gmail.com>
+  Report bugs/issues here: https://github.com/codemirror/CodeMirror/issues
+  GitHub: @peterkroon
+  The mdn-like theme is inspired on the displayed code examples at: https://developer.mozilla.org/en-US/docs/Web/CSS/animation
+*/
+.cm-s-mdn-like.codeMirror {
+  color: #999;
+  background-color: #fff;
+}
+.cm-s-mdn-like div.codeMirror-selected {
+  background: #cfc;
+}
+.cm-s-mdn-like .codeMirror-line::selection,
+.cm-s-mdn-like .codeMirror-line > span::selection,
+.cm-s-mdn-like .CodeMirror-line > span > span::selection {
+  background: #cfc;
+}
+.cm-s-mdn-like .codeMirror-line::-moz-selection,
+.cm-s-mdn-like .codeMirror-line > span::-moz-selection,
+.cm-s-mdn-like .CodeMirror-line > span > span::-moz-selection {
+  background: #cfc;
+}
+
+.cm-s-mdn-like .codeMirror-gutters {
+  background: #f8f8f8;
+  border-left: 6px solid rgba(0, 83, 159, 0.65);
+  color: #333;
+}
+.cm-s-mdn-like .codeMirror-linenumber {
+  color: #aaa;
+  padding-left: 8px;
+}
+.cm-s-mdn-like .codeMirror-cursor {
+  border-left: 2px solid #222;
+}
+
+.cm-s-mdn-like .cm-keyword {
+  color: #6262ff;
+}
+.cm-s-mdn-like .cm-atom {
+  color: #f90;
+}
+.cm-s-mdn-like .cm-number {
+  color: #ca7841;
+}
+.cm-s-mdn-like .cm-def {
+  color: #8da6ce;
+}
+.cm-s-mdn-like span.cs-variable-2,
+.cm-s-mdn-like span.cs-tag {
+  color: #690;
+}
+.cm-s-mdn-like span.cs-variable-3,
+.cm-s-mdn-like span.cs-def,
+.cm-s-mdn-like span.cs-type {
+  color: #07a;
+}
+
+.cm-s-mdn-like .cm-variable {
+  color: #07a;
+}
+.cm-s-mdn-like .cm-property {
+  color: #905;
+}
+.cm-s-mdn-like .cm-qualifier {
+  color: #690;
+}
+
+.cm-s-mdn-like .cm-operator {
+  color: #cda869;
+}
+.cm-s-mdn-like .cm-comment {
+  color: #777;
+  font-weight: normal;
+}
+.cm-s-mdn-like .cm-string {
+  color: #07a;
+  font-style: italic;
+}
+.cm-s-mdn-like .cm-string-2 {
+  color: #bd6b18;
+} /*?*/
+.cm-s-mdn-like .cm-meta {
+  color: #000;
+} /*?*/
+.cm-s-mdn-like .cm-builtin {
+  color: #9b7536;
+} /*?*/
+.cm-s-mdn-like .cm-tag {
+  color: #997643;
+}
+.cm-s-mdn-like .cm-attribute {
+  color: #d6bb6d;
+} /*?*/
+.cm-s-mdn-like .cm-header {
+  color: #ff6400;
+}
+.cm-s-mdn-like .cm-hr {
+  color: #aeaeae;
+}
+.cm-s-mdn-like .cm-link {
+  color: #ad9361;
+  font-style: italic;
+  text-decoration: none;
+}
+.cm-s-mdn-like .cm-error {
+  border-bottom: 1px solid red;
+}
+
+div.cm-s-mdn-like .codeMirror-activeline-background {
+  background: #efefff;
+}
+div.cm-s-mdn-like span.codeMirror-matchingbracket {
+  outline: 1px solid grey;
+  color: inherit;
+}
+
+pre.shell code {
+  color: $bunting
+}

@@ -1,14 +1,17 @@
 include ../common/meta.pug
 body.documentation
   include ../common/header.pug
-  include ../common/hero.pug
+  include ../common/hero-doc.pug
 
   section.documentation-section
-    a.sidebar-opener
     .container
-      nav.sidebar
+      nav.sidebar.pos-abt.z-100
         block navigation
+
+      a.sidebar-opener
       .documentation-container
+        if(editable)
+          a.editThisPage(href=`http://github.com/algolia/vue-instantsearch/edit/master/${githubSource}`) Edit this page
         block content
   include ../common/footer.pug
   script(src=webpack.assets['js/common.js'])
