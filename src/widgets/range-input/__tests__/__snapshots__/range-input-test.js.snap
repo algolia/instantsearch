@@ -46,8 +46,8 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
   }
   values={
     Object {
-      "max": null,
-      "min": null,
+      "max": undefined,
+      "min": undefined,
     }
   }
 />
@@ -99,8 +99,8 @@ exports[`rangeInput expect to render with custom labels 1`] = `
   }
   values={
     Object {
-      "max": null,
-      "min": null,
+      "max": undefined,
+      "min": undefined,
     }
   }
 />
@@ -205,8 +205,8 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
   }
   values={
     Object {
-      "max": null,
-      "min": null,
+      "max": undefined,
+      "min": undefined,
     }
   }
 />
@@ -258,8 +258,8 @@ exports[`rangeInput expect to render with results 1`] = `
   }
   values={
     Object {
-      "max": null,
-      "min": null,
+      "max": undefined,
+      "min": undefined,
     }
   }
 />
@@ -311,8 +311,8 @@ exports[`rangeInput expect to render without results 1`] = `
   }
   values={
     Object {
-      "max": null,
-      "min": null,
+      "max": undefined,
+      "min": undefined,
     }
   }
 />

@@ -215,8 +215,8 @@ describe('rangeInput', () => {
     expect(ReactDOM.render).toHaveBeenCalledTimes(1);
     expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     expect(ReactDOM.render.mock.calls[0][0].props.values).toEqual({
-      min: null,
-      max: null,
+      min: undefined,
+      max: undefined,
     });
   });
 

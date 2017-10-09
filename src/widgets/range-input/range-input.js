@@ -41,8 +41,8 @@ const renderer = ({
   const shouldAutoHideContainer = autoHideContainer && rangeMin === rangeMax;
 
   const values = {
-    min: minValue !== -Infinity && minValue !== rangeMin ? minValue : null,
-    max: maxValue !== Infinity && maxValue !== rangeMax ? maxValue : null,
+    min: minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
+    max: maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined,
   };
 
   ReactDOM.render(
