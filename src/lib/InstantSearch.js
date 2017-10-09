@@ -107,6 +107,8 @@ Usage: instantsearch({
         ...this.helper.state,
       });
 
+      this.helper.setState(this.searchParameters);
+
       widgets.forEach(widget => {
         if (widget.init) {
           widget.init({
@@ -120,7 +122,7 @@ Usage: instantsearch({
         }
       });
 
-      this.helper.setState(this.searchParameters).search();
+      this.helper.search();
     }
   }
 
