@@ -1,4 +1,5 @@
 import range from 'lodash/range';
+import times from 'lodash/times';
 import sinon from 'sinon';
 
 import algoliaSearchHelper from 'algoliasearch-helper';
@@ -590,5 +591,31 @@ describe('InstantSearch lifecycle', () => {
       expect(search.searchParameters.facets).toEqual(['price']);
       expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
     });
+  });
+
+  it('should remove all widgets without triggering a search on dispose', () => {
+    search = new InstantSearch({
+      appId,
+      apiKey,
+      indexName,
+    });
+
+    const widgets = times(5, () => ({
+      getConfiguration: () => ({}),
+      init: jest.fn(),
+      render: jest.fn(),
+      dispose: jest.fn(),
+    }));
+
+    search.addWidgets(widgets);
+    search.start();
+
+    expect(search.widgets.length).toBe(5);
+    expect(helperSearchSpy.callCount).toBe(1);
+
+    search.dispose();
+
+    expect(search.widgets.length).toBe(0);
+    expect(helperSearchSpy.callCount).toBe(1);
   });
 });

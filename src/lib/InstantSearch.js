@@ -147,7 +147,7 @@ Usage: instantsearch({
         );
       }
 
-      this.widgets.splice(this.widgets.indexOf(widget), 1);
+      this.widgets = this.widgets.filter(w => w !== widget);
 
       const nextState = widget.dispose({
         helper: this.helper,
@@ -165,7 +165,10 @@ Usage: instantsearch({
       }
     });
 
-    this.helper.search();
+    // no need to retrigger a search if we don't have any widgets left
+    if (this.widgets.length > 0) {
+      this.helper.search();
+    }
   }
 
   /**
@@ -235,6 +238,14 @@ Usage: instantsearch({
     // track we started the search if we add more widgets,
     // to init them directly after add
     this.started = true;
+  }
+
+  /**
+   * Remove all widgets without triggering a search afterwards.
+   * @return {undefined} This method does not return anything
+   */
+  dispose() {
+    this.removeWidgets(this.widgets);
   }
 
   createURL(params) {
