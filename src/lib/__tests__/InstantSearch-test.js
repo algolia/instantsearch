@@ -363,8 +363,6 @@ describe('InstantSearch lifecycle', () => {
   });
 
   describe('When removing a widget', () => {
-    let widget;
-
     function registerWidget(
       widgetGetConfiguration = {
         facets: ['categories'],
@@ -372,7 +370,7 @@ describe('InstantSearch lifecycle', () => {
       },
       dispose = sinon.spy()
     ) {
-      widget = {
+      const widget = {
         getConfiguration: sinon.stub().returns(widgetGetConfiguration),
         init: sinon.spy(),
         render: sinon.spy(),
@@ -526,6 +524,71 @@ describe('InstantSearch lifecycle', () => {
       expect(search.widgets.length).toBe(0);
       expect(search.searchParameters.numericRefinements).toEqual({});
       expect(search.searchParameters.disjunctiveFacets).toEqual([]);
+    });
+  });
+
+  describe('When adding widgets after start', () => {
+    function registerWidget(
+      widgetGetConfiguration = {},
+      dispose = sinon.spy()
+    ) {
+      const widget = {
+        getConfiguration: sinon.stub().returns(widgetGetConfiguration),
+        init: sinon.spy(),
+        render: sinon.spy(),
+        dispose,
+      };
+
+      return widget;
+    }
+
+    beforeEach(() => {
+      search = new InstantSearch({
+        appId,
+        apiKey,
+        indexName,
+      });
+    });
+
+    it('should add widgets after start', () => {
+      search.start();
+      expect(helperSearchSpy.callCount).toBe(1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.started).toBe(true);
+
+      const widget1 = registerWidget({ facets: ['price'] });
+      search.addWidget(widget1);
+
+      expect(helperSearchSpy.callCount).toBe(2);
+      expect(widget1.init.calledOnce).toBe(true);
+
+      const widget2 = registerWidget({ disjunctiveFacets: ['categories'] });
+      search.addWidget(widget2);
+
+      expect(widget2.init.calledOnce).toBe(true);
+      expect(helperSearchSpy.callCount).toBe(3);
+
+      expect(search.widgets.length).toBe(2);
+      expect(search.searchParameters.facets).toEqual(['price']);
+      expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
+    });
+
+    it('should trigger only one search using `addWidgets()`', () => {
+      search.start();
+
+      expect(helperSearchSpy.callCount).toBe(1);
+      expect(search.widgets.length).toBe(0);
+      expect(search.started).toBe(true);
+
+      const widget1 = registerWidget({ facets: ['price'] });
+      const widget2 = registerWidget({ disjunctiveFacets: ['categories'] });
+
+      search.addWidgets([widget1, widget2]);
+
+      expect(helperSearchSpy.callCount).toBe(2);
+      expect(search.searchParameters.facets).toEqual(['price']);
+      expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
     });
   });
 });
