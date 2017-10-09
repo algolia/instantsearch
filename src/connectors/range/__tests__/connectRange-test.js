@@ -526,8 +526,11 @@ describe('connectRange', () => {
     const rendering = () => {};
     const createHelper = () => {
       const helper = jsHelper(fakeClient);
-      helper.clearRefinements = jest.fn();
       helper.search = jest.fn();
+      const initalClearRefinements = helper.clearRefinements;
+      helper.clearRefinements = jest.fn((...args) =>
+        initalClearRefinements.apply(helper, args)
+      );
 
       return helper;
     };
@@ -590,40 +593,6 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to refine to given min when user bounds are set and value is a parsable number', () => {
-      const range = { min: 10, max: 500 };
-      const values = ['20', 490];
-      const helper = createHelper();
-      const widget = connectRange(rendering)({
-        attributeName,
-        min: 10,
-      });
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([20]);
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
-      expect(helper.search).toHaveBeenCalled();
-    });
-
-    it('expect to refine to given max when user bounds are set and value is a parsable number', () => {
-      const range = { min: 10, max: 500 };
-      const values = [20, '490'];
-      const helper = createHelper();
-      const widget = connectRange(rendering)({
-        attributeName,
-        max: 500,
-      });
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([20]);
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
-      expect(helper.search).toHaveBeenCalled();
-    });
-
     it('expect to refine min when user bounds are set and value is at range bound', () => {
       const range = { min: 10, max: 500 };
       const values = [10, 490];
@@ -637,7 +606,7 @@ describe('connectRange', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.clearRefinements).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -654,49 +623,18 @@ describe('connectRange', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.clearRefinements).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to refine min when user bounds are set and value is not a parsable number', () => {
-      const range = { min: 10, max: 500 };
-      const values = [null, 490];
-      const helper = createHelper();
-      const widget = connectRange(rendering)({
-        attributeName,
-        min: 10,
-      });
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
-    });
-
-    it('expect to refine max when user bounds are set and value is not a parsable number', () => {
-      const range = { min: 10, max: 500 };
-      const values = [20, null];
-      const helper = createHelper();
-      const widget = connectRange(rendering)({
-        attributeName,
-        max: 500,
-      });
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([20]);
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([500]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
-    });
-
-    it('expect to not refine min when no user bounds are set and value is at range bound', () => {
+    it('expect to reset min refinenement when value is undefined', () => {
       const range = { min: 0, max: 500 };
-      const values = [0, 490];
+      const values = [undefined, 490];
       const helper = createHelper();
       const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
 
       widget._refine(helper, range)(values);
 
@@ -708,11 +646,14 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to not refine max when no user bounds are set and value is at range bound', () => {
+    it('expect to reset max refinenement when value is undefined', () => {
       const range = { min: 0, max: 500 };
-      const values = [10, 500];
+      const values = [10, undefined];
       const helper = createHelper();
       const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
 
       widget._refine(helper, range)(values);
 
@@ -724,11 +665,14 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it("expect to not refine min when it's out of range", () => {
-      const range = { min: 10, max: 500 };
-      const values = [0, 490];
+    it('expect to reset min refinenement when value is empty string', () => {
+      const range = { min: 0, max: 500 };
+      const values = ['', 490];
       const helper = createHelper();
       const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
 
       widget._refine(helper, range)(values);
 
@@ -740,7 +684,118 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it("expect to not refine max when it's out of range", () => {
+    it('expect to reset max refinenement when value is empty string', () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, ''];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset min refinenement when user bounds are not set and value is at bounds', () => {
+      const range = { min: 0, max: 500 };
+      const values = [0, 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset max refinenement when user bounds are not set and value is at bounds', () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, 500];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset min refinenement when user bounds are set and value is nullable', () => {
+      const range = { min: 0, max: 500 };
+      const values = [undefined, 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({
+        attributeName,
+        min: 10,
+      });
+
+      helper.addNumericRefinement(attributeName, '>=', 20);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset max refinenement when user bounds are set and value is nullable', () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, undefined];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({
+        attributeName,
+        max: 250,
+      });
+
+      helper.addNumericRefinement(attributeName, '>=', 240);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([250]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it("expect to not refine when min it's out of range", () => {
+      const range = { min: 10, max: 500 };
+      const values = [0, 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
+    });
+
+    it("expect to not refine when max it's out of range", () => {
       const range = { min: 0, max: 490 };
       const values = [10, 500];
       const helper = createHelper();
@@ -748,34 +803,19 @@ describe('connectRange', () => {
 
       widget._refine(helper, range)(values);
 
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
-    });
-
-    it('expect to not refine when both values have not changed', () => {
-      const range = { min: 0, max: 500 };
-      const values = [10, 250];
-      const helper = createHelper();
-      const widget = connectRange(rendering)({ attributeName });
-
-      helper.addNumericRefinement(attributeName, '>=', 10);
-      helper.addNumericRefinement(attributeName, '<=', 250);
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([250]);
       expect(helper.clearRefinements).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
-    it('expect to not refine when values are invalid', () => {
+    it("expect to not refine when values don't have changed from empty state", () => {
       const range = { min: 0, max: 500 };
-      const values = [null, null];
+      const values = [undefined, undefined];
       const helper = createHelper();
       const widget = connectRange(rendering)({ attributeName });
 
@@ -787,8 +827,43 @@ describe('connectRange', () => {
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
+    });
+
+    it("expect to not refine when values don't have changed from non empty state", () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
+    });
+
+    it('expect to not refine when values are invalid', () => {
+      const range = { min: 0, max: 500 };
+      const values = ['ADASA', 'FFDSFQS'];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
     });
   });
 });
