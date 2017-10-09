@@ -5792,11 +5792,11 @@ react-error-overlay@^2.0.2:
     settle-promise "1.0.0"
     source-map "0.5.6"
 
-react-instantsearch-theme-algolia@4.1.2:
+react-instantsearch-theme-algolia@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/react-instantsearch-theme-algolia/-/react-instantsearch-theme-algolia-4.1.2.tgz#d5dda917cda4ad20be62b1674ee822f17ab8a1e0"
 
-react-instantsearch@4.1.2:
+react-instantsearch@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.1.2.tgz#d9d688147ce088cc3ea117f9561e58ef85d9dd00"
   dependencies:
