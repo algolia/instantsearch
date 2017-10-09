@@ -32,17 +32,17 @@ if [ $currentBranch != 'master' ]; then
   exit 1
 fi
 
-#if [[ -n $(git status --porcelain) ]]; then
-#  printf "Release: Working tree is not clean (git status)\n"
-#  exit 1
-#fi
+if [[ -n $(git status --porcelain) ]]; then
+  printf "Release: Working tree is not clean (git status)\n"
+  exit 1
+fi
 
 # printf "\n\nRelease: update working tree"
-#git pull origin master
-#git fetch origin --tags
+git pull origin master
+git fetch origin --tags
 
 # printf "Release: install dependencies"
-#yarn boot
+yarn boot
 
 # No need for complex release process for now, only patch releases should be ok
 currentVersion=`cat package.json | json version`
@@ -67,38 +67,38 @@ fi
 printf "\n=> Release: please type the new chosen version $additionalInfo >"
 read -e newVersion
 
-#(
-#cd packages/react-instantsearch
-#mversion $newVersion
-#)
+(
+cd packages/react-instantsearch
+mversion $newVersion
+)
 
-#(
-#cd packages/react-instantsearch-theme-algolia
-#mversion $newVersion
-#)
+(
+cd packages/react-instantsearch-theme-algolia
+mversion $newVersion
+)
 
-#mversion $newVersion
+mversion $newVersion
 
 # update changelog
 printf "\n\nRelease: update changelog"
 changelog=`conventional-changelog -p angular`
-#conventional-changelog --preset angular --infile CHANGELOG.md --same-file
+conventional-changelog --preset angular --infile CHANGELOG.md --same-file
 
 # regenerate readme TOC
 printf "\n\nRelease: generate TOCS"
-#yarn doctoc
+yarn doctoc
 
 # git add and tag
-#commitMessage="v$newVersion\n\n$changelog"
-#git add package.json CHANGELOG.md README.md packages/ yarn.lock
-#printf "$commitMessage" | git commit --file -
-#git tag "v$newVersion"
+commitMessage="v$newVersion\n\n$changelog"
+git add package.json CHANGELOG.md README.md packages/ yarn.lock
+printf "$commitMessage" | git commit --file -
+git tag "v$newVersion"
 
 printf "\n\nRelease: almost done, check everything in another terminal tab if you want.\n"
 read -p "=> Release: when ready, press [ENTER] to push to github and publish the package"
 
-#git push origin master
-#git push origin --tags
+git push origin master
+git push origin --tags
 
 printf "\n\nRelease: pushed to github, publish on npm"
 
