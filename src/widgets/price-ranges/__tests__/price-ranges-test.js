@@ -182,7 +182,7 @@ describe('priceRanges()', () => {
   });
 
   afterEach(() => {
-    priceRanges.__ResetDependency__('ReactDOM');
+    priceRanges.__ResetDependency__('render');
     priceRanges.__ResetDependency__('autoHideContainerHOC');
     priceRanges.__ResetDependency__('headerFooterHOC');
   });

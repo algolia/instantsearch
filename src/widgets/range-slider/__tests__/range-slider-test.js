@@ -41,7 +41,7 @@ describe('rangeSlider', () => {
     });
 
     afterEach(() => {
-      rangeSlider.__ResetDependency__('ReactDOM');
+      rangeSlider.__ResetDependency__('render');
       rangeSlider.__ResetDependency__('autoHideContainerHOC');
       rangeSlider.__ResetDependency__('headerFooterHOC');
     });
