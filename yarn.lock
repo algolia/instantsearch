@@ -143,8 +143,8 @@ ajv@^5.0.0, ajv@^5.1.0, ajv@^5.1.5, ajv@^5.2.0, ajv@^5.2.3:
     json-stable-stringify "^1.0.1"
 
 algoliasearch-helper@^2.21.1:
-  version "2.21.2"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.21.2.tgz#73a1f9a9e60be0ed04ce93d5f63fc7105e599f5b"
+  version "2.22.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.22.0.tgz#6904abf15cd9b65a32fc3d9eb9dfe50f53b27001"
   dependencies:
     events "^1.1.0"
     lodash "^4.13.1"
