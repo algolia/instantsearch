@@ -125,13 +125,16 @@ export default function connectRange(renderFn) {
           const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
           const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
 
-          const nextMinAsNumber = parseFloat(nextMin);
-          const nextMaxAsNumber = parseFloat(nextMax);
+          const isResetMin = nextMin === undefined || nextMin === '';
+          const isResetMax = nextMax === undefined || nextMax === '';
+
+          const nextMinAsNumber = !isResetMin ? parseFloat(nextMin) : undefined;
+          const nextMaxAsNumber = !isResetMax ? parseFloat(nextMax) : undefined;
 
           let newNextMin;
           if (!hasMinBound && currentRangeMin === nextMinAsNumber) {
             newNextMin = undefined;
-          } else if (hasMinBound && !_isFinite(nextMinAsNumber)) {
+          } else if (hasMinBound && isResetMin) {
             newNextMin = minBound;
           } else {
             newNextMin = nextMinAsNumber;
@@ -140,23 +143,39 @@ export default function connectRange(renderFn) {
           let newNextMax;
           if (!hasMaxBound && currentRangeMax === nextMaxAsNumber) {
             newNextMax = undefined;
-          } else if (hasMaxBound && !_isFinite(nextMaxAsNumber)) {
+          } else if (hasMaxBound && isResetMax) {
             newNextMax = maxBound;
           } else {
             newNextMax = nextMaxAsNumber;
           }
 
-          if (min !== newNextMin || max !== newNextMax) {
+          const isResetNewNextMin = newNextMin === undefined;
+          const isValidNewNextMin = _isFinite(newNextMin);
+          const isValidMinCurrentRange = _isFinite(currentRangeMin);
+          const isGreatherThanCurrentRange =
+            isValidMinCurrentRange && currentRangeMin <= newNextMin;
+          const isMinValid =
+            isResetNewNextMin ||
+            (isValidNewNextMin &&
+              (!isValidMinCurrentRange || isGreatherThanCurrentRange));
+
+          const isResetNewNextMax = newNextMax === undefined;
+          const isValidNewNextMax = _isFinite(newNextMax);
+          const isValidMaxCurrentRange = _isFinite(currentRangeMax);
+          const isLowerThanRange =
+            isValidMaxCurrentRange && currentRangeMax >= newNextMax;
+          const isMaxValid =
+            isResetNewNextMax ||
+            (isValidNewNextMax &&
+              (!isValidMaxCurrentRange || isLowerThanRange));
+
+          const hasMinChange = min !== newNextMin;
+          const hasMaxChange = max !== newNextMax;
+
+          if ((hasMinChange || hasMaxChange) && (isMinValid && isMaxValid)) {
             helper.clearRefinements(attributeName);
 
-            const isValidMinCurrentRange = _isFinite(currentRangeMin);
-            const isGreatherThanCurrentRange =
-              isValidMinCurrentRange && currentRangeMin <= newNextMin;
-
-            if (
-              _isFinite(newNextMin) &&
-              (!isValidMinCurrentRange || isGreatherThanCurrentRange)
-            ) {
+            if (isValidNewNextMin) {
               helper.addNumericRefinement(
                 attributeName,
                 '>=',
@@ -164,14 +183,7 @@ export default function connectRange(renderFn) {
               );
             }
 
-            const isValidMaxCurrentRange = _isFinite(currentRangeMax);
-            const isLowerThanRange =
-              isValidMaxCurrentRange && currentRangeMax >= newNextMax;
-
-            if (
-              _isFinite(newNextMax) &&
-              (!isValidMaxCurrentRange || isLowerThanRange)
-            ) {
+            if (isValidNewNextMax) {
               helper.addNumericRefinement(
                 attributeName,
                 '<=',
