@@ -361,4 +361,148 @@ describe('InstantSearch lifecycle', () => {
       expect(onRender.callCount).toEqual(1);
     });
   });
+
+  describe('When removing a widget', () => {
+    let widget;
+
+    function registerWidget(
+      widgetGetConfiguration = {
+        facets: ['categories'],
+        maxValuesPerFacet: 10,
+      },
+      dispose = sinon.spy()
+    ) {
+      widget = {
+        getConfiguration: sinon.stub().returns(widgetGetConfiguration),
+        init: sinon.spy(),
+        render: sinon.spy(),
+        dispose,
+      };
+
+      search.addWidget(widget);
+
+      return widget;
+    }
+
+    beforeEach(() => {
+      search = new InstantSearch({
+        appId,
+        apiKey,
+        indexName,
+      });
+    });
+
+    it('should unmount a widget without configuration', () => {
+      const widget1 = registerWidget({});
+      const widget2 = registerWidget({});
+
+      expect(search.widgets.length).toBe(2);
+
+      search.start();
+      search.removeWidget(widget1);
+      search.removeWidget(widget2);
+
+      expect(search.widgets.length).toBe(0);
+    });
+
+    it('should unmount a widget with facets configuration', () => {
+      const widget1 = registerWidget({ facets: ['price'] }, ({ state }) =>
+        state.removeFacet('price')
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.facets).toEqual(['price']);
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.facets).toEqual([]);
+    });
+
+    it('should unmount a widget with hierarchicalFacets configuration', () => {
+      const widget1 = registerWidget(
+        {
+          hierarchicalFacets: [
+            {
+              name: 'price',
+              attributes: ['foo'],
+              separator: ' > ',
+              rootPath: 'lvl1',
+              showParentLevel: true,
+            },
+          ],
+        },
+        ({ state }) => state.removeHierarchicalFacet('price')
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.hierarchicalFacets).toEqual([
+        {
+          name: 'price',
+          attributes: ['foo'],
+          separator: ' > ',
+          rootPath: 'lvl1',
+          showParentLevel: true,
+        },
+      ]);
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.hierarchicalFacets).toEqual([]);
+    });
+
+    it('should unmount a widget with disjunctiveFacets configuration', () => {
+      const widget1 = registerWidget(
+        { disjunctiveFacets: ['price'] },
+        ({ state }) => state.removeDisjunctiveFacet('price')
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.disjunctiveFacets).toEqual([]);
+    });
+
+    it('should unmount a widget with numericRefinements configuration', () => {
+      const widget1 = registerWidget(
+        { numericRefinements: { price: {} } },
+        ({ state }) => state.removeNumericRefinement('price')
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.numericRefinements).toEqual({ price: {} });
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.numericRefinements).toEqual({});
+    });
+
+    it('should unmount a widget with maxValuesPerFacet configuration', () => {
+      const widget1 = registerWidget(undefined, ({ state }) =>
+        state
+          .removeFacet('categories')
+          .setQueryParameters('maxValuesPerFacet', undefined)
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.facets).toEqual(['categories']);
+      expect(search.searchParameters.maxValuesPerFacet).toEqual(10);
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.facets).toEqual([]);
+      expect(search.searchParameters.maxValuesPerFacet).toBe(undefined);
+    });
+  });
 });
