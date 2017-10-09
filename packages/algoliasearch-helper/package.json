@@ -15,7 +15,7 @@
     "examples": "npm run build & npm run open & http-server .",
     "doc": "gulp --gulpfile documentation-src/build.gulp.js doc",
     "doc:watch": "gulp --gulpfile documentation-src/build.gulp.js doc:watch",
-    "doc:publish": "gh-pages-deploy",
+    "doc:publish": "yarn run doc && gh-pages -d documentation",
     "doc:staging": "scripts/staging-doc.sh",
     "readme:toc": "doctoc --notitle README.md --maxlevel 3",
     "test-ci": "scripts/test-ci.sh",
@@ -26,13 +26,6 @@
     "release": "git checkout dist/ && rm -rf node_modules && yarn && ./scripts/release.js",
     "changelog:view-last": "conventional-changelog -u -n scripts/conventional-changelog/",
     "changelog:update": "conventional-changelog -i CHANGELOG -s -u -n scripts/conventional-changelog/"
-  },
-  "gh-pages-deploy": {
-    "staticpath": "documentation",
-    "prep": [
-      "doc"
-    ],
-    "noprompt": false
   },
   "author": {
     "name": "Algolia SAS",
@@ -67,7 +60,7 @@
     "eslint": "^1.7.3",
     "eslint-config-airbnb": "0.0.8",
     "eslint-config-algolia": "^3.0.0",
-    "gh-pages-deploy": "^0.4.2",
+    "gh-pages": "^1.0.0",
     "gulp": "^3.9.1",
     "gulp-cli": "^1.2.1",
     "gulp-livereload": "^3.8.1",

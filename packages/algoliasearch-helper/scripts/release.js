@@ -18,13 +18,16 @@ colors.setTheme({
 
 const packageJson = require('../package.json');
 
+const {showChangelog, getChangelog, updateChangelog} = require('./lib/conventionalChangelog.js');
+
 shell.echo(`Algoliasearch-Helper release script`);
 
 checkEnvironment();
 mergeDevIntoMaster();
-showChangelog();
+showChangelog(shell);
 promptVersion(packageJson.version, (version) => {
   bumpVersion(version, () => {
+    updateChangelog(shell);
     commitNewFiles(version);
     publish();
     goBackToDevelop();
@@ -34,7 +37,6 @@ promptVersion(packageJson.version, (version) => {
 function checkEnvironment() {
   const currentBranch = shell.exec('git rev-parse --abbrev-ref HEAD', {silent: true}).toString().trim();
 
-  console.log(currentBranch);
   if (currentBranch !== 'develop') {
     shell.echo('The release script should be started from develop'.error);
     process.exit(1);
@@ -56,12 +58,6 @@ function mergeDevIntoMaster() {
   shell.exec('git checkout master', {silent: true});
   shell.exec('git merge origin master', {silent: true});
   shell.exec('git merge --no-ff --no-edit develop', {silent: true});
-}
-
-function showChangelog() {
-  shell.echo('\nNext version changelog:');
-  const changelog = shell.exec('conventional-changelog -u -n scripts/conventional-changelog/', {silent: true});
-  shell.echo(changelog.white);
 }
 
 function promptVersion(currentVersion, cb) {
@@ -108,7 +104,7 @@ function bumpVersion(newVersion, cb) {
 
 function commitNewFiles(version) {
   shell.echo('Commiting files');
-  const changelog = shell.exec('conventional-changelog -u -n scripts/conventional-changelog/', {silent: true}).trim().split('\n');
+  const changelog = getChangelog(shell);
   changelog.splice(1, 0, '');
   shell.exec(`git commit -a -m "${changelog.join('\n')}"`, {silent: true});
 
@@ -125,7 +121,7 @@ function publish() {
   shell.exec('npm publish', {silent: true});
 
   shell.echo('Publishing new documentation');
-  shell.exec('yarn run doc:publish', {silent: true});
+  shell.exec('yarn run doc:publish');
 }
 
 function goBackToDevelop() {

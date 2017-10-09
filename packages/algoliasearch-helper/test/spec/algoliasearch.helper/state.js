@@ -465,3 +465,41 @@ test('should be able to get configuration that is not from algolia', function(t)
     moar);
   t.end();
 });
+
+test('setState should set a default hierarchicalFacetRefinement when a rootPath is defined', function(t) {
+  var searchParameters = {hierarchicalFacets: [
+    {
+      name: 'hierarchicalCategories.lvl0',
+      attributes: [
+        'hierarchicalCategories.lvl0',
+        'hierarchicalCategories.lvl1',
+        'hierarchicalCategories.lvl2'
+      ],
+      separator: ' > ',
+      rootPath: 'Cameras & Camcorders',
+      showParentLevel: true
+    }
+  ]};
+
+  var helper = algoliasearchHelper(fakeClient, null, searchParameters);
+  var initialHelperState = Object.assign({}, helper.getState());
+
+  t.deepEquals(initialHelperState.hierarchicalFacetsRefinements, {
+    'hierarchicalCategories.lvl0': ['Cameras & Camcorders']
+  });
+
+  // reset state
+  helper.setState(helper.state.removeHierarchicalFacet('hierarchicalCategories.lvl0'));
+  t.deepEquals(helper.getState().hierarchicalFacetsRefinements, {});
+
+  // re-add `hierarchicalFacets`
+  helper.setState(Object.assign({}, helper.state, searchParameters));
+  var finalHelperState = Object.assign({}, helper.getState());
+
+  t.deepEquals(initialHelperState, finalHelperState);
+  t.deepEquals(finalHelperState.hierarchicalFacetsRefinements, {
+    'hierarchicalCategories.lvl0': ['Cameras & Camcorders']
+  });
+
+  t.end();
+});
