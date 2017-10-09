@@ -1,3 +1,13 @@
+2.22.0 - 2017-10-09
+ * chore(release): changelog should be updated during release (#530) https://github.com/algolia/algoliasearch-helper-js/commit/ba26e95896ee38607afb58ab09775ef059e51f3c
+ * chore(test): add test for the request builder and analytics (#545) https://github.com/algolia/algoliasearch-helper-js/commit/0377f495e84c166aa6a836c2738688f1e1b58d7e
+ * chore(tool): Publishing the website requires a manual intervention https://github.com/algolia/algoliasearch-helper-js/commit/8497c3cb12cfc369496e9997a5e1de7ab317f674
+ * chore(tool): replace 'gh-pages-deploy' with 'gh-pages' https://github.com/algolia/algoliasearch-helper-js/commit/ac1462bf28af4ea155f7458cce3918161c70ef8d
+ * feat(query rules): expose userData (#544) https://github.com/algolia/algoliasearch-helper-js/commit/2f935204b5fd92098d17b8579863d6a761a573a3, closes https://github.com/algolia/algoliasearch-helper-js/issues/529
+ * fix(FacetValue doc): wrong attribute name in docs (#539) https://github.com/algolia/algoliasearch-helper-js/commit/7275a756510f5d7df460ae99cb88af6c2e617424
+ * fix(requestBuilder): set analytics:false to subsequent queries (#543) https://github.com/algolia/algoliasearch-helper-js/commit/ebf41d97ea088af674e3661bfdd7f432018fc2c1, closes https://github.com/algolia/algoliasearch-helper-js/issues/540
+ * fix(setState): use .make() instead of constructor() (#542) https://github.com/algolia/algoliasearch-helper-js/commit/173da7cb256d007b7328b6c90aa037b17dcf95be
+
 2.21.2 - 2017-07-27
  * chore(cdn): update jsdelivr URL https://github.com/algolia/algoliasearch-helper-js/commit/5f663802dcb92a62e3e434dec1b68917973af3b5
  * chore(doc): update header https://github.com/algolia/algoliasearch-helper-js/commit/a5399fb9614d124716369b9f7acd339719c4ab63
