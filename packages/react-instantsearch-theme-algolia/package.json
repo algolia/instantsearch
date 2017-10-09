@@ -13,7 +13,7 @@
     "build-and-publish": "./scripts/build-and-publish.sh"
   },
   "devDependencies": {
-    "autoprefixer": "7.1.4",
+    "autoprefixer": "7.1.5",
     "cssnano": "3.10.0",
     "node-sass": "4.5.3",
     "postcss": "6.0.13",
