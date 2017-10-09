@@ -504,5 +504,28 @@ describe('InstantSearch lifecycle', () => {
       expect(search.searchParameters.facets).toEqual([]);
       expect(search.searchParameters.maxValuesPerFacet).toBe(undefined);
     });
+
+    it('should unmount multiple widgets at once', () => {
+      const widget1 = registerWidget(
+        { numericRefinements: { price: {} } },
+        ({ state }) => state.removeNumericRefinement('price')
+      );
+      const widget2 = registerWidget(
+        { disjunctiveFacets: ['price'] },
+        ({ state }) => state.removeDisjunctiveFacet('price')
+      );
+
+      search.start();
+
+      expect(search.widgets.length).toBe(2);
+      expect(search.searchParameters.numericRefinements).toEqual({ price: {} });
+      expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
+
+      search.removeWidgets([widget1, widget2]);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.numericRefinements).toEqual({});
+      expect(search.searchParameters.disjunctiveFacets).toEqual([]);
+    });
   });
 });
