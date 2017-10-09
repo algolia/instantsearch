@@ -81,6 +81,35 @@ export default function createConnector(connectorDesc) {
         if (isWidget) {
           this.unregisterWidget = widgetsManager.registerWidget(this);
         }
+        if (process.env.NODE_ENV === 'development') {
+          const onlyGetProvidedPropsUsage = !Object.keys(connectorDesc).find(
+            key =>
+              [
+                'getMetadata',
+                'getSearchParameters',
+                'refine',
+                'cleanUp',
+              ].indexOf(key) > -1
+          );
+
+          if (
+            onlyGetProvidedPropsUsage &&
+            !connectorDesc.displayName.startsWith('Algolia')
+          ) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              'react-instantsearch: it seems that you are using the `createConnector` api ' +
+                'only to access the `searchState` and the `searchResults` through `getProvidedProps`.' +
+                'We are now provided a dedicated API' +
+                ' the `connectStateResults` connector that you should use instead. The `createConnector` API will be ' +
+                'soon deprecated and will break in future next major versions.' +
+                '\n\n' +
+                'See more at https://community.algolia.com/react-instantsearch/connectors/connectStateResults.html' +
+                '\n' +
+                'and https://community.algolia.com/react-instantsearch/guide/Conditional_display.html'
+            );
+          }
+        }
       }
 
       getMetadata(nextWidgetsState) {
@@ -271,36 +300,6 @@ export default function createConnector(connectorDesc) {
               },
             }
           : {};
-
-        if (process.env.NODE_ENV === 'development') {
-          const onlyGetProvidedPropsUsage = !Object.keys(connectorDesc).find(
-            key =>
-              [
-                'getMetadata',
-                'getSearchParameters',
-                'refine',
-                'cleanUp',
-              ].indexOf(key) > -1
-          );
-
-          if (
-            onlyGetProvidedPropsUsage &&
-            !connectorDesc.displayName.startsWith('Algolia')
-          ) {
-            // eslint-disable-next-line no-console
-            console.warn(
-              'react-instantsearch: it seems that you are using the `createConnector` api ' +
-                'only to access the `searchState` and the `searchResults` through `getProvidedProps`.' +
-                'We are now provided a dedicated API' +
-                ' the `connectStateResults` connector that you should use instead. The `createConnector` API will be ' +
-                'soon deprecated and will break in future next major versions.' +
-                '\n\n' +
-                'See more at https://community.algolia.com/react-instantsearch/connectors/connectStateResults.html' +
-                '\n' +
-                'and https://community.algolia.com/react-instantsearch/guide/Conditional_display.html'
-            );
-          }
-        }
 
         return (
           <Composed
