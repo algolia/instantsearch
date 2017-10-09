@@ -3994,9 +3994,9 @@ eslint-plugin-import@2.7.0:
     minimatch "^3.0.3"
     read-pkg-up "^2.0.0"
 
-eslint-plugin-jasmine@2.8.6:
-  version "2.8.6"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jasmine/-/eslint-plugin-jasmine-2.8.6.tgz#42ccf4494a9544b220b1ae4259335942aa3723ea"
+eslint-plugin-jasmine@2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jasmine/-/eslint-plugin-jasmine-2.9.1.tgz#22e19a59f16f3a5f643a04aba04438d0e3047030"
 
 eslint-plugin-jest@21.2.0:
   version "21.2.0"
@@ -9882,8 +9882,8 @@ selfsigned@^1.9.1:
     node-forge "0.6.33"
 
 semantic-release@^8.0.3:
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/semantic-release/-/semantic-release-8.1.1.tgz#6d5d60acc101f9bba569ef53a36827e7d0fe4a04"
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/semantic-release/-/semantic-release-8.1.2.tgz#554b77a24df8af35cbc4c0fb423e908329ef5d23"
   dependencies:
     "@semantic-release/commit-analyzer" "^3.0.1"
     "@semantic-release/condition-travis" "^6.0.0"
