@@ -85,6 +85,11 @@ Usage: instantsearch({
     this.addWidgets([widget]);
   }
 
+  /**
+   * Add multiple widgets
+   * @param  {Widget[]} widgets The array of widgets to add to InstantSearch.
+   * @return {undefined} This method does not return anything
+   */
   addWidgets(widgets) {
     if (!Array.isArray(widgets)) {
       throw new Error(
@@ -126,10 +131,20 @@ Usage: instantsearch({
     }
   }
 
+  /**
+   * Remove a widget
+   * @param  {Widget} widget The widget instance to remove from InstantSearch. This widget must implement a `dipose()` method in order to be gracefully removed.
+   * @return {undefined} This method does not return anything
+   */
   removeWidget(widget) {
     this.removeWidgets([widget]);
   }
 
+  /**
+   * Remove multiple widgets
+   * @param  {Widget[]} widgets Array of widgets instances to remove from InstantSearch.
+   * @return {undefined} This method does not return anything
+   */
   removeWidgets(widgets) {
     if (!Array.isArray(widgets)) {
       throw new Error(
