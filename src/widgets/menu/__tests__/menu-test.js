@@ -33,6 +33,6 @@ describe('menu', () => {
     widget.init({ helper, createURL, instantSearchInstance });
     widget.render({ results, createURL, state });
     expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    menu.__ResetDependency__('ReactDOM');
+    menu.__ResetDependency__('render');
   });
 });

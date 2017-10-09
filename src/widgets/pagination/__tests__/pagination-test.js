@@ -118,7 +118,7 @@ describe('pagination()', () => {
   });
 
   afterEach(() => {
-    pagination.__ResetDependency__('ReactDOM');
+    pagination.__ResetDependency__('render');
     pagination.__ResetDependency__('autoHideContainerHOC');
   });
 

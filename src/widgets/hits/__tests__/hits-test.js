@@ -56,7 +56,7 @@ describe('hits()', () => {
   });
 
   afterEach(() => {
-    hits.__ResetDependency__('ReactDOM');
+    hits.__ResetDependency__('render');
   });
 
   function getProps() {
