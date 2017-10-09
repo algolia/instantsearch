@@ -9,7 +9,7 @@ exports[`menuSelect render correctly 1`] = `
       "header": "ais-menu-select--header",
       "option": "ais-menu-select--option",
       "root": "ais-menu-select",
-      "select": "ais-menu-select--footer",
+      "select": "ais-menu-select--select",
     }
   }
   items={
