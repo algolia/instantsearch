@@ -42,7 +42,7 @@ export default {
     }
   },
   methods: {
-    bem(element, modifier) {
+    bem(element, modifier, outputElement) {
       if (!this.blockClassName) {
         throw new Error("You need to provide 'blockClassName' in your data.");
       }
@@ -65,6 +65,9 @@ export default {
 
       const elementModifierClassName = `${elementClassName}--${modifier}`;
 
+      if (outputElement !== undefined && outputElement === false) {
+        return this.customClassName(elementModifierClassName);
+      }
       return `${this.customClassName(elementClassName)} ${this.customClassName(
         elementModifierClassName
       )}`;

@@ -1,29 +1,29 @@
 <template>
   <ul :class="bem()" v-show="totalResults > 0">
-    <li :class="[bem('item', 'first'), page === 1 ? bem('item', 'disabled') : '']">
-      <a href="#" @click.prevent="goToFirstPage">
+    <li :class="[bem('item', 'first'), page === 1 ? bem('item', 'disabled', false) : '']">
+      <a href="#" @click.prevent="goToFirstPage" :class="bem('link')">
         <slot name="first">&lt;&lt;</slot>
       </a>
     </li>
-    <li :class="[bem('item', 'previous'), page === 1 ? bem('item', 'disabled') : '']">
-      <a href="#" @click.prevent="goToPreviousPage">
+    <li :class="[bem('item', 'previous'), page === 1 ? bem('item', 'disabled', false) : '']">
+      <a href="#" @click.prevent="goToPreviousPage" :class="bem('link')">
         <slot name="previous">&lt;</slot>
       </a>
     </li>
-    <li v-for="item in pages" :key="item" :class="[bem('item'), page === item ? bem('item', 'active') : '']" >
-      <a href="#" @click.prevent="goToPage(item)">
+    <li v-for="item in pages" :key="item" :class="[bem('item'), page === item ? bem('item', 'active', false) : '']" >
+      <a href="#" @click.prevent="goToPage(item)" :class="bem('link')">
         <slot :value="item" :active="item === page">
           {{ item }}
         </slot>
       </a>
     </li>
-    <li :class="[bem('item', 'next'), page >= totalPages ? bem('item', 'disabled') : '']">
-      <a href="#" @click.prevent="goToNextPage">
+    <li :class="[bem('item', 'next'), page >= totalPages ? bem('item', 'disabled', false) : '']">
+      <a href="#" @click.prevent="goToNextPage" :class="bem('link')">
         <slot name="next">&gt;</slot>
       </a>
     </li>
-    <li :class="[bem('item', 'last'), page >= totalPages ? bem('item', 'disabled') : '']">
-      <a href="#" @click.prevent="goToLastPage">
+    <li :class="[bem('item', 'last'), page >= totalPages ? bem('item', 'disabled', false) : '']">
+      <a href="#" @click.prevent="goToLastPage" :class="bem('link')">
         <slot name="last">&gt;&gt;</slot>
       </a>
     </li>
