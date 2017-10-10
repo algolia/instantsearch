@@ -27,12 +27,7 @@ import { getResults } from '../core/indexUtils';
  *          : <div>
  *              No results has been found for {searchState.query}
  *            </div>
- *    );
- *    return (
- *      <WrapWithHits linkedStoryGroup="Conditional">
- *        <Content />
- *      </WrapWithHits>
- *    );
+ * );
  *
  * export default function App() {
  *  return (
