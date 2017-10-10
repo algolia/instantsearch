@@ -70,6 +70,7 @@ Scroll to the top of the page after a page was changed:
 | `ais-pagination__item--previous` | Previous link item |
 | `ais-pagination__item--next`     | Next link item     |
 | `ais-pagination__item--last`     | Last link item     |
+| `ais-pagination__link`           | Link anchor        |
 
 ## Events
 
