@@ -2,18 +2,19 @@
   "private": true,
   "devDependencies": {
     "identity-obj-proxy": "3.0.0",
+    "jest-environment-jsdom-11.0.0": "^20.0.9",
     "react-scripts": "1.0.14",
-    "react-test-renderer": "15.6.2"
+    "react-test-renderer": "16.0.0"
   },
   "dependencies": {
-    "antd": "^2.12.1",
-    "lodash": "^4.17.4",
-    "prop-types": "^15.5.10",
-    "react": "^15.6.1",
-    "react-autosuggest": "^9.3.1",
-    "react-dom": "^15.6.1",
-    "react-instantsearch": "^4.1.2",
-    "react-instantsearch-theme-algolia": "^4.1.2"
+    "antd": "2.12.1",
+    "lodash": "4.17.4",
+    "prop-types": "15.5.10",
+    "react": "16.0.0",
+    "react-autosuggest": "9.3.1",
+    "react-dom": "16.0.0",
+    "react-instantsearch": "4.1.3",
+    "react-instantsearch-theme-algolia": "4.1.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,7 +24,9 @@
     "notify": false,
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
-    }
+    },
+    "setupFiles": ["../../../../shim.js"],
+    "testEnvironment": "jest-environment-jsdom-11.0.0"
   },
   "main": "index.js",
   "license": "MIT"

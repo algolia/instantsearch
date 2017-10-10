@@ -9,6 +9,7 @@ setOptions({
   showDownPanel: true,
   showSearchBox: false,
   downPanelInRight: true,
+  sidebarAnimations: false,
 });
 
 const req = require.context('../stories', true, /\.stories\.js$/);

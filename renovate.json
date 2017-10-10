@@ -8,7 +8,7 @@
       "semanticPrefix": "chore(deps): "
     }
   ],
-  "ignoreDeps": ["jsdoc-parse", "react-native", "uglify-js"],
+  "ignoreDeps": ["jsdoc-parse", "uglify-js"],
   "packageRules": [
     {
       "packagePatterns": "^@storybook",
