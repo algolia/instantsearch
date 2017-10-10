@@ -36,6 +36,11 @@ header {
   header .searchbox-container {
     margin-left: 240px;
     max-width: 400px; }
+    header .searchbox-container .ais-search-box {
+      max-width: inherit; }
+      header .searchbox-container .ais-search-box #q {
+        border-radius: 0;
+        padding-bottom: 7px; }
     header .searchbox-container .input-group {
       margin-top: 5px; }
       header .searchbox-container .input-group .form-control:focus {
