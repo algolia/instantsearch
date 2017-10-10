@@ -9920,7 +9920,7 @@ var generateHierarchicalTree = __webpack_require__(340);
 /**
  * @typedef SearchResults.FacetValue
  * @type {object}
- * @property {string} value the facet value itself
+ * @property {string} name the facet value itself
  * @property {number} count times this facet appears in the results
  * @property {boolean} isRefined is the facet currently selected
  * @property {boolean} isExcluded is the facet currently excluded (only for conjunctive facets)
@@ -10190,6 +10190,13 @@ function SearchResults(state, results) {
    * @member {boolean}
    */
   this.exhaustiveNbHits = mainSubResponse.exhaustiveNbHits;
+
+
+  /**
+   * Contains the userData if they are set by a [query rule](https://www.algolia.com/doc/guides/query-rules/query-rules-overview/).
+   * @member {object[]}
+   */
+  this.userData = mainSubResponse.userData;
 
   /**
    * disjunctive facets results
@@ -11877,7 +11884,7 @@ module.exports = mapKeys;
 "use strict";
 
 
-module.exports = '2.21.2';
+module.exports = '2.22.0';
 
 
 /***/ }),
@@ -16965,7 +16972,7 @@ AlgoliaSearchHelper.prototype.setQueryParameter = function(parameter, value) {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.setState = function(newState) {
-  this.state = new SearchParameters(newState);
+  this.state = SearchParameters.make(newState);
   this._change();
   return this;
 };
@@ -22585,7 +22592,8 @@ var requestBuilder = {
       attributesToRetrieve: [],
       attributesToHighlight: [],
       attributesToSnippet: [],
-      tagFilters: tagFilters
+      tagFilters: tagFilters,
+      analytics: false
     };
 
     var hierarchicalFacet = state.getHierarchicalFacetByName(facet);
