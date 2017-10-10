@@ -31,7 +31,7 @@ exports[`accepts custom padding 1`] = `
       4
     </a>
   </li>
-  <li class="ais-pagination__item ais-pagination__item ais-pagination__item--active">
+  <li class="ais-pagination__item ais-pagination__item--active">
     <a href="#"
        class="ais-pagination__link"
     >
@@ -75,21 +75,21 @@ exports[`it should be hidden if there are no results in the current context 1`] 
 <ul class="ais-pagination"
     style="display: none;"
 >
-  <li class="ais-pagination__item ais-pagination__item--first ais-pagination__item ais-pagination__item--disabled">
+  <li class="ais-pagination__item ais-pagination__item--first ais-pagination__item--disabled">
     <a href="#"
        class="ais-pagination__link"
     >
       &lt;&lt;
     </a>
   </li>
-  <li class="ais-pagination__item ais-pagination__item--previous ais-pagination__item ais-pagination__item--disabled">
+  <li class="ais-pagination__item ais-pagination__item--previous ais-pagination__item--disabled">
     <a href="#"
        class="ais-pagination__link"
     >
       &lt;
     </a>
   </li>
-  <li class="ais-pagination__item ais-pagination__item ais-pagination__item--active">
+  <li class="ais-pagination__item ais-pagination__item--active">
     <a href="#"
        class="ais-pagination__link"
     >
@@ -180,7 +180,7 @@ exports[`renders proper HTML 1`] = `
       1
     </a>
   </li>
-  <li class="ais-pagination__item ais-pagination__item ais-pagination__item--active">
+  <li class="ais-pagination__item ais-pagination__item--active">
     <a href="#"
        class="ais-pagination__link"
     >
