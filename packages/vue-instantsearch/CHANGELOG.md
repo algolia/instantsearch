@@ -1,3 +1,19 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/algolia/vue-instantsearch/compare/v1.0.1...v1.1.0) (2017-10-10)
+
+
+### Bug Fixes
+
+* **pagination:** remove class duplicates ([c56ea2b](https://github.com/algolia/vue-instantsearch/commit/c56ea2b))
+
+
+### Features
+
+* **component:** add an option to bem utility to not output element class ([6d4e690](https://github.com/algolia/vue-instantsearch/commit/6d4e690))
+* **pagination:** add classes on link elements ([d39da3e](https://github.com/algolia/vue-instantsearch/commit/d39da3e))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/algolia/vue-instantsearch/compare/v1.0.0...v1.0.1) (2017-09-25)
 
