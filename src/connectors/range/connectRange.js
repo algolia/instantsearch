@@ -80,7 +80,7 @@ export default function connectRange(renderFn) {
     };
 
     return {
-      _getCurrentRange(stats = {}) {
+      _getCurrentRange(stats) {
         let min;
         if (hasMinBound) {
           min = minBound;
@@ -118,7 +118,7 @@ export default function connectRange(renderFn) {
         return [min, max];
       },
 
-      _refine(helper, currentRange = {}) {
+      _refine(helper, currentRange) {
         return ([nextMin, nextMax] = []) => {
           const { min: currentRangeMin, max: currentRangeMax } = currentRange;
 
@@ -257,7 +257,7 @@ export default function connectRange(renderFn) {
       render({ results, helper, instantSearchInstance }) {
         const facetsFromResults = results.disjunctiveFacets || [];
         const facet = find(facetsFromResults, { name: attributeName });
-        const stats = facet && facet.stats;
+        const stats = (facet && facet.stats) || {};
 
         const currentRange = this._getCurrentRange(stats);
         const start = this._getCurrentRefinement(helper);
