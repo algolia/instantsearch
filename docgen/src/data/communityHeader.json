@@ -109,7 +109,7 @@
     "name": "<span class='hidden-sm'>Demos</span>",
     "url": "examples.html"
   },  {
-    "name": "v1 docs",
+    "name": "v1",
     "url": "https://community.algolia.com/instantsearch.js/v1/"
   }, {
     "name": "Github",
@@ -153,7 +153,7 @@
     "url": "examples.html"
   },
   {
-    "name": "v1 docs",
+    "name": "v1",
     "url": "https://community.algolia.com/instantsearch.js/v1/"
   }],
   "docSearch": {
