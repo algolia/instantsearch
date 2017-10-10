@@ -18,6 +18,7 @@ const end = err => {
 const defaultOptions = {
   logger,
   silent: true,
+  add: true,
 };
 
 ghpages.publish(site, defaultOptions, end);
