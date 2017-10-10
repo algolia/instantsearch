@@ -6,7 +6,7 @@ NODE_ENV=${NODE_ENV:-development}
 VERSION=preview-$(json version < package.json)
 
 # Build instantsearch.js library
-yarn install
+yarn install --production=false
 NODE_ENV=production VERSION=${VERSION} yarn run build
 
 # Build the documentation
