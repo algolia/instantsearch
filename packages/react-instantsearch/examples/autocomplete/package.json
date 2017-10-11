@@ -7,7 +7,7 @@
     "react-test-renderer": "16.0.0"
   },
   "dependencies": {
-    "antd": "2.12.1",
+    "antd": "2.13.4",
     "lodash": "4.17.4",
     "prop-types": "15.5.10",
     "react": "16.0.0",
