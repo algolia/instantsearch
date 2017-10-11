@@ -28,7 +28,7 @@
     "setupFiles": ["../../../../shim.js"]
   },
   "dependencies": {
-    "express": "4.14.0",
+    "express": "4.16.2",
     "prop-types": "15.5.10",
     "react": "16.0.0",
     "react-dom": "16.0.0",
