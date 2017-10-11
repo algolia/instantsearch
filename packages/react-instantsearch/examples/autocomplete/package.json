@@ -2,7 +2,7 @@
   "private": true,
   "devDependencies": {
     "identity-obj-proxy": "3.0.0",
-    "jest-environment-jsdom-11.0.0": "^20.0.9",
+    "jest-environment-jsdom-11.0.0": "20.0.9",
     "react-scripts": "1.0.14",
     "react-test-renderer": "16.0.0"
   },
