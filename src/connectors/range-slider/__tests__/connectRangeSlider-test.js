@@ -46,6 +46,7 @@ describe('connectRangeSlider', () => {
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
         attributeName,
+        precision: 2,
       });
     }
 

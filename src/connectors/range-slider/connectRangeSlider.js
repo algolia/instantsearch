@@ -57,12 +57,17 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectRangeSlider(renderFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetParams = {}) => {
+  return (params = {}) => {
+    const widgetParams = {
+      precision: 2,
+      ...params,
+    };
+
     const {
       attributeName,
+      precision,
       min: minBound,
       max: maxBound,
-      precision = 2,
     } = widgetParams;
 
     if (!attributeName) {
