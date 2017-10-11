@@ -25,7 +25,7 @@ When called, `createInstantSearch` returns:
 * A dedicated [`<InstantSearch>`](widgets/InstantSearch.html) component accepting a `resultsState` prop containing the Algolia results.
 * A `findResultsState` function to retrieve a `resultsState`.
 
-The server-side reference is available in the [API docs](http://localhost:3000/server-side-renderings/createInstantSearch.html).
+The server-side reference is available in the [API docs](Server-side-rendering/).
 
 We split this guide in three parts:
 - App.js is the server and browser shared main React component from your application
