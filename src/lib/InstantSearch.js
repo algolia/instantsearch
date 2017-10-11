@@ -260,7 +260,11 @@ Usage: instantsearch({
    * @return {undefined} This method does not return anything
    */
   dispose() {
-    this.removeWidgets(this.widgets);
+    this.removeWidgets(
+      this.widgets
+        .slice()
+        .sort(widget => (widget.constructor.name === 'URLSync' ? -1 : 1))
+    );
   }
 
   createURL(params) {
