@@ -2018,7 +2018,7 @@ codeclimate-test-reporter@^0.5.0:
     lcov-parse "0.0.10"
     request "~2.79.0"
 
-collapse-white-space@^1.0.0:
+collapse-white-space@1.0.3, collapse-white-space@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/collapse-white-space/-/collapse-white-space-1.0.3.tgz#4b906f670e5a963a87b76b0e1689643341b6023c"
 
@@ -3567,13 +3567,13 @@ expand-range@^1.8.1:
   dependencies:
     fill-range "^2.1.0"
 
-expect-jsx@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/expect-jsx/-/expect-jsx-2.6.0.tgz#43f484828077d3942464421205b78c75b9791e6b"
+expect-jsx@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/expect-jsx/-/expect-jsx-4.0.0.tgz#bd1d3568f1da5d02c1b498bb773afd963dec3b46"
   dependencies:
     collapse-white-space "^1.0.0"
     react "^0.14.8 || ^15.0.1"
-    react-element-to-jsx-string "^3.0.0"
+    react-element-to-jsx-string "^12.0.0"
 
 expect@1.20.2:
   version "1.20.2"
@@ -4104,6 +4104,10 @@ generate-object-property@^1.1.0:
 get-caller-file@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.2.tgz#f702e63127e7e231c160a80c1554acb70d5047e5"
+
+get-own-enumerable-property-symbols@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/get-own-enumerable-property-symbols/-/get-own-enumerable-property-symbols-1.0.1.tgz#f1d4e3ad1402e039898e56d1e9b9aa924c26e484"
 
 get-pkg-repo@^1.0.0:
   version "1.4.0"
@@ -5134,7 +5138,7 @@ is-number@^3.0.0:
   dependencies:
     kind-of "^3.0.2"
 
-is-obj@^1.0.0:
+is-obj@^1.0.0, is-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/is-obj/-/is-obj-1.0.1.tgz#3e4729ac1f5fde025cd7d83a896dab9f4f67db0f"
 
@@ -5158,7 +5162,7 @@ is-plain-obj@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-1.1.0.tgz#71a50c8429dfca773c92a390a4a03b39fcd51d3e"
 
-is-plain-object@^2.0.1:
+is-plain-object@2.0.4, is-plain-object@^2.0.1:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-2.0.4.tgz#2c163b3fafb1b606d9d17928f05c2a1c38e07677"
   dependencies:
@@ -6107,7 +6111,7 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
-lodash@^4.0.0, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.1, lodash@^4.16.6, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.8.0, lodash@~4.17.4:
+lodash@4.17.4, lodash@^4.0.0, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.1, lodash@^4.16.6, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.8.0, lodash@~4.17.4:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -7593,7 +7597,7 @@ postcss@^6.0.1, postcss@^6.0.11, postcss@^6.0.2:
     source-map "^0.5.7"
     supports-color "^4.4.0"
 
-preact-compat@^3.16.0, preact-compat@^3.17.0:
+preact-compat@^3.16.0:
   version "3.17.0"
   resolved "https://registry.yarnpkg.com/preact-compat/-/preact-compat-3.17.0.tgz#528cfdfc301190c1a0f47567336be1f4be0266b3"
   dependencies:
@@ -7613,7 +7617,7 @@ preact-transition-group@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/preact-transition-group/-/preact-transition-group-1.1.1.tgz#f0a49327ea515ece34ea2be864c4a7d29e5d6e10"
 
-preact@^8.1.0, preact@^8.2.5:
+preact@^8.1.0:
   version "8.2.5"
   resolved "https://registry.yarnpkg.com/preact/-/preact-8.2.5.tgz#cbfa3962a8012768159f6d01d46f9c1eb3213c0a"
 
@@ -7868,10 +7872,6 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-"react-addons-test-utils@^0.14.8 || ^15.0.1":
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.6.2.tgz#c12b6efdc2247c10da7b8770d185080a7b047156"
-
 react-dom@^15.5.4:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.2.tgz#41cfadf693b757faf2708443a1d1fd5a02bef730"
@@ -7881,17 +7881,15 @@ react-dom@^15.5.4:
     object-assign "^4.1.0"
     prop-types "^15.5.10"
 
-react-element-to-jsx-string@^3.0.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/react-element-to-jsx-string/-/react-element-to-jsx-string-3.2.0.tgz#27ad7869e84f1d32f3d8a7385e44bc693dc8b7bb"
+react-element-to-jsx-string@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/react-element-to-jsx-string/-/react-element-to-jsx-string-12.0.0.tgz#d6c02272cb2268b8b3d98272adf0a4462fd75019"
   dependencies:
-    collapse-white-space "^1.0.0"
-    is-plain-object "^2.0.1"
-    lodash "^4.13.1"
-    react-addons-test-utils "^0.14.8 || ^15.0.1"
-    sortobject "^1.0.0"
-    stringify-object "^2.3.1"
-    traverse "^0.6.6"
+    collapse-white-space "1.0.3"
+    is-plain-object "2.0.4"
+    lodash "4.17.4"
+    sortobject "1.1.1"
+    stringify-object "3.2.0"
 
 react-inspector@^2.0.0:
   version "2.2.0"
@@ -8417,8 +8415,6 @@ rheostat@algolia/rheostat#dist-preact:
   resolved "https://codeload.github.com/algolia/rheostat/tar.gz/1327d77e45fb8417589a76af00c4413bca7f6aee"
   dependencies:
     object.assign "^4.0.4"
-    preact "^8.2.5"
-    preact-compat "^3.17.0"
     prop-types "^15.5.10"
 
 right-align@^0.1.1:
@@ -8833,7 +8829,7 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
-sortobject@^1.0.0:
+sortobject@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/sortobject/-/sortobject-1.1.1.tgz#4f695d4d44ed0a4c06482c34c2582a2dcdc2ab34"
   dependencies:
@@ -9075,11 +9071,12 @@ stringify-entities@^1.0.1:
     is-alphanumerical "^1.0.0"
     is-hexadecimal "^1.0.0"
 
-stringify-object@^2.3.1:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/stringify-object/-/stringify-object-2.4.0.tgz#c62d11023eb21fe2d9b087be039a26df3b22a09d"
+stringify-object@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/stringify-object/-/stringify-object-3.2.0.tgz#94370a135e41bc048358813bf99481f1315c6aa6"
   dependencies:
-    is-plain-obj "^1.0.0"
+    get-own-enumerable-property-symbols "^1.0.1"
+    is-obj "^1.0.1"
     is-regexp "^1.0.0"
 
 stringstream@~0.0.4, stringstream@~0.0.5:
