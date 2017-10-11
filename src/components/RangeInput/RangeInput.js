@@ -32,13 +32,10 @@ export class RawRangeInput extends Component {
     this.props.refine([this.state.min, this.state.max]);
   };
 
-  get isDisabled() {
-    return this.props.min >= this.props.max;
-  }
-
   render() {
     const { min: minValue, max: maxValue } = this.state;
     const { min, max, step, cssClasses, labels } = this.props;
+    const isDisabled = min >= max;
 
     return (
       <form className={cssClasses.form} onSubmit={this.onSubmit}>
@@ -53,7 +50,7 @@ export class RawRangeInput extends Component {
               value={minValue}
               onChange={this.onChange('min')}
               placeholder={min}
-              disabled={this.isDisabled}
+              disabled={isDisabled}
             />
           </label>
           <span className={cssClasses.separator}>{labels.separator}</span>
@@ -67,13 +64,13 @@ export class RawRangeInput extends Component {
               value={maxValue}
               onChange={this.onChange('max')}
               placeholder={max}
-              disabled={this.isDisabled}
+              disabled={isDisabled}
             />
           </label>
           <button
             role="button"
             className={cssClasses.submit}
-            disabled={this.isDisabled}
+            disabled={isDisabled}
           >
             {labels.submit}
           </button>
