@@ -30,7 +30,7 @@
     "metalsmith-layouts": "1.8.1",
     "metalsmith-navigation": "0.2.9",
     "metalsmith-sass": "1.4.0",
-    "ms-webpack": "2.0.0-alpha.1",
+    "ms-webpack": "2.0.0",
     "netlify-cli": "1.2.2",
     "node-sass": "4.5.3",
     "postcss-scss": "0.4.1",
