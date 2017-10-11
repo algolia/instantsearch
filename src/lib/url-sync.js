@@ -31,14 +31,16 @@ const hashUrlUtils = {
   ignoreNextPopState: false,
   character: '#',
   onpopstate(cb) {
-    window.addEventListener('hashchange', hash => {
+    this._onHashChange = hash => {
       if (this.ignoreNextPopState) {
         this.ignoreNextPopState = false;
         return;
       }
 
       cb(hash);
-    });
+    };
+
+    window.addEventListener('hashchange', this._onHashChange);
   },
   pushState(qs) {
     // hash change or location assign does trigger an hashchange event
@@ -54,6 +56,10 @@ const hashUrlUtils = {
   readUrl() {
     return window.location.hash.slice(1);
   },
+  dispose() {
+    window.removeEventListener('hashchange', this._onHashChange);
+    window.location.assign(getFullURL(''));
+  },
 };
 
 /**
@@ -63,7 +69,8 @@ const hashUrlUtils = {
 const modernUrlUtils = {
   character: '?',
   onpopstate(cb) {
-    window.addEventListener('popstate', cb);
+    this._onPopState = (...args) => cb(...args);
+    window.addEventListener('popstate', this._onPopState);
   },
   pushState(qs, { getHistoryState }) {
     window.history.pushState(
@@ -77,6 +84,10 @@ const modernUrlUtils = {
   },
   readUrl() {
     return window.location.search.slice(1);
+  },
+  dispose() {
+    window.removeEventListener('popstate', this._onPopState);
+    window.history.pushState(null, null, getFullURL(''));
   },
 };
 
@@ -136,8 +147,13 @@ class URLSync {
     if (this.firstRender) {
       this.firstRender = false;
       this.onHistoryChange(this.onPopState.bind(this, helper));
-      helper.on('change', state => this.renderURLFromState(state));
+      helper.on('change', this.renderURLFromState);
     }
+  }
+
+  dispose({ helper }) {
+    helper.removeListener('change', this.renderURLFromState);
+    this.urlUtils.dispose();
   }
 
   onPopState(helper, fullState) {
@@ -151,7 +167,7 @@ class URLSync {
     helper.overrideStateWithoutTriggeringChangeEvent(fullState).search();
   }
 
-  renderURLFromState(state) {
+  renderURLFromState = state => {
     const currentQueryString = this.urlUtils.readUrl();
     const foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(
       currentQueryString,
@@ -171,7 +187,7 @@ class URLSync {
     this.urlUpdateTimeout = setTimeout(() => {
       this.urlUtils.pushState(qs, { getHistoryState: this.getHistoryState });
     }, this.threshold);
-  }
+  };
 
   // External API's
 
