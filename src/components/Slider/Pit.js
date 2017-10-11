@@ -31,7 +31,12 @@ const Pit = ({ key, style, children }) => {
 
 Pit.propTypes = {
   key: PropTypes.string,
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  children: PropTypes.oneOfType([
+    PropTypes.number,
+    // Hack for preact-compat
+    // see: https://github.com/developit/preact-compat/issues/436
+    PropTypes.arrayOf(PropTypes.number),
+  ]),
   style: PropTypes.shape({
     position: PropTypes.string.isRequired,
     left: PropTypes.string.isRequired,
