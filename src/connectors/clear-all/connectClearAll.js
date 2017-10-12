@@ -61,6 +61,7 @@ const refine = ({
  *
  * @type {Connector}
  * @param {function(ClearAllRenderingOptions, boolean)} renderFn Rendering function for the custom **ClearAll** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomClearAllWidgetOptions)} Re-usable widget factory for a custom **ClearAll** widget.
  * @example
  * // custom `renderFn` to render the custom ClearAll widget
@@ -90,7 +91,7 @@ const refine = ({
  *   })
  * );
  */
-export default function connectClearAll(renderFn) {
+export default function connectClearAll(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -164,6 +165,10 @@ export default function connectClearAll(renderFn) {
           },
           false
         );
+      },
+
+      dispose() {
+        unmountFn();
       },
     };
   };

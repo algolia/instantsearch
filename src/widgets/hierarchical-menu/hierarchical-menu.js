@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
@@ -211,7 +211,10 @@ export default function hierarchicalMenu(
   });
 
   try {
-    const makeHierarchicalMenu = connectHierarchicalMenu(specializedRenderer);
+    const makeHierarchicalMenu = connectHierarchicalMenu(
+      specializedRenderer,
+      () => unmountComponentAtNode(containerNode)
+    );
     return makeHierarchicalMenu({
       attributes,
       separator,

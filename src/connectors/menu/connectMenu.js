@@ -65,6 +65,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
   * @type {Connector}
   * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
+  * @param {function} unmountFn Unmount function called when the widget is disposed.
   * @return {function(CustomMenuWidgetOptions)} Re-usable widget factory for a custom **Menu** widget.
   * @example
   * // custom `renderFn` to render the custom Menu widget
@@ -103,7 +104,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
   *   })
   * );
   */
-export default function connectMenu(renderFn) {
+export default function connectMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -227,6 +228,16 @@ export default function connectMenu(renderFn) {
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        unmountFn();
+
+        const nextState = state
+          .removeHierarchicalFacetRefinement(attributeName)
+          .removeHierarchicalFacet(attributeName);
+
+        return nextState;
       },
     };
   };

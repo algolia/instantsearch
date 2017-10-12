@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import filter from 'lodash/filter';
 
@@ -287,7 +287,9 @@ export default function refinementList(
   });
 
   try {
-    const makeWidget = connectRefinementList(specializedRenderer);
+    const makeWidget = connectRefinementList(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget({
       attributeName,
       operator,

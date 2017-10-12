@@ -127,6 +127,12 @@ const renderer = ({
   }
 };
 
+const disposer = containerNode => () => {
+  const range = document.createRange(); // IE10+
+  range.selectNodeContents(containerNode);
+  range.deleteContents();
+};
+
 const usage = `Usage:
 searchBox({
   container,
@@ -253,7 +259,10 @@ export default function searchBox(
   });
 
   try {
-    const makeWidget = connectSearchBox(specializedRenderer);
+    const makeWidget = connectSearchBox(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeWidget({ queryHook });
   } catch (e) {
     throw new Error(usage);

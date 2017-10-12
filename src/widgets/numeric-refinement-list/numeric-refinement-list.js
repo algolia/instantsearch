@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import RefinementList from '../../components/RefinementList/RefinementList.js';
@@ -177,7 +177,8 @@ export default function numericRefinementList(
   });
   try {
     const makeNumericRefinementList = connectNumericRefinementList(
-      specializedRenderer
+      specializedRenderer,
+      () => unmountComponentAtNode(containerNode)
     );
     return makeNumericRefinementList({ attributeName, options });
   } catch (e) {

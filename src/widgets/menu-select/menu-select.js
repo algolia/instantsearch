@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import connectMenu from '../../connectors/menu/connectMenu';
@@ -37,7 +36,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-  ReactDOM.render(
+  render(
     <MenuSelect
       cssClasses={cssClasses}
       items={items}

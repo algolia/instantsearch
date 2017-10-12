@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import Hits from '../../components/Hits.js';
@@ -135,7 +135,9 @@ export default function hits({
   });
 
   try {
-    const makeHits = connectHits(specializedRenderer);
+    const makeHits = connectHits(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeHits({ escapeHits });
   } catch (e) {
     throw new Error(usage);

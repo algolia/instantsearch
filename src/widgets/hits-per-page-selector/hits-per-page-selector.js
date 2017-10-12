@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import find from 'lodash/find';
@@ -111,7 +111,10 @@ export default function hitsPerPageSelector(
   });
 
   try {
-    const makeHitsPerPageSelector = connectHitsPerPage(specializedRenderer);
+    const makeHitsPerPageSelector = connectHitsPerPage(
+      specializedRenderer,
+      () => unmountComponentAtNode(containerNode)
+    );
     return makeHitsPerPageSelector({ items });
   } catch (e) {
     throw new Error(usage);
