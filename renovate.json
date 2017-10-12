@@ -1,6 +1,7 @@
 {
   "pinVersions": true,
   "semanticCommits": true,
+  "extends": [":library"],
   "depTypes": [
     {
       "depType": "dependencies",
@@ -14,5 +15,9 @@
       "packagePatterns": "^@storybook",
       "groupName": ["@storybook packages"]
     }
-  ]
+  ],
+  "automerge": true,
+  "major": {
+    "automerge": false
+  }
 }

@@ -29,5 +29,8 @@
     "setupFiles": ["../../../../shim.js"]
   },
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "renovate": {
+    "ignoreDeps": ["react-router"]
+  }
 }
