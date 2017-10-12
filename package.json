@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "2.2.0",
+  "version": "2.2.1-beta.0",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "main": "dist-es5-module/index.js",
@@ -124,7 +124,7 @@
     "hogan.js": "^3.0.2",
     "lodash": "^4.17.4",
     "preact": "^8.1.0",
-    "preact-compat": "^3.16.0",
+    "preact-compat-algolia": "^3.17.0-beta.0",
     "prop-types": "^15.5.10",
     "rheostat": "algolia/rheostat#dist-preact",
     "to-factory": "^1.0.0"

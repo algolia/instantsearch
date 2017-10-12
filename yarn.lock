@@ -142,7 +142,7 @@ ajv@^5.0.0, ajv@^5.1.0, ajv@^5.1.5, ajv@^5.2.0, ajv@^5.2.3:
     json-schema-traverse "^0.3.0"
     json-stable-stringify "^1.0.1"
 
-algoliasearch-helper@^2.21.1:
+algoliasearch-helper@^2.22.0:
   version "2.22.0"
   resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.22.0.tgz#6904abf15cd9b65a32fc3d9eb9dfe50f53b27001"
   dependencies:
@@ -7593,7 +7593,17 @@ postcss@^6.0.1, postcss@^6.0.11, postcss@^6.0.2:
     source-map "^0.5.7"
     supports-color "^4.4.0"
 
-preact-compat@^3.16.0, preact-compat@^3.17.0:
+preact-compat-algolia@^3.17.0-beta.0:
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/preact-compat-algolia/-/preact-compat-algolia-3.17.0.tgz#c104960eb64e6ad13394b71819e07ce32e79f890"
+  dependencies:
+    immutability-helper "^2.1.2"
+    preact-render-to-string "^3.6.0"
+    preact-transition-group "^1.1.0"
+    prop-types "^15.5.8"
+    standalone-react-addons-pure-render-mixin "^0.1.1"
+
+preact-compat@^3.17.0:
   version "3.17.0"
   resolved "https://registry.yarnpkg.com/preact-compat/-/preact-compat-3.17.0.tgz#528cfdfc301190c1a0f47567336be1f4be0266b3"
   dependencies:
