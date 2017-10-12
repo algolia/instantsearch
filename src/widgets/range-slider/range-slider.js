@@ -2,7 +2,7 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import Slider from '../../components/Slider/Slider.js';
-import connectRangeSlider from '../../connectors/range-slider/connectRangeSlider.js';
+import connectRange from '../../connectors/range/connectRange.js';
 
 import {
   bemHelper,
@@ -201,7 +201,7 @@ export default function rangeSlider(
   });
 
   try {
-    const makeWidget = connectRangeSlider(specializedRenderer, () =>
+    const makeWidget = connectRange(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attributeName, min, max, precision });

@@ -33,6 +33,7 @@ export { default as pagination } from '../widgets/pagination/pagination.js';
 export {
   default as priceRanges,
 } from '../widgets/price-ranges/price-ranges.js';
+export { default as rangeInput } from '../widgets/range-input/range-input.js';
 export { default as searchBox } from '../widgets/search-box/search-box.js';
 export {
   default as rangeSlider,
@@ -44,4 +45,5 @@ export { default as starRating } from '../widgets/star-rating/star-rating.js';
 export { default as stats } from '../widgets/stats/stats.js';
 export { default as toggle } from '../widgets/toggle/toggle.js';
 export { default as analytics } from '../widgets/analytics/analytics.js';
+export { default as breadcrumb } from '../widgets/breadcrumb/breadcrumb.js';
 export { default as menuSelect } from '../widgets/menu-select/menu-select.js';

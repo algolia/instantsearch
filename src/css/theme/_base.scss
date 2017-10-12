@@ -8,12 +8,14 @@
 @import 'numeric-selector';
 @import 'pagination';
 @import 'price-ranges';
+@import 'range-input';
 @import 'range-slider';
 @import 'search-box';
 @import 'sort-by-selector';
 @import 'star-rating';
 @import 'stats';
 @import 'toggle';
+@import 'breadcrumb';
 
 [class^=ais-] {
   box-sizing: border-box;
