@@ -88,6 +88,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * the widget options used.
  * @type {Connector}
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn Rendering function for the custom **CurrentRefinedValues** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomCurrentRefinedValuesWidgetOptions)} Re-usable widget factory for a custom **CurrentRefinedValues** widget.
  * @example
  * // custom `renderFn` to render the custom ClearAll widget
@@ -149,7 +150,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectCurrentRefinedValues(renderFn) {
+export default function connectCurrentRefinedValues(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -269,6 +270,10 @@ export default function connectCurrentRefinedValues(renderFn) {
           },
           false
         );
+      },
+
+      dispose() {
+        unmountFn();
       },
     };
   };

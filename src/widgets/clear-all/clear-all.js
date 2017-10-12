@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
 import cx from 'classnames';
 
@@ -142,7 +142,9 @@ export default function clearAll({
   });
 
   try {
-    const makeWidget = connectClearAll(specializedRenderer);
+    const makeWidget = connectClearAll(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget({ excludeAttributes, clearsQuery });
   } catch (e) {
     throw new Error(usage);

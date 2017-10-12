@@ -82,12 +82,108 @@ Usage: instantsearch({
    * @return {undefined} This method does not return anything
    */
   addWidget(widget) {
-    // Add the widget to the list of widget
-    if (widget.render === undefined && widget.init === undefined) {
-      throw new Error('Widget definition missing render or init method');
+    this.addWidgets([widget]);
+  }
+
+  /**
+   * Add multiple widgets
+   * @param  {Widget[]} widgets The array of widgets to add to InstantSearch.
+   * @return {undefined} This method does not return anything
+   */
+  addWidgets(widgets) {
+    if (!Array.isArray(widgets)) {
+      throw new Error(
+        'You need to provide an array of widgets or call `addWidget()`'
+      );
     }
 
-    this.widgets.push(widget);
+    widgets.forEach(widget => {
+      // Add the widget to the list of widget
+      if (widget.render === undefined && widget.init === undefined) {
+        throw new Error('Widget definition missing render or init method');
+      }
+
+      this.widgets.push(widget);
+    });
+
+    // Init the widget directly if instantsearch has been already started
+    if (this.started) {
+      this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+        ...this.helper.state,
+      });
+
+      this.helper.setState(this.searchParameters);
+
+      widgets.forEach(widget => {
+        if (widget.init) {
+          widget.init({
+            state: this.helper.state,
+            helper: this.helper,
+            templatesConfig: this.templatesConfig,
+            createURL: this._createAbsoluteURL,
+            onHistoryChange: this._onHistoryChange,
+            instantSearchInstance: this,
+          });
+        }
+      });
+
+      this.helper.search();
+    }
+  }
+
+  /**
+   * Remove a widget
+   * @param  {Widget} widget The widget instance to remove from InstantSearch. This widget must implement a `dipose()` method in order to be gracefully removed.
+   * @return {undefined} This method does not return anything
+   */
+  removeWidget(widget) {
+    this.removeWidgets([widget]);
+  }
+
+  /**
+   * Remove multiple widgets
+   * @param  {Widget[]} widgets Array of widgets instances to remove from InstantSearch.
+   * @return {undefined} This method does not return anything
+   */
+  removeWidgets(widgets) {
+    if (!Array.isArray(widgets)) {
+      throw new Error(
+        'You need to provide an array of widgets or call `removeWidget()`'
+      );
+    }
+
+    widgets.forEach(widget => {
+      if (
+        !this.widgets.includes(widget) ||
+        typeof widget.dispose !== 'function'
+      ) {
+        throw new Error(
+          'The widget you tried to remove does not implement the dispose method, therefore it is not possible to remove this widget'
+        );
+      }
+
+      this.widgets = this.widgets.filter(w => w !== widget);
+
+      const nextState = widget.dispose({
+        helper: this.helper,
+        state: this.helper.getState(),
+      });
+
+      // re-compute remaining widgets to the state
+      // in a case two widgets were using the same configuration but we removed one
+      if (nextState) {
+        this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+          ...nextState,
+        });
+
+        this.helper.setState(this.searchParameters);
+      }
+    });
+
+    // no need to retrigger a search if we don't have any widgets left
+    if (this.widgets.length > 0) {
+      this.helper.search();
+    }
   }
 
   /**
@@ -100,6 +196,8 @@ Usage: instantsearch({
   start() {
     if (!this.widgets)
       throw new Error('No widgets were added to instantsearch.js');
+
+    if (this.started) throw new Error('start() has been already called once');
 
     let searchParametersFromUrl;
 
@@ -151,6 +249,22 @@ Usage: instantsearch({
     this._init(helper.state, this.helper);
     this.helper.on('result', this._render.bind(this, this.helper));
     this.helper.search();
+
+    // track we started the search if we add more widgets,
+    // to init them directly after add
+    this.started = true;
+  }
+
+  /**
+   * Remove all widgets without triggering a search afterwards.
+   * @return {undefined} This method does not return anything
+   */
+  dispose() {
+    this.removeWidgets(
+      this.widgets
+        .slice()
+        .sort(widget => (widget.constructor.name === 'URLSync' ? -1 : 1))
+    );
   }
 
   createURL(params) {

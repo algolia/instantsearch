@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import Stats from '../../components/Stats/Stats.js';
@@ -166,7 +166,9 @@ export default function stats(
   });
 
   try {
-    const makeWidget = connectStats(specializedRenderer);
+    const makeWidget = connectStats(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget();
   } catch (e) {
     throw new Error(usage);

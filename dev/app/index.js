@@ -2,6 +2,7 @@ import { registerDisposer, start } from 'dev-novel';
 import initBuiltInWidgets from './builtin/init-stories';
 import initJqueryWidgets from './jquery/init-stories';
 import initVanillaWidgets from './vanilla/init-stories';
+import initUnmountWidgets from './init-unmount-widgets.js';
 
 import '../style.css';
 import '../../src/css/instantsearch.scss';
@@ -20,6 +21,9 @@ switch (true) {
     break;
   case q.includes('widgets=jquery'):
     initJqueryWidgets();
+    break;
+  case q.includes('widgets=unmount'):
+    initUnmountWidgets();
     break;
   default:
     initBuiltInWidgets();

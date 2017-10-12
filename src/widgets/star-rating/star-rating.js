@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import RefinementList from '../../components/RefinementList/RefinementList.js';
@@ -191,7 +191,9 @@ export default function starRating(
   });
 
   try {
-    const makeWidget = connectStarRating(specializedRenderer);
+    const makeWidget = connectStarRating(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget({ attributeName, max });
   } catch (e) {
     throw new Error(usage);

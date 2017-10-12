@@ -49,6 +49,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * with `options.value`.
  * @type {Connector}
  * @param {function(SortBySelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBySelector** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomSortBySelectorWidgetOptions)} Re-usable widget factory for a custom **SortBySelector** widget.
  * @example
  * // custom `renderFn` to render the custom SortBySelector widget
@@ -93,7 +94,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectSortBySelector(renderFn) {
+export default function connectSortBySelector(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -122,6 +123,7 @@ export default function connectSortBySelector(renderFn) {
           );
         }
 
+        this.initialIndex = currentIndex;
         this.setIndex = indexName => helper.setIndex(indexName).search();
 
         renderFn(
@@ -149,6 +151,11 @@ export default function connectSortBySelector(renderFn) {
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        unmountFn();
+        return state.setIndex(this.initialIndex);
       },
     };
   };

@@ -32,14 +32,15 @@ There's a simple example of a custom widget at the end of this guide.
 
 ## The widget lifecycle and API
 
-InstantSearch.js defines the widget lifecycle of the widgets in 3 steps:
+InstantSearch.js defines the widget lifecycle of the widgets in 4 steps:
 
  - the configuration step, during which the initial search configuration is computed
  - the init step, which happens before the first search
  - the render step, which happens after each result from Algolia
+ - the dispose step, which happens when you remove the widget or dispose the InstantSearch instance
 
 Thoses steps translate directly into the widget API. Widgets are defined as plain
-JS objects with 3 methods:
+JS objects with 4 methods:
 
  - `getConfiguration` (optional), returns the necessary subpart of the configuration, specific
     to this widget
@@ -47,6 +48,8 @@ JS objects with 3 methods:
     Called before the first search.
  - `render`, optional, used to update the widget with the new information from the results.
     Called after each time results come back from Algolia
+ - `dispose` optional, used to remove the specific configuration which was specified in the `getConfiguration` method.
+    Called when removing the widget or when InstantSearch disposes itself.
 
 If we translate this to code, this looks like:
 
@@ -69,6 +72,13 @@ search.addWidget({
     //   - helper: to modify the search state and propagate the user interaction
     //   - state: the state at this point
     //   - createURL: if the url sync is active, will make it possible to create new URLs
+  },
+  dispose: function(disposeOptions) {
+    // disposeOptions contains one key:
+    //   - state: the state at this point to
+    //
+    // The dispose method should return the next state of the search,
+    // if it has been modified.
   }
 });
 ```
@@ -80,8 +90,8 @@ A widget is valid as long as it implements at least `render` or `init`.
 The previous custom widget API boilerplate is the reading part of the widgets. To be able to transform
 user interaction into search parameters we need to be able to modify the state.
 
-The whole search state is held by an instance of the 
-[JS Helper](https://community.algolia.com/algoliasearch-helper-js/) in InstantSearch.js. 
+The whole search state is held by an instance of the
+[JS Helper](https://community.algolia.com/algoliasearch-helper-js/) in InstantSearch.js.
 This instance of the helper is accessible at the `init` and `render` phases.
 
 The helper is used to change the parameters of the search. It provides methods
