@@ -1,3 +1,6 @@
+[class^='ais-'] {
+  font-size: 1em; }
+
 .ais-Breadcrumb-list,
 .ais-CurrentRefinedValues-list,
 .ais-HierarchicalMenu-list,
@@ -126,7 +129,6 @@
   padding-top: 15px;
   position: absolute;
   text-align: center;
-  font-size: 0.8em;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%); }
 
@@ -134,7 +136,25 @@
   margin-left: 50%;
   position: absolute;
   top: -22px;
-  font-size: 0.8em;
   text-align: center;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%); }
+
+.ais-header {
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ccc; }
+
+.ais-footer {
+  margin-top: 1em;
+  padding-top: 1em;
+  font-size: 0.8em;
+  border-top: 1px solid #ccc; }
+
+.ais-ClearAll-button {
+  padding: 0.5em 1em;
+  color: #fff;
+  background-color: #00aeff;
+  border-radius: 5px; }
