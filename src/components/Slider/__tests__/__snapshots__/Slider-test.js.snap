@@ -94,7 +94,7 @@ exports[`Slider expect to render correctly 1`] = `
             className="ais-range-slider--marker ais-range-slider--marker-horizontal ais-range-slider--marker-large"
             style={
               Object {
-                "left": "1.9999999999999996e-7%",
+                "left": "0%",
                 "marginLeft": 0,
                 "position": "absolute",
               }
