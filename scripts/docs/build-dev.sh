@@ -1,11 +1,12 @@
 #! /usr/bin/env bash
 
-set -ev # exit when error
+set -e # exit when error
 
 NODE_ENV=${NODE_ENV:-development}
 VERSION=preview-$(json version < package.json)
 
 # Build instantsearch.js library
+yarn install --production=false
 NODE_ENV=production VERSION=${VERSION} yarn run build
 
 # Build the documentation
@@ -14,7 +15,8 @@ mkdir -p docs
 
 (
   cd docgen
-  yarn install && NODE_ENV=$NODE_ENV yarn run build
+  yarn install --production=false
+  NODE_ENV=$NODE_ENV yarn run build
 )
 
 
