@@ -1,3 +1,6 @@
+[class^='ais-'] {
+  font-size: 1em; }
+
 .ais-Breadcrumb-list,
 .ais-CurrentRefinedValues-list,
 .ais-HierarchicalMenu-list,
@@ -126,7 +129,6 @@
   padding-top: 15px;
   position: absolute;
   text-align: center;
-  font-size: 0.8em;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%); }
 
@@ -134,7 +136,6 @@
   margin-left: 50%;
   position: absolute;
   top: -22px;
-  font-size: 0.8em;
   text-align: center;
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%); }

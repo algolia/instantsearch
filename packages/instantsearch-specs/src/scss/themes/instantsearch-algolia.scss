@@ -1,1 +1,31 @@
 @import 'instantsearch-reset.scss';
+
+// Colors
+
+$algolia-blue: rgb(0, 174, 255);
+
+// Templates
+
+.ais-header {
+  margin-bottom: 1em;
+  padding-bottom: 1em;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ccc;
+}
+
+.ais-footer {
+  margin-top: 1em;
+  padding-top: 1em;
+  font-size: 0.8em;
+  border-top: 1px solid #ccc;
+}
+
+// Widgets
+
+.ais-ClearAll-button {
+  padding: 0.5em 1em;
+  color: #fff;
+  background-color: $algolia-blue;
+  border-radius: 5px;
+}

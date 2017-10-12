@@ -1,3 +1,9 @@
+// Global resets
+
+[class^='ais-'] {
+  font-size: 1em;
+}
+
 // Reset all lists
 
 .ais-Breadcrumb-list,
@@ -143,7 +149,6 @@
   padding-top: 15px;
   position: absolute;
   text-align: center;
-  font-size: 0.8em;
   transform: translateX(-50%);
 }
 
@@ -151,7 +156,6 @@
   margin-left: 50%;
   position: absolute;
   top: -22px;
-  font-size: 0.8em;
   text-align: center;
   transform: translateX(-50%);
 }
