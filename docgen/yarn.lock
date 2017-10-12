@@ -4428,9 +4428,9 @@ metalsmith-engine-jstransformer@^0.1.1:
     is-utf8 "^0.2.1"
     jstransformer "^1.0.0"
 
-metalsmith-headings@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/metalsmith-headings/-/metalsmith-headings-0.1.0.tgz#3bf39524fa9b2b5a542253891e1ff1ab5763270d"
+metalsmith-headings@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/metalsmith-headings/-/metalsmith-headings-0.2.0.tgz#b9c4d7e1609e377b45863d47ae39861b86c50529"
   dependencies:
     cheerio "^0.14.0"
 
