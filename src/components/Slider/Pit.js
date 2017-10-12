@@ -1,15 +1,16 @@
-import PropTypes from 'prop-types';
 import React from 'preact-compat';
+import PropTypes from 'prop-types';
+import includes from 'lodash/includes';
 import cx from 'classnames';
 
-import includes from 'lodash/includes';
-
-const Pit = ({ key, style, children }) => {
+const Pit = ({ style, children }) => {
   // first, end & middle
   const positionValue = Math.round(parseFloat(style.left));
   const shouldDisplayValue = includes([0, 50, 100], positionValue);
 
-  const value = children ? children : key.replace('pit-', '');
+  // Children could be an array, unwrap the value if it's the case
+  // see: https://github.com/developit/preact-compat/issues/436
+  const value = Array.isArray(children) ? children[0] : children;
   const pitValue = Math.round(parseFloat(value, 10) * 100) / 100;
 
   return (
@@ -30,7 +31,6 @@ const Pit = ({ key, style, children }) => {
 };
 
 Pit.propTypes = {
-  key: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.number,
     // Hack for preact-compat
