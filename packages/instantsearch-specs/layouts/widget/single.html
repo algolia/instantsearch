@@ -17,6 +17,8 @@
 
     <h2>{{ .Page.Title }}</h2>
 
+    {{ if .Params.info }}<p class="info">{{ .Params.info }}</p>{{ end }}
+
     <h3>Widget example</h3>
 
     <div class="codeWrapper">{{ .Params.html | safeHTML }}</div>
