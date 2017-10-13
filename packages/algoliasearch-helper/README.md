@@ -11,7 +11,7 @@ This is the library you will need to easily build a good search UX like our [ins
 
 [See the helper in action](http://algolia.github.io/algoliasearch-helper-js/)
 
-[![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
+[![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url] [![jsDelivr Hits][jsdelivr-badge]][jsdelivr-hits]
 
 [travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/develop.svg?style=flat-square
 [travis-url]: https://travis-ci.org/algolia/algoliasearch-helper-js
@@ -21,6 +21,8 @@ This is the library you will need to easily build a good search UX like our [ins
 [downloads-url]: http://npm-stat.com/charts.html?package=algoliasearch-helper
 [version-svg]: https://img.shields.io/npm/v/algoliasearch-helper.svg?style=flat-square
 [package-url]: https://npmjs.org/package/algoliasearch-helper
+[jsdelivr-badge]: https://data.jsdelivr.com/v1/package/npm/algoliasearch-helper/badge
+[jsdelivr-hits]: https://www.jsdelivr.com/package/npm/algoliasearch-helper
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
