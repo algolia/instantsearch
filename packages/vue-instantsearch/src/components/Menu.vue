@@ -69,10 +69,7 @@
           h(
             'div',
             {
-              class: [
-                this.bem('item'),
-                isRefined ? this.bem('item', 'active') : '',
-              ],
+              class: isRefined ? this.bem('item', 'active') : this.bem('item'),
             },
             [
               h(
