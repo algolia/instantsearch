@@ -13,7 +13,7 @@
     "css-loader": "0.28.4",
     "next": "4.0.3",
     "prop-types": "15.5.10",
-    "qs": "6.5.0",
+    "qs": "6.5.1",
     "react": "16.0.0",
     "react-dom": "16.0.0",
     "react-instantsearch": "4.1.3",
