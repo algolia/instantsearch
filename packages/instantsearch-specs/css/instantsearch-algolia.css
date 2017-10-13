@@ -141,20 +141,23 @@
   transform: translateX(-50%); }
 
 .ais-header {
-  margin-bottom: 1em;
-  padding-bottom: 1em;
-  font-size: 0.8em;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   border-bottom: 1px solid #ccc; }
 
 .ais-footer {
-  margin-top: 1em;
-  padding-top: 1em;
-  font-size: 0.8em;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  font-size: 0.8rem;
   border-top: 1px solid #ccc; }
 
 .ais-ClearAll-button {
-  padding: 0.5em 1em;
+  padding: 0.5rem 1rem;
   color: #fff;
   background-color: #00aeff;
   border-radius: 5px; }
+
+.ais-CurrentRefinedValues-item {
+  background-color: #495588; }
