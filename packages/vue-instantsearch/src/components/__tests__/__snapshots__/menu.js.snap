@@ -13,7 +13,7 @@ exports[`Menu should render correctly 1`] = `
       </span>
     </a>
   </div>
-  <div class="ais-menu__item">
+  <div class="ais-menu__item ais-menu__item--active">
     <a class="ais-menu__link"
        href="#"
     >

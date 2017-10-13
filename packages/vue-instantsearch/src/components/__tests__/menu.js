@@ -19,7 +19,7 @@ const getFacetValues = jest.fn(attributeName => ({
     {
       count: 100,
       data: null,
-      isRefined: false,
+      isRefined: true,
       name: 'Clothes',
       path: 'Clothes',
     },
