@@ -78,7 +78,7 @@ test('Should be able to remove values one by one even 0s', function(t) {
   helper.addNumericRefinement('attribute', '>', 4);
   t.deepEqual(helper.state.numericRefinements.attribute['>'], [0, 4], 'should be set to [0, 4] initially');
   helper.removeNumericRefinement('attribute', '>', 0);
-  t.deepEqual(helper.state.numericRefinements.attribute['>'], [4], 'should be set to [ 0 ]');
+  t.deepEqual(helper.state.numericRefinements.attribute['>'], [4], 'should be set to [ 4 ]');
   helper.removeNumericRefinement('attribute', '>', 4);
   t.equal(helper.state.numericRefinements.attribute, undefined, 'should set to undefined');
   t.end();
