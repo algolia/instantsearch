@@ -15,7 +15,7 @@
       },
       sortBy: {
         default() {
-          return ['name:asc']
+          return ['isRefined:desc', 'count:desc', 'name:asc']
         }
       }
     },
