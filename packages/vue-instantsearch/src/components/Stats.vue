@@ -20,7 +20,7 @@ export default {
       return this.searchStore.query;
     },
     totalResults() {
-      return this.searchStore.totalResults;
+      return this.searchStore.totalResults.toLocaleString();
     },
     processingTime() {
       return this.searchStore.processingTimeMS;
