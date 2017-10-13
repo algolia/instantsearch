@@ -7,6 +7,7 @@
     props: {
       attribute: {
         type: String,
+        required: true,
       },
       limit: {
         type: Number,
