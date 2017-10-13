@@ -175,7 +175,6 @@ export default function rangeSlider(params = {}) {
     tooltips: true,
     autoHideContainer: true,
     cssClasses: {},
-    renderState: {},
     templates: defaultTemplates,
     ...params,
   };
@@ -189,6 +188,7 @@ export default function rangeSlider(params = {}) {
 
     return makeWidget({
       ...widgetParams,
+      renderState: {},
       cssClasses: {
         root: cx(bem(null), widgetParams.cssClasses.root),
         header: cx(bem('header'), widgetParams.cssClasses.header),
