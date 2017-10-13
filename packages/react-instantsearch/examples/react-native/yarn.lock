@@ -5303,16 +5303,16 @@ react-redux@^5.0.2:
     loose-envify "^1.1.0"
     prop-types "^15.5.10"
 
+react-test-renderer@16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.0.0.tgz#9fe7b8308f2f71f29fc356d4102086f131c9cb15"
+  dependencies:
+    fbjs "^0.8.16"
+    object-assign "^4.1.1"
+
 react-test-renderer@16.0.0-alpha.12:
   version "16.0.0-alpha.12"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.0.0-alpha.12.tgz#9e4cc5d8ce8bfca72778340de3e1454b9d6c0cc5"
-  dependencies:
-    fbjs "^0.8.9"
-    object-assign "^4.1.0"
-
-react-test-renderer@16.0.0-rc.3:
-  version "16.0.0-rc.3"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.0.0-rc.3.tgz#1b9c8fa6743489602e27e5adae7d8c7468b01a45"
   dependencies:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
