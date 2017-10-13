@@ -13,8 +13,7 @@ describe('connectRange', () => {
     const context = { context: { ais: { mainTargetedIndex: 'index' } } };
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const refine = connect.refine.bind(context);
-    const getSP = connect.getSearchParameters.bind(context);
-    const getMetadata = connect.getMetadata.bind(context);
+    const getSearchParameters = connect.getSearchParameters.bind(context);
     const cleanUp = connect.cleanUp.bind(context);
 
     it('provides the correct props to the component', () => {
@@ -31,7 +30,7 @@ describe('connectRange', () => {
         canRefine: false,
       });
 
-      const results = {
+      let results = {
         getFacetStats: () => ({ min: 5, max: 10 }),
         getFacetValues: () => [
           { name: '5', count: 10 },
@@ -49,12 +48,44 @@ describe('connectRange', () => {
         canRefine: true,
       });
 
+      results = {
+        getFacetStats: () => {},
+        getFacetValues: () => [],
+        hits: [],
+      };
+      props = getProvidedProps(
+        {
+          attributeName: 'ok',
+        },
+        {},
+        { results }
+      );
+      expect(props).toEqual({
+        min: undefined,
+        max: undefined,
+        currentRefinement: {
+          min: undefined,
+          max: undefined,
+        },
+        count: [],
+        canRefine: false,
+      });
+
       props = getProvidedProps(
         { attributeName: 'ok' },
         { ok: { min: 6, max: 9 } },
         {}
       );
-      expect(props).toEqual({ canRefine: false });
+      expect(props).toEqual({
+        min: undefined,
+        max: undefined,
+        currentRefinement: {
+          min: undefined,
+          max: undefined,
+        },
+        count: [],
+        canRefine: false,
+      });
 
       props = getProvidedProps(
         {
@@ -127,24 +158,58 @@ describe('connectRange', () => {
     });
 
     it('calling refine with non finite values should fail', () => {
-      function shouldNotRefine() {
+      function shouldNotRefineWithNaN() {
         refine(
           { attributeName: 'ok' },
           { otherKey: 'val', range: { otherKey: { min: 1, max: 2 } } },
           { min: NaN, max: 5 }
         );
       }
-      expect(shouldNotRefine).toThrowError(
+      expect(shouldNotRefineWithNaN).toThrowError(
+        "You can't provide non finite values to the range connector"
+      );
+
+      function shouldNotRefineWithNull() {
+        refine(
+          { attributeName: 'ok' },
+          { otherKey: 'val', range: { otherKey: { min: 1, max: 2 } } },
+          { min: null, max: 5 }
+        );
+      }
+      expect(shouldNotRefineWithNull).toThrowError(
+        "You can't provide non finite values to the range connector"
+      );
+
+      function shouldNotRefineWithUndefined() {
+        refine(
+          { attributeName: 'ok' },
+          { otherKey: 'val', range: { otherKey: { min: 1, max: 2 } } },
+          { min: undefined, max: 5 }
+        );
+      }
+      expect(shouldNotRefineWithUndefined).toThrowError(
         "You can't provide non finite values to the range connector"
       );
     });
 
     it('refines the corresponding numeric facet', () => {
-      params = getSP(
+      params = getSearchParameters(
         new SearchParameters(),
         { attributeName: 'facet' },
         { range: { facet: { min: 10, max: 30 } } }
       );
+
+      expect(params.getNumericRefinements('facet')).toEqual({
+        '>=': [10],
+        '<=': [30],
+      });
+
+      params = getSearchParameters(
+        new SearchParameters(),
+        { attributeName: 'facet', min: 10, max: 30 },
+        {}
+      );
+
       expect(params.getNumericRefinements('facet')).toEqual({
         '>=': [10],
         '<=': [30],
@@ -152,7 +217,11 @@ describe('connectRange', () => {
     });
 
     it('registers its filter in metadata', () => {
-      let metadata = getMetadata(
+      let metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
         { attributeName: 'wot' },
         { range: { wot: { min: 5 } } }
       );
@@ -175,7 +244,11 @@ describe('connectRange', () => {
       });
       expect(searchState).toEqual({ range: {} });
 
-      metadata = getMetadata(
+      metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
         { attributeName: 'wot' },
         { range: { wot: { max: 10 } } }
       );
@@ -192,7 +265,11 @@ describe('connectRange', () => {
         ],
       });
 
-      metadata = getMetadata(
+      metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
         { attributeName: 'wot' },
         { range: { wot: { min: 5, max: 10 } } }
       );
@@ -208,10 +285,28 @@ describe('connectRange', () => {
           },
         ],
       });
+
+      metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
+        { attributeName: 'wot' },
+        { range: { wot: { min: 0, max: 100 } } }
+      );
+      expect(metadata).toEqual({
+        id: 'wot',
+        index: 'index',
+        items: [],
+      });
     });
 
     it('items value function should clear it from the search state', () => {
-      const metadata = getMetadata(
+      const metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
         { attributeName: 'one' },
         { range: { one: { min: 5 }, two: { max: 4 } } }
       );
@@ -243,16 +338,16 @@ describe('connectRange', () => {
       });
     });
   });
+
   describe('multi index', () => {
-    let context = {
+    const context = {
       context: {
         ais: { mainTargetedIndex: 'first' },
         multiIndexContext: { targetedIndex: 'first' },
       },
     };
     const getProvidedProps = connect.getProvidedProps.bind(context);
-    const getSP = connect.getSearchParameters.bind(context);
-    const getMetadata = connect.getMetadata.bind(context);
+    const getSearchParameters = connect.getSearchParameters.bind(context);
     const cleanUp = connect.cleanUp.bind(context);
 
     it('provides the correct props to the component', () => {
@@ -296,9 +391,10 @@ describe('connectRange', () => {
     });
 
     it("calling refine updates the widget's search state", () => {
-      let refine = connect.refine.bind(context);
-
-      let nextState = refine(
+      let nextState = connect.refine.call(
+        {
+          ...context,
+        },
         { attributeName: 'ok' },
         {
           otherKey: 'val',
@@ -316,15 +412,13 @@ describe('connectRange', () => {
         },
       });
 
-      context = {
-        context: {
-          ais: { mainTargetedIndex: 'first' },
-          multiIndexContext: { targetedIndex: 'second' },
+      nextState = connect.refine.call(
+        {
+          context: {
+            ais: { mainTargetedIndex: 'first' },
+            multiIndexContext: { targetedIndex: 'second' },
+          },
         },
-      };
-      refine = connect.refine.bind(context);
-
-      nextState = refine(
         { attributeName: 'ok' },
         {
           otherKey: 'val',
@@ -342,7 +436,7 @@ describe('connectRange', () => {
     });
 
     it('refines the corresponding numeric facet', () => {
-      params = getSP(
+      params = getSearchParameters(
         new SearchParameters(),
         { attributeName: 'facet' },
         { indices: { first: { range: { facet: { min: 10, max: 30 } } } } }
@@ -354,7 +448,11 @@ describe('connectRange', () => {
     });
 
     it('registers its filter in metadata', () => {
-      let metadata = getMetadata(
+      let metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
         { attributeName: 'wot' },
         { indices: { first: { range: { wot: { min: 5 } } } } }
       );
@@ -377,7 +475,11 @@ describe('connectRange', () => {
       });
       expect(searchState).toEqual({ indices: { first: { range: {} } } });
 
-      metadata = getMetadata(
+      metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
         { attributeName: 'wot' },
         { indices: { first: { range: { wot: { max: 10 } } } } }
       );
@@ -393,10 +495,28 @@ describe('connectRange', () => {
           },
         ],
       });
+
+      metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
+        { attributeName: 'wot' },
+        { indices: { first: { range: { wot: { max: 100 } } } } }
+      );
+      expect(metadata).toEqual({
+        id: 'wot',
+        index: 'first',
+        items: [],
+      });
     });
 
     it('items value function should clear it from the search state', () => {
-      const metadata = getMetadata(
+      const metadata = connect.getMetadata.call(
+        {
+          ...context,
+          _currentRange: { min: 0, max: 100 },
+        },
         { attributeName: 'one' },
         { indices: { first: { range: { one: { min: 5 }, two: { max: 4 } } } } }
       );
