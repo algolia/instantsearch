@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu should render correctly 1`] = `
+
+<div class="ais-menu">
+  <div class="ais-menu__item">
+    <a class="ais-menu__link"
+       href="#"
+    >
+      Bathroom
+      <span class="ais-menu__count">
+        319
+      </span>
+    </a>
+  </div>
+  <div class="ais-menu__item">
+    <a class="ais-menu__link"
+       href="#"
+    >
+      Clothes
+      <span class="ais-menu__count">
+        100
+      </span>
+    </a>
+  </div>
+  <div class="ais-menu__item">
+    <a class="ais-menu__link"
+       href="#"
+    >
+      Shoes
+      <span class="ais-menu__count">
+        202
+      </span>
+    </a>
+  </div>
+  <div class="ais-menu__item">
+    <a class="ais-menu__link"
+       href="#"
+    >
+      Kitchen
+      <span class="ais-menu__count">
+        398
+      </span>
+    </a>
+  </div>
+</div>
+
+`;
