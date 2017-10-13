@@ -5172,15 +5172,7 @@ react-native-vector-icons@4.1.1, react-native-vector-icons@~4.1.1:
     prop-types "^15.5.8"
     yargs "^6.3.0"
 
-react-native-vector-icons@4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-4.3.0.tgz#49eab845fbcde6354cb3dbcb62c1abd1f6abc866"
-  dependencies:
-    lodash "^4.0.0"
-    prop-types "^15.5.10"
-    yargs "^8.0.2"
-
-react-native-vector-icons@^4.2.0:
+react-native-vector-icons@4.4.2, react-native-vector-icons@^4.2.0:
   version "4.4.2"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-4.4.2.tgz#090f42ee0396c4cc4eae0ddaa518028ba8df40c7"
   dependencies:
