@@ -3897,6 +3897,10 @@ lodash.isarray@^3.0.0:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/lodash.isarray/-/lodash.isarray-3.0.4.tgz#79e4eb88c36a8122af86f844aa9bcd851b5fbb55"
 
+lodash.isequal@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+
 lodash.keys@^3.0.0:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/lodash.keys/-/lodash.keys-3.1.2.tgz#4dbc0472b156be50a0b286855d1bd0b0c656098a"
@@ -5105,16 +5109,17 @@ react-native-modal-dropdown@0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.5.0.tgz#f6c4cd4d077792e56902b43b14d83959f5f40f46"
 
-react-native-router-flux@4.0.0-beta.15:
-  version "4.0.0-beta.15"
-  resolved "https://registry.yarnpkg.com/react-native-router-flux/-/react-native-router-flux-4.0.0-beta.15.tgz#d4c340568677336a59f0cb704e308a449ce0245e"
+react-native-router-flux@4.0.0-beta.22:
+  version "4.0.0-beta.22"
+  resolved "https://registry.yarnpkg.com/react-native-router-flux/-/react-native-router-flux-4.0.0-beta.22.tgz#d2314d9b947ca23a10302737ae5ddd9218f086c3"
   dependencies:
+    lodash.isequal "^4.5.0"
     mobx "^3.1.16"
     mobx-react "^4.2.1"
     opencollective "^1.0.3"
     prop-types "^15.5.10"
     react-native-button "^2.0.0"
-    react-navigation "^1.0.0-beta.11"
+    react-navigation "^1.0.0-beta.13"
 
 react-native-safe-module@^1.1.0:
   version "1.2.0"
@@ -5268,7 +5273,7 @@ react-native@0.48.4:
     xtend ">=4.0.0 <4.1.0-0"
     yargs "^6.4.0"
 
-react-navigation@^1.0.0-beta.11:
+react-navigation@^1.0.0-beta.13:
   version "1.0.0-beta.13"
   resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-1.0.0-beta.13.tgz#77521f7080e5755906a3483a28baedbbc66f763c"
   dependencies:
