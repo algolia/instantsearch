@@ -20,11 +20,16 @@ class Panel extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { canRefine: true };
-    this.canRefine = canRefine => {
-      this.setState({ canRefine });
+
+    this.state = {
+      canRefine: true,
     };
   }
+
+  canRefine = canRefine => {
+    this.setState({ canRefine });
+  };
+
   render() {
     return (
       <div {...cx('root', !this.state.canRefine && 'noRefinement')}>
