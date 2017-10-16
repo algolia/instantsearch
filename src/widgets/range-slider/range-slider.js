@@ -17,17 +17,22 @@ const defaultTemplates = {
 
 const bem = bemHelper('ais-range-slider');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  pips,
-  step,
-  tooltips,
-  autoHideContainer,
-  collapsible,
-  renderState,
-  templates,
-}) => ({ refine, range, start, instantSearchInstance }, isFirstRendering) => {
+const renderer = (
+  { refine, range, start, instantSearchInstance, widgetParams },
+  isFirstRendering
+) => {
+  const {
+    container,
+    cssClasses,
+    pips,
+    step,
+    tooltips,
+    autoHideContainer,
+    collapsible,
+    renderState,
+    templates,
+  } = widgetParams;
+
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -66,7 +71,7 @@ const renderer = ({
       collapsible={collapsible}
       templateProps={renderState.templateProps}
     />,
-    containerNode
+    getContainerNode(container)
   );
 };
 
@@ -144,7 +149,7 @@ rangeSlider({
  *
  * @type {WidgetFactory}
  * @category filter
- * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
+ * @param {RangeSliderWidgetOptions} params RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.
  * @example
  * search.addWidget(
@@ -162,47 +167,35 @@ rangeSlider({
  *   })
  * );
  */
-export default function rangeSlider(
-  {
-    container,
-    attributeName,
-    min,
-    max,
-    templates = defaultTemplates,
-    cssClasses: userCssClasses = {},
-    step = 1,
-    pips = true,
-    precision = 2,
-    tooltips = true,
-    autoHideContainer = true,
-  } = {}
-) {
-  if (!container) {
+export default function rangeSlider(params = {}) {
+  const widgetParams = {
+    container: '',
+    step: 1,
+    pips: true,
+    tooltips: true,
+    autoHideContainer: true,
+    cssClasses: {},
+    templates: defaultTemplates,
+    ...params,
+  };
+
+  if (!widgetParams.container) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-  };
-
-  const specializedRenderer = renderer({
-    containerNode,
-    step,
-    pips,
-    tooltips,
-    renderState: {},
-    templates,
-    autoHideContainer,
-    cssClasses,
-  });
-
   try {
-    const makeWidget = connectRangeSlider(specializedRenderer);
-    return makeWidget({ attributeName, min, max, precision });
+    const makeWidget = connectRangeSlider(renderer);
+
+    return makeWidget({
+      ...widgetParams,
+      renderState: {},
+      cssClasses: {
+        root: cx(bem(null), widgetParams.cssClasses.root),
+        header: cx(bem('header'), widgetParams.cssClasses.header),
+        body: cx(bem('body'), widgetParams.cssClasses.body),
+        footer: cx(bem('footer'), widgetParams.cssClasses.footer),
+      },
+    });
   } catch (e) {
     throw new Error(usage);
   }
