@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.2.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
+/*! instantsearch.js preview-2.2.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
 .ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button {
   color: #FFFFFF;
   display: inline-block;
@@ -54,10 +54,10 @@
     height: 14px;
     width: 14px; }
 
-select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-by-selector {
+select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-by-selector, select.ais-menu-select--select {
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   background: #FFFFFF url("data:image/svg+xml;utf8,<svg viewBox='0 0 12 7' xmlns='http://www.w3.org/2000/svg'><path d='M11 1L6.02 6 1 1' stroke-width='1.5' stroke='%23BFC7D8' fill='none' fill-rule='evenodd' stroke-linecap='round'/></svg>") no-repeat center right 16px/10px;
   -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
           box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;

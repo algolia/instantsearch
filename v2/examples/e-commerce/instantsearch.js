@@ -12122,7 +12122,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.2.0';
+exports.default = '2.2.1';
 
 /***/ }),
 /* 181 */
@@ -12729,7 +12729,7 @@ var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(functi
   * levels deep.
   *
   * There's a complete example available on how to write a custom **HierarchicalMenu**:
-  *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/feat/instantsearch.js/v2/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
+  *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
   * @type {Connector}
   * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
   * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
@@ -14290,7 +14290,7 @@ function connectRangeSlider(renderFn) {
           var newNextMax = !hasMaxBound && rangeMax === nextMax ? undefined : nextMax;
 
           if (min !== newNextMin || max !== newNextMax) {
-            helper.clearRefinements();
+            helper.clearRefinements(attributeName);
 
             var isValidMinInput = (0, _isFinite3.default)(newNextMin);
             var isValidMinRange = (0, _isFinite3.default)(rangeMin);
@@ -35594,11 +35594,7 @@ var RawSlider = exports.RawSlider = function (_Component) {
 
       var pitPoints = [min].concat(_toConsumableArray((0, _times2.default)(steps - 1, function (step) {
         return min + stepsLength * (step + 1);
-      })), [max])
-      // bug with `key={ 0 }` and preact, see https://github.com/developit/preact/issues/642
-      .map(function (pitPoint) {
-        return pitPoint === 0 ? 0.000001 : pitPoint;
-      });
+      })), [max]);
 
       return pitPoints;
     }
@@ -36748,35 +36744,36 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _propTypes = __webpack_require__(4);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
 var _preactCompat = __webpack_require__(1);
 
 var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-var _classnames = __webpack_require__(3);
+var _propTypes = __webpack_require__(4);
 
-var _classnames2 = _interopRequireDefault(_classnames);
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _includes = __webpack_require__(101);
 
 var _includes2 = _interopRequireDefault(_includes);
 
+var _classnames = __webpack_require__(3);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Pit = function Pit(_ref) {
-  var key = _ref.key,
-      style = _ref.style,
+  var style = _ref.style,
       children = _ref.children;
 
   // first, end & middle
   var positionValue = Math.round(parseFloat(style.left));
   var shouldDisplayValue = (0, _includes2.default)([0, 50, 100], positionValue);
 
-  var value = children ? children : key.replace('pit-', '');
-  var pitValue = Math.round(parseFloat(value, 10) * 100) / 100;
+  // Children could be an array, unwrap the value if it's the case
+  // see: https://github.com/developit/preact-compat/issues/436
+  var value = Array.isArray(children) ? children[0] : children;
+  var pitValue = Math.round(parseFloat(value) * 100) / 100;
 
   return _preactCompat2.default.createElement(
     'div',
@@ -37938,13 +37935,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = menuSelect;
 
-var _react = __webpack_require__(1);
+var _preactCompat = __webpack_require__(1);
 
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(1);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
 var _classnames = __webpack_require__(3);
 
@@ -37993,7 +37986,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-    _reactDom2.default.render(_react2.default.createElement(_MenuSelect2.default, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_MenuSelect2.default, {
       cssClasses: cssClasses,
       items: items,
       refine: refine,
@@ -38018,7 +38011,7 @@ var usage = 'Usage:\nmenuSelect({\n  container,\n  attributeName,\n  [ sortBy=[\
 /**
  * @typedef {Object} MenuSelectTemplates
  * @property {string|function} [header] Header template.
- * @property {string|function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|function(label: string, count: number, isRefined: boolean, value: string)} [item] Item template, provided with `label`, `count`, `isRefined` and `value` data properties.
  * @property {string} [seeAllOption='See all'] Label of the see all option in the select.
  * @property {string|function} [footer] Footer template.
  */
@@ -38084,7 +38077,7 @@ function menuSelect(_ref3) {
     root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     header: (0, _classnames2.default)(bem('header'), userCssClasses.header),
     footer: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
-    select: (0, _classnames2.default)(bem('footer'), userCssClasses.footer),
+    select: (0, _classnames2.default)(bem('select'), userCssClasses.select),
     option: (0, _classnames2.default)(bem('option'), userCssClasses.option)
   };
 
