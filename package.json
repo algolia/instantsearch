@@ -5,15 +5,11 @@
     "boot": "./scripts/boot.sh",
     "upgrade-deps": "./scripts/upgrade-deps.sh",
     "changelog": "conventional-changelog --preset angular --output-unreleased",
-    "start":
-      "NODE_ENV=development babel-node docgen/start.js & NODE_ENV=development yarn docs:storybook-start & wait",
-    "docs:build":
-      "babel-node docgen/build.js && yarn docs:storybook-build-production",
-    "docs:deploy-production":
-      "NODE_ENV=production yarn docs:build && babel-node scripts/gh-pages.js",
+    "start": "NODE_ENV=development babel-node docgen/start.js & NODE_ENV=development yarn docs:storybook-start & wait",
+    "docs:build": "babel-node docgen/build.js && yarn docs:storybook-build-production",
+    "docs:deploy-production": "NODE_ENV=production yarn docs:build && babel-node scripts/gh-pages.js",
     "docs:build-preview": "./scripts/docs:build-preview.sh",
-    "docs:deploy-preview":
-      "NODE_ENV=production yarn docs:build-preview && rm -f preview.zip && zip -r -9 preview.zip docs-production/ && netlify deploy && rm preview.zip",
+    "docs:deploy-preview": "NODE_ENV=production yarn docs:build-preview && rm -f preview.zip && zip -r -9 preview.zip docs-production/ && netlify deploy && rm preview.zip",
     "release": "NODE_ENV=production ./scripts/release.sh",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -21,14 +17,11 @@
     "test": "./scripts/test.sh",
     "test:recipes": "./scripts/test:recipes.sh",
     "test:build": "NODE_ENV=production ./scripts/test:build.sh",
-    "test:regressions":
-      "webpack --config test/regressions/webpack.config.js && rm -rf test/screenshots && happo run && babel-node ./test/regressions/normalize.js",
+    "test:regressions": "webpack --config test/regressions/webpack.config.js && rm -rf test/screenshots && happo run && babel-node ./test/regressions/normalize.js",
     "argos": "argos upload test/screenshots --token $ARGOS_TOKEN || true",
     "dev": "jest --watch --bail",
-    "docs:storybook-start":
-      "start-storybook -p 6006 -c ./storybook -s ./storybook/public",
-    "docs:storybook-build-production":
-      "build-storybook -s ./storybook/public -o docs-production/react-instantsearch/storybook -c ./storybook"
+    "docs:storybook-start": "start-storybook -p 6006 -c ./storybook -s ./storybook/public",
+    "docs:storybook-build-production": "build-storybook -s ./storybook/public -o docs-production/react-instantsearch/storybook -c ./storybook"
   },
   "devDependencies": {
     "@storybook/addon-actions": "3.2.12",
@@ -129,12 +122,16 @@
   },
   "engines": {
     "node": "8.6.0",
-    "yarn": "1.1.0"
+    "yarn": "1.2.0"
   },
   "jest": {
     "notify": false,
-    "testPathIgnorePatterns": ["/packages/react-instantsearch/examples"],
-    "setupFiles": ["./shim.js"]
+    "testPathIgnorePatterns": [
+      "/packages/react-instantsearch/examples"
+    ],
+    "setupFiles": [
+      "./shim.js"
+    ]
   },
   "license": "MIT",
   "author": {
