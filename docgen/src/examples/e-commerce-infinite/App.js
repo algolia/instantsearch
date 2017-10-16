@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react';
-import { createConnector } from 'react-instantsearch';
 import {
   InstantSearch,
   HierarchicalMenu,
@@ -19,6 +18,7 @@ import {
   connectSearchBox,
   connectRefinementList,
   connectInfiniteHits,
+  connectStateResults,
 } from 'react-instantsearch/connectors';
 import 'react-instantsearch-theme-algolia/style.scss';
 
@@ -176,7 +176,7 @@ const Hit = ({ item }) => {
   for (let i = 0; i < 5; i++) {
     const suffix = i >= item.rating ? '_empty' : '';
     icons.push(
-      <label key={i} label className={`ais-StarRating__ratingIcon${suffix}`} />
+      <label key={i} className={`ais-StarRating__ratingIcon${suffix}`} />
     );
   }
   return (
@@ -204,21 +204,13 @@ const Hit = ({ item }) => {
   );
 };
 
-const CustomResults = createConnector({
-  displayName: 'CustomResults',
-
-  getProvidedProps(props, searchState, searchResults) {
-    const noResults = searchResults.results
-      ? searchResults.results.nbHits === 0
-      : false;
-    return { query: searchState.query, noResults };
-  },
-})(({ noResults, query }) => {
-  if (noResults) {
+const CustomResults = connectStateResults(({ searchState, searchResult }) => {
+  if (searchResult && searchResult.nbHits === 0) {
     return (
       <div className="results-wrapper">
         <div className="no-results">
-          No results found matching <span className="query">{query}</span>
+          No results found matching{' '}
+          <span className="query">{searchState.query}</span>
         </div>
       </div>
     );
