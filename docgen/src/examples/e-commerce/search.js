@@ -20,26 +20,26 @@ search.addWidget(
   })
 );
 
-search.on('render', function() {
+search.on('render', function () {
   $('.product-picture img').addClass('transparent');
-  $('.product-picture img').one('load', function() {
-      $(this).removeClass('transparent');
-  }).each(function() {
-      if(this.complete) $(this).load();
+  $('.product-picture img').one('load', function () {
+    $(this).removeClass('transparent');
+  }).each(function () {
+    if (this.complete) $(this).load();
   });
 });
 
 var hitTemplate =
   '<article class="hit">' +
-      '<div class="product-picture-wrapper">' +
-        '<div class="product-picture"><img src="{{image}}" /></div>' +
-      '</div>' +
-      '<div class="product-desc-wrapper">' +
-        '<div class="product-name">{{{_highlightResult.name.value}}}</div>' +
-        '<div class="product-type">{{{_highlightResult.type.value}}}</div>' +
-        '<div class="product-price">${{price}}</div>' +
-        '<div class="product-rating">{{#stars}}<span class="ais-star-rating--star{{^.}}__empty{{/.}}"></span>{{/stars}}</div>' +
-      '</div>' +
+  '<div class="product-picture-wrapper">' +
+  '<div class="product-picture"><img src="{{image}}" /></div>' +
+  '</div>' +
+  '<div class="product-desc-wrapper">' +
+  '<div class="product-name">{{{_highlightResult.name.value}}}</div>' +
+  '<div class="product-type">{{{_highlightResult.type.value}}}</div>' +
+  '<div class="product-price">${{price}}</div>' +
+  '<div class="product-rating">{{#stars}}<span class="ais-star-rating--star{{^.}}__empty{{/.}}"></span>{{/stars}}</div>' +
+  '</div>' +
   '</article>';
 
 var noResultsTemplate =
@@ -50,8 +50,8 @@ var menuTemplate =
 
 var facetTemplateCheckbox =
   '<a href="javascript:void(0);" class="facet-item">' +
-    '<input type="checkbox" class="{{cssClasses.checkbox}}" value="{{label}}" {{#isRefined}}checked{{/isRefined}} />{{label}}' +
-    '<span class="facet-count">({{count}})</span>' +
+  '<input type="checkbox" class="{{cssClasses.checkbox}}" value="{{label}}" {{#isRefined}}checked{{/isRefined}} />{{label}}' +
+  '<span class="facet-count">({{count}})</span>' +
   '</a>';
 
 var facetTemplateColors =
@@ -65,7 +65,7 @@ search.addWidget(
       empty: noResultsTemplate,
       item: hitTemplate
     },
-    transformData: function(hit) {
+    transformData: function (hit) {
       hit.stars = [];
       for (var i = 1; i <= 5; ++i) {
         hit.stars.push(i <= hit.rating);
@@ -152,14 +152,21 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.breadcrumb({
+    container: '#breadcrumb',
+    separator: ' > ',
+    attributes: ['category', 'sub_category', 'sub_sub_category'],
+  })
+);
+search.addWidget(
   instantsearch.widgets.sortBySelector({
     container: '#sort-by-selector',
     indices: [
-      {name: 'ikea', label: 'Featured'},
-      {name: 'ikea_price_asc', label: 'Price asc.'},
-      {name: 'ikea_price_desc', label: 'Price desc.'}
+      { name: 'ikea', label: 'Featured' },
+      { name: 'ikea_price_asc', label: 'Price asc.' },
+      { name: 'ikea_price_desc', label: 'Price desc.' }
     ],
-    label:'sort by'
+    label: 'sort by'
   })
 );
 
