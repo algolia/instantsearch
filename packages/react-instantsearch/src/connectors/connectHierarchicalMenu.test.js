@@ -30,6 +30,7 @@ describe('connectHierarchicalMenu', () => {
         { hierarchicalMenu: { ok: 'wat' } },
         { results }
       );
+
       expect(props).toEqual({
         canRefine: false,
         currentRefinement: 'wat',
@@ -167,6 +168,233 @@ describe('connectHierarchicalMenu', () => {
         },
       ]);
       expect(props.items).toEqual(['items']);
+    });
+
+    it('shows the effect of limitMax when there is no transformItems', () => {
+      const results = {
+        getFacetValues: jest.fn(),
+        getFacetByName: () => true,
+        hits: [],
+      };
+      results.getFacetValues.mockImplementation(() => ({
+        data: [
+          {
+            name: 'wat',
+            path: 'wat',
+            count: 20,
+            data: [
+              {
+                name: 'wot',
+                path: 'wat > wot',
+                count: 15,
+              },
+              {
+                name: 'wut',
+                path: 'wat > wut',
+                count: 3,
+              },
+              {
+                name: 'wit',
+                path: 'wat > wit',
+                count: 5,
+              },
+            ],
+          },
+          {
+            name: 'oy',
+            path: 'oy',
+            count: 10,
+          },
+          {
+            name: 'ay',
+            path: 'ay',
+            count: 3,
+          },
+        ],
+      }));
+
+      props = getProvidedProps(
+        { attributes: ['ok'], showMore: true, limitMin: 0, limitMax: 2 },
+        {},
+        { results }
+      );
+      expect(props.items).toEqual([
+        {
+          label: 'wat',
+          value: 'wat',
+          count: 20,
+          items: [
+            {
+              label: 'wot',
+              value: 'wat > wot',
+              count: 15,
+            },
+            {
+              label: 'wut',
+              value: 'wat > wut',
+              count: 3,
+            },
+          ],
+        },
+        {
+          label: 'oy',
+          value: 'oy',
+          count: 10,
+        },
+      ]);
+    });
+
+    it('applies limit after transforming items', () => {
+      const results = {
+        getFacetValues: jest.fn(),
+        getFacetByName: () => true,
+        hits: [],
+      };
+      results.getFacetValues.mockClear();
+      results.getFacetValues.mockImplementation(() => ({
+        data: [
+          {
+            name: 'wat',
+            path: 'wat',
+            count: 20,
+            data: [
+              {
+                name: 'wot',
+                path: 'wat > wot',
+                count: 15,
+              },
+              {
+                name: 'wut',
+                path: 'wat > wut',
+                count: 3,
+              },
+              {
+                name: 'wit',
+                path: 'wat > wit',
+                count: 5,
+              },
+            ],
+          },
+          {
+            name: 'oy',
+            path: 'oy',
+            count: 10,
+          },
+          {
+            name: 'ay',
+            path: 'ay',
+            count: 3,
+          },
+        ],
+      }));
+      props = getProvidedProps(
+        { attributes: ['ok'], showMore: true, limitMin: 0, limitMax: 3 },
+        {},
+        { results }
+      );
+      expect(props.items).toEqual([
+        {
+          label: 'wat',
+          value: 'wat',
+          count: 20,
+          items: [
+            {
+              label: 'wot',
+              value: 'wat > wot',
+              count: 15,
+            },
+            {
+              label: 'wut',
+              value: 'wat > wut',
+              count: 3,
+            },
+            {
+              label: 'wit',
+              value: 'wat > wit',
+              count: 5,
+            },
+          ],
+        },
+        {
+          label: 'oy',
+          value: 'oy',
+          count: 10,
+        },
+        {
+          label: 'ay',
+          value: 'ay',
+          count: 3,
+        },
+      ]);
+
+      function compareItem(a, b) {
+        if (a.label < b.label) return -1;
+        if (a.label > b.label) return 1;
+        return 0;
+      }
+      const transformItems = jest.fn(items => items.sort(compareItem));
+      props = getProvidedProps(
+        { attributes: ['ok'], transformItems },
+        {},
+        { results }
+      );
+      expect(transformItems.mock.calls[0][0]).toEqual([
+        {
+          label: 'ay',
+          value: 'ay',
+          count: 3,
+        },
+        {
+          label: 'oy',
+          value: 'oy',
+          count: 10,
+        },
+        {
+          label: 'wat',
+          value: 'wat',
+          count: 20,
+          items: [
+            {
+              label: 'wot',
+              value: 'wat > wot',
+              count: 15,
+            },
+            {
+              label: 'wut',
+              value: 'wat > wut',
+              count: 3,
+            },
+            {
+              label: 'wit',
+              value: 'wat > wit',
+              count: 5,
+            },
+          ],
+        },
+      ]);
+      props = getProvidedProps(
+        {
+          attributes: ['ok'],
+          transformItems,
+          showMore: true,
+          limitMin: 0,
+          limitMax: 2,
+        },
+        {},
+        { results }
+      );
+      expect(props.items).toEqual([
+        {
+          label: 'ay',
+          value: 'ay',
+          count: 3,
+        },
+        {
+          label: 'oy',
+          value: 'oy',
+          count: 10,
+        },
+      ]);
     });
 
     it("calling refine updates the widget's search state", () => {

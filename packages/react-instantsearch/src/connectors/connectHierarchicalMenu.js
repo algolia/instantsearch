@@ -59,15 +59,26 @@ function getValue(path, props, searchState, context) {
   return nextRefinement;
 }
 
-function transformValue(value, limit, props, searchState, context) {
-  return value.slice(0, limit).map(v => ({
+function transformValue(value, props, searchState, context) {
+  return value.map(v => ({
     label: v.name,
     value: getValue(v.path, props, searchState, context),
     count: v.count,
     isRefined: v.isRefined,
-    items: v.data && transformValue(v.data, limit, props, searchState, context),
+    items: v.data && transformValue(v.data, props, searchState, context),
   }));
 }
+
+const truncate = (items = [], limit = 10) =>
+  items.slice(0, limit).map(
+    (item = {}) =>
+      Array.isArray(item.items)
+        ? {
+            ...item,
+            items: truncate(item.items, limit),
+          }
+        : item
+  );
 
 function refine(props, searchState, nextRefinement, context) {
   const id = getId(props);
@@ -166,8 +177,8 @@ export default createConnector({
   getProvidedProps(props, searchState, searchResults) {
     const { showMore, limitMin, limitMax } = props;
     const id = getId(props);
-    const results = getResults(searchResults, this.context);
 
+    const results = getResults(searchResults, this.context);
     const isFacetPresent =
       Boolean(results) && Boolean(results.getFacetByName(id));
 
@@ -182,15 +193,16 @@ export default createConnector({
         canRefine: false,
       };
     }
-
     const limit = showMore ? limitMax : limitMin;
     const value = results.getFacetValues(id, { sortBy });
     const items = value.data
-      ? transformValue(value.data, limit, props, searchState, this.context)
+      ? transformValue(value.data, props, searchState, this.context)
       : [];
-
+    const transformedItems = props.transformItems
+      ? props.transformItems(items)
+      : items;
     return {
-      items: props.transformItems ? props.transformItems(items) : items,
+      items: truncate(transformedItems, limit),
       currentRefinement: getCurrentRefinement(props, searchState, this.context),
       canRefine: items.length > 0,
     };
