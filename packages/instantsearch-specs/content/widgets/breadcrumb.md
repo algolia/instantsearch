@@ -9,19 +9,19 @@ html: |
     <div class="ais-Breadcrumb-body ais-body">
       <ul class="ais-Breadcrumb-list">
         <li class="ais-Breadcrumb-item">
-          <button class="ais-Breadcrumb-button">Home</button>
+          <a class="ais-Breadcrumb-link" href="some-link">Home</a>
         </li>
         <li class="ais-Breadcrumb-item" aria-hidden="true">
           >
         </li>
         <li class="ais-Breadcrumb-item">
-          <button class="ais-Breadcrumb-button">Cooking</button>
+          <a class="ais-Breadcrumb-link" href="some-link">Cooking</a>
         </li>
         <li class="ais-Breadcrumb-item" aria-hidden="true">
           >
         </li>
         <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
-          <button class="ais-Breadcrumb-button">Kitchen textiles</button>
+          <a class="ais-Breadcrumb-link" href="some-link">Kitchen textiles</a>
         </li>
       </ul>
     </div>
@@ -42,7 +42,7 @@ classes:
     description: the breadcrumb navigation item
   - name: .ais-Breadcrumb-item--selected
     description: the selected breadcrumb item
-  - name: .ais-Breadcrumb-button
+  - name: .ais-Breadcrumb-link
     description: the clickable breadcrumb element
   - name: .ais-Breadcrumb-footer
     description: the footer of the widget

@@ -19,7 +19,7 @@ html: |
           </button>
         </li>
       </ul>
-      <button class="ais-CurrentRefinedValues-clearAll">
+      <button class="ais-CurrentRefinedValues-reset">
         Clear all
       </button>
     </div>
@@ -42,7 +42,7 @@ classes:
     description: the clickable refined element
   - name: .ais-CurrentRefinedValues-count
     description: the count of refined values for each item
-  - name: .ais-CurrentRefinedValues-clearAll
+  - name: .ais-CurrentRefinedValues-reset
     description: the reset button for current selected values
   - name: .ais-CurrentRefinedValues-footer
     description: the footer of the widget

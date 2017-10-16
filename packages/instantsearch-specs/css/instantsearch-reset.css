@@ -16,7 +16,6 @@
   padding: 0;
   list-style: none; }
 
-.ais-Breadcrumb-button,
 .ais-ClearAll-button,
 .ais-CurrentRefinedValues-button,
 .ais-CurrentRefinedValues-clearAll,
@@ -34,7 +33,6 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
-  .ais-Breadcrumb-button::-moz-focus-inner,
   .ais-ClearAll-button::-moz-focus-inner,
   .ais-CurrentRefinedValues-button::-moz-focus-inner,
   .ais-CurrentRefinedValues-clearAll::-moz-focus-inner,
@@ -52,6 +50,16 @@
 
 .ais-HierarchicalMenu-list .ais-HierarchicalMenu-list {
   margin-left: 1em; }
+
+.ais-PoweredBy-text {
+  display: inline-block;
+  vertical-align: middle; }
+
+.ais-PoweredBy-logo {
+  display: inline-block;
+  vertical-align: middle;
+  width: 70px;
+  height: auto; }
 
 .ais-SearchBox-form {
   display: block;
