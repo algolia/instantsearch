@@ -1,3 +1,16 @@
+<a name="2.2.1"></a>
+## [2.2.1](https://github.com/algolia/instantsearch.js/compare/v2.2.0...v2.2.1) (2017-10-16)
+
+
+### Bug Fixes
+
+* **connectRangeSlider:** only clear the refinement on the current attribute ([#2459](https://github.com/algolia/instantsearch.js/issues/2459)) ([7cebf58](https://github.com/algolia/instantsearch.js/commit/7cebf58))
+* **menuSelect:** select in userCssClasses ([#2455](https://github.com/algolia/instantsearch.js/issues/2455)) ([0eb3dc8](https://github.com/algolia/instantsearch.js/commit/0eb3dc8))
+* **menuSelect:** use preact instead of React ([#2460](https://github.com/algolia/instantsearch.js/issues/2460)) ([35ccae8](https://github.com/algolia/instantsearch.js/commit/35ccae8))
+* **test:** correctly reset the wired dependency ([#2461](https://github.com/algolia/instantsearch.js/issues/2461)) ([1f7f4ed](https://github.com/algolia/instantsearch.js/commit/1f7f4ed))
+
+
+
 <a name="2.2.0"></a>
 # [2.2.0](https://github.com/algolia/instantsearch.js/compare/v2.1.6...v2.2.0) (2017-10-03)
 
