@@ -6,6 +6,12 @@ $algolia-blue: rgb(0, 174, 255);
 $ghost: rgb(196, 200, 216);
 $east-bay: rgb(73, 85, 136);
 
+// Global
+
+a[class^='ais-'] {
+  color: $algolia-blue;
+}
+
 // Templates
 
 .ais-header {
@@ -26,7 +32,7 @@ $east-bay: rgb(73, 85, 136);
 // Widgets
 
 .ais-ClearAll-button,
-.ais-CurrentRefinedValues-clearAll {
+.ais-CurrentRefinedValues-reset {
   padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
   color: #fff;
@@ -34,7 +40,7 @@ $east-bay: rgb(73, 85, 136);
   border-radius: 5px;
 }
 
-.ais-CurrentRefinedValues-list + .ais-CurrentRefinedValues-clearAll {
+.ais-CurrentRefinedValues-list + .ais-CurrentRefinedValues-reset {
   margin-top: 0.5rem;
 }
 
