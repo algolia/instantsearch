@@ -29,7 +29,7 @@
     "@ptomasroos/react-native-multi-slider": "^0.0.11",
     "expo": "21.0.2",
     "lodash": "4.17.4",
-    "native-base": "2.3.2",
+    "native-base": "2.3.3",
     "prop-types": "15.5.8",
     "react": "16.0.0",
     "react-dom": "16.0.0",
