@@ -1,3 +1,13 @@
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/algolia/vue-instantsearch/compare/v1.2.1...v1.2.2) (2017-10-17)
+
+
+### Bug Fixes
+
+* **results:** remove key from slot ([8270847](https://github.com/algolia/vue-instantsearch/commit/8270847))
+
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/algolia/vue-instantsearch/compare/v1.2.0...v1.2.1) (2017-10-17)
 
