@@ -1,5 +1,7 @@
 import { configure } from "@storybook/vue";
 
+import './styles.css';
+
 import Vue from "vue";
 import InstantSearch, { createStoreFromAlgoliaCredentials } from "../src/instantsearch";
 
