@@ -1,11 +1,19 @@
-import { defaultSearchStore } from './utils';
+import { searchBoxWrapper, hitsWrapper, indexWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
 
-storiesOf('Stats', module).add('default', () => ({
-  template: '<ais-stats :search-store="searchStore"></ais-stats>',
-  data() {
-    return {
-      searchStore: defaultSearchStore(),
-    };
-  },
-}));
+storiesOf('Stats', module)
+  .addDecorator(searchBoxWrapper)
+  .addDecorator(hitsWrapper)
+  .addDecorator(indexWrapper)
+  .add('default', () => ({
+    template: '<ais-stats></ais-stats>',
+  }))
+  .add('custom display', () => ({
+    template: `
+    <ais-stats>
+      <div slot-scope="{ totalResults, processingTime, query }">
+        {{ totalResults.toLocaleString() }} results found in {{ processingTime }}ms for query "<b>{{ query }}</b>" 🚀.
+      </div>
+    </ais-stats>
+    `,
+  }));
