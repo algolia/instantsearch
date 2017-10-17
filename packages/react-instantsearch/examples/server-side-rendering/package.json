@@ -8,7 +8,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "babel-core": "7.0.0-beta.2",
+    "babel-core": "7.0.0-beta.3",
     "babel-loader": "7.1.2",
     "babel-plugin-transform-async-to-generator": "6.24.1",
     "babel-polyfill": "6.26.0",
