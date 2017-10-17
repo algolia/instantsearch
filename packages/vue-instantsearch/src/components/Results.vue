@@ -3,7 +3,7 @@
 
     <slot name="header"></slot>
 
-    <slot v-for="result in results" :result="result" :key="result.objectID">
+    <slot v-for="result in results" :result="result">
       Result 'objectID': {{ result.objectID }}
     </slot>
 
