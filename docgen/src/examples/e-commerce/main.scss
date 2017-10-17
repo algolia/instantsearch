@@ -302,16 +302,34 @@ aside {
 }
 
 #results-topbar {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   line-height: 22px;
-  @include clearfix;
   .sort-by {
     float: right;
   }
   label {
     font-weight: normal;
     font-size: .8em;
+  }
+
+  .ais-breadcrumb--root {
+    margin-top: 7px;
+    display: inline-block;
+  }
+
+  .ais-stats {
+    margin-top: -4px;
+  }
+  .ais-breadcrumb--disabledLabel {
+    &:hover {
+        text-decoration: none;
+        color: #444;
+        cursor: default;
+    }
+
   }
   .ais-breadcrumb--home,  {
     display: inline-block;
