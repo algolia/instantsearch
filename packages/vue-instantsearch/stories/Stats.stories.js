@@ -1,10 +1,8 @@
-import { searchBoxWrapper, hitsWrapper, indexWrapper } from './utils';
+import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
 
 storiesOf('Stats', module)
-  .addDecorator(searchBoxWrapper)
-  .addDecorator(hitsWrapper)
-  .addDecorator(indexWrapper)
+  .addDecorator(previewWrapper)
   .add('default', () => ({
     template: '<ais-stats></ais-stats>',
   }))

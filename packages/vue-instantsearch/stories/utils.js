@@ -11,44 +11,22 @@ export function defaultSearchStore() {
   return searchStore;
 }
 
-export function indexWrapper() {
+export function previewWrapper() {
   return {
     template: `
       <ais-index :search-store="searchStore">
+        <h2>Display</h2>
         <story/>
-      </ais-index>
-    `,
-    data() {
-      return {
-        searchStore: defaultSearchStore(),
-      };
-    },
-  };
-}
 
-export function searchBoxWrapper() {
-  return {
-    template: `
-      <div>
-        <story/>
+        <h2>Results</h2>
         <ais-search-box></ais-search-box>
-      </div>
-    `,
-  };
-}
-
-export function hitsWrapper() {
-  return {
-    template: `
-      <div>
-        <story/>
         <ais-results>
           <div slot-scope="{ result }">
             <h3 v-html="result._highlightResult.name.value"></h3>
             <div v-html="result._highlightResult.description.value"></div>
           </div>
         </ais-results>
-      </div>
+      </ais-index>
     `,
     data() {
       return {
