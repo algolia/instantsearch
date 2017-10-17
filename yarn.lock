@@ -1743,9 +1743,9 @@ builtins@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/builtins/-/builtins-1.0.3.tgz#cb94faeb61c8696451db36534e1422f94f0aee88"
 
-bundlesize@0.15.2:
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/bundlesize/-/bundlesize-0.15.2.tgz#56782be56d8c72f84d6bdb795a48c019425f2304"
+bundlesize@0.15.3:
+  version "0.15.3"
+  resolved "https://registry.yarnpkg.com/bundlesize/-/bundlesize-0.15.3.tgz#5cf7a48c11fd2835cfc9112e24429bb47c086ca8"
   dependencies:
     axios "^0.16.2"
     bytes "^3.0.0"
