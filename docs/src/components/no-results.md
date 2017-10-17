@@ -11,7 +11,7 @@ githubSource: docs/src/components/no-results.md
 
 A convenience component that will only be showed when no results are to be yielded.
 
-<a class="btn btn-static-theme" href="../stories/?selectedKind=NoResults">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=NoResults">🕹 try out live</a>
 
 ## Usage
 

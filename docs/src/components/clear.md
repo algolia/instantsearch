@@ -11,7 +11,7 @@ githubSource: docs/src/components/clear.md
 
 A button that clears the `query`, the `active refinements`, or both when pressed.
 
-<a class="btn btn-static-theme" href="../stories/?selectedKind=Clear">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=Clear">🕹 try out live</a>
 
 ## Usage
 

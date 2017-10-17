@@ -17,7 +17,7 @@ If provided components do not fit your needs, let us know via [GitHub](https://g
 
 You can try most of them out in our playground.
 
-<a class="btn btn-static-theme" href="../stories/">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/">🕹 try out live</a>
 
 * [Index](components/index.html)
 * [Input](components/input.html)

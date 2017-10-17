@@ -11,7 +11,7 @@ githubSource: docs/src/components/refinement-list.md
 
 A component to add facet refinements in the form of a list of checkboxes.
 
-<a class="btn btn-static-theme" href="../stories/?selectedKind=RefinementList">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=RefinementList">🕹 try out live</a>
 
 ## Usage
 
