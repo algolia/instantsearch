@@ -110,6 +110,9 @@ test('it should emit a "page-change" event when page changes', () => {
 
   expect(onPageChange).not.toHaveBeenCalled();
 
-  vm.$el.getElementsByTagName('li')[3].getElementsByTagName('a')[0].click();
+  vm.$el
+    .getElementsByTagName('li')[3]
+    .getElementsByTagName('a')[0]
+    .click();
   expect(onPageChange).toHaveBeenCalledTimes(1);
 });
