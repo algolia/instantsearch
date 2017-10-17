@@ -18,7 +18,7 @@
 
 .ais-ClearAll-button,
 .ais-CurrentRefinedValues-button,
-.ais-CurrentRefinedValues-clearAll,
+.ais-CurrentRefinedValues-reset,
 .ais-InfiniteHits-showMore,
 .ais-StarRating-button {
   padding: 0;
@@ -35,7 +35,7 @@
   user-select: none; }
   .ais-ClearAll-button::-moz-focus-inner,
   .ais-CurrentRefinedValues-button::-moz-focus-inner,
-  .ais-CurrentRefinedValues-clearAll::-moz-focus-inner,
+  .ais-CurrentRefinedValues-reset::-moz-focus-inner,
   .ais-InfiniteHits-showMore::-moz-focus-inner,
   .ais-StarRating-button::-moz-focus-inner {
     padding: 0;
