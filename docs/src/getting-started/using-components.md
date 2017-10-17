@@ -15,6 +15,10 @@ If provided components do not fit your needs, let us know via [GitHub](https://g
 
 ## Available components
 
+You can try most of them out in our playground.
+
+<a class="btn btn-static-theme" href="../stories/">🕹 try out live</a>
+
 * [Index](components/index.html)
 * [Input](components/input.html)
 * [Search Box](components/search-box.html)

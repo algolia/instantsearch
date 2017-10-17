@@ -11,6 +11,8 @@ githubSource: docs/src/components/refinement-list.md
 
 A component to add facet refinements in the form of a list of checkboxes.
 
+<a class="btn btn-static-theme" href="../stories/?selectedKind=RefinementList">🕹 try out live</a>
+
 ## Usage
 
 **Requirement**: To be able to use this component, you first need to make sure the attribute you want to facet on is added to the list of `attributesForFaceting`. You can do so by heading to the Algolia dashboard of your index, and configure the attributes for faceting under the `display` tab.
