@@ -28,6 +28,7 @@
     "build:cjs": "rollup -c ./build/rollup.cjs.config.js",
     "build:es": "rollup -c ./build/rollup.es.config.js",
     "build:umd": "rollup -c ./build/rollup.umd.config.js",
+    "storybook": "start-storybook -p 9001 -c .storybook",
     "docs:build": "cd docs && yarn && yarn build",
     "docs:build:dev": "cd docs && yarn && yarn build:dev",
     "docs:watch": "cd docs && yarn && yarn dev",
@@ -49,6 +50,7 @@
     "vue": "^2.2.2"
   },
   "devDependencies": {
+    "@storybook/vue": "^3.2.12",
     "babel-eslint": "^7.2.3",
     "babel-jest": "^19.0.0",
     "babel-preset-es2015": "^6.24.0",
