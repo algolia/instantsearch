@@ -18,7 +18,7 @@
 
 .ais-ClearAll-button,
 .ais-CurrentRefinedValues-button,
-.ais-CurrentRefinedValues-clearAll,
+.ais-CurrentRefinedValues-reset,
 .ais-InfiniteHits-showMore,
 .ais-StarRating-button {
   padding: 0;
@@ -35,7 +35,7 @@
   user-select: none; }
   .ais-ClearAll-button::-moz-focus-inner,
   .ais-CurrentRefinedValues-button::-moz-focus-inner,
-  .ais-CurrentRefinedValues-clearAll::-moz-focus-inner,
+  .ais-CurrentRefinedValues-reset::-moz-focus-inner,
   .ais-InfiniteHits-showMore::-moz-focus-inner,
   .ais-StarRating-button::-moz-focus-inner {
     padding: 0;
@@ -148,6 +148,9 @@
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%); }
 
+a[class^='ais-'] {
+  color: #00aeff; }
+
 .ais-header {
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
@@ -162,14 +165,14 @@
   border-top: 1px solid #ccc; }
 
 .ais-ClearAll-button,
-.ais-CurrentRefinedValues-clearAll {
+.ais-CurrentRefinedValues-reset {
   padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
   color: #fff;
   background-color: #00aeff;
   border-radius: 5px; }
 
-.ais-CurrentRefinedValues-list + .ais-CurrentRefinedValues-clearAll {
+.ais-CurrentRefinedValues-list + .ais-CurrentRefinedValues-reset {
   margin-top: 0.5rem; }
 
 .ais-CurrentRefinedValues-item {

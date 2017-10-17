@@ -1,6 +1,5 @@
 ---
 title: InfiniteHits
-info: The final name for this widget is not defined yet (HitsWithLoadMore? Other?)
 type: widget
 html: |
   <div class="ais-InfiniteHits">
