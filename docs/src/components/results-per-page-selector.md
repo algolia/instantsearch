@@ -11,6 +11,8 @@ githubSource: docs/src/components/results-per-page-selector.md
 
 A component that lets the user change the number of results to be displayed per page.
 
+<a class="btn btn-static-theme" href="../stories/?selectedKind=ResultsPerPageSelector">🕹 try out live</a>
+
 ## Usage
 
 Basic usage:

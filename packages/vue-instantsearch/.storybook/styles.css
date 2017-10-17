@@ -1,0 +1,34 @@
+.result {
+    font-size: 16px;
+}
+.result:after {
+    content:"";
+    display:block;
+    clear:both;
+}
+
+.result-picture {
+   float: left;
+   margin-right: 10px;
+}
+
+.result-content {
+    overflow: hidden;
+}
+
+.result-content em {
+    font-style: normal;
+    background: #ccefff;
+}
+
+.result-name {
+    padding-top: 20px;
+}
+.result-type {
+    color: #9d9dbd; /* East bay */
+}
+
+.result-description {
+    padding-top: 10px;
+    max-width: 400px; 
+}

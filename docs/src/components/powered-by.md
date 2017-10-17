@@ -11,6 +11,8 @@ githubSource: docs/src/components/powered-by.md
 
 A component that helps you quickly add the "powered by Algolia" mention that is required if you have a free plan.
 
+<a class="btn btn-static-theme" href="../stories/?selectedKind=PoweredBy">🕹 try out live</a>
+
 ## Usage
 
 Basic usage:

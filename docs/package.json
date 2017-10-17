@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "babel-node start.js",
-    "build:dev": "babel-node build.js",
-    "build": "NODE_ENV='production' babel-node build.js",
+    "build:dev": "babel-node build.js && cd .. && yarn storybook:build",
+    "build": "NODE_ENV='production' babel-node build.js && cd .. && yarn storybook:build",
     "deploy": "yarn run build && gh-pages -d dist"
   },
   "dependencies": {
