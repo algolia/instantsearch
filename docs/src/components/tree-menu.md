@@ -13,7 +13,7 @@ A component to add a tree menu in the form of a nested list of links.
 
 Generally used to implement layered navigation.
 
-<a class="btn btn-static-theme" href="../stories/?selectedKind=TreeMenu">🕹 try out live</a>
+<a class="btn btn-static-theme" href="stories/?selectedKind=TreeMenu">🕹 try out live</a>
 
 ## Usage
 
