@@ -1,3 +1,13 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/algolia/vue-instantsearch/compare/v1.2.0...v1.2.1) (2017-10-17)
+
+
+### Bug Fixes
+
+* **stats:** only use toLocaleString in display ([62699e9](https://github.com/algolia/vue-instantsearch/commit/62699e9))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/algolia/vue-instantsearch/compare/v1.1.0...v1.2.0) (2017-10-13)
 
