@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Stats renders proper HTML 1`] = `
+
+<div class="ais-stats">
+  10,000 results found in 1,000ms
+</div>
+
+`;
+
+exports[`Stats should not be displayed if there are no results 1`] = `undefined`;
