@@ -457,4 +457,84 @@ describe('connectRefinementList', () => {
 
     expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
   });
+
+  it('can search in facet values', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+    });
+
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
+    helper.search = sinon.stub();
+    helper.searchForFacetValues = sinon.stub().returns(
+      Promise.resolve({
+        exhaustiveFacetsCount: true,
+        facetHits: [
+          {
+            count: 33,
+            highlighted: 'Salvador <em>Da</em>li',
+            value: 'Salvador Dali',
+          },
+          {
+            count: 9,
+            highlighted: '<em>Da</em>vidoff',
+            value: 'Davidoff',
+          },
+        ],
+        processingTimeMS: 1,
+      })
+    );
+
+    // Sinulate the lifecycle
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // Simulation end
+
+    const search = rendering.lastCall.args[0].searchForItems;
+    search('da');
+
+    const sffvFacet = helper.searchForFacetValues.lastCall.args[0];
+    const sffvQuery = helper.searchForFacetValues.lastCall.args[1];
+
+    expect(sffvQuery).toBe('da');
+    expect(sffvFacet).toBe('category');
+
+    // should search with the same state and ad as the query
+    // should not have pre / post tags
+    // should call the rendering function again
+    // the yielded results should the same values as the results from the helper
+  });
 });
