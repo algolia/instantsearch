@@ -81,6 +81,8 @@ export default function connectRange(renderFn) {
 
     return {
       _getCurrentRange(stats) {
+        const pow = Math.pow(10, precision);
+
         let min;
         if (hasMinBound) {
           min = minBound;
@@ -100,8 +102,8 @@ export default function connectRange(renderFn) {
         }
 
         return {
-          min: precision === 0 ? Math.floor(min) : min,
-          max: precision === 0 ? Math.ceil(max) : max,
+          min: Math.floor(min * pow) / pow,
+          max: Math.ceil(max * pow) / pow,
         };
       },
 
