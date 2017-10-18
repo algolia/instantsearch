@@ -10,7 +10,6 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "dev": "./scripts/dev.sh",
-    "staging": "./scripts/staging-deploy.sh",
     "doctoc": "doctoc --maxlevel 3 README.md CONTRIBUTING.md",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "eslint .",
@@ -101,7 +100,6 @@
     "shelljs": "0.7.8",
     "sinon": "3.3.0",
     "style-loader": "0.18.2",
-    "surge": "0.18.0",
     "unminified-webpack-plugin": "1.2.0",
     "watch": "1.0.2",
     "wdio-dot-reporter": "0.0.9",
