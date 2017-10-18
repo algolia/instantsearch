@@ -195,6 +195,14 @@ export class Store {
     return this._helper.lastResults.processingTimeMS;
   }
 
+  setMaxValuesPerFacet(limit) {
+    const currentMaxValuesPerFacet = this._helper.state.maxValuesPerFacet || 0;
+    this._helper.setQueryParameter(
+      'maxValuesPerFacet',
+      Math.max(currentMaxValuesPerFacet, limit)
+    );
+  }
+
   addFacet(attribute, type = FACET_AND) {
     if (this.hasFacet(attribute, type)) {
       return;

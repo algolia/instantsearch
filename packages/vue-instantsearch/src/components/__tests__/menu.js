@@ -40,11 +40,10 @@ const getFacetValues = jest.fn(attributeName => ({
   ],
 }));
 
-const addFacet = jest.fn();
-
 const searchStore = {
   getFacetValues,
-  addFacet,
+  addFacet: () => {},
+  setMaxValuesPerFacet: () => {},
 };
 
 describe('Menu', () => {
@@ -67,7 +66,10 @@ describe('Menu', () => {
     new Component({ // eslint-disable-line
       propsData: {
         attribute: 'category',
-        searchStore: Object.assign({}, searchStore, { addFacet: addFacetMock }),
+        searchStore: Object.assign({}, searchStore, {
+          addFacet: addFacetMock,
+          setMaxValuesPerFacet: () => {},
+        }),
       },
     });
 
@@ -97,5 +99,23 @@ describe('Menu', () => {
     vm.$destroy();
 
     expect(removeFacetMock).toBeCalledWith('category');
+  });
+
+  it('should set `maxValuesPerFacet` when mounted', () => {
+    const Component = Vue.extend(Menu);
+    const setMaxValuesPerFacetMock = jest.fn();
+
+    new Component({ // eslint-disable-line
+      propsData: {
+        limit: 10,
+        attribute: 'category',
+        searchStore: Object.assign({}, searchStore, {
+          addFacet: () => {},
+          setMaxValuesPerFacet: setMaxValuesPerFacetMock,
+        }),
+      },
+    });
+
+    expect(setMaxValuesPerFacetMock).toBeCalledWith(10);
   });
 });

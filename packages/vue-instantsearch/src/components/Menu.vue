@@ -45,6 +45,7 @@
     },
 
     created() {
+      this.searchStore.setMaxValuesPerFacet(this.limit);
       this.searchStore.addFacet(
         {
           name: this.attribute,
