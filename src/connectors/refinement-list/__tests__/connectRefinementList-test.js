@@ -2,6 +2,7 @@ import sinon from 'sinon';
 
 import algoliasearchHelper from 'algoliasearch-helper';
 const SearchResults = algoliasearchHelper.SearchResults;
+import { tagConfig } from '../../../lib/escape-highlight.js';
 
 import connectRefinementList from '../connectRefinementList.js';
 
@@ -490,13 +491,13 @@ describe('connectRefinementList', () => {
     );
 
     // Sinulate the lifecycle
-
     widget.init({
       helper,
       state: helper.state,
       createURL: () => '#',
       onHistoryChange: () => {},
     });
+    expect(rendering.callCount).toBe(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -520,21 +521,242 @@ describe('connectRefinementList', () => {
       helper,
       createURL: () => '#',
     });
-
+    expect(rendering.callCount).toBe(2);
     // Simulation end
 
     const search = rendering.lastCall.args[0].searchForItems;
     search('da');
 
-    const sffvFacet = helper.searchForFacetValues.lastCall.args[0];
-    const sffvQuery = helper.searchForFacetValues.lastCall.args[1];
+    const [
+      sffvFacet,
+      sffvQuery,
+      maxNbItems,
+      paramOverride,
+    ] = helper.searchForFacetValues.lastCall.args;
 
     expect(sffvQuery).toBe('da');
     expect(sffvFacet).toBe('category');
+    expect(maxNbItems).toBe(2);
+    expect(paramOverride).toEqual({
+      highlightPreTag: undefined,
+      highlightPostTag: undefined,
+    });
 
-    // should search with the same state and ad as the query
-    // should not have pre / post tags
-    // should call the rendering function again
-    // the yielded results should the same values as the results from the helper
+    // because of how promises are resolved we use setImmediate
+    setImmediate(() => {
+      expect(rendering.callCount).toBe(3);
+      expect(rendering.lastCall.args[0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <em>Da</em>li',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          highlighted: '<em>Da</em>vidoff',
+          value: 'Davidoff',
+        },
+      ]);
+    });
+  });
+
+  it('can search in facet values, and reset pre post tags if needed', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', {
+      ...widget.getConfiguration({}),
+      // Here we simulate that another widget has set some highlight tags
+      ...tagConfig
+    });
+    helper.search = sinon.stub();
+    helper.searchForFacetValues = sinon.stub().returns(
+      Promise.resolve({
+        exhaustiveFacetsCount: true,
+        facetHits: [
+          {
+            count: 33,
+            highlighted: 'Salvador <em>Da</em>li',
+            value: 'Salvador Dali',
+          },
+          {
+            count: 9,
+            highlighted: '<em>Da</em>vidoff',
+            value: 'Davidoff',
+          },
+        ],
+        processingTimeMS: 1,
+      })
+    );
+
+    // Sinulate the lifecycle
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+    expect(rendering.callCount).toBe(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    expect(rendering.callCount).toBe(2);
+    // Simulation end
+
+    const search = rendering.lastCall.args[0].searchForItems;
+    search('da');
+
+    const [
+      sffvFacet,
+      sffvQuery,
+      maxNbItems,
+      paramOverride,
+    ] = helper.searchForFacetValues.lastCall.args;
+
+    expect(sffvQuery).toBe('da');
+    expect(sffvFacet).toBe('category');
+    expect(maxNbItems).toBe(2);
+    expect(paramOverride).toEqual({
+      highlightPreTag: undefined,
+      highlightPostTag: undefined,
+    });
+
+    // because of how promises are resolved we use setImmediate
+    setImmediate(() => {
+      expect(rendering.callCount).toBe(3);
+      expect(rendering.lastCall.args[0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <em>Da</em>li',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          highlighted: '<em>Da</em>vidoff',
+          value: 'Davidoff',
+        },
+      ]);
+    });
+  });
+
+  it('can search in facet values, and set post and pre tags if escapeFacetValues is true', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+      escapeFacetValues: true,
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', {
+      ...widget.getConfiguration({}),
+      // Here we simulate that another widget has set some highlight tags
+      ...tagConfig,
+    });
+    helper.search = sinon.stub();
+    helper.searchForFacetValues = sinon.stub().returns(
+      Promise.resolve({
+        exhaustiveFacetsCount: true,
+        facetHits: [
+          {
+            count: 33,
+            highlighted: `Salvador ${tagConfig.highlightPreTag}Da${tagConfig.highlightPostTag}li`,
+            value: 'Salvador Dali',
+          },
+          {
+            count: 9,
+            highlighted: `${tagConfig.highlightPreTag}Da${tagConfig.highlightPostTag}vidoff`,
+            value: 'Davidoff',
+          },
+        ],
+        processingTimeMS: 1,
+      })
+    );
+
+    // Sinulate the lifecycle
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+    expect(rendering.callCount).toBe(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    expect(rendering.callCount).toBe(2);
+    // Simulation end
+
+    const search = rendering.lastCall.args[0].searchForItems;
+    search('da');
+
+    const [
+      sffvFacet,
+      sffvQuery,
+      maxNbItems,
+      paramOverride,
+    ] = helper.searchForFacetValues.lastCall.args;
+
+    expect(sffvQuery).toBe('da');
+    expect(sffvFacet).toBe('category');
+    expect(maxNbItems).toBe(2);
+    expect(paramOverride).toEqual(tagConfig);
+
+    // because of how promises are resolved we use setImmediate
+    setImmediate(() => {
+      expect(rendering.callCount).toBe(3);
+      expect(rendering.lastCall.args[0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <em>Da</em>li',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          highlighted: '<em>Da</em>vidoff',
+          value: 'Davidoff',
+        },
+      ]);
+    });
   });
 });
