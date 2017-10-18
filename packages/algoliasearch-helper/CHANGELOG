@@ -1,3 +1,9 @@
+2.23.0 - 2017-10-18
+ * chore(doc): export the svg for the principles without text (#548) https://github.com/algolia/algoliasearch-helper-js/commit/1d8068048e16ee71af97a886f6324a84cc696137
+ * chore(readme): Add jsDelivr hits badge (#547) https://github.com/algolia/algoliasearch-helper-js/commit/33850059a14952e0eb1910b70b857b8bbeba48ab
+ * feat(sffv): can override search when using searchForFacetValues (#549) https://github.com/algolia/algoliasearch-helper-js/commit/55c2e753be2236df91cd33a11a113e9dc4dd3038
+ * fix(events): only trigger change when there is an actual change (#546) https://github.com/algolia/algoliasearch-helper-js/commit/80f97242aaebaacbda0c5d750c62bf709fa0f502
+
 2.22.0 - 2017-10-09
  * chore(release): changelog should be updated during release (#530) https://github.com/algolia/algoliasearch-helper-js/commit/ba26e95896ee38607afb58ab09775ef059e51f3c
  * chore(test): add test for the request builder and analytics (#545) https://github.com/algolia/algoliasearch-helper-js/commit/0377f495e84c166aa6a836c2738688f1e1b58d7e
