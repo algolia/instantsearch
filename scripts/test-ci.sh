@@ -14,6 +14,9 @@ INDEX_PAGE=index npm run test:functional
 # push the generated screenshots to Argos-CI.
 npm run argos
 
+# check if the next size of the bundle is inside the threshold
+npm run test:size
+
 if [ $TRAVIS_PULL_REQUEST == 'false' ] && [ $TRAVIS_BRANCH == 'master' ]; then
   npm run finish-release
 fi
