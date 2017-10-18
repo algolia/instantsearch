@@ -849,6 +849,18 @@ export default () => {
       })
     )
     .add(
+      'with precision',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            precision: 2,
+          })
+        );
+      })
+    )
+    .add(
       'without pips',
       wrapWithHits(container => {
         window.search.addWidget(
