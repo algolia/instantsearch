@@ -78,7 +78,7 @@ rangeSlider({
   [ max ],
   [ pips = true ],
   [ step = 1 ],
-  [ precision = 2 ],
+  [ precision = 0 ],
   [ tooltips=true ],
   [ templates.{header, footer} ],
   [ cssClasses.{root, header, body, footer} ],
@@ -126,6 +126,7 @@ rangeSlider({
  * @property  {RangeSliderCssClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property  {boolean} [pips=true] Show slider pips.
  * @property  {number} [step=1] Every handle move will jump that number of steps.
+ * @property  {number} [precision = 0] Number of digits after decimal point to use.
  * @property  {boolean|RangeSliderCollapsibleOptions} [collapsible=false] Hide the widget body and footer when clicking on header.
  * @property  {number} [min] Minimal slider value, default to automatically computed from the result set.
  * @property  {number} [max] Maximal slider value, defaults to automatically computed from the result set.
@@ -172,7 +173,7 @@ export default function rangeSlider(
     cssClasses: userCssClasses = {},
     step = 1,
     pips = true,
-    precision = 2,
+    precision = 0,
     tooltips = true,
     autoHideContainer = true,
   } = {}
