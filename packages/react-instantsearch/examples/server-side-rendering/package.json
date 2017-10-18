@@ -21,7 +21,7 @@
     "node-sass": "4.5.3",
     "react-test-renderer": "16.0.0",
     "sass-loader": "6.0.6",
-    "webpack": "3.8.0",
+    "webpack": "3.8.1",
     "webpack-node-externals": "1.6.0"
   },
   "jest": {
