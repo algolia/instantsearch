@@ -100,8 +100,8 @@ export default function connectRange(renderFn) {
         }
 
         return {
-          min: Math.floor(min),
-          max: Math.ceil(max),
+          min: precision === 0 ? Math.floor(min) : min,
+          max: precision === 0 ? Math.ceil(max) : max,
         };
       },
 
