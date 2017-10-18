@@ -262,14 +262,16 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
  * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
  * @param {string} facet the name of the faceted attribute
  * @param {string} query the string query for the search
- * @param {number} maxFacetHits the maximum number values returned. Should be > 0 and <= 100
- * @return {promise<FacetSearchResult>} the results of the search
+ * @param {number} [maxFacetHits] the maximum number values returned. Should be > 0 and <= 100
+ * @param {object} [userState] the set of custom parameters to use on top of the current state. Setting a property to `undefined` removes
+ * it in the generated query.
+ * @return {promise.<FacetSearchResult>} the results of the search
  */
-AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxFacetHits) {
-  var state = this.state;
-  var index = this.client.initIndex(this.state.index);
+AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxFacetHits, userState) {
+  var state = this.state.setQueryParameters(userState || {});
+  var index = this.client.initIndex(state.index);
   var isDisjunctive = state.isDisjunctiveFacet(facet);
-  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, this.state);
+  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, state);
 
   this._currentNbQueries++;
   var self = this;
