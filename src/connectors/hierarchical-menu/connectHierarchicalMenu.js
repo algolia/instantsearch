@@ -110,7 +110,7 @@ export default function connectHierarchicalMenu(renderFn) {
               'using Breadcrumb & HierarchicalMenu on the same facet with different options'
             );
           }
-          return;
+          return {};
         }
 
         return {
