@@ -1,3 +1,26 @@
+<template>
+  <div :class="bem()" v-if="show">
+    <slot name="header"></slot>
+
+    <div
+      v-for="(facet, key) in facetValues"
+      :key="key"
+      :class="facet.isRefined ? bem('item', 'active') : bem('item')"
+    >
+      <a
+        href="#"
+        :class="bem('link')"
+        @click.prevent="handleClick(facet.path)"
+      >
+        {{facet.name}}
+        <span :class="bem('count')">{{facet.count}}</span>
+      </a>
+    </div>
+
+    <slot name="footer"></slot>
+  </div>
+</template>
+
 <script>import algoliaComponent from '../component';
   import { FACET_TREE } from '../store';
 
@@ -29,11 +52,13 @@
 
         return data;
       },
+      show() {
+        return this.facetValues.length > 0;
+      },
     },
 
     methods: {
-      handleClick(event, path) {
-        event.preventDefault();
+      handleClick(path) {
         this.searchStore.toggleFacetRefinement(this.attribute, path);
       },
     },
@@ -57,39 +82,6 @@
 
     destroyed() {
       this.searchStore.removeFacet(this.attribute);
-    },
-
-    render(h) {
-      if (this.show === false) return undefined;
-
-      const children = [];
-      if (this.$slots.header) children.push(this.$slots.header);
-
-      children.push(
-        this.facetValues.map(({ name, path, count, isRefined }) =>
-          h(
-            'div',
-            {
-              class: isRefined ? this.bem('item', 'active') : this.bem('item'),
-            },
-            [
-              h(
-                'a',
-                {
-                  class: this.bem('link'),
-                  domProps: { href: '#' },
-                  on: { click: event => this.handleClick(event, path) },
-                },
-                [name, h('span', { class: this.bem('count') }, count)]
-              ),
-            ]
-          )
-        )
-      );
-
-      if (this.$slots.footer) children.push(this.$slots.footer);
-
-      return h('div', { class: this.bem() }, children);
     },
   };
 </script>

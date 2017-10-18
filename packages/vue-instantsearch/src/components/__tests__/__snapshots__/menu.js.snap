@@ -4,8 +4,8 @@ exports[`Menu should render correctly 1`] = `
 
 <div class="ais-menu">
   <div class="ais-menu__item">
-    <a class="ais-menu__link"
-       href="#"
+    <a href="#"
+       class="ais-menu__link"
     >
       Bathroom
       <span class="ais-menu__count">
@@ -14,8 +14,8 @@ exports[`Menu should render correctly 1`] = `
     </a>
   </div>
   <div class="ais-menu__item ais-menu__item--active">
-    <a class="ais-menu__link"
-       href="#"
+    <a href="#"
+       class="ais-menu__link"
     >
       Clothes
       <span class="ais-menu__count">
@@ -24,8 +24,8 @@ exports[`Menu should render correctly 1`] = `
     </a>
   </div>
   <div class="ais-menu__item">
-    <a class="ais-menu__link"
-       href="#"
+    <a href="#"
+       class="ais-menu__link"
     >
       Shoes
       <span class="ais-menu__count">
@@ -34,8 +34,8 @@ exports[`Menu should render correctly 1`] = `
     </a>
   </div>
   <div class="ais-menu__item">
-    <a class="ais-menu__link"
-       href="#"
+    <a href="#"
+       class="ais-menu__link"
     >
       Kitchen
       <span class="ais-menu__count">
