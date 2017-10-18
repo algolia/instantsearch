@@ -42,7 +42,7 @@ export class PureTemplate extends React.Component {
 
     if (isReactElement(content)) {
       throw new Error(
-        'Support for templates as React elements has been removed, please use react-instantsearch',
+        'Support for templates as React elements has been removed, please use react-instantsearch'
       );
     }
 
@@ -60,7 +60,7 @@ PureTemplate.propTypes = {
   rootProps: PropTypes.object,
   templateKey: PropTypes.string,
   templates: PropTypes.objectOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+    PropTypes.oneOfType([PropTypes.string, PropTypes.func])
   ),
   templatesConfig: PropTypes.shape({
     helpers: PropTypes.objectOf(PropTypes.func),
@@ -71,7 +71,7 @@ PureTemplate.propTypes = {
         PropTypes.shape({
           o: PropTypes.string,
           c: PropTypes.string,
-        }),
+        })
       ),
       delimiters: PropTypes.string,
       disableLambda: PropTypes.bool,
@@ -113,7 +113,7 @@ function transformData(fn, templateKey, originalData) {
     }
   } else {
     throw new Error(
-      `transformData must be a function or an object, was ${typeFn} (key : ${templateKey})`,
+      `transformData must be a function or an object, was ${typeFn} (key : ${templateKey})`
     );
   }
 
@@ -121,7 +121,7 @@ function transformData(fn, templateKey, originalData) {
   const expectedType = typeof originalData;
   if (dataType !== expectedType) {
     throw new Error(
-      `\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`,
+      `\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`
     );
   }
   return data;
@@ -141,7 +141,7 @@ function renderTemplate({
 
   if (!isTemplateString && !isTemplateFunction) {
     throw new Error(
-      `Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`,
+      `Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`
     );
   } else if (isTemplateFunction) {
     return template(data);
@@ -149,7 +149,7 @@ function renderTemplate({
     const transformedHelpers = transformHelpersToHogan(
       helpers,
       compileOptions,
-      data,
+      data
     );
     const preparedData = { ...data, helpers: transformedHelpers };
     return hogan.compile(template, compileOptions).render(preparedData);
@@ -166,7 +166,7 @@ function transformHelpersToHogan(helpers, compileOptions, data) {
     curry(function(text) {
       const render = value => hogan.compile(value, compileOptions).render(this);
       return method.call(data, text, render);
-    }),
+    })
   );
 }
 

@@ -260,7 +260,7 @@ describe('rangeSlider', () => {
 
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
-          state0.addNumericRefinement(attributeName, '>=', targetValue)
+          state0.addNumericRefinement(attributeName, '>=', 3)
         );
       });
 
@@ -274,7 +274,7 @@ describe('rangeSlider', () => {
 
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
-          state0.addNumericRefinement(attributeName, '<=', targetValue)
+          state0.addNumericRefinement(attributeName, '<=', 4999)
         );
       });
 
@@ -289,8 +289,8 @@ describe('rangeSlider', () => {
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
           state0
-            .addNumericRefinement(attributeName, '>=', targetValue[0])
-            .addNumericRefinement(attributeName, '<=', targetValue[1])
+            .addNumericRefinement(attributeName, '>=', 3)
+            .addNumericRefinement(attributeName, '<=', 4999)
         );
       });
 

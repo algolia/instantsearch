@@ -466,13 +466,53 @@ describe('connectRange', () => {
       expect(actual).toEqual(expectation);
     });
 
-    it('expect to return rounded range values', () => {
+    it('expect to return rounded range values when precision is 0', () => {
       const stats = { min: 1.79, max: 499.99 };
       const widget = connectRange(rendering)({
         attributeName,
+        precision: 0,
       });
 
       const expectation = { min: 1, max: 500 };
+      const actual = widget._getCurrentRange(stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return rounded range values when precision is 1', () => {
+      const stats = { min: 1.12345, max: 499.56789 };
+      const widget = connectRange(rendering)({
+        attributeName,
+        precision: 1,
+      });
+
+      const expectation = { min: 1.1, max: 499.6 };
+      const actual = widget._getCurrentRange(stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return rounded range values when precision is 2', () => {
+      const stats = { min: 1.12345, max: 499.56789 };
+      const widget = connectRange(rendering)({
+        attributeName,
+        precision: 2,
+      });
+
+      const expectation = { min: 1.12, max: 499.57 };
+      const actual = widget._getCurrentRange(stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return rounded range values when precision is 3', () => {
+      const stats = { min: 1.12345, max: 499.56789 };
+      const widget = connectRange(rendering)({
+        attributeName,
+        precision: 3,
+      });
+
+      const expectation = { min: 1.123, max: 499.568 };
       const actual = widget._getCurrentRange(stats);
 
       expect(actual).toEqual(expectation);

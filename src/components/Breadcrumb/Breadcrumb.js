@@ -26,20 +26,22 @@ class Breadcrumb extends PureComponent {
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
-      const label = isLast
-        ? <a className={`${cssClasses.disabledLabel} ${cssClasses.label}`}>
-            {item.name}
-          </a>
-        : <a
-            className={cssClasses.label}
-            href={createURL(item.value)}
-            onClick={e => {
-              e.preventDefault();
-              refine(item.value);
-            }}
-          >
-            {item.name}
-          </a>;
+      const label = isLast ? (
+        <a className={`${cssClasses.disabledLabel} ${cssClasses.label}`}>
+          {item.name}
+        </a>
+      ) : (
+        <a
+          className={cssClasses.label}
+          href={createURL(item.value)}
+          onClick={e => {
+            e.preventDefault();
+            refine(item.value);
+          }}
+        >
+          {item.name}
+        </a>
+      );
 
       return [
         <Template

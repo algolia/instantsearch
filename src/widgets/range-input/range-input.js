@@ -110,7 +110,7 @@ rangeInput({
  * @property {string} attributeName Name of the attribute for faceting.
  * @property {number} [min] Minimal slider value, default to automatically computed from the result set.
  * @property {number} [max] Maximal slider value, defaults to automatically computed from the result set.
- * @property {number} [precision = 2] Number of digits after decimal point to use.
+ * @property {number} [precision = 0] Number of digits after decimal point to use.
  * @property {RangeInputClasses} [cssClasses] CSS classes to add.
  * @property {RangeInputTemplates} [templates] Templates to use for the widget.
  * @property {RangeInputLabels} [labels] Labels to use for the widget.

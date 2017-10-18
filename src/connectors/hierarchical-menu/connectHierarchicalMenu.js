@@ -94,7 +94,7 @@ export default function connectHierarchicalMenu(renderFn) {
     return {
       getConfiguration: currentConfiguration => {
         if (currentConfiguration.hierarchicalFacets) {
-          let isFacetSet = find(
+          const isFacetSet = find(
             currentConfiguration.hierarchicalFacets,
             ({ name }) => name === hierarchicalFacetName
           );
@@ -105,11 +105,12 @@ export default function connectHierarchicalMenu(renderFn) {
               isFacetSet.separator === separator
             )
           ) {
+            // eslint-disable-next-line no-console
             console.warn(
               'using Breadcrumb & HierarchicalMenu on the same facet with different options'
             );
           }
-          return;
+          return {};
         }
 
         return {
