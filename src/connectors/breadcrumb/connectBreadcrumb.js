@@ -5,7 +5,7 @@ import { checkRendering } from '../../lib/utils.js';
 const usage = `Usage:
 var customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {
   // params = {
-  //   createURL,  
+  //   createURL,
   //   items,
   //   refine,
   //   instantSearchInstance,

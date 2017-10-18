@@ -94,7 +94,7 @@ export default function connectHierarchicalMenu(renderFn) {
     return {
       getConfiguration: currentConfiguration => {
         if (currentConfiguration.hierarchicalFacets) {
-          let isFacetSet = find(
+          const isFacetSet = find(
             currentConfiguration.hierarchicalFacets,
             ({ name }) => name === hierarchicalFacetName
           );
