@@ -74,6 +74,7 @@ export default function connectBreadcrumb(renderFn) {
               !isEqual(isFacetSet.attributes, attributes) ||
               isFacetSet.separator !== separator
             ) {
+              // eslint-disable-next-line no-console
               console.warn(
                 'Using Breadcrumb & HierarchicalMenu on the same facet with different options. Adding that one will override the configuration of the HierarchicalMenu. Check your options.'
               );

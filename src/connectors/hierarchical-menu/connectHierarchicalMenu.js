@@ -105,6 +105,7 @@ export default function connectHierarchicalMenu(renderFn) {
               isFacetSet.separator === separator
             )
           ) {
+            // eslint-disable-next-line no-console
             console.warn(
               'using Breadcrumb & HierarchicalMenu on the same facet with different options'
             );
