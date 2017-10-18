@@ -10,7 +10,11 @@ var isUndefined = require('lodash/isUndefined');
 function fixture() {
   var helper = algoliasearchHelper({addAlgoliaAgent: function() {}}, 'Index', {
     facets: ['facet1', 'facet2', 'both_facet', 'excluded1', 'excluded2'],
-    disjunctiveFacets: ['disjunctiveFacet1', 'disjunctiveFacet2', 'both_facet']
+    disjunctiveFacets: ['disjunctiveFacet1', 'disjunctiveFacet2', 'both_facet'],
+    hierarchicalFacets: [{
+      facetName: 'hierarchy',
+      attributes: ['a', 'b', 'c']
+    }]
   });
 
   return helper.toggleRefine('facet1', '0')
@@ -163,6 +167,53 @@ test('Clearing twice the same attribute should be not problem', function(t) {
   t.doesNotThrow(function() {
     helper.clearRefinements('numeric1');
   });
+
+  t.end();
+});
+
+test('Clearing without parameters should clear everything', function(t) {
+  var helper = fixture();
+
+  helper.clearRefinements();
+
+  t.deepEqual(helper.state.numericRefinements, {}, 'Numeric refinements should be empty');
+  t.deepEqual(helper.state.facetsRefinements, {}, 'Facets refinements should be empty');
+  t.deepEqual(helper.state.disjunctiveFacetsRefinements, {}, 'Disjunctive facets refinements should be empty');
+  t.deepEqual(helper.state.hierarchicalFacetsRefinements, {}, 'Hierarchical facets refinements should be empty');
+
+  t.end();
+});
+
+test('Clearing with no effect should not update the state', function(t) {
+  var helper = fixture();
+  // Reset the state
+  helper.clearRefinements();
+  var emptyState = helper.state;
+  // This operation should not update the reference to the state
+  helper.clearRefinements();
+
+  t.equal(helper.state.numericRefinements, emptyState.numericRefinements, 'Numeric refinements should be empty');
+  t.equal(helper.state.facetsRefinements, emptyState.facetsRefinements, 'Facets refinements should be empty');
+  t.equal(helper.state.disjunctiveFacetsRefinements, emptyState.disjunctiveFacetsRefinements, 'Disjunctive facets refinements should be empty');
+  t.equal(helper.state.hierarchicalFacetsRefinements, emptyState.hierarchicalFacetsRefinements, 'Hierarchical facets refinements should be empty');
+
+  t.equal(helper.state, emptyState, 'State should remain the same');
+
+  t.end();
+});
+
+test('Clearing with no effect should not update the state, if used with an unknown attribute', function(t) {
+  var helper = fixture();
+  var initialState = helper.state;
+  // This operation should not update the reference to the state
+  helper.clearRefinements('unknown');
+
+  t.equal(helper.state.numericRefinements, initialState.numericRefinements, 'Numeric refinements should be empty');
+  t.equal(helper.state.facetsRefinements, initialState.facetsRefinements, 'Facets refinements should be empty');
+  t.equal(helper.state.disjunctiveFacetsRefinements, initialState.disjunctiveFacetsRefinements, 'Disjunctive facets refinements should be empty');
+  t.equal(helper.state.hierarchicalFacetsRefinements, initialState.hierarchicalFacetsRefinements, 'Hierarchical facets refinements should be empty');
+
+  t.equal(helper.state, initialState, 'State should remain the same');
 
   t.end();
 });

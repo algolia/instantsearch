@@ -152,4 +152,3 @@ test(
       });
     }).then(null, bind(t.error, t));
   });
-

@@ -96,19 +96,30 @@ var lib = {
    */
   clearRefinement: function clearRefinement(refinementList, attribute, refinementType) {
     if (isUndefined(attribute)) {
+      if (isEmpty(refinementList)) return refinementList;
       return {};
     } else if (isString(attribute)) {
+      if (isEmpty(refinementList[attribute])) return refinementList;
       return omit(refinementList, attribute);
     } else if (isFunction(attribute)) {
-      return reduce(refinementList, function(memo, values, key) {
+      var hasChanged = false;
+
+      var newRefinementList = reduce(refinementList, function(memo, values, key) {
         var facetList = filter(values, function(value) {
           return !attribute(value, key, refinementType);
         });
 
-        if (!isEmpty(facetList)) memo[key] = facetList;
+        if (!isEmpty(facetList)) {
+          if (facetList.length !== values.length) hasChanged = true;
+          memo[key] = facetList;
+        }
+        else hasChanged = true;
 
         return memo;
       }, {});
+
+      if (hasChanged) return newRefinementList;
+      return refinementList;
     }
   },
   /**

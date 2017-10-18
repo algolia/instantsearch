@@ -20,6 +20,7 @@
     "readme:toc": "doctoc --notitle README.md --maxlevel 3",
     "test-ci": "scripts/test-ci.sh",
     "test": "scripts/test.sh",
+    "test:unit": "ONLY_UNIT=true scripts/test.sh",
     "test-node": "clear && node test/run",
     "test:watch": "onchange '{src,test}/**/*.js' 'index.js' -- npm run test-node",
     "test:perf": "node ./test/perf/index.js",
