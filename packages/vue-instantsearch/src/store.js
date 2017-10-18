@@ -195,7 +195,7 @@ export class Store {
     return this._helper.lastResults.processingTimeMS;
   }
 
-  setMaxValuesPerFacet(limit) {
+  set maxValuesPerFacet(limit) {
     const currentMaxValuesPerFacet = this._helper.state.maxValuesPerFacet || 0;
     this._helper.setQueryParameter(
       'maxValuesPerFacet',

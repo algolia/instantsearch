@@ -103,19 +103,16 @@ describe('Menu', () => {
 
   it('should set `maxValuesPerFacet` when mounted', () => {
     const Component = Vue.extend(Menu);
-    const setMaxValuesPerFacetMock = jest.fn();
+    const store = Object.assign({}, searchStore);
 
     new Component({ // eslint-disable-line
       propsData: {
         limit: 10,
         attribute: 'category',
-        searchStore: Object.assign({}, searchStore, {
-          addFacet: () => {},
-          setMaxValuesPerFacet: setMaxValuesPerFacetMock,
-        }),
+        searchStore: store,
       },
     });
 
-    expect(setMaxValuesPerFacetMock).toBeCalledWith(10);
+    expect(store.maxValuesPerFacet).toBe(10);
   });
 });
