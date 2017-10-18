@@ -19,6 +19,7 @@ import Stats from './components/Stats.vue';
 import Pagination from './components/Pagination.vue';
 import ResultsPerPageSelector from './components/ResultsPerPageSelector.vue';
 import TreeMenu from './components/TreeMenu.vue';
+import Menu from './components/Menu.vue';
 import SortBySelector from './components/SortBySelector.vue';
 import SearchBox from './components/SearchBox.vue';
 import Clear from './components/Clear.vue';
@@ -38,6 +39,7 @@ const InstantSearch = {
   Pagination,
   ResultsPerPageSelector,
   TreeMenu,
+  Menu,
   SortBySelector,
   SearchBox,
   Clear,
@@ -57,6 +59,7 @@ const InstantSearch = {
     Vue.component('ais-pagination', Pagination);
     Vue.component('ais-results-per-page-selector', ResultsPerPageSelector);
     Vue.component('ais-tree-menu', TreeMenu);
+    Vue.component('ais-menu', Menu);
     Vue.component('ais-sort-by-selector', SortBySelector);
     Vue.component('ais-search-box', SearchBox);
     Vue.component('ais-clear', Clear);
@@ -88,6 +91,7 @@ export {
   Pagination,
   ResultsPerPageSelector,
   TreeMenu,
+  Menu,
   SortBySelector,
   SearchBox,
   Clear,

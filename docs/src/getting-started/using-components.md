@@ -25,6 +25,7 @@ You can try most of them out in our playground.
 * [Results](components/results.html)
 * [No Results](components/no-results.html)
 * [Refinement List](components/refinement-list.html)
+* [Menu](components/menu.html)
 * [Tree Menu](components/tree-menu.html)
 * [Pagination](components/pagination.html)
 * [Clear](components/clear.html)
