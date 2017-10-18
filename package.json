@@ -105,7 +105,7 @@
     "react-addons-test-utils": "15.6.2",
     "react-autosuggest": "9.3.2",
     "react-dom": "16.0.0",
-    "react-hot-loader": "3.0.0",
+    "react-hot-loader": "3.1.1",
     "react-tap-event-plugin": "3.0.2",
     "recursive-readdir": "2.2.1",
     "replace-in-file": "2.6.4",
