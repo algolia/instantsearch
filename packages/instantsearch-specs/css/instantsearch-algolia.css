@@ -1,5 +1,5 @@
 [class^='ais-'] {
-  font-size: 1em; }
+  font-size: 1rem; }
 
 .ais-Breadcrumb-list,
 .ais-CurrentRefinedValues-list,
@@ -167,7 +167,6 @@ a[class^='ais-'] {
 .ais-ClearAll-button,
 .ais-CurrentRefinedValues-reset {
   padding: 0.3rem 0.5rem;
-  font-size: 0.8rem;
   color: #fff;
   background-color: #00aeff;
   border-radius: 5px; }
@@ -182,7 +181,6 @@ a[class^='ais-'] {
 .ais-CurrentRefinedValues-button {
   padding: 0.3rem 0.5rem;
   display: block;
-  font-size: 0.8rem;
   color: #fff;
   background-color: #495588;
   border-radius: 5px; }

@@ -1,0 +1,10 @@
+<div class="theme-selector">
+  <label>
+    <small>Choose a CSS theme:</small>
+    <select name="" id="js-changeTheme">
+      <option value="/assets/css/{{ index .Site.Data.hashcss "instantsearch-reset.css" }}">Reset</option>
+      <option value="/assets/css/{{ index .Site.Data.hashcss "instantsearch-algolia.css" }}">Algolia</option>
+      <option value="">None</option>
+    </select>
+  </label>
+</div>

@@ -1,0 +1,13 @@
+{{ partial "head.html" . }}
+
+{{ partial "header.html" . }}
+
+<div class="wrapper">
+  <div class="demo">
+    {{ partial "theme-selector.html" . }}
+    {{ range where .Site.Pages "Title" "=" "SearchBox" }}{{ .Params.html | safeHTML }}{{ end }}
+  </div>
+</div>
+
+
+{{ partial "foot.html" . }}
