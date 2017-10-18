@@ -25,7 +25,7 @@ export default () => {
           })
         );
 
-        //Custom Widget to toggle refinement
+        // Custom Widget to toggle refinement
         window.search.addWidget({
           init({ helper }) {
             helper.toggleRefinement(
@@ -56,7 +56,7 @@ export default () => {
           })
         );
 
-        //Custom Widget to toggle refinement
+        // Custom Widget to toggle refinement
         window.search.addWidget({
           init({ helper }) {
             helper.toggleRefinement(
@@ -800,11 +800,6 @@ export default () => {
             templates: {
               header: 'Price',
             },
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -821,11 +816,6 @@ export default () => {
             },
             min: 100,
             max: 50,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -838,9 +828,20 @@ export default () => {
             container,
             attributeName: 'price',
             step: 500,
+          })
+        );
+      })
+    )
+    .add(
+      'with tooltips',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
             tooltips: {
               format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
+                return `$${rawValue}`;
               },
             },
           })
@@ -855,11 +856,6 @@ export default () => {
             container,
             attributeName: 'price',
             pips: false,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -875,11 +871,6 @@ export default () => {
               header: 'Price',
             },
             min: 0,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -895,11 +886,6 @@ export default () => {
               header: 'Price',
             },
             min: 36,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -915,11 +901,6 @@ export default () => {
               header: 'Price',
             },
             max: 36,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -936,11 +917,6 @@ export default () => {
             },
             min: 10,
             max: 500,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
