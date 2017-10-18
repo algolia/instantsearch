@@ -35,7 +35,7 @@ function targetHtmlElement(item) {
       switch (currentNode.nodeType) {
         case Node.TEXT_NODE:
           if (ArrFromText.indexOf(word) > -1) {
-            curr.classList.toggle('highlightedText');
+            curr.classList.toggle('highlighted-text');
           }
           break;
         case Node.ELEMENT_NODE:

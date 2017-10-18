@@ -41,7 +41,7 @@ const distFolder = {
 gulp.task('styles', () => {
   del(distFolder.css + '**/*');
   return gulp
-    .src([devFolder.scss + 'main.scss', devFolder.scss + 'themes/*'])
+    .src([devFolder.scss + 'site/main.scss', devFolder.scss + 'themes/*'])
     .pipe($$.sourcemaps.init())
     .pipe($$.sass())
     .on('error', $$.notify.onError('Error: <%= error.message %>'))
