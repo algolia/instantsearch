@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-HierarchicalMenu">
     <div class="ais-HierarchicalMenu-header ais-header">
-      Header (optional)
+      Hierarchical menu
     </div>
     <div class="ais-HierarchicalMenu-body ais-body">
       <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
@@ -25,14 +25,14 @@ html: |
       </ul>
     </div>
     <div class="ais-HierarchicalMenu-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-HierarchicalMenu
     description: the root div of the widget
   - name: .ais-HierarchicalMenu-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-HierarchicalMenu-body
     description: the body of the widget
   - name: .ais-HierarchicalMenu-list
@@ -50,5 +50,5 @@ classes:
   - name: .ais-HierarchicalMenu-count
     description: the count of values for each item
   - name: .ais-HierarchicalMenu-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

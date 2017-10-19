@@ -5,11 +5,25 @@
 $algolia-blue: rgb(0, 174, 255);
 $ghost: rgb(196, 200, 216);
 $east-bay: rgb(73, 85, 136);
+$koromiko: rgb(255, 193, 104);
+$port-gore: rgb(58, 69, 112);
 
 // Global
 
+[class^='ais-'] {
+  font-size: 1rem;
+  color: $port-gore;
+}
+
 a[class^='ais-'] {
   color: $algolia-blue;
+  text-decoration: none;
+  transition: color 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    color: darken($algolia-blue, 10%);
+  }
 }
 
 // Templates
@@ -18,40 +32,194 @@ a[class^='ais-'] {
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
   font-size: 0.8rem;
+  font-weight: bold;
   text-transform: uppercase;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid $ghost;
 }
 
 .ais-footer {
   margin-top: 0.5rem;
-  padding-top: 0.5rem;
   font-size: 0.8rem;
-  border-top: 1px solid #ccc;
 }
 
 // Widgets
 
+.ais-Breadcrumb-item--selected,
+.ais-HierarchicalMenu-item--selected {
+  font-weight: bold;
+}
+
 .ais-ClearAll-button,
-.ais-CurrentRefinedValues-reset {
+.ais-CurrentRefinedValues-reset,
+.ais-Menu-showMore,
+.ais-InfiniteHits-showMore {
   padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
   color: #fff;
   background-color: $algolia-blue;
   border-radius: 5px;
+  transition: background-color 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    background-color: darken($algolia-blue, 10%);
+  }
 }
 
-.ais-CurrentRefinedValues-list + .ais-CurrentRefinedValues-reset {
-  margin-top: 0.5rem;
+.ais-CurrentRefinedValues-list {
+  display: inline-block;
+  vertical-align: top;
 }
 
 .ais-CurrentRefinedValues-item {
   display: inline-block;
-  vertical-align: middle;
 }
 
 .ais-CurrentRefinedValues-button {
   padding: 0.3rem 0.5rem;
-  display: block;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 0.8rem;
   color: #fff;
   background-color: $east-bay;
   border-radius: 5px;
+  transition: background-color 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    background-color: darken($east-bay, 10%);
+  }
+
+  &:after {
+    content: '×';
+    margin-left: 0.5em;
+    font-family: sans-serif;
+  }
+}
+
+.ais-CurrentRefinedValues-reset {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.ais-CurrentRefinedValues-count {
+  font-size: 0.8rem;
+  color: #fff;
+
+  &:before {
+    content: '(';
+  }
+
+  &:after {
+    content: ')';
+  }
+}
+
+.ais-HierarchicalMenu-list {
+  font-weight: normal;
+}
+
+.ais-HierarchicalMenu-link {
+  &:before {
+    margin-right: 0.5em;
+    content: '';
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z%27 fill%3D%22%233A4570%22 /%3E%3C/svg%3E');
+    background-size: 100% 100%;
+  }
+}
+
+.ais-HierarchicalMenu-count,
+.ais-Menu-count {
+  font-size: 0.8rem;
+
+  &:before {
+    content: '(';
+  }
+
+  &:after {
+    content: ')';
+  }
+}
+
+.ais-Highlight {
+  background-color: $koromiko;
+}
+
+.ais-Hits-list,
+.ais-InfiniteHits-list {
+  margin-top: -1rem;
+  margin-left: -1rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ais-Hits-item,
+.ais-InfiniteHits-item {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  padding: 1rem;
+  width: calc(25% - 1rem);
+  border: 1px solid $ghost;
+  box-shadow: 0 3px 8px 2px lighten($ghost, 10%);
+}
+
+.ais-HitsPerPageSelector-select,
+.ais-NumericSelector-select,
+.ais-SortBySelector-select {
+  appearance: none;
+  padding: 0.3rem 2rem 0.5rem 0.5rem;
+  background-color: #fff;
+  background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z%27 fill%3D%22%233A4570%22 /%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
+  background-position: 92% 50%;
+  border: 1px solid $ghost;
+  border-radius: 5px;
+}
+
+.ais-InfiniteHits-showMore,
+.ais-Menu-showMore {
+  margin-top: 1rem;
+}
+
+.ais-NumericRange-input {
+  padding: 0 0.2rem;
+  display: inline-block;
+  vertical-align: middle;
+  width: 5rem;
+  height: 1.5rem;
+  line-height: 1.5rem;
+}
+
+.ais-NumericRange-label,
+.ais-NumericRange-separator {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ais-NumericRange-submit {
+  appearance: none;
+  padding: 0 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+  height: 1.5rem;
+  line-height: 1.5rem;
+
+  font-size: 0.8rem;
+  color: #fff;
+  background-color: $algolia-blue;
+  border: none;
+  border-radius: 5px;
+  transition: 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    background-color: darken($algolia-blue, 10%);
+  }
+}
+
+.ais-Pagination {
 }

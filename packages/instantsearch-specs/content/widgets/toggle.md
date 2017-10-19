@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-Toggle">
     <div class="ais-Toggle-header ais-header">
-      Header (optional)
+      Toggle
     </div>
     <div class="ais-Toggle-body ais-body">
       <ul class="ais-Toggle-list">
@@ -17,14 +17,14 @@ html: |
       </ul>
     </div>
     <div class="ais-Toggle-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-Toggle
     description: the root div of the widget
   - name: .ais-Toggle-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-Toggle-body
     description: the body of the widget
   - name: .ais-Toggle-list
@@ -38,5 +38,5 @@ classes:
   - name: .ais-Toggle-count
     description: the count of items for each item
   - name: .ais-Toggle-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

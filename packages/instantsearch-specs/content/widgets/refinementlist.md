@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-RefinementList">
     <div class="ais-RefinementList-header ais-header">
-      Header (optional)
+      Refinement list
     </div>
     <div class="ais-RefinementList-body ais-body">
       <ul class="ais-RefinementList-list">
@@ -23,14 +23,14 @@ html: |
       </ul>
     </div>
     <div class="ais-RefinementList-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-RefinementList
     description: the root div of the widget
   - name: .ais-RefinementList-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-RefinementList-body
     description: the body of the widget
   - name: .ais-RefinementList-list
@@ -46,5 +46,5 @@ classes:
   - name: .ais-RefinementList-count
     description: the count of values for each item
   - name: .ais-RefinementList-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

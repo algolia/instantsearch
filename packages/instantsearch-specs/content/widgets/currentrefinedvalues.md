@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-CurrentRefinedValues">
     <div class="ais-CurrentRefinedValues-header ais-header">
-      Header (optional)
+      Current refined values
     </div>
     <div class="ais-CurrentRefinedValues-body ais-body">
       <ul class="ais-CurrentRefinedValues-list">
@@ -24,14 +24,14 @@ html: |
       </button>
     </div>
     <div class="ais-CurrentRefinedValues-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-CurrentRefinedValues
     description: the root div of the widget
   - name: .ais-CurrentRefinedValues-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-CurrentRefinedValues-body
     description: the body of the widget
   - name: .ais-CurrentRefinedValues-list
@@ -45,5 +45,5 @@ classes:
   - name: .ais-CurrentRefinedValues-reset
     description: the reset button for current selected values
   - name: .ais-CurrentRefinedValues-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-NumericRefinementList">
     <div class="ais-NumericRefinementList-header ais-header">
-      Header (optional)
+      Numeric refinement list
     </div>
     <div class="ais-NumericRefinementList-body ais-body">
       <ul class="ais-NumericRefinementList-list">
@@ -21,14 +21,14 @@ html: |
       </ul>
     </div>
     <div class="ais-NumericRefinementList-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-NumericRefinementList
     description: the root div of the widget
   - name: .ais-NumericRefinementList-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-NumericRefinementList-body
     description: the body of the widget
   - name: .ais-NumericRefinementList-list
@@ -42,5 +42,5 @@ classes:
   - name: .ais-NumericRefinementList-radio
     description: the radio input of each refinement item
   - name: .ais-NumericRefinementList-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-Breadcrumb">
     <div class="ais-Breadcrumb-header ais-header">
-      Header (optional)
+      Breadcrumb
     </div>
     <div class="ais-Breadcrumb-body ais-body">
       <ul class="ais-Breadcrumb-list">
@@ -26,14 +26,14 @@ html: |
       </ul>
     </div>
     <div class="ais-Breadcrumb-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-Breadcrumb
     description: the root div of the widget
   - name: .ais-Breadcrumb-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-Breadcrumb-body
     description: the body of the widget
   - name: .ais-Breadcrumb-list
@@ -45,5 +45,5 @@ classes:
   - name: .ais-Breadcrumb-link
     description: the clickable breadcrumb element
   - name: .ais-Breadcrumb-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

@@ -1,6 +1,3 @@
-[class^='ais-'] {
-  font-size: 1rem; }
-
 .ais-Breadcrumb-list,
 .ais-CurrentRefinedValues-list,
 .ais-HierarchicalMenu-list,
@@ -20,6 +17,7 @@
 .ais-CurrentRefinedValues-button,
 .ais-CurrentRefinedValues-reset,
 .ais-InfiniteHits-showMore,
+.ais-Menu-showMore,
 .ais-StarRating-button {
   padding: 0;
   overflow: visible;
@@ -37,6 +35,7 @@
   .ais-CurrentRefinedValues-button::-moz-focus-inner,
   .ais-CurrentRefinedValues-reset::-moz-focus-inner,
   .ais-InfiniteHits-showMore::-moz-focus-inner,
+  .ais-Menu-showMore::-moz-focus-inner,
   .ais-StarRating-button::-moz-focus-inner {
     padding: 0;
     border: 0; }

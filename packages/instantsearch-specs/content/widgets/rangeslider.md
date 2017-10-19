@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-RangeSlider">
     <div class="ais-RangeSlider-header ais-header">
-      Header (optional)
+      Range slider
     </div>
     <div class="ais-RangeSlider-body ais-body">
       <div class="rheostat rheostat-horizontal" style="position: relative;">
@@ -60,14 +60,14 @@ html: |
       </div>
     </div>
     <div class="ais-RangeSlider-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-RangeSlider
     description: the root div of the widget
   - name: .ais-RangeSlider-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-RangeSlider-body
     description: the body of the widget
   - name: .ais-RangeSlider-handle
@@ -85,5 +85,5 @@ classes:
   - name: .ais-RangeSlider-value
     description: the value of each key marker
   - name: .ais-RangeSlider-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

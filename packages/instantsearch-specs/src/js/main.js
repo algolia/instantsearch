@@ -15,6 +15,18 @@ if (changeThemeSelect) {
     customThemeStyleSheet.setAttribute('href', changeThemeSelect.value);
     localStorage.setItem('customTheme', changeThemeSelect.value);
   });
+
+  // FIXME
+  // Used to avoid CSS errors when updating themes and reloading
+  // Comment when comitting
+
+  // window.setTimeout(() => {
+  //   changeThemeSelect.value = changeThemeSelect.options[1].value;
+  //   customThemeStyleSheet.setAttribute(
+  //     'href',
+  //     changeThemeSelect.options[1].value
+  //   );
+  // }, 300);
 }
 
 // Hover list of classes to highligh them

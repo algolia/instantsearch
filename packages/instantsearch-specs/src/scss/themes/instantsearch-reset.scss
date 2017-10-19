@@ -1,7 +1,7 @@
-// Global resets
+// Reset colors
 
 [class^='ais-'] {
-  font-size: 1rem;
+  color: #000;
 }
 
 // Reset all lists
@@ -28,6 +28,8 @@
 .ais-CurrentRefinedValues-button,
 .ais-CurrentRefinedValues-reset,
 .ais-InfiniteHits-showMore,
+.ais-Menu-showMore,
+.ais-NumericRange-submit,
 .ais-StarRating-button {
   padding: 0;
   overflow: visible;
