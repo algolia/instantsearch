@@ -81,6 +81,9 @@
     "vue": "^2.2.2"
   },
   "jest": {
+    "setupFiles": [
+      "<rootDir>/jest.setup.js"
+    ],
     "moduleFileExtensions": [
       "js",
       "vue"
