@@ -8,7 +8,7 @@
     "build": "babel-node build.js"
   },
   "devDependencies": {
-    "algolia-frontend-components": "0.0.33",
+    "algolia-frontend-components": "0.0.34",
     "autoprefixer": "7.1.5",
     "babel-cli": "6.26.0",
     "babel-loader": "6.4.1",
