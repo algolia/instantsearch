@@ -25,7 +25,7 @@
     "markdown-it-anchor": "2.7.1",
     "metalsmith": "2.3.0",
     "metalsmith-copy": "0.3.0",
-    "metalsmith-headings": "0.1.0",
+    "metalsmith-headings": "0.2.0",
     "metalsmith-in-place": "2.0.1",
     "metalsmith-layouts": "1.8.1",
     "metalsmith-navigation": "0.2.9",
