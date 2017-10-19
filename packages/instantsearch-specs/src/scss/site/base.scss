@@ -109,10 +109,15 @@ body {
 }
 
 .widgets-details {
-  padding: 20px;
+  padding-bottom: 20px;
   display: inline-block;
   vertical-align: top;
   width: calc(100% - 300px);
+
+  > * {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 
   pre {
     position: relative;
@@ -151,7 +156,7 @@ body {
     font-family: monospace;
     font-size: 16px;
     border: 1px solid #ccc;
-    width: 100%;
+    width: calc(100% -40px);
   }
 
   td {
@@ -167,9 +172,10 @@ body {
 }
 
 .theme-selector {
-  padding: 0 0 20px;
-  border-bottom: 1px solid #ccc;
+  margin: 0;
+  padding: 10px;
   text-align: right;
+  background-color: #ddd;
 }
 
 .info {
@@ -199,6 +205,36 @@ body {
 }
 
 .demo {
-  padding: 20px;
   flex-grow: 1;
+
+  .ais-footer {
+    display: none;
+  }
+
+  .ais-Breadcrumb-header,
+  .ais-SearchBox-header {
+    display: none;
+  }
+}
+
+.demo-container {
+  padding: 20px;
+  display: flex;
+}
+
+.demo-filters {
+  padding-right: 20px;
+  min-width: 300px;
+  border-right: 1px solid #ccc;
+}
+
+.demo-results {
+  padding-left: 20px;
+  flex-grow: 1;
+}
+
+.demo-widget {
+  + .demo-widget {
+    margin-top: 30px;
+  }
 }

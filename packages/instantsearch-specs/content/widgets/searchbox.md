@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-SearchBox">
     <div class="ais-SearchBox-header ais-header">
-      Header (optional)
+      Search box
     </div>
     <div class="ais-SearchBox-body ais-body">
       <form class="ais-SearchBox-form" novalidate>
@@ -22,14 +22,14 @@ html: |
       </form>
     </div>
     <div class="ais-SearchBox-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-SearchBox
     description: the root div of the widget
   - name: .ais-SearchBox-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-SearchBox-body
     description: the body of the widget
   - name: .ais-SearchBox-input
@@ -41,5 +41,5 @@ classes:
   - name: .ais-SearchBox-resetIcon
     description: the reset icon used inside the reset button
   - name: .ais-SearchBox-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

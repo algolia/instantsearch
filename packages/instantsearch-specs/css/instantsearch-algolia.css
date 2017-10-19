@@ -1,6 +1,3 @@
-[class^='ais-'] {
-  font-size: 1rem; }
-
 .ais-Breadcrumb-list,
 .ais-CurrentRefinedValues-list,
 .ais-HierarchicalMenu-list,
@@ -20,6 +17,7 @@
 .ais-CurrentRefinedValues-button,
 .ais-CurrentRefinedValues-reset,
 .ais-InfiniteHits-showMore,
+.ais-Menu-showMore,
 .ais-StarRating-button {
   padding: 0;
   overflow: visible;
@@ -37,6 +35,7 @@
   .ais-CurrentRefinedValues-button::-moz-focus-inner,
   .ais-CurrentRefinedValues-reset::-moz-focus-inner,
   .ais-InfiniteHits-showMore::-moz-focus-inner,
+  .ais-Menu-showMore::-moz-focus-inner,
   .ais-StarRating-button::-moz-focus-inner {
     padding: 0;
     border: 0; }
@@ -155,18 +154,19 @@ a[class^='ais-'] {
   margin-bottom: 0.5rem;
   padding-bottom: 0.5rem;
   font-size: 0.8rem;
+  font-weight: bold;
   text-transform: uppercase;
   border-bottom: 1px solid #ccc; }
 
 .ais-footer {
   margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  font-size: 0.8rem;
-  border-top: 1px solid #ccc; }
+  font-size: 0.8rem; }
 
 .ais-ClearAll-button,
-.ais-CurrentRefinedValues-reset {
+.ais-CurrentRefinedValues-reset,
+.ais-Menu-showMore {
   padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
   color: #fff;
   background-color: #00aeff;
   border-radius: 5px; }
@@ -174,13 +174,23 @@ a[class^='ais-'] {
 .ais-CurrentRefinedValues-list + .ais-CurrentRefinedValues-reset {
   margin-top: 0.5rem; }
 
+.ais-CurrentRefinedValues-list {
+  display: inline-block; }
+
 .ais-CurrentRefinedValues-item {
   display: inline-block;
   vertical-align: middle; }
 
 .ais-CurrentRefinedValues-button {
   padding: 0.3rem 0.5rem;
-  display: block;
+  display: inline-block;
+  font-size: 0.8rem;
   color: #fff;
   background-color: #495588;
   border-radius: 5px; }
+
+.ais-Highlight {
+  background-color: #ffc168; }
+
+.ais-Menu-showMore {
+  margin-top: 1rem; }

@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-SortBySelector">
     <div class="ais-SortBySelector-header ais-header">
-      Header (optional)
+      Sort by selector
     </div>
     <div class="ais-SortBySelector-body ais-body">
       <select class="ais-SortBySelector-select">
@@ -13,14 +13,14 @@ html: |
       </select>
     </div>
     <div class="ais-SortBySelector-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-SortBySelector
     description: the root div of the widget
   - name: .ais-SortBySelector-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-SortBySelector-body
     description: the body of the widget
   - name: .ais-SortBySelector-select
@@ -28,5 +28,5 @@ classes:
   - name: .ais-SortBySelector-option
     description: the select option
   - name: .ais-SortBySelector-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

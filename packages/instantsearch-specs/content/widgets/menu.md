@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-Menu">
     <div class="ais-Menu-header ais-header">
-      Header (optional)
+      Menu
     </div>
     <div class="ais-Menu-body ais-body">
       <ul class="ais-Menu-list">
@@ -22,15 +22,16 @@ html: |
         </li>
       </ul>
     </div>
+    <button class="ais-Menu-showMore">Show more</button>
     <div class="ais-Menu-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-Menu
     description: the root div of the widget
   - name: .ais-Menu-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-Menu-body
     description: the body of the widget
   - name: .ais-Menu-list
@@ -43,6 +44,8 @@ classes:
     description: the clickable menu element
   - name: .ais-Menu-count
     description: the count of values for each item
+  - name: .ais-Menu-showMore
+    description: the button used to display more categories
   - name: .ais-Menu-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---

@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-StarRating">
     <div class="ais-StarRating-header ais-header">
-      Header (optional)
+      Star rating
     </div>
     <div class="ais-StarRating-body ais-body">
       <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
@@ -37,14 +37,14 @@ html: |
       </ul>
     </div>
     <div class="ais-StarRating-footer ais-footer">
-      Footer (optional)
+      Footer info
     </div>
   </div>
 classes:
   - name: .ais-StarRating
     description: the root div of the widget
   - name: .ais-StarRating-header
-    description: the header of the widget
+    description: the header of the widget (optional)
   - name: .ais-StarRating-body
     description: the body of the widget
   - name: .ais-StarRating-list
@@ -62,5 +62,5 @@ classes:
   - name: .ais-StarRating-count
     description: the count of ratings for a specific item
   - name: .ais-StarRating-footer
-    description: the footer of the widget
+    description: the footer of the widget (optional)
 ---
