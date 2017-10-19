@@ -98,7 +98,7 @@
     "sass-loader": "6.0.6",
     "semver": "5.4.1",
     "shelljs": "0.7.8",
-    "sinon": "3.3.0",
+    "sinon": "4.0.1",
     "style-loader": "0.18.2",
     "unminified-webpack-plugin": "1.2.0",
     "watch": "1.0.2",
