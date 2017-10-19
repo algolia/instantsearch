@@ -23,6 +23,25 @@ describe('Slider', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('expect to render collapsed', () => {
+    const tree = renderer
+      .create(
+        <Slider
+          refine={() => undefined}
+          min={0}
+          max={500}
+          values={[0, 0]}
+          pips={true}
+          step={2}
+          tooltips={true}
+          collapsible={{ collapsed: true }}
+          shouldAutoHideContainer={false}
+        />
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   it('expect to render without pips', () => {
     const tree = renderer
       .create(

@@ -175,6 +175,7 @@ export default function rangeSlider(
     precision = 2,
     tooltips = true,
     autoHideContainer = true,
+    collapsible = false,
   } = {}
 ) {
   if (!container) {
@@ -197,6 +198,7 @@ export default function rangeSlider(
     renderState: {},
     templates,
     autoHideContainer,
+    collapsible,
     cssClasses,
   });
 
