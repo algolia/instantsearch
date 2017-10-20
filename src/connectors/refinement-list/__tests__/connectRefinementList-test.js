@@ -569,7 +569,7 @@ describe('connectRefinementList', () => {
     const helper = algoliasearchHelper(fakeClient, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
-      ...tagConfig
+      ...tagConfig,
     });
     helper.search = sinon.stub();
     helper.searchForFacetValues = sinon.stub().returns(
