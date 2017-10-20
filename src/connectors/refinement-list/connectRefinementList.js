@@ -22,8 +22,8 @@ search.addWidget(
     [ operator = 'or' ],
     [ limit ],
     [ showMoreLimit ],
-    [ sortBy = ['isRefined', 'count:desc', 'name:asc']],
-    [ escape
+    [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
+    [ escapeFacetValues = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html
@@ -65,6 +65,7 @@ export const checkUsage = ({
  * @property {number} [showMoreLimit] The max number of items to display if the widget
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {boolean} [escapeFacetValues = false] Escapes the content of the facet values.
  */
 
 /**
