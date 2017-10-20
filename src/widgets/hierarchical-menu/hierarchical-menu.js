@@ -99,7 +99,7 @@ hierarchicalMenu({
  * @property {number} [limit=10] How much facet values to get [*].
  * @property {string} [separator=" > "] Separator used in the attributes to separate level values. [*].
  * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
- * @property {string} [showParentLevel=false] Show the parent level of the current refined value.
+ * @property {boolean} [showParentLevel=false] Show the parent level of the current refined value.
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).

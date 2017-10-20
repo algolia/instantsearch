@@ -821,6 +821,23 @@ export default () => {
       })
     )
     .add(
+      'collapsible',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            collapsible: {
+              collapsed: false,
+            },
+            templates: {
+              header: 'Price',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with step',
       wrapWithHits(container => {
         window.search.addWidget(

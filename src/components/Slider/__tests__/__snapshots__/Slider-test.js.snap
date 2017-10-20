@@ -1,5 +1,470 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Slider expect to render collapsed 1`] = `
+<div
+  style={
+    Object {
+      "display": "",
+    }
+  }
+>
+  <div
+    className="ais-root ais-root__collapsible ais-root__collapsed"
+  >
+    <div
+      className="ais-body"
+    >
+      <div
+        className=""
+      >
+        <div
+          className="rheostat rheostat-horizontal "
+          onClick={[Function]}
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="rheostat-background"
+          />
+          <div
+            aria-disabled={false}
+            aria-valuemax={500}
+            aria-valuemin={0}
+            aria-valuenow={0}
+            className="ais-range-slider--handle rheostat-handle ais-range-slider--handle-lower"
+            data-handle-key={0}
+            onClick={undefined}
+            onKeyDown={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+            role="slider"
+            style={
+              Object {
+                "left": "0%",
+                "position": "absolute",
+              }
+            }
+            tabIndex={0}
+          >
+            <div
+              className="ais-range-slider--tooltip"
+            >
+              0
+            </div>
+          </div>
+          <div
+            aria-disabled={false}
+            aria-valuemax={500}
+            aria-valuemin={0}
+            aria-valuenow={0}
+            className="ais-range-slider--handle rheostat-handle ais-range-slider--handle-upper"
+            data-handle-key={1}
+            onClick={undefined}
+            onKeyDown={[Function]}
+            onMouseDown={[Function]}
+            onTouchStart={[Function]}
+            role="slider"
+            style={
+              Object {
+                "left": "0%",
+                "position": "absolute",
+              }
+            }
+            tabIndex={0}
+          >
+            <div
+              className="ais-range-slider--tooltip"
+            >
+              0
+            </div>
+          </div>
+          <div
+            className="rheostat-progress"
+            style={
+              Object {
+                "left": "0%",
+                "width": "0%",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal ais-range-slider--marker-large"
+            style={
+              Object {
+                "left": "0%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          >
+            <div
+              className="ais-range-slider--value"
+            >
+              0
+            </div>
+          </div>
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "2.941176470588235%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "5.88235294117647%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "8.823529411764707%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "11.76470588235294%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "14.705882352941178%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "17.647058823529413%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "20.588235294117645%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "23.52941176470588%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "26.47058823529412%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "29.411764705882355%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "32.35294117647059%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "35.294117647058826%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "38.23529411764706%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "41.17647058823529%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "44.11764705882352%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "47.05882352941176%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal ais-range-slider--marker-large"
+            style={
+              Object {
+                "left": "50%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          >
+            <div
+              className="ais-range-slider--value"
+            >
+              250
+            </div>
+          </div>
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "52.94117647058824%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "55.882352941176464%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "58.82352941176471%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "61.76470588235294%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "64.70588235294117%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "67.6470588235294%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "70.58823529411765%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "73.52941176470587%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "76.47058823529412%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "79.41176470588235%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "82.35294117647058%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "85.29411764705883%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "88.23529411764704%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "91.17647058823529%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "94.11764705882352%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal"
+            style={
+              Object {
+                "left": "97.05882352941175%",
+                "marginLeft": 0,
+                "position": "absolute",
+              }
+            }
+          />
+          <div
+            className="ais-range-slider--marker ais-range-slider--marker-horizontal ais-range-slider--marker-large"
+            style={
+              Object {
+                "left": "100%",
+                "marginLeft": "-2px",
+                "position": "absolute",
+              }
+            }
+          >
+            <div
+              className="ais-range-slider--value"
+            >
+              500
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Slider expect to render correctly 1`] = `
 <div
   style={
