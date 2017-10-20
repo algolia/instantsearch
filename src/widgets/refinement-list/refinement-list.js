@@ -247,6 +247,9 @@ export default function refinementList(
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
 
+  const escapeFacetValues = searchForFacetValues
+    ? searchForFacetValues.escapeFacetValues || false
+    : false;
   const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || limit;
   const containerNode = getContainerNode(container);
   const showMoreTemplates = showMoreConfig
@@ -294,6 +297,7 @@ export default function refinementList(
       limit,
       showMoreLimit,
       sortBy,
+      escapeFacetValues,
     });
   } catch (e) {
     throw new Error(e);
