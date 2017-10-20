@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import algoliasearchHelper from 'algoliasearch-helper';
 const SearchResults = algoliasearchHelper.SearchResults;
 import { tagConfig } from '../../../lib/escape-highlight.js';
@@ -12,7 +10,7 @@ describe('connectRefinementList', () => {
   let rendering;
   let makeWidget;
   beforeEach(() => {
-    rendering = sinon.stub();
+    rendering = jest.fn();
     makeWidget = connectRefinementList(rendering);
   });
 
@@ -99,10 +97,10 @@ describe('connectRefinementList', () => {
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering.mock.calls.length).toBe(0);
 
     const helper = algoliasearchHelper(fakeClient, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -112,11 +110,11 @@ describe('connectRefinementList', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering.mock.calls.length).toBe(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering.mock.calls[0][1]).toBe(true);
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.canRefine).toBe(false);
     expect(firstRenderingOptions.widgetParams).toEqual({
       attributeName: 'myFacet',
@@ -131,10 +129,10 @@ describe('connectRefinementList', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering.mock.calls.length).toBe(2);
+    expect(rendering.mock.calls[1][1]).toBe(false);
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canRefine).toBe(false);
     expect(secondRenderingOptions.widgetParams).toEqual({
       attributeName: 'myFacet',
@@ -152,7 +150,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
 
@@ -163,7 +161,7 @@ describe('connectRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
@@ -177,7 +175,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderToggleRefinement } = secondRenderingOptions;
     renderToggleRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
@@ -197,7 +195,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -231,7 +229,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canToggleShowMore).toBe(false);
   });
 
@@ -247,7 +245,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -281,14 +279,14 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canToggleShowMore).toBe(true);
 
     // toggleShowMore will set the state of the show more to true
     // therefore it's always possible to go back and show less items
     secondRenderingOptions.toggleShowMore();
 
-    const thirdRenderingOptions = rendering.lastCall.args[0];
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
     expect(thirdRenderingOptions.canToggleShowMore).toBe(true);
   });
 
@@ -304,7 +302,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -342,7 +340,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toEqual([
       {
         label: 'c1',
@@ -356,7 +354,7 @@ describe('connectRefinementList', () => {
     // toggleShowMore does a new render
     secondRenderingOptions.toggleShowMore();
 
-    const thirdRenderingOptions = rendering.lastCall.args[0];
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
     expect(thirdRenderingOptions.items).toEqual([
       {
         label: 'c1',
@@ -393,7 +391,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -402,7 +400,7 @@ describe('connectRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+    expect(rendering.mock.calls[0][0].hasExhaustiveItems).toEqual(true);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -427,7 +425,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+    expect(rendering.mock.calls[1][0].hasExhaustiveItems).toEqual(true);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -456,7 +454,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
+    expect(rendering.mock.calls[2][0].hasExhaustiveItems).toEqual(false);
   });
 
   it('can search in facet values', () => {
@@ -470,8 +468,8 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
-    helper.searchForFacetValues = sinon.stub().returns(
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
       Promise.resolve({
         exhaustiveFacetsCount: true,
         facetHits: [
@@ -497,7 +495,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
       onHistoryChange: () => {},
     });
-    expect(rendering.callCount).toBe(1);
+    expect(rendering.mock.calls.length).toBe(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -521,10 +519,10 @@ describe('connectRefinementList', () => {
       helper,
       createURL: () => '#',
     });
-    expect(rendering.callCount).toBe(2);
+    expect(rendering.mock.calls.length).toBe(2);
     // Simulation end
 
-    const search = rendering.lastCall.args[0].searchForItems;
+    const search = rendering.mock.calls[1][0].searchForItems;
     search('da');
 
     const [
@@ -532,7 +530,7 @@ describe('connectRefinementList', () => {
       sffvQuery,
       maxNbItems,
       paramOverride,
-    ] = helper.searchForFacetValues.lastCall.args;
+    ] = helper.searchForFacetValues.mock.calls[0];
 
     expect(sffvQuery).toBe('da');
     expect(sffvFacet).toBe('category');
@@ -544,8 +542,8 @@ describe('connectRefinementList', () => {
 
     // because of how promises are resolved we use setImmediate
     setImmediate(() => {
-      expect(rendering.callCount).toBe(3);
-      expect(rendering.lastCall.args[0].items).toEqual([
+      expect(rendering.mock.calls.length).toBe(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
           highlighted: 'Salvador <em>Da</em>li',
@@ -571,8 +569,8 @@ describe('connectRefinementList', () => {
       // Here we simulate that another widget has set some highlight tags
       ...tagConfig,
     });
-    helper.search = sinon.stub();
-    helper.searchForFacetValues = sinon.stub().returns(
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
       Promise.resolve({
         exhaustiveFacetsCount: true,
         facetHits: [
@@ -598,7 +596,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
       onHistoryChange: () => {},
     });
-    expect(rendering.callCount).toBe(1);
+    expect(rendering.mock.calls.length).toBe(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -622,10 +620,10 @@ describe('connectRefinementList', () => {
       helper,
       createURL: () => '#',
     });
-    expect(rendering.callCount).toBe(2);
+    expect(rendering.mock.calls.length).toBe(2);
     // Simulation end
 
-    const search = rendering.lastCall.args[0].searchForItems;
+    const search = rendering.mock.calls[1][0].searchForItems;
     search('da');
 
     const [
@@ -633,7 +631,7 @@ describe('connectRefinementList', () => {
       sffvQuery,
       maxNbItems,
       paramOverride,
-    ] = helper.searchForFacetValues.lastCall.args;
+    ] = helper.searchForFacetValues.mock.calls[0];
 
     expect(sffvQuery).toBe('da');
     expect(sffvFacet).toBe('category');
@@ -645,8 +643,8 @@ describe('connectRefinementList', () => {
 
     // because of how promises are resolved we use setImmediate
     setImmediate(() => {
-      expect(rendering.callCount).toBe(3);
-      expect(rendering.lastCall.args[0].items).toEqual([
+      expect(rendering.mock.calls.length).toBe(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
           highlighted: 'Salvador <em>Da</em>li',
@@ -673,8 +671,8 @@ describe('connectRefinementList', () => {
       // Here we simulate that another widget has set some highlight tags
       ...tagConfig,
     });
-    helper.search = sinon.stub();
-    helper.searchForFacetValues = sinon.stub().returns(
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
       Promise.resolve({
         exhaustiveFacetsCount: true,
         facetHits: [
@@ -700,7 +698,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
       onHistoryChange: () => {},
     });
-    expect(rendering.callCount).toBe(1);
+    expect(rendering.mock.calls.length).toBe(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -724,10 +722,10 @@ describe('connectRefinementList', () => {
       helper,
       createURL: () => '#',
     });
-    expect(rendering.callCount).toBe(2);
+    expect(rendering.mock.calls.length).toBe(2);
     // Simulation end
 
-    const search = rendering.lastCall.args[0].searchForItems;
+    const search = rendering.mock.calls[1][0].searchForItems;
     search('da');
 
     const [
@@ -735,7 +733,7 @@ describe('connectRefinementList', () => {
       sffvQuery,
       maxNbItems,
       paramOverride,
-    ] = helper.searchForFacetValues.lastCall.args;
+    ] = helper.searchForFacetValues.mock.calls[0];
 
     expect(sffvQuery).toBe('da');
     expect(sffvFacet).toBe('category');
@@ -744,8 +742,8 @@ describe('connectRefinementList', () => {
 
     // because of how promises are resolved we use setImmediate
     setImmediate(() => {
-      expect(rendering.callCount).toBe(3);
-      expect(rendering.lastCall.args[0].items).toEqual([
+      expect(rendering.mock.calls.length).toBe(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
           highlighted: 'Salvador <em>Da</em>li',
