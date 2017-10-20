@@ -14,7 +14,8 @@ var customSearchBox = connectSearchBox(function render(params, isFirstRendering)
 search.addWidget(
   customSearchBox({
     [ queryHook ],
-  })
+  }),
+  [delay]
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSearchBox.html
 `;
@@ -26,12 +27,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * function to actually trigger the search. The function takes the query as the parameter.
  *
  * This queryHook can be used to debounce the number of searches done from the searchBox.
+ * @property {number} [delay=200] when defined adds a delay to the stalled search callback
  */
 
 /**
  * @typedef {Object} SearchBoxRenderingOptions
  * @property {string} query The query from the last search.
- * @property {function(SearchParameters)} onHistoryChange Registers a callback when the browser history changes.
+ * @property {function(SearchParameters)} onHistoryChange Registers a callback that is triggered when the browser history changes.
+ * @property {function} onStalledSearch Registers a callback that is triggered when some search takes too much time (> delay)
+ * @property {function} onSearchQueueEmpty Registers a callback that is triggered when there are no more searches in the queue
  * @property {function(string)} refine Sets a new query and searches.
  * @property {function()} clear Remove the query and perform search.
  * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
@@ -75,7 +79,7 @@ export default function connectSearchBox(renderFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { queryHook } = widgetParams;
+    const { queryHook, stalledSearchDelay } = widgetParams;
 
     function clear(helper) {
       return function() {
@@ -113,10 +117,35 @@ export default function connectSearchBox(renderFn) {
 
         this._onHistoryChange = onHistoryChange;
 
+        const delay = stalledSearchDelay || 200;
+        this._userStalledSearchCb = () => {};
+        this._userSearchQueueEmpty = () => {};
+        this._onSearchQueueEmpty = fn => {
+          this._userSearchQueueEmpty = fn;
+        };
+        this._onStalledSearch = fn => {
+          this._userStalledSearchCb = fn;
+        };
+        this._searchStalledTimer = null;
+        helper.on('search', () => {
+          if (!this._searchStalledTimer) {
+            this._searchStalledTimer = setTimeout(() => {
+              this._userStalledSearchCb();
+            }, delay);
+          }
+        });
+        helper.on('searchQueueEmpty', () => {
+          clearTimeout(this._searchStalledTimer);
+          this._searchStalledTimer = null;
+          this._userSearchQueueEmpty();
+        });
+
         renderFn(
           {
             query: helper.state.query,
             onHistoryChange: this._onHistoryChange,
+            onStalledSearch: this._onStalledSearch,
+            onSearchQueueEmpty: this._onSearchQueueEmpty,
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
@@ -133,6 +162,8 @@ export default function connectSearchBox(renderFn) {
           {
             query: helper.state.query,
             onHistoryChange: this._onHistoryChange,
+            onStalledSearch: this._onStalledSearch,
+            onSearchQueueEmpty: this._onSearchQueueEmpty,
             refine: this._refine,
             clear: this._cachedClear,
             widgetParams,
