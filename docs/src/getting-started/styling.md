@@ -127,7 +127,7 @@ Here is how you could implement a `TableResults.vue` component that would displa
 import { Results } from 'vue-instantsearch';
 
 export default {
-  extend: Results,
+  extends: Results,
 }
 </script>
 ```
