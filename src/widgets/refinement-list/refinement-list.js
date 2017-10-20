@@ -250,7 +250,7 @@ export default function refinementList(
   }
 
   const escapeFacetValues = searchForFacetValues
-    ? searchForFacetValues.escapeFacetValues || false
+    ? Boolean(searchForFacetValues.escapeFacetValues)
     : false;
   const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || limit;
   const containerNode = getContainerNode(container);
