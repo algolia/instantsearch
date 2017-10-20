@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RangeInput render default 1`] = `
+
+<div class="ais-range-input">
+  <form>
+    <input type="number"
+           min="-Infinity"
+           max="Infinity"
+           step="1"
+           placeholder
+           class="ais-range-input__input ais-range-input__input--from"
+    >
+    to
+    <input type="number"
+           min="-Infinity"
+           max="Infinity"
+           step="1"
+           placeholder
+           class="ais-range-input__input ais-range-input__input--to"
+    >
+    <button slot="submit">
+      ok
+    </button>
+  </form>
+</div>
+
+`;
+
+exports[`RangeInput render with max 1`] = `
+
+<div class="ais-range-input">
+  <form>
+    <input type="number"
+           min="-Infinity"
+           max="500"
+           step="1"
+           placeholder
+           class="ais-range-input__input ais-range-input__input--from"
+    >
+    to
+    <input type="number"
+           min="-Infinity"
+           max="500"
+           step="1"
+           placeholder
+           class="ais-range-input__input ais-range-input__input--to"
+    >
+    <button slot="submit">
+      ok
+    </button>
+  </form>
+</div>
+
+`;
+
+exports[`RangeInput render with min 1`] = `
+
+<div class="ais-range-input">
+  <form>
+    <input type="number"
+           min="10"
+           max="Infinity"
+           step="1"
+           placeholder
+           class="ais-range-input__input ais-range-input__input--from"
+    >
+    to
+    <input type="number"
+           min="10"
+           max="Infinity"
+           step="1"
+           placeholder
+           class="ais-range-input__input ais-range-input__input--to"
+    >
+    <button slot="submit">
+      ok
+    </button>
+  </form>
+</div>
+
+`;
+
+exports[`RangeInput render with precision 1`] = `
+
+<div class="ais-range-input">
+  <form>
+    <input type="number"
+           min="-Infinity"
+           max="Infinity"
+           step="0.01"
+           placeholder
+           class="ais-range-input__input ais-range-input__input--from"
+    >
+    to
+    <input type="number"
+           min="-Infinity"
+           max="Infinity"
+           step="0.01"
+           placeholder
+           class="ais-range-input__input ais-range-input__input--to"
+    >
+    <button slot="submit">
+      ok
+    </button>
+  </form>
+</div>
+
+`;

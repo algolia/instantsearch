@@ -24,6 +24,7 @@ import SortBySelector from './components/SortBySelector.vue';
 import SearchBox from './components/SearchBox.vue';
 import Clear from './components/Clear.vue';
 import Rating from './components/Rating.vue';
+import RangeInput from './components/RangeInput.vue';
 import NoResults from './components/NoResults.vue';
 import RefinementList from './components/RefinementList.vue';
 import PriceRange from './components/PriceRange.vue';
@@ -44,6 +45,7 @@ const InstantSearch = {
   SearchBox,
   Clear,
   Rating,
+  RangeInput,
   NoResults,
   RefinementList,
   PriceRange,
@@ -64,6 +66,7 @@ const InstantSearch = {
     Vue.component('ais-search-box', SearchBox);
     Vue.component('ais-clear', Clear);
     Vue.component('ais-rating', Rating);
+    Vue.component('ais-range-input', RangeInput);
     Vue.component('ais-no-results', NoResults);
     Vue.component('ais-refinement-list', RefinementList);
     Vue.component('ais-price-range', PriceRange);
@@ -96,6 +99,7 @@ export {
   SearchBox,
   Clear,
   Rating,
+  RangeInput,
   NoResults,
   RefinementList,
   PriceRange,
