@@ -75,7 +75,9 @@ describe('createInstantSearchManager', () => {
   });
 
   describe('Widget manager', () => {
-    it('triggers the search when a widget is added', () => {
+    it('triggers the search when a widget is added', done => {
+      expect.assertions(2);
+
       const ism = createInstantSearchManager({
         indexName: 'index',
         initialState: {},
@@ -84,9 +86,11 @@ describe('createInstantSearchManager', () => {
       });
 
       ism.widgetsManager.registerWidget({
-        getMetadata: () => {},
-        getSearchParameters: () => {},
-        transitionState: () => {},
+        props: {},
+        context: {},
+        getMetadata: () => ({}),
+        getSearchParameters: () => ({}),
+        transitionState: () => ({}),
       });
 
       const storeT0 = ism.store.getState();
@@ -95,6 +99,7 @@ describe('createInstantSearchManager', () => {
       setImmediate(() => {
         const storeT1 = ism.store.getState();
         expect(storeT1.searching).toBe(true);
+        done();
       });
     });
   });
