@@ -64,6 +64,17 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'With loading indicator',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container,
+            showLoading: true,
+          })
+        );
+      })
     );
 
   storiesOf('Stats').add(
