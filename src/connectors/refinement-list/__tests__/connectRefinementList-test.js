@@ -540,8 +540,7 @@ describe('connectRefinementList', () => {
       highlightPostTag: undefined,
     });
 
-    // because of how promises are resolved we use setImmediate
-    setImmediate(() => {
+    return Promise.resolve().then(() => {
       expect(rendering.mock.calls.length).toBe(3);
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
@@ -641,8 +640,7 @@ describe('connectRefinementList', () => {
       highlightPostTag: undefined,
     });
 
-    // because of how promises are resolved we use setImmediate
-    setImmediate(() => {
+    return Promise.resolve().then(() => {
       expect(rendering.mock.calls.length).toBe(3);
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
@@ -740,7 +738,6 @@ describe('connectRefinementList', () => {
     expect(maxNbItems).toBe(2);
     expect(paramOverride).toEqual(tagConfig);
 
-    // because of how promises are resolved we use setImmediate
     return Promise.resolve().then(() => {
       expect(rendering.mock.calls.length).toBe(3);
       expect(rendering.mock.calls[2][0].items).toEqual([
