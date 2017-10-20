@@ -28,9 +28,9 @@
         :value="refinementForRendering.max"
         @input="refinement.max = $event.target.value"
       />
-      <button slot="submit">
-        ok
-      </button>
+      <slot name="submit">
+        <button>Ok</button>
+      </slot>
     </form>
 
     <slot name="footer" />

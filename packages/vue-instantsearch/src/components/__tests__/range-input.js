@@ -21,9 +21,21 @@ describe('RangeInput', () => {
     );
 
   const render = propsData => {
+    const slots = propsData.slots || {};
+
+    // eslint-disable-next-line
+    delete propsData.slots;
+
     const Component = Vue.extend(RangeInput);
     const vm = new Component({
       propsData,
+    });
+
+    // Hacky way to simulate slots for
+    // snapshot... Waiting the release of
+    // vue-test-utils
+    Object.entries(slots).forEach(([name, element]) => {
+      vm.$slots[name] = [element];
     });
 
     return vm.$mount();
@@ -106,6 +118,58 @@ describe('RangeInput', () => {
 
     expect(component.$el.outerHTML).toMatchSnapshot();
     expect(component.precision).toBe(2);
+  });
+
+  test('render with header', () => {
+    const searchStore = createFakeStore();
+    const component = render({
+      attributeName,
+      searchStore,
+      slots: {
+        header: 'Custom header',
+      },
+    });
+
+    expect(component.$el.outerHTML).toMatchSnapshot();
+  });
+
+  test('render with footer', () => {
+    const searchStore = createFakeStore();
+    const component = render({
+      attributeName,
+      searchStore,
+      slots: {
+        footer: 'Custom footer',
+      },
+    });
+
+    expect(component.$el.outerHTML).toMatchSnapshot();
+  });
+
+  test('render with separator', () => {
+    const searchStore = createFakeStore();
+    const component = render({
+      attributeName,
+      searchStore,
+      slots: {
+        separator: '--->',
+      },
+    });
+
+    expect(component.$el.outerHTML).toMatchSnapshot();
+  });
+
+  test('render with submit', () => {
+    const searchStore = createFakeStore();
+    const component = render({
+      attributeName,
+      searchStore,
+      slots: {
+        submit: 'Go',
+      },
+    });
+
+    expect(component.$el.outerHTML).toMatchSnapshot();
   });
 
   test('expect to call onSubmit when submit', () => {

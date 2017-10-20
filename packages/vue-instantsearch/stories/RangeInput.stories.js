@@ -74,6 +74,13 @@ storiesOf('RangeInput', module)
       </ais-range-input>
     `,
   }))
+  .add('with submit', () => ({
+    template: `
+      <ais-range-input attribute-name="price">
+        <button slot="submit">Go</button>
+      </ais-range-input>
+    `,
+  }))
   .add('with header', () => ({
     template: `
       <ais-range-input attribute-name="price">
