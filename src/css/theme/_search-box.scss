@@ -43,5 +43,12 @@
       height: 18px;
       width: 18px;
     }
+
+    &.stalled-search {
+      svg{
+        visibility: hidden;
+      }
+      background: red;
+    }
   }
 }
