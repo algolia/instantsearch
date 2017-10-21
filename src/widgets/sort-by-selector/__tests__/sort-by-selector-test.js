@@ -117,7 +117,7 @@ describe('sortBySelector()', () => {
   });
 
   afterEach(() => {
-    sortBySelector.__ResetDependency__('ReactDOM');
+    sortBySelector.__ResetDependency__('render');
     sortBySelector.__ResetDependency__('autoHideContainerHOC');
   });
 });

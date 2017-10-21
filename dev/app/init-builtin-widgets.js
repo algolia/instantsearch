@@ -592,6 +592,23 @@ export default () => {
       })
     )
     .add(
+      'collapsible',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            collapsible: {
+              collapsed: false,
+            },
+            templates: {
+              header: 'Price',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with step',
       wrapWithHits(container => {
         window.search.addWidget(
@@ -616,6 +633,26 @@ export default () => {
             container,
             attributeName: 'price',
             pips: false,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with 0 as first pit',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
+            },
+            min: 0,
             tooltips: {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;

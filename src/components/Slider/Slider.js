@@ -48,9 +48,7 @@ export class RawSlider extends Component {
       min,
       ...times(steps - 1, step => min + stepsLength * (step + 1)),
       max,
-    ]
-      // bug with `key={ 0 }` and preact, see https://github.com/developit/preact/issues/642
-      .map(pitPoint => (pitPoint === 0 ? 0.000001 : pitPoint));
+    ];
 
     return pitPoints;
   }

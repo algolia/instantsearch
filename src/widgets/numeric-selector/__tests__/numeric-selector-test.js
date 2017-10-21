@@ -141,6 +141,6 @@ describe('numericSelector()', () => {
   });
 
   afterEach(() => {
-    numericSelector.__ResetDependency__('ReactDOM');
+    numericSelector.__ResetDependency__('render');
   });
 });

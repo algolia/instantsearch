@@ -1139,7 +1139,7 @@ describe('currentRefinedValues()', () => {
     });
 
     afterEach(() => {
-      currentRefinedValues.__ResetDependency__('ReactDOM');
+      currentRefinedValues.__ResetDependency__('render');
     });
   });
 });

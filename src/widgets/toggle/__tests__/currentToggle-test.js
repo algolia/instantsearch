@@ -592,7 +592,7 @@ describe('currentToggle()', () => {
     });
 
     afterEach(() => {
-      currentToggle.__ResetDependency__('ReactDOM');
+      currentToggle.__ResetDependency__('render');
     });
   });
 });

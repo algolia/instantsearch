@@ -291,7 +291,7 @@ describe('hierarchicalMenu()', () => {
   });
 
   afterEach(() => {
-    hierarchicalMenu.__ResetDependency__('ReactDOM');
+    hierarchicalMenu.__ResetDependency__('render');
     hierarchicalMenu.__ResetDependency__('autoHideContainerHOC');
     hierarchicalMenu.__ResetDependency__('headerFooterHOC');
   });

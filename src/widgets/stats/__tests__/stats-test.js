@@ -78,7 +78,7 @@ describe('stats()', () => {
   });
 
   afterEach(() => {
-    stats.__ResetDependency__('ReactDOM');
+    stats.__ResetDependency__('render');
     stats.__ResetDependency__('autoHideContainerHOC');
     stats.__ResetDependency__('headerFooterHOC');
   });

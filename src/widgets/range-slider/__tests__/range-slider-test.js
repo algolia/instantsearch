@@ -41,7 +41,7 @@ describe('rangeSlider', () => {
     });
 
     afterEach(() => {
-      rangeSlider.__ResetDependency__('ReactDOM');
+      rangeSlider.__ResetDependency__('render');
       rangeSlider.__ResetDependency__('autoHideContainerHOC');
       rangeSlider.__ResetDependency__('headerFooterHOC');
     });
@@ -77,6 +77,27 @@ describe('rangeSlider', () => {
         container,
         attributeName,
         cssClasses: { root: ['root', 'cx'] },
+      });
+
+      widget.init({ helper, instantSearchInstance });
+      widget.render({ results, helper });
+
+      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+      expect(
+        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
+      ).toEqual(true);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    it('should `collapse` when options is provided', () => {
+      const results = {};
+
+      widget = rangeSlider({
+        container,
+        attributeName,
+        collapsible: {
+          collapsed: true,
+        },
       });
 
       widget.init({ helper, instantSearchInstance });
