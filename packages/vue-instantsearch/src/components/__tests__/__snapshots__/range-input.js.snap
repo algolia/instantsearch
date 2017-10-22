@@ -19,7 +19,7 @@ exports[`RangeInput render default 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--to"
     >
-    <button>
+    <button class="ais-range-input__submit">
       Ok
     </button>
   </form>
@@ -46,7 +46,7 @@ exports[`RangeInput render with footer 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--to"
     >
-    <button>
+    <button class="ais-range-input__submit">
       Ok
     </button>
   </form>
@@ -75,7 +75,7 @@ exports[`RangeInput render with header 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--to"
     >
-    <button>
+    <button class="ais-range-input__submit">
       Ok
     </button>
   </form>
@@ -102,7 +102,7 @@ exports[`RangeInput render with max 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--to"
     >
-    <button>
+    <button class="ais-range-input__submit">
       Ok
     </button>
   </form>
@@ -129,7 +129,7 @@ exports[`RangeInput render with min 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--to"
     >
-    <button>
+    <button class="ais-range-input__submit">
       Ok
     </button>
   </form>
@@ -156,7 +156,7 @@ exports[`RangeInput render with precision 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--to"
     >
-    <button>
+    <button class="ais-range-input__submit">
       Ok
     </button>
   </form>
@@ -183,7 +183,7 @@ exports[`RangeInput render with separator 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--to"
     >
-    <button>
+    <button class="ais-range-input__submit">
       Ok
     </button>
   </form>

@@ -29,7 +29,7 @@
         @input="refinement.max = $event.target.value"
       />
       <slot name="submit">
-        <button>Ok</button>
+        <button :class="bem('submit')">Ok</button>
       </slot>
     </form>
 
