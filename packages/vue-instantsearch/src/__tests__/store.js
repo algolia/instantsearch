@@ -456,7 +456,7 @@ describe('Store', () => {
   });
 
   describe('getFacetStats', () => {
-    test('exepect to return the stats object when last results is set', () => {
+    test('expect to return the stats object when last results is set', () => {
       const attributeName = 'price';
       const store = createStore();
 
@@ -478,7 +478,7 @@ describe('Store', () => {
       );
     });
 
-    test('exepect to return an empty object when last results is not set', () => {
+    test('expect to return an empty object when last results is not set', () => {
       const attributeName = 'price';
       const store = createStore();
 
@@ -490,7 +490,7 @@ describe('Store', () => {
       expect(actual).toEqual(expectation);
     });
 
-    test("exepect to return an empty object when stats don't exist for this attribute", () => {
+    test("expect to return an empty object when stats don't exist for this attribute", () => {
       const attributeName = 'price';
       const store = createStore();
 
