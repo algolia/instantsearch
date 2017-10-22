@@ -16,13 +16,13 @@ A component to filter results based on a rating.
 Basic usage:
 
 ```html
-<ais-rating :attribute-name="rating"></ais-rating>
+<ais-rating attribute-name="rating"></ais-rating>
 ```
 
 Custom boundaries:
 
 ```html
-<ais-rating :attribute-name="score" :max="10"></ais-rating>
+<ais-rating attribute-name="score" :max="10"></ais-rating>
 ```
 
 ## Props
