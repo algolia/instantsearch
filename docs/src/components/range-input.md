@@ -48,3 +48,5 @@ Basic usage:
 | `ais-range-input__input`           | Min and max input element's class.               |
 | `ais-range-input__input--from`     | Min input element's class.                       |
 | `ais-range-input__input--to`       | Max input element's class.                       |
+| `ais-range-input__separator`       | Separator between input.                         |
+| `ais-range-input__submit`          | Submit button.                                   |
