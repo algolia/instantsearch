@@ -15,7 +15,9 @@
       />
 
       <slot name="separator">
-        to
+        <span :class="bem('separator')">
+          to
+        </span>
       </slot>
 
       <input

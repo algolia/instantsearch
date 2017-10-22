@@ -11,7 +11,9 @@ exports[`RangeInput render default 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--from"
     >
-    to
+    <span class="ais-range-input__separator">
+      to
+    </span>
     <input type="number"
            min="-Infinity"
            max="Infinity"
@@ -38,7 +40,9 @@ exports[`RangeInput render with footer 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--from"
     >
-    to
+    <span class="ais-range-input__separator">
+      to
+    </span>
     <input type="number"
            min="-Infinity"
            max="Infinity"
@@ -67,7 +71,9 @@ exports[`RangeInput render with header 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--from"
     >
-    to
+    <span class="ais-range-input__separator">
+      to
+    </span>
     <input type="number"
            min="-Infinity"
            max="Infinity"
@@ -94,7 +100,9 @@ exports[`RangeInput render with max 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--from"
     >
-    to
+    <span class="ais-range-input__separator">
+      to
+    </span>
     <input type="number"
            min="-Infinity"
            max="500"
@@ -121,7 +129,9 @@ exports[`RangeInput render with min 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--from"
     >
-    to
+    <span class="ais-range-input__separator">
+      to
+    </span>
     <input type="number"
            min="10"
            max="Infinity"
@@ -148,7 +158,9 @@ exports[`RangeInput render with precision 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--from"
     >
-    to
+    <span class="ais-range-input__separator">
+      to
+    </span>
     <input type="number"
            min="-Infinity"
            max="Infinity"
@@ -202,7 +214,9 @@ exports[`RangeInput render with submit 1`] = `
            placeholder
            class="ais-range-input__input ais-range-input__input--from"
     >
-    to
+    <span class="ais-range-input__separator">
+      to
+    </span>
     <input type="number"
            min="-Infinity"
            max="Infinity"
