@@ -5,6 +5,137 @@ import instantsearch from '../../index.js';
 import wrapWithHits from './wrap-with-hits.js';
 
 export default () => {
+  storiesOf('Breadcrumb')
+    .add(
+      'default',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="hierarchicalMenu"></div>
+        <div id="breadcrumb"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+          })
+        );
+
+        // Custom Widget to toggle refinement
+        window.search.addWidget({
+          init({ helper }) {
+            helper.toggleRefinement(
+              'hierarchicalCategories.lvl0',
+              'Cameras & Camcorders > Digital Cameras'
+            );
+          },
+        });
+      })
+    )
+    .add(
+      'with custom home label',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="hierarchicalMenu"></div>
+        <div id="breadcrumb"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            templates: { home: 'Home Page' },
+          })
+        );
+
+        // Custom Widget to toggle refinement
+        window.search.addWidget({
+          init({ helper }) {
+            helper.toggleRefinement(
+              'hierarchicalCategories.lvl0',
+              'Cameras & Camcorders > Digital Cameras'
+            );
+          },
+        });
+      })
+    )
+    .add(
+      'with default selected item',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="breadcrumb"></div>
+        <div id="hierarchicalMenu"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            rootPath: 'Cameras & Camcorders > Digital Cameras',
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            showParentLevel: false,
+            container: '#hierarchicalMenu',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            rootPath: 'Cameras & Camcorders',
+          })
+        );
+      })
+    )
+    .add(
+      'with hierarchical menu',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="breadcrumb"></div>
+        <div id="hierarchicalMenu"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            separator: ' / ',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            showParentLevel: false,
+            container: '#hierarchicalMenu',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            rootPath: 'Cameras & Camcorders',
+          })
+        );
+      })
+    );
+
   storiesOf('Analytics').add(
     'default',
     wrapWithHits(container => {
@@ -602,6 +733,114 @@ export default () => {
       })
     );
 
+  storiesOf('RangeInput')
+    .add(
+      'default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'disabled',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            min: 500,
+            max: 0,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'collapsible',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            collapsible: true,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with floating number',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            precision: 2,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with min boundary',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            min: 10,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with max boundary',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            max: 500,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with min & max boundaries',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeInput({
+            container,
+            attributeName: 'price',
+            min: 10,
+            max: 500,
+            templates: {
+              header: 'Range input',
+            },
+          })
+        );
+      })
+    );
+
   storiesOf('RangeSlider')
     .add(
       'default',
@@ -612,11 +851,6 @@ export default () => {
             attributeName: 'price',
             templates: {
               header: 'Price',
-            },
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
             },
           })
         );
@@ -634,11 +868,6 @@ export default () => {
             },
             min: 100,
             max: 50,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -668,11 +897,34 @@ export default () => {
             container,
             attributeName: 'price',
             step: 500,
+          })
+        );
+      })
+    )
+    .add(
+      'with tooltips',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
             tooltips: {
               format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
+                return `$${rawValue}`;
               },
             },
+          })
+        );
+      })
+    )
+    .add(
+      'with precision',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            precision: 2,
           })
         );
       })
@@ -685,11 +937,6 @@ export default () => {
             container,
             attributeName: 'price',
             pips: false,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -705,11 +952,6 @@ export default () => {
               header: 'Price',
             },
             min: 0,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -725,11 +967,6 @@ export default () => {
               header: 'Price',
             },
             min: 36,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -745,11 +982,6 @@ export default () => {
               header: 'Price',
             },
             max: 36,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -766,11 +998,6 @@ export default () => {
             },
             min: 10,
             max: 500,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
           })
         );
       })
@@ -788,7 +1015,22 @@ export default () => {
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-            rootPath: 'Cameras & Camcorders',
+          })
+        );
+      })
+    )
+    .add(
+      'only show current level',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            showParentLevel: false,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
           })
         );
       })

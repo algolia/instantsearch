@@ -1,3 +1,6 @@
+import find from 'lodash/find';
+import isEqual from 'lodash/isEqual';
+
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -89,25 +92,48 @@ export default function connectHierarchicalMenu(renderFn) {
     const [hierarchicalFacetName] = attributes;
 
     return {
-      getConfiguration: currentConfiguration => ({
-        hierarchicalFacets: [
-          {
-            name: hierarchicalFacetName,
-            attributes,
-            separator,
-            rootPath,
-            showParentLevel,
-          },
-        ],
-        maxValuesPerFacet:
-          currentConfiguration.maxValuesPerFacet !== undefined
-            ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
-            : limit,
-      }),
+      getConfiguration: currentConfiguration => {
+        if (currentConfiguration.hierarchicalFacets) {
+          const isFacetSet = find(
+            currentConfiguration.hierarchicalFacets,
+            ({ name }) => name === hierarchicalFacetName
+          );
+          if (
+            isFacetSet &&
+            !(
+              isEqual(isFacetSet.attributes, attributes) &&
+              isFacetSet.separator === separator
+            )
+          ) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              'using Breadcrumb & HierarchicalMenu on the same facet with different options'
+            );
+          }
+          return {};
+        }
+
+        return {
+          hierarchicalFacets: [
+            {
+              name: hierarchicalFacetName,
+              attributes,
+              separator,
+              rootPath,
+              showParentLevel,
+            },
+          ],
+          maxValuesPerFacet:
+            currentConfiguration.maxValuesPerFacet !== undefined
+              ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
+              : limit,
+        };
+      },
 
       init({ helper, createURL, instantSearchInstance }) {
-        this._refine = facetValue =>
+        this._refine = function(facetValue) {
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+        };
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
