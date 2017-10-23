@@ -59,7 +59,7 @@ export const checkUsage = ({
  * @property {string} attributeName The name of the attribute in the records.
  * @property {"and"|"or"} [operator = 'or'] How the filters are combined together.
  * @property {number} [limit = 10] The max number of items to display when
- * `showMoreLimit` is not or if the widget is showing less value.
+ * `showMoreLimit` is not set or if the widget is showing less value.
  * @property {number} [showMoreLimit] The max number of items to display if the widget
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
