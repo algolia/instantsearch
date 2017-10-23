@@ -331,10 +331,10 @@ export default function connectRefinementList(renderFn) {
           instantSearchInstance,
         } = renderOptions;
 
-        const rawItems = results.getFacetValues(attributeName, { sortBy });
-        const items = rawItems.slice(0, this.getLimit()).map(formatItems);
+        const facetValues = results.getFacetValues(attributeName, { sortBy });
+        const items = facetValues.slice(0, this.getLimit()).map(formatItems);
 
-        const hasExhaustiveItems = rawItems.length <= this.getLimit();
+        const hasExhaustiveItems = facetValues.length <= this.getLimit();
 
         lastResultsFromMainSearch = items;
 
