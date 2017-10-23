@@ -10,6 +10,7 @@ import RangeInputComponent from '../components/RangeInput.js';
  * @propType {{min: number, max: number}} [defaultRefinement] - Default state of the widget containing the start and the end of the range.
  * @propType {number} [min] - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} [max] - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
+ * @propType {number} [precision=2] - Number of digits after decimal point to use.
  * @themeKey ais-RangeInput__root - The root component of the widget
  * @themeKey ais-RangeInput__labelMin - The label for the min input
  * @themeKey ais-RangeInput__inputMin - The min input

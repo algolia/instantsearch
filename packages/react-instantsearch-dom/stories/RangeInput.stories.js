@@ -18,6 +18,26 @@ stories
       <RangeInput attributeName="price" />
     </WrapWithHits>
   ))
+  .add('with panel', () => (
+    <WrapWithHits linkedStoryGroup="RangeInput">
+      <Panel title="Price">
+        <RangeInput attributeName="price" />
+      </Panel>
+    </WrapWithHits>
+  ))
+  .add('with no refinement', () => (
+    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput">
+      <RangeInput attributeName="price" />
+      <div style={{ display: 'none' }}>
+        <SearchBox defaultRefinement="ds" />
+      </div>
+    </WrapWithHits>
+  ))
+  .add('with precision of 0', () => (
+    <WrapWithHits linkedStoryGroup="RangeInput">
+      <RangeInput attributeName="price" precision={0} />
+    </WrapWithHits>
+  ))
   .add('with default value', () => (
     <WrapWithHits linkedStoryGroup="RangeInput">
       <RangeInput
@@ -51,29 +71,13 @@ stories
       />
     </WrapWithHits>
   ))
-  .add('with panel', () => (
-    <WrapWithHits linkedStoryGroup="RangeInput">
-      <Panel title="Price">
-        <RangeInput attributeName="price" />
-      </Panel>
-    </WrapWithHits>
-  ))
-  .add('with panel but no refinement', () => (
-    <WrapWithHits searchBox={false} linkedStoryGroup="RangeInput">
-      <Panel title="Price">
-        <RangeInput attributeName="price" />
-        <div style={{ display: 'none' }}>
-          <SearchBox defaultRefinement="ds" />
-        </div>
-      </Panel>
-    </WrapWithHits>
-  ))
   .add('playground', () => (
     <WrapWithHits linkedStoryGroup="RangeInput">
       <RangeInput
         attributeName="price"
         min={number('min', 0)}
         max={number('max', 500)}
+        precision={number('precision', 0)}
         defaultRefinement={object('default value', { min: 100, max: 400 })}
         translations={object('translations', {
           submit: ' go',
