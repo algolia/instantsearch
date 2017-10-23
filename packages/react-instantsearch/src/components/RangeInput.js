@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { isNaN } from 'lodash';
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
 
@@ -9,6 +8,7 @@ const cx = classNames('RangeInput');
 export class RawRangeInput extends Component {
   static propTypes = {
     canRefine: PropTypes.bool.isRequired,
+    precision: PropTypes.number.isRequired,
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     min: PropTypes.number,
@@ -30,10 +30,7 @@ export class RawRangeInput extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      from: this.props.canRefine ? props.currentRefinement.min : '',
-      to: this.props.canRefine ? props.currentRefinement.max : '',
-    };
+    this.state = this.normalizeStateForRendering(props);
   }
 
   componentWillMount() {
@@ -57,10 +54,7 @@ export class RawRangeInput extends Component {
         this.props.currentRefinement.min !== nextProps.currentRefinement.min ||
         this.props.currentRefinement.max !== nextProps.currentRefinement.max)
     ) {
-      this.setState({
-        from: nextProps.currentRefinement.min,
-        to: nextProps.currentRefinement.max,
-      });
+      this.setState(this.normalizeStateForRendering(nextProps));
     }
 
     if (
@@ -73,17 +67,45 @@ export class RawRangeInput extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    e.stopPropagation();
-    if (
-      !isNaN(parseFloat(this.state.from, 10)) &&
-      !isNaN(parseFloat(this.state.to, 10))
-    ) {
-      this.props.refine({ min: this.state.from, max: this.state.to });
-    }
+
+    this.props.refine({
+      min: this.state.from,
+      max: this.state.to,
+    });
   };
 
+  normalizeStateForRendering(props) {
+    const { canRefine, min: rangeMin, max: rangeMax } = props;
+    const { min: valueMin, max: valueMax } = props.currentRefinement;
+
+    return {
+      from:
+        canRefine && valueMin !== undefined && valueMin !== rangeMin
+          ? valueMin
+          : '',
+      to:
+        canRefine && valueMax !== undefined && valueMax !== rangeMax
+          ? valueMax
+          : '',
+    };
+  }
+
+  normalizeRangeForRendering({ canRefine, min, max }) {
+    const hasMin = min !== undefined;
+    const hasMax = max !== undefined;
+
+    return {
+      min: canRefine && hasMin && hasMax ? min : '',
+      max: canRefine && hasMin && hasMax ? max : '',
+    };
+  }
+
   render() {
-    const { translate, canRefine } = this.props;
+    const { from, to } = this.state;
+    const { precision, translate, canRefine } = this.props;
+    const { min, max } = this.normalizeRangeForRendering(this.props);
+    const step = 1 / Math.pow(10, precision);
+
     return (
       <form
         {...cx('root', !canRefine && 'noRefinement')}
@@ -94,8 +116,12 @@ export class RawRangeInput extends Component {
             <input
               {...cx('inputMin')}
               type="number"
-              value={this.state.from}
-              onChange={e => this.setState({ from: e.target.value })}
+              min={min}
+              max={max}
+              value={from}
+              step={step}
+              placeholder={min}
+              onChange={e => this.setState({ from: e.currentTarget.value })}
             />
           </label>
           <span {...cx('separator')}>{translate('separator')}</span>
@@ -103,8 +129,12 @@ export class RawRangeInput extends Component {
             <input
               {...cx('inputMax')}
               type="number"
-              value={this.state.to}
-              onChange={e => this.setState({ to: e.target.value })}
+              min={min}
+              max={max}
+              value={to}
+              step={step}
+              placeholder={max}
+              onChange={e => this.setState({ to: e.currentTarget.value })}
             />
           </label>
           <button {...cx('submit')} type="submit">

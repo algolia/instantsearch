@@ -19,14 +19,15 @@
   padding: 6px 8px;
   font-size: 14px;
   outline: none;
-  color: #697782;
   margin: auto 8px;
   border-radius: 4px;
   background-color: #ffffff;
   border: solid 1px #d4d8e3;
+  min-width: 180px;
 
   @include placeholder {
     font-size: 14px;
+    color: lighten(#697782, 20%);
   }
 
   &:hover,

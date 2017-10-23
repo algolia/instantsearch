@@ -56,6 +56,7 @@
     "doctoc": "1.3.0",
     "enzyme": "3.1.0",
     "enzyme-adapter-react-16": "1.0.2",
+    "enzyme-to-json": "3.1.2",
     "escape-html": "1.0.3",
     "eslint": "4.9.0",
     "eslint-config-algolia": "12.0.0",
@@ -131,7 +132,8 @@
     ],
     "setupFiles": [
       "./shim.js"
-    ]
+    ],
+    "snapshotSerializers": ["enzyme-to-json/serializer"]
   },
   "license": "MIT",
   "author": {
