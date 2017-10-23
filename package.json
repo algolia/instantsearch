@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "2.2.1",
+  "version": "2.2.2-beta.0",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "author": "Algolia <support@algolia.com>",
@@ -38,7 +38,7 @@
   "devDependencies": {
     "argos-cli": "0.0.9",
     "autodll-webpack-plugin": "0.2.1",
-    "autoprefixer": "7.1.5",
+    "autoprefixer": "7.1.6",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-eslint": "8.0.1",
@@ -119,8 +119,8 @@
     "lodash": "^4.17.4",
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0",
+    "preact-rheostat": "^2.1.1",
     "prop-types": "^15.5.10",
-    "rheostat": "algolia/rheostat#dist-preact",
     "to-factory": "^1.0.0"
   },
   "jest": {
