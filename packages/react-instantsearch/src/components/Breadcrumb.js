@@ -37,23 +37,30 @@ class Breadcrumb extends Component {
   }
 
   render() {
-    const { canRefine, createURL, items, refine, translate } = this.props;
+    const {
+      canRefine,
+      createURL,
+      items,
+      refine,
+      rootURL,
+      separator,
+      translate,
+    } = this.props;
     const rootPath = canRefine ? (
       <span {...cx('item')}>
         <Link
           {...cx('itemLink', 'itemLinkRoot')}
-          onClick={() => (!this.props.rootURL ? refine() : null)}
-          href={this.props.rootURL ? this.props.rootURL : createURL()}
+          onClick={() => (!rootURL ? refine() : null)}
+          href={rootURL ? rootURL : createURL()}
         >
           <span {...cx('rootLabel')}>{translate('rootLabel')}</span>
         </Link>
-        <span {...cx('separator')}>{this.props.separator}</span>
+        <span {...cx('separator')}>{separator}</span>
       </span>
     ) : null;
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
-      const separator = isLast ? '' : this.props.separator;
       return !isLast ? (
         <span {...cx('item')} key={idx}>
           <Link
@@ -64,7 +71,7 @@ class Breadcrumb extends Component {
           >
             <span {...cx('itemLabel')}>{item.label}</span>
           </Link>
-          <span {...cx('separator')}>{separator}</span>
+          <span {...cx('separator')}>{isLast ? '' : separator}</span>
         </span>
       ) : (
         <span {...cx('itemLink', 'itemDisabled', 'item')} key={idx}>
