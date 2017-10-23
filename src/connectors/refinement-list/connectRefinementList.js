@@ -202,7 +202,9 @@ export default function connectRefinementList(renderFn) {
           canRefine: isFromSearch || items.length > 0,
           widgetParams,
           isShowingMore,
-          canToggleShowMore: isShowingMore || !hasExhaustiveItems,
+          canToggleShowMore: showMoreLimit
+            ? isShowingMore || !hasExhaustiveItems
+            : false,
           toggleShowMore,
           hasExhaustiveItems,
         },
@@ -328,12 +330,11 @@ export default function connectRefinementList(renderFn) {
           createURL,
           instantSearchInstance,
         } = renderOptions;
-        const items = results
-          .getFacetValues(attributeName, { sortBy })
-          .slice(0, this.getLimit())
-          .map(formatItems);
 
-        const hasExhaustiveItems = items.length < this.getLimit();
+        const rawItems = results.getFacetValues(attributeName, { sortBy });
+        const items = rawItems.slice(0, this.getLimit()).map(formatItems);
+
+        const hasExhaustiveItems = rawItems.length <= this.getLimit();
 
         lastResultsFromMainSearch = items;
 
