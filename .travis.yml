@@ -4,7 +4,6 @@ before_script:
 branches:
   only:
     - master
-dist: precise
 addons:
   firefox: 50.0
 before_install:
