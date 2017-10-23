@@ -36,7 +36,7 @@ test('searchForFacetValues should search for facetValues with the current state'
   t.end();
 });
 
-test.only('searchForFacetValues can override the current search state', function(t) {
+test('searchForFacetValues can override the current search state', function(t) {
   var lastParameters = null;
   var fakeClient = {
     addAlgoliaAgent: function() {},
