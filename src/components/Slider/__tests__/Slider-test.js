@@ -1,62 +1,56 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import { shallow } from 'enzyme';
+import { createRenderer } from 'react-test-renderer/shallow';
 
 import Slider, { RawSlider } from '../Slider';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {
-    const tree = renderer
-      .create(
-        <Slider
-          refine={() => undefined}
-          min={0}
-          max={500}
-          values={[0, 0]}
-          pips={true}
-          step={2}
-          tooltips={true}
-          shouldAutoHideContainer={false}
-        />
-      )
-      .toJSON();
+    const tree = createRenderer().render(
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={true}
+        step={2}
+        tooltips={true}
+        shouldAutoHideContainer={false}
+      />
+    );
     expect(tree).toMatchSnapshot();
   });
 
   it('expect to render collapsed', () => {
-    const tree = renderer
-      .create(
-        <Slider
-          refine={() => undefined}
-          min={0}
-          max={500}
-          values={[0, 0]}
-          pips={true}
-          step={2}
-          tooltips={true}
-          collapsible={{ collapsed: true }}
-          shouldAutoHideContainer={false}
-        />
-      )
-      .toJSON();
+    const tree = createRenderer().render(
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={true}
+        step={2}
+        tooltips={true}
+        collapsible={{ collapsed: true }}
+        shouldAutoHideContainer={false}
+      />
+    );
     expect(tree).toMatchSnapshot();
   });
 
   it('expect to render without pips', () => {
-    const tree = renderer
-      .create(
-        <Slider
-          refine={() => undefined}
-          min={0}
-          max={500}
-          values={[0, 0]}
-          pips={false}
-          step={2}
-          tooltips={true}
-          shouldAutoHideContainer={false}
-        />
-      )
-      .toJSON();
+    const tree = createRenderer().render(
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={false}
+        step={2}
+        tooltips={true}
+        shouldAutoHideContainer={false}
+      />
+    );
     expect(tree).toMatchSnapshot();
   });
 

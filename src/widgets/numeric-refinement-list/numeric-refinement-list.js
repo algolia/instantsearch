@@ -77,7 +77,7 @@ numericRefinementList({
 /**
  * @typedef {Object} NumericRefinementListTemplates
  * @property {string|function} [header] Header template.
- * @property {string|function} [item] Item template, provided with `name`, `isRefined`, `url` data properties.
+ * @property {string|function} [item] Item template, provided with `label` (the name in the configuration), `isRefined`, `url`, `value` (the setting for the filter) data properties.
  * @property {string|function} [footer] Footer template.
  */
 
