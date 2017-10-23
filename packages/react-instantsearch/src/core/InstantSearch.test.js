@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -33,7 +33,7 @@ describe('InstantSearch', () => {
 
   it('validates its props', () => {
     expect(() => {
-      mount(
+      shallow(
         <InstantSearch {...DEFAULT_PROPS}>
           <div />
         </InstantSearch>
@@ -41,11 +41,11 @@ describe('InstantSearch', () => {
     }).not.toThrow();
 
     expect(() => {
-      mount(<InstantSearch {...DEFAULT_PROPS} />);
+      shallow(<InstantSearch {...DEFAULT_PROPS} />);
     }).not.toThrow();
 
     expect(() => {
-      mount(
+      shallow(
         <InstantSearch {...DEFAULT_PROPS}>
           <div />
           <div />
@@ -54,7 +54,7 @@ describe('InstantSearch', () => {
     }).not.toThrow();
 
     expect(() => {
-      const wrapper = mount(
+      const wrapper = shallow(
         <InstantSearch
           {...DEFAULT_PROPS}
           searchState={{}}
@@ -72,7 +72,7 @@ describe('InstantSearch', () => {
     );
 
     expect(() => {
-      const wrapper = mount(
+      const wrapper = shallow(
         <InstantSearch {...DEFAULT_PROPS}>
           <div />
         </InstantSearch>
@@ -87,7 +87,7 @@ describe('InstantSearch', () => {
     );
 
     expect(() => {
-      const wrapper = mount(
+      const wrapper = shallow(
         <InstantSearch
           {...DEFAULT_PROPS}
           searchState={{}}
