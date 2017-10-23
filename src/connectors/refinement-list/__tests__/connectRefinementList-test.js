@@ -97,7 +97,7 @@ describe('connectRefinementList', () => {
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering.mock.calls.length).toBe(0);
+    expect(rendering).not.toHaveBeenCalled();
 
     const helper = algoliasearchHelper(fakeClient, '', config);
     helper.search = jest.fn();
@@ -110,9 +110,9 @@ describe('connectRefinementList', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.mock.calls.length).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.mock.calls[0][1]).toBe(true);
+    expect(rendering).lastCalledWith(expect.any(Object), true);
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.canRefine).toBe(false);
@@ -129,8 +129,8 @@ describe('connectRefinementList', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.mock.calls.length).toBe(2);
-    expect(rendering.mock.calls[1][1]).toBe(false);
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering).lastCalledWith(expect.any(Object), false);
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canRefine).toBe(false);
@@ -495,7 +495,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
       onHistoryChange: () => {},
     });
-    expect(rendering.mock.calls.length).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -519,7 +519,7 @@ describe('connectRefinementList', () => {
       helper,
       createURL: () => '#',
     });
-    expect(rendering.mock.calls.length).toBe(2);
+    expect(rendering).toHaveBeenCalledTimes(2);
     // Simulation end
 
     const search = rendering.mock.calls[1][0].searchForItems;
@@ -541,7 +541,7 @@ describe('connectRefinementList', () => {
     });
 
     return Promise.resolve().then(() => {
-      expect(rendering.mock.calls.length).toBe(3);
+      expect(rendering).toHaveBeenCalledTimes(3);
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
@@ -595,7 +595,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
       onHistoryChange: () => {},
     });
-    expect(rendering.mock.calls.length).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -619,7 +619,7 @@ describe('connectRefinementList', () => {
       helper,
       createURL: () => '#',
     });
-    expect(rendering.mock.calls.length).toBe(2);
+    expect(rendering).toHaveBeenCalledTimes(2);
     // Simulation end
 
     const search = rendering.mock.calls[1][0].searchForItems;
@@ -641,7 +641,7 @@ describe('connectRefinementList', () => {
     });
 
     return Promise.resolve().then(() => {
-      expect(rendering.mock.calls.length).toBe(3);
+      expect(rendering).toHaveBeenCalledTimes(3);
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
@@ -696,7 +696,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
       onHistoryChange: () => {},
     });
-    expect(rendering.mock.calls.length).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -720,7 +720,7 @@ describe('connectRefinementList', () => {
       helper,
       createURL: () => '#',
     });
-    expect(rendering.mock.calls.length).toBe(2);
+    expect(rendering).toHaveBeenCalledTimes(2);
     // Simulation end
 
     const search = rendering.mock.calls[1][0].searchForItems;
@@ -739,7 +739,7 @@ describe('connectRefinementList', () => {
     expect(paramOverride).toEqual(tagConfig);
 
     return Promise.resolve().then(() => {
-      expect(rendering.mock.calls.length).toBe(3);
+      expect(rendering).toHaveBeenCalledTimes(3);
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
