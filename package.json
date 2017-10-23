@@ -119,8 +119,8 @@
     "lodash": "^4.17.4",
     "preact": "^8.1.0",
     "preact-compat": "^3.16.0",
+    "preact-rheostat": "^2.1.1",
     "prop-types": "^15.5.10",
-    "rheostat": "algolia/rheostat#dist-preact",
     "to-factory": "^1.0.0"
   },
   "jest": {

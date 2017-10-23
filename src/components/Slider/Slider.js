@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import React, { Component } from 'preact-compat';
 
-import Rheostat from 'rheostat';
+import Rheostat from 'preact-rheostat';
 import cx from 'classnames';
 
 import Pit from './Pit.js';
