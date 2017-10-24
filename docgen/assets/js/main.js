@@ -3,6 +3,7 @@ import move from './mover.js';
 import activateClipboard from './activateClipboard.js';
 import { fixSidebar, followSidebarNavigation } from './fix-sidebar.js';
 import alg from 'algolia-frontend-components/javascripts.js';
+import './editThisPage.js';
 
 const docSearch = {
   apiKey: '5cb6763f264e31381e18639a1147634c',
