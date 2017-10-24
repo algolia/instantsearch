@@ -294,7 +294,8 @@ export default createConnector({
       items.push({
         label: fragments.join(''),
         attributeName: props.attributeName,
-        value: nextState => cleanUp(props, nextState, this.context),
+        value: nextState =>
+          refine(props, nextState, {}, this._currentRange, this.context),
         currentRefinement: {
           min: minValue,
           max: maxValue,

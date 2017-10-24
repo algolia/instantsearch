@@ -459,7 +459,15 @@ describe('connectRange', () => {
       const searchState = metadata.items[0].value({
         range: { wot: { min: 5 } },
       });
-      expect(searchState).toEqual({ range: {} });
+      expect(searchState).toEqual({
+        page: 1,
+        range: {
+          wot: {
+            min: undefined,
+            max: undefined,
+          },
+        },
+      });
 
       metadata = connect.getMetadata.call(
         {
@@ -532,7 +540,18 @@ describe('connectRange', () => {
         range: { one: { min: 5 }, two: { max: 4 } },
       });
 
-      expect(searchState).toEqual({ range: { two: { max: 4 } } });
+      expect(searchState).toEqual({
+        page: 1,
+        range: {
+          two: {
+            max: 4,
+          },
+          one: {
+            min: undefined,
+            max: undefined,
+          },
+        },
+      });
     });
 
     it('should return the right searchState when clean up', () => {
@@ -699,7 +718,19 @@ describe('connectRange', () => {
       const searchState = metadata.items[0].value({
         indices: { first: { range: { wot: { min: 5 } } } },
       });
-      expect(searchState).toEqual({ indices: { first: { range: {} } } });
+      expect(searchState).toEqual({
+        indices: {
+          first: {
+            page: 1,
+            range: {
+              wot: {
+                min: undefined,
+                max: undefined,
+              },
+            },
+          },
+        },
+      });
 
       metadata = connect.getMetadata.call(
         {
@@ -752,7 +783,20 @@ describe('connectRange', () => {
       });
 
       expect(searchState).toEqual({
-        indices: { first: { range: { two: { max: 4 } } } },
+        indices: {
+          first: {
+            page: 1,
+            range: {
+              one: {
+                min: undefined,
+                max: undefined,
+              },
+              two: {
+                max: 4,
+              },
+            },
+          },
+        },
       });
     });
 
