@@ -29,7 +29,7 @@ Basic usage:
 | default-refinement | false    | `{ min: number, max: number }` |          | Default state of the widget containing the start and the end of the range.                                                   |
 | min                | false    | `number`                       |          | Minimum value. When this isn’t set, the minimum value will be automatically computed by Algolia using the data in the index. |
 | max                | false    | `number`                       |          | Maximum value. When this isn’t set, the maximum value will be automatically computed by Algolia using the data in the index. |
-| precision          | false    | `number`                       | `0`      | Number of digits after decimal point to use.                                                                                 |
+| precision          | false    | `number`                       | `0`      | Number of digits after the decimal point to use.                                                                                 |
 
 ## Slots
 
