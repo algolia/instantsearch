@@ -142,18 +142,13 @@ export default {
       };
     },
 
-    range({
-      attributeName,
-      precision,
-      searchStore,
-      min: minRange,
-      max: maxRange,
-    }) {
-      const { min: minStat, max: maxStat } = searchStore.getFacetStats(
-        attributeName
+    range() {
+      const { min: minRange, max: maxRange } = this;
+      const { min: minStat, max: maxStat } = this.searchStore.getFacetStats(
+        this.attributeName
       );
 
-      const pow = Math.pow(10, precision);
+      const pow = Math.pow(10, this.precision);
 
       let min;
       if (minRange !== undefined) {

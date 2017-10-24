@@ -432,19 +432,19 @@ describe('RangeInput', () => {
     describe('range', () => {
       test('expect to return the range from boundaries', () => {
         const searchStore = createFakeStore();
+        const component = render({
+          attributeName,
+          searchStore,
+          min: 10,
+          max: 500,
+        });
 
         const expectation = {
           min: 10,
           max: 500,
         };
 
-        const actual = RangeInput.computed.range({
-          attributeName,
-          searchStore,
-          precision: 0,
-          min: 10,
-          max: 500,
-        });
+        const actual = component.range;
 
         expect(actual).toEqual(expectation);
       });
@@ -457,16 +457,17 @@ describe('RangeInput', () => {
           })),
         });
 
+        const component = render({
+          attributeName,
+          searchStore,
+        });
+
         const expectation = {
           min: 0,
           max: 799,
         };
 
-        const actual = RangeInput.computed.range({
-          attributeName,
-          searchStore,
-          precision: 0,
-        });
+        const actual = component.range;
 
         expect(actual).toEqual(expectation);
         expect(searchStore.getFacetStats).toHaveBeenCalledWith(attributeName);
@@ -474,17 +475,17 @@ describe('RangeInput', () => {
 
       test('expect to return the default range', () => {
         const searchStore = createFakeStore();
+        const component = render({
+          attributeName,
+          searchStore,
+        });
 
         const expectation = {
           min: -Infinity,
           max: Infinity,
         };
 
-        const actual = RangeInput.computed.range({
-          attributeName,
-          searchStore,
-          precision: 0,
-        });
+        const actual = component.range;
 
         expect(actual).toEqual(expectation);
       });
@@ -497,16 +498,17 @@ describe('RangeInput', () => {
           }),
         });
 
+        const component = render({
+          attributeName,
+          searchStore,
+        });
+
         const expectation = {
           min: 10,
           max: 800,
         };
 
-        const actual = RangeInput.computed.range({
-          attributeName,
-          searchStore,
-          precision: 0,
-        });
+        const actual = component.range;
 
         expect(actual).toEqual(expectation);
       });
@@ -519,16 +521,18 @@ describe('RangeInput', () => {
           }),
         });
 
+        const component = render({
+          attributeName,
+          searchStore,
+          precision: 1,
+        });
+
         const expectation = {
           min: 10.1,
           max: 799.6,
         };
 
-        const actual = RangeInput.computed.range({
-          attributeName,
-          searchStore,
-          precision: 1,
-        });
+        const actual = component.range;
 
         expect(actual).toEqual(expectation);
       });
@@ -541,16 +545,18 @@ describe('RangeInput', () => {
           }),
         });
 
+        const component = render({
+          attributeName,
+          searchStore,
+          precision: 2,
+        });
+
         const expectation = {
           min: 10.12,
           max: 799.57,
         };
 
-        const actual = RangeInput.computed.range({
-          attributeName,
-          searchStore,
-          precision: 2,
-        });
+        const actual = component.range;
 
         expect(actual).toEqual(expectation);
       });
