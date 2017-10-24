@@ -115,8 +115,8 @@ export default {
   },
 
   computed: {
-    step({ precision }) {
-      return 1 / Math.pow(10, precision);
+    step() {
+      return 1 / Math.pow(10, this.precision);
     },
 
     refinement({ attributeName, searchStore }) {

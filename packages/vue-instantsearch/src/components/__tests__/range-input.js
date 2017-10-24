@@ -344,14 +344,16 @@ describe('RangeInput', () => {
     describe('step', () => {
       test('expect to return a step from a precision of 0', () => {
         const searchStore = createFakeStore();
-
         const component = render({
           attributeName,
           searchStore,
           precision: 0,
         });
 
-        expect(component.step).toBe(1);
+        const expectation = 1;
+        const actual = component.step;
+
+        expect(actual).toBe(expectation);
       });
 
       test('expect to return a step from a precision of 1', () => {
@@ -362,18 +364,22 @@ describe('RangeInput', () => {
           precision: 1,
         });
 
-        expect(component.step).toBe(0.1);
+        const expectation = 0.1;
+        const actual = component.step;
+
+        expect(actual).toBe(expectation);
       });
 
       test('expect to return a step from a precision of 2', () => {
         const searchStore = createFakeStore();
-
-        const expectation = 0.01;
-        const actual = RangeInput.computed.step({
+        const component = render({
           attributeName,
           searchStore,
           precision: 2,
         });
+
+        const expectation = 0.01;
+        const actual = component.step;
 
         expect(actual).toBe(expectation);
       });
