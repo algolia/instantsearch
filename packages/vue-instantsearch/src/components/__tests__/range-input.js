@@ -404,23 +404,26 @@ describe('RangeInput', () => {
           ],
         });
 
-        const expectation = { min: 10, max: 500 };
-        const actual = RangeInput.computed.refinement({
+        const component = render({
           attributeName,
           searchStore,
         });
+
+        const expectation = { min: 10, max: 500 };
+        const actual = component.refinement;
 
         expect(actual).toEqual(expectation);
       });
 
       test('expect to return undefined when refinement is not set', () => {
         const searchStore = createFakeStore();
-
-        const expectation = {};
-        const actual = RangeInput.computed.refinement({
+        const component = render({
           attributeName,
           searchStore,
         });
+
+        const expectation = {};
+        const actual = component.refinement;
 
         expect(actual).toEqual(expectation);
       });

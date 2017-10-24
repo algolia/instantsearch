@@ -119,21 +119,21 @@ export default {
       return 1 / Math.pow(10, this.precision);
     },
 
-    refinement({ attributeName, searchStore }) {
+    refinement() {
       const { numericValue: min } =
-        searchStore.activeRefinements.find(
-          r =>
-            r.attributeName === attributeName &&
-            r.type === 'numeric' &&
-            r.operator === '>='
+        this.searchStore.activeRefinements.find(
+          ({ attributeName, type, operator }) =>
+            attributeName === this.attributeName &&
+            type === 'numeric' &&
+            operator === '>='
         ) || {};
 
       const { numericValue: max } =
-        searchStore.activeRefinements.find(
-          r =>
-            r.attributeName === attributeName &&
-            r.type === 'numeric' &&
-            r.operator === '<='
+        this.searchStore.activeRefinements.find(
+          ({ attributeName, type, operator }) =>
+            attributeName === this.attributeName &&
+            type === 'numeric' &&
+            operator === '<='
         ) || {};
 
       return {
