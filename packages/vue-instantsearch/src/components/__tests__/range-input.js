@@ -564,55 +564,56 @@ describe('RangeInput', () => {
 
     describe('rangeForRendering', () => {
       test('expect to return the given range when both value are different from Infinity', () => {
-        const range = {
+        const searchStore = createFakeStore();
+        const component = render({
+          attributeName,
+          searchStore,
           min: 0,
           max: 500,
-        };
+        });
 
         const expectation = {
           min: 0,
           max: 500,
         };
 
-        const actual = RangeInput.computed.rangeForRendering({
-          range,
-        });
+        const actual = component.rangeForRendering;
 
         expect(actual).toEqual(expectation);
       });
 
       test('expect to return an empty string as range when min value is -Infinity', () => {
-        const range = {
-          min: -Infinity,
+        const searchStore = createFakeStore();
+        const component = render({
+          attributeName,
+          searchStore,
           max: 500,
-        };
+        });
 
         const expectation = {
           min: '',
           max: '',
         };
 
-        const actual = RangeInput.computed.rangeForRendering({
-          range,
-        });
+        const actual = component.rangeForRendering;
 
         expect(actual).toEqual(expectation);
       });
 
       test('expect to return an empty string as range when max value is Infinity', () => {
-        const range = {
+        const searchStore = createFakeStore();
+        const component = render({
+          attributeName,
+          searchStore,
           min: 0,
-          max: Infinity,
-        };
+        });
 
         const expectation = {
           min: '',
           max: '',
         };
 
-        const actual = RangeInput.computed.rangeForRendering({
-          range,
-        });
+        const actual = component.rangeForRendering;
 
         expect(actual).toEqual(expectation);
       });

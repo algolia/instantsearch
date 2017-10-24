@@ -174,8 +174,8 @@ export default {
       };
     },
 
-    rangeForRendering({ range }) {
-      const { min, max } = range;
+    rangeForRendering() {
+      const { min, max } = this.range;
 
       const isMinInfinity = min === -Infinity;
       const isMaxInfinity = max === Infinity;
