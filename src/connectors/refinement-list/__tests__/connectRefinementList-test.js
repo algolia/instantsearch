@@ -48,6 +48,7 @@ describe('connectRefinementList', () => {
 
       expect(widget.getConfiguration()).toEqual({
         disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 10,
       });
     });
 
@@ -79,6 +80,7 @@ describe('connectRefinementList', () => {
 
       expect(widget.getConfiguration()).toEqual({
         facets: ['myFacet'],
+        maxValuesPerFacet: 10,
       });
     });
   });
@@ -234,6 +236,105 @@ describe('connectRefinementList', () => {
     expect(secondRenderingOptions.canToggleShowMore).toBe(false);
   });
 
+  it('If there are no showMoreLimit specified, canToggleShowMore is false', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 1,
+    });
+
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.canToggleShowMore).toBe(false);
+  });
+
+  it('If there are same amount of items then canToggleShowMore is false', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+      showMoreLimit: 10,
+    });
+
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.canToggleShowMore).toBe(false);
+  });
+
   it('If there are enough items then canToggleShowMore is true', () => {
     const widget = makeWidget({
       attributeName: 'category',
@@ -342,6 +443,7 @@ describe('connectRefinementList', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.canToggleShowMore).toEqual(true);
     expect(secondRenderingOptions.items).toEqual([
       {
         label: 'c1',
