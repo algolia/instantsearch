@@ -186,9 +186,9 @@ export default {
       };
     },
 
-    refinementForRendering({ refinement, range }) {
-      const { min: minValue, max: maxValue } = refinement;
-      const { min: minRange, max: maxRange } = range;
+    refinementForRendering() {
+      const { min: minValue, max: maxValue } = this.refinement;
+      const { min: minRange, max: maxRange } = this.range;
 
       return {
         min: minValue !== undefined && minValue !== minRange ? minValue : '',

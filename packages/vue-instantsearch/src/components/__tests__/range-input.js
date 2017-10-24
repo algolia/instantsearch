@@ -621,121 +621,164 @@ describe('RangeInput', () => {
 
     describe('refinementForRendering', () => {
       test('expect to return the refinement when values are defined & differ from range', () => {
-        const range = {
+        const searchStore = createFakeStore({
+          activeRefinements: [
+            {
+              attributeName,
+              type: 'numeric',
+              operator: '>=',
+              numericValue: 10,
+            },
+            {
+              attributeName,
+              type: 'numeric',
+              operator: '<=',
+              numericValue: 490,
+            },
+          ],
+        });
+
+        const component = render({
+          attributeName,
+          searchStore,
           min: 0,
           max: 500,
-        };
-
-        const refinement = {
-          min: 10,
-          max: 490,
-        };
+        });
 
         const expectation = {
           min: 10,
           max: 490,
         };
 
-        const actual = RangeInput.computed.refinementForRendering({
-          range,
-          refinement,
-        });
+        const actual = component.refinementForRendering;
 
         expect(actual).toEqual(expectation);
       });
 
       test('expect to return the min refinement as empty string when value is not defined', () => {
-        const range = {
+        const searchStore = createFakeStore({
+          activeRefinements: [
+            {
+              attributeName,
+              type: 'numeric',
+              operator: '<=',
+              numericValue: 490,
+            },
+          ],
+        });
+
+        const component = render({
+          attributeName,
+          searchStore,
           min: 0,
           max: 500,
-        };
-
-        const refinement = {
-          min: undefined,
-          max: 490,
-        };
+        });
 
         const expectation = {
           min: '',
           max: 490,
         };
 
-        const actual = RangeInput.computed.refinementForRendering({
-          range,
-          refinement,
-        });
+        const actual = component.refinementForRendering;
 
         expect(actual).toEqual(expectation);
       });
 
       test('expect to return the max refinement as empty string when value is not defined', () => {
-        const range = {
+        const searchStore = createFakeStore({
+          activeRefinements: [
+            {
+              attributeName,
+              type: 'numeric',
+              operator: '>=',
+              numericValue: 10,
+            },
+          ],
+        });
+
+        const component = render({
+          attributeName,
+          searchStore,
           min: 0,
           max: 500,
-        };
-
-        const refinement = {
-          min: 10,
-          max: undefined,
-        };
+        });
 
         const expectation = {
           min: 10,
           max: '',
         };
 
-        const actual = RangeInput.computed.refinementForRendering({
-          range,
-          refinement,
-        });
+        const actual = component.refinementForRendering;
 
         expect(actual).toEqual(expectation);
       });
 
       test('expect to return the min refinement as empty string when value is equal to range', () => {
-        const range = {
+        const searchStore = createFakeStore({
+          activeRefinements: [
+            {
+              attributeName,
+              type: 'numeric',
+              operator: '>=',
+              numericValue: 0,
+            },
+            {
+              attributeName,
+              type: 'numeric',
+              operator: '<=',
+              numericValue: 490,
+            },
+          ],
+        });
+
+        const component = render({
+          attributeName,
+          searchStore,
           min: 0,
           max: 500,
-        };
-
-        const refinement = {
-          min: 0,
-          max: 490,
-        };
+        });
 
         const expectation = {
           min: '',
           max: 490,
         };
 
-        const actual = RangeInput.computed.refinementForRendering({
-          range,
-          refinement,
-        });
+        const actual = component.refinementForRendering;
 
         expect(actual).toEqual(expectation);
       });
 
       test('expect to return the max refinement as empty string when value is equal to range', () => {
-        const range = {
+        const searchStore = createFakeStore({
+          activeRefinements: [
+            {
+              attributeName,
+              type: 'numeric',
+              operator: '>=',
+              numericValue: 10,
+            },
+            {
+              attributeName,
+              type: 'numeric',
+              operator: '<=',
+              numericValue: 500,
+            },
+          ],
+        });
+
+        const component = render({
+          attributeName,
+          searchStore,
           min: 0,
           max: 500,
-        };
-
-        const refinement = {
-          min: 10,
-          max: 500,
-        };
+        });
 
         const expectation = {
           min: 10,
           max: '',
         };
 
-        const actual = RangeInput.computed.refinementForRendering({
-          range,
-          refinement,
-        });
+        const actual = component.refinementForRendering;
 
         expect(actual).toEqual(expectation);
       });
