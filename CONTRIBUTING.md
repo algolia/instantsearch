@@ -88,7 +88,7 @@ Even though the scope is optional, we try to fill it in as it helps us better un
 impact of a change. We either use the name of the widget / connector / component impacted or we
 use the kind of part of the project it will impact, for example: `docs`, `tooling`, `ci`
 
-Finally if your work is based on an issue on github, please add in the body of the commit message
+Finally if your work is based on an issue on GitHub, please add in the body of the commit message
 `fix #1234` if it solves the issue #1234.
 
 Some examples of valid commit messages (first line):
@@ -99,7 +99,7 @@ Some examples of valid commit messages (first line):
 
 ## Branches organization 🌳
 
-The project is based on the classic github flow because we are building a library and
+The project is based on the classic GitHub flow because we are building a library and
 each version must be crafted with care. We also maintain a branch specicific for the older
 version of the library (currently v1). Finally, when building feature (that will go in the
 next minor version) we have specific branch.
