@@ -4,6 +4,57 @@ const SearchResults = jsHelper.SearchResults;
 import connectBreadcrumb from '../connectBreadcrumb.js';
 
 describe('connectBreadcrumb', () => {
+  it('It should compute getConfiguration() correctly', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectBreadcrumb(rendering);
+
+    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+
+    // when there is no hierarchicalFacets into current configuration
+    {
+      const config = widget.getConfiguration({});
+      expect(config).toEqual({
+        hierarchicalFacets: [
+          {
+            attributes: ['category', 'sub_category'],
+            name: 'category',
+            rootPath: null,
+            separator: ' > ',
+          },
+        ],
+      });
+    }
+
+    // when there is an identical hierarchicalFacets into current configuration
+    {
+      const spy = jest.spyOn(global.console, 'warn');
+      const config = widget.getConfiguration({
+        hierarchicalFacets: [{ name: 'category' }],
+      });
+      expect(config).toEqual({});
+      expect(spy).toHaveBeenCalled();
+      spy.mockReset();
+      spy.mockRestore();
+    }
+
+    // when there is already a different hierarchicalFacets into current configuration
+    {
+      const config = widget.getConfiguration({
+        hierarchicalFacets: [{ name: 'foo' }],
+      });
+      expect(config).toEqual({
+        hierarchicalFacets: [
+          {
+            attributes: ['category', 'sub_category'],
+            name: 'category',
+            rootPath: null,
+            separator: ' > ',
+          },
+        ],
+      });
+    }
+  });
+
   it('Renders during init and render', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
