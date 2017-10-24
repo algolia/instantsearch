@@ -12,7 +12,7 @@ don't hesitate to leave a message on the [community forum](https://discourse.alg
 
 
 - [Contributing with an new issue ⚠️](#contributing-with-an-new-issue-)
-- [Overview of the code contribution process 🤘](#overview-of-the-code-contribution-process-)
+- [The code contribution process 🤘](#the-code-contribution-process-)
 - [Commit conventions 🤓](#commit-conventions-)
 - [Branches organization 🌳](#branches-organization-)
 - [Requirements](#requirements)
@@ -24,7 +24,7 @@ don't hesitate to leave a message on the [community forum](https://discourse.alg
 - [Tests 🔬](#tests-)
   - [Unit tests](#unit-tests)
   - [Functional tests](#functional-tests)
-- [Lint ✨](#lint-)
+- [Linting ✨](#linting-)
 - [Release 🛳](#release-%F0%9F%9B%B3)
   - [Main version](#main-version)
   - [Maintenance version](#maintenance-version)
@@ -76,7 +76,7 @@ This project follows the [conventional changelog](https://conventionalcommits.or
 This means that all commit messages should be formatted using the following scheme:
 
 ```
-<type>[<scope>]: <description>
+type(scope): description
 ```
 
 In most cases, we use the following types:
@@ -91,6 +91,12 @@ use the kind of part of the project it will impact, for example: `docs`, `toolin
 Finally if your work is based on an issue on github, please add in the body of the commit message
 `fix #1234` if it solves the issue #1234.
 
+Some examples of valid commit messages (first line):
+ - fix(searchbox): make magnifying glass bigger
+ - chore(deps): update dependency style-loader to v0.19.0
+ - fix(connectRefinementList): set default value for limit
+ - chore: reword contributions guides
+
 ## Branches organization 🌳
 
 The project is based on the classic github flow because we are building a library and
@@ -99,12 +105,12 @@ version of the library (currently v1). Finally, when building feature (that will
 next minor version) we have specific branch.
 
 To sum up, we have:
- - `develop` for the version -- bugs PR should be created against this branch
- - `feat/2.*` for the next minor version -- features PR should be created against this branch
- - `master` for the main current stable version
- - `maintenance` for the previous major version (currently v1) -- for critical bug fix on the old version
+ - `develop` for the version -- Pull requests for bugs should be created against this branch
+ - `feat/2.*` for the next minor version -- Pull requests for features should be created against this branch
+ - `master` for the current stable version -- we usually don't make pull requests for this branch
+ - `maintenance` for the previous major version (currently v1) -- Pull requests for critical bug fixes on the old version
 
-You should do the dev and PR according to the target version.
+You should do the dev and create pull requests according to the target version.
 
 NB: No new features will be done on the maintenance version.
 
@@ -208,12 +214,12 @@ Here are the main files and folders of the project.
 ### Unit tests
 Our unit tests are written with [Jest](https://facebook.github.io/jest/):
 
-To run a the tests once:
+To run all the tests once:
 ```sh
 yarn test
 ```
 
-To run the test continuously (useful in dev / debugging):
+To run the test continuously based on what you changed (useful when developing or debugging):
 ```sh
 yarn test:watch # unit tests watch mode, no lint
 ```
@@ -239,7 +245,7 @@ docker run -d --name=grid -p 4444:24444 -p 6080:26080 -p 5900:25900 \
     -e TZ="US/Pacific" -e NOVNC=true -v /dev/shm:/dev/shm --privileged elgalu/selenium
 ```
 
-#### Local run
+#### Running locally
 
 ```sh
 # We want to access the host machine from the container (to reach the test app web server).
@@ -279,9 +285,9 @@ the test page with your VM. **Do not commit this change**
 Then you should be able bebug using the dev setup: `yarn run dev` and the virtual machine. You can also
 run the page used for function tests using `yarn run test:functional:dev:debug`
 
-## Lint ✨
+## Linting ✨
 
-Lints are static checked for the code. They help us maintain a consistent code base. They are used
+Linters are static checkers for the code. They help us maintain a consistent code base. They are used
 for js and SCSS files.
 
 If your editor support them, then you will see the errors directly there. You can also run them using
@@ -330,7 +336,7 @@ npm run release
 
 ## Updating the docs 📚
 
-The doc is created and pushed during the release of main version.
+The documentation website is created and pushed during the release of main version.
 
 [logo]: https://community.algolia.com/instantsearch.js/v2/assets/img/InstantSearch-JavaScript.svg
 [website]: https://community.algolia.com/instantsearch.js
