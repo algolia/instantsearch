@@ -7,7 +7,7 @@
     "react-test-renderer": "16.0.0"
   },
   "dependencies": {
-    "google-map-react": "0.24.0",
+    "google-map-react": "0.25.0",
     "prop-types": "15.5.10",
     "qs": "6.5.1",
     "react": "16.0.0",
