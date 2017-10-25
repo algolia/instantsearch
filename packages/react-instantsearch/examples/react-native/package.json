@@ -6,7 +6,7 @@
     "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
     "jest-cli": "21.2.1",
-    "jest-expo": "22.0.0",
+    "jest-expo": "22.0.1",
     "react-native-scripts": "1.5.0",
     "react-test-renderer": "16.0.0"
   },

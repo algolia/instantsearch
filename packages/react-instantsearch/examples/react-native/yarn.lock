@@ -3301,9 +3301,9 @@ jest-environment-node@^21.2.1:
     jest-mock "^21.2.0"
     jest-util "^21.2.1"
 
-jest-expo@22.0.0:
-  version "22.0.0"
-  resolved "https://registry.yarnpkg.com/jest-expo/-/jest-expo-22.0.0.tgz#4a73c52ea5893de785720038267e8b78ac660d19"
+jest-expo@22.0.1:
+  version "22.0.1"
+  resolved "https://registry.yarnpkg.com/jest-expo/-/jest-expo-22.0.1.tgz#029d73ad6f21a365fe55fff0c64d6cdb0046df68"
   dependencies:
     babel-jest "^20.0.3"
     jest "^20.0.4"
