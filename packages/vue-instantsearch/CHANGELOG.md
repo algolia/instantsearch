@@ -1,3 +1,28 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/algolia/vue-instantsearch/compare/v1.2.2...v1.3.0) (2017-10-25)
+
+
+### Bug Fixes
+
+* **menu:** mark attribute as required ([4b08b2d](https://github.com/algolia/vue-instantsearch/commit/4b08b2d))
+* **menu:** use same default sortby as specified ([81a7781](https://github.com/algolia/vue-instantsearch/commit/81a7781))
+* **Menu:** apply correctly css class ([cf996ae](https://github.com/algolia/vue-instantsearch/commit/cf996ae))
+* **results:** remove key from slot ([d63c70b](https://github.com/algolia/vue-instantsearch/commit/d63c70b))
+* **store:** update typo in test ([1430840](https://github.com/algolia/vue-instantsearch/commit/1430840))
+
+
+### Features
+
+* **docs:** add RangeInput section ([483583a](https://github.com/algolia/vue-instantsearch/commit/483583a))
+* **Menu:** set `maxValuesPerFacet` from `limit` prop ([6f9f7a7](https://github.com/algolia/vue-instantsearch/commit/6f9f7a7))
+* **RangeInput:** add className on separator ([d9b9b21](https://github.com/algolia/vue-instantsearch/commit/d9b9b21))
+* **RangeInput:** add className on submit ([de8702a](https://github.com/algolia/vue-instantsearch/commit/de8702a))
+* **RangeInput:** add widget ([cbc1e1b](https://github.com/algolia/vue-instantsearch/commit/cbc1e1b))
+* **store:** add method for retrieve facetStats ([c0c83aa](https://github.com/algolia/vue-instantsearch/commit/c0c83aa))
+* **widgets:** add Menu widget ([50c4c14](https://github.com/algolia/vue-instantsearch/commit/50c4c14))
+
+
+
 <a name="1.2.2"></a>
 ## [1.2.2](https://github.com/algolia/vue-instantsearch/compare/v1.2.1...v1.2.2) (2017-10-17)
 
