@@ -28,6 +28,7 @@ export {
 export {
   default as connectRangeSlider,
 } from './range-slider/connectRangeSlider.js';
+export { default as connectRange } from './range/connectRange.js';
 export {
   default as connectRefinementList,
 } from './refinement-list/connectRefinementList.js';
