@@ -454,4 +454,56 @@ describe('Store', () => {
     store.refresh();
     expect(clearCache).toHaveBeenCalledTimes(1);
   });
+
+  describe('getFacetStats', () => {
+    test('expect to return the stats object when last results is set', () => {
+      const attributeName = 'price';
+      const store = createStore();
+
+      store._helper = {
+        lastResults: {
+          getFacetStats: jest.fn(() => ({
+            min: 10,
+            max: 100,
+          })),
+        },
+      };
+
+      const expectation = { min: 10, max: 100 };
+      const actual = store.getFacetStats(attributeName);
+
+      expect(actual).toEqual(expectation);
+      expect(store._helper.lastResults.getFacetStats).toHaveBeenCalledWith(
+        attributeName
+      );
+    });
+
+    test('expect to return an empty object when last results is not set', () => {
+      const attributeName = 'price';
+      const store = createStore();
+
+      store._helper = {};
+
+      const expectation = {};
+      const actual = store.getFacetStats(attributeName);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    test("expect to return an empty object when stats don't exist for this attribute", () => {
+      const attributeName = 'price';
+      const store = createStore();
+
+      store._helper = {
+        lastResults: {
+          getFacetStats: jest.fn(() => null),
+        },
+      };
+
+      const expectation = {};
+      const actual = store.getFacetStats(attributeName);
+
+      expect(actual).toEqual(expectation);
+    });
+  });
 });

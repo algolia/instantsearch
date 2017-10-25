@@ -34,6 +34,7 @@ You can try most of them out in our playground.
 * [Stats](components/stats.html)
 * [Powered By](components/powered-by.html)
 * [Price Range](components/price-range.html)
+* [Range Input](components/range-input.html)
 * [Results per Page Selector](components/results-per-page-selector.html)
 * [Sort by Selector](components/sort-by-selector.html)
 * [Rating](components/rating.html)

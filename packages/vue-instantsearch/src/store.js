@@ -305,6 +305,14 @@ export class Store {
     return values.slice(0, limit);
   }
 
+  getFacetStats(attribute) {
+    if (!this._helper.lastResults) {
+      return {};
+    }
+
+    return this._helper.lastResults.getFacetStats(attribute) || {};
+  }
+
   get activeRefinements() {
     if (!this._helper.lastResults) {
       return [];
