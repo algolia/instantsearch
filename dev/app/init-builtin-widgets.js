@@ -548,6 +548,58 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'escape the facet values',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.refinementList({
+            container,
+            attributeName: 'brand',
+            operator: 'or',
+            limit: 10,
+            templates: {
+              header: 'Searchable brands',
+            },
+            searchForFacetValues: {
+              placeholder: 'Find other brands...',
+              escapeFacetValues: true,
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with a hits widget with escapeHits set to true',
+      wrapWithHits(container => {
+        const list = document.createElement('div');
+        const hits = document.createElement('div');
+        container.appendChild(hits);
+        container.appendChild(list);
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container: hits,
+            templates: {
+              item: '',
+            },
+            escapeHits: true,
+          })
+        );
+        window.search.addWidget(
+          instantsearch.widgets.refinementList({
+            container: list,
+            attributeName: 'brand',
+            operator: 'or',
+            limit: 10,
+            templates: {
+              header: 'Searchable brands',
+            },
+            searchForFacetValues: {
+              placeholder: 'Find other brands...',
+            },
+          })
+        );
+      })
     );
 
   storiesOf('StarRating').add(

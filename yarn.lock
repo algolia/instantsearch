@@ -142,7 +142,7 @@ ajv@^5.0.0, ajv@^5.1.0, ajv@^5.1.5, ajv@^5.2.0, ajv@^5.2.3:
     json-schema-traverse "^0.3.0"
     json-stable-stringify "^1.0.1"
 
-algoliasearch-helper@^2.22.0:
+algoliasearch-helper@^2.23.0:
   version "2.23.0"
   resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.23.0.tgz#e9ca6914f3adcb829631542e5cd2cafc83283ca2"
   dependencies:

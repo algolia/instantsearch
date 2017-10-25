@@ -1,4 +1,5 @@
 import { checkRendering } from '../../lib/utils.js';
+import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
 
 const usage = `Usage:
 var customRefinementList = connectRefinementList(function render(params) {
@@ -21,7 +22,8 @@ search.addWidget(
     [ operator = 'or' ],
     [ limit ],
     [ showMoreLimit ],
-    [ sortBy = ['isRefined', 'count:desc', 'name:asc']],
+    [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
+    [ escapeFacetValues = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html
@@ -63,6 +65,7 @@ export const checkUsage = ({
  * @property {number} [showMoreLimit] The max number of items to display if the widget
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {boolean} [escapeFacetValues = false] Escapes the content of the facet values.
  */
 
 /**
@@ -151,6 +154,7 @@ export default function connectRefinementList(renderFn) {
       limit,
       showMoreLimit,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
+      escapeFacetValues = false,
     } = widgetParams;
 
     checkUsage({ attributeName, operator, usage, limit, showMoreLimit });
@@ -235,21 +239,33 @@ export default function connectRefinementList(renderFn) {
           hasExhaustiveItems: false, // SFFV should not be used with show more
         });
       } else {
-        helper.searchForFacetValues(attributeName, query).then(results => {
-          const facetValues = results.facetHits;
+        const tags = {
+          highlightPreTag: escapeFacetValues
+            ? tagConfig.highlightPreTag
+            : undefined,
+          highlightPostTag: escapeFacetValues
+            ? tagConfig.highlightPostTag
+            : undefined,
+        };
+        helper
+          .searchForFacetValues(attributeName, query, limit, tags)
+          .then(results => {
+            const facetValues = escapeFacetValues
+              ? escapeFacets(results.facetHits)
+              : results.facetHits;
 
-          render({
-            items: facetValues,
-            state,
-            createURL,
-            helperSpecializedSearchFacetValues,
-            refine: toggleRefinement,
-            isFromSearch: true,
-            isFirstSearch: false,
-            instantSearchInstance,
-            hasExhaustiveItems: false, // SFFV should not be used with show more
+            render({
+              items: facetValues,
+              state,
+              createURL,
+              helperSpecializedSearchFacetValues,
+              refine: toggleRefinement,
+              isFromSearch: true,
+              isFirstSearch: false,
+              instantSearchInstance,
+              hasExhaustiveItems: false, // SFFV should not be used with show more
+            });
           });
-        });
       }
     };
 
