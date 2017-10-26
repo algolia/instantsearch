@@ -131,7 +131,7 @@ module.exports = {
         entry: {
           vendor: [
             ...Object.keys(require('../package.json').dependencies).filter(
-              pkg => !pkg.includes('rheostat')
+              pkg => !pkg.includes('react-google-maps')
             ),
             'dev-novel',
           ],
