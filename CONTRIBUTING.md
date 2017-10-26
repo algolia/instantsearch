@@ -323,9 +323,9 @@ npm run release-maintenance
 
 #### Beta version
 
-Beta version release is available on any branch that is not `master` or `maintainance`. The
+Beta version release is available on any branch except `master`, `maintainance` or `develop`. The
 main use cases are for releasing a patch before the official release, or create custom builds
-with new features. In those case we will use respectively the feature branch or the `feat/2.*`
+with new features. In those cases we will either use the feature branch itself or the `feat/2.*`
 branch.
 
 ```sh
