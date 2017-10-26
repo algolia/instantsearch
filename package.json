@@ -10,7 +10,7 @@
   "scripts": {
     "build": "./scripts/build.sh",
     "dev": "./scripts/dev.sh",
-    "doctoc": "doctoc --maxlevel 3 README.md CONTRIBUTING.md",
+    "doctoc": "doctoc --no-title --maxlevel 3 README.md CONTRIBUTING.md",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "eslint .",
     "lint:css": "./scripts/lint-css",
