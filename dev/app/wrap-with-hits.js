@@ -1,15 +1,26 @@
 /* eslint-disable import/default */
-import instantsearch from '../../index.js';
 
+import instantsearch from '../../index.js';
 import item from './templates/item.html';
 import empty from './templates/no-results.html';
 
-export default (initWidget, opts = {}) => container => {
+export default (
+  initWidget,
+  {
+    appId = 'latency',
+    apiKey = '6be0576ff61c053d5f9a3225e2a90f76',
+    indexName = 'instant_search',
+    searchParameters = {},
+  } = {}
+) => container => {
   window.search = instantsearch({
-    appId: 'latency',
-    apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-    indexName: 'instant_search',
-    searchParameters: { hitsPerPage: 3, ...(opts.searchParameters || {}) },
+    appId,
+    apiKey,
+    indexName,
+    searchParameters: {
+      hitsPerPage: 3,
+      ...searchParameters,
+    },
   });
 
   container.innerHTML = `
@@ -48,5 +59,6 @@ export default (initWidget, opts = {}) => container => {
   );
 
   initWidget(window.document.getElementById('widget-display'));
+
   window.search.start();
 };
