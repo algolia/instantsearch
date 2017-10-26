@@ -6,6 +6,7 @@ InstantSearch.js is part of the InstantSearch family:
 **InstantSearch.js** 
 | [React InstantSearch (web)][react-instantsearch-github]
 | [Vue InstantSearch (web)][vue-instantsearch-github]
+| [React-native InstantSearch (native)][react-instantsearch-github]
 | [InstantSearch Android (native)][instantsearch-android-github]
 | [InstantSearch iOS (native)][instantsearch-ios-github].
 
@@ -24,7 +25,7 @@ InstantSearch.js is part of the InstantSearch family:
 
 > ⚡ Lightning-fast search for your apps
 
-This library is built and maintained by [Algolia][algolia-website].
+This library is built and maintained by the contributors and the peeps at [Algolia][algolia-website].
 
 The documentation available at <https://community.algolia.com/instantsearch.js/>.
 
