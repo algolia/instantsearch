@@ -45,3 +45,4 @@ export { default as stats } from '../widgets/stats/stats.js';
 export { default as toggle } from '../widgets/toggle/toggle.js';
 export { default as analytics } from '../widgets/analytics/analytics.js';
 export { default as menuSelect } from '../widgets/menu-select/menu-select.js';
+export { default as geoSearch } from '../widgets/geo-search/geo-search.js';
