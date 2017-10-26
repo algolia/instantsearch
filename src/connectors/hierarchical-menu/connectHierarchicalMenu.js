@@ -37,7 +37,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string[]} attributes Attributes to use to generate the hierarchy of the menu.
  * @property {string} [separator = '>'] Separator used in the attributes to separate level values.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
- * @property {boolean} [showParentLevel = true] Shows the parent level of the current refined value.
+ * @property {boolean} [showParentLevel=false] Show the siblings of the selected parent levels of the current refined value. This
+ * does not impact the root level.
  * @property {number} [limit = 10] Max number of value to display.
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *

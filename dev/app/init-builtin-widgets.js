@@ -736,7 +736,23 @@ export default () => {
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-            rootPath: 'Cameras & Camcorders',
+            showParentLevel: false,
+          })
+        );
+      })
+    )
+    .add(
+      'hide parent levels',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            showParentLevel: true,
           })
         );
       })
