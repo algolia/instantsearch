@@ -27,7 +27,7 @@ export default () => {
     'with IP',
     wrapWithHitsAndConfiguration(container => {
       window.search.addWidget(
-        instantsearch.widgets.geoSearch({
+        instantsearch.widgets.geoSearchWithGoogleMaps({
           container,
         })
       );
@@ -37,7 +37,7 @@ export default () => {
       'with IP & radius',
       wrapWithHitsAndConfiguration(container => {
         window.search.addWidget(
-          instantsearch.widgets.geoSearch({
+          instantsearch.widgets.geoSearchWithGoogleMaps({
             container,
             radius,
           })
@@ -48,7 +48,7 @@ export default () => {
       'with IP & radius & precision',
       wrapWithHitsAndConfiguration(container => {
         window.search.addWidget(
-          instantsearch.widgets.geoSearch({
+          instantsearch.widgets.geoSearchWithGoogleMaps({
             container,
             radius,
             precision,
@@ -62,7 +62,7 @@ export default () => {
     'with position',
     wrapWithHitsAndConfiguration(container => {
       window.search.addWidget(
-        instantsearch.widgets.geoSearch({
+        instantsearch.widgets.geoSearchWithGoogleMaps({
           container,
           position,
         })
@@ -73,7 +73,7 @@ export default () => {
       'with position & radius',
       wrapWithHitsAndConfiguration(container => {
         window.search.addWidget(
-          instantsearch.widgets.geoSearch({
+          instantsearch.widgets.geoSearchWithGoogleMaps({
             container,
             radius,
             position,
@@ -85,7 +85,7 @@ export default () => {
       'with position & radius & precision',
       wrapWithHitsAndConfiguration(container => {
         window.search.addWidget(
-          instantsearch.widgets.geoSearch({
+          instantsearch.widgets.geoSearchWithGoogleMaps({
             container,
             radius,
             precision,
@@ -113,7 +113,7 @@ export default () => {
       );
 
       window.search.addWidget(
-        instantsearch.widgets.geoSearch({
+        instantsearch.widgets.geoSearchWithGoogleMaps({
           container: mapElement,
           radius: 20000,
           enableGeolocationWithIP: false,
@@ -137,7 +137,7 @@ export default () => {
       );
 
       window.search.addWidget(
-        instantsearch.widgets.geoSearch({
+        instantsearch.widgets.geoSearchWithGoogleMaps({
           container: mapElement,
           radius: 20000,
           enableGeolocationWithIP: false,
@@ -152,7 +152,7 @@ export default () => {
     'disable refine on move',
     wrapWithHitsAndConfiguration(container => {
       window.search.addWidget(
-        instantsearch.widgets.geoSearch({
+        instantsearch.widgets.geoSearchWithGoogleMaps({
           container,
           enableRefineOnMapMove: false,
         })
