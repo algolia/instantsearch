@@ -1,48 +1,11 @@
-import React, { render } from 'preact-compat';
 import cx from 'classnames';
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import { bemHelper } from '../../lib/utils.js';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
-import GoogleMapProvider from '../../components/GeoSearch/GoogleMapsProvider';
+import GoogleMapsRenderer from './GoogleMapsRenderer';
 
 const bem = bemHelper('ais-geo');
 
-const renderer = ({
-  hits,
-  refine,
-  clearRefinementWithMap,
-  isRefinedWithMap,
-  enableRefineOnMapMove,
-  widgetParams,
-}) => {
-  const { container } = widgetParams;
-
-  const loadingElementStyle = {
-    height: '100%',
-  };
-
-  const mapElementStyle = {
-    height: '350px',
-    marginTop: '10px',
-    marginBottom: '10px',
-  };
-
-  render(
-    <GoogleMapProvider
-      googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
-      loadingElement={<div style={loadingElementStyle} />}
-      containerElement={<div />}
-      mapElement={<div style={mapElementStyle} />}
-      markers={hits}
-      refine={refine}
-      clearRefinementWithMap={clearRefinementWithMap}
-      isRefinedWithMap={isRefinedWithMap}
-      enableRefineOnMapMove={enableRefineOnMapMove}
-    />,
-    getContainerNode(container)
-  );
-};
-
-export default function geoSearch(props = {}) {
+const geoSearch = renderer => (props = {}) => {
   const widgetParams = {
     cssClasses: {},
     ...props,
@@ -67,4 +30,6 @@ export default function geoSearch(props = {}) {
   } catch (e) {
     throw new Error(`See usage.`);
   }
-}
+};
+
+export const geoSearchWithGoogleMaps = geoSearch(GoogleMapsRenderer);
