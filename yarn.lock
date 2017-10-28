@@ -4232,9 +4232,9 @@ gm@^1.22.0:
     cross-spawn "^4.0.0"
     debug "~2.2.0"
 
-gonzales-pe@^4.1.1:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/gonzales-pe/-/gonzales-pe-4.2.2.tgz#f50a8c17842f13a9007909b7cb32188266e4d74c"
+gonzales-pe-sl@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/gonzales-pe-sl/-/gonzales-pe-sl-4.2.3.tgz#6a868bc380645f141feeb042c6f97fcc71b59fe6"
   dependencies:
     minimist "1.1.x"
 
@@ -8273,9 +8273,9 @@ sass-graph@^2.1.1:
     scss-tokenizer "^0.2.3"
     yargs "^7.0.0"
 
-sass-lint@1.11.1:
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/sass-lint/-/sass-lint-1.11.1.tgz#1ccea9be01e60fd0ca7ddf379a0096311b218240"
+sass-lint@1.12.1:
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/sass-lint/-/sass-lint-1.12.1.tgz#630f69c216aa206b8232fb2aa907bdf3336b6d83"
   dependencies:
     commander "^2.8.1"
     eslint "^2.7.0"
@@ -8283,7 +8283,7 @@ sass-lint@1.11.1:
     fs-extra "^3.0.1"
     glob "^7.0.0"
     globule "^1.0.0"
-    gonzales-pe "^4.1.1"
+    gonzales-pe-sl "^4.2.3"
     js-yaml "^3.5.4"
     known-css-properties "^0.3.0"
     lodash.capitalize "^4.1.0"
