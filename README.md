@@ -1,6 +1,6 @@
 [![InstantSearch.js logo][logo]][website]
 
-InstantSearch.js is a library for building blazing fast search-as-you-type search UIs with [Algolia](algolia-website).
+InstantSearch.js is a library for building blazing fast search-as-you-type search UIs with [Algolia][algolia-website].
 
 InstantSearch.js is part of the InstantSearch family: 
 **InstantSearch.js** 
