@@ -112,7 +112,7 @@ At the initialization and each time there is a result update, the callback given
 import { Component, OnInit } from '@angular/core';
 import { connectHits } from 'instantsearch.js/es/connectors';
 
-import { InstantSearchService } from '../../services/instantasearch.service';
+import { InstantSearchService } from '../../services/instantsearch.service';
 
 @Component({
   selector: 'app-hits',
