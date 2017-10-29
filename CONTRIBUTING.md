@@ -13,7 +13,7 @@ yarn install
 Then we recommend that you run:
 
 ```sh
-yarn watch
+yarn test:watch
 ```
 
 This will watch the files for changes and build the CommonJS bundle that is required by the tests.
