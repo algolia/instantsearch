@@ -89,6 +89,7 @@
     "mkdirp": "0.5.1",
     "mversion": "1.10.1",
     "node-sass": "4.5.3",
+    "places.js": "1.4.15",
     "postcss-loader": "2.0.6",
     "prettier": "1.7.4",
     "pretty-bytes-cli": "2.0.0",
@@ -121,6 +122,7 @@
     "preact-compat": "^3.16.0",
     "preact-rheostat": "^2.1.1",
     "prop-types": "^15.5.10",
+    "react-google-maps": "^9.0.1",
     "to-factory": "^1.0.0"
   },
   "jest": {

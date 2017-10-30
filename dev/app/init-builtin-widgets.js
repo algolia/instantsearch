@@ -1,10 +1,12 @@
 /* eslint-disable import/default */
 import { action, storiesOf } from 'dev-novel';
 import instantsearch from '../../index.js';
-
+import addGeoSearchStories from './built-in-widgets/geo-search.stories';
 import wrapWithHits from './wrap-with-hits.js';
 
 export default () => {
+  addGeoSearchStories();
+
   storiesOf('Analytics').add(
     'default',
     wrapWithHits(container => {
