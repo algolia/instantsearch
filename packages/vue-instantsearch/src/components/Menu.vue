@@ -70,6 +70,7 @@
     },
 
     created() {
+      this.searchStore.stop();
       this.searchStore.maxValuesPerFacet = this.limit;
       this.searchStore.addFacet(
         {
@@ -78,6 +79,8 @@
         },
         FACET_TREE
       );
+      this.searchStore.start();
+      this.searchStore.refresh();
     },
 
     destroyed() {
