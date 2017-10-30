@@ -1,3 +1,16 @@
+<a name="2.2.2"></a>
+## [2.2.2](https://github.com/algolia/instantsearch.js/compare/v2.2.1...v2.2.2) (2017-10-30)
+
+
+### Bug Fixes
+
+* **connectRefinementList:** set default value for limit ([#2517](https://github.com/algolia/instantsearch.js/issues/2517)) ([32918c9](https://github.com/algolia/instantsearch.js/commit/32918c9))
+* **MenuSelect:** switch from react to preact-compat ([#2513](https://github.com/algolia/instantsearch.js/issues/2513)) ([06aa626](https://github.com/algolia/instantsearch.js/commit/06aa626))
+* **range-slider:** add option `collapsible` ([#2502](https://github.com/algolia/instantsearch.js/issues/2502)) ([e78399d](https://github.com/algolia/instantsearch.js/commit/e78399d)), closes [#2501](https://github.com/algolia/instantsearch.js/issues/2501)
+* **url-sync:** make URLSync consistent even if search is tampered ([392927e](https://github.com/algolia/instantsearch.js/commit/392927e)), closes [#2523](https://github.com/algolia/instantsearch.js/issues/2523)
+
+
+
 <a name="2.2.1"></a>
 ## [2.2.1](https://github.com/algolia/instantsearch.js/compare/v2.2.0...v2.2.1) (2017-10-16)
 
