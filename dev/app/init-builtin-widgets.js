@@ -2,10 +2,12 @@
 import { action, storiesOf } from 'dev-novel';
 import instantsearch from '../../index.js';
 import addGeoSearchGoogleMapsStories from './built-in-widgets/geo-search-google-maps.stories';
+import addGeoSearchLeafletStories from './built-in-widgets/geo-search-leaflet.stories';
 import wrapWithHits from './wrap-with-hits.js';
 
 export default () => {
   addGeoSearchGoogleMapsStories();
+  addGeoSearchLeafletStories();
 
   storiesOf('Analytics').add(
     'default',
