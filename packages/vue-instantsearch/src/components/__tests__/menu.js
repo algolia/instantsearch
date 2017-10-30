@@ -44,6 +44,9 @@ const searchStore = {
   getFacetValues,
   addFacet: () => {},
   setMaxValuesPerFacet: () => {},
+  stop: () => {},
+  start: () => {},
+  refresh: () => {},
 };
 
 describe('Menu', () => {
@@ -59,7 +62,7 @@ describe('Menu', () => {
     expect(vm.$el.outerHTML).toMatchSnapshot();
   });
 
-  it('should add a facet to the store when mounted', () => {
+  it('should add a facet to the store when created', () => {
     const Component = Vue.extend(Menu);
     const addFacetMock = jest.fn();
 
