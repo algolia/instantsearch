@@ -52,7 +52,8 @@ header {
       padding-bottom: 7px; }
       header .input-group #q:focus {
         outline: none;
-        box-shadow: inset 0 0 0 1px #FFBE61; }
+        -webkit-box-shadow: inset 0 0 0 1px #FFBE61;
+                box-shadow: inset 0 0 0 1px #FFBE61; }
     header .input-group .input-group-btn button {
       height: 100%;
       padding: 0 30px;
@@ -114,12 +115,15 @@ aside {
     overflow: hidden;
     float: left; }
     aside .facet-color.checked {
-      box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.5); }
+      -webkit-box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.5);
+              box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.5); }
     aside .facet-color[data-facet-value="White"] {
       background-color: #FFFFFF;
-      box-shadow: inset 0 0 0 1px #CCC; }
+      -webkit-box-shadow: inset 0 0 0 1px #CCC;
+              box-shadow: inset 0 0 0 1px #CCC; }
       aside .facet-color[data-facet-value="White"].checked {
-        box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.1); }
+        -webkit-box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.1);
+                box-shadow: inset 0 0 0 4px rgba(0, 0, 0, 0.1); }
     aside .facet-color[data-facet-value="Black"] {
       background-color: #000000; }
     aside .facet-color[data-facet-value="Black-brown"] {
@@ -209,7 +213,8 @@ aside {
       background-color: #FFFFFF; }
     aside .ais-price-ranges--button:focus {
       outline: none;
-      box-shadow: inset 0 0 0 1px #FFBE61; }
+      -webkit-box-shadow: inset 0 0 0 1px #FFBE61;
+              box-shadow: inset 0 0 0 1px #FFBE61; }
 
 .results-wrapper {
   padding: 70px 10px 10px 240px; }
@@ -258,7 +263,8 @@ aside {
   border-bottom: solid 1px #EEE;
   margin: .5%;
   border: solid 1px #EEE;
-  box-shadow: 0 0 3px #f6f6f6;
+  -webkit-box-shadow: 0 0 3px #f6f6f6;
+          box-shadow: 0 0 3px #f6f6f6;
   position: relative; }
   @media (max-width: 960px) {
     .hit {
@@ -274,6 +280,7 @@ aside {
     vertical-align: middle;
     margin: 0 auto; }
     .hit .product-picture img {
+      -webkit-transition: opacity 500ms cubic-bezier(0.19, 1, 0.22, 1);
       transition: opacity 500ms cubic-bezier(0.19, 1, 0.22, 1);
       height: 150px;
       max-width: 100%; }

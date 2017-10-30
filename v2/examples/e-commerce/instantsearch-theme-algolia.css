@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.2.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
+/*! instantsearch.js preview-2.2.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
 .ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button {
   color: #FFFFFF;
   display: inline-block;
@@ -59,12 +59,16 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
   -moz-appearance: none;
   appearance: none;
   background: #FFFFFF url("data:image/svg+xml;utf8,<svg viewBox='0 0 12 7' xmlns='http://www.w3.org/2000/svg'><path d='M11 1L6.02 6 1 1' stroke-width='1.5' stroke='%23BFC7D8' fill='none' fill-rule='evenodd' stroke-linecap='round'/></svg>") no-repeat center right 16px/10px;
-  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
+  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
+          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
   border: solid 1px #D4D8E3 !important;
   border-radius: 4px;
   color: #697782;
   font-size: 12px;
+  -webkit-transition: background 0.2s ease, -webkit-box-shadow 0.2s ease;
+  transition: background 0.2s ease, -webkit-box-shadow 0.2s ease;
   transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, -webkit-box-shadow 0.2s ease;
   padding: 8px 32px 8px 16px;
   outline: none; }
 
@@ -96,7 +100,8 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-pagination {
   background: #FFFFFF;
-  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: 4px;
   display: inline-block;
@@ -139,7 +144,8 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-price-ranges--input {
   background: #FFFFFF;
-  box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  -webkit-box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+          box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: 4px;
   outline: none; }
@@ -164,7 +170,8 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
   width: 100%;
   height: 46px;
   white-space: nowrap;
-  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   font-size: 14px; }
   .ais-search-box--input {
     appearence: none;
@@ -172,15 +179,20 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
     display: inline-block;
     border: 1px solid #D4D8E3;
     border-radius: 4px;
-    box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+    -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+            box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+    -webkit-transition: background .4s ease, -webkit-box-shadow .4s ease;
+    transition: background .4s ease, -webkit-box-shadow .4s ease;
     transition: box-shadow .4s ease, background .4s ease;
+    transition: box-shadow .4s ease, background .4s ease, -webkit-box-shadow .4s ease;
     padding: 10px 10px 10px 35px;
     vertical-align: middle;
     white-space: normal;
     height: 100%;
     width: 100%; }
     .ais-search-box--input:focus {
-      box-shadow: none;
+      -webkit-box-shadow: none;
+              box-shadow: none;
       outline: 0; }
   .ais-search-box--reset {
     fill: #BFC7D8;
@@ -203,11 +215,13 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
   font-weight: bold; }
 
 [class^=ais-] {
-  box-sizing: border-box; }
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
   [class^=ais-] > *,
   [class^=ais-] > *:after,
   [class^=ais-] > *:before {
-    box-sizing: border-box; }
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box; }
 
 .ais-header {
   border-bottom: 2px solid #EEE;

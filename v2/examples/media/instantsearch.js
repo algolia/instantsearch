@@ -1,4 +1,4 @@
-(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.2.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -5244,13 +5244,21 @@ SearchParameters.prototype = {
    */
   clearRefinements: function clearRefinements(attribute) {
     var clear = RefinementList.clearRefinement;
-    return this.setQueryParameters({
+    var patch = {
       numericRefinements: this._clearNumericRefinements(attribute),
       facetsRefinements: clear(this.facetsRefinements, attribute, 'conjunctiveFacet'),
       facetsExcludes: clear(this.facetsExcludes, attribute, 'exclude'),
       disjunctiveFacetsRefinements: clear(this.disjunctiveFacetsRefinements, attribute, 'disjunctiveFacet'),
       hierarchicalFacetsRefinements: clear(this.hierarchicalFacetsRefinements, attribute, 'hierarchicalFacet')
-    });
+    };
+    if (patch.numericRefinements === this.numericRefinements &&
+        patch.facetsRefinements === this.facetsRefinements &&
+        patch.facetsExcludes === this.facetsExcludes &&
+        patch.disjunctiveFacetsRefinements === this.disjunctiveFacetsRefinements &&
+        patch.hierarchicalFacetsRefinements === this.hierarchicalFacetsRefinements) {
+      return this;
+    }
+    return this.setQueryParameters(patch);
   },
   /**
    * Remove all the refined tags from the SearchParameters
@@ -5503,11 +5511,14 @@ SearchParameters.prototype = {
    */
   _clearNumericRefinements: function _clearNumericRefinements(attribute) {
     if (isUndefined(attribute)) {
+      if (isEmpty(this.numericRefinements)) return this.numericRefinements;
       return {};
     } else if (isString(attribute)) {
+      if (isEmpty(this.numericRefinements[attribute])) return this.numericRefinements;
       return omit(this.numericRefinements, attribute);
     } else if (isFunction(attribute)) {
-      return reduce(this.numericRefinements, function(memo, operators, key) {
+      var hasChanged = false;
+      var newNumericRefinements = reduce(this.numericRefinements, function(memo, operators, key) {
         var operatorList = {};
 
         forEach(operators, function(values, operator) {
@@ -5516,13 +5527,20 @@ SearchParameters.prototype = {
             var predicateResult = attribute({val: value, op: operator}, key, 'numeric');
             if (!predicateResult) outValues.push(value);
           });
-          if (!isEmpty(outValues)) operatorList[operator] = outValues;
+          if (!isEmpty(outValues)) {
+            if (outValues.length !== values.length) hasChanged = true;
+            operatorList[operator] = outValues;
+          }
+          else hasChanged = true;
         });
 
         if (!isEmpty(operatorList)) memo[key] = operatorList;
 
         return memo;
       }, {});
+
+      if (hasChanged) return newNumericRefinements;
+      return this.numericRefinements;
     }
   },
   /**
@@ -6300,6 +6318,10 @@ SearchParameters.prototype = {
     );
     var path = refinement.split(separator);
     return map(path, trim);
+  },
+
+  toString: function() {
+    return JSON.stringify(this, null, 2);
   }
 };
 
@@ -11884,7 +11906,7 @@ module.exports = mapKeys;
 "use strict";
 
 
-module.exports = '2.22.0';
+module.exports = '2.23.0';
 
 
 /***/ }),
@@ -12122,7 +12144,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.2.1';
+exports.default = '2.2.2';
 
 /***/ }),
 /* 181 */
@@ -12705,7 +12727,8 @@ var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(functi
  * @property {string[]} attributes Attributes to use to generate the hierarchy of the menu.
  * @property {string} [separator = '>'] Separator used in the attributes to separate level values.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
- * @property {boolean} [showParentLevel = true] Shows the parent level of the current refined value.
+ * @property {boolean} [showParentLevel=false] Show the siblings of the selected parent levels of the current refined value. This
+ * does not impact the root level.
  * @property {number} [limit = 10] Max number of value to display.
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
@@ -14436,8 +14459,8 @@ var checkUsage = exports.checkUsage = function checkUsage(_ref) {
  * @typedef {Object} CustomRefinementListWidgetOptions
  * @property {string} attributeName The name of the attribute in the records.
  * @property {"and"|"or"} [operator = 'or'] How the filters are combined together.
- * @property {number} [limit = undefined] The max number of items to display when
- * `showMoreLimit` is not or if the widget is showing less value.
+ * @property {number} [limit = 10] The max number of items to display when
+ * `showMoreLimit` is not set or if the widget is showing less value.
  * @property {number} [showMoreLimit] The max number of items to display if the widget
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
@@ -14527,7 +14550,8 @@ function connectRefinementList(renderFn) {
     var attributeName = widgetParams.attributeName,
         _widgetParams$operato = widgetParams.operator,
         operator = _widgetParams$operato === undefined ? 'or' : _widgetParams$operato,
-        limit = widgetParams.limit,
+        _widgetParams$limit = widgetParams.limit,
+        limit = _widgetParams$limit === undefined ? 10 : _widgetParams$limit,
         showMoreLimit = widgetParams.showMoreLimit,
         _widgetParams$sortBy = widgetParams.sortBy,
         sortBy = _widgetParams$sortBy === undefined ? ['isRefined', 'count:desc', 'name:asc'] : _widgetParams$sortBy;
@@ -14578,7 +14602,7 @@ function connectRefinementList(renderFn) {
         canRefine: isFromSearch || items.length > 0,
         widgetParams: widgetParams,
         isShowingMore: isShowingMore,
-        canToggleShowMore: isShowingMore || !hasExhaustiveItems,
+        canToggleShowMore: showMoreLimit ? isShowingMore || !hasExhaustiveItems : false,
         toggleShowMore: toggleShowMore,
         hasExhaustiveItems: hasExhaustiveItems
       }, isFirstSearch);
@@ -14696,9 +14720,11 @@ function connectRefinementList(renderFn) {
             createURL = renderOptions.createURL,
             instantSearchInstance = renderOptions.instantSearchInstance;
 
-        var items = results.getFacetValues(attributeName, { sortBy: sortBy }).slice(0, this.getLimit()).map(formatItems);
 
-        var hasExhaustiveItems = items.length < this.getLimit();
+        var facetValues = results.getFacetValues(attributeName, { sortBy: sortBy });
+        var items = facetValues.slice(0, this.getLimit()).map(formatItems);
+
+        var hasExhaustiveItems = facetValues.length <= this.getLimit();
 
         lastResultsFromMainSearch = items;
 
@@ -16428,14 +16454,16 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
  * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
  * @param {string} facet the name of the faceted attribute
  * @param {string} query the string query for the search
- * @param {number} maxFacetHits the maximum number values returned. Should be > 0 and <= 100
- * @return {promise<FacetSearchResult>} the results of the search
+ * @param {number} [maxFacetHits] the maximum number values returned. Should be > 0 and <= 100
+ * @param {object} [userState] the set of custom parameters to use on top of the current state. Setting a property to `undefined` removes
+ * it in the generated query.
+ * @return {promise.<FacetSearchResult>} the results of the search
  */
-AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxFacetHits) {
-  var state = this.state;
-  var index = this.client.initIndex(this.state.index);
+AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxFacetHits, userState) {
+  var state = this.state.setQueryParameters(userState || {});
+  var index = this.client.initIndex(state.index);
   var isDisjunctive = state.isDisjunctiveFacet(facet);
-  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, this.state);
+  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, state);
 
   this._currentNbQueries++;
   var self = this;
@@ -16468,8 +16496,7 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
  * @chainable
  */
 AlgoliaSearchHelper.prototype.setQuery = function(q) {
-  this.state = this.state.setPage(0).setQuery(q);
-  this._change();
+  this._change(this.state.setPage(0).setQuery(q));
   return this;
 };
 
@@ -16497,8 +16524,7 @@ AlgoliaSearchHelper.prototype.setQuery = function(q) {
  * }).search();
  */
 AlgoliaSearchHelper.prototype.clearRefinements = function(name) {
-  this.state = this.state.setPage(0).clearRefinements(name);
-  this._change();
+  this._change(this.state.setPage(0).clearRefinements(name));
   return this;
 };
 
@@ -16511,8 +16537,7 @@ AlgoliaSearchHelper.prototype.clearRefinements = function(name) {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.clearTags = function() {
-  this.state = this.state.setPage(0).clearTags();
-  this._change();
+  this._change(this.state.setPage(0).clearTags());
   return this;
 };
 
@@ -16528,8 +16553,7 @@ AlgoliaSearchHelper.prototype.clearTags = function() {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement = function(facet, value) {
-  this.state = this.state.setPage(0).addDisjunctiveFacetRefinement(facet, value);
-  this._change();
+  this._change(this.state.setPage(0).addDisjunctiveFacetRefinement(facet, value));
   return this;
 };
 
@@ -16554,8 +16578,7 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function() {
  * @fires change
  */
 AlgoliaSearchHelper.prototype.addHierarchicalFacetRefinement = function(facet, value) {
-  this.state = this.state.setPage(0).addHierarchicalFacetRefinement(facet, value);
-  this._change();
+  this._change(this.state.setPage(0).addHierarchicalFacetRefinement(facet, value));
   return this;
 };
 
@@ -16572,8 +16595,7 @@ AlgoliaSearchHelper.prototype.addHierarchicalFacetRefinement = function(facet, v
  * @chainable
  */
 AlgoliaSearchHelper.prototype.addNumericRefinement = function(attribute, operator, value) {
-  this.state = this.state.setPage(0).addNumericRefinement(attribute, operator, value);
-  this._change();
+  this._change(this.state.setPage(0).addNumericRefinement(attribute, operator, value));
   return this;
 };
 
@@ -16589,8 +16611,7 @@ AlgoliaSearchHelper.prototype.addNumericRefinement = function(attribute, operato
  * @chainable
  */
 AlgoliaSearchHelper.prototype.addFacetRefinement = function(facet, value) {
-  this.state = this.state.setPage(0).addFacetRefinement(facet, value);
-  this._change();
+  this._change(this.state.setPage(0).addFacetRefinement(facet, value));
   return this;
 };
 
@@ -16614,8 +16635,7 @@ AlgoliaSearchHelper.prototype.addRefine = function() {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.addFacetExclusion = function(facet, value) {
-  this.state = this.state.setPage(0).addExcludeRefinement(facet, value);
-  this._change();
+  this._change(this.state.setPage(0).addExcludeRefinement(facet, value));
   return this;
 };
 
@@ -16637,8 +16657,7 @@ AlgoliaSearchHelper.prototype.addExclude = function() {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.addTag = function(tag) {
-  this.state = this.state.setPage(0).addTagRefinement(tag);
-  this._change();
+  this._change(this.state.setPage(0).addTagRefinement(tag));
   return this;
 };
 
@@ -16661,8 +16680,7 @@ AlgoliaSearchHelper.prototype.addTag = function(tag) {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.removeNumericRefinement = function(attribute, operator, value) {
-  this.state = this.state.setPage(0).removeNumericRefinement(attribute, operator, value);
-  this._change();
+  this._change(this.state.setPage(0).removeNumericRefinement(attribute, operator, value));
   return this;
 };
 
@@ -16681,8 +16699,7 @@ AlgoliaSearchHelper.prototype.removeNumericRefinement = function(attribute, oper
  * @chainable
  */
 AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function(facet, value) {
-  this.state = this.state.setPage(0).removeDisjunctiveFacetRefinement(facet, value);
-  this._change();
+  this._change(this.state.setPage(0).removeDisjunctiveFacetRefinement(facet, value));
   return this;
 };
 
@@ -16702,8 +16719,7 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function() {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.removeHierarchicalFacetRefinement = function(facet) {
-  this.state = this.state.setPage(0).removeHierarchicalFacetRefinement(facet);
-  this._change();
+  this._change(this.state.setPage(0).removeHierarchicalFacetRefinement(facet));
 
   return this;
 };
@@ -16723,8 +16739,7 @@ AlgoliaSearchHelper.prototype.removeHierarchicalFacetRefinement = function(facet
  * @chainable
  */
 AlgoliaSearchHelper.prototype.removeFacetRefinement = function(facet, value) {
-  this.state = this.state.setPage(0).removeFacetRefinement(facet, value);
-  this._change();
+  this._change(this.state.setPage(0).removeFacetRefinement(facet, value));
   return this;
 };
 
@@ -16750,8 +16765,7 @@ AlgoliaSearchHelper.prototype.removeRefine = function() {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.removeFacetExclusion = function(facet, value) {
-  this.state = this.state.setPage(0).removeExcludeRefinement(facet, value);
-  this._change();
+  this._change(this.state.setPage(0).removeExcludeRefinement(facet, value));
   return this;
 };
 
@@ -16773,8 +16787,7 @@ AlgoliaSearchHelper.prototype.removeExclude = function() {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.removeTag = function(tag) {
-  this.state = this.state.setPage(0).removeTagRefinement(tag);
-  this._change();
+  this._change(this.state.setPage(0).removeTagRefinement(tag));
   return this;
 };
 
@@ -16790,8 +16803,7 @@ AlgoliaSearchHelper.prototype.removeTag = function(tag) {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.toggleFacetExclusion = function(facet, value) {
-  this.state = this.state.setPage(0).toggleExcludeFacetRefinement(facet, value);
-  this._change();
+  this._change(this.state.setPage(0).toggleExcludeFacetRefinement(facet, value));
   return this;
 };
 
@@ -16836,9 +16848,7 @@ AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.toggleFacetRefinement = function(facet, value) {
-  this.state = this.state.setPage(0).toggleFacetRefinement(facet, value);
-
-  this._change();
+  this._change(this.state.setPage(0).toggleFacetRefinement(facet, value));
   return this;
 };
 
@@ -16860,8 +16870,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function() {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.toggleTag = function(tag) {
-  this.state = this.state.setPage(0).toggleTagRefinement(tag);
-  this._change();
+  this._change(this.state.setPage(0).toggleTagRefinement(tag));
   return this;
 };
 
@@ -16897,8 +16906,7 @@ AlgoliaSearchHelper.prototype.previousPage = function() {
 function setCurrentPage(page) {
   if (page < 0) throw new Error('Page requested below 0.');
 
-  this.state = this.state.setPage(page);
-  this._change();
+  this._change(this.state.setPage(page));
   return this;
 }
 
@@ -16932,8 +16940,7 @@ AlgoliaSearchHelper.prototype.setPage = setCurrentPage;
  * @chainable
  */
 AlgoliaSearchHelper.prototype.setIndex = function(name) {
-  this.state = this.state.setPage(0).setIndex(name);
-  this._change();
+  this._change(this.state.setPage(0).setIndex(name));
   return this;
 };
 
@@ -16955,12 +16962,7 @@ AlgoliaSearchHelper.prototype.setIndex = function(name) {
  * helper.setQueryParameter('hitsPerPage', 20).search();
  */
 AlgoliaSearchHelper.prototype.setQueryParameter = function(parameter, value) {
-  var newState = this.state.setPage(0).setQueryParameter(parameter, value);
-
-  if (this.state === newState) return this;
-
-  this.state = newState;
-  this._change();
+  this._change(this.state.setPage(0).setQueryParameter(parameter, value));
   return this;
 };
 
@@ -16972,8 +16974,7 @@ AlgoliaSearchHelper.prototype.setQueryParameter = function(parameter, value) {
  * @chainable
  */
 AlgoliaSearchHelper.prototype.setState = function(newState) {
-  this.state = SearchParameters.make(newState);
-  this._change();
+  this._change(SearchParameters.make(newState));
   return this;
 };
 
@@ -17456,8 +17457,11 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function(facet) {
     this.state.disjunctiveRefinements[facet].length > 0;
 };
 
-AlgoliaSearchHelper.prototype._change = function() {
-  this.emit('change', this.state, this.lastResults);
+AlgoliaSearchHelper.prototype._change = function(newState) {
+  if (newState !== this.state) {
+    this.state = newState;
+    this.emit('change', this.state, this.lastResults);
+  }
 };
 
 /**
@@ -20955,19 +20959,30 @@ var lib = {
    */
   clearRefinement: function clearRefinement(refinementList, attribute, refinementType) {
     if (isUndefined(attribute)) {
+      if (isEmpty(refinementList)) return refinementList;
       return {};
     } else if (isString(attribute)) {
+      if (isEmpty(refinementList[attribute])) return refinementList;
       return omit(refinementList, attribute);
     } else if (isFunction(attribute)) {
-      return reduce(refinementList, function(memo, values, key) {
+      var hasChanged = false;
+
+      var newRefinementList = reduce(refinementList, function(memo, values, key) {
         var facetList = filter(values, function(value) {
           return !attribute(value, key, refinementType);
         });
 
-        if (!isEmpty(facetList)) memo[key] = facetList;
+        if (!isEmpty(facetList)) {
+          if (facetList.length !== values.length) hasChanged = true;
+          memo[key] = facetList;
+        }
+        else hasChanged = true;
 
         return memo;
       }, {});
+
+      if (hasChanged) return newRefinementList;
+      return refinementList;
     }
   },
   /**
@@ -27651,6 +27666,13 @@ var URLSync = function () {
   }
 
   _createClass(URLSync, [{
+    key: 'init',
+    value: function init(_ref2) {
+      var state = _ref2.state;
+
+      this.initState = state;
+    }
+  }, {
     key: 'getConfiguration',
     value: function getConfiguration(currentConfiguration) {
       // we need to create a REAL helper to then get its state. Because some parameters
@@ -27663,17 +27685,28 @@ var URLSync = function () {
     }
   }, {
     key: 'render',
-    value: function render(_ref2) {
+    value: function render(_ref3) {
       var _this2 = this;
 
-      var helper = _ref2.helper;
+      var helper = _ref3.helper,
+          state = _ref3.state;
 
       if (this.firstRender) {
         this.firstRender = false;
         this.onHistoryChange(this.onPopState.bind(this, helper));
-        helper.on('change', function (state) {
-          return _this2.renderURLFromState(state);
+        helper.on('change', function (s) {
+          return _this2.renderURLFromState(s);
         });
+
+        var initStateQs = this.getQueryString(this.initState);
+        var stateQs = this.getQueryString(state);
+        if (initStateQs !== stateQs) {
+          // force update the URL, if the state has changed since the initial URL read
+          // We do this in order to make a URL update when there is search function
+          // that prevent the search of the initial rendering
+          // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
+          this.renderURLFromState(state);
+        }
       }
     }
   }, {
@@ -27693,27 +27726,31 @@ var URLSync = function () {
     value: function renderURLFromState(state) {
       var _this3 = this;
 
-      var currentQueryString = this.urlUtils.readUrl();
-      var foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString, { mapping: this.mapping });
-
-      var qs = _url2.default.getQueryStringFromState(state.filter(this.trackedParameters), {
-        moreAttributes: foreignConfig,
-        mapping: this.mapping,
-        safe: true
-      });
-
+      var qs = this.getQueryString(state);
       clearTimeout(this.urlUpdateTimeout);
       this.urlUpdateTimeout = setTimeout(function () {
         _this3.urlUtils.pushState(qs, { getHistoryState: _this3.getHistoryState });
       }, this.threshold);
+    }
+  }, {
+    key: 'getQueryString',
+    value: function getQueryString(state) {
+      var currentQueryString = this.urlUtils.readUrl();
+      var foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString, { mapping: this.mapping });
+
+      return _url2.default.getQueryStringFromState(state.filter(this.trackedParameters), {
+        moreAttributes: foreignConfig,
+        mapping: this.mapping,
+        safe: true
+      });
     }
 
     // External API's
 
   }, {
     key: 'createURL',
-    value: function createURL(state, _ref3) {
-      var absolute = _ref3.absolute;
+    value: function createURL(state, _ref4) {
+      var absolute = _ref4.absolute;
 
       var filteredState = state.filter(this.trackedParameters);
 
@@ -31441,7 +31478,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separator=\' > \' ],\n  [ rootPath ],\n  [ showParentLevel=true ],\n  [ limit=10 ],\n  [ sortBy=[\'name:asc\'] ],\n  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],\n  [ templates.{header, item, footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ]\n})';
+var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separator=\' > \' ],\n  [ rootPath ],\n  [ showParentLevel=false ],\n  [ limit=10 ],\n  [ sortBy=[\'name:asc\'] ],\n  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],\n  [ templates.{header, item, footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ]\n})';
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
@@ -31475,7 +31512,28 @@ var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separa
  * @property {number} [limit=10] How much facet values to get [*].
  * @property {string} [separator=" > "] Separator used in the attributes to separate level values. [*].
  * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
- * @property {string} [showParentLevel=false] Show the parent level of the current refined value.
+ * @property {boolean} [showParentLevel=true] Show the siblings of the selected parent level of the current refined value. This
+ * does not impact the root level.
+ *
+ * The hierarchical menu is able to show or hide the siblings with `showParentLevel`.
+ *
+ * With `showParentLevel` set to `true` (default):
+ * - Parent lvl0
+ *   - **lvl1**
+ *     - **lvl2**
+ *     - lvl2
+ *     - lvl2
+ *   - lvl 1
+ *   - lvl 1
+ * - Parent lvl0
+ * - Parent lvl0
+ *
+ * With `showParentLevel` set to `false`:
+ * - Parent lvl0
+ *   - **lvl1**
+ *     - **lvl2**
+ * - Parent lvl0
+ * - Parent lvl0
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
@@ -33194,7 +33252,7 @@ var usage = 'Usage:\nnumericRefinementList({\n  container,\n  attributeName,\n  
 /**
  * @typedef {Object} NumericRefinementListTemplates
  * @property {string|function} [header] Header template.
- * @property {string|function} [item] Item template, provided with `name`, `isRefined`, `url` data properties.
+ * @property {string|function} [item] Item template, provided with `label` (the name in the configuration), `isRefined`, `url`, `value` (the setting for the filter) data properties.
  * @property {string|function} [footer] Footer template.
  */
 
@@ -35435,7 +35493,9 @@ function rangeSlider() {
       _ref3$tooltips = _ref3.tooltips,
       tooltips = _ref3$tooltips === undefined ? true : _ref3$tooltips,
       _ref3$autoHideContain = _ref3.autoHideContainer,
-      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain;
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      _ref3$collapsible = _ref3.collapsible,
+      collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible;
 
   if (!container) {
     throw new Error(usage);
@@ -35457,6 +35517,7 @@ function rangeSlider() {
     renderState: {},
     templates: templates,
     autoHideContainer: autoHideContainer,
+    collapsible: collapsible,
     cssClasses: cssClasses
   });
 
@@ -35504,9 +35565,9 @@ var _preactCompat = __webpack_require__(1);
 
 var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
-var _rheostat = __webpack_require__(446);
+var _preactRheostat = __webpack_require__(446);
 
-var _rheostat2 = _interopRequireDefault(_rheostat);
+var _preactRheostat2 = _interopRequireDefault(_preactRheostat);
 
 var _classnames = __webpack_require__(3);
 
@@ -35629,7 +35690,7 @@ var RawSlider = exports.RawSlider = function (_Component) {
       return _preactCompat2.default.createElement(
         'div',
         { className: this.isDisabled ? 'ais-range-slider--disabled' : '' },
-        _preactCompat2.default.createElement(_rheostat2.default, {
+        _preactCompat2.default.createElement(_preactRheostat2.default, {
           handle: this.createHandleComponent(tooltips),
           onChange: this.handleChange,
           min: min,
@@ -38131,9 +38192,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(1);
+var _preactCompat = __webpack_require__(1);
 
-var _react2 = _interopRequireDefault(_react);
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
 var _propTypes = __webpack_require__(4);
 
@@ -38195,27 +38256,27 @@ var MenuSelect = function (_Component) {
       },
           selectedValue = _ref3.value;
 
-      return _react2.default.createElement(
+      return _preactCompat2.default.createElement(
         'select',
         {
           className: cssClasses.select,
           value: selectedValue,
           onChange: this.handleSelectChange
         },
-        _react2.default.createElement(
+        _preactCompat2.default.createElement(
           'option',
           { value: '', className: cssClasses.option },
-          _react2.default.createElement(_Template2.default, _extends({ templateKey: 'seeAllOption' }, templateProps))
+          _preactCompat2.default.createElement(_Template2.default, _extends({ templateKey: 'seeAllOption' }, templateProps))
         ),
         items.map(function (item) {
-          return _react2.default.createElement(
+          return _preactCompat2.default.createElement(
             'option',
             {
               key: item.value,
               value: item.value,
               className: cssClasses.option
             },
-            _react2.default.createElement(_Template2.default, _extends({ data: item, templateKey: 'item' }, templateProps))
+            _preactCompat2.default.createElement(_Template2.default, _extends({ data: item, templateKey: 'item' }, templateProps))
           );
         })
       );
@@ -38223,7 +38284,7 @@ var MenuSelect = function (_Component) {
   }]);
 
   return MenuSelect;
-}(_react.Component);
+}(_preactCompat.Component);
 
 exports.default = (0, _autoHideContainer2.default)((0, _headerFooter2.default)(MenuSelect));
 
