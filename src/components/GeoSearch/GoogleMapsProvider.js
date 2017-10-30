@@ -25,6 +25,7 @@ class GoogleMapsProvider extends Component {
     refine: PropTypes.func.isRequired,
     clearRefinementWithMap: PropTypes.func.isRequired,
     isRefinedWithMap: PropTypes.bool.isRequired,
+    isRefinePositionChanged: PropTypes.bool.isRequired,
     enableRefineOnMapMove: PropTypes.bool.isRequired,
   };
 
@@ -54,11 +55,18 @@ class GoogleMapsProvider extends Component {
       markers,
     };
 
+    // Restore hasMapMoveSinceLastRefine when refinement change
+    // but the refinement is not with the map
+    // ex: with places we can set the refinement with the
+    // autocomplete bar & we can move the map without
+    // the refine action
+    if (nextProps.isRefinePositionChanged && !nextProps.isRefinedWithMap) {
+      this.hasMapMoveSinceLastRefine = false;
+    }
+
     // Avoid the state? Probably don't need it since the map has
     // it's own state and we read everything from it.
     if (markers.length && !nextProps.isRefinedWithMap) {
-      this.hasMapMoveSinceLastRefine = false;
-
       const bounds = this.computeBoundsFromMarker(markers);
 
       nextState.zoom = this.computeZoomFromBounds(bounds);
@@ -158,7 +166,13 @@ class GoogleMapsProvider extends Component {
             justifyContent: 'space-between',
           }}
         >
-          <button onClick={clearRefinementWithMap} disabled={!isRefinedWithMap}>
+          <button
+            onClick={() => {
+              this.hasMapMoveSinceLastRefine = false;
+              clearRefinementWithMap();
+            }}
+            disabled={!isRefinedWithMap}
+          >
             Clear the refinement with the current map view
           </button>
 

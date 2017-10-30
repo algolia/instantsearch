@@ -7,6 +7,7 @@ const renderer = ({
   refine,
   clearRefinementWithMap,
   isRefinedWithMap,
+  isRefinePositionChanged,
   enableRefineOnMapMove,
   widgetParams,
 }) => {
@@ -32,6 +33,7 @@ const renderer = ({
       refine={refine}
       clearRefinementWithMap={clearRefinementWithMap}
       isRefinedWithMap={isRefinedWithMap}
+      isRefinePositionChanged={isRefinePositionChanged}
       enableRefineOnMapMove={enableRefineOnMapMove}
     />,
     getContainerNode(container)
