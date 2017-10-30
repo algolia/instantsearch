@@ -120,7 +120,7 @@ class URLSync {
     );
   }
 
-  init({state}) {
+  init({ state }) {
     this.initState = state;
   }
 
@@ -144,7 +144,6 @@ class URLSync {
 
       const initStateQs = this.getQueryString(this.initState);
       const stateQs = this.getQueryString(state);
-      console.log(initStateQs, stateQs);
       if (initStateQs !== stateQs) {
         // force update the URL, if the state has changed since the initial URL read
         // We do this in order to make a URL update when there is search function
