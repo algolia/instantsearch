@@ -5,6 +5,19 @@ import instantsearch from '../../index.js';
 import wrapWithHits from './wrap-with-hits.js';
 
 export default () => {
+  storiesOf('instantsearch').add(
+    'With searchfunction that prevent search',
+    wrapWithHits(() => {}, {
+      searchFunction: helper => {
+        const query = helper.state.query;
+        if (query === '') {
+          return;
+        }
+        helper.search();
+      },
+    })
+  );
+
   storiesOf('Analytics').add(
     'default',
     wrapWithHits(container => {

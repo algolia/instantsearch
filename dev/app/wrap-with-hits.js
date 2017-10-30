@@ -1,18 +1,20 @@
 /* eslint-disable import/default */
+import { action } from 'dev-novel';
 
 import instantsearch from '../../index.js';
 import item from './templates/item.html';
 import empty from './templates/no-results.html';
 
-export default (
-  initWidget,
-  {
+export default (initWidget, instantSearchConfig = {}) => container => {
+  const {
     appId = 'latency',
     apiKey = '6be0576ff61c053d5f9a3225e2a90f76',
     indexName = 'instant_search',
     searchParameters = {},
-  } = {}
-) => container => {
+    ...otherInstantSearchConfig
+  } = instantSearchConfig;
+
+  const urlLogger = action('[URL sync] pushstate: query string');
   window.search = instantsearch({
     appId,
     apiKey,
@@ -21,6 +23,21 @@ export default (
       hitsPerPage: 3,
       ...searchParameters,
     },
+    urlSync: {
+      urlUtils: {
+        onpopstate() {},
+        pushState(qs) {
+          urlLogger(this.createURL(qs));
+        },
+        createURL(qs) {
+          return qs;
+        },
+        readUrl() {
+          return '';
+        },
+      },
+    },
+    ...otherInstantSearchConfig,
   });
 
   container.innerHTML = `
