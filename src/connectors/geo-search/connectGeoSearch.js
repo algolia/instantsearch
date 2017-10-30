@@ -76,6 +76,7 @@ export default function connectGeoSearch(fn) {
             hits: [],
             refine: refine(helper),
             clearRefinementWithMap: clearRefinementWithMap(helper),
+            isRefinePositionChanged: false,
             enableRefineOnMapMove,
             instantSearchInstance,
             widgetParams,
@@ -86,22 +87,24 @@ export default function connectGeoSearch(fn) {
 
       render({ results, helper, instantSearchInstance }) {
         const isFirstRendering = false;
-        const currentPosition = helper.getQueryParameter('aroundLatLng');
+        const currentRefinePosition = helper.getQueryParameter('aroundLatLng');
         const currentPositionIP = helper.getQueryParameter('aroundLatLngViaIP');
         const currentBox = helper.getQueryParameter('insideBoundingBox');
+        const isRefinePositionChanged =
+          state.lastRefinePosition !== currentRefinePosition;
 
         // Hacky condition for enable to override the current search
         // when we currently refine with the map. It avoid the rendering
         // and trigger a search without the boundingBox. We defenitly
         // need to find an other solutions...
-        if (currentBox && state.lastRefinePosition !== currentPosition) {
+        if (currentBox && isRefinePositionChanged) {
           clearRefinementWithMap(helper)();
 
           return;
         }
 
         // Pretty mulch the same with IP
-        if (currentPositionIP && state.lastRefinePosition !== currentPosition) {
+        if (currentPositionIP && isRefinePositionChanged) {
           helper.setQueryParameter('aroundLatLngViaIP', false).search();
 
           return;
@@ -115,6 +118,7 @@ export default function connectGeoSearch(fn) {
             hits: results.hits.filter(h => h._geoloc),
             refine: refine(helper),
             clearRefinementWithMap: clearRefinementWithMap(helper),
+            isRefinePositionChanged,
             enableRefineOnMapMove,
             instantSearchInstance,
             widgetParams,
