@@ -10,6 +10,7 @@ import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
 import initNumericSelectorStories from './stories/numeric-selector.stories';
+import initPaginationStories from './stories/pagination.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -24,18 +25,7 @@ export default () => {
   initMenuStories();
   initNumericRefinementListStories();
   initNumericSelectorStories();
-
-  storiesOf('Pagination').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.pagination({
-          containerNode,
-          maxPages: 20,
-        })
-      );
-    })
-  );
+  initPaginationStories();
 
   storiesOf('RefinementList').add(
     'default',
