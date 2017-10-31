@@ -1,8 +1,11 @@
 import { storiesOf } from 'dev-novel';
 import { wrapWithHits } from '../utils/wrap-with-hits.js';
 import * as widgets from './widgets/index.js';
+import initClearAllStories from './stories/clear-all.stories';
 
 export default () => {
+  initClearAllStories();
+
   storiesOf('SearchBox')
     .add(
       'default',
@@ -32,13 +35,6 @@ export default () => {
         );
       })
     );
-
-  storiesOf('ClearAll').add(
-    'default',
-    wrapWithHits(containerNode => {
-      window.search.addWidget(widgets.clearAll({ containerNode }));
-    })
-  );
 
   storiesOf('Hits').add(
     'default',
