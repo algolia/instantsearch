@@ -13,6 +13,7 @@ import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
+import initSearchBoxStories from './stories/search-box.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -30,15 +31,7 @@ export default () => {
   initPaginationStories();
   initPriceRangesStories();
   initRefinementListStories();
-
-  storiesOf('SearchBox').add(
-    'default',
-    wrap(containerNode => {
-      const inputNode = document.createElement('input');
-      containerNode.appendChild(inputNode);
-      window.search.addWidget(widgets.searchBox({ inputNode }));
-    })
-  );
+  initSearchBoxStories();
 
   storiesOf('SortBySelector').add(
     'default',
