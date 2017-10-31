@@ -4,6 +4,7 @@ import * as widgets from './widgets/index.js';
 import initClearAllStories from './stories/clear-all.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
+import initHitsStories from './stories/hits.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -12,6 +13,7 @@ export default () => {
   initClearAllStories();
   initCurrentRefinedValuesStories();
   initHierarchicalMenuStories();
+  initHitsStories();
 
   storiesOf('Pagination').add(
     'default',
@@ -65,13 +67,6 @@ export default () => {
           ],
         })
       );
-    })
-  );
-
-  storiesOf('Hits').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(widgets.hits({ containerNode }));
     })
   );
 
