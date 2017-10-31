@@ -6,6 +6,7 @@ import initCurrentRefinedValuesStories from './stories/current-refined-values.st
 import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
 import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
+import initInfiniteHitsStories from './stories/infinite-hits.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -16,6 +17,7 @@ export default () => {
   initHierarchicalMenuStories();
   initHitsStories();
   initHitsPerPageSelectorStories();
+  initInfiniteHitsStories();
 
   storiesOf('Pagination').add(
     'default',
@@ -175,13 +177,6 @@ export default () => {
           title: 'Free Shipping',
         })
       );
-    })
-  );
-
-  storiesOf('InfiniteHits').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(widgets.infiniteHits({ containerNode }));
     })
   );
 };
