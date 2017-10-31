@@ -2,12 +2,14 @@ import { storiesOf } from 'dev-novel';
 import { wrapWithHits } from '../utils/wrap-with-hits.js';
 import * as widgets from './widgets/index.js';
 import initClearAllStories from './stories/clear-all.stories';
+import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
 
 export default () => {
   initClearAllStories();
+  initCurrentRefinedValuesStories();
 
   storiesOf('Pagination').add(
     'default',
@@ -47,13 +49,6 @@ export default () => {
         );
       })
     );
-
-  storiesOf('CurrentRefinedValues').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(widgets.currentRefinedValues({ containerNode }));
-    })
-  );
 
   storiesOf('HitsPerPageSelector').add(
     'default',
