@@ -15,6 +15,7 @@ import initPriceRangesStories from './stories/price-ranges.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
 import initSortBySelectorStories from './stories/sort-by-selector.stories';
+import initStarRatingStories from './stories/star-rating.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -34,16 +35,7 @@ export default () => {
   initRefinementListStories();
   initSearchBoxStories();
   initSortBySelectorStories();
-
-  storiesOf('StarRating').add('default', containerNode => {
-    window.search.addWidget(
-      widgets.starRating({
-        containerNode,
-        attributeName: 'rating',
-        max: 5,
-      })
-    );
-  });
+  initStarRatingStories();
 
   storiesOf('Stats').add(
     'default',
