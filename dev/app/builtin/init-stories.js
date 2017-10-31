@@ -20,6 +20,7 @@ import initRangeSliderStories from './stories/range-slider.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
 import initSortBySelector from './stories/sort-by-selector.stories';
+import initStatsStories from './stories/stats.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -39,13 +40,7 @@ export default () => {
   initRefinementListStories();
   initSearchBoxStories();
   initSortBySelector();
-
-  storiesOf('Stats').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(instantsearch.widgets.stats({ container }));
-    })
-  );
+  initStatsStories();
 
   storiesOf('StarRating').add(
     'default',
