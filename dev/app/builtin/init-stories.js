@@ -12,6 +12,7 @@ import initHitsStories from './stories/hits.stories';
 import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initMenuStories from './stories/menu.stories';
+import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -23,6 +24,7 @@ export default () => {
   initHitsPerPageSelectorStories();
   initInfiniteHitsStories();
   initMenuStories();
+  initNumericRefinementListStories();
 
   storiesOf('SearchBox')
     .add(
@@ -222,35 +224,6 @@ export default () => {
           },
           templates: {
             header: 'Rating',
-          },
-        })
-      );
-    })
-  );
-
-  storiesOf('NumericRefinementList').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.numericRefinementList({
-          container,
-          attributeName: 'price',
-          operator: 'or',
-          options: [
-            { name: 'All' },
-            { end: 4, name: 'less than 4' },
-            { start: 4, end: 4, name: '4' },
-            { start: 5, end: 10, name: 'between 5 and 10' },
-            { start: 10, name: 'more than 10' },
-          ],
-          cssClasses: {
-            header: 'facet-title',
-            link: 'facet-value',
-            count: 'facet-count pull-right',
-            active: 'facet-active',
-          },
-          templates: {
-            header: 'Numeric refinement list (price)',
           },
         })
       );
