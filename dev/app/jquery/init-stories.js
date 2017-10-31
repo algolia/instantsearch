@@ -1,5 +1,5 @@
 import { storiesOf } from 'dev-novel';
-import wrapWithHits from '../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../utils/wrap-with-hits.js';
 import * as widgets from './widgets/index.js';
 
 // transform `container` to jQuery object
