@@ -3,6 +3,7 @@ import { wrapWithHits } from '../utils/wrap-with-hits.js';
 import * as widgets from './widgets/index.js';
 import initClearAllStories from './stories/clear-all.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
+import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -10,6 +11,7 @@ const wrap = fn => wrapWithHits(container => fn(window.$(container)));
 export default () => {
   initClearAllStories();
   initCurrentRefinedValuesStories();
+  initHierarchicalMenuStories();
 
   storiesOf('Pagination').add(
     'default',
@@ -60,22 +62,6 @@ export default () => {
             { value: 3, label: '3 per page' },
             { value: 5, label: '5 per page' },
             { value: 10, label: '10 per page' },
-          ],
-        })
-      );
-    })
-  );
-
-  storiesOf('HierarchicalMenu').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.hierarchicalMenu({
-          containerNode,
-          attributes: [
-            'hierarchicalCategories.lvl0',
-            'hierarchicalCategories.lvl1',
-            'hierarchicalCategories.lvl2',
           ],
         })
       );
