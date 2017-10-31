@@ -9,6 +9,7 @@ import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.sto
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
+import initNumericSelectorStories from './stories/numeric-selector.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -22,6 +23,7 @@ export default () => {
   initInfiniteHitsStories();
   initMenuStories();
   initNumericRefinementListStories();
+  initNumericSelectorStories();
 
   storiesOf('Pagination').add(
     'default',
@@ -45,25 +47,6 @@ export default () => {
           operator: 'or',
           limit: 10,
           title: 'Brands',
-        })
-      );
-    })
-  );
-
-  storiesOf('NumericSelector').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.numericSelector({
-          containerNode,
-          operator: '>=',
-          attributeName: 'popularity',
-          options: [
-            { label: 'Default', value: 0 },
-            { label: 'Top 10', value: 9991 },
-            { label: 'Top 100', value: 9901 },
-            { label: 'Top 500', value: 9501 },
-          ],
         })
       );
     })
