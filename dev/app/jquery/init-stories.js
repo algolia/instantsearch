@@ -12,6 +12,7 @@ import initNumericRefinementListStories from './stories/numeric-refinement-list.
 import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
+import initRefinementListStories from './stories/refinement-list.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -28,21 +29,7 @@ export default () => {
   initNumericSelectorStories();
   initPaginationStories();
   initPriceRangesStories();
-
-  storiesOf('RefinementList').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.refinementList({
-          containerNode,
-          attributeName: 'brand',
-          operator: 'or',
-          limit: 10,
-          title: 'Brands',
-        })
-      );
-    })
-  );
+  initRefinementListStories();
 
   storiesOf('SearchBox').add(
     'default',
