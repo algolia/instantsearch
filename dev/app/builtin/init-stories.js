@@ -14,6 +14,7 @@ import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
 import initNumericSelectorStories from './stories/numeric-selector.stories';
+import initPaginationStories from './stories/pagination.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -27,6 +28,7 @@ export default () => {
   initMenuStories();
   initNumericRefinementListStories();
   initNumericSelectorStories();
+  initPaginationStories();
 
   storiesOf('SearchBox')
     .add(
@@ -86,18 +88,6 @@ export default () => {
             { name: 'instant_search_price_asc', label: 'Lowest price' },
             { name: 'instant_search_price_desc', label: 'Highest price' },
           ],
-        })
-      );
-    })
-  );
-
-  storiesOf('Pagination').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.pagination({
-          container,
-          maxPages: 20,
         })
       );
     })
