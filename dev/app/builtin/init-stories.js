@@ -15,6 +15,7 @@ import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
 import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
+import initPriceRangesStories from './stories/price-ranges.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -29,6 +30,7 @@ export default () => {
   initNumericRefinementListStories();
   initNumericSelectorStories();
   initPaginationStories();
+  initPriceRangesStories();
 
   storiesOf('SearchBox')
     .add(
@@ -431,19 +433,4 @@ export default () => {
         );
       })
     );
-
-  storiesOf('PriceRanges').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.priceRanges({
-          container,
-          attributeName: 'price',
-          templates: {
-            header: 'Price ranges',
-          },
-        })
-      );
-    })
-  );
 };
