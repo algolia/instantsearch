@@ -19,6 +19,7 @@ import initPriceRangesStories from './stories/price-ranges.stories';
 import initRangeSliderStories from './stories/range-slider.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
+import initSortBySelector from './stories/sort-by-selector.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -37,27 +38,12 @@ export default () => {
   initRangeSliderStories();
   initRefinementListStories();
   initSearchBoxStories();
+  initSortBySelector();
 
   storiesOf('Stats').add(
     'default',
     wrapWithHits(container => {
       window.search.addWidget(instantsearch.widgets.stats({ container }));
-    })
-  );
-
-  storiesOf('SortBySelector').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.sortBySelector({
-          container,
-          indices: [
-            { name: 'instant_search', label: 'Most relevant' },
-            { name: 'instant_search_price_asc', label: 'Lowest price' },
-            { name: 'instant_search_price_desc', label: 'Highest price' },
-          ],
-        })
-      );
     })
   );
 
