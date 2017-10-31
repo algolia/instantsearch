@@ -1,11 +1,14 @@
 import { storiesOf } from 'dev-novel';
 import { wrapWithHits } from '../utils/wrap-with-hits.js';
 import * as widgets from './widgets/index.js';
+import initClearAllStories from './stories/clear-all.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
 
 export default () => {
+  initClearAllStories();
+
   storiesOf('Pagination').add(
     'default',
     wrap(containerNode => {
@@ -44,13 +47,6 @@ export default () => {
         );
       })
     );
-
-  storiesOf('ClearAll').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(widgets.clearAll({ containerNode }));
-    })
-  );
 
   storiesOf('CurrentRefinedValues').add(
     'default',
