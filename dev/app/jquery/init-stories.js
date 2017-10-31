@@ -8,6 +8,7 @@ import initHitsStories from './stories/hits.stories';
 import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initMenuStories from './stories/menu.stories';
+import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -20,6 +21,7 @@ export default () => {
   initHitsPerPageSelectorStories();
   initInfiniteHitsStories();
   initMenuStories();
+  initNumericRefinementListStories();
 
   storiesOf('Pagination').add(
     'default',
@@ -61,26 +63,6 @@ export default () => {
             { label: 'Top 10', value: 9991 },
             { label: 'Top 100', value: 9901 },
             { label: 'Top 500', value: 9501 },
-          ],
-        })
-      );
-    })
-  );
-
-  storiesOf('NumericRefinementList').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.numericRefinementList({
-          containerNode,
-          attributeName: 'price',
-          operator: 'or',
-          options: [
-            { name: 'All' },
-            { end: 4, name: 'less than 4' },
-            { start: 4, end: 4, name: '4' },
-            { start: 5, end: 10, name: 'between 5 and 10' },
-            { start: 10, name: 'more than 10' },
           ],
         })
       );
