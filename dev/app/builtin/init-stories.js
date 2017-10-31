@@ -8,6 +8,7 @@ import initAnalyticsStories from './stories/analytics.stories';
 import initClearAllStories from './stories/clear-all.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
+import initHitsStories from './stories/hits.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -15,6 +16,7 @@ export default () => {
   initClearAllStories();
   initCurrentRefinedValuesStories();
   initHierarchicalMenu();
+  initHitsStories();
 
   storiesOf('SearchBox')
     .add(
@@ -110,13 +112,6 @@ export default () => {
         );
       })
     );
-
-  storiesOf('Hits').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(instantsearch.widgets.hits({ container }));
-    })
-  );
 
   storiesOf('InfiniteHits')
     .add(
