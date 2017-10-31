@@ -19,7 +19,8 @@ import initPriceRangesStories from './stories/price-ranges.stories';
 import initRangeSliderStories from './stories/range-slider.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
-import initSortBySelector from './stories/sort-by-selector.stories';
+import initSortBySelectorStories from './stories/sort-by-selector.stories';
+import initStarRatingStories from './stories/star-rating.stories';
 import initStatsStories from './stories/stats.stories';
 
 export default () => {
@@ -39,27 +40,9 @@ export default () => {
   initRangeSliderStories();
   initRefinementListStories();
   initSearchBoxStories();
-  initSortBySelector();
+  initSortBySelectorStories();
   initStatsStories();
-
-  storiesOf('StarRating').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.starRating({
-          container,
-          attributeName: 'rating',
-          max: 5,
-          labels: {
-            andUp: '& Up',
-          },
-          templates: {
-            header: 'Rating',
-          },
-        })
-      );
-    })
-  );
+  initStarRatingStories();
 
   storiesOf('Toggle')
     .add(
