@@ -11,6 +11,7 @@ import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
 import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
+import initPriceRangesStories from './stories/price-ranges.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -26,6 +27,7 @@ export default () => {
   initNumericRefinementListStories();
   initNumericSelectorStories();
   initPaginationStories();
+  initPriceRangesStories();
 
   storiesOf('RefinementList').add(
     'default',
@@ -37,18 +39,6 @@ export default () => {
           operator: 'or',
           limit: 10,
           title: 'Brands',
-        })
-      );
-    })
-  );
-
-  storiesOf('PriceRanges').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.priceRanges({
-          containerNode,
-          attributeName: 'price',
         })
       );
     })
