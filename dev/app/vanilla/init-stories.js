@@ -3,10 +3,12 @@ import { wrapWithHits } from '../utils/wrap-with-hits.js';
 import * as widgets from './widgets/index.js';
 import initClearAllStories from './stories/clear-all.stories';
 import initHitsStories from './stories/hits.stories';
+import initMenuStories from './stories/menu.stories';
 
 export default () => {
   initClearAllStories();
   initHitsStories();
+  initMenuStories();
 
   storiesOf('SearchBox')
     .add(
@@ -37,20 +39,6 @@ export default () => {
         );
       })
     );
-
-  storiesOf('Menu').add(
-    'select',
-    wrapWithHits(containerNode => {
-      window.search.addWidget(
-        widgets.selectMenu({
-          containerNode,
-          attributeName: 'brand',
-          limit: 10,
-          title: 'Brands',
-        })
-      );
-    })
-  );
 
   storiesOf('RefinementList').add(
     'default',
