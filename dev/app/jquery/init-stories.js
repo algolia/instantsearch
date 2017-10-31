@@ -1,6 +1,3 @@
-import { storiesOf } from 'dev-novel';
-import { wrapWithHits } from '../utils/wrap-with-hits.js';
-import * as widgets from './widgets/index.js';
 import initClearAllStories from './stories/clear-all.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
@@ -17,9 +14,7 @@ import initSearchBoxStories from './stories/search-box.stories';
 import initSortBySelectorStories from './stories/sort-by-selector.stories';
 import initStarRatingStories from './stories/star-rating.stories';
 import initStatsStories from './stories/stats.stories';
-
-// transform `container` to jQuery object
-const wrap = fn => wrapWithHits(container => fn(window.$(container)));
+import initToggleStories from './stories/toggle.stories';
 
 export default () => {
   initClearAllStories();
@@ -38,18 +33,5 @@ export default () => {
   initSortBySelectorStories();
   initStarRatingStories();
   initStatsStories();
-
-  storiesOf('Toggle').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.toggle({
-          containerNode,
-          attributeName: 'free_shipping',
-          label: 'Free Shipping (toggle single value)',
-          title: 'Free Shipping',
-        })
-      );
-    })
-  );
+  initToggleStories();
 };
