@@ -14,6 +14,7 @@ import initPaginationStories from './stories/pagination.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
+import initSortBySelectorStories from './stories/sort-by-selector.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -32,22 +33,7 @@ export default () => {
   initPriceRangesStories();
   initRefinementListStories();
   initSearchBoxStories();
-
-  storiesOf('SortBySelector').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.sortBySelector({
-          containerNode,
-          indices: [
-            { name: 'instant_search', label: 'Most relevant' },
-            { name: 'instant_search_price_asc', label: 'Lowest price' },
-            { name: 'instant_search_price_desc', label: 'Highest price' },
-          ],
-        })
-      );
-    })
-  );
+  initSortBySelectorStories();
 
   storiesOf('StarRating').add('default', containerNode => {
     window.search.addWidget(
