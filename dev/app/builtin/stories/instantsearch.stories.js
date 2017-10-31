@@ -3,7 +3,7 @@
 import { storiesOf } from 'dev-novel';
 import wrapWithHits from '../../utils/wrap-with-hits.js';
 
-const stories = storiesOf('instantsearch');
+const stories = storiesOf('Instantsearch');
 
 export default () => {
   stories.add(
