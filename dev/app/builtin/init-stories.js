@@ -10,6 +10,7 @@ import initCurrentRefinedValuesStories from './stories/current-refined-values.st
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
 import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
+import initInfiniteHitsStories from './stories/infinite-hits.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -19,6 +20,7 @@ export default () => {
   initHierarchicalMenu();
   initHitsStories();
   initHitsPerPageSelectorStories();
+  initInfiniteHitsStories();
 
   storiesOf('SearchBox')
     .add(
@@ -82,45 +84,6 @@ export default () => {
       );
     })
   );
-
-  storiesOf('InfiniteHits')
-    .add(
-      'default',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.infiniteHits({
-            container,
-            showMoreLabel: 'Show more',
-            templates: {
-              item: '{{name}}',
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'with custom css classes',
-      wrapWithHits(container => {
-        const style = window.document.createElement('style');
-        window.document.head.appendChild(style);
-        style.sheet.insertRule(
-          '.button button{border: 1px solid black; background: #fff;}'
-        );
-
-        window.search.addWidget(
-          instantsearch.widgets.infiniteHits({
-            container,
-            showMoreLabel: 'Show more',
-            cssClasses: {
-              showmore: 'button',
-            },
-            templates: {
-              item: '{{name}}',
-            },
-          })
-        );
-      })
-    );
 
   storiesOf('Pagination').add(
     'default',
