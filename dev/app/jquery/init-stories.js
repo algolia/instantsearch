@@ -5,6 +5,7 @@ import initClearAllStories from './stories/clear-all.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
+import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -14,6 +15,7 @@ export default () => {
   initCurrentRefinedValuesStories();
   initHierarchicalMenuStories();
   initHitsStories();
+  initHitsPerPageSelectorStories();
 
   storiesOf('Pagination').add(
     'default',
@@ -53,22 +55,6 @@ export default () => {
         );
       })
     );
-
-  storiesOf('HitsPerPageSelector').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(
-        widgets.hitsPerPageSelector({
-          containerNode,
-          items: [
-            { value: 3, label: '3 per page' },
-            { value: 5, label: '5 per page' },
-            { value: 10, label: '10 per page' },
-          ],
-        })
-      );
-    })
-  );
 
   storiesOf('RefinementList').add(
     'default',
