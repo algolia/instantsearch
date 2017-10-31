@@ -16,6 +16,7 @@ import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
 import initSortBySelectorStories from './stories/sort-by-selector.stories';
 import initStarRatingStories from './stories/star-rating.stories';
+import initStatsStories from './stories/stats.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -36,13 +37,7 @@ export default () => {
   initSearchBoxStories();
   initSortBySelectorStories();
   initStarRatingStories();
-
-  storiesOf('Stats').add(
-    'default',
-    wrap(containerNode => {
-      window.search.addWidget(widgets.stats({ containerNode }));
-    })
-  );
+  initStatsStories();
 
   storiesOf('Toggle').add(
     'default',
