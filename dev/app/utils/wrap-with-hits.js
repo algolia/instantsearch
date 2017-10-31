@@ -1,9 +1,9 @@
 /* eslint-disable import/default */
-import { action } from 'dev-novel';
 
-import instantsearch from '../../index.js';
-import item from './templates/item.html';
-import empty from './templates/no-results.html';
+import { action } from 'dev-novel';
+import instantsearch from '../../../index.js';
+import item from './item.html';
+import empty from './no-results.html';
 
 export default (initWidget, instantSearchConfig = {}) => container => {
   const {

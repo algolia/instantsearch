@@ -1,8 +1,6 @@
-/* eslint-disable import/default */
 import { storiesOf } from 'dev-novel';
-import * as jqueryWidgets from './custom-widgets/jquery/index.js';
-
-import wrapWithHits from './wrap-with-hits.js';
+import wrapWithHits from '../utils/wrap-with-hits.js';
+import * as widgets from './widgets/index.js';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -12,7 +10,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.pagination({
+        widgets.pagination({
           containerNode,
           maxPages: 20,
         })
@@ -25,7 +23,7 @@ export default () => {
       'default',
       wrap(containerNode => {
         window.search.addWidget(
-          jqueryWidgets.menu({
+          widgets.menu({
             containerNode,
             attributeName: 'categories',
             limit: 3,
@@ -37,7 +35,7 @@ export default () => {
       'with show more',
       wrap(containerNode => {
         window.search.addWidget(
-          jqueryWidgets.showMoreMenu({
+          widgets.showMoreMenu({
             containerNode,
             attributeName: 'categories',
             limit: 3,
@@ -50,16 +48,14 @@ export default () => {
   storiesOf('ClearAll').add(
     'default',
     wrap(containerNode => {
-      window.search.addWidget(jqueryWidgets.clearAll({ containerNode }));
+      window.search.addWidget(widgets.clearAll({ containerNode }));
     })
   );
 
   storiesOf('CurrentRefinedValues').add(
     'default',
     wrap(containerNode => {
-      window.search.addWidget(
-        jqueryWidgets.currentRefinedValues({ containerNode })
-      );
+      window.search.addWidget(widgets.currentRefinedValues({ containerNode }));
     })
   );
 
@@ -67,7 +63,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.hitsPerPageSelector({
+        widgets.hitsPerPageSelector({
           containerNode,
           items: [
             { value: 3, label: '3 per page' },
@@ -83,7 +79,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.hierarchicalMenu({
+        widgets.hierarchicalMenu({
           containerNode,
           attributes: [
             'hierarchicalCategories.lvl0',
@@ -98,7 +94,7 @@ export default () => {
   storiesOf('Hits').add(
     'default',
     wrap(containerNode => {
-      window.search.addWidget(jqueryWidgets.hits({ containerNode }));
+      window.search.addWidget(widgets.hits({ containerNode }));
     })
   );
 
@@ -106,7 +102,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.refinementList({
+        widgets.refinementList({
           containerNode,
           attributeName: 'brand',
           operator: 'or',
@@ -121,7 +117,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.numericSelector({
+        widgets.numericSelector({
           containerNode,
           operator: '>=',
           attributeName: 'popularity',
@@ -140,7 +136,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.numericRefinementList({
+        widgets.numericRefinementList({
           containerNode,
           attributeName: 'price',
           operator: 'or',
@@ -160,7 +156,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.priceRanges({
+        widgets.priceRanges({
           containerNode,
           attributeName: 'price',
         })
@@ -173,7 +169,7 @@ export default () => {
     wrap(containerNode => {
       const inputNode = document.createElement('input');
       containerNode.appendChild(inputNode);
-      window.search.addWidget(jqueryWidgets.searchBox({ inputNode }));
+      window.search.addWidget(widgets.searchBox({ inputNode }));
     })
   );
 
@@ -181,7 +177,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.sortBySelector({
+        widgets.sortBySelector({
           containerNode,
           indices: [
             { name: 'instant_search', label: 'Most relevant' },
@@ -195,7 +191,7 @@ export default () => {
 
   storiesOf('StarRating').add('default', containerNode => {
     window.search.addWidget(
-      jqueryWidgets.starRating({
+      widgets.starRating({
         containerNode,
         attributeName: 'rating',
         max: 5,
@@ -206,7 +202,7 @@ export default () => {
   storiesOf('Stats').add(
     'default',
     wrap(containerNode => {
-      window.search.addWidget(jqueryWidgets.stats({ containerNode }));
+      window.search.addWidget(widgets.stats({ containerNode }));
     })
   );
 
@@ -214,7 +210,7 @@ export default () => {
     'default',
     wrap(containerNode => {
       window.search.addWidget(
-        jqueryWidgets.toggle({
+        widgets.toggle({
           containerNode,
           attributeName: 'free_shipping',
           label: 'Free Shipping (toggle single value)',
@@ -227,7 +223,7 @@ export default () => {
   storiesOf('InfiniteHits').add(
     'default',
     wrap(containerNode => {
-      window.search.addWidget(jqueryWidgets.infiniteHits({ containerNode }));
+      window.search.addWidget(widgets.infiniteHits({ containerNode }));
     })
   );
 };

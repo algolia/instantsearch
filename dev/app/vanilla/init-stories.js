@@ -1,8 +1,6 @@
-/* eslint-disable import/default */
 import { storiesOf } from 'dev-novel';
-
-import * as vanillaWidgets from './custom-widgets/vanilla/index.js';
-import wrapWithHits from './wrap-with-hits.js';
+import wrapWithHits from '../utils/wrap-with-hits.js';
+import * as widgets from './widgets/index.js';
 
 export default () => {
   storiesOf('SearchBox')
@@ -13,7 +11,7 @@ export default () => {
         container.appendChild(input);
 
         window.search.addWidget(
-          vanillaWidgets.searchBox({
+          widgets.searchBox({
             node: input,
             placeholder: 'Search for products',
           })
@@ -27,7 +25,7 @@ export default () => {
         container.appendChild(input);
 
         window.search.addWidget(
-          vanillaWidgets.searchBoxReturn({
+          widgets.searchBoxReturn({
             node: input,
             placeholder: 'Search for products',
           })
@@ -38,14 +36,14 @@ export default () => {
   storiesOf('ClearAll').add(
     'default',
     wrapWithHits(containerNode => {
-      window.search.addWidget(vanillaWidgets.clearAll({ containerNode }));
+      window.search.addWidget(widgets.clearAll({ containerNode }));
     })
   );
 
   storiesOf('Hits').add(
     'default',
     wrapWithHits(containerNode => {
-      window.search.addWidget(vanillaWidgets.hits({ containerNode }));
+      window.search.addWidget(widgets.hits({ containerNode }));
     })
   );
 
@@ -53,7 +51,7 @@ export default () => {
     'select',
     wrapWithHits(containerNode => {
       window.search.addWidget(
-        vanillaWidgets.selectMenu({
+        widgets.selectMenu({
           containerNode,
           attributeName: 'brand',
           limit: 10,
@@ -67,7 +65,7 @@ export default () => {
     'default',
     wrapWithHits(containerNode => {
       window.search.addWidget(
-        vanillaWidgets.refinementList({
+        widgets.refinementList({
           containerNode,
           attributeName: 'brand',
           operator: 'or',

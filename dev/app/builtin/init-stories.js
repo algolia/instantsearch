@@ -1,8 +1,8 @@
 /* eslint-disable import/default */
-import { action, storiesOf } from 'dev-novel';
-import instantsearch from '../../index.js';
 
-import wrapWithHits from './wrap-with-hits.js';
+import { action, storiesOf } from 'dev-novel';
+import instantsearch from '../../../index.js';
+import wrapWithHits from '../utils/wrap-with-hits.js';
 
 export default () => {
   storiesOf('instantsearch').add(
