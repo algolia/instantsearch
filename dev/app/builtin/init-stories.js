@@ -5,10 +5,12 @@ import instantsearch from '../../../index.js';
 import wrapWithHits from '../utils/wrap-with-hits.js';
 import initInstantSearchStories from './stories/instantsearch.stories';
 import initAnalyticsStories from './stories/analytics.stories';
+import initClearAllStories from './stories/clear-all.stories';
 
 export default () => {
   initInstantSearchStories();
   initAnalyticsStories();
+  initClearAllStories();
 
   storiesOf('SearchBox')
     .add(
@@ -162,61 +164,6 @@ export default () => {
       );
     })
   );
-
-  storiesOf('ClearAll')
-    .add(
-      'default',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.clearAll({
-              container,
-              autoHideContainer: false,
-            })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple'] },
-            disjunctiveFacets: ['brand'],
-          },
-        }
-      )
-    )
-    .add(
-      'with nothing to clear',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.clearAll({
-            container,
-            autoHideContainer: false,
-          })
-        );
-      })
-    )
-    .add(
-      'with clear refinements and query',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.clearAll({
-              container,
-              autoHideContainer: false,
-              clearsQuery: true,
-              templates: {
-                link: 'Clear refinements and query',
-              },
-            })
-          );
-        },
-        {
-          searchParameters: {
-            disjunctiveFacetsRefinements: { brand: ['Apple'] },
-            disjunctiveFacets: ['brand'],
-          },
-        }
-      )
-    );
 
   storiesOf('CurrentRefinedValues')
     .add(
