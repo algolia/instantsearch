@@ -3,20 +3,10 @@
 import { action, storiesOf } from 'dev-novel';
 import instantsearch from '../../../index.js';
 import wrapWithHits from '../utils/wrap-with-hits.js';
+import initInstantSearchStories from './stories/instantsearch.stories';
 
 export default () => {
-  storiesOf('instantsearch').add(
-    'With searchfunction that prevent search',
-    wrapWithHits(() => {}, {
-      searchFunction: helper => {
-        const query = helper.state.query;
-        if (query === '') {
-          return;
-        }
-        helper.search();
-      },
-    })
-  );
+  initInstantSearchStories();
 
   storiesOf('Analytics').add(
     'default',
