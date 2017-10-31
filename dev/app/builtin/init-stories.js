@@ -18,6 +18,7 @@ import initPaginationStories from './stories/pagination.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
 import initRangeSliderStories from './stories/range-slider.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
+import initSearchBoxStories from './stories/search-box.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -35,46 +36,7 @@ export default () => {
   initPriceRangesStories();
   initRangeSliderStories();
   initRefinementListStories();
-
-  storiesOf('SearchBox')
-    .add(
-      'default',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.searchBox({
-            container,
-            placeholder: 'Search for products',
-            poweredBy: true,
-          })
-        );
-      })
-    )
-    .add(
-      'search on enter',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.searchBox({
-            container,
-            placeholder: 'Search for products',
-            poweredBy: true,
-            searchOnEnterKeyPressOnly: true,
-          })
-        );
-      })
-    )
-    .add(
-      'input with initial value',
-      wrapWithHits(container => {
-        container.innerHTML = '<input value="ok"/>';
-        const input = container.firstChild;
-        container.appendChild(input);
-        window.search.addWidget(
-          instantsearch.widgets.searchBox({
-            container: input,
-          })
-        );
-      })
-    );
+  initSearchBoxStories();
 
   storiesOf('Stats').add(
     'default',
