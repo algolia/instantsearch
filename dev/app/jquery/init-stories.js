@@ -7,6 +7,7 @@ import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
 import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
+import initMenuStories from './stories/menu.stories';
 
 // transform `container` to jQuery object
 const wrap = fn => wrapWithHits(container => fn(window.$(container)));
@@ -18,6 +19,7 @@ export default () => {
   initHitsStories();
   initHitsPerPageSelectorStories();
   initInfiniteHitsStories();
+  initMenuStories();
 
   storiesOf('Pagination').add(
     'default',
@@ -30,33 +32,6 @@ export default () => {
       );
     })
   );
-
-  storiesOf('Menu')
-    .add(
-      'default',
-      wrap(containerNode => {
-        window.search.addWidget(
-          widgets.menu({
-            containerNode,
-            attributeName: 'categories',
-            limit: 3,
-          })
-        );
-      })
-    )
-    .add(
-      'with show more',
-      wrap(containerNode => {
-        window.search.addWidget(
-          widgets.showMoreMenu({
-            containerNode,
-            attributeName: 'categories',
-            limit: 3,
-            showMoreLimit: 10,
-          })
-        );
-      })
-    );
 
   storiesOf('RefinementList').add(
     'default',
