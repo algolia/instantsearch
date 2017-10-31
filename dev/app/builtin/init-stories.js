@@ -7,12 +7,14 @@ import initInstantSearchStories from './stories/instantsearch.stories';
 import initAnalyticsStories from './stories/analytics.stories';
 import initClearAllStories from './stories/clear-all.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
+import initHierarchicalMenu from './stories/hierarchical-menu.stories';
 
 export default () => {
   initInstantSearchStories();
   initAnalyticsStories();
   initClearAllStories();
   initCurrentRefinedValuesStories();
+  initHierarchicalMenu();
 
   storiesOf('SearchBox')
     .add(
@@ -576,86 +578,6 @@ export default () => {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;
               },
-            },
-          })
-        );
-      })
-    );
-
-  storiesOf('HierarchicalMenu')
-    .add(
-      'default',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.hierarchicalMenu({
-            container,
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-            showParentLevel: false,
-          })
-        );
-      })
-    )
-    .add(
-      'hide parent levels',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.hierarchicalMenu({
-            container,
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-            showParentLevel: true,
-          })
-        );
-      })
-    )
-    .add(
-      'with default selected item',
-      wrapWithHits(
-        container => {
-          window.search.addWidget(
-            instantsearch.widgets.hierarchicalMenu({
-              container,
-              attributes: [
-                'hierarchicalCategories.lvl0',
-                'hierarchicalCategories.lvl1',
-                'hierarchicalCategories.lvl2',
-              ],
-              rootPath: 'Cameras & Camcorders',
-            })
-          );
-        },
-        {
-          searchParameters: {
-            hierarchicalFacetsRefinements: {
-              'hierarchicalCategories.lvl0': [
-                'Cameras & Camcorders > Digital Cameras',
-              ],
-            },
-          },
-        }
-      )
-    )
-    .add(
-      'with header',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.hierarchicalMenu({
-            container,
-            attributes: [
-              'hierarchicalCategories.lvl0',
-              'hierarchicalCategories.lvl1',
-              'hierarchicalCategories.lvl2',
-            ],
-            rootPath: 'Cameras & Camcorders',
-            templates: {
-              header: 'Hierarchical categories',
             },
           })
         );
