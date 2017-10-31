@@ -13,6 +13,7 @@ import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.sto
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
+import initNumericSelectorStories from './stories/numeric-selector.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -25,6 +26,7 @@ export default () => {
   initInfiniteHitsStories();
   initMenuStories();
   initNumericRefinementListStories();
+  initNumericSelectorStories();
 
   storiesOf('SearchBox')
     .add(
@@ -450,25 +452,6 @@ export default () => {
           templates: {
             header: 'Price ranges',
           },
-        })
-      );
-    })
-  );
-
-  storiesOf('NumericSelector').add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.numericSelector({
-          container,
-          operator: '>=',
-          attributeName: 'popularity',
-          options: [
-            { label: 'Default', value: 0 },
-            { label: 'Top 10', value: 9991 },
-            { label: 'Top 100', value: 9901 },
-            { label: 'Top 500', value: 9501 },
-          ],
         })
       );
     })
