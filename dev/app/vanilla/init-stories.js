@@ -4,11 +4,13 @@ import * as widgets from './widgets/index.js';
 import initClearAllStories from './stories/clear-all.stories';
 import initHitsStories from './stories/hits.stories';
 import initMenuStories from './stories/menu.stories';
+import initRefinementListStories from './stories/refinement-list.stories';
 
 export default () => {
   initClearAllStories();
   initHitsStories();
   initMenuStories();
+  initRefinementListStories();
 
   storiesOf('SearchBox')
     .add(
@@ -39,19 +41,4 @@ export default () => {
         );
       })
     );
-
-  storiesOf('RefinementList').add(
-    'default',
-    wrapWithHits(containerNode => {
-      window.search.addWidget(
-        widgets.refinementList({
-          containerNode,
-          attributeName: 'brand',
-          operator: 'or',
-          limit: 10,
-          title: 'Brands',
-        })
-      );
-    })
-  );
 };
