@@ -16,6 +16,7 @@ import initNumericRefinementListStories from './stories/numeric-refinement-list.
 import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
+import initRangeSliderStories from './stories/range-slider.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -31,6 +32,7 @@ export default () => {
   initNumericSelectorStories();
   initPaginationStories();
   initPriceRangesStories();
+  initRangeSliderStories();
 
   storiesOf('SearchBox')
     .add(
@@ -254,180 +256,6 @@ export default () => {
             },
             templates: {
               header: 'Google or amazon (toggle two values)',
-            },
-          })
-        );
-      })
-    );
-
-  storiesOf('RangeSlider')
-    .add(
-      'default',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            templates: {
-              header: 'Price',
-            },
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'disabled',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            templates: {
-              header: 'Price',
-            },
-            min: 100,
-            max: 50,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'collapsible',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            collapsible: {
-              collapsed: false,
-            },
-            templates: {
-              header: 'Price',
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'with step',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            step: 500,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'without pips',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            pips: false,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'with 0 as first pit',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            templates: {
-              header: 'Price',
-            },
-            min: 0,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'with min boundaries',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            templates: {
-              header: 'Price',
-            },
-            min: 36,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'with max boundaries',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            templates: {
-              header: 'Price',
-            },
-            max: 36,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
-            },
-          })
-        );
-      })
-    )
-    .add(
-      'with min / max boundaries',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.rangeSlider({
-            container,
-            attributeName: 'price',
-            templates: {
-              header: 'Price',
-            },
-            min: 10,
-            max: 500,
-            tooltips: {
-              format(rawValue) {
-                return `$${Math.round(rawValue).toLocaleString()}`;
-              },
             },
           })
         );
