@@ -9,6 +9,7 @@ import initClearAllStories from './stories/clear-all.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
+import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
 
 export default () => {
   initInstantSearchStories();
@@ -17,6 +18,7 @@ export default () => {
   initCurrentRefinedValuesStories();
   initHierarchicalMenu();
   initHitsStories();
+  initHitsPerPageSelectorStories();
 
   storiesOf('SearchBox')
     .add(
@@ -80,38 +82,6 @@ export default () => {
       );
     })
   );
-
-  storiesOf('HitsPerPageSelector')
-    .add(
-      'default',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.hitsPerPageSelector({
-            container,
-            items: [
-              { value: 3, label: '3 per page' },
-              { value: 5, label: '5 per page' },
-              { value: 10, label: '10 per page' },
-            ],
-          })
-        );
-      })
-    )
-    .add(
-      'With default hitPerPage to 5',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.hitsPerPageSelector({
-            container,
-            items: [
-              { value: 3, label: '3 per page' },
-              { value: 5, label: '5 per page', default: true },
-              { value: 10, label: '10 per page' },
-            ],
-          })
-        );
-      })
-    );
 
   storiesOf('InfiniteHits')
     .add(
