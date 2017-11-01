@@ -37,7 +37,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string[]} attributes Attributes to use to generate the hierarchy of the menu.
  * @property {string} [separator = '>'] Separator used in the attributes to separate level values.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
- * @property {boolean} [showParentLevel = true] Shows the parent level of the current refined value.
+ * @property {boolean} [showParentLevel=false] Show the siblings of the selected parent levels of the current refined value. This
+ * does not impact the root level.
  * @property {number} [limit = 10] Max number of value to display.
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
@@ -61,7 +62,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
   * levels deep.
   *
   * There's a complete example available on how to write a custom **HierarchicalMenu**:
-  *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/feat/instantsearch.js/v2/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
+  *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
   * @type {Connector}
   * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
   * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.

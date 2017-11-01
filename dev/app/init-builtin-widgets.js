@@ -5,6 +5,19 @@ import instantsearch from '../../index.js';
 import wrapWithHits from './wrap-with-hits.js';
 
 export default () => {
+  storiesOf('instantsearch').add(
+    'With searchfunction that prevent search',
+    wrapWithHits(() => {}, {
+      searchFunction: helper => {
+        const query = helper.state.query;
+        if (query === '') {
+          return;
+        }
+        helper.search();
+      },
+    })
+  );
+
   storiesOf('Analytics').add(
     'default',
     wrapWithHits(container => {
@@ -592,6 +605,23 @@ export default () => {
       })
     )
     .add(
+      'collapsible',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            collapsible: {
+              collapsed: false,
+            },
+            templates: {
+              header: 'Price',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with step',
       wrapWithHits(container => {
         window.search.addWidget(
@@ -616,6 +646,26 @@ export default () => {
             container,
             attributeName: 'price',
             pips: false,
+            tooltips: {
+              format(rawValue) {
+                return `$${Math.round(rawValue).toLocaleString()}`;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with 0 as first pit',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.rangeSlider({
+            container,
+            attributeName: 'price',
+            templates: {
+              header: 'Price',
+            },
+            min: 0,
             tooltips: {
               format(rawValue) {
                 return `$${Math.round(rawValue).toLocaleString()}`;
@@ -699,7 +749,23 @@ export default () => {
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-            rootPath: 'Cameras & Camcorders',
+            showParentLevel: false,
+          })
+        );
+      })
+    )
+    .add(
+      'hide parent levels',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            showParentLevel: true,
           })
         );
       })

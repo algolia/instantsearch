@@ -539,7 +539,7 @@ describe('connectRangeSlider', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -553,7 +553,7 @@ describe('connectRangeSlider', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -570,7 +570,7 @@ describe('connectRangeSlider', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -587,7 +587,7 @@ describe('connectRangeSlider', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -603,7 +603,7 @@ describe('connectRangeSlider', () => {
         undefined
       );
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -619,7 +619,7 @@ describe('connectRangeSlider', () => {
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -635,7 +635,7 @@ describe('connectRangeSlider', () => {
         undefined
       );
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -651,7 +651,7 @@ describe('connectRangeSlider', () => {
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -686,7 +686,7 @@ describe('connectRangeSlider', () => {
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
       expect(helper.search).toHaveBeenCalled();
     });
   });

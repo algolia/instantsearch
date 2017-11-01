@@ -1,7 +1,6 @@
 {
   "presets": [
     ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
-    "latest",
     "stage-2"
   ]
 }

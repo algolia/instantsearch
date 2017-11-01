@@ -86,7 +86,7 @@ Start by creating a new component in your Angular application for the hits:
 $ ng generate component components/hits --inline-style --inline-template
 ```
 
-In your new created component, let's inject the `InstantSearchService` we created before:
+In your newly created component, let's inject the `InstantSearchService` we created before:
 
 ```javascript
 import { Component, OnInit } from '@angular/core';
@@ -99,7 +99,7 @@ import { InstantSearchService } from '../../services/instantsearch.service';
   styles: []
 })
 export class HitsComponent implements OnInit {
-  construcor(private instantSearchService: InstantSearchService) {}
+  constructor(private instantSearchService: InstantSearchService) {}
   ngOnInit() {}
 }
 ```
@@ -112,7 +112,7 @@ At the initialization and each time there is a result update, the callback given
 import { Component, OnInit } from '@angular/core';
 import { connectHits } from 'instantsearch.js/es/connectors';
 
-import { InstantSearchService } from '../../services/instantasearch.service';
+import { InstantSearchService } from '../../services/instantsearch.service';
 
 @Component({
   selector: 'app-hits',
@@ -124,7 +124,7 @@ export class HitsComponent implements OnInit {
   // and intialize it with an empty hits array
   state: { hits: {}[] } = { hits: [] };
 
-  construcor(private instantSearchService: InstantSearchService) {}
+  constructor(private instantSearchService: InstantSearchService) {}
 
   ngOnInit() {
     // Create a widget which will call `this.updateState` whenever

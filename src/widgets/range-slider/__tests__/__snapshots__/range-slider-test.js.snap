@@ -2,7 +2,7 @@
 
 exports[`rangeSlider widget usage max option will use the results min when only max is passed 1`] = `
 <HeaderFooter-AutoHide
-  collapsible={undefined}
+  collapsible={false}
   cssClasses={
     Object {
       "body": "ais-range-slider--body",
@@ -43,7 +43,7 @@ exports[`rangeSlider widget usage max option will use the results min when only 
 
 exports[`rangeSlider widget usage min option sets the right range 1`] = `
 <HeaderFooter-AutoHide
-  collapsible={undefined}
+  collapsible={false}
   cssClasses={
     Object {
       "body": "ais-range-slider--body",
@@ -84,7 +84,7 @@ exports[`rangeSlider widget usage min option sets the right range 1`] = `
 
 exports[`rangeSlider widget usage min option will use the results max when only min passed 1`] = `
 <HeaderFooter-AutoHide
-  collapsible={undefined}
+  collapsible={false}
   cssClasses={
     Object {
       "body": "ais-range-slider--body",
@@ -123,9 +123,54 @@ exports[`rangeSlider widget usage min option will use the results max when only 
 />
 `;
 
+exports[`rangeSlider widget usage should \`collapse\` when options is provided 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={
+    Object {
+      "collapsed": true,
+    }
+  }
+  cssClasses={
+    Object {
+      "body": "ais-range-slider--body",
+      "footer": "ais-range-slider--footer",
+      "header": "ais-range-slider--header",
+      "root": "ais-range-slider",
+    }
+  }
+  max={0}
+  min={0}
+  pips={true}
+  refine={[Function]}
+  shouldAutoHideContainer={true}
+  step={1}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+      },
+    }
+  }
+  tooltips={true}
+  values={
+    Array [
+      0,
+      0,
+    ]
+  }
+/>
+`;
+
 exports[`rangeSlider widget usage should \`shouldAutoHideContainer\` when range min === max 1`] = `
 <HeaderFooter-AutoHide
-  collapsible={undefined}
+  collapsible={false}
   cssClasses={
     Object {
       "body": "ais-range-slider--body",
@@ -166,7 +211,7 @@ exports[`rangeSlider widget usage should \`shouldAutoHideContainer\` when range 
 
 exports[`rangeSlider widget usage should render without results 1`] = `
 <HeaderFooter-AutoHide
-  collapsible={undefined}
+  collapsible={false}
   cssClasses={
     Object {
       "body": "ais-range-slider--body",
@@ -207,7 +252,7 @@ exports[`rangeSlider widget usage should render without results 1`] = `
 
 exports[`rangeSlider widget usage with results calls twice ReactDOM.render 1`] = `
 <HeaderFooter-AutoHide
-  collapsible={undefined}
+  collapsible={false}
   cssClasses={
     Object {
       "body": "ais-range-slider--body",
@@ -248,7 +293,7 @@ exports[`rangeSlider widget usage with results calls twice ReactDOM.render 1`] =
 
 exports[`rangeSlider widget usage with results calls twice ReactDOM.render 2`] = `
 <HeaderFooter-AutoHide
-  collapsible={undefined}
+  collapsible={false}
   cssClasses={
     Object {
       "body": "ais-range-slider--body",

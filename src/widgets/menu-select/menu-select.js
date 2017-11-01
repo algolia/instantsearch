@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import connectMenu from '../../connectors/menu/connectMenu';
@@ -37,7 +36,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-  ReactDOM.render(
+  render(
     <MenuSelect
       cssClasses={cssClasses}
       items={items}
@@ -63,7 +62,7 @@ menuSelect({
 })`;
 
 /**
- * @typedef {Object} MenuCSSClasses
+ * @typedef {Object} MenuSelectCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
  * @property {string|string[]} [header] CSS class to add to the header element.
  * @property {string|string[]} [select] CSS class to add to the select element.
@@ -73,10 +72,10 @@ menuSelect({
 
 /**
  * @typedef {Object} MenuSelectTemplates
- * @property {string|Function} [header] Header template.
- * @property {string|Function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|function} [header] Header template.
+ * @property {string|function(label: string, count: number, isRefined: boolean, value: string)} [item] Item template, provided with `label`, `count`, `isRefined` and `value` data properties.
  * @property {string} [seeAllOption='See all'] Label of the see all option in the select.
- * @property {string|Function} [footer] Footer template.
+ * @property {string|function} [footer] Footer template.
  */
 
 /**
@@ -107,7 +106,7 @@ menuSelect({
  * @example
  * search.addWidget(
  *   instantsearch.widgets.menuSelect({
- *     container: '#categories',
+ *     container: '#categories-menuSelect',
  *     attributeName: 'hierarchicalCategories.lvl0',
  *     limit: 10,
  *     templates: {
@@ -135,7 +134,7 @@ export default function menuSelect({
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     footer: cx(bem('footer'), userCssClasses.footer),
-    select: cx(bem('footer'), userCssClasses.footer),
+    select: cx(bem('select'), userCssClasses.select),
     option: cx(bem('option'), userCssClasses.option),
   };
 

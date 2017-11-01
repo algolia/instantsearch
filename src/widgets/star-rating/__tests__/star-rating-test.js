@@ -289,7 +289,7 @@ describe('starRating()', () => {
   });
 
   afterEach(() => {
-    starRating.__ResetDependency__('ReactDOM');
+    starRating.__ResetDependency__('render');
     starRating.__ResetDependency__('autoHideContainerHOC');
     starRating.__ResetDependency__('headerFooterHOC');
   });
