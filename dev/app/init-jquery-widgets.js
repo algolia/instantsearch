@@ -172,8 +172,10 @@ export default () => {
     'default',
     wrap(containerNode => {
       const inputNode = document.createElement('input');
-      containerNode.appendChild(inputNode);
-      window.search.addWidget(jqueryWidgets.searchBox({ inputNode }));
+      containerNode.append(inputNode);
+      window.search.addWidget(
+        jqueryWidgets.searchBox({ inputNode: window.$(inputNode) })
+      );
     })
   );
 

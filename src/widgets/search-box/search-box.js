@@ -24,7 +24,18 @@ const renderer = ({
   wrapInput,
   reset,
   magnifier,
-}) => ({ refine, clear, query, onHistoryChange }, isFirstRendering) => {
+  showLoading,
+}) => (
+  {
+    refine,
+    clear,
+    query,
+    onHistoryChange,
+    onStalledSearch,
+    onSearchQueueEmpty,
+  },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
     const input = createInput(containerNode);
@@ -51,7 +62,17 @@ const renderer = ({
       containerNode.appendChild(wrappedInput);
     }
 
-    if (magnifier) addMagnifier(input, magnifier, templates);
+    if (magnifier) {
+      const domNode = addMagnifier(input, magnifier, templates);
+      if (showLoading) {
+        onStalledSearch(() => {
+          domNode.classList.add('stalled-search');
+        });
+        onSearchQueueEmpty(() => {
+          domNode.classList.remove('stalled-search');
+        });
+      }
+    }
     if (reset) addReset(input, reset, templates, clear);
 
     addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
@@ -136,8 +157,9 @@ searchBox({
   [ wrapInput ],
   [ autofocus ],
   [ searchOnEnterKeyPressOnly ],
-  [ queryHook ]
-  [ reset=true || reset.{template, cssClasses.{root}} ]
+  [ queryHook ],
+  [ reset=true || reset.{template, cssClasses.{root}} ],
+  [ showLoading = false || showLoading.{delay = 200} ]
 })`;
 
 /**
@@ -172,20 +194,27 @@ searchBox({
  */
 
 /**
+ * @typedef {Object} SearchBoxLoadingConfig
+ * @property {number} delay time before the search is considered stalled by the network. The delay should be superior or equal to 0.
+ */
+
+/**
  * @typedef {Object} SearchBoxWidgetOptions
- * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property  {string} [placeholder] Input's placeholder.
- * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
- * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
- * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
- * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
- * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
- * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property {string} [placeholder] Input's placeholder.
+ * @property {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
+ * @property {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
+ * @property {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
+ * @property {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
+ * @property {boolean|string} [autofocus="auto"] autofocus on the input.
+ * @property {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
  * once `<Enter>` is pressed only.
- * @property  {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
- * @property  {function} [queryHook] A function that will be called every time a new search would be done. You
+ * @property {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
+ * @property {function} [queryHook] A function that will be called every time a new search would be done. You
  * will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
+ * @property {boolean|SearchBoxLoadingConfig} [showLoading] When set to true or configured with an object, the searchbox
+ * will display a loading indicator instead of the magnifying glass if the search is stalled by the network.
  */
 
 /**
@@ -221,6 +250,7 @@ export default function searchBox(
     reset = true,
     magnifier = true,
     queryHook,
+    showLoading = false,
   } = {}
 ) {
   if (!container) {
@@ -239,6 +269,9 @@ export default function searchBox(
     poweredBy = {};
   }
 
+  // Must be > 0
+  const delay = (showLoading && showLoading.delay) || 200;
+
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
@@ -250,11 +283,12 @@ export default function searchBox(
     wrapInput,
     reset,
     magnifier,
+    showLoading,
   });
 
   try {
     const makeWidget = connectSearchBox(specializedRenderer);
-    return makeWidget({ queryHook });
+    return makeWidget({ queryHook, delay });
   } catch (e) {
     throw new Error(usage);
   }
@@ -373,6 +407,7 @@ function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
 
   const htmlNode = createNodeFromString(stringNode);
   input.parentNode.appendChild(htmlNode);
+  return htmlNode.firstChild;
 }
 
 function addPoweredBy(input, poweredBy, templates) {
