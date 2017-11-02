@@ -16,7 +16,7 @@
     "components",
     "react-native"
   ],
-  "version": "4.1.3",
+  "version": "4.2.0",
   "scripts": {
     "build": "./scripts/build.sh",
     "build-and-publish": "./scripts/build-and-publish.sh"

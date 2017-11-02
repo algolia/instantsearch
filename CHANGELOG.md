@@ -1,3 +1,24 @@
+<a name="4.2.0"></a>
+# [4.2.0](https://github.com/algolia/react-instantsearch/compare/v4.1.3...v4.2.0) (2017-11-02)
+
+
+### Bug Fixes
+
+* **connectRange:** handle boundaries on first call ([9f14dc0](https://github.com/algolia/react-instantsearch/commit/9f14dc0))
+* **connectRange:** use refine instead of cleanUp in metadata ([#526](https://github.com/algolia/react-instantsearch/issues/526)) ([1861235](https://github.com/algolia/react-instantsearch/commit/1861235))
+* **hierarchicaMenu:** allow sorting and using limit ([fe178ed](https://github.com/algolia/react-instantsearch/commit/fe178ed)), closes [#92](https://github.com/algolia/react-instantsearch/issues/92)
+* **InfiniteHits:** add disabled style to the LoadMore button ([#477](https://github.com/algolia/react-instantsearch/issues/477)) ([faba1ad](https://github.com/algolia/react-instantsearch/commit/faba1ad))
+* **Range:** handle float, allow reset and respect boundaries ([75969b8](https://github.com/algolia/react-instantsearch/commit/75969b8))
+* **RangeInput:** fix compatibility with React 16 & Panel ([3f218db](https://github.com/algolia/react-instantsearch/commit/3f218db))
+* **searchbox:** add maxlength 512 ([#542](https://github.com/algolia/react-instantsearch/issues/542)) ([5bd4033](https://github.com/algolia/react-instantsearch/commit/5bd4033)), closes [#510](https://github.com/algolia/react-instantsearch/issues/510)
+
+
+### Features
+
+* **MenuSelect:** add component and connector ([cc6e0d7](https://github.com/algolia/react-instantsearch/commit/cc6e0d7))
+
+
+
 <a name="4.1.3"></a>
 ## [4.1.3](https://github.com/algolia/react-instantsearch/compare/v4.1.2...v4.1.3) (2017-10-09)
 
