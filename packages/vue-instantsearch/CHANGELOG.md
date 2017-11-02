@@ -1,3 +1,18 @@
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/algolia/vue-instantsearch/compare/v1.3.0...v1.3.1) (2017-11-02)
+
+
+### Bug Fixes
+
+* **menu:** avoid multiple Algolia calls when created ([f1ac0a7](https://github.com/algolia/vue-instantsearch/commit/f1ac0a7))
+
+
+### Performance Improvements
+
+* **menu:** use facet name as key ([b496fd8](https://github.com/algolia/vue-instantsearch/commit/b496fd8))
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/algolia/vue-instantsearch/compare/v1.2.2...v1.3.0) (2017-10-25)
 
