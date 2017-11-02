@@ -3,7 +3,6 @@
   "version": "4.2.0",
   "scripts": {
     "boot": "./scripts/boot.sh",
-    "upgrade-deps": "./scripts/upgrade-deps.sh",
     "changelog": "conventional-changelog --preset angular --output-unreleased",
     "start": "NODE_ENV=development babel-node docgen/start.js & NODE_ENV=development yarn docs:storybook-start & wait",
     "docs:build": "babel-node docgen/build.js && yarn docs:storybook-build-production",

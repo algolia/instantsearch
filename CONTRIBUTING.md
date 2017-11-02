@@ -73,12 +73,6 @@ yarn docs:deploy-preview
 
 This uses [netlify](https://www.netlify.com/).
 
-## Upgrade deps
-
-```sh
-yarn upgrade-deps
-```
-
 ## See next release changelog
 
 ```sh
