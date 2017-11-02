@@ -1,0 +1,11 @@
+import { previewWrapper } from './utils';
+import { storiesOf } from '@storybook/vue';
+
+storiesOf('Menu', module)
+  .addDecorator(previewWrapper)
+  .add('default', () => ({
+    template: '<ais-menu attribute="materials"></ais-menu>',
+  }))
+  .add('limit the facet values', () => ({
+    template: '<ais-menu attribute="materials" :limit="3"></ais-menu>',
+  }));

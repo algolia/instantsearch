@@ -3,8 +3,8 @@
     <slot name="header"></slot>
 
     <div
-      v-for="(facet, key) in facetValues"
-      :key="key"
+      v-for="facet in facetValues"
+      :key="facet.name"
       :class="facet.isRefined ? bem('item', 'active') : bem('item')"
     >
       <a
@@ -70,6 +70,7 @@
     },
 
     created() {
+      this.searchStore.stop();
       this.searchStore.maxValuesPerFacet = this.limit;
       this.searchStore.addFacet(
         {
@@ -78,6 +79,8 @@
         },
         FACET_TREE
       );
+      this.searchStore.start();
+      this.searchStore.refresh();
     },
 
     destroyed() {
