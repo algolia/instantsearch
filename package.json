@@ -113,6 +113,7 @@
     "rheostat": "2.1.1",
     "sass-loader": "6.0.6",
     "stat-mode": "0.2.2",
+    "storybook-addon-jsx": "5.0.0",
     "string": "3.3.3",
     "style-loader": "0.19.0",
     "uglify-js": "3.0.25",
