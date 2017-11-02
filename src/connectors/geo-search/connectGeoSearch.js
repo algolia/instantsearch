@@ -5,6 +5,7 @@ export default function connectGeoSearch(fn) {
       radius,
       minRadius,
       precision,
+      enableControlRefineWithMap,
       enableGeolocationWithIP = true,
       enableRefineOnMapMove = true,
     } = widgetParams;
@@ -77,6 +78,7 @@ export default function connectGeoSearch(fn) {
             refine: refine(helper),
             clearRefinementWithMap: clearRefinementWithMap(helper),
             isRefinePositionChanged: false,
+            enableControlRefineWithMap,
             enableRefineOnMapMove,
             instantSearchInstance,
             widgetParams,
@@ -118,6 +120,7 @@ export default function connectGeoSearch(fn) {
             hits: results.hits.filter(h => h._geoloc),
             refine: refine(helper),
             clearRefinementWithMap: clearRefinementWithMap(helper),
+            enableControlRefineWithMap,
             isRefinePositionChanged,
             enableRefineOnMapMove,
             instantSearchInstance,

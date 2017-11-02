@@ -27,6 +27,7 @@ class GoogleMapsProvider extends Component {
     isRefinedWithMap: PropTypes.bool.isRequired,
     isRefinePositionChanged: PropTypes.bool.isRequired,
     enableRefineOnMapMove: PropTypes.bool.isRequired,
+    enableControlRefineWithMap: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -36,6 +37,7 @@ class GoogleMapsProvider extends Component {
 
     const markers = this.computeMarkerWithLatLng(props.markers);
     const nextState = {
+      enableRefineOnMapMove: props.enableRefineOnMapMove,
       markers,
     };
 
@@ -119,7 +121,7 @@ class GoogleMapsProvider extends Component {
   };
 
   onChangeWithRefine = () => {
-    if (this.props.enableRefineOnMapMove) {
+    if (this.state.enableRefineOnMapMove) {
       this.refine();
     }
 
@@ -127,17 +129,30 @@ class GoogleMapsProvider extends Component {
   };
 
   onDragEnd = () => {
-    if (this.props.enableRefineOnMapMove) {
+    if (this.state.enableRefineOnMapMove) {
       this.refine();
     }
   };
 
+  onChangeMapMoveControl = event => {
+    this.setState({
+      enableRefineOnMapMove: event.currentTarget.checked,
+    });
+  };
+
+  renderRedoSearchHere = () => (
+    <button onClick={this.refine} disabled={!this.hasMapMoveSinceLastRefine}>
+      Redo search here
+    </button>
+  );
+
   render() {
-    const { zoom, center, markers } = this.state;
+    const { zoom, center, markers, enableRefineOnMapMove } = this.state;
+
     const {
       clearRefinementWithMap,
       isRefinedWithMap,
-      enableRefineOnMapMove,
+      enableControlRefineWithMap,
     } = this.props;
 
     return (
@@ -176,14 +191,26 @@ class GoogleMapsProvider extends Component {
             Clear the refinement with the current map view
           </button>
 
-          {!enableRefineOnMapMove && (
-            <button
-              onClick={this.refine}
-              disabled={!this.hasMapMoveSinceLastRefine}
-            >
-              Refine with the current map view
-            </button>
+          {enableControlRefineWithMap && (
+            <div>
+              {enableRefineOnMapMove || !this.hasMapMoveSinceLastRefine ? (
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={enableRefineOnMapMove}
+                    onChange={this.onChangeMapMoveControl}
+                  />
+                  Search as I move the map
+                </label>
+              ) : (
+                this.renderRedoSearchHere()
+              )}
+            </div>
           )}
+
+          {!enableControlRefineWithMap &&
+            !enableRefineOnMapMove &&
+            this.renderRedoSearchHere()}
         </div>
       </div>
     );

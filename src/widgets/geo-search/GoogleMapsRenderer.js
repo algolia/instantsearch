@@ -9,6 +9,7 @@ const renderer = ({
   isRefinedWithMap,
   isRefinePositionChanged,
   enableRefineOnMapMove,
+  enableControlRefineWithMap,
   widgetParams,
 }) => {
   const { container } = widgetParams;
@@ -25,16 +26,19 @@ const renderer = ({
 
   render(
     <GoogleMapProvider
+      // GoogleMaps props
       googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
       loadingElement={<div style={loadingElementStyle} />}
       containerElement={<div />}
       mapElement={<div style={mapElementStyle} />}
+      // Widget props
       markers={hits}
       refine={refine}
       clearRefinementWithMap={clearRefinementWithMap}
       isRefinedWithMap={isRefinedWithMap}
       isRefinePositionChanged={isRefinePositionChanged}
       enableRefineOnMapMove={enableRefineOnMapMove}
+      enableControlRefineWithMap={enableControlRefineWithMap}
     />,
     getContainerNode(container)
   );
