@@ -1,12 +1,22 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
+import { setAddon, storiesOf } from '@storybook/react';
 import { PoweredBy } from '../packages/react-instantsearch/dom';
-import { WrapWithHits } from './util';
+import { displayName, filterProps, WrapWithHits } from './util';
+import JSXAddon from 'storybook-addon-jsx';
+
+setAddon(JSXAddon);
 
 const stories = storiesOf('PoweredBy', module);
 
-stories.add('default', () => (
-  <WrapWithHits linkedStoryGroup="PoweredBy">
-    <PoweredBy />
-  </WrapWithHits>
-));
+stories.addWithJSX(
+  'default',
+  () => (
+    <WrapWithHits linkedStoryGroup="PoweredBy">
+      <PoweredBy />
+    </WrapWithHits>
+  ),
+  {
+    displayName,
+    filterProps,
+  }
+);

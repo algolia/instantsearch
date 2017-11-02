@@ -1,38 +1,64 @@
 import React from 'react';
-import { storiesOf } from '@storybook/react';
+import { setAddon, storiesOf } from '@storybook/react';
 import { ClearAll, RefinementList } from '../packages/react-instantsearch/dom';
 import { withKnobs } from '@storybook/addon-knobs';
-import { WrapWithHits } from './util';
+import { displayName, filterProps, WrapWithHits } from './util';
+import JSXAddon from 'storybook-addon-jsx';
+
+setAddon(JSXAddon);
 
 const stories = storiesOf('ClearAll', module);
 
-stories.addDecorator(withKnobs);
-
 stories
-  .add('with refinements to clear', () => (
-    <WrapWithHits linkedStoryGroup="ClearAll">
-      <div>
-        <ClearAll />
-        <div style={{ display: 'none' }}>
-          <RefinementList
-            attributeName="category"
-            defaultRefinement={['Dining']}
-          />
+  .addDecorator(withKnobs)
+  .addWithJSX(
+    'with refinements to clear',
+    () => (
+      <WrapWithHits linkedStoryGroup="ClearAll">
+        <div>
+          <ClearAll />
+          <div style={{ display: 'none' }}>
+            <RefinementList
+              attributeName="category"
+              defaultRefinement={['Dining']}
+            />
+          </div>
         </div>
-      </div>
-    </WrapWithHits>
-  ))
-  .add('nothing to clear', () => (
-    <WrapWithHits linkedStoryGroup="ClearAll">
-      <ClearAll />
-    </WrapWithHits>
-  ))
-  .add('clear all refinements and the query', () => (
-    <WrapWithHits linkedStoryGroup="ClearAll">
-      <ClearAll
-        clearsQuery
-        translations={{ reset: 'Clear refinements and query' }}
-      />
-      <RefinementList attributeName="category" defaultRefinement={['Dining']} />
-    </WrapWithHits>
-  ));
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'nothing to clear',
+    () => (
+      <WrapWithHits linkedStoryGroup="ClearAll">
+        <ClearAll />
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'clear all refinements and the query',
+    () => (
+      <WrapWithHits linkedStoryGroup="ClearAll">
+        <ClearAll
+          clearsQuery
+          translations={{ reset: 'Clear refinements and query' }}
+        />
+        <RefinementList
+          attributeName="category"
+          defaultRefinement={['Dining']}
+        />
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  );
