@@ -55,6 +55,7 @@ exports[`RefinementList applies translations 1`] = `
             autoCorrect="off"
             autoFocus={false}
             className="ais-SearchBox__input"
+            maxLength="512"
             onChange={[Function]}
             placeholder="placeholder"
             required={true}
@@ -309,6 +310,7 @@ exports[`RefinementList refinement list with search inside items but no search r
             autoCorrect="off"
             autoFocus={false}
             className="ais-SearchBox__input"
+            maxLength="512"
             onChange={[Function]}
             placeholder="Search here…"
             required={true}
@@ -491,6 +493,7 @@ exports[`RefinementList refinement list with search inside items with search res
             autoCorrect="off"
             autoFocus={false}
             className="ais-SearchBox__input"
+            maxLength="512"
             onChange={[Function]}
             placeholder="Search here…"
             required={true}
