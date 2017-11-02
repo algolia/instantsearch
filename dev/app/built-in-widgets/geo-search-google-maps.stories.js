@@ -149,14 +149,51 @@ export default () => {
 
   // Only UI
   Stories.add(
-    'disable refine on move',
+    'with control & refine on map move',
     wrapWithHitsAndConfiguration(container => {
       window.search.addWidget(
         instantsearch.widgets.geoSearchWithGoogleMaps({
           container,
-          enableRefineOnMapMove: false,
+          enableControlRefineWithMap: true,
+          enableRefineOnMapMove: true,
         })
       );
     })
-  );
+  )
+    .add(
+      'with control & disable refine on map move',
+      wrapWithHitsAndConfiguration(container => {
+        window.search.addWidget(
+          instantsearch.widgets.geoSearchWithGoogleMaps({
+            container,
+            enableControlRefineWithMap: true,
+            enableRefineOnMapMove: false,
+          })
+        );
+      })
+    )
+    .add(
+      'without control & refine on map move',
+      wrapWithHitsAndConfiguration(container => {
+        window.search.addWidget(
+          instantsearch.widgets.geoSearchWithGoogleMaps({
+            container,
+            enableControlRefineWithMap: false,
+            enableRefineOnMapMove: true,
+          })
+        );
+      })
+    )
+    .add(
+      'without control & disable refine on map move',
+      wrapWithHitsAndConfiguration(container => {
+        window.search.addWidget(
+          instantsearch.widgets.geoSearchWithGoogleMaps({
+            container,
+            enableControlRefineWithMap: false,
+            enableRefineOnMapMove: false,
+          })
+        );
+      })
+    );
 };
