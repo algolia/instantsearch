@@ -57,7 +57,7 @@ hierarchicalMenu({
   attributes,
   [ separator=' > ' ],
   [ rootPath ],
-  [ showParentLevel=true ],
+  [ showParentLevel=false ],
   [ limit=10 ],
   [ sortBy=['name:asc'] ],
   [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
@@ -99,7 +99,28 @@ hierarchicalMenu({
  * @property {number} [limit=10] How much facet values to get [*].
  * @property {string} [separator=" > "] Separator used in the attributes to separate level values. [*].
  * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
- * @property {boolean} [showParentLevel=false] Show the parent level of the current refined value.
+ * @property {boolean} [showParentLevel=true] Show the siblings of the selected parent level of the current refined value. This
+ * does not impact the root level.
+ *
+ * The hierarchical menu is able to show or hide the siblings with `showParentLevel`.
+ *
+ * With `showParentLevel` set to `true` (default):
+ * - Parent lvl0
+ *   - **lvl1**
+ *     - **lvl2**
+ *     - lvl2
+ *     - lvl2
+ *   - lvl 1
+ *   - lvl 1
+ * - Parent lvl0
+ * - Parent lvl0
+ *
+ * With `showParentLevel` set to `false`:
+ * - Parent lvl0
+ *   - **lvl1**
+ *     - **lvl2**
+ * - Parent lvl0
+ * - Parent lvl0
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).

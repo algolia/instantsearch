@@ -1,5 +1,6 @@
 import urlSync from '../url-sync.js';
 import jsHelper from 'algoliasearch-helper';
+const SearchParameters = jsHelper.SearchParameters;
 
 jest.useFakeTimers();
 
@@ -27,7 +28,8 @@ describe('urlSync mechanics', () => {
     const helper = jsHelper({ addAlgoliaAgent: () => {} });
     const urlUtils = makeTestUrlUtils();
     const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });
-    urlSyncWidget.render({ helper });
+    urlSyncWidget.init({ state: SearchParameters.make({}) });
+    urlSyncWidget.render({ helper, state: helper.state });
 
     expect(urlUtils.lastQs).toEqual('');
     helper.setQuery('query');
@@ -41,11 +43,29 @@ describe('urlSync mechanics', () => {
     const helper = jsHelper({ addAlgoliaAgent: () => {} });
     const urlUtils = makeTestUrlUtils();
     const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });
-    urlSyncWidget.render({ helper });
+    urlSyncWidget.init({ state: SearchParameters.make({}) });
+    urlSyncWidget.render({ helper, state: helper.state });
     helper.setQuery('query');
 
     jest.runOnlyPendingTimers();
 
     expect(urlUtils.lastQs).not.toEqual(expect.stringContaining('is_v'));
+  });
+  test('updates the URL durding the first rendering if it has change since the initial configuration', () => {
+    const helper = jsHelper({ addAlgoliaAgent: () => {} });
+    const urlUtils = makeTestUrlUtils();
+    const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });
+    urlSyncWidget.init({ state: SearchParameters.make({}) });
+
+    // In this scenario, there should have been a search here
+    // but it was prevented by a search function
+    helper.setQuery('query');
+    // the change even is setup at the first rendering
+    urlSyncWidget.render({ helper, state: helper.state });
+
+    // because the state has changed before the first rendering,
+    // we expect the URL to be updated
+    jest.runOnlyPendingTimers();
+    expect(urlUtils.lastQs).toMatchSnapshot();
   });
 });

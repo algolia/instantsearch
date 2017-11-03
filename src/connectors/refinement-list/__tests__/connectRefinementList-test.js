@@ -47,6 +47,7 @@ describe('connectRefinementList', () => {
 
       expect(widget.getConfiguration()).toEqual({
         disjunctiveFacets: ['myFacet'],
+        maxValuesPerFacet: 10,
       });
     });
 
@@ -78,6 +79,7 @@ describe('connectRefinementList', () => {
 
       expect(widget.getConfiguration()).toEqual({
         facets: ['myFacet'],
+        maxValuesPerFacet: 10,
       });
     });
   });
@@ -233,6 +235,107 @@ describe('connectRefinementList', () => {
     expect(secondRenderingOptions.canToggleShowMore).toBe(false);
   });
 
+  it('If there are no showMoreLimit specified, canToggleShowMore is false', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 1,
+    });
+
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).lastCalledWith(expect.objectContaining({
+      canToggleShowMore: false,
+    }), false);
+  });
+
+  it('If there are same amount of items then canToggleShowMore is false', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+      showMoreLimit: 10,
+    });
+
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).lastCalledWith(expect.objectContaining({
+      canToggleShowMore: false,
+    }), false);
+  });
+
   it('If there are enough items then canToggleShowMore is true', () => {
     const widget = makeWidget({
       attributeName: 'category',
@@ -340,17 +443,18 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.items).toEqual([
-      {
+    expect(rendering).lastCalledWith(expect.objectContaining({
+      canToggleShowMore: true,
+      items: [{
         label: 'c1',
         value: 'c1',
         highlighted: 'c1',
         count: 880,
         isRefined: false,
-      },
-    ]);
+      }],
+    }), false);
 
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     // toggleShowMore does a new render
     secondRenderingOptions.toggleShowMore();
 

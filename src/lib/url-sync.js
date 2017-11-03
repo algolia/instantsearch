@@ -120,6 +120,10 @@ class URLSync {
     );
   }
 
+  init({ state }) {
+    this.initState = state;
+  }
+
   getConfiguration(currentConfiguration) {
     // we need to create a REAL helper to then get its state. Because some parameters
     // like hierarchicalFacet.rootPath are then triggering a default refinement that would
@@ -132,11 +136,21 @@ class URLSync {
     return this.searchParametersFromUrl;
   }
 
-  render({ helper }) {
+  render({ helper, state }) {
     if (this.firstRender) {
       this.firstRender = false;
       this.onHistoryChange(this.onPopState.bind(this, helper));
-      helper.on('change', state => this.renderURLFromState(state));
+      helper.on('change', s => this.renderURLFromState(s));
+
+      const initStateQs = this.getQueryString(this.initState);
+      const stateQs = this.getQueryString(state);
+      if (initStateQs !== stateQs) {
+        // force update the URL, if the state has changed since the initial URL read
+        // We do this in order to make a URL update when there is search function
+        // that prevent the search of the initial rendering
+        // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
+        this.renderURLFromState(state);
+      }
     }
   }
 
@@ -152,13 +166,21 @@ class URLSync {
   }
 
   renderURLFromState(state) {
+    const qs = this.getQueryString(state);
+    clearTimeout(this.urlUpdateTimeout);
+    this.urlUpdateTimeout = setTimeout(() => {
+      this.urlUtils.pushState(qs, { getHistoryState: this.getHistoryState });
+    }, this.threshold);
+  }
+
+  getQueryString(state) {
     const currentQueryString = this.urlUtils.readUrl();
     const foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(
       currentQueryString,
       { mapping: this.mapping }
     );
 
-    const qs = urlHelper.getQueryStringFromState(
+    return urlHelper.getQueryStringFromState(
       state.filter(this.trackedParameters),
       {
         moreAttributes: foreignConfig,
@@ -166,11 +188,6 @@ class URLSync {
         safe: true,
       }
     );
-
-    clearTimeout(this.urlUpdateTimeout);
-    this.urlUpdateTimeout = setTimeout(() => {
-      this.urlUtils.pushState(qs, { getHistoryState: this.getHistoryState });
-    }, this.threshold);
   }
 
   // External API's
