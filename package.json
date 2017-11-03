@@ -92,7 +92,6 @@
     "mversion": "1.10.1",
     "netlify-cli": "1.2.2",
     "node-sass": "4.5.3",
-    "npm-check": "5.4.5",
     "postcss": "6.0.14",
     "postcss-loader": "2.0.8",
     "postcss-scss": "1.0.2",
