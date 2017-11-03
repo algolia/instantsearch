@@ -1,9 +1,7 @@
-/* eslint-disable import/default */
 import { registerDisposer, start } from 'dev-novel';
-
-import initBuiltInWidgets from './init-builtin-widgets.js';
-import initVanillaWidgets from './init-vanilla-widgets.js';
-import initJqueryWidgets from './init-jquery-widgets.js';
+import initBuiltInWidgets from './builtin/init-stories';
+import initJqueryWidgets from './jquery/init-stories';
+import initVanillaWidgets from './vanilla/init-stories';
 
 import '../style.css';
 import '../../src/css/instantsearch.scss';
