@@ -76,7 +76,7 @@ export default {
       this._localSearchStore = createFromAlgoliaCredentials(
         this.appId,
         this.apiKey,
-        this.stalledSearchTimeout,
+        this.stalledSearchTimeout
       );
     } else {
       this._localSearchStore = this.searchStore;
