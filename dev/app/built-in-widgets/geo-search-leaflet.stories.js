@@ -121,43 +121,55 @@ export default () => {
         })
       );
     })
-  ).add(
-    'with position from Places with refine disable on move',
-    wrapWithHitsAndConfiguration(container => {
-      const placesElemeent = document.createElement('input');
-      const mapElement = document.createElement('div');
-
-      container.appendChild(placesElemeent);
-      container.appendChild(mapElement);
-
-      window.search.addWidget(
-        instantsearchPlacesWidget({
-          container: placesElemeent,
-          defaultPosition: [37.7749, -122.4194],
-        })
-      );
-
-      window.search.addWidget(
-        instantsearch.widgets.geoSearchWithLeaflet({
-          container: mapElement,
-          radius: 20000,
-          enableGeolocationWithIP: false,
-          enableRefineOnMapMove: false,
-        })
-      );
-    })
   );
 
   // Only UI
   Stories.add(
-    'disable refine on move',
+    'with control & refine on map move',
     wrapWithHitsAndConfiguration(container => {
       window.search.addWidget(
         instantsearch.widgets.geoSearchWithLeaflet({
           container,
-          enableRefineOnMapMove: false,
+          enableControlRefineWithMap: true,
+          enableRefineOnMapMove: true,
         })
       );
     })
-  );
+  )
+    .add(
+      'with control & disable refine on map move',
+      wrapWithHitsAndConfiguration(container => {
+        window.search.addWidget(
+          instantsearch.widgets.geoSearchWithLeaflet({
+            container,
+            enableControlRefineWithMap: true,
+            enableRefineOnMapMove: false,
+          })
+        );
+      })
+    )
+    .add(
+      'without control & refine on map move',
+      wrapWithHitsAndConfiguration(container => {
+        window.search.addWidget(
+          instantsearch.widgets.geoSearchWithLeaflet({
+            container,
+            enableControlRefineWithMap: false,
+            enableRefineOnMapMove: true,
+          })
+        );
+      })
+    )
+    .add(
+      'without control & disable refine on map move',
+      wrapWithHitsAndConfiguration(container => {
+        window.search.addWidget(
+          instantsearch.widgets.geoSearchWithLeaflet({
+            container,
+            enableControlRefineWithMap: false,
+            enableRefineOnMapMove: false,
+          })
+        );
+      })
+    );
 };
