@@ -62,6 +62,7 @@ export class Store {
     if (this._helper) {
       this._helper.removeListener('change', onHelperChange);
       this._helper.removeListener('result', onHelperResult);
+      this._helper.removeListener('search', onHelperSearch);
     }
 
     this._helper = helper;
@@ -81,8 +82,20 @@ export class Store {
 
     this._helper.on('change', onHelperChange.bind(this));
     this._helper.on('result', onHelperResult.bind(this));
+    this._helper.on('search', onHelperSearch.bind(this));
 
     this._helper.getClient().addAlgoliaAgent(`vue-instantsearch ${version}`);
+
+    this._stalledSearchTimer = null;
+    this.isSearchStalled = false;
+  }
+
+  get isSearchStalled() {
+    return this._isSearchStalled;
+  }
+
+  set isSearchStalled(isStalled) {
+    this._isSearchStalled = isStalled;
   }
 
   get algoliaHelper() {
@@ -416,11 +429,17 @@ export class Store {
 
       const resolvePromise = () => {
         this._helper.removeListener('error', rejectPromise);
+        this._stalledSearchTimer = null;
+        clearTimeout(this._stalledSearchTimer);
+        this.isSearchStalled = false;
         resolve();
       };
 
       const rejectPromise = error => {
         this._helper.removeListener('searchQueueEmpty', resolvePromise);
+        this._stalledSearchTimer = null;
+        clearTimeout(this._stalledSearchTimer);
+        this.isSearchStalled = false;
         reject(error);
       };
 
@@ -450,4 +469,18 @@ const onHelperResult = function(response) {
     this.highlightPreTag,
     this.highlightPostTag
   );
+
+  if(!this._helper.hasPendingRequests()) {
+    clearTimeout(this._stalledSearchTimer);
+    this._stalledSearchTimer = null;
+    this.isSearchStalled = false;
+  }
 };
+
+const onHelperSearch = function() {
+  if(!this._stalledSearchTimer) {
+    this._stalledSearchTimer = setTimeout(() => {
+      this.isSearchStalled = true;
+    }, 200);
+  }
+}
