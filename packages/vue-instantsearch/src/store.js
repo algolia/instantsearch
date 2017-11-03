@@ -15,11 +15,11 @@ export const FACET_TREE = 'tree';
 export const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
 export const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
 
-export const createFromAlgoliaCredentials = (appID, apiKey) => {
+export const createFromAlgoliaCredentials = (appID, apiKey, stalledSearchTimeout) => {
   const client = algolia(appID, apiKey);
   const helper = algoliaHelper(client);
 
-  return new Store(helper);
+  return new Store(helper, {stalledSearchTimeout});
 };
 
 export const createFromAlgoliaClient = client => {
@@ -39,7 +39,7 @@ export const createFromSerialized = data => {
 };
 
 export class Store {
-  constructor(helper) {
+  constructor(helper, {stalledSearchTimeout = 200} = {}) {
     if (!(helper instanceof algoliaHelper.AlgoliaSearchHelper)) {
       throw new TypeError(
         'Store should be constructed with an AlgoliaSearchHelper instance as first parameter.'
@@ -54,6 +54,8 @@ export class Store {
     this._highlightPostTag = '</em>';
 
     this._cacheEnabled = true;
+
+    this._stalledSearchTimeout = stalledSearchTimeout;
 
     this.algoliaHelper = helper;
   }
@@ -481,6 +483,6 @@ const onHelperSearch = function() {
   if(!this._stalledSearchTimer) {
     this._stalledSearchTimer = setTimeout(() => {
       this.isSearchStalled = true;
-    }, 200);
+    }, this._stalledSearchTimeout);
   }
 }
