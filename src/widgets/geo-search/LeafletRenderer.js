@@ -17,6 +17,17 @@ const refineWithBounds = (refine, bounds) => {
   });
 };
 
+const renderRedoSearchButton = ({ renderState, refine }) => {
+  renderState.containerControl.innerHTML = '';
+  const button = document.createElement('button');
+  button.textContent = 'Redo search here';
+  button.addEventListener('click', () => {
+    renderState.hasMapMoveSinceLastRefine = false;
+    refineWithBounds(refine, renderState.map.getBounds());
+  });
+  renderState.containerControl.appendChild(button);
+};
+
 const renderer = (
   {
     hits,
@@ -25,6 +36,7 @@ const renderer = (
     isRefinedWithMap,
     isRefinePositionChanged,
     enableRefineOnMapMove,
+    enableControlRefineWithMap,
     widgetParams,
   },
   isFirstRendering
@@ -33,6 +45,7 @@ const renderer = (
 
   if (isFirstRendering) {
     // Inital component state
+    renderState.enableRefineOnMapMove = enableRefineOnMapMove;
     renderState.hasMapMoveSinceLastRefine = false;
     renderState.isUserInteraction = true;
 
@@ -70,10 +83,17 @@ const renderer = (
     });
     renderState.buttonClearMapRefinement = buttonClearMapRefinement;
 
-    if (!enableRefineOnMapMove) {
+    if (enableControlRefineWithMap) {
+      const containerControl = document.createElement('div');
+      containerControl.className = 'ais-control';
+      containerButtonElement.appendChild(containerControl);
+      renderState.containerControl = containerControl;
+    }
+
+    if (!enableControlRefineWithMap && !renderState.enableRefineOnMapMove) {
       const buttonRefineOnMapMove = document.createElement('button');
       buttonRefineOnMapMove.className = 'ais-button-refine';
-      buttonRefineOnMapMove.textContent = 'Refine with the current map view';
+      buttonRefineOnMapMove.textContent = 'Redo search here';
       containerButtonElement.appendChild(buttonRefineOnMapMove);
       buttonRefineOnMapMove.addEventListener('click', () => {
         renderState.hasMapMoveSinceLastRefine = false;
@@ -97,7 +117,7 @@ const renderer = (
 
     // Setup events on map
     renderState.map.on('dragend', event => {
-      if (enableRefineOnMapMove) {
+      if (renderState.enableRefineOnMapMove) {
         renderState.hasMapMoveSinceLastRefine = false;
         refineWithBounds(refine, event.target.getBounds());
       }
@@ -107,9 +127,18 @@ const renderer = (
       if (renderState.isUserInteraction) {
         renderState.hasMapMoveSinceLastRefine = true;
 
-        if (enableRefineOnMapMove) {
+        if (enableControlRefineWithMap && !renderState.enableRefineOnMapMove) {
+          renderRedoSearchButton({
+            renderState,
+            refine,
+          });
+        }
+
+        if (enableControlRefineWithMap && renderState.enableRefineOnMapMove) {
           refineWithBounds(refine, event.target.getBounds());
-        } else {
+        }
+
+        if (!enableControlRefineWithMap) {
           renderState.buttonRefineOnMapMove.removeAttribute('disabled');
         }
       }
@@ -130,7 +159,15 @@ const renderer = (
   renderState.map.off('dragstart');
   renderState.map.on('dragstart', () => {
     renderState.hasMapMoveSinceLastRefine = true;
-    if (!enableRefineOnMapMove) {
+
+    if (enableControlRefineWithMap && !renderState.enableRefineOnMapMove) {
+      renderRedoSearchButton({
+        renderState,
+        refine,
+      });
+    }
+
+    if (!enableControlRefineWithMap && !renderState.enableRefineOnMapMove) {
       renderState.buttonRefineOnMapMove.removeAttribute('disabled');
     }
   });
@@ -155,7 +192,21 @@ const renderer = (
     renderState.buttonClearMapRefinement.setAttribute('disabled', true);
   }
 
-  if (!enableRefineOnMapMove) {
+  if (enableControlRefineWithMap) {
+    renderState.containerControl.innerHTML = '';
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = renderState.enableRefineOnMapMove;
+    label.appendChild(checkbox);
+    label.append('Search as I move the map');
+    checkbox.addEventListener('change', event => {
+      renderState.enableRefineOnMapMove = event.currentTarget.checked;
+    });
+    renderState.containerControl.appendChild(label);
+  }
+
+  if (!enableControlRefineWithMap && !renderState.enableRefineOnMapMove) {
     if (renderState.hasMapMoveSinceLastRefine) {
       renderState.buttonRefineOnMapMove.removeAttribute('disabled');
     } else {
