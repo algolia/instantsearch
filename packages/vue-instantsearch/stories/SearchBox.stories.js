@@ -6,6 +6,9 @@ storiesOf('SearchBox', module)
   .add('default', () => ({
     template: '<ais-search-box></ais-search-box>',
   }))
+  .add('with loading indicator', () => ({
+    template: '<ais-search-box showLoadingIndicator></ais-search-box>',
+  }))
   .add('with default query', () => ({
     template: '<ais-search-box ref="child"></ais-search-box>',
     mounted() {
