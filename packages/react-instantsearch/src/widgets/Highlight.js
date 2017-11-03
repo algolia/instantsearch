@@ -10,6 +10,9 @@ import HighlightComponent from '../components/Highlight.js';
  * @propType {string} attributeName - the location of the highlighted attribute in the hit
  * @propType {object} hit - the hit object containing the highlighted attribute
  * @propType {string} [tagName='em'] - the tag to be used for highlighted parts of the hit
+ * @themeKey ais-Highlight - the root of the component
+ * @themeKey ais-Highlight__highlighted - part of the text that is highlighted
+ * @themeKey ais-Highlight__nonHighlighted - part of the text that is non highlighted
  * @example
  * import React from 'react';
  *
