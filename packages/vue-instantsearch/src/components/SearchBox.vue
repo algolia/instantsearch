@@ -69,11 +69,6 @@ export default {
       blockClassName: 'ais-search-box',
     };
   },
-  computed: {
-    searchStalledClassName() {
-      return this.searchStore.isSearchStalled ? 'ais-search-box__stalled-search' : '';
-    },
-  },
   methods: {
     onFormSubmit() {
       const input = this.$el.querySelector('input[type=search]');
