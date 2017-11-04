@@ -51,6 +51,7 @@ exports[`Server-side rendering recipes App renders without crashing 1`] = `
         autoCorrect="off"
         autoFocus={false}
         className="ais-SearchBox__input"
+        maxLength="512"
         onChange={[Function]}
         placeholder="Search here…"
         required={true}

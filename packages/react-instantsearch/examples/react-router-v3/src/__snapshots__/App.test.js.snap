@@ -63,6 +63,7 @@ exports[`react-router recipe App renders without crashing 1`] = `
             autoCorrect="off"
             autoFocus={false}
             className="ais-SearchBox__input"
+            maxLength="512"
             onChange={[Function]}
             placeholder="Search here…"
             required={true}
