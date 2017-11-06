@@ -172,9 +172,9 @@ ansi-styles@^3.0.0, ansi-styles@^3.1.0:
   dependencies:
     color-convert "^1.9.0"
 
-antd@2.13.8:
-  version "2.13.8"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-2.13.8.tgz#8aa3e8562a91e775a908dc303cd689d178dc0c07"
+antd@2.13.9:
+  version "2.13.9"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-2.13.9.tgz#f8bcd17f0ecf9c5ef659bb6bc0124b450e6de080"
   dependencies:
     array-tree-filter "~1.0.0"
     babel-runtime "6.x"
