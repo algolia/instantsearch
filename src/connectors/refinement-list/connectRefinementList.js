@@ -334,7 +334,9 @@ export default function connectRefinementList(renderFn) {
         const facetValues = results.getFacetValues(attributeName, { sortBy });
         const items = facetValues.slice(0, this.getLimit()).map(formatItems);
 
-        const maxValuesPerFacetConfig = state.getQueryParameter('maxValuesPerFacet');
+        const maxValuesPerFacetConfig = state.getQueryParameter(
+          'maxValuesPerFacet'
+        );
         const currentLimit = this.getLimit();
         // If the limit is the max number of facet retrieved it is impossible to know
         // if the facets are exhaustives. The only moment we are sure it is exhaustive
@@ -342,9 +344,10 @@ export default function connectRefinementList(renderFn) {
         // widget has requested more values (maxValuesPerFacet > getLimit()).
         // Because this is used for making the search of facets unable or not, it is important
         // to be conservative here.
-        const hasExhaustiveItems = maxValuesPerFacetConfig > currentLimit
-          ? facetValues.length <= currentLimit
-          : facetValues.length < currentLimit;
+        const hasExhaustiveItems =
+          maxValuesPerFacetConfig > currentLimit
+            ? facetValues.length <= currentLimit
+            : facetValues.length < currentLimit;
 
         lastResultsFromMainSearch = items;
 

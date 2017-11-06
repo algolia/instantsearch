@@ -569,14 +569,10 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      {
-        ...widget.getConfiguration({}),
-        maxValuesPerFacet: 3
-      }
-    );
+    const helper = algoliasearchHelper(fakeClient, '', {
+      ...widget.getConfiguration({}),
+      maxValuesPerFacet: 3,
+    });
     helper.search = sinon.stub();
 
     widget.init({
