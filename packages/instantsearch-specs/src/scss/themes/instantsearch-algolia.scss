@@ -66,13 +66,24 @@ a[class^='ais-'] {
   }
 }
 
+.ais-CurrentRefinedValues-body {
+  display: flex;
+}
+
 .ais-CurrentRefinedValues-list {
-  display: inline-block;
-  vertical-align: top;
+  display: flex;
+
+  + .ais-CurrentRefinedValues-reset {
+    margin-left: 0.3rem;
+  }
 }
 
 .ais-CurrentRefinedValues-item {
   display: inline-block;
+
+  + .ais-CurrentRefinedValues-item {
+    margin-left: 0.3rem;
+  }
 }
 
 .ais-CurrentRefinedValues-button {
@@ -132,7 +143,10 @@ a[class^='ais-'] {
 }
 
 .ais-HierarchicalMenu-count,
-.ais-Menu-count {
+.ais-Menu-count,
+.ais-RefinementList-count,
+.ais-Toggle-count,
+.ais-StarRating-count {
   font-size: 0.8rem;
 
   &:before {
@@ -146,6 +160,16 @@ a[class^='ais-'] {
 
 .ais-Highlight {
   background-color: $koromiko;
+}
+
+.ais-Hits-header,
+.ais-InfiniteHits-header {
+  margin-bottom: 1rem;
+}
+
+.ais-Hits-footer,
+.ais-InfiniteHits-footer {
+  margin-top: 1rem;
 }
 
 .ais-Hits-list,
@@ -170,7 +194,7 @@ a[class^='ais-'] {
 .ais-NumericSelector-select,
 .ais-SortBySelector-select {
   appearance: none;
-  padding: 0.3rem 2rem 0.5rem 0.5rem;
+  padding: 0.3rem 2rem 0.3rem 0.3rem;
   background-color: #fff;
   background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z%27 fill%3D%22%233A4570%22 /%3E%3C/svg%3E');
   background-repeat: no-repeat;
@@ -180,34 +204,32 @@ a[class^='ais-'] {
   border-radius: 5px;
 }
 
-.ais-InfiniteHits-showMore,
-.ais-Menu-showMore {
+.ais-InfiniteHits-showMore {
   margin-top: 1rem;
+}
+
+.ais-NumericRange-form {
+  display: flex;
+  align-items: center;
 }
 
 .ais-NumericRange-input {
   padding: 0 0.2rem;
-  display: inline-block;
-  vertical-align: middle;
   width: 5rem;
   height: 1.5rem;
   line-height: 1.5rem;
 }
 
-.ais-NumericRange-label,
 .ais-NumericRange-separator {
-  display: inline-block;
-  vertical-align: middle;
+  margin: 0 0.3rem;
 }
 
 .ais-NumericRange-submit {
+  margin-left: 0.3rem;
   appearance: none;
   padding: 0 0.5rem;
-  display: inline-block;
-  vertical-align: middle;
   height: 1.5rem;
   line-height: 1.5rem;
-
   font-size: 0.8rem;
   color: #fff;
   background-color: $algolia-blue;
@@ -221,5 +243,109 @@ a[class^='ais-'] {
   }
 }
 
-.ais-Pagination {
+.ais-Menu-showMore {
+  margin-top: 0.5rem;
+}
+
+.ais-Pagination-list {
+  display: flex;
+  justify-content: center;
+}
+
+.ais-Pagination-item {
+  + .ais-Pagination-item {
+    margin-left: 0.3rem;
+  }
+}
+
+.ais-Pagination-link {
+  display: inline-block;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid $ghost;
+  border-radius: 5px;
+}
+
+.ais-RangeSlider {
+  .rheostat-progress {
+    background-color: $east-bay;
+  }
+
+  .rheostat-background {
+    border-color: darken($ghost, 20%);
+  }
+}
+
+.ais-RangeSlider-handle {
+  border-color: darken($ghost, 20%);
+}
+
+.ais-RangeSlider-tooltip,
+.ais-RangeSlider-value {
+  font-size: 0.8rem;
+}
+
+.ais-RangeSlider-marker {
+  background-color: darken($ghost, 20%);
+}
+
+.ais-SearchBox-form {
+  display: block;
+  position: relative;
+}
+
+.ais-SearchBox-input {
+  appearance: none;
+  padding: 0.3rem 2rem 0.3rem 0.3rem;
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid $ghost;
+  border-radius: 5px;
+
+  &::-webkit-input-placeholder {
+    color: lighten($port-gore, 40%);
+  }
+
+  &::-moz-placeholder {
+    color: lighten($port-gore, 40%);
+  }
+
+  &:-ms-input-placeholder {
+    color: lighten($port-gore, 40%);
+  }
+
+  &:-moz-placeholder {
+    color: lighten($port-gore, 40%);
+  }
+}
+
+.ais-SearchBox-submit,
+.ais-SearchBox-reset {
+  appearance: none;
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  right: 0.3rem;
+  transform: translateY(-50%);
+}
+
+.ais-SearchBox-submitIcon,
+.ais-SearchBox-reseticon {
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  path {
+    fill: $east-bay;
+  }
+}
+
+.ais-StarRating-starIcon {
+  width: 15px;
+  fill: $koromiko;
 }

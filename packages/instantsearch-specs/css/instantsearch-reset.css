@@ -69,7 +69,7 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box; }
 
-.ais-SearchBox-magnifierIcon {
+.ais-SearchBox-submitIcon {
   position: absolute;
   z-index: 1;
   width: auto;
