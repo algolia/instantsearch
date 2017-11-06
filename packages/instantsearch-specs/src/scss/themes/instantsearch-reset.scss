@@ -30,6 +30,8 @@
 .ais-InfiniteHits-showMore,
 .ais-Menu-showMore,
 .ais-NumericRange-submit,
+.ais-SearchBox-submit,
+.ais-SearchBox-reset,
 .ais-StarRating-button {
   padding: 0;
   overflow: visible;
@@ -71,26 +73,6 @@
   vertical-align: middle;
   width: 70px;
   height: auto;
-}
-
-.ais-SearchBox-form {
-  display: block;
-  position: relative;
-}
-
-.ais-SearchBox-input {
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.ais-SearchBox-magnifierIcon {
-  position: absolute;
-  z-index: 1;
-  width: auto;
-  height: 60%;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
 }
 
 .ais-StarRating-starIcon {

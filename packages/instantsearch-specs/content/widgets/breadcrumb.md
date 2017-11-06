@@ -21,7 +21,7 @@ html: |
           >
         </li>
         <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
-          <a class="ais-Breadcrumb-link" href="some-link">Kitchen textiles</a>
+          Kitchen textiles
         </li>
       </ul>
     </div>
