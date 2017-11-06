@@ -113,6 +113,8 @@ const renderer = (
       style: 'mapbox://styles/mapbox/streets-v9',
     });
 
+    renderState.map.addControl(new mapbox.NavigationControl(), 'top-left');
+
     // Setup the events
     renderState.map.on('dragend', event => {
       if (renderState.enableRefineOnMapMove) {
