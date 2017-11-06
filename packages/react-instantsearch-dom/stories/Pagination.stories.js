@@ -7,6 +7,7 @@ import {
 } from '../packages/react-instantsearch/dom';
 import { withKnobs, boolean, number } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
+import { checkA11y } from 'storybook-addon-a11y';
 import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
@@ -15,6 +16,7 @@ const stories = storiesOf('Pagination', module);
 
 stories
   .addDecorator(withKnobs)
+  .addDecorator(checkA11y)
   .addWithJSX(
     'default',
     () => (

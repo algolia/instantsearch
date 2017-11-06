@@ -14,10 +14,12 @@ import {
   connectStateResults,
 } from '../packages/react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
+import { checkA11y } from 'storybook-addon-a11y';
 
 const stories = storiesOf('<Index>', module);
 
 stories
+  .addDecorator(checkA11y)
   .add('MultiHits', () => (
     <InstantSearch
       appId="latency"

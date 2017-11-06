@@ -3,11 +3,12 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Snippet, Hits } from '../packages/react-instantsearch/dom';
 import { withKnobs, text } from '@storybook/addon-knobs';
+import { checkA11y } from 'storybook-addon-a11y';
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Snippet', module);
 
-stories.addDecorator(withKnobs);
+stories.addDecorator(withKnobs).addDecorator(checkA11y);
 
 const Default = ({ hit }) => (
   <article>
