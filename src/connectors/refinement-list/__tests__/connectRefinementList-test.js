@@ -483,7 +483,7 @@ describe('connectRefinementList', () => {
     ]);
   });
 
-  it('hasExhaustiveItems indicates if the items provided are exhaustive', () => {
+  it('hasExhaustiveItems indicates if the items provided are exhaustive - without other widgets making the maxValuesPerFacet bigger', () => {
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
@@ -512,6 +512,7 @@ describe('connectRefinementList', () => {
           facets: {
             category: {
               c1: 880,
+              c2: 880,
             },
           },
         },
@@ -519,6 +520,86 @@ describe('connectRefinementList', () => {
           facets: {
             category: {
               c1: 880,
+              c2: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // this one is `false` because we're not sure that what we asked is the actual number of facet values
+    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 34,
+              c3: 440,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 34,
+              c3: 440,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
+  });
+
+  it('hasExhaustiveItems indicates if the items provided are exhaustive - with an other widgets making the maxValuesPerFacet bigger', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', {
+      ...widget.getConfiguration({}),
+      maxValuesPerFacet: 3,
+    });
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 880,
             },
           },
         },
@@ -539,6 +620,7 @@ describe('connectRefinementList', () => {
               c1: 880,
               c2: 34,
               c3: 440,
+              c4: 440,
             },
           },
         },
@@ -548,6 +630,7 @@ describe('connectRefinementList', () => {
               c1: 880,
               c2: 34,
               c3: 440,
+              c4: 440,
             },
           },
         },
