@@ -3,6 +3,7 @@ import { bemHelper } from '../../lib/utils.js';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
 import GoogleMapsRenderer from './GoogleMapsRenderer';
 import LeafletRenderer from './LeafletRenderer';
+import MapboxRenderer from './MapboxRenderer';
 
 const bem = bemHelper('ais-geo');
 
@@ -36,3 +37,4 @@ const geoSearch = renderer => (props = {}) => {
 
 export const geoSearchWithGoogleMaps = geoSearch(GoogleMapsRenderer);
 export const geoSearchWithLeaflet = geoSearch(LeafletRenderer);
+export const geoSearchWithMapbox = geoSearch(MapboxRenderer);
