@@ -127,6 +127,11 @@ const renderer = (
       if (renderState.isUserInteraction) {
         renderState.hasMapMoveSinceLastRefine = true;
 
+        if (renderState.enableRefineOnMapMove) {
+          renderState.hasMapMoveSinceLastRefine = false;
+          refineWithBounds(refine, event.target.getBounds());
+        }
+
         if (enableControlRefineWithMap && !renderState.enableRefineOnMapMove) {
           renderRedoSearchButton({
             renderState,
@@ -134,11 +139,7 @@ const renderer = (
           });
         }
 
-        if (enableControlRefineWithMap && renderState.enableRefineOnMapMove) {
-          refineWithBounds(refine, event.target.getBounds());
-        }
-
-        if (!enableControlRefineWithMap) {
+        if (!enableControlRefineWithMap && !renderState.enableRefineOnMapMove) {
           renderState.buttonRefineOnMapMove.removeAttribute('disabled');
         }
       }
