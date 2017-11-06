@@ -4,22 +4,28 @@ import { setAddon, storiesOf } from '@storybook/react';
 import { Hits, Highlight, Snippet } from '../packages/react-instantsearch/dom';
 import { withKnobs } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
+import { checkA11y } from 'storybook-addon-a11y';
 import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
 
 const stories = storiesOf('Hits', module);
 
-stories.addDecorator(withKnobs).addWithJSX('default',
-() => (
-  <WrapWithHits linkedStoryGroup="Hits">
-    <Hits />
-  </WrapWithHits>
-),
-{
-  displayName,
-  filterProps,
-});
+stories
+  .addDecorator(withKnobs)
+  .addDecorator(checkA11y)
+  .addWithJSX(
+    'default',
+    () => (
+      <WrapWithHits linkedStoryGroup="Hits">
+        <Hits />
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  );
 
 stories.add('with custom rendering', () => (
   <WrapWithHits linkedStoryGroup="Hits">

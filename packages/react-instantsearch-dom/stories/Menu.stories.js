@@ -3,6 +3,7 @@ import { setAddon, storiesOf } from '@storybook/react';
 import { Menu, Panel, SearchBox } from '../packages/react-instantsearch/dom';
 import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
+import { checkA11y } from 'storybook-addon-a11y';
 import { orderBy } from 'lodash';
 import JSXAddon from 'storybook-addon-jsx';
 
@@ -12,6 +13,7 @@ const stories = storiesOf('Menu', module);
 
 stories
   .addDecorator(withKnobs)
+  .addDecorator(checkA11y)
   .addWithJSX(
     'default',
     () => (

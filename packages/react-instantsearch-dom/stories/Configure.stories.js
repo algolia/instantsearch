@@ -2,10 +2,11 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Configure } from '../packages/react-instantsearch/dom';
 import { WrapWithHits } from './util';
+import { checkA11y } from 'storybook-addon-a11y';
 
 const stories = storiesOf('Configure', module);
 
-stories.add('default', () => <ConfigureExample />);
+stories.addDecorator(checkA11y).add('default', () => <ConfigureExample />);
 
 class ConfigureExample extends React.Component {
   constructor() {

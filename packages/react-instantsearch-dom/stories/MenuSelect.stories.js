@@ -8,6 +8,7 @@ import {
   Panel,
   SearchBox,
 } from '../packages/react-instantsearch/dom';
+import { checkA11y } from 'storybook-addon-a11y';
 import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
@@ -16,6 +17,7 @@ const stories = storiesOf('MenuSelect', module);
 
 stories
   .addDecorator(withKnobs)
+  .addDecorator(checkA11y)
   .addWithJSX(
     'default',
     () => (

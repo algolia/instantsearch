@@ -2,10 +2,12 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { connectStateResults } from '../packages/react-instantsearch/connectors';
 import { WrapWithHits } from './util';
+import { checkA11y } from 'storybook-addon-a11y';
 
 const stories = storiesOf('Conditionals', module);
 
 stories
+  .addDecorator(checkA11y)
   .add('NoResults/HasResults', () => {
     const Content = connectStateResults(
       ({ searchState, searchResults }) =>
