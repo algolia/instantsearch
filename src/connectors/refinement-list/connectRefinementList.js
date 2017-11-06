@@ -238,7 +238,11 @@ export default function connectRefinementList(renderFn) {
         });
       } else {
         helper.searchForFacetValues(attributeName, query).then(results => {
-          const facetValues = results.facetHits;
+          const facetValues = results.facetHits.map(({ value, ...item }) => ({
+            ...item,
+            value,
+            label: value,
+          }));
 
           render({
             items: facetValues,
