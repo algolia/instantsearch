@@ -7,6 +7,7 @@ html: |
       Refinement list
     </div>
     <div class="ais-RefinementList-body ais-body">
+      <input class="ais-RefinementList-search" type="search" placeholder="Search for products" />
       <ul class="ais-RefinementList-list">
         <li class="ais-RefinementList-item ais-RefinementList-item--selected">
           <label class="ais-RefinementList-label">

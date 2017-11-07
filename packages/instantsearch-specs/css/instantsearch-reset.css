@@ -1,3 +1,6 @@
+[class^='ais-'] {
+  color: #000; }
+
 .ais-Breadcrumb-list,
 .ais-CurrentRefinedValues-list,
 .ais-HierarchicalMenu-list,
@@ -18,6 +21,9 @@
 .ais-CurrentRefinedValues-reset,
 .ais-InfiniteHits-showMore,
 .ais-Menu-showMore,
+.ais-NumericRange-submit,
+.ais-SearchBox-submit,
+.ais-SearchBox-reset,
 .ais-StarRating-button {
   padding: 0;
   overflow: visible;
@@ -36,6 +42,9 @@
   .ais-CurrentRefinedValues-reset::-moz-focus-inner,
   .ais-InfiniteHits-showMore::-moz-focus-inner,
   .ais-Menu-showMore::-moz-focus-inner,
+  .ais-NumericRange-submit::-moz-focus-inner,
+  .ais-SearchBox-submit::-moz-focus-inner,
+  .ais-SearchBox-reset::-moz-focus-inner,
   .ais-StarRating-button::-moz-focus-inner {
     padding: 0;
     border: 0; }
@@ -59,25 +68,6 @@
   vertical-align: middle;
   width: 70px;
   height: auto; }
-
-.ais-SearchBox-form {
-  display: block;
-  position: relative; }
-
-.ais-SearchBox-input {
-  width: 100%;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box; }
-
-.ais-SearchBox-submitIcon {
-  position: absolute;
-  z-index: 1;
-  width: auto;
-  height: 60%;
-  top: 50%;
-  right: 0;
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%); }
 
 .ais-StarRating-starIcon {
   display: inline-block;
