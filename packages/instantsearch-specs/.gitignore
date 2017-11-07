@@ -1,5 +1,9 @@
 node_modules/
 npm-debug.log
 .DS_Store
-public/
-css/
+/public/
+/css/
+/static/assets/css/
+/static/assets/js/
+/data/hashcss.json
+/data/hashjs.json
