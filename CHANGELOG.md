@@ -1,3 +1,15 @@
+<a name="2.2.3"></a>
+## [2.2.3](https://github.com/algolia/instantsearch.js/compare/v2.2.2...v2.2.3) (2017-11-07)
+
+
+### Bug Fixes
+
+* **connectRefinementList:** add label to searched items ([#2553](https://github.com/algolia/instantsearch.js/issues/2553)) ([ec810fa](https://github.com/algolia/instantsearch.js/commit/ec810fa))
+* **refinementList:** fix facet exhaustivity check ([#2554](https://github.com/algolia/instantsearch.js/issues/2554)) ([0f1bf08](https://github.com/algolia/instantsearch.js/commit/0f1bf08)), closes [#2552](https://github.com/algolia/instantsearch.js/issues/2552)
+* **theme:** searchbar should have normal size input ([#2545](https://github.com/algolia/instantsearch.js/issues/2545)) ([50d99f0](https://github.com/algolia/instantsearch.js/commit/50d99f0))
+
+
+
 <a name="2.2.2"></a>
 ## [2.2.2](https://github.com/algolia/instantsearch.js/compare/v2.2.1...v2.2.2) (2017-10-30)
 
