@@ -21,6 +21,7 @@ export {
   unescapeRefinement,
   checkRendering,
   isReactElement,
+  noop,
 };
 
 /**
@@ -325,3 +326,5 @@ function isReactElement(object) {
     object.$$typeof === REACT_ELEMENT_TYPE
   );
 }
+
+function noop() {}
