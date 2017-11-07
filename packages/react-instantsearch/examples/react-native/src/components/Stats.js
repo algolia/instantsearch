@@ -32,7 +32,8 @@ export default connectStats(({ nbHits, searchState, onSearchStateChange }) => (
         Actions.Home({
           searchState,
           onSearchStateChange,
-        })}
+        })
+      }
       /* eslint-enable new-cap */
       color="#162331"
     />

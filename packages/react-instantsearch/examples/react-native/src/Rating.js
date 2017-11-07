@@ -111,7 +111,8 @@ class Rating extends Component {
       onPress={() =>
         selected
           ? this.props.refine({ min: this.props.min, max: this.props.max })
-          : this.props.refine({ min, max })}
+          : this.props.refine({ min, max })
+      }
     >
       <View
         pointerEvents="none"

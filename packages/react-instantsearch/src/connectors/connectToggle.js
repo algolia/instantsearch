@@ -45,9 +45,9 @@ function cleanUp(props, searchState, context) {
  *  provides an on/off filtering feature based on an attribute value. Note that if you provide an “off” option, it will be refined at initialization.
  * @name connectToggle
  * @kind connector
- * @requirements To use this widget, you'll need an attribute to toggle on. 
- * 
- * You can't toggle on null or not-null values. If you want to address this particular use-case you'll need to compute an 
+ * @requirements To use this widget, you'll need an attribute to toggle on.
+ *
+ * You can't toggle on null or not-null values. If you want to address this particular use-case you'll need to compute an
  * extra boolean attribute saying if the value exists or not. See this [thread](https://discourse.algolia.com/t/how-to-create-a-toggle-for-the-absence-of-a-string-attribute/2460) for more details.
  *
  * @propType {string} attributeName - Name of the attribute on which to apply the `value` refinement. Required when `value` is present.

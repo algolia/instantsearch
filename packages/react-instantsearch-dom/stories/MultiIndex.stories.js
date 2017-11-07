@@ -116,7 +116,8 @@ const AutoComplete = connectAutoComplete(
       onSuggestionsClearRequested={() => refine('')}
       getSuggestionValue={hit => hit.name}
       renderSuggestion={hit =>
-        hit.brand ? <Product hit={hit} /> : <CategoryOrBrand hit={hit} />}
+        hit.brand ? <Product hit={hit} /> : <CategoryOrBrand hit={hit} />
+      }
       inputProps={{
         placeholder: 'Search for a category, brand or product',
         value: currentRefinement,
@@ -151,7 +152,9 @@ const CustomProducts = connectHits(({ hits }) => {
 });
 
 const Product = ({ hit }) => {
-  const image = `https://ecommerce-images.algolia.com/img/produit/nano/${hit.objectID}-1.jpg%3Falgolia`;
+  const image = `https://ecommerce-images.algolia.com/img/produit/nano/${
+    hit.objectID
+  }-1.jpg%3Falgolia`;
   return (
     <div className="multi-index_hit">
       <div>

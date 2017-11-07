@@ -34,7 +34,9 @@ const WrapWithHits = ({
   linkedStoryGroup,
   pagination = true,
 }) => {
-  const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${linkedStoryGroup}.stories.js`;
+  const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${
+    linkedStoryGroup
+  }.stories.js`;
   const playgroundLink = hasPlayground ? (
     <button
       onClick={linkTo(linkedStoryGroup, 'playground')}
@@ -102,7 +104,9 @@ const CustomHits = connectHits(({ hits }) => (
         <div>
           <div className="hit-picture">
             <img
-              src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_100,q_100,f_auto/${hit.image}`}
+              src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_100,q_100,f_auto/${
+                hit.image
+              }`}
             />
           </div>
         </div>

@@ -29,8 +29,8 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @translationkey noResults - The label of the no results text when no search for facet values results are found.
  * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
- * 
- * If you are using the `withSearchBox` prop, you'll also need to make the attribute searchable using 
+ *
+ * If you are using the `withSearchBox` prop, you'll also need to make the attribute searchable using
  * the [dashboard](https://www.algolia.com/explorer/display/) or using the [API](https://www.algolia.com/doc/guides/searching/faceting/#search-for-facet-values).
  * @example
  * import React from 'react';

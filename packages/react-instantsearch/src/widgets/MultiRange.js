@@ -24,9 +24,9 @@ import MultiRangeComponent from '../components/MultiRange.js';
  * @translationkey all - The label of the largest range added automatically by react instantsearch
  * @example
  * import React from 'react';
- * 
+ *
  * import { MultiRange, InstantSearch } from 'react-instantsearch/dom';
- * 
+ *
  * export default function App() {
  *   return (
  *     <InstantSearch

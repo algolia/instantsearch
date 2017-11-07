@@ -14,9 +14,9 @@ import Panel from '../components/Panel.js';
  * @themeKey ais-Panel__noRefinement - Present if the panel content is empty
  * @example
  * import React from 'react';
- * 
+ *
  * import { Panel, RefinementList, InstantSearch } from 'react-instantsearch/dom';
- * 
+ *
  * export default function App() {
  *   return (
  *     <InstantSearch
