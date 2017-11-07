@@ -30,7 +30,7 @@
     "@storybook/react": "3.2.14",
     "@storybook/ui": "3.2.14",
     "argos-cli": "0.0.9",
-    "async": "2.5.0",
+    "async": "2.6.0",
     "autoprefixer": "7.1.6",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
