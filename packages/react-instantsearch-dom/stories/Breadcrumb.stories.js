@@ -6,9 +6,8 @@ import {
   HierarchicalMenu,
 } from '../packages/react-instantsearch/dom';
 import { connectHierarchicalMenu } from '../packages/react-instantsearch/connectors';
-import { withKnobs, object, text } from '@storybook/addon-knobs';
+import { object, text } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
-import { checkA11y } from 'storybook-addon-a11y';
 import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
@@ -17,8 +16,6 @@ const stories = storiesOf('Breadcrumb', module);
 const VirtualHierarchicalMenu = connectHierarchicalMenu(() => null);
 
 stories
-  .addDecorator(withKnobs)
-  .addDecorator(checkA11y)
   .addWithJSX(
     'default',
     () => (

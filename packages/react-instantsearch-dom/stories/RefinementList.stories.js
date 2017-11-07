@@ -5,9 +5,8 @@ import {
   Panel,
   SearchBox,
 } from '../packages/react-instantsearch/dom';
-import { withKnobs, boolean, number, array } from '@storybook/addon-knobs';
+import { boolean, number, array } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
-import { checkA11y } from 'storybook-addon-a11y';
 import { orderBy } from 'lodash';
 import JSXAddon from 'storybook-addon-jsx';
 
@@ -16,8 +15,6 @@ setAddon(JSXAddon);
 const stories = storiesOf('RefinementList', module);
 
 stories
-  .addDecorator(withKnobs)
-  .addDecorator(checkA11y)
   .addWithJSX(
     'default',
     () => (

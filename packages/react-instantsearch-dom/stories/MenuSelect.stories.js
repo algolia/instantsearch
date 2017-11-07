@@ -1,14 +1,13 @@
 import React from 'react';
 import { orderBy } from 'lodash';
 import { setAddon, storiesOf } from '@storybook/react';
-import { withKnobs, text } from '@storybook/addon-knobs';
+import { text } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
 import {
   MenuSelect,
   Panel,
   SearchBox,
 } from '../packages/react-instantsearch/dom';
-import { checkA11y } from 'storybook-addon-a11y';
 import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
@@ -16,8 +15,6 @@ setAddon(JSXAddon);
 const stories = storiesOf('MenuSelect', module);
 
 stories
-  .addDecorator(withKnobs)
-  .addDecorator(checkA11y)
   .addWithJSX(
     'default',
     () => (

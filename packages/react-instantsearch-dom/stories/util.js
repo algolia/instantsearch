@@ -188,4 +188,5 @@ const displayName = element => {
 };
 
 const filterProps = ['linkedStoryGroup', 'hasPlayground'];
+
 export { displayName, filterProps, Wrap, WrapWithHits };

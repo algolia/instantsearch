@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
 import { SearchBox } from '../packages/react-instantsearch/dom';
-import { withKnobs, object } from '@storybook/addon-knobs';
+import { object } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
 import { action } from '@storybook/addon-actions';
-import { checkA11y } from 'storybook-addon-a11y';
 import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
@@ -12,8 +11,6 @@ setAddon(JSXAddon);
 const stories = storiesOf('SearchBox', module);
 
 stories
-  .addDecorator(withKnobs)
-  .addDecorator(checkA11y)
   .addWithJSX(
     'default',
     () => (
