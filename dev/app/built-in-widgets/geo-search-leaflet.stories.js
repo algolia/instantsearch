@@ -130,7 +130,7 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.geoSearchWithLeaflet({
           container,
-          enableControlRefineWithMap: true,
+          enableRefineControl: true,
           enableRefineOnMapMove: true,
         })
       );
@@ -142,7 +142,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
-            enableControlRefineWithMap: true,
+            enableRefineControl: true,
             enableRefineOnMapMove: false,
           })
         );
@@ -154,7 +154,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
-            enableControlRefineWithMap: false,
+            enableRefineControl: false,
             enableRefineOnMapMove: true,
           })
         );
@@ -166,7 +166,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
-            enableControlRefineWithMap: false,
+            enableRefineControl: false,
             enableRefineOnMapMove: false,
           })
         );
