@@ -150,7 +150,9 @@ export default createConnector({
         props[propName].length < 1
       ) {
         return new Error(
-          `Invalid prop ${propName} supplied to ${componentName}. Expected an Array of Strings`
+          `Invalid prop ${propName} supplied to ${
+            componentName
+          }. Expected an Array of Strings`
         );
       }
       return undefined;

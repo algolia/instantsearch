@@ -78,7 +78,8 @@ stories
         <RefinementList
           attributeName="category"
           transformItems={items =>
-            orderBy(items, ['label', 'count'], ['asc', 'desc'])}
+            orderBy(items, ['label', 'count'], ['asc', 'desc'])
+          }
         />
       </WrapWithHits>
     ),

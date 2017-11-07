@@ -22,5 +22,5 @@ export function findResultsState() {}
  * @name createInstantSearch
  * @kind server-side-rendering
  * @returns {{InstantSearch: Component, findResultsState: function}} - returns {InstantSearch: Component, findResultsState: function}
-*/
+ */
 export function createInstantSearch() {}

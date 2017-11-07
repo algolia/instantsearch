@@ -303,7 +303,8 @@ const ConnectedSortBy = connectSortBy(
             items.find(item => item.value === currentRefinement).label
           }
           onSelect={(index, value) =>
-            refine(items.find(item => item.label === value).value)}
+            refine(items.find(item => item.label === value).value)
+          }
           options={items.map(item => item.label)}
           renderRow={item => {
             const itemValue = items.find(i => i.label === item).value;
@@ -339,7 +340,8 @@ const Filters = connectCurrentRefinements(
         Actions.Filters({
           searchState,
           onSearchStateChange,
-        })}
+        })
+      }
       /* eslint-enable new-cap */
       title={`Filters (${items.length})`}
       color="#162331"

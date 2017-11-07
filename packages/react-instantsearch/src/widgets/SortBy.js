@@ -13,9 +13,9 @@ import SortByComponent from '../components/SortBy.js';
  * @themeKey ais-SortBy__root - the root of the component
  * @example
  * import React from 'react';
- * 
+ *
  * import { SortBy, InstantSearch } from 'react-instantsearch/dom';
- * 
+ *
  * export default function App() {
  *   return (
  *     <InstantSearch

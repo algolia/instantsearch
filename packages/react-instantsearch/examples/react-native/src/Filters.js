@@ -103,14 +103,16 @@ class Refinements extends React.Component {
       Price: {
         attributeName: 'price',
         value: item =>
-          `From ${item.currentRefinement.min}$ to ${item.currentRefinement
-            .max}$`,
+          `From ${item.currentRefinement.min}$ to ${
+            item.currentRefinement.max
+          }$`,
       },
       Rating: {
         attributeName: 'rating',
         value: item =>
-          `From ${item.currentRefinement.min} stars to ${item.currentRefinement
-            .max} stars`,
+          `From ${item.currentRefinement.min} stars to ${
+            item.currentRefinement.max
+          } stars`,
       },
       ClearAll: {
         attributeName: 'clearAll',

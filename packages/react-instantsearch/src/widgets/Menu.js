@@ -7,8 +7,8 @@ import MenuComponent from '../components/Menu.js';
  * @kind widget
  * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
- * 
- * If you are using the `withSearchBox` prop, you'll also need to make the attribute searchable using 
+ *
+ * If you are using the `withSearchBox` prop, you'll also need to make the attribute searchable using
  * the [dashboard](https://www.algolia.com/explorer/display/) or using the [API](https://www.algolia.com/doc/guides/searching/faceting/#search-for-facet-values).
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items

@@ -32,9 +32,9 @@ function transformValue(values) {
 }
 
 /**
- * The breadcrumb component is s a type of secondary navigation scheme that 
+ * The breadcrumb component is s a type of secondary navigation scheme that
  * reveals the user’s location in a website or web application.
- * 
+ *
  * @name connectBreadcrumb
  * @requirements To use this widget, your attributes must be formatted in a specific way.
  * If you want for example to have a Breadcrumb of categories, objects in your index
@@ -63,7 +63,7 @@ function transformValue(values) {
  * @kind connector
  * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
  * @propType {string} {React.Element} [separator=' > '] -  Specifies the level separator used in the data.
- * @propType {string} [rootURL=null] - The root element's URL (the originating page). 
+ * @propType {string} [rootURL=null] - The root element's URL (the originating page).
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
@@ -82,7 +82,9 @@ export default createConnector({
         props[propName].length < 1
       ) {
         return new Error(
-          `Invalid prop ${propName} supplied to ${componentName}. Expected an Array of Strings`
+          `Invalid prop ${propName} supplied to ${
+            componentName
+          }. Expected an Array of Strings`
         );
       }
       return undefined;
