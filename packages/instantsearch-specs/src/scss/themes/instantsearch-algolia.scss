@@ -111,6 +111,10 @@ a[class^='ais-'] {
 .ais-CurrentRefinedValues-reset {
   display: inline-block;
   vertical-align: top;
+
+  + .ais-CurrentRefinedValues-list {
+    margin-left: 0.3rem;
+  }
 }
 
 .ais-CurrentRefinedValues-count {
@@ -259,10 +263,14 @@ a[class^='ais-'] {
 }
 
 .ais-Pagination-link {
+  padding: 0.3rem 0.6rem;
   display: inline-block;
-  padding: 0.3rem 0.5rem;
   border: 1px solid $ghost;
   border-radius: 5px;
+}
+
+.ais-PoweredBy-text {
+  font-size: 0.8rem;
 }
 
 .ais-RangeSlider {
@@ -288,12 +296,17 @@ a[class^='ais-'] {
   background-color: darken($ghost, 20%);
 }
 
+.ais-RefinementList-search {
+  margin-bottom: 0.5rem;
+}
+
 .ais-SearchBox-form {
   display: block;
   position: relative;
 }
 
-.ais-SearchBox-input {
+.ais-SearchBox-input,
+.ais-RefinementList-search {
   appearance: none;
   padding: 0.3rem 2rem 0.3rem 0.3rem;
   width: 100%;
