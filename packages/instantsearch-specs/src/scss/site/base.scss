@@ -66,13 +66,22 @@ body {
   }
 }
 
-.cta {
+.intro {
   margin-top: 25px;
-  padding: 10px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+
+  h1 {
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+}
+
+.cta {
+  padding: 10px;
   text-decoration: none;
   color: #fff;
   background-color: $dark;
@@ -173,9 +182,9 @@ body {
 
 .theme-selector {
   margin: 0;
-  padding: 10px;
+  padding: 15px 20px;
   text-align: right;
-  background-color: #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 .info {

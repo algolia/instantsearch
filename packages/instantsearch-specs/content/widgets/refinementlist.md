@@ -34,6 +34,8 @@ classes:
     description: the header of the widget (optional)
   - name: .ais-RefinementList-body
     description: the body of the widget
+  - name: .ais-RefinementList-search
+    description: the search box of the widget
   - name: .ais-RefinementList-list
     description: the list of refinement items
   - name: .ais-RefinementList-item

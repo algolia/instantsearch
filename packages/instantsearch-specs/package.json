@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "./scripts/build.sh",
-    "dev": "gulp & hugo server & wait"
+    "dev": "NODE_ENV=development gulp & hugo server & wait"
   },
   "devDependencies": {
     "babel-preset-env": "^1.6.0",
