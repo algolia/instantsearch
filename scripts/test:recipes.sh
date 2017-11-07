@@ -5,12 +5,13 @@
 # cause test to fail if one fails
 set -e
 
-for d in packages/react-instantsearch/examples/* ; do 
+for d in packages/react-instantsearch/examples/* ; do
     cd $d
     yarn
+    yarn build
     if [ "$CI" = "true" ]
         then jest --runInBand
-        else jest 
+        else jest
     fi
     cd ../../../..
 done
