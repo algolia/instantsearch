@@ -9,6 +9,8 @@ navWeight: 68
 You can allow the user to search inside lists of items like [`<RefinementList>`](widgets/RefinementList.html), [`<Menu>`](widgets/Menu.html) widgets
 or [`connectRefinementList`](connectors/connectRefinementList.html) and [`connectMenu`](widgets/Menu.html) connectors.
 
+In order to make this feature work, you'll also need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
+
 ## Using widgets
 Use the `withSearchBox` prop to add a nice search box to supported widgets:
 - [`<RefinementList>`](widgets/RefinementList.html)

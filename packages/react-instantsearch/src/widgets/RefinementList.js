@@ -6,7 +6,7 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @name RefinementList
  * @kind widget
  * @propType {string} attributeName - the name of the attribute in the record
- * @propType {boolean} [withSearchBox=false] - true if the component should display an input to search for facet values
+ * @propType {boolean} [withSearchBox=false] - true if the component should display an input to search for facet values. <br> In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
  * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of displayed items
@@ -29,6 +29,9 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @translationkey noResults - The label of the no results text when no search for facet values results are found.
  * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
+ * 
+ * If you are using the `withSearchBox` prop, you'll also need to make the attribute searchable using 
+ * the [dashboard](https://www.algolia.com/explorer/display/) or using the [API](https://www.algolia.com/doc/guides/searching/faceting/#search-for-facet-values).
  * @example
  * import React from 'react';
  *
