@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.2.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.2.3 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -12144,7 +12144,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.2.2';
+exports.default = '2.2.3';
 
 /***/ }),
 /* 181 */
@@ -14630,7 +14630,15 @@ function connectRefinementList(renderFn) {
             });
           } else {
             helper.searchForFacetValues(attributeName, query).then(function (results) {
-              var facetValues = results.facetHits;
+              var facetValues = results.facetHits.map(function (_ref4) {
+                var value = _ref4.value,
+                    item = _objectWithoutProperties(_ref4, ['value']);
+
+                return _extends({}, item, {
+                  value: value,
+                  label: value
+                });
+              });
 
               _render({
                 items: facetValues,
@@ -14687,10 +14695,10 @@ function connectRefinementList(renderFn) {
 
         return widgetConfiguration;
       },
-      init: function init(_ref4) {
-        var helper = _ref4.helper,
-            createURL = _ref4.createURL,
-            instantSearchInstance = _ref4.instantSearchInstance;
+      init: function init(_ref5) {
+        var helper = _ref5.helper,
+            createURL = _ref5.createURL,
+            instantSearchInstance = _ref5.instantSearchInstance;
 
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
@@ -14724,7 +14732,15 @@ function connectRefinementList(renderFn) {
         var facetValues = results.getFacetValues(attributeName, { sortBy: sortBy });
         var items = facetValues.slice(0, this.getLimit()).map(formatItems);
 
-        var hasExhaustiveItems = facetValues.length <= this.getLimit();
+        var maxValuesPerFacetConfig = state.getQueryParameter('maxValuesPerFacet');
+        var currentLimit = this.getLimit();
+        // If the limit is the max number of facet retrieved it is impossible to know
+        // if the facets are exhaustives. The only moment we are sure it is exhaustive
+        // is when it is strictly under the number requested unless we know that another
+        // widget has requested more values (maxValuesPerFacet > getLimit()).
+        // Because this is used for making the search of facets unable or not, it is important
+        // to be conservative here.
+        var hasExhaustiveItems = maxValuesPerFacetConfig > currentLimit ? facetValues.length <= currentLimit : facetValues.length < currentLimit;
 
         lastResultsFromMainSearch = items;
 
@@ -33006,7 +33022,7 @@ var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ opera
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
- * @property {SearchForFacetOptions|boolean} [searchForFacetValues=false] Add a search input to let the user search for more facet values.
+ * @property {SearchForFacetOptions|boolean} [searchForFacetValues=false] Add a search input to let the user search for more facet values. In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
  * @property {RefinementListShowMoreOptions|boolean} [showMore=false] Limit the number of results and display a showMore button.
  * @property {RefinementListTemplates} [templates] Templates to use for the widget.
  * @property {RefinementListTransforms} [transformData] Functions to update the values before applying the templates.
@@ -33032,7 +33048,7 @@ var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ opera
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
- * If you also want to use search for facet values on this attribute, then [declare it accordingly](https://www.algolia.com/doc/guides/searching/faceting/#search-for-facet-values).
+ * If you also want to use search for facet values on this attribute, you need to make it searchable using the [dashboard](https://www.algolia.com/explorer/display/) or using the [API](https://www.algolia.com/doc/guides/searching/faceting/#search-for-facet-values).
  *
  * @type {WidgetFactory}
  * @category filter

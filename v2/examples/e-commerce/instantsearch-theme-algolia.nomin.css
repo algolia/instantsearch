@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.2.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button {
+/*! instantsearch.js preview-2.2.3 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button {
   color: #FFFFFF;
   display: inline-block;
   background: #3369E7;
@@ -165,15 +165,14 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 .ais-search-box {
   display: inline-block;
   position: relative;
-  max-width: 300px;
-  width: 100%;
   height: 46px;
   white-space: nowrap;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
   font-size: 14px; }
   .ais-search-box--input {
-    appearence: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+    font: inherit;
     background: #FFFFFF;
     display: inline-block;
     border: 1px solid #D4D8E3;
