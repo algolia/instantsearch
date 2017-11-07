@@ -10,7 +10,7 @@ const bem = bemHelper('ais-geo');
 const geoSearch = renderer => (props = {}) => {
   const widgetParams = {
     cssClasses: {},
-    enableControlRefineWithMap: true,
+    enableRefineControl: true,
     ...props,
   };
 

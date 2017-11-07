@@ -1,3 +1,5 @@
+import { noop } from '../../lib/utils';
+
 export default function connectGeoSearch(fn) {
   return (widgetParams = {}) => {
     const {
@@ -5,7 +7,6 @@ export default function connectGeoSearch(fn) {
       radius,
       minRadius,
       precision,
-      enableControlRefineWithMap,
       enableGeolocationWithIP = true,
       enableRefineOnMapMove = true,
     } = widgetParams;
@@ -14,121 +15,171 @@ export default function connectGeoSearch(fn) {
       throw new Error('Usage: only one of the radius should be pass');
     }
 
-    const state = {
-      isRefinedWithMap: false,
+    // UI State
+    const uiState = {
       lastRefinePosition: '',
+      isRefinedWithMap: false,
+      hasMapMoveSinceLastRefine: false,
+      enableRefineOnMapMove,
     };
 
+    // Private API
     const refine = helper => ({ ne, sw }) => {
       const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng];
 
       helper.setQueryParameter('insideBoundingBox', [boundingBox]).search();
 
-      state.isRefinedWithMap = true;
+      uiState.isRefinedWithMap = true;
+      uiState.hasMapMoveSinceLastRefine = false;
     };
 
-    const clearRefinementWithMap = helper => () => {
+    const clearMapRefinement = helper => () => {
       helper.setQueryParameter('insideBoundingBox').search();
 
-      state.isRefinedWithMap = false;
+      uiState.isRefinedWithMap = false;
+      uiState.hasMapMoveSinceLastRefine = false;
+    };
+
+    const toggleRefineOnMapMove = (renderFn, renderArgs) => () => {
+      uiState.enableRefineOnMapMove = !uiState.enableRefineOnMapMove;
+
+      renderFn(renderArgs);
+    };
+
+    const setMapMoveSinceLastRefine = (renderFn, renderArgs) => () => {
+      const isRenderRequired = !uiState.hasMapMoveSinceLastRefine;
+
+      uiState.hasMapMoveSinceLastRefine = true;
+
+      if (isRenderRequired) {
+        renderFn(renderArgs);
+      }
+    };
+
+    // Public API
+    const getConfiguration = configuration => {
+      const partial = {};
+
+      // We should check that the previous configuration
+      // don't already use the following property
+
+      if (position) {
+        partial.aroundLatLng = `${position.lat}, ${position.lng}`;
+      }
+
+      if (!position && enableGeolocationWithIP) {
+        partial.aroundLatLngViaIP = true;
+      }
+
+      if (radius) {
+        partial.aroundRadius = radius;
+      }
+
+      if (minRadius) {
+        partial.minimumAroundRadius = minRadius;
+      }
+
+      if (precision) {
+        partial.aroundPrecision = precision;
+      }
+
+      return {
+        ...configuration,
+        ...partial,
+      };
+    };
+
+    const init = renderOptions => {
+      const { helper, instantSearchInstance } = renderOptions;
+
+      const isFirstRendering = true;
+
+      uiState.lastRefinePosition = helper.getQueryParameter('aroundLatLng');
+
+      fn(
+        {
+          ...uiState,
+          hits: [],
+          refine: refine(helper),
+          clearMapRefinement: clearMapRefinement(helper),
+          // Noop on the init
+          toggleRefineOnMapMove: toggleRefineOnMapMove(noop, renderOptions),
+          // Noop on the init
+          setMapMoveSinceLastRefine: setMapMoveSinceLastRefine(
+            noop,
+            renderOptions
+          ),
+          instantSearchInstance,
+          widgetParams,
+        },
+        isFirstRendering
+      );
+    };
+
+    const render = renderOptions => {
+      const { results, helper, instantSearchInstance } = renderOptions;
+
+      const isFirstRendering = false;
+      const currentRefinePosition = helper.getQueryParameter('aroundLatLng');
+      const currentPositionIP = helper.getQueryParameter('aroundLatLngViaIP');
+      const currentBox = helper.getQueryParameter('insideBoundingBox');
+      const isRefinePositionChanged =
+        uiState.lastRefinePosition !== currentRefinePosition;
+
+      // Restore hasMapMoveSinceLastRefine when refinement change
+      // but the refinement is not with the map
+      // ex: with places we can set the refinement with the
+      // autocomplete bar & we can move the map without
+      // the refine action
+      if (isRefinePositionChanged && !uiState.isRefinedWithMap) {
+        uiState.hasMapMoveSinceLastRefine = false;
+      }
+
+      // Hacky condition for enable to override the current search
+      // when we currently refine with the map. It avoid the rendering
+      // and trigger a search without the boundingBox. We defenitly
+      // need to find an other solutions...
+      // -> this behaviour trigger the search two times, one with the
+      // boundingBox & one without
+      if (currentBox && isRefinePositionChanged) {
+        clearMapRefinement(helper)();
+
+        return;
+      }
+
+      // Pretty mulch the same with IP
+      // -> this behaviour trigger the search two times, one with the
+      // aroundLatLngViaIP & one without
+      if (currentPositionIP && isRefinePositionChanged) {
+        helper.setQueryParameter('aroundLatLngViaIP', false).search();
+
+        return;
+      }
+
+      uiState.lastRefinePosition = helper.getQueryParameter('aroundLatLng');
+
+      fn(
+        {
+          ...uiState,
+          hits: results.hits.filter(h => h._geoloc),
+          refine: refine(helper),
+          clearMapRefinement: clearMapRefinement(helper),
+          toggleRefineOnMapMove: toggleRefineOnMapMove(render, renderOptions),
+          setMapMoveSinceLastRefine: setMapMoveSinceLastRefine(
+            render,
+            renderOptions
+          ),
+          instantSearchInstance,
+          widgetParams,
+        },
+        isFirstRendering
+      );
     };
 
     return {
-      getConfiguration(configuration) {
-        const partial = {};
-
-        // We should check that the previous configuration
-        // don't already use the following property
-
-        if (position) {
-          partial.aroundLatLng = `${position.lat}, ${position.lng}`;
-        }
-
-        if (!position && enableGeolocationWithIP) {
-          partial.aroundLatLngViaIP = true;
-        }
-
-        if (radius) {
-          partial.aroundRadius = radius;
-        }
-
-        if (minRadius) {
-          partial.minimumAroundRadius = minRadius;
-        }
-
-        if (precision) {
-          partial.aroundPrecision = precision;
-        }
-
-        return {
-          ...configuration,
-          ...partial,
-        };
-      },
-
-      init({ helper, instantSearchInstance }) {
-        const isFirstRendering = true;
-
-        state.lastRefinePosition = helper.getQueryParameter('aroundLatLng');
-
-        fn(
-          {
-            ...state,
-            hits: [],
-            refine: refine(helper),
-            clearRefinementWithMap: clearRefinementWithMap(helper),
-            isRefinePositionChanged: false,
-            enableControlRefineWithMap,
-            enableRefineOnMapMove,
-            instantSearchInstance,
-            widgetParams,
-          },
-          isFirstRendering
-        );
-      },
-
-      render({ results, helper, instantSearchInstance }) {
-        const isFirstRendering = false;
-        const currentRefinePosition = helper.getQueryParameter('aroundLatLng');
-        const currentPositionIP = helper.getQueryParameter('aroundLatLngViaIP');
-        const currentBox = helper.getQueryParameter('insideBoundingBox');
-        const isRefinePositionChanged =
-          state.lastRefinePosition !== currentRefinePosition;
-
-        // Hacky condition for enable to override the current search
-        // when we currently refine with the map. It avoid the rendering
-        // and trigger a search without the boundingBox. We defenitly
-        // need to find an other solutions...
-        if (currentBox && isRefinePositionChanged) {
-          clearRefinementWithMap(helper)();
-
-          return;
-        }
-
-        // Pretty mulch the same with IP
-        if (currentPositionIP && isRefinePositionChanged) {
-          helper.setQueryParameter('aroundLatLngViaIP', false).search();
-
-          return;
-        }
-
-        state.lastRefinePosition = helper.getQueryParameter('aroundLatLng');
-
-        fn(
-          {
-            ...state,
-            hits: results.hits.filter(h => h._geoloc),
-            refine: refine(helper),
-            clearRefinementWithMap: clearRefinementWithMap(helper),
-            enableControlRefineWithMap,
-            isRefinePositionChanged,
-            enableRefineOnMapMove,
-            instantSearchInstance,
-            widgetParams,
-          },
-          isFirstRendering
-        );
-      },
+      getConfiguration,
+      init,
+      render,
     };
   };
 }
