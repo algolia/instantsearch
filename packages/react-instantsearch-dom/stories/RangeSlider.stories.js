@@ -1,8 +1,7 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import { withKnobs, object, number } from '@storybook/addon-knobs';
+import { object, number } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
-import { checkA11y } from 'storybook-addon-a11y';
 import Range from './3rdPartyIntegrations.stories';
 import JSXAddon from 'storybook-addon-jsx';
 
@@ -11,8 +10,6 @@ setAddon(JSXAddon);
 const stories = storiesOf('RangeSlider', module);
 
 stories
-  .addDecorator(withKnobs)
-  .addDecorator(checkA11y)
   .addWithJSX(
     'default',
     () => (
