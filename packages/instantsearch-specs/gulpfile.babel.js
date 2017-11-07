@@ -119,7 +119,7 @@ gulp.task('scripts', () => {
 // Watch files
 
 gulp.task('watch', () => {
-  gulp.watch(devFolder.scss + '**/*.scss', ['styles']);
+  gulp.watch(devFolder.scss + '**/*.scss', ['styles', 'themes']);
   gulp.watch(devFolder.js + '**/*.js', ['scripts']);
 });
 

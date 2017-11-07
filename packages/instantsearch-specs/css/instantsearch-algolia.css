@@ -223,6 +223,8 @@ a[class^='ais-'] {
 .ais-CurrentRefinedValues-reset {
   display: inline-block;
   vertical-align: top; }
+  .ais-CurrentRefinedValues-reset + .ais-CurrentRefinedValues-list {
+    margin-left: 0.3rem; }
 
 .ais-CurrentRefinedValues-count {
   font-size: 0.8rem;
@@ -362,10 +364,13 @@ a[class^='ais-'] {
   margin-left: 0.3rem; }
 
 .ais-Pagination-link {
+  padding: 0.3rem 0.6rem;
   display: inline-block;
-  padding: 0.3rem 0.5rem;
   border: 1px solid #c4c8d8;
   border-radius: 5px; }
+
+.ais-PoweredBy-text {
+  font-size: 0.8rem; }
 
 .ais-RangeSlider .rheostat-progress {
   background-color: #495588; }
@@ -383,11 +388,15 @@ a[class^='ais-'] {
 .ais-RangeSlider-marker {
   background-color: #878faf; }
 
+.ais-RefinementList-search {
+  margin-bottom: 0.5rem; }
+
 .ais-SearchBox-form {
   display: block;
   position: relative; }
 
-.ais-SearchBox-input {
+.ais-SearchBox-input,
+.ais-RefinementList-search {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -397,13 +406,17 @@ a[class^='ais-'] {
   background-color: #fff;
   border: 1px solid #c4c8d8;
   border-radius: 5px; }
-  .ais-SearchBox-input::-webkit-input-placeholder {
+  .ais-SearchBox-input::-webkit-input-placeholder,
+  .ais-RefinementList-search::-webkit-input-placeholder {
     color: #a5aed1; }
-  .ais-SearchBox-input::-moz-placeholder {
+  .ais-SearchBox-input::-moz-placeholder,
+  .ais-RefinementList-search::-moz-placeholder {
     color: #a5aed1; }
-  .ais-SearchBox-input:-ms-input-placeholder {
+  .ais-SearchBox-input:-ms-input-placeholder,
+  .ais-RefinementList-search:-ms-input-placeholder {
     color: #a5aed1; }
-  .ais-SearchBox-input:-moz-placeholder {
+  .ais-SearchBox-input:-moz-placeholder,
+  .ais-RefinementList-search:-moz-placeholder {
     color: #a5aed1; }
 
 .ais-SearchBox-submit,
