@@ -28,21 +28,19 @@ const removeMarkers = (markers = []) =>
 const addMarkers = (map, items) =>
   items.map(({ _geoloc }) => L.marker([_geoloc.lat, _geoloc.lng]).addTo(map));
 
-const fitMarkersBounds = ({ renderState, isRefinedWithMap }) => {
-  if (renderState.markers.length && !isRefinedWithMap) {
-    // Ugly hack for enable to detect user interaction
-    // rather than interaction trigger by the program
-    // see: https://stackoverflow.com/questions/31992278/detect-user-initiated-pan-zoom-operations-on-leaflet
-    // see: https://github.com/Leaflet/Leaflet/issues/2934
-    renderState.isUserInteraction = false;
-    renderState.map.fitBounds(L.featureGroup(renderState.markers).getBounds(), {
-      // Disable the animation because the bounds may not be correctly
-      // updated with `fitBounds`
-      // see: https://github.com/Leaflet/Leaflet/issues/3249
-      animate: false,
-    });
-    renderState.isUserInteraction = true;
-  }
+const fitMarkersBounds = renderState => {
+  // Ugly hack for enable to detect user interaction
+  // rather than interaction trigger by the program
+  // see: https://stackoverflow.com/questions/31992278/detect-user-initiated-pan-zoom-operations-on-leaflet
+  // see: https://github.com/Leaflet/Leaflet/issues/2934
+  renderState.isUserInteraction = false;
+  renderState.map.fitBounds(L.featureGroup(renderState.markers).getBounds(), {
+    // Disable the animation because the bounds may not be correctly
+    // updated with `fitBounds`
+    // see: https://github.com/Leaflet/Leaflet/issues/3249
+    animate: false,
+  });
+  renderState.isUserInteraction = true;
 };
 
 const renderClearRefinementButton = ({
@@ -197,10 +195,9 @@ const renderer = (
   removeMarkers(renderState.markers);
   renderState.markers = addMarkers(renderState.map, items);
 
-  fitMarkersBounds({
-    renderState,
-    isRefinedWithMap,
-  });
+  if (renderState.markers.length && !isRefinedWithMap) {
+    fitMarkersBounds(renderState);
+  }
 
   // UI
   renderClearRefinementButton({
