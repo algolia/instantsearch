@@ -18,9 +18,17 @@ export default () => {
   const Stories = storiesOf('GeoSearch (Leaflet)');
   const radius = 5000;
   const precision = 2500;
+
   const position = {
     lat: 37.7749,
     lng: -122.4194,
+  };
+
+  const paddingBoundingBox = {
+    top: 41,
+    right: 13,
+    bottom: 5,
+    left: 13,
   };
 
   // With IP
@@ -30,6 +38,7 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.geoSearchWithLeaflet({
           container,
+          paddingBoundingBox,
         })
       );
     })
@@ -40,6 +49,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
+            paddingBoundingBox,
             radius,
           })
         );
@@ -51,6 +61,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
+            paddingBoundingBox,
             radius,
             precision,
           })
@@ -65,6 +76,7 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.geoSearchWithLeaflet({
           container,
+          paddingBoundingBox,
           position,
         })
       );
@@ -76,6 +88,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
+            paddingBoundingBox,
             radius,
             position,
           })
@@ -88,6 +101,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
+            paddingBoundingBox,
             radius,
             precision,
             position,
@@ -130,6 +144,7 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.geoSearchWithLeaflet({
           container,
+          paddingBoundingBox,
           enableRefineControl: true,
           enableRefineOnMapMove: true,
         })
@@ -142,6 +157,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
+            paddingBoundingBox,
             enableRefineControl: true,
             enableRefineOnMapMove: false,
           })
@@ -154,6 +170,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
+            paddingBoundingBox,
             enableRefineControl: false,
             enableRefineOnMapMove: true,
           })
@@ -166,6 +183,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.geoSearchWithLeaflet({
             container,
+            paddingBoundingBox,
             enableRefineControl: false,
             enableRefineOnMapMove: false,
           })
