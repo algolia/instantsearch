@@ -1,9 +1,20 @@
 import L from 'leaflet';
 import { getContainerNode } from '../../lib/utils.js';
 
-const refineWithBounds = (refine, bounds) => {
-  const ne = bounds.getNorthEast();
-  const sw = bounds.getSouthWest();
+const refineWithMap = ({ refine, paddingBoundingBox, map }) => {
+  const bounds = map.getBounds();
+  const zoom = map.getZoom();
+
+  const northEastPoint = map
+    .project(bounds.getNorthEast(), zoom)
+    .add([-paddingBoundingBox.right, paddingBoundingBox.top]);
+
+  const southWestPoint = map
+    .project(bounds.getSouthWest(), zoom)
+    .add([paddingBoundingBox.left, -paddingBoundingBox.bottom]);
+
+  const ne = map.unproject(northEastPoint);
+  const sw = map.unproject(southWestPoint);
 
   refine({
     ne: { lat: ne.lat, lng: ne.lng },
@@ -65,6 +76,7 @@ const renderControlElement = ({
 
 const renderRedoSearchButton = ({
   renderState,
+  paddingBoundingBox,
   hasMapMoveSinceLastRefine,
   refine,
 }) => {
@@ -73,7 +85,11 @@ const renderRedoSearchButton = ({
   button.textContent = 'Redo search here';
   button.disabled = !hasMapMoveSinceLastRefine;
   button.addEventListener('click', () =>
-    refineWithBounds(refine, renderState.map.getBounds())
+    refineWithMap({
+      refine,
+      paddingBoundingBox,
+      map: renderState.map,
+    })
   );
   renderState.containerControl.appendChild(button);
 };
@@ -96,6 +112,7 @@ const renderer = (
     container,
     cssClasses,
     enableRefineControl,
+    paddingBoundingBox,
     renderState,
   } = widgetParams;
 
@@ -147,9 +164,13 @@ const renderer = (
   // Events apply on each render in order
   // to update the scope each time
   renderState.map.off('dragend zoomend');
-  renderState.map.on('dragend zoomend', event => {
+  renderState.map.on('dragend zoomend', () => {
     if (renderState.isUserInteraction && enableRefineOnMapMove) {
-      refineWithBounds(refine, event.target.getBounds());
+      refineWithMap({
+        refine,
+        paddingBoundingBox,
+        map: renderState.map,
+      });
     }
   });
 
@@ -158,6 +179,7 @@ const renderer = (
     if (enableRefineControl && !enableRefineOnMapMove) {
       renderRedoSearchButton({
         renderState,
+        paddingBoundingBox,
         hasMapMoveSinceLastRefine,
         refine,
       });
@@ -201,6 +223,7 @@ const renderer = (
   ) {
     renderRedoSearchButton({
       renderState,
+      paddingBoundingBox,
       hasMapMoveSinceLastRefine,
       refine,
     });

@@ -48,6 +48,12 @@ const geoSearch = renderer => (props = {}) => {
   const widgetParams = {
     cssClasses: {},
     enableRefineControl: true,
+    paddingBoundingBox: {
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    },
     ...props,
   };
 
