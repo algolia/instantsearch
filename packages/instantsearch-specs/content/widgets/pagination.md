@@ -9,22 +9,22 @@ html: |
     <div class="ais-Pagination-body ais-body">
       <ul class="ais-Pagination-list">
         <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
-          <a class="ais-Pagination-link" aria-label="Previous" href="some-link">‹</a>
+          <span class="ais-Pagination-link" aria-label="Previous">‹</a>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--firstPage">
-          <a class="ais-Pagination-link" href="some-link">1</a>
+          <a class="ais-Pagination-link" href="#">1</a>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--page ais-Pagination-item--selected">
-          <a class="ais-Pagination-link" href="some-link">2</a>
+          <a class="ais-Pagination-link" href="#">2</a>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--page">
-          <a class="ais-Pagination-link" href="some-link">3</a>
+          <a class="ais-Pagination-link" href="#">3</a>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--lastPage">
-          <a class="ais-Pagination-link" href="some-link">4</a>
+          <a class="ais-Pagination-link" href="#">4</a>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--nextPage">
-          <a class="ais-Pagination-link" aria-label="Next" href="some-link">›</a>
+          <a class="ais-Pagination-link" aria-label="Next" href="#">›</a>
         </li>
       </ul>
     </div>
@@ -51,6 +51,8 @@ classes:
     description: the "page" pagination list item
   - name: .ais-Pagination-item--selected
     description: the selected pagination list item
+  - name: .ais-Pagination-item--disabled
+    description: the disabled pagination list item
   - name: .ais-Pagination-item--link
     description: the pagination clickable element
   - name: .ais-Pagination-footer

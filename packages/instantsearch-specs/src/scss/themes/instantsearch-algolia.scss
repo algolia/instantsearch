@@ -252,6 +252,18 @@ a[class^='ais-'] {
   margin-top: 0.5rem;
 }
 
+.ais-Menu-showMore--disabled,
+.ais-ClearAll-button--disabled,
+.ais-InfiniteHits-showMore--disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+
+  &:hover,
+  &:focus {
+    background-color: $algolia-blue;
+  }
+}
+
 .ais-Pagination-list {
   display: flex;
   justify-content: center;
@@ -268,6 +280,21 @@ a[class^='ais-'] {
   display: inline-block;
   border: 1px solid $ghost;
   border-radius: 5px;
+
+  .ais-Pagination-item--disabled & {
+    opacity: 0.6;
+    cursor: not-allowed;
+    color: darken($ghost, 10%);
+
+    &:hover,
+    &:focus {
+      color: $ghost;
+    }
+  }
+
+  .ais-Pagination-item--selected & {
+    color: darken($algolia-blue, 10%);
+  }
 }
 
 .ais-PoweredBy-text {

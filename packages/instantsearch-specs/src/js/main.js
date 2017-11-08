@@ -4,6 +4,7 @@ const changeThemeSelect = document.getElementById('js-changeTheme');
 const customThemeStyleSheet = document.getElementById('js-customTheme');
 const localStorageTheme = localStorage.getItem('customTheme') || '';
 const hoverClass = document.querySelectorAll('.js-hoverClass');
+const codeWrapperTabs = document.querySelectorAll('.code-wrapper-tab');
 
 // Store current CSS theme in localStorage
 
@@ -20,13 +21,13 @@ if (changeThemeSelect) {
   // Used to avoid CSS errors when updating themes and reloading
   // Comment when comitting
 
-  window.setTimeout(() => {
-    changeThemeSelect.value = changeThemeSelect.options[1].value;
-    customThemeStyleSheet.setAttribute(
-      'href',
-      changeThemeSelect.options[1].value
-    );
-  }, 300);
+  // window.setTimeout(() => {
+  //   changeThemeSelect.value = changeThemeSelect.options[1].value;
+  //   customThemeStyleSheet.setAttribute(
+  //     'href',
+  //     changeThemeSelect.options[1].value
+  //   );
+  // }, 300);
 }
 
 // Hover list of classes to highligh them
@@ -64,5 +65,31 @@ hoverClass.forEach(item => {
   });
   item.addEventListener('mouseleave', () => {
     targetHtmlElement(item);
+  });
+});
+
+// Change HTML tabs
+
+codeWrapperTabs.forEach(item => {
+  const dataHTML = item.getAttribute('data-html');
+  item.addEventListener('click', () => {
+    codeWrapperTabs.forEach(item => {
+      item.classList.remove('selected');
+    });
+    item.classList.add('selected');
+    document.querySelectorAll('.code-wrapper-content').forEach(item => {
+      if (item.getAttribute('data-html') === dataHTML) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+    document.querySelectorAll('.code-output').forEach(item => {
+      if (item.getAttribute('data-html') === dataHTML) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
   });
 });

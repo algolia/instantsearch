@@ -192,7 +192,35 @@ body {
   background-color: #fcec9c;
 }
 
-.code-wrapper {
+.code-wrapper-tabs {
+  display: flex;
+}
+
+.code-wrapper-tab {
+  padding: 5px 10px;
+  appearance: none;
+  position: relative;
+  top: 1px;
+  font-size: 14px;
+  border-top: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
+  background-color: #eee;
+  cursor: pointer;
+  outline: none;
+
+  &.selected {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+  }
+
+  + .code-wrapper-tab {
+    border-left: none;
+  }
+}
+
+.code-wrapper-contents {
   padding: 20px;
   border: 1px solid #ddd;
   overflow: auto;

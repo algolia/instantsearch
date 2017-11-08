@@ -9,13 +9,13 @@ html: |
     <div class="ais-Menu-body ais-body">
       <ul class="ais-Menu-list">
         <li class="ais-Menu-item ais-Menu-item--selected">
-          <a class="ais-Menu-link" href="some-link">
+          <a class="ais-Menu-link" href="#">
             Appliances
             <span class="ais-Menu-count">4,306</span>
           </a>
         </li>
         <li class="ais-Menu-item">
-          <a class="ais-Menu-link" href="some-link">
+          <a class="ais-Menu-link" href="#">
             Audio
             <span class="ais-Menu-count">1,570</span>
           </a>
@@ -23,6 +23,33 @@ html: |
       </ul>
     </div>
     <button class="ais-Menu-showMore">Show more</button>
+    <div class="ais-Menu-footer ais-footer">
+      Footer info
+    </div>
+  </div>
+alt1: Show more disabled
+althtml1: |
+  <div class="ais-Menu">
+    <div class="ais-Menu-header ais-header">
+      Menu
+    </div>
+    <div class="ais-Menu-body ais-body">
+      <ul class="ais-Menu-list">
+        <li class="ais-Menu-item ais-Menu-item--selected">
+          <a class="ais-Menu-link" href="#">
+            Appliances
+            <span class="ais-Menu-count">4,306</span>
+          </a>
+        </li>
+        <li class="ais-Menu-item">
+          <a class="ais-Menu-link" href="#">
+            Audio
+            <span class="ais-Menu-count">1,570</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <button class="ais-Menu-showMore ais-Menu-showMore--disabled" disabled>Show more</button>
     <div class="ais-Menu-footer ais-footer">
       Footer info
     </div>
@@ -46,6 +73,8 @@ classes:
     description: the count of values for each item
   - name: .ais-Menu-showMore
     description: the button used to display more categories
+  - name: .ais-Menu-showMore--disabled
+    description: the disabled button used to display more categories
   - name: .ais-Menu-footer
     description: the footer of the widget (optional)
 ---
