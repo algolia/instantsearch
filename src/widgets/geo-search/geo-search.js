@@ -7,13 +7,6 @@ import MapboxRenderer from './MapboxRenderer';
 
 const bem = bemHelper('ais-geo');
 
-// type LatLng = Array<number, number>;
-//
-// type Bounds = {
-//   northEast: LatLng,
-//   southWest: LatLng,
-// };
-//
 // type Position = {
 //   top: number,
 //   right: number,
@@ -21,33 +14,31 @@ const bem = bemHelper('ais-geo');
 //   left: number,
 // };
 //
+// type CSSClasses = {
+//   // TBD
+// };
+//
+// type Templates = {
+//   // TBD
+// };
+//
 // type WidgetOptions = {
-//   enableGeolocationWithIP: boolean,
-//   enableRefineOnMapMove: boolean,
 //   enableRefineControl: boolean,
+//   paddingBoundingBox: Position,
+//   cssClasses: CSSClasses,
+//   templates: Templates,
+//   enableGeolocationWithIP?: boolean,
+//   enableRefineOnMapMove?: boolean,
 //   position?: string, // 40.71, -74.01
 //   radius?: number | 'all',
 //   minRadius?: number,
 //   precision?: number,
-//   paddingBoundingBox?: Position,
-// };
-//
-// type RenderingOptions = {
-//   hits: Array<{ _geoloc: { lat: number, lng: number } }>,
-//   refine: (bounds: Bounds) => void,
-//   clearMapRefinement: () => void,
-//   toggleRefineOnMapMove: () => void,
-//   setMapMoveSinceLastRefine: () => void,
-//   isRefinedWithMap: boolean,
-//   enableRefineOnMapMove: boolean,
-//   hasMapMoveSinceLastRefine: boolean,
-//   widgetParams: WidgetOptions,
 // };
 
 const geoSearch = renderer => (props = {}) => {
   const widgetParams = {
-    cssClasses: {},
     enableRefineControl: true,
+    cssClasses: {},
     paddingBoundingBox: {
       top: 0,
       right: 0,
