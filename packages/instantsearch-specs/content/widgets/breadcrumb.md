@@ -9,13 +9,13 @@ html: |
     <div class="ais-Breadcrumb-body ais-body">
       <ul class="ais-Breadcrumb-list">
         <li class="ais-Breadcrumb-item">
-          <a class="ais-Breadcrumb-link" href="some-link">Home</a>
+          <a class="ais-Breadcrumb-link" href="#">Home</a>
         </li>
         <li class="ais-Breadcrumb-item" aria-hidden="true">
           >
         </li>
         <li class="ais-Breadcrumb-item">
-          <a class="ais-Breadcrumb-link" href="some-link">Cooking</a>
+          <a class="ais-Breadcrumb-link" href="#">Cooking</a>
         </li>
         <li class="ais-Breadcrumb-item" aria-hidden="true">
           >
