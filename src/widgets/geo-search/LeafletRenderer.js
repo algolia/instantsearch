@@ -25,8 +25,8 @@ const refineWithMap = ({ refine, paddingBoundingBox, map }) => {
 const removeMarkers = (markers = []) =>
   markers.forEach(marker => marker.remove());
 
-const addMarkers = (map, hits) =>
-  hits.map(({ _geoloc }) => L.marker([_geoloc.lat, _geoloc.lng]).addTo(map));
+const addMarkers = (map, items) =>
+  items.map(({ _geoloc }) => L.marker([_geoloc.lat, _geoloc.lng]).addTo(map));
 
 const fitMarkersBounds = ({ renderState, isRefinedWithMap }) => {
   if (renderState.markers.length && !isRefinedWithMap) {
@@ -96,7 +96,7 @@ const renderRedoSearchButton = ({
 
 const renderer = (
   {
-    hits,
+    items,
     refine,
     clearMapRefinement,
     toggleRefineOnMapMove,
@@ -195,7 +195,7 @@ const renderer = (
 
   // Markers
   removeMarkers(renderState.markers);
-  renderState.markers = addMarkers(renderState.map, hits);
+  renderState.markers = addMarkers(renderState.map, items);
 
   fitMarkersBounds({
     renderState,

@@ -26,7 +26,7 @@ import { noop } from '../../lib/utils';
 // };
 //
 // type RenderingOptions = {
-//   hits: Array<{ _geoloc: { lat: number, lng: number } }>,
+//   items: Array<{ _geoloc: { lat: number, lng: number } }>,
 //   refine: (bounds: Bounds) => void,
 //   clearMapRefinement: () => void,
 //   toggleRefineOnMapMove: () => void,
@@ -136,7 +136,7 @@ export default function connectGeoSearch(fn) {
       fn(
         {
           ...uiState,
-          hits: [],
+          items: [],
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           // Noop on the init
@@ -198,7 +198,7 @@ export default function connectGeoSearch(fn) {
       fn(
         {
           ...uiState,
-          hits: results.hits.filter(h => h._geoloc),
+          items: results.hits.filter(h => h._geoloc),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           toggleRefineOnMapMove: toggleRefineOnMapMove(render, renderOptions),
