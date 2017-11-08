@@ -163,7 +163,7 @@ body {
   table {
     border-collapse: collapse;
     font-family: monospace;
-    font-size: 16px;
+    font-size: 14px;
     border: 1px solid #ccc;
     width: calc(100% -40px);
   }
@@ -224,6 +224,10 @@ body {
   padding: 20px;
   border: 1px solid #ddd;
   overflow: auto;
+}
+
+.code-output code {
+  font-size: 14px;
 }
 
 .highlighted-text {
