@@ -132,6 +132,7 @@ export default () => {
           container: mapElement,
           radius: 20000,
           enableGeolocationWithIP: false,
+          paddingBoundingBox,
         })
       );
     })
