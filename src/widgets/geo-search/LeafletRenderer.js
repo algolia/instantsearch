@@ -161,19 +161,11 @@ const renderer = (
 
   // Events apply on each render in order
   // to update the scope each time
-  renderState.map.off('dragend zoomend');
-  renderState.map.on('dragend zoomend', () => {
-    if (renderState.isUserInteraction && enableRefineOnMapMove) {
-      refineWithMap({
-        refine,
-        paddingBoundingBox,
-        map: renderState.map,
-      });
-    }
-  });
+  renderState.map.off('dragstart', renderState.dragstart);
+  renderState.map.off('move', renderState.move);
+  renderState.map.off('moveend', renderState.moveend);
 
-  renderState.map.off('dragstart');
-  renderState.map.on('dragstart', () => {
+  renderState.dragstart = () => {
     if (enableRefineControl && !enableRefineOnMapMove) {
       renderRedoSearchButton({
         renderState,
@@ -182,14 +174,27 @@ const renderer = (
         refine,
       });
     }
-  });
+  };
 
-  renderState.map.off('move');
-  renderState.map.on('move', () => {
+  renderState.move = () => {
     if (renderState.isUserInteraction) {
       setMapMoveSinceLastRefine();
     }
-  });
+  };
+
+  renderState.moveend = () => {
+    if (renderState.isUserInteraction && enableRefineOnMapMove) {
+      refineWithMap({
+        refine,
+        paddingBoundingBox,
+        map: renderState.map,
+      });
+    }
+  };
+
+  renderState.map.on('dragstart', renderState.dragstart);
+  renderState.map.on('move', renderState.move);
+  renderState.map.on('moveend', renderState.moveend);
 
   // Markers
   removeMarkers(renderState.markers);
