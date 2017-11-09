@@ -126,7 +126,7 @@ export default function connectSearchBox(renderFn) {
         );
       },
 
-      render({ helper, instantSearchInstance }) {
+      render({ helper, instantSearchInstance, searchMetadata }) {
         this._clear = clear(helper);
 
         renderFn(
@@ -137,6 +137,7 @@ export default function connectSearchBox(renderFn) {
             clear: this._cachedClear,
             widgetParams,
             instantSearchInstance,
+            isSearchStalled: searchMetadata.isSearchStalled,
           },
           false
         );

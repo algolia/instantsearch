@@ -24,7 +24,7 @@ const renderer = ({
   wrapInput,
   reset,
   magnifier,
-}) => ({ refine, clear, query, onHistoryChange }, isFirstRendering) => {
+}) => ({ refine, clear, query, onHistoryChange, isSearchStalled}, isFirstRendering) => {
   if (isFirstRendering) {
     const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
     const input = createInput(containerNode);
@@ -110,6 +110,14 @@ const renderer = ({
     const isFocused = document.activeElement === input;
     if (!isFocused && query !== input.value) {
       input.value = query;
+    }
+
+    if (magnifier) {
+      if (isSearchStalled) {
+        containerNode.firstChild.classList.add('stalled-search');
+      } else {
+        containerNode.firstChild.classList.remove('stalled-search');
+      }
     }
   }
 
