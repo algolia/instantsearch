@@ -235,4 +235,57 @@ describe('connectNumericSelector', () => {
       refine = renderingParameters.refine;
     });
   });
+
+  it('The refine function can unselect with `undefined` and "undefined"', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectNumericSelector(rendering);
+    const listOptions = [
+      { name: '' },
+      { name: '10', value: 10 },
+      { name: '20', value: 20 },
+      { name: '30', value: 30 },
+    ];
+    const widget = makeWidget({
+      attributeName: 'numerics',
+      options: listOptions,
+    });
+
+    const config = widget.getConfiguration({}, {});
+    const helper = jsHelper(fakeClient, '', config);
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    const { refine } = firstRenderingOptions;
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+    refine(listOptions[1].value);
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [10],
+    });
+    refine(listOptions[0].value);
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    const { refine: refineBis } = secondRenderingOptions;
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+    refineBis(listOptions[1].value);
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [10],
+    });
+    refineBis(listOptions[0].value);
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+  });
 });
