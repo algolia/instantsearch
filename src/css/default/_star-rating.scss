@@ -1,3 +1,4 @@
+// sass-lint:disable no-empty-rulesets
 @import "../base";
 @import "variables";
 
@@ -28,7 +29,7 @@ $stars-color-disabled: #C9C9C9;
     display: inline-block;
     width: 1em;
     height: 1em;
-    &:before {
+    &::before {
       content: '\2605';
       color: $stars-color;
     }
@@ -38,7 +39,7 @@ $stars-color-disabled: #C9C9C9;
       display: inline-block;
       width: 1em;
       height: 1em;
-      &:before {
+      &::before {
         content: '\2606';
         color: $stars-color;
       }
@@ -49,12 +50,12 @@ $stars-color-disabled: #C9C9C9;
     @include modifier(disabled) {
       /* disabled list item */
       @include bem(star-rating, star) {
-        &:before {
+        &::before {
           color: $stars-color-disabled;
         }
       }
       @include bem(star-rating, star, empty) {
-        &:before {
+        &::before {
           color: $stars-color-disabled;
         }
       }

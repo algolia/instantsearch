@@ -1,23 +1,23 @@
 .examples-container {
-  padding: 40px 0 ;
+  padding: 40px 0;
 
   .flex-it-2 {
     @include small-mq {
-      flex: 0 1 100% !important
+      flex: 0 1 100% !important;
     }
   }
 
   .example-tile {
     margin-bottom: 4em;
-    background: #fefefe;
-    border: 1px solid #ebebeb;
+    background: #FEFEFE;
+    border: 1px solid #EBEBEB;
     position: relative;
     text-align: center;
     overflow: hidden;
 
 
     a {
-      color: #fff;
+      color: #FFF;
       line-height: 5;
       padding: 0 1em;
 
@@ -48,13 +48,12 @@
       width: 100%;
       height: 100%;
       text-indent: 0;
-      color: inherit;
       left: 0;
       background: darken($accent-color, 0.95);
       text-transform: uppercase;
       font-size: 1.6em;
       font-weight: bold;
-      color: #fff;
+      color: #FFF;
       transform: scale(0);
       z-index: 2;
       line-height: 18;
@@ -82,7 +81,7 @@
   padding-left: 16px;
   line-height: 40px;
   height: 40px;
-  border: 1px solid #cccccc;
+  border: 1px solid #CCCCCC;
   border-radius: 3px;
   outline: none;
 }
@@ -111,7 +110,7 @@ body.example {
   .cm-navigation {
     z-index: 99999;
     top: 0;
-    border-bottom: 1px solid darken(#1d2f40, 10%);
+    border-bottom: 1px solid darken(#1D2F40, 10%);
   }
 
   aside {
@@ -126,20 +125,20 @@ body.example {
     min-height: 60px;
   }
 
-  .btn{
+  .btn {
     color: black;
   }
 
 }
 
 #examples {
-    ul {
-        margin-top: 20px;
-    }
-    ul > li {
-        clear: none;
-    }
-    h2 {
-        clear: both;
-    }
+  ul {
+    margin-top: 20px;
+  }
+  ul > li {
+    clear: none;
+  }
+  h2 {
+    clear: both;
+  }
 }

@@ -13,7 +13,7 @@ $header-height: 60px;
 $sidebar-width: 230px;
 
 @mixin clearfix {
-  &:after {
+  &::after {
     content: "";
     display: table;
     clear: both;

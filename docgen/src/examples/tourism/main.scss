@@ -65,9 +65,8 @@ body {
     width: 33%;
 
     &--reset {
-      fill: #bfc7d8;
+      fill: #BFC7D8;
       top: calc(50% - 12px / 2);
-      right: 0;
       right: 13px;
     }
 
@@ -123,7 +122,7 @@ body {
   }
 
   .guests-caret {
-    &:before {
+    &::before {
       line-height: 1;
       position: absolute;
       top: 0;
@@ -173,7 +172,7 @@ body {
 
     .ais-refinement-list--item__active {
       .ais-refinement-list--checkbox {
-        &:before {
+        &::before {
           font-size: .85em;
           position: absolute;
           width: 1.25em;

@@ -1,4 +1,5 @@
-$config-sffv:(
+// sass-lint:disable no-vendor-prefixes
+$config-sffv: (
   input-width: 100%,
   input-height: 25px,
   border-width: 1px,
@@ -78,11 +79,8 @@ $config-sffv:(
     box-shadow: inset 0 0 0 $border-width $input-border-color;
     background: $input-background;
     padding: 0;
-    padding-right: if($icon-position == 'right', even-px($input-height) + even-px($icon-clear-size) + 8px, even-px($input-height * .8))
-              + if($icon-background-opacity == 0, 0, even-px($font-size));
-    padding-left: if($icon-position == 'right',
-              even-px($font-size / 2) + even-px($border-radius / 2),
-              even-px($input-height) + if($icon-background-opacity == 0, 0, even-px($font-size * 1.2)));
+    padding-right: if($icon-position == 'right', even-px($input-height) + even-px($icon-clear-size) + 8px, even-px($input-height * .8)) + if($icon-background-opacity == 0, 0, even-px($font-size));
+    padding-left: if($icon-position == 'right', even-px($font-size / 2) + even-px($border-radius / 2), even-px($input-height) + if($icon-background-opacity == 0, 0, even-px($font-size * 1.2)));
     width: 100%;
     height: 100%;
     vertical-align: middle;
@@ -196,7 +194,7 @@ $config-sffv:(
     animation-duration: .15s;
   }
 
-  @at-root{
+  @at-root {
     @keyframes sbx-reset-in {
       0% {
         transform: translate3d(-20%, 0, 0);
@@ -211,7 +209,7 @@ $config-sffv:(
   }
 }
 
-.sbx-sffv{
+.sbx-sffv {
   @include searchbox($config-sffv...);
 }
 
