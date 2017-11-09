@@ -1,0 +1,11 @@
+/content/
+/data/
+/layouts/
+/scripts/
+/src/
+/static/
+!/themes/
+.nvmrc
+config.toml
+gulpfile.babel.js
+yarn.lock
