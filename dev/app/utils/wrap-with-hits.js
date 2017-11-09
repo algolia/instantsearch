@@ -1,11 +1,14 @@
 /* eslint-disable import/default */
+
 import { action } from 'dev-novel';
+import instantsearch from '../../../index.js';
+import item from './item.html';
+import empty from './no-results.html';
 
-import instantsearch from '../../index.js';
-import item from './templates/item.html';
-import empty from './templates/no-results.html';
-
-export default (initWidget, instantSearchConfig = {}) => container => {
+export const wrapWithHits = (
+  initWidget,
+  instantSearchConfig = {}
+) => container => {
   const {
     appId = 'latency',
     apiKey = '6be0576ff61c053d5f9a3225e2a90f76',
@@ -79,3 +82,6 @@ export default (initWidget, instantSearchConfig = {}) => container => {
 
   window.search.start();
 };
+
+export const wrapWithHitsAndJquery = fn =>
+  wrapWithHits(container => fn(window.$(container)));
