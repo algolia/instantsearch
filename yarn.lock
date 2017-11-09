@@ -1431,13 +1431,13 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bel@5.1.3:
-  version "5.1.3"
-  resolved "https://registry.yarnpkg.com/bel/-/bel-5.1.3.tgz#37df726ecb6d7d5f97e2dc847c41a66052823591"
+bel@5.1.5:
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/bel/-/bel-5.1.5.tgz#99d9381ce8503b120702e920e23daf515a6cba53"
   dependencies:
     hyperx "^2.3.0"
     is-electron "^2.0.0"
-    pelo "0.0.3"
+    pelo "^0.0.4"
 
 big.js@^3.1.3:
   version "3.2.0"
@@ -7079,9 +7079,9 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-pelo@0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/pelo/-/pelo-0.0.3.tgz#fb6b26b0612036db02b918feaab3e8c0c4cb597c"
+pelo@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/pelo/-/pelo-0.0.4.tgz#ca30c8d59a669d3b43a6d14c28681ca21b604b0f"
 
 performance-now@^0.2.0:
   version "0.2.0"
