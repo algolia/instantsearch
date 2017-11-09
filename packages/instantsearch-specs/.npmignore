@@ -1,10 +1,12 @@
 /content/
 /data/
 /layouts/
+/public/
 /scripts/
 /src/
 /static/
 !/themes/
+.babelrc
 .nvmrc
 config.toml
 gulpfile.babel.js
