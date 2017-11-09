@@ -150,7 +150,25 @@ Usage: instantsearch({
     this.helper = helper;
     this._init(helper.state, this.helper);
     this.helper.on('result', this._render.bind(this, this.helper));
+
+    const delay = /* stalledSearchDelay || */ 200;
+    this._searchStalledTimer = null;
+    this._isSearchStalled = false;
+
     this.helper.search();
+
+    this.helper.on('search', () => {
+      if (!this._searchStalledTimer) {
+        this._searchStalledTimer = setTimeout(() => {
+          this._isSearchStalled = true;
+          this._render(
+            this.helper,
+            this.helper.lastResults,
+            this.helper.lastResults._state
+          );
+        }, delay);
+      }
+    });
   }
 
   createURL(params) {
@@ -161,6 +179,12 @@ Usage: instantsearch({
   }
 
   _render(helper, results, state) {
+    if (!this.helper.hasPendingRequests()) {
+      clearTimeout(this._searchStalledTimer);
+      this._searchStalledTimer = null;
+      this._isSearchStalled = false;
+    }
+
     forEach(this.widgets, widget => {
       if (!widget.render) {
         return;
@@ -172,6 +196,9 @@ Usage: instantsearch({
         helper,
         createURL: this._createAbsoluteURL,
         instantSearchInstance: this,
+        searchMetadata: {
+          isSearchStalled: this._isSearchStalled,
+        },
       });
     });
 
