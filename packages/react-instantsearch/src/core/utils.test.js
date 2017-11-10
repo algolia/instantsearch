@@ -55,7 +55,7 @@ describe('utils', () => {
         },
       ]);
       assertFacetDefined(searchParameters, searchResults, 'facet');
-      expect(console.warn.mock.calls.length).toBe(1);
+      expect(console.warn.mock.calls).toHaveLength(1);
       expect(console.warn.mock.calls[0][0]).toBe(
         'A component requested values for facet "facet", but no facet values ' +
           'were retrieved from the API. This means that you should add the ' +

@@ -255,38 +255,38 @@ describe('Pagination', () => {
       .filterWhere(e => e.text() === '8')
       .simulate('click');
 
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual(8);
     wrapper
       .find(Link)
       .filterWhere(e => e.text() === '9')
       .simulate('click');
-    expect(refine.mock.calls.length).toBe(2);
+    expect(refine.mock.calls).toHaveLength(2);
     const parameters = refine.mock.calls[1][0];
     expect(parameters.valueOf()).toBe(9);
     wrapper
       .find('.ais-Pagination__itemPrevious')
       .find(Link)
       .simulate('click');
-    expect(refine.mock.calls.length).toBe(3);
+    expect(refine.mock.calls).toHaveLength(3);
     expect(refine.mock.calls[2][0]).toEqual(8);
     wrapper
       .find('.ais-Pagination__itemNext')
       .find(Link)
       .simulate('click');
-    expect(refine.mock.calls.length).toBe(4);
+    expect(refine.mock.calls).toHaveLength(4);
     expect(refine.mock.calls[3][0]).toEqual(10);
     wrapper
       .find('.ais-Pagination__itemFirst')
       .find(Link)
       .simulate('click');
-    expect(refine.mock.calls.length).toBe(5);
+    expect(refine.mock.calls).toHaveLength(5);
     expect(refine.mock.calls[4][0]).toEqual(1);
     wrapper
       .find('.ais-Pagination__itemLast')
       .find(Link)
       .simulate('click');
-    expect(refine.mock.calls.length).toBe(6);
+    expect(refine.mock.calls).toHaveLength(6);
     expect(refine.mock.calls[5][0]).toEqual(20);
   });
 
@@ -299,7 +299,7 @@ describe('Pagination', () => {
     el.simulate('click', { ctrlKey: true });
     el.simulate('click', { metaKey: true });
     el.simulate('click', { shiftKey: true });
-    expect(refine.mock.calls.length).toBe(0);
+    expect(refine.mock.calls).toHaveLength(0);
   });
   it('Should indicate when no more refinement', () => {
     const refine = jest.fn();
@@ -312,15 +312,15 @@ describe('Pagination', () => {
       }
     );
 
-    expect(canRefine.mock.calls.length).toBe(1);
+    expect(canRefine.mock.calls).toHaveLength(1);
     expect(canRefine.mock.calls[0][0]).toEqual(true);
-    expect(wrapper.find('.ais-Pagination__noRefinement').length).toBe(0);
+    expect(wrapper.find('.ais-Pagination__noRefinement')).toHaveLength(0);
 
     wrapper.setProps({ canRefine: false });
 
-    expect(canRefine.mock.calls.length).toBe(2);
+    expect(canRefine.mock.calls).toHaveLength(2);
     expect(canRefine.mock.calls[1][0]).toEqual(false);
-    expect(wrapper.find('.ais-Pagination__noRefinement').length).toBe(1);
+    expect(wrapper.find('.ais-Pagination__noRefinement')).toHaveLength(1);
   });
 
   describe('pagesPadding behaviour', () => {
@@ -339,7 +339,7 @@ describe('Pagination', () => {
       const pages = wrapper.find('.ais-Pagination__itemPage');
       const pageSelected = wrapper.find('.ais-Pagination__itemLinkSelected');
       // Since pagesPadding = 2, the Pagination widget's size should be 5
-      expect(pages.length).toBe(5);
+      expect(pages).toHaveLength(5);
 
       expect(pages.first().text()).toEqual('1');
 
@@ -365,7 +365,7 @@ describe('Pagination', () => {
       const pages = wrapper.find('.ais-Pagination__itemPage');
       const pageSelected = wrapper.find('.ais-Pagination__itemLinkSelected');
       // Since pagesPadding = 2, the Pagination widget's size should be 5
-      expect(pages.length).toBe(5);
+      expect(pages).toHaveLength(5);
 
       expect(pages.first().text()).toEqual('14');
       expect(pages.at(1).text()).toEqual('15');
@@ -390,7 +390,7 @@ describe('Pagination', () => {
       const pages = wrapper.find('.ais-Pagination__itemPage');
       const pageSelected = wrapper.find('.ais-Pagination__itemLinkSelected');
       // Since pagesPadding = 2, the Pagination widget's size should be 5
-      expect(pages.length).toBe(5);
+      expect(pages).toHaveLength(5);
 
       expect(pages.first().text()).toEqual('6');
       expect(pages.at(1).text()).toEqual('7');

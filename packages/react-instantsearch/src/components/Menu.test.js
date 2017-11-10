@@ -133,13 +133,13 @@ describe('Menu', () => {
 
     const items = wrapper.find('.ais-Menu__item');
 
-    expect(items.length).toBe(3);
+    expect(items).toHaveLength(3);
 
     const firstItem = items.first().find(Link);
 
     firstItem.simulate('click');
 
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual('white');
 
     wrapper.unmount();
@@ -169,11 +169,11 @@ describe('Menu', () => {
 
     const items = wrapper.find('.ais-Menu__item');
 
-    expect(items.length).toBe(2);
+    expect(items).toHaveLength(2);
 
     wrapper.find('.ais-Menu__showMore').simulate('click');
 
-    expect(wrapper.find('.ais-Menu__item').length).toBe(4);
+    expect(wrapper.find('.ais-Menu__item')).toHaveLength(4);
 
     wrapper.unmount();
   });
@@ -199,7 +199,7 @@ describe('Menu', () => {
 
     const items = wrapper.find('.ais-Menu__item');
 
-    expect(items.length).toBe(2);
+    expect(items).toHaveLength(2);
 
     expect(wrapper.find('.ais-Menu__showMoreDisabled')).toBeDefined();
 
@@ -253,7 +253,7 @@ describe('Menu', () => {
         .find('.ais-Menu__SearchBox input')
         .simulate('change', { target: { value: 'query' } });
 
-      expect(searchForItems.mock.calls.length).toBe(1);
+      expect(searchForItems.mock.calls).toHaveLength(1);
       expect(searchForItems.mock.calls[0][0]).toBe('query');
 
       wrapper.unmount();
@@ -268,12 +268,12 @@ describe('Menu', () => {
         .find(Link);
       firstItem.simulate('click');
 
-      expect(refine.mock.calls.length).toBe(1);
+      expect(refine.mock.calls).toHaveLength(1);
       expect(refine.mock.calls[0][0]).toEqual('white');
       expect(wrapper.find('.ais-Menu__SearchBox input').props().value).toBe('');
 
       const selectedRefinements = wrapper.find('.ais-Menu__item');
-      expect(selectedRefinements.length).toBe(2);
+      expect(selectedRefinements).toHaveLength(2);
 
       wrapper.unmount();
     });
@@ -284,12 +284,12 @@ describe('Menu', () => {
 
       wrapper.find('form').simulate('submit');
 
-      expect(refine.mock.calls.length).toBe(1);
+      expect(refine.mock.calls).toHaveLength(1);
       expect(refine.mock.calls[0][0]).toEqual('white');
       expect(wrapper.find('.ais-Menu__SearchBox input').props().value).toBe('');
 
       const selectedRefinements = wrapper.find('.ais-Menu__item');
-      expect(selectedRefinements.length).toBe(2);
+      expect(selectedRefinements).toHaveLength(2);
 
       wrapper.unmount();
     });
@@ -321,15 +321,15 @@ describe('Menu', () => {
         }
       );
 
-      expect(canRefine.mock.calls.length).toBe(1);
+      expect(canRefine.mock.calls).toHaveLength(1);
       expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(wrapper.find('.ais-Menu__noRefinement').length).toBe(0);
+      expect(wrapper.find('.ais-Menu__noRefinement')).toHaveLength(0);
 
       wrapper.setProps({ canRefine: false });
 
-      expect(canRefine.mock.calls.length).toBe(2);
+      expect(canRefine.mock.calls).toHaveLength(2);
       expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(wrapper.find('.ais-Menu__noRefinement').length).toBe(1);
+      expect(wrapper.find('.ais-Menu__noRefinement')).toHaveLength(1);
     });
   });
 });

@@ -83,7 +83,7 @@ describe('createConnector', () => {
       });
       props = { hello: 'you' };
       wrapper.setProps(props);
-      expect(getProvidedProps.mock.calls.length).toBe(2);
+      expect(getProvidedProps.mock.calls).toHaveLength(2);
       const args = getProvidedProps.mock.calls[1];
       expect(args[0]).toEqual(props);
       expect(args[1]).toBe(state.widgets);
@@ -145,7 +145,7 @@ describe('createConnector', () => {
       listener();
       wrapper.update();
 
-      expect(getProvidedProps.mock.calls.length).toBe(2);
+      expect(getProvidedProps.mock.calls).toHaveLength(2);
       const args = getProvidedProps.mock.calls[1];
       expect(args[0]).toEqual(props);
       expect(args[1]).toBe(state.widgets);
@@ -209,7 +209,7 @@ describe('createConnector', () => {
       wrapper.setProps(props);
 
       listener();
-      expect(getProvidedProps.mock.calls.length).toBe(3);
+      expect(getProvidedProps.mock.calls).toHaveLength(3);
       const args = getProvidedProps.mock.calls[2];
       expect(args[0]).toEqual(props);
       expect(args[1]).toBe(state.widgets);
@@ -243,9 +243,9 @@ describe('createConnector', () => {
           },
         },
       });
-      expect(unsubscribe.mock.calls.length).toBe(0);
+      expect(unsubscribe.mock.calls).toHaveLength(0);
       wrapper.unmount();
-      expect(unsubscribe.mock.calls.length).toBe(1);
+      expect(unsubscribe.mock.calls).toHaveLength(1);
     });
 
     it("doesn't update the component when passed props don't change", () => {
@@ -278,17 +278,17 @@ describe('createConnector', () => {
           },
         },
       });
-      expect(onSearchStateChange.mock.calls.length).toBe(0);
-      expect(update.mock.calls.length).toBe(0);
-      expect(transitionState.mock.calls.length).toBe(0);
+      expect(onSearchStateChange.mock.calls).toHaveLength(0);
+      expect(update.mock.calls).toHaveLength(0);
+      expect(transitionState.mock.calls).toHaveLength(0);
       wrapper.setProps({ hello: 'there', another: ['one', 'two'] });
-      expect(onSearchStateChange.mock.calls.length).toBe(1);
-      expect(transitionState.mock.calls.length).toBe(1);
-      expect(update.mock.calls.length).toBe(1);
+      expect(onSearchStateChange.mock.calls).toHaveLength(1);
+      expect(transitionState.mock.calls).toHaveLength(1);
+      expect(update.mock.calls).toHaveLength(1);
       wrapper.setProps({ hello: 'there', another: ['one', 'two'] });
-      expect(onSearchStateChange.mock.calls.length).toBe(1);
-      expect(transitionState.mock.calls.length).toBe(1);
-      expect(update.mock.calls.length).toBe(1);
+      expect(onSearchStateChange.mock.calls).toHaveLength(1);
+      expect(transitionState.mock.calls).toHaveLength(1);
+      expect(update.mock.calls).toHaveLength(1);
     });
   });
 
@@ -313,7 +313,7 @@ describe('createConnector', () => {
           },
         },
       });
-      expect(registerWidget.mock.calls.length).toBe(0);
+      expect(registerWidget.mock.calls).toHaveLength(0);
     });
 
     it('registers itself as a widget with getMetadata', () => {
@@ -340,10 +340,10 @@ describe('createConnector', () => {
           },
         },
       });
-      expect(registerWidget.mock.calls.length).toBe(1);
+      expect(registerWidget.mock.calls).toHaveLength(1);
       const state = {};
       const outputMetadata = registerWidget.mock.calls[0][0].getMetadata(state);
-      expect(getMetadata.mock.calls.length).toBe(1);
+      expect(getMetadata.mock.calls).toHaveLength(1);
       expect(getMetadata.mock.calls[0][0]).toEqual(props);
       expect(getMetadata.mock.calls[0][1]).toBe(state);
       expect(outputMetadata).toBe(metadata);
@@ -377,12 +377,12 @@ describe('createConnector', () => {
           },
         },
       });
-      expect(registerWidget.mock.calls.length).toBe(1);
+      expect(registerWidget.mock.calls).toHaveLength(1);
       const inputSP = {};
       const outputSP = registerWidget.mock.calls[0][0].getSearchParameters(
         inputSP
       );
-      expect(getSearchParameters.mock.calls.length).toBe(1);
+      expect(getSearchParameters.mock.calls).toHaveLength(1);
       expect(getSearchParameters.mock.calls[0][0]).toBe(inputSP);
       expect(getSearchParameters.mock.calls[0][1]).toEqual(props);
       expect(getSearchParameters.mock.calls[0][2]).toBe(state.widgets);
@@ -419,7 +419,7 @@ describe('createConnector', () => {
         context,
       });
 
-      expect(onSearchParameters.mock.calls.length).toBe(1);
+      expect(onSearchParameters.mock.calls).toHaveLength(1);
       expect(onSearchParameters.mock.calls[0][0]).toBe(getSearchParameters);
       expect(onSearchParameters.mock.calls[0][1]).toEqual(context);
       expect(onSearchParameters.mock.calls[0][2]).toEqual(props);
@@ -434,7 +434,7 @@ describe('createConnector', () => {
         context,
       });
 
-      expect(onSearchParameters.mock.calls.length).toBe(1);
+      expect(onSearchParameters.mock.calls).toHaveLength(1);
     });
 
     it('calls update when props change', () => {
@@ -464,13 +464,13 @@ describe('createConnector', () => {
           },
         },
       });
-      expect(update.mock.calls.length).toBe(0);
-      expect(onSearchStateChange.mock.calls.length).toBe(0);
-      expect(transitionState.mock.calls.length).toBe(0);
+      expect(update.mock.calls).toHaveLength(0);
+      expect(onSearchStateChange.mock.calls).toHaveLength(0);
+      expect(transitionState.mock.calls).toHaveLength(0);
       wrapper.setProps({ hello: 'you' });
-      expect(update.mock.calls.length).toBe(1);
-      expect(onSearchStateChange.mock.calls.length).toBe(1);
-      expect(transitionState.mock.calls.length).toBe(1);
+      expect(update.mock.calls).toHaveLength(1);
+      expect(onSearchStateChange.mock.calls).toHaveLength(1);
+      expect(transitionState.mock.calls).toHaveLength(1);
     });
 
     it('dont trigger onSearchStateChange when props change and the component has no transitionState function', () => {
@@ -498,11 +498,11 @@ describe('createConnector', () => {
           },
         },
       });
-      expect(update.mock.calls.length).toBe(0);
-      expect(onSearchStateChange.mock.calls.length).toBe(0);
+      expect(update.mock.calls).toHaveLength(0);
+      expect(onSearchStateChange.mock.calls).toHaveLength(0);
       wrapper.setProps({ hello: 'you' });
-      expect(update.mock.calls.length).toBe(1);
-      expect(onSearchStateChange.mock.calls.length).toBe(0);
+      expect(update.mock.calls).toHaveLength(1);
+      expect(onSearchStateChange.mock.calls).toHaveLength(0);
     });
 
     it('dont update when props dont change', () => {
@@ -532,13 +532,13 @@ describe('createConnector', () => {
           },
         },
       });
-      expect(onSearchStateChange.mock.calls.length).toBe(0);
-      expect(update.mock.calls.length).toBe(0);
-      expect(transitionState.mock.calls.length).toBe(0);
+      expect(onSearchStateChange.mock.calls).toHaveLength(0);
+      expect(update.mock.calls).toHaveLength(0);
+      expect(transitionState.mock.calls).toHaveLength(0);
       wrapper.setProps({ hello: 'there' });
-      expect(onSearchStateChange.mock.calls.length).toBe(0);
-      expect(update.mock.calls.length).toBe(0);
-      expect(transitionState.mock.calls.length).toBe(0);
+      expect(onSearchStateChange.mock.calls).toHaveLength(0);
+      expect(update.mock.calls).toHaveLength(0);
+      expect(transitionState.mock.calls).toHaveLength(0);
     });
 
     describe('unmounting', () => {
@@ -567,15 +567,15 @@ describe('createConnector', () => {
             },
           },
         });
-        expect(unregister.mock.calls.length).toBe(0);
-        expect(setState.mock.calls.length).toBe(0);
-        expect(onSearchStateChange.mock.calls.length).toBe(0);
+        expect(unregister.mock.calls).toHaveLength(0);
+        expect(setState.mock.calls).toHaveLength(0);
+        expect(onSearchStateChange.mock.calls).toHaveLength(0);
 
         wrapper.unmount();
 
-        expect(unregister.mock.calls.length).toBe(1);
-        expect(setState.mock.calls.length).toBe(1);
-        expect(onSearchStateChange.mock.calls.length).toBe(1);
+        expect(unregister.mock.calls).toHaveLength(1);
+        expect(setState.mock.calls).toHaveLength(1);
+        expect(onSearchStateChange.mock.calls).toHaveLength(1);
         expect(setState.mock.calls[0][0]).toEqual({
           widgets: { another: { state: 'state' } },
         });

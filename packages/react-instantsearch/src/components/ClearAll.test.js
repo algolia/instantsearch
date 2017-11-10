@@ -26,9 +26,9 @@ describe('ClearAll', () => {
     const wrapper = mount(<ClearAll refine={refine} items={[]} />);
 
     const btn = wrapper.find('button');
-    expect(refine.mock.calls.length).toBe(0);
+    expect(refine.mock.calls).toHaveLength(0);
     btn.simulate('click');
-    expect(refine.mock.calls.length).toBe(0);
+    expect(refine.mock.calls).toHaveLength(0);
   });
 
   it('is not disabled when there are filters', () => {
@@ -41,8 +41,8 @@ describe('ClearAll', () => {
     );
 
     const btn = wrapper.find('button');
-    expect(refine.mock.calls.length).toBe(0);
+    expect(refine.mock.calls).toHaveLength(0);
     btn.simulate('click');
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
   });
 });

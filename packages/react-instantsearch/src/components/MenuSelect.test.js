@@ -65,7 +65,7 @@ describe('MenuSelect', () => {
     );
 
     const items = wrapper.find('.ais-MenuSelect__option');
-    expect(items.length).toBe(4); // +1 from "see all option"
+    expect(items).toHaveLength(4); // +1 from "see all option"
 
     wrapper
       .find('.ais-MenuSelect__select')

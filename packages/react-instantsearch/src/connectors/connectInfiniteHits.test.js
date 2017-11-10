@@ -93,7 +93,7 @@ describe('connectInfiniteHits', () => {
           },
         });
         expect(res.hits).toEqual(allHits);
-        expect(res.hits.length).toEqual((page + 1) * 2);
+        expect(res.hits).toHaveLength((page + 1) * 2);
         expect(res.hasMore).toBe(true);
       }
 
@@ -107,7 +107,7 @@ describe('connectInfiniteHits', () => {
           nbPages,
         },
       });
-      expect(res.hits.length).toEqual(nbPages * 2);
+      expect(res.hits).toHaveLength(nbPages * 2);
       expect(res.hits).toEqual(allHits);
       expect(res.hasMore).toBe(false);
     });
@@ -243,7 +243,7 @@ describe('connectInfiniteHits', () => {
           },
         });
         expect(res.hits).toEqual(allHits);
-        expect(res.hits.length).toEqual((page + 1) * 2);
+        expect(res.hits).toHaveLength((page + 1) * 2);
         expect(res.hasMore).toBe(true);
       }
 
@@ -259,7 +259,7 @@ describe('connectInfiniteHits', () => {
           },
         },
       });
-      expect(res.hits.length).toEqual(nbPages * 2);
+      expect(res.hits).toHaveLength(nbPages * 2);
       expect(res.hits).toEqual(allHits);
       expect(res.hasMore).toBe(false);
     });

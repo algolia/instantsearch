@@ -38,9 +38,9 @@ describe('Hits', () => {
         hasMore={true}
       />
     );
-    expect(mockedRefine.mock.calls.length).toBe(0);
+    expect(mockedRefine.mock.calls).toHaveLength(0);
     wrapped.find('.ais-InfiniteHits__loadMore').simulate('click');
-    expect(mockedRefine.mock.calls.length).toBe(1);
+    expect(mockedRefine.mock.calls).toHaveLength(1);
   });
 
   it('Button is disabled when it is the last page', () => {

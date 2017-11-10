@@ -78,19 +78,19 @@ describe('CurrentRefinements', () => {
         }
       );
 
-      expect(canRefine.mock.calls.length).toBe(1);
+      expect(canRefine.mock.calls).toHaveLength(1);
       expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(wrapper.find('.ais-CurrentRefinements__noRefinement').length).toBe(
-        0
-      );
+      expect(
+        wrapper.find('.ais-CurrentRefinements__noRefinement')
+      ).toHaveLength(0);
 
       wrapper.setProps({ canRefine: false });
 
-      expect(canRefine.mock.calls.length).toBe(2);
+      expect(canRefine.mock.calls).toHaveLength(2);
       expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(wrapper.find('.ais-CurrentRefinements__noRefinement').length).toBe(
-        1
-      );
+      expect(
+        wrapper.find('.ais-CurrentRefinements__noRefinement')
+      ).toHaveLength(1);
     });
   });
 });
