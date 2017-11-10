@@ -28,7 +28,7 @@ const defaults = {
  * @param {Object} userOptions (optional)
  *   @property {String} source Path to copy static assets from (relative to working directory). Defaults to './public'
  *   @property {String} destination Path to copy static assets to (relative to destination directory). Defaults to '.'
- * @return {Function} a Metalsmith plugin
+ * @return {function} a Metalsmith plugin
  */
 function assets(userOptions = {}) {
   const options = {
