@@ -321,22 +321,15 @@ npm run release-maintenance
 
 **Be sure to use `$ npm run` instead of `$ yarn run` to avoid issues**
 
-#### Beta version β
+#### Beta version
 
-Beta version release is available on any branch except `master`, `maintainance`. The
+Beta version release is available on any branch except `master`, `maintainance` or `develop`. The
 main use cases are for releasing a patch before the official release, or create custom builds
-with new features (or friday releases).
-
-If you're on a feature branch (either for a fix or a new minor/major version), you can run:
+with new features. In those cases we will either use the feature branch itself or the `feat/2.*`
+branch.
 
 ```sh
 npm run release
-```
-
-You can also release a beta version from `develop`, using the beta flag in the command line:
-
-```sh
-npm run release -- --beta
 ```
 
 **Be sure to use `$ npm run` instead of `$ yarn run` to avoid issues**
