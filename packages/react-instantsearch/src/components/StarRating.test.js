@@ -87,7 +87,7 @@ describe('StarRating', () => {
   it('should create an URL for each row except for the largest: the default selected one', () => {
     const wrapper = mount(starRating);
 
-    expect(createURL.mock.calls.length).toBe(4);
+    expect(createURL.mock.calls).toHaveLength(4);
     expect(createURL.mock.calls[0][0]).toEqual({ min: 5, max: 5 });
     expect(createURL.mock.calls[1][0]).toEqual({ min: 4, max: 5 });
     expect(createURL.mock.calls[2][0]).toEqual({ min: 3, max: 5 });
@@ -99,14 +99,14 @@ describe('StarRating', () => {
   it('refines its value on change', () => {
     const wrapper = mount(starRating);
     const links = wrapper.find('.ais-StarRating__ratingLink');
-    expect(links.length).toBe(5);
+    expect(links).toHaveLength(5);
 
     let selectedLink = wrapper.find('.ais-StarRating__ratingLinkSelected');
-    expect(selectedLink.length).toBe(1);
+    expect(selectedLink).toHaveLength(1);
 
     links.first().simulate('click');
 
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual({ min: 5, max: 5 });
 
     selectedLink = wrapper.find('.ais-StarRating__ratingLinkSelected');
@@ -118,7 +118,7 @@ describe('StarRating', () => {
       .find('.ais-StarRating__ratingLinkDisabled')
       .find('.ais-StarRating__ratingIcon');
 
-    expect(disabledLink.length).toBe(5);
+    expect(disabledLink).toHaveLength(5);
     wrapper.unmount();
   });
 
@@ -136,8 +136,8 @@ describe('StarRating', () => {
       .first()
       .find('.ais-StarRating__ratingIconEmpty');
 
-    expect(fullIcon.length).toBe(1);
-    expect(emptyIcon.length).toBe(4);
+    expect(fullIcon).toHaveLength(1);
+    expect(emptyIcon).toHaveLength(4);
     wrapper.unmount();
   });
 
@@ -148,7 +148,7 @@ describe('StarRating', () => {
     const links = wrapper.find('.ais-StarRating__ratingLink');
     links.first().simulate('click');
 
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual({ min: 1, max: 5 });
     wrapper.unmount();
   });
@@ -169,8 +169,8 @@ describe('StarRating', () => {
     );
 
     const selected = wrapper.find('.ais-StarRating__ratingLinkSelected');
-    expect(selected.find('.ais-StarRating__ratingIconEmpty').length).toEqual(3);
-    expect(selected.find('.ais-StarRating__ratingIcon').length).toEqual(2);
+    expect(selected.find('.ais-StarRating__ratingIconEmpty')).toHaveLength(3);
+    expect(selected.find('.ais-StarRating__ratingIcon')).toHaveLength(2);
     expect(selected.text()).toContain('8');
 
     wrapper.unmount();
@@ -184,15 +184,15 @@ describe('StarRating', () => {
         childContextTypes: { canRefine: PropTypes.func },
       });
 
-      expect(canRefine.mock.calls.length).toBe(1);
+      expect(canRefine.mock.calls).toHaveLength(1);
       expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(wrapper.find('.ais-StarRating__noRefinement').length).toBe(0);
+      expect(wrapper.find('.ais-StarRating__noRefinement')).toHaveLength(0);
 
       wrapper.setProps({ canRefine: false });
 
-      expect(canRefine.mock.calls.length).toBe(2);
+      expect(canRefine.mock.calls).toHaveLength(2);
       expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(wrapper.find('.ais-StarRating__noRefinement').length).toBe(1);
+      expect(wrapper.find('.ais-StarRating__noRefinement')).toHaveLength(1);
     });
   });
 });

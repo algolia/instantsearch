@@ -48,7 +48,7 @@ describe('HitsPerPage', () => {
     );
 
     const selectedValue = wrapper.find('.ais-HitsPerPage__root');
-    expect(selectedValue.find('option').length).toBe(4);
+    expect(selectedValue.find('option')).toHaveLength(4);
     expect(
       selectedValue
         .find('option')
@@ -58,7 +58,7 @@ describe('HitsPerPage', () => {
 
     selectedValue.find('select').simulate('change', { target: { value: '6' } });
 
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual('6');
   });
 
@@ -74,7 +74,7 @@ describe('HitsPerPage', () => {
     );
 
     const selectedValue = wrapper.find('.ais-HitsPerPage__root');
-    expect(selectedValue.find('option').length).toBe(4);
+    expect(selectedValue.find('option')).toHaveLength(4);
     expect(
       selectedValue
         .find('option')

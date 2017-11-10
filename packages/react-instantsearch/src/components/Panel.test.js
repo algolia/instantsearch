@@ -18,10 +18,10 @@ describe('Panel', () => {
     const title = wrapper.find('.ais-Panel__title');
 
     expect(title.text()).toEqual('category');
-    expect(wrapper.find('.ais-Panel__noRefinement').length).toBe(0);
+    expect(wrapper.find('.ais-Panel__noRefinement')).toHaveLength(0);
 
     wrapper.setState({ canRefine: false });
 
-    expect(wrapper.find('.ais-Panel__noRefinement').length).toBe(1);
+    expect(wrapper.find('.ais-Panel__noRefinement')).toHaveLength(1);
   });
 });

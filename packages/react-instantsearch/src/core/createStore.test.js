@@ -29,9 +29,9 @@ describe('createStore', () => {
       const listener = jest.fn();
       store.subscribe(listener);
       const newState = {};
-      expect(listener.mock.calls.length).toBe(0);
+      expect(listener.mock.calls).toHaveLength(0);
       store.setState(newState);
-      expect(listener.mock.calls.length).toBe(1);
+      expect(listener.mock.calls).toHaveLength(1);
     });
 
     it('returns a method to unsubscribe', () => {
@@ -40,13 +40,13 @@ describe('createStore', () => {
       const listener = jest.fn();
       const unsubscribe = store.subscribe(listener);
       const newState = {};
-      expect(listener.mock.calls.length).toBe(0);
+      expect(listener.mock.calls).toHaveLength(0);
       store.setState(newState);
-      expect(listener.mock.calls.length).toBe(1);
+      expect(listener.mock.calls).toHaveLength(1);
       unsubscribe();
       const newerState = {};
       store.setState(newerState);
-      expect(listener.mock.calls.length).toBe(1);
+      expect(listener.mock.calls).toHaveLength(1);
     });
   });
 });

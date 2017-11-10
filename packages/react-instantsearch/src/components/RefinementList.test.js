@@ -126,13 +126,13 @@ describe('RefinementList', () => {
 
     const items = wrapper.find('.ais-RefinementList__item');
 
-    expect(items.length).toBe(3);
+    expect(items).toHaveLength(3);
 
     const firstItem = items.first().find('.ais-RefinementList__itemCheckbox');
 
     firstItem.simulate('change', { target: { checked: true } });
 
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual(['white']);
 
     wrapper.unmount();
@@ -162,11 +162,11 @@ describe('RefinementList', () => {
 
     const items = wrapper.find('.ais-RefinementList__item');
 
-    expect(items.length).toBe(2);
+    expect(items).toHaveLength(2);
 
     wrapper.find('.ais-RefinementList__showMore').simulate('click');
 
-    expect(wrapper.find('.ais-RefinementList__item').length).toBe(4);
+    expect(wrapper.find('.ais-RefinementList__item')).toHaveLength(4);
 
     wrapper.unmount();
   });
@@ -192,7 +192,7 @@ describe('RefinementList', () => {
 
     const items = wrapper.find('.ais-RefinementList__item');
 
-    expect(items.length).toBe(2);
+    expect(items).toHaveLength(2);
 
     expect(wrapper.find('.ais-RefinementList__showMoreDisabled')).toBeDefined();
 
@@ -246,7 +246,7 @@ describe('RefinementList', () => {
         .find('.ais-RefinementList__SearchBox input')
         .simulate('change', { target: { value: 'query' } });
 
-      expect(searchForItems.mock.calls.length).toBe(1);
+      expect(searchForItems.mock.calls).toHaveLength(1);
       expect(searchForItems.mock.calls[0][0]).toBe('query');
 
       wrapper.unmount();
@@ -261,14 +261,14 @@ describe('RefinementList', () => {
         .find('.ais-RefinementList__itemCheckbox');
       firstItem.simulate('change', { target: { checked: true } });
 
-      expect(refine.mock.calls.length).toBe(1);
+      expect(refine.mock.calls).toHaveLength(1);
       expect(refine.mock.calls[0][0]).toEqual(['white']);
       expect(
         wrapper.find('.ais-RefinementList__SearchBox input').props().value
       ).toBe('');
 
       const selectedRefinements = wrapper.find('.ais-RefinementList__item');
-      expect(selectedRefinements.length).toBe(2);
+      expect(selectedRefinements).toHaveLength(2);
 
       wrapper.unmount();
     });
@@ -279,14 +279,14 @@ describe('RefinementList', () => {
 
       wrapper.find('form').simulate('submit');
 
-      expect(refine.mock.calls.length).toBe(1);
+      expect(refine.mock.calls).toHaveLength(1);
       expect(refine.mock.calls[0][0]).toEqual(['white']);
       expect(
         wrapper.find('.ais-RefinementList__SearchBox input').props().value
       ).toBe('');
 
       const selectedRefinements = wrapper.find('.ais-RefinementList__item');
-      expect(selectedRefinements.length).toBe(2);
+      expect(selectedRefinements).toHaveLength(2);
 
       wrapper.unmount();
     });
@@ -312,15 +312,15 @@ describe('RefinementList', () => {
         }
       );
 
-      expect(canRefine.mock.calls.length).toBe(1);
+      expect(canRefine.mock.calls).toHaveLength(1);
       expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(wrapper.find('.ais-RefinementList__noRefinement').length).toBe(0);
+      expect(wrapper.find('.ais-RefinementList__noRefinement')).toHaveLength(0);
 
       wrapper.setProps({ canRefine: false });
 
-      expect(canRefine.mock.calls.length).toBe(2);
+      expect(canRefine.mock.calls).toHaveLength(2);
       expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(wrapper.find('.ais-RefinementList__noRefinement').length).toBe(1);
+      expect(wrapper.find('.ais-RefinementList__noRefinement')).toHaveLength(1);
     });
   });
 });

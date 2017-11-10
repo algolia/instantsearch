@@ -98,7 +98,7 @@ describe('SearchBox', () => {
     const refine = jest.fn();
     const wrapper = mount(<SearchBox searchAsYouType refine={refine} />);
     wrapper.find('input').simulate('change', { target: { value: 'hello' } });
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toBe('hello');
     wrapper.unmount();
   });
@@ -109,9 +109,9 @@ describe('SearchBox', () => {
       <SearchBox searchAsYouType={false} refine={refine} />
     );
     wrapper.find('input').simulate('change', { target: { value: 'hello' } });
-    expect(refine.mock.calls.length).toBe(0);
+    expect(refine.mock.calls).toHaveLength(0);
     wrapper.find('form').simulate('submit');
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toBe('hello');
     wrapper.unmount();
   });
@@ -123,8 +123,8 @@ describe('SearchBox', () => {
       <SearchBox searchAsYouType={false} onSubmit={onSubmit} refine={refine} />
     );
     wrapper.find('form').simulate('submit');
-    expect(onSubmit.mock.calls.length).toBe(1);
-    expect(refine.mock.calls.length).toBe(0);
+    expect(onSubmit.mock.calls).toHaveLength(1);
+    expect(refine.mock.calls).toHaveLength(0);
     wrapper.unmount();
   });
 
@@ -143,13 +143,13 @@ describe('SearchBox', () => {
     input.focus = jest.fn();
     const event1 = new KeyboardEvent('keydown', { keyCode: 82 });
     document.dispatchEvent(event1);
-    expect(input.focus.mock.calls.length).toBe(0);
+    expect(input.focus.mock.calls).toHaveLength(0);
     const event2 = new KeyboardEvent('keydown', { keyCode: 83 });
     document.dispatchEvent(event2);
-    expect(input.focus.mock.calls.length).toBe(1);
+    expect(input.focus.mock.calls).toHaveLength(1);
     const event3 = new KeyboardEvent('keydown', { keyCode: 84 });
     document.dispatchEvent(event3);
-    expect(input.focus.mock.calls.length).toBe(2);
+    expect(input.focus.mock.calls).toHaveLength(2);
   });
 
   it('should accept `onXXX` events', () => {

@@ -25,7 +25,7 @@ describe('SortBy behavior', () => {
     );
 
     const selectedValue = wrapper.find('.ais-SortBy__root');
-    expect(selectedValue.find('option').length).toBe(4);
+    expect(selectedValue.find('option')).toHaveLength(4);
     expect(
       selectedValue
         .find('option')
@@ -37,7 +37,7 @@ describe('SortBy behavior', () => {
       .find('select')
       .simulate('change', { target: { value: 'index3' } });
 
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual('index3');
   });
 
@@ -58,7 +58,7 @@ describe('SortBy behavior', () => {
     );
 
     const selectedValue = wrapper.find('.ais-SortBy__root');
-    expect(selectedValue.find('option').length).toBe(4);
+    expect(selectedValue.find('option')).toHaveLength(4);
     expect(
       selectedValue
         .find('option')

@@ -16,7 +16,7 @@ describe('createWidgetsManager', () => {
       const wm = createWidgetsManager(() => null);
       const unregister = wm.registerWidget({});
       unregister();
-      expect(wm.getWidgets().length).toBe(0);
+      expect(wm.getWidgets()).toHaveLength(0);
     });
 
     it('schedules an update', () => {
@@ -24,7 +24,7 @@ describe('createWidgetsManager', () => {
       const wm = createWidgetsManager(onUpdate);
       wm.registerWidget({});
       return Promise.resolve().then(() => {
-        expect(onUpdate.mock.calls.length).toBe(1);
+        expect(onUpdate.mock.calls).toHaveLength(1);
       });
     });
   });
@@ -35,7 +35,7 @@ describe('createWidgetsManager', () => {
       const wm = createWidgetsManager(onUpdate);
       wm.update();
       return Promise.resolve().then(() => {
-        expect(onUpdate.mock.calls.length).toBe(1);
+        expect(onUpdate.mock.calls).toHaveLength(1);
       });
     });
   });

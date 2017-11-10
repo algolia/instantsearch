@@ -166,13 +166,13 @@ describe('MultiRange', () => {
 
     const items = wrapper.find('.ais-MultiRange__item');
 
-    expect(items.length).toBe(4);
+    expect(items).toHaveLength(4);
 
     const firstItem = items.first().find('.ais-MultiRange__itemRadio');
 
     firstItem.simulate('change', { target: { checked: true } });
 
-    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toEqual('10:');
 
     wrapper.unmount();
@@ -214,10 +214,10 @@ describe('MultiRange', () => {
     );
 
     const itemWrapper = wrapper.find('.ais-MultiRange__noRefinement');
-    expect(itemWrapper.length).toBe(1);
+    expect(itemWrapper).toHaveLength(1);
 
     const items = wrapper.find('.ais-MultiRange__itemNoRefinement');
-    expect(items.length).toBe(4);
+    expect(items).toHaveLength(4);
 
     wrapper.unmount();
   });

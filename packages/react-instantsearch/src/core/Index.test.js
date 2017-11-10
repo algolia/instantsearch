@@ -52,7 +52,7 @@ describe('Index', () => {
       );
     }).not.toThrow();
 
-    expect(registerWidget.mock.calls.length).toBe(3);
+    expect(registerWidget.mock.calls).toHaveLength(3);
   });
 
   it('exposes multi index context', () => {
@@ -79,7 +79,7 @@ describe('Index', () => {
 
     wrapper.setProps({ indexName: 'newIndexName' });
 
-    expect(update.mock.calls.length).toBe(1);
+    expect(update.mock.calls).toHaveLength(1);
   });
 
   it('calls onSearchParameters when mounted', () => {
@@ -98,6 +98,6 @@ describe('Index', () => {
       { context }
     );
 
-    expect(onSearchParameters.mock.calls.length).toBe(1);
+    expect(onSearchParameters.mock.calls).toHaveLength(1);
   });
 });

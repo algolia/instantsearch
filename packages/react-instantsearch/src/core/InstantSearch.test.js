@@ -134,12 +134,12 @@ describe('InstantSearch', () => {
       </InstantSearch>
     );
 
-    expect(ism.updateClient.mock.calls.length).toBe(0);
+    expect(ism.updateClient.mock.calls).toHaveLength(0);
     wrapper.setProps({
       ...DEFAULT_PROPS,
       algoliaClient: {},
     });
-    expect(ism.updateClient.mock.calls.length).toBe(1);
+    expect(ism.updateClient.mock.calls).toHaveLength(1);
   });
 
   it('works as a controlled input', () => {
@@ -251,8 +251,8 @@ describe('InstantSearch', () => {
     wrapper.unmount();
     onSearchStateChange({});
 
-    expect(onSearchStateChangeMock.mock.calls.length).toBe(0);
-    expect(ism.skipSearch.mock.calls.length).toBe(1);
+    expect(onSearchStateChangeMock.mock.calls).toHaveLength(0);
+    expect(ism.skipSearch.mock.calls).toHaveLength(1);
   });
 
   it('calls onSearchParameters with the right values if function provided', () => {
@@ -277,7 +277,7 @@ describe('InstantSearch', () => {
 
     childContext.ais.onSearchParameters(getSearchParameters, context, props);
 
-    expect(onSearchParametersMock.mock.calls.length).toBe(1);
+    expect(onSearchParametersMock.mock.calls).toHaveLength(1);
     expect(onSearchParametersMock.mock.calls[0][0]).toBe(getSearchParameters);
     expect(onSearchParametersMock.mock.calls[0][1]).toEqual(context);
     expect(onSearchParametersMock.mock.calls[0][2]).toEqual(props);
@@ -297,7 +297,7 @@ describe('InstantSearch', () => {
 
     childContext.ais.onSearchParameters(getSearchParameters, context, props);
 
-    expect(onSearchParametersMock.mock.calls.length).toBe(2);
+    expect(onSearchParametersMock.mock.calls).toHaveLength(2);
     expect(onSearchParametersMock.mock.calls[1][3]).toEqual({
       search: 'state',
     });
@@ -312,7 +312,7 @@ describe('InstantSearch', () => {
 
     childContext.ais.onSearchParameters(getSearchParameters, context, props);
 
-    expect(onSearchParametersMock.mock.calls.length).toBe(2);
+    expect(onSearchParametersMock.mock.calls).toHaveLength(2);
   });
 
   describe('createHrefForState', () => {
