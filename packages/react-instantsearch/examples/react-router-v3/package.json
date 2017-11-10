@@ -4,14 +4,14 @@
     "identity-obj-proxy": "3.0.0",
     "jest-environment-jsdom-11.0.0": "20.0.9",
     "react-scripts": "1.0.17",
-    "react-test-renderer": "16.0.0"
+    "react-test-renderer": "16.1.0"
   },
   "dependencies": {
     "lodash": "4.17.4",
     "prop-types": "15.5.10",
     "qs": "6.5.1",
-    "react": "16.0.0",
-    "react-dom": "16.0.0",
+    "react": "16.1.0",
+    "react-dom": "16.1.0",
     "react-instantsearch": "4.2.0",
     "react-instantsearch-theme-algolia": "4.2.0",
     "react-router": "3.0.5"
