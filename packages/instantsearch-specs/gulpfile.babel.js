@@ -24,7 +24,7 @@ function handleError(err) {
 
 const baseDevFolder = 'src/';
 const baseDistFolder = 'static/assets/';
-const themesFolder = 'css';
+const themesFolder = 'themes';
 
 const devFolder = {
   scss: baseDevFolder + 'scss/',
