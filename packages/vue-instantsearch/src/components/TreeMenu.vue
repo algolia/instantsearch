@@ -42,7 +42,9 @@ export default {
     );
   },
   destroyed() {
+    this.searchStore.stop();
     this.searchStore.removeFacet(this.attribute);
+    this.searchStore.start();
   },
   computed: {
     facetValues() {

@@ -62,7 +62,9 @@ export default {
     this.searchStore.addFacet(this.attributeName, this.operator);
   },
   destroyed() {
+    this.searchStore.stop();
     this.searchStore.removeFacet(this.attributeName);
+    this.searchStore.start();
   },
   computed: {
     facetValues() {

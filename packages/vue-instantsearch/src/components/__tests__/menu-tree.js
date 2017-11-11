@@ -36,6 +36,8 @@ const addFacet = jest.fn();
 const searchStore = {
   getFacetValues,
   addFacet,
+  stop: () => {},
+  start: () => {},
 };
 
 test('renders proper HTML', () => {
