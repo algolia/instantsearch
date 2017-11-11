@@ -67,7 +67,7 @@ When you use a `scoped slot`, you need to tell your template to get the scope.
 
 ```html
 <ais-results>
-  <template scope="{ result }">
+  <template slot-scope="{ result }">
     <h2>{{ result.name }}</h2>
   </template>
 </ais-results>
