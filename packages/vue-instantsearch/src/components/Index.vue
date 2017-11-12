@@ -4,7 +4,8 @@
   </div>
 </template>
 
-<script>import { createFromAlgoliaCredentials } from '../store';
+<script>
+import { createFromAlgoliaCredentials } from '../store';
 import algoliaComponent from '../component';
 
 export default {

@@ -20,7 +20,8 @@
   </div>
 </template>
 
-<script>import algoliaComponent from '../component';
+<script>
+import algoliaComponent from '../component';
 export default {
   mixins: [algoliaComponent],
   props: {

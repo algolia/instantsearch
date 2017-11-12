@@ -21,70 +21,71 @@
   </div>
 </template>
 
-<script>import algoliaComponent from '../component';
-  import { FACET_TREE } from '../store';
+<script>
+import algoliaComponent from '../component';
+import { FACET_TREE } from '../store';
 
-  export default {
-    mixins: [algoliaComponent],
+export default {
+  mixins: [algoliaComponent],
 
-    props: {
-      attribute: {
-        type: String,
-        required: true,
-      },
-      limit: {
-        type: Number,
-        default: 10,
-      },
-      sortBy: {
-        default() {
-          return ['isRefined:desc', 'count:desc', 'name:asc'];
-        },
+  props: {
+    attribute: {
+      type: String,
+      required: true,
+    },
+    limit: {
+      type: Number,
+      default: 10,
+    },
+    sortBy: {
+      default() {
+        return ['isRefined:desc', 'count:desc', 'name:asc'];
       },
     },
+  },
 
-    computed: {
-      facetValues() {
-        const { data = [] } = this.searchStore.getFacetValues(
-          this.attribute,
-          this.sortBy
-        );
-
-        return data;
-      },
-      show() {
-        return this.facetValues.length > 0;
-      },
-    },
-
-    methods: {
-      handleClick(path) {
-        this.searchStore.toggleFacetRefinement(this.attribute, path);
-      },
-    },
-
-    data() {
-      return {
-        blockClassName: 'ais-menu',
-      };
-    },
-
-    created() {
-      this.searchStore.stop();
-      this.searchStore.maxValuesPerFacet = this.limit;
-      this.searchStore.addFacet(
-        {
-          name: this.attribute,
-          attributes: [this.attribute],
-        },
-        FACET_TREE
+  computed: {
+    facetValues() {
+      const { data = [] } = this.searchStore.getFacetValues(
+        this.attribute,
+        this.sortBy
       );
-      this.searchStore.start();
-      this.searchStore.refresh();
-    },
 
-    destroyed() {
-      this.searchStore.removeFacet(this.attribute);
+      return data;
     },
-  };
+    show() {
+      return this.facetValues.length > 0;
+    },
+  },
+
+  methods: {
+    handleClick(path) {
+      this.searchStore.toggleFacetRefinement(this.attribute, path);
+    },
+  },
+
+  data() {
+    return {
+      blockClassName: 'ais-menu',
+    };
+  },
+
+  created() {
+    this.searchStore.stop();
+    this.searchStore.maxValuesPerFacet = this.limit;
+    this.searchStore.addFacet(
+      {
+        name: this.attribute,
+        attributes: [this.attribute],
+      },
+      FACET_TREE
+    );
+    this.searchStore.start();
+    this.searchStore.refresh();
+  },
+
+  destroyed() {
+    this.searchStore.removeFacet(this.attribute);
+  },
+};
 </script>
