@@ -2,7 +2,7 @@ import connectScrollTo from '../connectors/connectScrollTo.js';
 import ScrollToComponent from '../components/ScrollTo.js';
 
 /**
- * The ScrollTo component will made the page scroll to the component wrapped by it when one of the
+ * The ScrollTo component will make the page scroll to the component wrapped by it when one of the
  * [search state](guide/Search_state.html) prop is updated. By default when the page number changes,
  * the scroll goes to the wrapped component.
  *
