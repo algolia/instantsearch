@@ -158,13 +158,15 @@ export default function connectPriceRanges(renderFn, unmountFn) {
       },
 
       init({ helper, instantSearchInstance }) {
-        this._refine = this._refine.bind(this, helper);
+        this.refine = (...opts) => {
+          this._refine(helper, ...opts);
+        };
 
         renderFn(
           {
             instantSearchInstance,
             items: [],
-            refine: this._refine,
+            refine: this.refine,
             widgetParams,
           },
           true
@@ -209,7 +211,7 @@ export default function connectPriceRanges(renderFn, unmountFn) {
         renderFn(
           {
             items: facetValues,
-            refine: this._refine,
+            refine: this.refine,
             widgetParams,
             instantSearchInstance,
           },

@@ -128,7 +128,7 @@ export default function connectToggle(renderFn, unmountFn) {
         };
       },
 
-      toggleRefinement(helper, { isRefined } = {}) {
+      _toggleRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
@@ -160,7 +160,9 @@ export default function connectToggle(renderFn, unmountFn) {
               )
           );
 
-        this.toggleRefinement = this.toggleRefinement.bind(this, helper);
+        this.toggleRefinement = (...opts) => {
+          this._toggleRefinement(helper, ...opts);
+        };
 
         const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
 
