@@ -5,6 +5,9 @@ packages/react-instantsearch/examples/*/node_modules/
 docs/
 docs-production/
 dist/
+build/
+.expo/
+.next/
 
 # Happo visual regression build
 test/.happo
