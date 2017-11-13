@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.2.3 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.2.4 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -8291,7 +8291,7 @@ var RawSelector = exports.RawSelector = function (_React$Component) {
         {
           className: this.props.cssClasses.select,
           onChange: this.handleChange,
-          value: currentValue
+          value: '' + currentValue
         },
         options.map(function (option) {
           return _preactCompat2.default.createElement(
@@ -8299,7 +8299,7 @@ var RawSelector = exports.RawSelector = function (_React$Component) {
             {
               className: _this2.props.cssClasses.item,
               key: option.label + option.value,
-              value: option.value
+              value: '' + option.value
             },
             option.label
           );
@@ -12144,7 +12144,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.2.3';
+exports.default = '2.2.4';
 
 /***/ }),
 /* 181 */
@@ -13659,6 +13659,7 @@ var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function
 /**
  * @typedef {Object} NumericSelectorOption
  * @property {number} value The numerical value to refine with.
+ * If the value is `undefined` or `"undefined"`, the option resets the filter.
  * @property {string} label Label to display in the option.
  */
 
@@ -13744,9 +13745,13 @@ function connectNumericSelector(renderFn) {
 
     return {
       getConfiguration: function getConfiguration(currentSearchParameters, searchParametersFromUrl) {
-        return {
-          numericRefinements: _defineProperty({}, attributeName, _defineProperty({}, operator, [this._getRefinedValue(searchParametersFromUrl)]))
-        };
+        var value = this._getRefinedValue(searchParametersFromUrl);
+        if (value) {
+          return {
+            numericRefinements: _defineProperty({}, attributeName, _defineProperty({}, operator, [this._getRefinedValue(searchParametersFromUrl)]))
+          };
+        }
+        return {};
       },
       init: function init(_ref) {
         var helper = _ref.helper,
@@ -13754,7 +13759,7 @@ function connectNumericSelector(renderFn) {
 
         this._refine = function (value) {
           helper.clearRefinements(attributeName);
-          if (value !== undefined) {
+          if (value !== undefined && value !== 'undefined') {
             helper.addNumericRefinement(attributeName, operator, value);
           }
           helper.search();
@@ -33455,6 +33460,7 @@ var usage = 'Usage: numericSelector({\n  container,\n  attributeName,\n  options
 /**
  * @typedef {Object} NumericOption
  * @property {number} value The numerical value to refine with.
+ * If the value is `undefined` or `"undefined"`, the option resets the filter.
  * @property {string} label Label to display in the option.
  */
 
@@ -33491,13 +33497,16 @@ var usage = 'Usage: numericSelector({\n  container,\n  attributeName,\n  options
  * @example
  * search.addWidget(
  *   instantsearch.widgets.numericSelector({
- *     container: '#popularity-selector',
- *     attributeName: 'popularity',
- *     operator: '>=',
+ *     container: '#rating-selector',
+ *     attributeName: 'rating',
+ *     operator: '=',
  *     options: [
- *       {label: 'Top 10', value: 9900},
- *       {label: 'Top 100', value: 9800},
- *       {label: 'Top 500', value: 9700}
+ *       {label: 'All products'},
+ *       {label: 'Only 5 star products', value: 5},
+ *       {label: 'Only 4 star products', value: 4},
+ *       {label: 'Only 3 star products', value: 3},
+ *       {label: 'Only 2 star products', value: 2},
+ *       {label: 'Only 1 star products', value: 1},
  *     ]
  *   })
  * );
