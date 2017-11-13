@@ -9,6 +9,9 @@ const inquirer = require('inquirer');
 const shell = require('shelljs');
 shell.fatal = true;
 
+// Read CLI flags
+const forceBeta = process.argv.includes('--beta');
+
 const {
   updateChangelog,
   getChangelog,
@@ -66,7 +69,7 @@ if (currentBranch === 'master') {
   process.exit(1);
 }
 
-const strategy = currentBranch === 'develop' ? 'stable' : 'beta';
+const strategy = currentBranch !== 'develop' || forceBeta ? 'beta' : 'stable';
 
 // called if process aborted before publish,
 // nothing is pushed nor published remove local changes
