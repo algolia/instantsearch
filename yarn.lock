@@ -8023,7 +8023,7 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-request@2, request@^2.65.0, request@^2.74.0, request@^2.79.0:
+request@2, request@^2.65.0, request@^2.74.0, request@^2.79.0, request@~2.83.0:
   version "2.83.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.83.0.tgz#ca0b65da02ed62935887808e6f510381034e3356"
   dependencies:
@@ -8312,9 +8312,9 @@ sass-loader@6.0.6:
     lodash.tail "^4.1.1"
     pify "^3.0.0"
 
-sauce-connect-launcher@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/sauce-connect-launcher/-/sauce-connect-launcher-1.2.2.tgz#7346cc8fbdc443191323439b0733451f5f3521f2"
+sauce-connect-launcher@~1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/sauce-connect-launcher/-/sauce-connect-launcher-1.2.3.tgz#d2f931ad7ae8fdabf1968a440e7b20417aca7f86"
   dependencies:
     adm-zip "~0.4.3"
     async "^2.1.2"
@@ -9639,12 +9639,12 @@ wdio-mocha-framework@0.5.11:
     mocha "^3.2.0"
     wdio-sync "0.7.0"
 
-wdio-sauce-service@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/wdio-sauce-service/-/wdio-sauce-service-0.4.0.tgz#3ad5dcedee0c5cd19118ca287ba99e61982cfa49"
+wdio-sauce-service@0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/wdio-sauce-service/-/wdio-sauce-service-0.4.4.tgz#234aae37cbe3984c3690f4b2c15d03b0694ff03f"
   dependencies:
-    request "2.81.0"
-    sauce-connect-launcher "1.2.2"
+    request "~2.83.0"
+    sauce-connect-launcher "~1.2.3"
 
 wdio-screenshot@^0.6.0:
   version "0.6.0"

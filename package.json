@@ -105,7 +105,7 @@
     "watch": "1.0.2",
     "wdio-dot-reporter": "0.0.9",
     "wdio-mocha-framework": "0.5.11",
-    "wdio-sauce-service": "0.4.0",
+    "wdio-sauce-service": "0.4.4",
     "wdio-visual-regression-service": "0.8.0",
     "webdriverio": "4.8.0",
     "webpack": "3.6.0",
