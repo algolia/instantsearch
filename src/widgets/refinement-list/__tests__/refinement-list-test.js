@@ -3,6 +3,8 @@ import sinon from 'sinon';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
+import algoliasearchHelper from 'algoliasearch-helper';
+const SearchParameters = algoliasearchHelper.SearchParameters;
 import refinementList from '../refinement-list.js';
 const instantSearchInstance = { templatesConfig: {} };
 
@@ -57,7 +59,7 @@ describe('refinementList()', () => {
           .stub()
           .returns([{ name: 'foo' }, { name: 'bar' }]),
       };
-      state = { toggleRefinement: sinon.spy() };
+      state = SearchParameters.make({});
       createURL = () => '#';
     });
 

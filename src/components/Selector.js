@@ -20,13 +20,13 @@ export class RawSelector extends React.Component {
       <select
         className={this.props.cssClasses.select}
         onChange={this.handleChange}
-        value={currentValue}
+        value={`${currentValue}`}
       >
         {options.map(option => (
           <option
             className={this.props.cssClasses.item}
             key={option.label + option.value}
-            value={option.value}
+            value={`${option.value}`}
           >
             {option.label}
           </option>
