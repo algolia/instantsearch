@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "^0.0.11",
-    "expo": "22.0.3",
+    "expo": "22.0.4",
     "lodash": "4.17.4",
     "native-base": "2.3.3",
     "prop-types": "15.5.8",
