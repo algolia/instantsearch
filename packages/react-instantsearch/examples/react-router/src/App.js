@@ -21,12 +21,19 @@ const createURL = state => `?${qs.stringify(state)}`;
 
 const searchStateToUrl = (props, searchState) =>
   searchState ? `${props.location.pathname}${createURL(searchState)}` : '';
+const urlToSearchState = location => qs.parse(location.search.slice(1));
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { searchState: qs.parse(props.location.search.slice(1)) };
+    this.state = { searchState: urlToSearchState(props.location) };
     this.onSearchStateChange = this.onSearchStateChange.bind(this);
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.location !== this.props.location) {
+      this.setState({ searchState: urlToSearchState(props.location) });
+    }
   }
 
   onSearchStateChange(searchState) {
