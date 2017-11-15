@@ -27,7 +27,8 @@
   </div>
 </template>
 
-<script>import { FACET_OR } from '../store';
+<script>
+import { FACET_OR } from '../store';
 import algoliaComponent from '../component';
 
 export default {
