@@ -56,7 +56,9 @@ export default {
     this.searchStore.addFacet(this.attributeName, FACET_OR);
   },
   destroyed() {
+    this.searchStore.stop();
     this.searchStore.removeFacet(this.attributeName);
+    this.searchStore.start();
   },
   computed: {
     show() {
