@@ -7,15 +7,15 @@
 // Reset all lists
 
 .ais-Breadcrumb-list,
-.ais-CurrentRefinedValues-list,
+.ais-CurrentRefinements-list,
 .ais-HierarchicalMenu-list,
-.ais-Hits-list,
-.ais-InfiniteHits-list,
+.ais-InfiniteResults-list,
 .ais-Menu-list,
-.ais-NumericRefinementList-list,
+.ais-NumericMenu-list,
 .ais-Pagination-list,
+.ais-RatingMenu-list,
 .ais-RefinementList-list,
-.ais-StarRating-list,
+.ais-Results-list,
 .ais-Toggle-list {
   margin: 0;
   padding: 0;
@@ -24,15 +24,15 @@
 
 // Reset all buttons
 
-.ais-ClearAll-button,
-.ais-CurrentRefinedValues-button,
-.ais-CurrentRefinedValues-reset,
-.ais-InfiniteHits-showMore,
+.ais-ClearRefinements-button,
+.ais-CurrentRefinements-button,
+.ais-CurrentRefinements-reset,
+.ais-InfiniteResults-showMore,
 .ais-Menu-showMore,
 .ais-NumericRange-submit,
+.ais-RatingMenu-button,
 .ais-SearchBox-submit,
-.ais-SearchBox-reset,
-.ais-StarRating-button {
+.ais-SearchBox-reset {
   padding: 0;
   overflow: visible;
   font: inherit;
@@ -53,8 +53,8 @@
 
 .ais-Breadcrumb-item,
 .ais-Pagination-item,
-.ais-StarRating-label,
-.ais-StarRating-count {
+.ais-RatingMenu-label,
+.ais-RatingMenu-count {
   display: inline-block;
   vertical-align: middle;
 }
@@ -75,7 +75,7 @@
   height: auto;
 }
 
-.ais-StarRating-starIcon {
+.ais-RatingMenu-starIcon {
   display: inline-block;
   vertical-align: middle;
   width: 20px;

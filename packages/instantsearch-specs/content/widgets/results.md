@@ -1,54 +1,54 @@
 ---
-title: Hits
+title: Results
 type: widget
 html: |
-  <div class="ais-Hits">
-    <div class="ais-Hits-header ais-header">
-      Hits
+  <div class="ais-Results">
+    <div class="ais-Results-header ais-header">
+      Results
     </div>
-    <div class="ais-Hits-body ais-body">
-      <ul class="ais-Hits-list">
-        <li class="ais-Hits-item">
+    <div class="ais-Results-body ais-body">
+      <ul class="ais-Results-list">
+        <li class="ais-Results-item">
           Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
         </li>
-        <li class="ais-Hits-item">
+        <li class="ais-Results-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
-        <li class="ais-Hits-item">
+        <li class="ais-Results-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
-        <li class="ais-Hits-item">
+        <li class="ais-Results-item">
           Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
         </li>
-        <li class="ais-Hits-item">
+        <li class="ais-Results-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
-        <li class="ais-Hits-item">
+        <li class="ais-Results-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
-        <li class="ais-Hits-item">
+        <li class="ais-Results-item">
           Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
         </li>
-        <li class="ais-Hits-item">
+        <li class="ais-Results-item">
           Hit 4397400: Google - Chromecast - Black
         </li>
       </ul>
     </div>
-    <div class="ais-Hits-footer ais-footer">
+    <div class="ais-Results-footer ais-footer">
       Footer info
     </div>
   </div>
 classes:
-  - name: .ais-Hits
+  - name: .ais-Results
     description: the root div of the widget
-  - name: .ais-Hits-header
+  - name: .ais-Results-header
     description: the header of the widget (optional)
-  - name: .ais-Hits-body
+  - name: .ais-Results-body
     description: the body of the widget
-  - name: .ais-Hits-list
-    description: the list of hits
-  - name: .ais-Hits-item
+  - name: .ais-Results-list
+    description: the list of results
+  - name: .ais-Results-item
     description: the hit list item
-  - name: .ais-Hits-footer
+  - name: .ais-Results-footer
     description: the footer of the widget (optional)
 ---
