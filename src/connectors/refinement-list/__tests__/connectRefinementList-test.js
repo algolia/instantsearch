@@ -280,9 +280,12 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering).lastCalledWith(expect.objectContaining({
-      canToggleShowMore: false,
-    }), false);
+    expect(rendering).lastCalledWith(
+      expect.objectContaining({
+        canToggleShowMore: false,
+      }),
+      false
+    );
   });
 
   it('If there are same amount of items then canToggleShowMore is false', () => {
@@ -331,9 +334,12 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering).lastCalledWith(expect.objectContaining({
-      canToggleShowMore: false,
-    }), false);
+    expect(rendering).lastCalledWith(
+      expect.objectContaining({
+        canToggleShowMore: false,
+      }),
+      false
+    );
   });
 
   it('If there are enough items then canToggleShowMore is true', () => {
@@ -443,16 +449,21 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering).lastCalledWith(expect.objectContaining({
-      canToggleShowMore: true,
-      items: [{
-        label: 'c1',
-        value: 'c1',
-        highlighted: 'c1',
-        count: 880,
-        isRefined: false,
-      }],
-    }), false);
+    expect(rendering).lastCalledWith(
+      expect.objectContaining({
+        canToggleShowMore: true,
+        items: [
+          {
+            label: 'c1',
+            value: 'c1',
+            highlighted: 'c1',
+            count: 880,
+            isRefined: false,
+          },
+        ],
+      }),
+      false
+    );
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     // toggleShowMore does a new render
@@ -532,7 +543,7 @@ describe('connectRefinementList', () => {
     });
 
     // this one is `false` because we're not sure that what we asked is the actual number of facet values
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
+    expect(rendering.mock.calls[1][0].hasExhaustiveItems).toEqual(false);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -561,7 +572,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
+    expect(rendering.mock.calls[2][0].hasExhaustiveItems).toEqual(false);
   });
 
   it('hasExhaustiveItems indicates if the items provided are exhaustive - with an other widgets making the maxValuesPerFacet bigger', () => {
@@ -574,7 +585,7 @@ describe('connectRefinementList', () => {
       ...widget.getConfiguration({}),
       maxValuesPerFacet: 3,
     });
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -583,7 +594,7 @@ describe('connectRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+    expect(rendering.mock.calls[0][0].hasExhaustiveItems).toEqual(true);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -733,11 +744,13 @@ describe('connectRefinementList', () => {
         {
           count: 33,
           highlighted: 'Salvador <em>Da</em>li',
+          label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
           highlighted: '<em>Da</em>vidoff',
+          label: 'Davidoff',
           value: 'Davidoff',
         },
       ]);
@@ -833,11 +846,13 @@ describe('connectRefinementList', () => {
         {
           count: 33,
           highlighted: 'Salvador <em>Da</em>li',
+          label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
           highlighted: '<em>Da</em>vidoff',
+          label: 'Davidoff',
           value: 'Davidoff',
         },
       ]);
@@ -931,11 +946,13 @@ describe('connectRefinementList', () => {
         {
           count: 33,
           highlighted: 'Salvador <em>Da</em>li',
+          label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
           highlighted: '<em>Da</em>vidoff',
+          label: 'Davidoff',
           value: 'Davidoff',
         },
       ]);
