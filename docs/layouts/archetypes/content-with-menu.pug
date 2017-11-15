@@ -1,20 +1,21 @@
-include ../common/meta.pug
-body.documentation
-  include ../common/header.pug
-  include ../common/hero-doc.pug
+extends ../common/meta.pug
 
-  section.documentation-section
-    .container
-      nav.sidebar.pos-abt.z-100
-        block navigation
+block body
+  body.documentation
+    include ../common/header.pug
+    include ../common/hero-doc.pug
 
-      a.sidebar-opener
-      .documentation-container
-        if(editable)
-          a.btn.btn-static-theme.elevation0.pull-right(href=`http://github.com/algolia/vue-instantsearch/edit/master/${githubSource}`) Edit this page
-        block content
+    section.documentation-section
+      .container
+        nav.sidebar.pos-abt.z-100
+          block navigation
 
-  include ../common/footer.pug
-  script(src=webpack.assets['js/main.js'])
-  include ../common/analytics.pug
-</html>
+        a.sidebar-opener
+        .documentation-container
+          if(editable)
+            a.btn.btn-static-theme.elevation0.pull-right(href=`http://github.com/algolia/vue-instantsearch/edit/master/${githubSource}`) Edit this page
+          block content
+
+    include ../common/footer.pug
+    script(src=webpack.assets['js/main.js'])
+    include ../common/analytics.pug
