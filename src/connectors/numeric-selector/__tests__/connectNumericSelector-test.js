@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
@@ -11,7 +9,7 @@ describe('connectNumericSelector', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
       { name: '10', value: 10 },
@@ -33,10 +31,10 @@ describe('connectNumericSelector', () => {
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).not.toHaveBeenCalled();
 
     const helper = jsHelper(fakeClient, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -46,11 +44,11 @@ describe('connectNumericSelector', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering).toHaveBeenLastCalledWith(expect.any(Object), true);
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.currentRefinement).toBe(listOptions[0].value);
     expect(firstRenderingOptions.widgetParams).toEqual({
       attributeName: 'numerics',
@@ -65,10 +63,10 @@ describe('connectNumericSelector', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering).toHaveBeenLastCalledWith(expect.any(Object), false);
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.currentRefinement).toBe(listOptions[0].value);
     expect(secondRenderingOptions.widgetParams).toEqual({
       attributeName: 'numerics',
@@ -79,7 +77,7 @@ describe('connectNumericSelector', () => {
   it('Reads the default value from the URL if possible', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
       { name: '10', value: 10 },
@@ -120,7 +118,7 @@ describe('connectNumericSelector', () => {
   });
 
   it('Provide a function to update the refinements at each step', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
       { name: '10', value: 10 },
@@ -134,7 +132,7 @@ describe('connectNumericSelector', () => {
 
     const config = widget.getConfiguration({}, {});
     const helper = jsHelper(fakeClient, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -143,7 +141,7 @@ describe('connectNumericSelector', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '=': [10],
@@ -168,7 +166,7 @@ describe('connectNumericSelector', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderSetValue } = secondRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({
       '=': [10],
@@ -188,7 +186,7 @@ describe('connectNumericSelector', () => {
   });
 
   it('provides isRefined for the currently selected value', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
       { name: '10', value: 10 },
@@ -202,7 +200,7 @@ describe('connectNumericSelector', () => {
 
     const config = widget.getConfiguration({}, {});
     const helper = jsHelper(fakeClient, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -211,7 +209,7 @@ describe('connectNumericSelector', () => {
       onHistoryChange: () => {},
     });
 
-    let refine = rendering.lastCall.args[0].refine;
+    let refine = rendering.mock.calls[0][0].refine;
 
     listOptions.forEach((_, i) => {
       // we loop with 1 increment because the first value is selected by default
@@ -229,10 +227,63 @@ describe('connectNumericSelector', () => {
       // First we copy and set the default added values
       const expectedResult = currentOption.value;
 
-      const renderingParameters = rendering.lastCall.args[0];
+      const renderingParameters = rendering.mock.calls[1 + i][0];
       expect(renderingParameters.currentRefinement).toEqual(expectedResult);
 
       refine = renderingParameters.refine;
     });
+  });
+
+  it('The refine function can unselect with `undefined` and "undefined"', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectNumericSelector(rendering);
+    const listOptions = [
+      { name: '' },
+      { name: '10', value: 10 },
+      { name: '20', value: 20 },
+      { name: '30', value: 30 },
+    ];
+    const widget = makeWidget({
+      attributeName: 'numerics',
+      options: listOptions,
+    });
+
+    const config = widget.getConfiguration({}, {});
+    const helper = jsHelper(fakeClient, '', config);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    const { refine } = firstRenderingOptions;
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+    refine(listOptions[1].value);
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [10],
+    });
+    refine(listOptions[0].value);
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    const { refine: refineBis } = secondRenderingOptions;
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
+    refineBis(listOptions[1].value);
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({
+      '=': [10],
+    });
+    refineBis(listOptions[0].value);
+    expect(helper.state.getNumericRefinements('numerics')).toEqual({});
   });
 });

@@ -1,3 +1,13 @@
+<a name="2.2.4"></a>
+## [2.2.4](https://github.com/algolia/instantsearch.js/compare/v2.2.3...v2.2.4) (2017-11-13)
+
+
+### Bug Fixes
+
+* **numericSelector:** make default value possible ([#2565](https://github.com/algolia/instantsearch.js/issues/2565)) ([5664f98](https://github.com/algolia/instantsearch.js/commit/5664f98))
+
+
+
 <a name="2.2.3"></a>
 ## [2.2.3](https://github.com/algolia/instantsearch.js/compare/v2.2.2...v2.2.3) (2017-11-07)
 

@@ -24,6 +24,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} NumericSelectorOption
  * @property {number} value The numerical value to refine with.
+ * If the value is `undefined` or `"undefined"`, the option resets the filter.
  * @property {string} label Label to display in the option.
  */
 
@@ -104,19 +105,23 @@ export default function connectNumericSelector(renderFn) {
 
     return {
       getConfiguration(currentSearchParameters, searchParametersFromUrl) {
-        return {
-          numericRefinements: {
-            [attributeName]: {
-              [operator]: [this._getRefinedValue(searchParametersFromUrl)],
+        const value = this._getRefinedValue(searchParametersFromUrl);
+        if (value) {
+          return {
+            numericRefinements: {
+              [attributeName]: {
+                [operator]: [this._getRefinedValue(searchParametersFromUrl)],
+              },
             },
-          },
-        };
+          };
+        }
+        return {};
       },
 
       init({ helper, instantSearchInstance }) {
         this._refine = value => {
           helper.clearRefinements(attributeName);
-          if (value !== undefined) {
+          if (value !== undefined && value !== 'undefined') {
             helper.addNumericRefinement(attributeName, operator, value);
           }
           helper.search();
