@@ -7,15 +7,15 @@
     "test": "jest"
   },
   "devDependencies": {
-    "react-test-renderer": "16.1.0"
+    "react-test-renderer": "16.1.1"
   },
   "dependencies": {
     "css-loader": "0.28.4",
     "next": "4.1.4",
     "prop-types": "15.5.10",
     "qs": "6.5.1",
-    "react": "16.1.0",
-    "react-dom": "16.1.0",
+    "react": "16.1.1",
+    "react-dom": "16.1.1",
     "react-instantsearch": "4.2.0",
     "react-instantsearch-theme-algolia": "4.2.0",
     "style-loader": "0.19.0"
