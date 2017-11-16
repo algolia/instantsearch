@@ -188,7 +188,7 @@ $config-sffv: (
     }
   }
 
-  &__input:valid ~ &__reset {
+  &__input:valid ~ &__reset { // sass-lint:disable-line force-pseudo-nesting
     display: block;
     animation-name: sbx-reset-in;
     animation-duration: .15s;
