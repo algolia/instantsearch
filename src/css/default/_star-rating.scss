@@ -29,6 +29,7 @@ $stars-color-disabled: #C9C9C9;
     display: inline-block;
     width: 1em;
     height: 1em;
+
     &::before {
       content: '\2605';
       color: $stars-color;
@@ -39,6 +40,7 @@ $stars-color-disabled: #C9C9C9;
       display: inline-block;
       width: 1em;
       height: 1em;
+
       &::before {
         content: '\2606';
         color: $stars-color;

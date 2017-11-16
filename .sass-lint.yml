@@ -22,7 +22,7 @@ rules:
 
   # Line Spacing
   one-declaration-per-line: 1
-  empty-line-between-blocks: 0
+  empty-line-between-blocks: 1
   single-line-per-selector: 0
 
   # Disallows

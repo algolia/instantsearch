@@ -23,6 +23,7 @@
 
 
       @include small-mq {
+
         figcaption {
           white-space: nowrap;
           overflow: hidden;
@@ -39,6 +40,7 @@
 
 
     figure {
+
       img {
         width: 100%;
       }
@@ -73,8 +75,6 @@
   }
 }
 
-
-
 .form-control {
   width: 100%;
   box-sizing: border-box;
@@ -106,6 +106,7 @@
 }
 
 body.example { // sass-lint:disable-line no-qualifying-elements
+
   .cm-navigation {
     z-index: 99999;
     top: 0;
@@ -116,6 +117,7 @@ body.example { // sass-lint:disable-line no-qualifying-elements
     float: left;
     top: 130px;
   }
+
   .content-wrapper {
     top: 60px;
   }
@@ -131,12 +133,15 @@ body.example { // sass-lint:disable-line no-qualifying-elements
 }
 
 #examples {
+
   ul {
     margin-top: 20px;
   }
+
   ul > li {
     clear: none;
   }
+
   h2 {
     clear: both;
   }

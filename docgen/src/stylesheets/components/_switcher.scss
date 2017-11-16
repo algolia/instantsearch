@@ -45,23 +45,29 @@
     float: left;
     left: -55px;
   }
+
   .label-2 {
     float: right;
     right: -40px;
   }
 
   label[for="switch-plan"]:not(.checked) { // sass-lint:disable-line force-pseudo-nesting force-attribute-nesting no-qualifying-elements
+
     .label-2 {
       opacity: 0.5;
     }
   }
+
   label[for="switch-plan"].checked {// sass-lint:disable-line force-attribute-nesting no-qualifying-elements
+
     &::after {
       left: 28px;
     }
+
     .label-1 {
       opacity: 0.5;
     }
+
     .label-2 {
       opacity: 1;
     }
