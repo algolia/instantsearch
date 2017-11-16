@@ -158,8 +158,8 @@ export default function connectPriceRanges(renderFn, unmountFn) {
       },
 
       init({ helper, instantSearchInstance }) {
-        this.refine = (...opts) => {
-          this._refine(helper, ...opts);
+        this.refine = opts => {
+          this._refine(helper, opts);
         };
 
         renderFn(

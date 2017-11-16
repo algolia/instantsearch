@@ -160,8 +160,8 @@ export default function connectToggle(renderFn, unmountFn) {
               )
           );
 
-        this.toggleRefinement = (...opts) => {
-          this._toggleRefinement(helper, ...opts);
+        this.toggleRefinement = opts => {
+          this._toggleRefinement(helper, opts);
         };
 
         const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
