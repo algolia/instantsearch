@@ -333,7 +333,6 @@ exports[`renders correctly 1`] = `
                 "params": Object {
                   "hideBackImage": false,
                   "init": true,
-                  "initial": true,
                   "navigationBarStyle": Object {
                     "backgroundColor": "#162331",
                     "borderBottomColor": "transparent",
