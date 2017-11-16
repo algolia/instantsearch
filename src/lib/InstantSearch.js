@@ -42,6 +42,7 @@ class InstantSearch extends EventEmitter {
     urlSync = null,
     searchFunction,
     createAlgoliaClient = defaultCreateAlgoliaClient,
+    stalledSearchDelay = 200,
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
@@ -66,6 +67,7 @@ Usage: instantsearch({
       helpers: createHelpers({ numberLocale }),
       compileOptions: {},
     };
+    this._stalledSearchDelay = stalledSearchDelay;
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
@@ -151,7 +153,6 @@ Usage: instantsearch({
     this._init(helper.state, this.helper);
     this.helper.on('result', this._render.bind(this, this.helper));
 
-    const delay = /* stalledSearchDelay || */ 200;
     this._searchStalledTimer = null;
     this._isSearchStalled = false;
 
@@ -166,7 +167,7 @@ Usage: instantsearch({
             this.helper.lastResults,
             this.helper.lastResults._state
           );
-        }, delay);
+        }, this._stalledSearchDelay);
       }
     });
   }

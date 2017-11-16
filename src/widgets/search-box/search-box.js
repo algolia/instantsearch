@@ -184,6 +184,7 @@ searchBox({
  * @typedef {Object} SearchBoxMagnifierOption
  * @property {function|string} template Template used for displaying the magnifier. Can accept a function or a Hogan string.
  * @property {{root: string}} [cssClasses] CSS classes added to the magnifier.
+ *  @property {boolean} [displayStalledSearch=false]
  */
 
 /**
