@@ -21,6 +21,27 @@ export default () => {
       })
     )
     .add(
+      'with custom templates',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container,
+            placeholder: 'Search for products',
+            poweredBy: true,
+            magnifier: {
+              template: '<div class="ais-search-box--magnifier">🔍</div>',
+            },
+            reset: {
+              template: '<div class="ais-search-box--reset">✖️</div>',
+            },
+            templates: {
+              poweredBy: 'Algolia',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'search on enter',
       wrapWithHits(container => {
         window.search.addWidget(
