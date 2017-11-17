@@ -110,7 +110,7 @@
     "recursive-readdir": "2.2.1",
     "replace-in-file": "3.0.0",
     "rheostat": "2.1.1",
-    "rollup": "0.51.3",
+    "rollup": "0.51.7",
     "rollup-plugin-babel": "3.0.2",
     "rollup-plugin-commonjs": "8.2.6",
     "rollup-plugin-filesize": "1.4.2",
