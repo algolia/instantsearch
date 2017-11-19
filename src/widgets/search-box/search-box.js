@@ -358,7 +358,7 @@ function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
     cssClasses: resetCSSClasses,
   });
 
-  const htmlNode = createNodeFromString(stringNode);
+  const htmlNode = createNodeFromString(stringNode, cx(bem('reset-wrapper')));
   input.parentNode.appendChild(htmlNode);
 
   htmlNode.addEventListener('click', event => {
@@ -389,7 +389,10 @@ function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
     cssClasses: magnifierCSSClasses,
   });
 
-  const htmlNode = createNodeFromString(stringNode);
+  const htmlNode = createNodeFromString(
+    stringNode,
+    cx(bem('magnifier-wrapper'))
+  );
   input.parentNode.appendChild(htmlNode);
 }
 
@@ -434,9 +437,9 @@ function addPoweredBy(input, poweredBy, templates) {
 
 // Crossbrowser way to create a DOM node from a string. We wrap in
 // a `span` to make sure we have one and only one node.
-function createNodeFromString(stringNode) {
+function createNodeFromString(stringNode, rootClassname = '') {
   const tmpNode = document.createElement('div');
-  tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
+  tmpNode.innerHTML = `<span class="${rootClassname}">${stringNode.trim()}</span>`;
   return tmpNode.firstChild;
 }
 
