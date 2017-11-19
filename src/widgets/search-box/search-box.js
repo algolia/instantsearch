@@ -336,6 +336,16 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
 }
 
+/**
+ * Adds a reset element in the searchbox widget. When this reset element is clicked on
+ * it should reset the query.
+ * @private
+ * @param {HTMLElement} input the DOM node of the input of the searchbox
+ * @param {object} reset the user options (cssClasses and template)
+ * @param {object} $2 the default templates
+ * @param {function} clearFunction function called when the element is activated (clicked)
+ * @returns {undefined} returns nothing
+ */
 function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
   reset = {
     cssClasses: {},
@@ -357,6 +367,14 @@ function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
   });
 }
 
+/**
+ * Adds a magnifying glass in the searchbox widget
+ * @private
+ * @param {HTMLElement} input the DOM node of the input of the searchbox
+ * @param {object} magnifier the user options (cssClasses and template)
+ * @param {object} $2 the default templates
+ * @returns {undefined} returns nothing
+ */
 function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
   magnifier = {
     cssClasses: {},
@@ -375,6 +393,14 @@ function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
   input.parentNode.appendChild(htmlNode);
 }
 
+/**
+ * Adds a powered by in the searchbox widget
+ * @private
+ * @param {HTMLElement} input the DOM node of the input of the searchbox
+ * @param {object} poweredBy the user options (cssClasses and template)
+ * @param {object} templates the default templates
+ * @returns {undefined} returns nothing
+ */
 function addPoweredBy(input, poweredBy, templates) {
   // Default values
   poweredBy = {
