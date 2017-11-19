@@ -114,15 +114,12 @@ const renderer = ({
   }
 
   if (reset) {
-    const resetButtonContainer =
-      containerNode.tagName === 'INPUT'
-        ? containerNode.parentNode
-        : containerNode;
-
+    const resetBtnSelector = `.${cx(bem('reset-wrapper'))}`;
     // hide reset button when there is no query
-    const resetButton = resetButtonContainer.querySelector(
-      'button[type="reset"]'
-    );
+    const resetButton =
+      containerNode.tagName === 'INPUT'
+        ? containerNode.parentNode.querySelector(resetBtnSelector)
+        : containerNode.querySelector(resetBtnSelector);
     resetButton.style.display = query && query.trim() ? 'block' : 'none';
   }
 };
