@@ -2,20 +2,15 @@ options:
   formatter: stylish
 files:
   include:
-    '+(docs|src)/**/*.scss'
+    '+(docgen|src)/**/*.scss'
   ignore:
-    - 'docs/_site/**'
-    - 'docs/_assets/stylesheets/bootstrap/**/*.scss' # Vendor
-    - 'docs/_assets/stylesheets/_syntax-highlighting.scss' # Vendor
-    - 'docs/examples/**/main.scss' # Files with front-matter
-    # Contains asset_path() call to jekyll-assets. sass-lint cannot disable rules inline
-    # https://github.com/sasstools/sass-lint/issues/70
-    - 'docs/_assets/stylesheets/_home.scss'
+    - 'docgen/src/stylesheets/vendors/**/*.scss'
+    - 'docgen/node_modules/**/*.scss'
 rules:
   # Extends
   extends-before-mixins: 1
   extends-before-declarations: 1
-  placeholder-in-extend: 1
+  placeholder-in-extend: 0
 
   class-name-format:
     - 1
@@ -27,11 +22,11 @@ rules:
 
   # Line Spacing
   one-declaration-per-line: 1
-  empty-line-between-blocks: 0
+  empty-line-between-blocks: 1
   single-line-per-selector: 0
 
   # Disallows
-  no-color-keywords: 1
+  no-color-keywords: 0
   no-color-literals: 0
   no-css-comments: 0
   no-debug: 1
@@ -56,7 +51,7 @@ rules:
   force-pseudo-nesting: 1
 
   # Name Formats
-  function-name-format: 1
+  function-name-format: 0 # this rule also applies on function name that are called...
   mixin-name-format: 1
   placeholder-name-format: 1
   variable-name-format: 1
@@ -68,15 +63,18 @@ rules:
   empty-args: 1
   hex-length: 0
   hex-notation:
-    - 2
+    - 1
     -
       style: uppercase
   indentation: 1
-  leading-zero: 1
+  leading-zero: 0
   nesting-depth: 0
   property-sort-order: 0
   quotes: 0
-  shorthand-values: 1
+  shorthand-values:
+    - 1
+    -
+      allowed-shorthands: [1, 2]
   url-quotes: 1
   variable-for-property: 1
   zero-unit: 1
@@ -89,6 +87,7 @@ rules:
   space-before-bang: 1
   space-after-bang: 1
   space-between-parens: 1
+  space-around-operator: 0 # because it's hard to read when you have multiple value set with operators (eg. padding)
 
   # Final Items
   trailing-semicolon: 1

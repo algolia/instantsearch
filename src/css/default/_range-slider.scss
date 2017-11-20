@@ -1,3 +1,4 @@
+// sass-lint:disable no-empty-rulesets
 @import "../base";
 @import "variables";
 
@@ -40,7 +41,7 @@ $range-slider-handle-bg: $white;
   .rheostat-horizontal {
     .rheostat-background {
       height: 6px;
-      top: 0px;
+      top: 0;
       width: 100%;
     }
 
@@ -63,15 +64,15 @@ $range-slider-handle-bg: $white;
     }
 
     .rheostat-handle {
-      &:before,
-      &:after {
+      &::before,
+      &::after {
         top: 7px;
         height: 10px;
         width: 1px;
       }
 
-      &:before { left: 10px; }
-      &:after { left: 13px; }
+      &::before { left: 10px; }
+      &::after { left: 13px; }
     }
   }
 
