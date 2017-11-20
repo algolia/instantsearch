@@ -33,12 +33,14 @@ body {
   padding: 0;
   border-bottom: 1px solid $aisdemo-color-gray-light;
   position: relative;
+
   .is-logo {
     display: inline-block;
     position: relative;
     top: -8px;
     left: 16px;
   }
+
   .logo {
     display: inline-block;
     padding: 14px 22px;
@@ -65,9 +67,8 @@ body {
     width: 33%;
 
     &--reset {
-      fill: #bfc7d8;
+      fill: #BFC7D8;
       top: calc(50% - 12px / 2);
-      right: 0;
       right: 13px;
     }
 
@@ -78,6 +79,7 @@ body {
       height: 40px;
       border: 0;
       box-shadow: none;
+
       &:focus {
         outline: none;
         box-shadow: none;
@@ -117,13 +119,15 @@ body {
     border-radius: 0;
     background: transparent;
     appearance: none;
+
     &:focus {
       outline: none;
     }
   }
 
   .guests-caret {
-    &:before {
+
+    &::before {
       line-height: 1;
       position: absolute;
       top: 0;
@@ -138,6 +142,7 @@ body {
   }
 
   #room_types {
+
     .ais-refinement-list--count {
       display: none;
     }
@@ -145,6 +150,7 @@ body {
     .ais-refinement-list--item {
       display: inline-block;
       cursor: pointer;
+
       label {
         font-size: .8em;
         font-weight: normal;
@@ -166,14 +172,17 @@ body {
       border: 1px solid $aisdemo-color-gray-light;
       background: #FFFFFF;
       appearance: none;
+
       &:focus {
         outline: none;
       }
     }
 
     .ais-refinement-list--item__active {
+
       .ais-refinement-list--checkbox {
-        &:before {
+
+        &::before {
           font-size: .85em;
           position: absolute;
           width: 1.25em;
@@ -186,6 +195,7 @@ body {
   }
 
   #price {
+
     .ais-range-slider--target {
       margin: 30px 9px 18px;
     }
@@ -199,6 +209,7 @@ body {
     }
 
     .ais-range-slider--tooltip {
+
       &:last-child {
         right: 0;
       }
@@ -237,12 +248,16 @@ body {
 }
 
 #hits {
+
   .hit {
+
     .pictures-wrapper {
       position: relative;
+
       .picture {
         width: 100%;
       }
+
       .profile {
         position: absolute;
         bottom: -16px;
@@ -252,6 +267,7 @@ body {
         border-radius: 30px;
       }
     }
+
     .infos {
       height: 90px;
       padding: 16px 20px;
@@ -299,6 +315,7 @@ body {
   }
 
   .pagination > li > a, .pagination > li > span {
+
     &:focus, &:hover {
       color: $aisdemo-color-white;
       border-color: $aisdemo-primary-color;
@@ -311,6 +328,7 @@ body {
 .thank-you {
   text-align: center;
   font-size: .8em;
+
   a {
     color: #FF585B;
   }

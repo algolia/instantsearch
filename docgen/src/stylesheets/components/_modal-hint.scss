@@ -11,7 +11,7 @@
   text-align: center;
   border-radius: 6px;
   box-shadow: 0 16px 32px 0 rgba($bunting, 0.2);
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   will-change: opacity, transform;
   opacity: 0;
   z-index: -1;
@@ -68,42 +68,14 @@
       padding: 8px;
 
       path {
-        fill: #667492
+        fill: #667492;
       }
     }
 
     &:hover {
       svg path {
-        fill: #FF2060
+        fill: #FF2060;
       }
     }
   }
-}
-
-
-/// ANIMATION
-.animated {
-  -webkit-animation-duration: 0.75s;
-  animation-duration: 0.75s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-
-@keyframes bounceInRight {
-  0%, 60%, 75%, 90%, 100% {
-    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
-  }
-
-  0% {
-    opacity: 0;
-    transform: translate3d(3000px, 0, 0);
-  }
-
-  100% {
-    transform: none;
-  }
-}
-
-.bounceInRight {
-  animation-name: bounceInRight;
 }
