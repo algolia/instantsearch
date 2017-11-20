@@ -114,15 +114,12 @@ const renderer = ({
   }
 
   if (reset) {
-    const resetButtonContainer =
-      containerNode.tagName === 'INPUT'
-        ? containerNode.parentNode
-        : containerNode;
-
+    const resetBtnSelector = `.${cx(bem('reset-wrapper'))}`;
     // hide reset button when there is no query
-    const resetButton = resetButtonContainer.querySelector(
-      'button[type="reset"]'
-    );
+    const resetButton =
+      containerNode.tagName === 'INPUT'
+        ? containerNode.parentNode.querySelector(resetBtnSelector)
+        : containerNode.querySelector(resetBtnSelector);
     resetButton.style.display = query && query.trim() ? 'block' : 'none';
   }
 };
@@ -336,6 +333,16 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
 }
 
+/**
+ * Adds a reset element in the searchbox widget. When this reset element is clicked on
+ * it should reset the query.
+ * @private
+ * @param {HTMLElement} input the DOM node of the input of the searchbox
+ * @param {object} reset the user options (cssClasses and template)
+ * @param {object} $2 the default templates
+ * @param {function} clearFunction function called when the element is activated (clicked)
+ * @returns {undefined} returns nothing
+ */
 function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
   reset = {
     cssClasses: {},
@@ -348,7 +355,7 @@ function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
     cssClasses: resetCSSClasses,
   });
 
-  const htmlNode = createNodeFromString(stringNode);
+  const htmlNode = createNodeFromString(stringNode, cx(bem('reset-wrapper')));
   input.parentNode.appendChild(htmlNode);
 
   htmlNode.addEventListener('click', event => {
@@ -357,6 +364,14 @@ function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
   });
 }
 
+/**
+ * Adds a magnifying glass in the searchbox widget
+ * @private
+ * @param {HTMLElement} input the DOM node of the input of the searchbox
+ * @param {object} magnifier the user options (cssClasses and template)
+ * @param {object} $2 the default templates
+ * @returns {undefined} returns nothing
+ */
 function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
   magnifier = {
     cssClasses: {},
@@ -371,10 +386,21 @@ function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
     cssClasses: magnifierCSSClasses,
   });
 
-  const htmlNode = createNodeFromString(stringNode);
+  const htmlNode = createNodeFromString(
+    stringNode,
+    cx(bem('magnifier-wrapper'))
+  );
   input.parentNode.appendChild(htmlNode);
 }
 
+/**
+ * Adds a powered by in the searchbox widget
+ * @private
+ * @param {HTMLElement} input the DOM node of the input of the searchbox
+ * @param {object} poweredBy the user options (cssClasses and template)
+ * @param {object} templates the default templates
+ * @returns {undefined} returns nothing
+ */
 function addPoweredBy(input, poweredBy, templates) {
   // Default values
   poweredBy = {
@@ -408,9 +434,9 @@ function addPoweredBy(input, poweredBy, templates) {
 
 // Crossbrowser way to create a DOM node from a string. We wrap in
 // a `span` to make sure we have one and only one node.
-function createNodeFromString(stringNode) {
+function createNodeFromString(stringNode, rootClassname = '') {
   const tmpNode = document.createElement('div');
-  tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
+  tmpNode.innerHTML = `<span class="${rootClassname}">${stringNode.trim()}</span>`;
   return tmpNode.firstChild;
 }
 
