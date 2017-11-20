@@ -18,12 +18,12 @@
 @import 'menu-select';
 @import 'breadcrumb';
 
-[class^=ais-] {
+[class^="ais-"] {
   box-sizing: border-box;
 
   & > *,
-  & > *:after,
-  & > *:before {
+  & > *::after,
+  & > *::before {
     box-sizing: border-box;
   }
 }

@@ -26,7 +26,7 @@
 
   &--button {
     @extend .ais-clear-all--link;
-    border: none;
+    border: 0;
     outline: none;
     margin-left: 5px;
     position: relative;
