@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.2.4 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-search-box {
+/*! instantsearch.js preview-2.2.5 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-search-box {
   position: relative;
   max-width: 300px;
   width: 100%; }
@@ -374,7 +374,7 @@
 
 .ais-range-slider .rheostat-horizontal .rheostat-background {
   height: 6px;
-  top: 0px;
+  top: 0;
   width: 100%; }
 
 .ais-range-slider .rheostat-horizontal .rheostat-progress {
@@ -391,15 +391,15 @@
     margin-left: -10px;
     width: 40px; }
 
-.ais-range-slider .rheostat-horizontal .rheostat-handle:before, .ais-range-slider .rheostat-horizontal .rheostat-handle:after {
+.ais-range-slider .rheostat-horizontal .rheostat-handle::before, .ais-range-slider .rheostat-horizontal .rheostat-handle::after {
   top: 7px;
   height: 10px;
   width: 1px; }
 
-.ais-range-slider .rheostat-horizontal .rheostat-handle:before {
+.ais-range-slider .rheostat-horizontal .rheostat-handle::before {
   left: 10px; }
 
-.ais-range-slider .rheostat-horizontal .rheostat-handle:after {
+.ais-range-slider .rheostat-horizontal .rheostat-handle::after {
   left: 13px; }
 
 .ais-range-slider--handle {
@@ -454,7 +454,7 @@
   display: inline-block;
   width: 1em;
   height: 1em; }
-  .ais-star-rating--star:before {
+  .ais-star-rating--star::before {
     content: '\2605';
     color: #FBAE00; }
   .ais-star-rating--star__empty {
@@ -462,7 +462,7 @@
     display: inline-block;
     width: 1em;
     height: 1em; }
-    .ais-star-rating--star__empty:before {
+    .ais-star-rating--star__empty::before {
       content: '\2606';
       color: #FBAE00; }
 
@@ -470,9 +470,9 @@
   /* item link */ }
   .ais-star-rating--link__disabled {
     /* disabled list item */ }
-    .ais-star-rating--link__disabled .ais-star-rating--star:before {
+    .ais-star-rating--link__disabled .ais-star-rating--star::before {
       color: #C9C9C9; }
-    .ais-star-rating--link__disabled .ais-star-rating--star__empty:before {
+    .ais-star-rating--link__disabled .ais-star-rating--star__empty::before {
       color: #C9C9C9; }
 
 .ais-star-rating--count {

@@ -47,9 +47,8 @@ body {
     height: 100%;
     width: 33%; }
     .aisdemo-navbar .ais-search-box--reset {
-      fill: #bfc7d8;
+      fill: #BFC7D8;
       top: calc(50% - 12px / 2);
-      right: 0;
       right: 13px; }
     .aisdemo-navbar .ais-search-box #q {
       position: absolute;
@@ -95,7 +94,7 @@ body {
   .aisdemo-filters #guests select:focus {
     outline: none; }
 
-.aisdemo-filters .guests-caret:before {
+.aisdemo-filters .guests-caret::before {
   line-height: 1;
   position: absolute;
   top: 0;
@@ -138,7 +137,7 @@ body {
   .aisdemo-filters #room_types .ais-refinement-list--checkbox:focus {
     outline: none; }
 
-.aisdemo-filters #room_types .ais-refinement-list--item__active .ais-refinement-list--checkbox:before {
+.aisdemo-filters #room_types .ais-refinement-list--item__active .ais-refinement-list--checkbox::before {
   font-size: .85em;
   position: absolute;
   width: 1.25em;

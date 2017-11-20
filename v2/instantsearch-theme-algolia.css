@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.2.4 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
+/*! instantsearch.js preview-2.2.5 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
 .ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button {
   color: #FFFFFF;
   display: inline-block;
@@ -10,7 +10,7 @@
   .ais-clear-all--link:hover, .ais-current-refined-values--clear-all:hover, .ais-price-ranges--button:hover {
     text-decoration: none;
     color: #FFFFFF;
-    Background: #184ECD; }
+    background: #184ECD; }
 
 .ais-clear-all--link-disabled, .ais-current-refined-values--clear-all-disabled {
   opacity: .5;
@@ -38,13 +38,13 @@
 
 .ais-hierarchical-menu--item__active > div > .ais-hierarchical-menu--link {
   font-weight: bold; }
-  .ais-hierarchical-menu--item__active > div > .ais-hierarchical-menu--link:after {
+  .ais-hierarchical-menu--item__active > div > .ais-hierarchical-menu--link::after {
     -webkit-transform: rotate(90deg);
             transform: rotate(90deg); }
 
 .ais-hierarchical-menu--link {
   position: relative; }
-  .ais-hierarchical-menu--link:after {
+  .ais-hierarchical-menu--link::after {
     background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 8 13' xmlns='http://www.w3.org/2000/svg'><path d='M1.5 1.5l5 4.98-5 5.02' stroke='%23697782' stroke-width='1.5' fill='none' fill-rule='evenodd' stroke-linecap='round' opacity='.4'/></svg>") no-repeat center center/contain;
     content: ' ';
     display: block;
@@ -56,8 +56,8 @@
 
 select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-by-selector, select.ais-menu-select--select {
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   background: #FFFFFF url("data:image/svg+xml;utf8,<svg viewBox='0 0 12 7' xmlns='http://www.w3.org/2000/svg'><path d='M11 1L6.02 6 1 1' stroke-width='1.5' stroke='%23BFC7D8' fill='none' fill-rule='evenodd' stroke-linecap='round'/></svg>") no-repeat center right 16px/10px;
   -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
           box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
@@ -77,7 +77,7 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-menu button {
   background: transparent;
-  border: none;
+  border: 0;
   cursor: pointer;
   font-size: 11px; }
 
@@ -94,7 +94,7 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-refinement-list div > button {
   background: transparent;
-  border: none;
+  border: 0;
   cursor: pointer;
   font-size: 11px; }
 
@@ -151,7 +151,7 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
   outline: none; }
 
 .ais-price-ranges--button {
-  border: none;
+  border: 0;
   outline: none;
   margin-left: 5px;
   position: relative;
@@ -213,12 +213,12 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 .ais-toggle--item__active {
   font-weight: bold; }
 
-[class^=ais-] {
+[class^="ais-"] {
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
-  [class^=ais-] > *,
-  [class^=ais-] > *:after,
-  [class^=ais-] > *:before {
+  [class^="ais-"] > *,
+  [class^="ais-"] > *::after,
+  [class^="ais-"] > *::before {
     -webkit-box-sizing: border-box;
             box-sizing: border-box; }
 
