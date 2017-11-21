@@ -32,11 +32,11 @@ import { noop } from '../../lib/utils';
 //   items: Array<LatLng>,
 //   refine: (bounds: Bounds) => void,
 //   clearMapRefinement: () => void,
-//   toggleRefineOnMapMove: () => void,
+//   toggleRefinedOnMapMove: () => void,
+//   isRefinedOnMapMove: () => boolean,
 //   setMapMoveSinceLastRefine: () => void,
-//   isRefinedWithMap: boolean,
-//   enableRefineOnMapMove: boolean,
-//   hasMapMoveSinceLastRefine: boolean,
+//   hasMapMoveSinceLastRefine: () => boolean,
+//   isRefinedWithMap: () => boolean,
 //   widgetParams: WidgetOptions,
 // };
 
@@ -59,12 +59,20 @@ export default function connectGeoSearch(fn) {
     // UI State
     const uiState = {
       lastRefinePosition: '',
-      isRefinedWithMap: false,
       hasMapMoveSinceLastRefine: false,
-      enableRefineOnMapMove,
+      isRefinedWithMap: false,
+      isRefinedOnMapMove: enableRefineOnMapMove,
     };
 
-    // Private API
+    // Very hacky solution to be able to bind only once the value.... We
+    // should avoid to do this, or create an API for handle this kind of
+    // situation a lot better.
+    const fnState = {
+      internalSetMapMoveSinceLastRefine: noop,
+      internalToggleRefinedOnMapMove: noop,
+    };
+
+    // - refine
     const refine = helper => ({ ne, sw }) => {
       const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng];
 
@@ -74,6 +82,10 @@ export default function connectGeoSearch(fn) {
       uiState.hasMapMoveSinceLastRefine = false;
     };
 
+    // - isRefinedWithMap
+    const isRefinedWithMap = () => uiState.isRefinedWithMap;
+
+    // - clearMapRefinement
     const clearMapRefinement = helper => () => {
       helper.setQueryParameter('insideBoundingBox').search();
 
@@ -81,13 +93,31 @@ export default function connectGeoSearch(fn) {
       uiState.hasMapMoveSinceLastRefine = false;
     };
 
-    const toggleRefineOnMapMove = (renderFn, renderArgs) => () => {
-      uiState.enableRefineOnMapMove = !uiState.enableRefineOnMapMove;
+    // - isRefinedOnMapMove
+    const isRefinedOnMapMove = () => uiState.isRefinedOnMapMove;
+
+    const toggleRefinedOnMapMove = () =>
+      fnState.internalToggleRefinedOnMapMove();
+
+    const createInternalToggleRefinedOnMapMove = (
+      renderFn,
+      renderArgs
+    ) => () => {
+      uiState.isRefinedOnMapMove = !uiState.isRefinedOnMapMove;
 
       renderFn(renderArgs);
     };
 
-    const setMapMoveSinceLastRefine = (renderFn, renderArgs) => () => {
+    // - hasMapMoveSinceLastRefine
+    const hasMapMoveSinceLastRefine = () => uiState.hasMapMoveSinceLastRefine;
+
+    const setMapMoveSinceLastRefine = () =>
+      fnState.internalSetMapMoveSinceLastRefine();
+
+    const createInternalSetMapMoveSinceLastRefine = (
+      renderFn,
+      renderArgs
+    ) => () => {
       const isRenderRequired = !uiState.hasMapMoveSinceLastRefine;
 
       uiState.hasMapMoveSinceLastRefine = true;
@@ -157,17 +187,14 @@ export default function connectGeoSearch(fn) {
 
       fn(
         {
-          ...uiState,
           items: [],
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
-          // Noop on the init
-          toggleRefineOnMapMove: toggleRefineOnMapMove(noop, renderOptions),
-          // Noop on the init
-          setMapMoveSinceLastRefine: setMapMoveSinceLastRefine(
-            noop,
-            renderOptions
-          ),
+          toggleRefinedOnMapMove,
+          isRefinedOnMapMove,
+          setMapMoveSinceLastRefine,
+          hasMapMoveSinceLastRefine,
+          isRefinedWithMap,
           instantSearchInstance,
           widgetParams: {
             ...widgetParams,
@@ -213,17 +240,27 @@ export default function connectGeoSearch(fn) {
 
       uiState.lastRefinePosition = helper.getQueryParameter('aroundLatLng');
 
+      // Create the correct render callback with the appropriate scope
+      fnState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
+        render,
+        renderOptions
+      );
+
+      fnState.internalToggleRefinedOnMapMove = createInternalToggleRefinedOnMapMove(
+        render,
+        renderOptions
+      );
+
       fn(
         {
-          ...uiState,
           items: results.hits.filter(_ => _._geoloc).map(_ => _._geoloc),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
-          toggleRefineOnMapMove: toggleRefineOnMapMove(render, renderOptions),
-          setMapMoveSinceLastRefine: setMapMoveSinceLastRefine(
-            render,
-            renderOptions
-          ),
+          toggleRefinedOnMapMove,
+          isRefinedOnMapMove,
+          setMapMoveSinceLastRefine,
+          hasMapMoveSinceLastRefine,
+          isRefinedWithMap,
           instantSearchInstance,
           widgetParams: {
             ...widgetParams,

@@ -51,22 +51,22 @@ const renderClearRefinementButton = ({
   renderState.containerClear.innerHTML = '';
   const button = document.createElement('button');
   button.textContent = 'Clear the refinement with the current map view';
-  button.disabled = !isRefinedWithMap;
+  button.disabled = !isRefinedWithMap();
   button.addEventListener('click', clearMapRefinement);
   renderState.containerClear.appendChild(button);
 };
 
 const renderControlElement = ({
   renderState,
-  toggleRefineOnMapMove,
-  enableRefineOnMapMove,
+  toggleRefinedOnMapMove,
+  isRefinedOnMapMove,
 }) => {
   renderState.containerControl.innerHTML = '';
   const label = document.createElement('label');
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
-  checkbox.checked = enableRefineOnMapMove;
-  checkbox.addEventListener('change', toggleRefineOnMapMove);
+  checkbox.checked = isRefinedOnMapMove();
+  checkbox.addEventListener('change', toggleRefinedOnMapMove);
   label.appendChild(checkbox);
   label.append('Search as I move the map');
   renderState.containerControl.appendChild(label);
@@ -81,7 +81,7 @@ const renderRedoSearchButton = ({
   renderState.containerControl.innerHTML = '';
   const button = document.createElement('button');
   button.textContent = 'Redo search here';
-  button.disabled = !hasMapMoveSinceLastRefine;
+  button.disabled = !hasMapMoveSinceLastRefine();
   button.addEventListener('click', () =>
     refineWithMap({
       refine,
@@ -97,11 +97,11 @@ const renderer = (
     items,
     refine,
     clearMapRefinement,
-    toggleRefineOnMapMove,
+    toggleRefinedOnMapMove,
+    isRefinedOnMapMove,
     setMapMoveSinceLastRefine,
-    isRefinedWithMap,
-    enableRefineOnMapMove,
     hasMapMoveSinceLastRefine,
+    isRefinedWithMap,
     widgetParams,
   },
   isFirstRendering
@@ -160,6 +160,22 @@ const renderer = (
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(renderState.map);
+
+    renderState.map.on('move', () => {
+      if (renderState.isUserInteraction) {
+        setMapMoveSinceLastRefine();
+      }
+    });
+
+    renderState.map.on('moveend', () => {
+      if (renderState.isUserInteraction && isRefinedOnMapMove()) {
+        refineWithMap({
+          refine,
+          paddingBoundingBox,
+          map: renderState.map,
+        });
+      }
+    });
   }
 
   // Display the inital position/zoom only when we don't have result
@@ -176,49 +192,12 @@ const renderer = (
     }
   }
 
-  // Events apply on each render in order
-  // to update the scope each time
-  renderState.map.off('dragstart', renderState.dragstart);
-  renderState.map.off('move', renderState.move);
-  renderState.map.off('moveend', renderState.moveend);
-
-  renderState.dragstart = () => {
-    if (enableRefineControl && !enableRefineOnMapMove) {
-      renderRedoSearchButton({
-        renderState,
-        paddingBoundingBox,
-        hasMapMoveSinceLastRefine,
-        refine,
-      });
-    }
-  };
-
-  renderState.move = () => {
-    if (renderState.isUserInteraction) {
-      setMapMoveSinceLastRefine();
-    }
-  };
-
-  renderState.moveend = () => {
-    if (renderState.isUserInteraction && enableRefineOnMapMove) {
-      refineWithMap({
-        refine,
-        paddingBoundingBox,
-        map: renderState.map,
-      });
-    }
-  };
-
-  renderState.map.on('dragstart', renderState.dragstart);
-  renderState.map.on('move', renderState.move);
-  renderState.map.on('moveend', renderState.moveend);
-
   // Markers
   removeMarkers(renderState.markers);
   renderState.markers = addMarkers(renderState.map, items);
 
   const hasMarkers = renderState.markers.length;
-  const enableFitBounds = !hasMapMoveSinceLastRefine && !isRefinedWithMap;
+  const enableFitBounds = !hasMapMoveSinceLastRefine() && !isRefinedWithMap();
 
   if (hasMarkers && enableFitBounds) {
     fitMarkersBounds(renderState);
@@ -234,14 +213,15 @@ const renderer = (
   if (enableRefineControl) {
     renderControlElement({
       renderState,
-      toggleRefineOnMapMove,
-      enableRefineOnMapMove,
+      toggleRefinedOnMapMove,
+      isRefinedOnMapMove,
     });
   }
 
   if (
-    !enableRefineOnMapMove &&
-    (!enableRefineControl || (enableRefineControl && hasMapMoveSinceLastRefine))
+    !isRefinedOnMapMove() &&
+    (!enableRefineControl ||
+      (enableRefineControl && hasMapMoveSinceLastRefine()))
   ) {
     renderRedoSearchButton({
       renderState,
