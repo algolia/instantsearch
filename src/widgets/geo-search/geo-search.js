@@ -27,12 +27,22 @@ const bem = bemHelper('ais-geo');
 //   // TBD
 // };
 //
+// type MapOptions = {
+//   // TBD
+// };
+//
+// type MarkerOptions = {
+//   // TBD
+// };
+//
 // type WidgetOptions = {
 //   initialView: View,
 //   enableRefineControl: boolean,
 //   paddingBoundingBox: Position,
 //   cssClasses: CSSClasses,
 //   templates: Templates,
+//   mapOptions?: MapOptions,
+//   markerOptions?: MarkerOptions,
 //   enableGeolocationWithIP?: boolean,
 //   enableRefineOnMapMove?: boolean,
 //   position?: string, // 40.71, -74.01
