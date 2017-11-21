@@ -207,13 +207,7 @@ const renderer = (
   renderState.markers = addMarkers(renderState.map, items);
 
   const hasMarkers = renderState.markers.length;
-  // Find a way to lock the fitBounds to avoid the zoom trouble
-  // If we use hasMapMoveSinceLastRefine:
-  // disable refineOnMapMove -> dezoom | move -> search -> no fitBounds
-  // If we don't use hasMapMoveSinceLastRefine:
-  // dezoom -> fitBounds is trigger
   const enableFitBounds = !hasMapMoveSinceLastRefine && !isRefinedWithMap;
-  // const enableFitBounds = !hasMapMoveSinceLastRefine && !isRefinedWithMap;
 
   if (hasMarkers && enableFitBounds) {
     fitMarkersBounds(renderState);
@@ -238,7 +232,6 @@ const renderer = (
     !enableRefineOnMapMove &&
     (!enableRefineControl || (enableRefineControl && hasMapMoveSinceLastRefine))
   ) {
-    // Link to fitBounds when trigger should not render
     renderRedoSearchButton({
       renderState,
       paddingBoundingBox,
