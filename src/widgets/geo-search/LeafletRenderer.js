@@ -116,12 +116,6 @@ const renderer = (
     renderState,
   } = widgetParams;
 
-  console.group('Render');
-  console.log('isRefinedWithMap', isRefinedWithMap);
-  console.log('enableRefineOnMapMove', enableRefineOnMapMove);
-  console.log('hasMapMoveSinceLastRefine', hasMapMoveSinceLastRefine);
-  console.groupEnd();
-
   if (isFirstRendering) {
     // Inital component state
     renderState.isUserInteraction = true;
