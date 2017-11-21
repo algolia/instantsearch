@@ -118,6 +118,7 @@ const renderer = (
 
   if (isFirstRendering) {
     // Inital component state
+    renderState.isMapRender = false;
     renderState.isUserInteraction = true;
 
     const node = getContainerNode(container);
@@ -165,7 +166,7 @@ const renderer = (
   // for aovid the map to blink when results are loaded. We don't set the
   // initial view the init function because we don't know the response will
   // contain some hits.
-  if (!isFirstRendering) {
+  if (!isFirstRendering && !renderState.isMapRender) {
     renderState.isMapRender = true;
 
     if (!items.length) {
