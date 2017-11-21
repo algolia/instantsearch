@@ -51,7 +51,7 @@ class App extends Component {
         appId="appId"
         apiKey="apiKey"
         indexName="indexName"
-        searchState={this.props.searchState || {}}
+        searchState={this.props.searchState}
         resultsState={this.props.resultsState || {}}
       >
         <SearchBox />
@@ -83,7 +83,7 @@ import { renderToString } from 'react-dom/server';
 
 const server = createServer((req, res) => {
   const searchState = {searchState: {query: 'chair'}};
-  const resultsState = await findResultsState(App);
+  const resultsState = await findResultsState(App, {searchState});
   const appInitialState = {searchState, resultsState}
   const appAsString = renderToString(<App {...appInitialState} />);
   res.send(
