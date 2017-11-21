@@ -29,7 +29,7 @@ import { noop } from '../../lib/utils';
 // };
 //
 // type RenderingOptions = {
-//   items: Array<{ _geoloc: { lat: number, lng: number } }>,
+//   items: Array<LatLng>,
 //   refine: (bounds: Bounds) => void,
 //   clearMapRefinement: () => void,
 //   toggleRefineOnMapMove: () => void,
@@ -216,7 +216,7 @@ export default function connectGeoSearch(fn) {
       fn(
         {
           ...uiState,
-          items: results.hits.filter(h => h._geoloc),
+          items: results.hits.filter(_ => _._geoloc).map(_ => _._geoloc),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           toggleRefineOnMapMove: toggleRefineOnMapMove(render, renderOptions),
