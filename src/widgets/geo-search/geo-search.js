@@ -7,11 +7,6 @@ import MapboxRenderer from './MapboxRenderer';
 
 const bem = bemHelper('ais-geo');
 
-// type View = {
-//   position: LatLng,
-//   zoom: number,
-// };
-//
 // type Position = {
 //   top: number,
 //   right: number,
@@ -36,7 +31,7 @@ const bem = bemHelper('ais-geo');
 // };
 //
 // type WidgetOptions = {
-//   initialView: View,
+//   initialZoom: number,
 //   enableRefineControl: boolean,
 //   paddingBoundingBox: Position,
 //   cssClasses: CSSClasses,
@@ -45,7 +40,8 @@ const bem = bemHelper('ais-geo');
 //   markerOptions?: MarkerOptions,
 //   enableGeolocationWithIP?: boolean,
 //   enableRefineOnMapMove?: boolean,
-//   position?: string, // 40.71, -74.01
+//   initialPosition?: LatLng,
+//   position?: LatLng,
 //   radius?: number | 'all',
 //   minRadius?: number,
 //   precision?: number,
@@ -55,13 +51,6 @@ const geoSearch = renderer => (props = {}) => {
   const widgetParams = {
     enableRefineControl: true,
     cssClasses: {},
-    initialView: {
-      position: {
-        lat: 40.71,
-        lng: -74.01,
-      },
-      zoom: 12,
-    },
     paddingBoundingBox: {
       top: 0,
       right: 0,

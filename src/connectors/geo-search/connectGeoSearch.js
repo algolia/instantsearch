@@ -47,6 +47,7 @@ export default function connectGeoSearch(fn) {
       radius,
       minRadius,
       precision,
+      initialPosition,
       enableGeolocationWithIP = true,
       enableRefineOnMapMove = true,
     } = widgetParams;
@@ -96,6 +97,15 @@ export default function connectGeoSearch(fn) {
       }
     };
 
+    const latLngFromString = x => {
+      const [lat, lng] = x.split(',');
+
+      return {
+        lat: parseFloat(lat),
+        lng: parseFloat(lng),
+      };
+    };
+
     // Public API
     const getConfiguration = configuration => {
       const partial = {};
@@ -104,7 +114,7 @@ export default function connectGeoSearch(fn) {
       // don't already use the following property
 
       if (position) {
-        partial.aroundLatLng = `${position.lat}, ${position.lng}`;
+        partial.aroundLatLng = `${position.lat},${position.lng}`;
       }
 
       if (!position && enableGeolocationWithIP) {
@@ -133,8 +143,9 @@ export default function connectGeoSearch(fn) {
       const { helper, instantSearchInstance } = renderOptions;
 
       const isFirstRendering = true;
+      const currentRefinePosition = helper.getQueryParameter('aroundLatLng');
 
-      uiState.lastRefinePosition = helper.getQueryParameter('aroundLatLng');
+      uiState.lastRefinePosition = currentRefinePosition;
 
       helper.on('result', () => {
         // Reset the value when result change from outside of the widget
@@ -158,7 +169,12 @@ export default function connectGeoSearch(fn) {
             renderOptions
           ),
           instantSearchInstance,
-          widgetParams,
+          widgetParams: {
+            ...widgetParams,
+            initialPosition: currentRefinePosition
+              ? latLngFromString(currentRefinePosition)
+              : initialPosition,
+          },
         },
         isFirstRendering
       );
@@ -209,7 +225,12 @@ export default function connectGeoSearch(fn) {
             renderOptions
           ),
           instantSearchInstance,
-          widgetParams,
+          widgetParams: {
+            ...widgetParams,
+            initialPosition: currentRefinePosition
+              ? latLngFromString(currentRefinePosition)
+              : initialPosition,
+          },
         },
         isFirstRendering
       );

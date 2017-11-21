@@ -109,7 +109,8 @@ const renderer = (
   const {
     container,
     cssClasses,
-    initialView,
+    initialZoom,
+    initialPosition,
     enableRefineControl,
     paddingBoundingBox,
     renderState,
@@ -123,7 +124,6 @@ const renderer = (
 
   if (isFirstRendering) {
     // Inital component state
-    renderState.isMapRender = false;
     renderState.isUserInteraction = true;
 
     const node = getContainerNode(container);
@@ -171,12 +171,12 @@ const renderer = (
   // for aovid the map to blink when results are loaded. We don't set the
   // initial view the init function because we don't know the response will
   // contain some hits.
-  if (!isFirstRendering && !renderState.isMapRender) {
+  if (!isFirstRendering) {
     renderState.isMapRender = true;
 
     if (!items.length) {
       renderState.isUserInteraction = false;
-      renderState.map.setView(initialView.position, initialView.zoom);
+      renderState.map.setView(initialPosition, initialZoom);
       renderState.isUserInteraction = true;
     }
   }
