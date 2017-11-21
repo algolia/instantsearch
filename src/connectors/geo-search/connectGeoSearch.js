@@ -1,6 +1,9 @@
 import { noop } from '../../lib/utils';
 
-// type LatLng = Array<number, number>;
+// type LatLng = {
+//   lat: number,
+//   lng: number,
+// };
 //
 // type Bounds = {
 //   northEast: LatLng,
