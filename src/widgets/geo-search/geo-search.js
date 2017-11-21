@@ -7,6 +7,11 @@ import MapboxRenderer from './MapboxRenderer';
 
 const bem = bemHelper('ais-geo');
 
+// type View = {
+//   position: LatLng,
+//   zoom: number,
+// };
+//
 // type Position = {
 //   top: number,
 //   right: number,
@@ -23,6 +28,7 @@ const bem = bemHelper('ais-geo');
 // };
 //
 // type WidgetOptions = {
+//   initialView: View,
 //   enableRefineControl: boolean,
 //   paddingBoundingBox: Position,
 //   cssClasses: CSSClasses,
@@ -39,6 +45,13 @@ const geoSearch = renderer => (props = {}) => {
   const widgetParams = {
     enableRefineControl: true,
     cssClasses: {},
+    initialView: {
+      position: {
+        lat: 40.71,
+        lng: -74.01,
+      },
+      zoom: 12,
+    },
     paddingBoundingBox: {
       top: 0,
       right: 0,
