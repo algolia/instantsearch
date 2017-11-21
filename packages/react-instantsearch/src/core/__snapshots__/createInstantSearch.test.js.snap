@@ -10,6 +10,7 @@ Object {
   "indexName": "name",
   "onSearchParameters": undefined,
   "onSearchStateChange": undefined,
+  "refresh": false,
   "resultsState": undefined,
   "root": Object {
     "Root": "div",

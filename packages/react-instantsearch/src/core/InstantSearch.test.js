@@ -9,6 +9,7 @@ Enzyme.configure({ adapter: new Adapter() });
 import InstantSearch from './InstantSearch';
 
 import createInstantSearchManager from './createInstantSearchManager';
+
 jest.mock('./createInstantSearchManager', () =>
   jest.fn(() => ({
     context: {},
@@ -24,6 +25,7 @@ const DEFAULT_PROPS = {
   root: {
     Root: 'div',
   },
+  refresh: false,
 };
 
 describe('InstantSearch', () => {
@@ -60,6 +62,7 @@ describe('InstantSearch', () => {
           searchState={{}}
           onSearchStateChange={() => null}
           createURL={() => null}
+          refresh={false}
         >
           <div />
         </InstantSearch>
@@ -139,6 +142,7 @@ describe('InstantSearch', () => {
       ...DEFAULT_PROPS,
       algoliaClient: {},
     });
+
     expect(ism.updateClient.mock.calls).toHaveLength(1);
   });
 
@@ -253,6 +257,64 @@ describe('InstantSearch', () => {
 
     expect(onSearchStateChangeMock.mock.calls).toHaveLength(0);
     expect(ism.skipSearch.mock.calls).toHaveLength(1);
+  });
+
+  it('refreshes the cache when the refresh prop is set to true', () => {
+    const ism = {
+      clearCache: jest.fn(),
+    };
+
+    createInstantSearchManager.mockImplementation(() => ism);
+
+    const wrapper = shallow(
+      <InstantSearch {...DEFAULT_PROPS}>
+        <div />
+      </InstantSearch>
+    );
+
+    expect(ism.clearCache).not.toHaveBeenCalled();
+
+    wrapper.setProps({
+      ...DEFAULT_PROPS,
+      refresh: false,
+    });
+
+    expect(ism.clearCache).not.toHaveBeenCalled();
+
+    wrapper.setProps({
+      ...DEFAULT_PROPS,
+      refresh: true,
+    });
+
+    expect(ism.clearCache).toHaveBeenCalledTimes(1);
+  });
+
+  it('updates the index when the the index changes', () => {
+    const ism = {
+      updateIndex: jest.fn(),
+    };
+
+    createInstantSearchManager.mockImplementation(() => ism);
+
+    const wrapper = shallow(
+      <InstantSearch {...DEFAULT_PROPS}>
+        <div />
+      </InstantSearch>
+    );
+
+    expect(ism.updateIndex).not.toHaveBeenCalled();
+
+    wrapper.setProps({
+      indexName: 'foobar',
+    });
+
+    expect(ism.updateIndex).not.toHaveBeenCalled();
+
+    wrapper.setProps({
+      indexName: 'newindexname',
+    });
+
+    expect(ism.updateIndex).toHaveBeenCalledTimes(1);
   });
 
   it('calls onSearchParameters with the right values if function provided', () => {
