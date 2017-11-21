@@ -133,6 +133,14 @@ export default function connectGeoSearch(fn) {
 
       uiState.lastRefinePosition = helper.getQueryParameter('aroundLatLng');
 
+      helper.on('result', () => {
+        // Reset the value when result change from outside of the widget
+        // -> from query, refinement, ...
+        if (uiState.enableRefineOnMapMove || !uiState.isRefinedWithMap) {
+          uiState.hasMapMoveSinceLastRefine = false;
+        }
+      });
+
       fn(
         {
           ...uiState,
