@@ -109,6 +109,7 @@ const renderer = (
   const {
     container,
     cssClasses,
+    initialView,
     enableRefineControl,
     paddingBoundingBox,
     renderState,
@@ -122,6 +123,7 @@ const renderer = (
 
   if (isFirstRendering) {
     // Inital component state
+    renderState.isMapRender = false;
     renderState.isUserInteraction = true;
 
     const node = getContainerNode(container);
@@ -163,6 +165,20 @@ const renderer = (
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(renderState.map);
+  }
+
+  // Display the inital position/zoom only when we don't have result
+  // for aovid the map to blink when results are loaded. We don't set the
+  // initial view the init function because we don't know the response will
+  // contain some hits.
+  if (!isFirstRendering && !renderState.isMapRender) {
+    renderState.isMapRender = true;
+
+    if (!items.length) {
+      renderState.isUserInteraction = false;
+      renderState.map.setView(initialView.position, initialView.zoom);
+      renderState.isUserInteraction = true;
+    }
   }
 
   // Events apply on each render in order
