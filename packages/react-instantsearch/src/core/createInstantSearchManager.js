@@ -57,6 +57,11 @@ export default function createInstantSearchManager({
     search();
   }
 
+  function clearCache() {
+    helper.clearCache();
+    search();
+  }
+
   function getMetadata(state) {
     return widgetsManager
       .getWidgets()
@@ -292,6 +297,7 @@ export default function createInstantSearchManager({
     onSearchForFacetValues,
     updateClient,
     updateIndex,
+    clearCache,
     skipSearch,
   };
 }
