@@ -171,15 +171,6 @@ export default function connectGeoSearch(fn) {
       const isRefinePositionChanged =
         uiState.lastRefinePosition !== currentRefinePosition;
 
-      // Restore hasMapMoveSinceLastRefine when refinement change
-      // but the refinement is not with the map
-      // ex: with places we can set the refinement with the
-      // autocomplete bar & we can move the map without
-      // the refine action
-      if (isRefinePositionChanged && !uiState.isRefinedWithMap) {
-        uiState.hasMapMoveSinceLastRefine = false;
-      }
-
       // Hacky condition for enable to override the current search
       // when we currently refine with the map. It avoid the rendering
       // and trigger a search without the boundingBox. We defenitly
