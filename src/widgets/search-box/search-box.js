@@ -24,6 +24,7 @@ const renderer = ({
   wrapInput,
   reset,
   magnifier,
+  loadingIndicator,
 }) => (
   { refine, clear, query, onHistoryChange, isSearchStalled },
   isFirstRendering
@@ -56,6 +57,8 @@ const renderer = ({
 
     if (magnifier) addMagnifier(input, magnifier, templates);
     if (reset) addReset(input, reset, templates, clear);
+    if (loadingIndicator)
+      addLoadingIndicator(input, loadingIndicator, templates);
 
     addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
 
@@ -135,9 +138,9 @@ function renderAfterInit({ containerNode, query, magnifier, isSearchStalled }) {
 
   if (magnifier) {
     if (isSearchStalled) {
-      containerNode.firstChild.classList.add('stalled-search');
+      containerNode.classList.add('stalled-search');
     } else {
-      containerNode.firstChild.classList.remove('stalled-search');
+      containerNode.classList.remove('stalled-search');
     }
   }
 }
@@ -174,6 +177,12 @@ searchBox({
  */
 
 /**
+ * @typedef {Object} SearchBoxLoadingIndicatorOption
+ * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
+ * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
+ */
+
+/**
  * @typedef {Object} SearchBoxCSSClasses
  * @property  {string|string[]} [root] CSS class to add to the
  * wrapping `<div>` (if `wrapInput` set to `true`).
@@ -184,7 +193,6 @@ searchBox({
  * @typedef {Object} SearchBoxMagnifierOption
  * @property {function|string} template Template used for displaying the magnifier. Can accept a function or a Hogan string.
  * @property {{root: string}} [cssClasses] CSS classes added to the magnifier.
- *  @property {boolean} [displayStalledSearch=false]
  */
 
 /**
@@ -192,8 +200,9 @@ searchBox({
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
- * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
+ * @property  {boolean|SearchBoxResetOption} [reset=false] Define if a reset button should be added in the input when there is a query.
  * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
+ * @property  {boolean|SearchBoxLoadingIndicatorOption} [loadingIndicator=false] Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
  * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
  * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
  * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
@@ -222,6 +231,7 @@ searchBox({
  *     autofocus: false,
  *     poweredBy: true,
  *     reset: false,
+ *     loadingIndicator: false
  *   })
  * );
  */
@@ -236,6 +246,7 @@ export default function searchBox(
     searchOnEnterKeyPressOnly = false,
     reset = true,
     magnifier = true,
+    loadingIndicator = false,
     queryHook,
   } = {}
 ) {
@@ -266,6 +277,7 @@ export default function searchBox(
     wrapInput,
     reset,
     magnifier,
+    loadingIndicator,
   });
 
   try {
@@ -385,6 +397,28 @@ function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
   };
   const stringNode = processTemplate(magnifier.template, {
     cssClasses: magnifierCSSClasses,
+  });
+
+  const htmlNode = createNodeFromString(stringNode);
+  input.parentNode.appendChild(htmlNode);
+}
+
+function addLoadingIndicator(
+  input,
+  loadingIndicator,
+  { loadingIndicator: loadingIndicatorTemplate }
+) {
+  loadingIndicator = {
+    cssClasses: {},
+    template: loadingIndicatorTemplate,
+    ...loadingIndicator,
+  };
+
+  const loadingIndicatorCSSClasses = {
+    root: cx(bem('loading-indicator'), loadingIndicator.cssClasses.root),
+  };
+  const stringNode = processTemplate(loadingIndicator.template, {
+    cssClasses: loadingIndicatorCSSClasses,
   });
 
   const htmlNode = createNodeFromString(stringNode);

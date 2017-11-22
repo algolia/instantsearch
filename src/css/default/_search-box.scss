@@ -6,6 +6,20 @@
   max-width: 300px;
   width: 100%;
 
+  .stalled-search {
+    @include element(magnifier) {
+      svg {
+        display: none;
+      }
+    }
+
+    @include element(loading-indicator) {
+      svg {
+        display: block;
+      }
+    }
+  }
+
   @include element(input) {
     /* search input */
     padding-left: 24px;
@@ -22,6 +36,21 @@
 
     svg {
       display: block;
+      vertical-align: middle;
+      height: 14px;
+      width: 14px;
+    }
+  }
+
+  @include element(loading-indicator) {
+    background: transparent;
+    position: absolute;
+    user-select: none;
+    top: 4px;
+    left: 7px;
+
+    svg {
+      display: none;
       vertical-align: middle;
       height: 14px;
       width: 14px;

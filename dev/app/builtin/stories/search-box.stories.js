@@ -21,6 +21,19 @@ export default () => {
       })
     )
     .add(
+      'display loading indicator',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container,
+            placeholder: 'Search for products',
+            poweredBy: true,
+            loadingIndicator: true,
+          })
+        );
+      })
+    )
+    .add(
       'search on enter',
       wrapWithHits(container => {
         window.search.addWidget(
