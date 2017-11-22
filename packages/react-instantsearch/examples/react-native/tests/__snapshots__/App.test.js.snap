@@ -108,6 +108,7 @@ exports[`renders correctly 1`] = `
                 />
               </View>
               <TextInput
+                allowFontScaling={true}
                 autoCapitalize="none"
                 autoCorrect={false}
                 clearButtonMode="always"
@@ -214,7 +215,6 @@ exports[`renders correctly 1`] = `
                       <Text
                         accessible={true}
                         allowFontScaling={true}
-                        disabled={false}
                         ellipsizeMode="tail"
                         numberOfLines={1}
                         style={
@@ -236,7 +236,6 @@ exports[`renders correctly 1`] = `
                 <Text
                   accessible={true}
                   allowFontScaling={true}
-                  disabled={false}
                   ellipsizeMode="tail"
                 />
               </View>
@@ -278,7 +277,7 @@ exports[`renders correctly 1`] = `
                   <Text
                     accessible={true}
                     allowFontScaling={true}
-                    disabled={false}
+                    disabled={undefined}
                     ellipsizeMode="tail"
                     style={
                       Array [
@@ -428,7 +427,6 @@ exports[`renders correctly 1`] = `
                 accessible={true}
                 allowFontScaling={true}
                 collapsable={undefined}
-                disabled={false}
                 ellipsizeMode="tail"
                 numberOfLines={1}
                 onLayout={[Function]}
