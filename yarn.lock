@@ -2631,9 +2631,9 @@ codeclimate-test-reporter@^0.5.0:
     lcov-parse "0.0.10"
     request "~2.79.0"
 
-codemirror@5.31.0:
-  version "5.31.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.31.0.tgz#ecf3d057eb74174147066bfc7c5f37b4c4e07df2"
+codemirror@5.32.0:
+  version "5.32.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.32.0.tgz#cb6ff5d8ef36d0b10f031130e2d9ebeee92c902e"
 
 coffee-script@^1.12.4:
   version "1.12.7"
