@@ -1,3 +1,13 @@
+<a name="2.2.5"></a>
+## [2.2.5](https://github.com/algolia/instantsearch.js/compare/v2.2.4...v2.2.5) (2017-11-20)
+
+
+### Bug Fixes
+
+* **searchbox:** fix usage of custom reset template ([#2585](https://github.com/algolia/instantsearch.js/issues/2585)) ([aad92b9](https://github.com/algolia/instantsearch.js/commit/aad92b9)), closes [#2528](https://github.com/algolia/instantsearch.js/issues/2528)
+
+
+
 <a name="2.2.4"></a>
 ## [2.2.4](https://github.com/algolia/instantsearch.js/compare/v2.2.3...v2.2.4) (2017-11-13)
 

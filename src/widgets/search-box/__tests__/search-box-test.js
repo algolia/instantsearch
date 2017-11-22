@@ -221,7 +221,7 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      expect($('button[type="reset"]')[0].style.display).toBe('none');
+      expect($('.ais-search-box--reset-wrapper')[0].style.display).toBe('none');
     });
 
     it('should be shown when there is a query', () => {
@@ -233,7 +233,9 @@ describe('searchBox()', () => {
       simulateInputEvent('test', 'tes', widget, helper, state, container);
 
       // Then
-      expect($('button[type="reset"]')[0].style.display).toBe('block');
+      expect($('.ais-search-box--reset-wrapper')[0].style.display).toBe(
+        'block'
+      );
     });
 
     it('should clear the query', () => {
@@ -243,7 +245,7 @@ describe('searchBox()', () => {
       simulateInputEvent('test', 'tes', widget, helper, state, container);
 
       // When
-      $('button[type="reset"]')[0].click();
+      $('.ais-search-box--reset-wrapper')[0].click();
 
       // Then
       expect(helper.setQuery.called).toBe(true);
@@ -277,7 +279,7 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      expect($('button[type="reset"]').length).toEqual(0);
+      expect($('.ais-search-box--reset-wrapper').length).toEqual(0);
     });
   });
 

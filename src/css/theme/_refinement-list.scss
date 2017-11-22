@@ -12,8 +12,8 @@
     @extend .ais-current-refined-values--link;
     cursor: pointer;
 
-    input[type="radio"],
-    input[type="checkbox"] {
+    input[type="radio"], // sass-lint:disable-line no-qualifying-elements force-attribute-nesting
+    input[type="checkbox"] { // sass-lint:disable-line no-qualifying-elements force-attribute-nesting
       margin-right: 5px;
     }
   }
@@ -24,7 +24,7 @@
 
   div > button {
     background: transparent;
-    border: none;
+    border: 0;
     cursor: pointer;
     font-size: $font-size - 1px;
   }

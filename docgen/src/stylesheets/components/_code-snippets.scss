@@ -19,7 +19,6 @@ pre {
 
   &.al-snippet {
     box-sizing: border-box;
-    line-height: initial;
     word-break: initial;
     word-wrap: initial;
     border-radius: 5px;
@@ -32,7 +31,7 @@ pre {
     font-size: $size;
     white-space: pre-line;
 
-    &:before {
+    &::before {
       content: '1 2 3 4 5 6 7 8';
       display: block;
       padding: $padding*2 0  !important;
@@ -51,7 +50,7 @@ pre {
       line-height: $line-height*1.08;
       font-size:  $line-number-size*1.11;
       text-align: center;
-      color: #bbbbbb;
+      color: #BBBBBB;
     }
 
     code {
@@ -65,7 +64,7 @@ pre {
 
     // Theme
     &[data-snippet-theme="light"] {
-      border: solid 1px #d7d9de !important;
+      border: solid 1px #D7D9DE !important;
       background-color: $white !important;
 
       // Main text color
@@ -75,7 +74,7 @@ pre {
       // Namespace : sn-
       @each $name, $color in $light-theme {
         .sn-#{$name} {
-          color: #{$color}
+          color: #{$color};
         }
       }
     }
@@ -84,5 +83,5 @@ pre {
 
 
 * {
-  background: red !important
+  background: red !important;
 }

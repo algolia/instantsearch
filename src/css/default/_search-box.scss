@@ -1,3 +1,4 @@
+// sass-lint:disable no-empty-rulesets
 @import "../base";
 @import "variables";
 
@@ -5,20 +6,6 @@
   position: relative;
   max-width: 300px;
   width: 100%;
-
-  .stalled-search {
-    @include element(magnifier) {
-      svg {
-        display: none;
-      }
-    }
-
-    @include element(loading-indicator) {
-      svg {
-        display: block;
-      }
-    }
-  }
 
   @include element(input) {
     /* search input */
@@ -42,7 +29,8 @@
     }
   }
 
-  @include element(loading-indicator) {
+  @include element(loading-indicator-wrapper) {
+    display: none;
     background: transparent;
     position: absolute;
     user-select: none;
@@ -50,7 +38,6 @@
     left: 7px;
 
     svg {
-      display: none;
       vertical-align: middle;
       height: 14px;
       width: 14px;
@@ -97,3 +84,14 @@
     vertical-align: middle;
   }
 }
+
+.ais-search-box.stalled-search {
+  .ais-search-box--magnifier-wrapper {
+    display: none;
+  }
+
+  .ais-search-box--loading-indicator-wrapper {
+    display: block;
+  }
+}
+

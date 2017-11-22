@@ -16,12 +16,12 @@
 @import 'toggle';
 @import 'menu-select';
 
-[class^=ais-] {
+[class^="ais-"] {
   box-sizing: border-box;
 
   & > *,
-  & > *:after,
-  & > *:before {
+  & > *::after,
+  & > *::before {
     box-sizing: border-box;
   }
 }
