@@ -112,7 +112,7 @@
     "name": "v1",
     "url": "https://community.algolia.com/instantsearch.js/v1/"
   }, {
-    "name": "Github",
+    "name": "GitHub",
     "image": "<img src='assets/img/github-icon.svg'/>",
     "url": "https://github.com/algolia/instantsearch.js/"
   }],
