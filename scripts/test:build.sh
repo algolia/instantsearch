@@ -5,3 +5,4 @@
 
 (cd packages/react-instantsearch && yarn build) &&
 (cd packages/react-instantsearch-theme-algolia && yarn build)
+yarn test:size
