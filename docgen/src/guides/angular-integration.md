@@ -16,7 +16,7 @@ githubSource: docgen/src/guides/angular-integration.md
 
 Angular InstantSearch will help you to create instant-search experiences with [Algolia](https://www.algolia.com) with customisable UI components.
 
-We'd love for you to try it out and give us your opinion! The library is open source and can be found on [Github](https://github.com/algolia/angular-instantsearch).
+We'd love for you to try it out and give us your opinion! The library is open source and can be found on [GitHub](https://github.com/algolia/angular-instantsearch).
 
 Give it a try! It takes 5 minutes to build an instant-search example with our [getting started](https://algolia.gitbooks.io/angular-instantsearch).
 
