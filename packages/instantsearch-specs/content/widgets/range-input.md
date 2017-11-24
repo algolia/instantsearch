@@ -4,7 +4,7 @@ type: widget
 html: |
   <div class="ais-RangeInput">
     <div class="ais-RangeInput-header ais-header">
-      Numeric range
+      Range input
     </div>
     <div class="ais-RangeInput-body ais-body">
       <form class="ais-RangeInput-form">
