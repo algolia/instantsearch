@@ -34,7 +34,7 @@
     "expo": "23.0.2",
     "lodash": "4.17.4",
     "native-base": "2.3.3",
-    "prop-types": "15.5.8",
+    "prop-types": "15.6.0",
     "react": "16.1.1",
     "react-dom": "16.1.1",
     "react-instantsearch": "4.2.0",
