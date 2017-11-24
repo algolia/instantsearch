@@ -13,10 +13,10 @@ import { noop } from '../../lib/utils';
 // };
 //
 // type WidgetOptions = {
-//   enableGeolocationWithIP: boolean,
-//   enableRefineOnMapMove: boolean,
+//   enableGeolocationWithIP?: boolean,
+//   enableRefineOnMapMove?: boolean,
 //   position?: LatLng,
-//   radius?: number | 'all',
+//   radius?: number,
 //   precision?: number,
 //   // ...rest of options from the Widget
 // };
