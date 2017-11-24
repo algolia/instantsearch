@@ -1,15 +1,15 @@
 /* eslint-disable import/default */
 import { action, storiesOf } from 'dev-novel';
 import instantsearch from '../../index.js';
-import addGeoSearchGoogleMapsStories from './built-in-widgets/geo-search-google-maps.stories';
+// import addGeoSearchGoogleMapsStories from './built-in-widgets/geo-search-google-maps.stories';
+// import addGeoSearchMapboxStories from './built-in-widgets/geo-search-mapbox.stories';
 import addGeoSearchLeafletStories from './built-in-widgets/geo-search-leaflet.stories';
-import addGeoSearchMapboxStories from './built-in-widgets/geo-search-mapbox.stories';
 import wrapWithHits from './wrap-with-hits.js';
 
 export default () => {
-  addGeoSearchGoogleMapsStories();
+  // addGeoSearchGoogleMapsStories();
+  // addGeoSearchMapboxStories();
   addGeoSearchLeafletStories();
-  addGeoSearchMapboxStories();
 
   storiesOf('Analytics').add(
     'default',
