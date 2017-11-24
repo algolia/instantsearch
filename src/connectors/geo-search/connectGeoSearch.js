@@ -12,26 +12,17 @@ import { noop } from '../../lib/utils';
 //   southWest: LatLng,
 // };
 //
-// type Position = {
-//   top: number,
-//   right: number,
-//   bottom: number,
-//   left: number,
-// };
-//
 // type WidgetOptions = {
 //   enableGeolocationWithIP: boolean,
 //   enableRefineOnMapMove: boolean,
-//   paddingBoundingBox: Position,
-//   position?: string, // 40.71, -74.01
+//   position?: LatLng,
 //   radius?: number | 'all',
-//   minRadius?: number,
 //   precision?: number,
-//   ...rest of options from the Widget
+//   // ...rest of options from the Widget
 // };
 //
 // type RenderingOptions = {
-//   items: Array<Hit + LatLng>,
+//   items: Array<Hit & { _geoloc: LatLng }>,
 //   refine: (bounds: Bounds) => void,
 //   clearMapRefinement: () => void,
 //   toggleRefineOnMapMove: () => void,

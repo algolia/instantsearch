@@ -15,23 +15,29 @@ const bem = bemHelper('ais-geo');
 // };
 //
 // type CSSClasses = {
-//   // TBD
+//   // TBD at the implementation
 // };
 //
 // type Templates = {
-//   // TBD
+//   clear: string,
+//   toggle: string,
+//   redo: string,
+//   popup: string,
 // };
 //
 // type MapOptions = {
-//   // TBD
+//   // TBD -> GoogleMaps:MapOptions
+//   // see: https://developers.google.com/maps/documentation/javascript/3.exp/reference#MapOptions
 // };
 //
 // type MarkerOptions = {
-//   // TBD
+//   // TBD -> GoogleMaps:MarkerOptions
+//   // see: https://developers.google.com/maps/documentation/javascript/3.exp/reference#MarkerOptions
 // };
 //
 // type PopupOptions = {
-//   // TBD
+//   // TBD -> GoogleMaps:InfoWindowOptions (probably)
+//   // see: https://developers.google.com/maps/documentation/javascript/3.exp/reference#InfoWindowOptions
 // };
 //
 // type WidgetOptions = {
@@ -47,8 +53,7 @@ const bem = bemHelper('ais-geo');
 //   enableRefineOnMapMove?: boolean,
 //   initialPosition?: LatLng,
 //   position?: LatLng,
-//   radius?: number | 'all',
-//   minRadius?: number,
+//   radius?: number,
 //   precision?: number,
 // };
 
