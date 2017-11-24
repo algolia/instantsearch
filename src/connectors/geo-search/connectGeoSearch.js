@@ -38,16 +38,11 @@ export default function connectGeoSearch(fn) {
     const {
       position,
       radius,
-      minRadius,
       precision,
       initialPosition,
       enableGeolocationWithIP = true,
       enableRefineOnMapMove = true,
     } = widgetParams;
-
-    if (radius !== undefined && minRadius !== undefined) {
-      throw new Error('Usage: only one of the radius should be pass');
-    }
 
     // UI State
     const uiState = {
@@ -148,10 +143,6 @@ export default function connectGeoSearch(fn) {
 
       if (radius) {
         partial.aroundRadius = radius;
-      }
-
-      if (minRadius) {
-        partial.minimumAroundRadius = minRadius;
       }
 
       if (precision) {
