@@ -79,26 +79,22 @@ const renderer = (
     linkElement.rel = 'stylesheet';
     linkElement.href = 'https://unpkg.com/leaflet@1.2.0/dist/leaflet.css';
     document.head.appendChild(linkElement);
-    renderState.linkElement = linkElement;
 
     const rootElement = document.createElement('div');
     rootElement.className = cssClasses.root;
     rootElement.style.height = '350px';
     rootElement.style.marginTop = '10px';
     node.appendChild(rootElement);
-    renderState.rootElement = rootElement;
 
     const containerButtonElement = document.createElement('div');
     containerButtonElement.style.display = 'flex';
     containerButtonElement.style.justifyContent = 'space-between';
     containerButtonElement.style.marginTop = '10px';
     node.appendChild(containerButtonElement);
-    renderState.containerButtonElement = containerButtonElement;
 
     const containerClear = document.createElement('div');
     containerClear.className = 'ais-control ais-control-clear';
     containerButtonElement.appendChild(containerClear);
-    renderState.containerClear = containerClear;
 
     const buttonClear = document.createElement('button');
     buttonClear.className = 'ais-control__button-clear';
@@ -110,7 +106,6 @@ const renderer = (
     const containerControl = document.createElement('div');
     containerControl.className = 'ais-control ais-control--refine';
     containerButtonElement.appendChild(containerControl);
-    renderState.containerControl = containerControl;
 
     if (enableRefineControl) {
       const label = document.createElement('label');
