@@ -253,16 +253,7 @@ describe('InstantSearch lifecycle', () => {
             true,
             'widget.render called once'
           );
-          expect(widget.render.args[0]).toEqual([
-            {
-              createURL: search._createAbsoluteURL,
-              results,
-              state: helper.state,
-              helper,
-              templatesConfig: search.templatesConfig,
-              instantSearchInstance: search,
-            },
-          ]);
+          expect(widget.render.args[0]).toMatchSnapshot();
         });
       });
     });

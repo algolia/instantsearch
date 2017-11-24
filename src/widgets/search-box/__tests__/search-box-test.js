@@ -677,7 +677,10 @@ describe('searchBox()', () => {
     widget = searchBox({ container });
     widget.init({ state, helper, onHistoryChange });
     container.blur();
-    widget.render({ helper: { state: { query: 'new value' } } });
+    widget.render({
+      helper: { state: { query: 'new value' } },
+      searchMetadata: { isSearchStalled: false },
+    });
     expect(container.value).toBe('new value');
   });
 
@@ -688,7 +691,10 @@ describe('searchBox()', () => {
     widget = searchBox({ container });
     widget.init({ state, helper, onHistoryChange });
     input.focus();
-    widget.render({ helper: { state: { query: 'new value' } } });
+    widget.render({
+      helper: { state: { query: 'new value' } },
+      searchMetadata: { isSearchStalled: false },
+    });
     expect(container.value).toBe('initial');
   });
 

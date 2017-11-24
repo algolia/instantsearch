@@ -47,6 +47,7 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     {
@@ -93,6 +94,7 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     {
@@ -138,6 +140,7 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     {
@@ -201,6 +204,7 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     {
@@ -242,6 +246,7 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     const firstRenderOptions = rendering.lastCall.args[0];
@@ -251,6 +256,7 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     const secondRenderOptions = rendering.lastCall.args[0];
