@@ -19,11 +19,11 @@ alt1: Button disabled
 althtml1: |
   <div class="ais-ClearRefinements">
     <div class="ais-ClearRefinements-header ais-header">
-      Clear all
+      Clear refinements
     </div>
     <div class="ais-ClearRefinements-body ais-body">
       <button class="ais-ClearRefinements-button ais-ClearRefinements-button--disabled" disabled>
-        Clear all
+        Clear refinements
       </button>
     </div>
     <div class="ais-ClearRefinements-footer ais-footer">

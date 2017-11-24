@@ -25,11 +25,11 @@
 // Reset all buttons
 
 .ais-ClearRefinements-button,
-.ais-CurrentRefinements-button,
+.ais-CurrentRefinements-delete,
 .ais-CurrentRefinements-reset,
-.ais-InfiniteResults-showMore,
+.ais-InfiniteResults-loadMore,
 .ais-Menu-showMore,
-.ais-NumericRange-submit,
+.ais-RangeInput-submit,
 .ais-RatingMenu-button,
 .ais-SearchBox-submit,
 .ais-SearchBox-reset {
@@ -46,6 +46,10 @@
   &::-moz-focus-inner {
     padding: 0;
     border: 0;
+  }
+
+  &[disabled] {
+    cursor: default;
   }
 }
 

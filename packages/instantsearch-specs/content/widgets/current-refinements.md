@@ -9,14 +9,13 @@ html: |
     <div class="ais-CurrentRefinements-body ais-body">
       <ul class="ais-CurrentRefinements-list">
         <li class="ais-CurrentRefinements-item">
-          <button class="ais-CurrentRefinements-button">
-            Movies & TV Shows <span class="ais-CurrentRefinements-count">1,574</span>
-          </button>
-        </li>
-        <li class="ais-CurrentRefinements-item">
-          <button class="ais-CurrentRefinements-button">
-            Others <span class="ais-CurrentRefinements-count">2,450</span>
-          </button>
+          <span class="ais-CurrentRefinements-label">category: </span>
+          <span class="ais-CurrentRefinements-label">Movies & TV Shows</span>
+          <span class="ais-CurrentRefinements-count">1,574</span>
+          <button class="ais-CurrentRefinements-delete">✕</button>
+          <span class="ais-CurrentRefinements-label">Others</span>
+          <span class="ais-CurrentRefinements-count">2,450</span>
+          <button class="ais-CurrentRefinements-delete">✕</button>
         </li>
       </ul>
       <button class="ais-CurrentRefinements-reset">
@@ -38,8 +37,10 @@ classes:
     description: the list of all refined items
   - name: .ais-CurrentRefinements-item
     description: the refined list item
-  - name: .ais-CurrentRefinements-button
-    description: the clickable refined element
+  - name: .ais-CurrentRefinements-label
+    description: the refined list labels
+  - name: .ais-CurrentRefinements-delete
+    description: the delete button for a label
   - name: .ais-CurrentRefinements-count
     description: the count of refined values for each item
   - name: .ais-CurrentRefinements-reset

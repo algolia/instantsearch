@@ -10,12 +10,14 @@ html: |
       <ul class="ais-NumericMenu-list">
         <li class="ais-NumericMenu-item ais-NumericMenu-item--selected">
           <label class="ais-NumericMenu-label">
-            <input class="ais-NumericMenu-radio" type="radio" name="NumericRefinementList" checked="" /> All
+            <input class="ais-NumericMenu-radio" type="radio" name="NumericMenu" checked="" />
+            <span class="ais-NumericMenu-labelText">All</span>
           </label>
         </li>
         <li class="ais-NumericMenu-item">
           <label class="ais-NumericMenu-label">
-            <input class="ais-NumericMenu-radio" type="radio" name="NumericRefinementList" /> Less than 500
+            <input class="ais-NumericMenu-radio" type="radio" name="NumericMenu" />
+            <span class="ais-NumericMenu-labelText">Less than 500</span>
           </label>
         </li>
       </ul>
@@ -41,6 +43,8 @@ classes:
     description: the label of each refinement item
   - name: .ais-NumericMenu-radio
     description: the radio input of each refinement item
+  - name: .ais-NumericMenu-labelText
+    description: the label text of each refinement item
   - name: .ais-NumericMenu-footer
     description: the footer of the widget (optional)
 ---
