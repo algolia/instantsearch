@@ -102,9 +102,11 @@ export default function connectGeoSearch(fn) {
       renderFn,
       renderArgs
     ) => () => {
+      const isInternalRender = true;
+
       uiState.isRefineOnMapMove = !uiState.isRefineOnMapMove;
 
-      renderFn(renderArgs);
+      renderFn(renderArgs, isInternalRender);
     };
 
     // - hasMapMoveSinceLastRefine
@@ -118,11 +120,12 @@ export default function connectGeoSearch(fn) {
       renderArgs
     ) => () => {
       const isRenderRequired = !uiState.hasMapMoveSinceLastRefine;
+      const isInternalRender = true;
 
       uiState.hasMapMoveSinceLastRefine = true;
 
       if (isRenderRequired) {
-        renderFn(renderArgs);
+        renderFn(renderArgs, isInternalRender);
       }
     };
 
@@ -176,14 +179,6 @@ export default function connectGeoSearch(fn) {
 
       uiState.lastRefinePosition = currentRefinePosition;
 
-      helper.on('result', () => {
-        // Reset the value when result change from outside of the widget
-        // -> from query, refinement, ...
-        if (uiState.enableRefineOnMapMove || !uiState.isRefinedWithMap) {
-          uiState.hasMapMoveSinceLastRefine = false;
-        }
-      });
-
       fn(
         {
           items: [],
@@ -206,7 +201,7 @@ export default function connectGeoSearch(fn) {
       );
     };
 
-    const render = renderOptions => {
+    const render = (renderOptions, isInternalRender = false) => {
       const { results, helper, instantSearchInstance } = renderOptions;
 
       const isFirstRendering = false;
@@ -235,6 +230,12 @@ export default function connectGeoSearch(fn) {
         helper.setQueryParameter('aroundLatLngViaIP', false).search();
 
         return;
+      }
+
+      if (!isInternalRender && !uiState.isRefinedWithMap) {
+        // Reset the value when result change from outside of the widget
+        // -> from query, refinement, ...
+        uiState.hasMapMoveSinceLastRefine = false;
       }
 
       uiState.lastRefinePosition = helper.getQueryParameter('aroundLatLng');
