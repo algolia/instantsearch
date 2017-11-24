@@ -41,17 +41,17 @@ const bem = bemHelper('ais-geo');
 // };
 //
 // type WidgetOptions = {
-//   initialZoom: number,
-//   enableRefineControl: boolean,
-//   paddingBoundingBox: Position,
-//   cssClasses: CSSClasses,
-//   templates: Templates,
-//   mapOptions?: MapOptions,
-//   markerOptions?: MarkerOptions,
-//   popupOptions?: PopupOptions,
-//   enableGeolocationWithIP?: boolean,
-//   enableRefineOnMapMove?: boolean,
-//   initialPosition?: LatLng,
+//   initialZoom?: number, // = 12 (may change)
+//   initialPosition?: LatLng, // = SF (may change)
+//   paddingBoundingBox?: Position, // = { 0, 0, 0, 0 }
+//   cssClasses?: CSSClasses, // = {}
+//   templates?: Templates, // = TBD
+//   mapOptions?: MapOptions, // = {}
+//   markerOptions?: MarkerOptions, // = {}
+//   popupOptions?: PopupOptions, // = {}
+//   enableRefineControl?: boolean, // = true
+//   enableGeolocationWithIP?: boolean, // = true
+//   enableRefineOnMapMove?: boolean, // = true
 //   position?: LatLng,
 //   radius?: number,
 //   precision?: number,
