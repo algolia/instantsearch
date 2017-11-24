@@ -35,6 +35,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function(string)} refine Sets a new query and searches.
  * @property {function()} clear Remove the query and perform search.
  * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
+ * @property {boolean} isSearchStalled `true` if the search results takes more than a certain time to come back
+ * from Algolia servers. This can be configured on the InstantSearch constructor with the attribute `stalledSearchDelay`
  */
 
 /**
