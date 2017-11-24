@@ -9,7 +9,7 @@
   "dependencies": {
     "antd": "2.13.10",
     "lodash": "4.17.4",
-    "prop-types": "15.5.10",
+    "prop-types": "15.6.0",
     "react": "16.1.1",
     "react-autosuggest": "9.3.2",
     "react-dom": "16.1.1",
