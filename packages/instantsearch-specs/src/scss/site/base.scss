@@ -209,6 +209,7 @@ body {
   background-color: #eee;
   cursor: pointer;
   outline: none;
+  border-radius: 0;
 
   &.selected {
     background-color: #fff;
@@ -253,8 +254,23 @@ body {
   }
 
   .ais-Breadcrumb-header,
-  .ais-SearchBox-header {
+  .ais-SearchBox-header,
+  .ais-CurrentRefinements-header,
+  .ais-Results-header,
+  .ais-Pagination-header,
+  .ais-Stats-header {
     display: none;
+  }
+
+  .ais-Breadcrumb,
+  .ais-SearchBox {
+    margin-bottom: 0.5rem;
+  }
+
+  .ais-Results,
+  .ais-Pagination,
+  .ais-CurrentRefinements {
+    margin-top: 1rem;
   }
 }
 

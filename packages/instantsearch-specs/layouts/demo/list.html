@@ -20,36 +20,42 @@
           {{ range where .Site.Pages "Title" "=" "Menu" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "SortBySelector" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "MenuSelect" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "StarRating" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "SortBy" }}{{ .Params.html | safeHTML }}{{ end }}
+        </div>
+        <div class="demo-widget">
+          {{ range where .Site.Pages "Title" "=" "RatingMenu" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
         <div class="demo-widget">
           {{ range where .Site.Pages "Title" "=" "NumericRange" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "RangeSlider" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "NumericMenu" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "NumericSelector" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "RangeInput" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "NumericRefinementList" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "ResultsPerPage" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "HitsPerPageSelector" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "ClearRefinements" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "ClearAll" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "PoweredBy" }}{{ .Params.html | safeHTML }}{{ end }}
         </div>
       </div>
       <div class="demo-results">
         {{ range where .Site.Pages "Title" "=" "Breadcrumb" }}{{ .Params.html | safeHTML }}{{ end }}
         {{ range where .Site.Pages "Title" "=" "SearchBox" }}{{ .Params.html | safeHTML }}{{ end }}
-        {{ range where .Site.Pages "Title" "=" "PoweredBy" }}{{ .Params.html | safeHTML }}{{ end }}
-        {{ range where .Site.Pages "Title" "=" "CurrentRefinedValues" }}{{ .Params.html | safeHTML }}{{ end }}
-        {{ range where .Site.Pages "Title" "=" "Hits" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Stats" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "CurrentRefinements" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Results" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Results" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Results" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Results" }}{{ .Params.html | safeHTML }}{{ end }}
         {{ range where .Site.Pages "Title" "=" "Pagination" }}{{ .Params.html | safeHTML }}{{ end }}
       </div>
     </div>

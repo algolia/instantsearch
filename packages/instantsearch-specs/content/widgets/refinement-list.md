@@ -7,17 +7,21 @@ html: |
       Refinement list
     </div>
     <div class="ais-RefinementList-body ais-body">
-      <input class="ais-RefinementList-search" type="search" placeholder="Search for products" />
+      <div class="ais-RefinementList-searchbox">
+        <!-- SearchBox widget here -->
+      </div>
       <ul class="ais-RefinementList-list">
         <li class="ais-RefinementList-item ais-RefinementList-item--selected">
           <label class="ais-RefinementList-label">
-            <input class="ais-RefinementList-checkbox" type="checkbox" value="Insignia™" checked="" /> Insignia™
+            <input class="ais-RefinementList-checkbox" type="checkbox" value="Insignia™" checked="" />
+            <span class="ais-RefinementList-labelText">Insignia™</span>
             <span class="ais-RefinementList-count">746</span>
           </label>
         </li>
         <li class="ais-RefinementList-item">
           <label class="ais-RefinementList-label">
-            <input class="ais-RefinementList-checkbox" type="checkbox" value="Samsung"> Samsung
+            <input class="ais-RefinementList-checkbox" type="checkbox" value="Samsung">
+            <span class="ais-RefinementList-labelText">Samsung</span>
             <span class="ais-RefinementList-count">633</span>
           </label>
         </li>
@@ -34,7 +38,7 @@ classes:
     description: the header of the widget (optional)
   - name: .ais-RefinementList-body
     description: the body of the widget
-  - name: .ais-RefinementList-search
+  - name: .ais-RefinementList-searchbox
     description: the search box of the widget
   - name: .ais-RefinementList-list
     description: the list of refinement items
@@ -46,6 +50,8 @@ classes:
     description: the label of each refinement item
   - name: .ais-RefinementList-checkbox
     description: the checkbox input of each refinement item
+  - name: .ais-RefinementList-labelText
+    description: the label text of each refinement item
   - name: .ais-RefinementList-count
     description: the count of values for each item
   - name: .ais-RefinementList-footer

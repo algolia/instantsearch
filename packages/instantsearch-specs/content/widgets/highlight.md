@@ -1,10 +1,13 @@
 ---
 title: Highlight
-info: This component is different from other widgets as it can be composed.
 type: widget
 html: |
-  This is the <em class="ais-Highlight">highlighted text</em>.
+  <span class="ais-Highlight"><span class="ais-Highlight-nonhighlighted">This is the</span> <em class="ais-Highlight-highlighted">highlighted text</em></span>
 classes:
   - name: .ais-Highlight
-    description: the emphasized text
+    description: the root span of the widget
+  - name: .ais-Highlight-highlighted
+    description: the highlighted text
+  - name: .ais-Highlight-nonHighlighted
+    description: the normal text
 ---

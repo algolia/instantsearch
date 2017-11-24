@@ -10,13 +10,13 @@ html: |
       <ul class="ais-Menu-list">
         <li class="ais-Menu-item ais-Menu-item--selected">
           <a class="ais-Menu-link" href="#">
-            Appliances
+            <span class="ais-Menu-label">Appliances</span>
             <span class="ais-Menu-count">4,306</span>
           </a>
         </li>
         <li class="ais-Menu-item">
           <a class="ais-Menu-link" href="#">
-            Audio
+            <span class="ais-Menu-label">Audio</span>
             <span class="ais-Menu-count">1,570</span>
           </a>
         </li>
@@ -37,13 +37,13 @@ althtml1: |
       <ul class="ais-Menu-list">
         <li class="ais-Menu-item ais-Menu-item--selected">
           <a class="ais-Menu-link" href="#">
-            Appliances
+            <span class="ais-Menu-label">Appliances</span>
             <span class="ais-Menu-count">4,306</span>
           </a>
         </li>
         <li class="ais-Menu-item">
           <a class="ais-Menu-link" href="#">
-            Audio
+            <span class="ais-Menu-label">Audio</span>
             <span class="ais-Menu-count">1,570</span>
           </a>
         </li>
@@ -69,6 +69,8 @@ classes:
     description: the selected menu list item
   - name: .ais-Menu-link
     description: the clickable menu element
+  - name: .ais-Menu-label
+    description: the label of each item
   - name: .ais-Menu-count
     description: the count of values for each item
   - name: .ais-Menu-showMore
