@@ -26,7 +26,13 @@ const removeMarkers = (markers = []) =>
   markers.forEach(marker => marker.remove());
 
 const addMarkers = (map, items) =>
-  items.map(({ lat, lng }) => L.marker([lat, lng]).addTo(map));
+  items.map(({ name, lat, lng }) => {
+    const marker = L.marker([lat, lng]).addTo(map);
+
+    marker.bindPopup(L.popup().setContent(name));
+
+    return marker;
+  });
 
 const fitMarkersBounds = renderState => {
   // Ugly hack for enable to detect user interaction

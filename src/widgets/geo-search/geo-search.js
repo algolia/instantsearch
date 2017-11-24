@@ -30,6 +30,10 @@ const bem = bemHelper('ais-geo');
 //   // TBD
 // };
 //
+// type PopupOptions = {
+//   // TBD
+// };
+//
 // type WidgetOptions = {
 //   initialZoom: number,
 //   enableRefineControl: boolean,
@@ -38,6 +42,7 @@ const bem = bemHelper('ais-geo');
 //   templates: Templates,
 //   mapOptions?: MapOptions,
 //   markerOptions?: MarkerOptions,
+//   popupOptions?: PopupOptions,
 //   enableGeolocationWithIP?: boolean,
 //   enableRefineOnMapMove?: boolean,
 //   initialPosition?: LatLng,
