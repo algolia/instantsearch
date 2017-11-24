@@ -43,55 +43,6 @@ const fitMarkersBounds = renderState => {
   renderState.isUserInteraction = true;
 };
 
-const renderClearRefinementButton = ({
-  renderState,
-  clearMapRefinement,
-  isRefinedWithMap,
-}) => {
-  renderState.containerClear.innerHTML = '';
-  const button = document.createElement('button');
-  button.textContent = 'Clear the refinement with the current map view';
-  button.disabled = !isRefinedWithMap();
-  button.addEventListener('click', clearMapRefinement);
-  renderState.containerClear.appendChild(button);
-};
-
-const renderControlElement = ({
-  renderState,
-  toggleRefinedOnMapMove,
-  isRefinedOnMapMove,
-}) => {
-  renderState.containerControl.innerHTML = '';
-  const label = document.createElement('label');
-  const checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';
-  checkbox.checked = isRefinedOnMapMove();
-  checkbox.addEventListener('change', toggleRefinedOnMapMove);
-  label.appendChild(checkbox);
-  label.append('Search as I move the map');
-  renderState.containerControl.appendChild(label);
-};
-
-const renderRedoSearchButton = ({
-  renderState,
-  paddingBoundingBox,
-  hasMapMoveSinceLastRefine,
-  refine,
-}) => {
-  renderState.containerControl.innerHTML = '';
-  const button = document.createElement('button');
-  button.textContent = 'Redo search here';
-  button.disabled = !hasMapMoveSinceLastRefine();
-  button.addEventListener('click', () =>
-    refineWithMap({
-      refine,
-      paddingBoundingBox,
-      map: renderState.map,
-    })
-  );
-  renderState.containerControl.appendChild(button);
-};
-
 const renderer = (
   {
     items,
@@ -145,14 +96,49 @@ const renderer = (
     renderState.containerButtonElement = containerButtonElement;
 
     const containerClear = document.createElement('div');
-    containerClear.className = 'ais-control';
+    containerClear.className = 'ais-control ais-control-clear';
     containerButtonElement.appendChild(containerClear);
     renderState.containerClear = containerClear;
 
+    const buttonClear = document.createElement('button');
+    buttonClear.className = 'ais-control__button-clear';
+    buttonClear.textContent = 'Clear the refinement with the current map view';
+    buttonClear.disabled = !isRefinedWithMap();
+    buttonClear.addEventListener('click', clearMapRefinement);
+    containerClear.appendChild(buttonClear);
+
     const containerControl = document.createElement('div');
-    containerControl.className = 'ais-control';
+    containerControl.className = 'ais-control ais-control--refine';
     containerButtonElement.appendChild(containerControl);
     renderState.containerControl = containerControl;
+
+    if (enableRefineControl) {
+      const label = document.createElement('label');
+      const checkbox = document.createElement('input');
+      checkbox.className = 'ais-control__checkbox';
+      checkbox.type = 'checkbox';
+      checkbox.checked = isRefinedOnMapMove();
+      checkbox.addEventListener('change', toggleRefinedOnMapMove);
+      label.className = 'ais-control__label';
+      label.appendChild(checkbox);
+      label.append('Search as I move the map');
+      containerControl.appendChild(label);
+    }
+
+    if (enableRefineControl || !isRefinedOnMapMove()) {
+      const button = document.createElement('button');
+      button.className = 'ais-control__button';
+      button.textContent = 'Redo search here';
+      button.disabled = !hasMapMoveSinceLastRefine();
+      button.addEventListener('click', () =>
+        refineWithMap({
+          refine,
+          paddingBoundingBox,
+          map: renderState.map,
+        })
+      );
+      containerControl.appendChild(button);
+    }
 
     renderState.map = L.map(rootElement);
 
@@ -204,18 +190,17 @@ const renderer = (
   }
 
   // UI
-  renderClearRefinementButton({
-    renderState,
-    clearMapRefinement,
-    isRefinedWithMap,
-  });
+  const buttonClear = document.querySelector('.ais-control__button-clear');
+  buttonClear.disabled = !isRefinedWithMap();
 
   if (enableRefineControl) {
-    renderControlElement({
-      renderState,
-      toggleRefinedOnMapMove,
-      isRefinedOnMapMove,
-    });
+    const label = document.querySelector('.ais-control__label');
+    const checkbox = document.querySelector('.ais-control__checkbox');
+    const button = document.querySelector('.ais-control__button');
+
+    label.style.display = 'block';
+    button.style.display = 'none';
+    checkbox.checked = isRefinedOnMapMove();
   }
 
   if (
@@ -223,12 +208,15 @@ const renderer = (
     (!enableRefineControl ||
       (enableRefineControl && hasMapMoveSinceLastRefine()))
   ) {
-    renderRedoSearchButton({
-      renderState,
-      paddingBoundingBox,
-      hasMapMoveSinceLastRefine,
-      refine,
-    });
+    const button = document.querySelector('.ais-control__button');
+
+    button.style.display = 'block';
+    button.disabled = !hasMapMoveSinceLastRefine();
+
+    if (enableRefineControl) {
+      const label = document.querySelector('.ais-control__label');
+      label.style.display = 'none';
+    }
   }
 };
 
