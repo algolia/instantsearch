@@ -48,8 +48,8 @@ const renderer = (
     items,
     refine,
     clearMapRefinement,
-    toggleRefinedOnMapMove,
-    isRefinedOnMapMove,
+    toggleRefineOnMapMove,
+    isRefineOnMapMove,
     setMapMoveSinceLastRefine,
     hasMapMoveSinceLastRefine,
     isRefinedWithMap,
@@ -117,15 +117,15 @@ const renderer = (
       const checkbox = document.createElement('input');
       checkbox.className = 'ais-control__checkbox';
       checkbox.type = 'checkbox';
-      checkbox.checked = isRefinedOnMapMove();
-      checkbox.addEventListener('change', toggleRefinedOnMapMove);
+      checkbox.checked = isRefineOnMapMove();
+      checkbox.addEventListener('change', toggleRefineOnMapMove);
       label.className = 'ais-control__label';
       label.appendChild(checkbox);
       label.append('Search as I move the map');
       containerControl.appendChild(label);
     }
 
-    if (enableRefineControl || !isRefinedOnMapMove()) {
+    if (enableRefineControl || !isRefineOnMapMove()) {
       const button = document.createElement('button');
       button.className = 'ais-control__button';
       button.textContent = 'Redo search here';
@@ -154,7 +154,7 @@ const renderer = (
     });
 
     renderState.map.on('moveend', () => {
-      if (renderState.isUserInteraction && isRefinedOnMapMove()) {
+      if (renderState.isUserInteraction && isRefineOnMapMove()) {
         refineWithMap({
           refine,
           paddingBoundingBox,
@@ -200,11 +200,11 @@ const renderer = (
 
     label.style.display = 'block';
     button.style.display = 'none';
-    checkbox.checked = isRefinedOnMapMove();
+    checkbox.checked = isRefineOnMapMove();
   }
 
   if (
-    !isRefinedOnMapMove() &&
+    !isRefineOnMapMove() &&
     (!enableRefineControl ||
       (enableRefineControl && hasMapMoveSinceLastRefine()))
   ) {

@@ -32,8 +32,8 @@ import { noop } from '../../lib/utils';
 //   items: Array<LatLng>,
 //   refine: (bounds: Bounds) => void,
 //   clearMapRefinement: () => void,
-//   toggleRefinedOnMapMove: () => void,
-//   isRefinedOnMapMove: () => boolean,
+//   toggleRefineOnMapMove: () => void,
+//   isRefineOnMapMove: () => boolean,
 //   setMapMoveSinceLastRefine: () => void,
 //   hasMapMoveSinceLastRefine: () => boolean,
 //   isRefinedWithMap: () => boolean,
@@ -61,7 +61,7 @@ export default function connectGeoSearch(fn) {
       lastRefinePosition: '',
       hasMapMoveSinceLastRefine: false,
       isRefinedWithMap: false,
-      isRefinedOnMapMove: enableRefineOnMapMove,
+      isRefineOnMapMove: enableRefineOnMapMove,
     };
 
     // Very hacky solution to be able to bind only once the value.... We
@@ -69,7 +69,7 @@ export default function connectGeoSearch(fn) {
     // situation a lot better.
     const fnState = {
       internalSetMapMoveSinceLastRefine: noop,
-      internalToggleRefinedOnMapMove: noop,
+      internalToggleRefineOnMapMove: noop,
     };
 
     // - refine
@@ -93,17 +93,16 @@ export default function connectGeoSearch(fn) {
       uiState.hasMapMoveSinceLastRefine = false;
     };
 
-    // - isRefinedOnMapMove
-    const isRefinedOnMapMove = () => uiState.isRefinedOnMapMove;
+    // - isRefineOnMapMove
+    const isRefineOnMapMove = () => uiState.isRefineOnMapMove;
 
-    const toggleRefinedOnMapMove = () =>
-      fnState.internalToggleRefinedOnMapMove();
+    const toggleRefineOnMapMove = () => fnState.internalToggleRefineOnMapMove();
 
-    const createInternalToggleRefinedOnMapMove = (
+    const createInternalToggleRefineOnMapMove = (
       renderFn,
       renderArgs
     ) => () => {
-      uiState.isRefinedOnMapMove = !uiState.isRefinedOnMapMove;
+      uiState.isRefineOnMapMove = !uiState.isRefineOnMapMove;
 
       renderFn(renderArgs);
     };
@@ -190,8 +189,8 @@ export default function connectGeoSearch(fn) {
           items: [],
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
-          toggleRefinedOnMapMove,
-          isRefinedOnMapMove,
+          toggleRefineOnMapMove,
+          isRefineOnMapMove,
           setMapMoveSinceLastRefine,
           hasMapMoveSinceLastRefine,
           isRefinedWithMap,
@@ -246,7 +245,7 @@ export default function connectGeoSearch(fn) {
         renderOptions
       );
 
-      fnState.internalToggleRefinedOnMapMove = createInternalToggleRefinedOnMapMove(
+      fnState.internalToggleRefineOnMapMove = createInternalToggleRefineOnMapMove(
         render,
         renderOptions
       );
@@ -256,8 +255,8 @@ export default function connectGeoSearch(fn) {
           items: results.hits.filter(_ => _._geoloc).map(_ => _._geoloc),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
-          toggleRefinedOnMapMove,
-          isRefinedOnMapMove,
+          toggleRefineOnMapMove,
+          isRefineOnMapMove,
           setMapMoveSinceLastRefine,
           hasMapMoveSinceLastRefine,
           isRefinedWithMap,
