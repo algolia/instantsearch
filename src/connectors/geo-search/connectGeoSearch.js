@@ -1,5 +1,7 @@
 import { noop } from '../../lib/utils';
 
+// type Hit = any;
+//
 // type LatLng = {
 //   lat: number,
 //   lng: number,
@@ -29,7 +31,7 @@ import { noop } from '../../lib/utils';
 // };
 //
 // type RenderingOptions = {
-//   items: Array<LatLng>,
+//   items: Array<Hit + LatLng>,
 //   refine: (bounds: Bounds) => void,
 //   clearMapRefinement: () => void,
 //   toggleRefineOnMapMove: () => void,
@@ -253,7 +255,7 @@ export default function connectGeoSearch(fn) {
 
       fn(
         {
-          items: results.hits.filter(_ => _._geoloc).map(_ => _._geoloc),
+          items: results.hits.filter(_ => _._geoloc),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           toggleRefineOnMapMove,

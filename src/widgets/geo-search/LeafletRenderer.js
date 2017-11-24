@@ -26,8 +26,8 @@ const removeMarkers = (markers = []) =>
   markers.forEach(marker => marker.remove());
 
 const addMarkers = (map, items) =>
-  items.map(({ name, lat, lng }) => {
-    const marker = L.marker([lat, lng]).addTo(map);
+  items.map(({ name, _geoloc }) => {
+    const marker = L.marker([_geoloc.lat, _geoloc.lng]).addTo(map);
 
     marker.bindPopup(L.popup().setContent(name));
 
