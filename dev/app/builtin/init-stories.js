@@ -1,4 +1,5 @@
 import initAnalyticsStories from './stories/analytics.stories';
+import initBreadcrumbStories from './stories/breadcrumb.stories.js';
 import initClearAllStories from './stories/clear-all.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
@@ -21,6 +22,7 @@ import initToggleStories from './stories/toggle.stories';
 
 export default () => {
   initAnalyticsStories();
+  initBreadcrumbStories();
   initClearAllStories();
   initCurrentRefinedValuesStories();
   initHierarchicalMenu();

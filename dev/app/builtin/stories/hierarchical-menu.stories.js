@@ -19,23 +19,22 @@ export default () => {
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-            showParentLevel: false,
           })
         );
       })
     )
     .add(
-      'hide parent levels',
+      'only show current level options',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
             container,
+            showParentLevel: false,
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-            showParentLevel: true,
           })
         );
       })
