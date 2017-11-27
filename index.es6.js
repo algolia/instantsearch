@@ -18,7 +18,7 @@ Object.defineProperty(instantSearchFactory, 'widgets', {
   get() {
     throw new ReferenceError(`
       You can't access to 'instantsearch.widgets' directly from the ES6 build.
-      Import the widgets this way 'import {SearchBox} from "instantsearch.js/widgets"'
+      Import the widgets this way "import { searchBox } from 'instantsearch.js/es/widgets'"
     `);
   },
 });
@@ -27,7 +27,7 @@ Object.defineProperty(instantSearchFactory, 'connectors', {
   get() {
     throw new ReferenceError(`
       You can't access to 'instantsearch.connectors' directly from the ES6 build.
-      Import the connectors this way 'import {connectSearchBox} from "instantsearch.js/connectors"'
+      Import the connectors this way "import { connectSearchBox } from 'instantsearch.js/es/connectors'"
     `);
   },
 });
