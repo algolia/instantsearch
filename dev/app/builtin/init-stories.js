@@ -12,6 +12,7 @@ import initNumericRefinementListStories from './stories/numeric-refinement-list.
 import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
+import initRangeInputStories from './stories/range-input.stories.js';
 import initRangeSliderStories from './stories/range-slider.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
@@ -35,6 +36,7 @@ export default () => {
   initNumericSelectorStories();
   initPaginationStories();
   initPriceRangesStories();
+  initRangeInputStories();
   initRangeSliderStories();
   initRefinementListStories();
   initSearchBoxStories();
