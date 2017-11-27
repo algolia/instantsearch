@@ -181,9 +181,11 @@ Usage: instantsearch({
       // re-compute remaining widgets to the state
       // in a case two widgets were using the same configuration but we removed one
       if (nextState) {
-        this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
-          ...nextState,
-        });
+        // We dont want to re-add URlSync `getConfiguration` widget
+        // it can throw errors since it may re-add SearchParameters about something unmounted
+        this.searchParameters = this.widgets
+          .filter(w => w.constructor.name !== 'URLSync')
+          .reduce(enhanceConfiguration({}), { ...nextState });
 
         this.helper.setState(this.searchParameters);
       }
@@ -272,11 +274,7 @@ Usage: instantsearch({
    * @return {undefined} This method does not return anything
    */
   dispose() {
-    this.removeWidgets(
-      this.widgets
-        .slice()
-        .sort(widget => (widget.constructor.name === 'URLSync' ? -1 : 1))
-    );
+    this.removeWidgets(this.widgets);
   }
 
   createURL(params) {
