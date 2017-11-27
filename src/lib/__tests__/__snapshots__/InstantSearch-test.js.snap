@@ -176,6 +176,7 @@ Array [
           -1,
         ],
       },
+      "started": true,
       "templatesConfig": Object {
         "compileOptions": Object {},
         "helpers": Object {
