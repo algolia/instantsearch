@@ -13,8 +13,8 @@
     "react": "16.1.1",
     "react-autosuggest": "9.3.2",
     "react-dom": "16.1.1",
-    "react-instantsearch": "4.2.0",
-    "react-instantsearch-theme-algolia": "4.2.0"
+    "react-instantsearch": "4.3.0-beta.0",
+    "react-instantsearch-theme-algolia": "4.3.0-beta.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -26,7 +26,9 @@
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
     },
-    "setupFiles": ["../../../../shim.js"],
+    "setupFiles": [
+      "../../../../shim.js"
+    ],
     "testEnvironment": "jest-environment-jsdom-11.0.0"
   },
   "main": "index.js",
