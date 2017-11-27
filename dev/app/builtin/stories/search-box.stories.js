@@ -94,5 +94,32 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with a provided input',
+      wrapWithHits(container => {
+        container.innerHTML = '<input/>';
+        const input = container.firstChild;
+        container.appendChild(input);
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container: input,
+          })
+        );
+      })
+    )
+    .add(
+      'with a provided input and the loading indicator',
+      wrapWithHits(container => {
+        container.innerHTML = '<input/>';
+        const input = container.firstChild;
+        container.appendChild(input);
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container: input,
+            loadingIndicator: true,
+          })
+        );
+      })
     );
 };
