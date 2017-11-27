@@ -8,6 +8,7 @@
 @import 'numeric-selector';
 @import 'pagination';
 @import 'price-ranges';
+@import 'range-input';
 @import 'range-slider';
 @import 'search-box';
 @import 'sort-by-selector';
@@ -15,6 +16,7 @@
 @import 'stats';
 @import 'toggle';
 @import 'menu-select';
+@import 'breadcrumb';
 
 [class^="ais-"] {
   box-sizing: border-box;

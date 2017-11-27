@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import PriceRanges from '../../components/PriceRanges/PriceRanges.js';
@@ -189,7 +189,9 @@ export default function priceRanges(
   });
 
   try {
-    const makeWidget = connectPriceRanges(specializedRenderer);
+    const makeWidget = connectPriceRanges(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget({ attributeName });
   } catch (e) {
     throw new Error(usage);

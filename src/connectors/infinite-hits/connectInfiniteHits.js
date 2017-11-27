@@ -40,6 +40,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * This connector provides a `InfiniteHitsRenderingOptions.showMore()` function to load next page of matched results.
  * @type {Connector}
  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn Rendering function for the custom **InfiniteHits** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomInfiniteHitsWidgetOptions)} Re-usable widget factory for a custom **InfiniteHits** widget.
  * @example
  * // custom `renderFn` to render the custom InfiniteHits widget
@@ -73,7 +74,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectInfiniteHits(renderFn) {
+export default function connectInfiniteHits(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -129,6 +130,10 @@ export default function connectInfiniteHits(renderFn) {
           },
           false
         );
+      },
+
+      dispose() {
+        unmountFn();
       },
     };
   };

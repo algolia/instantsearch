@@ -33,6 +33,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *
  * @type {Connector}
  * @param {function(StatsRenderingOptions, boolean)} renderFn Rendering function for the custom **Stats** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function} Re-usable widget factory for a custom **Stats** widget.
  * @example
  * // custom `renderFn` to render the custom Stats widget
@@ -53,7 +54,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectStats(renderFn) {
+export default function connectStats(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => ({
@@ -87,6 +88,10 @@ export default function connectStats(renderFn) {
         },
         false
       );
+    },
+
+    dispose() {
+      unmountFn();
     },
   });
 }

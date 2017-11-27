@@ -1,3 +1,6 @@
+import find from 'lodash/find';
+import isEqual from 'lodash/isEqual';
+
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -65,9 +68,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
   *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
   * @type {Connector}
   * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
+  * @param {function} unmountFn Unmount function called when the widget is disposed.
   * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
   */
-export default function connectHierarchicalMenu(renderFn) {
+export default function connectHierarchicalMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -90,25 +94,48 @@ export default function connectHierarchicalMenu(renderFn) {
     const [hierarchicalFacetName] = attributes;
 
     return {
-      getConfiguration: currentConfiguration => ({
-        hierarchicalFacets: [
-          {
-            name: hierarchicalFacetName,
-            attributes,
-            separator,
-            rootPath,
-            showParentLevel,
-          },
-        ],
-        maxValuesPerFacet:
-          currentConfiguration.maxValuesPerFacet !== undefined
-            ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
-            : limit,
-      }),
+      getConfiguration: currentConfiguration => {
+        if (currentConfiguration.hierarchicalFacets) {
+          const isFacetSet = find(
+            currentConfiguration.hierarchicalFacets,
+            ({ name }) => name === hierarchicalFacetName
+          );
+          if (
+            isFacetSet &&
+            !(
+              isEqual(isFacetSet.attributes, attributes) &&
+              isFacetSet.separator === separator
+            )
+          ) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              'using Breadcrumb & HierarchicalMenu on the same facet with different options'
+            );
+            return {};
+          }
+        }
+
+        return {
+          hierarchicalFacets: [
+            {
+              name: hierarchicalFacetName,
+              attributes,
+              separator,
+              rootPath,
+              showParentLevel,
+            },
+          ],
+          maxValuesPerFacet:
+            currentConfiguration.maxValuesPerFacet !== undefined
+              ? Math.max(currentConfiguration.maxValuesPerFacet, limit)
+              : limit,
+        };
+      },
 
       init({ helper, createURL, instantSearchInstance }) {
-        this._refine = facetValue =>
+        this._refine = function(facetValue) {
           helper.toggleRefinement(hierarchicalFacetName, facetValue).search();
+        };
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
@@ -163,6 +190,22 @@ export default function connectHierarchicalMenu(renderFn) {
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        // unmount widget from DOM
+        unmountFn();
+
+        // compute nextState for the search
+        const nextState = state
+          .removeHierarchicalFacetRefinement(hierarchicalFacetName)
+          .removeHierarchicalFacet(hierarchicalFacetName);
+
+        if (nextState.maxValuesPerFacet === limit) {
+          nextState.setQueryParameters('maxValuesPerFacet', undefined);
+        }
+
+        return nextState;
       },
     };
   };

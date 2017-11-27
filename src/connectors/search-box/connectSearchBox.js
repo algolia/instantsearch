@@ -47,6 +47,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * may be impacted by the `queryHook` widget parameter.
  * @type {Connector}
  * @param {function(SearchBoxRenderingOptions, boolean)} renderFn Rendering function for the custom **SearchBox** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomSearchBoxWidgetOptions)} Re-usable widget factory for a custom **SearchBox** widget.
  * @example
  * // custom `renderFn` to render the custom SearchBox widget
@@ -74,7 +75,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectSearchBox(renderFn) {
+export default function connectSearchBox(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -144,6 +145,11 @@ export default function connectSearchBox(renderFn) {
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        unmountFn();
+        return state.setQuery('');
       },
     };
   };

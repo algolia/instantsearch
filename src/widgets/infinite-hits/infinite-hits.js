@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import InfiniteHits from '../../components/InfiniteHits.js';
@@ -143,7 +143,9 @@ export default function infiniteHits(
   });
 
   try {
-    const makeInfiniteHits = connectInfiniteHits(specializedRenderer);
+    const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeInfiniteHits({ escapeHits });
   } catch (e) {
     throw new Error(usage);

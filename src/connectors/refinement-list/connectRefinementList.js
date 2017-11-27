@@ -1,4 +1,5 @@
 import { checkRendering } from '../../lib/utils.js';
+import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
 
 const usage = `Usage:
 var customRefinementList = connectRefinementList(function render(params) {
@@ -21,7 +22,8 @@ search.addWidget(
     [ operator = 'or' ],
     [ limit ],
     [ showMoreLimit ],
-    [ sortBy = ['isRefined', 'count:desc', 'name:asc']],
+    [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
+    [ escapeFacetValues = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html
@@ -63,6 +65,7 @@ export const checkUsage = ({
  * @property {number} [showMoreLimit] The max number of items to display if the widget
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @property {boolean} [escapeFacetValues = false] Escapes the content of the facet values.
  */
 
 /**
@@ -88,6 +91,7 @@ export const checkUsage = ({
   * function to select an item.
  * @type {Connector}
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomRefinementListWidgetOptions)} Re-usable widget factory for a custom **RefinementList** widget.
  * @example
  * // custom `renderFn` to render the custom RefinementList widget
@@ -141,7 +145,7 @@ export const checkUsage = ({
  *   })
  * );
  */
-export default function connectRefinementList(renderFn) {
+export default function connectRefinementList(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -151,6 +155,7 @@ export default function connectRefinementList(renderFn) {
       limit = 10,
       showMoreLimit,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
+      escapeFacetValues = false,
     } = widgetParams;
 
     checkUsage({ attributeName, operator, usage, limit, showMoreLimit });
@@ -237,25 +242,42 @@ export default function connectRefinementList(renderFn) {
           hasExhaustiveItems: false, // SFFV should not be used with show more
         });
       } else {
-        helper.searchForFacetValues(attributeName, query).then(results => {
-          const facetValues = results.facetHits.map(({ value, ...item }) => ({
-            ...item,
-            value,
-            label: value,
-          }));
+        const tags = {
+          highlightPreTag: escapeFacetValues
+            ? tagConfig.highlightPreTag
+            : undefined,
+          highlightPostTag: escapeFacetValues
+            ? tagConfig.highlightPostTag
+            : undefined,
+        };
 
-          render({
-            items: facetValues,
-            state,
-            createURL,
-            helperSpecializedSearchFacetValues,
-            refine: toggleRefinement,
-            isFromSearch: true,
-            isFirstSearch: false,
-            instantSearchInstance,
-            hasExhaustiveItems: false, // SFFV should not be used with show more
+        helper
+          .searchForFacetValues(attributeName, query, limit, tags)
+          .then(results => {
+            const facetValues = escapeFacetValues
+              ? escapeFacets(results.facetHits)
+              : results.facetHits;
+
+            const normalizedFacetValues = facetValues.map(
+              ({ value, ...item }) => ({
+                ...item,
+                value,
+                label: value,
+              })
+            );
+
+            render({
+              items: normalizedFacetValues,
+              state,
+              createURL,
+              helperSpecializedSearchFacetValues,
+              refine: toggleRefinement,
+              isFromSearch: true,
+              isFirstSearch: false,
+              instantSearchInstance,
+              hasExhaustiveItems: false, // SFFV should not be used with show more
+            });
           });
-        });
       }
     };
 
@@ -305,6 +327,7 @@ export default function connectRefinementList(renderFn) {
 
         return widgetConfiguration;
       },
+
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
@@ -327,6 +350,7 @@ export default function connectRefinementList(renderFn) {
           hasExhaustiveItems: true,
         });
       },
+
       render(renderOptions) {
         const {
           results,
@@ -370,6 +394,20 @@ export default function connectRefinementList(renderFn) {
           toggleShowMore: this.cachedToggleShowMore,
           hasExhaustiveItems,
         });
+      },
+
+      dispose({ state }) {
+        unmountFn();
+
+        if (operator === 'and') {
+          return state
+            .removeFacetRefinement(attributeName)
+            .removeFacet(attributeName);
+        } else {
+          return state
+            .removeDisjunctiveFacetRefinement(attributeName)
+            .removeDisjunctiveFacet(attributeName);
+        }
       },
     };
   };

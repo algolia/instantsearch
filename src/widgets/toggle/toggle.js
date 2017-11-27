@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import defaultTemplates from './defaultTemplates.js';
@@ -197,7 +197,9 @@ export default function toggle(
   });
 
   try {
-    const makeWidget = connectToggle(specializedRenderer);
+    const makeWidget = connectToggle(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget({ attributeName, label, values: userValues });
   } catch (e) {
     throw new Error(usage);
