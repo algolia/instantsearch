@@ -144,10 +144,14 @@ function renderAfterInit({
   }
 
   if (loadingIndicator) {
+    const rootElement =
+      containerNode.tagName === 'INPUT'
+        ? containerNode.parentNode
+        : containerNode.firstChild;
     if (isSearchStalled) {
-      containerNode.firstChild.classList.add('stalled-search');
+      rootElement.classList.add('ais-stalled-search');
     } else {
-      containerNode.firstChild.classList.remove('stalled-search');
+      rootElement.classList.remove('ais-stalled-search');
     }
   }
 }
