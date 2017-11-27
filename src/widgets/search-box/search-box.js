@@ -190,7 +190,7 @@ searchBox({
 /**
  * @typedef {Object} SearchBoxLoadingIndicatorOption
  * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
+ * @property {{root: string}} [cssClasses] CSS classes added to the loading-indicator element.
  */
 
 /**
