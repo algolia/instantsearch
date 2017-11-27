@@ -207,7 +207,7 @@ searchBox({
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
- * @property  {boolean|SearchBoxResetOption} [reset=false] Define if a reset button should be added in the input when there is a query.
+ * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
  * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
  * @property  {boolean|SearchBoxLoadingIndicatorOption} [loadingIndicator=false] Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
  * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
@@ -237,7 +237,7 @@ searchBox({
  *     placeholder: 'Search for products',
  *     autofocus: false,
  *     poweredBy: true,
- *     reset: false,
+ *     reset: true,
  *     loadingIndicator: false
  *   })
  * );
