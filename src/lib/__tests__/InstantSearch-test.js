@@ -369,12 +369,12 @@ describe('InstantSearch lifecycle', () => {
         facets: ['categories'],
         maxValuesPerFacet: 10,
       },
-      dispose = sinon.spy()
+      dispose = jest.fn()
     ) {
       const widget = {
-        getConfiguration: sinon.stub().returns(widgetGetConfiguration),
-        init: sinon.spy(),
-        render: sinon.spy(),
+        getConfiguration: jest.fn(() => widgetGetConfiguration),
+        init: jest.fn(),
+        render: jest.fn(),
         dispose,
       };
 
@@ -525,6 +525,44 @@ describe('InstantSearch lifecycle', () => {
       expect(search.widgets.length).toBe(0);
       expect(search.searchParameters.numericRefinements).toEqual({});
       expect(search.searchParameters.disjunctiveFacets).toEqual([]);
+    });
+
+    it('should unmount a widget without calling URLSync wiget getConfiguration', () => {
+      // fake url-sync widget
+      const spy = jest.fn();
+
+      class URLSync {
+        constructor() {
+          this.getConfiguration = spy;
+          this.init = jest.fn();
+          this.render = jest.fn();
+          this.dispose = jest.fn();
+        }
+      }
+
+      const urlSyncWidget = new URLSync();
+      expect(urlSyncWidget.constructor.name).toEqual('URLSync');
+
+      search.addWidget(urlSyncWidget);
+
+      // add fake widget to dispose
+      // that returns a `nextState` while dispose
+      const widget1 = registerWidget(
+        undefined,
+        jest.fn(({ state: nextState }) => nextState)
+      );
+
+      const widget2 = registerWidget();
+      search.start();
+
+      // remove widget1
+      search.removeWidget(widget1);
+
+      // it should have been called only once after start();
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      // but widget2 getConfiguration() should have been called twice
+      expect(widget2.getConfiguration).toHaveBeenCalledTimes(2);
     });
   });
 
