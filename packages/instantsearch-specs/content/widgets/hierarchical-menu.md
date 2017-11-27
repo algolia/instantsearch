@@ -7,14 +7,14 @@ html: |
       Hierarchical menu
     </div>
     <div class="ais-HierarchicalMenu-body ais-body">
-      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
+      <ul class="ais-HierarchicalMenu-list">
         <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
           <a class="ais-HierarchicalMenu-link" href="#">
             <span class="ais-HierarchicalMenu-label">Appliances</span>
             <span class="ais-HierarchicalMenu-count">4,306</span>
           </a>
-          <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl1">
-            <li class="ais-HierarchicalMenu-item">
+          <ul class="ais-HierarchicalMenu-list">
+            <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
               <a class="ais-HierarchicalMenu-link" href="#">
                 <span class="ais-HierarchicalMenu-label">Dishwashers</span>
                 <span class="ais-HierarchicalMenu-count">181</span>
@@ -49,10 +49,6 @@ classes:
     description: the body of the widget
   - name: .ais-HierarchicalMenu-list
     description: the list of menu items
-  - name: .ais-HierarchicalMenu-list--lvl0
-    description: the first level of menu items
-  - name: .ais-HierarchicalMenu-list--lvlx
-    description: the x nested level of menu items
   - name: .ais-HierarchicalMenu-item
     description: the menu list item
   - name: .ais-HierarchicalMenu-item--selected

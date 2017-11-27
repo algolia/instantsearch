@@ -299,8 +299,8 @@ a[class^='ais-'],
 }
 
 .ais-PoweredBy-text,
-.ais-RangeSlider-tooltip,
-.ais-RangeSlider-value,
+.rheostat-tooltip,
+.rheostat-value,
 .ais-Stats-text {
   font-size: 0.8rem;
 }
@@ -315,11 +315,11 @@ a[class^='ais-'],
   }
 }
 
-.ais-RangeSlider-handle {
+.rheostat-handle {
   border-color: darken($ghost, 20%);
 }
 
-.ais-RangeSlider-marker {
+.rheostat-marker {
   background-color: darken($ghost, 20%);
 }
 
