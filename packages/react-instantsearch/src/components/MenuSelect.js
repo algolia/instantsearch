@@ -16,7 +16,10 @@ class MenuSelect extends Component {
       PropTypes.shape({
         label: PropTypes.string.isRequired,
         value: PropTypes.string.isRequired,
-        count: PropTypes.number.isRequired,
+        count: PropTypes.oneOfType([
+          PropTypes.number.isRequired,
+          PropTypes.string.isRequired,
+        ]),
         isRefined: PropTypes.bool.isRequired,
       })
     ),
