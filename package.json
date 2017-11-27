@@ -129,7 +129,7 @@
     "webpack": "3.8.1",
     "webpack-bundle-analyzer": "2.9.1",
     "webpack-dev-middleware": "1.12.1",
-    "webpack-hot-middleware": "2.20.0"
+    "webpack-hot-middleware": "2.21.0"
   },
   "engines": {
     "node": "8.6.0",
