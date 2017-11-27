@@ -1,3 +1,20 @@
+<a name="4.3.0-beta.0"></a>
+# [4.3.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v4.2.0...v4.3.0-beta.0) (2017-11-27)
+
+
+### Bug Fixes
+
+* **babelrc:** add a key for each env development, production, es ([#547](https://github.com/algolia/react-instantsearch/issues/547)) ([fa9528d](https://github.com/algolia/react-instantsearch/commit/fa9528d))
+* **localizecount:** allow localized string for count in MenuSelect ([#657](https://github.com/algolia/react-instantsearch/issues/657)) ([67ebd34](https://github.com/algolia/react-instantsearch/commit/67ebd34))
+* **react-router-example:** Properly update search query when using browser navigation ([#604](https://github.com/algolia/react-instantsearch/issues/604)) ([9ee6600](https://github.com/algolia/react-instantsearch/commit/9ee6600))
+
+
+### Features
+
+* **refreshcache:** add prop refresh to InstantSearch instance ([#619](https://github.com/algolia/react-instantsearch/issues/619)) ([19f6de0](https://github.com/algolia/react-instantsearch/commit/19f6de0))
+
+
+
 <a name="4.2.0"></a>
 # [4.2.0](https://github.com/algolia/react-instantsearch/compare/v4.1.3...v4.2.0) (2017-11-02)
 
