@@ -9,10 +9,10 @@ html: |
     <div class="ais-Pagination-body ais-body">
       <ul class="ais-Pagination-list">
         <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
-          <span class="ais-Pagination-link" aria-label="Previous">‹‹</a>
+          <span class="ais-Pagination-link" aria-label="Previous">‹‹</span>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
-          <span class="ais-Pagination-link" aria-label="Previous">‹</a>
+          <span class="ais-Pagination-link" aria-label="Previous">‹</span>
         </li>
         <li class="ais-Pagination-item ais-Pagination-item--selected">
           <a class="ais-Pagination-link" href="#">1</a>

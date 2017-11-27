@@ -8,11 +8,13 @@ html: |
     </div>
     <div class="ais-RangeInput-body ais-body">
       <form class="ais-RangeInput-form">
-        <label class="ais-RangeInput-label"><span class="ais-RangeInput-currency">$ </span>
+        <label class="ais-RangeInput-label">
+          <span class="ais-RangeInput-currency">$</span>
           <input class="ais-RangeInput-input" type="number" />
         </label>
-        <span class="ais-RangeInput-separator"> to </span>
-        <label class="ais-RangeInput-label"><span class="ais-RangeInput-currency">$ </span>
+        <span class="ais-RangeInput-separator">to</span>
+        <label class="ais-RangeInput-label">
+          <span class="ais-RangeInput-currency">$</span>
           <input class="ais-RangeInput-input" type="number" />
         </label>
         <button class="ais-RangeInput-submit" type="submit">Go</button>

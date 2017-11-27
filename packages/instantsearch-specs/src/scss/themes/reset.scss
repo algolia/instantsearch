@@ -120,7 +120,7 @@
   }
 }
 
-.ais-RangeSlider-handle {
+.rheostat-handle {
   position: relative;
   z-index: 1;
   width: 20px;
@@ -131,7 +131,7 @@
   cursor: grab;
 }
 
-.ais-RangeSlider-marker {
+.rheostat-marker {
   margin-left: -1px;
   position: absolute;
   width: 1px;
@@ -139,11 +139,11 @@
   background-color: #aaa;
 }
 
-.ais-RangeSlider-marker--large {
+.rheostat-marker--large {
   height: 9px;
 }
 
-.ais-RangeSlider-value {
+.rheostat-value {
   margin-left: 50%;
   padding-top: 15px;
   position: absolute;
@@ -151,7 +151,7 @@
   transform: translateX(-50%);
 }
 
-.ais-RangeSlider-tooltip {
+.rheostat-tooltip {
   margin-left: 50%;
   position: absolute;
   top: -22px;
