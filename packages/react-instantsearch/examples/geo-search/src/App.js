@@ -32,10 +32,13 @@ class App extends Component {
 
   // when a click on the map is performed, the query is reset and the aroundLatLng property updated.
   onLatLngChange({ lat, lng }) {
-    this.setState({
-      searchState: { ...this.state.searchState, query: '' },
+    this.setState(prevState => ({
+      searchState: {
+        ...prevState.searchState,
+        query: '',
+      },
       aroundLatLng: `${lat},${lng}`,
-    });
+    }));
   }
 
   onSearchStateChange(searchState) {
