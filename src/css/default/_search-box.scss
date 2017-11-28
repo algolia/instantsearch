@@ -29,6 +29,21 @@
     }
   }
 
+  @include element(loading-indicator-wrapper) {
+    display: none;
+    background: transparent;
+    position: absolute;
+    user-select: none;
+    top: 4px;
+    left: 7px;
+
+    svg {
+      vertical-align: middle;
+      height: 14px;
+      width: 14px;
+    }
+  }
+
   @include element(reset) {
     background: none;
     cursor: pointer;
@@ -69,3 +84,14 @@
     vertical-align: middle;
   }
 }
+
+.ais-search-box.ais-stalled-search {
+  .ais-search-box--magnifier-wrapper {
+    display: none;
+  }
+
+  .ais-search-box--loading-indicator-wrapper {
+    display: block;
+  }
+}
+

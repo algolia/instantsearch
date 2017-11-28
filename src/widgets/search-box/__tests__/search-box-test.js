@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-import expect from 'expect';
 import searchBox from '../search-box';
 import EventEmitter from 'events';
 import expectJSX from 'expect-jsx';
@@ -24,8 +22,8 @@ describe('searchBox()', () => {
       query: '',
     };
     helper = {
-      setQuery: sinon.spy(),
-      search: sinon.spy(),
+      setQuery: jest.fn(),
+      search: jest.fn(),
       state: {
         query: '',
       },
@@ -248,8 +246,8 @@ describe('searchBox()', () => {
       $('.ais-search-box--reset-wrapper')[0].click();
 
       // Then
-      expect(helper.setQuery.called).toBe(true);
-      expect(helper.search.called).toBe(true);
+      expect(helper.setQuery).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
     });
 
     it('should let the user define its own string template', () => {
@@ -522,18 +520,18 @@ describe('searchBox()', () => {
 
       it('performs a search on any change', () => {
         simulateInputEvent('test', 'tes', widget, helper, state, container);
-        expect(helper.search.called).toBe(true);
+        expect(helper.search).toHaveBeenCalled();
       });
 
       it('sets the query on any change', () => {
         simulateInputEvent('test', 'tes', widget, helper, state, container);
-        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.setQuery).toHaveBeenCalledTimes(1);
       });
 
       it('does nothing when query is the same as state', () => {
         simulateInputEvent('test', 'test', widget, helper, state, container);
-        expect(helper.setQuery.calledOnce).toBe(false);
-        expect(helper.search.called).toBe(false);
+        expect(helper.setQuery).not.toHaveBeenCalled();
+        expect(helper.search).not.toHaveBeenCalled();
       });
     });
 
@@ -544,17 +542,17 @@ describe('searchBox()', () => {
       });
 
       it('updates the query', () => {
-        expect(helper.setQuery.callCount).toBe(1);
+        expect(helper.setQuery).toHaveBeenCalledTimes(1);
       });
 
       it('does not search', () => {
-        expect(helper.search.callCount).toBe(0);
+        expect(helper.search).toHaveBeenCalledTimes(0);
       });
     });
 
     describe('using a queryHook', () => {
       it('calls the queryHook', () => {
-        const queryHook = sinon.spy();
+        const queryHook = jest.fn();
         widget = searchBox({ container, queryHook });
         simulateInputEvent(
           'queryhook input',
@@ -564,35 +562,35 @@ describe('searchBox()', () => {
           state,
           container
         );
-        expect(queryHook.calledOnce).toBe(true);
-        expect(queryHook.firstCall.args[0]).toBe('queryhook input');
-        expect(queryHook.firstCall.args[1]).toBeA(Function);
+        expect(queryHook).toHaveBeenCalledTimes(1);
+        expect(queryHook).toHaveBeenLastCalledWith(
+          'queryhook input',
+          expect.any(Function)
+        );
       });
 
       it('does not perform a search by default', () => {
-        const queryHook = sinon.spy();
+        const queryHook = jest.fn();
         widget = searchBox({ container, queryHook });
         simulateInputEvent('test', 'tes', widget, helper, state, container);
-        expect(helper.setQuery.calledOnce).toBe(false);
-        expect(helper.search.called).toBe(false);
+        expect(helper.setQuery).toHaveBeenCalledTimes(0);
+        expect(helper.search).not.toHaveBeenCalled();
       });
 
       it('when calling the provided search function', () => {
-        const queryHook = sinon.spy((query, search) => search(query));
+        const queryHook = jest.fn((query, search) => search(query));
         widget = searchBox({ container, queryHook });
         simulateInputEvent('oh rly?', 'tes', widget, helper, state, container);
-        expect(helper.setQuery.calledOnce).toBe(true);
-        expect(helper.setQuery.firstCall.args[0]).toBe('oh rly?');
-        expect(helper.search.called).toBe(true);
+        expect(helper.setQuery).toHaveBeenCalledTimes(1);
+        expect(helper.setQuery).toHaveBeenLastCalledWith('oh rly?');
+        expect(helper.search).toHaveBeenCalled();
       });
 
       it('can override the query', () => {
-        const queryHook = sinon.spy((originalQuery, search) =>
-          search('hi mom!')
-        );
+        const queryHook = jest.fn((originalQuery, search) => search('hi mom!'));
         widget = searchBox({ container, queryHook });
         simulateInputEvent('come.on.', 'tes', widget, helper, state, container);
-        expect(helper.setQuery.firstCall.args[0]).toBe('hi mom!');
+        expect(helper.setQuery).toHaveBeenLastCalledWith('hi mom!');
       });
     });
   });
@@ -609,7 +607,7 @@ describe('searchBox()', () => {
 
       it('do not perform the search on keyup event (should be done by input event)', () => {
         simulateKeyUpEvent({}, widget, helper, state, container);
-        expect(helper.search.called).toBe(false);
+        expect(helper.search).not.toHaveBeenCalled();
       });
     });
 
@@ -627,8 +625,8 @@ describe('searchBox()', () => {
         const e1 = new window.Event('input');
         container.dispatchEvent(e1);
 
-        expect(helper.setQuery.callCount).toBe(1);
-        expect(helper.search.callCount).toBe(0);
+        expect(helper.setQuery).toHaveBeenCalledTimes(1);
+        expect(helper.search).toHaveBeenCalledTimes(0);
 
         // setQuery is mocked and does not apply the modification of the helper
         // we have to set it ourselves
@@ -638,8 +636,8 @@ describe('searchBox()', () => {
         Object.defineProperty(e2, 'keyCode', { get: () => 13 });
         container.dispatchEvent(e2);
 
-        expect(helper.setQuery.callCount).toBe(1);
-        expect(helper.search.callCount).toBe(1);
+        expect(helper.setQuery).toHaveBeenCalledTimes(1);
+        expect(helper.search).toHaveBeenCalledTimes(1);
       });
 
       it("doesn't perform the search on keyup if not <ENTER>", () => {
@@ -648,8 +646,8 @@ describe('searchBox()', () => {
         Object.defineProperty(event, 'keyCode', { get: () => 42 });
         container.dispatchEvent(event);
 
-        expect(helper.setQuery.callCount).toBe(0);
-        expect(helper.search.callCount).toBe(0);
+        expect(helper.setQuery).toHaveBeenCalledTimes(0);
+        expect(helper.search).toHaveBeenCalledTimes(0);
       });
     });
   });
@@ -677,7 +675,10 @@ describe('searchBox()', () => {
     widget = searchBox({ container });
     widget.init({ state, helper, onHistoryChange });
     container.blur();
-    widget.render({ helper: { state: { query: 'new value' } } });
+    widget.render({
+      helper: { state: { query: 'new value' } },
+      searchMetadata: { isSearchStalled: false },
+    });
     expect(container.value).toBe('new value');
   });
 
@@ -688,15 +689,18 @@ describe('searchBox()', () => {
     widget = searchBox({ container });
     widget.init({ state, helper, onHistoryChange });
     input.focus();
-    widget.render({ helper: { state: { query: 'new value' } } });
+    widget.render({
+      helper: { state: { query: 'new value' } },
+      searchMetadata: { isSearchStalled: false },
+    });
     expect(container.value).toBe('initial');
   });
 
   describe('autofocus', () => {
     beforeEach(() => {
       container = document.body.appendChild(document.createElement('input'));
-      container.focus = sinon.spy();
-      container.setSelectionRange = sinon.spy();
+      container.focus = jest.fn();
+      container.setSelectionRange = jest.fn();
     });
 
     describe('when auto', () => {
@@ -710,7 +714,7 @@ describe('searchBox()', () => {
         // When
         widget.init({ state, helper, onHistoryChange });
         // Then
-        expect(container.focus.called).toEqual(true);
+        expect(container.focus).toHaveBeenCalled();
       });
 
       it('is not called if search is not empty', () => {
@@ -719,7 +723,7 @@ describe('searchBox()', () => {
         // When
         widget.init({ state, helper, onHistoryChange });
         // Then
-        expect(container.focus.called).toEqual(false);
+        expect(container.focus).not.toHaveBeenCalled();
       });
     });
 
@@ -734,7 +738,7 @@ describe('searchBox()', () => {
         // When
         widget.init({ state, helper, onHistoryChange });
         // Then
-        expect(container.focus.called).toEqual(true);
+        expect(container.focus).toHaveBeenCalled();
       });
 
       it('is called if search is not empty', () => {
@@ -743,7 +747,7 @@ describe('searchBox()', () => {
         // When
         widget.init({ state, helper, onHistoryChange });
         // Then
-        expect(container.focus.called).toEqual(true);
+        expect(container.focus).toHaveBeenCalled();
       });
 
       it('forces cursor to be at the end of the query', () => {
@@ -752,7 +756,7 @@ describe('searchBox()', () => {
         // When
         widget.init({ state, helper, onHistoryChange });
         // Then
-        expect(container.setSelectionRange.calledWith(3, 3)).toEqual(true);
+        expect(container.setSelectionRange).toHaveBeenLastCalledWith(3, 3);
       });
     });
 
@@ -767,7 +771,7 @@ describe('searchBox()', () => {
         // When
         widget.init({ state, helper, onHistoryChange });
         // Then
-        expect(container.focus.called).toEqual(false);
+        expect(container.focus).not.toHaveBeenCalled();
       });
 
       it('is not called if search is not empty', () => {
@@ -776,7 +780,7 @@ describe('searchBox()', () => {
         // When
         widget.init({ state, helper, onHistoryChange });
         // Then
-        expect(container.focus.called).toEqual(false);
+        expect(container.focus).not.toHaveBeenCalled();
       });
     });
   });

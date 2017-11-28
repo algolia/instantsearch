@@ -67,6 +67,7 @@ import * as widgets from '../widgets/index.js';
  * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
  * @property {boolean|UrlSyncOptions} [urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
+ * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
  */
 
 /**

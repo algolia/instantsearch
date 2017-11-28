@@ -42,6 +42,7 @@ class InstantSearch extends EventEmitter {
     urlSync = null,
     searchFunction,
     createAlgoliaClient = defaultCreateAlgoliaClient,
+    stalledSearchDelay = 200,
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
@@ -66,6 +67,7 @@ Usage: instantsearch({
       helpers: createHelpers({ numberLocale }),
       compileOptions: {},
     };
+    this._stalledSearchDelay = stalledSearchDelay;
 
     if (searchFunction) {
       this._searchFunction = searchFunction;
@@ -260,7 +262,24 @@ Usage: instantsearch({
     this.helper = helper;
     this._init(helper.state, this.helper);
     this.helper.on('result', this._render.bind(this, this.helper));
+
+    this._searchStalledTimer = null;
+    this._isSearchStalled = false;
+
     this.helper.search();
+
+    this.helper.on('search', () => {
+      if (!this._searchStalledTimer) {
+        this._searchStalledTimer = setTimeout(() => {
+          this._isSearchStalled = true;
+          this._render(
+            this.helper,
+            this.helper.lastResults,
+            this.helper.lastResults._state
+          );
+        }, this._stalledSearchDelay);
+      }
+    });
 
     // track we started the search if we add more widgets,
     // to init them directly after add
@@ -285,6 +304,12 @@ Usage: instantsearch({
   }
 
   _render(helper, results, state) {
+    if (!this.helper.hasPendingRequests()) {
+      clearTimeout(this._searchStalledTimer);
+      this._searchStalledTimer = null;
+      this._isSearchStalled = false;
+    }
+
     forEach(this.widgets, widget => {
       if (!widget.render) {
         return;
@@ -296,6 +321,9 @@ Usage: instantsearch({
         helper,
         createURL: this._createAbsoluteURL,
         instantSearchInstance: this,
+        searchMetadata: {
+          isSearchStalled: this._isSearchStalled,
+        },
       });
     });
 

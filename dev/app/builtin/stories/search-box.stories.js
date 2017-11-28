@@ -21,6 +21,34 @@ export default () => {
       })
     )
     .add(
+      'display loading indicator',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container,
+            placeholder: 'Search for products',
+            poweredBy: true,
+            loadingIndicator: true,
+          })
+        );
+      })
+    )
+    .add(
+      'display loading indicator with a template',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container,
+            placeholder: 'Search for products',
+            poweredBy: true,
+            loadingIndicator: {
+              template: '⚡️',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with custom templates',
       wrapWithHits(container => {
         window.search.addWidget(
@@ -63,6 +91,33 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container: input,
+          })
+        );
+      })
+    )
+    .add(
+      'with a provided input',
+      wrapWithHits(container => {
+        container.innerHTML = '<input/>';
+        const input = container.firstChild;
+        container.appendChild(input);
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container: input,
+          })
+        );
+      })
+    )
+    .add(
+      'with a provided input and the loading indicator',
+      wrapWithHits(container => {
+        container.innerHTML = '<input/>';
+        const input = container.firstChild;
+        container.appendChild(input);
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container: input,
+            loadingIndicator: true,
           })
         );
       })

@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
@@ -11,7 +9,7 @@ describe('connectSearchBox', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectSearchBox(rendering);
 
     const widget = makeWidget({
@@ -21,7 +19,7 @@ describe('connectSearchBox', () => {
     expect(widget.getConfiguration).toBe(undefined);
 
     const helper = jsHelper(fakeClient);
-    helper.search = sinon.stub();
+    helper.search = () => {};
 
     widget.init({
       helper,
@@ -30,46 +28,45 @@ describe('connectSearchBox', () => {
       onHistoryChange: () => {},
     });
 
-    {
-      // should call the rendering once with isFirstRendering to true
-      expect(rendering.callCount).toBe(1);
-      const isFirstRendering = rendering.lastCall.args[1];
-      expect(isFirstRendering).toBe(true);
-
-      // should provide good values for the first rendering
-      const { query, widgetParams } = rendering.lastCall.args[0];
-      expect(query).toBe(helper.state.query);
-      expect(widgetParams).toEqual({ foo: 'bar' });
-    }
+    // should call the rendering once with isFirstRendering to true
+    expect(rendering).toHaveBeenCalledTimes(1);
+    // should provide good values for the first rendering
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        query: helper.state.query,
+        widgetParams: { foo: 'bar' },
+      }),
+      true
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
-    {
-      // Should call the rendering a second time, with isFirstRendering to false
-      expect(rendering.callCount).toBe(2);
-      const isFirstRendering = rendering.lastCall.args[1];
-      expect(isFirstRendering).toBe(false);
-
-      // should provide good values after the first search
-      const { query, widgetParams } = rendering.lastCall.args[0];
-      expect(query).toBe(helper.state.query);
-      expect(widgetParams).toEqual({ foo: 'bar' });
-    }
+    // Should call the rendering a second time, with isFirstRendering to false
+    expect(rendering).toHaveBeenCalledTimes(2);
+    // should provide good values after the first search
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        query: helper.state.query,
+        widgetParams: { foo: 'bar' },
+      }),
+      false
+    );
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectSearchBox(rendering);
 
     const widget = makeWidget();
 
     const helper = jsHelper(fakeClient);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -81,11 +78,10 @@ describe('connectSearchBox', () => {
     {
       // first rendering
       expect(helper.state.query).toBe('');
-      const renderOptions = rendering.lastCall.args[0];
-      const { refine } = renderOptions;
+      const { refine } = rendering.mock.calls[0][0];
       refine('bip');
       expect(helper.state.query).toBe('bip');
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
     widget.render({
@@ -93,28 +89,30 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     {
       // Second rendering
       expect(helper.state.query).toBe('bip');
-      const renderOptions = rendering.lastCall.args[0];
-      const { refine, query } = renderOptions;
+      const { refine, query } = rendering.mock.calls[1][0];
       expect(query).toBe('bip');
       refine('bop');
       expect(helper.state.query).toBe('bop');
-      expect(helper.search.callCount).toBe(2);
+      expect(helper.search).toHaveBeenCalledTimes(2);
     }
   });
 
   it('provides a function to clear the query and perform new search', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectSearchBox(rendering);
 
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient);
-    helper.search = sinon.stub();
+    const helper = jsHelper(fakeClient, '', {
+      query: 'bup',
+    });
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -125,12 +123,12 @@ describe('connectSearchBox', () => {
 
     {
       // first rendering
+      expect(helper.state.query).toBe('bup');
+      const { refine, clear } = rendering.mock.calls[0][0];
+      clear(); // triggers a search
       expect(helper.state.query).toBe('');
-      const renderOptions = rendering.lastCall.args[0];
-      const { refine } = renderOptions;
-      refine('bip');
-      expect(helper.state.query).toBe('bip');
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
+      refine('bip'); // triggers a search
     }
 
     widget.render({
@@ -138,27 +136,27 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     {
       // Second rendering
       expect(helper.state.query).toBe('bip');
-      const renderOptions = rendering.lastCall.args[0];
-      const { clear, query } = renderOptions;
-      expect(query).toBe('bip');
-      clear();
+      const { clear } = rendering.mock.calls[1][0];
+      clear(); // triggers a search
       expect(helper.state.query).toBe('');
-      expect(helper.search.callCount).toBe(2);
+      // refine and clear functions trigger searches. clear + refine + clear
+      expect(helper.search).toHaveBeenCalledTimes(3);
     }
   });
 
   it('queryHook parameter let the dev control the behavior of the search', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectSearchBox(rendering);
 
     // letSearchThrough will control if the provided function should be called
     let letSearchThrough = false;
-    const queryHook = sinon.spy((q, search) => {
+    const queryHook = jest.fn((q, search) => {
       if (letSearchThrough) search(q);
     });
 
@@ -167,7 +165,7 @@ describe('connectSearchBox', () => {
     });
 
     const helper = jsHelper(fakeClient);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -178,19 +176,18 @@ describe('connectSearchBox', () => {
 
     {
       // first rendering
-      const renderOptions = rendering.lastCall.args[0];
-      const { refine } = renderOptions;
+      const { refine } = rendering.mock.calls[0][0];
 
       refine('bip');
-      expect(queryHook.callCount).toBe(1);
+      expect(queryHook).toHaveBeenCalledTimes(1);
       expect(helper.state.query).toBe('');
-      expect(helper.search.callCount).toBe(0);
+      expect(helper.search).not.toHaveBeenCalled();
 
       letSearchThrough = true;
       refine('bip');
-      expect(queryHook.callCount).toBe(2);
+      expect(queryHook).toHaveBeenCalledTimes(2);
       expect(helper.state.query).toBe('bip');
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
     // reset the hook behavior
@@ -201,34 +198,34 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
     {
       // Second rendering
-      const renderOptions = rendering.lastCall.args[0];
-      const { refine } = renderOptions;
+      const { refine } = rendering.mock.calls[1][0];
 
       refine('bop');
-      expect(queryHook.callCount).toBe(3);
+      expect(queryHook).toHaveBeenCalledTimes(3);
       expect(helper.state.query).toBe('bip');
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
 
       letSearchThrough = true;
       refine('bop');
-      expect(queryHook.callCount).toBe(4);
+      expect(queryHook).toHaveBeenCalledTimes(4);
       expect(helper.state.query).toBe('bop');
-      expect(helper.search.callCount).toBe(2);
+      expect(helper.search).toHaveBeenCalledTimes(2);
     }
   });
 
   it('should always provide the same refine() and clear() function reference', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectSearchBox(rendering);
 
     const widget = makeWidget();
 
     const helper = jsHelper(fakeClient);
-    helper.search = sinon.stub();
+    helper.search = () => {};
 
     widget.init({
       helper,
@@ -242,31 +239,33 @@ describe('connectSearchBox', () => {
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
-    const firstRenderOptions = rendering.lastCall.args[0];
+    const firstRenderOptions = rendering.mock.calls[0][0];
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
       state: helper.state,
       helper,
       createURL: () => '#',
+      searchMetadata: { isSearchStalled: false },
     });
 
-    const secondRenderOptions = rendering.lastCall.args[0];
+    const secondRenderOptions = rendering.mock.calls[1][0];
 
     expect(firstRenderOptions.clear).toBe(secondRenderOptions.clear);
     expect(firstRenderOptions.refine).toBe(secondRenderOptions.refine);
   });
 
   it('should clear on init as well', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectSearchBox(rendering);
 
     const widget = makeWidget();
 
     const helper = jsHelper(fakeClient);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
     helper.setQuery('foobar');
 
     expect(helper.state.query).toBe('foobar');
@@ -278,10 +277,10 @@ describe('connectSearchBox', () => {
       onHistoryChange: () => {},
     });
 
-    const renderingOptions = rendering.lastCall.args[0];
-    renderingOptions.clear();
+    const { clear } = rendering.mock.calls[0][0];
+    clear();
 
     expect(helper.state.query).toBe('');
-    expect(helper.search.called).toBe(true);
+    expect(helper.search).toHaveBeenCalledTimes(1);
   });
 });
