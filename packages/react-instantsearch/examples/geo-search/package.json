@@ -4,14 +4,14 @@
     "identity-obj-proxy": "3.0.0",
     "jest-environment-jsdom-11.0.0": "20.0.9",
     "react-scripts": "1.0.17",
-    "react-test-renderer": "16.1.1"
+    "react-test-renderer": "16.2.0"
   },
   "dependencies": {
     "google-map-react": "0.25.0",
     "prop-types": "15.6.0",
     "qs": "6.5.1",
-    "react": "16.1.1",
-    "react-dom": "16.1.1",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
     "react-instantsearch": "4.3.0-beta.0",
     "react-instantsearch-theme-algolia": "4.3.0-beta.0"
   },

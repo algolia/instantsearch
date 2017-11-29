@@ -8,7 +8,7 @@
     "jest-cli": "21.2.1",
     "jest-expo": "23.0.0",
     "react-native-scripts": "1.8.0",
-    "react-test-renderer": "16.1.1"
+    "react-test-renderer": "16.2.0"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
@@ -35,8 +35,8 @@
     "lodash": "4.17.4",
     "native-base": "2.3.3",
     "prop-types": "15.6.0",
-    "react": "16.1.1",
-    "react-dom": "16.1.1",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
     "react-instantsearch": "4.3.0-beta.0",
     "react-instantsearch-theme-algolia": "4.3.0-beta.0",
     "react-native": "0.50.4",
