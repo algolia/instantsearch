@@ -25,7 +25,7 @@ class ClearAll extends Component {
     }
 
     return (
-      <button {...cx('root')} onClick={refine.bind(null, items)}>
+      <button {...cx('root')} onClick={() => refine(items)}>
         {translate('reset')}
       </button>
     );

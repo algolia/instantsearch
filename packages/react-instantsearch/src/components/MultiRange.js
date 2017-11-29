@@ -44,7 +44,7 @@ class MultiRange extends Component {
           type="radio"
           checked={item.isRefined}
           disabled={item.noRefinement}
-          onChange={refine.bind(null, item.value)}
+          onChange={() => refine(item.value)}
         />
         <span
           {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}

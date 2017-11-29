@@ -54,7 +54,7 @@ export default class LinkList extends Component {
                 {...cx('itemLink', item.selected && 'itemLinkSelected')}
                 aria-label={item.ariaLabel}
                 href={createURL(item.value)}
-                onClick={onSelect.bind(null, item.value)}
+                onClick={() => onSelect(item.value)}
               >
                 {has(item, 'label') ? item.label : item.value}
               </Link>
