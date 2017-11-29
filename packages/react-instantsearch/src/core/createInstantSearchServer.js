@@ -21,12 +21,12 @@ const createInstantSearch = function(algoliasearch) {
   let client;
   let indexName = '';
 
-  const onSearchParameters = function(
+  const onSearchParameters = (
     getSearchParameters,
     context,
     props,
     searchState
-  ) {
+  ) => {
     const index = getIndex(context);
     searchParameters.push({
       getSearchParameters,

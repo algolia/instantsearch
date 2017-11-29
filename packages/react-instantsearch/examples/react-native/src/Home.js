@@ -113,7 +113,7 @@ class Home extends Component {
   static displayName = 'React Native example';
   constructor(props) {
     super(props);
-    this.onSearchStateChange = this.onSearchStateChange.bind(this);
+
     this.state = {
       searchState: this.props.searchState ? this.props.searchState : {},
     };
@@ -121,9 +121,9 @@ class Home extends Component {
 
   componentWillReceiveProps() {}
 
-  onSearchStateChange(nextState) {
+  onSearchStateChange = nextState => {
     this.setState({ searchState: { ...this.state.searchState, ...nextState } });
-  }
+  };
 
   render() {
     return (
@@ -199,11 +199,11 @@ SearchBox.propTypes = {
 const ConnectedSearchBox = connectSearchBox(SearchBox);
 
 class Hits extends Component {
-  onEndReached() {
+  onEndReached = () => {
     if (this.props.hasMore) {
       this.props.refine();
     }
-  }
+  };
 
   render() {
     const ds = new ListView.DataSource({
@@ -216,7 +216,7 @@ class Hits extends Component {
             dataSource={ds.cloneWithRows(this.props.hits)}
             renderRow={this._renderRow}
             renderSeparator={this._renderSeparator}
-            onEndReached={this.onEndReached.bind(this)}
+            onEndReached={this.onEndReached}
           />
         </View>
       ) : null;
