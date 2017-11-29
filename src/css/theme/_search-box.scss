@@ -5,6 +5,7 @@
   white-space: nowrap;
   font-size: 14px;
 
+
   &--input {
     appearance: none;
     font: inherit;
@@ -33,6 +34,17 @@
   }
 
   &--magnifier {
+    fill: #BFC7D8;
+    left: 12px;
+    top: calc(50% - 18px / 2);
+
+    svg {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  &--loading-indicator-wrapper {
     fill: #BFC7D8;
     left: 12px;
     top: calc(50% - 18px / 2);

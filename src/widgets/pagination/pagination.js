@@ -1,6 +1,6 @@
 import defaults from 'lodash/defaults';
 
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import Pagination from '../../components/Pagination/Pagination.js';
@@ -177,7 +177,9 @@ export default function pagination(
   });
 
   try {
-    const makeWidget = connectPagination(specializedRenderer);
+    const makeWidget = connectPagination(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget({ maxPages });
   } catch (e) {
     throw new Error(usage);

@@ -1,4 +1,5 @@
 import range from 'lodash/range';
+import times from 'lodash/times';
 import sinon from 'sinon';
 
 import algoliaSearchHelper from 'algoliasearch-helper';
@@ -253,16 +254,7 @@ describe('InstantSearch lifecycle', () => {
             true,
             'widget.render called once'
           );
-          expect(widget.render.args[0]).toEqual([
-            {
-              createURL: search._createAbsoluteURL,
-              results,
-              state: helper.state,
-              helper,
-              templatesConfig: search.templatesConfig,
-              instantSearchInstance: search,
-            },
-          ]);
+          expect(widget.render.args[0]).toMatchSnapshot();
         });
       });
     });
@@ -360,5 +352,299 @@ describe('InstantSearch lifecycle', () => {
       expect(render.callCount).toEqual(10);
       expect(onRender.callCount).toEqual(1);
     });
+  });
+
+  describe('When removing a widget', () => {
+    function registerWidget(
+      widgetGetConfiguration = {
+        facets: ['categories'],
+        maxValuesPerFacet: 10,
+      },
+      dispose = jest.fn()
+    ) {
+      const widget = {
+        getConfiguration: jest.fn(() => widgetGetConfiguration),
+        init: jest.fn(),
+        render: jest.fn(),
+        dispose,
+      };
+
+      search.addWidget(widget);
+
+      return widget;
+    }
+
+    beforeEach(() => {
+      search = new InstantSearch({
+        appId,
+        apiKey,
+        indexName,
+      });
+    });
+
+    it('should unmount a widget without configuration', () => {
+      const widget1 = registerWidget({});
+      const widget2 = registerWidget({});
+
+      expect(search.widgets.length).toBe(2);
+
+      search.start();
+      search.removeWidget(widget1);
+      search.removeWidget(widget2);
+
+      expect(search.widgets.length).toBe(0);
+    });
+
+    it('should unmount a widget with facets configuration', () => {
+      const widget1 = registerWidget({ facets: ['price'] }, ({ state }) =>
+        state.removeFacet('price')
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.facets).toEqual(['price']);
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.facets).toEqual([]);
+    });
+
+    it('should unmount a widget with hierarchicalFacets configuration', () => {
+      const widget1 = registerWidget(
+        {
+          hierarchicalFacets: [
+            {
+              name: 'price',
+              attributes: ['foo'],
+              separator: ' > ',
+              rootPath: 'lvl1',
+              showParentLevel: true,
+            },
+          ],
+        },
+        ({ state }) => state.removeHierarchicalFacet('price')
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.hierarchicalFacets).toEqual([
+        {
+          name: 'price',
+          attributes: ['foo'],
+          separator: ' > ',
+          rootPath: 'lvl1',
+          showParentLevel: true,
+        },
+      ]);
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.hierarchicalFacets).toEqual([]);
+    });
+
+    it('should unmount a widget with disjunctiveFacets configuration', () => {
+      const widget1 = registerWidget(
+        { disjunctiveFacets: ['price'] },
+        ({ state }) => state.removeDisjunctiveFacet('price')
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.disjunctiveFacets).toEqual([]);
+    });
+
+    it('should unmount a widget with numericRefinements configuration', () => {
+      const widget1 = registerWidget(
+        { numericRefinements: { price: {} } },
+        ({ state }) => state.removeNumericRefinement('price')
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.numericRefinements).toEqual({ price: {} });
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.numericRefinements).toEqual({});
+    });
+
+    it('should unmount a widget with maxValuesPerFacet configuration', () => {
+      const widget1 = registerWidget(undefined, ({ state }) =>
+        state
+          .removeFacet('categories')
+          .setQueryParameters('maxValuesPerFacet', undefined)
+      );
+      search.start();
+
+      expect(search.widgets.length).toBe(1);
+      expect(search.searchParameters.facets).toEqual(['categories']);
+      expect(search.searchParameters.maxValuesPerFacet).toEqual(10);
+
+      search.removeWidget(widget1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.facets).toEqual([]);
+      expect(search.searchParameters.maxValuesPerFacet).toBe(undefined);
+    });
+
+    it('should unmount multiple widgets at once', () => {
+      const widget1 = registerWidget(
+        { numericRefinements: { price: {} } },
+        ({ state }) => state.removeNumericRefinement('price')
+      );
+      const widget2 = registerWidget(
+        { disjunctiveFacets: ['price'] },
+        ({ state }) => state.removeDisjunctiveFacet('price')
+      );
+
+      search.start();
+
+      expect(search.widgets.length).toBe(2);
+      expect(search.searchParameters.numericRefinements).toEqual({ price: {} });
+      expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
+
+      search.removeWidgets([widget1, widget2]);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.searchParameters.numericRefinements).toEqual({});
+      expect(search.searchParameters.disjunctiveFacets).toEqual([]);
+    });
+
+    it('should unmount a widget without calling URLSync wiget getConfiguration', () => {
+      // fake url-sync widget
+      const spy = jest.fn();
+
+      class URLSync {
+        constructor() {
+          this.getConfiguration = spy;
+          this.init = jest.fn();
+          this.render = jest.fn();
+          this.dispose = jest.fn();
+        }
+      }
+
+      const urlSyncWidget = new URLSync();
+      expect(urlSyncWidget.constructor.name).toEqual('URLSync');
+
+      search.addWidget(urlSyncWidget);
+
+      // add fake widget to dispose
+      // that returns a `nextState` while dispose
+      const widget1 = registerWidget(
+        undefined,
+        jest.fn(({ state: nextState }) => nextState)
+      );
+
+      const widget2 = registerWidget();
+      search.start();
+
+      // remove widget1
+      search.removeWidget(widget1);
+
+      // it should have been called only once after start();
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      // but widget2 getConfiguration() should have been called twice
+      expect(widget2.getConfiguration).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('When adding widgets after start', () => {
+    function registerWidget(
+      widgetGetConfiguration = {},
+      dispose = sinon.spy()
+    ) {
+      const widget = {
+        getConfiguration: sinon.stub().returns(widgetGetConfiguration),
+        init: sinon.spy(),
+        render: sinon.spy(),
+        dispose,
+      };
+
+      return widget;
+    }
+
+    beforeEach(() => {
+      search = new InstantSearch({
+        appId,
+        apiKey,
+        indexName,
+      });
+    });
+
+    it('should add widgets after start', () => {
+      search.start();
+      expect(helperSearchSpy.callCount).toBe(1);
+
+      expect(search.widgets.length).toBe(0);
+      expect(search.started).toBe(true);
+
+      const widget1 = registerWidget({ facets: ['price'] });
+      search.addWidget(widget1);
+
+      expect(helperSearchSpy.callCount).toBe(2);
+      expect(widget1.init.calledOnce).toBe(true);
+
+      const widget2 = registerWidget({ disjunctiveFacets: ['categories'] });
+      search.addWidget(widget2);
+
+      expect(widget2.init.calledOnce).toBe(true);
+      expect(helperSearchSpy.callCount).toBe(3);
+
+      expect(search.widgets.length).toBe(2);
+      expect(search.searchParameters.facets).toEqual(['price']);
+      expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
+    });
+
+    it('should trigger only one search using `addWidgets()`', () => {
+      search.start();
+
+      expect(helperSearchSpy.callCount).toBe(1);
+      expect(search.widgets.length).toBe(0);
+      expect(search.started).toBe(true);
+
+      const widget1 = registerWidget({ facets: ['price'] });
+      const widget2 = registerWidget({ disjunctiveFacets: ['categories'] });
+
+      search.addWidgets([widget1, widget2]);
+
+      expect(helperSearchSpy.callCount).toBe(2);
+      expect(search.searchParameters.facets).toEqual(['price']);
+      expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
+    });
+  });
+
+  it('should remove all widgets without triggering a search on dispose', () => {
+    search = new InstantSearch({
+      appId,
+      apiKey,
+      indexName,
+    });
+
+    const widgets = times(5, () => ({
+      getConfiguration: () => ({}),
+      init: jest.fn(),
+      render: jest.fn(),
+      dispose: jest.fn(),
+    }));
+
+    search.addWidgets(widgets);
+    search.start();
+
+    expect(search.widgets.length).toBe(5);
+    expect(helperSearchSpy.callCount).toBe(1);
+
+    search.dispose();
+
+    expect(search.widgets.length).toBe(0);
+    expect(helperSearchSpy.callCount).toBe(1);
   });
 });

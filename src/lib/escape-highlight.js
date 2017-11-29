@@ -56,3 +56,10 @@ export default function escapeHits(hits) {
 
   return hits;
 }
+
+export function escapeFacets(facetHits) {
+  return facetHits.map(h => ({
+    ...h,
+    highlighted: replaceWithEmAndEscape(h.highlighted),
+  }));
+}

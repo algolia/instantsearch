@@ -13,7 +13,8 @@ export class PureTemplate extends React.Component {
   shouldComponentUpdate(nextProps) {
     return (
       !isEqual(this.props.data, nextProps.data) ||
-      this.props.templateKey !== nextProps.templateKey
+      this.props.templateKey !== nextProps.templateKey ||
+      !isEqual(this.props.rootProps, nextProps.rootProps)
     );
   }
 

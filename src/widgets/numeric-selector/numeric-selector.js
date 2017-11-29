@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
@@ -116,7 +116,10 @@ export default function numericSelector({
   });
 
   try {
-    const makeNumericSelector = connectNumericSelector(specializedRenderer);
+    const makeNumericSelector = connectNumericSelector(
+      specializedRenderer,
+      () => unmountComponentAtNode(containerNode)
+    );
     return makeNumericSelector({ operator, attributeName, options });
   } catch (e) {
     throw new Error(usage);

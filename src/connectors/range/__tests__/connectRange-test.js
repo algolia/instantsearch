@@ -3,16 +3,16 @@ import sinon from 'sinon';
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectRangeSlider from '../connectRangeSlider.js';
+import connectRange from '../connectRange.js';
 
 const fakeClient = { addAlgoliaAgent: () => {} };
 
-describe('connectRangeSlider', () => {
+describe('connectRange', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
-    const makeWidget = connectRangeSlider(rendering);
+    const makeWidget = connectRange(rendering);
 
     const attributeName = 'price';
     const widget = makeWidget({
@@ -46,6 +46,7 @@ describe('connectRangeSlider', () => {
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
         attributeName,
+        precision: 2,
       });
     }
 
@@ -80,14 +81,18 @@ describe('connectRangeSlider', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values for the first rendering
-      const { range, start } = rendering.lastCall.args[0];
+      const { range, start, widgetParams } = rendering.lastCall.args[0];
       expect(range).toEqual({ min: 10, max: 30 });
       expect(start).toEqual([-Infinity, Infinity]);
+      expect(widgetParams).toEqual({
+        attributeName,
+        precision: 2,
+      });
     }
   });
 
   it('Accepts some user bounds', () => {
-    const makeWidget = connectRangeSlider(() => {});
+    const makeWidget = connectRange(() => {});
 
     const attributeName = 'price';
 
@@ -120,7 +125,7 @@ describe('connectRangeSlider', () => {
 
   it('Provides a function to update the refinements at each step', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectRangeSlider(rendering);
+    const makeWidget = connectRange(rendering);
 
     const attributeName = 'price';
     const widget = makeWidget({
@@ -189,7 +194,7 @@ describe('connectRangeSlider', () => {
 
   it('should add numeric refinement when refining min boundary without previous configuation', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectRangeSlider(rendering);
+    const makeWidget = connectRange(rendering);
 
     const attributeName = 'price';
     const widget = makeWidget({ attributeName, min: 0, max: 500 });
@@ -219,13 +224,13 @@ describe('connectRangeSlider', () => {
 
       refine([0, undefined]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
-      expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
     }
   });
 
   it('should add numeric refinement when refining min boundary with previous configuration', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectRangeSlider(rendering);
+    const makeWidget = connectRange(rendering);
 
     const attributeName = 'price';
     const widget = makeWidget({ attributeName, min: 0, max: 500 });
@@ -258,13 +263,13 @@ describe('connectRangeSlider', () => {
 
       refine([0, undefined]);
       expect(helper.getNumericRefinement('price', '>=')).toEqual([0]);
-      expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
+      expect(helper.getNumericRefinement('price', '<=')).toEqual([500]);
     }
   });
 
   it('should refine on boundaries when no min/max defined', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectRangeSlider(rendering);
+    const makeWidget = connectRange(rendering);
 
     const attributeName = 'price';
     const widget = makeWidget({ attributeName });
@@ -309,7 +314,7 @@ describe('connectRangeSlider', () => {
 
     it('expect to return default configuration', () => {
       const currentConfiguration = {};
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
       });
 
@@ -328,7 +333,7 @@ describe('connectRangeSlider', () => {
         },
       };
 
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         max: 500,
       });
@@ -341,7 +346,7 @@ describe('connectRangeSlider', () => {
 
     it('expect to return default configuration if the given min bound are greater than max bound', () => {
       const currentConfiguration = {};
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         min: 1000,
         max: 500,
@@ -355,7 +360,7 @@ describe('connectRangeSlider', () => {
 
     it('expect to return configuration with min numeric refinement', () => {
       const currentConfiguration = {};
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         min: 10,
       });
@@ -376,7 +381,7 @@ describe('connectRangeSlider', () => {
 
     it('expect to return configuration with max numeric refinement', () => {
       const currentConfiguration = {};
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         max: 10,
       });
@@ -397,7 +402,7 @@ describe('connectRangeSlider', () => {
 
     it('expect to return configuration with both numeric refinements', () => {
       const currentConfiguration = {};
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         min: 10,
         max: 500,
@@ -425,7 +430,7 @@ describe('connectRangeSlider', () => {
 
     it('expect to return default range', () => {
       const stats = {};
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
       });
 
@@ -437,7 +442,7 @@ describe('connectRangeSlider', () => {
 
     it('expect to return range from bounds', () => {
       const stats = { min: 10, max: 500 };
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         min: 20,
         max: 250,
@@ -451,7 +456,7 @@ describe('connectRangeSlider', () => {
 
     it('expect to return range from stats', () => {
       const stats = { min: 10, max: 500 };
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
       });
 
@@ -461,13 +466,53 @@ describe('connectRangeSlider', () => {
       expect(actual).toEqual(expectation);
     });
 
-    it('expect to return rounded range values', () => {
+    it('expect to return rounded range values when precision is 0', () => {
       const stats = { min: 1.79, max: 499.99 };
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
+        precision: 0,
       });
 
       const expectation = { min: 1, max: 500 };
+      const actual = widget._getCurrentRange(stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return rounded range values when precision is 1', () => {
+      const stats = { min: 1.12345, max: 499.56789 };
+      const widget = connectRange(rendering)({
+        attributeName,
+        precision: 1,
+      });
+
+      const expectation = { min: 1.1, max: 499.6 };
+      const actual = widget._getCurrentRange(stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return rounded range values when precision is 2', () => {
+      const stats = { min: 1.12345, max: 499.56789 };
+      const widget = connectRange(rendering)({
+        attributeName,
+        precision: 2,
+      });
+
+      const expectation = { min: 1.12, max: 499.57 };
+      const actual = widget._getCurrentRange(stats);
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return rounded range values when precision is 3', () => {
+      const stats = { min: 1.12345, max: 499.56789 };
+      const widget = connectRange(rendering)({
+        attributeName,
+        precision: 3,
+      });
+
+      const expectation = { min: 1.123, max: 499.568 };
       const actual = widget._getCurrentRange(stats);
 
       expect(actual).toEqual(expectation);
@@ -480,7 +525,7 @@ describe('connectRangeSlider', () => {
     const createHelper = () => jsHelper(fakeClient);
 
     it('expect to return default refinement', () => {
-      const widget = connectRangeSlider(rendering)({ attributeName });
+      const widget = connectRange(rendering)({ attributeName });
       const helper = createHelper();
 
       const expectation = [-Infinity, Infinity];
@@ -490,7 +535,7 @@ describe('connectRangeSlider', () => {
     });
 
     it('expect to return refinement from helper', () => {
-      const widget = connectRangeSlider(rendering)({ attributeName });
+      const widget = connectRange(rendering)({ attributeName });
       const helper = createHelper();
 
       helper.addNumericRefinement(attributeName, '>=', 10);
@@ -503,7 +548,7 @@ describe('connectRangeSlider', () => {
     });
 
     it('expect to return float refinement values', () => {
-      const widget = connectRangeSlider(rendering)({ attributeName });
+      const widget = connectRange(rendering)({ attributeName });
       const helper = createHelper();
 
       helper.addNumericRefinement(attributeName, '>=', 10.9);
@@ -521,8 +566,11 @@ describe('connectRangeSlider', () => {
     const rendering = () => {};
     const createHelper = () => {
       const helper = jsHelper(fakeClient);
-      helper.clearRefinements = jest.fn();
       helper.search = jest.fn();
+      const initalClearRefinements = helper.clearRefinements;
+      helper.clearRefinements = jest.fn((...args) =>
+        initalClearRefinements.apply(helper, args)
+      );
 
       return helper;
     };
@@ -531,7 +579,7 @@ describe('connectRangeSlider', () => {
       const range = {};
       const values = [10, 490];
       const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
       });
 
@@ -547,7 +595,7 @@ describe('connectRangeSlider', () => {
       const range = { min: 0, max: 500 };
       const values = [10, 490];
       const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({ attributeName });
+      const widget = connectRange(rendering)({ attributeName });
 
       widget._refine(helper, range)(values);
 
@@ -557,11 +605,39 @@ describe('connectRangeSlider', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
+    it('expect to refine when values are parsable interger', () => {
+      const range = { min: 0, max: 500 };
+      const values = ['10', '490'];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to refine when values are parsable float', () => {
+      const range = { min: 0, max: 500 };
+      const values = ['10.50', '490.50'];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10.5]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490.5]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
     it('expect to refine min when user bounds are set and value is at range bound', () => {
       const range = { min: 10, max: 500 };
       const values = [10, 490];
       const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         min: 10,
       });
@@ -570,7 +646,7 @@ describe('connectRangeSlider', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.clearRefinements).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
@@ -578,7 +654,7 @@ describe('connectRangeSlider', () => {
       const range = { min: 0, max: 490 };
       const values = [10, 490];
       const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({
+      const widget = connectRange(rendering)({
         attributeName,
         max: 490,
       });
@@ -587,96 +663,236 @@ describe('connectRangeSlider', () => {
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.clearRefinements).toHaveBeenCalled();
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to not refine min when no user bounds are set and value is at range bound', () => {
+    it('expect to reset min refinenement when value is undefined', () => {
       const range = { min: 0, max: 500 };
-      const values = [0, 490];
+      const values = [undefined, 490];
       const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({ attributeName });
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
-        undefined
-      );
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
-    });
-
-    it('expect to not refine max when no user bounds are set and value is at range bound', () => {
-      const range = { min: 0, max: 500 };
-      const values = [10, 500];
-      const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({ attributeName });
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
-        undefined
-      );
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
-    });
-
-    it("expect to not refine min when it's out of range", () => {
-      const range = { min: 10, max: 500 };
-      const values = [0, 490];
-      const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({ attributeName });
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
-        undefined
-      );
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
-    });
-
-    it("expect to not refine max when it's out of range", () => {
-      const range = { min: 0, max: 490 };
-      const values = [10, 500];
-      const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({ attributeName });
-
-      widget._refine(helper, range)(values);
-
-      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
-      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
-        undefined
-      );
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
-    });
-
-    it('expect to not refine when both values have not changed', () => {
-      const range = { min: 0, max: 500 };
-      const values = [10, 250];
-      const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({ attributeName });
+      const widget = connectRange(rendering)({ attributeName });
 
       helper.addNumericRefinement(attributeName, '>=', 10);
-      helper.addNumericRefinement(attributeName, '<=', 250);
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset max refinenement when value is undefined', () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, undefined];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset min refinenement when value is empty string', () => {
+      const range = { min: 0, max: 500 };
+      const values = ['', 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset max refinenement when value is empty string', () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, ''];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset min refinenement when user bounds are not set and value is at bounds', () => {
+      const range = { min: 0, max: 500 };
+      const values = [0, 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset max refinenement when user bounds are not set and value is at bounds', () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, 500];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset min refinenement when user bounds are set and value is nullable', () => {
+      const range = { min: 0, max: 500 };
+      const values = [undefined, 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({
+        attributeName,
+        min: 10,
+      });
+
+      helper.addNumericRefinement(attributeName, '>=', 20);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it('expect to reset max refinenement when user bounds are set and value is nullable', () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, undefined];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({
+        attributeName,
+        max: 250,
+      });
+
+      helper.addNumericRefinement(attributeName, '>=', 240);
 
       widget._refine(helper, range)(values);
 
       expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([250]);
+      expect(helper.clearRefinements).toHaveBeenCalled();
+      expect(helper.search).toHaveBeenCalled();
+    });
+
+    it("expect to not refine when min it's out of range", () => {
+      const range = { min: 10, max: 500 };
+      const values = [0, 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
+    });
+
+    it("expect to not refine when max it's out of range", () => {
+      const range = { min: 0, max: 490 };
+      const values = [10, 500];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
+    });
+
+    it("expect to not refine when values don't have changed from empty state", () => {
+      const range = { min: 0, max: 500 };
+      const values = [undefined, undefined];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual(
+        undefined
+      );
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
+        undefined
+      );
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
+    });
+
+    it("expect to not refine when values don't have changed from non empty state", () => {
+      const range = { min: 0, max: 500 };
+      const values = [10, 490];
+      const helper = createHelper();
+      const widget = connectRange(rendering)({ attributeName });
+
+      helper.addNumericRefinement(attributeName, '>=', 10);
+      helper.addNumericRefinement(attributeName, '<=', 490);
+
+      widget._refine(helper, range)(values);
+
+      expect(helper.getNumericRefinement(attributeName, '>=')).toEqual([10]);
+      expect(helper.getNumericRefinement(attributeName, '<=')).toEqual([490]);
       expect(helper.clearRefinements).not.toHaveBeenCalled();
       expect(helper.search).not.toHaveBeenCalled();
     });
 
     it('expect to not refine when values are invalid', () => {
       const range = { min: 0, max: 500 };
-      const values = [null, null];
+      const values = ['ADASA', 'FFDSFQS'];
       const helper = createHelper();
-      const widget = connectRangeSlider(rendering)({ attributeName });
+      const widget = connectRange(rendering)({ attributeName });
 
       widget._refine(helper, range)(values);
 
@@ -686,8 +902,8 @@ describe('connectRangeSlider', () => {
       expect(helper.getNumericRefinement(attributeName, '<=')).toEqual(
         undefined
       );
-      expect(helper.clearRefinements).toHaveBeenCalledWith(attributeName);
-      expect(helper.search).toHaveBeenCalled();
+      expect(helper.clearRefinements).not.toHaveBeenCalled();
+      expect(helper.search).not.toHaveBeenCalled();
     });
   });
 });

@@ -60,6 +60,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *
  * @type {Connector}
  * @param {function(ToggleRenderingOptions, boolean)} renderFn Rendering function for the custom **Toggle** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomToggleWidgetOptions)} Re-usable widget factory for a custom **Toggle** widget.
  * @example
  * // custom `renderFn` to render the custom ClearAll widget
@@ -102,7 +103,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectToggle(renderFn) {
+export default function connectToggle(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -127,7 +128,7 @@ export default function connectToggle(renderFn) {
         };
       },
 
-      toggleRefinement(helper, { isRefined } = {}) {
+      _toggleRefinement(helper, { isRefined } = {}) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
@@ -159,7 +160,9 @@ export default function connectToggle(renderFn) {
               )
           );
 
-        this.toggleRefinement = this.toggleRefinement.bind(this, helper);
+        this.toggleRefinement = opts => {
+          this._toggleRefinement(helper, opts);
+        };
 
         const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
 
@@ -261,6 +264,16 @@ export default function connectToggle(renderFn) {
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        unmountFn();
+
+        const nextState = state
+          .removeDisjunctiveFacetRefinement(attributeName)
+          .removeDisjunctiveFacet(attributeName);
+
+        return nextState;
       },
     };
   };

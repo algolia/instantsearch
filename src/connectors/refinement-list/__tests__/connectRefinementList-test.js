@@ -1,7 +1,6 @@
-import sinon from 'sinon';
-
 import algoliasearchHelper from 'algoliasearch-helper';
 const SearchResults = algoliasearchHelper.SearchResults;
+import { tagConfig } from '../../../lib/escape-highlight.js';
 
 import connectRefinementList from '../connectRefinementList.js';
 
@@ -11,7 +10,7 @@ describe('connectRefinementList', () => {
   let rendering;
   let makeWidget;
   beforeEach(() => {
-    rendering = sinon.stub();
+    rendering = jest.fn();
     makeWidget = connectRefinementList(rendering);
   });
 
@@ -100,10 +99,10 @@ describe('connectRefinementList', () => {
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).not.toHaveBeenCalled();
 
     const helper = algoliasearchHelper(fakeClient, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -113,11 +112,11 @@ describe('connectRefinementList', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering).lastCalledWith(expect.any(Object), true);
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.canRefine).toBe(false);
     expect(firstRenderingOptions.widgetParams).toEqual({
       attributeName: 'myFacet',
@@ -132,10 +131,10 @@ describe('connectRefinementList', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering).lastCalledWith(expect.any(Object), false);
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canRefine).toBe(false);
     expect(secondRenderingOptions.widgetParams).toEqual({
       attributeName: 'myFacet',
@@ -153,7 +152,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
 
@@ -164,7 +163,7 @@ describe('connectRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
@@ -178,7 +177,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderToggleRefinement } = secondRenderingOptions;
     renderToggleRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
@@ -198,7 +197,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -232,7 +231,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canToggleShowMore).toBe(false);
   });
 
@@ -247,7 +246,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -281,8 +280,12 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.canToggleShowMore).toBe(false);
+    expect(rendering).lastCalledWith(
+      expect.objectContaining({
+        canToggleShowMore: false,
+      }),
+      false
+    );
   });
 
   it('If there are same amount of items then canToggleShowMore is false', () => {
@@ -297,7 +300,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -331,8 +334,12 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.canToggleShowMore).toBe(false);
+    expect(rendering).lastCalledWith(
+      expect.objectContaining({
+        canToggleShowMore: false,
+      }),
+      false
+    );
   });
 
   it('If there are enough items then canToggleShowMore is true', () => {
@@ -347,7 +354,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -381,14 +388,14 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.canToggleShowMore).toBe(true);
 
     // toggleShowMore will set the state of the show more to true
     // therefore it's always possible to go back and show less items
     secondRenderingOptions.toggleShowMore();
 
-    const thirdRenderingOptions = rendering.lastCall.args[0];
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
     expect(thirdRenderingOptions.canToggleShowMore).toBe(true);
   });
 
@@ -404,7 +411,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -442,22 +449,27 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.canToggleShowMore).toEqual(true);
-    expect(secondRenderingOptions.items).toEqual([
-      {
-        label: 'c1',
-        value: 'c1',
-        highlighted: 'c1',
-        count: 880,
-        isRefined: false,
-      },
-    ]);
+    expect(rendering).lastCalledWith(
+      expect.objectContaining({
+        canToggleShowMore: true,
+        items: [
+          {
+            label: 'c1',
+            value: 'c1',
+            highlighted: 'c1',
+            count: 880,
+            isRefined: false,
+          },
+        ],
+      }),
+      false
+    );
 
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     // toggleShowMore does a new render
     secondRenderingOptions.toggleShowMore();
 
-    const thirdRenderingOptions = rendering.lastCall.args[0];
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
     expect(thirdRenderingOptions.items).toEqual([
       {
         label: 'c1',
@@ -494,7 +506,7 @@ describe('connectRefinementList', () => {
       '',
       widget.getConfiguration({})
     );
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -503,7 +515,7 @@ describe('connectRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+    expect(rendering.mock.calls[0][0].hasExhaustiveItems).toEqual(true);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -531,7 +543,7 @@ describe('connectRefinementList', () => {
     });
 
     // this one is `false` because we're not sure that what we asked is the actual number of facet values
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
+    expect(rendering.mock.calls[1][0].hasExhaustiveItems).toEqual(false);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -560,7 +572,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
+    expect(rendering.mock.calls[2][0].hasExhaustiveItems).toEqual(false);
   });
 
   it('hasExhaustiveItems indicates if the items provided are exhaustive - with an other widgets making the maxValuesPerFacet bigger', () => {
@@ -573,7 +585,7 @@ describe('connectRefinementList', () => {
       ...widget.getConfiguration({}),
       maxValuesPerFacet: 3,
     });
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -582,7 +594,7 @@ describe('connectRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+    expect(rendering.mock.calls[0][0].hasExhaustiveItems).toEqual(true);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -609,7 +621,7 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(true);
+    expect(rendering.mock.calls[1][0].hasExhaustiveItems).toEqual(true);
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -640,6 +652,310 @@ describe('connectRefinementList', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasExhaustiveItems).toEqual(false);
+    expect(rendering.mock.calls[2][0].hasExhaustiveItems).toEqual(false);
+  });
+
+  it('can search in facet values', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+    });
+
+    const helper = algoliasearchHelper(
+      fakeClient,
+      '',
+      widget.getConfiguration({})
+    );
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
+      Promise.resolve({
+        exhaustiveFacetsCount: true,
+        facetHits: [
+          {
+            count: 33,
+            highlighted: 'Salvador <em>Da</em>li',
+            value: 'Salvador Dali',
+          },
+          {
+            count: 9,
+            highlighted: '<em>Da</em>vidoff',
+            value: 'Davidoff',
+          },
+        ],
+        processingTimeMS: 1,
+      })
+    );
+
+    // Sinulate the lifecycle
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+    expect(rendering).toHaveBeenCalledTimes(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    expect(rendering).toHaveBeenCalledTimes(2);
+    // Simulation end
+
+    const search = rendering.mock.calls[1][0].searchForItems;
+    search('da');
+
+    const [
+      sffvFacet,
+      sffvQuery,
+      maxNbItems,
+      paramOverride,
+    ] = helper.searchForFacetValues.mock.calls[0];
+
+    expect(sffvQuery).toBe('da');
+    expect(sffvFacet).toBe('category');
+    expect(maxNbItems).toBe(2);
+    expect(paramOverride).toEqual({
+      highlightPreTag: undefined,
+      highlightPostTag: undefined,
+    });
+
+    return Promise.resolve().then(() => {
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <em>Da</em>li',
+          label: 'Salvador Dali',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          highlighted: '<em>Da</em>vidoff',
+          label: 'Davidoff',
+          value: 'Davidoff',
+        },
+      ]);
+    });
+  });
+
+  it('can search in facet values, and reset pre post tags if needed', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', {
+      ...widget.getConfiguration({}),
+      // Here we simulate that another widget has set some highlight tags
+      ...tagConfig,
+    });
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
+      Promise.resolve({
+        exhaustiveFacetsCount: true,
+        facetHits: [
+          {
+            count: 33,
+            highlighted: 'Salvador <em>Da</em>li',
+            value: 'Salvador Dali',
+          },
+          {
+            count: 9,
+            highlighted: '<em>Da</em>vidoff',
+            value: 'Davidoff',
+          },
+        ],
+        processingTimeMS: 1,
+      })
+    );
+
+    // Sinulate the lifecycle
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+    expect(rendering).toHaveBeenCalledTimes(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    expect(rendering).toHaveBeenCalledTimes(2);
+    // Simulation end
+
+    const search = rendering.mock.calls[1][0].searchForItems;
+    search('da');
+
+    const [
+      sffvFacet,
+      sffvQuery,
+      maxNbItems,
+      paramOverride,
+    ] = helper.searchForFacetValues.mock.calls[0];
+
+    expect(sffvQuery).toBe('da');
+    expect(sffvFacet).toBe('category');
+    expect(maxNbItems).toBe(2);
+    expect(paramOverride).toEqual({
+      highlightPreTag: undefined,
+      highlightPostTag: undefined,
+    });
+
+    return Promise.resolve().then(() => {
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <em>Da</em>li',
+          label: 'Salvador Dali',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          highlighted: '<em>Da</em>vidoff',
+          label: 'Davidoff',
+          value: 'Davidoff',
+        },
+      ]);
+    });
+  });
+
+  it('can search in facet values, and set post and pre tags if escapeFacetValues is true', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+      escapeFacetValues: true,
+    });
+
+    const helper = algoliasearchHelper(fakeClient, '', {
+      ...widget.getConfiguration({}),
+      // Here we simulate that another widget has set some highlight tags
+      ...tagConfig,
+    });
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
+      Promise.resolve({
+        exhaustiveFacetsCount: true,
+        facetHits: [
+          {
+            count: 33,
+            highlighted: `Salvador ${tagConfig.highlightPreTag}Da${tagConfig.highlightPostTag}li`,
+            value: 'Salvador Dali',
+          },
+          {
+            count: 9,
+            highlighted: `${tagConfig.highlightPreTag}Da${tagConfig.highlightPostTag}vidoff`,
+            value: 'Davidoff',
+          },
+        ],
+        processingTimeMS: 1,
+      })
+    );
+
+    // Sinulate the lifecycle
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+    expect(rendering).toHaveBeenCalledTimes(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    expect(rendering).toHaveBeenCalledTimes(2);
+    // Simulation end
+
+    const search = rendering.mock.calls[1][0].searchForItems;
+    search('da');
+
+    const [
+      sffvFacet,
+      sffvQuery,
+      maxNbItems,
+      paramOverride,
+    ] = helper.searchForFacetValues.mock.calls[0];
+
+    expect(sffvQuery).toBe('da');
+    expect(sffvFacet).toBe('category');
+    expect(maxNbItems).toBe(2);
+    expect(paramOverride).toEqual(tagConfig);
+
+    return Promise.resolve().then(() => {
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <em>Da</em>li',
+          label: 'Salvador Dali',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          highlighted: '<em>Da</em>vidoff',
+          label: 'Davidoff',
+          value: 'Davidoff',
+        },
+      ]);
+    });
   });
 });

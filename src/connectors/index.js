@@ -28,6 +28,7 @@ export {
 export {
   default as connectRangeSlider,
 } from './range-slider/connectRangeSlider.js';
+export { default as connectRange } from './range/connectRange.js';
 export {
   default as connectRefinementList,
 } from './refinement-list/connectRefinementList.js';
@@ -40,3 +41,6 @@ export {
 } from './star-rating/connectStarRating.js';
 export { default as connectStats } from './stats/connectStats.js';
 export { default as connectToggle } from './toggle/connectToggle.js';
+export {
+  default as connectBreadcrumb,
+} from './breadcrumb/connectBreadcrumb.js';

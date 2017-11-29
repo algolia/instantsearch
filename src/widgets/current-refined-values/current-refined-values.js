@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import isUndefined from 'lodash/isUndefined';
@@ -269,7 +269,8 @@ export default function currentRefinedValues({
 
   try {
     const makeCurrentRefinedValues = connectCurrentRefinedValues(
-      specializedRenderer
+      specializedRenderer,
+      () => unmountComponentAtNode(containerNode)
     );
     return makeCurrentRefinedValues({
       attributes,

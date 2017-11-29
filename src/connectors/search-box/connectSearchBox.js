@@ -35,6 +35,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function(string)} refine Sets a new query and searches.
  * @property {function()} clear Remove the query and perform search.
  * @property {Object} widgetParams All original `CustomSearchBoxWidgetOptions` forwarded to the `renderFn`.
+ * @property {boolean} isSearchStalled `true` if the search results takes more than a certain time to come back
+ * from Algolia servers. This can be configured on the InstantSearch constructor with the attribute
+ * `stalledSearchDelay` which is 200ms, by default.
  */
 
 /**
@@ -44,6 +47,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * may be impacted by the `queryHook` widget parameter.
  * @type {Connector}
  * @param {function(SearchBoxRenderingOptions, boolean)} renderFn Rendering function for the custom **SearchBox** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomSearchBoxWidgetOptions)} Re-usable widget factory for a custom **SearchBox** widget.
  * @example
  * // custom `renderFn` to render the custom SearchBox widget
@@ -71,7 +75,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectSearchBox(renderFn) {
+export default function connectSearchBox(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -126,7 +130,7 @@ export default function connectSearchBox(renderFn) {
         );
       },
 
-      render({ helper, instantSearchInstance }) {
+      render({ helper, instantSearchInstance, searchMetadata }) {
         this._clear = clear(helper);
 
         renderFn(
@@ -137,9 +141,15 @@ export default function connectSearchBox(renderFn) {
             clear: this._cachedClear,
             widgetParams,
             instantSearchInstance,
+            isSearchStalled: searchMetadata.isSearchStalled,
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        unmountFn();
+        return state.setQuery('');
       },
     };
   };

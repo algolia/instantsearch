@@ -400,10 +400,10 @@ describe('currentToggle()', () => {
       let helper;
 
       function toggleOn() {
-        widget.toggleRefinement(helper, { isRefined: false });
+        widget.toggleRefinement({ isRefined: false });
       }
       function toggleOff() {
-        widget.toggleRefinement(helper, { isRefined: true });
+        widget.toggleRefinement({ isRefined: true });
       }
 
       beforeEach(() => {
@@ -424,6 +424,11 @@ describe('currentToggle()', () => {
             userValues,
           });
           widget.getConfiguration();
+          const state = {
+            isDisjunctiveFacetRefined: sinon.stub().returns(false),
+          };
+          const createURL = () => '#';
+          widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
           toggleOn();
@@ -443,6 +448,11 @@ describe('currentToggle()', () => {
             userValues,
           });
           widget.getConfiguration();
+          const state = {
+            isDisjunctiveFacetRefined: sinon.stub().returns(true),
+          };
+          const createURL = () => '#';
+          widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
           toggleOff();
@@ -468,6 +478,11 @@ describe('currentToggle()', () => {
             values: userValues,
           });
           widget.getConfiguration();
+          const state = {
+            isDisjunctiveFacetRefined: sinon.stub().returns(false),
+          };
+          const createURL = () => '#';
+          widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
           toggleOn();
@@ -494,6 +509,11 @@ describe('currentToggle()', () => {
             values: userValues,
           });
           widget.getConfiguration();
+          const state = {
+            isDisjunctiveFacetRefined: sinon.stub().returns(true),
+          };
+          const createURL = () => '#';
+          widget.init({ state, helper, createURL, instantSearchInstance });
 
           // When
           toggleOff();

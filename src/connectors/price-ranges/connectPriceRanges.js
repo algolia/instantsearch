@@ -43,6 +43,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *
  * @type {Connector}
  * @param {function(PriceRangesRenderingOptions, boolean)} renderFn Rendering function for the custom **PriceRanges** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomPriceRangesWidgetOptions)} Re-usable widget factory for a custom **PriceRanges** widget.
  * @example
  * function getLabel(item) {
@@ -97,7 +98,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectPriceRanges(renderFn) {
+export default function connectPriceRanges(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -157,13 +158,15 @@ export default function connectPriceRanges(renderFn) {
       },
 
       init({ helper, instantSearchInstance }) {
-        this._refine = this._refine.bind(this, helper);
+        this.refine = opts => {
+          this._refine(helper, opts);
+        };
 
         renderFn(
           {
             instantSearchInstance,
             items: [],
-            refine: this._refine,
+            refine: this.refine,
             widgetParams,
           },
           true
@@ -208,12 +211,22 @@ export default function connectPriceRanges(renderFn) {
         renderFn(
           {
             items: facetValues,
-            refine: this._refine,
+            refine: this.refine,
             widgetParams,
             instantSearchInstance,
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        unmountFn();
+
+        const nextState = state
+          .removeFacetRefinement(attributeName)
+          .removeFacet(attributeName);
+
+        return nextState;
       },
     };
   };

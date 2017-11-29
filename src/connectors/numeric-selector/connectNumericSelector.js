@@ -51,6 +51,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * It provides a `refine(value)` function to trigger a new search with selected option.
  * @type {Connector}
  * @param {function(NumericSelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericSelector** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomNumericSelectorWidgetOptions)} Re-usable widget factory for a custom **NumericSelector** widget.
  * @example
  * // custom `renderFn` to render the custom NumericSelector widget
@@ -93,7 +94,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   })
  * );
  */
-export default function connectNumericSelector(renderFn) {
+export default function connectNumericSelector(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -152,6 +153,11 @@ export default function connectNumericSelector(renderFn) {
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        unmountFn();
+        return state.removeNumericRefinement(attributeName);
       },
 
       _getRefinedValue(state) {

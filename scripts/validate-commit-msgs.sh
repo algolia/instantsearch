@@ -4,10 +4,10 @@ set -e # exit when error
 
 [ -z $TRAVIS_PULL_REQUEST ] && TRAVIS_PULL_REQUEST="false"
 
-if [ $TRAVIS_PULL_REQUEST == "false" ]; then
-  echo "No need to validate commit message when not in a pull request"
-  exit 0
-fi
+# if [ $TRAVIS_PULL_REQUEST == "false" ]; then
+#   echo "No need to validate commit message when not in a pull request"
+#   exit 0
+# fi
 
 # Checks the commits msgs in the range of commits travis is testing.
 # Based heavily on
@@ -39,13 +39,13 @@ for sha in `git log --format=oneline "$RANGE" | cut '-d ' -f1`; do
 
   FIRST_LINE=`git log --format=%B -n 1 $sha | head -1`
   MSG_LENGTH=`echo "$FIRST_LINE" | wc -c`
-  if [ $MSG_LENGTH -gt 100 ]; then
+  if echo $FIRST_LINE | grep -qE '^Merge (pull request|branch)'; then
+    echo "OK (merge)"
+  elif [ $MSG_LENGTH -gt 100 ]; then
     echo "KO (too long): $FIRST_LINE"
     EXIT=2
-  elif echo $FIRST_LINE | grep -qE '^v\d+\.\d+\.\d+(-beta\.\d+)?'; then
+  elif echo $FIRST_LINE | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+(-beta\.[0-9]+)?'; then
     echo "OK (version)"
-  elif echo $FIRST_LINE | grep -qE '^Merge (pull request|branch)'; then
-    echo "OK (merge)"
   elif echo $FIRST_LINE | grep -qE '^(feat|fix|docs?|style|refactor|perf|tests?|chore|revert)(\(.+\))?: .*'; then
     echo "OK"
   else

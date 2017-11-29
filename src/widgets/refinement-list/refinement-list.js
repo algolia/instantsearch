@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import filter from 'lodash/filter';
 
@@ -98,7 +98,7 @@ refinementList({
   [ collapsible=false ],
   [ showMore.{templates: {active, inactive}, limit} ],
   [ collapsible=false ],
-  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive}],
+  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive, escapeFacetValues}],
 })`;
 
 /**
@@ -112,6 +112,8 @@ refinementList({
  * @property {SearchForFacetTemplates} [templates] Templates to use for search for facet values.
  * @property {boolean} [isAlwaysActive=false] When `false` the search field will become disabled if
  * there are less items to display than the `options.limit`, otherwise the search field is always usable.
+ * @property {boolean} [escapeFacetValues=false] When activated, it will escape the facet values that are returned
+ * from Algolia. In this case, the surrounding tags will always be `<em></em>`.
  */
 
 /**
@@ -247,6 +249,9 @@ export default function refinementList(
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
 
+  const escapeFacetValues = searchForFacetValues
+    ? Boolean(searchForFacetValues.escapeFacetValues)
+    : false;
   const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || limit;
   const containerNode = getContainerNode(container);
   const showMoreTemplates = showMoreConfig
@@ -287,13 +292,16 @@ export default function refinementList(
   });
 
   try {
-    const makeWidget = connectRefinementList(specializedRenderer);
+    const makeWidget = connectRefinementList(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget({
       attributeName,
       operator,
       limit,
       showMoreLimit,
       sortBy,
+      escapeFacetValues,
     });
   } catch (e) {
     throw new Error(e);

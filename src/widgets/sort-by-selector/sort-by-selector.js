@@ -1,4 +1,4 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
@@ -106,7 +106,9 @@ export default function sortBySelector(
   });
 
   try {
-    const makeWidget = connectSortBySelector(specializedRenderer);
+    const makeWidget = connectSortBySelector(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeWidget({ indices });
   } catch (e) {
     throw new Error(usage);

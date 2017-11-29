@@ -24,7 +24,11 @@ const renderer = ({
   wrapInput,
   reset,
   magnifier,
-}) => ({ refine, clear, query, onHistoryChange }, isFirstRendering) => {
+  loadingIndicator,
+}) => (
+  { refine, clear, query, onHistoryChange, isSearchStalled },
+  isFirstRendering
+) => {
   if (isFirstRendering) {
     const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
     const input = createInput(containerNode);
@@ -53,6 +57,8 @@ const renderer = ({
 
     if (magnifier) addMagnifier(input, magnifier, templates);
     if (reset) addReset(input, reset, templates, clear);
+    if (loadingIndicator)
+      addLoadingIndicator(input, loadingIndicator, templates);
 
     addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
 
@@ -106,11 +112,12 @@ const renderer = ({
       }
     }
   } else {
-    const input = getInput(containerNode);
-    const isFocused = document.activeElement === input;
-    if (!isFocused && query !== input.value) {
-      input.value = query;
-    }
+    renderAfterInit({
+      containerNode,
+      query,
+      loadingIndicator,
+      isSearchStalled,
+    });
   }
 
   if (reset) {
@@ -122,6 +129,37 @@ const renderer = ({
         : containerNode.querySelector(resetBtnSelector);
     resetButton.style.display = query && query.trim() ? 'block' : 'none';
   }
+};
+
+function renderAfterInit({
+  containerNode,
+  query,
+  loadingIndicator,
+  isSearchStalled,
+}) {
+  const input = getInput(containerNode);
+  const isFocused = document.activeElement === input;
+  if (!isFocused && query !== input.value) {
+    input.value = query;
+  }
+
+  if (loadingIndicator) {
+    const rootElement =
+      containerNode.tagName === 'INPUT'
+        ? containerNode.parentNode
+        : containerNode.firstChild;
+    if (isSearchStalled) {
+      rootElement.classList.add('ais-stalled-search');
+    } else {
+      rootElement.classList.remove('ais-stalled-search');
+    }
+  }
+}
+
+const disposer = containerNode => () => {
+  const range = document.createRange(); // IE10+
+  range.selectNodeContents(containerNode);
+  range.deleteContents();
 };
 
 const usage = `Usage:
@@ -156,6 +194,12 @@ searchBox({
  */
 
 /**
+ * @typedef {Object} SearchBoxLoadingIndicatorOption
+ * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
+ * @property {{root: string}} [cssClasses] CSS classes added to the loading-indicator element.
+ */
+
+/**
  * @typedef {Object} SearchBoxCSSClasses
  * @property  {string|string[]} [root] CSS class to add to the
  * wrapping `<div>` (if `wrapInput` set to `true`).
@@ -175,6 +219,7 @@ searchBox({
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
  * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
  * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
+ * @property  {boolean|SearchBoxLoadingIndicatorOption} [loadingIndicator=false] Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
  * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
  * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
  * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
@@ -202,7 +247,8 @@ searchBox({
  *     placeholder: 'Search for products',
  *     autofocus: false,
  *     poweredBy: true,
- *     reset: false,
+ *     reset: true,
+ *     loadingIndicator: false
  *   })
  * );
  */
@@ -217,6 +263,7 @@ export default function searchBox(
     searchOnEnterKeyPressOnly = false,
     reset = true,
     magnifier = true,
+    loadingIndicator = false,
     queryHook,
   } = {}
 ) {
@@ -247,10 +294,14 @@ export default function searchBox(
     wrapInput,
     reset,
     magnifier,
+    loadingIndicator,
   });
 
   try {
-    const makeWidget = connectSearchBox(specializedRenderer);
+    const makeWidget = connectSearchBox(
+      specializedRenderer,
+      disposer(containerNode)
+    );
     return makeWidget({ queryHook });
   } catch (e) {
     throw new Error(usage);
@@ -389,6 +440,31 @@ function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
   const htmlNode = createNodeFromString(
     stringNode,
     cx(bem('magnifier-wrapper'))
+  );
+  input.parentNode.appendChild(htmlNode);
+}
+
+function addLoadingIndicator(
+  input,
+  loadingIndicator,
+  { loadingIndicator: loadingIndicatorTemplate }
+) {
+  loadingIndicator = {
+    cssClasses: {},
+    template: loadingIndicatorTemplate,
+    ...loadingIndicator,
+  };
+
+  const loadingIndicatorCSSClasses = {
+    root: cx(bem('loading-indicator'), loadingIndicator.cssClasses.root),
+  };
+  const stringNode = processTemplate(loadingIndicator.template, {
+    cssClasses: loadingIndicatorCSSClasses,
+  });
+
+  const htmlNode = createNodeFromString(
+    stringNode,
+    cx(bem('loading-indicator-wrapper'))
   );
   input.parentNode.appendChild(htmlNode);
 }
