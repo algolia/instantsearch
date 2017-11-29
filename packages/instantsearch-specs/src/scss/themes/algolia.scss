@@ -13,7 +13,7 @@ $port-gore: rgb(58, 69, 112);
 [class^='ais-'] {
   font-size: 1rem;
   color: $port-gore;
-  line-height: 1.3;
+  box-sizing: border-box;
 }
 
 a[class^='ais-'],
@@ -62,6 +62,7 @@ a[class^='ais-'],
   background-color: $algolia-blue;
   border-radius: 5px;
   transition: background-color 0.2s ease-out;
+  outline: none;
 
   &:hover,
   &:focus {
@@ -96,45 +97,68 @@ a[class^='ais-'],
 
 .ais-CurrentRefinements-item {
   display: inline-block;
+  vertical-align: middle;
+  font-size: 0;
 
   + .ais-CurrentRefinements-item {
     margin-left: 0.3rem;
   }
 }
 
-.ais-CurrentRefinements-list {
+.ais-CurrentRefinements-label {
   padding: 0.3rem 0.5rem;
-  display: inline-block;
-  vertical-align: top;
-  background-color: $east-bay;
-  border-radius: 5px;
+  font-size: 0;
+
+  + .ais-CurrentRefinements-label {
+    padding-left: 0;
+  }
+
+  .ais-CurrentRefinements-item &:first-child {
+    border-radius: 5px 0 0 5px;
+  }
+
+  .ais-CurrentRefinements-item &:last-child {
+    border-radius: 0 5px 5px 0;
+  }
 }
 
 .ais-CurrentRefinements-label,
-.ais-CurrentRefinements-delete {
+.ais-CurrentRefinements-labelText,
+.ais-CurrentRefinements-delete,
+.ais-CurrentRefinements-count {
+  display: inline-block;
+  vertical-align: middle;
+  background-color: $east-bay;
+}
+
+.ais-CurrentRefinements-labelText,
+.ais-CurrentRefinements-delete,
+.ais-CurrentRefinements-count {
   font-size: 0.8rem;
   color: #fff;
 }
 
-.ais-CurrentRefinements-delete + .ais-CurrentRefinements-label {
-  margin-left: 0.3rem;
+.ais-CurrentRefinements-delete {
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
 }
 
 .ais-CurrentRefinements-reset {
   display: inline-block;
-  vertical-align: top;
+  vertical-align: middle;
 
   + .ais-CurrentRefinements-list {
     margin-left: 0.3rem;
   }
 }
 
-.ais-CurrentRefinements-count {
-  color: #fff;
-}
-
-.ais-HierarchicalMenu-list {
+.ais-HierarchicalMenu-list,
+.ais-Menu-list,
+.ais-NumericMenu-list,
+.ais-RatingMenu-list,
+.ais-RefinementList-list {
   font-weight: normal;
+  line-height: 1.5;
 }
 
 .ais-HierarchicalMenu-link {
@@ -143,13 +167,13 @@ a[class^='ais-'],
     content: '';
     width: 10px;
     height: 10px;
-    display: inline-block;
+    display: none;
     background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27%3E%3Cpath d=%27M7.33 24l-2.83-2.829 9.339-9.175-9.339-9.167 2.83-2.829 12.17 11.996z%27 fill%3D%22%233A4570%22 /%3E%3C/svg%3E');
     background-size: 100% 100%;
   }
 
-  .ais-HierarchicalMenu-item--noRefinement > &:after {
-    display: none;
+  .ais-HierarchicalMenu-item--parent > &:after {
+    display: inline-block;
   }
 
   .ais-HierarchicalMenu-item--selected > &:after {
@@ -258,6 +282,7 @@ a[class^='ais-'],
   border: none;
   border-radius: 5px;
   transition: 0.2s ease-out;
+  outline: none;
 
   &:hover,
   &:focus {
@@ -312,6 +337,7 @@ a[class^='ais-'],
 
   .rheostat-background {
     border-color: darken($ghost, 20%);
+    box-sizing: border-box;
   }
 }
 
@@ -338,6 +364,11 @@ div.ais-RatingMenu-button {
   font-weight: bold;
 }
 
+.ais-RatingMenu-button {
+  display: block;
+  outline: none;
+}
+
 .ais-RatingMenu-starIcon {
   position: relative;
   top: -1px;
@@ -349,7 +380,14 @@ div.ais-RatingMenu-button {
   }
 }
 
-.ais-RefinementList-searchbox {
+.ais-RatingMenu-starIcon,
+.ais-RatingMenu-label,
+.ais-RatingMenu-count {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ais-RefinementList-searchBox {
   margin-bottom: 0.5rem;
 }
 
@@ -360,7 +398,7 @@ div.ais-RatingMenu-button {
 
 .ais-SearchBox-input {
   appearance: none;
-  padding: 0.3rem 2rem 0.3rem 0.3rem;
+  padding: 0.3rem 1.7rem;
   width: 100%;
   position: relative;
   background-color: #fff;
@@ -394,6 +432,14 @@ div.ais-RatingMenu-button {
   top: 50%;
   right: 0.3rem;
   transform: translateY(-50%);
+}
+
+.ais-SearchBox-submit {
+  left: 0.3rem;
+}
+
+.ais-SearchBox-reset {
+  right: 0.3rem;
 }
 
 .ais-SearchBox-submitIcon,

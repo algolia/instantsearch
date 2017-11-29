@@ -7,7 +7,7 @@ html: |
       Refinement list
     </div>
     <div class="ais-RefinementList-body ais-body">
-      <div class="ais-RefinementList-searchbox">
+      <div class="ais-RefinementList-searchBox">
         <!-- SearchBox widget here -->
       </div>
       <ul class="ais-RefinementList-list">
@@ -38,7 +38,7 @@ classes:
     description: the header of the widget (optional)
   - name: .ais-RefinementList-body
     description: the body of the widget
-  - name: .ais-RefinementList-searchbox
+  - name: .ais-RefinementList-searchBox
     description: the search box of the widget
   - name: .ais-RefinementList-list
     description: the list of refinement items

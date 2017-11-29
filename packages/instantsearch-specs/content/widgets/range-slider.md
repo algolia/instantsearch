@@ -17,7 +17,7 @@ html: |
           <div class="rheostat-tooltip">$5,000</div>
         </div>
         <div class="rheostat-progress" style="left: 15%; width: 85%;"></div>
-        <div class="rheostat-marker rheostat-marker--lower" style="left: 0%; position: absolute; margin-left: 0px;">
+        <div class="rheostat-marker rheostat-marker--large" style="left: 0%; position: absolute; margin-left: 0px;">
           <div class="rheostat-value">1</div>
         </div>
         <div class="rheostat-marker" style="left: 2.94118%; position: absolute; margin-left: 0px;"></div>
@@ -55,7 +55,7 @@ html: |
         <div class="rheostat-marker" style="left: 91.1765%; position: absolute; margin-left: 0px;"></div>
         <div class="rheostat-marker" style="left: 94.1176%; position: absolute; margin-left: 0px;"></div>
         <div class="rheostat-marker" style="left: 97.0588%; position: absolute; margin-left: 0px;"></div>
-        <div class="rheostat-marker rheostat-marker--large" style="left: 100%; position: absolute; margin-left: -2px;">
+        <div class="rheostat-marker rheostat-marker--large" style="left: 100%; position: absolute; margin-left: -1px;">
           <div class="rheostat-value">5,000</div>
         </div>
       </div>
