@@ -20,7 +20,7 @@ html: |
                 <span class="ais-HierarchicalMenu-count">181</span>
               </a>
             </li>
-            <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--noRefinement">
+            <li class="ais-HierarchicalMenu-item">
               <a class="ais-HierarchicalMenu-link" href="#">
                 <span class="ais-HierarchicalMenu-label">Fans</span>
                 <span class="ais-HierarchicalMenu-count">91</span>
@@ -55,8 +55,6 @@ classes:
     description: the selected menu list item
   - name: .ais-HierarchicalMenu-item--parent
     description: the menu list item containing children
-  - name: .ais-HierarchicalMenu-item--noRefinement
-    description: the menu list item not containing children
   - name: .ais-HierarchicalMenu-link
     description: the clickable menu element
   - name: .ais-HierarchicalMenu-label
