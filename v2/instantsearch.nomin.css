@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.2.5 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-search-box {
+/*! instantsearch.js preview-2.3.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-search-box {
   position: relative;
   max-width: 300px;
   width: 100%; }
@@ -18,6 +18,20 @@
     left: 7px; }
     .ais-search-box--magnifier svg {
       display: block;
+      vertical-align: middle;
+      height: 14px;
+      width: 14px; }
+  .ais-search-box--loading-indicator-wrapper {
+    display: none;
+    background: transparent;
+    position: absolute;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    top: 4px;
+    left: 7px; }
+    .ais-search-box--loading-indicator-wrapper svg {
       vertical-align: middle;
       height: 14px;
       width: 14px; }
@@ -53,6 +67,12 @@
     background-repeat: no-repeat;
     background-size: contain;
     vertical-align: middle; }
+
+.ais-search-box.ais-stalled-search .ais-search-box--magnifier-wrapper {
+  display: none; }
+
+.ais-search-box.ais-stalled-search .ais-search-box--loading-indicator-wrapper {
+  display: block; }
 
 .sbx-sffv {
   display: inline-block;
@@ -351,6 +371,43 @@
 .ais-hierarchical-menu--footer {
   /* widget footer */ }
 
+.ais-range-input--fieldset {
+  /* custom fieldset */
+  margin: 0;
+  padding: 0;
+  border: 0; }
+
+.ais-range-input--labelMin {
+  /* custom label min */
+  display: inline-block; }
+
+.ais-range-input--inputMin {
+  /* custom input min */
+  min-width: 165px; }
+  .ais-range-input--inputMin:hover:disabled {
+    cursor: not-allowed; }
+
+.ais-range-input--separator {
+  /* separator */
+  margin: 0 5px; }
+
+.ais-range-input--labelMax {
+  /* custom label max */
+  display: inline-block; }
+
+.ais-range-input--inputMax {
+  /* custom input max */
+  min-width: 165px; }
+  .ais-range-input--inputMax:hover:disabled {
+    cursor: not-allowed; }
+
+.ais-range-input--submit {
+  /* custom form button */
+  margin-left: 5px; }
+  .ais-range-input--submit:disabled, .ais-range-input--submit:hover:disabled {
+    cursor: not-allowed;
+    background-color: #C9C9C9; }
+
 .ais-range-slider .ais-range-slider--disabled {
   cursor: not-allowed; }
   .ais-range-slider .ais-range-slider--disabled .ais-range-slider--handle {
@@ -560,3 +617,16 @@
 
 .ais-root__collapsed .ais-body, .ais-root__collapsed .ais-footer {
   display: none; }
+
+.ais-breadcrumb--label,
+.ais-breadcrumb--separator,
+.ais-breadcrumb--home {
+  display: inline;
+  color: #3369E7; }
+
+.ais-breadcrumb--item {
+  display: inline; }
+
+.ais-breadcrumb--disabledLabel {
+  color: #444444;
+  display: inline; }

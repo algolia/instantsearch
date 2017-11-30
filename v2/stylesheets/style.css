@@ -4813,8 +4813,7 @@ figure figcaption {
     line-height: 22px; }
   .documentation-section ul,
   .examples-section ul {
-    margin: 0;
-    position: relative; }
+    margin: 0; }
     .documentation-section ul li,
     .examples-section ul li {
       padding: 0; }
@@ -4844,7 +4843,6 @@ figure figcaption {
     margin-top: 32px;
     font-size: 24px;
     color: #201c38;
-    position: relative;
     z-index: 10; }
   .documentation-section h4,
   .examples-section h4 {

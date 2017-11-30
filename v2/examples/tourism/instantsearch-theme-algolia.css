@@ -1,5 +1,5 @@
-/*! instantsearch.js preview-2.2.5 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
-.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button {
+/*! instantsearch.js preview-2.3.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
+.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button, .ais-range-input--submit {
   color: #FFFFFF;
   display: inline-block;
   background: #3369E7;
@@ -7,7 +7,7 @@
   font-size: 12px;
   text-decoration: none;
   padding: 4px 8px; }
-  .ais-clear-all--link:hover, .ais-current-refined-values--clear-all:hover, .ais-price-ranges--button:hover {
+  .ais-clear-all--link:hover, .ais-current-refined-values--clear-all:hover, .ais-price-ranges--button:hover, .ais-range-input--submit:hover {
     text-decoration: none;
     color: #FFFFFF;
     background: #184ECD; }
@@ -157,6 +157,21 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
   position: relative;
   top: -2px; }
 
+.ais-range-input--inputMin, .ais-range-input--inputMax {
+  background: #FFFFFF;
+  -webkit-box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+          box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  border: solid 1px #D4D8E3;
+  border-radius: 4px;
+  outline: none; }
+
+.ais-range-input--submit {
+  border: none;
+  outline: none;
+  margin-left: 5px;
+  position: relative;
+  top: -2px; }
+
 .ais-range-slider--handle {
   border: 1px solid #3369E7; }
 
@@ -204,6 +219,13 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
     .ais-search-box--magnifier svg {
       height: 18px;
       width: 18px; }
+  .ais-search-box--loading-indicator-wrapper {
+    fill: #BFC7D8;
+    left: 12px;
+    top: calc(50% - 18px / 2); }
+    .ais-search-box--loading-indicator-wrapper svg {
+      height: 18px;
+      width: 18px; }
 
 .ais-stats {
   color: #697782;
@@ -212,6 +234,34 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-toggle--item__active {
   font-weight: bold; }
+
+.ais-breadcrumb--root .ais-breadcrumb--label,
+.ais-breadcrumb--root .ais-breadcrumb--separator,
+.ais-breadcrumb--root .ais-breadcrumb--home {
+  display: inline;
+  color: #3369E7; }
+  .ais-breadcrumb--root .ais-breadcrumb--label div,
+  .ais-breadcrumb--root .ais-breadcrumb--separator div,
+  .ais-breadcrumb--root .ais-breadcrumb--home div {
+    display: inline; }
+
+.ais-breadcrumb--root .ais-breadcrumb--disabledLabel {
+  color: #444444;
+  display: inline; }
+
+.ais-breadcrumb--root .ais-breadcrumb--separator {
+  position: relative;
+  display: inline-block;
+  height: 14px;
+  width: 14px; }
+  .ais-breadcrumb--root .ais-breadcrumb--separator::after {
+    background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 8 13' xmlns='http://www.w3.org/2000/svg'><path d='M1.5 1.5l5 4.98-5 5.02' stroke='%23697782' stroke-width='1.5' fill='none' fill-rule='evenodd' stroke-linecap='round' opacity='.4'/></svg>") no-repeat center center/contain;
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: 2px;
+    height: 14px;
+    width: 14px; }
 
 [class^="ais-"] {
   -webkit-box-sizing: border-box;
