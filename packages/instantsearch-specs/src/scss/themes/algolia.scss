@@ -12,24 +12,20 @@ $port-gore: rgb(58, 69, 112);
 
 [class^='ais-'] {
   font-size: 1rem;
-  color: $port-gore;
   box-sizing: border-box;
 }
 
-a[class^='ais-'],
-.ais-HierarchicalMenu-label,
-.ais-Menu-label {
-  color: $algolia-blue;
+a[class^='ais-'] {
   text-decoration: none;
-  transition: color 0.2s ease-out;
-
-  &:hover,
-  &:focus {
-    color: darken($algolia-blue, 10%);
-  }
 }
 
 // Templates
+
+.ais-header,
+.ais-body,
+.ais-footer {
+  color: $port-gore;
+}
 
 .ais-header {
   margin-bottom: 0.5rem;
@@ -47,13 +43,31 @@ a[class^='ais-'],
 
 // Widgets
 
+.ais-Breadcrumb-item + .ais-Breadcrumb-item {
+  margin-left: 0.3rem;
+}
+
 .ais-Breadcrumb-item--selected,
-.ais-HierarchicalMenu-item--selected {
+.ais-HierarchicalMenu-item--selected,
+.ais-Menu-item--selected {
   font-weight: bold;
+}
+
+.ais-Breadcrumb-link,
+.ais-HierarchicalMenu-link,
+.ais-Menu-link {
+  color: $algolia-blue;
+  transition: color 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    color: darken($algolia-blue, 10%);
+  }
 }
 
 .ais-ClearRefinements-button,
 .ais-CurrentRefinements-reset,
+.ais-HierarchicalMenu-showMore,
 .ais-InfiniteResults-loadMore,
 .ais-Menu-showMore {
   padding: 0.3rem 0.5rem;
@@ -95,57 +109,38 @@ a[class^='ais-'],
   }
 }
 
-.ais-CurrentRefinements-item {
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 0;
+.ais-CurrentRefinements-item + .ais-CurrentRefinements-item {
+  margin-left: 0.3rem;
+}
 
-  + .ais-CurrentRefinements-item {
-    margin-left: 0.3rem;
+.ais-CurrentRefinements-button {
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  background-color: $east-bay;
+  transition: 0.2s ease-out;
+  outline: none;
+  border-radius: 5px;
+
+  &:hover,
+  &:focus {
+    background-color: darken($east-bay, 10%);
   }
 }
 
-.ais-CurrentRefinements-label {
-  padding: 0.3rem 0.5rem;
-  font-size: 0;
-
-  + .ais-CurrentRefinements-label {
-    padding-left: 0;
-  }
-
-  .ais-CurrentRefinements-item &:first-child {
-    border-radius: 5px 0 0 5px;
-  }
-
-  .ais-CurrentRefinements-item &:last-child {
-    border-radius: 0 5px 5px 0;
-  }
+.ais-CurrentRefinements-count,
+.ais-CurrentRefinements-delete {
+  margin-left: 0.3rem;
 }
 
 .ais-CurrentRefinements-label,
-.ais-CurrentRefinements-labelText,
-.ais-CurrentRefinements-delete,
-.ais-CurrentRefinements-count {
-  display: inline-block;
-  vertical-align: middle;
-  background-color: $east-bay;
-}
-
-.ais-CurrentRefinements-labelText,
 .ais-CurrentRefinements-delete,
 .ais-CurrentRefinements-count {
   font-size: 0.8rem;
   color: #fff;
 }
 
-.ais-CurrentRefinements-delete {
-  margin-left: 0.5rem;
-  font-size: 0.7rem;
-}
-
 .ais-CurrentRefinements-reset {
-  display: inline-block;
-  vertical-align: middle;
+  display: flex;
 
   + .ais-CurrentRefinements-list {
     margin-left: 0.3rem;
@@ -198,6 +193,16 @@ a[class^='ais-'],
   }
 }
 
+.ais-HierarchicalMenu-count,
+.ais-Menu-count {
+  color: $port-gore;
+}
+
+.ais-HierarchicalMenu-showMore,
+.ais-Menu-showMore {
+  margin-top: 0.5rem;
+}
+
 .ais-Highlight-highlighted,
 .ais-Snippet-highlighted {
   background-color: $koromiko;
@@ -235,10 +240,6 @@ a[class^='ais-'],
   margin-top: 1rem;
 }
 
-.ais-Menu-showMore {
-  margin-top: 0.5rem;
-}
-
 .ais-MenuSelect-select,
 .ais-NumericSelector-select,
 .ais-ResultsPerPage-select,
@@ -252,11 +253,6 @@ a[class^='ais-'],
   background-position: 92% 50%;
   border: 1px solid $ghost;
   border-radius: 5px;
-}
-
-.ais-RangeInput-form {
-  display: flex;
-  align-items: center;
 }
 
 .ais-RangeInput-input {
@@ -291,7 +287,6 @@ a[class^='ais-'],
 }
 
 .ais-Pagination-list {
-  display: flex;
   justify-content: center;
 }
 
@@ -303,9 +298,15 @@ a[class^='ais-'],
 
 .ais-Pagination-link {
   padding: 0.3rem 0.6rem;
-  display: inline-block;
+  display: block;
   border: 1px solid $ghost;
   border-radius: 5px;
+  transition: background-color 0.2s ease-out;
+
+  &:hover,
+  &:focus {
+    background-color: lighten($ghost, 10%);
+  }
 
   .ais-Pagination-item--disabled & {
     opacity: 0.6;
@@ -315,11 +316,19 @@ a[class^='ais-'],
     &:hover,
     &:focus {
       color: darken($ghost, 10%);
+      background-color: #fff;
     }
   }
 
   .ais-Pagination-item--selected & {
-    color: darken($algolia-blue, 10%);
+    color: #fff;
+    background-color: $algolia-blue;
+    border-color: $algolia-blue;
+
+    &:hover,
+    &:focus {
+      color: #fff;
+    }
   }
 }
 
@@ -328,6 +337,10 @@ a[class^='ais-'],
 .rheostat-value,
 .ais-Stats-text {
   font-size: 0.8rem;
+}
+
+.ais-PoweredBy-logo {
+  margin-left: 0.3rem;
 }
 
 .ais-RangeSlider {
@@ -365,8 +378,11 @@ div.ais-RatingMenu-button {
 }
 
 .ais-RatingMenu-button {
-  display: block;
   outline: none;
+
+  * + * {
+    margin-left: 0.3rem;
+  }
 }
 
 .ais-RatingMenu-starIcon {
@@ -378,13 +394,6 @@ div.ais-RatingMenu-button {
   .ais-RatingMenu-item--disabled & {
     fill: $ghost;
   }
-}
-
-.ais-RatingMenu-starIcon,
-.ais-RatingMenu-label,
-.ais-RatingMenu-count {
-  display: inline-block;
-  vertical-align: middle;
 }
 
 .ais-RefinementList-searchBox {

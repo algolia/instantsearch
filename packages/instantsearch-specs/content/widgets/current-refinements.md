@@ -9,19 +9,18 @@ html: |
     <div class="ais-CurrentRefinements-body ais-body">
       <ul class="ais-CurrentRefinements-list">
         <li class="ais-CurrentRefinements-item">
-          <span class="ais-CurrentRefinements-label">
-            <span class="ais-CurrentRefinements-labelText">category:</span>
-          </span>
-          <span class="ais-CurrentRefinements-label">
-            <span class="ais-CurrentRefinements-labelText">Movies & TV Shows</span>
+          <button class="ais-CurrentRefinements-button">
+            <span class="ais-CurrentRefinements-label">Movies & TV Shows</span>
             <span class="ais-CurrentRefinements-count">1,574</span>
-            <button class="ais-CurrentRefinements-delete">✕</button>
-          </span>
-          <span class="ais-CurrentRefinements-label">
-            <span class="ais-CurrentRefinements-labelText">Others</span>
+            <span class="ais-CurrentRefinements-delete">✕</span>
+          </button>
+        </li>
+        <li class="ais-CurrentRefinements-item">
+          <button class="ais-CurrentRefinements-button">
+            <span class="ais-CurrentRefinements-label">Others</span>
             <span class="ais-CurrentRefinements-count">2,450</span>
-            <button class="ais-CurrentRefinements-delete">✕</button>
-          </span>
+            <span class="ais-CurrentRefinements-delete">✕</span>
+          </button>
         </li>
       </ul>
       <button class="ais-CurrentRefinements-reset">
@@ -43,10 +42,10 @@ classes:
     description: the list of all refined items
   - name: .ais-CurrentRefinements-item
     description: the refined list item
+  - name: .ais-CurrentRefinements-button
+    description: the button of each refined list item
   - name: .ais-CurrentRefinements-label
     description: the refined list label
-  - name: .ais-CurrentRefinements-labelText
-    description: the label text of each label
   - name: .ais-CurrentRefinements-count
     description: the count of refined values for each item
   - name: .ais-CurrentRefinements-delete
