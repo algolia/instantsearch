@@ -5,11 +5,19 @@
 ### Bug Fixes
 
 * **InstantSearch.dispose:** dont call `getConfiguration` of URLSync widget ([#2604](https://github.com/algolia/instantsearch.js/issues/2604)) ([3234b12](https://github.com/algolia/instantsearch.js/commit/3234b12))
+* **connectors:** prefer wrappers over bind ([#2575](https://github.com/algolia/instantsearch.js/issues/2575)) ([f8e0e00](https://github.com/algolia/instantsearch.js/commit/f8e0e00))
+* **connectHierarchicalMenu:** do not return if facet not set ([#2521](https://github.com/algolia/instantsearch.js/issues/2521)) ([26e99fb](https://github.com/algolia/instantsearch.js/commit/26e99fb))
+
 
 
 ### Features
 
 * **core:** provide information about stalled search to widgets ([#2569](https://github.com/algolia/instantsearch.js/issues/2569)) ([d104be1](https://github.com/algolia/instantsearch.js/commit/d104be1))
+* **core:** InstantSearch hot remove/add widgets ([#2384](https://github.com/algolia/instantsearch.js/issues/2384)) ([cfc1710](https://github.com/algolia/instantsearch.js/commit/cfc1710))
+* **refinementList:** add escapeFacetHits parameter ([#2507](https://github.com/algolia/instantsearch.js/issues/2507)) ([9b1b7ee](https://github.com/algolia/instantsearch.js/commit/9b1b7ee))
+* **breadcrumb:** Add the breadcrumb widget ([#2451](https://github.com/algolia/instantsearch.js/issues/2451)) ([11d78f0](https://github.com/algolia/instantsearch.js/commit/11d78f0)), closes [#2299](https://github.com/algolia/instantsearch.js/issues/2299)
+* **connectRange:** round the range based on precision ([#2498](https://github.com/algolia/instantsearch.js/issues/2498)) ([d4df45d](https://github.com/algolia/instantsearch.js/commit/d4df45d))
+* **rangeInput:** add rangeInput widget ([#2440](https://github.com/algolia/instantsearch.js/issues/2440)) ([7916d16](https://github.com/algolia/instantsearch.js/commit/7916d16))
 
 
 
