@@ -1,3 +1,18 @@
+<a name="2.3.0"></a>
+# [2.3.0](https://github.com/algolia/instantsearch.js/compare/v2.3.0-beta.7...v2.3.0) (2017-11-30)
+
+
+### Bug Fixes
+
+* **InstantSearch.dispose:** dont call `getConfiguration` of URLSync widget ([#2604](https://github.com/algolia/instantsearch.js/issues/2604)) ([3234b12](https://github.com/algolia/instantsearch.js/commit/3234b12))
+
+
+### Features
+
+* **core:** provide information about stalled search to widgets ([#2569](https://github.com/algolia/instantsearch.js/issues/2569)) ([d104be1](https://github.com/algolia/instantsearch.js/commit/d104be1))
+
+
+
 <a name="2.2.5"></a>
 ## [2.2.5](https://github.com/algolia/instantsearch.js/compare/v2.2.4...v2.2.5) (2017-11-20)
 
