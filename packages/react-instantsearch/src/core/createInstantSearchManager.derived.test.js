@@ -120,7 +120,82 @@ describe('createInstantSearchManager', () => {
           });
         });
       });
+
+      it('updates the store and searches with duplicate Index & SortBy', () => {
+        // <InstantSearch indexName="first">
+        //   <SearchBox defaultRefinement="query" />
+        //
+        //   <Index indexName="first">
+        //     <SortBy defaultRefinement="third" />
+        //   </Index>
+        //
+        //   <Index indexName="second" />
+        // </InstantSearch>;
+
+        const ism = createInstantSearchManager({
+          indexName: 'first',
+          initialState: {},
+          searchParameters: {},
+          algoliaClient: client,
+        });
+
+        // <SearchBox defaultRefinement="query" />
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setQuery('query'),
+          context: {},
+          props: {},
+        });
+
+        // <Index indexName="first" />
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: x => x.setIndex('first'),
+          context: {},
+          props: {
+            indexName: 'first',
+          },
+        });
+
+        // <Index indexName="first">
+        //   <SortBy defaultRefinement="third" />
+        // </Index>
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: x => x.setIndex('third'),
+          context: { multiIndexContext: { targetedIndex: 'first' } },
+          props: {},
+        });
+
+        // <Index indexName="second" />
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: x => x.setIndex('second'),
+          context: {},
+          props: {
+            indexName: 'second',
+          },
+        });
+
+        expect(ism.store.getState().results).toBe(null);
+
+        ism.widgetsManager.update();
+
+        return Promise.resolve().then(() => {
+          jest.runAllTimers();
+
+          expect(ism.store.getState().results).toEqual({
+            first: {
+              index: 'third',
+              query: 'query',
+              page: 0,
+            },
+            second: {
+              index: 'second',
+              query: 'query',
+              page: 0,
+            },
+          });
+        });
+      });
     });
+
     describe('on external updates', () => {
       it('updates the store and searches', () => {
         const ism = createInstantSearchManager({

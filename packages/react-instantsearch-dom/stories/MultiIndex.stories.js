@@ -7,6 +7,7 @@ import {
   Index,
   Highlight,
   SearchBox,
+  SortBy,
 } from '../packages/react-instantsearch/dom';
 import {
   connectHits,
@@ -60,6 +61,47 @@ stories
         <Configure hitsPerPage={5} />
       </Index>
       <AutoComplete />
+    </InstantSearch>
+  ))
+  .add('with SortBy nested in same Index as Root', () => (
+    <InstantSearch
+      appId="latency"
+      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+      indexName="categories"
+    >
+      <SearchBox />
+
+      <div className="multi-index_content">
+        <div className="multi-index_categories-or-brands">
+          <Index indexName="categories">
+            <Configure hitsPerPage={3} />
+
+            <SortBy
+              defaultRefinement="categories"
+              items={[
+                { value: 'categories', label: 'Categories' },
+                { value: 'bestbuy', label: 'Best buy' },
+              ]}
+            />
+
+            <CustomCategoriesOrBrands />
+          </Index>
+
+          <Index indexName="products">
+            <Configure hitsPerPage={3} />
+
+            <SortBy
+              defaultRefinement="products"
+              items={[
+                { value: 'products', label: 'Products' },
+                { value: 'brands', label: 'Brands' },
+              ]}
+            />
+
+            <CustomCategoriesOrBrands />
+          </Index>
+        </div>
+      </div>
     </InstantSearch>
   ))
   .add('with conditional rendering', () => (
