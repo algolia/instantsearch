@@ -197,9 +197,17 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         unmountFn();
 
         // compute nextState for the search
-        const nextState = state
-          .removeHierarchicalFacetRefinement(hierarchicalFacetName)
-          .removeHierarchicalFacet(hierarchicalFacetName);
+        let nextState;
+
+        if (state.isHierarchicalFacetRefined(hierarchicalFacetName)) {
+          nextState = state.removeHierarchicalFacetRefinement(
+            hierarchicalFacetName
+          );
+        }
+
+        nextState = (nextState || state).removeHierarchicalFacet(
+          hierarchicalFacetName
+        );
 
         if (nextState.maxValuesPerFacet === limit) {
           nextState.setQueryParameters('maxValuesPerFacet', undefined);
