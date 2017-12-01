@@ -121,6 +121,8 @@ export default function createInstantSearchManager({
         sharedParameters
       );
 
+    indexMapping[mainIndexParameters.index] = indexName;
+
     return { sharedParameters, mainIndexParameters, derivatedWidgets };
   }
 
