@@ -6,6 +6,7 @@ import {
   InstantSearch,
   Index,
   Highlight,
+  Pagination,
   SearchBox,
   SortBy,
 } from '../packages/react-instantsearch/dom';
@@ -146,6 +147,24 @@ stories
           </div>
         </div>
       </Results>
+    </InstantSearch>
+  ))
+  .add('with Hits & Configure', () => (
+    <InstantSearch
+      appId="latency"
+      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+      indexName="brands"
+    >
+      <Configure hitsPerPage={5} />
+      <SearchBox />
+
+      <CustomCategoriesOrBrands />
+      <Pagination />
+
+      <Index indexName="products">
+        <CustomProducts />
+        <Pagination />
+      </Index>
     </InstantSearch>
   ));
 
