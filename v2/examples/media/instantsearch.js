@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.3.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.3.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -8626,7 +8626,17 @@ function connectMenu(renderFn, unmountFn) {
 
         unmountFn();
 
-        var nextState = state.removeHierarchicalFacetRefinement(attributeName).removeHierarchicalFacet(attributeName);
+        var nextState = state;
+
+        if (state.isHierarchicalFacetRefined(attributeName)) {
+          nextState = state.removeHierarchicalFacetRefinement(attributeName);
+        }
+
+        nextState = nextState.removeHierarchicalFacet(attributeName);
+
+        if (nextState.maxValuesPerFacet === limit || showMoreLimit && nextState.maxValuesPerFacet === showMoreLimit) {
+          nextState.setQueryParameters('maxValuesPerFacet', undefined);
+        }
 
         return nextState;
       }
@@ -12559,7 +12569,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.3.0';
+exports.default = '2.3.1';
 
 /***/ }),
 /* 183 */
@@ -13503,7 +13513,13 @@ function connectHierarchicalMenu(renderFn, unmountFn) {
         unmountFn();
 
         // compute nextState for the search
-        var nextState = state.removeHierarchicalFacetRefinement(hierarchicalFacetName).removeHierarchicalFacet(hierarchicalFacetName);
+        var nextState = state;
+
+        if (state.isHierarchicalFacetRefined(hierarchicalFacetName)) {
+          nextState = state.removeHierarchicalFacetRefinement(hierarchicalFacetName);
+        }
+
+        nextState = nextState.removeHierarchicalFacet(hierarchicalFacetName);
 
         if (nextState.maxValuesPerFacet === limit) {
           nextState.setQueryParameters('maxValuesPerFacet', undefined);
