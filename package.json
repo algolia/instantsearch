@@ -126,7 +126,7 @@
     "storybook-addon-jsx": "5.0.0",
     "string": "3.3.3",
     "style-loader": "0.19.0",
-    "webpack": "3.9.1",
+    "webpack": "3.10.0",
     "webpack-bundle-analyzer": "2.9.1",
     "webpack-dev-middleware": "1.12.2",
     "webpack-hot-middleware": "2.21.0"

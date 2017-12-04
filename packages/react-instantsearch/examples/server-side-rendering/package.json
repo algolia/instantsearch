@@ -17,7 +17,7 @@
     "babel-preset-stage-0": "6.24.1",
     "json-loader": "0.5.7",
     "react-test-renderer": "16.2.0",
-    "webpack": "3.9.1",
+    "webpack": "3.10.0",
     "webpack-node-externals": "1.6.0"
   },
   "jest": {
