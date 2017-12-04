@@ -43,7 +43,7 @@ export default {
         'https://www.algolia.com/?' +
         'utm_source=vue-instantsearch&' +
         'utm_medium=website&' +
-        `utm_content=${location.hostname}&` +
+        `utm_content=${location ? location.hostname : ''}&` +
         'utm_campaign=poweredby'
       );
     },
