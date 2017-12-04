@@ -40,7 +40,8 @@
   </form>
 </template>
 
-<script>import algoliaComponent from '../component';
+<script>
+import algoliaComponent from '../component';
 import AisInput from './Input.vue';
 import AisClear from './Clear.vue';
 

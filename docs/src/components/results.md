@@ -17,7 +17,7 @@ Basic usage:
 
 ```html
 <ais-results>
-  <template scope="{ result }">
+  <template slot-scope="{ result }">
     <h2>
       <a :href="result.url">
         {{ result.title }}

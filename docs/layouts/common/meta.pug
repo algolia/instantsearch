@@ -5,7 +5,7 @@
 - var project_desc = project + " - " + description
 
 doctype html
-html
+html(lang='en')
   head
     base(href=publicPath)
     meta(content='IE=edge', http-equiv='X-UA-Compatible')
@@ -34,3 +34,5 @@ html
     link(rel='stylesheet', href="stylesheets/style.css?v=114")
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css")
     link(rel="stylesheet", href="//cdn.jsdelivr.net/npm/instantsearch.js@2.0.0-beta.1/dist/instantsearch.min.css")
+
+  block body

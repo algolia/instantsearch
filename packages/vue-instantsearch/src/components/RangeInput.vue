@@ -111,7 +111,9 @@ export default {
   },
 
   destroyed() {
+    this.searchStore.stop();
     this.searchStore.removeFacet(this.attributeName);
+    this.searchStore.start();
   },
 
   computed: {

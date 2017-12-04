@@ -11,6 +11,8 @@ githubSource: docs/src/components/menu.md
 
 Create a menu based on a facet. A menu displays facet values and let the user selects only one value at a time. It also displays an empty value which lets the user “unselect” any previous selection.
 
+<a class="btn btn-static-theme" href="stories/?selectedKind=Menu">🕹 try out live</a>
+
 ## Usage
 
 ```html

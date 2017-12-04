@@ -1,4 +1,5 @@
-<script>import { FACET_TREE } from '../store';
+<script>
+import { FACET_TREE } from '../store';
 import algoliaComponent from '../component';
 
 export default {
@@ -42,7 +43,9 @@ export default {
     );
   },
   destroyed() {
+    this.searchStore.stop();
     this.searchStore.removeFacet(this.attribute);
+    this.searchStore.start();
   },
   computed: {
     facetValues() {

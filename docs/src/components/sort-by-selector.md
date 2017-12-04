@@ -43,7 +43,7 @@ Customize the option rendering:
       {name: 'products_total_sales', label: 'Popularity'}
     ]"
 >
-  <template scope="{ indexName, label }">
+  <template slot-scope="{ indexName, label }">
     <option :value="indexName">Sort by: {{ label }}</option>
   </template>
 </ais-sort-by-selector>

@@ -25,7 +25,7 @@ Overriding the default content:
 
  ```html
 <ais-no-results>
-	<template scope="props">
+	<template slot-scope="props">
 		No products found for <i>{{ props.query }}</i>.
 	</template>
 </ais-no-results>

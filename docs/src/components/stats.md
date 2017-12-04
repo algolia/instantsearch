@@ -25,7 +25,7 @@ Custom text:
 
 ```html
 <ais-stats>
-  <template scope="{ totalResults, processingTime, query }">
+  <template slot-scope="{ totalResults, processingTime, query }">
     There are {{ totalResults }} matching your query: <b>{{ query }}</b>
     - <small>{{ processingTime }}ms</small>
   </template>

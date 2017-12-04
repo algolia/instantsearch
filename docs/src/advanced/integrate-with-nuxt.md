@@ -83,7 +83,7 @@ You can go ahead and create a search page by creating a new file called `pages/s
   <ais-index app-id="latency" api-key="3d9875e51fbd20c7754e65422f7ce5e1" index-name="bestbuy">
     <ais-search-box></ais-search-box>
     <ais-results>
-      <template scope="{ result }">
+      <template slot-scope="{ result }">
         <h2>{{ result.name }}</h2>
       </template>
     </ais-results>
@@ -111,7 +111,7 @@ Here is what you need to do to enable your server to pre-render results:
   <ais-index :search-store="searchStore" >
     <ais-search-box></ais-search-box>
     <ais-results>
-      <template scope="{ result }">
+      <template slot-scope="{ result }">
         <h2>{{ result.name }}</h2>
       </template>
     </ais-results>

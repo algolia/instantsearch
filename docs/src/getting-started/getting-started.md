@@ -92,7 +92,7 @@ Open the `src/App.vue` component. Then replace the whole beginning of the file, 
   >
     <ais-search-box></ais-search-box>
     <ais-results>
-      <template scope="{ result }">
+      <template slot-scope="{ result }">
         <h2>
           <ais-highlight :result="result" attribute-name="name"></ais-highlight>
         </h2>
@@ -166,7 +166,7 @@ A scoped slot means that the template can access data passed to the slot.
 This is illustrated by this snippet:
 
 ```html
-<template scope="parameters">
+<template slot-scope="parameters">
   <h1>{{ parameters.result.name }}</h1>
 </template>
 ```
@@ -174,7 +174,7 @@ This is illustrated by this snippet:
 or with an ES6 syntax:
 
 ```html
-<template scope="{ result }">
+<template slot-scope="{ result }">
   <h1>{{ result.name }}</h1>
 </template>
 ```

@@ -46,7 +46,7 @@ For more complex data structures, it will be necessary to leverage the [_highlig
 
 ```html
 <ais-results>
-  <template scope="{ result }">
+  <template slot-scope="{ result }">
     <p v-for="keyword in result._highlightResult.keywords" v-html="keyword.value"></p>
   </template>
 </ais-results>
