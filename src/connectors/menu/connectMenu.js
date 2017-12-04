@@ -233,13 +233,13 @@ export default function connectMenu(renderFn, unmountFn) {
       dispose({ state }) {
         unmountFn();
 
-        let nextState;
+        let nextState = state;
 
         if (state.isHierarchicalFacetRefined(attributeName)) {
           nextState = state.removeHierarchicalFacetRefinement(attributeName);
         }
 
-        nextState = (nextState || state).removeHierarchicalFacet(attributeName);
+        nextState = nextState.removeHierarchicalFacet(attributeName);
 
         if (
           nextState.maxValuesPerFacet === limit ||
