@@ -15,29 +15,24 @@ import SnippetComponent from '../components/Snippet.js';
  * @propType {string} [tagName='em'] - the tag to be used for highlighted parts of the attribute
  * @example
  * import React from 'react';
- *
- * import { connectHits, Snippet, InstantSearch } from 'react-instantsearch/dom';
- *
- * const CustomHits = connectHits(({ hits }) =>
- * <div>
- *   {hits.map(hit =>
- *     <p key={hit.objectID}>
- *       <Snippet attributeName="description" hit={hit} />
- *     </p>
- *   )}
- * </div>
- * );
+ * import { Snippet, InstantSearch, Hits } from 'react-instantsearch/dom';
  *
  * export default function App() {
- *  return (
- *    <InstantSearch
+ *   return (
+ *     <InstantSearch
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
  *     >
- *       <CustomHits />
+ *       <Hits
+ *         hitComponent={({ hit }) => (
+ *           <p key={hit.objectID}>
+ *             <Snippet attributeName="description" hit={hit} />
+ *           </p>
+ *         )}
+ *       />
  *     </InstantSearch>
- *  );
+ *   );
  * }
  */
 export default connectHighlight(SnippetComponent);
