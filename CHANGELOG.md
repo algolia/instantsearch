@@ -1,3 +1,14 @@
+<a name="2.3.1"></a>
+## [2.3.1](https://github.com/algolia/instantsearch.js/compare/v2.3.0...v2.3.1) (2017-12-04)
+
+
+### Bug Fixes
+
+* **connectors:** check facet is refined before removing it. hierarchicalMenu / menu ([67ae035](https://github.com/algolia/instantsearch.js/commit/67ae035))
+* **poweredBy:** minify slightly and make into correct URL ([#2615](https://github.com/algolia/instantsearch.js/issues/2615)) ([2b7d747](https://github.com/algolia/instantsearch.js/commit/2b7d747)), closes [#2613](https://github.com/algolia/instantsearch.js/issues/2613)
+
+
+
 <a name="2.3.0"></a>
 # [2.3.0](https://github.com/algolia/instantsearch.js/compare/v2.3.0-beta.7...v2.3.0) (2017-11-30)
 
