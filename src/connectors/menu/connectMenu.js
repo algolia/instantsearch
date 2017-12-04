@@ -233,9 +233,20 @@ export default function connectMenu(renderFn, unmountFn) {
       dispose({ state }) {
         unmountFn();
 
-        const nextState = state
-          .removeHierarchicalFacetRefinement(attributeName)
-          .removeHierarchicalFacet(attributeName);
+        let nextState = state;
+
+        if (state.isHierarchicalFacetRefined(attributeName)) {
+          nextState = state.removeHierarchicalFacetRefinement(attributeName);
+        }
+
+        nextState = nextState.removeHierarchicalFacet(attributeName);
+
+        if (
+          nextState.maxValuesPerFacet === limit ||
+          (showMoreLimit && nextState.maxValuesPerFacet === showMoreLimit)
+        ) {
+          nextState.setQueryParameters('maxValuesPerFacet', undefined);
+        }
 
         return nextState;
       },
