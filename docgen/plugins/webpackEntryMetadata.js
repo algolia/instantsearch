@@ -5,9 +5,9 @@ export default function webpackEntryMetadata(webpackConfig) {
     const assets = Object.keys(webpackConfig.entry).reduce(
       (memo, entryName) => ({
         ...memo,
-        [`${entryName}.js`]: `${webpackConfig.output.publicPath}${
-          entryName
-        }.js`,
+        [`${entryName}.js`]: `${
+          webpackConfig.output.publicPath
+        }${entryName}.js`,
       }),
       {}
     );

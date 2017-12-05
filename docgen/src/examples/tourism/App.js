@@ -233,9 +233,7 @@ const RoomType = connectRefinementList(({ items, refine }) => {
     const selectedClassName = item.isRefined
       ? ' ais-refinement-list--item__active'
       : '';
-    const itemClassName = `ais-refinement-list--item col-sm-3 ${
-      selectedClassName
-    }`;
+    const itemClassName = `ais-refinement-list--item col-sm-3 ${selectedClassName}`;
     return (
       <div className={itemClassName} key={item.label}>
         <div>
