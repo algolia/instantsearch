@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.3.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.3.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -12569,7 +12569,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.3.1';
+exports.default = '2.3.2';
 
 /***/ }),
 /* 183 */
@@ -35562,13 +35562,9 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 exports.default = rangeInput;
 
-var _react = __webpack_require__(1);
+var _preactCompat = __webpack_require__(1);
 
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(1);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
 var _classnames = __webpack_require__(3);
 
@@ -35632,7 +35628,7 @@ var renderer = function renderer(_ref) {
       max: maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined
     };
 
-    _reactDom2.default.render(_react2.default.createElement(_RangeInput2.default, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_RangeInput2.default, {
       min: rangeMin,
       max: rangeMax,
       step: step,
@@ -35802,9 +35798,9 @@ exports.RawRangeInput = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(1);
+var _preactCompat = __webpack_require__(1);
 
-var _react2 = _interopRequireDefault(_react);
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
 var _propTypes = __webpack_require__(4);
 
@@ -35878,16 +35874,16 @@ var RawRangeInput = exports.RawRangeInput = function (_Component) {
 
       var isDisabled = min >= max;
 
-      return _react2.default.createElement(
+      return _preactCompat2.default.createElement(
         'form',
         { className: cssClasses.form, onSubmit: this.onSubmit },
-        _react2.default.createElement(
+        _preactCompat2.default.createElement(
           'fieldset',
           { className: cssClasses.fieldset },
-          _react2.default.createElement(
+          _preactCompat2.default.createElement(
             'label',
             { className: cssClasses.labelMin },
-            _react2.default.createElement('input', {
+            _preactCompat2.default.createElement('input', {
               className: cssClasses.inputMin,
               type: 'number',
               min: min,
@@ -35899,15 +35895,15 @@ var RawRangeInput = exports.RawRangeInput = function (_Component) {
               disabled: isDisabled
             })
           ),
-          _react2.default.createElement(
+          _preactCompat2.default.createElement(
             'span',
             { className: cssClasses.separator },
             labels.separator
           ),
-          _react2.default.createElement(
+          _preactCompat2.default.createElement(
             'label',
             { className: cssClasses.labelMax },
-            _react2.default.createElement('input', {
+            _preactCompat2.default.createElement('input', {
               className: cssClasses.inputMax,
               type: 'number',
               min: min,
@@ -35919,7 +35915,7 @@ var RawRangeInput = exports.RawRangeInput = function (_Component) {
               disabled: isDisabled
             })
           ),
-          _react2.default.createElement(
+          _preactCompat2.default.createElement(
             'button',
             {
               role: 'button',
@@ -35934,7 +35930,7 @@ var RawRangeInput = exports.RawRangeInput = function (_Component) {
   }]);
 
   return RawRangeInput;
-}(_react.Component);
+}(_preactCompat.Component);
 
 exports.default = (0, _autoHideContainer2.default)((0, _headerFooter2.default)(RawRangeInput));
 
@@ -36189,7 +36185,7 @@ var usage = 'Usage:\nsearchBox({\n  container,\n  [ placeholder ],\n  [ cssClass
 
 /**
  * @typedef {Object} SearchBoxWidgetOptions
- * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget. If the CSS selector or the HTMLElement is an existing input, the widget will use it.
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
  * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
@@ -39237,13 +39233,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = breadcrumb;
 
-var _react = __webpack_require__(1);
+var _preactCompat = __webpack_require__(1);
 
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(1);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
 var _classnames = __webpack_require__(3);
 
@@ -39292,7 +39284,7 @@ var renderer = function renderer(_ref) {
 
     var shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-    _reactDom2.default.render(_react2.default.createElement(_Breadcrumb2.default, {
+    (0, _preactCompat.render)(_preactCompat2.default.createElement(_Breadcrumb2.default, {
       canRefine: canRefine,
       cssClasses: cssClasses,
       createURL: createURL,
@@ -39455,9 +39447,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(1);
+var _preactCompat = __webpack_require__(1);
 
-var _react2 = _interopRequireDefault(_react);
+var _preactCompat2 = _interopRequireDefault(_preactCompat);
 
 var _propTypes = __webpack_require__(4);
 
@@ -39507,11 +39499,11 @@ var Breadcrumb = function (_PureComponent) {
 
       var breadcrumb = items.map(function (item, idx) {
         var isLast = idx === items.length - 1;
-        var label = isLast ? _react2.default.createElement(
+        var label = isLast ? _preactCompat2.default.createElement(
           'a',
           { className: cssClasses.disabledLabel + ' ' + cssClasses.label },
           item.name
-        ) : _react2.default.createElement(
+        ) : _preactCompat2.default.createElement(
           'a',
           {
             className: cssClasses.label,
@@ -39524,7 +39516,7 @@ var Breadcrumb = function (_PureComponent) {
           item.name
         );
 
-        return [_react2.default.createElement(_Template2.default, _extends({
+        return [_preactCompat2.default.createElement(_Template2.default, _extends({
           key: item.name + idx,
           rootProps: { className: cssClasses.separator },
           templateKey: 'separator'
@@ -39540,17 +39532,17 @@ var Breadcrumb = function (_PureComponent) {
 
       var homeUrl = createURL(null);
 
-      return _react2.default.createElement(
+      return _preactCompat2.default.createElement(
         'div',
         { className: cssClasses.root },
-        _react2.default.createElement(
+        _preactCompat2.default.createElement(
           'a',
           {
             className: homeClassNames.join(' '),
             href: homeUrl,
             onClick: homeOnClickHandler
           },
-          _react2.default.createElement(_Template2.default, _extends({ templateKey: 'home' }, this.props.templateProps))
+          _preactCompat2.default.createElement(_Template2.default, _extends({ templateKey: 'home' }, this.props.templateProps))
         ),
         breadcrumb
       );
@@ -39558,7 +39550,7 @@ var Breadcrumb = function (_PureComponent) {
   }]);
 
   return Breadcrumb;
-}(_react.PureComponent);
+}(_preactCompat.PureComponent);
 
 exports.default = (0, _autoHideContainer2.default)(Breadcrumb);
 
