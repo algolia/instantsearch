@@ -40,7 +40,7 @@
   "devDependencies": {
     "argos-cli": "0.0.9",
     "autodll-webpack-plugin": "0.2.1",
-    "autoprefixer": "7.1.6",
+    "autoprefixer": "7.2.1",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-eslint": "8.0.2",
