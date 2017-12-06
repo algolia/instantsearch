@@ -214,7 +214,7 @@ searchBox({
 
 /**
  * @typedef {Object} SearchBoxWidgetOptions
- * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget. If the CSS selector or the HTMLElement is an existing input, the widget will use it.
  * @property  {string} [placeholder] Input's placeholder.
  * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
  * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
