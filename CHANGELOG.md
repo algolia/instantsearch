@@ -1,3 +1,13 @@
+<a name="2.3.2"></a>
+## [2.3.2](https://github.com/algolia/instantsearch.js/compare/v2.3.1...v2.3.2) (2017-12-06)
+
+
+### Bug Fixes
+
+* React reference: Breadcrumb & RangeInput components ([#2618](https://github.com/algolia/instantsearch.js/issues/2618)) ([7f32161](https://github.com/algolia/instantsearch.js/commit/7f32161))
+
+
+
 <a name="2.3.1"></a>
 ## [2.3.1](https://github.com/algolia/instantsearch.js/compare/v2.3.0...v2.3.1) (2017-12-04)
 
