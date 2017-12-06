@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
@@ -38,7 +37,7 @@ const renderer = ({
 
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
-  ReactDOM.render(
+  render(
     <Breadcrumb
       canRefine={canRefine}
       cssClasses={cssClasses}

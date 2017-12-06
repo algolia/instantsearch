@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput.js';
 import connectRange from '../../connectors/range/connectRange.js';
@@ -45,7 +44,7 @@ const renderer = ({
     max: maxValue !== Infinity && maxValue !== rangeMax ? maxValue : undefined,
   };
 
-  ReactDOM.render(
+  render(
     <RangeInput
       min={rangeMin}
       max={rangeMax}

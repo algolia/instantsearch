@@ -1,10 +1,14 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'preact-compat';
 import AlgoliasearchHelper from 'algoliasearch-helper';
 import rangeInput from '../range-input.js';
 
-jest.mock('react-dom', () => ({
-  render: jest.fn(),
-}));
+jest.mock('preact-compat', () => {
+  const module = require.requireActual('preact-compat');
+
+  module.render = jest.fn();
+
+  return module;
+});
 
 describe('rangeInput', () => {
   const attributeName = 'aNumAttr';
