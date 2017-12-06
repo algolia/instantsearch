@@ -14,17 +14,26 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * should be formatted this way:
  *
  * ```json
- * {
+ * [{
+ *   "objectID": "321432",
+ *   "name": "lemon",
  *   "categories.lvl0": "products",
  *   "categories.lvl1": "products > fruits",
- *   "categories.lvl2": "products > fruits > citrus"
- * }
+ * },
+ * {
+ *   "objectID": "8976987",
+ *   "name": "orange",
+ *   "categories.lvl0": "products",
+ *   "categories.lvl1": "products > fruits",
+ * }]
  * ```
  *
  * It's also possible to provide more than one path for each level:
  *
  * ```json
  * {
+ *   "objectID": "321432",
+ *   "name": "lemon",
  *   "categories.lvl0": ["products", "goods"],
  *   "categories.lvl1": ["products > fruits", "goods > to eat"]
  * }
