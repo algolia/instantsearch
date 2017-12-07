@@ -535,9 +535,9 @@ atob@~1.1.0:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-1.1.3.tgz#95f13629b12c3a51a5d215abdce2aa9f32f80773"
 
-autodll-webpack-plugin@0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/autodll-webpack-plugin/-/autodll-webpack-plugin-0.2.1.tgz#74976a098d813ab1438fd5ca38f36c874d035d13"
+autodll-webpack-plugin@0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/autodll-webpack-plugin/-/autodll-webpack-plugin-0.3.6.tgz#21c8a5f483c8445b35d6fd69df4a257840d8077e"
   dependencies:
     bluebird "^3.5.0"
     del "^3.0.0"
@@ -545,6 +545,10 @@ autodll-webpack-plugin@0.2.1:
     lodash "^4.17.4"
     make-dir "^1.0.0"
     memory-fs "^0.4.1"
+    mkdirp "^0.5.1"
+    read-pkg "^2.0.0"
+    webpack-merge "^4.1.0"
+    webpack-sources "^1.0.1"
 
 autoprefixer@7.2.1:
   version "7.2.1"
@@ -9960,6 +9964,12 @@ webpack-dev-server@2.9.7:
     supports-color "^4.2.1"
     webpack-dev-middleware "^1.11.0"
     yargs "^6.6.0"
+
+webpack-merge@^4.1.0:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.1.1.tgz#f1197a0a973e69c6fbeeb6d658219aa8c0c13555"
+  dependencies:
+    lodash "^4.17.4"
 
 webpack-sources@^1.0.1:
   version "1.0.1"
