@@ -47,6 +47,7 @@ function cleanUp(props, searchState, context) {
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the query to search for.
+ * @providedPropType {boolean} isSearchStalled - a flag that indicates if react-is has detected that searches are stalled.
  */
 export default createConnector({
   displayName: 'AlgoliaSearchBox',
@@ -55,9 +56,10 @@ export default createConnector({
     defaultRefinement: PropTypes.string,
   },
 
-  getProvidedProps(props, searchState) {
+  getProvidedProps(props, searchState, searchResults) {
     return {
       currentRefinement: getCurrentRefinement(props, searchState, this.context),
+      isSearchStalled: searchResults.isSearchStalled,
     };
   },
 

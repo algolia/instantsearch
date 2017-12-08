@@ -30,6 +30,7 @@ describe('SearchBox', () => {
     inst.update(<SearchBox refine={() => null} currentRefinement="QUERY2" />);
     expect(inst.toJSON()).toMatchSnapshot();
   });
+
   it('lets you customize its theme', () => {
     const tree = renderer
       .create(
@@ -192,5 +193,19 @@ describe('SearchBox', () => {
         .simulate(eventName.replace(/^on/, '').toLowerCase());
       expect(inputProps[eventName]).toBeCalled();
     });
+  });
+
+  it('should render the loader if showLoadingIndicator is true', () => {
+    const treeWithoutLoadingIndicator = renderer
+      .create(<SearchBox refine={() => null} showLoadingIndicator />)
+      .toJSON();
+    expect(treeWithoutLoadingIndicator).toMatchSnapshot();
+
+    const treeWithLoadingIndicator = renderer
+      .create(
+        <SearchBox refine={() => null} showLoadingIndicator isSearchStalled />
+      )
+      .toJSON();
+    expect(treeWithLoadingIndicator).toMatchSnapshot();
   });
 });

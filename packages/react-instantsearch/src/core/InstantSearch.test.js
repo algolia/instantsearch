@@ -121,6 +121,7 @@ describe('InstantSearch', () => {
       initialState: {},
       searchParameters: {},
       algoliaClient: {},
+      stalledSearchDelay: 200,
     });
   });
 

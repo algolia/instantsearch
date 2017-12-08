@@ -16,10 +16,10 @@ describe('connectSearchBox', () => {
     const getSP = connect.getSearchParameters.bind(context);
     const cleanUp = connect.cleanUp.bind(context);
     it('provides the correct props to the component', () => {
-      props = getProvidedProps({}, {});
+      props = getProvidedProps({}, {}, {});
       expect(props).toEqual({ currentRefinement: '' });
 
-      props = getProvidedProps({}, { query: 'yep' });
+      props = getProvidedProps({}, { query: 'yep' }, {});
       expect(props).toEqual({ currentRefinement: 'yep' });
     });
 
@@ -33,7 +33,7 @@ describe('connectSearchBox', () => {
     });
 
     it('supports defaultRefinement', () => {
-      expect(getProvidedProps({ defaultRefinement: 'yaw' }, {})).toEqual({
+      expect(getProvidedProps({ defaultRefinement: 'yaw' }, {}, {})).toEqual({
         currentRefinement: 'yaw',
       });
     });
@@ -65,10 +65,14 @@ describe('connectSearchBox', () => {
     const getSP = connect.getSearchParameters.bind(context);
     const cleanUp = connect.cleanUp.bind(context);
     it('provides the correct props to the component', () => {
-      props = getProvidedProps({}, {});
+      props = getProvidedProps({}, {}, {});
       expect(props).toEqual({ currentRefinement: '' });
 
-      props = getProvidedProps({}, { indices: { first: { query: 'yep' } } });
+      props = getProvidedProps(
+        {},
+        { indices: { first: { query: 'yep' } } },
+        {}
+      );
       expect(props).toEqual({ currentRefinement: 'yep' });
     });
 
@@ -101,7 +105,7 @@ describe('connectSearchBox', () => {
     });
 
     it('supports defaultRefinement', () => {
-      expect(getProvidedProps({ defaultRefinement: 'yaw' }, {})).toEqual({
+      expect(getProvidedProps({ defaultRefinement: 'yaw' }, {}, {})).toEqual({
         currentRefinement: 'yaw',
       });
     });

@@ -5,12 +5,51 @@ import classNames from './classNames.js';
 
 const cx = classNames('SearchBox');
 
+const DefaultLoadingIndicator = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 38 38"
+    xmlns="http://www.w3.org/2000/svg"
+    stroke="#BFC7D8"
+  >
+    <g fill="none" fillRule="evenodd">
+      <g transform="translate(1 1)" strokeWidth="2">
+        <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
+        <path d="M36 18c0-9.94-8.06-18-18-18">
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0 18 18"
+            to="360 18 18"
+            dur="1s"
+            repeatCount="indefinite"
+          />
+        </path>
+      </g>
+    </g>
+  </svg>
+);
+
+const DefaultReset = () => (
+  <svg role="img" width="1em" height="1em">
+    <use xlinkHref="#sbx-icon-clear-3" />
+  </svg>
+);
+
+const DefaultSubmit = () => (
+  <svg role="img" width="1em" height="1em">
+    <use xlinkHref="#sbx-icon-search-13" />
+  </svg>
+);
+
 class SearchBox extends Component {
   static propTypes = {
     currentRefinement: PropTypes.string,
     refine: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
 
+    loadingIndicatorComponent: PropTypes.element,
     resetComponent: PropTypes.element,
     submitComponent: PropTypes.element,
 
@@ -25,6 +64,9 @@ class SearchBox extends Component {
     onReset: PropTypes.func,
     onChange: PropTypes.func,
 
+    isSearchStalled: PropTypes.bool,
+    showLoadingIndicator: PropTypes.bool,
+
     // For testing purposes
     __inputRef: PropTypes.func,
   };
@@ -34,6 +76,11 @@ class SearchBox extends Component {
     focusShortcuts: ['s', '/'],
     autoFocus: false,
     searchAsYouType: true,
+    showLoadingIndicator: false,
+    isSearchStalled: false,
+    loadingIndicatorComponent: <DefaultLoadingIndicator />,
+    submitComponent: <DefaultSubmit />,
+    resetComponent: <DefaultReset />,
   };
 
   constructor(props) {
@@ -153,24 +200,14 @@ class SearchBox extends Component {
   };
 
   render() {
-    const { translate, autoFocus } = this.props;
+    const {
+      translate,
+      autoFocus,
+      loadingIndicatorComponent,
+      resetComponent,
+      submitComponent,
+    } = this.props;
     const query = this.getQuery();
-
-    const submitComponent = this.props.submitComponent ? (
-      this.props.submitComponent
-    ) : (
-      <svg role="img" width="1em" height="1em">
-        <use xlinkHref="#sbx-icon-search-13" />
-      </svg>
-    );
-
-    const resetComponent = this.props.resetComponent ? (
-      this.props.resetComponent
-    ) : (
-      <svg role="img" width="1em" height="1em">
-        <use xlinkHref="#sbx-icon-clear-3" />
-      </svg>
-    );
 
     const searchInputEvents = Object.keys(this.props).reduce((props, prop) => {
       if (
@@ -183,6 +220,9 @@ class SearchBox extends Component {
 
       return props;
     }, {});
+
+    const isSearchStalled =
+      this.props.showLoadingIndicator && this.props.isSearchStalled;
 
     /* eslint-disable max-len */
     return (
@@ -216,7 +256,10 @@ class SearchBox extends Component {
             />
           </symbol>
         </svg>
-        <div role="search" {...cx('wrapper')}>
+        <div
+          role="search"
+          {...cx('wrapper', isSearchStalled && 'stalled-search')}
+        >
           <input
             ref={this.onInputMount}
             type="search"
@@ -233,9 +276,22 @@ class SearchBox extends Component {
             {...searchInputEvents}
             {...cx('input')}
           />
+          {this.props.showLoadingIndicator && (
+            <div
+              style={{
+                display: isSearchStalled ? 'block' : 'none',
+              }}
+              {...cx('loading-indicator')}
+            >
+              {loadingIndicatorComponent}
+            </div>
+          )}
           <button
             type="submit"
             title={translate('submitTitle')}
+            style={{
+              display: isSearchStalled ? 'none' : 'block',
+            }}
             {...cx('submit')}
           >
             {submitComponent}

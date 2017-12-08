@@ -32,6 +32,7 @@ function validateNextProps(props, nextProps) {
  * @propType {object} [searchState] - Object to inject some search state. Switches the InstantSearch component in controlled mode. Useful for [URL Routing](guide/Routing.html).
  * @propType {func} [createURL] - Function to call when creating links, useful for [URL Routing](guide/Routing.html).
  * @propType {SearchResults|SearchResults[]} [resultsState] - Use this to inject the results that will be used at first rendering. Those results are found by using the `findResultsState` function. Useful for [Server Side Rendering](guide/Server-side_rendering.html).
+ * @propType {number} [stalledSearchDelay=200] The amount of time before considering that the search takes too much time. The time is expressed in milliseconds.
  * @example
  * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
  *
@@ -61,6 +62,7 @@ class InstantSearch extends Component {
       algoliaClient: props.algoliaClient,
       initialState,
       resultsState: props.resultsState,
+      stalledSearchDelay: props.stalledSearchDelay,
     });
   }
 
@@ -167,6 +169,10 @@ class InstantSearch extends Component {
   }
 }
 
+InstantSearch.defaultProps = {
+  stalledSearchDelay: 200,
+};
+
 InstantSearch.propTypes = {
   // @TODO: These props are currently constant.
   indexName: PropTypes.string.isRequired,
@@ -191,6 +197,8 @@ InstantSearch.propTypes = {
     Root: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     props: PropTypes.object,
   }).isRequired,
+
+  stalledSearchDelay: PropTypes.number,
 };
 
 InstantSearch.childContextTypes = {

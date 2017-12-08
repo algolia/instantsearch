@@ -58,6 +58,11 @@ exports[`SearchBox applies its default props 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
       title="Submit your search query."
       type="submit"
     >
@@ -149,6 +154,11 @@ exports[`SearchBox lets you customize its theme 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
       title="Submit your search query."
       type="submit"
     >
@@ -240,6 +250,11 @@ exports[`SearchBox lets you customize its translations 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
       title="Submit your search query."
       type="submit"
     >
@@ -331,6 +346,11 @@ exports[`SearchBox lets you give custom components for reset and submit 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
       title="Submit your search query."
       type="submit"
     >
@@ -349,6 +369,288 @@ exports[`SearchBox lets you give custom components for reset and submit 1`] = `
       >
         <path
           d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7"
+        />
+      </svg>
+    </button>
+  </div>
+</form>
+`;
+
+exports[`SearchBox should render the loader if showLoadingIndicator is true 1`] = `
+<form
+  action=""
+  className="ais-SearchBox__root"
+  noValidate={true}
+  onReset={[Function]}
+  onSubmit={[Function]}
+  role="search"
+>
+  <svg
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <symbol
+      id="sbx-icon-search-13"
+      viewBox="0 0 40 40"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
+        fillRule="evenodd"
+      />
+    </symbol>
+    <symbol
+      id="sbx-icon-clear-3"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
+        fillRule="evenodd"
+      />
+    </symbol>
+  </svg>
+  <div
+    className="ais-SearchBox__wrapper"
+    role="search"
+  >
+    <input
+      autoCapitalize="off"
+      autoComplete="off"
+      autoCorrect="off"
+      autoFocus={false}
+      className="ais-SearchBox__input"
+      maxLength="512"
+      onChange={[Function]}
+      placeholder="Search here…"
+      required={true}
+      spellCheck="false"
+      type="search"
+      value=""
+    />
+    <div
+      className="ais-SearchBox__loading-indicator"
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+    >
+      <svg
+        height="18"
+        stroke="#BFC7D8"
+        viewBox="0 0 38 38"
+        width="18"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g
+          fill="none"
+          fillRule="evenodd"
+        >
+          <g
+            strokeWidth="2"
+            transform="translate(1 1)"
+          >
+            <circle
+              cx="18"
+              cy="18"
+              r="18"
+              strokeOpacity=".5"
+            />
+            <path
+              d="M36 18c0-9.94-8.06-18-18-18"
+            >
+              <animateTransform
+                attributeName="transform"
+                dur="1s"
+                from="0 18 18"
+                repeatCount="indefinite"
+                to="360 18 18"
+                type="rotate"
+              />
+            </path>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <button
+      className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
+      title="Submit your search query."
+      type="submit"
+    >
+      <svg
+        height="1em"
+        role="img"
+        width="1em"
+      >
+        <use
+          xlinkHref="#sbx-icon-search-13"
+        />
+      </svg>
+    </button>
+    <button
+      className="ais-SearchBox__reset"
+      onClick={[Function]}
+      title="Clear the search query."
+      type="reset"
+    >
+      <svg
+        height="1em"
+        role="img"
+        width="1em"
+      >
+        <use
+          xlinkHref="#sbx-icon-clear-3"
+        />
+      </svg>
+    </button>
+  </div>
+</form>
+`;
+
+exports[`SearchBox should render the loader if showLoadingIndicator is true 2`] = `
+<form
+  action=""
+  className="ais-SearchBox__root"
+  noValidate={true}
+  onReset={[Function]}
+  onSubmit={[Function]}
+  role="search"
+>
+  <svg
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <symbol
+      id="sbx-icon-search-13"
+      viewBox="0 0 40 40"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
+        fillRule="evenodd"
+      />
+    </symbol>
+    <symbol
+      id="sbx-icon-clear-3"
+      viewBox="0 0 20 20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
+        fillRule="evenodd"
+      />
+    </symbol>
+  </svg>
+  <div
+    className="ais-SearchBox__wrapper ais-SearchBox__stalled-search"
+    role="search"
+  >
+    <input
+      autoCapitalize="off"
+      autoComplete="off"
+      autoCorrect="off"
+      autoFocus={false}
+      className="ais-SearchBox__input"
+      maxLength="512"
+      onChange={[Function]}
+      placeholder="Search here…"
+      required={true}
+      spellCheck="false"
+      type="search"
+      value=""
+    />
+    <div
+      className="ais-SearchBox__loading-indicator"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
+    >
+      <svg
+        height="18"
+        stroke="#BFC7D8"
+        viewBox="0 0 38 38"
+        width="18"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g
+          fill="none"
+          fillRule="evenodd"
+        >
+          <g
+            strokeWidth="2"
+            transform="translate(1 1)"
+          >
+            <circle
+              cx="18"
+              cy="18"
+              r="18"
+              strokeOpacity=".5"
+            />
+            <path
+              d="M36 18c0-9.94-8.06-18-18-18"
+            >
+              <animateTransform
+                attributeName="transform"
+                dur="1s"
+                from="0 18 18"
+                repeatCount="indefinite"
+                to="360 18 18"
+                type="rotate"
+              />
+            </path>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <button
+      className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "none",
+        }
+      }
+      title="Submit your search query."
+      type="submit"
+    >
+      <svg
+        height="1em"
+        role="img"
+        width="1em"
+      >
+        <use
+          xlinkHref="#sbx-icon-search-13"
+        />
+      </svg>
+    </button>
+    <button
+      className="ais-SearchBox__reset"
+      onClick={[Function]}
+      title="Clear the search query."
+      type="reset"
+    >
+      <svg
+        height="1em"
+        role="img"
+        width="1em"
+      >
+        <use
+          xlinkHref="#sbx-icon-clear-3"
         />
       </svg>
     </button>
@@ -414,6 +716,11 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
     />
     <button
       className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
       title="Submit your search query."
       type="submit"
     >
@@ -505,6 +812,11 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
       title="Submit your search query."
       type="submit"
     >
@@ -596,6 +908,11 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
     />
     <button
       className="ais-SearchBox__submit"
+      style={
+        Object {
+          "display": "block",
+        }
+      }
       title="Submit your search query."
       type="submit"
     >

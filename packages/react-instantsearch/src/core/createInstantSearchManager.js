@@ -11,6 +11,7 @@ import { omit, isEmpty } from 'lodash';
  * @param {string} indexName - the main index name
  * @param {object} initialState - initial widget state
  * @param {object} SearchParameters - optional additional parameters to send to the algolia API
+ * @param {number} stalledSearchDelay - time (in ms) after the search is stalled
  * @return {InstantSearchManager} a new instance of InstantSearchManager
  */
 export default function createInstantSearchManager({
@@ -19,6 +20,7 @@ export default function createInstantSearchManager({
   algoliaClient,
   searchParameters = {},
   resultsState,
+  stalledSearchDelay,
 }) {
   const baseSP = new SearchParameters({
     ...searchParameters,
@@ -26,9 +28,12 @@ export default function createInstantSearchManager({
     ...highlightTags,
   });
 
+  let stalledSearchTimer = null;
+
   const helper = algoliasearchHelper(algoliaClient, indexName, baseSP);
   helper.on('result', handleSearchSuccess);
   helper.on('error', handleSearchError);
+  helper.on('search', handleNewSearch);
 
   let derivedHelpers = {};
   let indexMapping = {}; // keep track of the original index where the parameters applied when sortBy is used.
@@ -43,6 +48,7 @@ export default function createInstantSearchManager({
     results: resultsState || null,
     error: null,
     searching: false,
+    isSearchStalled: true,
     searchingForFacetValues: false,
   });
 
@@ -163,7 +169,7 @@ export default function createInstantSearchManager({
     const state = store.getState();
     let results = state.results ? state.results : {};
 
-    /* if switching from mono index to multi index and vice versa, 
+    /* if switching from mono index to multi index and vice versa,
     results needs to reset to {}*/
     results = !isEmpty(derivedHelpers) && results.getFacetByName ? {} : results;
 
@@ -173,10 +179,19 @@ export default function createInstantSearchManager({
       results = content;
     }
 
+    const currentState = store.getState();
+    let nextIsSearchStalled = currentState.isSearchStalled;
+    if (!helper.hasPendingRequests()) {
+      clearTimeout(stalledSearchTimer);
+      stalledSearchTimer = null;
+      nextIsSearchStalled = false;
+    }
+
     const nextState = omit(
       {
-        ...store.getState(),
+        ...currentState,
         results,
+        isSearchStalled: nextIsSearchStalled,
         searching: false,
         error: null,
       },
@@ -186,15 +201,38 @@ export default function createInstantSearchManager({
   }
 
   function handleSearchError(error) {
+    const currentState = store.getState();
+    let nextIsSearchStalled = currentState.isSearchStalled;
+    if (!helper.hasPendingRequests()) {
+      clearTimeout(stalledSearchTimer);
+      nextIsSearchStalled = false;
+    }
+
     const nextState = omit(
       {
-        ...store.getState(),
+        ...currentState,
+        isSearchStalled: nextIsSearchStalled,
         error,
         searching: false,
       },
       'resultsFacetValues'
     );
     store.setState(nextState);
+  }
+
+  function handleNewSearch() {
+    if (!stalledSearchTimer) {
+      stalledSearchTimer = setTimeout(() => {
+        const nextState = omit(
+          {
+            ...store.getState(),
+            isSearchStalled: true,
+          },
+          'resultsFacetValues'
+        );
+        store.setState(nextState);
+      }, stalledSearchDelay);
+    }
   }
 
   // Called whenever a widget has been rendered with new props.
