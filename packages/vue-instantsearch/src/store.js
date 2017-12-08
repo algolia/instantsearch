@@ -15,27 +15,23 @@ export const FACET_TREE = 'tree';
 export const HIGHLIGHT_PRE_TAG = '__ais-highlight__';
 export const HIGHLIGHT_POST_TAG = '__/ais-highlight__';
 
-export const createFromAlgoliaCredentials = (
-  appID,
-  apiKey,
-  stalledSearchTimeout
-) => {
+export const createFromAlgoliaCredentials = (appID, apiKey, options) => {
   const client = algolia(appID, apiKey);
   const helper = algoliaHelper(client);
 
-  return new Store(helper, { stalledSearchTimeout });
+  return new Store(helper, options);
 };
 
-export const createFromAlgoliaClient = client => {
+export const createFromAlgoliaClient = (client, options) => {
   const helper = algoliaHelper(client);
 
-  return new Store(helper);
+  return new Store(helper, options);
 };
 
-export const createFromSerialized = data => {
+export const createFromSerialized = (data, options) => {
   const helper = deserializeHelper(data.helper);
 
-  const store = new Store(helper);
+  const store = new Store(helper, options);
   store.highlightPreTag = data.highlightPreTag;
   store.highlightPostTag = data.highlightPostTag;
 
@@ -43,7 +39,7 @@ export const createFromSerialized = data => {
 };
 
 export class Store {
-  constructor(helper, { stalledSearchTimeout = 200 } = {}) {
+  constructor(helper, { stalledSearchDelay = 200 } = {}) {
     if (!(helper instanceof algoliaHelper.AlgoliaSearchHelper)) {
       throw new TypeError(
         'Store should be constructed with an AlgoliaSearchHelper instance as first parameter.'
@@ -59,7 +55,7 @@ export class Store {
 
     this._cacheEnabled = true;
 
-    this._stalledSearchTimeout = stalledSearchTimeout;
+    this._stalledSearchDelay = stalledSearchDelay;
 
     this.algoliaHelper = helper;
   }
@@ -93,7 +89,7 @@ export class Store {
     this._helper.getClient().addAlgoliaAgent(`vue-instantsearch ${version}`);
 
     this._stalledSearchTimer = null;
-    this.isSearchStalled = false;
+    this.isSearchStalled = true;
   }
 
   get isSearchStalled() {
@@ -487,6 +483,6 @@ const onHelperSearch = function() {
   if (!this._stalledSearchTimer) {
     this._stalledSearchTimer = setTimeout(() => {
       this.isSearchStalled = true;
-    }, this._stalledSearchTimeout);
+    }, this._stalledSearchDelay);
   }
 };

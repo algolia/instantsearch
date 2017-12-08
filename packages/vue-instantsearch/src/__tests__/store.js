@@ -1,6 +1,8 @@
 import algoliaClient from 'algoliasearch';
 import algoliaHelper from 'algoliasearch-helper';
 
+jest.useFakeTimers();
+
 import {
   FACET_AND,
   FACET_OR,
@@ -506,4 +508,74 @@ describe('Store', () => {
       expect(actual).toEqual(expectation);
     });
   });
+
+  describe('loading indicator', () => {
+    test('should change isSearchStalled to true after a timeout', () => {
+      const client = makeManagedClient();
+      const store = createFromAlgoliaClient(client);
+      expect(client.search).not.toHaveBeenCalled();
+
+      // True at the initialization of InstantSearch for consistency
+      expect(store.isSearchStalled).toBe(true);
+
+      store.start();
+      store.refresh();
+
+      expect(client.search).toHaveBeenCalledTimes(1);
+      // first results from Algolia
+      client.searchResultsResolvers[0]();
+      return client.searchResultsPromises[0]
+        .then(() => {
+          expect(store.isSearchStalled).toBe(false);
+
+          store.refresh();
+          // The search timeout kicks in
+          jest.runAllTimers();
+
+          expect(store.isSearchStalled).toBe(true);
+
+          client.searchResultsResolvers[1]();
+          return client.searchResultsPromises[1];
+        })
+        .then(() => {
+          expect(store.isSearchStalled).toBe(false);
+        });
+    });
+  });
+});
+
+function makeManagedClient() {
+  const searchResultsResolvers = [];
+  const searchResultsPromises = [];
+  const fakeClient = {
+    search: jest.fn((qs, cb) => {
+      const p = new Promise(resolve =>
+        searchResultsResolvers.push(resolve)
+      ).then(() => {
+        cb(null, defaultResponse());
+      });
+      searchResultsPromises.push(p);
+    }),
+    addAlgoliaAgent: () => {},
+    searchResultsPromises,
+    searchResultsResolvers,
+  };
+
+  return fakeClient;
+}
+
+const defaultResponse = () => ({
+  results: [
+    {
+      params: 'query=&hitsPerPage=10&page=0&facets=%5B%5D&tagFilters=',
+      page: 0,
+      hits: [],
+      hitsPerPage: 10,
+      nbPages: 0,
+      processingTimeMS: 4,
+      query: '',
+      nbHits: 0,
+      index: 'index',
+    },
+  ],
 });
