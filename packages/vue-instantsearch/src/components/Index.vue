@@ -62,7 +62,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    stalledSearchTimeout: {
+    stalledSearchDelay: {
       type: Number,
       default: 200,
     },
@@ -77,7 +77,7 @@ export default {
       this._localSearchStore = createFromAlgoliaCredentials(
         this.appId,
         this.apiKey,
-        this.stalledSearchTimeout
+        { stalledSearchDelay: this.stalledSearchDelay }
       );
     } else {
       this._localSearchStore = this.searchStore;
