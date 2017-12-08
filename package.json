@@ -158,7 +158,7 @@
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "60 kB"
+      "maxSize": "62 kB"
     }
   ],
   "license": "MIT",
