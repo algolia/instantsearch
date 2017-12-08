@@ -264,12 +264,12 @@ Usage: instantsearch({
     this.helper.on('result', this._render.bind(this, this.helper));
 
     this._searchStalledTimer = null;
-    this._isSearchStalled = false;
+    this._isSearchStalled = true;
 
     this.helper.search();
 
     this.helper.on('search', () => {
-      if (!this._searchStalledTimer) {
+      if (!this._isSearchStalled && !this._searchStalledTimer) {
         this._searchStalledTimer = setTimeout(() => {
           this._isSearchStalled = true;
           this._render(

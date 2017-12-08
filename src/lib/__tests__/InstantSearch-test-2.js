@@ -143,4 +143,31 @@ describe('InstantSearch lifecycle', () => {
       });
     });
   });
+
+  it('does not break when adding a widget dynamically just after start', () => {
+    const searchFunctionSpy = jest.fn(h => {
+      h.setQuery('test').search();
+    });
+
+    const fakeClient = {
+      search: jest.fn(),
+      addAlgoliaAgent: () => {},
+    };
+
+    const search = new InstantSearch({
+      appId,
+      apiKey,
+      indexName,
+      searchFunction: searchFunctionSpy,
+      createAlgoliaClient: () => fakeClient,
+    });
+
+    search.start();
+
+    search.addWidget({
+      render: () => {},
+    });
+
+    jest.runAllTimers();
+  });
 });
