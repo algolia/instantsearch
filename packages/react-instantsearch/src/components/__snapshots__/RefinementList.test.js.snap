@@ -65,6 +65,11 @@ exports[`RefinementList applies translations 1`] = `
           />
           <button
             className="ais-SearchBox__submit"
+            style={
+              Object {
+                "display": "block",
+              }
+            }
             title="Submit your search query."
             type="submit"
           >
@@ -320,6 +325,11 @@ exports[`RefinementList refinement list with search inside items but no search r
           />
           <button
             className="ais-SearchBox__submit"
+            style={
+              Object {
+                "display": "block",
+              }
+            }
             title="Submit your search query."
             type="submit"
           >
@@ -503,6 +513,11 @@ exports[`RefinementList refinement list with search inside items with search res
           />
           <button
             className="ais-SearchBox__submit"
+            style={
+              Object {
+                "display": "block",
+              }
+            }
             title="Submit your search query."
             type="submit"
           >
