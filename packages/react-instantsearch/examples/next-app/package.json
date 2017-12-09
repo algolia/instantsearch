@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "css-loader": "0.28.7",
-    "next": "4.2.0",
+    "next": "4.2.1",
     "prop-types": "15.6.0",
     "qs": "6.5.1",
     "react": "16.2.0",
