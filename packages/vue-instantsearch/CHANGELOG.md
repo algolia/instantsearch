@@ -1,3 +1,13 @@
+<a name="1.3.3"></a>
+## [1.3.3](https://github.com/algolia/vue-instantsearch/compare/v1.3.2...v1.3.3) (2017-12-04)
+
+
+### Bug Fixes
+
+* Powered-by component is not SSR compatible [#367](https://github.com/algolia/vue-instantsearch/issues/367) ([f372bd4](https://github.com/algolia/vue-instantsearch/commit/f372bd4))
+
+
+
 <a name="1.3.2"></a>
 ## [1.3.2](https://github.com/algolia/vue-instantsearch/compare/v1.3.1...v1.3.2) (2017-11-15)
 
