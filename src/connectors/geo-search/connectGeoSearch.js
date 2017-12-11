@@ -49,6 +49,8 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       state.isRefinedWithMap = false;
     };
 
+    const isRefinedWithMap = () => state.isRefinedWithMap;
+
     const toggleRefineOnMapMove = () => state.internalToggleRefineOnMapMove();
     const createInternalToggleRefinementonMapMove = (render, args) => () => {
       state.isRefineOnMapMove = !state.isRefineOnMapMove;
@@ -61,8 +63,6 @@ export default function connectGeoSearch(renderFn, unmountFn) {
     const setMapMoveSinceLastRefine = () => {};
 
     const hasMapMoveSinceLastRefine = () => state.hasMapMoveSinceLastRefine;
-
-    const isRefinedWithMap = () => state.isRefinedWithMap;
 
     const init = initArgs => {
       const { helper } = initArgs;
@@ -78,11 +78,11 @@ export default function connectGeoSearch(renderFn, unmountFn) {
           items: [],
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
+          isRefinedWithMap,
           toggleRefineOnMapMove,
           isRefineOnMapMove,
           setMapMoveSinceLastRefine,
           hasMapMoveSinceLastRefine,
-          isRefinedWithMap,
           widgetParams,
         },
         isFirstRendering
