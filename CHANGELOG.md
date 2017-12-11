@@ -1,3 +1,13 @@
+<a name="2.3.3"></a>
+## [2.3.3](https://github.com/algolia/instantsearch.js/compare/v2.3.2...v2.3.3) (2017-12-11)
+
+
+### Bug Fixes
+
+* **core:** search is stalled at init ([#2623](https://github.com/algolia/instantsearch.js/issues/2623)) ([e3dd577](https://github.com/algolia/instantsearch.js/commit/e3dd577)), closes [#2616](https://github.com/algolia/instantsearch.js/issues/2616)
+
+
+
 <a name="2.3.2"></a>
 ## [2.3.2](https://github.com/algolia/instantsearch.js/compare/v2.3.1...v2.3.2) (2017-12-06)
 
