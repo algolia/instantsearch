@@ -41,7 +41,12 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       state.isRefinedWithMap = true;
     };
 
-    const clearMapRefinement = () => {};
+    const clearMapRefinement = helper => () => {
+      helper.setQueryParameter('insideBoundingBox').search();
+
+      state.hasMapMoveSinceLastRefine = false;
+      state.isRefinedWithMap = false;
+    };
 
     const toggleRefineOnMapMove = () => {};
 
@@ -88,7 +93,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
           {
             items: [],
             refine: refine(helper),
-            clearMapRefinement,
+            clearMapRefinement: clearMapRefinement(helper),
             toggleRefineOnMapMove,
             isRefineOnMapMove,
             setMapMoveSinceLastRefine,
@@ -107,7 +112,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
           {
             items: results.hits,
             refine: refine(helper),
-            clearMapRefinement,
+            clearMapRefinement: clearMapRefinement(helper),
             toggleRefineOnMapMove,
             isRefineOnMapMove,
             setMapMoveSinceLastRefine,
