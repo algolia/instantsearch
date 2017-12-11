@@ -263,6 +263,83 @@ describe('connectGeoSearch', () => {
     });
   });
 
+  describe('toggleRefineOnMapMove', () => {
+    it('expect to toggle refine on map move during init', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      // Simulate the "init" lifecycle
+      widget.init({
+        state: helper.getState(),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(true);
+
+      render.mock.calls[0][0].toggleRefineOnMapMove();
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(false);
+
+      // Simulate the "render" lifecycle
+      widget.render({
+        results: new SearchResults(helper.getState(), [
+          {
+            hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+          },
+        ]),
+        state: helper.getState(),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(false);
+      expect(render.mock.calls[0][0].toggleRefineOnMapMove).toBe(
+        render.mock.calls[1][0].toggleRefineOnMapMove
+      );
+    });
+
+    it('expect to toggle refine on map move during render', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      // Simulate the "render" lifecycle
+      widget.render({
+        results: new SearchResults(helper.getState(), [
+          {
+            hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+          },
+        ]),
+        state: helper.getState(),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(true);
+
+      render.mock.calls[0][0].toggleRefineOnMapMove();
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
+      expect(render.mock.calls[0][0].toggleRefineOnMapMove).toBe(
+        render.mock.calls[1][0].toggleRefineOnMapMove
+      );
+    });
+  });
+
   describe('getConfiguration', () => {
     describe('aroundLatLngViaIP', () => {
       it('expect to set aroundLatLngViaIP', () => {

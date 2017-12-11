@@ -1,3 +1,4 @@
+import noop from 'lodash/noop';
 import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
@@ -48,7 +49,12 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       state.isRefinedWithMap = false;
     };
 
-    const toggleRefineOnMapMove = () => {};
+    const toggleRefineOnMapMove = () => state.internalToggleRefineOnMapMove();
+    const createInternalToggleRefinementonMapMove = (render, args) => () => {
+      state.isRefineOnMapMove = !state.isRefineOnMapMove;
+
+      render(args);
+    };
 
     const isRefineOnMapMove = () => state.isRefineOnMapMove;
 
@@ -57,6 +63,56 @@ export default function connectGeoSearch(renderFn, unmountFn) {
     const hasMapMoveSinceLastRefine = () => state.hasMapMoveSinceLastRefine;
 
     const isRefinedWithMap = () => state.isRefinedWithMap;
+
+    const init = initArgs => {
+      const { helper } = initArgs;
+      const isFirstRendering = true;
+
+      state.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+        noop,
+        initArgs
+      );
+
+      renderFn(
+        {
+          items: [],
+          refine: refine(helper),
+          clearMapRefinement: clearMapRefinement(helper),
+          toggleRefineOnMapMove,
+          isRefineOnMapMove,
+          setMapMoveSinceLastRefine,
+          hasMapMoveSinceLastRefine,
+          isRefinedWithMap,
+          widgetParams,
+        },
+        isFirstRendering
+      );
+    };
+
+    const render = renderArgs => {
+      const { results, helper } = renderArgs;
+      const isFirstRendering = false;
+
+      state.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+        render,
+        renderArgs
+      );
+
+      renderFn(
+        {
+          items: results.hits,
+          refine: refine(helper),
+          clearMapRefinement: clearMapRefinement(helper),
+          toggleRefineOnMapMove,
+          isRefineOnMapMove,
+          setMapMoveSinceLastRefine,
+          hasMapMoveSinceLastRefine,
+          isRefinedWithMap,
+          widgetParams,
+        },
+        isFirstRendering
+      );
+    };
 
     return {
       getConfiguration(previous) {
@@ -86,43 +142,8 @@ export default function connectGeoSearch(renderFn, unmountFn) {
         return configuration;
       },
 
-      init({ helper }) {
-        const isFirstRendering = true;
-
-        renderFn(
-          {
-            items: [],
-            refine: refine(helper),
-            clearMapRefinement: clearMapRefinement(helper),
-            toggleRefineOnMapMove,
-            isRefineOnMapMove,
-            setMapMoveSinceLastRefine,
-            hasMapMoveSinceLastRefine,
-            isRefinedWithMap,
-            widgetParams,
-          },
-          isFirstRendering
-        );
-      },
-
-      render({ results, helper }) {
-        const isFirstRendering = false;
-
-        renderFn(
-          {
-            items: results.hits,
-            refine: refine(helper),
-            clearMapRefinement: clearMapRefinement(helper),
-            toggleRefineOnMapMove,
-            isRefineOnMapMove,
-            setMapMoveSinceLastRefine,
-            hasMapMoveSinceLastRefine,
-            isRefinedWithMap,
-            widgetParams,
-          },
-          isFirstRendering
-        );
-      },
+      init,
+      render,
 
       dispose() {
         unmountFn();
