@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.3.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.3.3 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -7,7 +7,7 @@
 		exports["instantsearch"] = factory();
 	else
 		root["instantsearch"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -1149,9 +1149,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 		module.exports = classNames;
 	} else if (true) {
 		// register as 'classnames', consistent with npm package name
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
 			return classNames;
-		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	} else {
 		window.classNames = classNames;
@@ -12569,7 +12569,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.3.2';
+exports.default = '2.3.3';
 
 /***/ }),
 /* 183 */
@@ -24296,12 +24296,12 @@ var InstantSearch = function (_EventEmitter) {
       this.helper.on('result', this._render.bind(this, this.helper));
 
       this._searchStalledTimer = null;
-      this._isSearchStalled = false;
+      this._isSearchStalled = true;
 
       this.helper.search();
 
       this.helper.on('search', function () {
-        if (!_this4._searchStalledTimer) {
+        if (!_this4._isSearchStalled && !_this4._searchStalledTimer) {
           _this4._searchStalledTimer = setTimeout(function () {
             _this4._isSearchStalled = true;
             _this4._render(_this4.helper, _this4.helper.lastResults, _this4.helper.lastResults._state);
