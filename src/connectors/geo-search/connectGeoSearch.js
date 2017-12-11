@@ -32,7 +32,14 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       isRefinedWithMap: false,
     };
 
-    const refine = () => {};
+    const refine = helper => ({ northEast: ne, southWest: sw }) => {
+      const boundingBox = [[ne.lat, ne.lng, sw.lat, sw.lng]];
+
+      helper.setQueryParameter('insideBoundingBox', boundingBox).search();
+
+      state.hasMapMoveSinceLastRefine = false;
+      state.isRefinedWithMap = true;
+    };
 
     const clearMapRefinement = () => {};
 
@@ -74,13 +81,13 @@ export default function connectGeoSearch(renderFn, unmountFn) {
         return configuration;
       },
 
-      init() {
+      init({ helper }) {
         const isFirstRendering = true;
 
         renderFn(
           {
             items: [],
-            refine,
+            refine: refine(helper),
             clearMapRefinement,
             toggleRefineOnMapMove,
             isRefineOnMapMove,
@@ -93,13 +100,13 @@ export default function connectGeoSearch(renderFn, unmountFn) {
         );
       },
 
-      render({ results }) {
+      render({ results, helper }) {
         const isFirstRendering = false;
 
         renderFn(
           {
             items: results.hits,
-            refine,
+            refine: refine(helper),
             clearMapRefinement,
             toggleRefineOnMapMove,
             isRefineOnMapMove,

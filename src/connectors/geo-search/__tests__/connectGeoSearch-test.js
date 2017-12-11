@@ -105,6 +105,85 @@ describe('connectGeoSearch', () => {
     expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
   });
 
+  describe('refine', () => {
+    it('expect to refine with the given bounds during init', () => {
+      const northEast = {
+        lat: 12,
+        lng: 10,
+      };
+
+      const southWest = {
+        lat: 40,
+        lng: 42,
+      };
+
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch({
+        enableGeolocationWithIP: true,
+      });
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      // Simulate the "init" lifecycle
+      widget.init({
+        state: helper.getState(),
+        helper,
+      });
+
+      render.mock.calls[0][0].refine({ northEast, southWest });
+
+      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(true);
+      expect(helper.getState().insideBoundingBox).toEqual([[12, 10, 40, 42]]);
+      expect(helper.search).toHaveBeenCalledTimes(1);
+    });
+
+    it('expect to refine when the map move with the given bounds during render', () => {
+      const northEast = {
+        lat: 12,
+        lng: 10,
+      };
+
+      const southWest = {
+        lat: 40,
+        lng: 42,
+      };
+
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch({
+        enableGeolocationWithIP: true,
+      });
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      // Simulate the "render" lifecycle
+      widget.render({
+        results: new SearchResults(helper.getState(), [
+          {
+            hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+          },
+        ]),
+        state: helper.getState(),
+        helper,
+      });
+
+      render.mock.calls[0][0].refine({ northEast, southWest });
+
+      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(true);
+      expect(helper.getState().insideBoundingBox).toEqual([[12, 10, 40, 42]]);
+      expect(helper.search).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('getConfiguration', () => {
     describe('aroundLatLngViaIP', () => {
       it('expect to set aroundLatLngViaIP', () => {
