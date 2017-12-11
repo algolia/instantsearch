@@ -1,4 +1,4 @@
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {
@@ -19,11 +19,32 @@ export default function connectGeoSearch(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     const {
+      enableRefineOnMapMove = true,
       enableGeolocationWithIP = true,
       position,
       radius,
       precision,
     } = widgetParams;
+
+    const state = {
+      isRefineOnMapMove: enableRefineOnMapMove,
+      hasMapMoveSinceLastRefine: false,
+      isRefinedWithMap: false,
+    };
+
+    const refine = () => {};
+
+    const clearMapRefinement = () => {};
+
+    const toggleRefineOnMapMove = () => {};
+
+    const isRefineOnMapMove = () => state.isRefineOnMapMove;
+
+    const setMapMoveSinceLastRefine = () => {};
+
+    const hasMapMoveSinceLastRefine = () => state.hasMapMoveSinceLastRefine;
+
+    const isRefinedWithMap = () => state.isRefinedWithMap;
 
     return {
       getConfiguration(previous) {
@@ -54,11 +75,41 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       },
 
       init() {
-        renderFn({}, true);
+        const isFirstRendering = true;
+
+        renderFn(
+          {
+            items: [],
+            refine,
+            clearMapRefinement,
+            toggleRefineOnMapMove,
+            isRefineOnMapMove,
+            setMapMoveSinceLastRefine,
+            hasMapMoveSinceLastRefine,
+            isRefinedWithMap,
+            widgetParams,
+          },
+          isFirstRendering
+        );
       },
 
-      render() {
-        renderFn({}, false);
+      render({ results }) {
+        const isFirstRendering = false;
+
+        renderFn(
+          {
+            items: results.hits,
+            refine,
+            clearMapRefinement,
+            toggleRefineOnMapMove,
+            isRefineOnMapMove,
+            setMapMoveSinceLastRefine,
+            hasMapMoveSinceLastRefine,
+            isRefinedWithMap,
+            widgetParams,
+          },
+          isFirstRendering
+        );
       },
 
       dispose() {

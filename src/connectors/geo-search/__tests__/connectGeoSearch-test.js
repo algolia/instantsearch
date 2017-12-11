@@ -1,8 +1,16 @@
-import searchHelper from 'algoliasearch-helper';
+import searchHelper, { SearchResults } from 'algoliasearch-helper';
 import connectGeoSearch from '../connectGeoSearch';
 
-const client = {
+const createFakeClient = () => ({
   addAlgoliaAgent: () => {},
+});
+
+const createFakeHelper = client => {
+  const helper = searchHelper(client);
+
+  helper.search = jest.fn();
+
+  return helper;
 };
 
 describe('connectGeoSearch', () => {
@@ -21,7 +29,81 @@ describe('connectGeoSearch', () => {
     });
   });
 
-  it('expect to render during init and render');
+  it('expect to render twice during init and render', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch(render, unmount);
+    const widget = customGeoSearch({
+      enableGeolocationWithIP: true,
+    });
+
+    const client = createFakeClient();
+    const helper = createFakeHelper(client);
+
+    // Simulate the "init" lifecycle
+    widget.init({
+      state: helper.getState(),
+      helper,
+    });
+
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [],
+        refine: expect.any(Function),
+        clearMapRefinement: expect.any(Function),
+        toggleRefineOnMapMove: expect.any(Function),
+        setMapMoveSinceLastRefine: expect.any(Function),
+        widgetParams: {
+          enableGeolocationWithIP: true,
+        },
+      }),
+      true
+    );
+
+    expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(true);
+    expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+    expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+
+    // Simulate the "render" lifecycle
+    widget.render({
+      results: new SearchResults(helper.getState(), [
+        {
+          hits: [
+            { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
+            { objectID: 456, _geoloc: { lat: 12, lng: 14 } },
+            { objectID: 789, _geoloc: { lat: 14, lng: 16 } },
+          ],
+        },
+      ]),
+      state: helper.getState(),
+      helper,
+    });
+
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
+          { objectID: 456, _geoloc: { lat: 12, lng: 14 } },
+          { objectID: 789, _geoloc: { lat: 14, lng: 16 } },
+        ],
+        refine: expect.any(Function),
+        clearMapRefinement: expect.any(Function),
+        toggleRefineOnMapMove: expect.any(Function),
+        setMapMoveSinceLastRefine: expect.any(Function),
+        widgetParams: {
+          enableGeolocationWithIP: true,
+        },
+      }),
+      false
+    );
+
+    expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(true);
+    expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+    expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+  });
 
   describe('getConfiguration', () => {
     describe('aroundLatLngViaIP', () => {
