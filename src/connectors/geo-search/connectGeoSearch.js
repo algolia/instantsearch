@@ -17,53 +17,55 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectGeoSearch(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetParams = {}) => ({
-    getConfiguration(previous) {
-      const configuration = {};
+  return (widgetParams = {}) => {
+    const {
+      enableGeolocationWithIP = true,
+      position,
+      radius,
+      precision,
+    } = widgetParams;
 
-      const {
-        enableGeolocationWithIP,
-        position,
-        radius,
-        precision,
-      } = widgetParams;
+    return {
+      getConfiguration(previous) {
+        const configuration = {};
 
-      if (
-        enableGeolocationWithIP &&
-        !position &&
-        !previous.hasOwnProperty('aroundLatLngViaIP') &&
-        !previous.aroundLatLng
-      ) {
-        configuration.aroundLatLngViaIP = true;
-      }
+        if (
+          enableGeolocationWithIP &&
+          !position &&
+          !previous.hasOwnProperty('aroundLatLngViaIP') &&
+          !previous.aroundLatLng
+        ) {
+          configuration.aroundLatLngViaIP = true;
+        }
 
-      if (position && !previous.aroundLatLng && !previous.aroundLatLngViaIP) {
-        configuration.aroundLatLng = `${position.lat}, ${position.lng}`;
-      }
+        if (position && !previous.aroundLatLng && !previous.aroundLatLngViaIP) {
+          configuration.aroundLatLng = `${position.lat}, ${position.lng}`;
+        }
 
-      if (radius && !previous.hasOwnProperty('aroundRadius')) {
-        configuration.aroundRadius = radius;
-      }
+        if (radius && !previous.hasOwnProperty('aroundRadius')) {
+          configuration.aroundRadius = radius;
+        }
 
-      if (precision && !previous.hasOwnProperty('aroundPrecision')) {
-        configuration.aroundPrecision = precision;
-      }
+        if (precision && !previous.hasOwnProperty('aroundPrecision')) {
+          configuration.aroundPrecision = precision;
+        }
 
-      return configuration;
-    },
+        return configuration;
+      },
 
-    init() {
-      renderFn({}, true);
-    },
+      init() {
+        renderFn({}, true);
+      },
 
-    render() {
-      renderFn({}, false);
-    },
+      render() {
+        renderFn({}, false);
+      },
 
-    dispose() {
-      unmountFn();
+      dispose() {
+        unmountFn();
 
-      return {};
-    },
-  });
+        return {};
+      },
+    };
+  };
 }

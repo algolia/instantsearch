@@ -201,6 +201,7 @@ describe('connectGeoSearch', () => {
         });
 
         const expectation = {
+          aroundLatLngViaIP: true,
           aroundRadius: 1000,
         };
 
@@ -218,7 +219,9 @@ describe('connectGeoSearch', () => {
           radius: 1000,
         });
 
-        const expectation = {};
+        const expectation = {
+          aroundLatLngViaIP: true,
+        };
 
         const actual = widget.getConfiguration({
           aroundRadius: 500,
@@ -239,6 +242,7 @@ describe('connectGeoSearch', () => {
         });
 
         const expectation = {
+          aroundLatLngViaIP: true,
           aroundPrecision: 1000,
         };
 
@@ -256,7 +260,9 @@ describe('connectGeoSearch', () => {
           precision: 1000,
         });
 
-        const expectation = {};
+        const expectation = {
+          aroundLatLngViaIP: true,
+        };
 
         const actual = widget.getConfiguration({
           aroundPrecision: 500,
