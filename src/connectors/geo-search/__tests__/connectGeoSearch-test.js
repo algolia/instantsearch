@@ -34,9 +34,7 @@ describe('connectGeoSearch', () => {
     const unmount = jest.fn();
 
     const customGeoSearch = connectGeoSearch(render, unmount);
-    const widget = customGeoSearch({
-      enableGeolocationWithIP: true,
-    });
+    const widget = customGeoSearch();
 
     const client = createFakeClient();
     const helper = createFakeHelper(client);
@@ -55,9 +53,7 @@ describe('connectGeoSearch', () => {
         clearMapRefinement: expect.any(Function),
         toggleRefineOnMapMove: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
-        widgetParams: {
-          enableGeolocationWithIP: true,
-        },
+        widgetParams: {},
       }),
       true
     );
@@ -93,9 +89,7 @@ describe('connectGeoSearch', () => {
         clearMapRefinement: expect.any(Function),
         toggleRefineOnMapMove: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
-        widgetParams: {
-          enableGeolocationWithIP: true,
-        },
+        widgetParams: {},
       }),
       false
     );
@@ -121,9 +115,7 @@ describe('connectGeoSearch', () => {
       const unmount = jest.fn();
 
       const customGeoSearch = connectGeoSearch(render, unmount);
-      const widget = customGeoSearch({
-        enableGeolocationWithIP: true,
-      });
+      const widget = customGeoSearch();
 
       const client = createFakeClient();
       const helper = createFakeHelper(client);
