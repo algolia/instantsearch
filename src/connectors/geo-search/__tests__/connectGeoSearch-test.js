@@ -411,7 +411,7 @@ describe('connectGeoSearch', () => {
 
       expect(render).toHaveBeenCalledTimes(2);
       expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
-      expect(render.mock.calls[1][0].toggleRefineOnMapMove).toBe(
+      expect(render.mock.calls[0][0].toggleRefineOnMapMove).toBe(
         render.mock.calls[1][0].toggleRefineOnMapMove
       );
     });
