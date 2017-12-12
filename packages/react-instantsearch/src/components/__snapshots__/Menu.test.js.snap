@@ -64,11 +64,7 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
         />
         <button
           className="ais-SearchBox__submit"
-          style={
-            Object {
-              "display": "block",
-            }
-          }
+          hidden={false}
           title="Submit your search query."
           type="submit"
         >
@@ -235,11 +231,7 @@ exports[`Menu Menu with search inside items with search results 1`] = `
         />
         <button
           className="ais-SearchBox__submit"
-          style={
-            Object {
-              "display": "block",
-            }
-          }
+          hidden={false}
           title="Submit your search query."
           type="submit"
         >
@@ -362,11 +354,7 @@ exports[`Menu applies translations 1`] = `
         />
         <button
           className="ais-SearchBox__submit"
-          style={
-            Object {
-              "display": "block",
-            }
-          }
+          hidden={false}
           title="Submit your search query."
           type="submit"
         >
