@@ -31,6 +31,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       isRefineOnMapMove: enableRefineOnMapMove,
       hasMapMoveSinceLastRefine: false,
       isRefinedWithMap: false,
+      internalToggleRefineOnMapMove: noop,
       internalSetMapMoveSinceLastRefine: noop,
     };
 
