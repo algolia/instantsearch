@@ -449,6 +449,124 @@ describe('connectGeoSearch', () => {
     });
   });
 
+  describe('setMapMoveSinceLastRefine', () => {
+    it('expect to set map move during init', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      widget.init({
+        state: helper.getState(),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+
+      render.mock.calls[0][0].setMapMoveSinceLastRefine();
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(true);
+
+      widget.render({
+        results: new SearchResults(helper.getState(), [
+          {
+            hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+          },
+        ]),
+        state: helper.getState(),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(true);
+      expect(render.mock.calls[0][0].setMapMoveSinceLastRefine).toBe(
+        render.mock.calls[1][0].setMapMoveSinceLastRefine
+      );
+    });
+
+    it('expect to set map move during render', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      const results = new SearchResults(helper.getState(), [
+        {
+          hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+        },
+      ]);
+
+      widget.render({
+        state: helper.getState(),
+        results,
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+
+      render.mock.calls[0][0].setMapMoveSinceLastRefine();
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(true);
+      expect(render.mock.calls[0][0].setMapMoveSinceLastRefine).toBe(
+        render.mock.calls[1][0].setMapMoveSinceLastRefine
+      );
+    });
+
+    it('expect to set map move during render & trigger render only when value change', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      const results = new SearchResults(helper.getState(), [
+        {
+          hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+        },
+      ]);
+
+      widget.render({
+        state: helper.getState(),
+        results,
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+
+      render.mock.calls[0][0].setMapMoveSinceLastRefine();
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(true);
+      expect(render.mock.calls[0][0].setMapMoveSinceLastRefine).toBe(
+        render.mock.calls[1][0].setMapMoveSinceLastRefine
+      );
+
+      render.mock.calls[0][0].setMapMoveSinceLastRefine();
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(true);
+      expect(render.mock.calls[0][0].setMapMoveSinceLastRefine).toBe(
+        render.mock.calls[1][0].setMapMoveSinceLastRefine
+      );
+    });
+  });
+
   describe('getConfiguration', () => {
     describe('aroundLatLngViaIP', () => {
       it('expect to set aroundLatLngViaIP', () => {

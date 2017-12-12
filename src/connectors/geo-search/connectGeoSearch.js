@@ -31,6 +31,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       isRefineOnMapMove: enableRefineOnMapMove,
       hasMapMoveSinceLastRefine: false,
       isRefinedWithMap: false,
+      internalSetMapMoveSinceLastRefine: noop,
     };
 
     const refine = helper => ({ northEast: ne, southWest: sw }) => {
@@ -60,7 +61,17 @@ export default function connectGeoSearch(renderFn, unmountFn) {
 
     const isRefineOnMapMove = () => state.isRefineOnMapMove;
 
-    const setMapMoveSinceLastRefine = () => {};
+    const setMapMoveSinceLastRefine = () =>
+      state.internalSetMapMoveSinceLastRefine();
+    const createInternalSetMapMoveSinceLastRefine = (render, args) => () => {
+      const shouldTriggerRender = state.hasMapMoveSinceLastRefine !== true;
+
+      state.hasMapMoveSinceLastRefine = true;
+
+      if (shouldTriggerRender) {
+        render(args);
+      }
+    };
 
     const hasMapMoveSinceLastRefine = () => state.hasMapMoveSinceLastRefine;
 
@@ -69,6 +80,11 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       const isFirstRendering = true;
 
       state.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+        noop,
+        initArgs
+      );
+
+      state.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
         noop,
         initArgs
       );
@@ -94,6 +110,11 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       const isFirstRendering = false;
 
       state.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+        render,
+        renderArgs
+      );
+
+      state.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
         render,
         renderArgs
       );
