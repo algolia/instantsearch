@@ -39,7 +39,6 @@ describe('connectGeoSearch - rendering', () => {
     const client = createFakeClient();
     const helper = createFakeHelper(client);
 
-    // Simulate the "init" lifecycle
     widget.init({
       state: helper.getState(),
       helper,
@@ -62,7 +61,6 @@ describe('connectGeoSearch - rendering', () => {
     expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
     expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
 
-    // Simulate the "render" lifecycle
     widget.render({
       results: new SearchResults(helper.getState(), [
         {
