@@ -99,6 +99,40 @@ describe('connectGeoSearch', () => {
     expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
   });
 
+  it('expect to be render with enableRefineOnMapMove disabled', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch(render, unmount);
+    const widget = customGeoSearch({
+      enableRefineOnMapMove: false,
+    });
+
+    const client = createFakeClient();
+    const helper = createFakeHelper(client);
+
+    widget.init({
+      state: helper.getState(),
+      helper,
+    });
+
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(false);
+
+    widget.render({
+      results: new SearchResults(helper.getState(), [
+        {
+          hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+        },
+      ]),
+      state: helper.getState(),
+      helper,
+    });
+
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
+  });
+
   describe('refine', () => {
     it('expect to refine with the given bounds during init', () => {
       const render = jest.fn();
