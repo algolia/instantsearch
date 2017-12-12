@@ -176,6 +176,15 @@ describe('connectGeoSearch', () => {
 
   describe('clearMapRefinement', () => {
     it('expect to clear the map refinement after the map has been refine during init', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
       const northEast = {
         lat: 12,
         lng: 10,
@@ -186,37 +195,62 @@ describe('connectGeoSearch', () => {
         lng: 42,
       };
 
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const results = new SearchResults(helper.getState(), [
+        {
+          hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+        },
+      ]);
 
-      const customGeoSearch = connectGeoSearch(render, unmount);
-      const widget = customGeoSearch();
-
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
-
-      // Simulate the "init" lifecycle
       widget.init({
         state: helper.getState(),
         helper,
       });
 
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+      expect(helper.getState().insideBoundingBox).toBe(undefined);
+      expect(helper.search).not.toHaveBeenCalled();
+
       render.mock.calls[0][0].refine({ northEast, southWest });
 
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(true);
+      widget.render({
+        state: helper.getState(),
+        results,
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
       expect(helper.getState().insideBoundingBox).toEqual([[12, 10, 40, 42]]);
       expect(helper.search).toHaveBeenCalledTimes(1);
 
       render.mock.calls[0][0].clearMapRefinement();
 
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+      widget.render({
+        state: helper.getState(),
+        results,
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(3);
+      expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(false);
       expect(helper.getState().insideBoundingBox).toBe(undefined);
       expect(helper.search).toHaveBeenCalledTimes(2);
     });
 
     it('expect to clear the map refinement after the map has been refine during render', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
       const northEast = {
         lat: 12,
         lng: 10,
@@ -227,37 +261,49 @@ describe('connectGeoSearch', () => {
         lng: 42,
       };
 
-      const render = jest.fn();
-      const unmount = jest.fn();
+      const results = new SearchResults(helper.getState(), [
+        {
+          hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
+        },
+      ]);
 
-      const customGeoSearch = connectGeoSearch(render, unmount);
-      const widget = customGeoSearch();
-
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
-
-      // Simulate the "render" lifecycle
       widget.render({
-        results: new SearchResults(helper.getState(), [
-          {
-            hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
-          },
-        ]),
         state: helper.getState(),
+        results,
         helper,
       });
 
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+      expect(helper.getState().insideBoundingBox).toBe(undefined);
+      expect(helper.search).not.toHaveBeenCalled();
+
       render.mock.calls[0][0].refine({ northEast, southWest });
 
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(true);
+      widget.render({
+        state: helper.getState(),
+        results,
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
       expect(helper.getState().insideBoundingBox).toEqual([[12, 10, 40, 42]]);
       expect(helper.search).toHaveBeenCalledTimes(1);
 
       render.mock.calls[0][0].clearMapRefinement();
 
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+      widget.render({
+        state: helper.getState(),
+        results,
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(3);
+      expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(false);
       expect(helper.getState().insideBoundingBox).toBe(undefined);
       expect(helper.search).toHaveBeenCalledTimes(2);
     });
