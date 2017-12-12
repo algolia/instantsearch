@@ -58,11 +58,7 @@ exports[`SearchBox applies its default props 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
       title="Submit your search query."
       type="submit"
     >
@@ -154,11 +150,7 @@ exports[`SearchBox lets you customize its theme 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
       title="Submit your search query."
       type="submit"
     >
@@ -250,11 +242,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
       title="Submit your search query."
       type="submit"
     >
@@ -346,11 +334,7 @@ exports[`SearchBox lets you give custom components for reset and submit 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
       title="Submit your search query."
       type="submit"
     >
@@ -434,11 +418,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 1`] 
     />
     <div
       className="ais-SearchBox__loading-indicator"
-      style={
-        Object {
-          "display": "none",
-        }
-      }
+      hidden={true}
     >
       <svg
         height="18"
@@ -479,11 +459,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 1`] 
     </div>
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
       title="Submit your search query."
       type="submit"
     >
@@ -575,11 +551,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 2`] 
     />
     <div
       className="ais-SearchBox__loading-indicator"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
     >
       <svg
         height="18"
@@ -620,11 +592,7 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 2`] 
     </div>
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "none",
-        }
-      }
+      hidden={true}
       title="Submit your search query."
       type="submit"
     >
@@ -716,11 +684,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
     />
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
       title="Submit your search query."
       type="submit"
     >
@@ -812,11 +776,7 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
     />
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
       title="Submit your search query."
       type="submit"
     >
@@ -908,11 +868,7 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
     />
     <button
       className="ais-SearchBox__submit"
-      style={
-        Object {
-          "display": "block",
-        }
-      }
+      hidden={false}
       title="Submit your search query."
       type="submit"
     >
