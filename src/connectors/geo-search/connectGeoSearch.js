@@ -125,7 +125,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
 
       renderFn(
         {
-          items: results.hits,
+          items: results.hits.filter(hit => hit._geoloc),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           toggleRefineOnMapMove,

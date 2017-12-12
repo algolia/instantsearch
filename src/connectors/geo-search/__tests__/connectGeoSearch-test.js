@@ -131,6 +131,41 @@ describe('connectGeoSearch - rendering', () => {
     expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
   });
 
+  it('expect to be render with only hits with geoloc', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch(render, unmount);
+    const widget = customGeoSearch();
+
+    const client = createFakeClient();
+    const helper = createFakeHelper(client);
+
+    widget.render({
+      results: new SearchResults(helper.getState(), [
+        {
+          hits: [
+            { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
+            { objectID: 456 },
+            { objectID: 789, _geoloc: { lat: 10, lng: 12 } },
+          ],
+        },
+      ]),
+      state: helper.getState(),
+      helper,
+    });
+
+    expect(render).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
+          { objectID: 789, _geoloc: { lat: 10, lng: 12 } },
+        ],
+      }),
+      false
+    );
+  });
+
   describe('refine', () => {
     it('expect to refine with the given bounds during init', () => {
       const render = jest.fn();
