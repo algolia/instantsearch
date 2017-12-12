@@ -94,9 +94,9 @@ describe('connectGeoSearch', () => {
       false
     );
 
-    expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(true);
-    expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+    expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(true);
+    expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
+    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(false);
   });
 
   it('expect to be render with enableRefineOnMapMove disabled', () => {
@@ -410,8 +410,8 @@ describe('connectGeoSearch', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(false);
-      expect(render.mock.calls[0][0].toggleRefineOnMapMove).toBe(
+      expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
+      expect(render.mock.calls[1][0].toggleRefineOnMapMove).toBe(
         render.mock.calls[1][0].toggleRefineOnMapMove
       );
     });
