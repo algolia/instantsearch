@@ -17,7 +17,6 @@ exports[`SearchBox component can be autofocused 1`] = `
   <!---->
   <button type="submit"
           class="ais-search-box__submit"
-          style="display: block;"
   >
     <svg xmlns="http://www.w3.org/2000/svg"
          width="1em"
@@ -69,8 +68,8 @@ exports[`SearchBox component if search is not stalled, show the submit and hide 
          placeholder
          autofocus="autofocus"
   >
-  <div class="ais-search-box__loading-indicator"
-       style="display: none;"
+  <div hidden="hidden"
+       class="ais-search-box__loading-indicator"
   >
     <svg width="1em"
          height="1em"
@@ -106,7 +105,6 @@ exports[`SearchBox component if search is not stalled, show the submit and hide 
   </div>
   <button type="submit"
           class="ais-search-box__submit"
-          style="display: block;"
   >
     <svg xmlns="http://www.w3.org/2000/svg"
          width="1em"
@@ -158,9 +156,7 @@ exports[`SearchBox component if search is stalled, hide the submit and display t
          placeholder
          autofocus="autofocus"
   >
-  <div class="ais-search-box__loading-indicator"
-       style="display: block;"
-  >
+  <div class="ais-search-box__loading-indicator">
     <svg width="1em"
          height="1em"
          viewbox="0 0 38 38"
@@ -194,8 +190,8 @@ exports[`SearchBox component if search is stalled, hide the submit and display t
     </svg>
   </div>
   <button type="submit"
+          hidden="hidden"
           class="ais-search-box__submit"
-          style="display: none;"
   >
     <svg xmlns="http://www.w3.org/2000/svg"
          width="1em"
@@ -249,7 +245,6 @@ exports[`SearchBox component renders proper HTML 1`] = `
   <!---->
   <button type="submit"
           class="ais-search-box__submit"
-          style="display: block;"
   >
     <svg xmlns="http://www.w3.org/2000/svg"
          width="1em"
