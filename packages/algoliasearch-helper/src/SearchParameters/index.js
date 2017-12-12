@@ -513,6 +513,16 @@ SearchParameters._parseNumbers = function(partialState) {
     }
   });
 
+  // there's two formats of insideBoundingBox, we need to parse
+  // the one which is an array of float geo rectangles
+  if (Array.isArray(partialState.insideBoundingBox)) {
+    numbers.insideBoundingBox = partialState.insideBoundingBox.map(function(geoRect) {
+      return geoRect.map(function(value) {
+        return parseFloat(value);
+      });
+    });
+  }
+
   if (partialState.numericRefinements) {
     var numericRefinements = {};
     forEach(partialState.numericRefinements, function(operators, attribute) {

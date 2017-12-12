@@ -8,6 +8,7 @@ test('_parseNumbers should convert to number all specified root keys (that are p
     aroundPrecision: '42',
     aroundRadius: '42',
     getRankingInfo: '42',
+    insideBoundingBox: [['51.1241999', '9.662499900000057', '41.3253001', '-5.559099999999944']],
     minWordSizefor2Typos: '42',
     minWordSizefor1Typo: '42',
     page: '42',
@@ -22,6 +23,7 @@ test('_parseNumbers should convert to number all specified root keys (that are p
   t.equal(actual.aroundPrecision, 42, 'aroundPrecision should be converted to number');
   t.equal(actual.aroundRadius, 42, 'aroundRadius should be converted to number');
   t.equal(actual.getRankingInfo, 42, 'getRankingInfo should be converted to number');
+  t.deepEqual(actual.insideBoundingBox, [[51.1241999, 9.662499900000057, 41.3253001, -5.559099999999944]], 'insideBoundingBox should be converted to number');
   t.equal(actual.minWordSizefor2Typos, 42, 'minWordSizeFor2Typos should be converted to number');
   t.equal(actual.minWordSizefor1Typo, 42, 'minWordSizeFor1Typo should be converted to number');
   t.equal(actual.page, 42, 'page should be converted to number');
@@ -41,6 +43,17 @@ test('_parseNumbers should not convert undefined to NaN', function(t) {
   var actual = SearchParameters._parseNumbers(partialState);
 
   t.equal(actual.aroundPrecision, undefined);
+
+  t.end();
+});
+
+test('_parseNumbers should not convert insideBoundingBox if it\'s a string', function(t) {
+  var partialState = {
+    insideBoundingBox: '5,4,5,4'
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  t.equal(actual.insideBoundingBox, '5,4,5,4');
 
   t.end();
 });

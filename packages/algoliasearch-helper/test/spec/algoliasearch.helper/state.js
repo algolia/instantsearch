@@ -387,7 +387,7 @@ test('getStateFromQueryString should parse page as number and be consistent with
   t.deepEquals(
     partialStateFromQueryString.page,
     helper.state.page,
-    'Page should be consistent throught query string serialization/deserialization');
+    'Page should be consistent through query string serialization/deserialization');
   t.end();
 });
 
