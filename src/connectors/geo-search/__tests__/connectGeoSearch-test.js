@@ -186,7 +186,7 @@ describe('connectGeoSearch', () => {
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
 
-    it('expect to refine when the map move with the given bounds during render', () => {
+    it('expect to refine with the given bounds during render', () => {
       const render = jest.fn();
       const unmount = jest.fn();
 
