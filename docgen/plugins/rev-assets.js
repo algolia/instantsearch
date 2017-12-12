@@ -57,9 +57,10 @@ function renameReferences(
   return replace({ from, to, files: inFiles });
 }
 
-function computeFiles(
-  [filesGlob, replaceFilesGlob]: Array<string, string>
-): Promise<*> {
+function computeFiles([filesGlob, replaceFilesGlob]: Array<
+  string,
+  string
+>): Promise<*> {
   const files = glob.sync(`${DIST_PATH}/${filesGlob}`);
   return computeHashForFiles(files)
     .then(renameFiles)
