@@ -352,7 +352,6 @@ describe('connectGeoSearch', () => {
       const client = createFakeClient();
       const helper = createFakeHelper(client);
 
-      // Simulate the "init" lifecycle
       widget.init({
         state: helper.getState(),
         helper,
@@ -366,7 +365,6 @@ describe('connectGeoSearch', () => {
       expect(render).toHaveBeenCalledTimes(1);
       expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(false);
 
-      // Simulate the "render" lifecycle
       widget.render({
         results: new SearchResults(helper.getState(), [
           {
@@ -394,7 +392,6 @@ describe('connectGeoSearch', () => {
       const client = createFakeClient();
       const helper = createFakeHelper(client);
 
-      // Simulate the "render" lifecycle
       widget.render({
         results: new SearchResults(helper.getState(), [
           {
