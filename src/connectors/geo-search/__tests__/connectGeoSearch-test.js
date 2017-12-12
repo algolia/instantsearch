@@ -817,3 +817,237 @@ describe('connectGeoSearch - getConfiguration', () => {
     });
   });
 });
+
+describe('connectGeoSearch - dispose', () => {
+  describe('aroundLatLngViaIP', () => {
+    it('expect reset aroundLatLngViaIP', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper.setState(widget.getConfiguration({}));
+
+      const expectation = {
+        aroundLatLngViaIP: undefined,
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+
+    it("expect to not reset aroundLatLngViaIP when it's not set by the widget", () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch({
+        enableGeolocationWithIP: false,
+      });
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper
+        .setState(widget.getConfiguration({}))
+        .setQueryParameter('aroundLatLngViaIP', true);
+
+      const expectation = {
+        aroundLatLngViaIP: true,
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+
+    it('expect to not reset aroundLatLngViaIP when position is given', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch({
+        position: {
+          lat: 10,
+          lng: 12,
+        },
+      });
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper
+        .setState(widget.getConfiguration({}))
+        .setQueryParameter('aroundLatLngViaIP', true);
+
+      const expectation = {
+        aroundLatLngViaIP: true,
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+  });
+
+  describe('aroundLatLng', () => {
+    it('expect to reset aroundLatLng', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch({
+        position: {
+          lat: 10,
+          lng: 12,
+        },
+      });
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper.setState(widget.getConfiguration({}));
+
+      const expectation = {
+        aroundLatLng: undefined,
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+
+    it("expect to not reset aroundLatLng when it's not set by the widget", () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper
+        .setState(widget.getConfiguration({}))
+        .setQueryParameter('aroundLatLng', '10, 12');
+
+      const expectation = {
+        aroundLatLng: '10, 12',
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+  });
+
+  describe('aroundRadius', () => {
+    it('expect to reset aroundRadius', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch({
+        radius: 1000,
+      });
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper.setState(widget.getConfiguration({}));
+
+      const expectation = {
+        aroundRadius: undefined,
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+
+    it("expect to not reset aroundRadius when it's not set by the widget", () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper
+        .setState(widget.getConfiguration({}))
+        .setQueryParameter('aroundRadius', 1000);
+
+      const expectation = {
+        aroundRadius: 1000,
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+  });
+
+  describe('aroundPrecision', () => {
+    it('expect to reset aroundPrecision', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch({
+        precision: 1000,
+      });
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper.setState(widget.getConfiguration({}));
+
+      const expectation = {
+        aroundPrecision: undefined,
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+
+    it("expect to not reset aroundPrecision when it's not set by the widget", () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+
+      const client = createFakeClient();
+      const helper = createFakeHelper(client);
+
+      helper
+        .setState(widget.getConfiguration({}))
+        .setQueryParameter('aroundPrecision', 1000);
+
+      const expectation = {
+        aroundPrecision: 1000,
+      };
+
+      const actual = widget.dispose({ state: helper.getState() });
+
+      expect(unmount).toHaveBeenCalled();
+      expect(actual).toMatchObject(expectation);
+    });
+  });
+});

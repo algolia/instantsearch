@@ -137,6 +137,9 @@ export default function connectGeoSearch(renderFn, unmountFn) {
     };
 
     return {
+      init,
+      render,
+
       getConfiguration(previous) {
         const configuration = {};
 
@@ -164,13 +167,28 @@ export default function connectGeoSearch(renderFn, unmountFn) {
         return configuration;
       },
 
-      init,
-      render,
-
-      dispose() {
+      dispose({ state }) {
         unmountFn();
 
-        return {};
+        let nextState = state;
+
+        if (enableGeolocationWithIP && !position) {
+          nextState = state.setQueryParameter('aroundLatLngViaIP');
+        }
+
+        if (position) {
+          nextState = state.setQueryParameter('aroundLatLng');
+        }
+
+        if (radius) {
+          nextState = state.setQueryParameter('aroundRadius');
+        }
+
+        if (precision) {
+          nextState = state.setQueryParameter('aroundPrecision');
+        }
+
+        return nextState;
       },
     };
   };
