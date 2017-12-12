@@ -27,7 +27,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       precision,
     } = widgetParams;
 
-    const state = {
+    const widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
       hasMapMoveSinceLastRefine: false,
       isRefinedWithMap: false,
@@ -40,52 +40,55 @@ export default function connectGeoSearch(renderFn, unmountFn) {
 
       helper.setQueryParameter('insideBoundingBox', boundingBox).search();
 
-      state.hasMapMoveSinceLastRefine = false;
-      state.isRefinedWithMap = true;
+      widgetState.hasMapMoveSinceLastRefine = false;
+      widgetState.isRefinedWithMap = true;
     };
 
     const clearMapRefinement = helper => () => {
       helper.setQueryParameter('insideBoundingBox').search();
 
-      state.hasMapMoveSinceLastRefine = false;
-      state.isRefinedWithMap = false;
+      widgetState.hasMapMoveSinceLastRefine = false;
+      widgetState.isRefinedWithMap = false;
     };
 
-    const isRefinedWithMap = () => state.isRefinedWithMap;
+    const isRefinedWithMap = () => widgetState.isRefinedWithMap;
 
-    const toggleRefineOnMapMove = () => state.internalToggleRefineOnMapMove();
+    const toggleRefineOnMapMove = () =>
+      widgetState.internalToggleRefineOnMapMove();
     const createInternalToggleRefinementonMapMove = (render, args) => () => {
-      state.isRefineOnMapMove = !state.isRefineOnMapMove;
+      widgetState.isRefineOnMapMove = !widgetState.isRefineOnMapMove;
 
       render(args);
     };
 
-    const isRefineOnMapMove = () => state.isRefineOnMapMove;
+    const isRefineOnMapMove = () => widgetState.isRefineOnMapMove;
 
     const setMapMoveSinceLastRefine = () =>
-      state.internalSetMapMoveSinceLastRefine();
+      widgetState.internalSetMapMoveSinceLastRefine();
     const createInternalSetMapMoveSinceLastRefine = (render, args) => () => {
-      const shouldTriggerRender = state.hasMapMoveSinceLastRefine !== true;
+      const shouldTriggerRender =
+        widgetState.hasMapMoveSinceLastRefine !== true;
 
-      state.hasMapMoveSinceLastRefine = true;
+      widgetState.hasMapMoveSinceLastRefine = true;
 
       if (shouldTriggerRender) {
         render(args);
       }
     };
 
-    const hasMapMoveSinceLastRefine = () => state.hasMapMoveSinceLastRefine;
+    const hasMapMoveSinceLastRefine = () =>
+      widgetState.hasMapMoveSinceLastRefine;
 
     const init = initArgs => {
       const { helper } = initArgs;
       const isFirstRendering = true;
 
-      state.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
         noop,
         initArgs
       );
 
-      state.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
+      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
         noop,
         initArgs
       );
@@ -110,12 +113,12 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       const { results, helper } = renderArgs;
       const isFirstRendering = false;
 
-      state.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
+      widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
         render,
         renderArgs
       );
 
-      state.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
+      widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(
         render,
         renderArgs
       );
