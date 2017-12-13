@@ -80,7 +80,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       widgetState.hasMapMoveSinceLastRefine;
 
     const init = initArgs => {
-      const { helper } = initArgs;
+      const { helper, instantSearchInstance } = initArgs;
       const isFirstRendering = true;
 
       widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
@@ -104,13 +104,14 @@ export default function connectGeoSearch(renderFn, unmountFn) {
           setMapMoveSinceLastRefine,
           hasMapMoveSinceLastRefine,
           widgetParams,
+          instantSearchInstance,
         },
         isFirstRendering
       );
     };
 
     const render = renderArgs => {
-      const { results, helper } = renderArgs;
+      const { results, helper, instantSearchInstance } = renderArgs;
       const isFirstRendering = false;
 
       widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
@@ -134,6 +135,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
           hasMapMoveSinceLastRefine,
           isRefinedWithMap,
           widgetParams,
+          instantSearchInstance,
         },
         isFirstRendering
       );

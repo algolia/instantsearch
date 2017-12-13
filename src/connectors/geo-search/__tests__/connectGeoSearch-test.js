@@ -38,10 +38,12 @@ describe('connectGeoSearch - rendering', () => {
 
     const client = createFakeClient();
     const helper = createFakeHelper(client);
+    const instantSearchInstance = { client, helper };
 
     widget.init({
       state: helper.getState(),
       helper,
+      instantSearchInstance,
     });
 
     expect(render).toHaveBeenCalledTimes(1);
@@ -53,6 +55,7 @@ describe('connectGeoSearch - rendering', () => {
         toggleRefineOnMapMove: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
         widgetParams: {},
+        instantSearchInstance,
       }),
       true
     );
@@ -73,6 +76,7 @@ describe('connectGeoSearch - rendering', () => {
       ]),
       state: helper.getState(),
       helper,
+      instantSearchInstance,
     });
 
     expect(render).toHaveBeenCalledTimes(2);
@@ -88,6 +92,7 @@ describe('connectGeoSearch - rendering', () => {
         toggleRefineOnMapMove: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
         widgetParams: {},
+        instantSearchInstance,
       }),
       false
     );
