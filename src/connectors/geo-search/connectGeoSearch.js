@@ -31,6 +31,8 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       isRefineOnMapMove: enableRefineOnMapMove,
       hasMapMoveSinceLastRefine: false,
       isRefinedWithMap: false,
+      lastRefinePosition: '',
+      lastRefineBoundingBox: '',
       internalToggleRefineOnMapMove: noop,
       internalSetMapMoveSinceLastRefine: noop,
     };
@@ -42,13 +44,11 @@ export default function connectGeoSearch(renderFn, unmountFn) {
 
       widgetState.hasMapMoveSinceLastRefine = false;
       widgetState.isRefinedWithMap = true;
+      widgetState.lastRefineBoundingBox = boundingBox;
     };
 
     const clearMapRefinement = helper => () => {
       helper.setQueryParameter('insideBoundingBox').search();
-
-      widgetState.hasMapMoveSinceLastRefine = false;
-      widgetState.isRefinedWithMap = false;
     };
 
     const isRefinedWithMap = () => widgetState.isRefinedWithMap;
@@ -111,8 +111,26 @@ export default function connectGeoSearch(renderFn, unmountFn) {
     };
 
     const render = renderArgs => {
-      const { results, helper, instantSearchInstance } = renderArgs;
+      const { results, helper, state, instantSearchInstance } = renderArgs;
       const isFirstRendering = false;
+
+      const positionChangedSinceLastRefine =
+        state.aroundLatLng &&
+        widgetState.lastRefinePosition &&
+        state.aroundLatLng !== widgetState.lastRefinePosition;
+
+      const boundingBoxChangedSinceLastRefine =
+        !state.insideBoundingBox &&
+        widgetState.lastRefineBoundingBox &&
+        state.insideBoundingBox !== widgetState.lastRefineBoundingBox;
+
+      if (positionChangedSinceLastRefine || boundingBoxChangedSinceLastRefine) {
+        widgetState.hasMapMoveSinceLastRefine = false;
+        widgetState.isRefinedWithMap = false;
+      }
+
+      widgetState.lastRefinePosition = state.aroundLatLng || '';
+      widgetState.lastRefineBoundingBox = state.insideBoundingBox || '';
 
       widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
         render,
