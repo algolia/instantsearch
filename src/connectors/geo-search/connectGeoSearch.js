@@ -36,7 +36,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
     };
 
     const refine = helper => ({ northEast: ne, southWest: sw }) => {
-      const boundingBox = [[ne.lat, ne.lng, sw.lat, sw.lng]];
+      const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
 
       helper.setQueryParameter('insideBoundingBox', boundingBox).search();
 

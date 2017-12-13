@@ -220,7 +220,7 @@ describe('connectGeoSearch - rendering', () => {
       expect(render).toHaveBeenCalledTimes(2);
       expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
       expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
-      expect(helper.getState().insideBoundingBox).toEqual([[12, 10, 40, 42]]);
+      expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
 
@@ -273,7 +273,7 @@ describe('connectGeoSearch - rendering', () => {
       expect(render).toHaveBeenCalledTimes(2);
       expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
       expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
-      expect(helper.getState().insideBoundingBox).toEqual([[12, 10, 40, 42]]);
+      expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
   });
@@ -327,7 +327,7 @@ describe('connectGeoSearch - rendering', () => {
       expect(render).toHaveBeenCalledTimes(2);
       expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
       expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
-      expect(helper.getState().insideBoundingBox).toEqual([[12, 10, 40, 42]]);
+      expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
 
       render.mock.calls[0][0].clearMapRefinement();
@@ -394,7 +394,7 @@ describe('connectGeoSearch - rendering', () => {
       expect(render).toHaveBeenCalledTimes(2);
       expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
       expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
-      expect(helper.getState().insideBoundingBox).toEqual([[12, 10, 40, 42]]);
+      expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
 
       render.mock.calls[0][0].clearMapRefinement();
