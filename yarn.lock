@@ -535,9 +535,9 @@ atob@~1.1.0:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-1.1.3.tgz#95f13629b12c3a51a5d215abdce2aa9f32f80773"
 
-autodll-webpack-plugin@0.3.6:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/autodll-webpack-plugin/-/autodll-webpack-plugin-0.3.6.tgz#21c8a5f483c8445b35d6fd69df4a257840d8077e"
+autodll-webpack-plugin@0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/autodll-webpack-plugin/-/autodll-webpack-plugin-0.3.8.tgz#d087dda8ca3f9e3231a15df3d42d1efde73c5777"
   dependencies:
     bluebird "^3.5.0"
     del "^3.0.0"
