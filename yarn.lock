@@ -9847,9 +9847,9 @@ wdio-mocha-framework@0.5.11:
     mocha "^3.2.0"
     wdio-sync "0.7.0"
 
-wdio-sauce-service@0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/wdio-sauce-service/-/wdio-sauce-service-0.4.4.tgz#234aae37cbe3984c3690f4b2c15d03b0694ff03f"
+wdio-sauce-service@0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/wdio-sauce-service/-/wdio-sauce-service-0.4.6.tgz#52d5e557d1a96f7d6e04fc59a07acca50d8b1d10"
   dependencies:
     request "~2.83.0"
     sauce-connect-launcher "~1.2.3"
