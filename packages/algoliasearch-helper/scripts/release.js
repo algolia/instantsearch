@@ -27,6 +27,7 @@ mergeDevIntoMaster();
 showChangelog(shell);
 promptVersion(packageJson.version, (version) => {
   bumpVersion(version, () => {
+    build();
     updateChangelog(shell);
     commitNewFiles(version);
     publish();
@@ -130,4 +131,8 @@ function goBackToDevelop() {
 
   shell.echo('Pushing the merge to Github');
   shell.exec('git push origin develop', {silent: true});
+}
+
+function build() {
+  shell.exec('yarn run build');
 }
