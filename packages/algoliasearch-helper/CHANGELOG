@@ -1,3 +1,6 @@
+2.23.2 - 2017-12-14
+ * fix(release-script): actually build the library (#559) https://github.com/algolia/algoliasearch-helper-js/commit/421ec706606798035dda2e2226fd3eb9015ec901
+
 2.23.1 - 2017-12-12
  * chore(package.json): add files entry (#557) https://github.com/algolia/algoliasearch-helper-js/commit/de029bda667a9b43239cacb1d0b3c92826611d6e
  * chore(test): run all tests (#551) https://github.com/algolia/algoliasearch-helper-js/commit/851cf4826b03f63aafcb26eedca3ac101ced362b
