@@ -3840,9 +3840,9 @@ jest-docblock@^20.0.3:
   version "20.0.3"
   resolved "https://registry.yarnpkg.com/jest-docblock/-/jest-docblock-20.0.3.tgz#17bea984342cc33d83c50fbe1545ea0efaa44712"
 
-jest-environment-jsdom-11.0.0@20.0.9:
-  version "20.0.9"
-  resolved "https://registry.yarnpkg.com/jest-environment-jsdom-11.0.0/-/jest-environment-jsdom-11.0.0-20.0.9.tgz#0cdba3103d33570b3b7b8f62b671a05b485adbcf"
+jest-environment-jsdom-11.0.0@20.1.9:
+  version "20.1.9"
+  resolved "https://registry.yarnpkg.com/jest-environment-jsdom-11.0.0/-/jest-environment-jsdom-11.0.0-20.1.9.tgz#4436d7c5ae3a623f9f170297d61b57713686a8de"
   dependencies:
     jest-mock "^20.0.3"
     jest-util "^20.0.3"
