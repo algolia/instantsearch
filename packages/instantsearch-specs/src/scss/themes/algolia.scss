@@ -43,19 +43,22 @@ a[class^='ais-'] {
 
 // Widgets
 
-.ais-Breadcrumb-item + .ais-Breadcrumb-item {
-  margin-left: 0.3rem;
-}
-
 .ais-Breadcrumb-item--selected,
 .ais-HierarchicalMenu-item--selected,
 .ais-Menu-item--selected {
   font-weight: bold;
 }
 
+.ais-Breadcrumb-separator {
+  margin: 0 0.3em;
+  font-weight: normal;
+}
+
 .ais-Breadcrumb-link,
 .ais-HierarchicalMenu-link,
-.ais-Menu-link {
+.ais-Menu-link,
+.ais-Pagination-link,
+.ais-RatingMenu-link {
   color: $algolia-blue;
   transition: color 0.2s ease-out;
 
@@ -85,6 +88,7 @@ a[class^='ais-'] {
 }
 
 .ais-ClearRefinements-button--disabled,
+.ais-HierarchicalMenu-showMore--disabled,
 .ais-InfiniteResults-loadMore--disabled,
 .ais-Menu-showMore--disabled {
   opacity: 0.6;
@@ -362,10 +366,6 @@ a[class^='ais-'] {
   background-color: darken($ghost, 20%);
 }
 
-div.ais-RatingMenu-button {
-  cursor: default;
-}
-
 .ais-RatingMenu-count,
 .ais-RatingMenu-label {
   .ais-RatingMenu-item--disabled & {
@@ -377,11 +377,18 @@ div.ais-RatingMenu-button {
   font-weight: bold;
 }
 
-.ais-RatingMenu-button {
-  outline: none;
-
+.ais-RatingMenu-link {
   * + * {
     margin-left: 0.3rem;
+  }
+}
+
+div.ais-RatingMenu-link {
+  color: $port-gore;
+
+  &:hover,
+  &:focus {
+    color: $port-gore;
   }
 }
 

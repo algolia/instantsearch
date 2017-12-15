@@ -25,7 +25,6 @@
 .ais-InfiniteResults-loadMore,
 .ais-Menu-showMore,
 .ais-RangeInput-submit,
-.ais-RatingMenu-button,
 .ais-SearchBox-submit,
 .ais-SearchBox-reset {
   padding: 0;
@@ -51,9 +50,10 @@
 // Reset widgets
 
 .ais-Breadcrumb-list,
+.ais-Breadcrumb-item,
 .ais-Pagination-list,
 .ais-RangeInput-form,
-.ais-RatingMenu-button,
+.ais-RatingMenu-link,
 .ais-PoweredBy {
   display: flex;
   align-items: center;
@@ -73,6 +73,22 @@
   display: block;
   width: 20px;
   height: 20px;
+}
+
+.ais-SearchBox-input {
+  &::-ms-clear,
+  &::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    display: none;
+  }
 }
 
 // Reset RangeSlider
