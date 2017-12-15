@@ -13,34 +13,34 @@ html: |
       </svg>
       <ul class="ais-RatingMenu-list">
         <li class="ais-RatingMenu-item ais-RatingMenu-item--disabled">
-          <button class="ais-RatingMenu-button" aria-label="5 & up" disabled>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+          <div class="ais-RatingMenu-link" aria-label="5 & up" disabled>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
             <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
             <span class="ais-RatingMenu-count">2,300</span>
-          </button>
+          </div>
         </li>
         <li class="ais-RatingMenu-item ais-RatingMenu-item--selected">
-          <button class="ais-RatingMenu-button" aria-label="4 & up">
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+          <a class="ais-RatingMenu-link" aria-label="4 & up" href="#">
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
             <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
             <span class="ais-RatingMenu-count">2,300</span>
-          </button>
+          </a>
         </li>
         <li class="ais-RatingMenu-item">
-          <div class="ais-RatingMenu-button" aria-label="3 & up">
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
-            <svg class="ais-RatingMenu-starIcon" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+          <div class="ais-RatingMenu-link" aria-label="3 & up">
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+            <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
             <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
             <span class="ais-RatingMenu-count">1,750</span>
           </div>
@@ -66,8 +66,12 @@ classes:
     description: the selected rating list item
   - name: .ais-RatingMenu-item--disabled
     description: the disabled rating list item
-  - name: .ais-RatingMenu-button
+  - name: .ais-RatingMenu-link
     description: the rating clickable item
+  - name: .ais-RatingMenu-starIcon--full
+    description: the filled star icon
+  - name: .ais-RatingMenu-starIcon--empty
+    description: the empty star icon
   - name: .ais-RatingMenu-starIcon
     description: the star icon
   - name: .ais-RatingMenu-label

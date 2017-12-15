@@ -7,6 +7,9 @@ html: |
       Menu
     </div>
     <div class="ais-Menu-body ais-body">
+      <div class="ais-Menu-searchBox">
+        <!-- SearchBox widget here -->
+      </div>
       <ul class="ais-Menu-list">
         <li class="ais-Menu-item ais-Menu-item--selected">
           <a class="ais-Menu-link" href="#">
@@ -34,6 +37,9 @@ althtml1: |
       Menu
     </div>
     <div class="ais-Menu-body ais-body">
+      <div class="ais-Menu-searchBox">
+        <!-- SearchBox widget here -->
+      </div>
       <ul class="ais-Menu-list">
         <li class="ais-Menu-item ais-Menu-item--selected">
           <a class="ais-Menu-link" href="#">

@@ -11,16 +11,12 @@ html: |
         <li class="ais-Breadcrumb-item">
           <a class="ais-Breadcrumb-link" href="#">Home</a>
         </li>
-        <li class="ais-Breadcrumb-item" aria-hidden="true">
-          >
-        </li>
         <li class="ais-Breadcrumb-item">
+          <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
           <a class="ais-Breadcrumb-link" href="#">Cooking</a>
         </li>
-        <li class="ais-Breadcrumb-item" aria-hidden="true">
-          >
-        </li>
         <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+          <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
           Kitchen textiles
         </li>
       </ul>
@@ -42,6 +38,8 @@ classes:
     description: the breadcrumb navigation item
   - name: .ais-Breadcrumb-item--selected
     description: the selected breadcrumb item
+  - name: .ais-Breadcrumb-separator
+    description: the separator of each breadcrumb item
   - name: .ais-Breadcrumb-link
     description: the clickable breadcrumb element
   - name: .ais-Breadcrumb-footer
