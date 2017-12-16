@@ -32,15 +32,7 @@
     "fix:prettier": "eslint --fix -c .eslintrc.js ."
   },
   "renovate": {
-    "extends": [
-      "config:js-lib",
-      "schedule:weekends",
-      ":automergeMinor",
-      ":automergeBranchPush",
-      ":semanticCommits",
-      ":rebaseStalePrs",
-      ":timezone(Europe/Paris)"
-    ]
+    "extends": ["config:js-lib", "algolia"]
   },
   "repository": "algolia/instantsearch.js",
   "files": [
