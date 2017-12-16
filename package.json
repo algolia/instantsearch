@@ -31,6 +31,17 @@
     "serve": "./scripts/serve.sh",
     "fix:prettier": "eslint --fix -c .eslintrc.js ."
   },
+  "renovate": {
+    "extends": [
+      "config:js-lib",
+      "schedule:weekends",
+      ":automergeMinor",
+      ":automergeBranchPush",
+      ":semanticCommits",
+      ":rebaseStalePrs",
+      ":timezone(Europe/Paris)"
+    ]
+  },
   "repository": "algolia/instantsearch.js",
   "files": [
     "dist",
