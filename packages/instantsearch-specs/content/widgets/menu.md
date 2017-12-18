@@ -67,6 +67,8 @@ classes:
     description: the header of the widget (optional)
   - name: .ais-Menu-body
     description: the body of the widget
+  - name: .ais-Menu-searchBox
+    description: the search box of the widget
   - name: .ais-Menu-list
     description: the list of all menu items
   - name: .ais-Menu-item
