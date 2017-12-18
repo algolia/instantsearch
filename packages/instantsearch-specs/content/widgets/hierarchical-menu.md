@@ -50,6 +50,8 @@ classes:
     description: the header of the widget (optional)
   - name: .ais-HierarchicalMenu-body
     description: the body of the widget
+  - name: .ais-HierarchicalMenu-searchBox
+    description: the search box of the widget
   - name: .ais-HierarchicalMenu-list
     description: the list of menu items
   - name: .ais-HierarchicalMenu-list--lvl0
