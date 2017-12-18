@@ -439,7 +439,8 @@ div.ais-RatingMenu-link {
 }
 
 .ais-SearchBox-submit,
-.ais-SearchBox-reset {
+.ais-SearchBox-reset,
+.ais-SearchBox-loadingIndicator {
   appearance: none;
   position: absolute;
   z-index: 1;
@@ -459,15 +460,32 @@ div.ais-RatingMenu-link {
 }
 
 .ais-SearchBox-submitIcon,
-.ais-SearchBox-reseticon {
-  width: 14px;
-  height: 14px;
+.ais-SearchBox-resetIcon,
+.ais-SearchBox-loadingIcon {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translateX(-50%) translateY(-50%);
+}
 
+.ais-SearchBox-submitIcon,
+.ais-SearchBox-resetIcon {
   path {
     fill: $east-bay;
   }
+}
+
+.ais-SearchBox-submitIcon {
+  width: 14px;
+  height: 14px;
+}
+
+.ais-SearchBox-resetIcon {
+  width: 12px;
+  height: 12px;
+}
+
+.ais-SearchBox-loadingIcon {
+  width: 16px;
+  height: 16px;
 }

@@ -19,6 +19,7 @@
         <div class="code-wrapper-tabs">
           <button class="code-wrapper-tab selected" data-html="1">Default</button>
           <button class="code-wrapper-tab" data-html="2">{{ .Params.alt1 }}</button>
+          {{ if .Params.alt2 }}<button class="code-wrapper-tab" data-html="3">{{ .Params.alt2 }}</button>{{ end }}
         </div>
       {{ end }}
       <div class="code-wrapper-contents">
@@ -30,6 +31,11 @@
             {{ .Params.althtml1 | safeHTML }}
           </div>
         {{ end }}
+        {{ if .Params.alt2 }}
+          <div class="code-wrapper-content" style="display:none" data-html="3">
+            {{ .Params.althtml2 | safeHTML }}
+          </div>
+        {{ end }}
       </div>
     </div>
 
@@ -38,6 +44,7 @@
     <div id="js-pre">
       <pre class="code-output" data-html="1"><code>{{ .Params.html }}</code></pre>
       {{ if .Params.althtml1 }}<pre class="code-output" style="display:none" data-html="2"><code>{{ .Params.althtml1 }}</code></pre>{{ end }}
+      {{ if .Params.althtml2 }}<pre class="code-output" style="display:none" data-html="3"><code>{{ .Params.althtml2 }}</code></pre>{{ end }}
     </div>
 
     <h3>Classes list</h3>
