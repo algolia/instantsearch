@@ -1,4 +1,7 @@
-import searchHelper, { SearchResults } from 'algoliasearch-helper';
+import searchHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import connectGeoSearch from '../connectGeoSearch';
 
 const createFakeClient = () => ({
@@ -897,7 +900,7 @@ describe('connectGeoSearch - getConfiguration', () => {
         aroundLatLngViaIP: true,
       };
 
-      const actual = widget.getConfiguration({});
+      const actual = widget.getConfiguration(new SearchParameters());
 
       expect(actual).toEqual(expectation);
     });
@@ -919,7 +922,7 @@ describe('connectGeoSearch - getConfiguration', () => {
         aroundLatLng: '12, 10',
       };
 
-      const actual = widget.getConfiguration({});
+      const actual = widget.getConfiguration(new SearchParameters());
 
       expect(actual).toEqual(expectation);
     });
@@ -935,9 +938,11 @@ describe('connectGeoSearch - getConfiguration', () => {
 
       const expectation = {};
 
-      const actual = widget.getConfiguration({
-        aroundLatLngViaIP: false,
-      });
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          aroundLatLngViaIP: false,
+        })
+      );
 
       expect(actual).toEqual(expectation);
     });
@@ -953,9 +958,11 @@ describe('connectGeoSearch - getConfiguration', () => {
 
       const expectation = {};
 
-      const actual = widget.getConfiguration({
-        aroundLatLng: '10, 12',
-      });
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          aroundLatLng: '10, 12',
+        })
+      );
 
       expect(actual).toEqual(expectation);
     });
@@ -978,7 +985,7 @@ describe('connectGeoSearch - getConfiguration', () => {
         aroundLatLng: '12, 10',
       };
 
-      const actual = widget.getConfiguration({});
+      const actual = widget.getConfiguration(new SearchParameters());
 
       expect(actual).toEqual(expectation);
     });
@@ -999,9 +1006,11 @@ describe('connectGeoSearch - getConfiguration', () => {
         aroundLatLng: '12, 10',
       };
 
-      const actual = widget.getConfiguration({
-        aroundLatLngViaIP: false,
-      });
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          aroundLatLngViaIP: false,
+        })
+      );
 
       expect(actual).toEqual(expectation);
     });
@@ -1020,9 +1029,11 @@ describe('connectGeoSearch - getConfiguration', () => {
 
       const expectation = {};
 
-      const actual = widget.getConfiguration({
-        aroundLatLng: '12, 12',
-      });
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          aroundLatLng: '12, 12',
+        })
+      );
 
       expect(actual).toEqual(expectation);
     });
@@ -1041,9 +1052,11 @@ describe('connectGeoSearch - getConfiguration', () => {
 
       const expectation = {};
 
-      const actual = widget.getConfiguration({
-        aroundLatLngViaIP: true,
-      });
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          aroundLatLngViaIP: true,
+        })
+      );
 
       expect(actual).toEqual(expectation);
     });
@@ -1064,7 +1077,7 @@ describe('connectGeoSearch - getConfiguration', () => {
         aroundRadius: 1000,
       };
 
-      const actual = widget.getConfiguration({});
+      const actual = widget.getConfiguration(new SearchParameters());
 
       expect(actual).toEqual(expectation);
     });
@@ -1082,9 +1095,11 @@ describe('connectGeoSearch - getConfiguration', () => {
         aroundLatLngViaIP: true,
       };
 
-      const actual = widget.getConfiguration({
-        aroundRadius: 500,
-      });
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          aroundRadius: 500,
+        })
+      );
 
       expect(actual).toEqual(expectation);
     });
@@ -1105,7 +1120,7 @@ describe('connectGeoSearch - getConfiguration', () => {
         aroundPrecision: 1000,
       };
 
-      const actual = widget.getConfiguration({});
+      const actual = widget.getConfiguration(new SearchParameters());
 
       expect(actual).toEqual(expectation);
     });
@@ -1123,9 +1138,11 @@ describe('connectGeoSearch - getConfiguration', () => {
         aroundLatLngViaIP: true,
       };
 
-      const actual = widget.getConfiguration({
-        aroundPrecision: 500,
-      });
+      const actual = widget.getConfiguration(
+        new SearchParameters({
+          aroundPrecision: 500,
+        })
+      );
 
       expect(actual).toEqual(expectation);
     });
@@ -1144,7 +1161,7 @@ describe('connectGeoSearch - dispose', () => {
       const client = createFakeClient();
       const helper = createFakeHelper(client);
 
-      helper.setState(widget.getConfiguration({}));
+      helper.setState(widget.getConfiguration(new SearchParameters()));
 
       const expectation = {
         aroundLatLngViaIP: undefined,
@@ -1169,7 +1186,7 @@ describe('connectGeoSearch - dispose', () => {
       const helper = createFakeHelper(client);
 
       helper
-        .setState(widget.getConfiguration({}))
+        .setState(widget.getConfiguration(new SearchParameters()))
         .setQueryParameter('aroundLatLngViaIP', true);
 
       const expectation = {
@@ -1198,7 +1215,7 @@ describe('connectGeoSearch - dispose', () => {
       const helper = createFakeHelper(client);
 
       helper
-        .setState(widget.getConfiguration({}))
+        .setState(widget.getConfiguration(new SearchParameters()))
         .setQueryParameter('aroundLatLngViaIP', true);
 
       const expectation = {
@@ -1228,7 +1245,7 @@ describe('connectGeoSearch - dispose', () => {
       const client = createFakeClient();
       const helper = createFakeHelper(client);
 
-      helper.setState(widget.getConfiguration({}));
+      helper.setState(widget.getConfiguration(new SearchParameters()));
 
       const expectation = {
         aroundLatLng: undefined,
@@ -1251,7 +1268,7 @@ describe('connectGeoSearch - dispose', () => {
       const helper = createFakeHelper(client);
 
       helper
-        .setState(widget.getConfiguration({}))
+        .setState(widget.getConfiguration(new SearchParameters()))
         .setQueryParameter('aroundLatLng', '10, 12');
 
       const expectation = {
@@ -1278,7 +1295,7 @@ describe('connectGeoSearch - dispose', () => {
       const client = createFakeClient();
       const helper = createFakeHelper(client);
 
-      helper.setState(widget.getConfiguration({}));
+      helper.setState(widget.getConfiguration(new SearchParameters()));
 
       const expectation = {
         aroundRadius: undefined,
@@ -1301,7 +1318,7 @@ describe('connectGeoSearch - dispose', () => {
       const helper = createFakeHelper(client);
 
       helper
-        .setState(widget.getConfiguration({}))
+        .setState(widget.getConfiguration(new SearchParameters()))
         .setQueryParameter('aroundRadius', 1000);
 
       const expectation = {
@@ -1328,7 +1345,7 @@ describe('connectGeoSearch - dispose', () => {
       const client = createFakeClient();
       const helper = createFakeHelper(client);
 
-      helper.setState(widget.getConfiguration({}));
+      helper.setState(widget.getConfiguration(new SearchParameters()));
 
       const expectation = {
         aroundPrecision: undefined,
@@ -1351,7 +1368,7 @@ describe('connectGeoSearch - dispose', () => {
       const helper = createFakeHelper(client);
 
       helper
-        .setState(widget.getConfiguration({}))
+        .setState(widget.getConfiguration(new SearchParameters()))
         .setQueryParameter('aroundPrecision', 1000);
 
       const expectation = {

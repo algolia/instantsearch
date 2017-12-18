@@ -169,8 +169,8 @@ export default function connectGeoSearch(renderFn, unmountFn) {
         if (
           enableGeolocationWithIP &&
           !position &&
-          !previous.hasOwnProperty('aroundLatLngViaIP') &&
-          !previous.aroundLatLng
+          !previous.aroundLatLng &&
+          previous.aroundLatLngViaIP === undefined
         ) {
           configuration.aroundLatLngViaIP = true;
         }
@@ -179,11 +179,11 @@ export default function connectGeoSearch(renderFn, unmountFn) {
           configuration.aroundLatLng = `${position.lat}, ${position.lng}`;
         }
 
-        if (radius && !previous.hasOwnProperty('aroundRadius')) {
+        if (radius && !previous.aroundRadius) {
           configuration.aroundRadius = radius;
         }
 
-        if (precision && !previous.hasOwnProperty('aroundPrecision')) {
+        if (precision && !previous.aroundPrecision) {
           configuration.aroundPrecision = precision;
         }
 
