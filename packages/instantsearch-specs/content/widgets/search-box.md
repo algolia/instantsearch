@@ -20,7 +20,7 @@ html: |
           </svg>
         </button>
         <span class="ais-SearchBox-loadingIndicator" hidden>
-          <svg width="18" height="18" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#444" class="ais-SearchBox-loadingIcon">
+          <svg width="16" height="16" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#444" class="ais-SearchBox-loadingIcon">
             <g fill="none" fillRule="evenodd">
               <g transform="translate(1 1)" strokeWidth="2">
                 <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
@@ -64,7 +64,7 @@ althtml1: |
           </svg>
         </button>
         <span class="ais-SearchBox-loadingIndicator" hidden>
-          <svg width="18" height="18" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#444" class="ais-SearchBox-loadingIcon">
+          <svg width="16" height="16" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#444" class="ais-SearchBox-loadingIcon">
             <g fill="none" fillRule="evenodd">
               <g transform="translate(1 1)" strokeWidth="2">
                 <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
@@ -108,7 +108,7 @@ althtml2: |
           </svg>
         </button>
         <span class="ais-SearchBox-loadingIndicator">
-          <svg width="18" height="18" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#444" class="ais-SearchBox-loadingIcon">
+          <svg width="16" height="16" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#444" class="ais-SearchBox-loadingIcon">
             <g fill="none" fillRule="evenodd">
               <g transform="translate(1 1)" strokeWidth="2">
                 <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
