@@ -47,3 +47,6 @@ export { default as toggle } from '../widgets/toggle/toggle.js';
 export { default as analytics } from '../widgets/analytics/analytics.js';
 export { default as breadcrumb } from '../widgets/breadcrumb/breadcrumb.js';
 export { default as menuSelect } from '../widgets/menu-select/menu-select.js';
+export {
+  default as multiIndexResults,
+} from '../widgets/multi-index-results/multi-index-results';

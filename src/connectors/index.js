@@ -44,3 +44,6 @@ export { default as connectToggle } from './toggle/connectToggle.js';
 export {
   default as connectBreadcrumb,
 } from './breadcrumb/connectBreadcrumb.js';
+export {
+  default as connectMultiIndexResults,
+} from './multi-index-results/connectMultiIndexResults';
