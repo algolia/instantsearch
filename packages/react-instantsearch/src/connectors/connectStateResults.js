@@ -13,7 +13,7 @@ import { getResults } from '../core/indexUtils';
  * @providedPropType {string} error - If the search failed, the error will be logged here.
  * @providedPropType {boolean} searching - If there is a search in progress.
  * @providedPropType {boolean} searchingForFacetValues - If there is a search in a list in progress.
- * @providedPropType {boolean} props - component props.
+ * @providedPropType {object} props - component props.
  * @example
  * import React from 'react';
  *
