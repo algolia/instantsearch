@@ -10,8 +10,8 @@ for d in packages/react-instantsearch/examples/* ; do
     yarn
     yarn build
     if [ "$CI" = "true" ]
-        then jest --runInBand
-        else jest
+        then yarn test --runInBand
+        else yarn test
     fi
     cd ../../../..
 done
