@@ -11,4 +11,6 @@ Highlight.propTypes = {
   attributeName: PropTypes.string.isRequired,
   highlight: PropTypes.func.isRequired,
   tagName: PropTypes.string,
+  nonHighlightedTagName: PropTypes.string,
+  separatorComponent: PropTypes.node,
 };

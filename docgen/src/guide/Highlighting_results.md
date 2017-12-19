@@ -20,8 +20,8 @@ like most of its features it comes in two flavors, depending on your use case:
 ## &lt;Highlight&gt; and &lt;Snippet&gt; widgets
 
 Highlighting is based on the results and you will need to make a custom Hit in order
-to use the Highlighter. The Highlight and the Snippet widgets takes two props:
- - attributeName: the path to the highlighted attribute
+to use the Highlighter. The Highlight and the Snippet widgets take two props:
+ - attributeName: the path to the highlighted attribute of the hit (which can be either a string or an array of strings)
  - hit: a single result object
 
 **Notes:**
@@ -69,7 +69,7 @@ from the results. This function takes a single parameter object with three
 properties:
  - attributeName: the highlighted attribute name
  - hit: a single result object
- - highlightProperty: the path to the structure containing the highlighted attribute. The value is either `_highlightResult` or `_snippetResult` depending if you want to make an Highlight or Snippet widget.
+ - highlightProperty: the path to the structure containing the highlighted attribute. The value is either `_highlightResult` or `_snippetResult` depending on whether you want to make a Highlight or a Snippet widget.
 
 Those parameters are taken from the context in which the the custom component
 is used, therefore it's reasonable to have them as props.
