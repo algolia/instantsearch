@@ -69,6 +69,36 @@ describe('parseAlgoliaHit()', () => {
     ]);
   });
 
+  it('supports the array format, parses it and returns the part that is highlighted', () => {
+    const hit = {
+      tags: ['litterature', 'biology', 'photography'],
+      _highlightResult: {
+        tags: [
+          { value: 'litterature' },
+          { value: 'biology' },
+          { value: '<em>photo</em>graphy' },
+        ],
+      },
+    };
+
+    const actual = parseAlgoliaHit({
+      attributeName: 'tags',
+      hit,
+      highlightProperty: '_highlightResult',
+    });
+
+    const exepectation = [
+      [{ value: 'litterature', isHighlighted: false }],
+      [{ value: 'biology', isHighlighted: false }],
+      [
+        { value: 'photo', isHighlighted: true },
+        { value: 'graphy', isHighlighted: false },
+      ],
+    ];
+
+    expect(actual).toEqual(exepectation);
+  });
+
   it('parses the string and returns the part that are highlighted - same pre and post tag', () => {
     const str = 'surpise **lo**l mouhahah roflmao **lo**utre';
     const hit = createHit('attr', str);

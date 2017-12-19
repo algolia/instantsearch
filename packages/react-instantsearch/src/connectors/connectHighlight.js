@@ -19,7 +19,7 @@ const highlight = ({ attributeName, hit, highlightProperty }) =>
  * @name connectHighlight
  * @kind connector
  * @category connector
- * @providedPropType {function} highlight - the function to retrieve and parse an attribute from a hit. It takes a configuration object with 3 attribute: `highlightProperty` which is the property that contains the highlight structure from the records, `attributeName` which is the name of the attribute to look for and `hit` which is the hit from Algolia. It returns an array of object `{value: string, isHighlighted: boolean}`.
+ * @providedPropType {function} highlight - function to retrieve and parse an attribute from a hit. It takes a configuration object with 3 attributes: `highlightProperty` which is the property that contains the highlight structure from the records, `attributeName` which is the name of the attribute (it can be either a string or an array of strings) to look for and `hit` which is the hit from Algolia. It returns an array of objects `{value: string, isHighlighted: boolean}. If the element that corresponds to the attributeName is an array of strings, it will return a nested array of objects.
  * @example
  * import React from 'react';
  * import { connectHighlight } from 'react-instantsearch/connectors';

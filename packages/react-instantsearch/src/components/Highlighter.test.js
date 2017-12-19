@@ -1,88 +1,224 @@
 /* eslint-env jest, jasmine */
 
 import React from 'react';
-import renderer from 'react-test-renderer';
-
-import Highlighter from './Highlighter';
+import Enzyme, { shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+import Highlighter, { Highlight } from './Highlighter';
 import parseAlgoliaHit from '../core/highlight';
 
-describe('Highlighter', () => {
-  it('parses an highlighted attribute of hit object', () => {
-    const hitFromAPI = {
-      objectID: 0,
-      deep: { attribute: { value: 'awesome highlighted hit!' } },
-      _highlightProperty: {
-        deep: {
-          attribute: {
-            value: {
-              value:
-                'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
-              fullyHighlighted: true,
-              matchLevel: 'full',
-              matchedWords: [''],
-            },
-          },
-        },
-      },
+Enzyme.configure({ adapter: new Adapter() });
+
+describe('Highlighter - Highlight', () => {
+  const defaultProps = {
+    value: 'test',
+    highlightedTagName: 'em',
+    isHighlighted: false,
+    nonHighlightedTagName: 'div',
+  };
+
+  it('renders a highlight', () => {
+    const props = {
+      ...defaultProps,
+      isHighlighted: true,
     };
 
-    const highlight = ({ hit, attributeName, highlightProperty }) =>
-      parseAlgoliaHit({
-        preTag: '<ais-highlight>',
-        postTag: '</ais-highlight>',
-        attributeName,
-        hit,
-        highlightProperty,
-      });
+    const wrapper = shallow(<Highlight {...props} />);
 
-    const tree = renderer.create(
-      <Highlighter
-        attributeName="deep.attribute.value"
-        hit={hitFromAPI}
-        highlight={highlight}
-        highlightProperty="_highlightProperty"
-      />
-    );
-    expect(tree.toJSON()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
-  it('renders a hit with a custom tag correctly', () => {
-    const hitFromAPI = {
-      objectID: 0,
-      deep: { attribute: { value: 'awesome highlighted hit!' } },
-      _highlightProperty: {
-        deep: {
-          attribute: {
-            value: {
-              value:
-                'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
-              fullyHighlighted: true,
-              matchLevel: 'full',
-              matchedWords: [''],
-            },
+  it('renders a nonhighlight', () => {
+    const props = {
+      ...defaultProps,
+    };
+
+    const wrapper = shallow(<Highlight {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+});
+
+describe('Highlighter - simple', () => {
+  const hitFromAPI = {
+    objectID: 3,
+    title: 'Apple',
+    _highlight: {
+      title: {
+        value: '<ais-highlight>Ap</ais-highlight>ple',
+      },
+    },
+  };
+
+  const highlight = ({ hit, attributeName, highlightProperty }) =>
+    parseAlgoliaHit({
+      preTag: '<ais-highlight>',
+      postTag: '</ais-highlight>',
+      attributeName,
+      hit,
+      highlightProperty,
+    });
+
+  const defaultProps = {
+    hit: hitFromAPI,
+    attributeName: 'title',
+    highlightProperty: '_highlight',
+    highlight,
+  };
+
+  it('renders a highlighted value', () => {
+    const props = {
+      ...defaultProps,
+    };
+
+    const wrapper = shallow(<Highlighter {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders a non highlighted value', () => {
+    const props = {
+      ...defaultProps,
+      hit: {
+        objectID: 3,
+        title: 'Apple',
+        _highlight: {
+          title: {
+            value: 'Apple',
           },
         },
       },
     };
 
-    const highlight = ({ hit, attributeName, highlightProperty }) =>
-      parseAlgoliaHit({
-        preTag: '<ais-highlight>',
-        postTag: '</ais-highlight>',
-        attributeName,
-        hit,
-        highlightProperty,
-      });
+    const wrapper = shallow(<Highlighter {...props} />);
 
-    const tree = renderer.create(
-      <Highlighter
-        attributeName="deep.attribute.value"
-        hit={hitFromAPI}
-        highlight={highlight}
-        highlightProperty="_highlightProperty"
-        tagName="mark"
-      />
-    );
-    expect(tree.toJSON()).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders a highlighted value with a custom tagName', () => {
+    const props = {
+      ...defaultProps,
+      tagName: 'strong',
+    };
+
+    const wrapper = shallow(<Highlighter {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders a highlighted value with a custom nonHighlightedTagName', () => {
+    const props = {
+      ...defaultProps,
+      nonHighlightedTagName: 'p',
+    };
+
+    const wrapper = shallow(<Highlighter {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+});
+
+describe('Highlighter - multi', () => {
+  const hitFromAPI = {
+    objectID: 3,
+    titles: ['Apple', 'Samsung', 'Philips'],
+    _highlight: {
+      titles: [
+        {
+          value: 'Apple',
+        },
+        {
+          value: '<ais-highlight>Sam</ais-highlight>sung',
+        },
+        {
+          value: 'Philips',
+        },
+      ],
+    },
+  };
+
+  const highlight = ({ hit, attributeName, highlightProperty }) =>
+    parseAlgoliaHit({
+      preTag: '<ais-highlight>',
+      postTag: '</ais-highlight>',
+      attributeName,
+      hit,
+      highlightProperty,
+    });
+
+  const defaultProps = {
+    hit: hitFromAPI,
+    attributeName: 'titles',
+    highlightProperty: '_highlight',
+    highlight,
+  };
+
+  it('renders a highlighted value', () => {
+    const props = {
+      ...defaultProps,
+    };
+
+    const wrapper = shallow(<Highlighter {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders a non highlighted value', () => {
+    const props = {
+      ...defaultProps,
+      hit: {
+        objectID: 3,
+        titles: ['Apple', 'Samsung', 'Philips'],
+        _highlight: {
+          titles: [
+            {
+              value: 'Apple',
+            },
+            {
+              value: 'Samsung',
+            },
+            {
+              value: 'Philips',
+            },
+          ],
+        },
+      },
+    };
+
+    const wrapper = shallow(<Highlighter {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders a highlighted value with a custom tagName', () => {
+    const props = {
+      ...defaultProps,
+      tagName: 'strong',
+    };
+
+    const wrapper = shallow(<Highlighter {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders a highlighted value with a custom nonHighlightedTagName', () => {
+    const props = {
+      ...defaultProps,
+      nonHighlightedTagName: 'p',
+    };
+
+    const wrapper = shallow(<Highlighter {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders a highlighted value with a custom separator', () => {
+    const props = {
+      ...defaultProps,
+      separator: '-',
+    };
+
+    const wrapper = shallow(<Highlighter {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

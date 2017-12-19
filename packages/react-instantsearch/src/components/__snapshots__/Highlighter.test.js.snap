@@ -1,65 +1,372 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Highlighter parses an highlighted attribute of hit object 1`] = `
+exports[`Highlighter - Highlight renders a highlight 1`] = `
+<em
+  className="ais-Highlight__highlighted"
+>
+  test
+</em>
+`;
+
+exports[`Highlighter - Highlight renders a nonhighlight 1`] = `
+<div
+  className="ais-Highlight__nonHighlighted"
+>
+  test
+</div>
+`;
+
+exports[`Highlighter - multi renders a highlighted value 1`] = `
 <span
   className="ais-Highlight"
 >
   <span
-    className="ais-Highlight__nonHighlighted"
+    key="split-0-Apple"
   >
-    awesome 
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Apple"
+      nonHighlightedTagName="span"
+      value="Apple"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      , 
+    </span>
   </span>
-  <em
-    className="ais-Highlight__highlighted"
-  >
-    hi
-  </em>
   <span
-    className="ais-Highlight__nonHighlighted"
+    key="split-1-Samsung"
   >
-    ghlighted 
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={true}
+      key="split-0-Sam"
+      nonHighlightedTagName="span"
+      value="Sam"
+    />
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-1-sung"
+      nonHighlightedTagName="span"
+      value="sung"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      , 
+    </span>
   </span>
-  <em
-    className="ais-Highlight__highlighted"
-  >
-    hi
-  </em>
   <span
-    className="ais-Highlight__nonHighlighted"
+    key="split-2-Philips"
   >
-    t!
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Philips"
+      nonHighlightedTagName="span"
+      value="Philips"
+    />
   </span>
 </span>
 `;
 
-exports[`Highlighter renders a hit with a custom tag correctly 1`] = `
+exports[`Highlighter - multi renders a highlighted value with a custom nonHighlightedTagName 1`] = `
 <span
   className="ais-Highlight"
 >
   <span
-    className="ais-Highlight__nonHighlighted"
+    key="split-0-Apple"
   >
-    awesome 
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Apple"
+      nonHighlightedTagName="p"
+      value="Apple"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      , 
+    </span>
   </span>
-  <mark
-    className="ais-Highlight__highlighted"
-  >
-    hi
-  </mark>
   <span
-    className="ais-Highlight__nonHighlighted"
+    key="split-1-Samsung"
   >
-    ghlighted 
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={true}
+      key="split-0-Sam"
+      nonHighlightedTagName="p"
+      value="Sam"
+    />
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-1-sung"
+      nonHighlightedTagName="p"
+      value="sung"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      , 
+    </span>
   </span>
-  <mark
-    className="ais-Highlight__highlighted"
-  >
-    hi
-  </mark>
   <span
-    className="ais-Highlight__nonHighlighted"
+    key="split-2-Philips"
   >
-    t!
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Philips"
+      nonHighlightedTagName="p"
+      value="Philips"
+    />
   </span>
+</span>
+`;
+
+exports[`Highlighter - multi renders a highlighted value with a custom separator 1`] = `
+<span
+  className="ais-Highlight"
+>
+  <span
+    key="split-0-Apple"
+  >
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Apple"
+      nonHighlightedTagName="span"
+      value="Apple"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      -
+    </span>
+  </span>
+  <span
+    key="split-1-Samsung"
+  >
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={true}
+      key="split-0-Sam"
+      nonHighlightedTagName="span"
+      value="Sam"
+    />
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-1-sung"
+      nonHighlightedTagName="span"
+      value="sung"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      -
+    </span>
+  </span>
+  <span
+    key="split-2-Philips"
+  >
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Philips"
+      nonHighlightedTagName="span"
+      value="Philips"
+    />
+  </span>
+</span>
+`;
+
+exports[`Highlighter - multi renders a highlighted value with a custom tagName 1`] = `
+<span
+  className="ais-Highlight"
+>
+  <span
+    key="split-0-Apple"
+  >
+    <Highlight
+      highlightedTagName="strong"
+      isHighlighted={false}
+      key="split-0-Apple"
+      nonHighlightedTagName="span"
+      value="Apple"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      , 
+    </span>
+  </span>
+  <span
+    key="split-1-Samsung"
+  >
+    <Highlight
+      highlightedTagName="strong"
+      isHighlighted={true}
+      key="split-0-Sam"
+      nonHighlightedTagName="span"
+      value="Sam"
+    />
+    <Highlight
+      highlightedTagName="strong"
+      isHighlighted={false}
+      key="split-1-sung"
+      nonHighlightedTagName="span"
+      value="sung"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      , 
+    </span>
+  </span>
+  <span
+    key="split-2-Philips"
+  >
+    <Highlight
+      highlightedTagName="strong"
+      isHighlighted={false}
+      key="split-0-Philips"
+      nonHighlightedTagName="span"
+      value="Philips"
+    />
+  </span>
+</span>
+`;
+
+exports[`Highlighter - multi renders a non highlighted value 1`] = `
+<span
+  className="ais-Highlight"
+>
+  <span
+    key="split-0-Apple"
+  >
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Apple"
+      nonHighlightedTagName="span"
+      value="Apple"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      , 
+    </span>
+  </span>
+  <span
+    key="split-1-Samsung"
+  >
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Samsung"
+      nonHighlightedTagName="span"
+      value="Samsung"
+    />
+    <span
+      className="ais-Highlight__separator"
+    >
+      , 
+    </span>
+  </span>
+  <span
+    key="split-2-Philips"
+  >
+    <Highlight
+      highlightedTagName="em"
+      isHighlighted={false}
+      key="split-0-Philips"
+      nonHighlightedTagName="span"
+      value="Philips"
+    />
+  </span>
+</span>
+`;
+
+exports[`Highlighter - simple renders a highlighted value 1`] = `
+<span
+  className="ais-Highlight"
+>
+  <Highlight
+    highlightedTagName="em"
+    isHighlighted={true}
+    key="split-0-Ap"
+    nonHighlightedTagName="span"
+    value="Ap"
+  />
+  <Highlight
+    highlightedTagName="em"
+    isHighlighted={false}
+    key="split-1-ple"
+    nonHighlightedTagName="span"
+    value="ple"
+  />
+</span>
+`;
+
+exports[`Highlighter - simple renders a highlighted value with a custom nonHighlightedTagName 1`] = `
+<span
+  className="ais-Highlight"
+>
+  <Highlight
+    highlightedTagName="em"
+    isHighlighted={true}
+    key="split-0-Ap"
+    nonHighlightedTagName="p"
+    value="Ap"
+  />
+  <Highlight
+    highlightedTagName="em"
+    isHighlighted={false}
+    key="split-1-ple"
+    nonHighlightedTagName="p"
+    value="ple"
+  />
+</span>
+`;
+
+exports[`Highlighter - simple renders a highlighted value with a custom tagName 1`] = `
+<span
+  className="ais-Highlight"
+>
+  <Highlight
+    highlightedTagName="strong"
+    isHighlighted={true}
+    key="split-0-Ap"
+    nonHighlightedTagName="span"
+    value="Ap"
+  />
+  <Highlight
+    highlightedTagName="strong"
+    isHighlighted={false}
+    key="split-1-ple"
+    nonHighlightedTagName="span"
+    value="ple"
+  />
+</span>
+`;
+
+exports[`Highlighter - simple renders a non highlighted value 1`] = `
+<span
+  className="ais-Highlight"
+>
+  <Highlight
+    highlightedTagName="em"
+    isHighlighted={false}
+    key="split-0-Apple"
+    nonHighlightedTagName="span"
+    value="Apple"
+  />
 </span>
 `;
