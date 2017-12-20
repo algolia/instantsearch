@@ -48,7 +48,7 @@ export default () => {
       injectGoogleMaps(() => {
         window.search.addWidget(
           instantsearch.widgets.geoSearch({
-            googleMapsInstance: window.google,
+            googleInstance: window.google,
             container,
             initialPosition,
             initialZoom,
@@ -64,7 +64,7 @@ export default () => {
         injectGoogleMaps(() => {
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
-              googleMapsInstance: window.google,
+              googleInstance: window.google,
               container,
               initialPosition,
               initialZoom,
@@ -81,7 +81,7 @@ export default () => {
         injectGoogleMaps(() => {
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
-              googleMapsInstance: window.google,
+              googleInstance: window.google,
               container,
               initialPosition,
               initialZoom,
@@ -101,7 +101,7 @@ export default () => {
       injectGoogleMaps(() => {
         window.search.addWidget(
           instantsearch.widgets.geoSearch({
-            googleMapsInstance: window.google,
+            googleInstance: window.google,
             container,
             initialZoom,
             paddingBoundingBox,
@@ -117,7 +117,7 @@ export default () => {
         injectGoogleMaps(() => {
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
-              googleMapsInstance: window.google,
+              googleInstance: window.google,
               container,
               initialZoom,
               paddingBoundingBox,
@@ -134,7 +134,7 @@ export default () => {
         injectGoogleMaps(() => {
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
-              googleMapsInstance: window.google,
+              googleInstance: window.google,
               container,
               initialZoom,
               paddingBoundingBox,
@@ -167,7 +167,7 @@ export default () => {
 
         window.search.addWidget(
           instantsearch.widgets.geoSearch({
-            googleMapsInstance: window.google,
+            googleInstance: window.google,
             container: mapElement,
             radius: 20000,
             enableGeolocationWithIP: false,
@@ -186,7 +186,7 @@ export default () => {
       injectGoogleMaps(() => {
         window.search.addWidget(
           instantsearch.widgets.geoSearch({
-            googleMapsInstance: window.google,
+            googleInstance: window.google,
             container,
             initialPosition,
             initialZoom,
@@ -204,7 +204,7 @@ export default () => {
         injectGoogleMaps(() => {
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
-              googleMapsInstance: window.google,
+              googleInstance: window.google,
               container,
               initialPosition,
               initialZoom,
@@ -222,7 +222,7 @@ export default () => {
         injectGoogleMaps(() => {
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
-              googleMapsInstance: window.google,
+              googleInstance: window.google,
               container,
               initialPosition,
               initialZoom,
@@ -240,7 +240,7 @@ export default () => {
         injectGoogleMaps(() => {
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
-              googleMapsInstance: window.google,
+              googleInstance: window.google,
               container,
               initialPosition,
               initialZoom,
