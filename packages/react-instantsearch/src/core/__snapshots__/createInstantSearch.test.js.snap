@@ -3,7 +3,13 @@
 exports[`createInstantSearch wraps InstantSearch 1`] = `
 Object {
   "algoliaClient": Object {
-    "addAlgoliaAgent": [Function],
+    "addAlgoliaAgent": [MockFunction] {
+      "calls": Array [
+        Array [
+          "react-instantsearch 4.3.0-beta.0",
+        ],
+      ],
+    },
   },
   "children": undefined,
   "createURL": undefined,

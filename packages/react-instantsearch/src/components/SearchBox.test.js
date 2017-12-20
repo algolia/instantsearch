@@ -4,81 +4,96 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import SearchBox from './SearchBox';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('SearchBox', () => {
   it('applies its default props', () => {
-    const tree = renderer.create(<SearchBox refine={() => null} />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const instance = renderer.create(<SearchBox refine={() => null} />);
+
+    expect(instance.toJSON()).toMatchSnapshot();
+
+    instance.unmount();
   });
 
   it('transfers the autoFocus prop to the underlying input element', () => {
-    const tree = renderer
-      .create(<SearchBox refine={() => null} autoFocus />)
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const instance = renderer.create(
+      <SearchBox refine={() => null} autoFocus />
+    );
+
+    expect(instance.toJSON()).toMatchSnapshot();
+
+    instance.unmount();
   });
 
   it('treats its query prop as its input value', () => {
-    const inst = renderer.create(
+    const instance = renderer.create(
       <SearchBox refine={() => null} currentRefinement="QUERY1" />
     );
-    expect(inst.toJSON()).toMatchSnapshot();
 
-    inst.update(<SearchBox refine={() => null} currentRefinement="QUERY2" />);
-    expect(inst.toJSON()).toMatchSnapshot();
+    expect(instance.toJSON()).toMatchSnapshot();
+
+    instance.update(
+      <SearchBox refine={() => null} currentRefinement="QUERY2" />
+    );
+
+    expect(instance.toJSON()).toMatchSnapshot();
+
+    instance.unmount();
   });
 
   it('lets you customize its theme', () => {
-    const tree = renderer
-      .create(
-        <SearchBox
-          refine={() => null}
-          theme={{
-            root: 'ROOT',
-            wrapper: 'WRAPPER',
-            input: 'INPUT',
-            submit: 'SUBMIT',
-            reset: 'RESET',
-          }}
-        />
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const instance = renderer.create(
+      <SearchBox
+        refine={() => null}
+        theme={{
+          root: 'ROOT',
+          wrapper: 'WRAPPER',
+          input: 'INPUT',
+          submit: 'SUBMIT',
+          reset: 'RESET',
+        }}
+      />
+    );
+
+    expect(instance.toJSON()).toMatchSnapshot();
+
+    instance.unmount();
   });
 
   it('lets you give custom components for reset and submit', () => {
-    const tree = renderer
-      .create(
-        <SearchBox
-          refine={() => null}
-          submitComponent={<span>🔍</span>}
-          resetComponent={
-            <svg viewBox="200 198 108 122">
-              <path d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7" />
-            </svg>
-          }
-        />
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const instance = renderer.create(
+      <SearchBox
+        refine={() => null}
+        submitComponent={<span>🔍</span>}
+        resetComponent={
+          <svg viewBox="200 198 108 122">
+            <path d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7" />
+          </svg>
+        }
+      />
+    );
+
+    expect(instance.toJSON()).toMatchSnapshot();
+
+    instance.unmount();
   });
 
   it('lets you customize its translations', () => {
-    const tree = renderer
-      .create(
-        <SearchBox
-          refine={() => null}
-          translations={{
-            resetTitle: 'RESET_TITLE',
-            placeholder: 'PLACEHOLDER',
-          }}
-        />
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const instance = renderer.create(
+      <SearchBox
+        refine={() => null}
+        translations={{
+          resetTitle: 'RESET_TITLE',
+          placeholder: 'PLACEHOLDER',
+        }}
+      />
+    );
+
+    expect(instance.toJSON()).toMatchSnapshot();
+
+    instance.unmount();
   });
 
   it('treats query as a default value when searchAsYouType=false', () => {
@@ -89,18 +104,25 @@ describe('SearchBox', () => {
         searchAsYouType={false}
       />
     );
+
     expect(wrapper.find('input').props().value).toBe('QUERY1');
+
     wrapper.find('input').simulate('change', { target: { value: 'QUERY2' } });
+
     expect(wrapper.find('input').props().value).toBe('QUERY2');
+
     wrapper.unmount();
   });
 
   it('refines its value on change when searchAsYouType=true', () => {
     const refine = jest.fn();
     const wrapper = mount(<SearchBox searchAsYouType refine={refine} />);
+
     wrapper.find('input').simulate('change', { target: { value: 'hello' } });
+
     expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toBe('hello');
+
     wrapper.unmount();
   });
 
@@ -109,11 +131,16 @@ describe('SearchBox', () => {
     const wrapper = mount(
       <SearchBox searchAsYouType={false} refine={refine} />
     );
+
     wrapper.find('input').simulate('change', { target: { value: 'hello' } });
+
     expect(refine.mock.calls).toHaveLength(0);
+
     wrapper.find('form').simulate('submit');
+
     expect(refine.mock.calls).toHaveLength(1);
     expect(refine.mock.calls[0][0]).toBe('hello');
+
     wrapper.unmount();
   });
 
@@ -123,15 +150,19 @@ describe('SearchBox', () => {
     const wrapper = mount(
       <SearchBox searchAsYouType={false} onSubmit={onSubmit} refine={refine} />
     );
+
     wrapper.find('form').simulate('submit');
+
     expect(onSubmit.mock.calls).toHaveLength(1);
     expect(refine.mock.calls).toHaveLength(0);
+
     wrapper.unmount();
   });
 
   it('focuses the input when one of the keys in focusShortcuts is pressed', () => {
     let input;
-    mount(
+
+    const wrapper = mount(
       <SearchBox
         refine={() => null}
         focusShortcuts={['s', 84]}
@@ -142,15 +173,20 @@ describe('SearchBox', () => {
     );
 
     input.focus = jest.fn();
+
     const event1 = new KeyboardEvent('keydown', { keyCode: 82 });
     document.dispatchEvent(event1);
     expect(input.focus.mock.calls).toHaveLength(0);
+
     const event2 = new KeyboardEvent('keydown', { keyCode: 83 });
     document.dispatchEvent(event2);
     expect(input.focus.mock.calls).toHaveLength(1);
+
     const event3 = new KeyboardEvent('keydown', { keyCode: 84 });
     document.dispatchEvent(event3);
     expect(input.focus.mock.calls).toHaveLength(2);
+
+    wrapper.unmount();
   });
 
   it('should accept `onXXX` events', () => {
@@ -165,6 +201,7 @@ describe('SearchBox', () => {
       'onKeyDown',
       'onKeyPress',
     ];
+
     const inputProps = inputEventsList.reduce(
       (props, prop) => ({ ...props, [prop]: jest.fn() }),
       {}
@@ -191,21 +228,27 @@ describe('SearchBox', () => {
       wrapper
         .find('input')
         .simulate(eventName.replace(/^on/, '').toLowerCase());
+
       expect(inputProps[eventName]).toBeCalled();
     });
+
+    wrapper.unmount();
   });
 
   it('should render the loader if showLoadingIndicator is true', () => {
-    const treeWithoutLoadingIndicator = renderer
-      .create(<SearchBox refine={() => null} showLoadingIndicator />)
-      .toJSON();
-    expect(treeWithoutLoadingIndicator).toMatchSnapshot();
+    const instanceWithoutLoadingIndicator = renderer.create(
+      <SearchBox refine={() => null} showLoadingIndicator />
+    );
 
-    const treeWithLoadingIndicator = renderer
-      .create(
-        <SearchBox refine={() => null} showLoadingIndicator isSearchStalled />
-      )
-      .toJSON();
-    expect(treeWithLoadingIndicator).toMatchSnapshot();
+    expect(instanceWithoutLoadingIndicator.toJSON()).toMatchSnapshot();
+
+    const instanceWithLoadingIndicator = renderer.create(
+      <SearchBox refine={() => null} showLoadingIndicator isSearchStalled />
+    );
+
+    expect(instanceWithLoadingIndicator.toJSON()).toMatchSnapshot();
+
+    instanceWithoutLoadingIndicator.unmount();
+    instanceWithLoadingIndicator.unmount();
   });
 });
