@@ -62,6 +62,7 @@ exports[`geo-search recipe App renders without crashing 1`] = `
       />
       <button
         className="ais-SearchBox__submit"
+        hidden={false}
         title="Submit your search query."
         type="submit"
       >
