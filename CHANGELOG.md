@@ -1,3 +1,20 @@
+<a name="4.3.0"></a>
+# [4.3.0](https://github.com/algolia/react-instantsearch/compare/v4.3.0-beta.0...v4.3.0) (2017-12-20)
+
+
+### Bug Fixes
+
+* reset page with multi index ([#665](https://github.com/algolia/react-instantsearch/issues/665)) ([865b7dc](https://github.com/algolia/react-instantsearch/commit/865b7dc))
+* track all index in the manager ([#660](https://github.com/algolia/react-instantsearch/issues/660)) ([793502b](https://github.com/algolia/react-instantsearch/commit/793502b))
+
+
+### Features
+
+* **SearchBox:** provide a loading indicator ([#544](https://github.com/algolia/react-instantsearch/issues/544)) ([189659e](https://github.com/algolia/react-instantsearch/commit/189659e))
+* **Highlight:** support array of strings ([#715](https://github.com/algolia/react-instantsearch/issues/715)) ([8e93c6a](https://github.com/algolia/react-instantsearch/commit/8e93c6a))
+
+
+
 <a name="4.3.0-beta.0"></a>
 # [4.3.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v4.2.0...v4.3.0-beta.0) (2017-11-27)
 
@@ -235,7 +252,7 @@ highlighting results then you'll need to adapt it as now it's only "ais-highligh
 
 ### Features and migration guide
 
-You can find all the details of the release and the migration guide from v3 to v4 here: https://discourse.algolia.com/t/react-instantsearch-v4/1329. 
+You can find all the details of the release and the migration guide from v3 to v4 here: https://discourse.algolia.com/t/react-instantsearch-v4/1329.
 
 
 <a name="4.0.0-beta.6"></a>
