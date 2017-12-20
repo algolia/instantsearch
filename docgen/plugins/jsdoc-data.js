@@ -117,7 +117,7 @@ export default function() {
  * the first square bracket is  matched in order to detect optional parameter
  */
 
-const typeNameValueDescription = /\{(.+)\} (?:(\[?)(\S+?)(?:=(\S+?))?]? - )?([\s\S]*)/;
+const typeNameValueDescription = /\{(.+)\} (?:(\[?)(\S+?)(?:=(\S+?))?]? (?:- )?)?([\s\S]*)/;
 function parseTypeNameValueDescription(v) {
   const parsed = typeNameValueDescription.exec(v);
   if (!parsed) return null;

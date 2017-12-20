@@ -32,7 +32,7 @@ function validateNextProps(props, nextProps) {
  * @propType {object} [searchState] - Object to inject some search state. Switches the InstantSearch component in controlled mode. Useful for [URL Routing](guide/Routing.html).
  * @propType {func} [createURL] - Function to call when creating links, useful for [URL Routing](guide/Routing.html).
  * @propType {SearchResults|SearchResults[]} [resultsState] - Use this to inject the results that will be used at first rendering. Those results are found by using the `findResultsState` function. Useful for [Server Side Rendering](guide/Server-side_rendering.html).
- * @propType {number} [stalledSearchDelay=200] The amount of time before considering that the search takes too much time. The time is expressed in milliseconds.
+ * @propType {number} [stalledSearchDelay=200] - The amount of time before considering that the search takes too much time. The time is expressed in milliseconds.
  * @example
  * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
  *
