@@ -14,9 +14,7 @@ class AppWithRefresh extends Component {
   }
 
   refresh = () => {
-    this.setState(prevState => ({
-      refresh: !prevState.refresh,
-    }));
+    this.setState({ refresh: true });
   };
 
   onSearchStateChange = () => {
@@ -128,3 +126,47 @@ class AppWithRefresh extends Component {
 }
 
 stories.add('with a refresh button', () => <AppWithRefresh />);
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      refresh: false,
+      count: 0,
+    };
+  }
+
+  componentDidMount() {
+    setInterval(
+      () =>
+        this.setState(prevState => ({
+          refresh: prevState.count === 5,
+          count: prevState.count === 5 ? 0 : prevState.count + 1,
+        })),
+      1000
+    );
+  }
+
+  render() {
+    return (
+      <InstantSearch
+        appId="latency"
+        apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+        indexName="ikea"
+        refresh={this.state.refresh}
+      >
+        <span>{this.state.count}s elasped since refresh</span>
+
+        <SearchBox
+          translations={{
+            placeholder: 'Search our furnitures: chairs, tables etc.',
+          }}
+        />
+
+        <CustomHits />
+      </InstantSearch>
+    );
+  }
+}
+
+stories.add('with setInterval', () => <App />);
