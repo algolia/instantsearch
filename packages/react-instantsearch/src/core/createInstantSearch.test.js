@@ -25,8 +25,12 @@ describe('createInstantSearch', () => {
     const wrapper = shallow(
       <CustomInstantSearch appId="app" apiKey="key" indexName="name" />
     );
+
+    // eslint-disable-next-line no-shadow
+    const { algoliaClient, ...propsWithoutClient } = wrapper.props();
+
     expect(wrapper.is(InstantSearch)).toBe(true);
-    expect(wrapper.props()).toMatchSnapshot();
+    expect(propsWithoutClient).toMatchSnapshot();
     expect(wrapper.props().algoliaClient).toBe(algoliaClient);
   });
 
