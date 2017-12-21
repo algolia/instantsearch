@@ -111,8 +111,11 @@ export default function connectGeoSearch(renderFn, unmountFn) {
     };
 
     const render = renderArgs => {
-      const { results, helper, state, instantSearchInstance } = renderArgs;
+      const { results, helper, instantSearchInstance } = renderArgs;
       const isFirstRendering = false;
+      // We don't use the state provided by the render function because we need
+      // to be sure that the state is the latest one for the following condition
+      const state = helper.getState();
 
       const positionChangedSinceLastRefine =
         state.aroundLatLng &&

@@ -44,7 +44,6 @@ describe('connectGeoSearch - rendering', () => {
     const instantSearchInstance = { client, helper };
 
     widget.init({
-      state: helper.getState(),
       helper,
       instantSearchInstance,
     });
@@ -77,7 +76,6 @@ describe('connectGeoSearch - rendering', () => {
           ],
         },
       ]),
-      state: helper.getState(),
       helper,
       instantSearchInstance,
     });
@@ -118,7 +116,6 @@ describe('connectGeoSearch - rendering', () => {
     const helper = createFakeHelper(client);
 
     widget.init({
-      state: helper.getState(),
       helper,
     });
 
@@ -131,7 +128,6 @@ describe('connectGeoSearch - rendering', () => {
           hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
         },
       ]),
-      state: helper.getState(),
       helper,
     });
 
@@ -159,7 +155,6 @@ describe('connectGeoSearch - rendering', () => {
           ],
         },
       ]),
-      state: helper.getState(),
       helper,
     });
 
@@ -207,7 +202,6 @@ describe('connectGeoSearch - rendering', () => {
     helper.setQueryParameter('aroundLatLng', '10,12');
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -215,7 +209,6 @@ describe('connectGeoSearch - rendering', () => {
     render.mock.calls[0][0].refine({ northEast, southWest });
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -233,7 +226,6 @@ describe('connectGeoSearch - rendering', () => {
     helper.setQueryParameter('aroundLatLng', '14,16');
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -276,7 +268,6 @@ describe('connectGeoSearch - rendering', () => {
     helper.setQueryParameter('aroundLatLng', '10,12');
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -284,7 +275,6 @@ describe('connectGeoSearch - rendering', () => {
     render.mock.calls[0][0].refine({ northEast, southWest });
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -302,7 +292,6 @@ describe('connectGeoSearch - rendering', () => {
     helper.setQueryParameter('aroundLatLng', '10,12');
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -345,7 +334,6 @@ describe('connectGeoSearch - rendering', () => {
     helper.setQueryParameter('insideBoundingBox', '10,12,14,16');
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -353,7 +341,6 @@ describe('connectGeoSearch - rendering', () => {
     render.mock.calls[0][0].refine({ northEast, southWest });
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -371,7 +358,6 @@ describe('connectGeoSearch - rendering', () => {
     helper.setQueryParameter('insideBoundingBox');
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -414,7 +400,6 @@ describe('connectGeoSearch - rendering', () => {
     helper.setQueryParameter('insideBoundingBox', '10,12,14,16');
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -422,7 +407,6 @@ describe('connectGeoSearch - rendering', () => {
     render.mock.calls[0][0].refine({ northEast, southWest });
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -440,7 +424,6 @@ describe('connectGeoSearch - rendering', () => {
     helper.setQueryParameter('insideBoundingBox', '12,14,16,18');
 
     widget.render({
-      state: helper.getState(),
       results,
       helper,
     });
@@ -478,7 +461,6 @@ describe('connectGeoSearch - rendering', () => {
       ]);
 
       widget.init({
-        state: helper.getState(),
         helper,
       });
 
@@ -491,7 +473,6 @@ describe('connectGeoSearch - rendering', () => {
       render.mock.calls[0][0].refine({ northEast, southWest });
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -530,7 +511,6 @@ describe('connectGeoSearch - rendering', () => {
       ]);
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -544,7 +524,6 @@ describe('connectGeoSearch - rendering', () => {
       render.mock.calls[0][0].refine({ northEast, southWest });
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -585,7 +564,6 @@ describe('connectGeoSearch - rendering', () => {
       ]);
 
       widget.init({
-        state: helper.getState(),
         helper,
       });
 
@@ -598,7 +576,6 @@ describe('connectGeoSearch - rendering', () => {
       render.mock.calls[0][0].refine({ northEast, southWest });
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -612,7 +589,6 @@ describe('connectGeoSearch - rendering', () => {
       render.mock.calls[0][0].clearMapRefinement();
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -651,7 +627,6 @@ describe('connectGeoSearch - rendering', () => {
       ]);
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -665,7 +640,6 @@ describe('connectGeoSearch - rendering', () => {
       render.mock.calls[0][0].refine({ northEast, southWest });
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -679,7 +653,6 @@ describe('connectGeoSearch - rendering', () => {
       render.mock.calls[0][0].clearMapRefinement();
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -704,7 +677,6 @@ describe('connectGeoSearch - rendering', () => {
       const helper = createFakeHelper(client);
 
       widget.init({
-        state: helper.getState(),
         helper,
       });
 
@@ -722,7 +694,6 @@ describe('connectGeoSearch - rendering', () => {
             hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
           },
         ]),
-        state: helper.getState(),
         helper,
       });
 
@@ -749,7 +720,6 @@ describe('connectGeoSearch - rendering', () => {
             hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
           },
         ]),
-        state: helper.getState(),
         helper,
       });
 
@@ -778,7 +748,6 @@ describe('connectGeoSearch - rendering', () => {
       const helper = createFakeHelper(client);
 
       widget.init({
-        state: helper.getState(),
         helper,
       });
 
@@ -796,7 +765,6 @@ describe('connectGeoSearch - rendering', () => {
             hits: [{ objectID: 123, _geoloc: { lat: 10, lng: 12 } }],
           },
         ]),
-        state: helper.getState(),
         helper,
       });
 
@@ -824,7 +792,6 @@ describe('connectGeoSearch - rendering', () => {
       ]);
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
@@ -858,7 +825,6 @@ describe('connectGeoSearch - rendering', () => {
       ]);
 
       widget.render({
-        state: helper.getState(),
         results,
         helper,
       });
