@@ -67,6 +67,10 @@
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@hypnosphi/fuse.js/-/fuse.js-3.0.9.tgz#ea99f6121b4a8f065b4c71f85595db2714498807"
 
+"@mapbox/point-geometry@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@mapbox/point-geometry/-/point-geometry-0.1.0.tgz#8a83f9335c7860effa2eeeca254332aa0aeed8f2"
+
 "@semantic-release/commit-analyzer@^3.0.1":
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/@semantic-release/commit-analyzer/-/commit-analyzer-3.0.6.tgz#3020ca7030658f3f52fef14c78f7fcccb8a1b33a"
@@ -5525,13 +5529,13 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-google-map-react@0.25.0:
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-0.25.0.tgz#d76ff1ac6557fc1eadc47375fc7d9518ebcc50ed"
+google-map-react@0.26.0:
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-0.26.0.tgz#b71bc2ccc18b5f5d3d50fe7ed04f384f7d0a3e4b"
   dependencies:
+    "@mapbox/point-geometry" "^0.1.0"
     eventemitter3 "^1.1.0"
     fbjs "^0.8.3"
-    point-geometry "0.0.0"
     scriptjs "^2.5.7"
 
 got@5.6.0:
@@ -8935,10 +8939,6 @@ podda@^1.2.2:
   dependencies:
     babel-runtime "^6.11.6"
     immutable "^3.8.1"
-
-point-geometry@0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/point-geometry/-/point-geometry-0.0.0.tgz#6fcbcad7a803b6418247dd6e49c2853c584daff7"
 
 portfinder@^1.0.9:
   version "1.0.13"
