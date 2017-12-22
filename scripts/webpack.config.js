@@ -7,6 +7,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const extractCSS = new ExtractTextPlugin('instantsearch.css');
 const extractTheme = new ExtractTextPlugin('instantsearch-theme-algolia.css');
@@ -76,14 +77,16 @@ module.exports = {
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
 
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        comparisons: false,
-      },
-      output: {
-        comments: false,
-        ascii_only: true,
+    new UglifyJSPlugin({
+      uglifyOptions: {
+        compress: {
+          warnings: false,
+          comparisons: false,
+        },
+        output: {
+          comments: false,
+          ascii_only: true,
+        },
       },
       sourceMap: true,
     }),

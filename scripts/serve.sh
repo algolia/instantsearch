@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Serves the current build version on a local server available (by default) on
-# http://127.0.0.1:8080/instantsearch.js
+# http://127.0.0.1:8080/instantsearch.min.js
 #
 # This is useful when you want to test the latest instantsearch.js version
 # (including your own branches) on a specific local project. Just run `npm run
