@@ -5,16 +5,6 @@ import assign from 'lodash/assign';
 
 const AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 
-function timerMaker(t0) {
-  let t = t0;
-  return function timer() {
-    const now = Date.now();
-    const delta = now - t;
-    t = now;
-    return delta;
-  };
-}
-
 /**
  * @typedef {object} UrlUtil
  * @property {string} character the character used in the url
@@ -112,7 +102,6 @@ class URLSync {
   constructor(urlUtils, options) {
     this.urlUtils = urlUtils;
     this.originalConfig = null;
-    this.timer = timerMaker(Date.now());
     this.mapping = options.mapping || {};
     this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
