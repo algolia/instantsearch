@@ -19,3 +19,5 @@ Available at http://localhost:1313
 ```
 yarn build
 ```
+
+## Release a new version

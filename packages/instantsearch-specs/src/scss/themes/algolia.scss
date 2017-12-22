@@ -71,8 +71,9 @@ a[class^='ais-'] {
 .ais-ClearRefinements-button,
 .ais-CurrentRefinements-reset,
 .ais-HierarchicalMenu-showMore,
-.ais-InfiniteResults-loadMore,
-.ais-Menu-showMore {
+.ais-InfiniteHits-loadMore,
+.ais-Menu-showMore,
+.ais-RefinementList-showMore {
   padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
   color: #fff;
@@ -89,8 +90,9 @@ a[class^='ais-'] {
 
 .ais-ClearRefinements-button--disabled,
 .ais-HierarchicalMenu-showMore--disabled,
-.ais-InfiniteResults-loadMore--disabled,
-.ais-Menu-showMore--disabled {
+.ais-InfiniteHits-loadMore--disabled,
+.ais-Menu-showMore--disabled,
+.ais-RefinementList-showMore--disabled {
   opacity: 0.6;
   cursor: not-allowed;
 
@@ -203,7 +205,8 @@ a[class^='ais-'] {
 }
 
 .ais-HierarchicalMenu-showMore,
-.ais-Menu-showMore {
+.ais-Menu-showMore,
+.ais-RefinementList-showMore {
   margin-top: 0.5rem;
 }
 
@@ -212,26 +215,26 @@ a[class^='ais-'] {
   background-color: $koromiko;
 }
 
-.ais-InfiniteResults-header,
-.ais-Results-header {
+.ais-InfiniteHits-header,
+.ais-Hits-header {
   margin-bottom: 1rem;
 }
 
-.ais-InfiniteResults-footer,
-.ais-Results-footer {
+.ais-InfiniteHits-footer,
+.ais-Hits-footer {
   margin-top: 1rem;
 }
 
-.ais-InfiniteResults-list,
-.ais-Results-list {
+.ais-InfiniteHits-list,
+.ais-Hits-list {
   margin-top: -1rem;
   margin-left: -1rem;
   display: flex;
   flex-wrap: wrap;
 }
 
-.ais-InfiniteResults-item,
-.ais-Results-item {
+.ais-InfiniteHits-item,
+.ais-Hits-item {
   margin-top: 1rem;
   margin-left: 1rem;
   padding: 1rem;
@@ -240,13 +243,13 @@ a[class^='ais-'] {
   box-shadow: 0 2px 5px 0px lighten($ghost, 10%);
 }
 
-.ais-InfiniteResults-loadMore {
+.ais-InfiniteHits-loadMore {
   margin-top: 1rem;
 }
 
 .ais-MenuSelect-select,
 .ais-NumericSelector-select,
-.ais-ResultsPerPage-select,
+.ais-HitsPerPage-select,
 .ais-SortBy-select {
   appearance: none;
   padding: 0.3rem 2rem 0.3rem 0.3rem;

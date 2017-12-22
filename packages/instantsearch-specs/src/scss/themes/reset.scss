@@ -3,13 +3,13 @@
 .ais-Breadcrumb-list,
 .ais-CurrentRefinements-list,
 .ais-HierarchicalMenu-list,
-.ais-InfiniteResults-list,
+.ais-Hits-list,
+.ais-InfiniteHits-list,
 .ais-Menu-list,
 .ais-NumericMenu-list,
 .ais-Pagination-list,
 .ais-RatingMenu-list,
 .ais-RefinementList-list,
-.ais-Results-list,
 .ais-Toggle-list {
   margin: 0;
   padding: 0;
@@ -22,9 +22,10 @@
 .ais-CurrentRefinements-button,
 .ais-CurrentRefinements-reset,
 .ais-HierarchicalMenu-showMore,
-.ais-InfiniteResults-loadMore,
+.ais-InfiniteHits-loadMore,
 .ais-Menu-showMore,
 .ais-RangeInput-submit,
+.ais-RefinementList-showMore,
 .ais-SearchBox-submit,
 .ais-SearchBox-reset {
   padding: 0;
