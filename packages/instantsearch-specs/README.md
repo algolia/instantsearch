@@ -21,3 +21,11 @@ yarn build
 ```
 
 ## Release a new version
+
+Make your changes, commit them and:
+
+```
+npm version (major|minor|patch) -m "Version x.x.x"
+npm publish
+git push origin <tag_name>
+```
