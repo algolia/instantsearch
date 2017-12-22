@@ -49,6 +49,10 @@ classes:
     description: the list of all pagination items
   - name: .ais-Pagination-item
     description: the pagination list item
+  - name: .ais-Pagination-item--firstPage
+    description: the "first" pagination list item
+  - name: .ais-Pagination-item--lastPage
+    description: the "last" pagination list item
   - name: .ais-Pagination-item--previousPage
     description: the "previous" pagination list item
   - name: .ais-Pagination-item--nextPage
@@ -59,7 +63,7 @@ classes:
     description: the selected pagination list item
   - name: .ais-Pagination-item--disabled
     description: the disabled pagination list item
-  - name: .ais-Pagination-item--link
+  - name: .ais-Pagination-link
     description: the pagination clickable element
   - name: .ais-Pagination-footer
     description: the footer of the widget (optional)
