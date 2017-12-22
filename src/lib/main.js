@@ -18,6 +18,9 @@ import version from './version.js';
 import * as connectors from '../connectors/index.js';
 import * as widgets from '../widgets/index.js';
 
+import * as storage from './storage/index.js';
+import * as uiStateMapping from './uiStateMapping/index.js';
+
 /**
  * @typedef {Object} UrlSyncOptions
  * @property {Object} [mapping] Object used to define replacement query
@@ -89,6 +92,8 @@ import * as widgets from '../widgets/index.js';
  */
 const instantsearch = toFactory(InstantSearch);
 
+instantsearch.storage = storage;
+instantsearch.uiStateMapping = uiStateMapping;
 instantsearch.createQueryString =
   algoliasearchHelper.url.getQueryStringFromState;
 instantsearch.connectors = connectors;
