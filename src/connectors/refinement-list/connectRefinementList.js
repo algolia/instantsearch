@@ -409,6 +409,27 @@ export default function connectRefinementList(renderFn, unmountFn) {
             .removeDisjunctiveFacet(attributeName);
         }
       },
+
+      getUIState(fullState, { state }) {
+        const values = state.getDisjunctiveRefinements(attributeName);
+        if (values.length === 0) return fullState;
+        return {
+          ...fullState,
+          refinementList: {
+            [attributeName]: values,
+          },
+        };
+      },
+
+      getSearchParameters(searchParam, { uiState }) {
+        const values =
+          (uiState.refinementList && uiState.refinementList[attributeName]) ||
+          [];
+        return values.reduce(
+          (sp, v) => sp.addDisjunctiveFacetRefinement(attributeName, v),
+          searchParam.clearRefinements(attributeName)
+        );
+      },
     };
   };
 }
