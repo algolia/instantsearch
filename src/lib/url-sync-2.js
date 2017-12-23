@@ -11,38 +11,19 @@ import isEqual from 'lodash/isEqual';
  * @type StorageAdapter
  * @property {(object) => ()} write push a syncable object into a storage
  * @property {((object) => (object)) => ()} onUpdate sets an event listenere when the storage is updated by a third party
+ * @property {() => (object)} read reads the storage and gets a syncable object
  * @property {(object) => string} createURL transforms a syncable object into a URL
  * @property {() => ()} dispose cleans up any event listeners
  */
 
 export default class URLSync {
-  constructor(
-    {
-      instantSearchInstance,
-      storageAdapter,
-      uiStateMapping,
-      mapping = {},
-      threshold = 700,
-      trackedParameters = [
-        'query',
-        'attribute:*',
-        'index',
-        'page',
-        'hitsPerPage',
-      ],
-    } = {}
-  ) {
-    //  this.urlUtils = urlUtils;
+  constructor({ instantSearchInstance, storageAdapter, uiStateMapping } = {}) {
     this.originalConfig = null;
     this.firstRender = true;
 
     this.storageAdapter = storageAdapter;
     this.uiStateMapping = uiStateMapping;
     this.instantSearchInstance = instantSearchInstance;
-
-    this.mapping = mapping;
-    this.threshold = threshold;
-    this.trackedParameters = trackedParameters;
 
     this.originalUIState = this.uiStateMapping.fromSyncable(
       this.storageAdapter.read()
@@ -113,7 +94,6 @@ export default class URLSync {
           .search();
       });
 
-      // this.onHistoryChange(this.onPopState.bind(this, helper));
       helper.on('change', searchState => {
         // this.renderURLFromState(s)
         const uiState = this.getAllUIStates({
@@ -135,18 +115,12 @@ export default class URLSync {
       });
 
       if (!isEqual(this.initState, firstRenderState)) {
+        // force update the URL, if the state has changed since the initial URL read
+        // We do this in order to make a URL update when there is search function
+        // that prevent the search of the initial rendering
+        // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
         this.storageAdapter.write(firstRenderState);
       }
-
-      //  const initStateQs = this.getQueryString(this.initState);
-      //  const stateQs = this.getQueryString(state);
-      //  if (initStateQs !== stateQs) {
-      //    // force update the URL, if the state has changed since the initial URL read
-      //    // We do this in order to make a URL update when there is search function
-      //    // that prevent the search of the initial rendering
-      //    // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-      //    this.renderURLFromState(state);
-      //  }
     }
   }
 
@@ -155,7 +129,7 @@ export default class URLSync {
       'change',
       this.renderURLFromState
     );
-    // FIXME this.urlUtils.dispose();
+    this.storageAdapter.dispose();
   }
 
   getAllSearchParameters({ state, uiState }) {
@@ -180,21 +154,6 @@ export default class URLSync {
     }, {});
 
     return uiState;
-  }
-
-  onPopState(helper, fullState) {
-    clearTimeout(this.urlUpdateTimeout);
-    // compare with helper.state
-    const partialHelperState = helper.getState(this.trackedParameters);
-    const fullHelperState = Object.assign(
-      {},
-      this.originalConfig,
-      partialHelperState
-    );
-
-    if (isEqual(fullHelperState, fullState)) return;
-
-    helper.overrideStateWithoutTriggeringChangeEvent(fullState).search();
   }
 
   // External API's
