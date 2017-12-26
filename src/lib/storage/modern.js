@@ -24,14 +24,15 @@ class ModernURL {
    */
   write(uiState) {
     const url = this.createURL(uiState);
-    const title = this.titleFromUIState(uiState);
+    const title = this.titleFromUIState && this.titleFromUIState(uiState);
 
     if (this.writeTimer) {
       window.clearTimeout(this.writeTimer);
     }
 
     this.writeTimer = setTimeout(() => {
-      window.history.pushState(uiState, title, url);
+      if (title) window.document.title = title;
+      window.history.pushState(uiState, title || '', url);
       this.writeTimer = undefined;
     }, this.writeTimeout);
   }
