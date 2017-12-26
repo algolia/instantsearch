@@ -24,12 +24,12 @@
     "docs:storybook-build-production": "build-storybook -s ./storybook/public -o docs-production/react-instantsearch/storybook -c ./storybook"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "3.2.18",
-    "@storybook/addon-knobs": "3.2.18",
-    "@storybook/addon-options": "3.2.18",
-    "@storybook/addons": "3.2.18",
-    "@storybook/react": "3.2.18",
-    "@storybook/ui": "3.2.18",
+    "@storybook/addon-actions": "3.2.19",
+    "@storybook/addon-knobs": "3.2.19",
+    "@storybook/addon-options": "3.2.19",
+    "@storybook/addons": "3.2.19",
+    "@storybook/react": "3.2.19",
+    "@storybook/ui": "3.2.19",
     "argos-cli": "0.0.9",
     "async": "2.6.0",
     "autoprefixer": "7.2.3",
