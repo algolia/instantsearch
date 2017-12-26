@@ -35,7 +35,7 @@
     "autoprefixer": "7.2.3",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
-    "babel-eslint": "8.1.1",
+    "babel-eslint": "8.1.2",
     "babel-loader": "7.1.2",
     "babel-plugin-external-helpers": "6.22.0",
     "babel-plugin-inline-json-import": "0.2.1",
