@@ -213,6 +213,34 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
         return nextState;
       },
+      getUIState(fullState, { state }) {
+        const path = state.getHierarchicalFacetBreadcrumb(
+          hierarchicalFacetName
+        );
+        if (!path || path.length === 0) return fullState;
+        return {
+          ...fullState,
+          hierarchicalMenu: {
+            [hierarchicalFacetName]: path,
+          },
+        };
+      },
+
+      getSearchParameters(searchParam, { uiState }) {
+        if (
+          uiState.hierarchicalMenu &&
+          uiState.hierarchicalMenu[hierarchicalFacetName]
+        ) {
+          return searchParam
+            .clearRefinements(hierarchicalFacetName)
+            .toggleRefinement(
+              hierarchicalFacetName,
+              uiState.hierarchicalMenu[hierarchicalFacetName].join(separator)
+            );
+        } else {
+          return searchParam;
+        }
+      },
     };
   };
 }
