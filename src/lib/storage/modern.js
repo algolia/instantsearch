@@ -1,5 +1,20 @@
 import qs from 'qs';
 
+function defaultCreateURL(qsModule, uiState) {
+  const { protocol, hostname, port = '', pathname, hash } = window.location;
+  const queryString = qsModule.stringify(uiState);
+  const portWithPrefix = port === '' ? '' : `:${port}`;
+  // IE <= 11 has no location.origin or buggy. Therefore we don't rely on it
+  if (!uiState || Object.keys(uiState).length === 0)
+    return `${protocol}//${hostname}${portWithPrefix}${pathname}${hash}`;
+  else
+    return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
+}
+
+function defaultParseURL(qsModule) {
+  return qsModule.parse(window.location.search.slice(1));
+}
+
 class ModernURL {
   /**
    * Initializes a new storage provider that will sync the search state in the URL
@@ -10,11 +25,27 @@ class ModernURL {
    * provided to the URL sync). It should return a string that will be the title.
    * @param {number} [$0.writeTimeout = 400] time before a write is actually done.
    * Prevent having too much entries in the history and thus make the back button more friendly.
+   * @param {function(qs, object):string} [$0.createURL] generates the full URL. If not provided,
+   * the storage adaptor will mapped all syncable keys to the query string of the URL. The first
+   * parameter is a utility object that has two methods: `stringify` that creates a query string
+   * from an object and `parse` that transforms a query string into an object.
+   * @param {function(qs): object} [$0.parseURL] parses an URL into an object. It should symetrical
+   * to `createURL`. It gets as an argument an object that contains two methods: `stringify` that
+   * creates a query string from an object and `parse` that transforms a query string into an object.
    */
-  constructor({ titleFromUIState, writeTimeout = 400 } = {}) {
+  constructor(
+    {
+      titleFromUIState,
+      writeTimeout = 400,
+      createURL = defaultCreateURL,
+      parseURL = defaultParseURL,
+    } = {}
+  ) {
     this.titleFromUIState = titleFromUIState;
     this.writeTimer = undefined;
     this.writeTimeout = writeTimeout;
+    this.userDefinedCreateURL = createURL;
+    this.userDefinedParseURL = parseURL;
   }
 
   /**
@@ -42,7 +73,7 @@ class ModernURL {
    * @return {object} the equivalent to what is store in the URL as an object
    */
   read() {
-    return qs.parse(window.location.search.slice(1));
+    return this.userDefinedParseURL(qs);
   }
 
   /**
@@ -82,14 +113,7 @@ class ModernURL {
    * @returns {string} the full URL for the provided syncable state
    */
   createURL(uiState) {
-    const { protocol, hostname, port = '', pathname, hash } = window.location;
-    const queryString = qs.stringify(uiState);
-    const portWithPrefix = port === '' ? '' : `:${port}`;
-    // IE <= 11 has no location.origin or buggy. Therefore we don't rely on it
-    if (!uiState || Object.keys(uiState).length === 0)
-      return `${protocol}//${hostname}${portWithPrefix}${pathname}${hash}`;
-    else
-      return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
+    return this.userDefinedCreateURL(qs, uiState);
   }
 
   /**
