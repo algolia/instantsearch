@@ -155,7 +155,7 @@ class App extends Component {
         indexName="ikea"
         refresh={this.state.refresh}
       >
-        <span>{this.state.count}s elasped since refresh</span>
+        <span>{this.state.count} s elapsed since last refresh</span>
 
         <SearchBox
           translations={{
