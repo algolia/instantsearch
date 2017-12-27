@@ -67,6 +67,30 @@ export default () => {
       )
     )
     .add(
+      'with custom item template',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            templates: {
+              item:
+              `<a class="{{cssClasses.link}}" href="{{url}}">
+                {{label}}
+              </a>
+              {{#hasChildren}}
+                <span>Has children</span>
+              {{/hasChildren}}`,
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with header',
       wrapWithHits(container => {
         window.search.addWidget(

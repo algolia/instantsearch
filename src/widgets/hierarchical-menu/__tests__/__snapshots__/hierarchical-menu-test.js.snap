@@ -21,10 +21,12 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
   facetValues={
     Array [
       Object {
+        "hasChildren": false,
         "label": "foo",
         "value": undefined,
       },
       Object {
+        "hasChildren": false,
         "label": "bar",
         "value": undefined,
       },
@@ -72,10 +74,12 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
   facetValues={
     Array [
       Object {
+        "hasChildren": false,
         "label": "foo",
         "value": undefined,
       },
       Object {
+        "hasChildren": false,
         "label": "bar",
         "value": undefined,
       },
@@ -203,10 +207,12 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
   facetValues={
     Array [
       Object {
+        "hasChildren": false,
         "label": "foo",
         "value": undefined,
       },
       Object {
+        "hasChildren": false,
         "label": "bar",
         "value": undefined,
       },

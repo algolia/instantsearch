@@ -163,7 +163,12 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
             if (Array.isArray(subValue.data)) {
               subValue.data = this._prepareFacetValues(subValue.data, state);
             }
-            return { ...subValue, label, value };
+            return {
+              ...subValue,
+              label,
+              value,
+              hasChildren: Boolean(subValue.data && subValue.data.length > 0),
+            };
           });
       },
 

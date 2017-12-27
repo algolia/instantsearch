@@ -229,12 +229,14 @@ describe('connectHierarchicalMenu', () => {
         value: 'Decoration',
         count: 880,
         isRefined: true,
+        hasChildren: true,
         data: [
           {
             label: 'Candle holders & candles',
             value: 'Decoration > Candle holders & candles',
             count: 193,
             isRefined: false,
+            hasChildren: false,
             data: null,
           },
           {
@@ -242,6 +244,7 @@ describe('connectHierarchicalMenu', () => {
             value: 'Decoration > Frames & pictures',
             count: 173,
             isRefined: false,
+            hasChildren: false,
             data: null,
           },
         ],
@@ -251,6 +254,7 @@ describe('connectHierarchicalMenu', () => {
         value: 'Outdoor',
         count: 47,
         isRefined: false,
+        hasChildren: false,
         data: null,
       },
     ]);
