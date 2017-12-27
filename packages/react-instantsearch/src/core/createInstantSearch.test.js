@@ -1,20 +1,20 @@
-/* eslint-env jest, jasmine */
-/* eslint-disable no-console */
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
+import { version } from '../../package.json';
 import createInstantSearch from './createInstantSearch';
 import InstantSearch from './InstantSearch.js';
-import { version } from '../../package.json';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('createInstantSearch', () => {
   const algoliaClient = { addAlgoliaAgent: jest.fn() };
   const algoliaClientFactory = jest.fn(() => algoliaClient);
-  const CustomInstantSearch = createInstantSearch(algoliaClientFactory, {
-    Root: 'div',
-  });
+  const createCustomInstantSearch = root =>
+    createInstantSearch(algoliaClientFactory, {
+      Root: 'div',
+      ...root,
+    });
 
   beforeEach(() => {
     algoliaClient.addAlgoliaAgent.mockClear();
@@ -22,6 +22,8 @@ describe('createInstantSearch', () => {
   });
 
   it('wraps InstantSearch', () => {
+    const CustomInstantSearch = createCustomInstantSearch();
+
     const wrapper = shallow(
       <CustomInstantSearch appId="app" apiKey="key" indexName="name" />
     );
@@ -35,7 +37,10 @@ describe('createInstantSearch', () => {
   });
 
   it('creates an algolia client using the provided factory', () => {
+    const CustomInstantSearch = createCustomInstantSearch();
+
     shallow(<CustomInstantSearch appId="app" apiKey="key" indexName="name" />);
+
     expect(algoliaClientFactory).toHaveBeenCalledTimes(1);
     expect(algoliaClientFactory).toHaveBeenCalledWith('app', 'key');
     expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
@@ -45,35 +50,75 @@ describe('createInstantSearch', () => {
   });
 
   it('updates the algoliaClient when appId or apiKey changes', () => {
+    const CustomInstantSearch = createCustomInstantSearch();
+
     const wrapper = shallow(
       <CustomInstantSearch appId="app" apiKey="key" indexName="name" />
     );
+
     wrapper.setProps({ appId: 'app2', apiKey: 'key' });
     wrapper.setProps({ appId: 'app', apiKey: 'key2' });
+
     expect(algoliaClientFactory).toHaveBeenCalledTimes(3);
     expect(algoliaClientFactory.mock.calls[1]).toEqual(['app2', 'key']);
     expect(algoliaClientFactory.mock.calls[2]).toEqual(['app', 'key2']);
   });
 
   it('uses the provided algoliaClient', () => {
+    const CustomInstantSearch = createCustomInstantSearch();
+
     const wrapper = shallow(
       <CustomInstantSearch algoliaClient={algoliaClient} indexName="name" />
     );
+
     expect(algoliaClientFactory).toHaveBeenCalledTimes(0);
     expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
     expect(wrapper.props().algoliaClient).toBe(algoliaClient);
   });
 
   it('updates the algoliaClient when provided algoliaClient is passed down', () => {
+    const CustomInstantSearch = createCustomInstantSearch();
+    const newAlgoliaClient = {
+      addAlgoliaAgent: jest.fn(),
+    };
+
     const wrapper = shallow(
       <CustomInstantSearch algoliaClient={algoliaClient} indexName="name" />
     );
+
     expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
-    const newAlgoliaClient = { addAlgoliaAgent: jest.fn() };
+
     wrapper.setProps({
       algoliaClient: newAlgoliaClient,
     });
+
     expect(wrapper.props().algoliaClient).toBe(newAlgoliaClient);
     expect(newAlgoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+  });
+
+  it('expect to create InstantSearch with a custom root props', () => {
+    const CustomInstantSearch = createCustomInstantSearch({
+      Root: 'span',
+      props: {
+        style: {
+          flex: 1,
+        },
+      },
+    });
+
+    const wrapper = shallow(
+      <CustomInstantSearch algoliaClient={algoliaClient} indexName="name" />
+    );
+
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+
+    expect(wrapper.props().root).toEqual({
+      Root: 'span',
+      props: {
+        style: {
+          flex: 1,
+        },
+      },
+    });
   });
 });

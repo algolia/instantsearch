@@ -28,16 +28,25 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       onSearchStateChange: PropTypes.func,
       onSearchParameters: PropTypes.func,
       resultsState: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+      root: PropTypes.shape({
+        Root: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
+          .isRequired,
+        props: PropTypes.object,
+      }),
     };
 
     static defaultProps = {
       refresh: false,
+      root,
     };
 
-    constructor(props) {
-      super();
+    constructor(...args) {
+      super(...args);
+
       this.client =
-        props.algoliaClient || defaultAlgoliaClient(props.appId, props.apiKey);
+        this.props.algoliaClient ||
+        defaultAlgoliaClient(this.props.appId, this.props.apiKey);
+
       this.client.addAlgoliaAgent(`react-instantsearch ${version}`);
     }
 
@@ -63,7 +72,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
           searchState={this.props.searchState}
           onSearchStateChange={this.props.onSearchStateChange}
           onSearchParameters={this.props.onSearchParameters}
-          root={root}
+          root={this.props.root}
           algoliaClient={this.client}
           refresh={this.props.refresh}
           resultsState={this.props.resultsState}
