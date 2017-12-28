@@ -262,6 +262,9 @@ Usage: instantsearch({
     this.helper = helper;
     this._init(helper.state, this.helper);
     this.helper.on('result', this._render.bind(this, this.helper));
+    this.helper.on('error', e => {
+      this.emit('error', e);
+    });
 
     this._searchStalledTimer = null;
     this._isSearchStalled = true;
