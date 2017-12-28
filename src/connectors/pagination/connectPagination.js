@@ -141,6 +141,19 @@ export default function connectPagination(renderFn, unmountFn) {
       dispose() {
         unmountFn();
       },
+
+      getUIState(fullState, { state }) {
+        const page = state.page;
+        if (page === 0) return fullState;
+        return {
+          ...fullState,
+          page,
+        };
+      },
+
+      getSearchParameters(searchParam, { uiState }) {
+        return searchParam.setQueryParameter('page', uiState.page);
+      },
     };
   };
 }
