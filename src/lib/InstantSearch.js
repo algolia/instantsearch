@@ -200,7 +200,18 @@ Usage: instantsearch({
   }
 
   /**
-   * The start methods ends the initialization of InstantSearch.js and triggers the
+   * The reload method clears the cached answers from Algolia and triggers a new search.
+   *
+   * @return {undefined} Does not return anything
+   */
+  reload() {
+    if (this.helper) {
+      this.helper.clearCache().search();
+    }
+  }
+
+  /**
+   * The start method ends the initialization of InstantSearch.js and triggers the
    * first search. This method should be called after all widgets have been added
    * to the instance of InstantSearch.js. InstantSearch.js also supports adding and removing
    * widgets after the start as an **EXPERIMENTAL** feature.
