@@ -200,7 +200,18 @@ Usage: instantsearch({
   }
 
   /**
-   * The start methods ends the initialization of InstantSearch.js and triggers the
+   * The clearCache method clears the cached answers from Algolia and triggers a new search.
+   *
+   * @return {undefined} Does not return anything
+   */
+  clearCache() {
+    if (this.helper) {
+      this.helper.clearCache().search();
+    }
+  }
+
+  /**
+   * The start method ends the initialization of InstantSearch.js and triggers the
    * first search. This method should be called after all widgets have been added
    * to the instance of InstantSearch.js. InstantSearch.js also supports adding and removing
    * widgets after the start as an **EXPERIMENTAL** feature.
@@ -226,7 +237,7 @@ Usage: instantsearch({
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
-      this._onHistoryChange = function() {};
+      this._onHistoryChange = function () { };
     }
 
     this.searchParameters = this.widgets.reduce(
@@ -245,8 +256,8 @@ Usage: instantsearch({
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            addAlgoliaAgent: () => {},
-            search: () => {},
+            addAlgoliaAgent: () => { },
+            search: () => { },
           },
           helper.state.index,
           helper.state
