@@ -31,6 +31,9 @@
     "serve": "./scripts/serve.sh",
     "fix:prettier": "eslint --fix -c .eslintrc.js ."
   },
+  "renovate": {
+    "extends": ["config:js-lib", "algolia"]
+  },
   "repository": "algolia/instantsearch.js",
   "files": [
     "dist",

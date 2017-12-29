@@ -1,11 +1,15 @@
 {
   "name": "instantsearch.js-docgen",
+  "private": true,
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "dev": "babel-node start.js",
     "build": "babel-node build.js"
+  },
+  "renovate": {
+    "extends": ["config:js-app", "algolia"]
   },
   "devDependencies": {
     "algolia-frontend-components": "0.0.34",
@@ -36,7 +40,7 @@
     "postcss-scss": "1.0.2",
     "pug": "2.0.0-rc.4",
     "webpack": "3.10.0",
-    "webpack-dev-middleware": "1.12.2",
+    "webpack-dev-middleware": "2.0.1",
     "webpack-hot-middleware": "2.20.0"
   }
 }
