@@ -237,7 +237,7 @@ Usage: instantsearch({
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
-      this._onHistoryChange = function () { };
+      this._onHistoryChange = function() {};
     }
 
     this.searchParameters = this.widgets.reduce(
@@ -256,8 +256,8 @@ Usage: instantsearch({
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            addAlgoliaAgent: () => { },
-            search: () => { },
+            addAlgoliaAgent: () => {},
+            search: () => {},
           },
           helper.state.index,
           helper.state
