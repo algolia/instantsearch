@@ -332,6 +332,76 @@ exports[`Pagination should display the first/last link 1`] = `
 </ul>
 `;
 
+exports[`Pagination should have all buttons disabled if there are no results 1`] = `
+<ul
+  className="root"
+>
+  <li
+    className="item first disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+  <li
+    className="item previous disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+  <li
+    className="item page active"
+  >
+    <a
+      aria-label={1}
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": 1,
+        }
+      }
+      href="[0]"
+      onClick={[Function]}
+    />
+  </li>
+  <li
+    className="item next disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+  <li
+    className="item last disabled"
+  >
+    <span
+      className=""
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "",
+        }
+      }
+    />
+  </li>
+</ul>
+`;
+
 exports[`Pagination should render five elements 1`] = `
 <ul
   className="root"
