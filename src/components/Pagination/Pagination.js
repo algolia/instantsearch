@@ -44,7 +44,7 @@ export class RawPagination extends React.Component {
         cssClasses={cssClasses}
         handleClick={this.handleClick}
         isDisabled={isDisabled}
-        key={label + pageNumber}
+        key={label + pageNumber + ariaLabel}
         label={label}
         pageNumber={pageNumber}
         url={url}
