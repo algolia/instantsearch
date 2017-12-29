@@ -132,7 +132,7 @@ store.stop();
 
 store.indexName = 'new_index';
 store.query = '';
-store.queryParameters({'distinct': true});
+store.queryParameters = { distinct: true };
 
 store.start();
 store.refresh();
