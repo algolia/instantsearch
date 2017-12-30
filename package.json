@@ -47,7 +47,7 @@
     "babel-preset-stage-2": "6.24.1",
     "browser-sync": "2.23.1",
     "bundlesize": "0.15.3",
-    "chokidar": "1.7.0",
+    "chokidar": "2.0.0",
     "clipboard": "1.7.1",
     "codemirror": "5.33.0",
     "collect-json": "1.0.8",
