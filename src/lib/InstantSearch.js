@@ -200,11 +200,11 @@ Usage: instantsearch({
   }
 
   /**
-   * The reload method clears the cached answers from Algolia and triggers a new search.
+   * The refresh method clears the cached answers from Algolia and triggers a new search.
    *
    * @return {undefined} Does not return anything
    */
-  reload() {
+  refresh() {
     if (this.helper) {
       this.helper.clearCache().search();
     }
