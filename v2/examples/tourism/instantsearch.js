@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.3.3 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.4.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -12569,7 +12569,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.3.3';
+exports.default = '2.4.0';
 
 /***/ }),
 /* 183 */
@@ -24238,7 +24238,21 @@ var InstantSearch = function (_EventEmitter) {
     }
 
     /**
-     * The start methods ends the initialization of InstantSearch.js and triggers the
+     * The refresh method clears the cached answers from Algolia and triggers a new search.
+     *
+     * @return {undefined} Does not return anything
+     */
+
+  }, {
+    key: 'refresh',
+    value: function refresh() {
+      if (this.helper) {
+        this.helper.clearCache().search();
+      }
+    }
+
+    /**
+     * The start method ends the initialization of InstantSearch.js and triggers the
      * first search. This method should be called after all widgets have been added
      * to the instance of InstantSearch.js. InstantSearch.js also supports adding and removing
      * widgets after the start as an **EXPERIMENTAL** feature.
@@ -24294,6 +24308,9 @@ var InstantSearch = function (_EventEmitter) {
       this.helper = helper;
       this._init(helper.state, this.helper);
       this.helper.on('result', this._render.bind(this, this.helper));
+      this.helper.on('error', function (e) {
+        _this4.emit('error', e);
+      });
 
       this._searchStalledTimer = null;
       this._isSearchStalled = true;
@@ -34559,7 +34576,7 @@ var RawPagination = exports.RawPagination = function (_React$Component) {
         cssClasses: cssClasses,
         handleClick: this.handleClick,
         isDisabled: isDisabled,
-        key: label + pageNumber,
+        key: label + pageNumber + ariaLabel,
         label: label,
         pageNumber: pageNumber,
         url: url
@@ -34571,7 +34588,7 @@ var RawPagination = exports.RawPagination = function (_React$Component) {
       return this.pageLink({
         ariaLabel: 'Previous',
         additionalClassName: this.props.cssClasses.previous,
-        isDisabled: pager.isFirstPage(),
+        isDisabled: this.props.nbHits === 0 || pager.isFirstPage(),
         label: this.props.labels.previous,
         pageNumber: pager.currentPage - 1,
         createURL: createURL
@@ -34583,7 +34600,7 @@ var RawPagination = exports.RawPagination = function (_React$Component) {
       return this.pageLink({
         ariaLabel: 'Next',
         additionalClassName: this.props.cssClasses.next,
-        isDisabled: pager.isLastPage(),
+        isDisabled: this.props.nbHits === 0 || pager.isLastPage(),
         label: this.props.labels.next,
         pageNumber: pager.currentPage + 1,
         createURL: createURL
@@ -34595,7 +34612,7 @@ var RawPagination = exports.RawPagination = function (_React$Component) {
       return this.pageLink({
         ariaLabel: 'First',
         additionalClassName: this.props.cssClasses.first,
-        isDisabled: pager.isFirstPage(),
+        isDisabled: this.props.nbHits === 0 || pager.isFirstPage(),
         label: this.props.labels.first,
         pageNumber: 0,
         createURL: createURL
@@ -34607,7 +34624,7 @@ var RawPagination = exports.RawPagination = function (_React$Component) {
       return this.pageLink({
         ariaLabel: 'Last',
         additionalClassName: this.props.cssClasses.last,
-        isDisabled: pager.isLastPage(),
+        isDisabled: this.props.nbHits === 0 || pager.isLastPage(),
         label: this.props.labels.last,
         pageNumber: pager.total - 1,
         createURL: createURL
@@ -34787,6 +34804,8 @@ var Paginator = function () {
           currentPage = this.currentPage,
           padding = this.padding;
 
+
+      if (total === 0) return [0];
 
       var totalDisplayedPages = this.nbPagesDisplayed(padding, total);
       if (totalDisplayedPages === total) return (0, _range2.default)(0, total);
