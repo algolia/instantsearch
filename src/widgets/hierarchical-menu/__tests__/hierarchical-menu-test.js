@@ -265,17 +265,18 @@ describe('hierarchicalMenu()', () => {
 
       data = { data: firstLevel };
       const expectedFacetValues = [
-        { label: 'one', value: 'one' },
+        { label: 'one', value: 'one', hasChildren: false },
         {
           label: 'two',
           value: 'two',
           data: [
-            { label: 'six', value: 'six' },
-            { label: 'seven', value: 'seven' },
-            { label: 'eight', value: 'eight' },
+            { label: 'six', value: 'six', hasChildren: false },
+            { label: 'seven', value: 'seven', hasChildren: false },
+            { label: 'eight', value: 'eight', hasChildren: false },
           ],
+          hasChildren: true,
         },
-        { label: 'three', value: 'three' },
+        { label: 'three', value: 'three', hasChildren: false },
       ];
       widget = hierarchicalMenu({ ...options, limit: 3 });
       widget.init({ helper, createURL, instantSearchInstance: {} });
