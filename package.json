@@ -94,7 +94,7 @@
     "mversion": "1.10.1",
     "netlify-cli": "1.2.2",
     "node-sass": "4.7.2",
-    "postcss": "6.0.14",
+    "postcss": "6.0.15",
     "postcss-loader": "2.0.9",
     "postcss-scss": "1.0.2",
     "prettier": "1.9.2",
