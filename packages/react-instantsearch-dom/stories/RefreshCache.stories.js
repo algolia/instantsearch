@@ -137,7 +137,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    setInterval(
+    this.interval = setInterval(
       () =>
         this.setState(prevState => ({
           refresh: prevState.count === 5,
@@ -145,6 +145,10 @@ class App extends Component {
         })),
       1000
     );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   render() {

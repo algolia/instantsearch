@@ -82,7 +82,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    setInterval(() => this.setState({ refresh: true }), 5000);
+    this.interval = setInterval(() => this.setState({ refresh: true }), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   onSearchStateChange = () => {
