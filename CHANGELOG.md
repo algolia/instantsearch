@@ -1,3 +1,20 @@
+<a name="4.4.0"></a>
+# [4.4.0](https://github.com/algolia/react-instantsearch/compare/v4.3.0...v4.4.0) (2018-01-03)
+
+
+### Bug Fixes
+
+* **createInstantSearch:** remove the client from the Snapshot ([#749](https://github.com/algolia/react-instantsearch/issues/749)) ([700d8f4](https://github.com/algolia/react-instantsearch/commit/700d8f4))
+* refresh cache memory leak example ([#784](https://github.com/algolia/react-instantsearch/issues/784)) ([cf228ac](https://github.com/algolia/react-instantsearch/commit/cf228ac))
+* **stories:** rename InstantSearch to <InstantSearch> ([#789](https://github.com/algolia/react-instantsearch/issues/789)) ([05efda5](https://github.com/algolia/react-instantsearch/commit/05efda5))
+
+
+### Features
+
+* InstantSearch root props ([#770](https://github.com/algolia/react-instantsearch/issues/770)) ([2d458f8](https://github.com/algolia/react-instantsearch/commit/2d458f8))
+
+
+
 <a name="4.3.0"></a>
 # [4.3.0](https://github.com/algolia/react-instantsearch/compare/v4.3.0-beta.0...v4.3.0) (2017-12-20)
 
