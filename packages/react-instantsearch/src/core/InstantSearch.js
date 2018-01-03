@@ -21,6 +21,7 @@ function validateNextProps(props, nextProps) {
  * It provides all the connected components (aka widgets) a means to interact
  * with the searchState.
  * @kind widget
+ * @name <InstantSearch>
  * @requirements You will need to have an Algolia account to be able to use this widget.
  * [Create one now](https://www.algolia.com/users/sign_up).
  * @propType {string} appId - Your Algolia application id.
