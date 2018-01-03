@@ -81,20 +81,24 @@ describe('escapeHits()', () => {
     const hits = [
       {
         _highlightResult: {
-          foobar: {
-            value: [
-              '<script>__ais-highlight__bar__/ais-highlight__</script>',
-              '<script>__ais-highlight__foo__/ais-highlight__</script>',
-            ],
-          },
+          foobar: [
+            {
+              value: '<script>__ais-highlight__bar__/ais-highlight__</script>',
+            },
+            {
+              value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+            },
+          ],
         },
         _snippetResult: {
-          foobar: {
-            value: [
-              '<script>__ais-highlight__bar__/ais-highlight__</script>',
-              '<script>__ais-highlight__foo__/ais-highlight__</script>',
-            ],
-          },
+          foobar: [
+            {
+              value: '<script>__ais-highlight__bar__/ais-highlight__</script>',
+            },
+            {
+              value: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+            },
+          ],
         },
       },
     ];
@@ -102,20 +106,16 @@ describe('escapeHits()', () => {
     expect(escapeHits(hits)).toEqual([
       {
         _highlightResult: {
-          foobar: {
-            value: [
-              '&lt;script&gt;<em>bar</em>&lt;/script&gt;',
-              '&lt;script&gt;<em>foo</em>&lt;/script&gt;',
-            ],
-          },
+          foobar: [
+            { value: '&lt;script&gt;<em>bar</em>&lt;/script&gt;' },
+            { value: '&lt;script&gt;<em>foo</em>&lt;/script&gt;' },
+          ],
         },
         _snippetResult: {
-          foobar: {
-            value: [
-              '&lt;script&gt;<em>bar</em>&lt;/script&gt;',
-              '&lt;script&gt;<em>foo</em>&lt;/script&gt;',
-            ],
-          },
+          foobar: [
+            { value: '&lt;script&gt;<em>bar</em>&lt;/script&gt;' },
+            { value: '&lt;script&gt;<em>foo</em>&lt;/script&gt;' },
+          ],
         },
       },
     ]);

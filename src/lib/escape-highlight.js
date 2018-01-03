@@ -27,8 +27,11 @@ function recursiveEscape(input) {
         value.value = mapValues(value.value, replaceWithEmAndEscape);
       }
 
-      if (isArray(value.value)) {
-        value.value = value.value.map(replaceWithEmAndEscape);
+      if (isArray(value)) {
+        value = value.map(item => ({
+          ...item,
+          value: replaceWithEmAndEscape(item.value),
+        }));
       }
 
       return { ...output, [key]: value };
