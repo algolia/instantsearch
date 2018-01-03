@@ -51,7 +51,7 @@ Note: we use `yarn add` to install dependencies but React InstantSearch is also 
 
 ## Add the `<InstantSearch>` component
 
-[`<InstantSearch>`](widgets/InstantSearch.html) is the component that will connect to Algolia
+[`<InstantSearch>`](widgets/<InstantSearch>.html) is the component that will connect to Algolia
 and will synchronise all the widgets together.
 
 It maintains the state

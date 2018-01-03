@@ -5,7 +5,7 @@
  */
 
 /**
- * The `findResultsState` function provides a way to retrieve a `resultsState` to be passed to an [`<InstantSearch>`](widgets/InstantSearch.html)
+ * The `findResultsState` function provides a way to retrieve a `resultsState` to be passed to an [`<InstantSearch>`](widgets/<InstantSearch>.html)
  * component.
  * @name findResultsState
  * @kind server-side-rendering

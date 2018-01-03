@@ -89,7 +89,7 @@
       "dropdownItems": [
         {
           "name": "&lt;InstantSearch>",
-          "url": "widgets/InstantSearch.html"
+          "url": "widgets/<InstantSearch>.html"
         },
         {
           "name": "&lt;Index>",
@@ -140,7 +140,7 @@
     },
     {
       "name": "API",
-      "url": "widgets/InstantSearch.html"
+      "url": "widgets/<InstantSearch>.html"
     },
     {
       "name": "Guides",

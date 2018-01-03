@@ -11,8 +11,19 @@ if (document.querySelector('.documentation-container')) {
 
   if (/^\/(?:widgets|connectors)\/.+/.test(pathname)) {
     href += `${api}${pathname.replace('.html', '.js')}`;
-    if (pathname === '/widgets/InstantSearch.html') {
-      href = href.replace('/widgets/', '/core/');
+
+    const instantsearchEncoded = encodeURIComponent('<InstantSearch>');
+    const indexEncoded = encodeURIComponent('<Index>');
+
+    if (pathname === `/widgets/${instantsearchEncoded}.html`) {
+      href = href.replace(
+        `/widgets/${instantsearchEncoded}`,
+        '/core/InstantSearch'
+      );
+    }
+
+    if (pathname === `/widgets/${indexEncoded}.html`) {
+      href = href.replace(`/widgets/${indexEncoded}`, '/core/Index');
     }
   } else {
     if (/\/$/.test(pathname)) pathname += 'index.html';
