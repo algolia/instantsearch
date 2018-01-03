@@ -2,7 +2,6 @@ import reduce from 'lodash/reduce';
 import escape from 'lodash/escape';
 import isPlainObject from 'lodash/isPlainObject';
 import isArray from 'lodash/isArray';
-import mapValues from 'lodash/mapValues';
 
 export const tagConfig = {
   highlightPreTag: '__ais-highlight__',
@@ -18,23 +17,26 @@ function replaceWithEmAndEscape(value) {
 function recursiveEscape(input) {
   return reduce(
     input,
-    (output, value, key) => {
-      if (typeof value.value === 'string') {
-        value.value = replaceWithEmAndEscape(value.value);
+    (output, attribute, key) => {
+      if (typeof attribute.value === 'string') {
+        attribute.value = replaceWithEmAndEscape(attribute.value);
       }
 
-      if (isPlainObject(value.value)) {
-        value.value = mapValues(value.value, replaceWithEmAndEscape);
+      if (isPlainObject(attribute)) {
+        attribute = recursiveEscape(attribute);
       }
 
-      if (isArray(value)) {
-        value = value.map(item => ({
+      if (isArray(attribute)) {
+        attribute = attribute.map(item => ({
           ...item,
           value: replaceWithEmAndEscape(item.value),
         }));
       }
 
-      return { ...output, [key]: value };
+      return {
+        ...output,
+        [key]: attribute,
+      };
     },
     {}
   );

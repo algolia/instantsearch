@@ -37,18 +37,18 @@ describe('escapeHits()', () => {
     const hits = [
       {
         _highlightResult: {
-          foobar: {
-            value: {
-              foo: '<script>__ais-highlight__bar__/ais-highlight__</script>',
-              bar: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+          foo: {
+            bar: {
+              value:
+                '<script>__ais-highlight__foobar__/ais-highlight__</script>',
             },
           },
         },
         _snippetResult: {
-          foobar: {
-            value: {
-              foo: '<script>__ais-highlight__bar__/ais-highlight__</script>',
-              bar: '<script>__ais-highlight__foo__/ais-highlight__</script>',
+          foo: {
+            bar: {
+              value:
+                '<script>__ais-highlight__foobar__/ais-highlight__</script>',
             },
           },
         },
@@ -58,18 +58,16 @@ describe('escapeHits()', () => {
     expect(escapeHits(hits)).toEqual([
       {
         _highlightResult: {
-          foobar: {
-            value: {
-              foo: '&lt;script&gt;<em>bar</em>&lt;/script&gt;',
-              bar: '&lt;script&gt;<em>foo</em>&lt;/script&gt;',
+          foo: {
+            bar: {
+              value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
             },
           },
         },
         _snippetResult: {
-          foobar: {
-            value: {
-              foo: '&lt;script&gt;<em>bar</em>&lt;/script&gt;',
-              bar: '&lt;script&gt;<em>foo</em>&lt;/script&gt;',
+          foo: {
+            bar: {
+              value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
             },
           },
         },
