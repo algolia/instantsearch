@@ -21,6 +21,7 @@ export default () => {
           window.search.addWidget(
             instantsearch.widgets.hits({
               container,
+              escapeHits: true,
               templates: {
                 item: `
                   <div class="hit" id="hit-{{objectID}}">
