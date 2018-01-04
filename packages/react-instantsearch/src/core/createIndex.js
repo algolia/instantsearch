@@ -1,29 +1,34 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 import Index from './Index';
 
 /**
  * Creates a specialized root Index component. It accepts
  * a specification of the root Element.
- * @param {object} root - the defininition of the root of an Index sub tree.
- * @returns {object} a Index root
+ * @param {object} defaultRoot - the defininition of the root of an Index sub tree.
+ * @return {object} a Index root
  */
-export default function createIndex(root) {
-  return class CreateIndex extends Component {
-    static propTypes = {
-      children: PropTypes.oneOfType([
-        PropTypes.arrayOf(PropTypes.node),
-        PropTypes.node,
-      ]),
-      indexName: PropTypes.string.isRequired,
-    };
+const createIndex = defaultRoot => {
+  const CreateIndex = ({ indexName, root, children }) => (
+    <Index indexName={indexName} root={root}>
+      {children}
+    </Index>
+  );
 
-    render() {
-      return (
-        <Index indexName={this.props.indexName} root={root}>
-          {this.props.children}
-        </Index>
-      );
-    }
+  CreateIndex.propTypes = {
+    indexName: PropTypes.string.isRequired,
+    root: PropTypes.shape({
+      Root: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
+      props: PropTypes.object,
+    }),
+    children: PropTypes.node,
   };
-}
+
+  CreateIndex.defaultProps = {
+    root: defaultRoot,
+  };
+
+  return CreateIndex;
+};
+
+export default createIndex;

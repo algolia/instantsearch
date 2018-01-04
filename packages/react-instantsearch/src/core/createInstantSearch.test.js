@@ -10,11 +10,9 @@ Enzyme.configure({ adapter: new Adapter() });
 describe('createInstantSearch', () => {
   const algoliaClient = { addAlgoliaAgent: jest.fn() };
   const algoliaClientFactory = jest.fn(() => algoliaClient);
-  const createCustomInstantSearch = root =>
-    createInstantSearch(algoliaClientFactory, {
-      Root: 'div',
-      ...root,
-    });
+  const CustomInstantSearch = createInstantSearch(algoliaClientFactory, {
+    Root: 'div',
+  });
 
   beforeEach(() => {
     algoliaClient.addAlgoliaAgent.mockClear();
@@ -22,8 +20,6 @@ describe('createInstantSearch', () => {
   });
 
   it('wraps InstantSearch', () => {
-    const CustomInstantSearch = createCustomInstantSearch();
-
     const wrapper = shallow(
       <CustomInstantSearch appId="app" apiKey="key" indexName="name" />
     );
@@ -37,8 +33,6 @@ describe('createInstantSearch', () => {
   });
 
   it('creates an algolia client using the provided factory', () => {
-    const CustomInstantSearch = createCustomInstantSearch();
-
     shallow(<CustomInstantSearch appId="app" apiKey="key" indexName="name" />);
 
     expect(algoliaClientFactory).toHaveBeenCalledTimes(1);
@@ -50,8 +44,6 @@ describe('createInstantSearch', () => {
   });
 
   it('updates the algoliaClient when appId or apiKey changes', () => {
-    const CustomInstantSearch = createCustomInstantSearch();
-
     const wrapper = shallow(
       <CustomInstantSearch appId="app" apiKey="key" indexName="name" />
     );
@@ -65,8 +57,6 @@ describe('createInstantSearch', () => {
   });
 
   it('uses the provided algoliaClient', () => {
-    const CustomInstantSearch = createCustomInstantSearch();
-
     const wrapper = shallow(
       <CustomInstantSearch algoliaClient={algoliaClient} indexName="name" />
     );
@@ -77,7 +67,6 @@ describe('createInstantSearch', () => {
   });
 
   it('updates the algoliaClient when provided algoliaClient is passed down', () => {
-    const CustomInstantSearch = createCustomInstantSearch();
     const newAlgoliaClient = {
       addAlgoliaAgent: jest.fn(),
     };
@@ -97,28 +86,23 @@ describe('createInstantSearch', () => {
   });
 
   it('expect to create InstantSearch with a custom root props', () => {
-    const CustomInstantSearch = createCustomInstantSearch({
+    const root = {
       Root: 'span',
       props: {
         style: {
           flex: 1,
         },
       },
-    });
+    };
 
     const wrapper = shallow(
-      <CustomInstantSearch algoliaClient={algoliaClient} indexName="name" />
+      <CustomInstantSearch indexName="name" root={root} />
     );
 
-    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    // eslint-disable-next-line no-shadow, no-unused-vars
+    const { algoliaClient, ...propsWithoutClient } = wrapper.props();
 
-    expect(wrapper.props().root).toEqual({
-      Root: 'span',
-      props: {
-        style: {
-          flex: 1,
-        },
-      },
-    });
+    expect(wrapper.props().root).toEqual(root);
+    expect(propsWithoutClient).toMatchSnapshot();
   });
 });
