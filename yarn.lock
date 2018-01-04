@@ -11745,9 +11745,9 @@ storybook-addon-a11y@3.1.9:
     axe-core "^2.0.7"
     prop-types "^15.5.10"
 
-storybook-addon-jsx@5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/storybook-addon-jsx/-/storybook-addon-jsx-5.1.0.tgz#37e2396e830a4743a5061245e27119a4938a1297"
+storybook-addon-jsx@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/storybook-addon-jsx/-/storybook-addon-jsx-5.2.0.tgz#2d587ae3273d29327ba2335f9c52dee22c942f14"
   dependencies:
     react-copy-to-clipboard "^5.0.1"
     react-element-to-jsx-string "^13.1.0"
