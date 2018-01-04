@@ -319,6 +319,7 @@ exports[`renders correctly 1`] = `
           "width": 0,
         }
       }
+      leftInterpolator={[Function]}
       mode="float"
       navigation={
         Object {
@@ -350,6 +351,7 @@ exports[`renders correctly 1`] = `
           },
         }
       }
+      rightInterpolator={[Function]}
       router={
         Object {
           "getActionForPathAndParams": [Function],
@@ -361,9 +363,11 @@ exports[`renders correctly 1`] = `
           "getStateForAction": [Function],
         }
       }
+      titleInterpolator={[Function]}
       transitionConfig={undefined}
     >
       <View
+        collapsable={undefined}
         onLayout={[Function]}
         style={
           Object {
