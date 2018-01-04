@@ -9,6 +9,7 @@ import React, { Component, Children } from 'react';
  * @kind widget
  * @name <Index>
  * @propType {string} indexName - index in which to search.
+ * @propType {{ Root: string|function, props: object }} [root] - Use this to customize the root element. Default value: `{ Root: 'div' }`
  * @example
  * import {InstantSearch, Index, SearchBox, Hits, Configure} from 'react-instantsearch/dom';
  *

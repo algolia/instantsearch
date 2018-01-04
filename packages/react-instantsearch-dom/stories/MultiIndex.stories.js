@@ -16,6 +16,7 @@ import {
   connectStateResults,
 } from '../packages/react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
+import { displayName, filterProps } from './util';
 
 const stories = storiesOf('<Index>', module);
 
@@ -166,7 +167,36 @@ stories
         <Pagination />
       </Index>
     </InstantSearch>
-  ));
+  ))
+  .addWithJSX(
+    'with custom root',
+    () => (
+      <InstantSearch
+        appId="latency"
+        apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+        indexName="ikea"
+      >
+        <SearchBox />
+        <Index
+          indexName="products"
+          root={{
+            Root: 'div',
+            props: {
+              style: {
+                background: 'linear-gradient(80deg, #00D8FF, #00A7FF)',
+              },
+            },
+          }}
+        >
+          <CustomProducts />
+        </Index>
+      </InstantSearch>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  );
 
 const AutoComplete = connectAutoComplete(
   ({ hits, currentRefinement, refine }) => (
