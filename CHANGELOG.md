@@ -1,3 +1,13 @@
+<a name="2.4.1"></a>
+## [2.4.1](https://github.com/algolia/instantsearch.js/compare/v2.4.0...v2.4.1) (2018-01-04)
+
+
+### Bug Fixes
+
+* **core:** correct escape highlight for arrays and nested objects ([#2646](https://github.com/algolia/instantsearch.js/issues/2646)) ([ed0ee73](https://github.com/algolia/instantsearch.js/commit/ed0ee73))
+
+
+
 <a name="2.4.0"></a>
 # [2.4.0](https://github.com/algolia/instantsearch.js/compare/v2.3.3...v2.4.0) (2018-01-02)
 
