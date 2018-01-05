@@ -408,17 +408,8 @@ a[class^='ais-'] {
 .ais-RatingMenu-link {
   line-height: 1.5;
 
-  * + * {
+  > * + * {
     margin-left: 0.3rem;
-  }
-}
-
-div.ais-RatingMenu-link {
-  color: $port-gore;
-
-  &:hover,
-  &:focus {
-    color: $port-gore;
   }
 }
 
