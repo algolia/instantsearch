@@ -3,34 +3,22 @@ title: RangeInput
 type: widget
 html: |
   <div class="ais-RangeInput">
-    <div class="ais-RangeInput-header ais-header">
-      Range input
-    </div>
-    <div class="ais-RangeInput-body ais-body">
-      <form class="ais-RangeInput-form">
-        <label class="ais-RangeInput-label">
-          <span class="ais-RangeInput-currency">$</span>
-          <input class="ais-RangeInput-input ais-RangeInput-input--min" type="number" />
-        </label>
-        <span class="ais-RangeInput-separator">to</span>
-        <label class="ais-RangeInput-label">
-          <span class="ais-RangeInput-currency">$</span>
-          <input class="ais-RangeInput-input ais-RangeInput-input--max" type="number" />
-        </label>
-        <button class="ais-RangeInput-submit" type="submit">Go</button>
-      </form>
-    </div>
-    <div class="ais-RangeInput-footer ais-footer">
-      Footer info
-    </div>
+    <form class="ais-RangeInput-form">
+      <label class="ais-RangeInput-label">
+        <span class="ais-RangeInput-currency">$</span>
+        <input class="ais-RangeInput-input ais-RangeInput-input--min" type="number" />
+      </label>
+      <span class="ais-RangeInput-separator">to</span>
+      <label class="ais-RangeInput-label">
+        <span class="ais-RangeInput-currency">$</span>
+        <input class="ais-RangeInput-input ais-RangeInput-input--max" type="number" />
+      </label>
+      <button class="ais-RangeInput-submit" type="submit">Go</button>
+    </form>
   </div>
 classes:
   - name: .ais-RangeInput
     description: the root div of the widget
-  - name: .ais-RangeInput-header
-    description: the header of the widget (optional)
-  - name: .ais-RangeInput-body
-    description: the body of the widget
   - name: .ais-RangeInput-form
     description: the wrapping form
   - name: .ais-RangeInput-label
@@ -47,6 +35,4 @@ classes:
     description: the separator word used between the two inputs
   - name: .ais-RangeInput-button
     description: the submit button
-  - name: .ais-RangeInput-footer
-    description: the footer of the widget (optional)
 ---
