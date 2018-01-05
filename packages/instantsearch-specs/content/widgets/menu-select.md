@@ -3,18 +3,10 @@ title: MenuSelect
 type: widget
 html: |
   <div class="ais-MenuSelect">
-    <div class="ais-MenuSelect-header ais-header">
-      Menu Select
-    </div>
-    <div class="ais-MenuSelect-body ais-body">
-      <select class="ais-MenuSelect-select">
-        <option class="ais-MenuSelect-option" value="Most relevant">Appliances (4306)</option>
-        <option class="ais-MenuSelect-option" value="Lowest price">Audio (1570)</option>
-      </select>
-    </div>
-    <div class="ais-MenuSelect-footer ais-footer">
-      Footer info
-    </div>
+    <select class="ais-MenuSelect-select">
+      <option class="ais-MenuSelect-option" value="Most relevant">Appliances (4306)</option>
+      <option class="ais-MenuSelect-option" value="Lowest price">Audio (1570)</option>
+    </select>
   </div>
 classes:
   - name: .ais-MenuSelect

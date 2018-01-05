@@ -3,35 +3,23 @@ title: Breadcrumb
 type: widget
 html: |
   <div class="ais-Breadcrumb">
-    <div class="ais-Breadcrumb-header ais-header">
-      Breadcrumb
-    </div>
-    <div class="ais-Breadcrumb-body ais-body">
-      <ul class="ais-Breadcrumb-list">
-        <li class="ais-Breadcrumb-item">
-          <a class="ais-Breadcrumb-link" href="#">Home</a>
-        </li>
-        <li class="ais-Breadcrumb-item">
-          <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
-          <a class="ais-Breadcrumb-link" href="#">Cooking</a>
-        </li>
-        <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
-          <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
-          Kitchen textiles
-        </li>
-      </ul>
-    </div>
-    <div class="ais-Breadcrumb-footer ais-footer">
-      Footer info
-    </div>
+    <ul class="ais-Breadcrumb-list">
+      <li class="ais-Breadcrumb-item">
+        <a class="ais-Breadcrumb-link" href="#">Home</a>
+      </li>
+      <li class="ais-Breadcrumb-item">
+        <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+        <a class="ais-Breadcrumb-link" href="#">Cooking</a>
+      </li>
+      <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+        <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+        Kitchen textiles
+      </li>
+    </ul>
   </div>
 classes:
   - name: .ais-Breadcrumb
     description: the root div of the widget
-  - name: .ais-Breadcrumb-header
-    description: the header of the widget (optional)
-  - name: .ais-Breadcrumb-body
-    description: the body of the widget
   - name: .ais-Breadcrumb-list
     description: the list of all breadcrumb items
   - name: .ais-Breadcrumb-item
@@ -42,6 +30,4 @@ classes:
     description: the separator of each breadcrumb item
   - name: .ais-Breadcrumb-link
     description: the clickable breadcrumb element
-  - name: .ais-Breadcrumb-footer
-    description: the footer of the widget (optional)
 ---

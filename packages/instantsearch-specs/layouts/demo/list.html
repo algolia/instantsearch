@@ -8,37 +8,124 @@
     <div class="demo-container">
       <div class="demo-filters">
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "RefinementList" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "RefinementList" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Refinement list
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "Toggle" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "Toggle" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Toggle
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "HierarchicalMenu" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "HierarchicalMenu" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Hierarchical menu
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "Menu" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "Menu" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Menu
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "MenuSelect" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "MenuSelect" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Menu select
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "SortBy" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "SortBy" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Sort by
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "RatingMenu" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "RatingMenu" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Rating menu
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "NumericRange" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "RangeInput" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Range input
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "NumericMenu" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "NumericMenu" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Numeric menu
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "RangeInput" }}{{ .Params.html | safeHTML }}{{ end }}
-        </div>
-        <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "ResultsPerPage" }}{{ .Params.html | safeHTML }}{{ end }}
+          {{ range where .Site.Pages "Title" "=" "HitsPerPage" }}
+            <div class="ais-Panel">
+              <div class="ais-Panel-header">
+                Hits per page
+              </div>
+              <div class="ais-Panel-body">
+                {{ .Params.html | safeHTML }}
+              </div>
+            </div>
+          {{ end }}
         </div>
         <div class="demo-widget">
           {{ range where .Site.Pages "Title" "=" "ClearRefinements" }}{{ .Params.html | safeHTML }}{{ end }}
@@ -52,10 +139,10 @@
         {{ range where .Site.Pages "Title" "=" "SearchBox" }}{{ .Params.html | safeHTML }}{{ end }}
         {{ range where .Site.Pages "Title" "=" "Stats" }}{{ .Params.html | safeHTML }}{{ end }}
         {{ range where .Site.Pages "Title" "=" "CurrentRefinements" }}{{ .Params.html | safeHTML }}{{ end }}
-        {{ range where .Site.Pages "Title" "=" "Results" }}{{ .Params.html | safeHTML }}{{ end }}
-        {{ range where .Site.Pages "Title" "=" "Results" }}{{ .Params.html | safeHTML }}{{ end }}
-        {{ range where .Site.Pages "Title" "=" "Results" }}{{ .Params.html | safeHTML }}{{ end }}
-        {{ range where .Site.Pages "Title" "=" "Results" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Hits" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Hits" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Hits" }}{{ .Params.html | safeHTML }}{{ end }}
+        {{ range where .Site.Pages "Title" "=" "Hits" }}{{ .Params.html | safeHTML }}{{ end }}
         {{ range where .Site.Pages "Title" "=" "Pagination" }}{{ .Params.html | safeHTML }}{{ end }}
       </div>
     </div>

@@ -19,26 +19,31 @@ a[class^='ais-'] {
   text-decoration: none;
 }
 
-// Templates
-
-.ais-header,
-.ais-body,
-.ais-footer {
+.ais-Breadcrumb,
+.ais-ClearRefinements,
+.ais-CurrentRefinements,
+.ais-HierarchicalMenu,
+.ais-Highlight,
+.ais-Hits,
+.ais-HitsPerPage,
+.ais-InfiniteHits,
+.ais-Menu,
+.ais-MenuSelect,
+.ais-NumericMenu,
+.ais-NumericSelector,
+.ais-Pagination,
+.ais-Panel,
+.ais-PoweredBy,
+.ais-RangeInput,
+.ais-RangeSlider,
+.ais-RatingMenu,
+.ais-RefinementList,
+.ais-SearchBox,
+.ais-Snippet,
+.ais-SortBy,
+.ais-Stats,
+.ais-Toggle {
   color: $port-gore;
-}
-
-.ais-header {
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-size: 0.8rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-bottom: 1px solid $ghost;
-}
-
-.ais-footer {
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
 }
 
 // Widgets
@@ -102,7 +107,7 @@ a[class^='ais-'] {
   }
 }
 
-.ais-CurrentRefinements-body {
+.ais-CurrentRefinements {
   display: flex;
   flex-wrap: wrap;
 }
@@ -260,6 +265,20 @@ a[class^='ais-'] {
   background-position: 92% 50%;
   border: 1px solid $ghost;
   border-radius: 5px;
+}
+
+.ais-Panel-header {
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 1px solid $ghost;
+}
+
+.ais-Panel-footer {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
 }
 
 .ais-RangeInput-input {

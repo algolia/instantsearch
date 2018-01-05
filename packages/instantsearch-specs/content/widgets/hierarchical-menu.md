@@ -3,90 +3,74 @@ title: HierarchicalMenu
 type: widget
 html: |
   <div class="ais-HierarchicalMenu">
-    <div class="ais-HierarchicalMenu-header ais-header">
-      Hierarchical menu
+    <div class="ais-HierarchicalMenu-searchBox">
+      <!-- SearchBox widget here -->
     </div>
-    <div class="ais-HierarchicalMenu-body ais-body">
-      <div class="ais-HierarchicalMenu-searchBox">
-        <!-- SearchBox widget here -->
-      </div>
-      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
-        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
-          <a class="ais-HierarchicalMenu-link" href="#">
-            <span class="ais-HierarchicalMenu-label">Appliances</span>
-            <span class="ais-HierarchicalMenu-count">4,306</span>
-          </a>
-          <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
-            <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-              <a class="ais-HierarchicalMenu-link" href="#">
-                <span class="ais-HierarchicalMenu-label">Dishwashers</span>
-                <span class="ais-HierarchicalMenu-count">181</span>
-              </a>
-            </li>
-            <li class="ais-HierarchicalMenu-item">
-              <a class="ais-HierarchicalMenu-link" href="#">
-                <span class="ais-HierarchicalMenu-label">Fans</span>
-                <span class="ais-HierarchicalMenu-count">91</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-          <a class="ais-HierarchicalMenu-link" href="#">
-            <span class="ais-HierarchicalMenu-label">Audio</span>
-            <span class="ais-HierarchicalMenu-count">1,570</span>
-          </a>
-        </li>
-      </ul>
-      <button class="ais-HierarchicalMenu-showMore">Show more</button>
-    </div>
-    <div class="ais-HierarchicalMenu-footer ais-footer">
-      Footer info
-    </div>
+    <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
+      <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
+        <a class="ais-HierarchicalMenu-link" href="#">
+          <span class="ais-HierarchicalMenu-label">Appliances</span>
+          <span class="ais-HierarchicalMenu-count">4,306</span>
+        </a>
+        <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
+          <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+            <a class="ais-HierarchicalMenu-link" href="#">
+              <span class="ais-HierarchicalMenu-label">Dishwashers</span>
+              <span class="ais-HierarchicalMenu-count">181</span>
+            </a>
+          </li>
+          <li class="ais-HierarchicalMenu-item">
+            <a class="ais-HierarchicalMenu-link" href="#">
+              <span class="ais-HierarchicalMenu-label">Fans</span>
+              <span class="ais-HierarchicalMenu-count">91</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+        <a class="ais-HierarchicalMenu-link" href="#">
+          <span class="ais-HierarchicalMenu-label">Audio</span>
+          <span class="ais-HierarchicalMenu-count">1,570</span>
+        </a>
+      </li>
+    </ul>
+    <button class="ais-HierarchicalMenu-showMore">Show more</button>
   </div>
 alt1: Show more disabled
 althtml1: |
   <div class="ais-HierarchicalMenu">
-    <div class="ais-HierarchicalMenu-header ais-header">
-      Hierarchical menu
+    <div class="ais-HierarchicalMenu-searchBox">
+      <!-- SearchBox widget here -->
     </div>
-    <div class="ais-HierarchicalMenu-body ais-body">
-      <div class="ais-HierarchicalMenu-searchBox">
-        <!-- SearchBox widget here -->
-      </div>
-      <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
-        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
-          <a class="ais-HierarchicalMenu-link" href="#">
-            <span class="ais-HierarchicalMenu-label">Appliances</span>
-            <span class="ais-HierarchicalMenu-count">4,306</span>
-          </a>
-          <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
-            <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-              <a class="ais-HierarchicalMenu-link" href="#">
-                <span class="ais-HierarchicalMenu-label">Dishwashers</span>
-                <span class="ais-HierarchicalMenu-count">181</span>
-              </a>
-            </li>
-            <li class="ais-HierarchicalMenu-item">
-              <a class="ais-HierarchicalMenu-link" href="#">
-                <span class="ais-HierarchicalMenu-label">Fans</span>
-                <span class="ais-HierarchicalMenu-count">91</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
-          <a class="ais-HierarchicalMenu-link" href="#">
-            <span class="ais-HierarchicalMenu-label">Audio</span>
-            <span class="ais-HierarchicalMenu-count">1,570</span>
-          </a>
-        </li>
-      </ul>
-      <button class="ais-HierarchicalMenu-showMore ais-HierarchicalMenu-showMore--disabled" disabled>Show more</button>
-    </div>
-    <div class="ais-HierarchicalMenu-footer ais-footer">
-      Footer info
-    </div>
+    <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--lvl0">
+      <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent ais-HierarchicalMenu-item--selected">
+        <a class="ais-HierarchicalMenu-link" href="#">
+          <span class="ais-HierarchicalMenu-label">Appliances</span>
+          <span class="ais-HierarchicalMenu-count">4,306</span>
+        </a>
+        <ul class="ais-HierarchicalMenu-list ais-HierarchicalMenu-list--child ais-HierarchicalMenu-list--lvl1">
+          <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+            <a class="ais-HierarchicalMenu-link" href="#">
+              <span class="ais-HierarchicalMenu-label">Dishwashers</span>
+              <span class="ais-HierarchicalMenu-count">181</span>
+            </a>
+          </li>
+          <li class="ais-HierarchicalMenu-item">
+            <a class="ais-HierarchicalMenu-link" href="#">
+              <span class="ais-HierarchicalMenu-label">Fans</span>
+              <span class="ais-HierarchicalMenu-count">91</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="ais-HierarchicalMenu-item ais-HierarchicalMenu-item--parent">
+        <a class="ais-HierarchicalMenu-link" href="#">
+          <span class="ais-HierarchicalMenu-label">Audio</span>
+          <span class="ais-HierarchicalMenu-count">1,570</span>
+        </a>
+      </li>
+    </ul>
+    <button class="ais-HierarchicalMenu-showMore ais-HierarchicalMenu-showMore--disabled" disabled>Show more</button>
   </div>
 classes:
   - name: .ais-HierarchicalMenu
