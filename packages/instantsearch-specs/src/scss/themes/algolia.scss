@@ -158,6 +158,12 @@ a[class^='ais-'] {
   }
 }
 
+.ais-HierarchicalMenu-link,
+.ais-Menu-link {
+  display: block;
+  line-height: 1.5;
+}
+
 .ais-HierarchicalMenu-list,
 .ais-Menu-list,
 .ais-NumericMenu-list,
@@ -400,6 +406,8 @@ a[class^='ais-'] {
 }
 
 .ais-RatingMenu-link {
+  line-height: 1.5;
+
   * + * {
     margin-left: 0.3rem;
   }
@@ -425,8 +433,12 @@ div.ais-RatingMenu-link {
   }
 }
 
+.ais-HierarchicalMenu-searchBox,
+.ais-Menu-searchBox,
 .ais-RefinementList-searchBox {
-  margin-bottom: 0.5rem;
+  > * {
+    margin-bottom: 0.5rem;
+  }
 }
 
 .ais-SearchBox-form {
