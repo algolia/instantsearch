@@ -25,8 +25,11 @@ a[class^='ais-'] {
 .ais-HierarchicalMenu,
 .ais-Highlight,
 .ais-Hits,
+.ais-Results,
 .ais-HitsPerPage,
+.ais-ResultsPerPage,
 .ais-InfiniteHits,
+.ais-InfiniteResults,
 .ais-Menu,
 .ais-MenuSelect,
 .ais-NumericMenu,
@@ -77,6 +80,7 @@ a[class^='ais-'] {
 .ais-CurrentRefinements-reset,
 .ais-HierarchicalMenu-showMore,
 .ais-InfiniteHits-loadMore,
+.ais-InfiniteResults-loadMore,
 .ais-Menu-showMore,
 .ais-RefinementList-showMore {
   padding: 0.3rem 0.5rem;
@@ -96,6 +100,7 @@ a[class^='ais-'] {
 .ais-ClearRefinements-button--disabled,
 .ais-HierarchicalMenu-showMore--disabled,
 .ais-InfiniteHits-loadMore--disabled,
+.ais-InfiniteResults-loadMore--disabled,
 .ais-Menu-showMore--disabled,
 .ais-RefinementList-showMore--disabled {
   opacity: 0.6;
@@ -227,17 +232,23 @@ a[class^='ais-'] {
 }
 
 .ais-InfiniteHits-header,
-.ais-Hits-header {
+.ais-InfiniteResults-header,
+.ais-Hits-header,
+.ais-Results-header {
   margin-bottom: 1rem;
 }
 
 .ais-InfiniteHits-footer,
-.ais-Hits-footer {
+.ais-InfiniteResults-footer,
+.ais-Hits-footer,
+.ais-Results-footer {
   margin-top: 1rem;
 }
 
 .ais-InfiniteHits-list,
-.ais-Hits-list {
+.ais-InfiniteResults-list,
+.ais-Hits-list,
+.ais-Results-list {
   margin-top: -1rem;
   margin-left: -1rem;
   display: flex;
@@ -245,7 +256,9 @@ a[class^='ais-'] {
 }
 
 .ais-InfiniteHits-item,
-.ais-Hits-item {
+.ais-InfiniteResults-item,
+.ais-Hits-item,
+.ais-Results-item {
   margin-top: 1rem;
   margin-left: 1rem;
   padding: 1rem;
@@ -254,13 +267,15 @@ a[class^='ais-'] {
   box-shadow: 0 2px 5px 0px lighten($ghost, 10%);
 }
 
-.ais-InfiniteHits-loadMore {
+.ais-InfiniteHits-loadMore,
+.ais-InfiniteResults-loadMore {
   margin-top: 1rem;
 }
 
 .ais-MenuSelect-select,
 .ais-NumericSelector-select,
 .ais-HitsPerPage-select,
+.ais-ResultsPerPage-select,
 .ais-SortBy-select {
   appearance: none;
   padding: 0.3rem 2rem 0.3rem 0.3rem;
