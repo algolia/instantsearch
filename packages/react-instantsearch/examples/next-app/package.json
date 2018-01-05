@@ -10,7 +10,7 @@
     "react-test-renderer": "16.2.0"
   },
   "dependencies": {
-    "css-loader": "0.28.7",
+    "css-loader": "0.28.8",
     "next": "4.2.1",
     "prop-types": "15.6.0",
     "qs": "6.5.1",
