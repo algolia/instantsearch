@@ -122,7 +122,7 @@
     "sass-loader": "6.0.6",
     "stat-mode": "0.2.2",
     "storybook-addon-a11y": "3.1.9",
-    "storybook-addon-jsx": "5.2.0",
+    "storybook-addon-jsx": "5.3.0",
     "string": "3.3.3",
     "style-loader": "0.19.1",
     "webpack": "3.10.0",
