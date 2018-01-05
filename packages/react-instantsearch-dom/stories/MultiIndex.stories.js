@@ -183,7 +183,7 @@ stories
             Root: 'div',
             props: {
               style: {
-                background: 'linear-gradient(80deg, #00D8FF, #00A7FF)',
+                border: '1px solid red',
               },
             },
           }}
