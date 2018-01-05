@@ -31,7 +31,7 @@ html: |
         </a>
       </li>
       <li class="ais-RatingMenu-item">
-        <div class="ais-RatingMenu-link" aria-label="3 & up">
+        <a class="ais-RatingMenu-link" aria-label="3 & up" href="#">
           <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
           <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
           <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
@@ -39,7 +39,7 @@ html: |
           <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
           <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
           <span class="ais-RatingMenu-count">1,750</span>
-        </div>
+        </a>
       </li>
     </ul>
   </div>
