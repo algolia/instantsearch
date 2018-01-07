@@ -2,7 +2,7 @@
 
 import React from 'react';
 import renderer from 'react-test-renderer';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import SearchBox from './SearchBox';
 
@@ -250,5 +250,41 @@ describe('SearchBox', () => {
 
     instanceWithoutLoadingIndicator.unmount();
     instanceWithLoadingIndicator.unmount();
+  });
+
+  it('expect to clear the query when the reset button is click with searchAsYouType=true', () => {
+    const refine = jest.fn();
+
+    const wrapper = shallow(
+      <SearchBox refine={refine} searchAsYouType />
+    ).dive();
+
+    // Simulate the ref
+    wrapper.instance().input = { focus: jest.fn() };
+
+    wrapper.find('button[type="reset"]').simulate('click');
+
+    expect(refine).toHaveBeenCalledWith('');
+    expect(wrapper.instance().input.focus).toHaveBeenCalled();
+  });
+
+  it('expect to clear the query when the reset button is click with searchAsYouType=false', () => {
+    const refine = jest.fn();
+
+    const wrapper = shallow(
+      <SearchBox refine={refine} searchAsYouType={false} />
+    ).dive();
+
+    // Simulate the ref
+    wrapper.instance().input = { focus: jest.fn() };
+
+    // Simulate change event
+    wrapper.setState({ query: 'Hello' });
+
+    wrapper.find('button[type="reset"]').simulate('click');
+
+    expect(refine).toHaveBeenCalledWith('');
+    expect(wrapper.instance().input.focus).toHaveBeenCalled();
+    expect(wrapper.state()).toEqual({ query: '' });
   });
 });

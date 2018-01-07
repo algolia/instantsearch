@@ -119,17 +119,6 @@ class SearchBox extends Component {
       ? this.props.currentRefinement
       : this.state.query;
 
-  setQuery = val => {
-    const { refine, searchAsYouType } = this.props;
-    if (searchAsYouType) {
-      refine(val);
-    } else {
-      this.setState({
-        query: val,
-      });
-    }
-  };
-
   onInputMount = input => {
     this.input = input;
     if (this.props.__inputRef) {
@@ -182,20 +171,33 @@ class SearchBox extends Component {
     return false;
   };
 
-  onChange = e => {
-    this.setQuery(e.target.value);
+  onChange = event => {
+    const { searchAsYouType, refine, onChange } = this.props;
+    const value = event.target.value;
 
-    if (this.props.onChange) {
-      this.props.onChange(e);
+    if (searchAsYouType) {
+      refine(value);
+    } else {
+      this.setState({ query: value });
+    }
+
+    if (onChange) {
+      onChange(event);
     }
   };
 
-  onReset = () => {
-    this.setQuery('');
+  onReset = event => {
+    const { searchAsYouType, refine, onReset } = this.props;
+
+    refine('');
     this.input.focus();
 
-    if (this.props.onReset) {
-      this.props.onReset();
+    if (!searchAsYouType) {
+      this.setState({ query: '' });
+    }
+
+    if (onReset) {
+      onReset(event);
     }
   };
 
