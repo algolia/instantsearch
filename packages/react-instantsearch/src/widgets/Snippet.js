@@ -14,7 +14,7 @@ import SnippetComponent from '../components/Snippet.js';
  * @propType {object} hit - hit object containing the highlighted snippet attribute
  * @propType {string} [tagName='em'] - tag to be used for highlighted parts of the attribute
  * @propType {string} [nonHighlightedTagName='span'] - tag to be used for the parts of the hit that are not highlighted
- * @propType {React.Element} [separatorComponent=',<space>'] - symbol used to separate the elements of the array in case the attributeName points to an array of strings.
+ * @propType {React.Element} [separator=',<space>'] - symbol used to separate the elements of the array in case the attributeName points to an array of strings.
  * @example
  * import React from 'react';
  * import { Snippet, InstantSearch, Hits } from 'react-instantsearch/dom';
