@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createRenderer } from 'react-test-renderer/shallow';
+import { shallow } from 'enzyme';
 import autoHideContainer from '../autoHideContainer';
 
 class TestComponent extends React.Component {
@@ -18,11 +18,9 @@ describe('autoHideContainer', () => {
   let props = {};
 
   it('should render autoHideContainer(<TestComponent />)', () => {
-    const renderer = createRenderer();
     props.hello = 'son';
     const AutoHide = autoHideContainer(TestComponent);
-    renderer.render(<AutoHide shouldAutoHideContainer {...props} />);
-    const out = renderer.getRenderOutput();
+    const out = shallow(<AutoHide shouldAutoHideContainer {...props} />);
     expect(out).toMatchSnapshot();
   });
 
