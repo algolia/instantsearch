@@ -1,9 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import serializer from 'enzyme-to-json/serializer';
 import { RawRangeInput } from '../RangeInput';
-
-expect.addSnapshotSerializer(serializer);
 
 describe('RawRangeInput', () => {
   const defaultProps = {
