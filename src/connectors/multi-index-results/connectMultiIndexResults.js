@@ -70,7 +70,7 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
         });
 
         this.instantSearchInstance = instantSearchInstance;
-        this.renderWithAllIndices();
+        this.renderWithAllIndices({ isFirstRendering: true });
       },
 
       saveResults({ results, index }) {
@@ -93,12 +93,15 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
         this.saveResults({ results, index: this.derivedIndices[0].index });
       },
 
-      renderWithAllIndices() {
-        renderFn({
-          widgetParams,
-          derivedIndices: this.derivedIndices,
-          instantSearchInstance: this.instantSearchInstance,
-        });
+      renderWithAllIndices({ isFirstRendering = false } = {}) {
+        renderFn(
+          {
+            widgetParams,
+            derivedIndices: this.derivedIndices,
+            instantSearchInstance: this.instantSearchInstance,
+          },
+          isFirstRendering
+        );
       },
 
       dispose() {
