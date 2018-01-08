@@ -11,7 +11,7 @@ import HighlightComponent from '../components/Highlight.js';
  * @propType {object} hit - hit object containing the highlighted attribute
  * @propType {string} [tagName='em'] - tag to be used for highlighted parts of the hit
  * @propType {string} [nonHighlightedTagName='span'] - tag to be used for the parts of the hit that are not highlighted
- * @propType {React.Element} [separatorComponent=',<space>'] - symbol used to separate the elements of the array in case the attributeName points to an array of strings.
+ * @propType {React.Element} [separator=',<space>'] - symbol used to separate the elements of the array in case the attributeName points to an array of strings.
  * @themeKey ais-Highlight - root of the component
  * @themeKey ais-Highlight__highlighted - part of the text that is highlighted
  * @themeKey ais-Highlight__nonHighlighted - part of the text that is non highlighted
