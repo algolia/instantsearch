@@ -15,51 +15,56 @@ class MultiIndexResults extends React.Component {
     templateProps: PropTypes.object.isRequired,
   };
 
-  renderNoResults() {
+  renderNoResults({ label }) {
     const { cssClasses: { root, empty } } = this.props;
     const className = cx(root, empty);
     return (
-      <Template
-        rootProps={{ className }}
-        templateKey="empty"
-        {...this.props.templateProps}
-      />
+      <div key={label}>
+        <strong>{label}</strong>
+        <Template
+          rootProps={{ className }}
+          templateKey="empty"
+          {...this.props.templateProps}
+        />
+      </div>
+    );
+  }
+
+  renderResults({ label, hits }) {
+    const { cssClasses: { item } } = this.props;
+
+    const hitsMarkup = hits.map((hit, position) => {
+      const data = { ...hit, __hitIndex: position };
+      return (
+        <Template
+          data={data}
+          key={data.objectID}
+          rootProps={{ className: item }}
+          templateKey="item"
+          {...this.props.templateProps}
+        />
+      );
+    });
+
+    return (
+      <div key={label}>
+        <strong>{label}</strong>
+        <div>{hitsMarkup}</div>
+      </div>
     );
   }
 
   render() {
-    const { derivedIndices, cssClasses: { root, item } } = this.props;
-    const hasResults = derivedIndices.some(
-      ({ results }) => results && results.hits && results.hits.length > 0
+    const { derivedIndices, cssClasses: { root } } = this.props;
+
+    const markup = derivedIndices.map(
+      ({ label, results }) =>
+        results && results.hits && results.hits.length > 0
+          ? this.renderResults({ label, hits: results.hits })
+          : this.renderNoResults({ label })
     );
 
-    if (!hasResults) {
-      return this.renderNoResults();
-    }
-
-    const renderedHits = derivedIndices
-      .filter(({ results }) => results && results.hits)
-      .map(({ label, results }) => (
-        <div key={label}>
-          <strong>{label}</strong>
-          <div>
-            {results.hits.map((hit, position) => {
-              const data = { ...hit, __hitIndex: position };
-              return (
-                <Template
-                  data={data}
-                  key={data.objectID}
-                  rootProps={{ className: item }}
-                  templateKey="item"
-                  {...this.props.templateProps}
-                />
-              );
-            })}
-          </div>
-        </div>
-      ));
-
-    return <div className={root}>{renderedHits}</div>;
+    return <div className={root}>{markup}</div>;
   }
 }
 
