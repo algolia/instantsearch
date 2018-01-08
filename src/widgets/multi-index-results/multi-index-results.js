@@ -66,7 +66,7 @@ export default function multiIndexResults({
   };
 
   const specializedRenderer = renderer({
-    getContainerNode,
+    containerNode,
     cssClasses,
     renderState: {},
     transformData,
