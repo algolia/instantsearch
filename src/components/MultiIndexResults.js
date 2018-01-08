@@ -37,25 +37,27 @@ class MultiIndexResults extends React.Component {
       return this.renderNoResults();
     }
 
-    const renderedHits = derivedIndices.map(({ label, results }) => (
-      <div key={label}>
-        <strong>{label}</strong>
-        <div>
-          {results.hits.map((hit, position) => {
-            const data = { ...hit, __hitIndex: position };
-            return (
-              <Template
-                data={data}
-                key={data.objectID}
-                rootProps={{ className: item }}
-                templateKey="item"
-                {...this.props.templateProps}
-              />
-            );
-          })}
+    const renderedHits = derivedIndices
+      .filter(({ results }) => results && results.hits)
+      .map(({ label, results }) => (
+        <div key={label}>
+          <strong>{label}</strong>
+          <div>
+            {results.hits.map((hit, position) => {
+              const data = { ...hit, __hitIndex: position };
+              return (
+                <Template
+                  data={data}
+                  key={data.objectID}
+                  rootProps={{ className: item }}
+                  templateKey="item"
+                  {...this.props.templateProps}
+                />
+              );
+            })}
+          </div>
         </div>
-      </div>
-    ));
+      ));
 
     return <div className={root}>{renderedHits}</div>;
   }
