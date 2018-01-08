@@ -12,7 +12,7 @@ csso dist/instantsearch-theme-algolia.css dist/instantsearch-theme-algolia.min.c
 
 wait
 
-printf "dist/instantsearch.min.js gzipped will weight `cat dist/instantsearch.min.js | gzip -9 | wc -c | pretty-bytes`\n\n"
+printf "dist/instantsearch.min.js gzipped will weigh `cat dist/instantsearch.min.js | gzip -9 | wc -c | pretty-bytes`\n\n"
 
 echo "➡️  Bundle instantsearch.js to ES5 build './dist-es5-module' via babel-cli"
 BABEL_ENV=production babel -q index.js -o dist-es5-module/index.js &
