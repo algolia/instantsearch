@@ -1,8 +1,6 @@
-/* eslint-env jest, jasmine */
-
-import { SearchParameters } from 'algoliasearch-helper';
-
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import connect from './connectRange';
+
 jest.mock('../core/createConnector');
 
 let props;
@@ -214,6 +212,7 @@ describe('connectRange', () => {
       });
 
       results = {
+        getFacetByName: () => false,
         getFacetStats: () => {},
         getFacetValues: () => [],
         hits: [],
@@ -312,6 +311,28 @@ describe('connectRange', () => {
         min: 5,
         max: 10,
         currentRefinement: { min: 6, max: 9 },
+        count: [],
+        canRefine: false,
+        precision: 2,
+      });
+
+      props = getProvidedProps(
+        {
+          attributeName: 'ok',
+          precision: 2,
+        },
+        {},
+        {
+          results: new SearchResults(new SearchParameters(), [{ hits: [] }]),
+        }
+      );
+      expect(props).toEqual({
+        min: undefined,
+        max: undefined,
+        currentRefinement: {
+          min: undefined,
+          max: undefined,
+        },
         count: [],
         canRefine: false,
         precision: 2,
@@ -627,6 +648,30 @@ describe('connectRange', () => {
         min: 5,
         max: 10,
         currentRefinement: { min: 6, max: 9 },
+        count: [],
+        canRefine: false,
+        precision: 2,
+      });
+
+      props = getProvidedProps(
+        {
+          attributeName: 'ok',
+          precision: 2,
+        },
+        {},
+        {
+          results: {
+            first: new SearchResults(new SearchParameters(), [{ hits: [] }]),
+          },
+        }
+      );
+      expect(props).toEqual({
+        min: undefined,
+        max: undefined,
+        currentRefinement: {
+          min: undefined,
+          max: undefined,
+        },
         count: [],
         canRefine: false,
         precision: 2,

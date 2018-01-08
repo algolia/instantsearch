@@ -190,13 +190,14 @@ export default createConnector({
   getProvidedProps(props, searchState, searchResults) {
     const { attributeName, precision, min: minBound, max: maxBound } = props;
     const results = getResults(searchResults, this.context);
-    const stats = results ? results.getFacetStats(attributeName) || {} : {};
-    const count = results
-      ? results.getFacetValues(attributeName).map(v => ({
-          value: v.name,
-          count: v.count,
-        }))
-      : [];
+    const hasFacet = results && results.getFacetByName(attributeName);
+    const stats = hasFacet ? results.getFacetStats(attributeName) || {} : {};
+    const facetValues = hasFacet ? results.getFacetValues(attributeName) : [];
+
+    const count = facetValues.map(v => ({
+      value: v.name,
+      count: v.count,
+    }));
 
     const { min: rangeMin, max: rangeMax } = getCurrentRange(
       { min: minBound, max: maxBound },
