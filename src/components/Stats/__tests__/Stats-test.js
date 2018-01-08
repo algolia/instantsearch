@@ -1,37 +1,20 @@
 import React from 'react';
-import expect from 'expect';
-import { createRenderer } from 'react-test-renderer/shallow';
+import { shallow } from 'enzyme';
 import { RawStats as Stats } from '../Stats';
-import Template from '../../Template';
-
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 
 describe('Stats', () => {
-  let renderer;
-
-  beforeEach(() => {
-    renderer = createRenderer();
-  });
-
   it('should render <Template data= />', () => {
-    const out = render();
+    const out = shallow(<Stats {...getProps()} templateProps={{}} />);
+
     const defaultProps = {
       cssClasses: {},
       hasManyResults: true,
       hasNoResults: false,
       hasOneResult: false,
     };
-    expect(out).toEqualJSX(
-      <Template data={getProps(defaultProps)} templateKey="body" />
-    );
+    expect(out.props().data).toMatchObject(defaultProps);
+    expect(out).toMatchSnapshot();
   });
-
-  function render(extraProps = {}) {
-    const props = getProps(extraProps);
-    renderer.render(<Stats {...props} templateProps={{}} />);
-    return renderer.getRenderOutput();
-  }
 
   function getProps(extraProps = {}) {
     return {

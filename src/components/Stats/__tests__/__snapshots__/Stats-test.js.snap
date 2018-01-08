@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Stats should render <Template data= /> 1`] = `
+<Component
+  data={
+    Object {
+      "cssClasses": Object {},
+      "hasManyResults": true,
+      "hasNoResults": false,
+      "hasOneResult": false,
+      "hitsPerPage": 10,
+      "nbHits": 1234,
+      "nbPages": 124,
+      "page": 0,
+      "processingTimeMS": 42,
+      "query": "a query",
+    }
+  }
+  templateKey="body"
+/>
+`;
