@@ -89,7 +89,7 @@
     "metalsmith-headings": "0.2.0",
     "metalsmith-layouts": "1.8.1",
     "metalsmith-navigation": "0.2.9",
-    "metalsmith-sass": "1.5.0",
+    "metalsmith-sass": "1.5.1",
     "ms-webpack": "2.0.0",
     "mversion": "1.10.1",
     "netlify-cli": "1.2.2",
