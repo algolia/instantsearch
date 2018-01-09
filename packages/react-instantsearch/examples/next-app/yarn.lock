@@ -3212,9 +3212,9 @@ netrc@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/netrc/-/netrc-0.1.4.tgz#6be94fcaca8d77ade0a9670dc460914c94472444"
 
-next@4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/next/-/next-4.2.1.tgz#37b5637050235b92a487ca484e20088ace7e37fe"
+next@4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/next/-/next-4.2.2.tgz#2f0d05c3ed534b9cabea856b42b09e9f938e679a"
   dependencies:
     ansi-html "0.0.7"
     babel-core "6.26.0"
