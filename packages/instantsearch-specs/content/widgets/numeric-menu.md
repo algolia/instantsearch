@@ -21,6 +21,8 @@ html: |
 classes:
   - name: .ais-NumericMenu
     description: the root div of the widget
+  - name: .ais-NumericMenu--noRefinement
+    description: the root div of the widget with no refinement
   - name: .ais-NumericMenu-list
     description: the list of all refinement items
   - name: .ais-NumericMenu-item

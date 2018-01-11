@@ -19,6 +19,8 @@ html: |
 classes:
   - name: .ais-RangeInput
     description: the root div of the widget
+  - name: .ais-RangeInput--noRefinement
+    description: the root div of the widget with no refinement
   - name: .ais-RangeInput-form
     description: the wrapping form
   - name: .ais-RangeInput-label
