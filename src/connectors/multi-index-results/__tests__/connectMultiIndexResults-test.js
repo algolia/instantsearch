@@ -26,7 +26,7 @@ describe('connectMultiIndexResults', () => {
 
     widget.render({
       widgetParams: {},
-      derivedIndice: widget.derivedIndices,
+      indices: widget.indices,
       instantSearchInstance: widget.instantSearchInstance,
     });
 
@@ -46,6 +46,6 @@ describe('connectMultiIndexResults', () => {
     widget.init({ helper, instantSearchInstance: {} });
 
     // original helper + derived one
-    expect(widget.derivedIndices.length).toBe(2);
+    expect(widget.indices.length).toBe(2);
   });
 });

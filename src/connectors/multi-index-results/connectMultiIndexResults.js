@@ -6,7 +6,7 @@ import { checkRendering } from '../../lib/utils';
 const usage = `Usage:
 var customMultiIndexResults = connectMultiIndexResults(function render(params, isFirstRendering) {
   // params = {
-  //   derivedIndices,
+  //   indices,
   //   instantSearchInstance,
   //   widgetParams
   // }
@@ -40,8 +40,8 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
       },
 
       init({ instantSearchInstance, helper }) {
-        // init `this.derivedIndices` with the default index
-        this.derivedIndices = [
+        // init `this.indices` with the default index
+        this.indices = [
           {
             helper,
             label: 'default',
@@ -50,19 +50,19 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
           },
         ];
 
-        // add additionnal indices intto `this.derivedIndices`
+        // add additionnal indices intto `this.indices`
         indices.forEach(({ label, value }) => {
           const derivedHelper = helper.derive(searchParameters =>
             searchParameters.setIndex(value)
           );
-          this.derivedIndices.push({
+          this.indices.push({
             label,
             index: value,
             helper: derivedHelper,
             results: undefined,
           });
 
-          // after a derived index got results, update `this.derivedIndices[x].results`
+          // after a derived index got results, update `this.indices[x].results`
           // and trigger a new render
           derivedHelper.on('result', results =>
             this.saveResults({ results, index: value })
@@ -74,7 +74,7 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
       },
 
       saveResults({ results, index }) {
-        const derivedIndex = find(this.derivedIndices, { index });
+        const derivedIndex = find(this.indices, { index });
 
         if (
           widgetParams.escapeHits &&
@@ -92,14 +92,14 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
 
       render({ results, instantSearchInstance }) {
         this.instantSearchInstance = instantSearchInstance;
-        this.saveResults({ results, index: this.derivedIndices[0].index });
+        this.saveResults({ results, index: this.indices[0].index });
       },
 
       renderWithAllIndices({ isFirstRendering = false } = {}) {
         renderFn(
           {
             widgetParams,
-            derivedIndices: this.derivedIndices,
+            indices: this.indices,
             instantSearchInstance: this.instantSearchInstance,
           },
           isFirstRendering

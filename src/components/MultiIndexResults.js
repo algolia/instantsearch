@@ -11,7 +11,7 @@ class MultiIndexResults extends React.Component {
       item: PropTypes.string,
       empty: PropTypes.string,
     }),
-    derivedIndices: PropTypes.array,
+    indices: PropTypes.array,
     templateProps: PropTypes.object.isRequired,
   };
 
@@ -52,9 +52,9 @@ class MultiIndexResults extends React.Component {
   }
 
   render() {
-    const { derivedIndices, cssClasses: { root } } = this.props;
+    const { indices, cssClasses: { root } } = this.props;
 
-    const markup = derivedIndices.map(
+    const markup = indices.map(
       ({ label, hits }) =>
         hits
           ? this.renderResults({ label, hits })
