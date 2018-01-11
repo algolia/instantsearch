@@ -55,9 +55,9 @@ class MultiIndexResults extends React.Component {
     const { derivedIndices, cssClasses: { root } } = this.props;
 
     const markup = derivedIndices.map(
-      ({ label, results }) =>
-        results && results.hits && results.hits.length > 0
-          ? this.renderResults({ label, hits: results.hits })
+      ({ label, hits }) =>
+        hits
+          ? this.renderResults({ label, hits })
           : this.renderNoResults({ label })
     );
 

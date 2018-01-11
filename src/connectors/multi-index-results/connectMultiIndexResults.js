@@ -85,6 +85,8 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
         }
 
         derivedIndex.results = results;
+        derivedIndex.hits = results ? results.hits : undefined;
+
         this.renderWithAllIndices();
       },
 
