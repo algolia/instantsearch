@@ -989,7 +989,7 @@ async@1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.0.tgz#2796642723573859565633fc6274444bee2f8ce3"
 
-async@1.5.2, async@^1.3.0, async@^1.4.0, async@^1.5.2, async@~1.5.2:
+async@1.5.2, async@^1.4.0, async@^1.5.2, async@~1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
 
@@ -2272,7 +2272,7 @@ bluebird@^2.9.34:
   version "2.11.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
 
-bluebird@^3.0.5, bluebird@^3.1.1, bluebird@^3.4.7, bluebird@^3.5.0:
+bluebird@^3.0.5, bluebird@^3.4.7, bluebird@^3.5.0:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
@@ -3386,12 +3386,6 @@ console-browserify@^1.1.0:
 console-control-strings@^1.0.0, console-control-strings@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/console-control-strings/-/console-control-strings-1.1.0.tgz#3d7cf4464db6446ea644bf4b39507f9851008e8e"
-
-consolidate@^0.14.0:
-  version "0.14.5"
-  resolved "https://registry.yarnpkg.com/consolidate/-/consolidate-0.14.5.tgz#5a25047bc76f73072667c8cb52c989888f494c63"
-  dependencies:
-    bluebird "^3.1.1"
 
 consolidated-events@^1.0.1:
   version "1.1.1"
@@ -6582,6 +6576,12 @@ inline-style-prefixer@^3.0.6, inline-style-prefixer@^3.0.8:
     bowser "^1.7.3"
     css-in-js-utils "^2.0.0"
 
+inputformat-to-jstransformer@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/inputformat-to-jstransformer/-/inputformat-to-jstransformer-1.2.1.tgz#4e0f3c0c9fd61b305801b26944b10256d4a760eb"
+  dependencies:
+    require-one "^1.0.2"
+
 inquirer@3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-3.0.6.tgz#e04aaa9d05b7a3cb9b0f407d04375f0447190347"
@@ -7031,7 +7031,7 @@ is-unc-path@^0.1.1:
   dependencies:
     unc-path-regex "^0.1.0"
 
-is-utf8@^0.2.0, is-utf8@~0.2.0:
+is-utf8@^0.2.0, is-utf8@^0.2.1, is-utf8@~0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-utf8/-/is-utf8-0.2.1.tgz#4b0da1442104d1b336340e80797e865cf39f7d72"
 
@@ -7637,7 +7637,13 @@ jstransformer-markdown-it@2.0.0:
   dependencies:
     markdown-it "^8.0.0"
 
-jstransformer@1.0.0:
+jstransformer-pug@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/jstransformer-pug/-/jstransformer-pug-0.3.0.tgz#13544eb0174d1bf168799ae4aff9f102a1dcbcb3"
+  dependencies:
+    pug "^2.0.0-rc.4"
+
+jstransformer@1.0.0, jstransformer@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/jstransformer/-/jstransformer-1.0.0.tgz#ed8bf0921e2f3f1ed4d5c1a44f68709ed24722c3"
   dependencies:
@@ -7983,10 +7989,6 @@ lodash.merge@^4.6.0:
 lodash.mergewith@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.0.tgz#150cf0a16791f5903b8891eab154609274bdea55"
-
-lodash.omit@^4.0.2:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/lodash.omit/-/lodash.omit-4.5.0.tgz#6eb19ae5a1ee1dd9df0b969e66ce0b7fa30b5e60"
 
 lodash.pairs@^3.0.0:
   version "3.0.1"
@@ -8334,18 +8336,14 @@ metalsmith-headings@0.2.0:
   dependencies:
     cheerio "^0.14.0"
 
-metalsmith-layouts@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/metalsmith-layouts/-/metalsmith-layouts-1.8.1.tgz#a365d39939d9146cdfe51fadee7d875573fccbdc"
+metalsmith-layouts@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/metalsmith-layouts/-/metalsmith-layouts-2.0.0.tgz#1a4057bd0fbcb0991691b097ac966c7b7d397232"
   dependencies:
-    async "^1.3.0"
-    consolidate "^0.14.0"
-    debug "^2.2.0"
-    extend "^3.0.0"
-    fs-readdir-recursive "^1.0.0"
-    is-utf8 "^0.2.0"
-    lodash.omit "^4.0.2"
-    multimatch "^2.0.0"
+    inputformat-to-jstransformer "^1.2.1"
+    is-utf8 "^0.2.1"
+    jstransformer "^1.0.0"
+    multimatch "^2.1.0"
 
 metalsmith-navigation@0.2.9:
   version "0.2.9"
@@ -8626,7 +8624,7 @@ multicast-dns@^6.0.1:
     dns-packet "^1.0.1"
     thunky "^0.1.0"
 
-multimatch@^2.0.0:
+multimatch@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/multimatch/-/multimatch-2.1.0.tgz#9c7906a22fb4c02919e2f5f75161b4cdbd4b2a2b"
   dependencies:
@@ -10235,7 +10233,7 @@ pug-walk@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/pug-walk/-/pug-walk-1.1.5.tgz#90e943acbcf7021e6454cf1b32245891cba6f851"
 
-pug@2.0.0-rc.4:
+pug@2.0.0-rc.4, pug@^2.0.0-rc.4:
   version "2.0.0-rc.4"
   resolved "https://registry.yarnpkg.com/pug/-/pug-2.0.0-rc.4.tgz#b7b08f6599bd5302568042b7436984fb28c80a13"
   dependencies:
@@ -11240,6 +11238,10 @@ require-from-string@^1.1.0:
 require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
+
+require-one@^1.0.2:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/require-one/-/require-one-1.0.3.tgz#0efebcce980fefc3df84ce00f269e19c8b6f4990"
 
 require-package-name@^2.0.1:
   version "2.0.1"
