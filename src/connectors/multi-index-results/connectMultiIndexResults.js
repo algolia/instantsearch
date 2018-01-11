@@ -20,6 +20,45 @@ search.addWidget(
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectMultiIndexResults.html
 `;
 
+/**
+ * @typedef {Object} CustomMultiIndexResultsOptions
+ * @property {MultiIndexResultsIndices[]} indices Additional indices to display results from.
+ * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ */
+
+/**
+ * **MultiIndexResults connector provides the logic to create custom widgets that will render results from different Algolia indices.
+ * @type {Connector}
+ * @param {function(MultiIndexResultsRenderingOptions, boolean)} renderFn Rendering function for the custom **MultiIndexResults** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
+ * @return {function(CustomMultiIndexResultsOptions)} Re-usable widget factory for a custom **MultiIndexResults** widget.
+ * @example
+ * // custom `renderFn` to render the custom MultiIndexResults widget
+ * function renderFn(MultiIndexResultsOptions) {
+ *   MultiIndexResultsOptions.widgetParams.containerNode.html(
+ *     MultiIndexResultsOptions.indices.map(function(index) {
+ *       if (index.hits) {
+ *         return index.hits.map(function(hit) {
+ *           return '<div>' + hit._highlightResult.name.value + '</div>';
+ *         })
+ *       }
+ *
+ *       return 'No results for index ' + '<strong>' + index.label + '</strong>';
+ *     })
+ *   )
+ * }
+ *
+ * // connect `renderFn` to Hits logic
+ * var customMultiIndexResults = instantsearch
+ *   .connectors.connectMultiIndexResults(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customMultiIndexResults({
+ *     containerNode: $('#custom-multi-index-results-container'),
+ *   })
+ * );
+ */
 export default function connectMultiIndexResults(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
