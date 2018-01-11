@@ -33,7 +33,13 @@ export default createConnector({
           ) {
             return res;
           }
-          return res.concat(meta.items);
+          return res.concat(
+            meta.items.map(item => ({
+              ...item,
+              id: meta.id,
+              index: meta.index,
+            }))
+          );
         }
       }
       return res;
