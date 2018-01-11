@@ -44,6 +44,7 @@ const usage = `Usage:
 multiIndexResults({
   container,
   indices,
+  [ escapeHits = false ],
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty, allItems} ],
 })
