@@ -33,18 +33,15 @@ class MultiIndexResults extends React.Component {
   renderResults({ label, hits }) {
     const { cssClasses: { item } } = this.props;
 
-    const hitsMarkup = hits.map((hit, position) => {
-      const data = { ...hit, __hitIndex: position };
-      return (
-        <Template
-          data={data}
-          key={data.objectID}
-          rootProps={{ className: item }}
-          templateKey="item"
-          {...this.props.templateProps}
-        />
-      );
-    });
+    const hitsMarkup = hits.map((hit, __hitIndex) => (
+      <Template
+        key={hit.objectID}
+        data={{ ...hit, __hitIndex }}
+        rootProps={{ className: item }}
+        templateKey="item"
+        {...this.props.templateProps}
+      />
+    ));
 
     return (
       <div key={label}>
