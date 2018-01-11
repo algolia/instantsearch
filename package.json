@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "2.3.3",
+  "version": "2.4.1",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "author": "Algolia <support@algolia.com>",
@@ -32,7 +32,10 @@
     "fix:prettier": "eslint --fix -c .eslintrc.js ."
   },
   "renovate": {
-    "extends": ["config:js-lib", "algolia"]
+    "extends": [
+      "config:js-lib",
+      "algolia"
+    ]
   },
   "repository": "algolia/instantsearch.js",
   "files": [

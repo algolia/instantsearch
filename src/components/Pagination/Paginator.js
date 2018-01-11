@@ -10,6 +10,8 @@ class Paginator {
   pages() {
     const { total, currentPage, padding } = this;
 
+    if (total === 0) return [0];
+
     const totalDisplayedPages = this.nbPagesDisplayed(padding, total);
     if (totalDisplayedPages === total) return range(0, total);
 
