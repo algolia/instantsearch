@@ -74,7 +74,7 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
       },
 
       saveResults({ results, index }) {
-        const derivedIndice = find(this.derivedIndices, { index });
+        const derivedIndex = find(this.derivedIndices, { index });
 
         if (
           widgetParams.escapeHits &&
@@ -84,7 +84,7 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
           results.hits = escapeHits(results.hits);
         }
 
-        derivedIndice.results = results;
+        derivedIndex.results = results;
         this.renderWithAllIndices();
       },
 
