@@ -129,8 +129,7 @@ export default function connectMultiIndexResults(renderFn, unmountFn) {
         this.renderWithAllIndices();
       },
 
-      render({ results, instantSearchInstance }) {
-        this.instantSearchInstance = instantSearchInstance;
+      render({ results }) {
         this.saveResults({ results, index: this.indices[0].index });
       },
 
