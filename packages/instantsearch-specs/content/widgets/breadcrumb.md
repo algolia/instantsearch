@@ -20,6 +20,8 @@ html: |
 classes:
   - name: .ais-Breadcrumb
     description: the root div of the widget
+  - name: .ais-Breadcrumb--noRefinement
+    description: the root div of the widget with no refinement
   - name: .ais-Breadcrumb-list
     description: the list of all breadcrumb items
   - name: .ais-Breadcrumb-item

@@ -116,6 +116,8 @@ althtml2: |
 classes:
   - name: .ais-HierarchicalMenu
     description: the root div of the widget
+  - name: .ais-HierarchicalMenu--noRefinement
+    description: the root div of the widget with no refinement
   - name: .ais-HierarchicalMenu-header
     description: the header of the widget (optional)
   - name: .ais-HierarchicalMenu-body

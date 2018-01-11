@@ -33,6 +33,8 @@ html: |
 classes:
   - name: .ais-Pagination
     description: the root div of the widget
+  - name: .ais-Pagination--noRefinement
+    description: the root div of the widget with no refinement
   - name: .ais-Pagination-list
     description: the list of all pagination items
   - name: .ais-Pagination-item

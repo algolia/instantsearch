@@ -11,6 +11,8 @@ html: |
 classes:
   - name: .ais-MenuSelect
     description: the root div of the widget
+  - name: .ais-MenuSelect--noRefinement
+    description: the root div of the widget with no refinement
   - name: .ais-MenuSelect-header
     description: the header of the widget (optional)
   - name: .ais-MenuSelect-body

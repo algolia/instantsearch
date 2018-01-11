@@ -88,6 +88,8 @@ althtml2: |
 classes:
   - name: .ais-Menu
     description: the root div of the widget
+  - name: .ais-Menu--noRefinement
+    description: the root div of the widget with no refinement
   - name: .ais-Menu-searchBox
     description: the search box of the widget
   - name: .ais-Menu-list
