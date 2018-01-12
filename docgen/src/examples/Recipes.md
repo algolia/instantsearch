@@ -45,7 +45,12 @@ examples: [{
     title: 'Server Side Rendering using next.js',
     sourceCodeUrl: 'https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/next-app',
     demoUrl: 'https://react-instantsearch-algolia-nextjs.now.sh/'
-  }]
+  }, {
+    id: 'query-suggestions',
+    title: 'Query suggestions with React Native',
+    sourceCodeUrl: 'https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/query-suggestions-rn',
+    demoUrl: 'https://expo.io/@mlthuret/algolia-query-suggestions-ris'
+  },]
 ---
 
 ## Recipes

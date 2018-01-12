@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+      "marginTop": 30,
+    }
+  }
+>
+  <View
+    flex={1}
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "stretch",
+          "flexDirection": "row",
+        }
+      }
+    >
+      <Image
+        source={
+          Object {
+            "uri": "https://d13yacurqjgara.cloudfront.net/users/1090953/avatars/small/3a0f064859092a0e82bedddcee24a4a8.png?148154278",
+          }
+        }
+        style={
+          Object {
+            "height": 40,
+            "margin": 10,
+            "width": 40,
+          }
+        }
+      />
+      <TextInput
+        allowFontScaling={true}
+        autoCapitalize="none"
+        autoCorrect={false}
+        clearButtonMode="always"
+        onChange={[Function]}
+        onChangeText={[Function]}
+        onFocus={[Function]}
+        placeholder="Search a product..."
+        placeholderTextColor="black"
+        spellCheck={false}
+        style={
+          Object {
+            "alignSelf": "center",
+            "color": "black",
+            "height": 50,
+            "width": 300,
+          }
+        }
+        underlineColorAndroid="white"
+        value=""
+      />
+    </View>
+    <View />
+    <View
+      flex={1}
+    >
+      <Text
+        accessible={true}
+        allowFontScaling={true}
+        ellipsizeMode="tail"
+        style={
+          Object {
+            "backgroundColor": "lightgrey",
+            "height": 40,
+            "justifyContent": "center",
+            "padding": 10,
+          }
+        }
+      >
+        Best results
+      </Text>
+      <View
+        style={
+          Object {
+            "flex": 1,
+          }
+        }
+      >
+        <RCTScrollView
+          ItemSeparatorComponent={[Function]}
+          data={Array []}
+          disableVirtualization={false}
+          getItem={[Function]}
+          getItemCount={[Function]}
+          horizontal={false}
+          initialNumToRender={10}
+          keyExtractor={[Function]}
+          maxToRenderPerBatch={10}
+          numColumns={1}
+          onContentSizeChange={[Function]}
+          onEndReached={[Function]}
+          onEndReachedThreshold={2}
+          onLayout={[Function]}
+          onMomentumScrollEnd={[Function]}
+          onScroll={[Function]}
+          onScrollBeginDrag={[Function]}
+          onScrollEndDrag={[Function]}
+          renderItem={[Function]}
+          scrollEventThrottle={50}
+          stickyHeaderIndices={Array []}
+          updateCellsBatchingPeriod={50}
+          viewabilityConfigCallbackPairs={Array []}
+          windowSize={21}
+        >
+          <View />
+        </RCTScrollView>
+      </View>
+    </View>
+  </View>
+</View>
+`;

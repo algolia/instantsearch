@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Algolia Query Suggestions with React InstantSearch",
+    "description":
+      "Showcase the Algolia Search Experience with Query Suggestions inside a React Native application. \n\n => Code can be found at https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/query-suggestions-rn \n\n => See React InstantSearch documentation website at https://community.algolia.com/react-instantsearch/",
+
+    "slug": "algolia-query-suggestions-ris",
+    "privacy": "unlisted",
+    "sdkVersion": "24.0.0",
+    "platforms": ["ios", "android"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon":
+      "https://www.algolia.com/static_assets/images/press/downloads/algolia-mark-blue.png",
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "react-native-query-suggestions",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "scripts": {
+    "start": "react-native-scripts start",
+    "eject": "react-native-scripts eject",
+    "android": "react-native-scripts android",
+    "ios": "react-native-scripts ios",
+    "test": "jest",
+    "build": "echo \"Error: no build specified\" && exit 0"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!react|@expo|expo|@ptomasroos|react-native-router-flux|mobx-react)"
+    ],
+    "setupFiles": ["../../../../shim.js", "./shim-react-native.js"]
+  },
+  "devDependencies": {
+    "babel-preset-react-native": "4.0.0",
+    "jest": "21.2.1",
+    "jest-expo": "24.0.0",
+    "react-native-scripts": "1.8.1"
+  },
+  "dependencies": {
+    "expo": "24.0.0",
+    "lodash": "4.17.4",
+    "prop-types": "15.6.0",
+    "react": "16.0.0",
+    "react-instantsearch": "4.4.1",
+    "react-native":
+      "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz",
+    "react-native-animatable": "1.2.4",
+    "react-native-vector-icons": "4.4.3",
+    "react-test-renderer": "16.2.0"
+  }
+}
