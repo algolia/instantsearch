@@ -24,7 +24,7 @@
 
 * **createInstantSearch:** remove the client from the Snapshot ([#749](https://github.com/algolia/react-instantsearch/issues/749)) ([700d8f4](https://github.com/algolia/react-instantsearch/commit/700d8f4))
 * refresh cache memory leak example ([#784](https://github.com/algolia/react-instantsearch/issues/784)) ([cf228ac](https://github.com/algolia/react-instantsearch/commit/cf228ac))
-* **stories:** rename InstantSearch to <InstantSearch> ([#789](https://github.com/algolia/react-instantsearch/issues/789)) ([05efda5](https://github.com/algolia/react-instantsearch/commit/05efda5))
+* **stories:** rename InstantSearch to `<InstantSearch>` ([#789](https://github.com/algolia/react-instantsearch/issues/789)) ([05efda5](https://github.com/algolia/react-instantsearch/commit/05efda5))
 
 
 ### Features
