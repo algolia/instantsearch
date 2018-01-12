@@ -33,7 +33,7 @@
     "react-native":
       "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz",
     "react-native-animatable": "1.2.4",
-    "react-native-vector-icons": "4.4.3",
+    "react-native-vector-icons": "4.5.0",
     "react-test-renderer": "16.2.0"
   }
 }
