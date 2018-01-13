@@ -4739,9 +4739,9 @@ react-native-maps@0.17.1:
   version "0.17.1"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.17.1.tgz#ab2236341fd984dac8864202ae55331bc262f60c"
 
-react-native-modal-dropdown@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.5.0.tgz#f6c4cd4d077792e56902b43b14d83959f5f40f46"
+react-native-modal-dropdown@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.6.0.tgz#dbe01b069dcb24bf937eaa7900469c5b387cef33"
 
 react-native-router-flux@4.0.0-beta.27:
   version "4.0.0-beta.27"
