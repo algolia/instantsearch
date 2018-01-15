@@ -3,7 +3,7 @@
   "devDependencies": {
     "identity-obj-proxy": "3.0.0",
     "jest-environment-jsdom-11.0.0": "20.1.9",
-    "react-scripts": "1.0.17",
+    "react-scripts": "1.1.0",
     "react-test-renderer": "16.2.0"
   },
   "dependencies": {
