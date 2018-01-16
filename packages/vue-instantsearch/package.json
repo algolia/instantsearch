@@ -34,7 +34,7 @@
     "docs:build:dev": "cd docs && yarn && yarn build:dev",
     "docs:watch": "cd docs && yarn && yarn dev",
     "docs:deploy": "cd docs && yarn && yarn deploy",
-    "test": "yarn run lint && jest --verbose --coverage",
+    "test": "jest --verbose --coverage && yarn run lint",
     "test:update": "jest --verbose --updateSnapshot",
     "test:watch": "jest --verbose --watchAll --notify",
     "lint": "eslint --ext .js,.vue .",
