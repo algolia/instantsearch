@@ -39,7 +39,7 @@
     "react-instantsearch-theme-algolia": "4.4.1",
     "react-native": "0.51.0",
     "react-native-modal-dropdown": "0.6.0",
-    "react-native-router-flux": "4.0.0-beta.27",
+    "react-native-router-flux": "4.0.0-beta.28",
     "react-native-star-rating": "1.0.8",
     "react-native-vector-icons": "4.5.0"
   }

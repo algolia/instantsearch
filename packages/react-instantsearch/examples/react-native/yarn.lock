@@ -4743,9 +4743,9 @@ react-native-modal-dropdown@0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/react-native-modal-dropdown/-/react-native-modal-dropdown-0.6.0.tgz#dbe01b069dcb24bf937eaa7900469c5b387cef33"
 
-react-native-router-flux@4.0.0-beta.27:
-  version "4.0.0-beta.27"
-  resolved "https://registry.yarnpkg.com/react-native-router-flux/-/react-native-router-flux-4.0.0-beta.27.tgz#11862319b64a750189d04ded8cdf2f98c02f1425"
+react-native-router-flux@4.0.0-beta.28:
+  version "4.0.0-beta.28"
+  resolved "https://registry.yarnpkg.com/react-native-router-flux/-/react-native-router-flux-4.0.0-beta.28.tgz#1d39cf176c88d0658af03cfa80dfb4a8eb284619"
   dependencies:
     lodash.isequal "^4.5.0"
     mobx "^3.3.1"
