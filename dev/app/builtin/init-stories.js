@@ -15,6 +15,7 @@ import initPriceRangesStories from './stories/price-ranges.stories';
 import initRangeInputStories from './stories/range-input.stories.js';
 import initRangeSliderStories from './stories/range-slider.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
+import initReloadStories from './stories/reload.stories';
 import initSearchBoxStories from './stories/search-box.stories';
 import initSortBySelectorStories from './stories/sort-by-selector.stories';
 import initStarRatingStories from './stories/star-rating.stories';
@@ -39,6 +40,7 @@ export default () => {
   initRangeInputStories();
   initRangeSliderStories();
   initRefinementListStories();
+  initReloadStories();
   initSearchBoxStories();
   initSortBySelectorStories();
   initStatsStories();

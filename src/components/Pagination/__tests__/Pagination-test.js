@@ -67,4 +67,19 @@ describe('Pagination', () => {
     );
     expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
   });
+
+  it('should have all buttons disabled if there are no results', () => {
+    const tree = renderer
+      .create(
+        <Pagination
+          {...defaultProps}
+          showFirstLast
+          currentPage={0}
+          nbHits={0}
+          nbPages={0}
+        />
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 });

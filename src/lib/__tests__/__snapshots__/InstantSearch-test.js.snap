@@ -7,10 +7,11 @@ Array [
     "helper": AlgoliaSearchHelper {
       "_currentNbQueries": 0,
       "_events": Object {
+        "error": [Function],
         "result": [Function],
         "search": [Function],
       },
-      "_eventsCount": 2,
+      "_eventsCount": 3,
       "_lastQueryIdReceived": -1,
       "_queryId": 0,
       "client": Object {
@@ -94,10 +95,11 @@ Array [
       "helper": AlgoliaSearchHelper {
         "_currentNbQueries": 0,
         "_events": Object {
+          "error": [Function],
           "result": [Function],
           "search": [Function],
         },
-        "_eventsCount": 2,
+        "_eventsCount": 3,
         "_lastQueryIdReceived": -1,
         "_queryId": 0,
         "client": Object {

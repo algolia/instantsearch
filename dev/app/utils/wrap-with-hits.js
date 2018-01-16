@@ -78,9 +78,15 @@ export const wrapWithHits = (
     })
   );
 
-  initWidget(window.document.getElementById('widget-display'));
+  if (initWidget.length === 1) {
+    initWidget(window.document.getElementById('widget-display'));
 
-  window.search.start();
+    return window.search.start();
+  }
+
+  return initWidget(window.document.getElementById('widget-display'), () => {
+    window.search.start();
+  });
 };
 
 export const wrapWithHitsAndJquery = fn =>

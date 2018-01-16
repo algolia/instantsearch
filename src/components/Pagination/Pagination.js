@@ -44,7 +44,7 @@ export class RawPagination extends React.Component {
         cssClasses={cssClasses}
         handleClick={this.handleClick}
         isDisabled={isDisabled}
-        key={label + pageNumber}
+        key={label + pageNumber + ariaLabel}
         label={label}
         pageNumber={pageNumber}
         url={url}
@@ -56,7 +56,7 @@ export class RawPagination extends React.Component {
     return this.pageLink({
       ariaLabel: 'Previous',
       additionalClassName: this.props.cssClasses.previous,
-      isDisabled: pager.isFirstPage(),
+      isDisabled: this.props.nbHits === 0 || pager.isFirstPage(),
       label: this.props.labels.previous,
       pageNumber: pager.currentPage - 1,
       createURL,
@@ -67,7 +67,7 @@ export class RawPagination extends React.Component {
     return this.pageLink({
       ariaLabel: 'Next',
       additionalClassName: this.props.cssClasses.next,
-      isDisabled: pager.isLastPage(),
+      isDisabled: this.props.nbHits === 0 || pager.isLastPage(),
       label: this.props.labels.next,
       pageNumber: pager.currentPage + 1,
       createURL,
@@ -78,7 +78,7 @@ export class RawPagination extends React.Component {
     return this.pageLink({
       ariaLabel: 'First',
       additionalClassName: this.props.cssClasses.first,
-      isDisabled: pager.isFirstPage(),
+      isDisabled: this.props.nbHits === 0 || pager.isFirstPage(),
       label: this.props.labels.first,
       pageNumber: 0,
       createURL,
@@ -89,7 +89,7 @@ export class RawPagination extends React.Component {
     return this.pageLink({
       ariaLabel: 'Last',
       additionalClassName: this.props.cssClasses.last,
-      isDisabled: pager.isLastPage(),
+      isDisabled: this.props.nbHits === 0 || pager.isLastPage(),
       label: this.props.labels.last,
       pageNumber: pager.total - 1,
       createURL,

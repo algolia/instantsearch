@@ -1,3 +1,32 @@
+<a name="2.4.1"></a>
+## [2.4.1](https://github.com/algolia/instantsearch.js/compare/v2.4.0...v2.4.1) (2018-01-04)
+
+
+### Bug Fixes
+
+* **core:** correct escape highlight for arrays and nested objects ([#2646](https://github.com/algolia/instantsearch.js/issues/2646)) ([ed0ee73](https://github.com/algolia/instantsearch.js/commit/ed0ee73))
+
+
+
+<a name="2.4.0"></a>
+# [2.4.0](https://github.com/algolia/instantsearch.js/compare/v2.3.3...v2.4.0) (2018-01-02)
+
+
+### Bug Fixes
+
+* **pagination:** disable buttons if not results ([#2643](https://github.com/algolia/instantsearch.js/issues/2643)) ([9017b72](https://github.com/algolia/instantsearch.js/commit/9017b72)), closes [#2014](https://github.com/algolia/instantsearch.js/issues/2014)
+* **theme:** fix height of pagination ([#2641](https://github.com/algolia/instantsearch.js/issues/2641)) ([b3185e5](https://github.com/algolia/instantsearch.js/commit/b3185e5))
+
+
+### Features
+
+* **core:** add a reload method on the InstantSearch component ([#2637](https://github.com/algolia/instantsearch.js/issues/2637)) ([e73ff13](https://github.com/algolia/instantsearch.js/commit/e73ff13))
+* **core:** add an error event to monitor error from Algolia ([#2642](https://github.com/algolia/instantsearch.js/issues/2642)) ([71c2d68](https://github.com/algolia/instantsearch.js/commit/71c2d68)), closes [#1585](https://github.com/algolia/instantsearch.js/issues/1585)
+* **core:** rename `reload` to `refresh` ([#2645](https://github.com/algolia/instantsearch.js/issues/2645)) ([9b8ac65](https://github.com/algolia/instantsearch.js/commit/9b8ac65))
+* **wrapWithHits:** enable async init ([#2635](https://github.com/algolia/instantsearch.js/issues/2635)) ([08a8747](https://github.com/algolia/instantsearch.js/commit/08a8747))
+
+
+
 <a name="2.3.3"></a>
 ## [2.3.3](https://github.com/algolia/instantsearch.js/compare/v2.3.2...v2.3.3) (2017-12-11)
 

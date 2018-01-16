@@ -17,22 +17,22 @@
   padding: 50px 40px 40px;
 }
 
-#results-display .hit {
+.hit {
   align-items: center;
   display: flex;
   margin: 10px 10px;
 }
 
-#results-display .hit .hit-picture img {
+.hit .hit-picture img {
   height: auto;
   width: 80px;
 }
 
-#results-display .hit .hit-content {
+.hit .hit-content {
   padding: 0 10px;
 }
 
-#results-display .hit .hit-type {
+.hit .hit-type {
   color: #888;
   font-size: 13px;
 }

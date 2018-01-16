@@ -35,7 +35,7 @@ export default function() {
     middleware: [
       compression(),
       webpackDevMiddleware(compiler, {
-        noInfo: true,
+        logLevel: 'warn',
         publicPath: webpackConfig.output.publicPath,
       }),
       webpackHotMiddleware(compiler),
