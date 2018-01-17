@@ -6,7 +6,7 @@
     "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
     "jest-expo": "24.0.0",
-    "react-native-scripts": "1.8.1",
+    "react-native-scripts": "1.9.0",
     "react-test-renderer": "16.2.0"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
