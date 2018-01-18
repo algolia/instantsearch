@@ -18,11 +18,11 @@
 <!--
   ***************************
   If the current behavior is a bug, please provide all the steps to reproduce and a minimal
-  [JSFiddle](https://jsfiddle.net/) example or a repository on GitHub that we can `npm install`
+  [CodeSandbox](https://codesandbox.io/) example or a repository on GitHub that we can `npm install`
   and `npm start`.
 
   We have a simple online template for you to use as a base to explain your bug or issue:
-  https://jsfiddle.net/ar80rgpc/6/
+  https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/React%20InstantSearch
 
   If you are requesting a new feature, we need to understand WHY would you
   need this feature (your use case) or how you are limited with the current API.
