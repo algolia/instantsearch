@@ -118,10 +118,6 @@ classes:
     description: the root div of the widget
   - name: .ais-HierarchicalMenu--noRefinement
     description: the root div of the widget with no refinement
-  - name: .ais-HierarchicalMenu-header
-    description: the header of the widget (optional)
-  - name: .ais-HierarchicalMenu-body
-    description: the body of the widget
   - name: .ais-HierarchicalMenu-searchBox
     description: the search box of the widget
   - name: .ais-HierarchicalMenu-list
@@ -150,6 +146,4 @@ classes:
     description: the button used to display more categories
   - name: .ais-HierarchicalMenu-showMore--disabled
     description: the disabled button used to display more categories
-  - name: .ais-HierarchicalMenu-footer
-    description: the footer of the widget (optional)
 ---
