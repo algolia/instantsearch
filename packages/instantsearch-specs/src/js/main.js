@@ -2,32 +2,27 @@ import './highlight';
 
 const changeThemeSelect = document.getElementById('js-changeTheme');
 const customThemeStyleSheet = document.getElementById('js-customTheme');
-const localStorageTheme = localStorage.getItem('customTheme') || '';
+const localStorageSelectChoice = localStorage.getItem('selectChoice') || 0;
 const hoverClass = document.querySelectorAll('.js-hoverClass');
 const codeWrapperTabs = document.querySelectorAll('.code-wrapper-tab');
 
 // Store current CSS theme in localStorage
 
-customThemeStyleSheet.setAttribute('href', localStorageTheme);
+customThemeStyleSheet.setAttribute(
+  'href',
+  changeThemeSelect.options[localStorageSelectChoice].value
+);
 
 if (changeThemeSelect) {
-  changeThemeSelect.value = localStorageTheme;
-  changeThemeSelect.addEventListener('change', () => {
-    customThemeStyleSheet.setAttribute('href', changeThemeSelect.value);
-    localStorage.setItem('customTheme', changeThemeSelect.value);
+  changeThemeSelect.value =
+    changeThemeSelect.options[localStorageSelectChoice].value;
+  changeThemeSelect.addEventListener('change', e => {
+    customThemeStyleSheet.setAttribute(
+      'href',
+      changeThemeSelect.options[e.target.options.selectedIndex].value
+    );
+    localStorage.setItem('selectChoice', e.target.options.selectedIndex);
   });
-
-  // FIXME
-  // Used to avoid CSS errors when updating themes and reloading
-  // Comment when comitting
-
-  // window.setTimeout(() => {
-  //   changeThemeSelect.value = changeThemeSelect.options[1].value;
-  //   customThemeStyleSheet.setAttribute(
-  //     'href',
-  //     changeThemeSelect.options[1].value
-  //   );
-  // }, 300);
 }
 
 // Hover list of classes to highligh them

@@ -13,14 +13,8 @@ classes:
     description: the root div of the widget
   - name: .ais-MenuSelect--noRefinement
     description: the root div of the widget with no refinement
-  - name: .ais-MenuSelect-header
-    description: the header of the widget (optional)
-  - name: .ais-MenuSelect-body
-    description: the body of the widget
   - name: .ais-MenuSelect-select
     description: the select
   - name: .ais-MenuSelect-option
     description: the select option
-  - name: .ais-MenuSelect-footer
-    description: the footer of the widget (optional)
 ---

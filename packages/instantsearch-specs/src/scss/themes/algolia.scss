@@ -23,7 +23,6 @@ a[class^='ais-'] {
 .ais-ClearRefinements,
 .ais-CurrentRefinements,
 .ais-HierarchicalMenu,
-.ais-Highlight,
 .ais-Hits,
 .ais-Results,
 .ais-HitsPerPage,
@@ -42,10 +41,9 @@ a[class^='ais-'] {
 .ais-RatingMenu,
 .ais-RefinementList,
 .ais-SearchBox,
-.ais-Snippet,
 .ais-SortBy,
 .ais-Stats,
-.ais-Toggle {
+.ais-ToggleRefinement {
   color: $port-gore;
 }
 
@@ -203,7 +201,7 @@ a[class^='ais-'] {
 .ais-Menu-count,
 .ais-RatingMenu-count,
 .ais-RefinementList-count,
-.ais-Toggle-count {
+.ais-ToggleRefinement-count {
   font-size: 0.8rem;
 
   &:before {
@@ -231,20 +229,6 @@ a[class^='ais-'] {
   background-color: $koromiko;
 }
 
-.ais-InfiniteHits-header,
-.ais-InfiniteResults-header,
-.ais-Hits-header,
-.ais-Results-header {
-  margin-bottom: 1rem;
-}
-
-.ais-InfiniteHits-footer,
-.ais-InfiniteResults-footer,
-.ais-Hits-footer,
-.ais-Results-footer {
-  margin-top: 1rem;
-}
-
 .ais-InfiniteHits-list,
 .ais-InfiniteResults-list,
 .ais-Hits-list,
@@ -253,6 +237,10 @@ a[class^='ais-'] {
   margin-left: -1rem;
   display: flex;
   flex-wrap: wrap;
+
+  .ais-Panel-body & {
+    margin: 0.5rem 0 0 -1rem;
+  }
 }
 
 .ais-InfiniteHits-item,
@@ -265,6 +253,10 @@ a[class^='ais-'] {
   width: calc(25% - 1rem);
   border: 1px solid $ghost;
   box-shadow: 0 2px 5px 0px lighten($ghost, 10%);
+
+  .ais-Panel-body & {
+    margin: 0.5rem 0 0.5rem 1rem;
+  }
 }
 
 .ais-InfiniteHits-loadMore,
@@ -399,14 +391,18 @@ a[class^='ais-'] {
     border-color: darken($ghost, 20%);
     box-sizing: border-box;
   }
-}
 
-.rheostat-handle {
-  border-color: darken($ghost, 20%);
-}
+  .rheostat-handle {
+    border-color: darken($ghost, 20%);
+  }
 
-.rheostat-marker {
-  background-color: darken($ghost, 20%);
+  .rheostat-marker {
+    background-color: darken($ghost, 20%);
+  }
+
+  .ais-Panel-body & {
+    margin: 2rem 0;
+  }
 }
 
 .ais-RatingMenu-count,
