@@ -25,7 +25,7 @@
     "react-native-scripts": "1.9.0"
   },
   "dependencies": {
-    "expo": "24.0.2",
+    "expo": "25.0.0",
     "lodash": "4.17.4",
     "prop-types": "15.6.0",
     "react": "16.0.0",
