@@ -2868,9 +2868,9 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
-google-map-react@0.27.0:
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-0.27.0.tgz#b11bca9fbd7a334d113a6608c947642b09d6fbcd"
+google-map-react@0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-0.28.0.tgz#0171f021c2e2ef13126a55d2842b3b2268fdf3ee"
   dependencies:
     "@mapbox/point-geometry" "^0.1.0"
     eventemitter3 "^1.1.0"
