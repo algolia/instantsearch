@@ -94,7 +94,7 @@ export default function createConnector(connectorDesc) {
 
           if (
             onlyGetProvidedPropsUsage &&
-            !connectorDesc.displayName.startsWith('Algolia')
+            connectorDesc.displayName.substr(0, 7) !== 'Algolia'
           ) {
             // eslint-disable-next-line no-console
             console.warn(
