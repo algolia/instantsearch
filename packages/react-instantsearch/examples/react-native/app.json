@@ -1,6 +1,6 @@
 {
   "expo": {
-    "sdkVersion": "24.0.0",
+    "sdkVersion": "25.0.0",
     "name": "React InstantSearch for React Native",
     "description":
       "Showcase the Algolia Search Experience inside a React Native application. \n\n => Code can be found at https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/react-native \n\n => See React InstantSearch documentation website at https://community.algolia.com/react-instantsearch/",
