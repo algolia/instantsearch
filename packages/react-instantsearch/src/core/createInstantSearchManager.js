@@ -1,9 +1,8 @@
+import { omit, isEmpty } from 'lodash';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
-
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
 import highlightTags from './highlightTags.js';
-import { omit, isEmpty } from 'lodash';
 
 /**
  * Creates a new instance of the InstantSearchManager which controls the widgets and
@@ -274,22 +273,22 @@ export default function createInstantSearchManager({
     search();
   }
 
-  function onSearchForFacetValues(nextSearchState) {
+  function onSearchForFacetValues({ facetName, query, maxFacetHits }) {
     store.setState({
       ...store.getState(),
       searchingForFacetValues: true,
     });
 
     helper
-      .searchForFacetValues(nextSearchState.facetName, nextSearchState.query)
+      .searchForFacetValues(facetName, query, maxFacetHits)
       .then(
         content => {
           store.setState({
             ...store.getState(),
             resultsFacetValues: {
               ...store.getState().resultsFacetValues,
-              [nextSearchState.facetName]: content.facetHits,
-              query: nextSearchState.query,
+              [facetName]: content.facetHits,
+              query,
             },
             searchingForFacetValues: false,
           });

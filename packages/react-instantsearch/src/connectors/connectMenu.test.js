@@ -369,15 +369,31 @@ describe('connectMenu', () => {
       });
     });
 
-    it('calling searchForItems return the right searchForItems parameters', () => {
+    it('calling searchForItems return the right searchForItems parameters with limitMin', () => {
       const parameters = searchForFacetValues(
-        { attributeName: 'ok' },
+        { attributeName: 'ok', limitMin: 15, limitMax: 25, showMore: false },
         {},
         'yep'
       );
+
       expect(parameters).toEqual({
         facetName: 'ok',
         query: 'yep',
+        maxFacetHits: 15,
+      });
+    });
+
+    it('calling searchForItems return the right searchForItems parameters with limitMax', () => {
+      const parameters = searchForFacetValues(
+        { attributeName: 'ok', limitMin: 15, limitMax: 25, showMore: true },
+        {},
+        'yep'
+      );
+
+      expect(parameters).toEqual({
+        facetName: 'ok',
+        query: 'yep',
+        maxFacetHits: 25,
       });
     });
 

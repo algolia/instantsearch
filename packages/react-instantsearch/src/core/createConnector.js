@@ -290,7 +290,7 @@ export default function createConnector(connectorDesc) {
         const searchForFacetValuesProps = hasSearchForFacetValues
           ? {
               searchForItems: this.searchForFacetValues,
-              searchForFacetValues: (facetName, query) => {
+              searchForFacetValues: (...args) => {
                 if (process.env.NODE_ENV === 'development') {
                   // eslint-disable-next-line no-console
                   console.warn(
@@ -298,7 +298,7 @@ export default function createConnector(connectorDesc) {
                       '`searchForItems`, this will break in the next major version.'
                   );
                 }
-                this.searchForFacetValues(facetName, query);
+                this.searchForFacetValues(...args);
               },
             }
           : {};
