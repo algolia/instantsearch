@@ -203,7 +203,7 @@ const CoolWidget = createConnector({
 This method needs to be implemented if you want to have the ability to perform a search for facet values inside your widget.
 
 It takes in the current props of the higher-order component, the [search state](guide/Search_state.html) of all widgets, as well as all arguments passed to the `searchForFacetValues` props of stateful widgets, and returns an
-object of the shape: `{facetName: string, query: string}`
+object of the shape: `{facetName: string, query: string, maxFacetHits?: number}`. The default value for the `maxFacetHits` is the one set by [the API](https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits) which is `10`.
 
 ```jsx
 import {createConnector} from 'react-instantsearch';
