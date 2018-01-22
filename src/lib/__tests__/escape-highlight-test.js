@@ -17,7 +17,7 @@ describe('escapeHits()', () => {
       },
     ];
 
-    expect(escapeHits(hits)).toEqual([
+    const output = [
       {
         _highlightResult: {
           foobar: {
@@ -30,7 +30,10 @@ describe('escapeHits()', () => {
           },
         },
       },
-    ]);
+    ];
+
+    output.__escaped = true;
+    expect(escapeHits(hits)).toEqual(output);
   });
 
   it('should escape highlighProperty nested object value', () => {
@@ -55,7 +58,7 @@ describe('escapeHits()', () => {
       },
     ];
 
-    expect(escapeHits(hits)).toEqual([
+    const output = [
       {
         _highlightResult: {
           foo: {
@@ -72,7 +75,10 @@ describe('escapeHits()', () => {
           },
         },
       },
-    ]);
+    ];
+
+    output.__escaped = true;
+    expect(escapeHits(hits)).toEqual(output);
   });
 
   it('should escape highlighProperty array of string', () => {
@@ -101,7 +107,7 @@ describe('escapeHits()', () => {
       },
     ];
 
-    expect(escapeHits(hits)).toEqual([
+    const output = [
       {
         _highlightResult: {
           foobar: [
@@ -116,7 +122,10 @@ describe('escapeHits()', () => {
           ],
         },
       },
-    ]);
+    ];
+
+    output.__escaped = true;
+    expect(escapeHits(hits)).toEqual(output);
   });
 
   it('should escape highlighProperty array of object', () => {
@@ -165,7 +174,7 @@ describe('escapeHits()', () => {
       },
     ];
 
-    expect(escapeHits(hits)).toEqual([
+    const output = [
       {
         _highlightResult: {
           foobar: [
@@ -204,11 +213,13 @@ describe('escapeHits()', () => {
           ],
         },
       },
-    ]);
+    ];
+    output.__escaped = true;
+    expect(escapeHits(hits)).toEqual(output);
   });
 
   it('should not escape twice the same results', () => {
-    const hits = [
+    let hits = [
       {
         _highlightResult: {
           foobar: {
@@ -218,8 +229,8 @@ describe('escapeHits()', () => {
       },
     ];
 
-    escapeHits(hits);
-    escapeHits(hits);
+    hits = escapeHits(hits);
+    hits = escapeHits(hits);
 
     const output = [
       {
