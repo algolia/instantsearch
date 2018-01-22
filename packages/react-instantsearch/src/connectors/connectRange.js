@@ -25,6 +25,9 @@ import createConnector from '../core/createConnector';
  * @providedPropType {function} refine - a function to select a range.
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
+ * @providedPropType {number} min - the minimum value available.
+ * @providedPropType {number} max - the maximum value available.
+ * @providedPropType {number} precision - Number of digits after decimal point to use.
  */
 
 function getId(props) {
