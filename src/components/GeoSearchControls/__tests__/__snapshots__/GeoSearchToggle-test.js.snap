@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GeoSearchToggle expect to render 1`] = `
+<label
+  className="label"
+>
+  <input
+    checked={false}
+    className="input"
+    onChange={[Function]}
+    type="checkbox"
+  />
+  Clear the current map refinement
+</label>
+`;
+
+exports[`GeoSearchToggle expect to render checked 1`] = `
+<label
+  className="label"
+>
+  <input
+    checked={true}
+    className="input"
+    onChange={[Function]}
+    type="checkbox"
+  />
+  Clear the current map refinement
+</label>
+`;
