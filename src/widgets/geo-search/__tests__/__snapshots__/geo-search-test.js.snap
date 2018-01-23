@@ -16,6 +16,7 @@ Array [
         "root": "ais-geo-search custom-root",
         "toggleInput": "ais-geo-search--toggle-input custom-toggleInput",
         "toggleLabel": "ais-geo-search--toggle-label custom-toggleLabel",
+        "toggleLabelActive": "ais-geo-search--toggle-label-active",
       }
     }
     enableClearMapRefinement={true}
@@ -62,6 +63,7 @@ Array [
         "root": "ais-geo-search",
         "toggleInput": "ais-geo-search--toggle-input",
         "toggleLabel": "ais-geo-search--toggle-label",
+        "toggleLabelActive": "ais-geo-search--toggle-label-active",
       }
     }
     enableClearMapRefinement={true}

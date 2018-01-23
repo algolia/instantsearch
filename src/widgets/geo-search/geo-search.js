@@ -44,6 +44,10 @@ const geoSearch = (props = {}) => {
     clear: cx(bem('clear'), userCssClasses.clear),
     control: cx(bem('control'), userCssClasses.control),
     toggleLabel: cx(bem('toggle-label'), userCssClasses.toggleLabel),
+    toggleLabelActive: cx(
+      bem('toggle-label-active'),
+      userCssClasses.toggleLabelActive
+    ),
     toggleInput: cx(bem('toggle-input'), userCssClasses.toggleInput),
     redo: cx(bem('redo'), userCssClasses.redo),
   };
