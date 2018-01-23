@@ -71,7 +71,7 @@
     "fs-extra": "5.0.0",
     "gh-pages": "1.1.0",
     "glob": "7.1.2",
-    "google-map-react": "0.28.0",
+    "google-map-react": "0.29.0",
     "happo": "5.0.0",
     "happo-core": "5.0.0",
     "happo-target-firefox": "5.0.0",
