@@ -46,9 +46,9 @@ bin/publish.sh
 ```
 
 This will:
-- publish the new version on NPM
-- tag and push the tag to GitHub
 
+* publish the new version on NPM
+* tag and push the tag to GitHub
 
 ## Documentation
 

@@ -45,43 +45,36 @@
 
 
 <a name="1.3.3"></a>
-## [1.3.3](https://github.com/algolia/vue-instantsearch/compare/v1.3.2...v1.3.3) (2017-12-04)
 
+## [1.3.3](https://github.com/algolia/vue-instantsearch/compare/v1.3.2...v1.3.3) (2017-12-04)
 
 ### Bug Fixes
 
 * Powered-by component is not SSR compatible [#367](https://github.com/algolia/vue-instantsearch/issues/367) ([f372bd4](https://github.com/algolia/vue-instantsearch/commit/f372bd4))
 
-
-
 <a name="1.3.2"></a>
-## [1.3.2](https://github.com/algolia/vue-instantsearch/compare/v1.3.1...v1.3.2) (2017-11-15)
 
+## [1.3.2](https://github.com/algolia/vue-instantsearch/compare/v1.3.1...v1.3.2) (2017-11-15)
 
 ### Bug Fixes
 
 * avoid query when components are destroyed ([c41c606](https://github.com/algolia/vue-instantsearch/commit/c41c606))
 
-
-
 <a name="1.3.1"></a>
-## [1.3.1](https://github.com/algolia/vue-instantsearch/compare/v1.3.0...v1.3.1) (2017-11-02)
 
+## [1.3.1](https://github.com/algolia/vue-instantsearch/compare/v1.3.0...v1.3.1) (2017-11-02)
 
 ### Bug Fixes
 
 * **menu:** avoid multiple Algolia calls when created ([f1ac0a7](https://github.com/algolia/vue-instantsearch/commit/f1ac0a7))
 
-
 ### Performance Improvements
 
 * **menu:** use facet name as key ([b496fd8](https://github.com/algolia/vue-instantsearch/commit/b496fd8))
 
-
-
 <a name="1.3.0"></a>
-# [1.3.0](https://github.com/algolia/vue-instantsearch/compare/v1.2.2...v1.3.0) (2017-10-25)
 
+# [1.3.0](https://github.com/algolia/vue-instantsearch/compare/v1.2.2...v1.3.0) (2017-10-25)
 
 ### Bug Fixes
 
@@ -90,7 +83,6 @@
 * **Menu:** apply correctly css class ([cf996ae](https://github.com/algolia/vue-instantsearch/commit/cf996ae))
 * **results:** remove key from slot ([d63c70b](https://github.com/algolia/vue-instantsearch/commit/d63c70b))
 * **store:** update typo in test ([1430840](https://github.com/algolia/vue-instantsearch/commit/1430840))
-
 
 ### Features
 
@@ -102,67 +94,54 @@
 * **store:** add method for retrieve facetStats ([c0c83aa](https://github.com/algolia/vue-instantsearch/commit/c0c83aa))
 * **widgets:** add Menu widget ([50c4c14](https://github.com/algolia/vue-instantsearch/commit/50c4c14))
 
-
-
 <a name="1.2.2"></a>
-## [1.2.2](https://github.com/algolia/vue-instantsearch/compare/v1.2.1...v1.2.2) (2017-10-17)
 
+## [1.2.2](https://github.com/algolia/vue-instantsearch/compare/v1.2.1...v1.2.2) (2017-10-17)
 
 ### Bug Fixes
 
 * **results:** remove key from slot ([8270847](https://github.com/algolia/vue-instantsearch/commit/8270847))
 
-
-
 <a name="1.2.1"></a>
-## [1.2.1](https://github.com/algolia/vue-instantsearch/compare/v1.2.0...v1.2.1) (2017-10-17)
 
+## [1.2.1](https://github.com/algolia/vue-instantsearch/compare/v1.2.0...v1.2.1) (2017-10-17)
 
 ### Bug Fixes
 
 * **stats:** only use toLocaleString in display ([62699e9](https://github.com/algolia/vue-instantsearch/commit/62699e9))
 
-
-
 <a name="1.2.0"></a>
-# [1.2.0](https://github.com/algolia/vue-instantsearch/compare/v1.1.0...v1.2.0) (2017-10-13)
 
+# [1.2.0](https://github.com/algolia/vue-instantsearch/compare/v1.1.0...v1.2.0) (2017-10-13)
 
 ### Features
 
 * **stats:** update stats component to use toLocaleString() ([3b41db3](https://github.com/algolia/vue-instantsearch/commit/3b41db3))
 
-
-
 <a name="1.1.0"></a>
-# [1.1.0](https://github.com/algolia/vue-instantsearch/compare/v1.0.1...v1.1.0) (2017-10-10)
 
+# [1.1.0](https://github.com/algolia/vue-instantsearch/compare/v1.0.1...v1.1.0) (2017-10-10)
 
 ### Bug Fixes
 
 * **pagination:** remove class duplicates ([c56ea2b](https://github.com/algolia/vue-instantsearch/commit/c56ea2b))
-
 
 ### Features
 
 * **component:** add an option to bem utility to not output element class ([6d4e690](https://github.com/algolia/vue-instantsearch/commit/6d4e690))
 * **pagination:** add classes on link elements ([d39da3e](https://github.com/algolia/vue-instantsearch/commit/d39da3e))
 
-
-
 <a name="1.0.1"></a>
-## [1.0.1](https://github.com/algolia/vue-instantsearch/compare/v1.0.0...v1.0.1) (2017-09-25)
 
+## [1.0.1](https://github.com/algolia/vue-instantsearch/compare/v1.0.0...v1.0.1) (2017-09-25)
 
 ### Bug Fixes
 
 * **instantsearch:** allow to treeshake es module ([f419329](https://github.com/algolia/vue-instantsearch/commit/f419329))
 
-
-
 <a name="1.0.0"></a>
-# [1.0.0](https://github.com/algolia/vue-instantsearch/compare/v0.7.0...v1.0.0) (2017-08-23)
 
+# [1.0.0](https://github.com/algolia/vue-instantsearch/compare/v0.7.0...v1.0.0) (2017-08-23)
 
 ### Features
 
@@ -170,42 +149,34 @@
 * **highlight:** throw error if missing config in Algolia ([09d8d3d](https://github.com/algolia/vue-instantsearch/commit/09d8d3d))
 * **snippet:** throw error if missing configuration in Algolia ([6988cb2](https://github.com/algolia/vue-instantsearch/commit/6988cb2))
 
-
-
 <a name="0.7.0"></a>
-# [0.7.0](https://github.com/algolia/vue-instantsearch/compare/v0.6.0...v0.7.0) (2017-08-15)
 
+# [0.7.0](https://github.com/algolia/vue-instantsearch/compare/v0.6.0...v0.7.0) (2017-08-15)
 
 ### Bug Fixes
 
 * **helper-serializer:** allow to serialize a helper that has no results ([cf2add9](https://github.com/algolia/vue-instantsearch/commit/cf2add9))
 
-
 ### Code Refactoring
 
 * **store:** remove searchParameters getter and setter ([c146b16](https://github.com/algolia/vue-instantsearch/commit/c146b16))
-
 
 ### Features
 
 * **store:** improve query parameters merge strategy ([0472627](https://github.com/algolia/vue-instantsearch/commit/0472627))
 
-
 ### Reverts
 
 * **store:** have highlighting tags return the current value ([3d65391](https://github.com/algolia/vue-instantsearch/commit/3d65391))
 
-
 ### BREAKING CHANGES
 
 * **store:** if you previously used the `store.searchParameters` getters and setters of the store,
-you should now use `store.queryParameters` instead.
-
-
+  you should now use `store.queryParameters` instead.
 
 <a name="0.6.0"></a>
-# [0.6.0](https://github.com/algolia/vue-instantsearch/compare/v0.5.0...v0.6.0) (2017-08-08)
 
+# [0.6.0](https://github.com/algolia/vue-instantsearch/compare/v0.5.0...v0.6.0) (2017-08-08)
 
 ### Bug Fixes
 
@@ -213,7 +184,6 @@ you should now use `store.queryParameters` instead.
 * **sort-by-selector:** make SSR ready ([e50c38a](https://github.com/algolia/vue-instantsearch/commit/e50c38a))
 * **store:** avoid mutating query parameters ([cb8cfb7](https://github.com/algolia/vue-instantsearch/commit/cb8cfb7))
 * make all components SSR ready ([4db0720](https://github.com/algolia/vue-instantsearch/commit/4db0720))
-
 
 ### Features
 
@@ -223,34 +193,28 @@ you should now use `store.queryParameters` instead.
 * **store:** do not automatically refresh when using start() ([cda198c](https://github.com/algolia/vue-instantsearch/commit/cda198c))
 * **store:** do not register facet if already existing ([6370bd1](https://github.com/algolia/vue-instantsearch/commit/6370bd1))
 
-
 ### Performance Improvements
 
 * use unique keys in all v-for loops ([fdbf56a](https://github.com/algolia/vue-instantsearch/commit/fdbf56a))
 
-
 ### BREAKING CHANGES
 
 * **store:** using `store.start()` will no longer trigger an Algolia call.
-if you were using `store.stop()`/`store.start()` you should now
-also call `store.refresh()` if you want your store to stay in sync with Algolia.
-
-
+  if you were using `store.stop()`/`store.start()` you should now
+  also call `store.refresh()` if you want your store to stay in sync with Algolia.
 
 <a name="0.5.0"></a>
-# [0.5.0](https://github.com/algolia/vue-instantsearch/compare/v0.4.0...v0.5.0) (2017-08-05)
 
+# [0.5.0](https://github.com/algolia/vue-instantsearch/compare/v0.4.0...v0.5.0) (2017-08-05)
 
 ### Features
 
 * **pagination:** emit "page-change" event after page has changed ([a259cc5](https://github.com/algolia/vue-instantsearch/commit/a259cc5))
 * **refinement-list:** add BEM classes for labels and checkboxes ([5c4f463](https://github.com/algolia/vue-instantsearch/commit/5c4f463))
 
-
-
 <a name="0.4.0"></a>
-# [0.4.0](https://github.com/algolia/vue-instantsearch/compare/v0.3.2...v0.4.0) (2017-08-02)
 
+# [0.4.0](https://github.com/algolia/vue-instantsearch/compare/v0.3.2...v0.4.0) (2017-08-02)
 
 ### Bug Fixes
 
@@ -259,44 +223,37 @@ also call `store.refresh()` if you want your store to stay in sync with Algolia.
 * **powered-by:** ensure search store is not required ([bc0a19f](https://github.com/algolia/vue-instantsearch/commit/bc0a19f))
 * **spelling:** run most code through a spell checker (#226) ([640fec3](https://github.com/algolia/vue-instantsearch/commit/640fec3))
 
-
 ### Code Refactoring
 
 * **store:** do not expose highlighting tags ([d3ee912](https://github.com/algolia/vue-instantsearch/commit/d3ee912))
 * **store:** remove pagination utility methods ([3bdf759](https://github.com/algolia/vue-instantsearch/commit/3bdf759)), closes [#228](https://github.com/algolia/vue-instantsearch/issues/228)
 
-
 ### Features
 
 * add keys to all for loops ([a36a493](https://github.com/algolia/vue-instantsearch/commit/a36a493))
-
 
 ### BREAKING CHANGES
 
 * **store:** pagination utility methods have been removed. This includes `goToFirstPage`, `goToPreviousPage`, `goToNextPage` and `goToLastPage`.
 * **store:** HIGHLIGHT_PRE_TAG and HIGHLIGHT_POST_TAG are no longer exported.
 
-
-
 <a name="0.3.2"></a>
-## [0.3.2](https://github.com/algolia/vue-instantsearch/compare/v0.3.1...v0.3.2) (2017-07-30)
 
+## [0.3.2](https://github.com/algolia/vue-instantsearch/compare/v0.3.1...v0.3.2) (2017-07-30)
 
 ### Bug Fixes
 
 * **rating:** correct star counts ([a499be4](https://github.com/algolia/vue-instantsearch/commit/a499be4))
 
-
-
 <a name="0.3.1"></a>
+
 ## [0.3.1](https://github.com/algolia/vue-instantsearch/compare/v0.3.0...v0.3.1) (2017-07-26)
 
 Update the readme on npm website.
 
-
 <a name="0.3.0"></a>
-# [0.3.0](https://github.com/algolia/vue-instantsearch/compare/v0.2.1...v0.3.0) (2017-07-21)
 
+# [0.3.0](https://github.com/algolia/vue-instantsearch/compare/v0.2.1...v0.3.0) (2017-07-21)
 
 ### Bug Fixes
 
@@ -306,7 +263,6 @@ Update the readme on npm website.
 * **store:** make sure serialization contains hl tags ([4e8a7de](https://github.com/algolia/vue-instantsearch/commit/4e8a7de))
 * **store:** reject wait sync if error occurs ([9568ddf](https://github.com/algolia/vue-instantsearch/commit/9568ddf))
 
-
 ### Features
 
 * **sanitize-results:** add a module to sanitize results ([e78cacd](https://github.com/algolia/vue-instantsearch/commit/e78cacd))
@@ -314,27 +270,23 @@ Update the readme on npm website.
 * **store:** allow to use custom highlight tags ([c77f336](https://github.com/algolia/vue-instantsearch/commit/c77f336))
 * **store:** escape results when fetched ([61341a9](https://github.com/algolia/vue-instantsearch/commit/61341a9))
 
-
 ### Performance Improvements
 
 * **store:** cache sanitized results ([62858b2](https://github.com/algolia/vue-instantsearch/commit/62858b2))
 
-
 ### BREAKING CHANGES
 
 * Highlight and Snippet components no longer accept `tag-name` nor `escape-html`
-as props. Highlighted values are now escaped as responses are received.
-The highlighting tags can now be configured on the store itself.
-
+  as props. Highlighted values are now escaped as responses are received.
+  The highlighting tags can now be configured on the store itself.
 
 <a name="0.2.1"></a>
+
 ## [0.2.1](https://github.com/algolia/vue-instantsearch/compare/v0.2.0...v0.2.1) (2017-05-29)
 
-
-
 <a name="0.2.0"></a>
-# 0.2.0 (2017-05-29)
 
+# 0.2.0 (2017-05-29)
 
 ### Bug Fixes
 
@@ -375,7 +327,6 @@ The highlighting tags can now be configured on the store itself.
 * **store:** remove SearchParameters explicit import ([4c665fe](https://github.com/algolia/vue-instantsearch/commit/4c665fe))
 * **travis:** switch to npm client ([5065718](https://github.com/algolia/vue-instantsearch/commit/5065718))
 * **tree-menu:** correct mis-usage of bem syntax ([d511d03](https://github.com/algolia/vue-instantsearch/commit/d511d03))
-
 
 ### Features
 
@@ -426,7 +377,6 @@ The highlighting tags can now be configured on the store itself.
 * **tree-menu:** add class to list element ([578c9ab](https://github.com/algolia/vue-instantsearch/commit/578c9ab))
 * **tree-menu:** allow infinite number of nested levels ([b7217e9](https://github.com/algolia/vue-instantsearch/commit/b7217e9))
 * **url-sync-example:** add URL sync example with Vue Router ([ec70e91](https://github.com/algolia/vue-instantsearch/commit/ec70e91))
-
 
 ### Performance Improvements
 

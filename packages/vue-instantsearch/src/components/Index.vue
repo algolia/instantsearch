@@ -7,6 +7,7 @@
 <script>
 import { createFromAlgoliaCredentials } from '../store';
 import algoliaComponent from '../component';
+import instantsearch from 'instantsearch.js/es/';
 
 export default {
   mixins: [algoliaComponent],
@@ -15,6 +16,12 @@ export default {
       type: Object,
       default() {
         return this._searchStore;
+      },
+    },
+    instance: {
+      type: Object,
+      default() {
+        return this._instance;
       },
     },
     apiKey: {
@@ -73,14 +80,14 @@ export default {
     };
   },
   provide() {
-    if (!this.searchStore) {
+    if (this.searchStore) {
+      this._localSearchStore = this.searchStore;
+    } else {
       this._localSearchStore = createFromAlgoliaCredentials(
         this.appId,
         this.apiKey,
         { stalledSearchDelay: this.stalledSearchDelay }
       );
-    } else {
-      this._localSearchStore = this.searchStore;
     }
 
     if (this.indexName) {
@@ -101,8 +108,17 @@ export default {
       this._localSearchStore.disableCache();
     }
 
+    // todo: make it configurable
+    const instance = instantsearch({
+      appId: 'latency',
+      apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
+      indexName: 'ikea',
+    });
+    instance.start();
+
     return {
       _searchStore: this._localSearchStore,
+      _instance: instance,
     };
   },
   mounted() {

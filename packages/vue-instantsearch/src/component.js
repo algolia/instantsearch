@@ -1,5 +1,5 @@
 export default {
-  inject: ['_searchStore'],
+  inject: ['_searchStore', '_instance'],
   props: {
     searchStore: {
       type: Object,
@@ -15,6 +15,20 @@ export default {
         return this._searchStore;
       },
     },
+    instance: {
+      type: Object,
+      default() {
+        if (typeof this._instance !== 'object') {
+          const tag = this.$options._componentTag;
+          throw new TypeError(
+            `It looks like you forgot to wrap your Algolia search component 
+            "<${tag}>" inside of an "<ais-index>" component. You can also pass a 
+            search store as a prop to your component. lol`
+          );
+        }
+        return this._instance;
+      },
+    },
     classNames: {
       type: Object,
       default() {
@@ -24,10 +38,14 @@ export default {
   },
   beforeCreate() {
     let source = this; // eslint-disable-line consistent-this
-    const provideKey = '_searchStore';
+    const store = '_searchStore';
+    const instance = '_instance';
 
     while (source) {
-      if (source._provided && provideKey in source._provided) {
+      if (source._provided && store in source._provided) {
+        break;
+      }
+      if (source._provided && instance in source._provided) {
         break;
       }
       source = source.$parent;
@@ -38,7 +56,8 @@ export default {
         this._provided = {};
       }
 
-      this._provided[provideKey] = undefined;
+      this._provided[store] = undefined;
+      this._provided[instance] = undefined;
     }
   },
   methods: {

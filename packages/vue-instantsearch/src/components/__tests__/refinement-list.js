@@ -38,7 +38,8 @@ test('should add a facet to the store when created', () => {
   const Component = Vue.extend(RefinementList);
   const addFacetMock = jest.fn();
   const store = Object.assign({}, searchStore, { addFacet: addFacetMock });
-  new Component({ // eslint-disable-line
+  new Component({
+    // eslint-disable-line
     propsData: {
       attributeName: 'color',
       searchStore: store,

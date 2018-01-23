@@ -1,10 +1,10 @@
 <template>
-  <div :class="bem()" v-if="show">
+  <div :class="bem()">
 
     <slot name="header"></slot>
 
     <slot v-for="(result, index) in results" :result="result" :index="index">
-      Result 'objectID': {{ result.objectID }}
+      {{index}}: Result 'objectID': {{ result.objectID }}
     </slot>
 
     <slot name="footer"></slot>
@@ -14,72 +14,40 @@
 
 <script>
 import algoliaComponent from '../component';
+import { connectHits } from 'instantsearch.js/es/connectors';
 
 export default {
   mixins: [algoliaComponent],
   props: {
-    stack: {
+    escapeHits: {
       type: Boolean,
-      default: false,
-    },
-    resultsPerPage: {
-      type: Number,
+      default: true,
     },
   },
   data() {
     return {
       blockClassName: 'ais-results',
+      widget: undefined,
+      state: {},
     };
   },
   created() {
-    this.updateResultsPerPage();
-  },
-  watch: {
-    resultsPerPage() {
-      this.updateResultsPerPage();
-    },
+    this.widget = connectHits(this.updateData);
+
+    this._instance.addWidget(
+      this.widget({
+        escapeHits: this.escapeHits,
+      })
+    );
   },
   methods: {
-    updateResultsPerPage() {
-      if (typeof this.resultsPerPage === 'number' && this.resultsPerPage > 0) {
-        this.searchStore.resultsPerPage = this.resultsPerPage;
-      }
+    updateData(state = {}, isFirstRendering) {
+      this.state = state;
     },
   },
   computed: {
     results() {
-      if (this.stack === false) {
-        return this.searchStore.results;
-      }
-
-      if (typeof this.stackedResults === 'undefined') {
-        this.stackedResults = [];
-      }
-
-      if (this.searchStore.page === 1) {
-        this.stackedResults = [];
-      }
-
-      if (
-        this.stackedResults.length === 0 ||
-        this.searchStore.results.length === 0
-      ) {
-        this.stackedResults.push(...this.searchStore.results);
-      } else {
-        const lastStacked = this.stackedResults[this.stackedResults.length - 1];
-        const lastResult = this.searchStore.results[
-          this.searchStore.results.length - 1
-        ];
-
-        if (lastStacked.objectID !== lastResult.objectID) {
-          this.stackedResults.push(...this.searchStore.results);
-        }
-      }
-
-      return this.stackedResults;
-    },
-    show() {
-      return this.results.length > 0;
+      return this.state.hits;
     },
   },
 };

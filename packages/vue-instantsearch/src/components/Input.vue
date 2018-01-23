@@ -11,30 +11,34 @@
 
 <script>
 import algoliaComponent from '../component';
+import { connectSearchBox } from 'instantsearch.js/es/connectors';
 
 export default {
   mixins: [algoliaComponent],
   data() {
     return {
       blockClassName: 'ais-input',
+      widget: undefined,
+      state: {},
     };
+  },
+  created() {
+    this.widget = connectSearchBox(this.updateData);
+
+    this._instance.addWidget(this.widget());
+  },
+  methods: {
+    updateData(state = {}, isFirstRendering) {
+      this.state = state;
+    },
   },
   computed: {
     query: {
       get() {
-        return this.searchStore.query;
+        return this.state.query;
       },
       set(value) {
-        this.searchStore.stop();
-        this.searchStore.query = value;
-        this.$emit('query', value);
-
-        // We here ensure we give the time to listeners to alter the store's state
-        // without triggering in between ghost queries.
-        this.$nextTick(function() {
-          this.searchStore.start();
-          this.searchStore.refresh();
-        });
+        this.state.refine(value);
       },
     },
   },

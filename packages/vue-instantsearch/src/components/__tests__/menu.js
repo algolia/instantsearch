@@ -82,7 +82,8 @@ describe('Menu', () => {
     const Component = Vue.extend(Menu);
     const addFacetMock = jest.fn();
 
-    new Component({ // eslint-disable-line
+    new Component({
+      // eslint-disable-line
       propsData: {
         attribute: 'category',
         searchStore: Object.assign({}, searchStore, {
@@ -124,7 +125,8 @@ describe('Menu', () => {
     const Component = Vue.extend(Menu);
     const store = Object.assign({}, searchStore);
 
-    new Component({ // eslint-disable-line
+    new Component({
+      // eslint-disable-line
       propsData: {
         limit: 10,
         attribute: 'category',

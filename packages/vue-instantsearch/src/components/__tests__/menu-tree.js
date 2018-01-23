@@ -57,7 +57,8 @@ test('should add a tree facet to the store when mounted', () => {
   const Component = Vue.extend(TreeMenu);
   const addFacetMock = jest.fn();
   const store = Object.assign({}, searchStore, { addFacet: addFacetMock });
-  new Component({ // eslint-disable-line
+  new Component({
+    // eslint-disable-line
     propsData: {
       attributes: ['category.lvl1', 'category.lvl2'],
       searchStore: store,
