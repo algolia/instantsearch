@@ -22,7 +22,7 @@
     "babel-preset-react-native": "4.0.0",
     "jest": "21.2.1",
     "jest-expo": "24.0.0",
-    "react-native-scripts": "1.9.0"
+    "react-native-scripts": "1.10.0"
   },
   "dependencies": {
     "expo": "25.0.0",
