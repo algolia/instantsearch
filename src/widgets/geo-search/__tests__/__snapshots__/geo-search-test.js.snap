@@ -5,7 +5,6 @@ exports[`GeoSearchRenderer exepct to render with custom classNames 1`] = `"<div 
 exports[`GeoSearchRenderer exepct to render with custom classNames 2`] = `
 Array [
   <GeoSearchControls
-    clearMapRefinement={[Function]}
     cssClasses={
       Object {
         "clear": "ais-geo-search--clear custom-clear",
@@ -24,7 +23,9 @@ Array [
     hasMapMoveSinceLastRefine={false}
     isRefineOnMapMove={true}
     isRefinedWithMap={false}
-    refineWithMap={[Function]}
+    onClearClick={[Function]}
+    onRefineClick={[Function]}
+    onRefineToggle={[Function]}
     templateProps={
       Object {
         "templates": Object {
@@ -41,7 +42,6 @@ Array [
         },
       }
     }
-    toggleRefineOnMapMove={[Function]}
   />,
   null,
 ]
@@ -52,7 +52,6 @@ exports[`GeoSearchRenderer expect to render 1`] = `"<div class=\\"ais-geo-search
 exports[`GeoSearchRenderer expect to render 2`] = `
 Array [
   <GeoSearchControls
-    clearMapRefinement={[Function]}
     cssClasses={
       Object {
         "clear": "ais-geo-search--clear",
@@ -71,7 +70,9 @@ Array [
     hasMapMoveSinceLastRefine={false}
     isRefineOnMapMove={true}
     isRefinedWithMap={false}
-    refineWithMap={[Function]}
+    onClearClick={[Function]}
+    onRefineClick={[Function]}
+    onRefineToggle={[Function]}
     templateProps={
       Object {
         "templates": Object {
@@ -88,7 +89,6 @@ Array [
         },
       }
     }
-    toggleRefineOnMapMove={[Function]}
   />,
   <div
     class="ais-geo-search--controls"

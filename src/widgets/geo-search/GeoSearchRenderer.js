@@ -219,15 +219,15 @@ const renderer = (
       isRefineOnMapMove={isRefineOnMapMove()}
       isRefinedWithMap={isRefinedWithMap()}
       hasMapMoveSinceLastRefine={hasMapMoveSinceLastRefine()}
-      toggleRefineOnMapMove={toggleRefineOnMapMove}
-      refineWithMap={() =>
+      onRefineToggle={toggleRefineOnMapMove}
+      onRefineClick={() =>
         refineWithMap({
           mapInstance: renderState.mapInstance,
           refine,
           paddingBoundingBox,
           googleReference,
         })}
-      clearMapRefinement={clearMapRefinement}
+      onClearClick={clearMapRefinement}
       templateProps={renderState.templateProps}
     />,
     containerNode.querySelector(`.${cssClasses.controls}`)
