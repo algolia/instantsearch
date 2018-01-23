@@ -27,6 +27,9 @@ export default {
 
     this._instance.addWidget(this.widget());
   },
+  beforeDestroy() {
+    this._instance.removeWidget(this.widget);
+  },
   methods: {
     updateData(state = {}, isFirstRendering) {
       this.state = state;

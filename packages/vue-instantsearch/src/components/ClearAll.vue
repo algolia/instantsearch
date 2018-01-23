@@ -45,6 +45,9 @@ export default {
       })
     );
   },
+  beforeDestroy() {
+    this._instance.removeWidget(this.widget);
+  },
   computed: {
     disabled() {
       return !this.state.hasRefinements;
