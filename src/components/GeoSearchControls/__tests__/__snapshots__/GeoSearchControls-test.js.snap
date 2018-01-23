@@ -1,0 +1,132 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GeoSearchControls Clear button expect to not render the button when the options is disabled 1`] = `<div />`;
+
+exports[`GeoSearchControls Clear button expect to not render the button when the refinement is not coming from the map 1`] = `<div />`;
+
+exports[`GeoSearchControls Clear button expect to render the button when the refinement come from the map 1`] = `
+<div>
+  <GeoSearchButton
+    className="clear"
+    disabled={false}
+    onClick={[Function]}
+  >
+    <Component
+      templateKey="clear"
+    />
+  </GeoSearchButton>
+</div>
+`;
+
+exports[`GeoSearchControls Control disabled expect to render nothing when refine on map move is enabled 1`] = `<div />`;
+
+exports[`GeoSearchControls Control disabled expect to render the button disabled when refine on map move is disabled and the map has not moved 1`] = `
+<div>
+  <div
+    className="control"
+  >
+    <GeoSearchButton
+      className="redo"
+      disabled={true}
+      onClick={[Function]}
+    >
+      <Component
+        templateKey="redo"
+      />
+    </GeoSearchButton>
+  </div>
+</div>
+`;
+
+exports[`GeoSearchControls Control disabled expect to render the button enabled when refine on map move is disabled and the map as moved 1`] = `
+<div>
+  <div
+    className="control"
+  >
+    <GeoSearchButton
+      className="redo"
+      disabled={false}
+      onClick={[Function]}
+    >
+      <Component
+        templateKey="redo"
+      />
+    </GeoSearchButton>
+  </div>
+</div>
+`;
+
+exports[`GeoSearchControls Control enabled expect to render the button when refine on map move is disabled and the map has moved 1`] = `
+<div>
+  <div
+    className="control"
+  >
+    <GeoSearchButton
+      className="redo"
+      disabled={false}
+      onClick={[Function]}
+    >
+      <Component
+        templateKey="redo"
+      />
+    </GeoSearchButton>
+  </div>
+</div>
+`;
+
+exports[`GeoSearchControls Control enabled expect to render the toggle checked when refine on map move is enabled 1`] = `
+<div>
+  <div
+    className="control"
+  >
+    <GeoSearchToggle
+      checked={true}
+      classNameInput="toggleInput"
+      classNameLabel="toggleLabel toggleLabelActive"
+      onToggle={[Function]}
+    >
+      <Component
+        templateKey="toggle"
+      />
+    </GeoSearchToggle>
+  </div>
+</div>
+`;
+
+exports[`GeoSearchControls Control enabled expect to render the toggle checked when refine on map move is enabled even when the map has moved 1`] = `
+<div>
+  <div
+    className="control"
+  >
+    <GeoSearchToggle
+      checked={true}
+      classNameInput="toggleInput"
+      classNameLabel="toggleLabel toggleLabelActive"
+      onToggle={[Function]}
+    >
+      <Component
+        templateKey="toggle"
+      />
+    </GeoSearchToggle>
+  </div>
+</div>
+`;
+
+exports[`GeoSearchControls Control enabled expect to render the toggle unchecked when refine on map move is disabled and the map has not moved 1`] = `
+<div>
+  <div
+    className="control"
+  >
+    <GeoSearchToggle
+      checked={false}
+      classNameInput="toggleInput"
+      classNameLabel="toggleLabel"
+      onToggle={[Function]}
+    >
+      <Component
+        templateKey="toggle"
+      />
+    </GeoSearchToggle>
+  </div>
+</div>
+`;
