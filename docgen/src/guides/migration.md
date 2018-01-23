@@ -31,7 +31,7 @@ search.addWidget(instantsearch.widgets.searchbox({
 }));
 ```
 
-You can read more about these options [here](/widgets/searchBox.html).
+You can read more about these options [here](instantsearch.js/v2/widgets/searchBox.html).
 
 ## No more `hitsPerPage` in `hits` and `infiniteHits`
 
