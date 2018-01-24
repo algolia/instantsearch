@@ -13,8 +13,8 @@
     "react": "16.2.0",
     "react-autosuggest": "9.3.2",
     "react-dom": "16.2.0",
-    "react-instantsearch": "4.4.1",
-    "react-instantsearch-theme-algolia": "4.4.1"
+    "react-instantsearch": "4.4.2",
+    "react-instantsearch-theme-algolia": "4.4.2"
   },
   "scripts": {
     "start": "react-scripts start",

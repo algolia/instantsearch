@@ -30,7 +30,7 @@
     "prop-types": "15.6.0",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-instantsearch": "4.4.1",
-    "react-instantsearch-theme-algolia": "4.4.1"
+    "react-instantsearch": "4.4.2",
+    "react-instantsearch-theme-algolia": "4.4.2"
   }
 }
