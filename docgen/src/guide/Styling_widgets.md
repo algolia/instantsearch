@@ -32,13 +32,13 @@ manually.
 ### Via CDN
 
 The theme is available on [jsDelivr](https://www.jsdelivr.com/):
-- minified: https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.1
-- unminified: https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.1/style.css
+- minified: https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2
+- unminified: https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2/style.css
 
 You can either copy paste the content in your own app or use a direct link to jsDelivr:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2">
 ```
 
 ### Via npm, Webpack

@@ -105,7 +105,7 @@ We provide an Algolia theme that should be a good start.
 Include it in your webpage with this CDN link or copy paste the raw content:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2">
 ```
 
 Read the [styling](guide/Styling_widgets.html) guide for more information.
