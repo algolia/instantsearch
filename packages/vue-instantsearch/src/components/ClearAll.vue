@@ -31,12 +31,11 @@ export default {
   data() {
     return {
       blockClassName: 'ais-clear',
-      widget: undefined,
       state: {},
     };
   },
   created() {
-    this.widget = connectClearAll(this.updateData);
+    this.widget = connectClearAll(this.updateData, () => {});
 
     this._instance.addWidget(
       this.widget({
@@ -46,7 +45,7 @@ export default {
     );
   },
   beforeDestroy() {
-    this._instance.removeWidget(this.widget);
+    if (this.widget) this._instance.removeWidget(this.widget);
   },
   computed: {
     disabled() {

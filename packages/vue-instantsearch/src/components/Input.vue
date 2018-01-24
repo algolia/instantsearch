@@ -18,17 +18,16 @@ export default {
   data() {
     return {
       blockClassName: 'ais-input',
-      widget: undefined,
       state: {},
     };
   },
   created() {
-    this.widget = connectSearchBox(this.updateData);
+    this.widget = connectSearchBox(this.updateData, () => {});
 
     this._instance.addWidget(this.widget());
   },
   beforeDestroy() {
-    this._instance.removeWidget(this.widget);
+    if (this.widget) this._instance.removeWidget(this.widget);
   },
   methods: {
     updateData(state = {}, isFirstRendering) {

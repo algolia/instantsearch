@@ -27,12 +27,11 @@ export default {
   data() {
     return {
       blockClassName: 'ais-results',
-      widget: undefined,
       state: {},
     };
   },
   created() {
-    this.widget = connectHits(this.updateData);
+    this.widget = connectHits(this.updateData, () => {});
 
     this._instance.addWidget(
       this.widget({
@@ -41,7 +40,7 @@ export default {
     );
   },
   beforeDestroy() {
-    this._instance.removeWidget(this.widget);
+    if (this.widget) this._instance.removeWidget(this.widget);
   },
   methods: {
     updateData(state = {}, isFirstRendering) {
