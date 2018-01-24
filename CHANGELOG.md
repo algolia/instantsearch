@@ -1,3 +1,14 @@
+<a name="4.4.2"></a>
+## [4.4.2](https://github.com/algolia/react-instantsearch/compare/v4.4.1...v4.4.2) (2018-01-24)
+
+
+### Bug Fixes
+
+* **currentRefinements:** give access to id and index from transformItems for deduplication ([#830](https://github.com/algolia/react-instantsearch/issues/830)) ([316b8f5](https://github.com/algolia/react-instantsearch/commit/316b8f5))
+* pass maxFacetHits to SFFV ([#863](https://github.com/algolia/react-instantsearch/issues/863)) ([de23a46](https://github.com/algolia/react-instantsearch/commit/de23a46))
+
+
+
 <a name="4.4.1"></a>
 ## [4.4.1](https://github.com/algolia/react-instantsearch/compare/v4.4.0...v4.4.1) (2018-01-09)
 
