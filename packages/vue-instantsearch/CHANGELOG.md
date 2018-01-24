@@ -1,3 +1,18 @@
+<a name="1.3.4"></a>
+## [1.3.4](https://github.com/algolia/vue-instantsearch/compare/v1.3.3...v1.3.4) (2018-01-24)
+
+
+### Bug Fixes
+
+* **doc:** `queryParameters` is not a function ([#377](https://github.com/algolia/vue-instantsearch/issues/377)) ([cd87cad](https://github.com/algolia/vue-instantsearch/commit/cd87cad))
+
+
+### Features
+
+* **Results:** add `index` (position) ([#382](https://github.com/algolia/vue-instantsearch/issues/382)) ([16c2c64](https://github.com/algolia/vue-instantsearch/commit/16c2c64))
+
+
+
 <a name="1.3.3"></a>
 ## [1.3.3](https://github.com/algolia/vue-instantsearch/compare/v1.3.2...v1.3.3) (2017-12-04)
 
