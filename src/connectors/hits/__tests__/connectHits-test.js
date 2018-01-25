@@ -139,6 +139,8 @@ describe('connectHits', () => {
       },
     ];
 
+    escapedHits.__escaped = true;
+
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.hits).toEqual(escapedHits);
     expect(secondRenderingOptions.results).toEqual(results);
