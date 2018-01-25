@@ -38,9 +38,7 @@ function recursiveEscape(input) {
 
 export default function escapeHits(hits) {
   if (hits.__escaped === undefined) {
-    hits.__escaped = true;
-
-    return hits.map(hit => {
+    hits = hits.map(hit => {
       if (hit._highlightResult) {
         hit._highlightResult = recursiveEscape(hit._highlightResult);
       }
@@ -51,6 +49,7 @@ export default function escapeHits(hits) {
 
       return hit;
     });
+    hits.__escaped = true;
   }
 
   return hits;

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`autoHideContainer should render autoHideContainer(<TestComponent />) 1`] = `
+<div
+  style={
+    Object {
+      "display": "none",
+    }
+  }
+>
+  <TestComponent
+    hello="son"
+    shouldAutoHideContainer={true}
+  />
+</div>
+`;
