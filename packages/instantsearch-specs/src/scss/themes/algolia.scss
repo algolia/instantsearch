@@ -2,7 +2,7 @@
 
 // Colors
 
-$algolia-blue: rgb(0, 174, 255);
+$algolia-blue: darken(rgb(0, 174, 255), 7%);
 $ghost: rgb(196, 200, 216);
 $east-bay: rgb(73, 85, 136);
 $koromiko: rgb(255, 193, 104);
@@ -111,50 +111,45 @@ a[class^='ais-'] {
 }
 
 .ais-CurrentRefinements {
+  margin-top: -0.3rem;
   display: flex;
   flex-wrap: wrap;
 }
 
 .ais-CurrentRefinements-list {
   display: flex;
-
-  + .ais-CurrentRefinements-reset {
-    margin-left: 0.3rem;
-  }
+  flex-wrap: wrap;
 }
 
-.ais-CurrentRefinements-item + .ais-CurrentRefinements-item {
-  margin-left: 0.3rem;
-}
-
-.ais-CurrentRefinements-button {
+.ais-CurrentRefinements-item {
+  margin-right: 0.3rem;
+  margin-top: 0.3rem;
   padding: 0.3rem 0.5rem;
   display: flex;
   background-color: $east-bay;
-  transition: 0.2s ease-out;
-  outline: none;
   border-radius: 5px;
-
-  &:hover,
-  &:focus {
-    background-color: darken($east-bay, 10%);
-  }
 }
 
-.ais-CurrentRefinements-count,
+.ais-CurrentRefinements-category {
+  margin-left: 0.3em;
+  display: flex;
+}
+
 .ais-CurrentRefinements-delete {
   margin-left: 0.3rem;
 }
 
 .ais-CurrentRefinements-label,
-.ais-CurrentRefinements-delete,
-.ais-CurrentRefinements-count {
+.ais-CurrentRefinements-categoryLabel,
+.ais-CurrentRefinements-delete {
+  white-space: nowrap;
   font-size: 0.8rem;
   color: #fff;
 }
 
 .ais-CurrentRefinements-reset {
-  display: flex;
+  margin-top: 0.3rem;
+  white-space: nowrap;
 
   + .ais-CurrentRefinements-list {
     margin-left: 0.3rem;
@@ -197,11 +192,7 @@ a[class^='ais-'] {
 }
 
 .ais-CurrentRefinements-count,
-.ais-HierarchicalMenu-count,
-.ais-Menu-count,
-.ais-RatingMenu-count,
-.ais-RefinementList-count,
-.ais-ToggleRefinement-count {
+.ais-RatingMenu-count {
   font-size: 0.8rem;
 
   &:before {
@@ -214,8 +205,14 @@ a[class^='ais-'] {
 }
 
 .ais-HierarchicalMenu-count,
-.ais-Menu-count {
+.ais-Menu-count,
+.ais-RefinementList-count,
+.ais-ToggleRefinement-count {
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
   color: $port-gore;
+  background-color: lighten($port-gore, 57%);
+  border-radius: 8px;
 }
 
 .ais-HierarchicalMenu-showMore,
@@ -323,6 +320,10 @@ a[class^='ais-'] {
   &:focus {
     background-color: darken($algolia-blue, 10%);
   }
+}
+
+.ais-RatingMenu-count {
+  color: $port-gore;
 }
 
 .ais-Pagination-list {

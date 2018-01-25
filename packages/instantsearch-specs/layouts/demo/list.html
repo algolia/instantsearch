@@ -20,10 +20,10 @@
           {{ end }}
         </div>
         <div class="demo-widget">
-          {{ range where .Site.Pages "Title" "=" "Toggle" }}
+          {{ range where .Site.Pages "Title" "=" "ToggleRefinement" }}
             <div class="ais-Panel">
               <div class="ais-Panel-header">
-                Toggle
+                Toggle refinement
               </div>
               <div class="ais-Panel-body">
                 {{ .Params.html | safeHTML }}

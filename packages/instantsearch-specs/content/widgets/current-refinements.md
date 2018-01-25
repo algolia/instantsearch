@@ -5,18 +5,17 @@ html: |
   <div class="ais-CurrentRefinements">
     <ul class="ais-CurrentRefinements-list">
       <li class="ais-CurrentRefinements-item">
-        <button class="ais-CurrentRefinements-button">
-          <span class="ais-CurrentRefinements-label">Movies & TV Shows</span>
-          <span class="ais-CurrentRefinements-count">1,574</span>
-          <span class="ais-CurrentRefinements-delete">✕</span>
-        </button>
-      </li>
-      <li class="ais-CurrentRefinements-item">
-        <button class="ais-CurrentRefinements-button">
-          <span class="ais-CurrentRefinements-label">Others</span>
-          <span class="ais-CurrentRefinements-count">2,450</span>
-          <span class="ais-CurrentRefinements-delete">✕</span>
-        </button>
+        <span class="ais-CurrentRefinements-label">
+          Category:
+        </span>
+        <span class="ais-CurrentRefinements-category">
+          <span class="ais-CurrentRefinements-categoryLabel">Movies & TV Shows</span>
+          <button class="ais-CurrentRefinements-delete">✕</button>
+        </span>
+        <span class="ais-CurrentRefinements-category">
+          <span class="ais-CurrentRefinements-categoryLabel">Others</span>
+          <button class="ais-CurrentRefinements-delete">✕</button>
+        </span>
       </li>
     </ul>
     <button class="ais-CurrentRefinements-reset">
@@ -30,14 +29,14 @@ classes:
     description: the list of all refined items
   - name: .ais-CurrentRefinements-item
     description: the refined list item
-  - name: .ais-CurrentRefinements-button
-    description: the button of each refined list item
   - name: .ais-CurrentRefinements-label
     description: the refined list label
-  - name: .ais-CurrentRefinements-count
-    description: the count of refined values for each item
+  - name: .ais-CurrentRefinements-category
+    description: the category of each item
+  - name: .ais-CurrentRefinements-categoryLabel
+    description: the label of each catgory
   - name: .ais-CurrentRefinements-delete
-    description: the delete button of each label
+    description: the delete button of each catgory
   - name: .ais-CurrentRefinements-reset
     description: the reset button for current selected values
 ---
