@@ -138,6 +138,9 @@
       "<rootDir>/node_modules/",
       "<rootDir>/dist*",
       "<rootDir>/functional-tests"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
     ]
   },
   "bundlesize": [
