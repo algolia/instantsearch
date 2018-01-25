@@ -1,12 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import expect from 'expect';
-import { createRenderer } from 'react-test-renderer/shallow';
+import { shallow } from 'enzyme';
 import autoHideContainer from '../autoHideContainer';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-import sinon from 'sinon';
 
 class TestComponent extends React.Component {
   render() {
@@ -22,16 +18,10 @@ describe('autoHideContainer', () => {
   let props = {};
 
   it('should render autoHideContainer(<TestComponent />)', () => {
-    const renderer = createRenderer();
     props.hello = 'son';
     const AutoHide = autoHideContainer(TestComponent);
-    renderer.render(<AutoHide shouldAutoHideContainer {...props} />);
-    const out = renderer.getRenderOutput();
-    expect(out).toEqualJSX(
-      <div style={{ display: 'none' }}>
-        <TestComponent hello="son" shouldAutoHideContainer />
-      </div>
-    );
+    const out = shallow(<AutoHide shouldAutoHideContainer {...props} />);
+    expect(out).toMatchSnapshot();
   });
 
   describe('props.shouldAutoHideContainer', () => {
@@ -48,16 +38,16 @@ describe('autoHideContainer', () => {
     });
 
     it('creates a component', () => {
-      expect(component).toExist();
+      expect(component).toBeDefined();
     });
 
     it('shows the container at first', () => {
-      expect(container.style.display).toNotEqual('none');
+      expect(container.style.display).not.toEqual('none');
     });
 
     describe('when set to true', () => {
       beforeEach(() => {
-        sinon.spy(component, 'render');
+        jest.spyOn(component, 'render');
         props.shouldAutoHideContainer = true;
         ReactDOM.render(<AutoHide {...props} />, container);
         innerContainer = container.firstElementChild;
@@ -68,7 +58,7 @@ describe('autoHideContainer', () => {
       });
 
       it('call component.render()', () => {
-        expect(component.render.called).toBe(true);
+        expect(component.render).toHaveBeenCalled();
       });
 
       describe('when set back to false', () => {
@@ -78,11 +68,11 @@ describe('autoHideContainer', () => {
         });
 
         it('shows the container', () => {
-          expect(innerContainer.style.display).toNotEqual('none');
+          expect(innerContainer.style.display).not.toEqual('none');
         });
 
         it('calls component.render()', () => {
-          expect(component.render.calledTwice).toBe(true);
+          expect(component.render).toHaveBeenCalledTimes(2);
         });
       });
     });
