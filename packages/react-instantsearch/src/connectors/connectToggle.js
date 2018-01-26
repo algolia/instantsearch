@@ -109,14 +109,16 @@ export default createConnector({
     const checked = getCurrentRefinement(props, searchState, this.context);
     const items = [];
     const index = getIndex(this.context);
+
     if (checked) {
       items.push({
         label: props.label,
-        currentRefinement: props.label,
+        currentRefinement: checked,
         attributeName: props.attributeName,
         value: nextState => refine(props, nextState, false, this.context),
       });
     }
+
     return { id, index, items };
   },
 });
