@@ -518,7 +518,7 @@ describe('InstantSearch lifecycle', () => {
       expect(search.searchParameters.disjunctiveFacets).toEqual([]);
     });
 
-    it('should unmount a widget without calling URLSync wiget getConfiguration', () => {
+    it('should unmount a widget without calling URLSync widget getConfiguration', () => {
       // fake url-sync widget
       const spy = jest.fn();
 
