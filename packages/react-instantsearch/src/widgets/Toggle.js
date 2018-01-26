@@ -2,7 +2,7 @@ import connectToggle from '../connectors/connectToggle.js';
 import ToggleComponent from '../components/Toggle.js';
 
 /**
- * The Toggle provides an on/off filtering feature based on an attribute value. Note that if you provide an “off” option, it will be refined at initialization.
+ * The Toggle provides an on/off filtering feature based on an attribute value.
  * @name Toggle
  * @kind widget
  * @requirements To use this widget, you'll need an attribute to toggle on.
