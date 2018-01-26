@@ -42,7 +42,7 @@ function cleanUp(props, searchState, context) {
 
 /**
  * connectToggle connector provides the logic to build a widget that will
- *  provides an on/off filtering feature based on an attribute value. Note that if you provide an “off” option, it will be refined at initialization.
+ * provides an on/off filtering feature based on an attribute value.
  * @name connectToggle
  * @kind connector
  * @requirements To use this widget, you'll need an attribute to toggle on.
@@ -56,7 +56,7 @@ function cleanUp(props, searchState, context) {
  * @propType {boolean} [defaultRefinement=false] - Default searchState of the widget. Should the toggle be checked by default?
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
- * @providedPropType {boolean} currentRefinement - the refinement currently applied
+ * @providedPropType {boolean} currentRefinement - `true` when the refinement is applied, `false` otherwise
  */
 export default createConnector({
   displayName: 'AlgoliaToggle',
