@@ -93,7 +93,7 @@ describe('connectToggle', () => {
             // Ignore clear, we test it later
             value: metadata.items[0].value,
             attributeName: 't',
-            currentRefinement: 'yep',
+            currentRefinement: true,
           },
         ],
         id: 't',
@@ -233,7 +233,7 @@ describe('connectToggle', () => {
             // Ignore clear, we test it later
             value: metadata.items[0].value,
             attributeName: 't',
-            currentRefinement: 'yep',
+            currentRefinement: true,
           },
         ],
         id: 't',
