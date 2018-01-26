@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
 import isEqual from 'lodash/isEqual';
 
-class PaginationLink extends React.Component {
+class PaginationLink extends Component {
   componentWillMount() {
     this.handleClick = this.handleClick.bind(this);
   }

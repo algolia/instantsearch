@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { shallow } from 'enzyme';
 import autoHideContainer from '../autoHideContainer';
 
-class TestComponent extends React.Component {
+class TestComponent extends Component {
   render() {
     return <div>{this.props.hello}</div>;
   }
