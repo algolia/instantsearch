@@ -18,7 +18,7 @@
     "react-dom": "16.2.0",
     "react-instantsearch": "4.4.2",
     "react-instantsearch-theme-algolia": "4.4.2",
-    "style-loader": "0.19.1"
+    "style-loader": "0.20.1"
   },
   "jest": {
     "setupFiles": [
