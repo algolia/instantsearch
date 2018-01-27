@@ -2275,8 +2275,6 @@ for-in@^1.0.1:
 for-own@^0.1.4:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/for-own/-/for-own-0.1.5.tgz#5265c681a4f294dabbf17c9509b6763aa84510ce"
-  dependencies:
-    for-in "^1.0.1"
 
 foreach@^2.0.5:
   version "2.0.5"
@@ -4731,9 +4729,9 @@ react-native-safe-module@^1.1.0:
   dependencies:
     dedent "^0.6.0"
 
-react-native-scripts@1.11.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/react-native-scripts/-/react-native-scripts-1.11.0.tgz#05c2210d057935132ba5ff711b349267c405f329"
+react-native-scripts@1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/react-native-scripts/-/react-native-scripts-1.11.1.tgz#a9f0a5c91a85d34acee9ec9012cf614665670b80"
   dependencies:
     "@expo/bunyan" "1.8.10"
     babel-runtime "^6.9.2"
