@@ -125,7 +125,7 @@
     "storybook-addon-a11y": "3.1.9",
     "storybook-addon-jsx": "5.3.0",
     "string": "3.3.3",
-    "style-loader": "0.19.1",
+    "style-loader": "0.20.1",
     "webpack": "3.10.0",
     "webpack-bundle-analyzer": "2.9.2",
     "webpack-dev-middleware": "2.0.4",
