@@ -17,7 +17,7 @@ has options to manipulate CSS classes or even modifying part of the HTML
 output (templates).
 
 To go a step further in terms of customization, InstantSearch.js offers connectors
-that contains the logic of the widgets without their rendering.
+that contain the logic of the widgets without their rendering.
 
 ## Introducing the connectors
 
@@ -43,11 +43,11 @@ Let's go step by step on how to write this custom widget.
 ## A custom menu with jQuery
 
 In this example we will create a new custom widget using [connectMenu](connectors/connectMenu.html) connector.
-We will cover step by step on how to write a render function used by the connector.
+We will cover step by step how to write a render function used by the connector.
 
 For simplicity, we will write custom widgets with [jQuery](https://jquery.com/) to manipulate the DOM.
 
-In the first three steps we focus on implementing the rendering function and then will it connect it to InstantSearch.
+In the first three steps we focus on implementing the rendering function and then will connect it to InstantSearch.
 
 ## 1. Set up the DOM
 
@@ -84,7 +84,7 @@ const customMenuRenderFn = function(renderParams, isFirstRendering) {
     );
   }
 
-  // `renderParams` is an object containing all the informations
+  // `renderParams` is an object containing all the information
   // you need to create a custom widget.
   const items = renderParams.items;
 
@@ -109,7 +109,7 @@ Now we have all the menu options displayed on the page but nothing is updating w
 ## 3. Make it interacts with the search results
 
 Menu connector comes with a `refine()` function in the first argument `renderParams` object.
-You need to call this `refine()` function every time an user select another option to *refine* the search results:
+You need to call this `refine()` function every time a user select another option to *refine* the search results:
 
 ```javascript
 const customMenuRenderFn = function(renderParams, isFirstRendering) {
@@ -143,7 +143,7 @@ const customMenuRenderFn = function(renderParams, isFirstRendering) {
 }
 ```
 
-Now every time an user selects a new option in the dropdown menu, it triggers new search to refine the search results!
+Now every time a user selects a new option in the dropdown menu, it triggers a new search to refine the search results!
 
 
 ## 4. Mount the custom menu dropdown widget on your page
@@ -203,7 +203,7 @@ the rendering of each single widget instance when instantiating them.
 That's why all the options passed to the newly created widget factory will be forwarded to the
 rendering.
 
-Let's update our custom render function to be able to configure the DOM element where the widget is mount and also the title:
+Let's update our custom render function to be able to configure the DOM element where the widget is mounted and also the title:
 
 ```javascript
 const customMenuRenderFn = function(renderParams, isFirstRendering) {
@@ -255,7 +255,7 @@ search.addWidget(
 );
 ```
 
-With this steps we introduced a way to provide custom parameters:
+With these steps we introduced a way to provide custom parameters:
   * a DOM container
   * a title
 
