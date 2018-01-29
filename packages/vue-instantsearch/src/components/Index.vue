@@ -62,6 +62,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    stalledSearchDelay: {
+      type: Number,
+      default: 200,
+    },
   },
   data() {
     return {
@@ -72,7 +76,8 @@ export default {
     if (!this.searchStore) {
       this._localSearchStore = createFromAlgoliaCredentials(
         this.appId,
-        this.apiKey
+        this.apiKey,
+        { stalledSearchDelay: this.stalledSearchDelay }
       );
     } else {
       this._localSearchStore = this.searchStore;

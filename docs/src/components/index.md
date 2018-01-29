@@ -53,6 +53,7 @@ Provide search query parameters:
 | query-parameters | Object  | ``      | The search query parameters. Available options are [documented here](https://www.algolia.com/doc/api-reference/search-api-parameters/). |
 | cache            | Boolean | `true`  | Whether to cache results or not. See [the documentation](https://www.algolia.com/doc/tutorials/getting-started/quick-start-with-the-api-client/javascript/#cache)       |
 | auto-search      | Boolean | `true`  | Whether to initiate a query to Algolia when this component is mounted                                                                               |
+| stalledSearchDelay | number | `200`  | Time before the search is considered unresponsive. Used to display a loading indicator. |
 
 ## Slots
 

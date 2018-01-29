@@ -31,4 +31,36 @@ describe('SearchBox component', () => {
 
     expect(vm.$el.outerHTML).toMatchSnapshot();
   });
+
+  test('if search is stalled, hide the submit and display the loader', () => {
+    const searchStore = {
+      query: '',
+      activeRefinements: [], // needed for Clear component
+      isSearchStalled: true,
+    };
+    const Component = Vue.extend(SearchBox);
+    const vm = new Component({
+      propsData: { searchStore, autofocus: true, showLoadingIndicator: true },
+    });
+
+    vm.$mount();
+
+    expect(vm.$el.outerHTML).toMatchSnapshot();
+  });
+
+  test('if search is not stalled, show the submit and hide the loader', () => {
+    const searchStore = {
+      query: '',
+      activeRefinements: [], // needed for Clear component
+      isSearchStalled: false,
+    };
+    const Component = Vue.extend(SearchBox);
+    const vm = new Component({
+      propsData: { searchStore, autofocus: true, showLoadingIndicator: true },
+    });
+
+    vm.$mount();
+
+    expect(vm.$el.outerHTML).toMatchSnapshot();
+  });
 });
