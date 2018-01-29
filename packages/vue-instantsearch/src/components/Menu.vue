@@ -4,15 +4,15 @@
 
     <div
       v-for="facet in facetValues"
-      :key="facet.name"
+      :key="facet.label"
       :class="facet.isRefined ? bem('item', 'active') : bem('item')"
     >
       <a
         href="#"
         :class="bem('link')"
-        @click.prevent="handleClick(facet.path)"
+        @click.prevent="state.refine(facet.value)"
       >
-        {{facet.name}}
+        {{facet.label}}
         <span :class="bem('count')">{{facet.count}}</span>
       </a>
     </div>
@@ -23,13 +23,12 @@
 
 <script>
 import algoliaComponent from '../component';
-import { FACET_TREE } from '../store';
+import { connectMenu } from 'instantsearch.js/es/connectors';
 
 export default {
   mixins: [algoliaComponent],
-
   props: {
-    attribute: {
+    attributeName: {
       type: String,
       required: true,
     },
@@ -37,61 +36,38 @@ export default {
       type: Number,
       default: 10,
     },
+    showMoreLimit: {
+      type: Number,
+    },
     sortBy: {
       default() {
         return ['isRefined:desc', 'count:desc', 'name:asc'];
       },
     },
   },
-
   computed: {
     facetValues() {
-      const { data } = this.searchStore.getFacetValues(
-        this.attribute,
-        this.sortBy
-      );
-
-      if (Array.isArray(data)) {
-        return data;
-      }
-
-      return [];
+      return this.state.items;
     },
     show() {
       return this.facetValues.length > 0;
     },
-  },
-
-  methods: {
-    handleClick(path) {
-      this.searchStore.toggleFacetRefinement(this.attribute, path);
+    widgetParams() {
+      return {
+        attributeName: this.attributeName,
+        limit: this.limit,
+        showMoreLimit: this.showMoreLimit,
+        sortBy: this.sortBy,
+      };
     },
   },
-
   data() {
     return {
       blockClassName: 'ais-menu',
     };
   },
-
-  created() {
-    this.searchStore.stop();
-    this.searchStore.maxValuesPerFacet = this.limit;
-    this.searchStore.addFacet(
-      {
-        name: this.attribute,
-        attributes: [this.attribute],
-      },
-      FACET_TREE
-    );
-    this.searchStore.start();
-    this.searchStore.refresh();
-  },
-
-  destroyed() {
-    this.searchStore.stop();
-    this.searchStore.removeFacet(this.attribute);
-    this.searchStore.start();
+  beforeCreate() {
+    this.connector = connectMenu;
   },
 };
 </script>
