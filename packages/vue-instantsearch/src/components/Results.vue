@@ -27,29 +27,19 @@ export default {
   data() {
     return {
       blockClassName: 'ais-results',
-      state: {},
     };
   },
-  created() {
-    this.widget = connectHits(this.updateData, () => {});
-
-    this._instance.addWidget(
-      this.widget({
-        escapeHits: this.escapeHits,
-      })
-    );
-  },
-  beforeDestroy() {
-    if (this.widget) this._instance.removeWidget(this.widget);
-  },
-  methods: {
-    updateData(state = {}, isFirstRendering) {
-      this.state = state;
-    },
+  beforeCreate() {
+    this.connector = connectHits;
   },
   computed: {
     results() {
       return this.state.hits;
+    },
+    widgetParams() {
+      return {
+        escapeHits: this.escapeHits,
+      };
     },
   },
 };

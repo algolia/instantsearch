@@ -36,6 +36,11 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      state: {},
+    };
+  },
   beforeCreate() {
     let source = this; // eslint-disable-line consistent-this
     const store = '_searchStore';
@@ -59,6 +64,28 @@ export default {
       this._provided[store] = undefined;
       this._provided[instance] = undefined;
     }
+  },
+  created() {
+    if (this.connector) {
+      this.widgetFactory = this.connector(this.updateData, () => {});
+      this.widget = this.widgetFactory(this.widgetParams);
+
+      this._instance.addWidget(this.widget);
+    }
+  },
+  beforeDestroy() {
+    if (this.widget) this._instance.removeWidget(this.widget);
+  },
+  watch: {
+    widgetParams(newVal) {
+      if (this.widget) {
+        const oldWidget = this.widget;
+        this.widget = this.widgetFactory(newVal);
+
+        this._instance.addWidget(this.widget);
+        this._instance.removeWidget(oldWidget);
+      }
+    },
   },
   methods: {
     bem(element, modifier, outputElement) {
@@ -90,6 +117,9 @@ export default {
       return `${this.customClassName(elementClassName)} ${this.customClassName(
         elementModifierClassName
       )}`;
+    },
+    updateData(state = {}, isFirstRendering) {
+      this.state = state;
     },
     customClassName(className) {
       return !this.classNames[className]

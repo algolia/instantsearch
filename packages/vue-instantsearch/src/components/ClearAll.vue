@@ -31,31 +31,23 @@ export default {
   data() {
     return {
       blockClassName: 'ais-clear',
-      state: {},
     };
   },
-  created() {
-    this.widget = connectClearAll(this.updateData, () => {});
-
-    this._instance.addWidget(
-      this.widget({
-        clearsQuery: this.clearsQuery,
-        excludeAttributes: this.excludeAttributes,
-      })
-    );
-  },
-  beforeDestroy() {
-    if (this.widget) this._instance.removeWidget(this.widget);
+  beforeCreate() {
+    this.connector = connectClearAll;
   },
   computed: {
     disabled() {
       return !this.state.hasRefinements;
     },
+    widgetParams() {
+      return {
+        clearsQuery: this.clearsQuery,
+        excludeAttributes: this.excludeAttributes,
+      };
+    },
   },
   methods: {
-    updateData(state = {}, isFirstRendering) {
-      this.state = state;
-    },
     clear() {
       this.state.refine();
     },

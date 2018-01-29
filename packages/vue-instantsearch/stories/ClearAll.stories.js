@@ -18,4 +18,18 @@ storiesOf('ClearAll', module)
         Clear search query
       </template>
     </ais-clear-all>`,
+  }))
+  .add('toggler', () => ({
+    template: `<div>
+      <ais-clear-all :clearsQuery="clearsQuery"></ais-clear-all>
+      <button @click="toggleClearsQuery">clearsQuery: {{clearsQuery}}, change</button>
+    </div>`,
+    data() {
+      return { clearsQuery: false };
+    },
+    methods: {
+      toggleClearsQuery() {
+        this.clearsQuery = !this.clearsQuery;
+      },
+    },
   }));

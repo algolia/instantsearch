@@ -18,21 +18,10 @@ export default {
   data() {
     return {
       blockClassName: 'ais-input',
-      state: {},
     };
   },
-  created() {
-    this.widget = connectSearchBox(this.updateData, () => {});
-
-    this._instance.addWidget(this.widget());
-  },
-  beforeDestroy() {
-    if (this.widget) this._instance.removeWidget(this.widget);
-  },
-  methods: {
-    updateData(state = {}, isFirstRendering) {
-      this.state = state;
-    },
+  beforeCreate() {
+    this.connector = connectSearchBox;
   },
   computed: {
     query: {
@@ -42,6 +31,9 @@ export default {
       set(value) {
         this.state.refine(value);
       },
+    },
+    widgetParams() {
+      return {};
     },
   },
 };
