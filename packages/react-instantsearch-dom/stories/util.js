@@ -9,7 +9,7 @@ import {
   Configure,
 } from '../packages/react-instantsearch/dom';
 import { connectHits } from '../packages/react-instantsearch/connectors';
-import { linkTo } from '@storybook/react';
+import { linkTo } from '@storybook/addon-links';
 import '../packages/react-instantsearch-theme-algolia/style.scss';
 
 const Wrap = props => (

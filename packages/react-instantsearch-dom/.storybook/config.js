@@ -7,10 +7,10 @@ setOptions({
   name: 'react-instantsearch',
   url: 'https://community.algolia.com/react-instantsearch/',
   goFullScreen: false,
-  showLeftPanel: true,
-  showDownPanel: true,
+  showStoriesPanel: true,
+  showAddonPanel: true,
   showSearchBox: false,
-  downPanelInRight: true,
+  addonPanelInRight: true,
   sidebarAnimations: false,
 });
 
