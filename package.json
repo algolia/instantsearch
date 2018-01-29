@@ -26,7 +26,7 @@
   "devDependencies": {
     "@storybook/addon-actions": "3.3.11",
     "@storybook/addon-knobs": "3.3.11",
-    "@storybook/addon-links": "^3.3.11",
+    "@storybook/addon-links": "3.3.11",
     "@storybook/addon-options": "3.3.11",
     "@storybook/addons": "3.3.11",
     "@storybook/react": "3.3.11",
