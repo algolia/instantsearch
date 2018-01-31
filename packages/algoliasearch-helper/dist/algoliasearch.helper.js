@@ -13110,6 +13110,13 @@ function SearchResults(state, results) {
   this.userData = mainSubResponse.userData;
 
   /**
+   * queryID is the unique identifier of the query used to generate the current search results.
+   * This value is only available if the `clickAnalytics` search parameter is set to `true`.
+   * @member {string}
+   */
+  this.queryID = mainSubResponse.queryID;
+
+  /**
    * disjunctive facets results
    * @member {SearchResults.Facet[]}
    */
@@ -15092,7 +15099,8 @@ var requestBuilder = {
       attributesToHighlight: [],
       attributesToSnippet: [],
       tagFilters: tagFilters,
-      analytics: false
+      analytics: false,
+      clickAnalytics: false
     };
 
     var hierarchicalFacet = state.getHierarchicalFacetByName(facet);
@@ -15480,7 +15488,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":291,"./SearchParameters/shortener":292,"lodash/bind":215,"lodash/forEach":224,"lodash/invert":232,"lodash/isArray":234,"lodash/isEmpty":238,"lodash/isPlainObject":246,"lodash/isString":247,"lodash/map":254,"lodash/mapKeys":255,"lodash/mapValues":256,"lodash/pick":264,"qs":282,"qs/lib/utils":285}],300:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.23.2';
+module.exports = '2.24.0';
 
 },{}]},{},[1])(1)
 });
