@@ -8,6 +8,9 @@
   "bin": {
     "create-instantsearch-app": "bin/create-instantsearch-app.js"
   },
+  "scripts": {
+    "format": "prettier --write *.{js,md,json}"
+  },
   "dependencies": {
     "colors": "^1.1.2",
     "commander": "^2.11.0",
@@ -15,6 +18,9 @@
     "metalsmith": "^2.3.0",
     "metalsmith-in-place": "^2.0.1",
     "prompt": "^1.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.10.2"
   },
   "repository": {
     "type": "git",
