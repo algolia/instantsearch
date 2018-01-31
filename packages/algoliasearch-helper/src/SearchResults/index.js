@@ -326,6 +326,13 @@ function SearchResults(state, results) {
   this.userData = mainSubResponse.userData;
 
   /**
+   * queryID is the unique identifier of the query used to generate the current search results.
+   * This value is only available if the `clickAnalytics` search parameter is set to `true`.
+   * @member {string}
+   */
+  this.queryID = mainSubResponse.queryID;
+
+  /**
    * disjunctive facets results
    * @member {SearchResults.Facet[]}
    */

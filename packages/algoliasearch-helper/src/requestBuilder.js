@@ -97,7 +97,8 @@ var requestBuilder = {
       attributesToHighlight: [],
       attributesToSnippet: [],
       tagFilters: tagFilters,
-      analytics: false
+      analytics: false,
+      clickAnalytics: false
     };
 
     var hierarchicalFacet = state.getHierarchicalFacetByName(facet);
