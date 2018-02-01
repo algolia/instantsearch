@@ -62,13 +62,18 @@ h3 {
 
 .wrapper {
   display: flex;
-  height: calc(100% - 60px);
+  height: calc(100% - 292px);
 }
 
 .left {
   border-right: 1px solid #eee;
   padding: 20px;
   min-width: 400px;
+}
+
+.left-footer {
+  border-top: 1px solid #eee;
+  margin: 16px 0;
 }
 
 .right {
@@ -115,16 +120,4 @@ h3 {
 
 .hit > h3 small {
   color: #777;
-}
-
-.button {
-  cursor: pointer;
-  min-width: 100px;
-  padding: 12px 16px;
-  background: linear-gradient(to bottom, rgb(241, 197, 76), rgb(221, 181, 69));
-  border: none;
-  color: #fff;
-  border-radius: 3px;
-  font: inherit;
-  box-shadow: 0 2px 3px 0 rgba(150, 150, 150, 0.16);
 }
