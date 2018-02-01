@@ -1,30 +1,30 @@
 <template>
-  <ul :class="bem()" v-show="totalResults > 0">
+  <ul :class="bem()" v-show="state.nbHits > 0">
     <li :class="[bem('item', 'first'), page === 1 ? bem('item', 'disabled', false) : '']">
       <a href="#" @click.prevent="goToFirstPage" :class="bem('link')">
-        <slot name="first">&lt;&lt;</slot>
+        <slot name="first">‹‹</slot>
       </a>
     </li>
     <li :class="[bem('item', 'previous'), page === 1 ? bem('item', 'disabled', false) : '']">
       <a href="#" @click.prevent="goToPreviousPage" :class="bem('link')">
-        <slot name="previous">&lt;</slot>
+        <slot name="previous">‹</slot>
       </a>
     </li>
     <li v-for="item in pages" :key="item" :class="[bem('item'), page === item ? bem('item', 'active', false) : '']" >
       <a href="#" @click.prevent="goToPage(item)" :class="bem('link')">
-        <slot :value="item" :active="item === page">
-          {{ item }}
+        <slot :value="item + 1" :active="item === page">
+          {{ item + 1 }}
         </slot>
       </a>
     </li>
     <li :class="[bem('item', 'next'), page >= totalPages ? bem('item', 'disabled', false) : '']">
       <a href="#" @click.prevent="goToNextPage" :class="bem('link')">
-        <slot name="next">&gt;</slot>
+        <slot name="next">›</slot>
       </a>
     </li>
     <li :class="[bem('item', 'last'), page >= totalPages ? bem('item', 'disabled', false) : '']">
       <a href="#" @click.prevent="goToLastPage" :class="bem('link')">
-        <slot name="last">&gt;&gt;</slot>
+        <slot name="last">››</slot>
       </a>
     </li>
   </ul>
@@ -32,6 +32,8 @@
 
 <script>
 import algoliaComponent from '../component';
+import range from 'lodash/range';
+import { connectPagination } from 'instantsearch.js/es/connectors';
 
 export default {
   mixins: [algoliaComponent],
@@ -49,58 +51,47 @@ export default {
       blockClassName: 'ais-pagination',
     };
   },
+  beforeCreate() {
+    this.connector = connectPagination;
+  },
   computed: {
     page() {
-      return this.searchStore.page;
+      return this.state.currentRefinement;
     },
     totalPages() {
-      return this.searchStore.totalPages;
+      return this.state.nbPages;
     },
     pages() {
-      let maxPages = this.padding * 2;
-      if (this.totalPages - 1 < maxPages) {
-        maxPages = this.totalPages - 1;
+      const { nbPages, currentRefinement } = this.state;
+
+      const minDelta = currentRefinement - this.padding - 1;
+      const maxDelta = currentRefinement + this.padding + 1;
+
+      if (minDelta < 0) {
+        return range(0, currentRefinement + this.padding + Math.abs(minDelta));
       }
 
-      const pages = [this.page];
-      let even = false;
-      let lastPage = this.page;
-      let firstPage = this.page;
-      while (pages.length <= maxPages) {
-        even = !even;
-        if (even) {
-          if (firstPage <= 1) {
-            continue; // eslint-disable-line no-continue
-          }
-          firstPage--;
-          pages.unshift(firstPage);
-        } else {
-          if (lastPage >= this.totalPages) {
-            continue; // eslint-disable-line no-continue
-          }
-          lastPage++;
-          pages.push(lastPage);
-        }
+      if (maxDelta > nbPages) {
+        return range(
+          currentRefinement - this.padding - (maxDelta - nbPages),
+          nbPages
+        );
       }
 
-      return pages;
-    },
-    totalResults() {
-      return this.searchStore.totalResults;
+      return range(
+        currentRefinement - this.padding,
+        currentRefinement + this.padding + 1
+      );
     },
   },
   methods: {
     goToPage(page) {
-      let p = Math.max(1, page);
-      p = Math.min(this.totalPages, p);
-      if (this.searchStore.page === p) {
-        return;
-      }
-      this.searchStore.page = p;
+      const p = Math.min(Math.max(page, 0), this.totalPages - 1);
+      this.state.refine(p);
       this.$emit('page-change', p);
     },
     goToFirstPage() {
-      this.goToPage(1);
+      this.goToPage(0);
     },
     goToPreviousPage() {
       this.goToPage(this.page - 1);
@@ -109,7 +100,7 @@ export default {
       this.goToPage(this.page + 1);
     },
     goToLastPage() {
-      this.goToPage(this.totalPages);
+      this.goToPage(this.totalPages - 1);
     },
   },
 };

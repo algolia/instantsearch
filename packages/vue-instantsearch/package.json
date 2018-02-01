@@ -47,7 +47,8 @@
     "algoliasearch": "^3.24.9",
     "algoliasearch-helper": "^2.23.2",
     "escape-html": "^1.0.3",
-    "instantsearch.js": "^2.4.1"
+    "instantsearch.js": "^2.4.1",
+    "lodash": "^4.17.4"
   },
   "peerDependencies": {
     "vue": "^2.2.2"

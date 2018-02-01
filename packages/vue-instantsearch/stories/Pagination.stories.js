@@ -8,7 +8,7 @@ storiesOf('Pagination', module)
   }))
   .add('complete custom rendering', () => ({
     template: `
-      <ais-pagination padding="5" style="font-family: Fira Code, sans-serif">
+      <ais-pagination :padding="5" style="font-family: Fira Code, sans-serif">
         <span slot="first"><<-</span>
         <span slot="previous"><-</span>
         <span slot="next">-></span>
