@@ -50,9 +50,9 @@ const makeRangeWidget = instantsearch.connectors.connectRange(
       },
       // Some good parameters based on our dataset:
       start_date: new Date(),
-      end_date: new Date(`2020 00:00`),
-      earliest_date: new Date('2008 00:00'),
-      latest_date: new Date(`2020 00:00`),
+      end_date: new Date('01/01/2020'),
+      earliest_date: new Date('01/01/2008'),
+      latest_date: new Date('01/01/2020'),
     });
   }
 );
