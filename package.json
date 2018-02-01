@@ -11,7 +11,11 @@
   "scripts": {
     "format": "prettier --write *.{js,md,json}"
   },
+  "engines": {
+    "node": ">= 7.6"
+  },
   "dependencies": {
+    "algoliasearch": "^3.24.9",
     "colors": "^1.1.2",
     "commander": "^2.11.0",
     "jstransformer-handlebars": "^1.0.0",
