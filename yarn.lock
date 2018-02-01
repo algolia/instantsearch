@@ -11584,11 +11584,9 @@ rollup-pluginutils@^2.0.1:
     estree-walker "^0.3.0"
     micromatch "^2.3.11"
 
-rollup@0.55.2:
-  version "0.55.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.55.2.tgz#69a6de69688eec5a9fcea817aa17cedfe3f648ae"
-  dependencies:
-    opencollective "^1.0.3"
+rollup@0.55.3:
+  version "0.55.3"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.55.3.tgz#0af082a766d51c3058430c8372442ff5207d8736"
 
 rst-selector-parser@^2.2.3:
   version "2.2.3"
