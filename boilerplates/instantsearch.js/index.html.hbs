@@ -1,7 +1,9 @@
+<!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.2/dist/instantsearch.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.2/dist/instantsearch-theme-algolia.min.css">
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@{{libVersion}}/dist/instantsearch.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@{{libVersion}}/dist/instantsearch-theme-algolia.min.css">
     <link rel="stylesheet" type="text/css" href="main.css">
     <title>{{name}}</title>
   </head>
@@ -12,7 +14,6 @@
 
     <div class="wrapper">
       <div class="left">
-
         <div id="current-refined-values">
           <!-- CurrentRefinedValues widget will appear here -->
         </div>
@@ -42,7 +43,7 @@
     </div>
 
     <!-- js -->
-    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.2/dist/instantsearch.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@{{libVersion}}/dist/instantsearch.min.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
