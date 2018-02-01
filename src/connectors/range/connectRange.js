@@ -36,7 +36,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} RangeRenderingOptions
  * @property {function(Array<number, number>)} refine Sets a range to filter the results on. Both values
- * are optional, and will default to the higher and lower bounds.
+ * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a
+ * previously set bound or to set an infinite bound.
  * @property {{min: number, max: number}} range Results bounds without the current range filter.
  * @property {Array<number, number>} start Current numeric bounds of the search.
  * @property {{from: function, to: function}} formatter Transform for the rendering `from` and/or `to` values.
