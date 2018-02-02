@@ -97,7 +97,7 @@
     "netlify-cli": "1.2.2",
     "node-sass": "4.7.2",
     "postcss": "6.0.17",
-    "postcss-loader": "2.0.10",
+    "postcss-loader": "2.1.0",
     "postcss-scss": "1.0.3",
     "prettier": "1.10.2",
     "pretty-bytes-cli": "2.0.0",
