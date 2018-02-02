@@ -18,7 +18,7 @@ By the end of this guide, you'll understand how to implement a calendar widget t
 
 Algolia handles dates as numeric values. We'll store them as JavaScript timestamps, which are the number of milliseconds since the year 1970 ([see `Date.prototype.getTime()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime)).
 
-Through this guide, we'll use a generated concert dataset that contains the following attributes:
+Through this guide, we'll use a [generated concert dataset](https://raw.githubusercontent.com/algolia/datasets/master/concerts/alternative_rock_artists.json) that contains the following attributes:
 
 * `name`: the name of the music band
 * `location`: the venue of the concert
