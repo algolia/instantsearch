@@ -12,6 +12,7 @@ import { getResults } from '../core/indexUtils';
  * @providedPropType {object} allSearchResults - In case of multiple indices you can retrieve all the results
  * @providedPropType {string} error - If the search failed, the error will be logged here.
  * @providedPropType {boolean} searching - If there is a search in progress.
+ * @providedPropType {boolean} isSearchStalled - Flag that indicates if React InstantSearch has detected that searches are stalled.
  * @providedPropType {boolean} searchingForFacetValues - If there is a search in a list in progress.
  * @providedPropType {object} props - component props.
  * @example
@@ -46,11 +47,13 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const results = getResults(searchResults, this.context);
+
     return {
       searchState,
       searchResults: results,
       allSearchResults: searchResults.results,
       searching: searchResults.searching,
+      isSearchStalled: searchResults.isSearchStalled,
       error: searchResults.error,
       searchingForFacetValues: searchResults.searchingForFacetValues,
       props,
