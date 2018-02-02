@@ -15,7 +15,7 @@ function defaultParseURL(qsModule) {
   return qsModule.parse(window.location.search.slice(1));
 }
 
-class ModernURL {
+class BrowserHistory {
   /**
    * Initializes a new storage provider that will sync the search state in the URL
    * using web API (window.location.pushState and onpopstate event).
@@ -128,5 +128,5 @@ class ModernURL {
 }
 
 export default function(...args) {
-  return new ModernURL(...args);
+  return new BrowserHistory(...args);
 }
