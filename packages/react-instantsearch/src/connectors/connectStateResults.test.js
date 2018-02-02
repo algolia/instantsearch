@@ -1,38 +1,52 @@
-/* eslint-env jest, jasmine */
-
 import connect from './connectStateResults';
-jest.mock('../core/createConnector');
 
-let props;
+jest.mock('../core/createConnector');
 
 describe('connectStateResults', () => {
   describe('single index', () => {
-    const context = { context: { ais: { mainTargetedIndex: 'index' } } };
+    const context = {
+      context: {
+        ais: { mainTargetedIndex: 'index' },
+      },
+    };
+
     const getProvidedProps = connect.getProvidedProps.bind(context);
+
     it('provides the correct props to the component', () => {
       const searchState = { state: 'state' };
       const error = 'error';
       const searching = true;
+      const isSearchStalled = true;
       const searchingForFacetValues = true;
       const searchResults = {
         results: { nbHits: 25, hits: [] },
         error,
         searching,
+        isSearchStalled,
         searchingForFacetValues,
       };
 
-      props = getProvidedProps({ props: 'props' }, searchState, searchResults);
-      expect(props).toEqual({
+      const expectation = {
         searchState,
         searchResults: searchResults.results,
         allSearchResults: searchResults.results,
+        props: { props: 'props' },
         error,
         searching,
+        isSearchStalled,
         searchingForFacetValues,
-        props: { props: 'props' },
-      });
+      };
+
+      const actual = getProvidedProps(
+        { props: 'props' },
+        searchState,
+        searchResults
+      );
+
+      expect(actual).toEqual(expectation);
     });
   });
+
   describe('multi index', () => {
     const context = {
       context: {
@@ -40,11 +54,14 @@ describe('connectStateResults', () => {
         multiIndexContext: { targetedIndex: 'first' },
       },
     };
+
     const getProvidedProps = connect.getProvidedProps.bind(context);
+
     it('provides the correct props to the component', () => {
       const searchState = { state: 'state' };
       const error = 'error';
       const searching = true;
+      const isSearchStalled = true;
       const searchingForFacetValues = true;
       const searchResults = {
         results: {
@@ -53,19 +70,28 @@ describe('connectStateResults', () => {
         },
         error,
         searching,
+        isSearchStalled,
         searchingForFacetValues,
       };
 
-      props = getProvidedProps({ props: 'props' }, searchState, searchResults);
-      expect(props).toEqual({
+      const expectation = {
         searchState,
         searchResults: searchResults.results.first,
         allSearchResults: searchResults.results,
+        props: { props: 'props' },
         error,
         searching,
+        isSearchStalled,
         searchingForFacetValues,
-        props: { props: 'props' },
-      });
+      };
+
+      const actual = getProvidedProps(
+        { props: 'props' },
+        searchState,
+        searchResults
+      );
+
+      expect(actual).toEqual(expectation);
     });
   });
 });
