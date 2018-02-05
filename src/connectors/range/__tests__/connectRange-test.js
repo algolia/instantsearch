@@ -192,7 +192,7 @@ describe('connectRange', () => {
     }
   });
 
-  it('should add numeric refinement when refining min boundary without previous configuation', () => {
+  it('should add numeric refinement when refining min boundary without previous configuration', () => {
     const rendering = sinon.stub();
     const makeWidget = connectRange(rendering);
 
@@ -567,9 +567,9 @@ describe('connectRange', () => {
     const createHelper = () => {
       const helper = jsHelper(fakeClient);
       helper.search = jest.fn();
-      const initalClearRefinements = helper.clearRefinements;
+      const initialClearRefinements = helper.clearRefinements;
       helper.clearRefinements = jest.fn((...args) =>
-        initalClearRefinements.apply(helper, args)
+        initialClearRefinements.apply(helper, args)
       );
 
       return helper;
@@ -605,7 +605,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to refine when values are parsable interger', () => {
+    it('expect to refine when values are parsable integer', () => {
       const range = { min: 0, max: 500 };
       const values = ['10', '490'];
       const helper = createHelper();
@@ -667,7 +667,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to reset min refinenement when value is undefined', () => {
+    it('expect to reset min refinement when value is undefined', () => {
       const range = { min: 0, max: 500 };
       const values = [undefined, 490];
       const helper = createHelper();
@@ -686,7 +686,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to reset max refinenement when value is undefined', () => {
+    it('expect to reset max refinement when value is undefined', () => {
       const range = { min: 0, max: 500 };
       const values = [10, undefined];
       const helper = createHelper();
@@ -705,7 +705,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to reset min refinenement when value is empty string', () => {
+    it('expect to reset min refinement when value is empty string', () => {
       const range = { min: 0, max: 500 };
       const values = ['', 490];
       const helper = createHelper();
@@ -724,7 +724,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to reset max refinenement when value is empty string', () => {
+    it('expect to reset max refinement when value is empty string', () => {
       const range = { min: 0, max: 500 };
       const values = [10, ''];
       const helper = createHelper();
@@ -743,7 +743,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to reset min refinenement when user bounds are not set and value is at bounds', () => {
+    it('expect to reset min refinement when user bounds are not set and value is at bounds', () => {
       const range = { min: 0, max: 500 };
       const values = [0, 490];
       const helper = createHelper();
@@ -761,7 +761,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to reset max refinenement when user bounds are not set and value is at bounds', () => {
+    it('expect to reset max refinement when user bounds are not set and value is at bounds', () => {
       const range = { min: 0, max: 500 };
       const values = [10, 500];
       const helper = createHelper();
@@ -779,7 +779,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to reset min refinenement when user bounds are set and value is nullable', () => {
+    it('expect to reset min refinement when user bounds are set and value is nullable', () => {
       const range = { min: 0, max: 500 };
       const values = [undefined, 490];
       const helper = createHelper();
@@ -798,7 +798,7 @@ describe('connectRange', () => {
       expect(helper.search).toHaveBeenCalled();
     });
 
-    it('expect to reset max refinenement when user bounds are set and value is nullable', () => {
+    it('expect to reset max refinement when user bounds are set and value is nullable', () => {
       const range = { min: 0, max: 500 };
       const values = [10, undefined];
       const helper = createHelper();

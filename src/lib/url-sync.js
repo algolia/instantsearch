@@ -44,7 +44,7 @@ const hashUrlUtils = {
   },
   pushState(qs) {
     // hash change or location assign does trigger an hashchange event
-    // so everytime we change it manually, we inform the code
+    // so every time we change it manually, we inform the code
     // to ignore the next hashchange event
     // see https://github.com/algolia/instantsearch.js/issues/2012
     this.ignoreNextPopState = true;
@@ -206,7 +206,7 @@ class URLSync {
     );
   }
 
-  // External API's
+  // External APIs
 
   createURL(state, { absolute }) {
     const filteredState = state.filter(this.trackedParameters);
@@ -234,7 +234,7 @@ class URLSync {
 }
 
 /**
- * Instanciate a url sync widget. This widget let you synchronize the search
+ * Instantiate a url sync widget. This widget let you synchronize the search
  * parameters with the URL. It can operate with legacy API and hash or it can use
  * the modern history API. By default, it will use the modern API, but if you are
  * looking for compatibility with IE8 and IE9, then you should set 'useHash' to
@@ -244,7 +244,7 @@ class URLSync {
  *  - threshold:number time in ms after which a new state is created in the browser
  * history. The default value is 700.
  *  - trackedParameters:string[] parameters that will be synchronized in the
- * URL. By default, it will track the query, all the refinable attribute (facets and numeric
+ * URL. By default, it will track the query, all the refinable attributes (facets and numeric
  * filters), the index and the page.
  *  - useHash:boolean if set to true, the url will be hash based. Otherwise,
  * it'll use the query parameters using the modern history API.

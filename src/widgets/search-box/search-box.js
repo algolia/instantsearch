@@ -190,7 +190,7 @@ searchBox({
 /**
  * @typedef {Object} SearchBoxResetOption
  * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
+ * @property {{root: string}} [cssClasses] CSS classes added to the reset button.
  */
 
 /**
@@ -508,7 +508,7 @@ function addPoweredBy(input, poweredBy, templates) {
   input.parentNode.insertBefore(htmlNode, input.nextSibling);
 }
 
-// Crossbrowser way to create a DOM node from a string. We wrap in
+// Cross-browser way to create a DOM node from a string. We wrap in
 // a `span` to make sure we have one and only one node.
 function createNodeFromString(stringNode, rootClassname = '') {
   const tmpNode = document.createElement('div');
