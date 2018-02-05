@@ -3,6 +3,7 @@ import layouts from 'metalsmith-layouts';
 import msWebpack from 'ms-webpack';
 import navigation from 'metalsmith-navigation';
 import nav from './plugins/navigation.js';
+import searchConfig from './plugins/searchConfig.js';
 import sass from 'metalsmith-sass';
 import inPlace from 'metalsmith-in-place';
 import copy from 'metalsmith-copy';
@@ -42,6 +43,7 @@ const common = [
     source: '../dist',
     destination: './examples/tourism',
   }),
+  searchConfig(),
   ignore(fileName => {
     // This is a fix for VIM swp files inside src/,
     // We could also configure VIM to store swp files somewhere else
