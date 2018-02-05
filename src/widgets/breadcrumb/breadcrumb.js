@@ -98,7 +98,7 @@ breadcrumb({
 /**
  * The breadcrumb widget is a secondary navigation scheme that allows the user to see where the current page is in relation to the facet's hierarchy.
  * 
- * It reduces the number of actions a user needs to take in order to get to a higher-level page and improve the findability of the app or website's sections and pages.
+ * It reduces the number of actions a user needs to take in order to get to a higher-level page and improve the discoverability of the app or website's sections and pages.
  * It is commonly used for websites with a large amount of data organized into categories with subcategories.
  *
  * All attributes (lvl0, lvl1 in this case) must be declared as [attributes for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your

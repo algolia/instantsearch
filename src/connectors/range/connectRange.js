@@ -36,7 +36,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} RangeRenderingOptions
  * @property {function(Array<number, number>)} refine Sets a range to filter the results on. Both values
- * are optional, and will default to the higher and lower bounds.
+ * are optional, and will default to the higher and lower bounds. You can use `undefined` to remove a
+ * previously set bound or to set an infinite bound.
  * @property {{min: number, max: number}} range Results bounds without the current range filter.
  * @property {Array<number, number>} start Current numeric bounds of the search.
  * @property {{from: function, to: function}} formatter Transform for the rendering `from` and/or `to` values.
@@ -48,7 +49,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * **Range** connector provides the logic to create custom widget that will let
  * the user refine results using a numeric range.
  *
- * Thic connectors provides a `refine()` function that accepts bounds. It will also provide
+ * This connectors provides a `refine()` function that accepts bounds. It will also provide
  * information about the min and max bounds for the current result set.
  * @type {Connector}
  * @param {function(RangeRenderingOptions, boolean)} renderFn Rendering function for the custom **Range** widget.
@@ -155,12 +156,12 @@ export default function connectRange(renderFn, unmountFn) {
           const isResetNewNextMin = newNextMin === undefined;
           const isValidNewNextMin = _isFinite(newNextMin);
           const isValidMinCurrentRange = _isFinite(currentRangeMin);
-          const isGreatherThanCurrentRange =
+          const isGreaterThanCurrentRange =
             isValidMinCurrentRange && currentRangeMin <= newNextMin;
           const isMinValid =
             isResetNewNextMin ||
             (isValidNewNextMin &&
-              (!isValidMinCurrentRange || isGreatherThanCurrentRange));
+              (!isValidMinCurrentRange || isGreaterThanCurrentRange));
 
           const isResetNewNextMax = newNextMax === undefined;
           const isValidNewNextMax = _isFinite(newNextMax);

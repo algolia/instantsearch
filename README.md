@@ -2,8 +2,8 @@
 
 InstantSearch.js is a library for building blazing fast search-as-you-type search UIs with [Algolia][algolia-website].
 
-InstantSearch.js is part of the InstantSearch family: 
-**InstantSearch.js** 
+InstantSearch.js is part of the InstantSearch family:
+**InstantSearch.js**
 | [React InstantSearch (web)][react-instantsearch-github]
 | [Vue InstantSearch (web)][vue-instantsearch-github]
 | [React-native InstantSearch (native)][react-instantsearch-github]
@@ -37,25 +37,40 @@ Using InstantSearch.js is as simple as adding this JS in your page:
 var search = instantsearch({
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-  indexName: 'movies',
+  indexName: 'instant_search',
+  searchParameters: {
+    hitsPerPage: 8
+  }
 });
 
-search.addWidget(instantsearch.widgets.hits({
-  container: document.querySelector('#movies'),
-  templates: {
-    item: '{{{_highlightResult.title.value}}}'
-  },
-}));
+search.addWidget(
+  instantsearch.widgets.hits({
+    container: document.querySelector('#products'),
+    templates: {
+      item: '{{{_highlightResult.name.value}}}'
+    }
+  })
+);
 
-search.addWidget(instantsearch.widgets.searchBox({
-  container: document.querySelector('#searchBox'),
-  placeholder: 'Search for movies',
-}));
+search.addWidget(
+  instantsearch.widgets.searchBox({
+    container: document.querySelector('#searchBox'),
+    placeholder: 'Search for products',
+    autofocus: false /* Only to avoid live preview taking focus */
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: document.querySelector('#brand'),
+    attributeName: 'brand'
+  })
+);
 
 search.start();
 ```
 
-You can [see this live](https://jsfiddle.net/bobylito/9h7sgo10/) on JSFiddle.
+You can [see this live](https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js) on CodeSandbox.
 
 If you want to learn more about the library, you
 can follow the [getting started](https://community.algolia.com/instantsearch.js/v2/getting-started.html)
