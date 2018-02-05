@@ -2,7 +2,6 @@
 title: Create a calendar widget
 mainTitle: Guides
 layout: main.pug
-name: customize
 category: guides
 withHeadings: true
 navWeight: 20
