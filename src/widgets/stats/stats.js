@@ -122,7 +122,7 @@ stats({
  * results inside the engine.
  * @type {WidgetFactory}
  * @category metadata
- * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatories: `container`,
+ * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new stats widget instance
  * @example
  * search.addWidget(

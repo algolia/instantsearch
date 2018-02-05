@@ -7,7 +7,7 @@ const appId = 'appId';
 const apiKey = 'apiKey';
 const indexName = 'lifecycle';
 
-describe('InstantSearch lifecycle', () => {
+describe('InstantSearch life cycle', () => {
   it('calls the provided searchFunction when used', () => {
     const searchFunctionSpy = jest.fn(h => {
       h.setQuery('test').search();

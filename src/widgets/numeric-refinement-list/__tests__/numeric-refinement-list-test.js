@@ -257,7 +257,7 @@ describe('numericRefinementList()', () => {
       options: initialOptions,
     });
 
-    // The lifeccycle impose all the steps
+    // The life cycle impose all the steps
     testWidget.init({ helper, createURL: () => '', instantSearchInstance: {} });
 
     // When
