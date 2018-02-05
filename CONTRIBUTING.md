@@ -43,7 +43,7 @@ topic using the [issues tab](https://github.com/algolia/instantsearch.js/issues)
 hesitate to thumb up an issue that corresponds to the problem you found.
 
 Another element that will help us go faster at solving the issue is to provide a reproducible
-test case. We often recommend to [use this jsFiddle template](https://jsfiddle.net/bobylito/9h7sgo10/).
+test case. We often recommend to [use this CodeSandbox template](https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js).
 
 ## The code contribution process 🤘
 
