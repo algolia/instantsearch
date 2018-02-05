@@ -367,7 +367,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         );
         const currentLimit = this.getLimit();
         // If the limit is the max number of facet retrieved it is impossible to know
-        // if the facets are exhaustives. The only moment we are sure it is exhaustive
+        // if the facets are exhaustive. The only moment we are sure it is exhaustive
         // is when it is strictly under the number requested unless we know that another
         // widget has requested more values (maxValuesPerFacet > getLimit()).
         // Because this is used for making the search of facets unable or not, it is important

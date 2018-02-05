@@ -137,7 +137,7 @@ refinementList({
 
 /**
  * @typedef {Object} RefinementListItemData
- * @property {number} count The number of occurences of the facet in the result set.
+ * @property {number} count The number of occurrences of the facet in the result set.
  * @property {boolean} isRefined True if the value is selected.
  * @property {string} label The label to display.
  * @property {string} value The value used for refining.
@@ -185,7 +185,7 @@ refinementList({
  * @property {RefinementListTransforms} [transformData] Functions to update the values before applying the templates.
  * @property {boolean} [autoHideContainer=true] Hide the container when no items in the refinement list.
  * @property {RefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
- * @property {RefinementListCollapsibleOptions|boolean} [collapsible=false] If true, the user can collapse the widget. If the use clicks on the header, itwill hide the content and the footer.
+ * @property {RefinementListCollapsibleOptions|boolean} [collapsible=false] If true, the user can collapse the widget. If the use clicks on the header, it will hide the content and the footer.
  */
 
 /**
