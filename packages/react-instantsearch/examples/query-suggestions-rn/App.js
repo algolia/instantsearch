@@ -239,7 +239,10 @@ const HitsList = ({ hits, removeSuggestions, onEndReached }) => (
     data={hits}
     keyExtractor={item => item.objectID}
     onEndReached={onEndReached}
-    onScroll={removeSuggestions}
+    onScroll={() => {
+      Keyboard.dismiss();
+      removeSuggestions();
+    }}
     ItemSeparatorComponent={() => <View style={hits.hitsSeparator} />}
   />
 );
