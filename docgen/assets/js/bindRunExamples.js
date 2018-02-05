@@ -9,7 +9,8 @@ window.search = instantsearch({
   urlSync: false,
   searchParameters: {
     hitsPerPage: 3
-  }
+  },
+  ...window.searchConfig
 });
 
 const el = html => {
