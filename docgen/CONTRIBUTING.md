@@ -26,7 +26,7 @@ The name of the category of your page.
 
 > `string` | no default
 
-The layout of your page among [`docgen/layouts/`](docgen/layouts/) (i.e. [`main.pug`](docgen/layouts/main.pug)).
+The layout of your page among [`docgen/layouts/`](layouts/) (i.e. [`main.pug`](layouts/main.pug)).
 
 #### `category`
 
@@ -96,5 +96,5 @@ editable: true
 githubSource: docgen/src/widgets.md
 ---
 
-# The start of your page
+The start of your page...
 ```
