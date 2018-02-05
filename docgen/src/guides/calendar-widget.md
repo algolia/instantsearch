@@ -7,6 +7,7 @@ withHeadings: true
 navWeight: 20
 editable: true
 githubSource: docgen/src/guides/calendar-widget.md
+indexName: concert_events_instantsearchjs
 ---
 
 Search results often need to be refined by dates. Calendars are a good visual way to improve the user experience when it comes to filtering dates. InstantSearch provides custom widgets to create reusable components within your app.
