@@ -128,7 +128,7 @@ describe('rangeInput', () => {
     expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
   });
 
-  it('exepct to render with min', () => {
+  it('expect to render with min', () => {
     const container = createContainer();
     const helper = createHelper();
     const results = [];
@@ -146,7 +146,7 @@ describe('rangeInput', () => {
     expect(ReactDOM.render.mock.calls[0][0].props.min).toBe(20);
   });
 
-  it('exepct to render with max', () => {
+  it('expect to render with max', () => {
     const container = createContainer();
     const helper = createHelper();
     const results = [];

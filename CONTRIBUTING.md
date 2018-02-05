@@ -43,7 +43,7 @@ topic using the [issues tab](https://github.com/algolia/instantsearch.js/issues)
 hesitate to thumb up an issue that corresponds to the problem you found.
 
 Another element that will help us go faster at solving the issue is to provide a reproducible
-test case. We often recommend to [use this jsFiddle template](https://jsfiddle.net/bobylito/9h7sgo10/).
+test case. We often recommend to [use this CodeSandbox template](https://codesandbox.io/s/github/algolia/instantsearch-templates/tree/master/src/InstantSearch.js).
 
 ## The code contribution process 🤘
 
@@ -100,7 +100,7 @@ Some examples of valid commit messages (first line):
 ## Branches organization 🌳
 
 The project is based on the classic GitHub flow because we are building a library and
-each version must be crafted with care. We also maintain a branch specicific for the older
+each version must be crafted with care. We also maintain a branch specific for the older
 version of the library (currently v1). Finally, when building feature (that will go in the
 next minor version) we have specific branch.
 
@@ -178,10 +178,10 @@ Here are the main files and folders of the project.
   ▸ src/                            << Source for the editorial content
     build.js                        << build script (prod)
     builder.js                      << main js file of the doc builder
-    config.js                       << variables definiton for the build
+    config.js                       << variables definition for the build
     devServer.js                    << config for the dev server
     mdRenderer.js                   << customized md renderer
-    middlewares.js                  << metalsmit plugins definitions
+    middlewares.js                  << metalsmith plugins definitions
     package.json
     path.js                         << path config file
     postcss.config.js               << postcss config file
@@ -282,7 +282,7 @@ the test page with your VM. **Do not commit this change**
 + webpack-dev-server --config dev/webpack.dev.config.babel.js --hot --inline --no-info --public [your_ip] &
 ```
 
-Then you should be able bebug using the dev setup: `yarn run dev` and the virtual machine. You can also
+Then you should be able debug using the dev setup: `yarn run dev` and the virtual machine. You can also
 run the page used for function tests using `yarn run test:functional:dev:debug`
 
 ## Linting ✨
@@ -323,7 +323,7 @@ npm run release-maintenance
 
 #### Beta version β
 
-Beta version release is available on any branch except `master`, `maintainance`. The
+Beta version release is available on any branch except `master`, `maintenance`. The
 main use cases are for releasing a patch before the official release, or create custom builds
 with new features (or friday releases).
 
