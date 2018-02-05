@@ -18,7 +18,7 @@ The title of your page.
 
 #### `mainTitle`
 
-> `string` | no default
+> `string` | defaults to `""`
 
 The name of the category of your page.
 
@@ -76,7 +76,7 @@ The Algolia application ID to run the code samples on.
 
 The API key of the app to run the code samples on.
 
-#### `index`
+#### `indexName`
 
 > `string` | defaults to `instant_search`
 
