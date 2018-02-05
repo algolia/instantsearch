@@ -107,6 +107,13 @@ function getCurrentRefinement(props, searchState, currentRange, context) {
   return refinement;
 }
 
+function getCurrentRefinementWithRange(refinement, range) {
+  return {
+    min: refinement.min !== undefined ? refinement.min : range.min,
+    max: refinement.max !== undefined ? refinement.max : range.max,
+  };
+}
+
 function nextValueForRefinement(hasBound, isReset, range, value) {
   let next;
   if (!hasBound && range === value) {
@@ -217,7 +224,7 @@ export default createConnector({
       max: rangeMax,
     };
 
-    const { min: valueMin, max: valueMax } = getCurrentRefinement(
+    const currentRefinement = getCurrentRefinement(
       props,
       searchState,
       this._currentRange,
@@ -228,10 +235,10 @@ export default createConnector({
       min: rangeMin,
       max: rangeMax,
       canRefine: count.length > 0,
-      currentRefinement: {
-        min: valueMin === undefined ? rangeMin : valueMin,
-        max: valueMax === undefined ? rangeMax : valueMax,
-      },
+      currentRefinement: getCurrentRefinementWithRange(
+        currentRefinement,
+        this._currentRange
+      ),
       count,
       precision,
     };
@@ -300,10 +307,10 @@ export default createConnector({
         attributeName: props.attributeName,
         value: nextState =>
           refine(props, nextState, {}, this._currentRange, this.context),
-        currentRefinement: {
-          min: minValue,
-          max: maxValue,
-        },
+        currentRefinement: getCurrentRefinementWithRange(
+          { min: minValue, max: maxValue },
+          { min: minRange, max: maxRange }
+        ),
       });
     }
 
