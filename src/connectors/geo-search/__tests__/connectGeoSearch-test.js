@@ -44,21 +44,23 @@ describe('connectGeoSearch - rendering', () => {
     const instantSearchInstance = { client, helper };
 
     widget.init({
-      helper,
+      state: helper.state,
       instantSearchInstance,
+      helper,
     });
 
     expect(render).toHaveBeenCalledTimes(1);
     expect(render).toHaveBeenLastCalledWith(
-      expect.objectContaining({
+      {
         items: [],
+        position: undefined,
         refine: expect.any(Function),
         clearMapRefinement: expect.any(Function),
         toggleRefineOnMapMove: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
         widgetParams: {},
         instantSearchInstance,
-      }),
+      },
       true
     );
 
@@ -88,6 +90,7 @@ describe('connectGeoSearch - rendering', () => {
           { objectID: 456, _geoloc: { lat: 12, lng: 14 } },
           { objectID: 789, _geoloc: { lat: 14, lng: 16 } },
         ],
+        position: undefined,
         refine: expect.any(Function),
         clearMapRefinement: expect.any(Function),
         toggleRefineOnMapMove: expect.any(Function),
@@ -116,6 +119,7 @@ describe('connectGeoSearch - rendering', () => {
     const helper = createFakeHelper(client);
 
     widget.init({
+      state: helper.state,
       helper,
     });
 
@@ -164,6 +168,64 @@ describe('connectGeoSearch - rendering', () => {
           { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
           { objectID: 789, _geoloc: { lat: 10, lng: 12 } },
         ],
+      }),
+      false
+    );
+  });
+
+  it('expect to render with position from the state', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch(render, unmount);
+    const widget = customGeoSearch({
+      position: {
+        lat: 10,
+        lng: 12,
+      },
+    });
+
+    const client = createFakeClient();
+    const helper = createFakeHelper(client);
+
+    // Simulate the configuration or external setter
+    helper.setQueryParameter('aroundLatLng', '10, 12');
+
+    widget.init({
+      helper,
+      state: helper.state,
+    });
+
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render).toHaveBeenCalledWith(
+      expect.objectContaining({
+        position: {
+          lat: 10,
+          lng: 12,
+        },
+      }),
+      true
+    );
+
+    // Simulate the configuration or external setter
+    helper.setQueryParameter('aroundLatLng', '12, 14');
+
+    widget.render({
+      results: new SearchResults(helper.getState(), [
+        {
+          hits: [],
+        },
+      ]),
+      helper,
+    });
+
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledWith(
+      expect.objectContaining({
+        position: {
+          lat: 12,
+          lng: 14,
+        },
       }),
       false
     );
@@ -461,6 +523,7 @@ describe('connectGeoSearch - rendering', () => {
       ]);
 
       widget.init({
+        state: helper.state,
         helper,
       });
 
@@ -564,6 +627,7 @@ describe('connectGeoSearch - rendering', () => {
       ]);
 
       widget.init({
+        state: helper.state,
         helper,
       });
 
@@ -677,6 +741,7 @@ describe('connectGeoSearch - rendering', () => {
       const helper = createFakeHelper(client);
 
       widget.init({
+        state: helper.state,
         helper,
       });
 
@@ -748,6 +813,7 @@ describe('connectGeoSearch - rendering', () => {
       const helper = createFakeHelper(client);
 
       widget.init({
+        state: helper.state,
         helper,
       });
 

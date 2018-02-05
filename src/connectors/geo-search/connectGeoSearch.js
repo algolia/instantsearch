@@ -1,5 +1,5 @@
 import noop from 'lodash/noop';
-import { checkRendering } from '../../lib/utils';
+import { checkRendering, parseAroundLatLngFromString } from '../../lib/utils';
 
 const usage = `Usage:
 var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {
@@ -36,6 +36,9 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       internalToggleRefineOnMapMove: noop,
       internalSetMapMoveSinceLastRefine: noop,
     };
+
+    const getPositionFromState = state =>
+      state.aroundLatLng && parseAroundLatLngFromString(state.aroundLatLng);
 
     const refine = helper => ({ northEast: ne, southWest: sw }) => {
       const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
@@ -80,7 +83,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       widgetState.hasMapMoveSinceLastRefine;
 
     const init = initArgs => {
-      const { helper, instantSearchInstance } = initArgs;
+      const { state, helper, instantSearchInstance } = initArgs;
       const isFirstRendering = true;
 
       widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
@@ -96,6 +99,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       renderFn(
         {
           items: [],
+          position: getPositionFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap,
@@ -148,6 +152,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       renderFn(
         {
           items: results.hits.filter(hit => hit._geoloc),
+          position: getPositionFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           toggleRefineOnMapMove,
