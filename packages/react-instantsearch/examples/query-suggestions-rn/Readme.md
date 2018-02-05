@@ -3,6 +3,8 @@ suggestions along with instant results.
 
 It was created using `create-react-native-app`.
 
+To learn how you can setup Query Suggestions on your Algolia application, [read this guide](https://www.algolia.com/doc/guides/analytics/query-suggestions/).
+
 ## Clone the example
 
 ```

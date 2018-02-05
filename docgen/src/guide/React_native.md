@@ -18,6 +18,10 @@ Building a good React Native app will require your to learn those React InstantS
 * [Virtual widgets](guide/Virtual_widgets.html)
 * [Routing](guide/Routing.html)
 
+## Query Suggestions
+
+If you want to display query suggestions on your React Native application, check out our [demo](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/query-suggestions-rn)
+
 <div class="guide-nav">
     <div class="guide-nav-left">
         Previous: <a href="guide/Conditional_display.html">← Conditional Display</a>
