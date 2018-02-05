@@ -322,7 +322,7 @@ export default () => {
       )
     )
     .add(
-      'with custom marker options',
+      'with built-in marker options',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
           container.style.height = '600px';
@@ -330,7 +330,7 @@ export default () => {
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
               googleReference: window.google,
-              createMarkerOptions: item => ({
+              createBuiltInMarkerOptions: item => ({
                 title: item.name,
                 label: item.price_formatted,
               }),

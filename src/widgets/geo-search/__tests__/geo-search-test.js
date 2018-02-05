@@ -227,7 +227,7 @@ describe('GeoSearchRenderer', () => {
     });
   });
 
-  it('expect to render markers with default options', () => {
+  it('expect to render markers built-in with default options', () => {
     const container = createContainer();
     const instantSearchInstance = createFakeInstantSearch();
     const helper = createFakeHelper();
@@ -265,7 +265,7 @@ describe('GeoSearchRenderer', () => {
     ]);
   });
 
-  it('expect to render markers with given options', () => {
+  it('expect to render built-in markers with given options', () => {
     const container = createContainer();
     const instantSearchInstance = createFakeInstantSearch();
     const helper = createFakeHelper();
@@ -275,7 +275,7 @@ describe('GeoSearchRenderer', () => {
     const widget = geoSearch({
       googleReference,
       container,
-      createMarkerOptions: item => ({
+      createBuiltInMarkerOptions: item => ({
         title: `ID: ${item.objectID}`,
       }),
     });

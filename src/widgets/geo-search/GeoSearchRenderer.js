@@ -71,7 +71,7 @@ const renderer = (
     enableRefineControl,
     paddingBoundingBox,
     mapOptions,
-    createMarkerOptions,
+    createBuiltInMarkerOptions,
     renderState,
   } = widgetParams;
 
@@ -179,7 +179,7 @@ const renderer = (
     nextPendingItems.map(
       item =>
         new googleReference.maps.Marker({
-          ...createMarkerOptions(item),
+          ...createBuiltInMarkerOptions(item),
           __id: item.objectID,
           position: item._geoloc,
           map: renderState.mapInstance,

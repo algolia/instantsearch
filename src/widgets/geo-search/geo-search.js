@@ -19,7 +19,7 @@ const geoSearch = (props = {}) => {
       bottom: 0,
       left: 0,
     },
-    createMarkerOptions: noop,
+    createBuiltInMarkerOptions: noop,
     ...props,
   };
 
