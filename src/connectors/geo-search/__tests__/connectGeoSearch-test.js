@@ -109,7 +109,7 @@ describe('connectGeoSearch - rendering', () => {
     expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(false);
   });
 
-  it('expect to be render with enableRefineOnMapMove disabled', () => {
+  it('expect to render with enableRefineOnMapMove disabled', () => {
     const render = jest.fn();
     const unmount = jest.fn();
 
@@ -142,7 +142,7 @@ describe('connectGeoSearch - rendering', () => {
     expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
   });
 
-  it('expect to be render with only hits with geoloc', () => {
+  it('expect to render with only geoloc hits', () => {
     const render = jest.fn();
     const unmount = jest.fn();
 
