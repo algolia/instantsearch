@@ -1,6 +1,6 @@
 import last from 'lodash/last';
 import { render } from 'preact-compat';
-import AlgoliasearchHelper from 'algoliasearch-helper';
+import algoliasearchHelper from 'algoliasearch-helper';
 import renderer from '../GeoSearchRenderer';
 import geoSearch from '../geo-search';
 
@@ -74,7 +74,7 @@ describe('GeoSearchRenderer', () => {
   const createContainer = () => document.createElement('div');
   const createFakeInstantSearch = () => ({ templatesConfig: undefined });
   const createFakeHelper = () =>
-    new AlgoliasearchHelper(
+    algoliasearchHelper(
       {
         search() {},
         addAlgoliaAgent() {
@@ -106,7 +106,11 @@ describe('GeoSearchRenderer', () => {
       container,
     });
 
-    widget.init({ helper, instantSearchInstance });
+    widget.init({
+      instantSearchInstance,
+      helper,
+      state: helper.state,
+    });
 
     widget.render({
       helper,
@@ -141,7 +145,11 @@ describe('GeoSearchRenderer', () => {
       },
     });
 
-    widget.init({ helper, instantSearchInstance });
+    widget.init({
+      helper,
+      instantSearchInstance,
+      state: helper.state,
+    });
 
     widget.render({
       helper,
@@ -166,7 +174,11 @@ describe('GeoSearchRenderer', () => {
       container,
     });
 
-    widget.init({ helper, instantSearchInstance });
+    widget.init({
+      helper,
+      instantSearchInstance,
+      state: helper.state,
+    });
 
     expect(googleReference.maps.Map).toHaveBeenCalledWith(expect.anything(), {
       mapTypeControl: false,
@@ -197,7 +209,11 @@ describe('GeoSearchRenderer', () => {
       },
     });
 
-    widget.init({ helper, instantSearchInstance });
+    widget.init({
+      helper,
+      instantSearchInstance,
+      state: helper.state,
+    });
 
     expect(googleReference.maps.Map).toHaveBeenCalledWith(expect.anything(), {
       otherMapSpecific: 'value',
@@ -223,7 +239,11 @@ describe('GeoSearchRenderer', () => {
       container,
     });
 
-    widget.init({ helper, instantSearchInstance });
+    widget.init({
+      helper,
+      instantSearchInstance,
+      state: helper.state,
+    });
 
     widget.render({
       helper,
@@ -260,7 +280,11 @@ describe('GeoSearchRenderer', () => {
       }),
     });
 
-    widget.init({ helper, instantSearchInstance });
+    widget.init({
+      helper,
+      instantSearchInstance,
+      state: helper.state,
+    });
 
     widget.render({
       helper,
@@ -295,7 +319,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'center_changed',
@@ -329,7 +357,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'center_changed',
@@ -358,7 +390,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'zoom_changed',
@@ -386,7 +422,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'zoom_changed',
@@ -417,7 +457,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'dragstart',
@@ -443,7 +487,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'dragstart',
@@ -476,7 +524,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'idle',
@@ -506,7 +558,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'idle',
@@ -540,7 +596,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'idle',
@@ -570,7 +630,11 @@ describe('GeoSearchRenderer', () => {
         enableRefineOnMapMove: false,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'idle',
@@ -603,7 +667,11 @@ describe('GeoSearchRenderer', () => {
         },
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
@@ -641,7 +709,15 @@ describe('GeoSearchRenderer', () => {
         },
       });
 
-      widget.init({ helper, instantSearchInstance });
+      // Simulate the configuration
+      const initialState = widget.getConfiguration({});
+      helper.setState(initialState);
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
@@ -675,7 +751,11 @@ describe('GeoSearchRenderer', () => {
         },
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
@@ -692,7 +772,7 @@ describe('GeoSearchRenderer', () => {
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
     });
 
-    it('expect to not init the position when the map is already render', () => {
+    it('expect to not init the position when the refinement is coming from the map', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -709,7 +789,11 @@ describe('GeoSearchRenderer', () => {
         },
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
@@ -721,6 +805,11 @@ describe('GeoSearchRenderer', () => {
           hits: [{ objectID: 123, _geoloc: true }],
         },
       });
+
+      // Simulate a refinement
+      simulateEvent(mapInstance, 'dragstart');
+      simulateEvent(mapInstance, 'center_changed');
+      simulateEvent(mapInstance, 'idle');
 
       widget.render({
         helper,
@@ -748,7 +837,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       widget.render({
         helper,
@@ -785,7 +878,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       widget.render({
         helper,
@@ -812,7 +909,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       widget.render({
         helper,
@@ -865,7 +966,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       widget.render({
         helper,
@@ -910,7 +1015,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       widget.render({
         helper,
@@ -950,7 +1059,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       widget.render({
         helper,
@@ -987,7 +1100,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       widget.render({
         helper,
@@ -1018,7 +1135,11 @@ describe('GeoSearchRenderer', () => {
         container,
       });
 
-      widget.init({ helper, instantSearchInstance });
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
 
       widget.render({
         helper,

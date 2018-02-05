@@ -47,6 +47,7 @@ const collectMarkersForNextRender = (markers, nextIds) =>
 const renderer = (
   {
     items,
+    position,
     refine,
     clearMapRefinement,
     toggleRefineOnMapMove,
@@ -66,7 +67,6 @@ const renderer = (
     templates,
     initialZoom,
     initialPosition,
-    position,
     enableClearMapRefinement,
     enableRefineControl,
     paddingBoundingBox,
@@ -78,7 +78,6 @@ const renderer = (
   const containerNode = getContainerNode(container);
 
   if (isFirstRendering) {
-    renderState.isMapAlreadyRender = false;
     renderState.isUserInteraction = true;
     renderState.isPendingRefine = false;
     renderState.markers = [];
@@ -150,11 +149,7 @@ const renderer = (
     return;
   }
 
-  // Display the inital position/zoom only when we don't have result
-  // for aovid the map to blink when results are loaded. We don't set the
-  // initial view in the init block because we don't know if the response will
-  // contain some results.
-  if (!items.length && !renderState.isMapAlreadyRender) {
+  if (!items.length && !isRefinedWithMap()) {
     const intialMapPosition = position || initialPosition;
 
     renderState.isUserInteraction = false;
@@ -206,10 +201,6 @@ const renderer = (
     renderState.mapInstance.fitBounds(bounds);
     renderState.isUserInteraction = true;
   }
-
-  // Map has been render with "initialPosition" or "fitBounds" at this stage,
-  // set the flag to avoid reset to inital position when there is no results
-  renderState.isMapAlreadyRender = true;
 
   render(
     <GeoSearchControls
