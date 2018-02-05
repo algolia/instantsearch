@@ -3462,9 +3462,9 @@ conventional-changelog-angular@^1.4.0:
     compare-func "^1.3.1"
     q "^1.4.1"
 
-conventional-changelog-angular@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/conventional-changelog-angular/-/conventional-changelog-angular-1.6.1.tgz#e1434d017c854032b272f690424a8c0ca16dc318"
+conventional-changelog-angular@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-angular/-/conventional-changelog-angular-1.6.2.tgz#0a811313de46326e5e4e11dac281d61cfe1f00c4"
   dependencies:
     compare-func "^1.3.1"
     q "^1.4.1"
@@ -3475,12 +3475,12 @@ conventional-changelog-atom@^0.2.0:
   dependencies:
     q "^1.4.1"
 
-conventional-changelog-cli@1.3.8:
-  version "1.3.8"
-  resolved "https://registry.yarnpkg.com/conventional-changelog-cli/-/conventional-changelog-cli-1.3.8.tgz#3b3f3591cb8d1f154bdb28e1819c5fcd8d967536"
+conventional-changelog-cli@1.3.9:
+  version "1.3.9"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-cli/-/conventional-changelog-cli-1.3.9.tgz#926aed3af40c76682f6e192f8a573f46dcd3894f"
   dependencies:
     add-stream "^1.0.0"
-    conventional-changelog "^1.1.10"
+    conventional-changelog "^1.1.11"
     lodash "^4.1.0"
     meow "^3.7.0"
     tempfile "^1.1.1"
@@ -3509,12 +3509,12 @@ conventional-changelog-core@^1.9.0:
     read-pkg-up "^1.0.1"
     through2 "^2.0.0"
 
-conventional-changelog-core@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/conventional-changelog-core/-/conventional-changelog-core-2.0.0.tgz#1bdf7d21f3d066427ff9e07db0a2c5dd60015b9f"
+conventional-changelog-core@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-core/-/conventional-changelog-core-2.0.1.tgz#7573de89bde46e0ccf395b4b85a0869aa5388e8d"
   dependencies:
     conventional-changelog-writer "^3.0.0"
-    conventional-commits-parser "^2.1.0"
+    conventional-commits-parser "^2.1.1"
     dateformat "^1.0.12"
     get-pkg-repo "^1.0.0"
     git-raw-commits "^1.3.0"
@@ -3527,9 +3527,9 @@ conventional-changelog-core@^2.0.0:
     read-pkg-up "^1.0.1"
     through2 "^2.0.0"
 
-conventional-changelog-ember@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/conventional-changelog-ember/-/conventional-changelog-ember-0.3.1.tgz#bc71dc0a57e5c7ed0bf0538c32e44220691871d1"
+conventional-changelog-ember@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/conventional-changelog-ember/-/conventional-changelog-ember-0.3.2.tgz#d3dd89ffe96832384a5d3b60dc63bf5e0142a944"
   dependencies:
     q "^1.4.1"
 
@@ -3594,15 +3594,15 @@ conventional-changelog-writer@^3.0.0:
     split "^1.0.0"
     through2 "^2.0.0"
 
-conventional-changelog@^1.1.10:
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-1.1.10.tgz#d9bb3aad9086152d283e4707fb45a5b7a28e9e98"
+conventional-changelog@^1.1.11:
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/conventional-changelog/-/conventional-changelog-1.1.11.tgz#3c880f5e5ebf483642a19d9bd5c9562f0d1257b8"
   dependencies:
-    conventional-changelog-angular "^1.6.1"
+    conventional-changelog-angular "^1.6.2"
     conventional-changelog-atom "^0.2.0"
     conventional-changelog-codemirror "^0.3.0"
-    conventional-changelog-core "^2.0.0"
-    conventional-changelog-ember "^0.3.1"
+    conventional-changelog-core "^2.0.1"
+    conventional-changelog-ember "^0.3.2"
     conventional-changelog-eslint "^1.0.0"
     conventional-changelog-express "^0.3.0"
     conventional-changelog-jquery "^0.1.0"
@@ -3635,9 +3635,9 @@ conventional-commits-parser@^2.0.0:
     through2 "^2.0.0"
     trim-off-newlines "^1.0.0"
 
-conventional-commits-parser@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/conventional-commits-parser/-/conventional-commits-parser-2.1.0.tgz#9b4b7c91124bf2a1a9a2cc1c72760d382cbbb229"
+conventional-commits-parser@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/conventional-commits-parser/-/conventional-commits-parser-2.1.1.tgz#1525a01bdad3349297b4210396e283d8a8ffd044"
   dependencies:
     JSONStream "^1.0.4"
     is-text-path "^1.0.0"
