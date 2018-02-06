@@ -1,3 +1,18 @@
+<a name="2.5.0"></a>
+# [2.5.0](https://github.com/algolia/instantsearch.js/compare/v2.4.1...v2.5.0) (2018-02-06)
+
+
+### Bug Fixes
+
+* **doc:** add maximum width to images (fix [#2685](https://github.com/algolia/instantsearch.js/issues/2685)) ([#2686](https://github.com/algolia/instantsearch.js/issues/2686)) ([f4b5377](https://github.com/algolia/instantsearch.js/commit/f4b5377))
+
+
+### Features
+
+* support for algolia insights ([#2689](https://github.com/algolia/instantsearch.js/issues/2689)) ([96b8d61](https://github.com/algolia/instantsearch.js/commit/96b8d61))
+
+
+
 <a name="2.4.1"></a>
 ## [2.4.1](https://github.com/algolia/instantsearch.js/compare/v2.4.0...v2.4.1) (2018-01-04)
 
