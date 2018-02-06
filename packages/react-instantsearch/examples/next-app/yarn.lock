@@ -4103,13 +4103,13 @@ react-hot-loader@3.1.1:
     redbox-react "^1.3.6"
     source-map "^0.6.1"
 
-react-instantsearch-theme-algolia@4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-theme-algolia/-/react-instantsearch-theme-algolia-4.5.0.tgz#662d286a3df1b45ffdd53a8d9afb0c3e767d9b63"
+react-instantsearch-theme-algolia@4.5.1:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-theme-algolia/-/react-instantsearch-theme-algolia-4.5.1.tgz#29513fcb54100ea29764cbdf1961312ffc82393b"
 
-react-instantsearch@4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.5.0.tgz#e8edb92cb75c02c779389b08dce48899c4fa6664"
+react-instantsearch@4.5.1:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.5.1.tgz#b079bb643e08f262329922eae2eef9ca076ac5cd"
   dependencies:
     algoliasearch "^3.24.0"
     algoliasearch-helper "^2.21.0"
