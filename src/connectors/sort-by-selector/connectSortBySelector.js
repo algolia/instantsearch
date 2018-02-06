@@ -21,7 +21,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} SortBySelectorIndices
  * @property {string} name Name of the index to target.
- * @property {string} label Label to display for the targettded index.
+ * @property {string} label Label to display for the targeted index.
  */
 
 /**
@@ -44,7 +44,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * a user to change how the hits are being sorted.
  *
  * This connector provides the `refine` function that allows to switch indices.
- * The connector provides to the rendering: `refine()` to swith the current index and
+ * The connector provides to the rendering: `refine()` to switch the current index and
  * `options` that are the values that can be selected. `refine` should be used
  * with `options.value`.
  * @type {Connector}
@@ -85,7 +85,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * // mount widget on the page
  * search.addWidget(
  *   customSortBySelector({
- *     containerNode: $('#custom-sortby-selector-container'),
+ *     containerNode: $('#custom-sort-by-selector-container'),
  *     indices: [
  *       {name: 'instant_search', label: 'Most relevant'},
  *       {name: 'instant_search_price_asc', label: 'Lowest price'},

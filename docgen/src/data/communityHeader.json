@@ -77,6 +77,10 @@
         "url": "guides/custom-widget.html"
       },
       {
+        "name": "Create a calendar widget",
+        "url": "guides/calendar-widget.html"
+      },
+      {
         "name": "Migrate from V1",
         "url": "guides/migration.html"
       },

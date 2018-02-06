@@ -31,7 +31,7 @@ const renderer = ({
 ) => {
   if (isFirstRendering) return;
 
-  const setCurrrentPage = pageNumber => {
+  const setCurrentPage = pageNumber => {
     refine(pageNumber);
 
     if (scrollToNode !== false) {
@@ -50,7 +50,7 @@ const renderer = ({
       nbHits={nbHits}
       nbPages={nbPages}
       padding={padding}
-      setCurrentPage={setCurrrentPage}
+      setCurrentPage={setCurrentPage}
       shouldAutoHideContainer={shouldAutoHideContainer}
       showFirstLast={showFirstLast}
     />,
@@ -108,9 +108,9 @@ pagination({
  * The pagination widget allow the user to switch between pages of the results.
  *
  * This is an alternative to using the *show more* pattern, that allows the user
- * only to display more items. The *show more* pattern is usually prefered
+ * only to display more items. The *show more* pattern is usually preferred
  * because it is simpler to use, and it is more convenient in a mobile context.
- * See the infinite hits widget, for more informations.
+ * See the infinite hits widget, for more information.
  *
  * When using the pagination with Algolia, you should be aware that the engine won't provide you pages
  * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
