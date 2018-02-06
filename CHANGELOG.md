@@ -1,3 +1,20 @@
+<a name="4.5.0"></a>
+# [4.5.0](https://github.com/algolia/react-instantsearch/compare/v4.4.2...v4.5.0) (2018-02-06)
+
+
+### Bug Fixes
+
+* **connectRange:** use the same behaviour for currentRefinement in getMetadata ([#923](https://github.com/algolia/react-instantsearch/issues/923)) ([08917b6](https://github.com/algolia/react-instantsearch/commit/08917b6))
+* **connectToggle:** use currentRefinement in metadata instead of the label ([#909](https://github.com/algolia/react-instantsearch/issues/909)) ([89cae2b](https://github.com/algolia/react-instantsearch/commit/89cae2b))
+* **StarRatings:** always show the stars below ([#929](https://github.com/algolia/react-instantsearch/issues/929)) ([22bf93a](https://github.com/algolia/react-instantsearch/commit/22bf93a))
+
+
+### Features
+
+* **connectStateResults:** expose isSearchStalled ([#933](https://github.com/algolia/react-instantsearch/issues/933)) ([f45ba27](https://github.com/algolia/react-instantsearch/commit/f45ba27))
+
+
+
 <a name="4.4.2"></a>
 ## [4.4.2](https://github.com/algolia/react-instantsearch/compare/v4.4.1...v4.4.2) (2018-01-24)
 
