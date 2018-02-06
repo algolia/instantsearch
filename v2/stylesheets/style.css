@@ -4914,6 +4914,9 @@ figure figcaption {
             float: left;
             margin-right: 6px;
             color: #9d9dbd; }
+    .documentation-section .documentation-container img,
+    .examples-section .documentation-container img {
+      max-width: 100%; }
     .documentation-section .documentation-container .content p:first-child,
     .examples-section .documentation-container .content p:first-child {
       margin-top: 0; }
