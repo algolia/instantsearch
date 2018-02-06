@@ -131,8 +131,8 @@ class StarRating extends Component {
 
     // min & max are always set when there is a results, otherwise it means
     // that we don't want to render anything since we don't have any values.
-    const limitMin = min !== undefined && min >= 0 ? min : 0;
-    const limitMax = max !== undefined && max >= 0 ? max : -1;
+    const limitMin = min !== undefined && min >= 0 ? min : 1;
+    const limitMax = max !== undefined && max >= 0 ? max : 0;
     const inclusiveLength = limitMax - limitMin + 1;
     const safeInclusiveLength = Math.max(inclusiveLength, 0);
 

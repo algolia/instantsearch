@@ -104,9 +104,9 @@ describe('StarRating', () => {
     }).not.toThrow();
   });
 
-  it('expect to not throw when only max is defined', () => {
-    expect(() => {
-      renderer.create(
+  it('expect to render when only max is defined', () => {
+    const tree = renderer
+      .create(
         <StarRating
           createURL={() => '#'}
           refine={() => null}
@@ -124,11 +124,12 @@ describe('StarRating', () => {
           ]}
           canRefine={true}
         />
-      );
-    }).not.toThrow();
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
-  it('expect to render from from 0 when min is negative', () => {
+  it('expect to render from from 1 when min is negative', () => {
     const tree = renderer
       .create(
         <StarRating

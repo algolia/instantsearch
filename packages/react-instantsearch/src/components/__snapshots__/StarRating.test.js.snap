@@ -180,7 +180,7 @@ exports[`StarRating applies translations 1`] = `
 </div>
 `;
 
-exports[`StarRating expect to render from from 0 when min is negative 1`] = `
+exports[`StarRating expect to render from from 1 when min is negative 1`] = `
 <div
   className="ais-StarRating__root"
 >
@@ -324,11 +324,9 @@ exports[`StarRating expect to render from from 0 when min is negative 1`] = `
       14
     </span>
   </a>
-  <a
+  <div
     className="ais-StarRating__ratingLink ais-StarRating__ratingLinkSelected"
     disabled={false}
-    href="#"
-    onClick={[Function]}
   >
     <span
       className="ais-StarRating__ratingIcon ais-StarRating__ratingIconSelected"
@@ -358,6 +356,48 @@ exports[`StarRating expect to render from from 0 when min is negative 1`] = `
     >
       15
     </span>
+  </div>
+</div>
+`;
+
+exports[`StarRating expect to render nothing when min is higher than max 1`] = `
+<div
+  className="ais-StarRating__root"
+/>
+`;
+
+exports[`StarRating expect to render when only max is defined 1`] = `
+<div
+  className="ais-StarRating__root"
+>
+  <a
+    className="ais-StarRating__ratingLink"
+    disabled={false}
+    href="#"
+    onClick={[Function]}
+  >
+    <span
+      className="ais-StarRating__ratingIcon"
+    />
+    <span
+      className="ais-StarRating__ratingIcon"
+    />
+    <span
+      className="ais-StarRating__ratingIcon"
+    />
+    <span
+      className="ais-StarRating__ratingLabel"
+    >
+       & Up
+    </span>
+    <span>
+       
+    </span>
+    <span
+      className="ais-StarRating__ratingCount"
+    >
+      3
+    </span>
   </a>
   <a
     className="ais-StarRating__ratingLink"
@@ -366,13 +406,36 @@ exports[`StarRating expect to render from from 0 when min is negative 1`] = `
     onClick={[Function]}
   >
     <span
-      className="ais-StarRating__ratingIconEmpty"
+      className="ais-StarRating__ratingIcon"
+    />
+    <span
+      className="ais-StarRating__ratingIcon"
     />
     <span
       className="ais-StarRating__ratingIconEmpty"
     />
     <span
-      className="ais-StarRating__ratingIconEmpty"
+      className="ais-StarRating__ratingLabel"
+    >
+       & Up
+    </span>
+    <span>
+       
+    </span>
+    <span
+      className="ais-StarRating__ratingCount"
+    >
+      5
+    </span>
+  </a>
+  <a
+    className="ais-StarRating__ratingLink"
+    disabled={false}
+    href="#"
+    onClick={[Function]}
+  >
+    <span
+      className="ais-StarRating__ratingIcon"
     />
     <span
       className="ais-StarRating__ratingIconEmpty"
@@ -391,16 +454,10 @@ exports[`StarRating expect to render from from 0 when min is negative 1`] = `
     <span
       className="ais-StarRating__ratingCount"
     >
-      15
+      6
     </span>
   </a>
 </div>
-`;
-
-exports[`StarRating expect to render nothing when min is higher than max 1`] = `
-<div
-  className="ais-StarRating__root"
-/>
 `;
 
 exports[`StarRating supports passing max/min values 1`] = `
