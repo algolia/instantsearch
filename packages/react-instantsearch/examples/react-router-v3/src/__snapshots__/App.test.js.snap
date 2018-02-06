@@ -198,7 +198,274 @@ exports[`react-router recipe App renders without crashing 1`] = `
         </p>
         <div
           className="ais-StarRating__root ais-StarRating__noRefinement"
-        />
+        >
+          <a
+            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
+            disabled={true}
+            href="?range%5Brating%5D%5Bmin%5D=6&range%5Brating%5D%5Bmax%5D=6&page=1"
+            onClick={[Function]}
+          >
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            >
+               & Up
+            </span>
+            <span>
+               
+            </span>
+            <span
+              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+            >
+              0
+            </span>
+          </a>
+          <a
+            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
+            disabled={true}
+            href="?range%5Brating%5D%5Bmin%5D=5&range%5Brating%5D%5Bmax%5D=6&page=1"
+            onClick={[Function]}
+          >
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            >
+               & Up
+            </span>
+            <span>
+               
+            </span>
+            <span
+              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+            >
+              0
+            </span>
+          </a>
+          <a
+            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
+            disabled={true}
+            href="?range%5Brating%5D%5Bmin%5D=4&range%5Brating%5D%5Bmax%5D=6&page=1"
+            onClick={[Function]}
+          >
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            >
+               & Up
+            </span>
+            <span>
+               
+            </span>
+            <span
+              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+            >
+              0
+            </span>
+          </a>
+          <a
+            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
+            disabled={true}
+            href="?range%5Brating%5D%5Bmin%5D=3&range%5Brating%5D%5Bmax%5D=6&page=1"
+            onClick={[Function]}
+          >
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            >
+               & Up
+            </span>
+            <span>
+               
+            </span>
+            <span
+              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+            >
+              0
+            </span>
+          </a>
+          <a
+            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
+            disabled={true}
+            href="?range%5Brating%5D%5Bmin%5D=2&range%5Brating%5D%5Bmax%5D=6&page=1"
+            onClick={[Function]}
+          >
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            >
+               & Up
+            </span>
+            <span>
+               
+            </span>
+            <span
+              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+            >
+              0
+            </span>
+          </a>
+          <a
+            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
+            disabled={true}
+            href="?range%5Brating%5D%5Bmin%5D=1&range%5Brating%5D%5Bmax%5D=6&page=1"
+            onClick={[Function]}
+          >
+            <span
+              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            >
+               & Up
+            </span>
+            <span>
+               
+            </span>
+            <span
+              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+            >
+              0
+            </span>
+          </a>
+          <a
+            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
+            disabled={true}
+            href="?range%5Brating%5D%5Bmin%5D=0&range%5Brating%5D%5Bmax%5D=6&page=1"
+            onClick={[Function]}
+          >
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
+            />
+            <span
+              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            >
+               & Up
+            </span>
+            <span>
+               
+            </span>
+            <span
+              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+            >
+              0
+            </span>
+          </a>
+        </div>
       </div>
       <div
         style={
