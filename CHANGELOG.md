@@ -1,3 +1,13 @@
+<a name="4.5.1"></a>
+## [4.5.1](https://github.com/algolia/react-instantsearch/compare/v4.5.0...v4.5.1) (2018-02-06)
+
+
+### Bug Fixes
+
+* **StarRating:** move to 1 based instead of 0 ([#949](https://github.com/algolia/react-instantsearch/issues/949)) ([eb0152d](https://github.com/algolia/react-instantsearch/commit/eb0152d))
+
+
+
 <a name="4.5.0"></a>
 # [4.5.0](https://github.com/algolia/react-instantsearch/compare/v4.4.2...v4.5.0) (2018-02-06)
 
