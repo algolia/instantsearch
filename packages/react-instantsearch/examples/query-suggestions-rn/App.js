@@ -14,6 +14,7 @@ import {
   connectSearchBox,
   connectInfiniteHits,
   connectHits,
+  connectRefinementList,
 } from 'react-instantsearch/connectors';
 import { InstantSearch, Configure, Index } from 'react-instantsearch/native';
 import Highlight from './Highlight';
@@ -74,6 +75,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
   },
+  categoryTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  categoryTextIn: { fontStyle: 'italic' },
+  categoryText: { color: '#cc8008' },
 });
 
 export default class App extends React.Component {
@@ -84,12 +91,14 @@ export default class App extends React.Component {
       isFirstKeystroke: true,
       searchState: {},
       query: '',
+      category: null,
     };
     this.displaySuggestions = this.displaySuggestions.bind(this);
     this.removeSuggestions = this.removeSuggestions.bind(this);
     this.setQuery = this.setQuery.bind(this);
     this.onSearchStateChange = this.onSearchStateChange.bind(this);
     this.firstKeystroke = this.firstKeystroke.bind(this);
+    this.clearFilter = this.clearFilter.bind(this);
   }
 
   firstKeystroke() {
@@ -104,7 +113,7 @@ export default class App extends React.Component {
     this.setState({ displaySuggestions: false, isFirstKeystroke: true });
   }
 
-  setQuery(query) {
+  setQuery(query, category) {
     const searchState = omit(this.state.searchState, ['query', 'page']);
     if (searchState.indices && searchState.indices.instant_search) {
       searchState.indices.instant_search.page = 0;
@@ -112,7 +121,15 @@ export default class App extends React.Component {
     this.setState({
       query,
       searchState,
+      category,
       displaySuggestions: false,
+    });
+  }
+
+  clearFilter() {
+    this.setState({
+      category: null,
+      query: '',
     });
   }
 
@@ -148,8 +165,9 @@ export default class App extends React.Component {
             firstKeystroke={this.firstKeystroke}
             isFirstKeystroke={this.state.isFirstKeystroke}
             defaultRefinement={this.state.query}
+            clearFilter={this.clearFilter}
           />
-          <Index indexName="instantsearch_query_suggestions">
+          <Index indexName="instant_search_demo_query_suggestions">
             <Configure hitsPerPage={5} />
             {suggestions}
           </Index>
@@ -161,7 +179,16 @@ export default class App extends React.Component {
             }}
           >
             <Configure hitsPerPage={15} />
-            <Text style={styles.bestResults}>Best results</Text>
+            <VirtualRefinementList
+              attributeName="categories"
+              defaultRefinement={
+                this.state.category ? [this.state.category] : []
+              }
+            />
+            <Text style={styles.bestResults}>
+              Best results
+              {this.state.category ? ` in ${this.state.category}` : null}
+            </Text>
             <View style={styles.suggestionsContainer}>{results}</View>
           </Index>
         </InstantSearch>
@@ -183,7 +210,12 @@ class SearchBox extends Component {
         />
         <TextInput
           style={styles.searchBox}
-          onChangeText={text => this.props.refine(text)}
+          onChangeText={text => {
+            if (text === '') {
+              this.props.clearFilter();
+            }
+            this.props.refine(text);
+          }}
           value={this.props.currentRefinement}
           placeholder={'Search a product...'}
           placeholderTextColor={'black'}
@@ -213,6 +245,7 @@ SearchBox.propTypes = {
   firstKeystroke: PropTypes.func,
   refine: PropTypes.func,
   isFirstKeystroke: PropTypes.bool,
+  clearFilter: PropTypes.func,
 };
 
 const HitsList = ({ hits, removeSuggestions, onEndReached }) => (
@@ -237,7 +270,7 @@ const HitsList = ({ hits, removeSuggestions, onEndReached }) => (
       </View>
     )}
     data={hits}
-    keyExtractor={item => item.objectID}
+    keyExtractor={(item, index) => item.objectID + index}
     onEndReached={onEndReached}
     onScroll={() => {
       Keyboard.dismiss();
@@ -273,32 +306,79 @@ const ResultsHits = connectHits(({ hits, removeSuggestions }) => (
 
 const SuggestionsHits = connectHits(({ hits, onPressItem }) => (
   <FlatList
-    renderItem={({ item }) => (
-      <TouchableHighlight
-        onPress={() => {
-          Keyboard.dismiss();
-          onPressItem(item.query);
-        }}
-        underlayColor="white"
-      >
-        <View style={styles.suggestions}>
-          <Icon
-            size={13}
-            name="search"
-            color="#000"
-            style={styles.suggestionsIcon}
-          />
-          <Highlight
-            attributeName="query"
-            hit={item}
-            highlightProperty="_highlightResult"
-            inverted
-          />
-        </View>
-      </TouchableHighlight>
-    )}
-    keyExtractor={item => item.objectID}
-    data={hits}
+    renderItem={({ item, index }) => {
+      const category =
+        index === 1
+          ? item.instant_search.facets.exact_matches.categories[0].value
+          : null;
+      return (
+        <Item
+          index={index}
+          category={category}
+          item={item}
+          onPressItem={onPressItem}
+        />
+      );
+    }}
+    keyExtractor={(item, index) => item.objectID + index}
+    data={hits.reduce((acc, hit, index) => {
+      if (index === 0) {
+        acc.push(hit); // we duplicate first hit to allow a refinement under or not category
+      }
+      acc.push(hit);
+      return acc;
+    }, [])}
     keyboardShouldPersistTaps="always"
   />
 ));
+
+const buildItemCategoryText = categoryText => (
+  <View style={styles.categoryTextContainer}>
+    <Text style={styles.categoryTextIn}> in</Text>
+    <Text style={styles.categoryText}> {categoryText}</Text>
+  </View>
+);
+
+const Item = ({ item, category, onPressItem, index }) => {
+  let text = null;
+  if (index === 0) {
+    text = buildItemCategoryText('All our categories');
+  }
+  if (category) {
+    text = buildItemCategoryText(category);
+  }
+  return (
+    <TouchableHighlight
+      onPress={() => {
+        Keyboard.dismiss();
+        onPressItem(item.query, category);
+      }}
+      underlayColor="white"
+    >
+      <View style={styles.suggestions}>
+        <Icon
+          size={13}
+          name="search"
+          color="#000"
+          style={styles.suggestionsIcon}
+        />
+        <Highlight
+          attributeName="query"
+          hit={item}
+          highlightProperty="_highlightResult"
+          inverted
+        />
+        {text}
+      </View>
+    </TouchableHighlight>
+  );
+};
+
+Item.propTypes = {
+  item: PropTypes.object,
+  index: PropTypes.number,
+  category: PropTypes.string,
+  onPressItem: PropTypes.func,
+};
+
+const VirtualRefinementList = connectRefinementList(() => null);
