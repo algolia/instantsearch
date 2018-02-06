@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
-class PriceRangesForm extends React.Component {
+class PriceRangesForm extends Component {
   constructor(props) {
     super(props);
     this.state = {

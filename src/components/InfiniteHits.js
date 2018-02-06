@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 import Hits from './Hits.js';
 
-class InfiniteHits extends React.Component {
+class InfiniteHits extends Component {
   render() {
     const {
       cssClasses,

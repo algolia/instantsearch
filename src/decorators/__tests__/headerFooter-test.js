@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import expect from 'expect';
 import { shallow } from 'enzyme';
 import { createRenderer } from 'react-test-renderer/shallow';
@@ -9,7 +9,7 @@ import Template from '../../components/Template';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-class TestComponent extends React.Component {
+class TestComponent extends Component {
   render() {
     return <div {...this.props} />;
   }

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
 
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
 import cx from 'classnames';
 import getKey from 'lodash/get';
@@ -10,7 +10,7 @@ import getKey from 'lodash/get';
 import Template from '../components/Template.js';
 
 function headerFooter(ComposedComponent) {
-  class HeaderFooter extends React.Component {
+  class HeaderFooter extends Component {
     constructor(props) {
       super(props);
       this.handleHeaderClick = this.handleHeaderClick.bind(this);

@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 import map from 'lodash/map';
 import Template from './Template.js';
 import hasKey from 'lodash/has';
 import cx from 'classnames';
 
-class Hits extends React.Component {
+class Hits extends Component {
   renderWithResults() {
     const renderedHits = map(this.props.hits, (hit, position) => {
       const data = {

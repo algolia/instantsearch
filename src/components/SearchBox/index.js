@@ -1,8 +1,8 @@
 /* eslint-disable max-len, no-extra-parens */
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
-export default class SearchBox extends React.Component {
+export default class SearchBox extends Component {
   static propTypes = {
     placeholder: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,

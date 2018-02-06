@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 import Template from '../Template.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
 import autoHideContainer from '../../decorators/autoHideContainer.js';
 import headerFooter from '../../decorators/headerFooter.js';
 
-export class RawClearAll extends React.Component {
+export class RawClearAll extends Component {
   componentWillMount() {
     this.handleClick = this.handleClick.bind(this);
   }
