@@ -1,3 +1,19 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/algolia/vue-instantsearch/compare/v1.3.4...v1.4.0) (2018-02-06)
+
+
+### Bug Fixes
+
+* **Highlight:** only warn once for possibly missing highlighting ([#386](https://github.com/algolia/vue-instantsearch/issues/386)) ([92ab6c4](https://github.com/algolia/vue-instantsearch/commit/92ab6c4)), closes [#385](https://github.com/algolia/vue-instantsearch/issues/385)
+
+
+### Features
+
+* **loading-indicator:** add API ([148577f](https://github.com/algolia/vue-instantsearch/commit/148577f))
+* **loading-indicator:** initial implementation ([6bdf9a7](https://github.com/algolia/vue-instantsearch/commit/6bdf9a7))
+
+
+
 <a name="1.3.4"></a>
 ## [1.3.4](https://github.com/algolia/vue-instantsearch/compare/v1.3.3...v1.3.4) (2018-01-24)
 
