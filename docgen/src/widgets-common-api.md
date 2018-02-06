@@ -9,7 +9,7 @@ editable: true
 githubSource: docgen/src/widgets-common-api.md
 ---
 
-## Common wigdet parameters
+## Common widget parameters
 
 Most widgets share a common set of options. Here is a list of the one
 that you'll encounter using the different widgets.
