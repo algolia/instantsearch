@@ -126,6 +126,7 @@ searchStore.indexName = 'bestbuy'
 export default {
   async asyncData () {
     searchStore.start()
+    searchStore.refresh()
     await searchStore.waitUntilInSync()
 
     return { serializedSearchStore: searchStore.serialize() }
@@ -148,7 +149,7 @@ First thing to notice is that you now [manually pass down the search store](gett
 This allows you to have a better control over the lifecycle of the search.
 
 In the `asyncData` method, multiple things happen:
-1. you first manually start the store which will launch the first query to Algolia `searchStore.start()`
+1. you first manually start & refresh the store which will launch the first query to Algolia `searchStore.start()` && `searchStore.refresh()`
 2. you then wait for the query to be done so that you get all the results in the store with `store.waitUntilInSync()` method
 3. you return the serialized version of the store so that it can be passed to the frontend `return { serializedSearchStore: searchStore.serialize() }`
 
