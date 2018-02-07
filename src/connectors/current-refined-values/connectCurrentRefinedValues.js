@@ -80,7 +80,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * **CurrentRefinedValues** connector provides the logic to build a widget that will give
- * the user the ability to see all the currently aplied filters and, remove some or all of
+ * the user the ability to see all the currently applied filters and, remove some or all of
  * them.
  *
  * This provides a `refine(item)` function to remove a selected refinement and a `clearAllClick`
@@ -96,7 +96,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  *   var containerNode = CurrentRefinedValuesRenderingOptions.widgetParams.containerNode;
  *   if (isFirstRendering) {
  *     containerNode
- *       .html('<ul id="refiments"></ul><div id="cta-container"></div>');
+ *       .html('<ul id="refinements"></ul><div id="cta-container"></div>');
  *   }
  *
  *   containerNode

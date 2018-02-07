@@ -51,7 +51,7 @@ describe('urlSync mechanics', () => {
 
     expect(urlUtils.lastQs).not.toEqual(expect.stringContaining('is_v'));
   });
-  test('updates the URL durding the first rendering if it has change since the initial configuration', () => {
+  test('updates the URL during the first rendering if it has change since the initial configuration', () => {
     const helper = jsHelper({ addAlgoliaAgent: () => {} });
     const urlUtils = makeTestUrlUtils();
     const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });

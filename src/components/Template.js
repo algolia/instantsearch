@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 import hogan from 'hogan.js';
 
 import curry from 'lodash/curry';
@@ -9,7 +9,7 @@ import isEqual from 'lodash/isEqual';
 
 import { isReactElement } from '../lib/utils.js';
 
-export class PureTemplate extends React.Component {
+export class PureTemplate extends Component {
   shouldComponentUpdate(nextProps) {
     return (
       !isEqual(this.props.data, nextProps.data) ||

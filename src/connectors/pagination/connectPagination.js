@@ -26,7 +26,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} PaginationRenderingOptions
- * @property {function(page): string} createURL Creates URL's for the next state, the number is the page to generate the URL for.
+ * @property {function(page): string} createURL Creates URLs for the next state, the number is the page to generate the URL for.
  * @property {number} currentRefinement The number of the page currently displayed.
  * @property {number} nbHits The number of hits computed for the last query (can be approximated).
  * @property {number} nbPages The number of pages for the result set.

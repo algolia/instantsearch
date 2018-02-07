@@ -1,4 +1,4 @@
-// we use the fullpath to the lite build to solve a meteor.js issue:
+// we use the full path to the lite build to solve a meteor.js issue:
 // https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
 import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite.js';
 import algoliasearchHelper from 'algoliasearch-helper';
@@ -85,7 +85,7 @@ Usage: instantsearch({
    * it is possibly buggy, if you find anything please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20hot%20addWidget).
    * @param  {Widget} widget The widget to add to InstantSearch. Widgets are simple objects
-   * that have methods that map the search lifecycle in a UI perspective. Usually widgets are
+   * that have methods that map the search life cycle in a UI perspective. Usually widgets are
    * created by [widget factories](widgets.html) like the one provided with InstantSearch.js.
    * @return {undefined} This method does not return anything
    */
@@ -145,7 +145,7 @@ Usage: instantsearch({
    * Removes a widget. This can be done after the InstantSearch has been started. This feature
    * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20removeWidget).
-   * @param  {Widget} widget The widget instance to remove from InstantSearch. This widget must implement a `dipose()` method in order to be gracefully removed.
+   * @param  {Widget} widget The widget instance to remove from InstantSearch. This widget must implement a `dispose()` method in order to be gracefully removed.
    * @return {undefined} This method does not return anything
    */
   removeWidget(widget) {
@@ -196,7 +196,7 @@ Usage: instantsearch({
       }
     });
 
-    // no need to retrigger a search if we don't have any widgets left
+    // no need to trigger a search if we don't have any widgets left
     if (this.widgets.length > 0) {
       this.helper.search();
     }
@@ -356,7 +356,7 @@ Usage: instantsearch({
     /**
      * Render is triggered when the rendering of the widgets has been completed
      * after a search.
-     * @event IntantSearch#render
+     * @event InstantSearch#render
      */
     this.emit('render');
   }

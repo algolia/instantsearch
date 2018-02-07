@@ -159,7 +159,7 @@ describe('priceRanges()', () => {
     });
 
     it('refines on the upper bound', () => {
-      widget.refine({ fromt: undefined, to: 10 });
+      widget.refine({ from: undefined, to: 10 });
       expect(helper.clearRefinements.calledOnce).toBe(
         true,
         'helper.clearRefinements called once'

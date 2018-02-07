@@ -46,7 +46,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} NumericRefinementListRenderingOptions
- * @property {function(item.value): string} createURL Creates URL's for the next state, the string is the name of the selected option.
+ * @property {function(item.value): string} createURL Creates URLs for the next state, the string is the name of the selected option.
  * @property {NumericRefinementListItem[]} items The list of available choices.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {function(item.value)} refine Sets the selected value and trigger a new search.
