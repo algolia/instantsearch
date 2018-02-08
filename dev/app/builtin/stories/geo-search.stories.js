@@ -1,6 +1,6 @@
 /* eslint-disable import/default */
 
-import { storiesOf } from 'dev-novel';
+import { storiesOf, action } from 'dev-novel';
 import instantsearchPlacesWidget from 'places.js/instantsearchWidget';
 import injectScript from 'scriptjs';
 import instantsearch from '../../../../index';
@@ -10,7 +10,7 @@ const wrapWithHitsAndConfiguration = (story, searchParameters) =>
   wrapWithHits(story, {
     indexName: 'airbnb',
     searchParameters: {
-      hitsPerPage: 50,
+      hitsPerPage: 25,
       ...searchParameters,
     },
   });
@@ -325,15 +325,64 @@ export default () => {
       'with built-in marker options',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
+          const logger = action('[GeoSearch] click: builtInMarker');
+
           container.style.height = '600px';
 
           window.search.addWidget(
             instantsearch.widgets.geoSearch({
               googleReference: window.google,
-              createBuiltInMarkerOptions: item => ({
-                title: item.name,
-                label: item.price_formatted,
-              }),
+              builtInMarker: {
+                createOptions: item => ({
+                  title: item.name,
+                  label: item.price_formatted,
+                }),
+                events: {
+                  click: (event, item) => {
+                    logger(event, item);
+                  },
+                },
+              },
+              container,
+              initialPosition,
+              initialZoom,
+              paddingBoundingBox,
+            })
+          );
+
+          start();
+        })
+      )
+    )
+    .add(
+      'with HTML marker options',
+      wrapWithHitsAndConfiguration((container, start) =>
+        injectGoogleMaps(() => {
+          const logger = action('[GeoSearch] click: HTMLMarker');
+
+          container.style.height = '600px';
+
+          window.search.addWidget(
+            instantsearch.widgets.geoSearch({
+              googleReference: window.google,
+              customHTMLMarker: {
+                createOptions: () => ({
+                  anchor: {
+                    x: 0,
+                    y: 5,
+                  },
+                }),
+                template: item => `
+                  <div class="my-custom-marker">
+                    ${item.price_formatted}
+                  </div>
+                `,
+                events: {
+                  click: (event, item) => {
+                    logger(event, item);
+                  },
+                },
+              },
               container,
               initialPosition,
               initialZoom,
