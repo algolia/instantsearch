@@ -6,11 +6,15 @@ import isEmpty from 'lodash/isEmpty';
 import keys from 'lodash/keys';
 import uniq from 'lodash/uniq';
 import mapKeys from 'lodash/mapKeys';
+import mapValues from 'lodash/mapValues';
+import curry from 'lodash/curry';
+import hogan from 'hogan.js';
 
 export {
   getContainerNode,
   bemHelper,
   prepareTemplateProps,
+  renderTemplate,
   isSpecialClick,
   isDomElement,
   getRefinements,
@@ -147,16 +151,63 @@ function prepareTemplates(defaultTemplates = {}, templates = {}) {
   );
 }
 
+function renderTemplate({
+  templates,
+  templateKey,
+  compileOptions,
+  helpers,
+  data,
+}) {
+  const template = templates[templateKey];
+  const templateType = typeof template;
+  const isTemplateString = templateType === 'string';
+  const isTemplateFunction = templateType === 'function';
+
+  if (!isTemplateString && !isTemplateFunction) {
+    throw new Error(
+      `Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`
+    );
+  }
+
+  if (isTemplateFunction) {
+    return template(data);
+  }
+
+  const transformedHelpers = transformHelpersToHogan(
+    helpers,
+    compileOptions,
+    data
+  );
+
+  return hogan.compile(template, compileOptions).render({
+    ...data,
+    helpers: transformedHelpers,
+  });
+}
+
+// We add all our template helper methods to the template as lambdas. Note
+// that lambdas in Mustache are supposed to accept a second argument of
+// `render` to get the rendered value, not the literal `{{value}}`. But
+// this is currently broken (see https://github.com/twitter/hogan.js/issues/222).
+function transformHelpersToHogan(helpers, compileOptions, data) {
+  return mapValues(helpers, method =>
+    curry(function(text) {
+      const render = value => hogan.compile(value, compileOptions).render(this);
+      return method.call(data, text, render);
+    })
+  );
+}
+
 function getRefinement(state, type, attributeName, name, resultsFacets) {
   const res = { type, attributeName, name };
   let facet = find(resultsFacets, { name: attributeName });
   let count;
   if (type === 'hierarchical') {
     const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
-    const splitted = name.split(facetDeclaration.separator);
-    res.name = splitted[splitted.length - 1];
-    for (let i = 0; facet !== undefined && i < splitted.length; ++i) {
-      facet = find(facet.data, { name: splitted[i] });
+    const split = name.split(facetDeclaration.separator);
+    res.name = split[split.length - 1];
+    for (let i = 0; facet !== undefined && i < split.length; ++i) {
+      facet = find(facet.data, { name: split[i] });
     }
     count = get(facet, 'count');
   } else {

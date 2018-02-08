@@ -1,13 +1,8 @@
 import forEach from 'lodash/forEach';
-import isString from 'lodash/isString';
-import isFunction from 'lodash/isFunction';
 import cx from 'classnames';
-import Hogan from 'hogan.js';
-
-import connectSearchBox from '../../connectors/search-box/connectSearchBox.js';
-import defaultTemplates from './defaultTemplates.js';
-
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import { bemHelper, getContainerNode, renderTemplate } from '../../lib/utils';
+import connectSearchBox from '../../connectors/search-box/connectSearchBox';
+import defaultTemplates from './defaultTemplates';
 
 const bem = bemHelper('ais-search-box');
 const KEY_ENTER = 13;
@@ -190,7 +185,7 @@ searchBox({
 /**
  * @typedef {Object} SearchBoxResetOption
  * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the reset buton.
+ * @property {{root: string}} [cssClasses] CSS classes added to the reset button.
  */
 
 /**
@@ -401,12 +396,20 @@ function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
     ...reset,
   };
 
-  const resetCSSClasses = { root: cx(bem('reset'), reset.cssClasses.root) };
-  const stringNode = processTemplate(reset.template, {
-    cssClasses: resetCSSClasses,
+  const resetCSSClasses = {
+    root: cx(bem('reset'), reset.cssClasses.root),
+  };
+
+  const stringNode = renderTemplate({
+    templateKey: 'template',
+    templates: reset,
+    data: {
+      cssClasses: resetCSSClasses,
+    },
   });
 
   const htmlNode = createNodeFromString(stringNode, cx(bem('reset-wrapper')));
+
   input.parentNode.appendChild(htmlNode);
 
   htmlNode.addEventListener('click', event => {
@@ -433,14 +436,20 @@ function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
   const magnifierCSSClasses = {
     root: cx(bem('magnifier'), magnifier.cssClasses.root),
   };
-  const stringNode = processTemplate(magnifier.template, {
-    cssClasses: magnifierCSSClasses,
+
+  const stringNode = renderTemplate({
+    templateKey: 'template',
+    templates: magnifier,
+    data: {
+      cssClasses: magnifierCSSClasses,
+    },
   });
 
   const htmlNode = createNodeFromString(
     stringNode,
     cx(bem('magnifier-wrapper'))
   );
+
   input.parentNode.appendChild(htmlNode);
 }
 
@@ -458,14 +467,20 @@ function addLoadingIndicator(
   const loadingIndicatorCSSClasses = {
     root: cx(bem('loading-indicator'), loadingIndicator.cssClasses.root),
   };
-  const stringNode = processTemplate(loadingIndicator.template, {
-    cssClasses: loadingIndicatorCSSClasses,
+
+  const stringNode = renderTemplate({
+    templateKey: 'template',
+    templates: loadingIndicator,
+    data: {
+      cssClasses: loadingIndicatorCSSClasses,
+    },
   });
 
   const htmlNode = createNodeFromString(
     stringNode,
     cx(bem('loading-indicator-wrapper'))
   );
+
   input.parentNode.appendChild(htmlNode);
 }
 
@@ -477,11 +492,11 @@ function addLoadingIndicator(
  * @param {object} templates the default templates
  * @returns {undefined} returns nothing
  */
-function addPoweredBy(input, poweredBy, templates) {
+function addPoweredBy(input, poweredBy, { poweredBy: poweredbyTemplate }) {
   // Default values
   poweredBy = {
     cssClasses: {},
-    template: templates.poweredBy,
+    template: poweredbyTemplate,
     ...poweredBy,
   };
 
@@ -497,37 +512,24 @@ function addPoweredBy(input, poweredBy, templates) {
     `utm_content=${location.hostname}&` +
     'utm_campaign=poweredby';
 
-  const templateData = {
-    cssClasses: poweredByCSSClasses,
-    url,
-  };
+  const stringNode = renderTemplate({
+    templateKey: 'template',
+    templates: poweredBy,
+    data: {
+      cssClasses: poweredByCSSClasses,
+      url,
+    },
+  });
 
-  const template = poweredBy.template;
-  const stringNode = processTemplate(template, templateData);
   const htmlNode = createNodeFromString(stringNode);
+
   input.parentNode.insertBefore(htmlNode, input.nextSibling);
 }
 
-// Crossbrowser way to create a DOM node from a string. We wrap in
+// Cross-browser way to create a DOM node from a string. We wrap in
 // a `span` to make sure we have one and only one node.
 function createNodeFromString(stringNode, rootClassname = '') {
   const tmpNode = document.createElement('div');
   tmpNode.innerHTML = `<span class="${rootClassname}">${stringNode.trim()}</span>`;
   return tmpNode.firstChild;
-}
-
-function processTemplate(template, templateData) {
-  let result;
-
-  if (isString(template)) {
-    result = Hogan.compile(template).render(templateData);
-  } else if (isFunction(template)) {
-    result = template(templateData);
-  }
-
-  if (!isString(result)) {
-    throw new Error('Wrong template options for the SearchBox widget');
-  }
-
-  return result;
 }

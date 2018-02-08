@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
 import PriceRangesForm from './PriceRangesForm.js';
@@ -9,7 +9,7 @@ import isEqual from 'lodash/isEqual';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
-export class RawPriceRanges extends React.Component {
+export class RawPriceRanges extends Component {
   componentWillMount() {
     this.refine = this.refine.bind(this);
   }

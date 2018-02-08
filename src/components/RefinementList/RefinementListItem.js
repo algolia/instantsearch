@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
 import isEqual from 'lodash/isEqual';
 
-class RefinementListItem extends React.Component {
+class RefinementListItem extends Component {
   componentWillMount() {
     this.handleClick = this.handleClick.bind(this);
   }

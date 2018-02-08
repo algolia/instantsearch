@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "author": "Algolia <support@algolia.com>",
@@ -121,17 +121,17 @@
     "webpack-dev-server": "2.9.7"
   },
   "dependencies": {
-    "algoliasearch": "^3.24.0",
-    "algoliasearch-helper": "^2.23.0",
-    "classnames": "^2.2.5",
-    "events": "^1.1.0",
-    "hogan.js": "^3.0.2",
-    "lodash": "^4.17.4",
-    "preact": "^8.1.0",
-    "preact-compat": "^3.16.0",
-    "preact-rheostat": "^2.1.1",
-    "prop-types": "^15.5.10",
-    "to-factory": "^1.0.0"
+    "algoliasearch": "3.24.9",
+    "algoliasearch-helper": "2.24.0",
+    "classnames": "2.2.5",
+    "events": "1.1.0",
+    "hogan.js": "3.0.2",
+    "lodash": "4.17.4",
+    "preact": "8.1.0",
+    "preact-compat": "3.17.0",
+    "preact-rheostat": "2.1.1",
+    "prop-types": "15.5.10",
+    "to-factory": "1.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [

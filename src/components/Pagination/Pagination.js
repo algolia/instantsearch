@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 import forEach from 'lodash/forEach';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { isSpecialClick } from '../../lib/utils.js';
@@ -11,7 +11,7 @@ import PaginationLink from './PaginationLink.js';
 
 import cx from 'classnames';
 
-export class RawPagination extends React.Component {
+export class RawPagination extends Component {
   constructor(props) {
     super(defaultsDeep(props, RawPagination.defaultProps));
     this.handleClick = this.handleClick.bind(this);

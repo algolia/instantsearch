@@ -6,9 +6,6 @@
 // required for browsers not supporting Object.freeze (helper requirement)
 import '../shams/Object.freeze.js';
 
-// required for IE <= 10 since move to babel6
-import '../shims/Object.getPrototypeOf.js';
-
 import toFactory from 'to-factory';
 import algoliasearchHelper from 'algoliasearch-helper';
 

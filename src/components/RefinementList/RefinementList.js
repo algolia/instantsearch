@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 import cx from 'classnames';
 import { isSpecialClick } from '../../lib/utils.js';
 
@@ -12,7 +12,7 @@ import SearchBox from '../SearchBox';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
-export class RawRefinementList extends React.Component {
+export class RawRefinementList extends Component {
   constructor(props) {
     super(props);
     this.handleItemClick = this.handleItemClick.bind(this);

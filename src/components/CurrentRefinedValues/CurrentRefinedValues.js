@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
 
@@ -11,7 +11,7 @@ import map from 'lodash/map';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 
-export class RawCurrentRefinedValues extends React.Component {
+export class RawCurrentRefinedValues extends Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }

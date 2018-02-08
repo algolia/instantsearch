@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
-export class RawStats extends React.Component {
+export class RawStats extends Component {
   shouldComponentUpdate(nextProps) {
     return (
       this.props.nbHits !== nextProps.hits ||

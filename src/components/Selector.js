@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import React from 'preact-compat';
+import React, { Component } from 'preact-compat';
 
 import autoHideContainer from '../decorators/autoHideContainer.js';
 import headerFooter from '../decorators/headerFooter.js';
 
-export class RawSelector extends React.Component {
+export class RawSelector extends Component {
   componentWillMount() {
     this.handleChange = this.handleChange.bind(this);
   }
