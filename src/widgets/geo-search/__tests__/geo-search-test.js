@@ -1055,7 +1055,7 @@ describe('GeoSearchRenderer', () => {
           createOptions: item => ({
             title: `ID: ${item.objectID}`,
           }),
-          template: item => `<p>${item.objectID}</p>`,
+          template: '<p>{{objectID}}</p>',
         },
       });
 

@@ -372,9 +372,9 @@ export default () => {
                     y: 5,
                   },
                 }),
-                template: item => `
+                template: `
                   <div class="my-custom-marker">
-                    ${item.price_formatted}
+                    {{price_formatted}}
                   </div>
                 `,
                 events: {

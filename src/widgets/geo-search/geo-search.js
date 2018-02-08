@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import noop from 'lodash/noop';
-import { bemHelper } from '../../lib/utils';
+import { bemHelper, renderTemplate } from '../../lib/utils';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
 import renderer from './GeoSearchRenderer';
 import defaultTemplates from './defaultTemplates';
@@ -107,9 +107,12 @@ const geoSearch = (props = {}) => {
       ...customHTMLMarker.createOptions(item),
       __id: item.objectID,
       position: item._geoloc,
-      // Replace with renderTemplate
-      template: customHTMLMarker.template(item),
       className: cx(bem('marker')),
+      template: renderTemplate({
+        templateKey: 'template',
+        templates: customHTMLMarker,
+        data: item,
+      }),
     });
 
   const createMarker = !customHTMLMarker
