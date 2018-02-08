@@ -28,7 +28,9 @@ describe('connectConfigure', () => {
   it('Applies searchParameters with a higher priority', () => {
     const widget = makeWidget({ analytics: true });
     {
-      const config = widget.getConfiguration(jsHelper.make({ analytics: false }));
+      const config = widget.getConfiguration(
+        jsHelper.make({ analytics: false })
+      );
       expect(config).toEqual({
         analytics: true,
       });
