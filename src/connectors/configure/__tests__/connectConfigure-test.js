@@ -1,6 +1,9 @@
 import jsHelper from 'algoliasearch-helper';
 import connectConfigure from '../connectConfigure';
 
+const createState = state =>
+  jsHelper({ addAlgoliaAgent: () => {} }, '', state).state;
+
 describe('connectConfigure', () => {
   let makeWidget;
   beforeEach(() => {
@@ -11,7 +14,7 @@ describe('connectConfigure', () => {
 
   it('Applies searchParameters if nothing in configuration yet', () => {
     const widget = makeWidget({ analytics: true });
-    const config = widget.getConfiguration(jsHelper.make({}));
+    const config = widget.getConfiguration(createState({}));
     expect(config).toEqual({
       analytics: true,
     });
@@ -19,7 +22,7 @@ describe('connectConfigure', () => {
 
   it('Applies searchParameters if nothing conflicting configuration', () => {
     const widget = makeWidget({ analytics: true });
-    const config = widget.getConfiguration(jsHelper.make({ query: 'testing' }));
+    const config = widget.getConfiguration(createState({ query: 'testing' }));
     expect(config).toEqual({
       analytics: true,
     });
@@ -28,16 +31,14 @@ describe('connectConfigure', () => {
   it('Applies searchParameters with a higher priority', () => {
     const widget = makeWidget({ analytics: true });
     {
-      const config = widget.getConfiguration(
-        jsHelper.make({ analytics: false })
-      );
+      const config = widget.getConfiguration(createState({ analytics: false }));
       expect(config).toEqual({
         analytics: true,
       });
     }
     {
       const config = widget.getConfiguration(
-        jsHelper.make({ analytics: false, extra: true })
+        createState({ analytics: false, extra: true })
       );
       expect(config).toEqual({
         analytics: true,
@@ -49,14 +50,14 @@ describe('connectConfigure', () => {
     const widget = makeWidget({ analytics: true });
 
     const nextState = widget.dispose({
-      state: jsHelper.make({
+      state: createState({
         analytics: true,
         somethingElse: false,
       }),
     });
 
     expect(nextState).toEqual(
-      jsHelper.make({
+      createState({
         somethingElse: false,
       })
     );
@@ -66,7 +67,7 @@ describe('connectConfigure', () => {
     const widget = makeWidget({ analytics: true });
 
     const nextState = widget.dispose({
-      state: jsHelper.make({
+      state: createState({
         // even though it's different, it will be deleted
         analytics: false,
         somethingElse: false,
@@ -74,7 +75,7 @@ describe('connectConfigure', () => {
     });
 
     expect(nextState).toEqual(
-      jsHelper.make({
+      createState({
         somethingElse: false,
       })
     );
