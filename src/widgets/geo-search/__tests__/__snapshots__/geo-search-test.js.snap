@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GeoSearchRenderer exepct to render with custom classNames 1`] = `"<div class=\\"ais-geo-search custom-root\\"><div class=\\"ais-geo-search--map custom-map\\"></div><div class=\\"ais-geo-search--controls custom-controls\\"></div></div>"`;
+exports[`GeoSearch exepct to render with custom classNames 1`] = `"<div class=\\"ais-geo-search custom-root\\"><div class=\\"ais-geo-search--map custom-map\\"></div><div class=\\"ais-geo-search--controls custom-controls\\"></div></div>"`;
 
-exports[`GeoSearchRenderer exepct to render with custom classNames 2`] = `
+exports[`GeoSearch exepct to render with custom classNames 2`] = `
 Array [
   <GeoSearchControls
     cssClasses={
@@ -47,9 +47,9 @@ Array [
 ]
 `;
 
-exports[`GeoSearchRenderer expect to render 1`] = `"<div class=\\"ais-geo-search\\"><div class=\\"ais-geo-search--map\\"></div><div class=\\"ais-geo-search--controls\\"></div></div>"`;
+exports[`GeoSearch expect to render 1`] = `"<div class=\\"ais-geo-search\\"><div class=\\"ais-geo-search--map\\"></div><div class=\\"ais-geo-search--controls\\"></div></div>"`;
 
-exports[`GeoSearchRenderer expect to render 2`] = `
+exports[`GeoSearch expect to render 2`] = `
 Array [
   <GeoSearchControls
     cssClasses={

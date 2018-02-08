@@ -21,7 +21,7 @@ jest.mock('../GeoSearchRenderer', () => {
 
 jest.mock('../createHTMLMarker');
 
-describe('GeoSearchRenderer', () => {
+describe('GeoSearch', () => {
   const createFakeMapInstance = () => ({
     addListener: jest.fn(),
     setCenter: jest.fn(),
