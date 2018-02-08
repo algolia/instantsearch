@@ -182,6 +182,85 @@ describe('GeoSearchRenderer', () => {
     expect(render.mock.calls[0]).toMatchSnapshot();
   });
 
+  it('exepct to render with custom template', () => {
+    const container = createContainer();
+    const instantSearchInstance = createFakeInstantSearch();
+    const helper = createFakeHelper();
+    const googleReference = createFakeGoogleReference();
+
+    const widget = geoSearch({
+      googleReference,
+      container,
+      templates: {
+        toggle: 'Search when the map move',
+      },
+    });
+
+    widget.init({
+      helper,
+      instantSearchInstance,
+      state: helper.state,
+    });
+
+    widget.render({
+      helper,
+      instantSearchInstance,
+      results: {
+        hits: [],
+      },
+    });
+
+    const actual = renderer.mock.calls[0][0].widgetParams.templates;
+
+    const expectation = {
+      clear: 'Clear the map refinement',
+      toggle: 'Search when the map move',
+      redo: 'Redo search here',
+    };
+
+    expect(actual).toEqual(expectation);
+  });
+
+  it('exepct to render with custom paddingBoundingBoc', () => {
+    const container = createContainer();
+    const instantSearchInstance = createFakeInstantSearch();
+    const helper = createFakeHelper();
+    const googleReference = createFakeGoogleReference();
+
+    const widget = geoSearch({
+      googleReference,
+      container,
+      paddingBoundingBox: {
+        top: 10,
+      },
+    });
+
+    widget.init({
+      helper,
+      instantSearchInstance,
+      state: helper.state,
+    });
+
+    widget.render({
+      helper,
+      instantSearchInstance,
+      results: {
+        hits: [],
+      },
+    });
+
+    const actual = renderer.mock.calls[0][0].widgetParams.paddingBoundingBox;
+
+    const expectation = {
+      top: 10,
+      right: 0,
+      bottom: 0,
+      left: 0,
+    };
+
+    expect(actual).toEqual(expectation);
+  });
+
   it('expect to render the map with default options', () => {
     const container = createContainer();
     const instantSearchInstance = createFakeInstantSearch();
