@@ -2908,9 +2908,9 @@ chokidar@1.7.0, chokidar@^1.6.0, chokidar@^1.6.1, chokidar@^1.7.0:
   optionalDependencies:
     fsevents "^1.0.0"
 
-chokidar@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.0.tgz#6686313c541d3274b2a5c01233342037948c911b"
+chokidar@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.1.tgz#6e67e9998fe10e8f651e975ca62460456ff8e297"
   dependencies:
     anymatch "^2.0.0"
     async-each "^1.0.0"
@@ -2922,6 +2922,7 @@ chokidar@2.0.0:
     normalize-path "^2.1.1"
     path-is-absolute "^1.0.0"
     readdirp "^2.0.0"
+    upath "1.0.0"
   optionalDependencies:
     fsevents "^1.0.0"
 
@@ -8164,6 +8165,10 @@ lodash.uniq@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
 
+lodash@3.x, lodash@^3.10.1, lodash@^3.3.1:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
+
 lodash@4.17.5:
   version "4.17.5"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
@@ -8171,10 +8176,6 @@ lodash@4.17.5:
 lodash@4.x.x, lodash@^4.0.0, lodash@^4.0.1, lodash@^4.1.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.15.0, lodash@^4.17.2, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.6.1, lodash@~4.17.4:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
-
-lodash@^3.10.1, lodash@^3.3.1:
-  version "3.10.1"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
 lodash@~1.0.1:
   version "1.0.2"
@@ -13102,6 +13103,10 @@ underscore-contrib@~0.3.0:
   dependencies:
     underscore "1.6.0"
 
+underscore.string@2.3.x:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-2.3.3.tgz#71c08bf6b428b1133f37e78fa3a21c82f7329b0d"
+
 underscore.string@~2.2.0rc:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/underscore.string/-/underscore.string-2.2.1.tgz#d7c0fa2af5d5a1a67f4253daee98132e733f0f19"
@@ -13219,6 +13224,13 @@ unzip-response@^1.0.0, unzip-response@^1.0.2:
 unzip-response@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/unzip-response/-/unzip-response-2.0.1.tgz#d2f0f737d16b0615e72a6935ed04214572d56f97"
+
+upath@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/upath/-/upath-1.0.0.tgz#b4706b9461ca8473adf89133d235689ca17f3656"
+  dependencies:
+    lodash "3.x"
+    underscore.string "2.3.x"
 
 update-notifier@^0.2.2:
   version "0.2.2"
