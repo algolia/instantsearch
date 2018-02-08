@@ -10,4 +10,4 @@
 # folder through a local web server.
 
 yarn
-NODE_ENV=production webpack-dev-server --config ./scripts/webpack.config.js --content-base dist/
+NODE_ENV=development webpack-dev-server --config ./scripts/webpack.config.js --content-base dist/

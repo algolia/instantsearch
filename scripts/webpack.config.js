@@ -7,12 +7,16 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HappyPack = require('happypack');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const extractCSS = new ExtractTextPlugin('instantsearch.css');
 const extractTheme = new ExtractTextPlugin('instantsearch-theme-algolia.css');
 
-const { NODE_ENV = 'development', VERSION = 'UNRELEASED' } = process.env;
+const {
+  NODE_ENV = 'development',
+  VERSION = `UNRELEASED / generated at: ${new Date().toUTCString()}`,
+} = process.env;
+
+const noop = () => ({ apply: () => undefined });
 
 module.exports = {
   devtool: 'source-map',
@@ -77,26 +81,26 @@ module.exports = {
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
 
-    new UglifyJSPlugin({
-      uglifyOptions: {
-        compress: {
-          warnings: false,
-          comparisons: false,
-        },
-        output: {
-          comments: false,
-          ascii_only: true,
-        },
-      },
-      sourceMap: true,
-    }),
+    NODE_ENV === 'production'
+      ? new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            warnings: false,
+            comparisons: false,
+          },
+          output: {
+            comments: false,
+            ascii_only: true,
+          },
+          sourceMap: true,
+        })
+      : noop,
 
     new webpack.BannerPlugin(
       `instantsearch.js ${VERSION} | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js`
     ),
 
     // Generate un-minified js along with UglifyJsPlugin
-    new UnminifiedWebpackPlugin(),
+    NODE_ENV === 'production' ? new UnminifiedWebpackPlugin() : noop,
 
     new HappyPack({
       loaders: ['babel-loader'],
