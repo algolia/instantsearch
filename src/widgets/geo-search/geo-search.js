@@ -17,7 +17,6 @@ const geoSearch = (props = {}) => {
   const defaultCustomHTMLMarker = {
     createOptions: noop,
     template: () => '<p>Your custom HTML Marker</p>',
-    cssClasses: {},
     events: {},
   };
 
