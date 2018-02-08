@@ -1,6 +1,7 @@
 import last from 'lodash/last';
 import { render } from 'preact-compat';
 import algoliasearchHelper from 'algoliasearch-helper';
+import createHTMLMarker from '../createHTMLMarker';
 import renderer from '../GeoSearchRenderer';
 import geoSearch from '../geo-search';
 
@@ -17,6 +18,8 @@ jest.mock('../GeoSearchRenderer', () => {
 
   return jest.fn((...args) => module.default(...args));
 });
+
+jest.mock('../createHTMLMarker');
 
 describe('GeoSearchRenderer', () => {
   const createFakeMapInstance = () => ({
@@ -44,6 +47,7 @@ describe('GeoSearchRenderer', () => {
   const createFakeMarkerInstance = () => ({
     setMap: jest.fn(),
     getPosition: jest.fn(),
+    addListener: jest.fn(),
   });
 
   const createFakeGoogleReference = (
@@ -53,6 +57,7 @@ describe('GeoSearchRenderer', () => {
     } = {}
   ) => ({
     maps: {
+      LatLng: jest.fn(),
       LatLngBounds: jest.fn(() => ({
         extend: jest.fn().mockReturnThis(),
       })),
@@ -67,6 +72,20 @@ describe('GeoSearchRenderer', () => {
       event: {
         addListener: jest.fn(),
         removeListener: jest.fn(),
+      },
+      OverlayView: {
+        setMap: jest.fn(),
+        getPanes: jest.fn(() => ({
+          overlayMouseTarget: {
+            appendChild: jest.fn(),
+          },
+        })),
+        getProjection: jest.fn(() => ({
+          fromLatLngToDivPixel: jest.fn(() => ({
+            x: 0,
+            y: 0,
+          })),
+        })),
       },
     },
   });
@@ -86,8 +105,8 @@ describe('GeoSearchRenderer', () => {
 
   const lastOptions = fn => last(fn.mock.calls)[0];
   const lastRenderState = fn => lastOptions(fn).widgetParams.renderState;
-  const simulateEvent = (fn, eventName) => {
-    fn.addListener.mock.calls.find(call => call.includes(eventName))[1]();
+  const simulateEvent = (fn, eventName, event) => {
+    fn.addListener.mock.calls.find(call => call.includes(eventName))[1](event);
   };
 
   beforeEach(() => {
@@ -225,85 +244,6 @@ describe('GeoSearchRenderer', () => {
         position: 'right:bottom',
       },
     });
-  });
-
-  it('expect to render markers built-in with default options', () => {
-    const container = createContainer();
-    const instantSearchInstance = createFakeInstantSearch();
-    const helper = createFakeHelper();
-    const mapInstance = createFakeMapInstance();
-    const googleReference = createFakeGoogleReference({ mapInstance });
-
-    const widget = geoSearch({
-      googleReference,
-      container,
-    });
-
-    widget.init({
-      helper,
-      instantSearchInstance,
-      state: helper.state,
-    });
-
-    widget.render({
-      helper,
-      instantSearchInstance,
-      results: {
-        hits: [
-          { objectID: 123, _geoloc: true },
-          { objectID: 456, _geoloc: true },
-          { objectID: 789, _geoloc: true },
-        ],
-      },
-    });
-
-    expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
-    expect(googleReference.maps.Marker.mock.calls).toEqual([
-      [expect.objectContaining({ __id: 123 })],
-      [expect.objectContaining({ __id: 456 })],
-      [expect.objectContaining({ __id: 789 })],
-    ]);
-  });
-
-  it('expect to render built-in markers with given options', () => {
-    const container = createContainer();
-    const instantSearchInstance = createFakeInstantSearch();
-    const helper = createFakeHelper();
-    const mapInstance = createFakeMapInstance();
-    const googleReference = createFakeGoogleReference({ mapInstance });
-
-    const widget = geoSearch({
-      googleReference,
-      container,
-      createBuiltInMarkerOptions: item => ({
-        title: `ID: ${item.objectID}`,
-      }),
-    });
-
-    widget.init({
-      helper,
-      instantSearchInstance,
-      state: helper.state,
-    });
-
-    widget.render({
-      helper,
-      instantSearchInstance,
-      results: {
-        hits: [
-          { objectID: 123, _geoloc: true },
-          { objectID: 456, _geoloc: true },
-          { objectID: 789, _geoloc: true },
-        ],
-      },
-    });
-
-    expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
-    expect(googleReference.maps.Marker.mock.calls).toEqual([
-      [expect.objectContaining({ __id: 123, title: 'ID: 123' })],
-      [expect.objectContaining({ __id: 456, title: 'ID: 456' })],
-      [expect.objectContaining({ __id: 789, title: 'ID: 789' })],
-    ]);
   });
 
   describe('setup events', () => {
@@ -821,6 +761,330 @@ describe('GeoSearchRenderer', () => {
 
       expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('markers creation', () => {
+    it('expect to render built-in markers with default options', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const googleReference = createFakeGoogleReference();
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 456, _geoloc: true },
+            { objectID: 789, _geoloc: true },
+          ],
+        },
+      });
+
+      expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
+      expect(googleReference.maps.Marker.mock.calls).toEqual([
+        [expect.objectContaining({ __id: 123 })],
+        [expect.objectContaining({ __id: 456 })],
+        [expect.objectContaining({ __id: 789 })],
+      ]);
+    });
+
+    it('expect to render built-in markers with given options', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const googleReference = createFakeGoogleReference();
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        builtInMarker: {
+          createOptions: item => ({
+            title: `ID: ${item.objectID}`,
+          }),
+        },
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 456, _geoloc: true },
+            { objectID: 789, _geoloc: true },
+          ],
+        },
+      });
+
+      expect(googleReference.maps.Marker).toHaveBeenCalledTimes(3);
+      expect(googleReference.maps.Marker.mock.calls).toEqual([
+        [expect.objectContaining({ __id: 123, title: 'ID: 123' })],
+        [expect.objectContaining({ __id: 456, title: 'ID: 456' })],
+        [expect.objectContaining({ __id: 789, title: 'ID: 789' })],
+      ]);
+    });
+
+    it('expect to setup listeners on built-in markers', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const markerInstance = createFakeMarkerInstance();
+      const googleReference = createFakeGoogleReference({ markerInstance });
+      const onClick = jest.fn();
+      const onMouseOver = jest.fn();
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        builtInMarker: {
+          events: {
+            click: onClick,
+            mouseover: onMouseOver,
+          },
+        },
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 234, _geoloc: true },
+            { objectID: 789, _geoloc: true },
+          ],
+        },
+      });
+
+      // 2 events for each hit
+      expect(markerInstance.addListener).toHaveBeenCalledTimes(6);
+
+      // Simulate click event
+      simulateEvent(markerInstance, 'click', { type: 'click' });
+
+      // Simulate mouseover event
+      simulateEvent(markerInstance, 'mouseover', { type: 'mouseover' });
+
+      expect(onClick).toHaveBeenCalledWith(
+        { type: 'click' },
+        { objectID: 123, _geoloc: true }
+      );
+
+      expect(onMouseOver).toHaveBeenCalledWith(
+        { type: 'mouseover' },
+        { objectID: 123, _geoloc: true }
+      );
+    });
+
+    it('expect to render custom HTML markers with default options', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const googleReference = createFakeGoogleReference();
+      const HTMLMarker = jest.fn(createFakeMarkerInstance);
+
+      createHTMLMarker.mockImplementation(() => HTMLMarker);
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        customHTMLMarker: true,
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 456, _geoloc: true },
+            { objectID: 789, _geoloc: true },
+          ],
+        },
+      });
+
+      expect(HTMLMarker).toHaveBeenCalledTimes(3);
+      expect(HTMLMarker.mock.calls).toEqual([
+        [
+          expect.objectContaining({
+            __id: 123,
+            template: '<p>Your custom HTML Marker</p>',
+          }),
+        ],
+        [
+          expect.objectContaining({
+            __id: 456,
+            template: '<p>Your custom HTML Marker</p>',
+          }),
+        ],
+        [
+          expect.objectContaining({
+            __id: 789,
+            template: '<p>Your custom HTML Marker</p>',
+          }),
+        ],
+      ]);
+
+      createHTMLMarker.mockRestore();
+    });
+
+    it('expect to render custom HTML markers with given options', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const googleReference = createFakeGoogleReference();
+      const HTMLMarker = jest.fn(createFakeMarkerInstance);
+
+      createHTMLMarker.mockImplementation(() => HTMLMarker);
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        customHTMLMarker: {
+          createOptions: item => ({
+            title: `ID: ${item.objectID}`,
+          }),
+          template: item => `<p>${item.objectID}</p>`,
+        },
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 456, _geoloc: true },
+            { objectID: 789, _geoloc: true },
+          ],
+        },
+      });
+
+      expect(HTMLMarker).toHaveBeenCalledTimes(3);
+      expect(HTMLMarker.mock.calls).toEqual([
+        [
+          expect.objectContaining({
+            __id: 123,
+            title: 'ID: 123',
+            template: '<p>123</p>',
+          }),
+        ],
+        [
+          expect.objectContaining({
+            __id: 456,
+            title: 'ID: 456',
+            template: '<p>456</p>',
+          }),
+        ],
+        [
+          expect.objectContaining({
+            __id: 789,
+            title: 'ID: 789',
+            template: '<p>789</p>',
+          }),
+        ],
+      ]);
+
+      createHTMLMarker.mockRestore();
+    });
+
+    it('expect to setup listeners on custom HTML markers', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const googleReference = createFakeGoogleReference();
+      const markerInstance = createFakeMarkerInstance();
+      const HTMLMarker = jest.fn(() => markerInstance);
+      const onClick = jest.fn();
+      const onMouseOver = jest.fn();
+
+      createHTMLMarker.mockImplementation(() => HTMLMarker);
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        customHTMLMarker: {
+          events: {
+            click: onClick,
+            mouseover: onMouseOver,
+          },
+        },
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 234, _geoloc: true },
+            { objectID: 789, _geoloc: true },
+          ],
+        },
+      });
+
+      // 2 events for each hit
+      expect(markerInstance.addListener).toHaveBeenCalledTimes(6);
+
+      // Simulate click event
+      simulateEvent(markerInstance, 'click', { type: 'click' });
+
+      // Simulate mouseover event
+      simulateEvent(markerInstance, 'mouseover', { type: 'mouseover' });
+
+      expect(onClick).toHaveBeenCalledWith(
+        { type: 'click' },
+        { objectID: 123, _geoloc: true }
+      );
+
+      expect(onMouseOver).toHaveBeenCalledWith(
+        { type: 'mouseover' },
+        { objectID: 123, _geoloc: true }
+      );
     });
   });
 

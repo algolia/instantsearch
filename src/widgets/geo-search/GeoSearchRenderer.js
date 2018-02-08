@@ -71,7 +71,8 @@ const renderer = (
     enableRefineControl,
     paddingBoundingBox,
     mapOptions,
-    createBuiltInMarkerOptions,
+    createMarker,
+    markerOptions,
     renderState,
   } = widgetParams;
 
@@ -176,15 +177,20 @@ const renderer = (
 
   // Create the markers from the items
   renderState.markers = updateMarkers.concat(
-    nextPendingItems.map(
-      item =>
-        new googleReference.maps.Marker({
-          ...createBuiltInMarkerOptions(item),
-          __id: item.objectID,
-          position: item._geoloc,
-          map: renderState.mapInstance,
-        })
-    )
+    nextPendingItems.map(item => {
+      const marker = createMarker({
+        map: renderState.mapInstance,
+        item,
+      });
+
+      Object.keys(markerOptions.events).forEach(eventName => {
+        marker.addListener(eventName, event => {
+          markerOptions.events[eventName](event, item);
+        });
+      });
+
+      return marker;
+    })
   );
 
   // Fit the map to the markers when needed

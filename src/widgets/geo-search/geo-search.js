@@ -4,27 +4,47 @@ import { bemHelper } from '../../lib/utils';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
 import renderer from './GeoSearchRenderer';
 import defaultTemplates from './defaultTemplates';
+import createHTMLMarker from './createHTMLMarker';
 
 const bem = bemHelper('ais-geo-search');
 
 const geoSearch = (props = {}) => {
+  const defaultBuiltInMarker = {
+    createOptions: noop,
+    events: {},
+  };
+
+  const defaultCustomHTMLMarker = {
+    createOptions: noop,
+    template: () => '<p>Your custom HTML Marker</p>',
+    cssClasses: {},
+    events: {},
+  };
+
+  const defaultPaddingBoundingBox = {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  };
+
   const widgetParams = {
     enableClearMapRefinement: true,
     enableRefineControl: true,
     cssClasses: {},
     templates: {},
-    paddingBoundingBox: {
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-    },
-    createBuiltInMarkerOptions: noop,
+    builtInMarker: {},
+    customHTMLMarker: false,
+    paddingBoundingBox: {},
     ...props,
   };
 
   const {
     cssClasses: userCssClasses,
+    templates: userTemplates,
+    builtInMarker: userBuiltInMarker,
+    customHTMLMarker: userCustomHTMLMarker,
+    paddingBoundingBox: userPaddingBoundingBox,
     container,
     googleReference,
   } = widgetParams;
@@ -54,8 +74,52 @@ const geoSearch = (props = {}) => {
 
   const templates = {
     ...defaultTemplates,
-    ...widgetParams.templates,
+    ...userTemplates,
   };
+
+  const builtInMarker = {
+    ...defaultBuiltInMarker,
+    ...userBuiltInMarker,
+  };
+
+  const customHTMLMarker = Boolean(userCustomHTMLMarker) && {
+    ...defaultCustomHTMLMarker,
+    ...userCustomHTMLMarker,
+  };
+
+  const paddingBoundingBox = {
+    ...defaultPaddingBoundingBox,
+    ...userPaddingBoundingBox,
+  };
+
+  const createBuiltInMarker = ({ item, ...rest }) =>
+    new googleReference.maps.Marker({
+      ...rest,
+      ...builtInMarker.createOptions(item),
+      __id: item.objectID,
+      position: item._geoloc,
+    });
+
+  const HTMLMarker = createHTMLMarker(googleReference);
+  const createCustomHTMLMarker = ({ item, ...rest }) =>
+    new HTMLMarker({
+      ...rest,
+      ...customHTMLMarker.createOptions(item),
+      __id: item.objectID,
+      position: item._geoloc,
+      // Replace with renderTemplate
+      template: customHTMLMarker.template(item),
+      className: cx(bem('marker')),
+    });
+
+  const createMarker = !customHTMLMarker
+    ? createBuiltInMarker
+    : createCustomHTMLMarker;
+
+  // prettier-ignore
+  const markerOptions = !customHTMLMarker
+    ? builtInMarker
+    : customHTMLMarker;
 
   try {
     const makeGeoSearch = connectGeoSearch(renderer);
@@ -65,6 +129,9 @@ const geoSearch = (props = {}) => {
       renderState: {},
       cssClasses,
       templates,
+      paddingBoundingBox,
+      createMarker,
+      markerOptions,
     });
   } catch (e) {
     throw new Error(`See usage.`);
