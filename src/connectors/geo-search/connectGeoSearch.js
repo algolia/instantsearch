@@ -30,7 +30,6 @@ export default function connectGeoSearch(renderFn, unmountFn) {
     const widgetState = {
       isRefineOnMapMove: enableRefineOnMapMove,
       hasMapMoveSinceLastRefine: false,
-      isRefinedWithMap: false,
       lastRefinePosition: '',
       lastRefineBoundingBox: '',
       internalToggleRefineOnMapMove: noop,
@@ -46,7 +45,6 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       helper.setQueryParameter('insideBoundingBox', boundingBox).search();
 
       widgetState.hasMapMoveSinceLastRefine = false;
-      widgetState.isRefinedWithMap = true;
       widgetState.lastRefineBoundingBox = boundingBox;
     };
 
@@ -54,7 +52,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       helper.setQueryParameter('insideBoundingBox').search();
     };
 
-    const isRefinedWithMap = () => widgetState.isRefinedWithMap;
+    const isRefinedWithMap = state => () => Boolean(state.insideBoundingBox);
 
     const toggleRefineOnMapMove = () =>
       widgetState.internalToggleRefineOnMapMove();
@@ -102,7 +100,7 @@ export default function connectGeoSearch(renderFn, unmountFn) {
           position: getPositionFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
-          isRefinedWithMap,
+          isRefinedWithMap: isRefinedWithMap(state),
           toggleRefineOnMapMove,
           isRefineOnMapMove,
           setMapMoveSinceLastRefine,
@@ -122,18 +120,17 @@ export default function connectGeoSearch(renderFn, unmountFn) {
       const state = helper.getState();
 
       const positionChangedSinceLastRefine =
-        state.aroundLatLng &&
-        widgetState.lastRefinePosition &&
+        Boolean(state.aroundLatLng) &&
+        Boolean(widgetState.lastRefinePosition) &&
         state.aroundLatLng !== widgetState.lastRefinePosition;
 
       const boundingBoxChangedSinceLastRefine =
         !state.insideBoundingBox &&
-        widgetState.lastRefineBoundingBox &&
+        Boolean(widgetState.lastRefineBoundingBox) &&
         state.insideBoundingBox !== widgetState.lastRefineBoundingBox;
 
       if (positionChangedSinceLastRefine || boundingBoxChangedSinceLastRefine) {
         widgetState.hasMapMoveSinceLastRefine = false;
-        widgetState.isRefinedWithMap = false;
       }
 
       widgetState.lastRefinePosition = state.aroundLatLng || '';
@@ -155,11 +152,11 @@ export default function connectGeoSearch(renderFn, unmountFn) {
           position: getPositionFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
+          isRefinedWithMap: isRefinedWithMap(state),
           toggleRefineOnMapMove,
           isRefineOnMapMove,
           setMapMoveSinceLastRefine,
           hasMapMoveSinceLastRefine,
-          isRefinedWithMap,
           widgetParams,
           instantSearchInstance,
         },

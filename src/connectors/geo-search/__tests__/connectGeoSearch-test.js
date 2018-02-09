@@ -234,6 +234,67 @@ describe('connectGeoSearch - rendering', () => {
     );
   });
 
+  it('expect to render with insideBoundingBox from the state', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch(render, unmount);
+    const widget = customGeoSearch({
+      position: {
+        lat: 10,
+        lng: 12,
+      },
+    });
+
+    const client = createFakeClient();
+    const helper = createFakeHelper(client);
+
+    // Simulate the configuration or external setter
+    helper.setQueryParameter('insideBoundingBox', [
+      [
+        48.84174222399724,
+        2.367719162523599,
+        48.81614630305218,
+        2.284205902635904,
+      ],
+    ]);
+
+    widget.init({
+      helper,
+      state: helper.state,
+    });
+
+    expect(render).toHaveBeenCalledTimes(1);
+    expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(true);
+
+    widget.render({
+      results: new SearchResults(helper.getState(), [
+        {
+          hits: [],
+        },
+      ]),
+      helper,
+    });
+
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+
+    // Simulate the configuration or external setter
+    helper.setQueryParameter('insideBoundingBox');
+
+    widget.render({
+      results: new SearchResults(helper.getState(), [
+        {
+          hits: [],
+        },
+      ]),
+      helper,
+    });
+
+    expect(render).toHaveBeenCalledTimes(3);
+    expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(false);
+  });
+
   it('expect to reset the map state when position changed', () => {
     const render = jest.fn();
     const unmount = jest.fn();
@@ -297,7 +358,7 @@ describe('connectGeoSearch - rendering', () => {
 
     expect(render).toHaveBeenCalledTimes(4);
     expect(render.mock.calls[3][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[3][0].isRefinedWithMap()).toBe(false);
+    expect(render.mock.calls[3][0].isRefinedWithMap()).toBe(true);
   });
 
   it("expect to not reset the map state when position don't changed", () => {
@@ -428,8 +489,8 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(false);
+    expect(render.mock.calls[3][0].hasMapMoveSinceLastRefine()).toBe(false);
+    expect(render.mock.calls[3][0].isRefinedWithMap()).toBe(false);
   });
 
   it('expect to not reset the map state when boundingBox is preserve', () => {
@@ -494,8 +555,8 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(true);
-    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+    expect(render.mock.calls[3][0].hasMapMoveSinceLastRefine()).toBe(true);
+    expect(render.mock.calls[3][0].isRefinedWithMap()).toBe(true);
   });
 
   describe('refine', () => {
