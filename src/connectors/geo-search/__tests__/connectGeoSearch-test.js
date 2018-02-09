@@ -1,4 +1,6 @@
-import searchHelper, {
+import last from 'lodash/last';
+import first from 'lodash/first';
+import algoliasearchHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
@@ -9,12 +11,15 @@ const createFakeClient = () => ({
 });
 
 const createFakeHelper = client => {
-  const helper = searchHelper(client);
+  const helper = algoliasearchHelper(client);
 
   helper.search = jest.fn();
 
   return helper;
 };
+
+const firstRenderArgs = fn => first(fn.mock.calls)[0];
+const lastRenderArgs = fn => last(fn.mock.calls)[0];
 
 describe('connectGeoSearch - rendering', () => {
   it('expect to be a widget', () => {
@@ -67,9 +72,9 @@ describe('connectGeoSearch - rendering', () => {
       true
     );
 
-    expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(true);
-    expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+    expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
 
     widget.render({
       results: new SearchResults(helper.getState(), [
@@ -104,9 +109,9 @@ describe('connectGeoSearch - rendering', () => {
       false
     );
 
-    expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(true);
-    expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(false);
+    expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
   });
 
   it('expect to render with enableRefineOnMapMove disabled', () => {
@@ -127,7 +132,7 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(false);
+    expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
 
     widget.render({
       results: new SearchResults(helper.getState(), [
@@ -139,7 +144,7 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
+    expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
   });
 
   it('expect to render with only geoloc hits', () => {
@@ -210,6 +215,26 @@ describe('connectGeoSearch - rendering', () => {
       true
     );
 
+    widget.render({
+      results: new SearchResults(helper.getState(), [
+        {
+          hits: [],
+        },
+      ]),
+      helper,
+    });
+
+    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledWith(
+      expect.objectContaining({
+        position: {
+          lat: 10,
+          lng: 12,
+        },
+      }),
+      false
+    );
+
     // Simulate the configuration or external setter
     helper.setQueryParameter('aroundLatLng', '12, 14');
 
@@ -222,7 +247,7 @@ describe('connectGeoSearch - rendering', () => {
       helper,
     });
 
-    expect(render).toHaveBeenCalledTimes(2);
+    expect(render).toHaveBeenCalledTimes(3);
     expect(render).toHaveBeenCalledWith(
       expect.objectContaining({
         position: {
@@ -265,7 +290,7 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(1);
-    expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     widget.render({
       results: new SearchResults(helper.getState(), [
@@ -277,7 +302,7 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     // Simulate the configuration or external setter
     helper.setQueryParameter('insideBoundingBox');
@@ -292,7 +317,7 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
   });
 
   it('expect to reset the map state when position changed', () => {
@@ -332,7 +357,7 @@ describe('connectGeoSearch - rendering', () => {
       helper,
     });
 
-    render.mock.calls[0][0].refine({ northEast, southWest });
+    lastRenderArgs(render).refine({ northEast, southWest });
 
     widget.render({
       results,
@@ -340,14 +365,14 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
-    render.mock.calls[0][0].setMapMoveSinceLastRefine();
+    lastRenderArgs(render).setMapMoveSinceLastRefine();
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(true);
-    expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     helper.setQueryParameter('aroundLatLng', '14,16');
 
@@ -357,8 +382,8 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(render.mock.calls[3][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[3][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
 
   it("expect to not reset the map state when position don't changed", () => {
@@ -398,7 +423,7 @@ describe('connectGeoSearch - rendering', () => {
       helper,
     });
 
-    render.mock.calls[0][0].refine({ northEast, southWest });
+    lastRenderArgs(render).refine({ northEast, southWest });
 
     widget.render({
       results,
@@ -406,14 +431,14 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
-    render.mock.calls[0][0].setMapMoveSinceLastRefine();
+    lastRenderArgs(render).setMapMoveSinceLastRefine();
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(true);
-    expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     helper.setQueryParameter('aroundLatLng', '10,12');
 
@@ -423,8 +448,8 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(render.mock.calls[3][0].hasMapMoveSinceLastRefine()).toBe(true);
-    expect(render.mock.calls[3][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
 
   it('expect to reset the map state when boundingBox is reset', () => {
@@ -464,7 +489,7 @@ describe('connectGeoSearch - rendering', () => {
       helper,
     });
 
-    render.mock.calls[0][0].refine({ northEast, southWest });
+    lastRenderArgs(render).refine({ northEast, southWest });
 
     widget.render({
       results,
@@ -472,14 +497,14 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
-    render.mock.calls[0][0].setMapMoveSinceLastRefine();
+    lastRenderArgs(render).setMapMoveSinceLastRefine();
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(true);
-    expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     helper.setQueryParameter('insideBoundingBox');
 
@@ -489,8 +514,8 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(render.mock.calls[3][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[3][0].isRefinedWithMap()).toBe(false);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
   });
 
   it('expect to not reset the map state when boundingBox is preserve', () => {
@@ -530,7 +555,7 @@ describe('connectGeoSearch - rendering', () => {
       helper,
     });
 
-    render.mock.calls[0][0].refine({ northEast, southWest });
+    lastRenderArgs(render).refine({ northEast, southWest });
 
     widget.render({
       results,
@@ -538,14 +563,14 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(2);
-    expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-    expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
-    render.mock.calls[0][0].setMapMoveSinceLastRefine();
+    lastRenderArgs(render).setMapMoveSinceLastRefine();
 
     expect(render).toHaveBeenCalledTimes(3);
-    expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(true);
-    expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
 
     helper.setQueryParameter('insideBoundingBox', '12,14,16,18');
 
@@ -555,8 +580,8 @@ describe('connectGeoSearch - rendering', () => {
     });
 
     expect(render).toHaveBeenCalledTimes(4);
-    expect(render.mock.calls[3][0].hasMapMoveSinceLastRefine()).toBe(true);
-    expect(render.mock.calls[3][0].isRefinedWithMap()).toBe(true);
+    expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
   });
 
   describe('refine', () => {
@@ -592,12 +617,12 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.getState().insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
 
-      render.mock.calls[0][0].refine({ northEast, southWest });
+      lastRenderArgs(render).refine({ northEast, southWest });
 
       widget.render({
         results,
@@ -605,8 +630,8 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
@@ -643,12 +668,12 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.getState().insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
 
-      render.mock.calls[0][0].refine({ northEast, southWest });
+      lastRenderArgs(render).refine({ northEast, southWest });
 
       widget.render({
         results,
@@ -656,8 +681,8 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
     });
@@ -696,12 +721,12 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.getState().insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
 
-      render.mock.calls[0][0].refine({ northEast, southWest });
+      lastRenderArgs(render).refine({ northEast, southWest });
 
       widget.render({
         results,
@@ -709,12 +734,12 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
 
-      render.mock.calls[0][0].clearMapRefinement();
+      lastRenderArgs(render).clearMapRefinement();
 
       widget.render({
         results,
@@ -722,8 +747,8 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(3);
-      expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.getState().insideBoundingBox).toBe(undefined);
       expect(helper.search).toHaveBeenCalledTimes(2);
     });
@@ -760,12 +785,12 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[0][0].isRefinedWithMap()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.getState().insideBoundingBox).toBe(undefined);
       expect(helper.search).not.toHaveBeenCalled();
 
-      render.mock.calls[0][0].refine({ northEast, southWest });
+      lastRenderArgs(render).refine({ northEast, southWest });
 
       widget.render({
         results,
@@ -773,12 +798,12 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[1][0].isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
       expect(helper.getState().insideBoundingBox).toEqual('12,10,40,42');
       expect(helper.search).toHaveBeenCalledTimes(1);
 
-      render.mock.calls[0][0].clearMapRefinement();
+      lastRenderArgs(render).clearMapRefinement();
 
       widget.render({
         results,
@@ -786,8 +811,8 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(3);
-      expect(render.mock.calls[2][0].hasMapMoveSinceLastRefine()).toBe(false);
-      expect(render.mock.calls[2][0].isRefinedWithMap()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
       expect(helper.getState().insideBoundingBox).toBe(undefined);
       expect(helper.search).toHaveBeenCalledTimes(2);
     });
@@ -810,12 +835,12 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(true);
+      expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(true);
 
-      render.mock.calls[0][0].toggleRefineOnMapMove();
+      lastRenderArgs(render).toggleRefineOnMapMove();
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(false);
+      expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
 
       widget.render({
         results: new SearchResults(helper.getState(), [
@@ -827,9 +852,9 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
-      expect(render.mock.calls[0][0].toggleRefineOnMapMove).toBe(
-        render.mock.calls[1][0].toggleRefineOnMapMove
+      expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
+      expect(firstRenderArgs(render).toggleRefineOnMapMove).toBe(
+        lastRenderArgs(render).toggleRefineOnMapMove
       );
     });
 
@@ -853,14 +878,14 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].isRefineOnMapMove()).toBe(true);
+      expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(true);
 
-      render.mock.calls[0][0].toggleRefineOnMapMove();
+      lastRenderArgs(render).toggleRefineOnMapMove();
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].isRefineOnMapMove()).toBe(false);
-      expect(render.mock.calls[0][0].toggleRefineOnMapMove).toBe(
-        render.mock.calls[1][0].toggleRefineOnMapMove
+      expect(lastRenderArgs(render).isRefineOnMapMove()).toBe(false);
+      expect(firstRenderArgs(render).toggleRefineOnMapMove).toBe(
+        lastRenderArgs(render).toggleRefineOnMapMove
       );
     });
   });
@@ -882,12 +907,12 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
 
-      render.mock.calls[0][0].setMapMoveSinceLastRefine();
+      lastRenderArgs(render).setMapMoveSinceLastRefine();
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
 
       widget.render({
         results: new SearchResults(helper.getState(), [
@@ -899,9 +924,9 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(true);
-      expect(render.mock.calls[0][0].setMapMoveSinceLastRefine).toBe(
-        render.mock.calls[1][0].setMapMoveSinceLastRefine
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(firstRenderArgs(render).setMapMoveSinceLastRefine).toBe(
+        lastRenderArgs(render).setMapMoveSinceLastRefine
       );
     });
 
@@ -927,14 +952,14 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
 
-      render.mock.calls[0][0].setMapMoveSinceLastRefine();
+      lastRenderArgs(render).setMapMoveSinceLastRefine();
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(true);
-      expect(render.mock.calls[0][0].setMapMoveSinceLastRefine).toBe(
-        render.mock.calls[1][0].setMapMoveSinceLastRefine
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(firstRenderArgs(render).setMapMoveSinceLastRefine).toBe(
+        lastRenderArgs(render).setMapMoveSinceLastRefine
       );
     });
 
@@ -960,22 +985,19 @@ describe('connectGeoSearch - rendering', () => {
       });
 
       expect(render).toHaveBeenCalledTimes(1);
-      expect(render.mock.calls[0][0].hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(false);
 
-      render.mock.calls[0][0].setMapMoveSinceLastRefine();
-
-      expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(true);
-      expect(render.mock.calls[0][0].setMapMoveSinceLastRefine).toBe(
-        render.mock.calls[1][0].setMapMoveSinceLastRefine
-      );
-
-      render.mock.calls[0][0].setMapMoveSinceLastRefine();
+      lastRenderArgs(render).setMapMoveSinceLastRefine();
 
       expect(render).toHaveBeenCalledTimes(2);
-      expect(render.mock.calls[1][0].hasMapMoveSinceLastRefine()).toBe(true);
-      expect(render.mock.calls[0][0].setMapMoveSinceLastRefine).toBe(
-        render.mock.calls[1][0].setMapMoveSinceLastRefine
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+
+      lastRenderArgs(render).setMapMoveSinceLastRefine();
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(firstRenderArgs(render).setMapMoveSinceLastRefine).toBe(
+        lastRenderArgs(render).setMapMoveSinceLastRefine
       );
     });
   });
