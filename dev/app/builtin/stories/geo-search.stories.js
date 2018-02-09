@@ -424,5 +424,66 @@ export default () => {
           ],
         }
       )
+    )
+    .add(
+      'with Hits communication (custom)',
+      wrapWithHitsAndConfiguration((container, start) =>
+        injectGoogleMaps(() => {
+          container.style.height = '600px';
+
+          window.search.addWidget(
+            instantsearch.widgets.geoSearch({
+              googleReference: window.google,
+              customHTMLMarker: {
+                createOptions: () => ({
+                  anchor: {
+                    x: 0,
+                    y: 5,
+                  },
+                }),
+                template: `
+                  <div class="my-custom-marker" data-id="{{objectID}}">
+                    {{price_formatted}}
+                  </div>
+                `,
+              },
+              container,
+              initialPosition,
+              initialZoom,
+              paddingBoundingBox,
+            })
+          );
+
+          start();
+
+          const containerElement = document.querySelector(
+            '#results-hits-container'
+          );
+
+          const removeActiveClassNames = () => {
+            document.querySelectorAll('.my-custom-marker').forEach(el => {
+              el.classList.remove('my-custom-marker--active');
+            });
+          };
+
+          containerElement.addEventListener('mouseover', event => {
+            const hitElement = event.target.closest('.hit');
+
+            if (hitElement) {
+              removeActiveClassNames();
+
+              const objectID = parseInt(hitElement.id.substr(4), 10);
+              const selector = `.my-custom-marker[data-id="${objectID}"]`;
+              const marker = document.querySelector(selector);
+
+              marker.classList.add('my-custom-marker--active');
+            }
+          });
+
+          containerElement.addEventListener('mouseleave', () => {
+            removeActiveClassNames();
+          });
+        })
+      )
     );
 };

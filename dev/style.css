@@ -27,6 +27,10 @@
   margin: 10px 10px;
 }
 
+.hit:hover {
+  cursor: pointer;
+}
+
 .hit .hit-picture img {
   height: auto;
   width: 80px;
@@ -55,14 +59,11 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
 }
 
-.my-custom-marker:hover {
+.my-custom-marker:hover,
+.my-custom-marker--active {
   background-color: #3369e7;
   color: white;
   cursor: pointer;
-}
-
-.my-custom-marker:hover::after {
-  background-color: #3369e7;
 }
 
 .my-custom-marker::after {
@@ -79,4 +80,9 @@
   left: 50%;
   margin-left: -4px;
   transform: rotate(45deg);
+}
+
+.my-custom-marker:hover::after,
+.my-custom-marker--active::after {
+  background-color: #3369e7;
 }
