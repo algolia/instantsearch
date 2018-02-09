@@ -195,7 +195,12 @@ const renderer = (
 
   // Fit the map to the markers when needed
   const hasMarkers = renderState.markers.length;
-  const enableFitBounds = !hasMapMoveSinceLastRefine() && !isRefinedWithMap();
+  const center = renderState.mapInstance.getCenter();
+  const zoom = renderState.mapInstance.getZoom();
+  const isPositionInitialize = center !== undefined && zoom !== undefined;
+  const enableFitBounds =
+    !hasMapMoveSinceLastRefine() &&
+    (!isRefinedWithMap() || (isRefinedWithMap() && !isPositionInitialize));
 
   if (hasMarkers && enableFitBounds) {
     const bounds = renderState.markers.reduce(
