@@ -26,8 +26,8 @@ export default () => {
   const initialZoom = 12;
 
   const position = {
-    lat: 37.7749,
-    lng: -122.4194,
+    lat: 37.7793,
+    lng: -122.419,
   };
 
   const initialPosition = {
