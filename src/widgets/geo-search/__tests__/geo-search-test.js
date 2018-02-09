@@ -104,8 +104,8 @@ describe('GeoSearch', () => {
       'indexName'
     );
 
-  const lastOptions = fn => last(fn.mock.calls)[0];
-  const lastRenderState = fn => lastOptions(fn).widgetParams.renderState;
+  const lastRenderArgs = fn => last(fn.mock.calls)[0];
+  const lastRenderState = fn => lastRenderArgs(fn).widgetParams.renderState;
   const simulateEvent = (fn, eventName, event) => {
     fn.addListener.mock.calls.find(call => call.includes(eventName))[1](event);
   };
@@ -358,11 +358,11 @@ describe('GeoSearch', () => {
         },
       });
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
 
       simulateEvent(mapInstance, 'center_changed');
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
     });
 
     it('expect to listen for "center_changed" and do not trigger on programmatic interaction', () => {
@@ -391,11 +391,11 @@ describe('GeoSearch', () => {
       // Simulate programmatic event
       lastRenderState(renderer).isUserInteraction = false;
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
 
       simulateEvent(mapInstance, 'center_changed');
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
     });
 
     it('expect to listen for "zoom_changed", trigger setMapMoveSinceLastRefine and schedule a refine call on user interaction', () => {
@@ -422,12 +422,12 @@ describe('GeoSearch', () => {
       );
 
       expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
 
       simulateEvent(mapInstance, 'zoom_changed');
 
       expect(lastRenderState(renderer).isPendingRefine).toBe(true);
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
     });
 
     it('expect to listen for "zoom_changed" and do not trigger on programmatic interaction', () => {
@@ -457,12 +457,12 @@ describe('GeoSearch', () => {
       lastRenderState(renderer).isUserInteraction = false;
 
       expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
 
       simulateEvent(mapInstance, 'zoom_changed');
 
       expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
     });
 
     it('expect to listen for "dragstart" and schedule a refine call on user interaction', () => {
@@ -1434,7 +1434,7 @@ describe('GeoSearch', () => {
         lng: 12,
       }));
 
-      expect(lastOptions(renderer).isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(renderer).toHaveBeenCalledTimes(2);
 
@@ -1449,7 +1449,7 @@ describe('GeoSearch', () => {
         },
       });
 
-      expect(lastOptions(renderer).isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(renderer).toHaveBeenCalledTimes(3);
     });
@@ -1521,13 +1521,13 @@ describe('GeoSearch', () => {
         },
       });
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(renderer).toHaveBeenCalledTimes(2);
 
       simulateEvent(mapInstance, 'center_changed');
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(renderer).toHaveBeenCalledTimes(3);
     });
@@ -1565,16 +1565,16 @@ describe('GeoSearch', () => {
         lng: 12,
       }));
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-      expect(lastOptions(renderer).isRefinedWithMap()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(renderer).toHaveBeenCalledTimes(2);
 
       simulateEvent(mapInstance, 'dragstart');
       simulateEvent(mapInstance, 'center_changed');
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(true);
-      expect(lastOptions(renderer).isRefinedWithMap()).toBe(false);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
+      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(renderer).toHaveBeenCalledTimes(3);
 
@@ -1588,8 +1588,8 @@ describe('GeoSearch', () => {
         },
       });
 
-      expect(lastOptions(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-      expect(lastOptions(renderer).isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(renderer).toHaveBeenCalledTimes(4);
     });
