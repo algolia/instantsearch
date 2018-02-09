@@ -213,7 +213,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
         return nextState;
       },
-      getUIState(fullState, { state }) {
+      getWidgetState(fullState, { state }) {
         const path = state.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
         );
@@ -226,7 +226,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         };
       },
 
-      getSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParam, { uiState }) {
         if (
           uiState.hierarchicalMenu &&
           uiState.hierarchicalMenu[hierarchicalFacetName]

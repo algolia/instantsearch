@@ -15,8 +15,8 @@ import version from './version.js';
 import * as connectors from '../connectors/index.js';
 import * as widgets from '../widgets/index.js';
 
-import * as storage from './storage/index.js';
-import * as uiStateMapping from './uiStateMapping/index.js';
+import * as storage from './router/index.js';
+import * as uiStateMapping from './stateMapping/index.js';
 
 /**
  * @typedef {Object} UrlSyncOptions

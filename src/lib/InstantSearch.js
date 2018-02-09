@@ -8,9 +8,16 @@ import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import { EventEmitter } from 'events';
 import urlSyncWidget from './url-sync.js';
-import URLSync from './url-sync-2.js';
+import RoutingManager from './RoutingManager.js';
+import simpleMapping from './stateMapping/simple.js';
+import historyRouter from './router/history.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
+
+const ROUTING_DEFAULT_OPTIONS = {
+  stateMapping: simpleMapping,
+  router: historyRouter,
+};
 
 function defaultCreateURL() {
   return '#';
@@ -41,7 +48,7 @@ class InstantSearch extends EventEmitter {
     numberLocale,
     searchParameters = {},
     urlSync = null,
-    urlSync2 = null,
+    routing = null,
     searchFunction,
     createAlgoliaClient = defaultCreateAlgoliaClient,
     stalledSearchDelay = 200,
@@ -76,7 +83,13 @@ Usage: instantsearch({
     }
 
     this.urlSync = urlSync === true ? {} : urlSync;
-    this.urlSync2 = urlSync2 === true ? {} : urlSync2;
+    this.routing =
+      routing === true
+        ? ROUTING_DEFAULT_OPTIONS
+        : {
+            ...ROUTING_DEFAULT_OPTIONS,
+            routing,
+          };
   }
 
   /**
@@ -237,15 +250,17 @@ Usage: instantsearch({
       this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
       this.widgets.push(syncWidget);
       searchParametersFromUrl = syncWidget.searchParametersFromUrl;
-    } else if (this.urlSync2) {
-      const sync2 = new URLSync({
-        ...this.urlSync2,
+    } else if (this.routing) {
+      const routingManager = new RoutingManager({
+        ...this.routing,
         instantSearchInstance: this,
       });
-      this._onHistoryChange = sync2.onHistoryChange.bind(sync2);
-      this._createURL = sync2.createURL.bind(sync2);
+      this._onHistoryChange = routingManager.onHistoryChange.bind(
+        routingManager
+      );
+      this._createURL = routingManager.createURL.bind(routingManager);
       this._createAbsoluteURL = this._createURL;
-      this.widgets.push(sync2);
+      this.widgets.push(routingManager);
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;

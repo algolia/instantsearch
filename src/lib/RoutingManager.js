@@ -2,13 +2,13 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import isEqual from 'lodash/isEqual';
 
 /**
- * @type UIStateMapping
- * @property {(object) => object} toSyncable transforms an UI state representation into a syncable object
- * @property {(object) => object} fromSyncable transforms syncable object into an UI state representation
+ * @type StateMapping
+ * @property {(object) => object} stateToRoute transforms an UI state representation into a syncable object
+ * @property {(object) => object} routeToState transforms syncable object into an UI state representation
  */
 
 /**
- * @type StorageAdapter
+ * @type Router
  * @property {(object) => ()} write push a syncable object into a storage
  * @property {((object) => (object)) => ()} onUpdate sets an event listenere when the storage is updated by a third party
  * @property {() => (object)} read reads the storage and gets a syncable object
@@ -16,18 +16,16 @@ import isEqual from 'lodash/isEqual';
  * @property {() => ()} dispose cleans up any event listeners
  */
 
-export default class URLSync {
-  constructor({ instantSearchInstance, storageAdapter, uiStateMapping } = {}) {
+export default class RoutingManager {
+  constructor({ instantSearchInstance, router, stateMapping } = {}) {
     this.originalConfig = null;
     this.firstRender = true;
 
-    this.storageAdapter = storageAdapter;
-    this.uiStateMapping = uiStateMapping;
+    this.router = router;
+    this.stateMapping = stateMapping;
     this.instantSearchInstance = instantSearchInstance;
 
-    this.originalUIState = this.uiStateMapping.fromSyncable(
-      this.storageAdapter.read()
-    );
+    this.originalUIState = this.stateMapping.routeToState(this.router.read());
   }
 
   init({ state }) {
@@ -64,8 +62,8 @@ export default class URLSync {
     if (this.firstRender) {
       this.firstRender = false;
       const { helper } = this.instantSearchInstance;
-      this.storageAdapter.onUpdate(syncable => {
-        const uiState = this.uiStateMapping.fromSyncable(syncable);
+      this.router.onUpdate(syncable => {
+        const uiState = this.stateMapping.routeToState(syncable);
         const currentUIState = this.getAllUIStates({
           helper,
           state: helper.state,
@@ -101,8 +99,8 @@ export default class URLSync {
           state: searchState,
           instantSearchInstance: this.instantSearchInstance,
         });
-        const syncable = this.uiStateMapping.toSyncable(uiState);
-        this.storageAdapter.write(syncable);
+        const syncable = this.stateMapping.stateToRoute(uiState);
+        this.router.write(syncable);
       });
 
       // Compare initial state and post first render state, in order
@@ -119,7 +117,7 @@ export default class URLSync {
         // We do this in order to make a URL update when there is search function
         // that prevent the search of the initial rendering
         // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-        this.storageAdapter.write(firstRenderState);
+        this.router.write(firstRenderState);
       }
     }
   }
@@ -129,14 +127,14 @@ export default class URLSync {
       'change',
       this.renderURLFromState
     );
-    this.storageAdapter.dispose();
+    this.router.dispose();
   }
 
   getAllSearchParameters({ state, uiState }) {
     const { widgets } = this.instantSearchInstance;
     const searchParameters = widgets.reduce((u, w) => {
-      if (!w.getSearchParameters) return u;
-      return w.getSearchParameters(u, {
+      if (!w.getWidgetSearchParameters) return u;
+      return w.getWidgetSearchParameters(u, {
         uiState,
       });
     }, state);
@@ -146,8 +144,8 @@ export default class URLSync {
   getAllUIStates({ state }) {
     const { widgets, helper } = this.instantSearchInstance;
     const uiState = widgets.reduce((u, w) => {
-      if (!w.getUIState) return u;
-      return w.getUIState(u, {
+      if (!w.getWidgetState) return u;
+      return w.getWidgetState(u, {
         helper,
         state,
       });
@@ -162,14 +160,14 @@ export default class URLSync {
     const uiState = this.getAllUIStates({
       state,
     });
-    const syncable = this.uiStateMapping.toSyncable(uiState);
-    return this.storageAdapter.createURL(syncable);
+    const syncable = this.stateMapping.stateToRoute(uiState);
+    return this.router.createURL(syncable);
   }
 
   onHistoryChange(fn) {
-    this.storageAdapter.onUpdate(syncable => {
+    this.router.onUpdate(syncable => {
       const helper = this.instantSearchInstance.helper;
-      const uiState = this.uiStateMapping.fromSyncable(syncable);
+      const uiState = this.stateMapping.routeToState(syncable);
       const currentUIState = this.getAllUIStates({
         helper: this.instantSearchInstance.helper,
         state: helper.state,

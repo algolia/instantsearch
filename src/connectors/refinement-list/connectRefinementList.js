@@ -410,7 +410,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         }
       },
 
-      getUIState(fullState, { state }) {
+      getWidgetState(fullState, { state }) {
         const values = state.getDisjunctiveRefinements(attributeName);
         if (values.length === 0) return fullState;
         return {
@@ -421,7 +421,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         };
       },
 
-      getSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParam, { uiState }) {
         const values =
           (uiState.refinementList && uiState.refinementList[attributeName]) ||
           [];

@@ -1,8 +1,8 @@
 class SimpleUIStateMapping {
-  toSyncable(uiState) {
+  stateToRoute(uiState) {
     return uiState;
   }
-  fromSyncable(syncable) {
+  routeToState(syncable) {
     return syncable;
   }
 }
