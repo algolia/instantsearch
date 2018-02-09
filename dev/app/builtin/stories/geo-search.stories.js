@@ -188,7 +188,7 @@ export default () => {
         window.search.addWidget(
           instantsearchPlacesWidget({
             container: placesElemeent,
-            defaultPosition: [37.7749, -122.4194],
+            defaultPosition: [position.lat, position.lng],
           })
         );
 
