@@ -14,7 +14,7 @@
     "build-and-publish": "./scripts/build-and-publish.sh"
   },
   "devDependencies": {
-    "autoprefixer": "7.2.5",
+    "autoprefixer": "7.2.6",
     "cssnano": "3.10.0",
     "node-sass": "4.7.2",
     "postcss": "6.0.17",

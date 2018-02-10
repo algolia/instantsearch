@@ -33,7 +33,7 @@
     "@storybook/ui": "3.3.12",
     "argos-cli": "0.0.9",
     "async": "2.6.0",
-    "autoprefixer": "7.2.5",
+    "autoprefixer": "7.2.6",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-eslint": "8.2.1",
