@@ -88,7 +88,7 @@ Usage: instantsearch({
         ? ROUTING_DEFAULT_OPTIONS
         : {
             ...ROUTING_DEFAULT_OPTIONS,
-            routing,
+            ...routing,
           };
   }
 

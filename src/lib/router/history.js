@@ -44,7 +44,7 @@ class BrowserHistory {
     this.titleFromUIState = titleFromUIState;
     this.writeTimer = undefined;
     this.writeTimeout = writeTimeout;
-    this.createURL = createURL;
+    this._createURL = createURL;
     this.parseURL = parseURL;
   }
 
@@ -113,7 +113,7 @@ class BrowserHistory {
    * @returns {string} the full URL for the provided syncable state
    */
   createURL(uiState) {
-    return this.createURL(qs, uiState);
+    return this._createURL(qs, uiState);
   }
 
   /**

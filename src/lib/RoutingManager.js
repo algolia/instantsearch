@@ -3,16 +3,16 @@ import isEqual from 'lodash/isEqual';
 
 /**
  * @type StateMapping
- * @property {(object) => object} stateToRoute transforms an UI state representation into a syncable object
- * @property {(object) => object} routeToState transforms syncable object into an UI state representation
+ * @property {(object) => object} stateToRoute transforms an UI state representation into a route object
+ * @property {(object) => object} routeToState transforms route object into an UI state representation
  */
 
 /**
  * @type Router
- * @property {(object) => ()} write push a syncable object into a storage
+ * @property {(object) => ()} write push a route object into a storage
  * @property {((object) => (object)) => ()} onUpdate sets an event listenere when the storage is updated by a third party
- * @property {() => (object)} read reads the storage and gets a syncable object
- * @property {(object) => string} createURL transforms a syncable object into a URL
+ * @property {() => (object)} read reads the storage and gets a route object
+ * @property {(object) => string} createURL transforms a route object into a URL
  * @property {() => ()} dispose cleans up any event listeners
  */
 
@@ -62,8 +62,8 @@ export default class RoutingManager {
     if (this.firstRender) {
       this.firstRender = false;
       const { helper } = this.instantSearchInstance;
-      this.router.onUpdate(syncable => {
-        const uiState = this.stateMapping.routeToState(syncable);
+      this.router.onUpdate(route => {
+        const uiState = this.stateMapping.routeToState(route);
         const currentUIState = this.getAllUIStates({
           helper,
           state: helper.state,
@@ -99,8 +99,8 @@ export default class RoutingManager {
           state: searchState,
           instantSearchInstance: this.instantSearchInstance,
         });
-        const syncable = this.stateMapping.stateToRoute(uiState);
-        this.router.write(syncable);
+        const route = this.stateMapping.stateToRoute(uiState);
+        this.router.write(route);
       });
 
       // Compare initial state and post first render state, in order
@@ -160,14 +160,14 @@ export default class RoutingManager {
     const uiState = this.getAllUIStates({
       state,
     });
-    const syncable = this.stateMapping.stateToRoute(uiState);
-    return this.router.createURL(syncable);
+    const route = this.stateMapping.stateToRoute(uiState);
+    return this.router.createURL(route);
   }
 
   onHistoryChange(fn) {
-    this.router.onUpdate(syncable => {
+    this.router.onUpdate(route => {
       const helper = this.instantSearchInstance.helper;
-      const uiState = this.stateMapping.routeToState(syncable);
+      const uiState = this.stateMapping.routeToState(route);
       const currentUIState = this.getAllUIStates({
         helper: this.instantSearchInstance.helper,
         state: helper.state,
