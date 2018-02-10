@@ -395,37 +395,6 @@ export default () => {
       )
     )
     .add(
-      'with URLSync (simulate)',
-      wrapWithHitsAndConfiguration(
-        (container, start) =>
-          injectGoogleMaps(() => {
-            container.style.height = '600px';
-
-            window.search.addWidget(
-              instantsearch.widgets.geoSearch({
-                googleReference: window.google,
-                container,
-                initialPosition,
-                initialZoom,
-                paddingBoundingBox,
-              })
-            );
-
-            start();
-          }),
-        {
-          insideBoundingBox: [
-            [
-              48.84174222399724,
-              2.367719162523599,
-              48.81614630305218,
-              2.284205902635904,
-            ],
-          ],
-        }
-      )
-    )
-    .add(
       'with Hits communication (custom)',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
@@ -484,6 +453,37 @@ export default () => {
             removeActiveClassNames();
           });
         })
+      )
+    )
+    .add(
+      'with URLSync (simulate)',
+      wrapWithHitsAndConfiguration(
+        (container, start) =>
+          injectGoogleMaps(() => {
+            container.style.height = '600px';
+
+            window.search.addWidget(
+              instantsearch.widgets.geoSearch({
+                googleReference: window.google,
+                container,
+                initialPosition,
+                initialZoom,
+                paddingBoundingBox,
+              })
+            );
+
+            start();
+          }),
+        {
+          insideBoundingBox: [
+            [
+              48.84174222399724,
+              2.367719162523599,
+              48.81614630305218,
+              2.284205902635904,
+            ],
+          ],
+        }
       )
     );
 };
