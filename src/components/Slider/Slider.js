@@ -55,6 +55,7 @@ export class RawSlider extends Component {
 
   // creates an array of values where the slider should snap to
   computeSnapPoints({ min, max, step }) {
+    if (!step) return undefined;
     return [...range(min, max, step), max];
   }
 
