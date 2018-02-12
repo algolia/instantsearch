@@ -66,7 +66,7 @@
     "eslint-import-resolver-webpack": "0.8.4",
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jasmine": "2.9.2",
-    "eslint-plugin-jest": "21.8.0",
+    "eslint-plugin-jest": "21.9.0",
     "eslint-plugin-prettier": "2.6.0",
     "eslint-plugin-react": "7.6.1",
     "fs-extra": "5.0.0",
