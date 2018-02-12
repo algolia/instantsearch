@@ -111,7 +111,7 @@ export default function connectNumericSelector(renderFn, unmountFn) {
           return {
             numericRefinements: {
               [attributeName]: {
-                [operator]: [this._getRefinedValue(searchParametersFromUrl)],
+                [operator]: [value],
               },
             },
           };
@@ -158,6 +158,33 @@ export default function connectNumericSelector(renderFn, unmountFn) {
       dispose({ state }) {
         unmountFn();
         return state.removeNumericRefinement(attributeName);
+      },
+
+      getWidgetState(fullState, { state }) {
+        const currentRefinement = this._getRefinedValue(state);
+        if (currentRefinement || currentRefinement === 0)
+          return {
+            ...fullState,
+            numericSelector: {
+              ...fullState.numericSelector,
+              [attributeName]: currentRefinement,
+            },
+          };
+        return fullState;
+      },
+
+      getWidgetSearchParameters(searchParam, { uiState }) {
+        const value =
+          uiState.numericSelector && uiState.numericSelector[attributeName];
+        const clearedSearchParam = searchParam.clearRefinements(attributeName);
+        if (value)
+          return clearedSearchParam.addNumericRefinement(
+            attributeName,
+            operator,
+            value
+          );
+
+        return clearedSearchParam;
       },
 
       _getRefinedValue(state) {
