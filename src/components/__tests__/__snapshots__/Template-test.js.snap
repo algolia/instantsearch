@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Template can configure compilation options 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it configures compilation delimiters",
+    }
+  }
+/>
+`;
+
 exports[`Template forward rootProps to the first node 1`] = `
 <div
   className="hey"
@@ -47,56 +57,6 @@ exports[`Template transform data usage transformData with an object is using a d
   dangerouslySetInnerHTML={
     Object {
       "__html": "",
-    }
-  }
-/>
-`;
-
-exports[`Template using helpers call the relevant function 1`] = `
-<div
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "it supports <em>helpers</em>",
-    }
-  }
-/>
-`;
-
-exports[`Template using helpers sets the function context (\`this\`) to the template \`data\` 1`] = `
-<div
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "it supports ",
-    }
-  }
-/>
-`;
-
-exports[`Template without helpers can configure compilation options 1`] = `
-<div
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "it configures compilation delimiters",
-    }
-  }
-/>
-`;
-
-exports[`Template without helpers supports templates as functions returning a string 1`] = `
-<div
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "it also works with functions",
-    }
-  }
-/>
-`;
-
-exports[`Template without helpers supports templates as strings 1`] = `
-<div
-  dangerouslySetInnerHTML={
-    Object {
-      "__html": "it works with strings",
     }
   }
 />

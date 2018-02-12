@@ -69,12 +69,13 @@ export class RawCurrentRefinedValues extends Component {
   }
 
   render() {
+    const refinements = map(this.props.refinements, (r, i) =>
+      this._refinementElement(r, i)
+    );
     return (
       <div>
         {this._clearAllElement('before', this.props.clearAllPosition)}
-        <div className={this.props.cssClasses.list}>
-          {map(this.props.refinements, this._refinementElement.bind(this))}
-        </div>
+        <div className={this.props.cssClasses.list}>{refinements}</div>
         {this._clearAllElement('after', this.props.clearAllPosition)}
       </div>
     );

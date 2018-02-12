@@ -5,87 +5,35 @@ import sinon from 'sinon';
 import renderer from 'react-test-renderer';
 
 describe('Template', () => {
-  describe('without helpers', () => {
-    it('supports templates as strings', () => {
-      const props = getProps({
-        templates: { test: 'it works with {{type}}' },
-        data: { type: 'strings' },
-      });
-      const tree = renderer.create(<PureTemplate {...props} />).toJSON();
-      expect(tree).toMatchSnapshot();
+  it('throws an error when templates as functions returning a React element', () => {
+    const props = getProps({
+      templates: {
+        test: templateData => <p>it doesnt works with {templateData.type}</p>,
+      }, // eslint-disable-line react/display-name
+      data: { type: 'functions' },
     });
-
-    it('supports templates as functions returning a string', () => {
-      const props = getProps({
-        templates: {
-          test: templateData => `it also works with ${templateData.type}`,
-        },
-        data: { type: 'functions' },
-      });
-      const tree = renderer.create(<PureTemplate {...props} />).toJSON();
-      expect(tree).toMatchSnapshot();
-    });
-
-    it('throws an error when templates as functions returning a React element', () => {
-      const props = getProps({
-        templates: {
-          test: templateData => <p>it doesnt works with {templateData.type}</p>,
-        }, // eslint-disable-line react/display-name
-        data: { type: 'functions' },
-      });
-      expect(() => renderer.create(<PureTemplate {...props} />)).toThrow();
-    });
-
-    it('can configure compilation options', () => {
-      const props = getProps({
-        templates: { test: 'it configures compilation <%options%>' },
-        data: { options: 'delimiters' },
-        useCustomCompileOptions: { test: true },
-        templatesConfig: { compileOptions: { delimiters: '<% %>' } },
-      });
-      const tree = renderer.create(<PureTemplate {...props} />).toJSON();
-      expect(tree).toMatchSnapshot();
-    });
+    expect(() => renderer.create(<PureTemplate {...props} />)).toThrow();
   });
 
-  describe('using helpers', () => {
-    it('call the relevant function', () => {
-      const props = getProps({
-        templates: {
-          test:
-            'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}',
-        },
-        data: { feature: 'helpers' },
-        templatesConfig: {
-          helpers: { emphasis: (text, render) => `<em>${render(text)}</em>` },
-        },
-      });
-      const tree = renderer.create(<PureTemplate {...props} />).toJSON();
-      expect(tree).toMatchSnapshot();
+  it('can configure compilation options', () => {
+    const props = getProps({
+      templates: { test: 'it configures compilation <%options%>' },
+      data: { options: 'delimiters' },
+      useCustomCompileOptions: { test: true },
+      templatesConfig: { compileOptions: { delimiters: '<% %>' } },
     });
+    const tree = renderer.create(<PureTemplate {...props} />).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
 
-    it('sets the function context (`this`) to the template `data`', done => {
-      const data = { feature: 'helpers' };
-      const props = getProps({
-        templates: {
-          test:
-            'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}',
-        },
-        data,
-        templatesConfig: {
-          helpers: {
-            emphasis() {
-              // context will be different when using arrow function (lexical scope used)
-              expect(this).toBe(data);
-              done();
-            },
-          },
-        },
-      });
+  it('forward rootProps to the first node', () => {
+    function fn() {}
 
-      const tree = renderer.create(<PureTemplate {...props} />).toJSON();
-      expect(tree).toMatchSnapshot();
+    const props = getProps({
+      rootProps: { className: 'hey', onClick: fn },
     });
+    const tree = renderer.create(<PureTemplate {...props} />).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
   describe('transform data usage', () => {
@@ -203,16 +151,6 @@ describe('Template', () => {
         renderer.create(<TemplateWithTransformData {...props} />);
       }).toThrow('`transformData` must return a `object`, got `boolean`.');
     });
-  });
-
-  it('forward rootProps to the first node', () => {
-    function fn() {}
-
-    const props = getProps({
-      rootProps: { className: 'hey', onClick: fn },
-    });
-    const tree = renderer.create(<PureTemplate {...props} />).toJSON();
-    expect(tree).toMatchSnapshot();
   });
 
   describe('shouldComponentUpdate', () => {

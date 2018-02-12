@@ -1,13 +1,8 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import hogan from 'hogan.js';
-
-import curry from 'lodash/curry';
+import PropTypes from 'prop-types';
 import cloneDeep from 'lodash/cloneDeep';
-import mapValues from 'lodash/mapValues';
 import isEqual from 'lodash/isEqual';
-
-import { isReactElement } from '../lib/utils.js';
+import { isReactElement, renderTemplate } from '../lib/utils';
 
 export class PureTemplate extends Component {
   shouldComponentUpdate(nextProps) {
@@ -125,49 +120,6 @@ function transformData(fn, templateKey, originalData) {
     );
   }
   return data;
-}
-
-function renderTemplate({
-  templates,
-  templateKey,
-  compileOptions,
-  helpers,
-  data,
-}) {
-  const template = templates[templateKey];
-  const templateType = typeof template;
-  const isTemplateString = templateType === 'string';
-  const isTemplateFunction = templateType === 'function';
-
-  if (!isTemplateString && !isTemplateFunction) {
-    throw new Error(
-      `Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`
-    );
-  } else if (isTemplateFunction) {
-    return template(data);
-  } else {
-    const transformedHelpers = transformHelpersToHogan(
-      helpers,
-      compileOptions,
-      data
-    );
-    const preparedData = { ...data, helpers: transformedHelpers };
-    return hogan.compile(template, compileOptions).render(preparedData);
-  }
-}
-
-// We add all our template helper methods to the template as lambdas. Note
-// that lambdas in Mustache are supposed to accept a second argument of
-// `render` to get the rendered value, not the literal `{{value}}`. But
-// this is currently broken (see
-// https://github.com/twitter/hogan.js/issues/222).
-function transformHelpersToHogan(helpers, compileOptions, data) {
-  return mapValues(helpers, method =>
-    curry(function(text) {
-      const render = value => hogan.compile(value, compileOptions).render(this);
-      return method.call(data, text, render);
-    })
-  );
 }
 
 // Resolve transformData before Template, so transformData is always called
