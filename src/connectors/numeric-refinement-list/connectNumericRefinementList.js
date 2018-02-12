@@ -35,7 +35,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {number} start Lower bound of the option (>=).
  * @property {number} end Higher bound of the option (<=).
  * @property {boolean} isRefined True if the value is selected.
- * @property {string} attributeName The name of the attribute in the records.
  */
 
 /**
