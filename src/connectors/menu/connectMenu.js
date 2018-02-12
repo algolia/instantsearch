@@ -250,6 +250,40 @@ export default function connectMenu(renderFn, unmountFn) {
 
         return nextState;
       },
+
+      getWidgetState(fullState, { state }) {
+        const [refinedItem] = state.getHierarchicalFacetBreadcrumb(
+          attributeName
+        );
+        return {
+          ...fullState,
+          menu: {
+            [attributeName]: refinedItem,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParam, { uiState }) {
+        if (uiState.menu && uiState.menu[attributeName]) {
+          const uiStateRefinedItem = uiState.menu[attributeName];
+          const isAlreadyRefined = searchParam.isHierarchicalFacetRefined(
+            attributeName,
+            uiStateRefinedItem
+          );
+          if (isAlreadyRefined) return searchParam;
+          return searchParam.toggleRefinement(
+            attributeName,
+            uiStateRefinedItem
+          );
+        }
+        if (searchParam.isHierarchicalFacetRefined(attributeName)) {
+          const [refinedItem] = searchParam.getHierarchicalFacetBreadcrumb(
+            attributeName
+          );
+          return searchParam.toggleRefinement(attributeName, refinedItem);
+        }
+        return searchParam;
+      },
     };
   };
 }
