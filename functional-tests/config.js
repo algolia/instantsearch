@@ -64,6 +64,15 @@ if (process.env.CI === 'true') {
     key: process.env.SAUCE_ACCESS_KEY,
     maxInstances: 5,
     sauceConnect: true,
+    // See https://github.com/bermi/sauce-connect-launcher
+    sauceConnectOpts: {
+      // Log output from the `sc` process to stdout?
+      verbose: true,
+      // retry to establish a tunnel multiple times. (optional)
+      connectRetries: 2,
+      // retry to download the sauce connect archive multiple times. (optional)
+      downloadRetries: 2,
+    },
     // we are not currently testing android nor microsoft edge
     // their selenium support is completely broken, nothing much to do here
     capabilities: [
