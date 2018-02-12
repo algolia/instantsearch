@@ -172,6 +172,79 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
         unmountFn();
         return state.clearRefinements(attributeName);
       },
+
+      getWidgetState(fullState, { state }) {
+        const currentRefinements = state.getNumericRefinements(attributeName);
+        const equal = currentRefinements['='] && currentRefinements['='][0];
+        if (equal || equal === 0) {
+          return {
+            ...fullState,
+            numericRefinementList: {
+              ...fullState.numericRefinementList,
+              [attributeName]: `${currentRefinements['=']}`,
+            },
+          };
+        }
+
+        const lowerBound =
+          (currentRefinements['>='] && currentRefinements['>='][0]) || '';
+        const upperBound =
+          (currentRefinements['<='] && currentRefinements['<='][0]) || '';
+
+        if (lowerBound !== '' || upperBound !== '') {
+          return {
+            ...fullState,
+            numericRefinementList: {
+              ...fullState.numericRefinementList,
+              [attributeName]: `${lowerBound}:${upperBound}`,
+            },
+          };
+        }
+
+        return fullState;
+      },
+
+      getWidgetSearchParameters(searchParam, { uiState }) {
+        const clearedParams = searchParam.clearRefinements(attributeName);
+        const value =
+          uiState.numericRefinementList &&
+          uiState.numericRefinementList[attributeName];
+        if (value) {
+          const valueAsEqual = value.indexOf(':') === -1 && value;
+
+          if (valueAsEqual) {
+            return clearedParams.addNumericRefinement(
+              attributeName,
+              '=',
+              valueAsEqual
+            );
+          }
+
+          const [lowerBound, upperBound] = value.split(':');
+          if (
+            (lowerBound || lowerBound === 0) &&
+            (upperBound || upperBound === 0)
+          ) {
+            return clearedParams
+              .addNumericRefinement(attributeName, '>=', lowerBound)
+              .addNumericRefinement(attributeName, '<=', upperBound);
+          }
+          if (lowerBound || lowerBound === 0)
+            return clearedParams.addNumericRefinement(
+              attributeName,
+              '>=',
+              lowerBound
+            );
+          if (upperBound || upperBound === 0)
+            return clearedParams.addNumericRefinement(
+              attributeName,
+              '<=',
+              upperBound
+            );
+        }
+
+        return clearedParams;
+      },
     };
   };
 }
