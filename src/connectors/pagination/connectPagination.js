@@ -147,12 +147,15 @@ export default function connectPagination(renderFn, unmountFn) {
         if (page === 0) return fullState;
         return {
           ...fullState,
-          page,
+          page: page + 1,
         };
       },
 
       getWidgetSearchParameters(searchParam, { uiState }) {
-        return searchParam.setQueryParameter('page', uiState.page);
+        const uiPage = uiState.page;
+        if (uiPage)
+          return searchParam.setQueryParameter('page', uiState.page - 1);
+        return searchParam.setQueryParameter('page', 0);
       },
     };
   };
