@@ -258,6 +258,7 @@ export default function connectMenu(renderFn, unmountFn) {
         return {
           ...fullState,
           menu: {
+            ...fullState.menu,
             [attributeName]: refinedItem,
           },
         };
