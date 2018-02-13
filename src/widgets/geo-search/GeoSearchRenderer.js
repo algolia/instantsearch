@@ -137,7 +137,6 @@ const renderer = (
           mapInstance: renderState.mapInstance,
           refine,
           paddingBoundingBox,
-          googleReference,
         });
       }
     });
@@ -232,7 +231,6 @@ const renderer = (
           mapInstance: renderState.mapInstance,
           refine,
           paddingBoundingBox,
-          googleReference,
         })}
       onClearClick={clearMapRefinement}
       templateProps={renderState.templateProps}
