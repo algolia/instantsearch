@@ -17,15 +17,14 @@ export default class extends React.Component {
     searchState: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-    this.onSearchStateChange = this.onSearchStateChange.bind(this);
-  }
+  state = {
+    searchState: this.props.searchState,
+  };
 
   /*
      nextjs params.query doesn't handle nested objects
      once it does, params.query could be used directly here, but also inside the constructor
-     to initialize the searchState. 
+     to initialize the searchState.
   */
   static async getInitialProps(params) {
     const searchState = params.asPath.includes('?')
@@ -60,13 +59,9 @@ export default class extends React.Component {
         <Head title="Home" />
         <div>
           <App
+            searchState={this.state.searchState}
             resultsState={this.props.resultsState}
             onSearchStateChange={this.onSearchStateChange}
-            searchState={
-              this.state && this.state.searchState
-                ? this.state.searchState
-                : this.props.searchState
-            }
             createURL={createURL}
           />
         </div>

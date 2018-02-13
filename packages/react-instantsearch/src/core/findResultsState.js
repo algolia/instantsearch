@@ -9,16 +9,16 @@
  * component.
  * @name findResultsState
  * @kind server-side-rendering
- * @param {Component} App - You `<App>` component.
- * @param {object} props - Props to forward to the dedicated `<InstantSearch>` component. Use it to pass a `searchState` such as `{searchState: {query: 'chair'}}` when
- * dealing with [URL routing](guide/Routing.html)
+ * @param {Component} App - Your top level `<App>` component.
+ * @param {object} props - Props passed to `<App>` for computing `resultsState`. Use it to pass a your initial `searchState` such as `{searchState: {query: 'chair'}}`. You'll typically do this when
+ * dealing with [URL routing](guide/Routing.html) and pulling the initial search query from the URL. Make sure `<App>` passes the initial search state prop on to the `<InstantSearch>` component.
  * @returns {Promise} - Resolved with a `resultsState` object.
  */
 export function findResultsState() {}
 
 /* eslint valid-jsdoc: 0 */
 /**
- * The `createInstantSearch` let's you create a dedicated, server-side compatible, `<InstantSearch>` component along with a `findResultsState` function tied to this component.
+ * The `createInstantSearch` let's you create a server-side compatible `<InstantSearch>` component along with a `findResultsState` function tied to this component. You'll use this component on both the server and client.
  * @name createInstantSearch
  * @kind server-side-rendering
  * @returns {{InstantSearch: Component, findResultsState: function}} - returns {InstantSearch: Component, findResultsState: function}
