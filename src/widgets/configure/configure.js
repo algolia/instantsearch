@@ -2,16 +2,11 @@ import isPlainObject from 'lodash/isPlainObject';
 const usage = `Usage:
 search.addWidget(
   instantsearch.widgets.configure({
-    searchParameters: {} // any searchParameter
+    // any searchParameter
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/widgets/configure.html
 `;
-
-/**
- * @typedef {Object} ConfigureWidgetOptions
- * @property {SearchParameters} searchParameters the parameters to apply when this widget is mounted
- */
 
 /**
  * The **Configure** widget provides the logic to build a custom widget that
@@ -22,20 +17,18 @@ Full documentation available at https://community.algolia.com/instantsearch.js/w
  *
  * @type {WidgetFactory}
  * @category filter
- * @param {ConfigureWidgetOptions} $0 The Configure widget options
+ * @param {SearchParameters} searchParameters The Configure widget options are search parameters
  * @returns {Object} A new Configure widget instance.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.configure({
- *     searchParameters: {
- *       analytics: true,
- *       ruleContexts: ['desktop', 'cool-users'],
- *       distinct: 3,
- *     }
+ *     analytics: true,
+ *     ruleContexts: ['desktop', 'cool-users'],
+ *     distinct: 3,
  *   })
  * );
  */
-export default function configure({ searchParameters = {} } = {}) {
+export default function configure(searchParameters = {}) {
   if (!isPlainObject(searchParameters)) {
     throw new Error(usage);
   }

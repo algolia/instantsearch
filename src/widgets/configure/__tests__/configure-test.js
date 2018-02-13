@@ -4,14 +4,14 @@ import configure from '../configure';
 describe('configure', () => {
   it('throws when you pass it a non-plain object', () => {
     [
-      () => configure({ searchParameters: new Date() }),
-      () => configure({ searchParameters: () => {} }),
-      () => configure({ searchParameters: /ok/ }),
+      () => configure(new Date()),
+      () => configure(() => {}),
+      () => configure(/ok/),
     ].map(widget => expect(widget).toThrowError(/Usage/));
   });
 
   it('Applies searchParameters if nothing in configuration yet', () => {
-    const widget = configure({ searchParameters: { analytics: true } });
+    const widget = configure({ analytics: true });
     const config = widget.getConfiguration(SearchParameters.make({}));
     expect(config).toEqual({
       analytics: true,
@@ -19,7 +19,7 @@ describe('configure', () => {
   });
 
   it('Applies searchParameters if nothing conflicting configuration', () => {
-    const widget = configure({ searchParameters: { analytics: true } });
+    const widget = configure({ analytics: true });
     const config = widget.getConfiguration(
       SearchParameters.make({ query: 'testing' })
     );
@@ -29,7 +29,7 @@ describe('configure', () => {
   });
 
   it('Applies searchParameters with a higher priority', () => {
-    const widget = configure({ searchParameters: { analytics: true } });
+    const widget = configure({ analytics: true });
     {
       const config = widget.getConfiguration(
         SearchParameters.make({ analytics: false })
@@ -49,7 +49,7 @@ describe('configure', () => {
   });
 
   it('disposes all of the state set by configure', () => {
-    const widget = configure({ searchParameters: { analytics: true } });
+    const widget = configure({ analytics: true });
 
     const nextState = widget.dispose({
       state: SearchParameters.make({
@@ -66,7 +66,7 @@ describe('configure', () => {
   });
 
   it('disposes all of the state set by configure in case of a conflict', () => {
-    const widget = configure({ searchParameters: { analytics: true } });
+    const widget = configure({ analytics: true });
 
     const nextState = widget.dispose({
       state: SearchParameters.make({
