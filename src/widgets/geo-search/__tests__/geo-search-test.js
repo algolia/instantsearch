@@ -928,8 +928,13 @@ describe('GeoSearch', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
+      const mapInstance = createFakeMapInstance();
       const markerInstance = createFakeMarkerInstance();
-      const googleReference = createFakeGoogleReference({ markerInstance });
+      const googleReference = createFakeGoogleReference({
+        mapInstance,
+        markerInstance,
+      });
+
       const onClick = jest.fn();
       const onMouseOver = jest.fn();
 
@@ -971,15 +976,19 @@ describe('GeoSearch', () => {
       // Simulate mouseover event
       simulateEvent(markerInstance, 'mouseover', { type: 'mouseover' });
 
-      expect(onClick).toHaveBeenCalledWith(
-        { type: 'click' },
-        { objectID: 123, _geoloc: true }
-      );
+      expect(onClick).toHaveBeenCalledWith({
+        event: { type: 'click' },
+        item: { objectID: 123, _geoloc: true },
+        marker: expect.objectContaining({ __id: 123 }),
+        map: mapInstance,
+      });
 
-      expect(onMouseOver).toHaveBeenCalledWith(
-        { type: 'mouseover' },
-        { objectID: 123, _geoloc: true }
-      );
+      expect(onMouseOver).toHaveBeenCalledWith({
+        event: { type: 'mouseover' },
+        item: { objectID: 123, _geoloc: true },
+        marker: expect.objectContaining({ __id: 123 }),
+        map: mapInstance,
+      });
     });
 
     it('expect to render custom HTML markers with default options', () => {
@@ -1110,9 +1119,14 @@ describe('GeoSearch', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
-      const googleReference = createFakeGoogleReference();
+      const mapInstance = createFakeMapInstance();
+      const googleReference = createFakeGoogleReference({ mapInstance });
       const markerInstance = createFakeMarkerInstance();
-      const HTMLMarker = jest.fn(() => markerInstance);
+      const HTMLMarker = jest.fn(({ ...args }) => ({
+        ...args,
+        ...markerInstance,
+      }));
+
       const onClick = jest.fn();
       const onMouseOver = jest.fn();
 
@@ -1156,15 +1170,21 @@ describe('GeoSearch', () => {
       // Simulate mouseover event
       simulateEvent(markerInstance, 'mouseover', { type: 'mouseover' });
 
-      expect(onClick).toHaveBeenCalledWith(
-        { type: 'click' },
-        { objectID: 123, _geoloc: true }
-      );
+      expect(onClick).toHaveBeenCalledWith({
+        event: { type: 'click' },
+        item: { objectID: 123, _geoloc: true },
+        marker: expect.objectContaining({ __id: 123 }),
+        map: mapInstance,
+      });
 
-      expect(onMouseOver).toHaveBeenCalledWith(
-        { type: 'mouseover' },
-        { objectID: 123, _geoloc: true }
-      );
+      expect(onMouseOver).toHaveBeenCalledWith({
+        event: { type: 'mouseover' },
+        item: { objectID: 123, _geoloc: true },
+        marker: expect.objectContaining({ __id: 123 }),
+        map: mapInstance,
+      });
+
+      createHTMLMarker.mockRestore();
     });
   });
 

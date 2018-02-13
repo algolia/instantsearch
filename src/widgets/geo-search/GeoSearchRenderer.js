@@ -185,7 +185,12 @@ const renderer = (
 
       Object.keys(markerOptions.events).forEach(eventName => {
         marker.addListener(eventName, event => {
-          markerOptions.events[eventName](event, item);
+          markerOptions.events[eventName]({
+            map: renderState.mapInstance,
+            event,
+            item,
+            marker,
+          });
         });
       });
 

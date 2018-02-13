@@ -338,8 +338,8 @@ export default () => {
                   label: item.price_formatted,
                 }),
                 events: {
-                  click: (event, item) => {
-                    logger(event, item);
+                  click: ({ event, item, marker, map }) => {
+                    logger(event, item, marker, map);
                   },
                 },
               },
@@ -378,8 +378,8 @@ export default () => {
                   </div>
                 `,
                 events: {
-                  click: (event, item) => {
-                    logger(event, item);
+                  click: ({ event, item, marker, map }) => {
+                    logger(event, item, marker, map);
                   },
                 },
               },
