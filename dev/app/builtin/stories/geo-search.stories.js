@@ -355,6 +355,39 @@ export default () => {
       )
     )
     .add(
+      'with built-in marker & InfoWindow',
+      wrapWithHitsAndConfiguration((container, start) =>
+        injectGoogleMaps(() => {
+          const InfoWindow = new window.google.maps.InfoWindow();
+
+          container.style.height = '600px';
+
+          window.search.addWidget(
+            instantsearch.widgets.geoSearch({
+              googleReference: window.google,
+              builtInMarker: {
+                events: {
+                  click: ({ item, marker, map }) => {
+                    InfoWindow.close();
+
+                    InfoWindow.setContent(item.name);
+
+                    InfoWindow.open(map, marker);
+                  },
+                },
+              },
+              container,
+              initialPosition,
+              initialZoom,
+              paddingBoundingBox,
+            })
+          );
+
+          start();
+        })
+      )
+    )
+    .add(
       'with HTML marker options',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
@@ -380,6 +413,52 @@ export default () => {
                 events: {
                   click: ({ event, item, marker, map }) => {
                     logger(event, item, marker, map);
+                  },
+                },
+              },
+              container,
+              initialPosition,
+              initialZoom,
+              paddingBoundingBox,
+            })
+          );
+
+          start();
+        })
+      )
+    )
+    .add(
+      'with HTML marker & InfoWindow',
+      wrapWithHitsAndConfiguration((container, start) =>
+        injectGoogleMaps(() => {
+          const InfoWindow = new window.google.maps.InfoWindow({
+            pixelOffset: new window.google.maps.Size(0, -30),
+          });
+
+          container.style.height = '600px';
+
+          window.search.addWidget(
+            instantsearch.widgets.geoSearch({
+              googleReference: window.google,
+              customHTMLMarker: {
+                createOptions: () => ({
+                  anchor: {
+                    x: 0,
+                    y: 5,
+                  },
+                }),
+                template: `
+                  <div class="my-custom-marker">
+                    {{price_formatted}}
+                  </div>
+                `,
+                events: {
+                  click: ({ item, marker, map }) => {
+                    InfoWindow.close();
+
+                    InfoWindow.setContent(item.name);
+
+                    InfoWindow.open(map, marker);
                   },
                 },
               },
