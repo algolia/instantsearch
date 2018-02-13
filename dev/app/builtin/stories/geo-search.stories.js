@@ -4,7 +4,8 @@ import { storiesOf, action } from 'dev-novel';
 import instantsearchPlacesWidget from 'places.js/instantsearchWidget';
 import injectScript from 'scriptjs';
 import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
+import createInfoBox from '../../utils/create-info-box';
 
 const wrapWithHitsAndConfiguration = (story, searchParameters) =>
   wrapWithHits(story, {
@@ -388,6 +389,55 @@ export default () => {
       )
     )
     .add(
+      'with built-in marker & InfoBox',
+      wrapWithHitsAndConfiguration((container, start) =>
+        injectGoogleMaps(() => {
+          const InfoBox = createInfoBox(window.google);
+          const InfoBoxInstance = new InfoBox();
+
+          InfoBoxInstance.addListener('domready', () => {
+            const bbBox = InfoBoxInstance.div_.getBoundingClientRect();
+
+            InfoBoxInstance.setOptions({
+              pixelOffset: new window.google.maps.Size(
+                -bbBox.width / 2,
+                -bbBox.height - 35 // Adjust with the marker size
+              ),
+            });
+          });
+
+          container.style.height = '600px';
+
+          window.search.addWidget(
+            instantsearch.widgets.geoSearch({
+              googleReference: window.google,
+              builtInMarker: {
+                events: {
+                  click: ({ item, marker, map }) => {
+                    InfoBoxInstance.close();
+
+                    InfoBoxInstance.setContent(`
+                      <div class="my-custom-info-box">
+                        <p class="my-custom-info-box__text">${item.name}</p>
+                      </div>
+                    `);
+
+                    InfoBoxInstance.open(map, marker);
+                  },
+                },
+              },
+              container,
+              initialPosition,
+              initialZoom,
+              paddingBoundingBox,
+            })
+          );
+
+          start();
+        })
+      )
+    )
+    .add(
       'with HTML marker options',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
@@ -459,6 +509,66 @@ export default () => {
                     InfoWindow.setContent(item.name);
 
                     InfoWindow.open(map, marker);
+                  },
+                },
+              },
+              container,
+              initialPosition,
+              initialZoom,
+              paddingBoundingBox,
+            })
+          );
+
+          start();
+        })
+      )
+    )
+    .add(
+      'with HTML marker & InfoBox',
+      wrapWithHitsAndConfiguration((container, start) =>
+        injectGoogleMaps(() => {
+          const InfoBox = createInfoBox(window.google);
+          const InfoBoxInstance = new InfoBox();
+
+          InfoBoxInstance.addListener('domready', () => {
+            const bbBox = InfoBoxInstance.div_.getBoundingClientRect();
+
+            InfoBoxInstance.setOptions({
+              pixelOffset: new window.google.maps.Size(
+                -bbBox.width / 2,
+                -bbBox.height - 5 // Adjust with the marker offset
+              ),
+            });
+          });
+
+          container.style.height = '600px';
+
+          window.search.addWidget(
+            instantsearch.widgets.geoSearch({
+              googleReference: window.google,
+              customHTMLMarker: {
+                createOptions: () => ({
+                  anchor: {
+                    x: 0,
+                    y: 5,
+                  },
+                }),
+                template: `
+                  <div class="my-custom-marker">
+                    {{price_formatted}}
+                  </div>
+                `,
+                events: {
+                  click: ({ item, marker, map }) => {
+                    InfoBoxInstance.close();
+
+                    InfoBoxInstance.setContent(`
+                      <div class="my-custom-info-box">
+                        <p class="my-custom-info-box__text">${item.name}</p>
+                      </div>
+                    `);
+
+                    InfoBoxInstance.open(map, marker);
                   },
                 },
               },
