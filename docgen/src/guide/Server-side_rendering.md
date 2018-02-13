@@ -25,7 +25,7 @@ When called, `createInstantSearch` returns:
 * A dedicated [`<InstantSearch>`](widgets/<InstantSearch>.html) component accepting a `resultsState` prop containing the Algolia results.
 * A `findResultsState` function to retrieve a `resultsState`.
 
-The server-side reference is available in the [API docs](server-side-rendering/).
+More details are available in the [server-side API docs](server-side-rendering/).
 
 We split this guide in three parts:
 - App.js is the server and browser shared main React component from your application
@@ -52,7 +52,7 @@ class App extends Component {
         apiKey="apiKey"
         indexName="indexName"
         searchState={this.props.searchState}
-        resultsState={this.props.resultsState || {}}
+        resultsState={this.props.resultsState}
       >
         <SearchBox />
         <Hits />
@@ -82,7 +82,7 @@ import { App, findResultsState } from './app.js';
 import { renderToString } from 'react-dom/server';
 
 const server = createServer((req, res) => {
-  const searchState = {searchState: {query: 'chair'}};
+  const searchState = {query: 'chair'};
   const resultsState = await findResultsState(App, {searchState});
   const appInitialState = {searchState, resultsState}
   const appAsString = renderToString(<App {...appInitialState} />);
