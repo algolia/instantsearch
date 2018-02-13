@@ -1,4 +1,5 @@
 import { checkRendering } from '../../lib/utils.js';
+import range from 'lodash/range';
 
 const usage = `Usage:
 var customPagination = connectPagination(function render(params, isFirstRendering) {
@@ -7,6 +8,7 @@ var customPagination = connectPagination(function render(params, isFirstRenderin
   //   currentRefinement,
   //   nbHits,
   //   nbPages,
+  //   pages,
   //   refine,
   //   widgetParams,
   // }
@@ -14,6 +16,7 @@ var customPagination = connectPagination(function render(params, isFirstRenderin
 search.addWidget(
   customPagination({
     [ maxPages ]
+    [ padding ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPagination.html
@@ -94,7 +97,7 @@ export default function connectPagination(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { maxPages } = widgetParams;
+    const { maxPages, padding = 3 } = widgetParams;
 
     return {
       init({ helper, createURL, instantSearchInstance }) {
@@ -123,6 +126,27 @@ export default function connectPagination(renderFn, unmountFn) {
         return maxPages !== undefined ? Math.min(maxPages, nbPages) : nbPages;
       },
 
+      getPages({ nbPages, currentRefinement }) {
+        const minDelta = currentRefinement - padding - 1;
+        const maxDelta = currentRefinement + padding + 1;
+
+        if (minDelta < 0) {
+          return range(0, currentRefinement + padding + Math.abs(minDelta));
+        }
+
+        if (maxDelta > nbPages) {
+          return range(
+            currentRefinement - padding - (maxDelta - nbPages),
+            nbPages
+          );
+        }
+
+        return range(
+          currentRefinement - padding,
+          currentRefinement + padding + 1
+        );
+      },
+
       render({ results, state, instantSearchInstance }) {
         renderFn(
           {
@@ -131,6 +155,10 @@ export default function connectPagination(renderFn, unmountFn) {
             refine: this.refine,
             nbHits: results.nbHits,
             nbPages: this.getMaxPage(results),
+            pages: this.getPages({
+              nbPages: this.getMaxPage(results),
+              currentRefinement: state.page,
+            }),
             widgetParams,
             instantSearchInstance,
           },
