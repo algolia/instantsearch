@@ -141,7 +141,7 @@ refinementList({
  * @property {boolean} isRefined True if the value is selected.
  * @property {string} label The label to display.
  * @property {string} value The value used for refining.
- * @property {string} highlighted The label highlighted (when using search for facet values).
+ * @property {string} highlighted The label highlighted (when using search for facet values). This value is displayed in the default template.
  * @property {string} url The url with this refinement selected.
  * @property {object} cssClasses Object containing all the classes computed for the item.
  */
