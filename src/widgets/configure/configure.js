@@ -2,11 +2,16 @@ import isPlainObject from 'lodash/isPlainObject';
 const usage = `Usage:
 search.addWidget(
   instantsearch.widgets.configure({
-    // any helper parameters
+    searchParameters: {} // any searchParameter
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/widgets/configure.html
 `;
+
+/**
+ * @typedef {Object} ConfigureWidgetOptions
+ * @property {SearchParameters} searchParameters the parameters to apply when this widget is mounted
+ */
 
 /**
  * The **Configure** widget provides the logic to build a custom widget that
@@ -17,31 +22,33 @@ Full documentation available at https://community.algolia.com/instantsearch.js/w
  *
  * @type {WidgetFactory}
  * @category filter
- * @param {Object} widgetParams Any search parameters accepted by the helper.
+ * @param {ConfigureWidgetOptions} $0 The Configure widget options
  * @returns {Object} A new Configure widget instance.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.configure({
- *     analytics: true,
- *     ruleContexts: ['desktop', 'cool-users'],
- *     distinct: 3,
+ *     searchParameters: {
+ *       analytics: true,
+ *       ruleContexts: ['desktop', 'cool-users'],
+ *       distinct: 3,
+ *     }
  *   })
  * );
  */
-export default function configure(widgetParams = {}) {
-  if (!isPlainObject(widgetParams)) {
+export default function configure({ searchParameters = {} } = {}) {
+  if (!isPlainObject(searchParameters)) {
     throw new Error(usage);
   }
   return {
     getConfiguration() {
-      return widgetParams;
+      return searchParameters;
     },
     init() {},
     dispose({ state }) {
       return state.mutateMe(mutableState => {
         // widgetParams are assumed 'controlled',
         // so they override whatever other widgets give the state
-        Object.keys(widgetParams).forEach(key => {
+        Object.keys(searchParameters).forEach(key => {
           delete mutableState[key];
         });
       });
