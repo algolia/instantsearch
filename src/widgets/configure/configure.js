@@ -2,7 +2,7 @@ import isPlainObject from 'lodash/isPlainObject';
 const usage = `Usage:
 search.addWidget(
   instantsearch.widgets.configure({
-    // any helper parameters
+    // any searchParameter
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/widgets/configure.html
@@ -17,7 +17,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/w
  *
  * @type {WidgetFactory}
  * @category filter
- * @param {Object} widgetParams Any search parameters accepted by the helper.
+ * @param {SearchParameters} searchParameters The Configure widget options are search parameters
  * @returns {Object} A new Configure widget instance.
  * @example
  * search.addWidget(
@@ -28,20 +28,20 @@ Full documentation available at https://community.algolia.com/instantsearch.js/w
  *   })
  * );
  */
-export default function configure(widgetParams = {}) {
-  if (!isPlainObject(widgetParams)) {
+export default function configure(searchParameters = {}) {
+  if (!isPlainObject(searchParameters)) {
     throw new Error(usage);
   }
   return {
     getConfiguration() {
-      return widgetParams;
+      return searchParameters;
     },
     init() {},
     dispose({ state }) {
       return state.mutateMe(mutableState => {
         // widgetParams are assumed 'controlled',
         // so they override whatever other widgets give the state
-        Object.keys(widgetParams).forEach(key => {
+        Object.keys(searchParameters).forEach(key => {
           delete mutableState[key];
         });
       });

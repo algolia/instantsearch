@@ -1,8 +1,5 @@
-import jsHelper from 'algoliasearch-helper';
+import { SearchParameters } from 'algoliasearch-helper';
 import configure from '../configure';
-
-const createState = state =>
-  jsHelper({ addAlgoliaAgent: () => {} }, '', state).state;
 
 describe('configure', () => {
   it('throws when you pass it a non-plain object', () => {
@@ -15,7 +12,7 @@ describe('configure', () => {
 
   it('Applies searchParameters if nothing in configuration yet', () => {
     const widget = configure({ analytics: true });
-    const config = widget.getConfiguration(createState({}));
+    const config = widget.getConfiguration(SearchParameters.make({}));
     expect(config).toEqual({
       analytics: true,
     });
@@ -23,7 +20,9 @@ describe('configure', () => {
 
   it('Applies searchParameters if nothing conflicting configuration', () => {
     const widget = configure({ analytics: true });
-    const config = widget.getConfiguration(createState({ query: 'testing' }));
+    const config = widget.getConfiguration(
+      SearchParameters.make({ query: 'testing' })
+    );
     expect(config).toEqual({
       analytics: true,
     });
@@ -32,14 +31,16 @@ describe('configure', () => {
   it('Applies searchParameters with a higher priority', () => {
     const widget = configure({ analytics: true });
     {
-      const config = widget.getConfiguration(createState({ analytics: false }));
+      const config = widget.getConfiguration(
+        SearchParameters.make({ analytics: false })
+      );
       expect(config).toEqual({
         analytics: true,
       });
     }
     {
       const config = widget.getConfiguration(
-        createState({ analytics: false, extra: true })
+        SearchParameters.make({ analytics: false, extra: true })
       );
       expect(config).toEqual({
         analytics: true,
@@ -51,14 +52,14 @@ describe('configure', () => {
     const widget = configure({ analytics: true });
 
     const nextState = widget.dispose({
-      state: createState({
+      state: SearchParameters.make({
         analytics: true,
         somethingElse: false,
       }),
     });
 
     expect(nextState).toEqual(
-      createState({
+      SearchParameters.make({
         somethingElse: false,
       })
     );
@@ -68,7 +69,7 @@ describe('configure', () => {
     const widget = configure({ analytics: true });
 
     const nextState = widget.dispose({
-      state: createState({
+      state: SearchParameters.make({
         // even though it's different, it will be deleted
         analytics: false,
         somethingElse: false,
@@ -76,7 +77,7 @@ describe('configure', () => {
     });
 
     expect(nextState).toEqual(
-      createState({
+      SearchParameters.make({
         somethingElse: false,
       })
     );
