@@ -186,15 +186,22 @@ function findRelatedTypes(functionSymbol, symbols) {
       const typeSymbol = find(symbols, {name: unnamedParameterType});
       types = [...types, typeSymbol, ...findRelatedTypes(typeSymbol, symbols)]
     } else {
-      const currentTypeName = p.name;
-      const isCustomType = currentTypeName && currentTypeName !== 'Object' && currentTypeName[0] === currentTypeName[0].toUpperCase();
-      if (isCustomType) {
-        const typeSymbol = find(symbols, {name: currentTypeName});
-        if(!typeSymbol) console.warn('Undefined type: ', currentTypeName);
+      if (isCustomType(p.name)) {
+        const typeSymbol = find(symbols, {name: p.name});
+        if(!typeSymbol) console.warn('Undefined type: ', p.name);
         else {
           types = [...types, typeSymbol];
           // iterate over each property to get their types
           forEach(typeSymbol.properties, p => findParamsTypes({name: p.type.name, type: p.type}));
+        }
+      } else if(isCustomType(p.type.name)){
+        const typeSymbol = find(symbols, {name: p.type.name});
+        if(!typeSymbol) console.warn('Undefined type: ', p.type.name);
+        else {
+          types = [...types, typeSymbol];
+          // iterate over each property to get their types
+          if(typeSymbol.properties)
+            forEach(typeSymbol.properties, p2 => findParamsTypes({name: p2.type.name, type: p2.type}));
         }
       }
     }
@@ -205,4 +212,8 @@ function findRelatedTypes(functionSymbol, symbols) {
   forEach(functionSymbol.properties, findParamsTypes);
 
   return uniqBy(types, 'name');
+}
+
+function isCustomType(name) {
+  return name && name !== 'Object' && name[0] === name[0].toUpperCase();
 }

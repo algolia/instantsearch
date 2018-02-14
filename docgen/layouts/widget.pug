@@ -30,14 +30,14 @@ block content
     a.anchor(href=`${navPath}#usage`)
   +widgetUsage(jsdoc)
 
-  if jsdoc.relatedTypes && jsdoc.relatedTypes.length > 0
-    h2#structure Options
-      a.anchor(href=`${navPath}#structure`)
-    each t in jsdoc.relatedTypes
-      if t
-        +struct(t, jsdoc.relatedTypes)
+  if jsdoc.params && jsdoc.params.length === 1 && jsdoc.params[0].name === '$0'
+    if jsdoc.relatedTypes && jsdoc.relatedTypes.length > 0
+      h2#structure Options
+        a.anchor(href=`${navPath}#structure`)
+      each t in jsdoc.relatedTypes
+        if t
+          +struct(t, jsdoc.relatedTypes)
   else if jsdoc.params
-    - console.log(jsdoc)
     h2#structure Options
       a.anchor(href=`${navPath}#structure`)
     ul.struct-def
@@ -46,7 +46,7 @@ block content
           strong=property.name
           a.anchor(href=`${navPath}#param-${property.name}`)
           code
-            +type(property.type, relatedTypes)
+            +type(property.type, jsdoc.relatedTypes)
           if tag && tag.default
             div.default-value
               | Default value:
