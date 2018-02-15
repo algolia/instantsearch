@@ -38,7 +38,7 @@ Scroll to the top of the page after a page was changed:
 <script>
   export default {
     methods: {
-      onPageChange() {
+      onPageChange(page) {
         window.scrollTo(0,0);
       }
     }
@@ -76,6 +76,6 @@ Scroll to the top of the page after a page was changed:
 
 ## Events
 
-| Event name  | Description                                                                                  |
-|-------------|----------------------------------------------------------------------------------------------|
-| page-change | Triggered right after a page was changed due to an action taken on the pagination component. |
+| Event name  | Variables  | Description                                                                                  |
+|-------------|------------|----------------------------------------------------------------------------------------------|
+| page-change | page       | Triggered right after a page was changed due to an action taken on the pagination component. |

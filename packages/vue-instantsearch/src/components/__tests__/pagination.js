@@ -90,7 +90,7 @@ test('it should be hidden if there are no results in the current context', () =>
   expect(vm.$el.outerHTML).toMatchSnapshot();
 });
 
-test('it should emit a "page-change" event when page changes', () => {
+test('it should emit a "page-change" event when page changes and pass in the page variable', () => {
   const searchStore = {
     page: 1,
     totalPages: 20,
@@ -115,4 +115,8 @@ test('it should emit a "page-change" event when page changes', () => {
     .getElementsByTagName('a')[0]
     .click();
   expect(onPageChange).toHaveBeenCalledTimes(1);
+
+  const page = searchStore.page;
+  expect(onPageChange).toHaveBeenCalledWith(page);
+  expect(page).toBe(2);
 });

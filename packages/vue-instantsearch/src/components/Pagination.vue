@@ -97,7 +97,7 @@ export default {
         return;
       }
       this.searchStore.page = p;
-      this.$emit('page-change');
+      this.$emit('page-change', p);
     },
     goToFirstPage() {
       this.goToPage(1);
