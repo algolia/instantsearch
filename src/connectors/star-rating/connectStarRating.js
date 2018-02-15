@@ -17,7 +17,7 @@ search.addWidget(
     [ max=5 ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectStarRating.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStarRating.html
 `;
 
 /**

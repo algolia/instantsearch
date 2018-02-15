@@ -21,7 +21,7 @@ search.addWidget(
     [ clearsQuery = false ]
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectClearAll.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearAll.html
 `;
 
 const refine = ({
