@@ -10,7 +10,7 @@
   },
   "renovate": {
     "extends": ["config:js-app", "algolia"],
-    "automerge": "true",
+    "automerge": true,
     "major": {
       "automerge": false
     }
