@@ -369,7 +369,9 @@ export default () => {
               builtInMarker: {
                 events: {
                   click: ({ item, marker, map }) => {
-                    InfoWindow.close();
+                    if (InfoWindow.getMap()) {
+                      InfoWindow.close();
+                    }
 
                     InfoWindow.setContent(item.name);
 
@@ -414,7 +416,9 @@ export default () => {
               builtInMarker: {
                 events: {
                   click: ({ item, marker, map }) => {
-                    InfoBoxInstance.close();
+                    if (InfoBoxInstance.getMap()) {
+                      InfoBoxInstance.close();
+                    }
 
                     InfoBoxInstance.setContent(`
                       <div class="my-custom-info-box">
@@ -504,7 +508,9 @@ export default () => {
                 `,
                 events: {
                   click: ({ item, marker, map }) => {
-                    InfoWindow.close();
+                    if (InfoWindow.getMap()) {
+                      InfoWindow.close();
+                    }
 
                     InfoWindow.setContent(item.name);
 
@@ -560,7 +566,9 @@ export default () => {
                 `,
                 events: {
                   click: ({ item, marker, map }) => {
-                    InfoBoxInstance.close();
+                    if (InfoBoxInstance.getMap()) {
+                      InfoBoxInstance.close();
+                    }
 
                     InfoBoxInstance.setContent(`
                       <div class="my-custom-info-box">
