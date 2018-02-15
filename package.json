@@ -36,7 +36,11 @@
     "extends": [
       "config:js-lib",
       "algolia"
-    ]
+    ],
+    "automerge": true,
+    "major": {
+      "automerge": false
+    }
   },
   "repository": "algolia/instantsearch.js",
   "files": [

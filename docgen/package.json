@@ -9,7 +9,11 @@
     "build": "babel-node build.js"
   },
   "renovate": {
-    "extends": ["config:js-app", "algolia"]
+    "extends": ["config:js-app", "algolia"],
+    "automerge": "true",
+    "major": {
+      "automerge": false
+    }
   },
   "devDependencies": {
     "algolia-frontend-components": "0.0.34",
