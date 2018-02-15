@@ -22,7 +22,7 @@ search.addWidget(
     [ precision = 2 ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRange.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRange.html
 `;
 
 /**

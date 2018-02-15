@@ -23,7 +23,7 @@ search.addWidget(
     [ sortBy = ['name:asc'] ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHierarchicalMenu.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html
 `;
 
 /**
