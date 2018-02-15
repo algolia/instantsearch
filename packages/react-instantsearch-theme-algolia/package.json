@@ -17,7 +17,7 @@
     "autoprefixer": "8.0.0",
     "cssnano": "3.10.0",
     "node-sass": "4.7.2",
-    "postcss": "6.0.17",
+    "postcss": "6.0.18",
     "postcss-scss": "1.0.3"
   },
   "author": {
