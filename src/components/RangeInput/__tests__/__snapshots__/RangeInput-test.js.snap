@@ -336,7 +336,6 @@ exports[`RawRangeInput willReceiveProps expect to update the empty state from gi
         placeholder={0}
         step={1}
         type="number"
-        value={20}
       />
     </label>
     <span
@@ -356,7 +355,6 @@ exports[`RawRangeInput willReceiveProps expect to update the empty state from gi
         placeholder={500}
         step={1}
         type="number"
-        value={480}
       />
     </label>
     <button
@@ -444,7 +442,7 @@ exports[`RawRangeInput willReceiveProps expect to update the state from given pr
         placeholder={0}
         step={1}
         type="number"
-        value={20}
+        value={40}
       />
     </label>
     <span
@@ -464,7 +462,7 @@ exports[`RawRangeInput willReceiveProps expect to update the state from given pr
         placeholder={500}
         step={1}
         type="number"
-        value={480}
+        value={460}
       />
     </label>
     <button
