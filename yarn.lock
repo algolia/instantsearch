@@ -3180,7 +3180,7 @@ envify@^4.0.0:
     esprima "^4.0.0"
     through "~2.3.4"
 
-enzyme-adapter-react-15@false1.0.5:
+enzyme-adapter-react-15@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/enzyme-adapter-react-15/-/enzyme-adapter-react-15-1.0.5.tgz#99f9a03ff2c2303e517342935798a6bdfbb75fac"
   dependencies:
