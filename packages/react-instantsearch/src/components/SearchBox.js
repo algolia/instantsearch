@@ -291,12 +291,7 @@ class SearchBox extends Component {
           >
             {submitComponent}
           </button>
-          <button
-            type="reset"
-            title={translate('resetTitle')}
-            {...cx('reset')}
-            onClick={this.onReset}
-          >
+          <button type="reset" title={translate('resetTitle')} {...cx('reset')}>
             {resetComponent}
           </button>
         </div>

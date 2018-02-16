@@ -80,7 +80,6 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
         </button>
         <button
           className="ais-SearchBox__reset"
-          onClick={[Function]}
           title="Clear the search query."
           type="reset"
         >
@@ -247,7 +246,6 @@ exports[`Menu Menu with search inside items with search results 1`] = `
         </button>
         <button
           className="ais-SearchBox__reset"
-          onClick={[Function]}
           title="Clear the search query."
           type="reset"
         >
@@ -370,7 +368,6 @@ exports[`Menu applies translations 1`] = `
         </button>
         <button
           className="ais-SearchBox__reset"
-          onClick={[Function]}
           title="Clear the search query."
           type="reset"
         >
