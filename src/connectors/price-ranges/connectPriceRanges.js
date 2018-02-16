@@ -228,6 +228,53 @@ export default function connectPriceRanges(renderFn, unmountFn) {
 
         return nextState;
       },
+
+      getWidgetState(fullState, { state }) {
+        const { '>=': min = '', '<=': max = '' } = state.getNumericRefinements(
+          attributeName
+        );
+
+        if (min === '' && max === '') return fullState;
+
+        return {
+          ...fullState,
+          priceRanges: {
+            ...fullState.priceRanges,
+            [attributeName]: `${min}:${max}`,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParam, { uiState }) {
+        const value =
+          uiState && uiState.priceRanges && uiState.priceRanges[attributeName];
+
+        if (value && value.indexOf(':') >= 0) {
+          const clearedParams = searchParam.clearRefinements(attributeName);
+          const [lowerBound, upperBound] = value.split(':');
+          if (
+            (lowerBound || lowerBound === 0) &&
+            (upperBound || upperBound === 0)
+          ) {
+            return clearedParams
+              .addNumericRefinement(attributeName, '>=', lowerBound)
+              .addNumericRefinement(attributeName, '<=', upperBound);
+          }
+          if (lowerBound || lowerBound === 0)
+            return clearedParams.addNumericRefinement(
+              attributeName,
+              '>=',
+              lowerBound
+            );
+          if (upperBound || upperBound === 0)
+            return clearedParams.addNumericRefinement(
+              attributeName,
+              '<=',
+              upperBound
+            );
+        }
+        return searchParam;
+      },
     };
   };
 }
