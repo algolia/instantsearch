@@ -43,6 +43,24 @@ export default () => {
     left: 13,
   };
 
+  Stories.add(
+    'default',
+    wrapWithHitsAndConfiguration((container, start) =>
+      injectGoogleMaps(() => {
+        container.style.height = '600px';
+
+        window.search.addWidget(
+          instantsearch.widgets.geoSearch({
+            googleReference: window.google,
+            container,
+          })
+        );
+
+        start();
+      })
+    )
+  );
+
   // With IP
   Stories.add(
     'with IP',
