@@ -83,13 +83,12 @@ Usage: instantsearch({
     }
 
     this.urlSync = urlSync === true ? {} : urlSync;
-    this.routing =
-      routing === true
-        ? ROUTING_DEFAULT_OPTIONS
-        : {
-            ...ROUTING_DEFAULT_OPTIONS,
-            ...routing,
-          };
+    if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
+    else if (isPlainObject(routing))
+      this.routing = {
+        ...ROUTING_DEFAULT_OPTIONS,
+        ...routing,
+      };
   }
 
   /**

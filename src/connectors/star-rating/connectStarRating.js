@@ -152,7 +152,7 @@ export default function connectStarRating(renderFn, unmountFn) {
             allValues[v] += facet.count;
           }
         });
-        const refinedStar = this._getRefinedStar(helper);
+        const refinedStar = this._getRefinedStar(helper.state);
         for (let star = max - 1; star >= 1; --star) {
           const count = allValues[star];
           if (refinedStar && star !== refinedStar && count === 0) {
@@ -197,7 +197,8 @@ export default function connectStarRating(renderFn, unmountFn) {
       },
 
       _toggleRefinement(helper, facetValue) {
-        const isRefined = this._getRefinedStar(helper) === Number(facetValue);
+        const isRefined =
+          this._getRefinedStar(helper.state) === Number(facetValue);
         helper.clearRefinements(attributeName);
         if (!isRefined) {
           for (let val = Number(facetValue); val <= max; ++val) {
@@ -207,12 +208,14 @@ export default function connectStarRating(renderFn, unmountFn) {
         helper.search();
       },
 
-      _getRefinedStar(helper) {
+      _getRefinedStar(searchParameters) {
         let refinedStar = undefined;
-        const refinements = helper.getRefinements(attributeName);
+        const refinements = searchParameters.getDisjunctiveRefinements(
+          attributeName
+        );
         refinements.forEach(r => {
-          if (!refinedStar || Number(r.value) < refinedStar) {
-            refinedStar = Number(r.value);
+          if (!refinedStar || Number(r) < refinedStar) {
+            refinedStar = Number(r);
           }
         });
         return refinedStar;

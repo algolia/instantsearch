@@ -10,6 +10,7 @@ const fakeClient = { addAlgoliaAgent: () => {} };
 const SearchResults = jsHelper.SearchResults;
 
 describe('starRating()', () => {
+  const attributeName = 'anAttrName';
   let ReactDOM;
   let container;
   let widget;
@@ -26,16 +27,15 @@ describe('starRating()', () => {
     container = document.createElement('div');
     widget = starRating({
       container,
-      attributeName: 'anAttrName',
+      attributeName,
       cssClasses: { body: ['body', 'cx'] },
     });
-    helper = {
-      clearRefinements: sinon.spy(),
-      addDisjunctiveFacetRefinement: sinon.spy(),
-      getRefinements: sinon.stub().returns([]),
-      search: sinon.spy(),
-      setState: sinon.spy(),
-    };
+    helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    sinon.spy(helper, 'clearRefinements');
+    sinon.spy(helper, 'addDisjunctiveFacetRefinement');
+    sinon.spy(helper, 'getRefinements');
+    helper.search = sinon.stub();
+
     state = {
       toggleRefinement: sinon.spy(),
     };
@@ -68,9 +68,17 @@ describe('starRating()', () => {
   });
 
   it('hide the count==0 when there is a refinement', () => {
-    helper.getRefinements = sinon.stub().returns([{ value: '1' }]);
-    results.getFacetValues = sinon.stub().returns([{ name: '1', count: 42 }]);
-    widget.render({ state, helper, results, createURL });
+    helper.addDisjunctiveFacetRefinement(attributeName, 1);
+    const _results = new SearchResults(helper.state, [
+      {
+        facets: {
+          [attributeName]: { 1: 42 },
+        },
+      },
+      {},
+    ]);
+
+    widget.render({ state, helper, results: _results, createURL });
     expect(ReactDOM.render.callCount).toBe(1);
     expect(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([
       {
@@ -113,7 +121,8 @@ describe('starRating()', () => {
   });
 
   it('toggles the refinements', () => {
-    helper.getRefinements = sinon.stub().returns([{ value: '2' }]);
+    helper.addDisjunctiveFacetRefinement(attributeName, 2);
+    helper.addDisjunctiveFacetRefinement.reset();
     widget._toggleRefinement('2');
     expect(helper.clearRefinements.calledOnce).toBe(
       true,
@@ -141,8 +150,6 @@ describe('starRating()', () => {
   });
 
   it('should return the right facet counts and results', () => {
-    const attributeName = 'anAttrName';
-
     const _widget = starRating({
       container,
       attributeName,
