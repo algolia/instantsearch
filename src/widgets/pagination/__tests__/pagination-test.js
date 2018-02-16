@@ -1,8 +1,6 @@
 import expect from 'expect';
 import sinon from 'sinon';
 import pagination from '../pagination';
-import Pagination from '../../../components/Pagination/Pagination';
-import Paginator from '../../../connectors/pagination/Paginator';
 
 describe('pagination call', () => {
   it('throws an exception when no container', () => {
