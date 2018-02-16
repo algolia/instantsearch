@@ -642,7 +642,9 @@ export default () => {
               const selector = `.my-custom-marker[data-id="${objectID}"]`;
               const marker = document.querySelector(selector);
 
-              marker.classList.add('my-custom-marker--active');
+              if (marker) {
+                marker.classList.add('my-custom-marker--active');
+              }
             }
           });
 
