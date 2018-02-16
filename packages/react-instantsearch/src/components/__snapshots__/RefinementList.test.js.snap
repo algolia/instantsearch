@@ -81,7 +81,6 @@ exports[`RefinementList applies translations 1`] = `
           </button>
           <button
             className="ais-SearchBox__reset"
-            onClick={[Function]}
             title="Clear the search query."
             type="reset"
           >
@@ -337,7 +336,6 @@ exports[`RefinementList refinement list with search inside items but no search r
           </button>
           <button
             className="ais-SearchBox__reset"
-            onClick={[Function]}
             title="Clear the search query."
             type="reset"
           >
@@ -521,7 +519,6 @@ exports[`RefinementList refinement list with search inside items with search res
           </button>
           <button
             className="ais-SearchBox__reset"
-            onClick={[Function]}
             title="Clear the search query."
             type="reset"
           >

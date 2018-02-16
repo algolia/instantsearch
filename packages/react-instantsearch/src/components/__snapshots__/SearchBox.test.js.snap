@@ -74,7 +74,6 @@ exports[`SearchBox applies its default props 1`] = `
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="Clear the search query."
       type="reset"
     >
@@ -166,7 +165,6 @@ exports[`SearchBox lets you customize its theme 1`] = `
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="Clear the search query."
       type="reset"
     >
@@ -258,7 +256,6 @@ exports[`SearchBox lets you customize its translations 1`] = `
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="RESET_TITLE"
       type="reset"
     >
@@ -344,7 +341,6 @@ exports[`SearchBox lets you give custom components for reset and submit 1`] = `
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="Clear the search query."
       type="reset"
     >
@@ -475,7 +471,6 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 1`] 
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="Clear the search query."
       type="reset"
     >
@@ -608,7 +603,6 @@ exports[`SearchBox should render the loader if showLoadingIndicator is true 2`] 
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="Clear the search query."
       type="reset"
     >
@@ -700,7 +694,6 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="Clear the search query."
       type="reset"
     >
@@ -792,7 +785,6 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="Clear the search query."
       type="reset"
     >
@@ -884,7 +876,6 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
     </button>
     <button
       className="ais-SearchBox__reset"
-      onClick={[Function]}
       title="Clear the search query."
       type="reset"
     >
