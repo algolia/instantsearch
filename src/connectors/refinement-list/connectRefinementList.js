@@ -416,6 +416,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         return {
           ...fullState,
           refinementList: {
+            ...fullState.refinementList,
             [attributeName]: values,
           },
         };
