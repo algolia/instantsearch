@@ -18,7 +18,7 @@ import createConnector from '../core/createConnector';
  * @kind connector
  * @requirements The attribute passed to the `attributeName` prop must be holding numerical values.
  * @propType {string} attributeName - Name of the attribute for faceting
- * @propType {{min: number, max: number}} [defaultRefinement] - Default searchState of the widget containing the start and the end of the range.
+ * @propType {{min?: number, max?: number}} [defaultRefinement] - Default searchState of the widget containing the start and the end of the range.
  * @propType {number} [min] - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} [max] - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} [precision=2] - Number of digits after decimal point to use.
@@ -185,8 +185,8 @@ export default createConnector({
     id: PropTypes.string,
     attributeName: PropTypes.string.isRequired,
     defaultRefinement: PropTypes.shape({
-      min: PropTypes.number.isRequired,
-      max: PropTypes.number.isRequired,
+      min: PropTypes.number,
+      max: PropTypes.number,
     }),
     min: PropTypes.number,
     max: PropTypes.number,
