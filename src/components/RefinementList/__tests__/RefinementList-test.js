@@ -77,7 +77,7 @@ describe('RefinementList', () => {
 
       // Then
       expect(activeItem.props().itemClassName).toContain('active');
-      expect(inactiveItem.props().itemClassName).toNotContain('active');
+      expect(inactiveItem.props().itemClassName).not.toContain('active');
     });
   });
 

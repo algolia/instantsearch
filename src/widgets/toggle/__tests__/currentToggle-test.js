@@ -1,11 +1,8 @@
-import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import currentToggle from '../toggle.js';
 import defaultTemplates from '../defaultTemplates.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 
 describe('currentToggle()', () => {
   describe('good usage', () => {
@@ -162,9 +159,7 @@ describe('currentToggle()', () => {
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       });
 
       it('with facet values', () => {
@@ -205,12 +200,8 @@ describe('currentToggle()', () => {
           ...props,
         };
 
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
-        expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       });
 
       it('supports negative numeric off or on values', () => {
@@ -254,12 +245,8 @@ describe('currentToggle()', () => {
         };
 
         // The first call is not the one expected, because of the new init rendering..
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
-        expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
 
         widget.toggleRefinement({ isRefined: true });
         expect(
@@ -303,12 +290,8 @@ describe('currentToggle()', () => {
           ...props,
         };
 
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
-        expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       });
 
       it('when refined', () => {
@@ -354,12 +337,8 @@ describe('currentToggle()', () => {
           ...props,
         };
 
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
-        expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-          <RefinementList {...props} />
-        );
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       });
 
       it('using props.refine', () => {
@@ -383,7 +362,7 @@ describe('currentToggle()', () => {
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         const { toggleRefinement } = ReactDOM.render.firstCall.args[0].props;
-        expect(toggleRefinement).toBeA('function');
+        expect(typeof toggleRefinement).toEqual('function');
         toggleRefinement();
         expect(helper.addDisjunctiveFacetRefinement.calledOnce).toBe(true);
         expect(

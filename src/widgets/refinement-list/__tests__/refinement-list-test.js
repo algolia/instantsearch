@@ -1,8 +1,5 @@
 import sinon from 'sinon';
 
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-
 import algoliasearchHelper from 'algoliasearch-helper';
 const SearchParameters = algoliasearchHelper.SearchParameters;
 import refinementList from '../refinement-list.js';
