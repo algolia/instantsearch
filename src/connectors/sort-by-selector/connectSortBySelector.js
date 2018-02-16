@@ -157,6 +157,25 @@ export default function connectSortBySelector(renderFn, unmountFn) {
         unmountFn();
         return state.setIndex(this.initialIndex);
       },
+
+      getWidgetState(fullState, { state }) {
+        const isInitialIndex =
+          state.getQueryParameter('index') === this.initialIndex;
+        if (isInitialIndex) return fullState;
+
+        return {
+          ...fullState,
+          sortBy: state.getQueryParameter('index'),
+        };
+      },
+
+      getWidgetSearchParameters(searchParam, { uiState }) {
+        // Modify and return the searchParam based on uiState
+        // return searchParam.setQueryParameter('page', 0);
+        if (uiState.sortBy)
+          return searchParam.setQueryParameter('index', uiState.sortBy);
+        return searchParam;
+      },
     };
   };
 }
