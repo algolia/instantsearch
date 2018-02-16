@@ -22,11 +22,19 @@ const renderer = ({
   cssClasses,
   labels,
   showFirstLast,
-  padding,
   autoHideContainer,
   scrollToNode,
 }) => (
-  { createURL, currentRefinement, nbHits, nbPages, refine },
+  {
+    createURL,
+    currentRefinement,
+    nbHits,
+    nbPages,
+    pages,
+    isFirstPage,
+    isLastPage,
+    refine,
+  },
   isFirstRendering
 ) => {
   if (isFirstRendering) return;
@@ -49,7 +57,9 @@ const renderer = ({
       labels={labels}
       nbHits={nbHits}
       nbPages={nbPages}
-      padding={padding}
+      pages={pages}
+      isFirstPage={isFirstPage}
+      isLastPage={isLastPage}
       setCurrentPage={setCurrentPage}
       shouldAutoHideContainer={shouldAutoHideContainer}
       showFirstLast={showFirstLast}

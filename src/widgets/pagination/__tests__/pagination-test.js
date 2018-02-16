@@ -5,6 +5,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 import pagination from '../pagination';
 import Pagination from '../../../components/Pagination/Pagination';
+import Paginator from '../../../connectors/pagination/Paginator';
 
 describe('pagination call', () => {
   it('throws an exception when no container', () => {
@@ -123,6 +124,11 @@ describe('pagination()', () => {
   });
 
   function getProps() {
+    const pager = new Paginator({
+      currentPage: 0,
+      total: 20,
+      padding: 3,
+    });
     return {
       cssClasses: {
         root: 'ais-pagination root cx',
@@ -141,7 +147,9 @@ describe('pagination()', () => {
       labels: { first: '«', last: '»', next: '›', previous: '‹' },
       nbHits: results.nbHits,
       nbPages: results.nbPages,
-      padding: 3,
+      pages: pager.pages(),
+      isFirstPage: pager.isFirstPage(),
+      isLastPage: pager.isLastPage(),
       setCurrentPage: () => {},
       showFirstLast: true,
       createURL: () => '#',

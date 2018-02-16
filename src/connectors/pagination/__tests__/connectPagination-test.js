@@ -134,7 +134,7 @@ describe('connectPagination', () => {
 
     // page 0
     widget.render({
-      results: new SearchResults(helper.state, [{}]),
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -150,7 +150,7 @@ describe('connectPagination', () => {
     // some random page
     helper.setPage(5);
     widget.render({
-      results: new SearchResults(helper.state, [{}]),
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -166,11 +166,7 @@ describe('connectPagination', () => {
     // last pages
     helper.setPage(49);
     widget.render({
-      results: new SearchResults(helper.state, [
-        {
-          nbPages: 50,
-        },
-      ]),
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -204,7 +200,7 @@ describe('connectPagination', () => {
 
     // page 0
     widget.render({
-      results: new SearchResults(helper.state, [{}]),
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -220,7 +216,7 @@ describe('connectPagination', () => {
     // some random page
     helper.setPage(5);
     widget.render({
-      results: new SearchResults(helper.state, [{}]),
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
       helper,
       createURL: () => '#',
@@ -236,11 +232,7 @@ describe('connectPagination', () => {
     // last pages
     helper.setPage(49);
     widget.render({
-      results: new SearchResults(helper.state, [
-        {
-          nbPages: 50,
-        },
-      ]),
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
       state: helper.state,
       helper,
       createURL: () => '#',

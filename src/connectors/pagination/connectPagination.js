@@ -1,5 +1,6 @@
 import { checkRendering } from '../../lib/utils.js';
 import range from 'lodash/range';
+import Paginator from './Paginator';
 
 const usage = `Usage:
 var customPagination = connectPagination(function render(params, isFirstRendering) {
@@ -99,6 +100,12 @@ export default function connectPagination(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     const { maxPages, padding = 3 } = widgetParams;
 
+    const pager = new Paginator({
+      currentPage: 0,
+      total: 0,
+      padding,
+    });
+
     return {
       init({ helper, createURL, instantSearchInstance }) {
         this.refine = page => {
@@ -114,6 +121,9 @@ export default function connectPagination(renderFn, unmountFn) {
             currentRefinement: helper.getPage() || 0,
             nbHits: 0,
             nbPages: 0,
+            pages: pager.pages(),
+            isFirstPage: pager.isFirstPage(),
+            isLastPage: pager.isLastPage(),
             refine: this.refine,
             widgetParams,
             instantSearchInstance,
@@ -148,17 +158,20 @@ export default function connectPagination(renderFn, unmountFn) {
       },
 
       render({ results, state, instantSearchInstance }) {
+        const nbPages = this.getMaxPage(results);
+        pager.currentPage = state.page;
+        pager.total = nbPages;
+
         renderFn(
           {
             createURL: this.createURL(state),
             currentRefinement: state.page,
             refine: this.refine,
             nbHits: results.nbHits,
-            nbPages: this.getMaxPage(results),
-            pages: this.getPages({
-              nbPages: this.getMaxPage(results),
-              currentRefinement: state.page,
-            }),
+            nbPages,
+            pages: pager.pages(),
+            isFirstPage: pager.isFirstPage(),
+            isLastPage: pager.isLastPage(),
             widgetParams,
             instantSearchInstance,
           },
