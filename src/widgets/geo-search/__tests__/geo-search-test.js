@@ -71,8 +71,7 @@ describe('GeoSearch', () => {
         LEFT_TOP: 'left:top',
       },
       event: {
-        addListener: jest.fn(),
-        removeListener: jest.fn(),
+        addListenerOnce: jest.fn(),
       },
       OverlayView: {
         setMap: jest.fn(),
@@ -106,6 +105,11 @@ describe('GeoSearch', () => {
 
   const lastRenderArgs = fn => last(fn.mock.calls)[0];
   const lastRenderState = fn => lastRenderArgs(fn).widgetParams.renderState;
+
+  const simulateMapReadyEvent = google => {
+    google.maps.event.addListenerOnce.mock.calls[0][2]();
+  };
+
   const simulateEvent = (fn, eventName, event) => {
     fn.addListener.mock.calls.find(call => call.includes(eventName))[1](event);
   };
@@ -327,6 +331,53 @@ describe('GeoSearch', () => {
   });
 
   describe('setup events', () => {
+    it('expect to listen for "idle" once and trigger the registration of the rest of the listeners', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const mapInstance = createFakeMapInstance();
+      const googleReference = createFakeGoogleReference({ mapInstance });
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      expect(googleReference.maps.event.addListenerOnce).toHaveBeenCalledWith(
+        mapInstance,
+        'idle',
+        expect.any(Function)
+      );
+
+      simulateMapReadyEvent(googleReference);
+
+      expect(mapInstance.addListener).toHaveBeenCalledWith(
+        'center_changed',
+        expect.any(Function)
+      );
+
+      expect(mapInstance.addListener).toHaveBeenCalledWith(
+        'zoom_changed',
+        expect.any(Function)
+      );
+
+      expect(mapInstance.addListener).toHaveBeenCalledWith(
+        'dragstart',
+        expect.any(Function)
+      );
+
+      expect(mapInstance.addListener).toHaveBeenCalledWith(
+        'idle',
+        expect.any(Function)
+      );
+    });
+
     it('expect to listen for "center_changed" and trigger setMapMoveSinceLastRefine on user interaction', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
@@ -344,6 +395,8 @@ describe('GeoSearch', () => {
         instantSearchInstance,
         state: helper.state,
       });
+
+      simulateMapReadyEvent(googleReference);
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'center_changed',
@@ -383,6 +436,8 @@ describe('GeoSearch', () => {
         state: helper.state,
       });
 
+      simulateMapReadyEvent(googleReference);
+
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'center_changed',
         expect.any(Function)
@@ -416,6 +471,8 @@ describe('GeoSearch', () => {
         state: helper.state,
       });
 
+      simulateMapReadyEvent(googleReference);
+
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'zoom_changed',
         expect.any(Function)
@@ -447,6 +504,8 @@ describe('GeoSearch', () => {
         instantSearchInstance,
         state: helper.state,
       });
+
+      simulateMapReadyEvent(googleReference);
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'zoom_changed',
@@ -483,6 +542,8 @@ describe('GeoSearch', () => {
         state: helper.state,
       });
 
+      simulateMapReadyEvent(googleReference);
+
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'dragstart',
         expect.any(Function)
@@ -512,6 +573,8 @@ describe('GeoSearch', () => {
         instantSearchInstance,
         state: helper.state,
       });
+
+      simulateMapReadyEvent(googleReference);
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'dragstart',
@@ -550,6 +613,8 @@ describe('GeoSearch', () => {
         state: helper.state,
       });
 
+      simulateMapReadyEvent(googleReference);
+
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'idle',
         expect.any(Function)
@@ -583,6 +648,8 @@ describe('GeoSearch', () => {
         instantSearchInstance,
         state: helper.state,
       });
+
+      simulateMapReadyEvent(googleReference);
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'idle',
@@ -622,6 +689,8 @@ describe('GeoSearch', () => {
         state: helper.state,
       });
 
+      simulateMapReadyEvent(googleReference);
+
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'idle',
         expect.any(Function)
@@ -655,6 +724,8 @@ describe('GeoSearch', () => {
         instantSearchInstance,
         state: helper.state,
       });
+
+      simulateMapReadyEvent(googleReference);
 
       expect(mapInstance.addListener).toHaveBeenCalledWith(
         'idle',
@@ -814,6 +885,8 @@ describe('GeoSearch', () => {
         instantSearchInstance,
         state: helper.state,
       });
+
+      simulateMapReadyEvent(googleReference);
 
       expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
@@ -1533,6 +1606,8 @@ describe('GeoSearch', () => {
         state: helper.state,
       });
 
+      simulateMapReadyEvent(googleReference);
+
       widget.render({
         helper,
         instantSearchInstance,
@@ -1569,6 +1644,8 @@ describe('GeoSearch', () => {
         instantSearchInstance,
         state: helper.state,
       });
+
+      simulateMapReadyEvent(googleReference);
 
       widget.render({
         helper,

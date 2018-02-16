@@ -106,40 +106,48 @@ const renderer = (
       ...mapOptions,
     });
 
-    renderState.mapInstance.addListener('center_changed', () => {
-      if (renderState.isUserInteraction) {
-        setMapMoveSinceLastRefine();
-      }
-    });
+    const setupListenersWhenMapIsReady = () => {
+      renderState.mapInstance.addListener('center_changed', () => {
+        if (renderState.isUserInteraction) {
+          setMapMoveSinceLastRefine();
+        }
+      });
 
-    renderState.mapInstance.addListener('zoom_changed', () => {
-      if (renderState.isUserInteraction) {
-        renderState.isPendingRefine = true;
-        setMapMoveSinceLastRefine();
-      }
-    });
+      renderState.mapInstance.addListener('zoom_changed', () => {
+        if (renderState.isUserInteraction) {
+          renderState.isPendingRefine = true;
+          setMapMoveSinceLastRefine();
+        }
+      });
 
-    renderState.mapInstance.addListener('dragstart', () => {
-      if (renderState.isUserInteraction) {
-        renderState.isPendingRefine = true;
-      }
-    });
+      renderState.mapInstance.addListener('dragstart', () => {
+        if (renderState.isUserInteraction) {
+          renderState.isPendingRefine = true;
+        }
+      });
 
-    renderState.mapInstance.addListener('idle', () => {
-      if (
-        renderState.isUserInteraction &&
-        renderState.isPendingRefine &&
-        isRefineOnMapMove()
-      ) {
-        renderState.isPendingRefine = false;
+      renderState.mapInstance.addListener('idle', () => {
+        if (
+          renderState.isUserInteraction &&
+          renderState.isPendingRefine &&
+          isRefineOnMapMove()
+        ) {
+          renderState.isPendingRefine = false;
 
-        refineWithMap({
-          mapInstance: renderState.mapInstance,
-          refine,
-          paddingBoundingBox,
-        });
-      }
-    });
+          refineWithMap({
+            mapInstance: renderState.mapInstance,
+            refine,
+            paddingBoundingBox,
+          });
+        }
+      });
+    };
+
+    googleReference.maps.event.addListenerOnce(
+      renderState.mapInstance,
+      'idle',
+      setupListenersWhenMapIsReady
+    );
 
     renderState.templateProps = prepareTemplateProps({
       templatesConfig: instantSearchInstance.templatesConfig,
