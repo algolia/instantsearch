@@ -1,10 +1,6 @@
-import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 import numericSelector from '../numeric-selector';
-import Selector from '../../../components/Selector';
 
 describe('numericSelector()', () => {
   let ReactDOM;
@@ -93,13 +89,9 @@ describe('numericSelector()', () => {
       true,
       'ReactDOM.render called twice'
     );
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-      <Selector {...expectedProps} />
-    );
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-      <Selector {...expectedProps} />
-    );
+    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
@@ -113,9 +105,7 @@ describe('numericSelector()', () => {
     };
     expectedProps.currentValue = 20;
     widget.render({ helper, results, state: helper.state });
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-      <Selector {...expectedProps} />
-    );
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
   });
 
   it('sets the underlying numeric refinement', () => {

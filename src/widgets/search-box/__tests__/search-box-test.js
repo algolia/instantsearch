@@ -1,7 +1,5 @@
 import searchBox from '../search-box';
 import EventEmitter from 'events';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 
 function createHTMLNodeFromString(string) {
   const parent = document.createElement('div');

@@ -26,7 +26,7 @@ search.addWidget(
     [ escapeFacetValues = false ]
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html
 `;
 
 export const checkUsage = ({

@@ -1,11 +1,7 @@
-import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import cloneDeep from 'lodash/cloneDeep';
-import expectJSX from 'expect-jsx';
 import numericRefinementList from '../numeric-refinement-list.js';
-import RefinementList from '../../../components/RefinementList/RefinementList.js';
-expect.extend(expectJSX);
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
@@ -93,63 +89,10 @@ describe('numericRefinementList()', () => {
     widget.render({ state, results, createURL });
     widget.render({ state, results, createURL });
 
-    const props = {
-      cssClasses: {
-        active: 'ais-refinement-list--item__active',
-        body: 'ais-refinement-list--body',
-        footer: 'ais-refinement-list--footer',
-        header: 'ais-refinement-list--header',
-        item: 'ais-refinement-list--item',
-        label: 'ais-refinement-list--label',
-        list: 'ais-refinement-list--list',
-        radio: 'ais-refinement-list--radio',
-        root: 'ais-refinement-list root cx',
-      },
-      collapsible: false,
-      createURL() {},
-      facetValues: [
-        { label: 'All', value: encodeValue(), isRefined: true },
-        {
-          label: 'less than 4',
-          value: encodeValue(undefined, 4),
-          isRefined: false,
-        },
-        { label: '4', value: encodeValue(4, 4), isRefined: false },
-        {
-          label: 'between 5 and 10',
-          value: encodeValue(5, 10),
-          isRefined: false,
-        },
-        { label: 'more than 10', value: encodeValue(10), isRefined: false },
-      ],
-      toggleRefinement: () => {},
-      shouldAutoHideContainer: false,
-      templateProps: {
-        templates: {
-          footer: '',
-          header: '',
-          // eslint-disable-next-line max-len
-          item:
-            '<label class="{{cssClasses.label}}">\n  <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{label}}\n</label>',
-        },
-        templatesConfig: undefined,
-        transformData: undefined,
-        useCustomCompileOptions: {
-          footer: false,
-          header: false,
-          item: false,
-        },
-      },
-    };
-
     expect(ReactDOM.render.callCount).toBe(2);
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-      <RefinementList {...props} />
-    );
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-      <RefinementList {...props} />
-    );
+    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 

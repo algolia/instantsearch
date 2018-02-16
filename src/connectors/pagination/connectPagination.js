@@ -20,7 +20,7 @@ search.addWidget(
     [ padding ]
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPagination.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPagination.html
 `;
 
 /**

@@ -28,7 +28,7 @@
     "markdown-it": "8.4.0",
     "markdown-it-anchor": "4.0.0",
     "metalsmith": "2.3.0",
-    "metalsmith-copy": "0.3.0",
+    "metalsmith-copy": "0.4.0",
     "metalsmith-headings": "0.2.0",
     "metalsmith-in-place": "3.0.1",
     "metalsmith-layouts": "1.8.1",

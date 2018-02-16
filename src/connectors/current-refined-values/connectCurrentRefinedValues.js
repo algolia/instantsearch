@@ -38,7 +38,7 @@ search.addWidget(
     [ clearsQuery = false ]
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectCurrentRefinedValues.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectCurrentRefinedValues.html
 `;
 
 /**
