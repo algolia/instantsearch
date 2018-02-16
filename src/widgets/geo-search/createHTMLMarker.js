@@ -31,7 +31,8 @@ const createHTMLMarker = googleReference => {
       this.getPanes().overlayMouseTarget.appendChild(this.element);
 
       // Compute the offset onAdd & cache it because afterwards
-      // it won't retrieve the correct values.
+      // it won't retrieve the correct values, we also avoid
+      // to read the values on every draw
       const bbBox = this.element.getBoundingClientRect();
 
       this.offset = {
