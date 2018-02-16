@@ -22,7 +22,8 @@ const bem = bemHelper('ais-geo-search');
 
 /**
  * @typedef {object} BuiltInMarkerOptions
- * @property {function(item): MarkerOptions} [createOptions] Function used to create the options passed to the Google Maps marker. You can find more information in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MarkerOptions).
+ * @property {function(item): MarkerOptions} [createOptions] Function used to create the options passed to the Google Maps marker. <br />
+ * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MarkerOptions) for more informations.
  * @property {{ eventType: function(object) }} [events] Object that takes an event type (ex: `click`, `mouseover`) as key and a listener as value. The listener is provided with an object that contains `event`, `item`, `marker`, `map`.
  */
 
@@ -63,13 +64,15 @@ const bem = bemHelper('ais-geo-search');
 /**
  * @typedef {object} GeoSearchWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {object} googleReference Reference to the global `window.google` object. You can find more information about how to load the library in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/tutorial).
+ * @property {object} googleReference Reference to the global `window.google` object. <br />
+ * See [the documentation](https://developers.google.com/maps/documentation/javascript/tutorial) for more informations.
  * @property {number} [initialZoom=1] By default the map will set the zoom accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situtations we need to provide a zoom to render the map.
  * @property {LatLng} [initialPosition={ lat: 0, lng: 0 }] By default the map will set the position accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situtations we need to provide a position to render the map. This option is ignored when the `position` is provided.
  * @property {Padding} [paddingBoundingBox={ top:0, right: 0, bottom:0, left: 0 }] Add an inner padding on the map when you refine.
  * @property {GeoSearchTemplates} [templates] Templates to use for the widget.
  * @property {GeoSeachCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
- * @property {object} [mapOptions] Option forwarded to the Google Maps constructor. You can find more information in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions).
+ * @property {object} [mapOptions] Option forwarded to the Google Maps constructor. <br />
+ * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions) for more informations.
  * @property {BuiltInMarkerOptions} [builtInMarker] Options for customize the built-in Google Maps marker. This option is ignored when the `customHTMLMarker` is provided.
  * @property {CustomHTMLMarkerOptions|boolean} [customHTMLMarker=false] Options for customize the HTML marker. We provide an alternative to the built-in Google Maps marker in order to have a full control of the marker rendering. You can use plain HTML to build your marker.
  * @property {boolean} [enableClearMapRefinement=true] If true, a button is displayed on the map when the refinement is coming from the map in order to remove it.
