@@ -1,10 +1,6 @@
-import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 import clearAll from '../clear-all';
-import ClearAll from '../../../components/ClearAll/ClearAll';
 import defaultTemplates from '../defaultTemplates.js';
 
 describe('clearAll()', () => {
@@ -98,13 +94,9 @@ describe('clearAll()', () => {
         true,
         'ReactDOM.render called twice'
       );
-      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-        <ClearAll {...getProps()} />
-      );
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-        <ClearAll {...getProps()} />
-      );
+      expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
     });
   });
@@ -124,13 +116,9 @@ describe('clearAll()', () => {
         true,
         'ReactDOM.render called twice'
       );
-      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-        <ClearAll {...getProps()} />
-      );
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-        <ClearAll {...getProps()} />
-      );
+      expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
     });
   });
@@ -139,11 +127,4 @@ describe('clearAll()', () => {
     clearAll.__ResetDependency__('render');
     clearAll.__ResetDependency__('defaultTemplates');
   });
-
-  function getProps(extraProps = {}) {
-    return {
-      ...props,
-      ...extraProps,
-    };
-  }
 });

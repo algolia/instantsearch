@@ -1,12 +1,7 @@
-import React from 'react';
 import sinon from 'sinon';
 import expect from 'expect';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 import algoliasearchHelper from 'algoliasearch-helper';
 import infiniteHits from '../infinite-hits';
-import InfiniteHits from '../../../components/InfiniteHits';
-import defaultTemplates from '../defaultTemplates.js';
 
 describe('infiniteHits call', () => {
   it('throws an exception when no container', () => {
@@ -17,10 +12,8 @@ describe('infiniteHits call', () => {
 describe('infiniteHits()', () => {
   let ReactDOM;
   let container;
-  let templateProps;
   let widget;
   let results;
-  let props;
   let helper;
 
   beforeEach(() => {
@@ -31,12 +24,6 @@ describe('infiniteHits()', () => {
     infiniteHits.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
-    templateProps = {
-      transformData: undefined,
-      templatesConfig: undefined,
-      templates: defaultTemplates,
-      useCustomCompileOptions: { item: false, empty: false },
-    };
     widget = infiniteHits({
       container,
       escapeHits: true,
@@ -54,7 +41,6 @@ describe('infiniteHits()', () => {
   });
 
   it('calls twice ReactDOM.render(<Hits props />, container)', () => {
-    props = getProps();
     const state = { page: 0 };
     widget.render({ results, state });
     widget.render({ results, state });
@@ -63,18 +49,13 @@ describe('infiniteHits()', () => {
       true,
       'ReactDOM.render called twice'
     );
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-      <InfiniteHits {...props} />
-    );
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-      <InfiniteHits {...props} />
-    );
+    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
-    props = getProps();
     const state = { page: 0 };
     widget.render({
       results: { ...results, page: 0, nbPages: 2 },
@@ -89,21 +70,9 @@ describe('infiniteHits()', () => {
       true,
       'ReactDOM.render called twice'
     );
-    const propsWithIsLastPageFalse = {
-      ...getProps({ ...results, page: 0, nbPages: 2 }),
-      isLastPage: false,
-    };
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-      <InfiniteHits {...propsWithIsLastPageFalse} />
-    );
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    const propsWithIsLastPageTrue = {
-      ...getProps({ ...results, page: 1, nbPages: 2 }),
-      isLastPage: true,
-    };
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-      <InfiniteHits {...propsWithIsLastPageTrue} />
-    );
+    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
@@ -126,21 +95,4 @@ describe('infiniteHits()', () => {
     infiniteHits.__ResetDependency__('render');
     infiniteHits.__ResetDependency__('defaultTemplates');
   });
-
-  function getProps(otherResults) {
-    return {
-      hits: (otherResults || results).hits,
-      results: otherResults || results,
-      templateProps,
-      cssClasses: {
-        root: 'ais-infinite-hits root cx',
-        item: 'ais-infinite-hits--item',
-        empty: 'ais-infinite-hits__empty',
-        showmore: 'ais-infinite-hits--showmore',
-      },
-      showMore: () => {},
-      showMoreLabel: 'Show more results',
-      isLastPage: false,
-    };
-  }
 });
