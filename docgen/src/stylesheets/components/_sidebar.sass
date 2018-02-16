@@ -2,11 +2,12 @@ $sidebarTopOffset: 60px;
 
 .sidebar
   width: $sidebar-width
-  overflow: scroll
   height: calc(100vh - 56px - #{$sidebarTopOffset})
   margin-top: $sidebarTopOffset
   padding-top: 30px
   padding-bottom: 30px
+  overflow-y: scroll;
+  overflow-x: hidden;
 
   &.fixed
     position: fixed

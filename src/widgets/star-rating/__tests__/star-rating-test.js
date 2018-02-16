@@ -1,15 +1,10 @@
-import React from 'react';
 import sinon from 'sinon';
 import expect from 'expect';
 
 import jsHelper from 'algoliasearch-helper';
 
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-import defaultTemplates from '../../../widgets/star-rating/defaultTemplates.js';
 import defaultLabels from '../../../widgets/star-rating/defaultLabels.js';
 import starRating from '../star-rating.js';
-import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
 const fakeClient = { addAlgoliaAgent: () => {} };
 const SearchResults = jsHelper.SearchResults;
@@ -65,79 +60,10 @@ describe('starRating()', () => {
     widget.render({ state, helper, results, createURL });
     widget.render({ state, helper, results, createURL });
 
-    const props = {
-      cssClasses: {
-        active: 'ais-star-rating--item__active',
-        body: 'ais-star-rating--body body cx',
-        footer: 'ais-star-rating--footer',
-        header: 'ais-star-rating--header',
-        item: 'ais-star-rating--item',
-        count: 'ais-star-rating--count',
-        link: 'ais-star-rating--link',
-        disabledLink: 'ais-star-rating--link__disabled',
-        list: 'ais-star-rating--list',
-        star: 'ais-star-rating--star',
-        emptyStar: 'ais-star-rating--star__empty',
-        root: 'ais-star-rating',
-      },
-      collapsible: false,
-      createURL: () => {},
-      facetValues: [
-        {
-          isRefined: false,
-          stars: [true, true, true, true, false],
-          count: 0,
-          name: '4',
-          value: '4',
-          labels: defaultLabels,
-        },
-        {
-          isRefined: false,
-          stars: [true, true, true, false, false],
-          count: 0,
-          name: '3',
-          value: '3',
-          labels: defaultLabels,
-        },
-        {
-          isRefined: false,
-          stars: [true, true, false, false, false],
-          count: 0,
-          name: '2',
-          value: '2',
-          labels: defaultLabels,
-        },
-        {
-          isRefined: false,
-          stars: [true, false, false, false, false],
-          count: 0,
-          name: '1',
-          value: '1',
-          labels: defaultLabels,
-        },
-      ],
-      toggleRefinement: () => {},
-      shouldAutoHideContainer: false,
-      templateProps: {
-        templates: defaultTemplates,
-        templatesConfig: undefined,
-        transformData: undefined,
-        useCustomCompileOptions: {
-          footer: false,
-          header: false,
-          item: false,
-        },
-      },
-    };
-
     expect(ReactDOM.render.callCount).toBe(2);
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-      <RefinementList {...props} />
-    );
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-      <RefinementList {...props} />
-    );
+    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 

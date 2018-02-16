@@ -18,7 +18,7 @@ search.addWidget(
     [ operator = '=' ]
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectNumericSelector.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericSelector.html
 `;
 
 /**

@@ -22,7 +22,7 @@ search.addWidget(
     ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHitsPerPage.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHitsPerPage.html
 `;
 
 /**

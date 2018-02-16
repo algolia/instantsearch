@@ -19,7 +19,7 @@ search.addWidget(
     options,
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectNumericRefinementList.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html
 `;
 
 /**

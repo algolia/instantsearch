@@ -8,7 +8,7 @@ describe('searchBox', () => {
     it('input is empty', () => expect(searchBox.get()).toBe(''));
 
     it('triggers an empty search', () => {
-      expect(browser.getText('#hits')).toNotContain('MP3');
+      expect(browser.getText('#hits')).not.toContain('MP3');
       prepareScreenshot();
       browser.checkDocument({
         hide: ['.ais-stats--body'], // Flaky X ms information.
