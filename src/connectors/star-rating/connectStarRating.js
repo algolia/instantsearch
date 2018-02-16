@@ -196,6 +196,35 @@ export default function connectStarRating(renderFn, unmountFn) {
         return nextState;
       },
 
+      getWidgetState(fullState, { state }) {
+        const refinedStar = this._getRefinedStar(state);
+        if (refinedStar === undefined) return fullState;
+        return {
+          ...fullState,
+          starRating: {
+            ...fullState.starRating,
+            [attributeName]: refinedStar,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParam, { uiState }) {
+        const starRatingFromURL =
+          uiState.starRating && uiState.starRating[attributeName];
+        let clearedSearchParam = searchParam.clearRefinements();
+
+        if (starRatingFromURL !== undefined) {
+          for (let val = Number(starRatingFromURL); val <= max; ++val) {
+            clearedSearchParam = clearedSearchParam.addDisjunctiveFacetRefinement(
+              attributeName,
+              val
+            );
+          }
+        }
+
+        return clearedSearchParam;
+      },
+
       _toggleRefinement(helper, facetValue) {
         const isRefined =
           this._getRefinedStar(helper.state) === Number(facetValue);
