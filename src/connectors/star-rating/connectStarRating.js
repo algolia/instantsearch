@@ -211,7 +211,7 @@ export default function connectStarRating(renderFn, unmountFn) {
       getWidgetSearchParameters(searchParam, { uiState }) {
         const starRatingFromURL =
           uiState.starRating && uiState.starRating[attributeName];
-        let clearedSearchParam = searchParam.clearRefinements();
+        let clearedSearchParam = searchParam.clearRefinements(attributeName);
 
         if (starRatingFromURL !== undefined) {
           for (let val = Number(starRatingFromURL); val <= max; ++val) {
