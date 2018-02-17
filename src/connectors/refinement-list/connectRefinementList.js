@@ -411,7 +411,10 @@ export default function connectRefinementList(renderFn, unmountFn) {
       },
 
       getWidgetState(fullState, { state }) {
-        const values = state.getDisjunctiveRefinements(attributeName);
+        const values =
+          operator === 'or'
+            ? state.getDisjunctiveRefinements(attributeName)
+            : state.getConjunctiveRefinements(attributeName);
         if (values.length === 0) return fullState;
         return {
           ...fullState,
@@ -424,10 +427,13 @@ export default function connectRefinementList(renderFn, unmountFn) {
 
       getWidgetSearchParameters(searchParam, { uiState }) {
         const values =
-          (uiState.refinementList && uiState.refinementList[attributeName]) ||
-          [];
+          uiState.refinementList && uiState.refinementList[attributeName];
+        if (values === undefined) return searchParam;
         return values.reduce(
-          (sp, v) => sp.addDisjunctiveFacetRefinement(attributeName, v),
+          (sp, v) =>
+            operator === 'or'
+              ? sp.addDisjunctiveFacetRefinement(attributeName, v)
+              : sp.addFacetRefinement(attributeName, v),
           searchParam.clearRefinements(attributeName)
         );
       },
