@@ -8,6 +8,31 @@ import createHTMLMarker from './createHTMLMarker';
 
 const bem = bemHelper('ais-geo-search');
 
+const usage = `Usage:
+
+geoSearch({
+  container,
+  googleReference,
+  [ initialZoom = 1 ],
+  [ initialPosition = { lat: 0, lng: 0 } ],
+  [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],
+  [ cssClasses.{root,map,controls,clear,control,toggleLabel,toggleLabelActive,toggleInput,redo} = {} ],
+  [ templates.{clear,toggle,redo} ],
+  [ mapOptions ],
+  [ builtInMarker ],
+  [ customHTMLMarker = false ],
+  [ enableClearMapRefinement = true ],
+  [ enableRefineControl = true ],
+  [ enableRefineOnMapMove = true ],
+  [ enableGeolocationWithIP = true ],
+  [ position ],
+  [ radius ],
+  [ precision ],
+})
+
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html
+`;
+
 /**
  * @typedef {object} HTMLMarkerOptions
  * @property {object} [anchor] The offset from the marker's position.
@@ -109,18 +134,15 @@ const bem = bemHelper('ais-geo-search');
  */
 const geoSearch = (
   {
-    enableClearMapRefinement = true,
-    enableRefineControl = true,
-    cssClasses: userCssClasses = {},
+    initialZoom = 1,
+    initialPosition = { lat: 0, lng: 0 },
     templates: userTemplates = {},
+    cssClasses: userCssClasses = {},
+    paddingBoundingBox: userPaddingBoundingBox = {},
     builtInMarker: userBuiltInMarker = {},
     customHTMLMarker: userCustomHTMLMarker = false,
-    paddingBoundingBox: userPaddingBoundingBox = {},
-    initialZoom = 1,
-    initialPosition = {
-      lat: 0,
-      lng: 0,
-    },
+    enableClearMapRefinement = true,
+    enableRefineControl = true,
     container,
     googleReference,
     ...widgetParams
@@ -145,11 +167,11 @@ const geoSearch = (
   };
 
   if (!container) {
-    throw new Error(`Must provide a container.`);
+    throw new Error(`Must provide a "container". ${usage}`);
   }
 
   if (!googleReference) {
-    throw new Error(`Must provide a google reference.`);
+    throw new Error(`Must provide a "googleReference". ${usage}`);
   }
 
   const cssClasses = {
@@ -229,13 +251,13 @@ const geoSearch = (
       googleReference,
       initialZoom,
       initialPosition,
-      enableClearMapRefinement,
-      enableRefineControl,
-      cssClasses,
       templates,
+      cssClasses,
+      paddingBoundingBox,
       createMarker,
       markerOptions,
-      paddingBoundingBox,
+      enableClearMapRefinement,
+      enableRefineControl,
     });
   } catch (e) {
     throw new Error(`See usage.`);

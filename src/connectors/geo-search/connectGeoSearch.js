@@ -2,17 +2,35 @@ import noop from 'lodash/noop';
 import { checkRendering, parseAroundLatLngFromString } from '../../lib/utils';
 
 const usage = `Usage:
+
 var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {
-  // Fill corresponding values
+  // params = {
+  //   items,
+  //   position,
+  //   refine,
+  //   clearMapRefinement,
+  //   isRefinedWithMap,
+  //   toggleRefineOnMapMove,
+  //   isRefineOnMapMove,
+  //   setMapMoveSinceLastRefine,
+  //   hasMapMoveSinceLastRefine,
+  //   hasMapMoveSinceLastRefine,
+  //   widgetParams,
+  //   instantSearchInstance,
+  // }
 });
 
 search.addWidget(
   customGeoSearch({
-    // Fill corresponding values
+    [ enableRefineOnMapMove = true ],
+    [ enableGeolocationWithIP = true ],
+    [ position ],
+    [ radius ],
+    [ precision ],
   })
 );
 
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectGeoSearch.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectGeoSearch.html
 `;
 
 /**
