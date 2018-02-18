@@ -95,7 +95,6 @@
     "jest": "22.3.0",
     "jsdom-global": "3.0.2",
     "json": "9.0.6",
-    "leaflet": "1.2.0",
     "mkdirp": "0.5.1",
     "mversion": "1.10.1",
     "node-sass": "4.6.1",
