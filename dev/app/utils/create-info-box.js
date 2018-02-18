@@ -1,3 +1,9 @@
+/* eslint-disable */
+
+// This file is only use for devlopment purpose, the source are wrapped
+// in order to avoid to load GMaps globally. The codesource is available on GitHub.
+// See: https://github.com/googlemaps/v3-utility-library/tree/master/infobox
+
 const createInfoBox = googleReference => {
   /**
  * @name InfoBox
