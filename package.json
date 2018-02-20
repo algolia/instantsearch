@@ -68,7 +68,7 @@
     "eslint-plugin-jasmine": "2.9.2",
     "eslint-plugin-jest": "21.12.2",
     "eslint-plugin-prettier": "2.6.0",
-    "eslint-plugin-react": "7.6.1",
+    "eslint-plugin-react": "7.7.0",
     "fs-extra": "5.0.0",
     "gh-pages": "1.1.0",
     "glob": "7.1.2",
