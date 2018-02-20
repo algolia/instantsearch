@@ -21,6 +21,7 @@ import initSortBySelectorStories from './stories/sort-by-selector.stories';
 import initStarRatingStories from './stories/star-rating.stories';
 import initStatsStories from './stories/stats.stories';
 import initToggleStories from './stories/toggle.stories';
+import initMultiIndexStories from './stories/multi-index-results.stories';
 
 export default () => {
   initAnalyticsStories();
@@ -46,4 +47,5 @@ export default () => {
   initStatsStories();
   initStarRatingStories();
   initToggleStories();
+  initMultiIndexStories();
 };
