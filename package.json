@@ -64,7 +64,7 @@
     "eslint-config-algolia": "13.1.0",
     "eslint-config-prettier": "2.9.0",
     "eslint-import-resolver-webpack": "0.8.4",
-    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-import": "2.9.0",
     "eslint-plugin-jasmine": "2.9.2",
     "eslint-plugin-jest": "21.12.2",
     "eslint-plugin-prettier": "2.6.0",
