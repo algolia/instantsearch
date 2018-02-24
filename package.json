@@ -98,7 +98,7 @@
     "node-sass": "4.7.2",
     "postcss": "6.0.19",
     "postcss-loader": "2.1.0",
-    "postcss-scss": "1.0.3",
+    "postcss-scss": "1.0.4",
     "prettier": "1.10.2",
     "pretty-bytes-cli": "2.0.0",
     "prop-types": "15.6.0",
