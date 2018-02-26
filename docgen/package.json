@@ -40,7 +40,7 @@
     "postcss-scss": "1.0.2",
     "pug": "2.0.0-rc.4",
     "webpack": "3.10.0",
-    "webpack-dev-middleware": "2.0.1",
+    "webpack-dev-middleware": "2.0.6",
     "webpack-hot-middleware": "2.20.0"
   }
 }
