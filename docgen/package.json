@@ -37,7 +37,7 @@
     "ms-webpack": "2.0.0",
     "netlify-cli": "1.2.2",
     "node-sass": "4.6.1",
-    "postcss-scss": "1.0.2",
+    "postcss-scss": "1.0.4",
     "pug": "2.0.0-rc.4",
     "webpack": "3.10.0",
     "webpack-dev-middleware": "2.0.1",
