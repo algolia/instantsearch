@@ -98,7 +98,7 @@
     "mkdirp": "0.5.1",
     "mversion": "1.10.1",
     "node-sass": "4.6.1",
-    "postcss-loader": "2.0.6",
+    "postcss-loader": "2.0.10",
     "prettier": "1.7.4",
     "pretty-bytes-cli": "2.0.0",
     "raw-loader": "0.5.1",
