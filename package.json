@@ -115,7 +115,7 @@
     "wdio-mocha-framework": "0.5.11",
     "wdio-sauce-service": "0.4.4",
     "wdio-visual-regression-service": "0.8.0",
-    "webdriverio": "4.9.8",
+    "webdriverio": "4.9.11",
     "webpack": "3.10.0",
     "webpack-dev-server": "2.9.7"
   },
