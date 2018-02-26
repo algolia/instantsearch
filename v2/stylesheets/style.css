@@ -5228,11 +5228,12 @@ figure figcaption {
 
 .sidebar {
   width: 260px;
-  overflow: scroll;
   height: calc(100vh - 56px - 60px);
   margin-top: 60px;
   padding-top: 30px;
-  padding-bottom: 30px; }
+  padding-bottom: 30px;
+  overflow-y: scroll;
+  overflow-x: hidden; }
   .sidebar.fixed {
     position: fixed;
     top: 60px; }

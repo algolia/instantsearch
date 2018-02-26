@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.5.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.5.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -450,7 +450,7 @@ function checkRendering(rendering, usage) {
   }
 }
 
-var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && _typeof(Symbol.iterator) === 'symbol' && Symbol.for && Symbol.for('react.element') || 0xeac7;
 
 function isReactElement(object) {
   return (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -4585,7 +4585,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var usage = 'Usage:\nvar customRange = connectRange(function render(params, isFirstRendering) {\n  // params = {\n  //   refine,\n  //   range,\n  //   start,\n  //   format,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customRange({\n    attributeName,\n    [ min ],\n    [ max ],\n    [ precision = 2 ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRange.html\n';
+var usage = 'Usage:\nvar customRange = connectRange(function render(params, isFirstRendering) {\n  // params = {\n  //   refine,\n  //   range,\n  //   start,\n  //   format,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customRange({\n    attributeName,\n    [ min ],\n    [ max ],\n    [ precision = 2 ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRange.html\n';
 
 /**
  * @typedef {Object} CustomRangeWidgetOptions
@@ -8381,7 +8381,7 @@ var _utils = __webpack_require__(0);
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-var usage = 'Usage:\nvar customMenu = connectMenu(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   widgetParams,\n  //   isShowingMore,\n  //   toggleShowMore\n  // }\n});\nsearch.addWidget(\n  customMenu({\n    attributeName,\n    [ limit ],\n    [ showMoreLimit ]\n    [ sortBy = [\'name:asc\'] ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectMenu.html\n';
+var usage = 'Usage:\nvar customMenu = connectMenu(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   widgetParams,\n  //   isShowingMore,\n  //   toggleShowMore\n  // }\n});\nsearch.addWidget(\n  customMenu({\n    attributeName,\n    [ limit ],\n    [ showMoreLimit ]\n    [ sortBy = [\'name:asc\'] ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectMenu.html\n';
 
 /**
  * @typedef {Object} MenuItem
@@ -12688,7 +12688,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.5.1';
+exports.default = '2.5.2';
 
 /***/ }),
 /* 185 */
@@ -12897,7 +12897,7 @@ exports.default = connectClearAll;
 
 var _utils = __webpack_require__(0);
 
-var usage = 'Usage:\nvar customClearAll = connectClearAll(function render(params, isFirstRendering) {\n  // params = {\n  //   refine,\n  //   hasRefinements,\n  //   createURL,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customClearAll({\n    [ excludeAttributes = [] ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectClearAll.html\n';
+var usage = 'Usage:\nvar customClearAll = connectClearAll(function render(params, isFirstRendering) {\n  // params = {\n  //   refine,\n  //   hasRefinements,\n  //   createURL,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customClearAll({\n    [ excludeAttributes = [] ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearAll.html\n';
 
 var refine = function refine(_ref) {
   var helper = _ref.helper,
@@ -13114,7 +13114,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   attributes,\n  //   clearAllClick,\n  //   clearAllPosition,\n  //   clearAllURL,\n  //   refine,\n  //   createURL,\n  //   refinements,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customCurrentRefinedValues({\n    [ attributes = [] ],\n    [ onlyListedAttributes = false ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectCurrentRefinedValues.html\n';
+var usage = 'Usage:\nvar customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   attributes,\n  //   clearAllClick,\n  //   clearAllPosition,\n  //   clearAllURL,\n  //   refine,\n  //   createURL,\n  //   refinements,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customCurrentRefinedValues({\n    [ attributes = [] ],\n    [ onlyListedAttributes = false ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectCurrentRefinedValues.html\n';
 
 /**
  * @typedef {Object} CurrentRefinement
@@ -13466,7 +13466,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHierarchicalMenu({\n    attributes,\n    [ separator = \' > \' ],\n    [ rootPath = null ],\n    [ showParentLevel = true ],\n    [ limit = 10 ],\n    [ sortBy = [\'name:asc\'] ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHierarchicalMenu.html\n';
+var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHierarchicalMenu({\n    attributes,\n    [ separator = \' > \' ],\n    [ rootPath = null ],\n    [ showParentLevel = true ],\n    [ limit = 10 ],\n    [ sortBy = [\'name:asc\'] ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html\n';
 
 /**
  * @typedef {Object} HierarchicalMenuItem
@@ -13670,7 +13670,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHits({\n    [ escapeHits = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHits.html\n';
+var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHits({\n    [ escapeHits = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html\n';
 
 /**
  * @typedef {Object} HitsRenderingOptions
@@ -13776,7 +13776,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var usage = 'Usage:\nvar customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHitsPerPage({\n    items: [\n      {value: 5, label: \'5 results per page\', default: true},\n      {value: 10, label: \'10 results per page\'},\n      {value: 42, label: \'42 results per page\'},\n    ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHitsPerPage.html\n';
+var usage = 'Usage:\nvar customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHitsPerPage({\n    items: [\n      {value: 5, label: \'5 results per page\', default: true},\n      {value: 10, label: \'10 results per page\'},\n      {value: 42, label: \'42 results per page\'},\n    ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHitsPerPage.html\n';
 
 /**
  * @typedef {Object} HitsPerPageRenderingOptionsItem
@@ -13970,7 +13970,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   showMore,\n  //   isLastPage,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customInfiniteHits({\n    escapeHits: true,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectInfiniteHits.html\n';
+var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   showMore,\n  //   isLastPage,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customInfiniteHits({\n    escapeHits: true,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html\n';
 
 /**
  * @typedef {Object} InfiniteHitsRenderingOptions
@@ -14111,7 +14111,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   hasNoResults,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //  }\n});\nsearch.addWidget(\n  customNumericRefinementList({\n    attributeName,\n    options,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectNumericRefinementList.html\n';
+var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   hasNoResults,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //  }\n});\nsearch.addWidget(\n  customNumericRefinementList({\n    attributeName,\n    options,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html\n';
 
 /**
  * @typedef {Object} NumericRefinementListOption
@@ -14375,7 +14375,7 @@ var _utils = __webpack_require__(0);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customNumericSelector({\n    attributeName,\n    options,\n    [ operator = \'=\' ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectNumericSelector.html\n';
+var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customNumericSelector({\n    attributeName,\n    options,\n    [ operator = \'=\' ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericSelector.html\n';
 
 /**
  * @typedef {Object} NumericSelectorOption
@@ -14543,7 +14543,7 @@ exports.default = connectPagination;
 
 var _utils = __webpack_require__(0);
 
-var usage = 'Usage:\nvar customPagination = connectPagination(function render(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   currentRefinement,\n  //   nbHits,\n  //   nbPages,\n  //   refine,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPagination({\n    [ maxPages ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPagination.html\n';
+var usage = 'Usage:\nvar customPagination = connectPagination(function render(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   currentRefinement,\n  //   nbHits,\n  //   nbPages,\n  //   refine,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPagination({\n    [ maxPages ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPagination.html\n';
 
 /**
  * @typedef {Object} CustomPaginationWidgetOptions
@@ -14698,7 +14698,7 @@ var _generateRanges3 = _interopRequireDefault(_generateRanges2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customPriceRanges = connectToggle(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPriceRanges({\n    attributeName,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPriceRanges.html\n';
+var usage = 'Usage:\nvar customPriceRanges = connectPriceRanges(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customPriceRanges({\n    attributeName,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPriceRanges.html\n';
 
 /**
  * @typedef {Object} PriceRangesItem
@@ -14930,7 +14930,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-var usage = 'Usage:\nvar customRefinementList = connectRefinementList(function render(params) {\n  // params = {\n  //   isFromSearch,\n  //   createURL,\n  //   items,\n  //   refine,\n  //   searchForItems,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   toggleShowMore,\n  //   isShowingMore,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customRefinementList({\n    attributeName,\n    [ operator = \'or\' ],\n    [ limit ],\n    [ showMoreLimit ],\n    [ sortBy = [\'isRefined\', \'count:desc\', \'name:asc\'] ],\n    [ escapeFacetValues = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html\n';
+var usage = 'Usage:\nvar customRefinementList = connectRefinementList(function render(params) {\n  // params = {\n  //   isFromSearch,\n  //   createURL,\n  //   items,\n  //   refine,\n  //   searchForItems,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   toggleShowMore,\n  //   isShowingMore,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customRefinementList({\n    attributeName,\n    [ operator = \'or\' ],\n    [ limit ],\n    [ showMoreLimit ],\n    [ sortBy = [\'isRefined\', \'count:desc\', \'name:asc\'] ],\n    [ escapeFacetValues = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html\n';
 
 var checkUsage = exports.checkUsage = function checkUsage(_ref) {
   var attributeName = _ref.attributeName,
@@ -15302,7 +15302,7 @@ exports.default = connectSearchBox;
 
 var _utils = __webpack_require__(0);
 
-var usage = 'Usage:\nvar customSearchBox = connectSearchBox(function render(params, isFirstRendering) {\n  // params = {\n  //   query,\n  //   onHistoryChange,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //   clear,\n  // }\n});\nsearch.addWidget(\n  customSearchBox({\n    [ queryHook ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSearchBox.html\n';
+var usage = 'Usage:\nvar customSearchBox = connectSearchBox(function render(params, isFirstRendering) {\n  // params = {\n  //   query,\n  //   onHistoryChange,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //   clear,\n  // }\n});\nsearch.addWidget(\n  customSearchBox({\n    [ queryHook ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSearchBox.html\n';
 
 /**
  * @typedef {Object} CustomSearchBoxWidgetOptions
@@ -15464,7 +15464,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customSortBySelector({ indices })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSortBySelector.html\n';
+var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customSortBySelector({ indices })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html\n';
 
 /**
  * @typedef {Object} SortBySelectorIndices
@@ -15630,7 +15630,7 @@ exports.default = connectStarRating;
 
 var _utils = __webpack_require__(0);
 
-var usage = 'Usage:\nvar customStarRating = connectStarRating(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   hasNoResults,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customStarRatingI({\n    attributeName,\n    [ max=5 ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectStarRating.html\n';
+var usage = 'Usage:\nvar customStarRating = connectStarRating(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   hasNoResults,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customStarRatingI({\n    attributeName,\n    [ max=5 ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStarRating.html\n';
 
 /**
  * @typedef {Object} StarRatingItems
@@ -15852,7 +15852,7 @@ exports.default = connectStats;
 
 var _utils = __webpack_require__(0);
 
-var usage = 'Usage:\nvar customStats = connectState(function render(params, isFirstRendering) {\n  // params = {\n  //   instantSearchInstance,\n  //   hitsPerPage,\n  //   nbHits,\n  //   nbPages,\n  //   page,\n  //   processingTimeMS,\n  //   query,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(customStats());\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectStats.html';
+var usage = 'Usage:\nvar customStats = connectStats(function render(params, isFirstRendering) {\n  // params = {\n  //   instantSearchInstance,\n  //   hitsPerPage,\n  //   nbHits,\n  //   nbPages,\n  //   page,\n  //   processingTimeMS,\n  //   query,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(customStats());\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStats.html';
 
 /**
  * @typedef {Object} StatsRenderingOptions
@@ -15955,7 +15955,7 @@ var _find2 = _interopRequireDefault(_find);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customToggle = connectToggle(function render(params, isFirstRendering) {\n  // params = {\n  //   value,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customToggle({\n    attributeName,\n    label,\n    [ values = {on: true, off: undefined} ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/connectors/connectToggle.html\n';
+var usage = 'Usage:\nvar customToggle = connectToggle(function render(params, isFirstRendering) {\n  // params = {\n  //   value,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customToggle({\n    attributeName,\n    label,\n    [ values = {on: true, off: undefined} ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggle.html\n';
 
 /**
  * @typedef {Object} ToggleValue
