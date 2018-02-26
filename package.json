@@ -112,7 +112,7 @@
     "unminified-webpack-plugin": "1.4.1",
     "watch": "1.0.2",
     "wdio-dot-reporter": "0.0.9",
-    "wdio-mocha-framework": "0.5.11",
+    "wdio-mocha-framework": "0.5.12",
     "wdio-sauce-service": "0.4.4",
     "wdio-visual-regression-service": "0.8.0",
     "webdriverio": "4.9.8",
