@@ -367,7 +367,10 @@ function checkRendering(rendering, usage) {
 }
 
 const REACT_ELEMENT_TYPE =
-  (typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element')) ||
+  (typeof Symbol === 'function' &&
+    typeof Symbol.iterator === 'symbol' &&
+    Symbol.for &&
+    Symbol.for('react.element')) ||
   0xeac7;
 
 function isReactElement(object) {
