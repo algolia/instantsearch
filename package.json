@@ -89,7 +89,7 @@
     "express": "4.16.2",
     "extract-text-webpack-plugin": "3.0.2",
     "gh-pages": "1.1.0",
-    "happypack": "4.0.0",
+    "happypack": "4.0.1",
     "html-webpack-plugin": "2.30.1",
     "inquirer": "4.0.0",
     "jest": "22.3.0",
