@@ -101,7 +101,7 @@
     "postcss-scss": "1.0.4",
     "prettier": "1.10.2",
     "pretty-bytes-cli": "2.0.0",
-    "prop-types": "15.6.0",
+    "prop-types": "15.6.1",
     "pug": "2.0.0-rc.4",
     "qs": "6.5.1",
     "react": "16.2.0",
