@@ -275,6 +275,47 @@ export default function connectToggle(renderFn, unmountFn) {
 
         return nextState;
       },
+
+      getWidgetState(fullState, { state }) {
+        const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
+
+        if (isRefined) {
+          return {
+            ...fullState,
+            toggle: {
+              ...fullState.toggle,
+              [attributeName]: isRefined,
+            },
+          };
+        }
+
+        return fullState;
+      },
+
+      getWidgetSearchParameters(searchParam, { uiState }) {
+        const isRefined = Boolean(
+          uiState.toggle && uiState.toggle[attributeName]
+        );
+
+        if (isRefined) {
+          if (hasAnOffValue)
+            return searchParam
+              .removeDisjunctiveFacetRefinement(attributeName, off)
+              .addDisjunctiveFacetRefinement(attributeName, on);
+
+          return searchParam.addDisjunctiveFacetRefinement(attributeName, on);
+        } else {
+          if (hasAnOffValue)
+            return searchParam
+              .removeDisjunctiveFacetRefinement(attributeName, on)
+              .addDisjunctiveFacetRefinement(attributeName, off);
+
+          return searchParam.removeDisjunctiveFacetRefinement(
+            attributeName,
+            on
+          );
+        }
+      },
     };
   };
 }
