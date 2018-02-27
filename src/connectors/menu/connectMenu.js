@@ -255,6 +255,9 @@ export default function connectMenu(renderFn, unmountFn) {
         const [refinedItem] = state.getHierarchicalFacetBreadcrumb(
           attributeName
         );
+
+        if (!refinedItem) return fullState;
+
         return {
           ...fullState,
           menu: {
