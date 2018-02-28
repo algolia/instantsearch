@@ -1,12 +1,9 @@
-/* eslint-env jest, jasmine */
-/* eslint-disable max-len */
-
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import Index from './Index';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('Index', () => {
   const DEFAULT_PROPS = {

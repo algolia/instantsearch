@@ -1,6 +1,5 @@
-/* eslint-env jest, jasmine */
-
 import connect from './connectCurrentRefinements.js';
+
 jest.mock('../core/createConnector');
 
 const { refine } = connect;

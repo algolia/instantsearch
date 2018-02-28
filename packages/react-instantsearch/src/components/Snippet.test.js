@@ -1,10 +1,7 @@
-/* eslint-env jest, jasmine */
-
 import React from 'react';
 import renderer from 'react-test-renderer';
-
-import Snippet from './Snippet';
 import parseAlgoliaHit from '../core/highlight';
+import Snippet from './Snippet';
 
 describe('Snippet', () => {
   it('parses an highlighted snippet attribute of hit object', () => {

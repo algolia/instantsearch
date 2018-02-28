@@ -1,11 +1,9 @@
-/* eslint-env jest, jasmine */
-
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import Panel from './Panel';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('Panel', () => {
   it('panel should add a classname when no refinement', () => {

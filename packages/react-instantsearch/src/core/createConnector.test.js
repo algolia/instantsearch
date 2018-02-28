@@ -1,12 +1,9 @@
-/* eslint-env jest, jasmine */
-/* eslint-disable no-console */
-
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import createConnector from './createConnector';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 function createState() {
   return {

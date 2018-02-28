@@ -1,9 +1,5 @@
-/* eslint-env jest, jasmine */
-/* eslint-disable no-console */
-
-import createInstantSearchManager from './createInstantSearchManager';
-
 import algoliaClient from 'algoliasearch/lite';
+import createInstantSearchManager from './createInstantSearchManager';
 
 jest.useFakeTimers();
 

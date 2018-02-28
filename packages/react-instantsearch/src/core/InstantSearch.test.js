@@ -1,14 +1,10 @@
-/* eslint-env jest, jasmine */
-/* eslint-disable max-len */
-
 import React from 'react';
 import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
+import createInstantSearchManager from './createInstantSearchManager';
 import InstantSearch from './InstantSearch';
 
-import createInstantSearchManager from './createInstantSearchManager';
+Enzyme.configure({ adapter: new Adapter() });
 
 jest.mock('./createInstantSearchManager', () =>
   jest.fn(() => ({

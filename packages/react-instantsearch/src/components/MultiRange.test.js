@@ -1,12 +1,10 @@
-/* eslint-env jest, jasmine */
-
 import React from 'react';
 import renderer from 'react-test-renderer';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import MultiRange from './MultiRange';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('MultiRange', () => {
   it('supports passing items values', () => {

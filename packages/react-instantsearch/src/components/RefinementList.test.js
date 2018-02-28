@@ -1,13 +1,11 @@
-import PropTypes from 'prop-types';
-/* eslint-env jest, jasmine */
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import renderer from 'react-test-renderer';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import RefinementList from './RefinementList';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 jest.mock('../widgets/Highlight', () => () => null);
 

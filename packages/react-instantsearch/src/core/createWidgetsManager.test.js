@@ -1,6 +1,3 @@
-/* eslint-env jest, jasmine */
-/* eslint-disable no-console */
-
 import createWidgetsManager from './createWidgetsManager';
 
 describe('createWidgetsManager', () => {

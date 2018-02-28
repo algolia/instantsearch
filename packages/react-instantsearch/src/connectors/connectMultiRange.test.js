@@ -1,8 +1,6 @@
-/* eslint-env jest, jasmine */
-
 import { SearchParameters } from 'algoliasearch-helper';
-
 import connect from './connectMultiRange';
+
 jest.mock('../core/createConnector');
 
 let props;
