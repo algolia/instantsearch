@@ -3,6 +3,7 @@
 InstantSearch projects: **Vue InstantSearch**
 | [InstantSearch.js][instantsearch.js-github]
 | [React InstantSearch][react-instantsearch-github]
+| [Angular InstantSearch][angular-instantsearch-github]
 | [InstantSearch Android][instantsearch-android-github]
 | [InstantSearch iOS][instantsearch-ios-github].
 
@@ -45,3 +46,4 @@ one command away to start the developer environment,
 [react-instantsearch-github]: https://github.com/algolia/react-instantsearch
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
+[angular-instantsearch-github]: https://github.com/algolia/angular-instantsearch
