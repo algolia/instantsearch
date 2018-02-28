@@ -256,7 +256,12 @@ export default function connectMenu(renderFn, unmountFn) {
           attributeName
         );
 
-        if (!refinedItem) return fullState;
+        if (
+          !refinedItem ||
+          (fullState.menu && fullState.menu[attributeName] === refinedItem)
+        ) {
+          return fullState;
+        }
 
         return {
           ...fullState,
