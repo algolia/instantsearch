@@ -13730,9 +13730,9 @@ webpack-bundle-analyzer@2.11.0:
     opener "^1.4.3"
     ws "^4.0.0"
 
-webpack-dev-middleware@2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-2.0.5.tgz#2a1d07afb599e1993033d72c2181ec2344c15e31"
+webpack-dev-middleware@2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/webpack-dev-middleware/-/webpack-dev-middleware-2.0.6.tgz#a51692801e8310844ef3e3790e1eacfe52326fd4"
   dependencies:
     loud-rejection "^1.6.0"
     memory-fs "~0.4.1"
