@@ -613,6 +613,42 @@ export default () => {
       'with Hits communication (custom)',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
+          const containerElement = document.querySelector(
+            '#results-hits-container'
+          );
+
+          const removeActiveHitClassNames = () => {
+            document.querySelectorAll('.hit').forEach(el => {
+              el.classList.remove('hit--active');
+            });
+          };
+
+          const removeActiveMarkerClassNames = () => {
+            document.querySelectorAll('.my-custom-marker').forEach(el => {
+              el.classList.remove('my-custom-marker--active');
+            });
+          };
+
+          containerElement.addEventListener('mouseover', event => {
+            const hitElement = event.target.closest('.hit');
+
+            if (hitElement) {
+              removeActiveMarkerClassNames();
+
+              const objectID = parseInt(hitElement.id.substr(4), 10);
+              const selector = `.my-custom-marker[data-id="${objectID}"]`;
+              const marker = document.querySelector(selector);
+
+              if (marker) {
+                marker.classList.add('my-custom-marker--active');
+              }
+            }
+          });
+
+          containerElement.addEventListener('mouseleave', () => {
+            removeActiveMarkerClassNames();
+          });
+
           container.style.height = '600px';
 
           window.search.addWidget(
@@ -630,6 +666,20 @@ export default () => {
                     {{price_formatted}}
                   </div>
                 `,
+                events: {
+                  mouseover: ({ item }) => {
+                    removeActiveHitClassNames();
+
+                    const hit = document.getElementById(`hit-${item.objectID}`);
+
+                    if (hit) {
+                      hit.classList.add('hit--active');
+                    }
+                  },
+                  mouseleave: () => {
+                    removeActiveHitClassNames();
+                  },
+                },
               },
               container,
               initialPosition,
@@ -639,36 +689,6 @@ export default () => {
           );
 
           start();
-
-          const containerElement = document.querySelector(
-            '#results-hits-container'
-          );
-
-          const removeActiveClassNames = () => {
-            document.querySelectorAll('.my-custom-marker').forEach(el => {
-              el.classList.remove('my-custom-marker--active');
-            });
-          };
-
-          containerElement.addEventListener('mouseover', event => {
-            const hitElement = event.target.closest('.hit');
-
-            if (hitElement) {
-              removeActiveClassNames();
-
-              const objectID = parseInt(hitElement.id.substr(4), 10);
-              const selector = `.my-custom-marker[data-id="${objectID}"]`;
-              const marker = document.querySelector(selector);
-
-              if (marker) {
-                marker.classList.add('my-custom-marker--active');
-              }
-            }
-          });
-
-          containerElement.addEventListener('mouseleave', () => {
-            removeActiveClassNames();
-          });
         })
       )
     )

@@ -24,11 +24,16 @@
 .hit {
   align-items: center;
   display: flex;
-  margin: 10px 10px;
+  padding: 5px 0;
 }
 
 .hit:hover {
   cursor: pointer;
+}
+
+.hit--active {
+  background-color: #3369e7;
+  color: white;
 }
 
 .hit .hit-picture img {
