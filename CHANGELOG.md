@@ -1,3 +1,14 @@
+<a name="2.5.2"></a>
+## [2.5.2](https://github.com/algolia/instantsearch.js/compare/v2.5.1...v2.5.2) (2018-02-26)
+
+
+### Bug Fixes
+
+* **Template:** harden Symbol checks ([#2749](https://github.com/algolia/instantsearch.js/issues/2749)) ([fab66bc](https://github.com/algolia/instantsearch.js/commit/fab66bc))
+* **yarnrc:** use empty string for save-prefix ([#2739](https://github.com/algolia/instantsearch.js/issues/2739)) ([979e0cd](https://github.com/algolia/instantsearch.js/commit/979e0cd))
+
+
+
 <a name="2.5.1"></a>
 ## [2.5.1](https://github.com/algolia/instantsearch.js/compare/v2.5.0...v2.5.1) (2018-02-13)
 
