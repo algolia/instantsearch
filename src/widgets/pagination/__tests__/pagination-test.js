@@ -1,10 +1,6 @@
-import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 import pagination from '../pagination';
-import Pagination from '../../../components/Pagination/Pagination';
 
 describe('pagination call', () => {
   it('throws an exception when no container', () => {
@@ -69,13 +65,9 @@ describe('pagination()', () => {
       true,
       'ReactDOM.render called twice'
     );
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-      <Pagination {...getProps()} />
-    );
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-      <Pagination {...getProps()} />
-    );
+    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
@@ -121,32 +113,6 @@ describe('pagination()', () => {
     pagination.__ResetDependency__('render');
     pagination.__ResetDependency__('autoHideContainerHOC');
   });
-
-  function getProps() {
-    return {
-      cssClasses: {
-        root: 'ais-pagination root cx',
-        item: 'ais-pagination--item item',
-        link: 'ais-pagination--link link',
-        page: 'ais-pagination--item__page page',
-        previous: 'ais-pagination--item__previous previous',
-        next: 'ais-pagination--item__next next',
-        first: 'ais-pagination--item__first first',
-        last: 'ais-pagination--item__last last',
-        active: 'ais-pagination--item__active active',
-        disabled: 'ais-pagination--item__disabled disabled',
-      },
-      currentPage: 0,
-      shouldAutoHideContainer: false,
-      labels: { first: '«', last: '»', next: '›', previous: '‹' },
-      nbHits: results.nbHits,
-      nbPages: results.nbPages,
-      padding: 3,
-      setCurrentPage: () => {},
-      showFirstLast: true,
-      createURL: () => '#',
-    };
-  }
 });
 
 describe('pagination MaxPage', () => {

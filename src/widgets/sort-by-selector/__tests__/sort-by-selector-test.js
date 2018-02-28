@@ -1,8 +1,5 @@
-import React from 'react';
 import sinon from 'sinon';
 import expect from 'expect';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 import sortBySelector from '../sort-by-selector';
 import Selector from '../../../components/Selector';
 
@@ -24,7 +21,6 @@ describe('sortBySelector()', () => {
   let indices;
   let cssClasses;
   let widget;
-  let props;
   let helper;
   let results;
   let autoHideContainer;
@@ -67,31 +63,13 @@ describe('sortBySelector()', () => {
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {
     widget.render({ helper, results });
     widget.render({ helper, results });
-    props = {
-      shouldAutoHideContainer: false,
-      cssClasses: {
-        root: 'ais-sort-by-selector custom-root cx',
-        select: 'ais-sort-by-selector custom-select',
-        item: 'ais-sort-by-selector--item custom-item',
-      },
-      currentValue: 'index-a',
-      options: [
-        { value: 'index-a', label: 'Index A' },
-        { value: 'index-b', label: 'Index B' },
-      ],
-      setValue: () => {},
-    };
     expect(ReactDOM.render.calledTwice).toBe(
       true,
       'ReactDOM.render called twice'
     );
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-      <Selector {...props} />
-    );
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-      <Selector {...props} />
-    );
+    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 

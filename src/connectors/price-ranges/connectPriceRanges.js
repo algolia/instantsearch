@@ -2,7 +2,7 @@ import { checkRendering } from '../../lib/utils.js';
 import generateRanges from './generate-ranges.js';
 
 const usage = `Usage:
-var customPriceRanges = connectToggle(function render(params, isFirstRendering) {
+var customPriceRanges = connectPriceRanges(function render(params, isFirstRendering) {
   // params = {
   //   items,
   //   refine,
@@ -15,7 +15,7 @@ search.addWidget(
     attributeName,
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPriceRanges.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPriceRanges.html
 `;
 
 /**

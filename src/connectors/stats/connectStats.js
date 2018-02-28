@@ -1,7 +1,7 @@
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
-var customStats = connectState(function render(params, isFirstRendering) {
+var customStats = connectStats(function render(params, isFirstRendering) {
   // params = {
   //   instantSearchInstance,
   //   hitsPerPage,
@@ -14,7 +14,7 @@ var customStats = connectState(function render(params, isFirstRendering) {
   // }
 });
 search.addWidget(customStats());
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectStats.html`;
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStats.html`;
 
 /**
  * @typedef {Object} StatsRenderingOptions

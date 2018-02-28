@@ -15,7 +15,7 @@ var customSortBySelector = connectSortBySelector(function render(params, isFirst
 search.addWidget(
   customSortBySelector({ indices })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSortBySelector.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html
 `;
 
 /**

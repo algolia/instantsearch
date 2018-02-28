@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`hits() calls twice ReactDOM.render(<Hits props />, container) 1`] = `
+<Hits
+  cssClasses={
+    Object {
+      "empty": "ais-hits__empty",
+      "item": "ais-hits--item",
+      "root": "ais-hits root cx",
+    }
+  }
+  hits={
+    Array [
+      Object {
+        "first": "hit",
+        "second": "hit",
+      },
+    ]
+  }
+  results={
+    Object {
+      "hits": Array [
+        Object {
+          "first": "hit",
+          "second": "hit",
+        },
+      ],
+    }
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "empty": "No results",
+        "item": [Function],
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "empty": false,
+        "item": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`hits() calls twice ReactDOM.render(<Hits props />, container) 2`] = `
+<Hits
+  cssClasses={
+    Object {
+      "empty": "ais-hits__empty",
+      "item": "ais-hits--item",
+      "root": "ais-hits root cx",
+    }
+  }
+  hits={
+    Array [
+      Object {
+        "first": "hit",
+        "second": "hit",
+      },
+    ]
+  }
+  results={
+    Object {
+      "hits": Array [
+        Object {
+          "first": "hit",
+          "second": "hit",
+        },
+      ],
+    }
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "empty": "No results",
+        "item": [Function],
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "empty": false,
+        "item": false,
+      },
+    }
+  }
+/>
+`;

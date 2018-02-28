@@ -23,7 +23,7 @@ search.addWidget(
     [ values = {on: true, off: undefined} ]
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectToggle.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggle.html
 `;
 
 /**

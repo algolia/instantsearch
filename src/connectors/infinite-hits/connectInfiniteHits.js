@@ -17,7 +17,7 @@ search.addWidget(
     escapeHits: true,
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectInfiniteHits.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html
 `;
 
 /**

@@ -1,12 +1,6 @@
-import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 import priceRanges from '../price-ranges.js';
-import generateRanges from '../../../connectors/price-ranges/generate-ranges.js';
-import PriceRanges from '../../../components/PriceRanges/PriceRanges.js';
-import defaultTemplates from '../defaultTemplates.js';
 
 const instantSearchInstance = { templatesConfig: undefined };
 
@@ -59,8 +53,6 @@ describe('priceRanges()', () => {
   });
 
   describe('without refinements', () => {
-    let props;
-
     beforeEach(() => {
       helper = {
         getRefinements: sinon.stub().returns([]),
@@ -76,46 +68,6 @@ describe('priceRanges()', () => {
 
       createURL = sinon.stub().returns('#createURL');
 
-      props = {
-        cssClasses: {
-          active: 'ais-price-ranges--item__active',
-          body: 'ais-price-ranges--body',
-          button: 'ais-price-ranges--button',
-          currency: 'ais-price-ranges--currency',
-          footer: 'ais-price-ranges--footer',
-          form: 'ais-price-ranges--form',
-          header: 'ais-price-ranges--header',
-          input: 'ais-price-ranges--input',
-          item: 'ais-price-ranges--item',
-          label: 'ais-price-ranges--label',
-          list: 'ais-price-ranges--list',
-          link: 'ais-price-ranges--link',
-          root: 'ais-price-ranges root cx',
-          separator: 'ais-price-ranges--separator',
-        },
-        collapsible: false,
-        shouldAutoHideContainer: false,
-        facetValues: generateRanges(results.getFacetStats()).map(facetValue => {
-          facetValue.url = '#createURL';
-          return facetValue;
-        }),
-        currency: '$',
-        labels: {
-          separator: 'to',
-          button: 'Go',
-        },
-        refine() {},
-        templateProps: {
-          templates: defaultTemplates,
-          templatesConfig: undefined,
-          transformData: undefined,
-          useCustomCompileOptions: {
-            header: false,
-            footer: false,
-            item: false,
-          },
-        },
-      };
       widget.init({ helper, instantSearchInstance });
     });
 
@@ -127,13 +79,9 @@ describe('priceRanges()', () => {
         true,
         'ReactDOM.render called twice'
       );
-      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-        <PriceRanges {...props} />
-      );
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(
-        <PriceRanges {...props} />
-      );
+      expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
       expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
     });
 
