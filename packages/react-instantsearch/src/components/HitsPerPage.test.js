@@ -1,12 +1,10 @@
-/* eslint-env jest, jasmine */
-
 import React from 'react';
 import renderer from 'react-test-renderer';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import HitsPerPage from './HitsPerPage';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('HitsPerPage', () => {
   it('renders', () =>

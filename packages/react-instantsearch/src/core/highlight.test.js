@@ -1,4 +1,3 @@
-/* eslint-env jest, jasmine */
 import parseAlgoliaHit from './highlight.js';
 
 describe('parseAlgoliaHit()', () => {

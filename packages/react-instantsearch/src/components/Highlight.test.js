@@ -1,8 +1,5 @@
-/* eslint-env jest, jasmine */
-
 import React from 'react';
 import renderer from 'react-test-renderer';
-
 import Highlight from './Highlight';
 import parseAlgoliaHit from '../core/highlight';
 

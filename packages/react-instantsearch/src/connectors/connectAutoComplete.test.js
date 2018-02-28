@@ -1,7 +1,5 @@
-/* eslint-env jest, jasmine */
-
-import connect from './connectAutoComplete.js';
 import { SearchParameters } from 'algoliasearch-helper';
+import connect from './connectAutoComplete.js';
 
 jest.mock('../core/createConnector');
 

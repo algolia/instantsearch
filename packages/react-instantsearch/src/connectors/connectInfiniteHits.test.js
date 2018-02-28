@@ -1,6 +1,5 @@
-/* eslint-env jest, jasmine */
-
 import connect from './connectInfiniteHits.js';
+
 jest.mock('../core/createConnector');
 
 describe('connectInfiniteHits', () => {

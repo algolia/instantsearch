@@ -1,5 +1,5 @@
-/* eslint-env jest, jasmine */
 import connect from './connectBreadcrumb';
+
 jest.mock('../core/createConnector');
 
 let props;

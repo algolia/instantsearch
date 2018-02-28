@@ -1,12 +1,9 @@
-/* eslint-env jest, jasmine */
-/* eslint-disable no-console */
-
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import translatable from './translatable';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('translatable', () => {
   it('provides a translate prop to the composed component', () => {

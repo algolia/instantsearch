@@ -1,9 +1,6 @@
-import PropTypes from 'prop-types';
-/* eslint-env jest, jasmine */
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import renderer from 'react-test-renderer';
-
 import Hits from './Hits';
 
 describe('Hits', () => {

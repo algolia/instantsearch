@@ -1,6 +1,5 @@
-/* eslint-env jest, jasmine */
-
 import connect from './connectScrollTo';
+
 jest.mock('../core/createConnector');
 
 let props;

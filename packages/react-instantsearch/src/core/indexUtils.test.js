@@ -1,5 +1,3 @@
-/* eslint-env jest, jasmine */
-
 import {
   refineValue,
   getCurrentRefinementValue,

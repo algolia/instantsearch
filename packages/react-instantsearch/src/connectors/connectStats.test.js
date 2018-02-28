@@ -1,6 +1,5 @@
-/* eslint-env jest, jasmine */
-
 import connect from './connectStats';
+
 jest.mock('../core/createConnector');
 
 let props;

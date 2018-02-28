@@ -1,6 +1,5 @@
-/* eslint-env jest, jasmine */
-
 import connect from './connectHits.js';
+
 jest.mock('../core/createConnector');
 
 const { getSearchParameters } = connect;

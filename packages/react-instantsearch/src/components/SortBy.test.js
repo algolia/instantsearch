@@ -1,11 +1,9 @@
-/* eslint-env jest, jasmine */
-
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
-
 import SortBy from './SortBy';
+
+Enzyme.configure({ adapter: new Adapter() });
 
 describe('SortBy behavior', () => {
   it('refines its value on change', () => {
