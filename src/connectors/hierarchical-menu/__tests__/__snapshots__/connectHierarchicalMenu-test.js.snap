@@ -1,46 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectHitsPerPage provides the current hitsPerPage value 1`] = `
-Array [
-  Object {
-    "isRefined": false,
-    "label": "3 items per page",
-    "value": 3,
-  },
-  Object {
-    "isRefined": false,
-    "label": "10 items per page",
-    "value": 10,
-  },
-  Object {
-    "isRefined": true,
-    "label": "",
-    "value": 7,
-  },
-]
-`;
-
-exports[`connectHitsPerPage provides the current hitsPerPage value 2`] = `
-Array [
-  Object {
-    "isRefined": true,
-    "label": "3 items per page",
-    "value": 3,
-  },
-  Object {
-    "isRefined": false,
-    "label": "10 items per page",
-    "value": 10,
-  },
-  Object {
-    "isRefined": false,
-    "label": "",
-    "value": 7,
-  },
-]
-`;
-
-exports[`connectHitsPerPage routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
+exports[`connectHierarchicalMenu routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
 SearchParameters {
   "advancedSyntax": undefined,
   "allowTyposOnNumericTokens": undefined,
@@ -62,17 +22,32 @@ SearchParameters {
   "facetsExcludes": Object {},
   "facetsRefinements": Object {},
   "getRankingInfo": undefined,
-  "hierarchicalFacets": Array [],
-  "hierarchicalFacetsRefinements": Object {},
+  "hierarchicalFacets": Array [
+    Object {
+      "attributes": Array [
+        "category",
+        "subCategory",
+      ],
+      "name": "category",
+      "rootPath": null,
+      "separator": " > ",
+      "showParentLevel": true,
+    },
+  ],
+  "hierarchicalFacetsRefinements": Object {
+    "category": Array [
+      "path",
+    ],
+  },
   "highlightPostTag": undefined,
   "highlightPreTag": undefined,
-  "hitsPerPage": 10,
+  "hitsPerPage": undefined,
   "ignorePlurals": undefined,
   "index": "",
   "insideBoundingBox": undefined,
   "insidePolygon": undefined,
   "length": undefined,
-  "maxValuesPerFacet": undefined,
+  "maxValuesPerFacet": 10,
   "minProximity": undefined,
   "minWordSizefor1Typo": undefined,
   "minWordSizefor2Typos": undefined,
@@ -97,8 +72,22 @@ SearchParameters {
 }
 `;
 
-exports[`connectHitsPerPage routing getWidgetState should add an entry equal to the refinement 1`] = `
+exports[`connectHierarchicalMenu routing getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
-  "hitsPerPage": 10,
+  "hierarchicalMenu": Object {
+    "category": Array [
+      "path",
+    ],
+  },
+}
+`;
+
+exports[`connectHierarchicalMenu routing getWidgetState should not overide other entries in the same namespace 1`] = `
+Object {
+  "hierarchicalMenu": Object {
+    "category": Array [
+      "path",
+    ],
+  },
 }
 `;

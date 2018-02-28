@@ -213,11 +213,19 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
         return nextState;
       },
+
       getWidgetState(fullState, { state }) {
         const path = state.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
         );
         if (!path || path.length === 0) return fullState;
+        if (
+          fullState.hierarchicalMenu &&
+          isEqual(path, fullState.hierarchicalMenu[hierarchicalFacetName])
+        ) {
+          return fullState;
+        }
+
         return {
           ...fullState,
           hierarchicalMenu: {

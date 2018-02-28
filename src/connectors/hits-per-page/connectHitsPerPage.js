@@ -205,9 +205,12 @@ The first one will be picked, you should probably set only one default value`
         const hitsPerPage = state.hitsPerPage;
         if (
           (defaultValue && hitsPerPage === defaultValue.value) ||
-          hitsPerPage === undefined
-        )
+          hitsPerPage === undefined ||
+          fullState.hitsPerPage === hitsPerPage
+        ) {
           return fullState;
+        }
+
         return {
           ...fullState,
           hitsPerPage,
