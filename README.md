@@ -6,6 +6,7 @@ InstantSearch.js is part of the InstantSearch family:
 **InstantSearch.js**
 | [React InstantSearch (web)][react-instantsearch-github]
 | [Vue InstantSearch (web)][vue-instantsearch-github]
+| [Angular InstantSearch (web)][instantsearch-angular-github]
 | [React-native InstantSearch (native)][react-instantsearch-github]
 | [InstantSearch Android (native)][instantsearch-android-github]
 | [InstantSearch iOS (native)][instantsearch-ios-github].
@@ -103,3 +104,5 @@ If you want to learn more about the contribution process, [read our CONTRIBUTING
 [vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
+[instantsearch-angular-github]: https://github.com/algolia/angular-instantsearch
+
