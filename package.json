@@ -98,7 +98,7 @@
     "postcss": "6.0.19",
     "postcss-loader": "2.1.1",
     "postcss-scss": "1.0.4",
-    "prettier": "1.11.0",
+    "prettier": "1.11.1",
     "pretty-bytes-cli": "2.0.0",
     "prop-types": "15.6.1",
     "pug": "2.0.0-rc.4",
