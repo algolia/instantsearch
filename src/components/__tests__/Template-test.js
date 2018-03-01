@@ -26,6 +26,13 @@ describe('Template', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('can configure custom rootTagName', () => {
+    const props = getProps({ rootTagName: 'span' });
+    const tree = renderer.create(<PureTemplate {...props} />).toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
+
   it('forward rootProps to the first node', () => {
     function fn() {}
 
@@ -207,8 +214,10 @@ describe('Template', () => {
     useCustomCompileOptions = {},
     templatesConfig = { helper: {}, compileOptions: {} },
     transformData = null,
+    ...props
   }) {
     return {
+      ...props,
       templates,
       data,
       templateKey,
