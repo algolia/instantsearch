@@ -189,7 +189,7 @@ export function getCurrentRefinementValue(
 export function cleanUpValue(searchState, context, id) {
   const index = getIndex(context);
   const { namespace, attributeName } = getNamespaceAndAttributeName(id);
-  if (hasMultipleIndex(context)) {
+  if (hasMultipleIndex(context) && Boolean(searchState.indices)) {
     return namespace
       ? {
           ...searchState,
