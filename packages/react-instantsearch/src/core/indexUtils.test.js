@@ -497,6 +497,20 @@ describe('utility method for manipulating the search state', () => {
           },
         },
       });
+
+      // When nothing is refine the searchState doesn't have the indices
+      // attribute even if we are in a context with <Index>. This should
+      // not happen, the searchState should always be in sync (indices + no values).
+      searchState = {
+        page: 1,
+      };
+
+      searchState = cleanUpValue(searchState, context, 'namespace.refinement');
+
+      expect(searchState).toEqual({
+        page: 1,
+        namespace: {},
+      });
     });
 
     it('get results', () => {
