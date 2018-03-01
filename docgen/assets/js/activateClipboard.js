@@ -1,4 +1,4 @@
-import Clipboard from 'clipboard';
+import ClipboardJS from 'clipboard';
 
 export default function activateClipboard(codeSamples) {
   codeSamples.forEach(codeSample => {
@@ -20,7 +20,7 @@ export default function activateClipboard(codeSamples) {
       copyToClipboard.textContent = 'Copied!';
     };
 
-    const clipboard = new Clipboard(copyToClipboard, {
+    const clipboard = new ClipboardJS(copyToClipboard, {
       text: () => codeSample.querySelector('code').textContent,
     });
 
