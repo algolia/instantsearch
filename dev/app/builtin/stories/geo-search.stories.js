@@ -318,6 +318,31 @@ export default () => {
       )
     )
     .add(
+      'with custom templates for controls',
+      wrapWithHitsAndConfiguration((container, start) =>
+        injectGoogleMaps(() => {
+          container.style.height = '600px';
+
+          window.search.addWidget(
+            instantsearch.widgets.geoSearch({
+              googleReference: window.google,
+              templates: {
+                clear: '<span>re-center</span>',
+                toggle: '<span>Redo search when map moved</span>',
+                redo: '<span>Search this area</span>',
+              },
+              container,
+              initialPosition,
+              initialZoom,
+              paddingBoundingBox,
+            })
+          );
+
+          start();
+        })
+      )
+    )
+    .add(
       'with custom map options',
       wrapWithHitsAndConfiguration((container, start) =>
         injectGoogleMaps(() => {
