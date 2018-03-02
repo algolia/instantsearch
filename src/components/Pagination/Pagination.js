@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import forEach from 'lodash/forEach';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { isSpecialClick } from '../../lib/utils.js';
 
@@ -96,24 +95,18 @@ export class RawPagination extends Component {
   }
 
   pages({ currentPage, pages, createURL }) {
-    const _pages = [];
-
-    forEach(pages, pageNumber => {
+    return pages.map(pageNumber => {
       const isActive = pageNumber === currentPage;
 
-      _pages.push(
-        this.pageLink({
-          ariaLabel: pageNumber + 1,
-          additionalClassName: this.props.cssClasses.page,
-          isActive,
-          label: pageNumber + 1,
-          pageNumber,
-          createURL,
-        })
-      );
+      return this.pageLink({
+        ariaLabel: pageNumber + 1,
+        additionalClassName: this.props.cssClasses.page,
+        isActive,
+        label: pageNumber + 1,
+        pageNumber,
+        createURL,
+      });
     });
-
-    return _pages;
   }
 
   handleClick(pageNumber, event) {
@@ -133,13 +126,14 @@ export class RawPagination extends Component {
       isFirstPage,
       isLastPage,
       currentPage,
+      nbPages,
+      showFirstLast,
+      cssClasses,
     } = this.props;
 
     return (
-      <ul className={this.props.cssClasses.root}>
-        {this.props.showFirstLast
-          ? this.firstPageLink({ isFirstPage, createURL })
-          : null}
+      <ul className={cssClasses.root}>
+        {showFirstLast && this.firstPageLink({ isFirstPage, createURL })}
         {this.previousPageLink({ isFirstPage, currentPage, createURL })}
         {this.pages({
           currentPage,
@@ -147,13 +141,12 @@ export class RawPagination extends Component {
           createURL,
         })}
         {this.nextPageLink({ isLastPage, currentPage, createURL })}
-        {this.props.showFirstLast
-          ? this.lastPageLink({
-              total: this.props.nbPages,
-              isLastPage,
-              createURL,
-            })
-          : null}
+        {showFirstLast &&
+          this.lastPageLink({
+            total: nbPages,
+            isLastPage,
+            createURL,
+          })}
       </ul>
     );
   }

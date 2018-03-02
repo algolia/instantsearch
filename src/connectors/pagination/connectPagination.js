@@ -1,5 +1,4 @@
 import { checkRendering } from '../../lib/utils.js';
-import range from 'lodash/range';
 import Paginator from './Paginator';
 
 const usage = `Usage:
@@ -26,6 +25,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomPaginationWidgetOptions
  * @property {number} [maxPages] The max number of pages to browse.
+ * @property {number} [padding=3] The padding of pages to show around the current page
  */
 
 /**
@@ -34,6 +34,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {number} currentRefinement The number of the page currently displayed.
  * @property {number} nbHits The number of hits computed for the last query (can be approximated).
  * @property {number} nbPages The number of pages for the result set.
+ * @property {number[]} pages The actual pages relevant to the current situation and padding
+ * @property {boolean} isFirstPage true if the current page is also the first page
+ * @property {boolean} isLastPage true if the current page is also the last page
  * @property {function(page)} refine Sets the current page and trigger a search.
  * @property {Object} widgetParams All original `CustomPaginationWidgetOptions` forwarded to the `renderFn`.
  */
@@ -61,8 +64,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *     .find('a[data-page]')
  *     .each(function() { $(this).off('click'); });
  *
- *   var pages = Array.apply(null, {length: PaginationRenderingOptions.nbPages})
- *     .map(Number.call, Number)
+ *   var pages = PaginationRenderingOptions.pages
  *     .map(function(page) {
  *       return '<li style="display: inline-block; margin-right: 10px;">' +
  *         '<a href="' + PaginationRenderingOptions.createURL(page) + '" data-page="' + page + '">' +
@@ -91,6 +93,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   customPagination({
  *     containerNode: $('#custom-pagination-container'),
  *     maxPages: 20,
+ *     padding: 4,
  *   })
  * );
  */
@@ -121,9 +124,9 @@ export default function connectPagination(renderFn, unmountFn) {
             currentRefinement: helper.getPage() || 0,
             nbHits: 0,
             nbPages: 0,
-            pages: pager.pages(),
-            isFirstPage: pager.isFirstPage(),
-            isLastPage: pager.isLastPage(),
+            pages: [],
+            isFirstPage: true,
+            isLastPage: true,
             refine: this.refine,
             widgetParams,
             instantSearchInstance,
@@ -134,27 +137,6 @@ export default function connectPagination(renderFn, unmountFn) {
 
       getMaxPage({ nbPages }) {
         return maxPages !== undefined ? Math.min(maxPages, nbPages) : nbPages;
-      },
-
-      getPages({ nbPages, currentRefinement }) {
-        const minDelta = currentRefinement - padding - 1;
-        const maxDelta = currentRefinement + padding + 1;
-
-        if (minDelta < 0) {
-          return range(0, currentRefinement + padding + Math.abs(minDelta));
-        }
-
-        if (maxDelta > nbPages) {
-          return range(
-            currentRefinement - padding - (maxDelta - nbPages),
-            nbPages
-          );
-        }
-
-        return range(
-          currentRefinement - padding,
-          currentRefinement + padding + 1
-        );
       },
 
       render({ results, state, instantSearchInstance }) {
