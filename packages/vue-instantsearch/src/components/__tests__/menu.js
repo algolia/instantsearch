@@ -62,6 +62,22 @@ describe('Menu', () => {
     expect(vm.$el.outerHTML).toMatchSnapshot();
   });
 
+  it('should render nothing if no menu entries are available', () => {
+    const Component = Vue.extend(Menu);
+
+    const store = Object.assign({}, searchStore, {
+      getFacetValues: () => ({ data: null }),
+    });
+    const vm = new Component({
+      propsData: {
+        attribute: 'category',
+        searchStore: store,
+      },
+    });
+    vm.$mount();
+    expect(vm.$el.outerHTML).toMatchSnapshot();
+  });
+
   it('should add a facet to the store when created', () => {
     const Component = Vue.extend(Menu);
     const addFacetMock = jest.fn();

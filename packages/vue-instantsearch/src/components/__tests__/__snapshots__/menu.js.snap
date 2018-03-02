@@ -46,3 +46,5 @@ exports[`Menu should render correctly 1`] = `
 </div>
 
 `;
+
+exports[`Menu should render nothing if no menu entries are available 1`] = `undefined`;

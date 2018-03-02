@@ -46,12 +46,16 @@ export default {
 
   computed: {
     facetValues() {
-      const { data = [] } = this.searchStore.getFacetValues(
+      const { data } = this.searchStore.getFacetValues(
         this.attribute,
         this.sortBy
       );
 
-      return data;
+      if (Array.isArray(data)) {
+        return data;
+      }
+
+      return [];
     },
     show() {
       return this.facetValues.length > 0;
