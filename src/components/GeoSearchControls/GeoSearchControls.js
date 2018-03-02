@@ -30,7 +30,11 @@ const GeoSearchControls = ({
             checked={isRefineOnMapMove}
             onToggle={onRefineToggle}
           >
-            <Template {...templateProps} templateKey="toggle" />
+            <Template
+              {...templateProps}
+              templateKey="toggle"
+              rootTagName="span"
+            />
           </GeoSearchToggle>
         ) : (
           <GeoSearchButton
@@ -38,7 +42,11 @@ const GeoSearchControls = ({
             disabled={!hasMapMoveSinceLastRefine}
             onClick={onRefineClick}
           >
-            <Template {...templateProps} templateKey="redo" />
+            <Template
+              {...templateProps}
+              templateKey="redo"
+              rootTagName="span"
+            />
           </GeoSearchButton>
         )}
       </div>
@@ -52,7 +60,11 @@ const GeoSearchControls = ({
             disabled={!hasMapMoveSinceLastRefine}
             onClick={onRefineClick}
           >
-            <Template {...templateProps} templateKey="redo" />
+            <Template
+              {...templateProps}
+              templateKey="redo"
+              rootTagName="span"
+            />
           </GeoSearchButton>
         </div>
       )}
@@ -60,7 +72,7 @@ const GeoSearchControls = ({
     {enableClearMapRefinement &&
       isRefinedWithMap && (
         <GeoSearchButton className={cssClasses.clear} onClick={onClearClick}>
-          <Template {...templateProps} templateKey="clear" />
+          <Template {...templateProps} templateKey="clear" rootTagName="span" />
         </GeoSearchButton>
       )}
   </div>

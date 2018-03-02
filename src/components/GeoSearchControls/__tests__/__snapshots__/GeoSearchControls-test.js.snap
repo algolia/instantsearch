@@ -12,6 +12,7 @@ exports[`GeoSearchControls Clear button expect to render the button when the ref
     onClick={[Function]}
   >
     <Component
+      rootTagName="span"
       templateKey="clear"
     />
   </GeoSearchButton>
@@ -31,6 +32,7 @@ exports[`GeoSearchControls Control disabled expect to render the button disabled
       onClick={[Function]}
     >
       <Component
+        rootTagName="span"
         templateKey="redo"
       />
     </GeoSearchButton>
@@ -49,6 +51,7 @@ exports[`GeoSearchControls Control disabled expect to render the button enabled 
       onClick={[Function]}
     >
       <Component
+        rootTagName="span"
         templateKey="redo"
       />
     </GeoSearchButton>
@@ -67,6 +70,7 @@ exports[`GeoSearchControls Control enabled expect to render the button when refi
       onClick={[Function]}
     >
       <Component
+        rootTagName="span"
         templateKey="redo"
       />
     </GeoSearchButton>
@@ -86,6 +90,7 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
       onToggle={[Function]}
     >
       <Component
+        rootTagName="span"
         templateKey="toggle"
       />
     </GeoSearchToggle>
@@ -105,6 +110,7 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
       onToggle={[Function]}
     >
       <Component
+        rootTagName="span"
         templateKey="toggle"
       />
     </GeoSearchToggle>
@@ -124,6 +130,7 @@ exports[`GeoSearchControls Control enabled expect to render the toggle unchecked
       onToggle={[Function]}
     >
       <Component
+        rootTagName="span"
         templateKey="toggle"
       />
     </GeoSearchToggle>
