@@ -1,9 +1,6 @@
 import React from 'preact-compat';
 import { shallow } from 'enzyme';
-import serializer from 'enzyme-to-json/serializer';
 import GeoSearchToggle from '../GeoSearchToggle';
-
-expect.addSnapshotSerializer(serializer);
 
 describe('GeoSearchToggle', () => {
   const defaultProps = {
