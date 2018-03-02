@@ -260,7 +260,7 @@ const geoSearch = (
       enableRefineControl,
     });
   } catch (e) {
-    throw new Error(`See usage.`);
+    throw new Error(`See usage. ${usage}`);
   }
 };
 
