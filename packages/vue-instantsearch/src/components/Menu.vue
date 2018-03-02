@@ -51,7 +51,11 @@ export default {
         this.sortBy
       );
 
-      return data;
+      if (Array.isArray(data)) {
+        return data;
+      }
+
+      return [];
     },
     show() {
       return this.facetValues.length > 0;
