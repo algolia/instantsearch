@@ -1,3 +1,18 @@
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/algolia/vue-instantsearch/compare/v1.4.0...v1.5.0) (2018-03-02)
+
+
+### Bug Fixes
+
+* **menu:** avoid error when no facet values are retrieved ([0dbb683](https://github.com/algolia/vue-instantsearch/commit/0dbb683))
+
+
+### Features
+
+* **Pagination:** pass in the page when emitting the page change event ([#394](https://github.com/algolia/vue-instantsearch/issues/394)) ([a349e19](https://github.com/algolia/vue-instantsearch/commit/a349e19))
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/algolia/vue-instantsearch/compare/v1.3.4...v1.4.0) (2018-02-06)
 
