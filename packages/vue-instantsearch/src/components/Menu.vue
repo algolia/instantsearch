@@ -46,7 +46,7 @@ export default {
 
   computed: {
     facetValues() {
-      const { data = [] } = this.searchStore.getFacetValues(
+      const { data } = this.searchStore.getFacetValues(
         this.attribute,
         this.sortBy
       );
