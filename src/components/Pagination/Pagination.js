@@ -120,24 +120,13 @@ export class RawPagination extends Component {
   }
 
   render() {
-    const {
-      createURL,
-      pages,
-      isFirstPage,
-      isLastPage,
-      currentPage,
-      nbPages,
-      showFirstLast,
-      cssClasses,
-    } = this.props;
-
     return (
-      <ul className={cssClasses.root}>
-        {showFirstLast && this.firstPageLink({ isFirstPage, createURL })}
-        {this.previousPageLink({ isFirstPage, currentPage, createURL })}
-        {this.pages({ currentPage, pages, createURL })}
-        {this.nextPageLink({ isLastPage, currentPage, createURL })}
-        {showFirstLast && this.lastPageLink({ nbPages, isLastPage, createURL })}
+      <ul className={this.props.cssClasses.root}>
+        {this.props.showFirstLast && this.firstPageLink(this.props)}
+        {this.previousPageLink(this.props)}
+        {this.pages(this.props)}
+        {this.nextPageLink(this.props)}
+        {this.props.showFirstLast && this.lastPageLink(this.props)}
       </ul>
     );
   }
