@@ -83,13 +83,13 @@ export class RawPagination extends Component {
     });
   }
 
-  lastPageLink({ isLastPage, total, createURL }) {
+  lastPageLink({ isLastPage, nbPages, createURL }) {
     return this.pageLink({
       ariaLabel: 'Last',
       additionalClassName: this.props.cssClasses.last,
       isDisabled: this.props.nbHits === 0 || isLastPage,
       label: this.props.labels.last,
-      pageNumber: total - 1,
+      pageNumber: nbPages - 1,
       createURL,
     });
   }
@@ -135,18 +135,9 @@ export class RawPagination extends Component {
       <ul className={cssClasses.root}>
         {showFirstLast && this.firstPageLink({ isFirstPage, createURL })}
         {this.previousPageLink({ isFirstPage, currentPage, createURL })}
-        {this.pages({
-          currentPage,
-          pages,
-          createURL,
-        })}
+        {this.pages({ currentPage, pages, createURL })}
         {this.nextPageLink({ isLastPage, currentPage, createURL })}
-        {showFirstLast &&
-          this.lastPageLink({
-            total: nbPages,
-            isLastPage,
-            createURL,
-          })}
+        {showFirstLast && this.lastPageLink({ nbPages, isLastPage, createURL })}
       </ul>
     );
   }
