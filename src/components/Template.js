@@ -14,6 +14,7 @@ export class PureTemplate extends Component {
   }
 
   render() {
+    const RootTagName = this.props.rootTagName;
     const useCustomCompileOptions = this.props.useCustomCompileOptions[
       this.props.templateKey
     ];
@@ -42,7 +43,7 @@ export class PureTemplate extends Component {
     }
 
     return (
-      <div
+      <RootTagName
         {...this.props.rootProps}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -53,6 +54,7 @@ export class PureTemplate extends Component {
 PureTemplate.propTypes = {
   data: PropTypes.object,
   rootProps: PropTypes.object,
+  rootTagName: PropTypes.string,
   templateKey: PropTypes.string,
   templates: PropTypes.objectOf(
     PropTypes.oneOfType([PropTypes.string, PropTypes.func])
@@ -81,6 +83,7 @@ PureTemplate.propTypes = {
 
 PureTemplate.defaultProps = {
   data: {},
+  rootTagName: 'div',
   useCustomCompileOptions: {},
   templates: {},
   templatesConfig: {},
