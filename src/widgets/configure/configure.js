@@ -5,12 +5,13 @@ search.addWidget(
     // any searchParameter
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/widgets/configure.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/configure.html
 `;
 
 /**
- * The **Configure** widget provides the logic to build a custom widget that
- * will give the user the ability to add arbitrary search parameters.
+ * The **configure** widget is a headless widget that let you configure the
+ * settings of your search using the parameters described by the
+ * [general Algolia documentation](https://www.algolia.com/doc/api-reference/search-api-parameters/)
  *
  * This widget has no visible UI, so you should only use it for search parameters
  * users shouldn't expect to change.

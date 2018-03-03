@@ -7,7 +7,7 @@ describe('configure', () => {
       () => configure(new Date()),
       () => configure(() => {}),
       () => configure(/ok/),
-    ].map(widget => expect(widget).toThrowError(/Usage/));
+    ].forEach(widget => expect(widget).toThrowError(/Usage/));
   });
 
   it('Applies searchParameters if nothing in configuration yet', () => {
