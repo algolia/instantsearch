@@ -120,7 +120,7 @@
     "rollup-plugin-node-resolve": "3.0.3",
     "rollup-plugin-replace": "2.0.0",
     "rollup-plugin-uglify": "3.0.0",
-    "sass-loader": "6.0.6",
+    "sass-loader": "6.0.7",
     "stat-mode": "0.2.2",
     "storybook-addon-a11y": "3.1.9",
     "storybook-addon-jsx": "5.3.0",
