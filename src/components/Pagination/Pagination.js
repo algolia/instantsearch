@@ -95,18 +95,14 @@ export class RawPagination extends Component {
   }
 
   pages({ currentPage, pages, createURL }) {
-    return pages.map(pageNumber => {
-      const isActive = pageNumber === currentPage;
-
-      return this.pageLink({
-        ariaLabel: pageNumber + 1,
-        additionalClassName: this.props.cssClasses.page,
-        isActive,
-        label: pageNumber + 1,
-        pageNumber,
-        createURL,
-      });
-    });
+    return pages.map(pageNumber => ({
+      ariaLabel: pageNumber + 1,
+      additionalClassName: this.props.cssClasses.page,
+      isActive: pageNumber === currentPage,
+      label: pageNumber + 1,
+      pageNumber,
+      createURL
+    }));
   }
 
   handleClick(pageNumber, event) {
