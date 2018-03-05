@@ -114,7 +114,7 @@
     "rheostat": "2.1.3",
     "rollup": "0.56.4",
     "rollup-plugin-babel": "3.0.3",
-    "rollup-plugin-commonjs": "8.4.0",
+    "rollup-plugin-commonjs": "8.4.1",
     "rollup-plugin-filesize": "1.5.0",
     "rollup-plugin-node-globals": "1.1.0",
     "rollup-plugin-node-resolve": "3.0.3",
