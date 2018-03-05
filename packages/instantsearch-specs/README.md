@@ -1,4 +1,4 @@
-# InstantSearch.css
+# InstantSearch.css and specs
 
 ## Installation
 
