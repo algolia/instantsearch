@@ -162,18 +162,18 @@ body {
 
   table {
     border-collapse: collapse;
-    font-family: monospace;
     font-size: 14px;
     border: 1px solid #ccc;
     width: calc(100% -40px);
   }
 
-  td {
+  td,
+  th {
     padding: 10px;
     white-space: nowrap;
     border: 1px solid #ccc;
 
-    + td {
+    &:last-of-type {
       white-space: normal;
       width: 100%;
     }
