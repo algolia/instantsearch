@@ -47,18 +47,47 @@
       {{ if .Params.althtml2 }}<pre class="code-output" style="display:none" data-html="3"><code>{{ .Params.althtml2 }}</code></pre>{{ end }}
     </div>
 
-    <h3>Classes list</h3>
+    <h3>CSS classes</h3>
 
     <p><small><strong>Hint:</strong> hover classes below to see their position.</small></p>
 
     <table>
+      <thead>
+        <th>name</th>
+        <th>description</th>
+      </thead>
       {{ range $element := .Params.classes }}
         <tr class="js-hoverClass" data-value="{{ $element.name }}">
-          <td>{{ $element.name }}</td>
+          <td><code>{{ $element.name }}</code></td>
           <td>{{ $element.description }}</td>
         </tr>
       {{ end }}
     </table>
+
+    <h3>Options</h3>
+
+    {{ if .Params.options }}
+
+    <p><small><strong>Note:</strong> this is a guideline for new InstantSearch flavours, not a rule.</small></p>
+
+    <table>
+      <thead>
+        <th>name</th>
+        <th>default value</th>
+        <th>description</th>
+      </thead>
+      {{ range $element := .Params.options }}
+        <tr>
+          <td><code>{{ $element.name }}</code></td>
+          <td><code>{{ $element.default }}</code></td>
+          <td>{{ $element.description }}</td>
+        </tr>
+      {{ end }}
+    </table>
+
+    {{ else }}
+      <p><small><strong>Note:</strong> there are no common options for this widget</small></p>
+    {{ end }}
   </main>
 </div>
 
