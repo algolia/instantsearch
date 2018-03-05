@@ -136,6 +136,7 @@ toggle({
  * in your Algolia settings.
  *
  * @type {WidgetFactory}
+ * @devNovel Toggle
  * @category filter
  * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
  * @return {Widget} A new instance of the Toggle widget

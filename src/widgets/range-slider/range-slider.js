@@ -144,6 +144,7 @@ rangeSlider({
  * The values inside this attribute must be JavaScript numbers (not strings).
  *
  * @type {WidgetFactory}
+ * @devNovel RangeSlider
  * @category filter
  * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.

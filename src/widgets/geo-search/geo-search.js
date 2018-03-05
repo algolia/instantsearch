@@ -122,6 +122,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * You are also repsonsible for loading the Google Maps library, it's not shipped with InstantSearch. You need to load the Google Maps library and pass a reference to the widget. You can find more information about how to install the library in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/tutorial).
  *
  * @type {WidgetFactory}
+ * @devNovel GeoSearch
  * @param {GeoSearchWidgetOptions} $0 Options of the GeoSearch widget.
  * @return {Widget} A new instance of GeoSearch widget.
  * @example

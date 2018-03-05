@@ -172,6 +172,7 @@ hierarchicalMenu({
  * }
  * ```
  * @type {WidgetFactory}
+ * @devNovel HierarchicalMenu
  * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.

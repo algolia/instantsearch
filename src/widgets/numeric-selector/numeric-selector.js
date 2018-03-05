@@ -68,6 +68,7 @@ const usage = `Usage: numericSelector({
  *
  * The values inside this attribute must be JavaScript numbers and not strings.
  * @type {WidgetFactory}
+ * @devNovel NumericSelector
  * @category filter
  * @param {NumericSelectorWidgetOptions} $0 The NumericSelector widget options.
  * @return {Widget} A new instance of NumericSelector widget.
