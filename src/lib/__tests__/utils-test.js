@@ -1229,3 +1229,26 @@ describe('utils.deprecate', () => {
     warn.mockRestore();
   });
 });
+
+describe('utils.parseAroundLatLngFromString', () => {
+  it('expect to return a LatLng object from string', () => {
+    const samples = [
+      { input: '10,12', expectation: { lat: 10, lng: 12 } },
+      { input: '10,    12', expectation: { lat: 10, lng: 12 } },
+      { input: '10.15,12', expectation: { lat: 10.15, lng: 12 } },
+      { input: '10,12.15', expectation: { lat: 10, lng: 12.15 } },
+    ];
+
+    samples.forEach(({ input, expectation }) => {
+      expect(utils.parseAroundLatLngFromString(input)).toEqual(expectation);
+    });
+  });
+
+  it('expect to throw an error when the parsing fail', () => {
+    const samples = [{ input: '10a,12' }, { input: '10.    12' }];
+
+    samples.forEach(({ input }) => {
+      expect(() => utils.parseAroundLatLngFromString(input)).toThrow();
+    });
+  });
+});

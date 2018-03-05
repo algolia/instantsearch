@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GeoSearchButton expect to render 1`] = `
+<button
+  className="button"
+  disabled={false}
+  onClick={[Function]}
+>
+  Clear the current map refinement
+</button>
+`;
+
+exports[`GeoSearchButton expect to render disabled 1`] = `
+<button
+  className="button"
+  disabled={true}
+  onClick={[Function]}
+>
+  Clear the current map refinement
+</button>
+`;

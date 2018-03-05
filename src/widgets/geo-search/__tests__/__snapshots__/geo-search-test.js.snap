@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GeoSearch exepct to render with custom classNames 1`] = `"<div class=\\"ais-geo-search custom-root\\"><div class=\\"ais-geo-search--map custom-map\\"></div><div class=\\"ais-geo-search--controls custom-controls\\"></div></div>"`;
+
+exports[`GeoSearch exepct to render with custom classNames 2`] = `
+Array [
+  <GeoSearchControls
+    cssClasses={
+      Object {
+        "clear": "ais-geo-search--clear custom-clear",
+        "control": "ais-geo-search--control custom-control",
+        "controls": "ais-geo-search--controls custom-controls",
+        "map": "ais-geo-search--map custom-map",
+        "redo": "ais-geo-search--redo custom-redo",
+        "root": "ais-geo-search custom-root",
+        "toggleInput": "ais-geo-search--toggle-input custom-toggleInput",
+        "toggleLabel": "ais-geo-search--toggle-label custom-toggleLabel",
+        "toggleLabelActive": "ais-geo-search--toggle-label-active",
+      }
+    }
+    enableClearMapRefinement={true}
+    enableRefineControl={true}
+    hasMapMoveSinceLastRefine={false}
+    isRefineOnMapMove={true}
+    isRefinedWithMap={false}
+    onClearClick={[Function]}
+    onRefineClick={[Function]}
+    onRefineToggle={[Function]}
+    templateProps={
+      Object {
+        "templates": Object {
+          "clear": "Clear the map refinement",
+          "redo": "Redo search here",
+          "toggle": "Search as I move the map",
+        },
+        "templatesConfig": undefined,
+        "transformData": undefined,
+        "useCustomCompileOptions": Object {
+          "clear": true,
+          "redo": true,
+          "toggle": true,
+        },
+      }
+    }
+  />,
+  null,
+]
+`;
+
+exports[`GeoSearch expect to render 1`] = `"<div class=\\"ais-geo-search\\"><div class=\\"ais-geo-search--map\\"></div><div class=\\"ais-geo-search--controls\\"></div></div>"`;
+
+exports[`GeoSearch expect to render 2`] = `
+Array [
+  <GeoSearchControls
+    cssClasses={
+      Object {
+        "clear": "ais-geo-search--clear",
+        "control": "ais-geo-search--control",
+        "controls": "ais-geo-search--controls",
+        "map": "ais-geo-search--map",
+        "redo": "ais-geo-search--redo",
+        "root": "ais-geo-search",
+        "toggleInput": "ais-geo-search--toggle-input",
+        "toggleLabel": "ais-geo-search--toggle-label",
+        "toggleLabelActive": "ais-geo-search--toggle-label-active",
+      }
+    }
+    enableClearMapRefinement={true}
+    enableRefineControl={true}
+    hasMapMoveSinceLastRefine={false}
+    isRefineOnMapMove={true}
+    isRefinedWithMap={false}
+    onClearClick={[Function]}
+    onRefineClick={[Function]}
+    onRefineToggle={[Function]}
+    templateProps={
+      Object {
+        "templates": Object {
+          "clear": "Clear the map refinement",
+          "redo": "Redo search here",
+          "toggle": "Search as I move the map",
+        },
+        "templatesConfig": undefined,
+        "transformData": undefined,
+        "useCustomCompileOptions": Object {
+          "clear": true,
+          "redo": true,
+          "toggle": true,
+        },
+      }
+    }
+  />,
+  <div
+    class="ais-geo-search--controls"
+  />,
+]
+`;
