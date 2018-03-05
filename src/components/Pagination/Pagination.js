@@ -101,7 +101,7 @@ export class RawPagination extends Component {
       isActive: pageNumber === currentPage,
       label: pageNumber + 1,
       pageNumber,
-      createURL
+      createURL,
     }));
   }
 
