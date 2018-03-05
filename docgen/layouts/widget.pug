@@ -12,6 +12,7 @@ block navigation
   - if(jsdoc.requirements != '') headings.push({tag: 'h2', id:'requirements', text:'Requirements'})
   - headings.push({tag: 'h2', id:'usage', text:'Usage'}, {tag:'h2', id:'structure', text: 'Options'});
   - if(jsdoc.examples && jsdoc.examples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
+  - if(jsdoc.staticExamples && jsdoc.staticExamples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
   +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
 
 block content
@@ -58,3 +59,9 @@ block content
       a.anchor(href=`${navPath}#example`)
     each example in jsdoc.examples
       div!=h.highlight(example.description)
+
+  if jsdoc.staticExamples && jsdoc.staticExamples.length > 0
+      h2#example Example
+        a.anchor(href=`${navPath}#example`)
+      each example in jsdoc.staticExamples
+        div!=h.highlight(example.description, { runnable: false })

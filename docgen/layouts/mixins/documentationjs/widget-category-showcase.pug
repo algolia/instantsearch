@@ -4,7 +4,7 @@ mixin widgetCategoryShowCase(category, symbols, title)
     h2(id=category)=title
       a.anchor(href=`${navPath}#${category}`)
     for symbol in categorySymbols
-      - const match = /container: '#(\S+)'/.exec(symbol.examples[0].description)
+      - const match = symbol.examples && symbol.examples.length > 0 && /container: '#(\S+)'/.exec(symbol.examples[0].description)
       h3(id=`${category}-${symbol.name}`)=symbol.name
         a.anchor(href=`${navPath}#${category}-${symbol.name}`)
       p

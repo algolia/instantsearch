@@ -9,7 +9,8 @@ include mixins/documentationjs/connector-usage.pug
 
 block navigation
   - let headings = [{tag: 'h2', id: 'description', text: 'Description'}, {tag: 'h2', id:'usage', text:'Usage'}, {tag: 'h2', id:'structure', text: 'Connector options'}]
-  - if(jsdoc.examples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
+  - if(jsdoc.examples && jsdoc.examples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
+  - if(jsdoc.staticExamples && jsdoc.staticExamples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
   +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
 
 block content
@@ -17,11 +18,11 @@ block content
     a.anchor(href=`${navPath}#description`)
   p
     +description(jsdoc.description)
-    
+
   h2#usage Usage
     a.anchor(href=`${navPath}#usage`)
   +connectorUsage(jsdoc)
-  
+
   h2#structure Connector options
     a.anchor(href=`${navPath}#structure`)
   each t in jsdoc.relatedTypes
@@ -34,3 +35,9 @@ block content
       a.anchor(href=`${navPath}#example`)
     each example in jsdoc.examples
       p!=h.highlight(example.description)
+
+  if jsdoc.staticExamples && jsdoc.staticExamples.length > 0
+    h2#example Example
+      a.anchor(href=`${navPath}#example`)
+    each example in jsdoc.staticExamples
+      div!=h.highlight(example.description, { runnable: false })
