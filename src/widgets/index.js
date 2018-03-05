@@ -6,6 +6,7 @@
  */
 
 export { default as clearAll } from '../widgets/clear-all/clear-all.js';
+export { default as configure } from '../widgets/configure/configure.js';
 export {
   default as currentRefinedValues,
 } from '../widgets/current-refined-values/current-refined-values.js';

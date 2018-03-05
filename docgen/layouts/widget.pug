@@ -12,6 +12,7 @@ block navigation
   - if(jsdoc.requirements != '') headings.push({tag: 'h2', id:'requirements', text:'Requirements'})
   - headings.push({tag: 'h2', id:'usage', text:'Usage'}, {tag:'h2', id:'structure', text: 'Options'});
   - if(jsdoc.examples && jsdoc.examples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
+  - if(jsdoc.staticExamples && jsdoc.staticExamples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
   +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
 
 block content
@@ -30,13 +31,37 @@ block content
     a.anchor(href=`${navPath}#usage`)
   +widgetUsage(jsdoc)
 
-  h2#structure Options
-    a.anchor(href=`${navPath}#structure`)
-  each t in jsdoc.relatedTypes
-    if t
-      +struct(t, jsdoc.relatedTypes)
+  if jsdoc.params && jsdoc.params.length === 1 && jsdoc.params[0].name === '$0'
+    if jsdoc.relatedTypes && jsdoc.relatedTypes.length > 0
+      h2#structure Options
+        a.anchor(href=`${navPath}#structure`)
+      each t in jsdoc.relatedTypes
+        if t
+          +struct(t, jsdoc.relatedTypes)
+  else if jsdoc.params
+    h2#structure Options
+      a.anchor(href=`${navPath}#structure`)
+    ul.struct-def
+      each property in jsdoc.params
+        li.type(id=`struct-${property.name}`)
+          strong=property.name
+          a.anchor(href=`${navPath}#param-${property.name}`)
+          code
+            +type(property.type, jsdoc.relatedTypes)
+          if tag && tag.default
+            div.default-value
+              | Default value:
+              code=tag.default
+          +description(property.description)
+
   if jsdoc.examples && jsdoc.examples.length > 0
     h2#example Example
       a.anchor(href=`${navPath}#example`)
     each example in jsdoc.examples
       div!=h.highlight(example.description)
+
+  if jsdoc.staticExamples && jsdoc.staticExamples.length > 0
+      h2#example Example
+        a.anchor(href=`${navPath}#example`)
+      each example in jsdoc.staticExamples
+        div!=h.highlight(example.description, { runnable: false })

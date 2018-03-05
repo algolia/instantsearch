@@ -115,4 +115,134 @@ describe('connectPagination', () => {
       expect(helper.search.callCount).toBe(2);
     }
   });
+
+  it('Provides the pages to render (default)', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectPagination(rendering);
+
+    const widget = makeWidget();
+
+    const helper = jsHelper(fakeClient);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // page 0
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    {
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { pages } = renderOptions;
+      expect(pages).toEqual([0, 1, 2, 3, 4, 5, 6]);
+    }
+
+    // some random page
+    helper.setPage(5);
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    {
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { pages } = renderOptions;
+      expect(pages).toEqual([2, 3, 4, 5, 6, 7, 8]);
+    }
+
+    // last pages
+    helper.setPage(49);
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    {
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { pages } = renderOptions;
+      expect(pages).toEqual([43, 44, 45, 46, 47, 48, 49]);
+    }
+  });
+
+  it('Provides the pages to render (extra padding)', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectPagination(rendering);
+
+    const widget = makeWidget({
+      padding: 5,
+    });
+
+    const helper = jsHelper(fakeClient);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // page 0
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    {
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { pages } = renderOptions;
+      expect(pages).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    }
+
+    // some random page
+    helper.setPage(5);
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    {
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { pages } = renderOptions;
+      expect(pages).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    }
+
+    // last pages
+    helper.setPage(49);
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbPages: 50 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    {
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
+      const { pages } = renderOptions;
+      expect(pages).toEqual([39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]);
+    }
+  });
 });

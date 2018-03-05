@@ -1,8 +1,5 @@
 /** @module module:instantsearch */
-/**
- * @external SearchParameters
- * @see https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters
- */
+
 // required for browsers not supporting Object.freeze (helper requirement)
 import '../shams/Object.freeze.js';
 
@@ -14,6 +11,11 @@ import version from './version.js';
 
 import * as connectors from '../connectors/index.js';
 import * as widgets from '../widgets/index.js';
+
+/**
+ * @external SearchParameters
+ * @see https://www.algolia.com/doc/api-reference/search-api-parameters/
+ */
 
 /**
  * @typedef {Object} UrlSyncOptions

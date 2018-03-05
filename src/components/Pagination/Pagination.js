@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import forEach from 'lodash/forEach';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { isSpecialClick } from '../../lib/utils.js';
 
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
-import Paginator from './Paginator.js';
 import PaginationLink from './PaginationLink.js';
 
 import cx from 'classnames';
@@ -52,69 +50,61 @@ export class RawPagination extends Component {
     );
   }
 
-  previousPageLink(pager, createURL) {
+  previousPageLink({ isFirstPage, currentPage, createURL }) {
     return this.pageLink({
       ariaLabel: 'Previous',
       additionalClassName: this.props.cssClasses.previous,
-      isDisabled: this.props.nbHits === 0 || pager.isFirstPage(),
+      isDisabled: this.props.nbHits === 0 || isFirstPage,
       label: this.props.labels.previous,
-      pageNumber: pager.currentPage - 1,
+      pageNumber: currentPage - 1,
       createURL,
     });
   }
 
-  nextPageLink(pager, createURL) {
+  nextPageLink({ isLastPage, currentPage, createURL }) {
     return this.pageLink({
       ariaLabel: 'Next',
       additionalClassName: this.props.cssClasses.next,
-      isDisabled: this.props.nbHits === 0 || pager.isLastPage(),
+      isDisabled: this.props.nbHits === 0 || isLastPage,
       label: this.props.labels.next,
-      pageNumber: pager.currentPage + 1,
+      pageNumber: currentPage + 1,
       createURL,
     });
   }
 
-  firstPageLink(pager, createURL) {
+  firstPageLink({ isFirstPage, createURL }) {
     return this.pageLink({
       ariaLabel: 'First',
       additionalClassName: this.props.cssClasses.first,
-      isDisabled: this.props.nbHits === 0 || pager.isFirstPage(),
+      isDisabled: this.props.nbHits === 0 || isFirstPage,
       label: this.props.labels.first,
       pageNumber: 0,
       createURL,
     });
   }
 
-  lastPageLink(pager, createURL) {
+  lastPageLink({ isLastPage, nbPages, createURL }) {
     return this.pageLink({
       ariaLabel: 'Last',
       additionalClassName: this.props.cssClasses.last,
-      isDisabled: this.props.nbHits === 0 || pager.isLastPage(),
+      isDisabled: this.props.nbHits === 0 || isLastPage,
       label: this.props.labels.last,
-      pageNumber: pager.total - 1,
+      pageNumber: nbPages - 1,
       createURL,
     });
   }
 
-  pages(pager, createURL) {
-    const pages = [];
-
-    forEach(pager.pages(), pageNumber => {
-      const isActive = pageNumber === pager.currentPage;
-
-      pages.push(
-        this.pageLink({
-          ariaLabel: pageNumber + 1,
-          additionalClassName: this.props.cssClasses.page,
-          isActive,
-          label: pageNumber + 1,
-          pageNumber,
-          createURL,
-        })
-      );
-    });
-
-    return pages;
+  pages({ currentPage, pages, createURL }) {
+    return pages.map(pageNumber =>
+      this.pageLink({
+        ariaLabel: pageNumber + 1,
+        additionalClassName: this.props.cssClasses.page,
+        isActive: pageNumber === currentPage,
+        label: pageNumber + 1,
+        pageNumber,
+        createURL,
+      })
+    );
   }
 
   handleClick(pageNumber, event) {
@@ -128,21 +118,13 @@ export class RawPagination extends Component {
   }
 
   render() {
-    const pager = new Paginator({
-      currentPage: this.props.currentPage,
-      total: this.props.nbPages,
-      padding: this.props.padding,
-    });
-
-    const createURL = this.props.createURL;
-
     return (
       <ul className={this.props.cssClasses.root}>
-        {this.props.showFirstLast ? this.firstPageLink(pager, createURL) : null}
-        {this.previousPageLink(pager, createURL)}
-        {this.pages(pager, createURL)}
-        {this.nextPageLink(pager, createURL)}
-        {this.props.showFirstLast ? this.lastPageLink(pager, createURL) : null}
+        {this.props.showFirstLast && this.firstPageLink(this.props)}
+        {this.previousPageLink(this.props)}
+        {this.pages(this.props)}
+        {this.nextPageLink(this.props)}
+        {this.props.showFirstLast && this.lastPageLink(this.props)}
       </ul>
     );
   }
@@ -171,7 +153,9 @@ RawPagination.propTypes = {
   }),
   nbHits: PropTypes.number,
   nbPages: PropTypes.number,
-  padding: PropTypes.number,
+  pages: PropTypes.arrayOf(PropTypes.number),
+  isFirstPage: PropTypes.bool.isRequired,
+  isLastPage: PropTypes.bool.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   showFirstLast: PropTypes.bool,
 };
