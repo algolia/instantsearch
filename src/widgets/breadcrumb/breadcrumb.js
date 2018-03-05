@@ -141,7 +141,7 @@ breadcrumb({
  *   instantsearch.widgets.Breadcrumb({
  *     container: '#breadcrumb',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
- *     templates: { home: 'Home Page' }
+ *     templates: { home: 'Home Page' },
  *     rootPath: 'Cameras & Camcorders > Digital Cameras',
  *   })
  * );
