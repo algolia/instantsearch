@@ -48,7 +48,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {object} BuiltInMarkerOptions
  * @property {function(item): MarkerOptions} [createOptions] Function used to create the options passed to the Google Maps marker. <br />
- * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MarkerOptions) for more informations.
+ * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MarkerOptions) for more information.
  * @property {{ eventType: function(object) }} [events] Object that takes an event type (ex: `click`, `mouseover`) as key and a listener as value. The listener is provided with an object that contains `event`, `item`, `marker`, `map`.
  */
 
@@ -90,30 +90,30 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @typedef {object} GeoSearchWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {object} googleReference Reference to the global `window.google` object. <br />
- * See [the documentation](https://developers.google.com/maps/documentation/javascript/tutorial) for more informations.
+ * See [the documentation](https://developers.google.com/maps/documentation/javascript/tutorial) for more information.
  * @property {number} [initialZoom=1] By default the map will set the zoom accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situtations we need to provide a zoom to render the map.
  * @property {LatLng} [initialPosition={ lat: 0, lng: 0 }] By default the map will set the position accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situtations we need to provide a position to render the map. This option is ignored when the `position` is provided.
  * @property {Padding} [paddingBoundingBox={ top:0, right: 0, bottom:0, left: 0 }] Add an inner padding on the map when you refine.
  * @property {GeoSearchTemplates} [templates] Templates to use for the widget.
  * @property {GeoSeachCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {object} [mapOptions] Option forwarded to the Google Maps constructor. <br />
- * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions) for more informations.
+ * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions) for more information.
  * @property {BuiltInMarkerOptions} [builtInMarker] Options for customize the built-in Google Maps marker. This option is ignored when the `customHTMLMarker` is provided.
  * @property {CustomHTMLMarkerOptions|boolean} [customHTMLMarker=false] Options for customize the HTML marker. We provide an alternative to the built-in Google Maps marker in order to have a full control of the marker rendering. You can use plain HTML to build your marker.
  * @property {boolean} [enableClearMapRefinement=true] If true, a button is displayed on the map when the refinement is coming from the map in order to remove it.
  * @property {boolean} [enableRefineControl=true] If true, the user can toggle the option `enableRefineOnMapMove` directly from the map.
  * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
- * @property {boolean} [enableGeolocationWithIP=true] If true, the IP will be use for the geolocation. If the `position` option is provided this option will be ignored, since we already refine the results around the given position. See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLngViaIP) for more informations.
+ * @property {boolean} [enableGeolocationWithIP=true] If true, the IP will be use for the geolocation. If the `position` option is provided this option will be ignored, since we already refine the results around the given position. See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLngViaIP) for more information.
  * @property {LatLng} [position] Position that will be use to search around. <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLng) for more informations.
+ * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLng) for more information.
  * @property {number} [radius] Maximum radius to search around the position (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more informations.
+ * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more information.
  * @property {number} [precision] Precision of geo search (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more informations.
+ * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more information.
  */
 
 /**
- * The **GeoSearch** wdiget displays the list of results from the search on a Google Maps. It also provides a way to search for results based on their position. The widget also provide some of the common GeoSearch patterns like search on map interaction.
+ * The **GeoSearch** widget displays the list of results from the search on a Google Maps. It also provides a way to search for results based on their position. The widget also provide some of the common GeoSearch patterns like search on map interaction.
  *
  * @requirements
  *
