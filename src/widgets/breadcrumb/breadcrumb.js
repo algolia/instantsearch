@@ -138,7 +138,7 @@ breadcrumb({
  * @return {Widget} A new Breadcrumb widget instance.
  * @example
  * search.addWidget(
- *   instantsearch.widgets.Breadcrumb({
+ *   instantsearch.widgets.breadcrumb({
  *     container: '#breadcrumb',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
  *     templates: { home: 'Home Page' },
