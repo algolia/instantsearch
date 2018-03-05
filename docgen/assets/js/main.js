@@ -20,11 +20,12 @@ const header = new alg.communityHeader(docSearch);
 
 const container = document.querySelector('.documentation-container');
 const codeSamples = document.querySelectorAll('.code-sample');
+const codeSamplesRunnable = document.querySelectorAll('.code-sample-runnable');
 
 dropdowns();
 move();
 activateClipboard(codeSamples);
-bindRunExamples(codeSamples);
+bindRunExamples(codeSamplesRunnable);
 
 const sidebarContainer = document.querySelector('.sidebar');
 if(sidebarContainer) {
