@@ -18,6 +18,8 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
     }
   }
   currentPage={0}
+  isFirstPage={true}
+  isLastPage={false}
   labels={
     Object {
       "first": "«",
@@ -28,7 +30,17 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   }
   nbHits={200}
   nbPages={20}
-  padding={3}
+  pages={
+    Array [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+    ]
+  }
   setCurrentPage={[Function]}
   shouldAutoHideContainer={false}
   showFirstLast={true}
@@ -53,6 +65,8 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
     }
   }
   currentPage={0}
+  isFirstPage={true}
+  isLastPage={false}
   labels={
     Object {
       "first": "«",
@@ -63,7 +77,17 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
   }
   nbHits={200}
   nbPages={20}
-  padding={3}
+  pages={
+    Array [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+    ]
+  }
   setCurrentPage={[Function]}
   shouldAutoHideContainer={false}
   showFirstLast={true}

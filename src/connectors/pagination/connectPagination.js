@@ -1,4 +1,5 @@
 import { checkRendering } from '../../lib/utils.js';
+import Paginator from './Paginator';
 
 const usage = `Usage:
 var customPagination = connectPagination(function render(params, isFirstRendering) {
@@ -7,6 +8,7 @@ var customPagination = connectPagination(function render(params, isFirstRenderin
   //   currentRefinement,
   //   nbHits,
   //   nbPages,
+  //   pages,
   //   refine,
   //   widgetParams,
   // }
@@ -14,6 +16,7 @@ var customPagination = connectPagination(function render(params, isFirstRenderin
 search.addWidget(
   customPagination({
     [ maxPages ]
+    [ padding ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPagination.html
@@ -22,6 +25,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomPaginationWidgetOptions
  * @property {number} [maxPages] The max number of pages to browse.
+ * @property {number} [padding=3] The padding of pages to show around the current page
  */
 
 /**
@@ -30,6 +34,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {number} currentRefinement The number of the page currently displayed.
  * @property {number} nbHits The number of hits computed for the last query (can be approximated).
  * @property {number} nbPages The number of pages for the result set.
+ * @property {number[]} pages The actual pages relevant to the current situation and padding
+ * @property {boolean} isFirstPage true if the current page is also the first page
+ * @property {boolean} isLastPage true if the current page is also the last page
  * @property {function(page)} refine Sets the current page and trigger a search.
  * @property {Object} widgetParams All original `CustomPaginationWidgetOptions` forwarded to the `renderFn`.
  */
@@ -57,8 +64,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *     .find('a[data-page]')
  *     .each(function() { $(this).off('click'); });
  *
- *   var pages = Array.apply(null, {length: PaginationRenderingOptions.nbPages})
- *     .map(Number.call, Number)
+ *   var pages = PaginationRenderingOptions.pages
  *     .map(function(page) {
  *       return '<li style="display: inline-block; margin-right: 10px;">' +
  *         '<a href="' + PaginationRenderingOptions.createURL(page) + '" data-page="' + page + '">' +
@@ -87,6 +93,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   customPagination({
  *     containerNode: $('#custom-pagination-container'),
  *     maxPages: 20,
+ *     padding: 4,
  *   })
  * );
  */
@@ -94,7 +101,13 @@ export default function connectPagination(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { maxPages } = widgetParams;
+    const { maxPages, padding = 3 } = widgetParams;
+
+    const pager = new Paginator({
+      currentPage: 0,
+      total: 0,
+      padding,
+    });
 
     return {
       init({ helper, createURL, instantSearchInstance }) {
@@ -111,6 +124,9 @@ export default function connectPagination(renderFn, unmountFn) {
             currentRefinement: helper.getPage() || 0,
             nbHits: 0,
             nbPages: 0,
+            pages: [],
+            isFirstPage: true,
+            isLastPage: true,
             refine: this.refine,
             widgetParams,
             instantSearchInstance,
@@ -124,13 +140,20 @@ export default function connectPagination(renderFn, unmountFn) {
       },
 
       render({ results, state, instantSearchInstance }) {
+        const nbPages = this.getMaxPage(results);
+        pager.currentPage = state.page;
+        pager.total = nbPages;
+
         renderFn(
           {
             createURL: this.createURL(state),
             currentRefinement: state.page,
             refine: this.refine,
             nbHits: results.nbHits,
-            nbPages: this.getMaxPage(results),
+            nbPages,
+            pages: pager.pages(),
+            isFirstPage: pager.isFirstPage(),
+            isLastPage: pager.isLastPage(),
             widgetParams,
             instantSearchInstance,
           },
