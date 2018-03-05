@@ -80,7 +80,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @param {function(GeoSearchRenderingOptions, boolean)} renderFn Rendering function for the custom **GeoSearch** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomGeoSearchWidgetOptions)} Re-usable widget factory for a custom **GeoSearch** widget.
- * @example
+ * @staticExample
  * // This example use Leaflet for the rendering, be sure to have the library correctly setup
  * // before trying the demo. You can find more details in their documentation (link below).
  * // We choose Leaflet for the example but you can use any libraries that you want.
