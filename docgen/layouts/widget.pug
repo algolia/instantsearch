@@ -10,6 +10,7 @@ include mixins/documentationjs/widget-usage.pug
 block navigation
   - let headings = [{tag: 'h2', id: 'description', text: 'Description'}]
   - if(jsdoc.requirements != '') headings.push({tag: 'h2', id:'requirements', text:'Requirements'})
+  - headings.push({tag: 'h2', id:'live', text:'Live example'});
   - headings.push({tag: 'h2', id:'usage', text:'Usage'}, {tag:'h2', id:'structure', text: 'Options'});
   - if(jsdoc.examples && jsdoc.examples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
   - if(jsdoc.staticExamples && jsdoc.staticExamples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
@@ -26,6 +27,14 @@ block content
       a.anchor(href=`${navPath}#requirements`)
     p
       +description(jsdoc.requirements)
+
+  h2#live Live example
+    a.anchor(href=`${navPath}#live`)
+  p
+    if (jsdoc.devNovel)
+      | You can find an example #[a(href=`${navPath}#example`) at the end of the page] or a live example in #[a(href=`${publicPath}${jsdoc.devNovel}` target="_blank" rel="noopener") our widget showcase].
+    else
+      | You can find an example #[a(href=`${navPath}#example`) at the end of the page].
 
   h2#usage Usage
     a.anchor(href=`${navPath}#usage`)
