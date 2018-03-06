@@ -3589,9 +3589,9 @@ react-dom@16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-instantsearch@5.0.0-beta.1:
-  version "5.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-5.0.0-beta.1.tgz#b3423b9c492da7751e401e0be775f5712011fafd"
+react-instantsearch@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-5.0.0.tgz#a24cec3d7ac1bb2428cdf959a0b76f0645f54a0d"
   dependencies:
     algoliasearch "^3.24.0"
     algoliasearch-helper "^2.21.0"
