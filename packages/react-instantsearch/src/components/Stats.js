@@ -1,23 +1,32 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import translatable from '../core/translatable';
-import classNames from './classNames.js';
+import createClassNames from './createClassNames';
 
-const cx = classNames('Stats');
+const cx = createClassNames('Stats');
 
 class Stats extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     nbHits: PropTypes.number.isRequired,
     processingTimeMS: PropTypes.number.isRequired,
+    className: PropTypes.string,
+  };
+
+  static defaultProps = {
+    className: '',
   };
 
   render() {
-    const { translate, nbHits, processingTimeMS } = this.props;
+    const { translate, nbHits, processingTimeMS, className } = this.props;
+
     return (
-      <span {...cx('root')}>
-        {translate('stats', nbHits, processingTimeMS)}
-      </span>
+      <div className={classNames(cx(''), className)}>
+        <span className={cx('text')}>
+          {translate('stats', nbHits, processingTimeMS)}
+        </span>
+      </div>
     );
   }
 }

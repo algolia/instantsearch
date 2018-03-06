@@ -180,7 +180,7 @@ export default class App extends React.Component {
           >
             <Configure hitsPerPage={15} />
             <VirtualRefinementList
-              attributeName="categories"
+              attribute="categories"
               defaultRefinement={
                 this.state.category ? [this.state.category] : []
               }
@@ -262,7 +262,7 @@ const HitsList = ({ hits, removeSuggestions, onEndReached }) => (
         />
         <Text style={styles.hitsText}>
           <Highlight
-            attributeName="name"
+            attribute="name"
             hit={item}
             highlightProperty="_highlightResult"
           />
@@ -363,7 +363,7 @@ const Item = ({ item, category, onPressItem, index }) => {
           style={styles.suggestionsIcon}
         />
         <Highlight
-          attributeName="query"
+          attribute="query"
           hit={item}
           highlightProperty="_highlightResult"
           inverted

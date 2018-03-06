@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import renderer from 'react-test-renderer';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -25,8 +24,34 @@ describe('Menu', () => {
             { label: 'green', value: 'green', count: 30, isRefined: false },
             { label: 'red', value: 'red', count: 30, isRefined: false },
           ]}
-          limitMin={2}
-          limitMax={4}
+          limit={2}
+          showMoreLimit={4}
+          showMore={true}
+          isFromSearch={false}
+          canRefine={true}
+        />
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('default menu with custom className', () => {
+    const tree = renderer
+      .create(
+        <Menu
+          className="MyCustomMenu"
+          refine={() => null}
+          searchForItems={() => null}
+          createURL={() => '#'}
+          items={[
+            { label: 'white', value: 'white', count: 10, isRefined: false },
+            { label: 'black', value: 'black', count: 20, isRefined: false },
+            { label: 'blue', value: 'blue', count: 30, isRefined: false },
+            { label: 'green', value: 'green', count: 30, isRefined: false },
+            { label: 'red', value: 'red', count: 30, isRefined: false },
+          ]}
+          limit={2}
+          showMoreLimit={4}
           showMore={true}
           isFromSearch={false}
           canRefine={true}
@@ -42,7 +67,7 @@ describe('Menu', () => {
         <Menu
           refine={() => null}
           searchForItems={() => null}
-          withSearchBox
+          searchable
           createURL={() => '#'}
           items={[
             { label: 'white', value: 'white', count: 10, isRefined: true },
@@ -63,7 +88,7 @@ describe('Menu', () => {
         <Menu
           refine={() => null}
           searchForItems={() => null}
-          withSearchBox
+          searchable
           createURL={() => '#'}
           items={[
             {
@@ -89,7 +114,7 @@ describe('Menu', () => {
           refine={() => null}
           createURL={() => '#'}
           searchForItems={() => null}
-          withSearchBox
+          searchable
           items={[
             { label: 'white', value: 'white', count: 10, isRefined: false },
             { label: 'black', value: 'black', count: 20, isRefined: false },
@@ -97,8 +122,8 @@ describe('Menu', () => {
             { label: 'green', value: 'green', count: 30, isRefined: false },
             { label: 'red', value: 'red', count: 30, isRefined: false },
           ]}
-          limitMin={2}
-          limitMax={4}
+          limit={2}
+          showMoreLimit={4}
           showMore={true}
           translations={{
             showMore: ' display more',
@@ -129,7 +154,7 @@ describe('Menu', () => {
       />
     );
 
-    const items = wrapper.find('.ais-Menu__item');
+    const items = wrapper.find('li');
 
     expect(items).toHaveLength(3);
 
@@ -156,8 +181,8 @@ describe('Menu', () => {
           { label: 'green', value: 'green', count: 30, isRefined: false },
           { label: 'red', value: 'red', count: 30, isRefined: false },
         ]}
-        limitMin={2}
-        limitMax={4}
+        limit={2}
+        showMoreLimit={4}
         showMore={true}
         isFromSearch={false}
         searchForItems={() => null}
@@ -165,13 +190,13 @@ describe('Menu', () => {
       />
     );
 
-    const items = wrapper.find('.ais-Menu__item');
+    const items = wrapper.find('li');
 
     expect(items).toHaveLength(2);
 
-    wrapper.find('.ais-Menu__showMore').simulate('click');
+    wrapper.find('button').simulate('click');
 
-    expect(wrapper.find('.ais-Menu__item')).toHaveLength(4);
+    expect(wrapper.find('li')).toHaveLength(4);
 
     wrapper.unmount();
   });
@@ -186,8 +211,8 @@ describe('Menu', () => {
           { label: 'white', value: 'white', count: 10, isRefined: false },
           { label: 'black', value: 'black', count: 20, isRefined: false },
         ]}
-        limitMin={2}
-        limitMax={4}
+        limit={2}
+        showMoreLimit={4}
         showMore={true}
         isFromSearch={false}
         searchForItems={() => null}
@@ -195,11 +220,11 @@ describe('Menu', () => {
       />
     );
 
-    const items = wrapper.find('.ais-Menu__item');
+    const items = wrapper.find('li');
 
     expect(items).toHaveLength(2);
 
-    expect(wrapper.find('.ais-Menu__showMoreDisabled')).toBeDefined();
+    expect(wrapper.find('button[disabled]')).toBeDefined();
 
     wrapper.unmount();
   });
@@ -210,7 +235,7 @@ describe('Menu', () => {
     const menu = (
       <Menu
         refine={refine}
-        withSearchBox={true}
+        searchable
         searchForItems={searchForItems}
         createURL={() => '#'}
         items={[
@@ -237,7 +262,7 @@ describe('Menu', () => {
     it('a searchbox should be displayed if the feature is activated', () => {
       const wrapper = mount(menu);
 
-      const searchBox = wrapper.find('.ais-Menu__SearchBox');
+      const searchBox = wrapper.find('.searchBox');
 
       expect(searchBox).toBeDefined();
 
@@ -247,9 +272,7 @@ describe('Menu', () => {
     it('searching for a value should call searchForItems', () => {
       const wrapper = mount(menu);
 
-      wrapper
-        .find('.ais-Menu__SearchBox input')
-        .simulate('change', { target: { value: 'query' } });
+      wrapper.find('input').simulate('change', { target: { value: 'query' } });
 
       expect(searchForItems.mock.calls).toHaveLength(1);
       expect(searchForItems.mock.calls[0][0]).toBe('query');
@@ -261,16 +284,16 @@ describe('Menu', () => {
       const wrapper = mount(menu);
 
       const firstItem = wrapper
-        .find('.ais-Menu__item')
+        .find('li')
         .first()
         .find(Link);
       firstItem.simulate('click');
 
       expect(refine.mock.calls).toHaveLength(1);
       expect(refine.mock.calls[0][0]).toEqual('white');
-      expect(wrapper.find('.ais-Menu__SearchBox input').props().value).toBe('');
+      expect(wrapper.find('input').props().value).toBe('');
 
-      const selectedRefinements = wrapper.find('.ais-Menu__item');
+      const selectedRefinements = wrapper.find('li');
       expect(selectedRefinements).toHaveLength(2);
 
       wrapper.unmount();
@@ -284,50 +307,12 @@ describe('Menu', () => {
 
       expect(refine.mock.calls).toHaveLength(1);
       expect(refine.mock.calls[0][0]).toEqual('white');
-      expect(wrapper.find('.ais-Menu__SearchBox input').props().value).toBe('');
+      expect(wrapper.find('input').props().value).toBe('');
 
-      const selectedRefinements = wrapper.find('.ais-Menu__item');
+      const selectedRefinements = wrapper.find('li');
       expect(selectedRefinements).toHaveLength(2);
 
       wrapper.unmount();
-    });
-  });
-
-  describe('Panel compatibility', () => {
-    it('Should indicate when no more refinement', () => {
-      const canRefine = jest.fn();
-      const wrapper = mount(
-        <Menu
-          refine={() => null}
-          searchForItems={() => null}
-          createURL={() => '#'}
-          items={[
-            {
-              label: 'white',
-              value: 'white',
-              count: 10,
-              isRefined: true,
-              _highlightResult: { label: 'white' },
-            },
-          ]}
-          isFromSearch={true}
-          canRefine={true}
-        />,
-        {
-          context: { canRefine },
-          childContextTypes: { canRefine: PropTypes.func },
-        }
-      );
-
-      expect(canRefine.mock.calls).toHaveLength(1);
-      expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(wrapper.find('.ais-Menu__noRefinement')).toHaveLength(0);
-
-      wrapper.setProps({ canRefine: false });
-
-      expect(canRefine.mock.calls).toHaveLength(2);
-      expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(wrapper.find('.ais-Menu__noRefinement')).toHaveLength(1);
     });
   });
 });

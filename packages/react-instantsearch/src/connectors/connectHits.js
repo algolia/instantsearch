@@ -26,7 +26,7 @@ import { getResults } from '../core/indexUtils';
  * <div>
  *   {hits.map(hit =>
  *     <p key={hit.objectID}>
- *       <Highlight attributeName="description" hit={hit} />
+ *       <Highlight attribute="description" hit={hit} />
  *     </p>
  *   )}
  * </div>

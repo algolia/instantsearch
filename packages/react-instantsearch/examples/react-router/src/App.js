@@ -6,12 +6,11 @@ import {
   Menu,
   Pagination,
   PoweredBy,
-  StarRating,
+  RatingMenu,
   RefinementList,
   SearchBox,
-  ClearAll,
+  ClearRefinements,
 } from 'react-instantsearch/dom';
-import 'react-instantsearch-theme-algolia/style.css';
 import PropTypes from 'prop-types';
 import qs from 'qs';
 
@@ -80,15 +79,15 @@ class App extends Component {
                 attributes={['category', 'sub_category', 'sub_sub_category']}
               />
               <p>Menu</p>
-              <Menu attributeName="type" />
+              <Menu attribute="type" />
               <p>Refinement List</p>
-              <RefinementList attributeName="colors" />
+              <RefinementList attribute="colors" />
               <p>Range Ratings</p>
-              <StarRating attributeName="rating" max={6} />
+              <RatingMenu attribute="rating" max={6} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                <ClearAll />
+                <ClearRefinements />
               </div>
               <div>
                 <Hits />

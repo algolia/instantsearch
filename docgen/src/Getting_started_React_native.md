@@ -113,7 +113,7 @@ This connector gives you three interesting properties:
 * `hasMore`, a boolean that indicates if there are more pages to load
 * `refine`, the function to call when the end of the page is reached to load more results.
 
-On the React Native side we are going to take advantage of the [FlatList](https://facebook.github.io/react-native/docs/flatlist.html) to render this infinite scroll. The FlatList component is available since the v0.43 of React Native. If you're using a previous version, you can use the [ListView](https://facebook.github.io/react-native/docs/listview.html) component instead. 
+On the React Native side we are going to take advantage of the [FlatList](https://facebook.github.io/react-native/docs/flatlist.html) to render this infinite scroll. The FlatList component is available since the v0.43 of React Native. If you're using a previous version, you can use the [ListView](https://facebook.github.io/react-native/docs/listview.html) component instead.
 
 Let’s create our own React Native Infinite Hits widget:
 
@@ -284,7 +284,7 @@ This connector gives you one interesting properties:
 
 When using this component you will have to provide two properties:
 
-* `attributeName` attribute name from the record that you want to highlight.
+* `attribute` attribute name from the record that you want to highlight.
 * `hit` , the hit to highlight
 
 ```jsx
@@ -296,9 +296,9 @@ import {
 } from 'react-instantsearch/connectors';
 
 const Highlight = connectHighlight(
-  ({ highlight, attributeName, hit, highlightProperty }) => {
+  ({ highlight, attribute, hit, highlightProperty }) => {
     const parsedHit = highlight({
-      attributeName,
+      attribute,
       hit,
       highlightProperty: '_highlightResult',
     });
@@ -340,10 +340,10 @@ const Hits = connectInfiniteHits(({ hits, hasMore, refine }) => {
             />
             <View style={{ flex: 1 }}>
               <Text>
-                <Highlight attributeName="name" hit={item} />
+                <Highlight attribute="name" hit={item} />
               </Text>
               <Text>
-                <Highlight attributeName="type" hit={item} />
+                <Highlight attribute="type" hit={item} />
               </Text>
             </View>
           </View>
@@ -444,13 +444,13 @@ const App = () =>
       >
         <SearchBox />
       </View>
-      <RefinementList attributeName="category" />
+      <RefinementList attribute="category" />
       <Hits />
     </InstantSearch>
   </View>
 ```
 
-The `attributeName` props specifies the faceted attribute to use in this widget. This attribute should be declared as a facet in the index configuration as well.
+The `attribute` props specifies the faceted attribute to use in this widget. This attribute should be declared as a facet in the index configuration as well.
 
 The values displayed are computed by Algolia from the results.
 
@@ -512,7 +512,7 @@ class Categories extends React.Component {
               onSearchStateChange={this.props.onSearchStateChange}
               searchState={this.props.searchState}
             >
-              <RefinementList attributeName="category" />
+              <RefinementList attribute="category" />
               <TouchableHighlight
                 onPress={() => {
                   this.props.setModalVisible(!this.props.modalVisible);
@@ -634,7 +634,7 @@ Let’s add it to our first `<InstantSearch>`:
     </TouchableHighlight>
   </View>
   <Hits />
-  <VirtualRefinementList attributeName="category" />
+  <VirtualRefinementList attribute="category" />
   <Categories
     setModalVisible={this.setModalVisible}
     modalVisible={this.state.modalVisible}

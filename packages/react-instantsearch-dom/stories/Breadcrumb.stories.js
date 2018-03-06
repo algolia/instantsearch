@@ -2,8 +2,8 @@ import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
 import {
   Breadcrumb,
-  Panel,
   HierarchicalMenu,
+  Panel,
 } from '../packages/react-instantsearch/dom';
 import { connectHierarchicalMenu } from '../packages/react-instantsearch/connectors';
 import { object, text } from '@storybook/addon-knobs';
@@ -28,7 +28,7 @@ stories
           <HierarchicalMenu
             attributes={['category', 'sub_category', 'sub_sub_category']}
             defaultRefinement="Cooking > Kitchen textiles"
-            limitMax={3}
+            showMoreLimit={3}
             showMore={true}
           />
         </WrapWithHits>
@@ -39,30 +39,6 @@ stories
       filterProps,
     }
   )
-  .addWithJSX(
-    'with panel',
-    () => (
-      <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
-        <Panel title="Category">
-          <Breadcrumb
-            attributes={['category', 'sub_category', 'sub_sub_category']}
-            separator=" / "
-          />
-        </Panel>
-        <hr />
-        <HierarchicalMenu
-          attributes={['category', 'sub_category', 'sub_sub_category']}
-          defaultRefinement="Cooking > Bakeware"
-        />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  );
-
-stories
   .add('with custom component', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
       <Breadcrumb
@@ -78,18 +54,53 @@ stories
   ))
   .add('playground', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
-      <Panel title="Category">
-        <Breadcrumb
-          attributes={['category', 'sub_category', 'sub_sub_category']}
-          separator={text('separator', ' / ')}
-          translations={object('translations', {
-            rootLabel: 'Home',
-          })}
-        />
-      </Panel>
+      <Breadcrumb
+        attributes={['category', 'sub_category', 'sub_sub_category']}
+        separator={text('separator', ' / ')}
+        translations={object('translations', {
+          rootLabel: 'Home',
+        })}
+      />
       <VirtualHierarchicalMenu
         attributes={['category', 'sub_category', 'sub_sub_category']}
         defaultRefinement="Cooking > Bakeware"
       />
     </WrapWithHits>
-  ));
+  ))
+  .addWithJSX(
+    'with Panel',
+    () => (
+      <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
+        <Panel header="Breadcrumb" footer="footer">
+          <Breadcrumb
+            attributes={['category', 'sub_category', 'sub_sub_category']}
+          />
+        </Panel>
+        <hr />
+        <HierarchicalMenu
+          attributes={['category', 'sub_category', 'sub_sub_category']}
+          defaultRefinement="Cooking > Bakeware"
+        />
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'with Panel but no refinement',
+    () => (
+      <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
+        <Panel header="Breadcrumb" footer="footer">
+          <Breadcrumb
+            attributes={['category', 'sub_category', 'sub_sub_category']}
+          />
+        </Panel>
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  );

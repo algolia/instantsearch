@@ -2,30 +2,62 @@
 
 exports[`Snippet parses an highlighted snippet attribute of hit object 1`] = `
 <span
-  className="ais-Highlight"
+  className="ais-Snippet"
 >
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Snippet-nonHighlighted"
   >
     awesome 
   </span>
   <em
-    className="ais-Highlight__highlighted"
+    className="ais-Snippet-highlighted"
   >
     hi
   </em>
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Snippet-nonHighlighted"
   >
     ghlighted 
   </span>
   <em
-    className="ais-Highlight__highlighted"
+    className="ais-Snippet-highlighted"
   >
     hi
   </em>
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Snippet-nonHighlighted"
+  >
+    t!
+  </span>
+</span>
+`;
+
+exports[`Snippet renders a hit with a custom className 1`] = `
+<span
+  className="ais-Snippet MyCustomSnippet"
+>
+  <span
+    className="ais-Snippet-nonHighlighted"
+  >
+    awesome 
+  </span>
+  <em
+    className="ais-Snippet-highlighted"
+  >
+    hi
+  </em>
+  <span
+    className="ais-Snippet-nonHighlighted"
+  >
+    ghlighted 
+  </span>
+  <em
+    className="ais-Snippet-highlighted"
+  >
+    hi
+  </em>
+  <span
+    className="ais-Snippet-nonHighlighted"
   >
     t!
   </span>
@@ -34,30 +66,30 @@ exports[`Snippet parses an highlighted snippet attribute of hit object 1`] = `
 
 exports[`Snippet renders a hit with a custom tag correctly 1`] = `
 <span
-  className="ais-Highlight"
+  className="ais-Snippet"
 >
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Snippet-nonHighlighted"
   >
     awesome 
   </span>
   <strong
-    className="ais-Highlight__highlighted"
+    className="ais-Snippet-highlighted"
   >
     hi
   </strong>
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Snippet-nonHighlighted"
   >
     ghlighted 
   </span>
   <strong
-    className="ais-Highlight__highlighted"
+    className="ais-Snippet-highlighted"
   >
     hi
   </strong>
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Snippet-nonHighlighted"
   >
     t!
   </span>

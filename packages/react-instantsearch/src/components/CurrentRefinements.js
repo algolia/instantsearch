@@ -1,69 +1,70 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-
+import classNames from 'classnames';
 import translatable from '../core/translatable';
-import classNames from './classNames.js';
+import createClassNames from '../components/createClassNames';
 
-const cx = classNames('CurrentRefinements');
+const cx = createClassNames('CurrentRefinements');
 
-class CurrentRefinements extends Component {
-  static propTypes = {
-    translate: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-      })
-    ).isRequired,
-    refine: PropTypes.func.isRequired,
-    canRefine: PropTypes.bool.isRequired,
-    transformItems: PropTypes.func,
-  };
-
-  static contextTypes = {
-    canRefine: PropTypes.func,
-  };
-
-  componentWillMount() {
-    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
-  }
-
-  componentWillReceiveProps(props) {
-    if (this.context.canRefine) this.context.canRefine(props.canRefine);
-  }
-
-  render() {
-    const { translate, items, refine, canRefine } = this.props;
-
-    return (
-      <div {...cx('root', !canRefine && 'noRefinement')}>
-        <div {...cx('items')}>
-          {items.map(item => (
-            <div key={item.label} {...cx('item', item.items && 'itemParent')}>
-              <span {...cx('itemLabel')}>{item.label}</span>
-              {item.items ? (
-                item.items.map(nestedItem => (
-                  <div key={nestedItem.label} {...cx('item')}>
-                    <span {...cx('itemLabel')}>{nestedItem.label}</span>
-                    <button
-                      {...cx('itemClear')}
-                      onClick={() => refine(nestedItem.value)}
-                    >
-                      {translate('clearFilter', nestedItem)}
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <button {...cx('itemClear')} onClick={() => refine(item.value)}>
-                  {translate('clearFilter', item)}
+export const CurrentRefinements = ({
+  items,
+  canRefine,
+  refine,
+  translate,
+  className,
+}) => (
+  <div className={classNames(cx('', !canRefine && '-noRefinement'), className)}>
+    <ul className={cx('list', !canRefine && 'list--noRefinement')}>
+      {items.map(item => (
+        <li key={item.label} className={cx('item')}>
+          <span className={cx('label')}>{item.label}</span>
+          {item.items ? (
+            item.items.map(nest => (
+              <span key={nest.label} className={cx('category')}>
+                <span className={cx('categoryLabel')}>{nest.label}</span>
+                <button
+                  className={cx('delete')}
+                  onClick={() => refine(nest.value)}
+                >
+                  {translate('clearFilter', nest)}
                 </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-}
+              </span>
+            ))
+          ) : (
+            <span className={cx('category')}>
+              <button
+                className={cx('delete')}
+                onClick={() => refine(item.value)}
+              >
+                {translate('clearFilter', item)}
+              </button>
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+
+const itemPropTypes = PropTypes.arrayOf(
+  PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.func.isRequired,
+    items: (...args) => itemPropTypes(...args),
+  })
+);
+
+CurrentRefinements.propTypes = {
+  items: itemPropTypes.isRequired,
+  canRefine: PropTypes.bool.isRequired,
+  refine: PropTypes.func.isRequired,
+  translate: PropTypes.func.isRequired,
+  className: PropTypes.string,
+};
+
+CurrentRefinements.defaultProps = {
+  className: '',
+};
 
 export default translatable({
   clearFilter: '✕',

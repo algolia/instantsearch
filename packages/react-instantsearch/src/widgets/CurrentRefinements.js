@@ -1,5 +1,7 @@
-import connectCurrentRefinements from '../connectors/connectCurrentRefinements.js';
-import CurrentRefinementsComponent from '../components/CurrentRefinements.js';
+import React from 'react';
+import connectCurrentRefinements from '../connectors/connectCurrentRefinements';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
+import CurrentRefinements from '../components/CurrentRefinements';
 
 /**
  * The CurrentRefinements widget displays the list of currently applied filters.
@@ -8,12 +10,16 @@ import CurrentRefinementsComponent from '../components/CurrentRefinements.js';
  * @name CurrentRefinements
  * @kind widget
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
- * @themeKey ais-CurrentRefinements__root - the root div of the widget
- * @themeKey ais-CurrentRefinements__items - the container of the filters
- * @themeKey ais-CurrentRefinements__item - a single filter
- * @themeKey ais-CurrentRefinements__itemLabel - the label of a filter
- * @themeKey ais-CurrentRefinements__itemClear - the trigger to remove the filter
- * @themeKey ais-CurrentRefinements__noRefinement - present when there is no refinement
+ * @themeKey ais-CurrentRefinements - the root div of the widget
+ * @themeKey ais-CurrentRefinements--noRefinement - the root div of the widget when there is no refinement
+ * @themeKey ais-CurrentRefinements-list - the list of all refined items
+ * @themeKey ais-CurrentRefinements-list--noRefinement - the list of all refined items when there is no refinement
+ * @themeKey ais-CurrentRefinements-item - the refined list item
+ * @themeKey ais-CurrentRefinements-button - the button of each refined list item
+ * @themeKey ais-CurrentRefinements-label - the refined list label
+ * @themeKey ais-CurrentRefinements-category - the category of each item
+ * @themeKey ais-CurrentRefinements-categoryLabel - the label of each catgory
+ * @themeKey ais-CurrentRefinements-delete - the delete button of each label
  * @translationKey clearFilter - the remove filter button label
  * @example
  * import React from 'react';
@@ -29,11 +35,18 @@ import CurrentRefinementsComponent from '../components/CurrentRefinements.js';
  *     >
  *       <CurrentRefinements />
  *       <RefinementList
-          attributeName="colors"
+          attribute="colors"
           defaultRefinement={['Black']}
         />
  *     </InstantSearch>
  *   );
  * }
  */
-export default connectCurrentRefinements(CurrentRefinementsComponent);
+
+const CurrentRefinementsWidget = props => (
+  <PanelCallbackHandler {...props}>
+    <CurrentRefinements {...props} />
+  </PanelCallbackHandler>
+);
+
+export default connectCurrentRefinements(CurrentRefinementsWidget);

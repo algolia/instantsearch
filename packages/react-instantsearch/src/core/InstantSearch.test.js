@@ -17,7 +17,6 @@ const DEFAULT_PROPS = {
   apiKey: 'bar',
   indexName: 'foobar',
   algoliaClient: {},
-  searchParameters: {},
   root: {
     Root: 'div',
   },
@@ -115,7 +114,6 @@ describe('InstantSearch', () => {
     expect(createInstantSearchManager.mock.calls[0][0]).toEqual({
       indexName: DEFAULT_PROPS.indexName,
       initialState: {},
-      searchParameters: {},
       algoliaClient: {},
       stalledSearchDelay: 200,
     });

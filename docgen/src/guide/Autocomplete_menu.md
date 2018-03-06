@@ -9,7 +9,8 @@ navWeight: 20
 You can build an autocomplete menu with React InstantSearch that uses an external autocomplete component. It takes advantage of the [`connectAutoComplete`](connectors/connectAutoComplete.html) connector.
 
 [Read the examples](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/autocomplete)
- showing you how to build an autocomplete menu that will let you:
+showing you how to build an autocomplete menu that will let you:
+
 * display hits from different indices
 * have a textarea able to propose suggestions like mentions.
 
@@ -24,6 +25,6 @@ them you can read their guide first:
         Previous: <a href="guide/Server-side_rendering.html">← Server-side Rendering</a>
     </div>
     <div class="guide-nav-right">
-        Next: <a href="guide/Migration_guides.html">Migration guides →</a>
+        Next: <a href="guide/Migration_guide_v3.html">Migration Guide - From v2 to v3 →</a>
     </div>
 </div>

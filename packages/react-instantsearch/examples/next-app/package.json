@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "devDependencies": {
+    "jest": "22.1.4",
     "react-test-renderer": "16.2.0"
   },
   "dependencies": {
@@ -16,8 +17,7 @@
     "qs": "6.5.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-instantsearch": "4.5.2",
-    "react-instantsearch-theme-algolia": "4.5.2",
+    "react-instantsearch": "5.0.0-beta.1",
     "style-loader": "0.20.1"
   },
   "jest": {

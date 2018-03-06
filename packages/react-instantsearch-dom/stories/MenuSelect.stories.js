@@ -2,12 +2,12 @@ import React from 'react';
 import { orderBy } from 'lodash';
 import { setAddon, storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs';
-import { displayName, filterProps, WrapWithHits } from './util';
 import {
   MenuSelect,
   Panel,
   SearchBox,
 } from '../packages/react-instantsearch/dom';
+import { displayName, filterProps, WrapWithHits } from './util';
 import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
@@ -19,7 +19,7 @@ stories
     'default',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
-        <MenuSelect attributeName="category" />
+        <MenuSelect attribute="category" />
       </WrapWithHits>
     ),
     {
@@ -31,7 +31,7 @@ stories
     'with default selected item',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
-        <MenuSelect attributeName="category" defaultRefinement="Eating" />
+        <MenuSelect attribute="category" defaultRefinement="Eating" />
       </WrapWithHits>
     ),
     {
@@ -44,7 +44,7 @@ stories
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
         <MenuSelect
-          attributeName="category"
+          attribute="category"
           transformItems={items =>
             orderBy(items, ['label', 'count'], ['asc', 'desc'])
           }
@@ -57,46 +57,11 @@ stories
     }
   )
   .addWithJSX(
-    'with panel',
-    () => (
-      <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
-        <Panel title="Category">
-          <MenuSelect attributeName="category" />
-        </Panel>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with panel but no available refinement',
-    () => (
-      <WrapWithHits
-        searchBox={false}
-        hasPlayground={true}
-        linkedStoryGroup="MenuSelect"
-      >
-        <Panel title="Category">
-          <MenuSelect attributeName="category" />
-          <div style={{ display: 'none' }}>
-            <SearchBox defaultRefinement="dkjsakdjskajdksjakdjaskj" />
-          </div>
-        </Panel>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
     'playground',
     () => (
       <WrapWithHits linkedStoryGroup="MenuSelect">
         <MenuSelect
-          attributeName="category"
+          attribute="category"
           defaultRefinement={text('defaultSelectedItem', 'Bathroom')}
         />
       </WrapWithHits>
@@ -111,7 +76,7 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="MenuSelect">
         <MenuSelect
-          attributeName="category"
+          attribute="category"
           defaultRefinement={text('defaultSelectedItem', 'Bathroom')}
           transformItems={items =>
             items.map(({ count, ...item }) => ({
@@ -120,6 +85,42 @@ stories
             }))
           }
         />
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'with Panel',
+    () => (
+      <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
+        <Panel header="Menu select" footer="Footer">
+          <MenuSelect attribute="category" />
+        </Panel>
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'with Panel but no refinement',
+    () => (
+      <WrapWithHits
+        searchBox={false}
+        hasPlayground={true}
+        linkedStoryGroup="MenuSelect"
+      >
+        <Panel header="Menu select" footer="Footer">
+          <MenuSelect attribute="category" />
+        </Panel>
+
+        <div style={{ display: 'none' }}>
+          <SearchBox defaultRefinement="dkjsakdjskajdksjakdjaskj" />
+        </div>
       </WrapWithHits>
     ),
     {

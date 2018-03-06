@@ -1,5 +1,5 @@
-import connectInfiniteHits from '../connectors/connectInfiniteHits.js';
-import InfiniteHitsComponent from '../components/InfiniteHits.js';
+import connectInfiniteHits from '../connectors/connectInfiniteHits';
+import InfiniteHits from '../components/InfiniteHits';
 
 /**
  * Displays an infinite list of hits along with a **load more** button.
@@ -9,10 +9,14 @@ import InfiniteHitsComponent from '../components/InfiniteHits.js';
  *
  * @name InfiniteHits
  * @kind widget
- * @propType {Component} hitComponent - Component used for rendering each hit from
+ * @propType {Component} [hitComponent] - Component used for rendering each hit from
  *   the results. If it is not provided the rendering defaults to displaying the
  *   hit in its JSON form. The component will be called with a `hit` prop.
- * @themeKey ais-InfiniteHits__root - the root of the component
+ * @themeKey ais-InfiniteHits - the root div of the widget
+ * @themeKey ais-InfiniteHits-list - the list of hits
+ * @themeKey ais-InfiniteHits-item - the hit list item
+ * @themeKey ais-InfiniteHits-loadMore - the button used to display more results
+ * @themeKey ais-InfiniteHits-loadMore--disabled - the disabled button used to display more results
  * @translationKey loadMore - the label of load more button
  * @example
  * import React from 'react';
@@ -31,4 +35,5 @@ import InfiniteHitsComponent from '../components/InfiniteHits.js';
  *   );
  * }
  */
-export default connectInfiniteHits(InfiniteHitsComponent);
+
+export default connectInfiniteHits(InfiniteHits);

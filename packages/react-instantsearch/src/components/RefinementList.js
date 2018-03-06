@@ -1,23 +1,19 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { pick } from 'lodash';
 import translatable from '../core/translatable';
+import createClassNames from './createClassNames';
 import List from './List';
-import classNames from './classNames.js';
 import Highlight from '../widgets/Highlight';
-const cx = classNames('RefinementList');
+
+const cx = createClassNames('RefinementList');
 
 class RefinementList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { query: '' };
-  }
-
   static propTypes = {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     searchForItems: PropTypes.func.isRequired,
-    withSearchBox: PropTypes.bool,
+    searchable: PropTypes.bool,
     createURL: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(
       PropTypes.shape({
@@ -30,22 +26,19 @@ class RefinementList extends Component {
     isFromSearch: PropTypes.bool.isRequired,
     canRefine: PropTypes.bool.isRequired,
     showMore: PropTypes.bool,
-    limitMin: PropTypes.number,
-    limitMax: PropTypes.number,
+    limit: PropTypes.number,
+    showMoreLimit: PropTypes.number,
     transformItems: PropTypes.func,
+    className: PropTypes.string,
   };
 
-  static contextTypes = {
-    canRefine: PropTypes.func,
+  static defaultProps = {
+    className: '',
   };
 
-  componentWillMount() {
-    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
-  }
-
-  componentWillReceiveProps(props) {
-    if (this.context.canRefine) this.context.canRefine(props.canRefine);
-  }
+  state = {
+    query: '',
+  };
 
   selectItem = (item, resetQuery) => {
     resetQuery();
@@ -54,59 +47,45 @@ class RefinementList extends Component {
 
   renderItem = (item, resetQuery) => {
     const label = this.props.isFromSearch ? (
-      <Highlight attributeName="label" hit={item} />
+      <Highlight attribute="label" hit={item} />
     ) : (
       item.label
     );
 
     return (
-      <label>
+      <label className={cx('label')}>
         <input
-          {...cx('itemCheckbox', item.isRefined && 'itemCheckboxSelected')}
+          className={cx('checkbox')}
           type="checkbox"
           checked={item.isRefined}
           onChange={() => this.selectItem(item, resetQuery)}
         />
-        <span
-          {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}
-        />
-        <span
-          {...cx(
-            'itemLabel',
-            'itemLabel',
-            item.isRefined && 'itemLabelSelected'
-          )}
-        >
-          {label}
-        </span>{' '}
-        <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
-          {item.count.toLocaleString()}
-        </span>
+        <span className={cx('labelText')}>{label}</span>{' '}
+        <span className={cx('count')}>{item.count.toLocaleString()}</span>
       </label>
     );
   };
 
   render() {
     return (
-      <div>
-        <List
-          renderItem={this.renderItem}
-          selectItem={this.selectItem}
-          cx={cx}
-          {...pick(this.props, [
-            'translate',
-            'items',
-            'showMore',
-            'limitMin',
-            'limitMax',
-            'isFromSearch',
-            'searchForItems',
-            'withSearchBox',
-            'canRefine',
-          ])}
-          query={this.state.query}
-        />
-      </div>
+      <List
+        renderItem={this.renderItem}
+        selectItem={this.selectItem}
+        cx={cx}
+        {...pick(this.props, [
+          'translate',
+          'items',
+          'showMore',
+          'limit',
+          'showMoreLimit',
+          'isFromSearch',
+          'searchForItems',
+          'searchable',
+          'canRefine',
+          'className',
+        ])}
+        query={this.state.query}
+      />
     );
   }
 }

@@ -21,13 +21,13 @@ like most of its features it comes in two flavors, depending on your use case:
 
 Highlighting is based on the results and you will need to make a custom Hit in order
 to use the Highlighter. The Highlight and the Snippet widgets take two props:
- - attributeName: the path to the highlighted attribute of the hit (which can be either a string or an array of strings)
+ - attribute: the path to the highlighted attribute of the hit (which can be either a string or an array of strings)
  - hit: a single result object
 
 **Notes:**
 * Use the `<Highlight>` widget when you want to display the regular value of an attribute.
 * Use the `<Snippet>` widget when you want to display the snippet version of an attribute.
-  To use this widget, the attribute name passed to the `attributeName` prop must be present in
+  To use this widget, the attribute name passed to the `attribute` prop must be present in
   "Attributes to snippet" on the Algolia dashboard or configured as `attributesToSnippet`
   via a set settings call to the Algolia API.
 
@@ -45,7 +45,7 @@ import { InstantSearch, Hits, Highlight } from 'react-instantsearch/dom';
 
 const Hit = ({ hit }) => (
   <p>
-    <Highlight attributeName="description" hit={hit} tagName="mark" />
+    <Highlight attribute="description" hit={hit} tagName="mark" />
   </p>
 );
 
@@ -67,7 +67,7 @@ export default function App() {
 The connector provides a function that will extract the highlighting data
 from the results. This function takes a single parameter object with three
 properties:
- - attributeName: the highlighted attribute name
+ - attribute: the highlighted attribute name
  - hit: a single result object
  - highlightProperty: the path to the structure containing the highlighted attribute. The value is either `_highlightResult` or `_snippetResult` depending on whether you want to make a Highlight or a Snippet widget.
 
@@ -83,9 +83,9 @@ import { connectHighlight } from 'react-instantsearch/connectors';
 import { InstantSearch, Hits } from 'react-instantsearch/dom';
 
 const CustomHighlight = connectHighlight(
-  ({ highlight, attributeName, hit, highlightProperty }) => {
+  ({ highlight, attribute, hit, highlightProperty }) => {
     const parsedHit = highlight({
-      attributeName,
+      attribute,
       hit,
       highlightProperty: '_highlightResult'
     });
@@ -99,7 +99,7 @@ const CustomHighlight = connectHighlight(
 
 const Hit = ({ hit }) => (
   <p>
-    <CustomHighlight attributeName="description" hit={hit} />
+    <CustomHighlight attribute="description" hit={hit} />
   </p>
 );
 

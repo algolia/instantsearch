@@ -19,15 +19,15 @@ const HitComponent = ({ hit }) => (
     </div>
     <div className="hit-content">
       <div>
-        <Highlight attributeName="name" hit={hit} />
+        <Highlight attribute="name" hit={hit} />
         <span> - ${hit.price}</span>
         <span> - {hit.rating} stars</span>
       </div>
       <div className="hit-type">
-        <Highlight attributeName="type" hit={hit} />
+        <Highlight attribute="type" hit={hit} />
       </div>
       <div className="hit-description">
-        <Highlight attributeName="description" hit={hit} />
+        <Highlight attribute="description" hit={hit} />
       </div>
     </div>
   </div>
@@ -56,14 +56,14 @@ export default class extends React.Component {
         searchState={this.props.searchState}
         createURL={this.props.createURL}
       >
-        <Configure hitsPerPage={10} />
+        <Configure hitsPerPage={12} />
         <header>
           <h1>React InstantSearch + Next.Js</h1>
           <SearchBox />
         </header>
         <content>
           <menu>
-            <RefinementList attributeName="category" />
+            <RefinementList attribute="category" />
           </menu>
           <results>
             <Hits hitComponent={HitComponent} />

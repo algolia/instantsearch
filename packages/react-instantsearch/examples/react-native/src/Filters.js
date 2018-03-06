@@ -68,10 +68,10 @@ class Filters extends Component {
             searchState={this.state.searchState}
             onSearchStateChange={this.onSearchStateChange}
           />
-          <VirtualRefinementList attributeName="type" />
-          <VirtualMenu attributeName="category" />
-          <VirtualRange attributeName="price" />
-          <VirtualRange attributeName="rating" />
+          <VirtualRefinementList attribute="type" />
+          <VirtualMenu attribute="category" />
+          <VirtualRange attribute="price" />
+          <VirtualRange attribute="rating" />
           <VirtualSearchBox />
         </InstantSearch>
       </View>
@@ -90,43 +90,43 @@ class Refinements extends React.Component {
     this._renderRow = this._renderRow.bind(this);
     this.mapping = {
       Categories: {
-        attributeName: 'category',
+        attribute: 'category',
         value: item => item.currentRefinement,
       },
       Type: {
-        attributeName: 'type',
+        attribute: 'type',
         value: item => {
           const values = item.items.map(i => i.label).join(' - ');
           return values;
         },
       },
       Price: {
-        attributeName: 'price',
+        attribute: 'price',
         value: item =>
           `From ${item.currentRefinement.min}$ to ${
             item.currentRefinement.max
           }$`,
       },
       Rating: {
-        attributeName: 'rating',
+        attribute: 'rating',
         value: item =>
           `From ${item.currentRefinement.min} stars to ${
             item.currentRefinement.max
           } stars`,
       },
-      ClearAll: {
-        attributeName: 'clearAll',
+      ClearRefinements: {
+        attribute: 'clearAll',
       },
     };
   }
 
   _renderRow = refinement => {
     const item = this.props.items.find(
-      i => i.attributeName === this.mapping[refinement].attributeName
+      i => i.attribute === this.mapping[refinement].attribute
     );
     const refinementValue = item ? this.mapping[refinement].value(item) : '-';
     const filtersRow =
-      refinement !== 'ClearAll' ? (
+      refinement !== 'ClearRefinements' ? (
         <TouchableHighlight
           onPress={() => {
             Actions[refinement]({
@@ -176,7 +176,7 @@ class Refinements extends React.Component {
             'Categories',
             'Price',
             'Rating',
-            'ClearAll',
+            'ClearRefinements',
           ])}
           renderRow={this._renderRow}
           renderSeparator={this._renderSeparator}

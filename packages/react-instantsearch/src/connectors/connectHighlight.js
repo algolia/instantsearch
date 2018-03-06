@@ -3,9 +3,9 @@ import parseAlgoliaHit from '../core/highlight';
 
 import highlightTags from '../core/highlightTags.js';
 
-const highlight = ({ attributeName, hit, highlightProperty }) =>
+const highlight = ({ attribute, hit, highlightProperty }) =>
   parseAlgoliaHit({
-    attributeName,
+    attribute,
     hit,
     preTag: highlightTags.highlightPreTag,
     postTag: highlightTags.highlightPostTag,
@@ -19,15 +19,15 @@ const highlight = ({ attributeName, hit, highlightProperty }) =>
  * @name connectHighlight
  * @kind connector
  * @category connector
- * @providedPropType {function} highlight - function to retrieve and parse an attribute from a hit. It takes a configuration object with 3 attributes: `highlightProperty` which is the property that contains the highlight structure from the records, `attributeName` which is the name of the attribute (it can be either a string or an array of strings) to look for and `hit` which is the hit from Algolia. It returns an array of objects `{value: string, isHighlighted: boolean}`. If the element that corresponds to the attributeName is an array of strings, it will return a nested array of objects.
+ * @providedPropType {function} highlight - function to retrieve and parse an attribute from a hit. It takes a configuration object with 3 attributes: `highlightProperty` which is the property that contains the highlight structure from the records, `attribute` which is the name of the attribute (it can be either a string or an array of strings) to look for and `hit` which is the hit from Algolia. It returns an array of objects `{value: string, isHighlighted: boolean}`. If the element that corresponds to the attribute is an array of strings, it will return a nested array of objects.
  * @example
  * import React from 'react';
  * import { connectHighlight } from 'react-instantsearch/connectors';
  * import { InstantSearch, Hits } from 'react-instantsearch/dom';
  *
  * const CustomHighlight = connectHighlight(
- *   ({ highlight, attributeName, hit, highlightProperty }) => {
- *     const parsedHit = highlight({ attributeName, hit, highlightProperty: '_highlightResult' });
+ *   ({ highlight, attribute, hit, highlightProperty }) => {
+ *     const parsedHit = highlight({ attribute, hit, highlightProperty: '_highlightResult' });
  *     const highlightedHits = parsedHit.map(part => {
  *       if (part.isHighlighted) return <mark>{part.value}</mark>;
  *       return part.value;
@@ -38,7 +38,7 @@ const highlight = ({ attributeName, hit, highlightProperty }) =>
  *
  * const Hit = ({hit}) =>
  * <p>
- *   <CustomHighlight attributeName="description" hit={hit} />
+ *   <CustomHighlight attribute="description" hit={hit} />
  * </p>;
  *
  * export default function App() {

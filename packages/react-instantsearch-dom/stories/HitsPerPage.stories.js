@@ -46,12 +46,12 @@ stories
     }
   )
   .addWithJSX(
-    'inside a panel',
+    'with Panel',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="HitsPerPage">
-        <Panel title="Hits to display">
+        <Panel header="Hits per page" footer="Footer">
           <HitsPerPage
-            defaultRefinement={number('default hits per page', 4)}
+            defaultRefinement={4}
             items={[
               { value: 2, label: '2 hits per page' },
               { value: 4, label: '4 hits per page' },

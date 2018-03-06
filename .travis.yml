@@ -16,7 +16,6 @@ cache:
   directories:
     - node_modules
     - packages/react-instantsearch/node_modules
-    - packages/react-instantsearch-theme-algolia/node_modules
 env:
   global:
   # ARGOS

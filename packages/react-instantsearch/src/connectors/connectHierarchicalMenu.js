@@ -124,11 +124,11 @@ const sortBy = ['name:asc'];
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
  *
  * @kind connector
- * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
+ * @propType {array.<string>} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
  * @propType {string} [defaultRefinement] - the item value selected by default
- * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limitMin and limitMax.
- * @propType {number} [limitMin=10] -  The maximum number of items displayed.
- * @propType {number} [limitMax=20] -  The maximum number of items displayed when the user triggers the show more. Not considered if `showMore` is false.
+ * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limit and showMoreLimit.
+ * @propType {number} [limit=10] -  The maximum number of items displayed.
+ * @propType {number} [showMoreLimit=20] -  The maximum number of items displayed when the user triggers the show more. Not considered if `showMore` is false.
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
@@ -160,22 +160,22 @@ export default createConnector({
     showParentLevel: PropTypes.bool,
     defaultRefinement: PropTypes.string,
     showMore: PropTypes.bool,
-    limitMin: PropTypes.number,
-    limitMax: PropTypes.number,
+    limit: PropTypes.number,
+    showMoreLimit: PropTypes.number,
     transformItems: PropTypes.func,
   },
 
   defaultProps: {
     showMore: false,
-    limitMin: 10,
-    limitMax: 20,
+    limit: 10,
+    showMoreLimit: 20,
     separator: ' > ',
     rootPath: null,
     showParentLevel: true,
   },
 
   getProvidedProps(props, searchState, searchResults) {
-    const { showMore, limitMin, limitMax } = props;
+    const { showMore, limit, showMoreLimit } = props;
     const id = getId(props);
 
     const results = getResults(searchResults, this.context);
@@ -193,7 +193,7 @@ export default createConnector({
         canRefine: false,
       };
     }
-    const limit = showMore ? limitMax : limitMin;
+    const itemsLimit = showMore ? showMoreLimit : limit;
     const value = results.getFacetValues(id, { sortBy });
     const items = value.data
       ? transformValue(value.data, props, searchState, this.context)
@@ -202,7 +202,7 @@ export default createConnector({
       ? props.transformItems(items)
       : items;
     return {
-      items: truncate(transformedItems, limit),
+      items: truncate(transformedItems, itemsLimit),
       currentRefinement: getCurrentRefinement(props, searchState, this.context),
       canRefine: items.length > 0,
     };
@@ -223,12 +223,12 @@ export default createConnector({
       rootPath,
       showParentLevel,
       showMore,
-      limitMin,
-      limitMax,
+      limit,
+      showMoreLimit,
     } = props;
 
     const id = getId(props);
-    const limit = showMore ? limitMax : limitMin;
+    const itemsLimit = showMore ? showMoreLimit : limit;
 
     searchParameters = searchParameters
       .addHierarchicalFacet({
@@ -241,7 +241,7 @@ export default createConnector({
       .setQueryParameters({
         maxValuesPerFacet: Math.max(
           searchParameters.maxValuesPerFacet || 0,
-          limit
+          itemsLimit
         ),
       });
 
@@ -277,7 +277,7 @@ export default createConnector({
         : [
             {
               label: `${rootAttribute}: ${currentRefinement}`,
-              attributeName: rootAttribute,
+              attribute: rootAttribute,
               value: nextState => refine(props, nextState, '', this.context),
               currentRefinement,
             },

@@ -81,15 +81,15 @@ class Filters extends Component {
           onSearchStateChange={this.onSearchStateChange}
           searchState={this.state.searchState}
         >
-          <ConnectedMenu attributeName="category" />
+          <ConnectedMenu attribute="category" />
           <Stats
             searchState={this.state.searchState}
             onSearchStateChange={this.onSearchStateChange}
           />
           <VirtualSearchBox />
-          <VirtualRefinementList attributeName="type" />
-          <VirtualRange attributeName="price" />
-          <VirtualRange attributeName="rating" />
+          <VirtualRefinementList attribute="type" />
+          <VirtualRange attribute="price" />
+          <VirtualRange attribute="rating" />
         </InstantSearch>
       </View>
     );
@@ -160,7 +160,7 @@ class Menu extends Component {
     );
     const label = this.props.isFromSearch ? (
       <Highlight
-        attributeName="label"
+        attribute="label"
         hit={refinement}
         highlightProperty="_highlightResult"
       />

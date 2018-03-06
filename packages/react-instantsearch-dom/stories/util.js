@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {
   InstantSearch,
-  ClearAll,
+  ClearRefinements,
   SearchBox,
   Pagination,
   Highlight,
@@ -10,7 +10,7 @@ import {
 } from '../packages/react-instantsearch/dom';
 import { connectHits } from '../packages/react-instantsearch/connectors';
 import { linkTo } from '@storybook/addon-links';
-import '../packages/react-instantsearch-theme-algolia/style.scss';
+import 'instantsearch.css/themes/algolia.css';
 
 const Wrap = props => (
   <InstantSearch
@@ -80,7 +80,7 @@ const WrapWithHits = ({
                   }}
                 />
               ) : null}
-              <ClearAll translations={{ reset: 'Clear all filters' }} />
+              <ClearRefinements translations={{ reset: 'Clear all filters' }} />
             </div>
             <CustomHits />
             <div className="hit-pagination">
@@ -109,15 +109,15 @@ const CustomHits = connectHits(({ hits }) => (
         </div>
         <div className="hit-content">
           <div>
-            <Highlight attributeName="name" hit={hit} />
+            <Highlight attribute="name" hit={hit} />
             <span> - ${hit.price}</span>
             <span> - {hit.rating} stars</span>
           </div>
           <div className="hit-type">
-            <Highlight attributeName="type" hit={hit} />
+            <Highlight attribute="type" hit={hit} />
           </div>
           <div className="hit-description">
-            <Highlight attributeName="description" hit={hit} />
+            <Highlight attribute="description" hit={hit} />
           </div>
         </div>
       </div>

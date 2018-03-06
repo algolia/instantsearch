@@ -61,9 +61,7 @@ function transformValue(values) {
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
  *
  * @kind connector
- * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
- * @propType {string} {React.Element} [separator=' > '] -  Specifies the level separator used in the data.
- * @propType {string} [rootURL=null] - The root element's URL (the originating page).
+ * @propType {array.<string>} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
@@ -87,14 +85,7 @@ export default createConnector({
       }
       return undefined;
     },
-    rootURL: PropTypes.string,
-    separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     transformItems: PropTypes.func,
-  },
-
-  defaultProps: {
-    rootURL: null,
-    separator: ' > ',
   },
 
   getProvidedProps(props, searchState, searchResults) {

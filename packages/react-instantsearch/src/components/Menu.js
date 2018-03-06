@@ -1,20 +1,20 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { pick } from 'lodash';
 import translatable from '../core/translatable';
 import List from './List';
 import Link from './Link';
 import Highlight from '../widgets/Highlight';
-import classNames from './classNames.js';
+import createClassNames from './createClassNames';
 
-const cx = classNames('Menu');
+const cx = createClassNames('Menu');
 
 class Menu extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     searchForItems: PropTypes.func.isRequired,
-    withSearchBox: PropTypes.bool,
+    searchable: PropTypes.bool,
     createURL: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(
       PropTypes.shape({
@@ -27,42 +27,31 @@ class Menu extends Component {
     isFromSearch: PropTypes.bool.isRequired,
     canRefine: PropTypes.bool.isRequired,
     showMore: PropTypes.bool,
-    limitMin: PropTypes.number,
-    limitMax: PropTypes.number,
+    limit: PropTypes.number,
+    showMoreLimit: PropTypes.number,
     transformItems: PropTypes.func,
+    className: PropTypes.string,
   };
 
-  static contextTypes = {
-    canRefine: PropTypes.func,
+  static defaultProps = {
+    className: '',
   };
-
-  componentWillMount() {
-    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
-  }
-
-  componentWillReceiveProps(props) {
-    if (this.context.canRefine) this.context.canRefine(props.canRefine);
-  }
 
   renderItem = (item, resetQuery) => {
     const { createURL } = this.props;
     const label = this.props.isFromSearch ? (
-      <Highlight attributeName="label" hit={item} />
+      <Highlight attribute="label" hit={item} />
     ) : (
       item.label
     );
     return (
       <Link
-        {...cx('itemLink', item.isRefined && 'itemLinkSelected')}
+        className={cx('link')}
         onClick={() => this.selectItem(item, resetQuery)}
         href={createURL(item.value)}
       >
-        <span {...cx('itemLabel', item.isRefined && 'itemLabelSelected')}>
-          {label}
-        </span>{' '}
-        <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
-          {item.count}
-        </span>
+        <span className={cx('label')}>{label}</span>{' '}
+        <span className={cx('count')}>{item.count}</span>
       </Link>
     );
   };
@@ -82,12 +71,13 @@ class Menu extends Component {
           'translate',
           'items',
           'showMore',
-          'limitMin',
-          'limitMax',
+          'limit',
+          'showMoreLimit',
           'isFromSearch',
           'searchForItems',
-          'withSearchBox',
+          'searchable',
           'canRefine',
+          'className',
         ])}
       />
     );

@@ -1,11 +1,14 @@
 em {
-  color: rgb(0, 188, 212);;
+  color: rgb(0, 188, 212);
 }
 
-html,body{
+html,
+body {
   -webkit-overflow-scrolling : touch !important;
   overflow: auto !important;
   height: 100% !important;
+  padding: 0;
+  margin: 0;
 }
 
 .cm-navigation {
@@ -15,10 +18,10 @@ html,body{
 .Header__appBar {
   box-shadow: none !important;
   position: fixed !important;
-  top: 60px;
+  top: 56px;
 }
 
-span[type='button']{
+span[type='button'] {
   background: white!important;
   -webkit-appearance: inherit!important;
 }

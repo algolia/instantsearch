@@ -20,7 +20,9 @@ describe('Highlighter - Highlight', () => {
       isHighlighted: true,
     };
 
-    const wrapper = shallow(<Highlight {...props} />);
+    const wrapper = shallow(
+      <Highlight cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -30,7 +32,9 @@ describe('Highlighter - Highlight', () => {
       ...defaultProps,
     };
 
-    const wrapper = shallow(<Highlight {...props} />);
+    const wrapper = shallow(
+      <Highlight cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -47,18 +51,18 @@ describe('Highlighter - simple', () => {
     },
   };
 
-  const highlight = ({ hit, attributeName, highlightProperty }) =>
+  const highlight = ({ hit, attribute, highlightProperty }) =>
     parseAlgoliaHit({
       preTag: '<ais-highlight>',
       postTag: '</ais-highlight>',
-      attributeName,
+      attribute,
       hit,
       highlightProperty,
     });
 
   const defaultProps = {
     hit: hitFromAPI,
-    attributeName: 'title',
+    attribute: 'title',
     highlightProperty: '_highlight',
     highlight,
   };
@@ -68,7 +72,9 @@ describe('Highlighter - simple', () => {
       ...defaultProps,
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -87,7 +93,9 @@ describe('Highlighter - simple', () => {
       },
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -98,7 +106,9 @@ describe('Highlighter - simple', () => {
       tagName: 'strong',
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -109,7 +119,22 @@ describe('Highlighter - simple', () => {
       nonHighlightedTagName: 'p',
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders with a custom className', () => {
+    const props = {
+      ...defaultProps,
+      className: 'MyCustomHighlighter',
+    };
+
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -134,18 +159,18 @@ describe('Highlighter - multi', () => {
     },
   };
 
-  const highlight = ({ hit, attributeName, highlightProperty }) =>
+  const highlight = ({ hit, attribute, highlightProperty }) =>
     parseAlgoliaHit({
       preTag: '<ais-highlight>',
       postTag: '</ais-highlight>',
-      attributeName,
+      attribute,
       hit,
       highlightProperty,
     });
 
   const defaultProps = {
     hit: hitFromAPI,
-    attributeName: 'titles',
+    attribute: 'titles',
     highlightProperty: '_highlight',
     highlight,
   };
@@ -155,7 +180,9 @@ describe('Highlighter - multi', () => {
       ...defaultProps,
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -182,7 +209,9 @@ describe('Highlighter - multi', () => {
       },
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -193,7 +222,9 @@ describe('Highlighter - multi', () => {
       tagName: 'strong',
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -204,7 +235,9 @@ describe('Highlighter - multi', () => {
       nonHighlightedTagName: 'p',
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -215,7 +248,22 @@ describe('Highlighter - multi', () => {
       separator: '-',
     };
 
-    const wrapper = shallow(<Highlighter {...props} />);
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('renders a custom className', () => {
+    const props = {
+      ...defaultProps,
+      className: 'MyCustomHighlighter',
+    };
+
+    const wrapper = shallow(
+      <Highlighter cx={(...x) => x.join(' ')} {...props} />
+    );
 
     expect(wrapper).toMatchSnapshot();
   });

@@ -10,10 +10,10 @@ const stories = storiesOf('Snippet', module);
 const Default = ({ hit }) => (
   <article>
     <p>
-      <Snippet attributeName="name" hit={hit} />
+      <Snippet attribute="name" hit={hit} />
     </p>
     <p>
-      <Snippet attributeName="description" hit={hit} />
+      <Snippet attribute="description" hit={hit} />
     </p>
   </article>
 );
@@ -26,14 +26,14 @@ const StrongHits = ({ hit }) => (
   <article>
     <p>
       <Snippet
-        attributeName="name"
+        attribute="name"
         tagName={text('tag name (title)', 'strong')}
         hit={hit}
       />
     </p>
     <p>
       <Snippet
-        attributeName="description"
+        attribute="description"
         tagName={text('tag name (description)', 'strong')}
         hit={hit}
       />

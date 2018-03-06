@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import SearchBox from '../components/SearchBox';
 
 const itemsPropType = PropTypes.arrayOf(
@@ -18,18 +19,19 @@ class List extends Component {
     items: itemsPropType,
     renderItem: PropTypes.func.isRequired,
     selectItem: PropTypes.func,
+    className: PropTypes.string,
     showMore: PropTypes.bool,
-    limitMin: PropTypes.number,
-    limitMax: PropTypes.number,
     limit: PropTypes.number,
+    showMoreLimit: PropTypes.number,
     show: PropTypes.func,
     searchForItems: PropTypes.func,
-    withSearchBox: PropTypes.bool,
+    searchable: PropTypes.bool,
     isFromSearch: PropTypes.bool,
     canRefine: PropTypes.bool,
   };
 
   static defaultProps = {
+    className: '',
     isFromSearch: false,
   };
 
@@ -49,9 +51,9 @@ class List extends Component {
   };
 
   getLimit = () => {
-    const { limitMin, limitMax } = this.props;
+    const { limit, showMoreLimit } = this.props;
     const { extended } = this.state;
-    return extended ? limitMax : limitMin;
+    return extended ? showMoreLimit : limit;
   };
 
   resetQuery = () => {
@@ -60,34 +62,33 @@ class List extends Component {
 
   renderItem = (item, resetQuery) => {
     const items = item.items && (
-      <div {...this.props.cx('itemItems')}>
+      <ul className={this.props.cx('list', 'list--child')}>
         {item.items
           .slice(0, this.getLimit())
           .map(child => this.renderItem(child, item))}
-      </div>
+      </ul>
     );
 
     return (
-      <div
+      <li
         key={item.key || item.label}
-        {...this.props.cx(
+        className={this.props.cx(
           'item',
-          item.isRefined && 'itemSelected',
-          item.noRefinement && 'itemNoRefinement',
-          items && 'itemParent',
-          items && item.isRefined && 'itemSelectedParent'
+          item.isRefined && 'item--selected',
+          item.noRefinement && 'item--noRefinement',
+          items && 'item--parent'
         )}
       >
         {this.props.renderItem(item, resetQuery)}
         {items}
-      </div>
+      </li>
     );
   };
 
   renderShowMore() {
     const { showMore, translate, cx } = this.props;
     const { extended } = this.state;
-    const disabled = this.props.limitMin >= this.props.items.length;
+    const disabled = this.props.limit >= this.props.items.length;
     if (!showMore) {
       return null;
     }
@@ -95,7 +96,7 @@ class List extends Component {
     return (
       <button
         disabled={disabled}
-        {...cx('showMore', disabled && 'showMoreDisabled')}
+        className={cx('showMore', disabled && 'showMore--disabled')}
         onClick={this.onShowMoreClick}
       >
         {translate('showMore', extended)}
@@ -115,10 +116,10 @@ class List extends Component {
 
     const noResults =
       items.length === 0 && this.state.query !== '' ? (
-        <div {...cx('noResults')}>{translate('noResults')}</div>
+        <div className={cx('noResults')}>{translate('noResults')}</div>
       ) : null;
     return (
-      <div {...cx('SearchBox')}>
+      <div className={cx('searchBox')}>
         <SearchBox
           currentRefinement={this.state.query}
           refine={value => {
@@ -141,26 +142,28 @@ class List extends Component {
   }
 
   render() {
-    const { cx, items, withSearchBox, canRefine } = this.props;
-    const searchBox = withSearchBox ? this.renderSearchBox() : null;
+    const { cx, items, className, searchable, canRefine } = this.props;
+    const searchBox = searchable ? this.renderSearchBox() : null;
+    const rootClassName = classNames(
+      cx('', !canRefine && '-noRefinement'),
+      className
+    );
+
     if (items.length === 0) {
-      return (
-        <div {...cx('root', !canRefine && 'noRefinement')}>{searchBox}</div>
-      );
+      return <div className={rootClassName}>{searchBox}</div>;
     }
 
     // Always limit the number of items we show on screen, since the actual
     // number of retrieved items might vary with the `maxValuesPerFacet` config
     // option.
-    const limit = this.getLimit();
     return (
-      <div {...cx('root', !this.props.canRefine && 'noRefinement')}>
+      <div className={rootClassName}>
         {searchBox}
-        <div {...cx('items')}>
+        <ul className={cx('list', !canRefine && 'list--noRefinement')}>
           {items
-            .slice(0, limit)
+            .slice(0, this.getLimit())
             .map(item => this.renderItem(item, this.resetQuery))}
-        </div>
+        </ul>
         {this.renderShowMore()}
       </div>
     );

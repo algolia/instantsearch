@@ -51,7 +51,7 @@ const ConnectedSearchBox = connectSearchBox(MySearchBox);
 
 ## Exposed props
 
-Connectors expose props to configure their behavior. Like the `attributeName`
+Connectors expose props to configure their behavior. Like the `attribute`
 being refined in a [`<Menu>`](widgets/Menu.html).
 
 One common exposed prop that you can use is the `defaultRefinement` one. Use it when as a way to provide the

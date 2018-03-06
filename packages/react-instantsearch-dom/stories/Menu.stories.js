@@ -15,7 +15,7 @@ stories
     'default',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
-        <Menu attributeName="category" />
+        <Menu attribute="category" />
       </WrapWithHits>
     ),
     {
@@ -27,7 +27,7 @@ stories
     'with default selected item',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
-        <Menu attributeName="category" defaultRefinement="Eating" />
+        <Menu attribute="category" defaultRefinement="Eating" />
       </WrapWithHits>
     ),
     {
@@ -40,9 +40,9 @@ stories
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
         <Menu
-          attributeName="category"
-          limitMin={2}
-          limitMax={5}
+          attribute="category"
+          limit={2}
+          showMoreLimit={5}
           showMore={true}
         />
       </WrapWithHits>
@@ -57,8 +57,8 @@ stories
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
         <Menu
-          attributeName="category"
-          withSearchBox
+          attribute="category"
+          searchable
           transformItems={items =>
             orderBy(
               items,
@@ -79,7 +79,7 @@ stories
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
         <Menu
-          attributeName="category"
+          attribute="category"
           transformItems={items =>
             orderBy(items, ['label', 'count'], ['asc', 'desc'])
           }
@@ -92,11 +92,11 @@ stories
     }
   )
   .addWithJSX(
-    'with panel',
+    'with Panel',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Menu">
-        <Panel title="Category">
-          <Menu attributeName="category" />
+        <Panel header="Menu" footer="Footer">
+          <Menu attribute="category" />
         </Panel>
       </WrapWithHits>
     ),
@@ -106,19 +106,20 @@ stories
     }
   )
   .addWithJSX(
-    'with panel but no available refinement',
+    'with Panel but no refinement',
     () => (
       <WrapWithHits
         searchBox={false}
         hasPlayground={true}
         linkedStoryGroup="Menu"
       >
-        <Panel title="Category">
-          <Menu attributeName="category" />
-          <div style={{ display: 'none' }}>
-            <SearchBox defaultRefinement="dkjsakdjskajdksjakdjaskj" />
-          </div>
+        <Panel header="Menu" footer="Footer">
+          <Menu attribute="category" />
         </Panel>
+
+        <div style={{ display: 'none' }}>
+          <SearchBox defaultRefinement="dkjsakdjskajdksjakdjaskj" />
+        </div>
       </WrapWithHits>
     ),
     {
@@ -131,10 +132,10 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="Menu">
         <Menu
-          attributeName="category"
+          attribute="category"
           defaultRefinement={text('defaultSelectedItem', 'Bathroom')}
-          limitMin={number('limitMin', 10)}
-          limitMax={number('limitMax', 20)}
+          limit={number('limit', 10)}
+          showMoreLimit={number('showMoreLimit', 20)}
           showMore={boolean('showMore', true)}
         />
       </WrapWithHits>

@@ -1,5 +1,5 @@
-import connectHighlight from '../connectors/connectHighlight.js';
-import HighlightComponent from '../components/Highlight.js';
+import connectHighlight from '../connectors/connectHighlight';
+import Highlight from '../components/Highlight';
 
 /**
  * Renders any attribute from a hit into its highlighted form when relevant.
@@ -7,14 +7,14 @@ import HighlightComponent from '../components/Highlight.js';
  * Read more about it in the [Highlighting results](guide/Highlighting_results.html) guide.
  * @name Highlight
  * @kind widget
- * @propType {string} attributeName - location of the highlighted attribute in the hit (the corresponding element can be either a string or an array of strings)
+ * @propType {string} attribute - location of the highlighted attribute in the hit (the corresponding element can be either a string or an array of strings)
  * @propType {object} hit - hit object containing the highlighted attribute
  * @propType {string} [tagName='em'] - tag to be used for highlighted parts of the hit
  * @propType {string} [nonHighlightedTagName='span'] - tag to be used for the parts of the hit that are not highlighted
- * @propType {React.Element} [separator=',<space>'] - symbol used to separate the elements of the array in case the attributeName points to an array of strings.
+ * @propType {node} [separator=',<space>'] - symbol used to separate the elements of the array in case the attribute points to an array of strings.
  * @themeKey ais-Highlight - root of the component
- * @themeKey ais-Highlight__highlighted - part of the text that is highlighted
- * @themeKey ais-Highlight__nonHighlighted - part of the text that is non highlighted
+ * @themeKey ais-Highlight-highlighted - part of the text which is highlighted
+ * @themeKey ais-Highlight-nonHighlighted - part of the text that is not highlighted
  * @example
  * import React from 'react';
  *
@@ -24,7 +24,7 @@ import HighlightComponent from '../components/Highlight.js';
  * <div>
  *   {hits.map(hit =>
  *     <p key={hit.objectID}>
- *       <Highlight attributeName="description" hit={hit} />
+ *       <Highlight attribute="description" hit={hit} />
  *     </p>
  *   )}
  * </div>
@@ -42,4 +42,5 @@ import HighlightComponent from '../components/Highlight.js';
  *  );
  * }
  */
-export default connectHighlight(HighlightComponent);
+
+export default connectHighlight(Highlight);

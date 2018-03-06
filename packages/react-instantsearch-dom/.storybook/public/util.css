@@ -1,3 +1,7 @@
+/**
+ * Container
+ */
+
 .container {
   padding: 50px 40px 40px;
   position: relative;
@@ -18,6 +22,35 @@
   border-width: 0 1px 1px 0;
 }
 
+.footer-container {
+  border-radius: 0px 0px 5px 5px;
+  display: flex;
+  justify-content: space-around;
+  overflow-x: hidden;
+  clear: left;
+  border-bottom: solid 1px #E4E4E4;
+  border-left: solid 1px #E4E4E4;
+  border-right: solid 1px #E4E4E4;
+  background-color: #F3F3F3;
+}
+
+.playground-url,
+.source-code-url {
+  font-family: inherit;
+  font-size: 13px;
+  top: 0;
+  left: 0;
+  color: #999999;
+  padding: 4px 6px;
+  line-height: 1em;
+  background-color: #F3F3F3;
+  border: none;
+}
+
+/**
+ * Widget
+ */
+
 .widget-container {
   border: solid 1px #E4E4E4;
   border-radius: 5px 5px 0px 0px;
@@ -27,6 +60,10 @@
   content: "Widget display";
   border-radius: 5px 0 3px;
 }
+
+/**
+ * Results
+ */
 
 .hits-container {
   border-left: solid 1px #E4E4E4;
@@ -40,31 +77,25 @@
   content: "Results";
 }
 
-.footer-container {
-  border-radius: 0px 0px 5px 5px;
+/**
+ * Search
+ */
+
+.hit-actions {
   display: flex;
-  justify-content: space-around;
-  overflow-x: hidden;
-  clear: left;
-  border-bottom: solid 1px #E4E4E4;
-  border-left: solid 1px #E4E4E4;
-  border-right: solid 1px #E4E4E4;
-  background-color: #F3F3F3;
+  align-items: center;
 }
 
-button.playground-url {
-  border: none;
+.hit-actions > .ais-ClearRefinements {
+  margin-left: 15px;
 }
 
-.playground-url,
-.source-code-url {
-  font-size: 13px;
-  top: 0;
-  left: 0;
-  color: #999999;
-  padding: 4px 6px;
-  line-height: 1em;
-  background-color: #F3F3F3;
+/**
+ * Hits
+ */
+
+.hits {
+  margin: 25px 0;
 }
 
 .hit {
@@ -73,19 +104,15 @@ button.playground-url {
   align-items: center;
 }
 
-.hit-actions {
-  display: flex;
-}
-
 .ais-SearchBox__root {
   margin-right: 10px;
 }
 
 .hit-content {
-  padding: 0px 10px;
+  margin-left: 20px;
 }
 
-.hit-picture img {
+.hit-picture > img {
   width: 80px;
   height: 80px;
 }
@@ -94,6 +121,10 @@ button.playground-url {
   color: #888888;
   font-size: 13px;
 }
+
+/**
+ * Multi-index
+ */
 
 .multi-index_content {
   display: flex;

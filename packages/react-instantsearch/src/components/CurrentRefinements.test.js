@@ -1,94 +1,162 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import renderer from 'react-test-renderer';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import CurrentRefinements from './CurrentRefinements';
+import Connected, { CurrentRefinements } from './CurrentRefinements';
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe('CurrentRefinements', () => {
-  it('renders a list of current refinements', () =>
-    expect(
-      renderer
-        .create(
-          <CurrentRefinements
-            refine={() => null}
-            items={[
-              {
-                label: 'Genre',
-                value: 'clear all genres',
-              },
-            ]}
-            canRefine={true}
-          />
-        )
-        .toJSON()
-    ).toMatchSnapshot());
+  const defaultProps = {
+    items: [],
+    canRefine: true,
+    refine: () => {},
+    translate: x => x,
+  };
 
-  it('allows clearing unique items of a refinement', () =>
-    expect(
-      renderer
-        .create(
-          <CurrentRefinements
-            refine={() => null}
-            items={[
-              {
-                label: 'Genre',
-                value: 'clear all genres',
-                items: [
-                  {
-                    label: 'Sci-fi',
-                    value: 'clear sci-fi',
-                  },
-                ],
-              },
-            ]}
-            canRefine={true}
-          />
-        )
-        .toJSON()
-    ).toMatchSnapshot());
-
-  describe('Panel compatibility', () => {
-    it('Should indicate when no more refinement', () => {
-      const canRefine = jest.fn();
-      const wrapper = mount(
-        <CurrentRefinements
-          refine={() => null}
-          items={[
-            {
-              label: 'Genre',
-              value: 'clear all genres',
-              items: [
-                {
-                  label: 'Sci-fi',
-                  value: 'clear sci-fi',
-                },
-              ],
-            },
-          ]}
-          canRefine={true}
-        />,
+  it('expect to render a list of current refinements', () => {
+    const props = {
+      ...defaultProps,
+      items: [
+        { label: 'color: Red', value: () => {} },
         {
-          context: { canRefine },
-          childContextTypes: { canRefine: PropTypes.func },
-        }
-      );
+          label: 'category:',
+          value: () => {},
+          items: [
+            { label: 'iPhone', value: () => {} },
+            { label: 'iPad', value: () => {} },
+          ],
+        },
+      ],
+    };
 
-      expect(canRefine.mock.calls).toHaveLength(1);
-      expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(
-        wrapper.find('.ais-CurrentRefinements__noRefinement')
-      ).toHaveLength(0);
+    const wrapper = shallow(<CurrentRefinements {...props} />);
 
-      wrapper.setProps({ canRefine: false });
+    expect(wrapper).toMatchSnapshot();
+  });
 
-      expect(canRefine.mock.calls).toHaveLength(2);
-      expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(
-        wrapper.find('.ais-CurrentRefinements__noRefinement')
-      ).toHaveLength(1);
-    });
+  it('expect to render a list without refinements', () => {
+    const props = {
+      ...defaultProps,
+      canRefine: false,
+    };
+
+    const wrapper = shallow(<CurrentRefinements {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('expect to render a list with a custom className', () => {
+    const props = {
+      ...defaultProps,
+      className: 'MyCustomCurrentRefinements',
+    };
+
+    const wrapper = shallow(<CurrentRefinements {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('expect to refine the "color" onClick', () => {
+    const value = () => {};
+    const props = {
+      ...defaultProps,
+      items: [
+        { label: 'color: Red', value },
+        {
+          label: 'category:',
+          value: () => {},
+          items: [
+            { label: 'iPhone', value: () => {} },
+            { label: 'iPad', value: () => {} },
+          ],
+        },
+      ],
+      refine: jest.fn(),
+    };
+
+    const wrapper = shallow(<CurrentRefinements {...props} />);
+
+    expect(props.refine).not.toHaveBeenCalled();
+
+    wrapper
+      .find('li')
+      .first()
+      .find('button')
+      .simulate('click');
+
+    expect(props.refine).toHaveBeenCalledWith(value);
+  });
+
+  it('expect to refine the "category: iPad" onClick', () => {
+    const value = () => {};
+    const props = {
+      ...defaultProps,
+      items: [
+        { label: 'color: Red', value: () => {} },
+        {
+          label: 'category:',
+          value: () => {},
+          items: [
+            { label: 'iPhone', value: () => {} },
+            { label: 'iPad', value },
+          ],
+        },
+      ],
+      refine: jest.fn(),
+    };
+
+    const wrapper = shallow(<CurrentRefinements {...props} />);
+
+    expect(props.refine).not.toHaveBeenCalled();
+
+    wrapper
+      .find('li')
+      .last()
+      .find('button')
+      .last()
+      .simulate('click');
+
+    expect(props.refine).toHaveBeenCalledWith(value);
+  });
+});
+
+describe('CurrentRefinements - Connected', () => {
+  const defaultProps = {
+    items: [
+      { label: 'color: Red', value: () => {} },
+      {
+        label: 'category:',
+        value: () => {},
+        items: [
+          { label: 'iPhone', value: () => {} },
+          { label: 'iPad', value: () => {} },
+        ],
+      },
+    ],
+    canRefine: true,
+    refine: () => {},
+  };
+
+  it('expect to render a list of current refinements', () => {
+    const props = {
+      ...defaultProps,
+    };
+
+    const wrapper = shallow(<Connected {...props} />).dive();
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('expect to render a list of current refinements with custom translations', () => {
+    const props = {
+      ...defaultProps,
+      translations: {
+        clearFilter: 'DELETE',
+      },
+    };
+
+    const wrapper = shallow(<Connected {...props} />).dive();
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

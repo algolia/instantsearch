@@ -21,7 +21,6 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
         PropTypes.node,
       ]),
       indexName: PropTypes.string.isRequired,
-      searchParameters: PropTypes.object,
       createURL: PropTypes.func,
       searchState: PropTypes.object,
       refresh: PropTypes.bool.isRequired,
@@ -68,7 +67,6 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
         <InstantSearch
           createURL={this.props.createURL}
           indexName={this.props.indexName}
-          searchParameters={this.props.searchParameters}
           searchState={this.props.searchState}
           onSearchStateChange={this.props.onSearchStateChange}
           onSearchParameters={this.props.onSearchParameters}

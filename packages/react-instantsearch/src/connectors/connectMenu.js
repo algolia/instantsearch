@@ -13,7 +13,7 @@ import {
 const namespace = 'menu';
 
 function getId(props) {
-  return props.attributeName;
+  return props.attribute;
 }
 
 function getCurrentRefinement(props, searchState, context) {
@@ -37,8 +37,8 @@ function getValue(name, props, searchState, context) {
   return name === currentRefinement ? '' : name;
 }
 
-function getLimit({ showMore, limitMin, limitMax }) {
-  return showMore ? limitMax : limitMin;
+function getLimit({ showMore, limit, showMoreLimit }) {
+  return showMore ? showMoreLimit : limit;
 }
 
 function refine(props, searchState, nextRefinement, context) {
@@ -58,15 +58,15 @@ const sortBy = ['count:desc', 'name:asc'];
  * connectMenu connector provides the logic to build a widget that will
  * give the user the ability to choose a single value for a specific facet.
  * @name connectMenu
- * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
+ * @requirements The attribute passed to the `attribute` prop must be present in "attributes for faceting"
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
  * @kind connector
- * @propType {string} attributeName - the name of the attribute in the record
+ * @propType {string} attribute - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
- * @propType {number} [limitMin=10] - the minimum number of diplayed items
- * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
+ * @propType {number} [limit=10] - the minimum number of diplayed items
+ * @propType {number} [showMoreLimit=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string} [defaultRefinement] - the value of the item selected by default
- * @propType {boolean} [withSearchBox=false] - allow search inside values
+ * @propType {boolean} [searchable=false] - allow search inside values
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
@@ -78,20 +78,19 @@ export default createConnector({
   displayName: 'AlgoliaMenu',
 
   propTypes: {
-    attributeName: PropTypes.string.isRequired,
+    attribute: PropTypes.string.isRequired,
     showMore: PropTypes.bool,
-    limitMin: PropTypes.number,
-    limitMax: PropTypes.number,
+    limit: PropTypes.number,
+    showMoreLimit: PropTypes.number,
     defaultRefinement: PropTypes.string,
     transformItems: PropTypes.func,
-    withSearchBox: PropTypes.bool,
-    searchForFacetValues: PropTypes.bool, // @deprecated
+    searchable: PropTypes.bool,
   },
 
   defaultProps: {
     showMore: false,
-    limitMin: 10,
-    limitMax: 20,
+    limit: 10,
+    showMoreLimit: 20,
   },
 
   getProvidedProps(
@@ -101,27 +100,20 @@ export default createConnector({
     meta,
     searchForFacetValuesResults
   ) {
-    const { attributeName } = props;
+    const { attribute, searchable } = props;
     const results = getResults(searchResults, this.context);
 
     const canRefine =
-      Boolean(results) && Boolean(results.getFacetByName(attributeName));
+      Boolean(results) && Boolean(results.getFacetByName(attribute));
 
     const isFromSearch = Boolean(
       searchForFacetValuesResults &&
-        searchForFacetValuesResults[attributeName] &&
+        searchForFacetValuesResults[attribute] &&
         searchForFacetValuesResults.query !== ''
     );
-    const withSearchBox = props.withSearchBox || props.searchForFacetValues;
-    if (process.env.NODE_ENV === 'development' && props.searchForFacetValues) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        'react-instantsearch: `searchForFacetValues` has been renamed to' +
-          '`withSearchBox`, this will break in the next major version.'
-      );
-    }
+
     // Search For Facet Values is not available with derived helper (used for multi index search)
-    if (props.withSearchBox && this.context.multiIndexContext) {
+    if (searchable && this.context.multiIndexContext) {
       throw new Error(
         'react-instantsearch: searching in *List is not available when used inside a' +
           ' multi index context'
@@ -137,20 +129,20 @@ export default createConnector({
           this.context
         ),
         isFromSearch,
-        withSearchBox,
+        searchable,
         canRefine,
       };
     }
 
     const items = isFromSearch
-      ? searchForFacetValuesResults[attributeName].map(v => ({
+      ? searchForFacetValuesResults[attribute].map(v => ({
           label: v.value,
           value: getValue(v.value, props, searchState, this.context),
           _highlightResult: { label: { value: v.highlighted } },
           count: v.count,
           isRefined: v.isRefined,
         }))
-      : results.getFacetValues(attributeName, { sortBy }).map(v => ({
+      : results.getFacetValues(attribute, { sortBy }).map(v => ({
           label: v.name,
           value: getValue(v.name, props, searchState, this.context),
           count: v.count,
@@ -158,21 +150,23 @@ export default createConnector({
         }));
 
     const sortedItems =
-      withSearchBox && !isFromSearch
+      searchable && !isFromSearch
         ? orderBy(
             items,
             ['isRefined', 'count', 'label'],
             ['desc', 'desc', 'asc']
           )
         : items;
+
     const transformedItems = props.transformItems
       ? props.transformItems(sortedItems)
       : sortedItems;
+
     return {
       items: transformedItems.slice(0, getLimit(props)),
       currentRefinement: getCurrentRefinement(props, searchState, this.context),
       isFromSearch,
-      withSearchBox,
+      searchable,
       canRefine: items.length > 0,
     };
   },
@@ -183,7 +177,7 @@ export default createConnector({
 
   searchForFacetValues(props, searchState, nextRefinement) {
     return {
-      facetName: props.attributeName,
+      facetName: props.attribute,
       query: nextRefinement,
       maxFacetHits: getLimit(props),
     };
@@ -194,7 +188,7 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    const { attributeName } = props;
+    const { attribute } = props;
 
     searchParameters = searchParameters.setQueryParameters({
       maxValuesPerFacet: Math.max(
@@ -203,7 +197,7 @@ export default createConnector({
       ),
     });
 
-    searchParameters = searchParameters.addDisjunctiveFacet(attributeName);
+    searchParameters = searchParameters.addDisjunctiveFacet(attribute);
 
     const currentRefinement = getCurrentRefinement(
       props,
@@ -212,7 +206,7 @@ export default createConnector({
     );
     if (currentRefinement !== null) {
       searchParameters = searchParameters.addDisjunctiveFacetRefinement(
-        attributeName,
+        attribute,
         currentRefinement
       );
     }
@@ -235,8 +229,8 @@ export default createConnector({
           ? []
           : [
               {
-                label: `${props.attributeName}: ${currentRefinement}`,
-                attributeName: props.attributeName,
+                label: `${props.attribute}: ${currentRefinement}`,
+                attribute: props.attribute,
                 value: nextState => refine(props, nextState, '', this.context),
                 currentRefinement,
               },

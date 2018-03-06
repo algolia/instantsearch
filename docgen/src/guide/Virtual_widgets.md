@@ -16,7 +16,7 @@ import {InstantSearch, SearchBox} from 'react-instantsearch/dom';
 import {connectMenu} from 'react-instantsearch/connectors';
 
 const VirtualMenu = connectMenu(() => null);
-const Hoodies = () => <VirtualMenu attributeName="clothes" defaultRefinement="hoodies"/>;
+const Hoodies = () => <VirtualMenu attribute="clothes" defaultRefinement="hoodies"/>;
 
 const App = () =>
   <InstantSearch
@@ -26,7 +26,7 @@ const App = () =>
   >
     <SearchBox defaultRefinement="hi" />
     <Hoodies/>
-    <Menu attributeName="fruits" defaultRefinement="Orange" />
+    <Menu attribute="fruits" defaultRefinement="Orange" />
   </InstantSearch>;
 ```
 In this case, we are using the `VirtualMenu` to pre refine our results (within the `clothes` search, only display `hoodies`). Think of the `VirtualMenu` as a hidden filter where we define attributes and values that will always be applied to our search results

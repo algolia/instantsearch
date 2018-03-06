@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch",
-  "version": "4.5.2",
+  "version": "5.0.0-beta.1",
   "description": "⚡ Lightning-fast search for React and React Native apps, by Algolia",
   "keywords": [
     "algolia",
@@ -39,7 +39,7 @@
     "enzyme-adapter-react-16": "1.1.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-native": "0.54.0",
+    "react-native": "0.51.0",
     "react-test-renderer": "16.2.0"
   }
 }

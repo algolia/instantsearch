@@ -1,6 +1,6 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import { SortBy } from '../packages/react-instantsearch/dom';
+import { Panel, SortBy } from '../packages/react-instantsearch/dom';
 import { displayName, filterProps, WrapWithHits } from './util';
 import JSXAddon from 'storybook-addon-jsx';
 
@@ -40,6 +40,27 @@ stories
           ]}
           defaultRefinement="ikea"
         />
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'with Panel',
+    () => (
+      <WrapWithHits linkedStoryGroup="SortBy">
+        <Panel header="Sort By" footer="Footer">
+          <SortBy
+            items={[
+              { value: 'ikea', label: 'Featured' },
+              { value: 'ikea_price_asc', label: 'Price asc.' },
+              { value: 'ikea_price_desc', label: 'Price desc.' },
+            ]}
+            defaultRefinement="ikea"
+          />
+        </Panel>
       </WrapWithHits>
     ),
     {

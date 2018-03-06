@@ -1,8 +1,0 @@
-.ais-ClearAll__root {
-  @include buttonLink();
-  @include buttonSecondary();
-}
-
-.ais-ClearAll__root:disabled {
-  @include disabled();
-}

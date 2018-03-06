@@ -17,7 +17,6 @@ Object {
       },
     },
   },
-  "searchParameters": undefined,
   "searchState": undefined,
   "stalledSearchDelay": 200,
 }
@@ -35,7 +34,6 @@ Object {
   "root": Object {
     "Root": "div",
   },
-  "searchParameters": undefined,
   "searchState": undefined,
   "stalledSearchDelay": 200,
 }

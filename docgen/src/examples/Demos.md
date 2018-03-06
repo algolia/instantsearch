@@ -35,6 +35,12 @@ examples: [{
     description: 'This demos shows the usage of react-instantsearch in the context of a home renting website',
     sourceCodeUrl: 'https://github.com/algolia/react-instantsearch/tree/master/docgen/src/examples/tourism',
     demoUrl: 'examples/tourism'
+  }, {
+    id: 'default-theme',
+    title: 'Default theme',
+    description: 'This demos shows the usage of react-instantsearch in the context of a home renting website',
+    sourceCodeUrl: 'https://github.com/algolia/react-instantsearch/tree/master/docgen/src/examples/default-theme',
+    demoUrl: 'examples/default-theme'
   }]
 ---
 

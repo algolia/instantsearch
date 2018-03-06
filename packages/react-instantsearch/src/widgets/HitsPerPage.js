@@ -1,19 +1,21 @@
-import connectHitsPerPage from '../connectors/connectHitsPerPage.js';
-import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
+import connectHitsPerPage from '../connectors/connectHitsPerPage';
+import HitsPerPage from '../components/HitsPerPage';
 
 /**
  * The HitsPerPage widget displays a dropdown menu to let the user change the number
  * of displayed hits.
  *
  * If you only want to configure the number of hits per page without
- * displaying a widget, you should use the `<Configure hitsPerPage={20} />` widget. See [`<Configure /> documentation`](widgets/Configure.html)
+ * displaying a widget, you should use the `<Configure hitsPerPage={20} />` widget. See [`<Configure />` documentation](widgets/Configure.html)
  *
  * @name HitsPerPage
  * @kind widget
  * @propType {{value: number, label: string}[]} items - List of available options.
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
- * @themeKey ais-HitsPerPage__root - the root of the component.
+ * @themeKey ais-HitsPerPage - the root div of the widget
+ * @themeKey ais-HitsPerPage-select - the select
+ * @themeKey ais-HitsPerPage-option - the select option
  * @example
  * import React from 'react';
 
@@ -34,4 +36,5 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  *   );
  * }
  */
-export default connectHitsPerPage(HitsPerPageSelectComponent);
+
+export default connectHitsPerPage(HitsPerPage);

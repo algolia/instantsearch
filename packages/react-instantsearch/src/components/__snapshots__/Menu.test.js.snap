@@ -2,50 +2,20 @@
 
 exports[`Menu Menu with search inside items but no search results 1`] = `
 <div
-  className="ais-Menu__root"
+  className="ais-Menu"
 >
   <div
-    className="ais-Menu__SearchBox"
+    className="ais-Menu-searchBox"
   >
-    <form
-      action=""
-      className="ais-SearchBox__root"
-      noValidate={true}
-      onReset={[Function]}
-      onSubmit={[Function]}
-      role="search"
+    <div
+      className="ais-SearchBox"
     >
-      <svg
-        style={
-          Object {
-            "display": "none",
-          }
-        }
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <symbol
-          id="sbx-icon-search-13"
-          viewBox="0 0 40 40"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-            fillRule="evenodd"
-          />
-        </symbol>
-        <symbol
-          id="sbx-icon-clear-3"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-            fillRule="evenodd"
-          />
-        </symbol>
-      </svg>
-      <div
-        className="ais-SearchBox__wrapper"
+      <form
+        action=""
+        className="ais-SearchBox-form"
+        noValidate={true}
+        onReset={[Function]}
+        onSubmit={[Function]}
         role="search"
       >
         <input
@@ -53,7 +23,7 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
           autoComplete="off"
           autoCorrect="off"
           autoFocus={false}
-          className="ais-SearchBox__input"
+          className="ais-SearchBox-input"
           maxLength="512"
           onChange={[Function]}
           placeholder="Search here…"
@@ -63,155 +33,129 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
           value=""
         />
         <button
-          className="ais-SearchBox__submit"
-          hidden={false}
+          className="ais-SearchBox-submit"
           title="Submit your search query."
           type="submit"
         >
           <svg
-            height="1em"
-            role="img"
-            width="1em"
+            className="ais-SearchBox-submitIcon"
+            height="10"
+            viewBox="0 0 40 40"
+            width="10"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <use
-              xlinkHref="#sbx-icon-search-13"
+            <path
+              d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
             />
           </svg>
         </button>
         <button
-          className="ais-SearchBox__reset"
+          className="ais-SearchBox-reset"
+          hidden={true}
           title="Clear the search query."
           type="reset"
         >
           <svg
-            height="1em"
-            role="img"
-            width="1em"
+            className="ais-SearchBox-resetIcon"
+            height="10"
+            viewBox="0 0 20 20"
+            width="10"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <use
-              xlinkHref="#sbx-icon-clear-3"
+            <path
+              d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
             />
           </svg>
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-  <div
-    className="ais-Menu__items"
+  <ul
+    className="ais-Menu-list"
   >
-    <div
-      className="ais-Menu__item ais-Menu__itemSelected"
+    <li
+      className="ais-Menu-item ais-Menu-item--selected"
     >
       <a
-        className="ais-Menu__itemLink ais-Menu__itemLinkSelected"
+        className="ais-Menu-link"
         href="#"
         onClick={[Function]}
       >
         <span
-          className="ais-Menu__itemLabel ais-Menu__itemLabelSelected"
+          className="ais-Menu-label"
         >
           white
         </span>
          
         <span
-          className="ais-Menu__itemCount ais-Menu__itemCountSelected"
+          className="ais-Menu-count"
         >
           10
         </span>
       </a>
-    </div>
-    <div
-      className="ais-Menu__item"
+    </li>
+    <li
+      className="ais-Menu-item"
     >
       <a
-        className="ais-Menu__itemLink"
+        className="ais-Menu-link"
         href="#"
         onClick={[Function]}
       >
         <span
-          className="ais-Menu__itemLabel"
+          className="ais-Menu-label"
         >
           black
         </span>
          
         <span
-          className="ais-Menu__itemCount"
+          className="ais-Menu-count"
         >
           20
         </span>
       </a>
-    </div>
-    <div
-      className="ais-Menu__item"
+    </li>
+    <li
+      className="ais-Menu-item"
     >
       <a
-        className="ais-Menu__itemLink"
+        className="ais-Menu-link"
         href="#"
         onClick={[Function]}
       >
         <span
-          className="ais-Menu__itemLabel"
+          className="ais-Menu-label"
         >
           blue
         </span>
          
         <span
-          className="ais-Menu__itemCount"
+          className="ais-Menu-count"
         >
           30
         </span>
       </a>
-    </div>
-  </div>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`Menu Menu with search inside items with search results 1`] = `
 <div
-  className="ais-Menu__root"
+  className="ais-Menu"
 >
   <div
-    className="ais-Menu__SearchBox"
+    className="ais-Menu-searchBox"
   >
-    <form
-      action=""
-      className="ais-SearchBox__root"
-      noValidate={true}
-      onReset={[Function]}
-      onSubmit={[Function]}
-      role="search"
+    <div
+      className="ais-SearchBox"
     >
-      <svg
-        style={
-          Object {
-            "display": "none",
-          }
-        }
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <symbol
-          id="sbx-icon-search-13"
-          viewBox="0 0 40 40"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-            fillRule="evenodd"
-          />
-        </symbol>
-        <symbol
-          id="sbx-icon-clear-3"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-            fillRule="evenodd"
-          />
-        </symbol>
-      </svg>
-      <div
-        className="ais-SearchBox__wrapper"
+      <form
+        action=""
+        className="ais-SearchBox-form"
+        noValidate={true}
+        onReset={[Function]}
+        onSubmit={[Function]}
         role="search"
       >
         <input
@@ -219,7 +163,7 @@ exports[`Menu Menu with search inside items with search results 1`] = `
           autoComplete="off"
           autoCorrect="off"
           autoFocus={false}
-          className="ais-SearchBox__input"
+          className="ais-SearchBox-input"
           maxLength="512"
           onChange={[Function]}
           placeholder="Search here…"
@@ -229,111 +173,85 @@ exports[`Menu Menu with search inside items with search results 1`] = `
           value=""
         />
         <button
-          className="ais-SearchBox__submit"
-          hidden={false}
+          className="ais-SearchBox-submit"
           title="Submit your search query."
           type="submit"
         >
           <svg
-            height="1em"
-            role="img"
-            width="1em"
+            className="ais-SearchBox-submitIcon"
+            height="10"
+            viewBox="0 0 40 40"
+            width="10"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <use
-              xlinkHref="#sbx-icon-search-13"
+            <path
+              d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
             />
           </svg>
         </button>
         <button
-          className="ais-SearchBox__reset"
+          className="ais-SearchBox-reset"
+          hidden={true}
           title="Clear the search query."
           type="reset"
         >
           <svg
-            height="1em"
-            role="img"
-            width="1em"
+            className="ais-SearchBox-resetIcon"
+            height="10"
+            viewBox="0 0 20 20"
+            width="10"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <use
-              xlinkHref="#sbx-icon-clear-3"
+            <path
+              d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
             />
           </svg>
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-  <div
-    className="ais-Menu__items"
+  <ul
+    className="ais-Menu-list"
   >
-    <div
-      className="ais-Menu__item ais-Menu__itemSelected"
+    <li
+      className="ais-Menu-item ais-Menu-item--selected"
     >
       <a
-        className="ais-Menu__itemLink ais-Menu__itemLinkSelected"
+        className="ais-Menu-link"
         href="#"
         onClick={[Function]}
       >
         <span
-          className="ais-Menu__itemLabel ais-Menu__itemLabelSelected"
+          className="ais-Menu-label"
         />
          
         <span
-          className="ais-Menu__itemCount ais-Menu__itemCountSelected"
+          className="ais-Menu-count"
         >
           10
         </span>
       </a>
-    </div>
-  </div>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`Menu applies translations 1`] = `
 <div
-  className="ais-Menu__root"
+  className="ais-Menu"
 >
   <div
-    className="ais-Menu__SearchBox"
+    className="ais-Menu-searchBox"
   >
-    <form
-      action=""
-      className="ais-SearchBox__root"
-      noValidate={true}
-      onReset={[Function]}
-      onSubmit={[Function]}
-      role="search"
+    <div
+      className="ais-SearchBox"
     >
-      <svg
-        style={
-          Object {
-            "display": "none",
-          }
-        }
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <symbol
-          id="sbx-icon-search-13"
-          viewBox="0 0 40 40"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-            fillRule="evenodd"
-          />
-        </symbol>
-        <symbol
-          id="sbx-icon-clear-3"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-            fillRule="evenodd"
-          />
-        </symbol>
-      </svg>
-      <div
-        className="ais-SearchBox__wrapper"
+      <form
+        action=""
+        className="ais-SearchBox-form"
+        noValidate={true}
+        onReset={[Function]}
+        onSubmit={[Function]}
         role="search"
       >
         <input
@@ -341,7 +259,7 @@ exports[`Menu applies translations 1`] = `
           autoComplete="off"
           autoCorrect="off"
           autoFocus={false}
-          className="ais-SearchBox__input"
+          className="ais-SearchBox-input"
           maxLength="512"
           onChange={[Function]}
           placeholder="placeholder"
@@ -351,87 +269,91 @@ exports[`Menu applies translations 1`] = `
           value=""
         />
         <button
-          className="ais-SearchBox__submit"
-          hidden={false}
+          className="ais-SearchBox-submit"
           title="Submit your search query."
           type="submit"
         >
           <svg
-            height="1em"
-            role="img"
-            width="1em"
+            className="ais-SearchBox-submitIcon"
+            height="10"
+            viewBox="0 0 40 40"
+            width="10"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <use
-              xlinkHref="#sbx-icon-search-13"
+            <path
+              d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
             />
           </svg>
         </button>
         <button
-          className="ais-SearchBox__reset"
+          className="ais-SearchBox-reset"
+          hidden={true}
           title="Clear the search query."
           type="reset"
         >
           <svg
-            height="1em"
-            role="img"
-            width="1em"
+            className="ais-SearchBox-resetIcon"
+            height="10"
+            viewBox="0 0 20 20"
+            width="10"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <use
-              xlinkHref="#sbx-icon-clear-3"
+            <path
+              d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
             />
           </svg>
         </button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-  <div
-    className="ais-Menu__items"
+  <ul
+    className="ais-Menu-list"
   >
-    <div
-      className="ais-Menu__item"
+    <li
+      className="ais-Menu-item"
     >
       <a
-        className="ais-Menu__itemLink"
+        className="ais-Menu-link"
         href="#"
         onClick={[Function]}
       >
         <span
-          className="ais-Menu__itemLabel"
+          className="ais-Menu-label"
         >
           white
         </span>
          
         <span
-          className="ais-Menu__itemCount"
+          className="ais-Menu-count"
         >
           10
         </span>
       </a>
-    </div>
-    <div
-      className="ais-Menu__item"
+    </li>
+    <li
+      className="ais-Menu-item"
     >
       <a
-        className="ais-Menu__itemLink"
+        className="ais-Menu-link"
         href="#"
         onClick={[Function]}
       >
         <span
-          className="ais-Menu__itemLabel"
+          className="ais-Menu-label"
         >
           black
         </span>
          
         <span
-          className="ais-Menu__itemCount"
+          className="ais-Menu-count"
         >
           20
         </span>
       </a>
-    </div>
-  </div>
+    </li>
+  </ul>
   <button
-    className="ais-Menu__showMore"
+    className="ais-Menu-showMore"
     disabled={false}
     onClick={[Function]}
   >
@@ -442,56 +364,116 @@ exports[`Menu applies translations 1`] = `
 
 exports[`Menu default menu 1`] = `
 <div
-  className="ais-Menu__root"
+  className="ais-Menu"
 >
-  <div
-    className="ais-Menu__items"
+  <ul
+    className="ais-Menu-list"
   >
-    <div
-      className="ais-Menu__item"
+    <li
+      className="ais-Menu-item"
     >
       <a
-        className="ais-Menu__itemLink"
+        className="ais-Menu-link"
         href="#"
         onClick={[Function]}
       >
         <span
-          className="ais-Menu__itemLabel"
+          className="ais-Menu-label"
         >
           white
         </span>
          
         <span
-          className="ais-Menu__itemCount"
+          className="ais-Menu-count"
         >
           10
         </span>
       </a>
-    </div>
-    <div
-      className="ais-Menu__item"
+    </li>
+    <li
+      className="ais-Menu-item"
     >
       <a
-        className="ais-Menu__itemLink"
+        className="ais-Menu-link"
         href="#"
         onClick={[Function]}
       >
         <span
-          className="ais-Menu__itemLabel"
+          className="ais-Menu-label"
         >
           black
         </span>
          
         <span
-          className="ais-Menu__itemCount"
+          className="ais-Menu-count"
         >
           20
         </span>
       </a>
-    </div>
-  </div>
+    </li>
+  </ul>
   <button
-    className="ais-Menu__showMore"
+    className="ais-Menu-showMore"
+    disabled={false}
+    onClick={[Function]}
+  >
+    Show more
+  </button>
+</div>
+`;
+
+exports[`Menu default menu with custom className 1`] = `
+<div
+  className="ais-Menu MyCustomMenu"
+>
+  <ul
+    className="ais-Menu-list"
+  >
+    <li
+      className="ais-Menu-item"
+    >
+      <a
+        className="ais-Menu-link"
+        href="#"
+        onClick={[Function]}
+      >
+        <span
+          className="ais-Menu-label"
+        >
+          white
+        </span>
+         
+        <span
+          className="ais-Menu-count"
+        >
+          10
+        </span>
+      </a>
+    </li>
+    <li
+      className="ais-Menu-item"
+    >
+      <a
+        className="ais-Menu-link"
+        href="#"
+        onClick={[Function]}
+      >
+        <span
+          className="ais-Menu-label"
+        >
+          black
+        </span>
+         
+        <span
+          className="ais-Menu-count"
+        >
+          20
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button
+    className="ais-Menu-showMore"
     disabled={false}
     onClick={[Function]}
   >

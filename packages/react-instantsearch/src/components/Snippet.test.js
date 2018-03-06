@@ -23,18 +23,19 @@ describe('Snippet', () => {
       },
     };
 
-    const highlight = ({ hit, attributeName, highlightProperty }) =>
+    const highlight = ({ hit, attribute, highlightProperty }) =>
       parseAlgoliaHit({
         preTag: '<ais-highlight>',
         postTag: '</ais-highlight>',
-        attributeName,
+        attribute,
         hit,
         highlightProperty,
       });
 
     const tree = renderer.create(
       <Snippet
-        attributeName="deep.attribute.value"
+        cx={(...x) => x.join(' ')}
+        attribute="deep.attribute.value"
         hit={hitFromAPI}
         highlight={highlight}
       />
@@ -61,21 +62,62 @@ describe('Snippet', () => {
       },
     };
 
-    const highlight = ({ hit, attributeName, highlightProperty }) =>
+    const highlight = ({ hit, attribute, highlightProperty }) =>
       parseAlgoliaHit({
         preTag: '<ais-highlight>',
         postTag: '</ais-highlight>',
-        attributeName,
+        attribute,
         hit,
         highlightProperty,
       });
 
     const tree = renderer.create(
       <Snippet
-        attributeName="deep.attribute.value"
+        cx={(...x) => x.join(' ')}
+        attribute="deep.attribute.value"
         hit={hitFromAPI}
         highlight={highlight}
         tagName="strong"
+      />
+    );
+    expect(tree.toJSON()).toMatchSnapshot();
+  });
+
+  it('renders a hit with a custom className', () => {
+    const hitFromAPI = {
+      objectID: 0,
+      deep: { attribute: { value: 'awesome highlighted hit!' } },
+      _snippetResult: {
+        deep: {
+          attribute: {
+            value: {
+              value:
+                'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
+              fullyHighlighted: true,
+              matchLevel: 'full',
+              matchedWords: [''],
+            },
+          },
+        },
+      },
+    };
+
+    const highlight = ({ hit, attribute, highlightProperty }) =>
+      parseAlgoliaHit({
+        preTag: '<ais-highlight>',
+        postTag: '</ais-highlight>',
+        attribute,
+        hit,
+        highlightProperty,
+      });
+
+    const tree = renderer.create(
+      <Snippet
+        cx={(...x) => x.join(' ')}
+        className="MyCustomSnippet"
+        attribute="deep.attribute.value"
+        hit={hitFromAPI}
+        highlight={highlight}
       />
     );
     expect(tree.toJSON()).toMatchSnapshot();

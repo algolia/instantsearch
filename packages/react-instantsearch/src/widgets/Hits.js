@@ -1,5 +1,5 @@
-import connectHits from '../connectors/connectHits.js';
-import HitsComponent from '../components/Hits.js';
+import connectHits from '../connectors/connectHits';
+import Hits from '../components/Hits';
 
 /**
  * Displays a list of hits.
@@ -12,7 +12,9 @@ import HitsComponent from '../components/Hits.js';
  * @propType {Component} [hitComponent] - Component used for rendering each hit from
  *   the results. If it is not provided the rendering defaults to displaying the
  *   hit in its JSON form. The component will be called with a `hit` prop.
- * @themeKey ais-Hits__root - the root of the component
+ * @themeKey ais-Hits - the root div of the widget
+ * @themeKey ais-Hits-list - the list of results
+ * @themeKey ais-Hits-item - the hit list item
  * @example
  * import React from 'react';
 
@@ -30,4 +32,5 @@ import HitsComponent from '../components/Hits.js';
  *   );
  * }
  */
-export default connectHits(HitsComponent);
+
+export default connectHits(Hits);

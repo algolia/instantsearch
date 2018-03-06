@@ -1,8 +1,8 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
 import {
-  RefinementList,
   Panel,
+  RefinementList,
   SearchBox,
 } from '../packages/react-instantsearch/dom';
 import { boolean, number, array } from '@storybook/addon-knobs';
@@ -19,7 +19,7 @@ stories
     'default',
     () => (
       <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
-        <RefinementList attributeName="category" />
+        <RefinementList attribute="category" />
       </WrapWithHits>
     ),
     {
@@ -31,10 +31,7 @@ stories
     'with selected item',
     () => (
       <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
-        <RefinementList
-          attributeName="category"
-          defaultRefinement={['Dining']}
-        />
+        <RefinementList attribute="category" defaultRefinement={['Dining']} />
       </WrapWithHits>
     ),
     {
@@ -47,9 +44,9 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
         <RefinementList
-          attributeName="category"
-          limitMin={2}
-          limitMax={5}
+          attribute="category"
+          limit={2}
+          showMoreLimit={5}
           showMore={true}
         />
       </WrapWithHits>
@@ -63,7 +60,7 @@ stories
     'with search inside items',
     () => (
       <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
-        <RefinementList attributeName="category" withSearchBox />
+        <RefinementList attribute="category" searchable />
       </WrapWithHits>
     ),
     {
@@ -76,7 +73,7 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
         <RefinementList
-          attributeName="category"
+          attribute="category"
           transformItems={items =>
             orderBy(items, ['label', 'count'], ['asc', 'desc'])
           }
@@ -89,11 +86,11 @@ stories
     }
   )
   .addWithJSX(
-    'with panel',
+    'with Panel',
     () => (
       <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
-        <Panel title="Category">
-          <RefinementList attributeName="category" />
+        <Panel header="Refinement List" footer="Footer">
+          <RefinementList attribute="category" />
         </Panel>
       </WrapWithHits>
     ),
@@ -103,19 +100,20 @@ stories
     }
   )
   .addWithJSX(
-    'with panel but no refinement',
+    'with Panel but no refinement',
     () => (
       <WrapWithHits
         searchBox={false}
         linkedStoryGroup="RefinementList"
         hasPlayground={true}
       >
-        <Panel title="Category">
-          <RefinementList attributeName="category" />
-          <div style={{ display: 'none' }}>
-            <SearchBox defaultRefinement="ds" />
-          </div>
+        <Panel header="Refinement List" footer="Footer">
+          <RefinementList attribute="category" />
         </Panel>
+
+        <div style={{ display: 'none' }}>
+          <SearchBox defaultRefinement="ds" />
+        </div>
       </WrapWithHits>
     ),
     {
@@ -128,13 +126,13 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="RefinementList">
         <RefinementList
-          attributeName="category"
+          attribute="category"
           defaultRefinement={array('defaultSelectedItem', [
             'Decoration',
             'Lighting',
           ])}
-          limitMin={number('limitMin', 10)}
-          limitMax={number('limitMax', 20)}
+          limit={number('limit', 10)}
+          showMoreLimit={number('showMoreLimit', 20)}
           showMore={boolean('showMore', true)}
         />
       </WrapWithHits>

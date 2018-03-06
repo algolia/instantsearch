@@ -60,7 +60,6 @@ class InstantSearch extends Component {
 
     this.aisManager = createInstantSearchManager({
       indexName: props.indexName,
-      searchParameters: props.searchParameters,
       algoliaClient: props.algoliaClient,
       initialState,
       resultsState: props.resultsState,
@@ -180,8 +179,6 @@ InstantSearch.propTypes = {
   indexName: PropTypes.string.isRequired,
 
   algoliaClient: PropTypes.object.isRequired,
-
-  searchParameters: PropTypes.object,
 
   createURL: PropTypes.func,
 

@@ -14,7 +14,7 @@ describe('connectRange', () => {
 
     it('provides the correct props to the component', () => {
       props = getProvidedProps(
-        { attributeName: 'ok', min: 5, max: 10, precision: 2 },
+        { attribute: 'ok', min: 5, max: 10, precision: 2 },
         {},
         {}
       );
@@ -38,7 +38,7 @@ describe('connectRange', () => {
       };
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 2,
         },
         {},
@@ -64,7 +64,7 @@ describe('connectRange', () => {
       };
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 0,
         },
         {},
@@ -90,7 +90,7 @@ describe('connectRange', () => {
       };
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 2,
           min: 0.1,
           max: 9.9,
@@ -118,7 +118,7 @@ describe('connectRange', () => {
       };
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 0,
         },
         {},
@@ -144,7 +144,7 @@ describe('connectRange', () => {
       };
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 1,
         },
         {},
@@ -170,7 +170,7 @@ describe('connectRange', () => {
       };
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 2,
         },
         {},
@@ -196,7 +196,7 @@ describe('connectRange', () => {
       };
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 3,
         },
         {},
@@ -219,7 +219,7 @@ describe('connectRange', () => {
       };
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 2,
         },
         {},
@@ -238,7 +238,7 @@ describe('connectRange', () => {
       });
 
       props = getProvidedProps(
-        { attributeName: 'ok', precision: 2 },
+        { attribute: 'ok', precision: 2 },
         { ok: { min: 6, max: 9 } },
         {}
       );
@@ -256,7 +256,7 @@ describe('connectRange', () => {
 
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           min: 5,
           max: 10,
           precision: 2,
@@ -277,7 +277,7 @@ describe('connectRange', () => {
 
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           min: 5,
           max: 10,
           precision: 2,
@@ -298,7 +298,7 @@ describe('connectRange', () => {
 
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           min: 5,
           max: 10,
           defaultRefinement: { min: 6, max: 9 },
@@ -318,7 +318,7 @@ describe('connectRange', () => {
 
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 2,
         },
         {},
@@ -341,7 +341,7 @@ describe('connectRange', () => {
       expect(() =>
         getProvidedProps(
           {
-            attributeName: 'ok',
+            attribute: 'ok',
             min: 5,
             max: 10,
             defaultRefinement: { min: 4, max: 9 },
@@ -355,7 +355,7 @@ describe('connectRange', () => {
       expect(() =>
         getProvidedProps(
           {
-            attributeName: 'ok',
+            attribute: 'ok',
             min: 5,
             max: 10,
             defaultRefinement: { min: 6, max: 11 },
@@ -373,7 +373,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'ok' },
+        { attribute: 'ok' },
         { otherKey: 'val', range: { otherKey: { min: 1, max: 2 } } },
         { min: 3, max: 5 }
       );
@@ -391,7 +391,7 @@ describe('connectRange', () => {
             ...context,
             _currentRange: { min: 0, max: 100 },
           },
-          { attributeName: 'ok' },
+          { attribute: 'ok' },
           { otherKey: 'val', range: { otherKey: { min: 1, max: 2 } } },
           { min: NaN, max: 5 }
         );
@@ -406,7 +406,7 @@ describe('connectRange', () => {
             ...context,
             _currentRange: { min: 0, max: 100 },
           },
-          { attributeName: 'ok' },
+          { attribute: 'ok' },
           { otherKey: 'val', range: { otherKey: { min: 1, max: 2 } } },
           { min: null, max: 5 }
         );
@@ -426,7 +426,7 @@ describe('connectRange', () => {
           },
         },
         new SearchParameters(),
-        { attributeName: 'facet' },
+        { attribute: 'facet' },
         { range: { facet: { min: 10, max: 30 } } }
       );
 
@@ -444,7 +444,7 @@ describe('connectRange', () => {
           },
         },
         new SearchParameters(),
-        { attributeName: 'facet', min: 10, max: 30 },
+        { attribute: 'facet', min: 10, max: 30 },
         {}
       );
 
@@ -460,7 +460,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'wot' },
+        { attribute: 'wot' },
         { range: { wot: { min: 5 } } }
       );
       expect(metadata).toEqual({
@@ -469,7 +469,7 @@ describe('connectRange', () => {
         items: [
           {
             label: '5 <= wot',
-            attributeName: 'wot',
+            attribute: 'wot',
             currentRefinement: { min: 5, max: 100 },
             // Ignore clear, we test it later
             value: metadata.items[0].value,
@@ -495,7 +495,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'wot' },
+        { attribute: 'wot' },
         { range: { wot: { max: 10 } } }
       );
       expect(metadata).toEqual({
@@ -504,7 +504,7 @@ describe('connectRange', () => {
         items: [
           {
             label: 'wot <= 10',
-            attributeName: 'wot',
+            attribute: 'wot',
             currentRefinement: { min: 0, max: 10 },
             value: metadata.items[0].value,
           },
@@ -516,7 +516,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'wot' },
+        { attribute: 'wot' },
         { range: { wot: { min: 5, max: 10 } } }
       );
       expect(metadata).toEqual({
@@ -525,7 +525,7 @@ describe('connectRange', () => {
         items: [
           {
             label: '5 <= wot <= 10',
-            attributeName: 'wot',
+            attribute: 'wot',
             currentRefinement: { min: 5, max: 10 },
             value: metadata.items[0].value,
           },
@@ -537,7 +537,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'wot' },
+        { attribute: 'wot' },
         { range: { wot: { min: 0, max: 100 } } }
       );
       expect(metadata).toEqual({
@@ -553,7 +553,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'one' },
+        { attribute: 'one' },
         { range: { one: { min: 5 }, two: { max: 4 } } }
       );
 
@@ -577,7 +577,7 @@ describe('connectRange', () => {
 
     it('should return the right searchState when clean up', () => {
       let searchState = cleanUp(
-        { attributeName: 'name' },
+        { attribute: 'name' },
         {
           range: { name: 'searchState', name2: 'searchState' },
           another: { searchState: 'searchState' },
@@ -588,7 +588,7 @@ describe('connectRange', () => {
         another: { searchState: 'searchState' },
       });
 
-      searchState = cleanUp({ attributeName: 'name2' }, searchState);
+      searchState = cleanUp({ attribute: 'name2' }, searchState);
       expect(searchState).toEqual({
         range: {},
         another: { searchState: 'searchState' },
@@ -619,7 +619,7 @@ describe('connectRange', () => {
         },
       };
       props = getProvidedProps(
-        { attributeName: 'ok', precision: 2 },
+        { attribute: 'ok', precision: 2 },
         {},
         { results }
       );
@@ -634,7 +634,7 @@ describe('connectRange', () => {
 
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           min: 5,
           max: 10,
           precision: 2,
@@ -655,7 +655,7 @@ describe('connectRange', () => {
 
       props = getProvidedProps(
         {
-          attributeName: 'ok',
+          attribute: 'ok',
           precision: 2,
         },
         {},
@@ -684,7 +684,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'ok' },
+        { attribute: 'ok' },
         {
           otherKey: 'val',
           indices: { first: { range: { otherKey: { min: 1, max: 2 } } } },
@@ -709,7 +709,7 @@ describe('connectRange', () => {
           },
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'ok' },
+        { attribute: 'ok' },
         {
           otherKey: 'val',
           indices: { first: { range: { otherKey: { min: 1, max: 2 } } } },
@@ -728,7 +728,7 @@ describe('connectRange', () => {
     it('refines the corresponding numeric facet', () => {
       params = getSearchParameters(
         new SearchParameters(),
-        { attributeName: 'facet' },
+        { attribute: 'facet' },
         { indices: { first: { range: { facet: { min: 10, max: 30 } } } } }
       );
       expect(params.getNumericRefinements('facet')).toEqual({
@@ -743,7 +743,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'wot' },
+        { attribute: 'wot' },
         { indices: { first: { range: { wot: { min: 5 } } } } }
       );
       expect(metadata).toEqual({
@@ -752,7 +752,7 @@ describe('connectRange', () => {
         items: [
           {
             label: '5 <= wot',
-            attributeName: 'wot',
+            attribute: 'wot',
             currentRefinement: { min: 5, max: 100 },
             // Ignore clear, we test it later
             value: metadata.items[0].value,
@@ -782,7 +782,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'wot' },
+        { attribute: 'wot' },
         { indices: { first: { range: { wot: { max: 10 } } } } }
       );
       expect(metadata).toEqual({
@@ -791,7 +791,7 @@ describe('connectRange', () => {
         items: [
           {
             label: 'wot <= 10',
-            attributeName: 'wot',
+            attribute: 'wot',
             currentRefinement: { min: 0, max: 10 },
             value: metadata.items[0].value,
           },
@@ -803,7 +803,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'wot' },
+        { attribute: 'wot' },
         { indices: { first: { range: { wot: { max: 100 } } } } }
       );
       expect(metadata).toEqual({
@@ -819,7 +819,7 @@ describe('connectRange', () => {
           ...context,
           _currentRange: { min: 0, max: 100 },
         },
-        { attributeName: 'one' },
+        { attribute: 'one' },
         { indices: { first: { range: { one: { min: 5 }, two: { max: 4 } } } } }
       );
 
@@ -847,7 +847,7 @@ describe('connectRange', () => {
 
     it('should return the right searchState when clean up', () => {
       let searchState = cleanUp(
-        { attributeName: 'name' },
+        { attribute: 'name' },
         {
           indices: {
             first: { range: { name: 'searchState', name2: 'searchState' } },
@@ -860,7 +860,7 @@ describe('connectRange', () => {
         another: { searchState: 'searchState' },
       });
 
-      searchState = cleanUp({ attributeName: 'name2' }, searchState);
+      searchState = cleanUp({ attribute: 'name2' }, searchState);
       expect(searchState).toEqual({
         another: { searchState: 'searchState' },
         indices: { first: { range: {} } },
@@ -876,7 +876,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -926,7 +926,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -976,7 +976,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -1026,7 +1026,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
         min: 10,
       };
 
@@ -1075,7 +1075,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
         max: 90,
       };
 
@@ -1124,7 +1124,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
         min: 10,
       };
 
@@ -1179,7 +1179,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
         max: 90,
       };
 
@@ -1234,7 +1234,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -1288,7 +1288,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -1342,7 +1342,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -1396,7 +1396,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -1450,7 +1450,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -1504,7 +1504,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {
@@ -1558,7 +1558,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {};
@@ -1584,7 +1584,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
       };
 
       const searchState = {};
@@ -1610,7 +1610,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
         min: 10,
       };
 
@@ -1637,7 +1637,7 @@ describe('connectRange', () => {
       };
 
       const propsForRefine = {
-        attributeName: 'ok',
+        attribute: 'ok',
         max: 100,
       };
 
