@@ -24,7 +24,7 @@ const App = () =>
     indexName="..."
   >
     <SearchBox defaultRefinement="hi" />
-    <Menu attributeName="fruits" defaultRefinement="Orange" />
+    <Menu attribute="fruits" defaultRefinement="Orange" />
   </InstantSearch>;
 ```
 
@@ -55,8 +55,8 @@ const App = () =>
            transformItems={items => items.filter(item => item.currentRefinement !== 'Orange')}
         />
         <SearchBox/>
-        <VirtualMenu attributeName="fruits" defaultRefinement={'Orange'} />
-        <Menu attributeName="origin" defaultRefinement={'Spain'} />
+        <VirtualMenu attribute="fruits" defaultRefinement={'Orange'} />
+        <Menu attribute="origin" defaultRefinement={'Spain'} />
     </div>
   </InstantSearch>;
 ```

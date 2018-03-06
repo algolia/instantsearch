@@ -45,8 +45,8 @@ function refine(props, searchState, nextPage, context) {
  * @propType {boolean} [showLast=false] - Display the last page link.
  * @propType {boolean} [showPrevious=true] - Display the previous page link.
  * @propType {boolean} [showNext=true] - Display the next page link.
- * @propType {number} [pagesPadding=3] - How many page links to display around the current page.
- * @propType {number} [maxPages=Infinity] - Maximum number of pages to display.
+ * @propType {number} [padding=3] - How many page links to display around the current page.
+ * @propType {number} [totalPages=Infinity] - Maximum number of pages to display.
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {number} nbPages - the total of existing pages

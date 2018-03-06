@@ -63,9 +63,7 @@ class Content extends React.Component {
     super();
     this.state = { drawer: !isMobile };
   }
-  drawerAction() {
-    this.setState({ drawer: !this.state.drawer });
-  }
+
   render() {
     const baseDrawerStyle = {
       transition: 'none',
@@ -89,8 +87,10 @@ class Content extends React.Component {
       <div>
         <AppBar
           title={isMobile ? '' : 'SHOP'}
-          onLeftIconButtonTouchTap={this.drawerAction}
           className="Header__appBar"
+          onLeftIconButtonClick={() => {
+            this.setState({ drawer: !this.state.drawer });
+          }}
         >
           <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <ConnectedSearchBox />
@@ -120,11 +120,11 @@ class Content extends React.Component {
               />
               <Divider />
               <ConnectedCheckBoxRefinementList
-                attributeName="materials"
+                attribute="materials"
                 operator="or"
               />
               <ConnectedCheckBoxRefinementList
-                attributeName="colors"
+                attribute="colors"
                 operator="or"
               />
               <Divider />
@@ -207,14 +207,12 @@ const CheckBoxItem = ({ item, refine }) => (
 
 const MaterialUiCheckBoxRefinementList = ({
   items,
-  attributeName,
+  attribute,
   refine,
   createURL,
 }) => (
   <List>
-    <Subheader style={{ fontSize: 18 }}>
-      {attributeName.toUpperCase()}
-    </Subheader>
+    <Subheader style={{ fontSize: 18 }}>{attribute.toUpperCase()}</Subheader>
     {items.map(item => (
       <CheckBoxItem
         key={item.label}
@@ -320,9 +318,7 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
       <main id="hits" style={containerCardStyle}>
         {hits.map(hit => (
           <Card key={hit.objectID} style={cardStyle}>
-            <CardHeader
-              subtitle={<Highlight attributeName="name" hit={hit} />}
-            />
+            <CardHeader subtitle={<Highlight attribute="name" hit={hit} />} />
             <div style={imageHolderStyle}>
               <img
                 src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_300,q_100,f_auto/${
@@ -334,10 +330,10 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
             <CardTitle
               title={
                 <span>
-                  <Highlight attributeName="name" hit={hit} /> - ${hit.price}
+                  <Highlight attribute="name" hit={hit} /> - ${hit.price}
                 </span>
               }
-              subtitle={<Highlight attributeName="type" hit={hit} />}
+              subtitle={<Highlight attribute="type" hit={hit} />}
               style={{
                 position: 'absolute',
                 bottom: 0,

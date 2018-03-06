@@ -3,8 +3,8 @@ import { Text } from 'react-native';
 import { connectHighlight } from 'react-instantsearch/connectors';
 
 export default connectHighlight(
-  ({ highlight, attributeName, hit, highlightProperty, inverted }) => {
-    const parsedHit = highlight({ attributeName, hit, highlightProperty });
+  ({ highlight, attribute, hit, highlightProperty, inverted }) => {
+    const parsedHit = highlight({ attribute, hit, highlightProperty });
     const styles = inverted ? {} : { backgroundColor: '#ffff99' };
     const highligtedHit = parsedHit.map((part, idx) => {
       if (part.isHighlighted)

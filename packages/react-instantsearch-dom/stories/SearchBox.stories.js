@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import { SearchBox } from '../packages/react-instantsearch/dom';
+import { Panel, SearchBox } from '../packages/react-instantsearch/dom';
 import { object, boolean } from '@storybook/addon-knobs';
 import { displayName, filterProps, WrapWithHits } from './util';
 import { action } from '@storybook/addon-actions';
@@ -54,8 +54,8 @@ stories
         linkedStoryGroup="SearchBox"
       >
         <SearchBox
-          submitComponent={<span>🔍</span>}
-          resetComponent={
+          submit={<span>🔍</span>}
+          reset={
             <svg viewBox="200 198 108 122">
               <path d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7" />
             </svg>
@@ -74,7 +74,7 @@ stories
       <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
         <SearchBox
           showLoadingIndicator={true}
-          loadingIndicatorComponent={<span>✨</span>}
+          loadingIndicator={<span>✨</span>}
         />
       </WrapWithHits>
     ),
@@ -96,6 +96,24 @@ stories
     }
   )
   .addWithJSX(
+    'with Panel',
+    () => (
+      <WrapWithHits
+        searchBox={false}
+        hasPlayground={true}
+        linkedStoryGroup="SearchBox"
+      >
+        <Panel header="SearchBox" footer="Footer">
+          <SearchBox />
+        </Panel>
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
     'playground',
     () => (
       <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
@@ -104,8 +122,6 @@ stories
           searchAsYouType={true}
           autoFocus={true}
           translations={object('translations', {
-            submit: null,
-            reset: null,
             submitTitle: 'Submit your search query.',
             resetTitle: 'Clear your search query.',
             placeholder: 'Search your website.',

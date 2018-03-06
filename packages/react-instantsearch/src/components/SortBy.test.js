@@ -1,11 +1,30 @@
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
+import Enzyme, { shallow, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import SortBy from './SortBy';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe('SortBy behavior', () => {
+describe('SortBy', () => {
+  it('expect to render with custom className', () => {
+    const wrapper = shallow(
+      <SortBy
+        className="MyCustomSortBy"
+        createURL={() => '#'}
+        items={[
+          { value: 'index1', label: 'index name 1' },
+          { value: 'index2', label: 'index name 2' },
+          { value: 'index3', label: 'index name 3' },
+          { value: 'index4', label: 'index name 4' },
+        ]}
+        currentRefinement={'index1'}
+        refine={() => null}
+      />
+    );
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
   it('refines its value on change', () => {
     const refine = jest.fn();
     const wrapper = mount(
@@ -22,7 +41,7 @@ describe('SortBy behavior', () => {
       />
     );
 
-    const selectedValue = wrapper.find('.ais-SortBy__root');
+    const selectedValue = wrapper.find('select');
     expect(selectedValue.find('option')).toHaveLength(4);
     expect(
       selectedValue
@@ -55,7 +74,7 @@ describe('SortBy behavior', () => {
       />
     );
 
-    const selectedValue = wrapper.find('.ais-SortBy__root');
+    const selectedValue = wrapper.find('select');
     expect(selectedValue.find('option')).toHaveLength(4);
     expect(
       selectedValue

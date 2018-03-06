@@ -1,7 +1,9 @@
+html,
 body {
   min-height: 100%;
   font-family: Roboto;
   background: #F1F1F1;
+  font-size: 14px;
 }
 
 a {
@@ -143,7 +145,7 @@ section aside .badge {
 }
 
 section article {
-  margin-top: 64px;
+  margin-top: 67px;
   margin-bottom: 10px;
   margin-left: 237px;
   margin-right: 10px;
@@ -153,7 +155,7 @@ section article {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-#stats {
+.ais-Stats-text {
   padding-right: 14px;
   font-size: .8em;
   line-height: 24px;
@@ -163,49 +165,55 @@ section article {
   padding: 0 15px;
 }
 
-.ais-Pagination__root {
+.ais-Pagination {
   box-shadow: none;
   border: none;
   border-radius: initial;
   padding: 0px;
 }
 
-.ais-Pagination__item {
+.ais-Pagination-item {
   display: inline-block;
-  border: 1px solid;
-  border-color: #ddd;
   padding: 0px;
 }
 
-.ais-Pagination__item + .ais-Pagination__item {
+.ais-Pagination-item + .ais-Pagination-item {
   margin-left: 4px;
 }
 
-.ais-Pagination__itemDisabled{
+.ais-Pagination-item--disabled{
   display: none;
 }
 
-.ais-Pagination__itemLink{
+.ais-Pagination-link{
   display:block;
   background: #F8F8F8;
   padding: 3px 8px;
   color: #333333;
 }
 
-.ais-Pagination__itemSelected {
-  background: #FF585B;
-}
-
-.ais-Pagination__itemSelected .ais-Pagination__itemLink {
+.ais-Pagination-item--selected .ais-Pagination-link {
   border-color: #b5b5b5;
   background: #E8E8E8;
 }
 
-.ais-Pagination__itemLink:hover {
+.ais-Pagination-link:hover {
   text-decoration: none;
   border-color: #cfcfcf;
   background: #ebebeb;
   color: #333333;
+}
+
+.ais-Hits-list {
+  margin: 0;
+}
+
+.ais-Hits-item {
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  width: 100%;
 }
 
 .hit {
@@ -233,6 +241,10 @@ section article {
   color: #167AC6;
   font-weight: normal;
   font-size: 18px;
+}
+
+.hit .media-body {
+  padding: 10px;
 }
 
 .thank-you {
@@ -289,6 +301,6 @@ section article {
   background: #BBBBBB;
 }
 
-#ratings {
-  padding: 0 20px;
+.ais-RatingMenu {
+  margin: 0 24px 0 28px;
 }

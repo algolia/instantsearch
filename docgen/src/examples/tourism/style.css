@@ -51,7 +51,7 @@ body {
   color: #DCE0E0;
 }
 
-.ais-SearchBox__root {
+.ais-SearchBox {
   position: absolute;
   width: 280px;
   height: 33px;
@@ -59,15 +59,16 @@ body {
   box-sizing: border-box;
   font-size: 14px;
   top: 80px;
-  left: 165px;
+  left: 205px;
 }
 
-.ais-SearchBox__wrapper {
+.ais-SearchBox-body,
+.ais-SearchBox-form {
   width: 100%;
   height: 100%;
 }
 
-.ais-SearchBox__input {
+.ais-SearchBox-input {
   display: inline-block;
   -webkit-transition: box-shadow .4s ease, background .4s ease;
   transition: box-shadow .4s ease, background .4s ease;
@@ -86,41 +87,44 @@ body {
   appearance: none;
 }
 
-.ais-SearchBox__input::-webkit-search-decoration, .ais-SearchBox__input::-webkit-search-cancel-button, .ais-SearchBox__input::-webkit-search-results-button, .ais-SearchBox__input::-webkit-search-results-decoration {
+.ais-SearchBox-input::-webkit-search-decoration,
+.ais-SearchBox-input::-webkit-search-cancel-button,
+.ais-SearchBox-input::-webkit-search-results-button,
+.ais-SearchBox-input::-webkit-search-results-decoration {
   display: none;
 }
 
-.ais-SearchBox__input:hover {
+.ais-SearchBox-input:hover {
   box-shadow: inset 0 0 0 0px #b3b3b3;
 }
 
-.ais-SearchBox__input:focus, .SearchBox__input:active {
+.ais-SearchBox-input:focus, .SearchBox__input:active {
   outline: 0;
   box-shadow: inset 0 0 0 0px #D6DEE3;
   background: #FFFFFF;
 }
 
-.ais-SearchBox__input::-webkit-input-placeholder {
+.ais-SearchBox-input::-webkit-input-placeholder {
   color: #9AAEB5;
 }
 
-.ais-SearchBox__input::-moz-placeholder {
+.ais-SearchBox-input::-moz-placeholder {
   color: #9AAEB5;
 }
 
-.ais-SearchBox__input:-ms-input-placeholder {
+.ais-SearchBox-input:-ms-input-placeholder {
   color: #9AAEB5;
 }
 
-.ais-SearchBox__input::placeholder {
+.ais-SearchBox-input::placeholder {
   color: #9AAEB5;
 }
 
-.ais-SearchBox__submit {
+.ais-SearchBox-submit {
   display: none;
 }
 
-.ais-SearchBox__reset {
+.ais-SearchBox-reset {
   display: none;
 }
 
@@ -306,11 +310,14 @@ body {
 
 /* PAGINATION
 // ------------------------- */
-.ais-Pagination__root {
+.ais-Pagination {
   text-align: center;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
 }
 
-.ais-Pagination__root .ais-Pagination__item {
+.ais-Pagination .ais-Pagination-item {
   display: inline-block;
   border: 1px solid;
   border-radius: 4px;
@@ -320,7 +327,7 @@ body {
   background: transparent;
 }
 
-.ais-Pagination__item .ais-Pagination__itemLink {
+.ais-Pagination-item .ais-Pagination-link {
   display: block;
   color: #FF585B;
   line-height: 30px;
@@ -328,16 +335,16 @@ body {
   height: 30px;
 }
 
-.ais-Pagination__item.ais-Pagination__itemSelected.ais-Pagination__itemPage {
+.ais-Pagination-item.ais-Pagination-item--selected.ais-Pagination-item--page {
   background: #FF585B;
 }
 
-.ais-Pagination__item.ais-Pagination__itemSelected.ais-Pagination__itemPage .ais-Pagination__itemLink {
+.ais-Pagination-item.ais-Pagination-item--selected.ais-Pagination-item--page .ais-Pagination-link {
   color: #FFFFFF;
   border-color: #FF585B;
 }
 
-.ais-Pagination__itemDisabled {
+.ais-Pagination-item--disabled {
   visibility: hidden;
 }
 

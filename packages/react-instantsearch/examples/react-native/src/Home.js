@@ -25,7 +25,7 @@ import {
 } from 'react-instantsearch/connectors';
 import Highlight from './components/Highlight';
 import Spinner from './components/Spinner';
-import StarRating from 'react-native-star-rating';
+import RatingMenu from 'react-native-star-rating';
 import ModalDropdown from 'react-native-modal-dropdown';
 import IosIcon from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
@@ -154,10 +154,10 @@ class Home extends Component {
             />
           </View>
           <ConnectedHits />
-          <VirtualRefinementList attributeName="type" />
-          <VirtualRange attributeName="price" />
-          <VirtualMenu attributeName="category" />
-          <VirtualRange attributeName="rating" />
+          <VirtualRefinementList attribute="type" />
+          <VirtualRange attribute="price" />
+          <VirtualMenu attribute="category" />
+          <VirtualRange attribute="rating" />
         </InstantSearch>
       </View>
     );
@@ -229,21 +229,21 @@ class Hits extends Component {
       <View style={styles.itemContent}>
         <Text style={styles.itemName}>
           <Highlight
-            attributeName="name"
+            attribute="name"
             hit={hit}
             highlightProperty="_highlightResult"
           />
         </Text>
         <Text style={styles.itemType}>
           <Highlight
-            attributeName="type"
+            attribute="type"
             hit={hit}
             highlightProperty="_highlightResult"
           />
         </Text>
         <Text style={styles.itemPrice}>${hit.price}</Text>
         <View style={styles.starRating}>
-          <StarRating
+          <RatingMenu
             disabled={true}
             maxStars={5}
             rating={hit.rating}

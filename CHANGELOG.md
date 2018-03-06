@@ -10,6 +10,16 @@
 
 
 
+<a name="5.0.0-beta.1"></a>
+# [5.0.0-beta.1](https://github.com/algolia/react-instantsearch/compare/v5.0.0-beta.0...v5.0.0-beta.1) (2018-02-06)
+
+
+Apply features & bug fixes from [v4.5.0](#450-2018-02-06) & [v4.5.1](#451-2018-02-06) on the v5.
+
+See their CHANGELOG for more details.
+
+
+
 <a name="4.5.1"></a>
 ## [4.5.1](https://github.com/algolia/react-instantsearch/compare/v4.5.0...v4.5.1) (2018-02-06)
 
@@ -34,6 +44,17 @@
 ### Features
 
 * **connectStateResults:** expose isSearchStalled ([#933](https://github.com/algolia/react-instantsearch/issues/933)) ([f45ba27](https://github.com/algolia/react-instantsearch/commit/f45ba27))
+
+
+<a name="5.0.0-beta.0"></a>
+# [5.0.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v4.4.2...v5.0.0-beta.0) (2018-01-30)
+
+
+This new version introduce a complete revamp of the naming and the HTML output of most widgets. The goal of this release is to provide improved semantics to our users.
+
+This release also introduces a new CSS naming convention which will be reused across all InstantSearch libraries. This will enable the possibility to develop cross-libraries CSS themes easily.
+
+You can find all the informations for the migration [in our documentation](https://react-instantsearch-beta.netlify.com/react-instantsearch/guide/migration_guide_v5).
 
 
 

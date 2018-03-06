@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import renderer from 'react-test-renderer';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -22,11 +21,58 @@ describe('RefinementList', () => {
             { label: 'black', value: ['black'], count: 20, isRefined: false },
             { label: 'blue', value: ['blue'], count: 30, isRefined: false },
           ]}
-          limitMin={2}
-          limitMax={4}
+          limit={2}
+          showMoreLimit={4}
           showMore={true}
           isFromSearch={false}
           canRefine={true}
+        />
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('default refinement list with custom className', () => {
+    const tree = renderer
+      .create(
+        <RefinementList
+          className="MyCustomRefinementList"
+          refine={() => null}
+          createURL={() => '#'}
+          searchForItems={() => null}
+          items={[
+            { label: 'white', value: ['white'], count: 10, isRefined: true },
+            { label: 'black', value: ['black'], count: 20, isRefined: false },
+            { label: 'blue', value: ['blue'], count: 30, isRefined: false },
+          ]}
+          limit={2}
+          showMoreLimit={4}
+          showMore={true}
+          isFromSearch={false}
+          canRefine={true}
+        />
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('default refinement list with no refinement', () => {
+    const tree = renderer
+      .create(
+        <RefinementList
+          refine={() => null}
+          createURL={() => '#'}
+          searchForItems={() => null}
+          items={[
+            { label: 'white', value: ['white'], count: 10, isRefined: true },
+            { label: 'black', value: ['black'], count: 20, isRefined: false },
+            { label: 'blue', value: ['blue'], count: 30, isRefined: false },
+          ]}
+          limit={2}
+          showMoreLimit={4}
+          showMore={true}
+          isFromSearch={false}
+          canRefine={false}
         />
       )
       .toJSON();
@@ -39,7 +85,7 @@ describe('RefinementList', () => {
         <RefinementList
           refine={() => null}
           searchForItems={() => null}
-          withSearchBox
+          searchable
           createURL={() => '#'}
           items={[
             { label: 'white', value: ['white'], count: 10, isRefined: true },
@@ -59,7 +105,7 @@ describe('RefinementList', () => {
       .create(
         <RefinementList
           refine={() => null}
-          withSearchBox
+          searchable
           searchForItems={() => null}
           createURL={() => '#'}
           items={[
@@ -85,7 +131,7 @@ describe('RefinementList', () => {
         <RefinementList
           refine={() => null}
           searchForItems={() => null}
-          withSearchBox
+          searchable
           createURL={() => '#'}
           items={[
             { label: 'white', value: ['white'], count: 10, isRefined: false },
@@ -122,11 +168,11 @@ describe('RefinementList', () => {
       />
     );
 
-    const items = wrapper.find('.ais-RefinementList__item');
+    const items = wrapper.find('li');
 
     expect(items).toHaveLength(3);
 
-    const firstItem = items.first().find('.ais-RefinementList__itemCheckbox');
+    const firstItem = items.first().find('input[type="checkbox"]');
 
     firstItem.simulate('change', { target: { checked: true } });
 
@@ -150,21 +196,21 @@ describe('RefinementList', () => {
           { label: 'red', value: ['red'], count: 30, isRefined: false },
           { label: 'green', value: ['green'], count: 30, isRefined: false },
         ]}
-        limitMin={2}
-        limitMax={4}
+        limit={2}
+        showMoreLimit={4}
         showMore={true}
         isFromSearch={false}
         canRefine={true}
       />
     );
 
-    const items = wrapper.find('.ais-RefinementList__item');
+    const items = wrapper.find('li');
 
     expect(items).toHaveLength(2);
 
-    wrapper.find('.ais-RefinementList__showMore').simulate('click');
+    wrapper.find('button').simulate('click');
 
-    expect(wrapper.find('.ais-RefinementList__item')).toHaveLength(4);
+    expect(wrapper.find('li')).toHaveLength(4);
 
     wrapper.unmount();
   });
@@ -180,19 +226,19 @@ describe('RefinementList', () => {
           { label: 'white', value: ['white'], count: 10, isRefined: false },
           { label: 'black', value: ['black'], count: 20, isRefined: false },
         ]}
-        limitMin={2}
-        limitMax={4}
+        limit={2}
+        showMoreLimit={4}
         showMore={true}
         isFromSearch={false}
         canRefine={true}
       />
     );
 
-    const items = wrapper.find('.ais-RefinementList__item');
+    const items = wrapper.find('li');
 
     expect(items).toHaveLength(2);
 
-    expect(wrapper.find('.ais-RefinementList__showMoreDisabled')).toBeDefined();
+    expect(wrapper.find('button[disabled]')).toBeDefined();
 
     wrapper.unmount();
   });
@@ -203,7 +249,7 @@ describe('RefinementList', () => {
     const refinementList = (
       <RefinementList
         refine={refine}
-        withSearchBox
+        searchable
         searchForItems={searchForItems}
         createURL={() => '#'}
         items={[
@@ -230,7 +276,7 @@ describe('RefinementList', () => {
     it('a searchbox should be displayed if the feature is activated', () => {
       const wrapper = mount(refinementList);
 
-      const searchBox = wrapper.find('.ais-RefinementList__SearchBox');
+      const searchBox = wrapper.find('input[type="search"]');
 
       expect(searchBox).toBeDefined();
 
@@ -241,7 +287,7 @@ describe('RefinementList', () => {
       const wrapper = mount(refinementList);
 
       wrapper
-        .find('.ais-RefinementList__SearchBox input')
+        .find('input[type="search"]')
         .simulate('change', { target: { value: 'query' } });
 
       expect(searchForItems.mock.calls).toHaveLength(1);
@@ -254,18 +300,16 @@ describe('RefinementList', () => {
       const wrapper = mount(refinementList);
 
       const firstItem = wrapper
-        .find('.ais-RefinementList__item')
+        .find('li')
         .first()
-        .find('.ais-RefinementList__itemCheckbox');
+        .find('input[type="checkbox"]');
       firstItem.simulate('change', { target: { checked: true } });
 
       expect(refine.mock.calls).toHaveLength(1);
       expect(refine.mock.calls[0][0]).toEqual(['white']);
-      expect(
-        wrapper.find('.ais-RefinementList__SearchBox input').props().value
-      ).toBe('');
+      expect(wrapper.find('input[type="search"]').props().value).toBe('');
 
-      const selectedRefinements = wrapper.find('.ais-RefinementList__item');
+      const selectedRefinements = wrapper.find('li');
       expect(selectedRefinements).toHaveLength(2);
 
       wrapper.unmount();
@@ -279,46 +323,12 @@ describe('RefinementList', () => {
 
       expect(refine.mock.calls).toHaveLength(1);
       expect(refine.mock.calls[0][0]).toEqual(['white']);
-      expect(
-        wrapper.find('.ais-RefinementList__SearchBox input').props().value
-      ).toBe('');
+      expect(wrapper.find('input[type="search"]').props().value).toBe('');
 
-      const selectedRefinements = wrapper.find('.ais-RefinementList__item');
+      const selectedRefinements = wrapper.find('li');
       expect(selectedRefinements).toHaveLength(2);
 
       wrapper.unmount();
-    });
-  });
-
-  describe('Panel compatibility', () => {
-    it('Should indicate when no more refinement', () => {
-      const canRefine = jest.fn();
-      const wrapper = mount(
-        <RefinementList
-          refine={() => null}
-          searchForItems={() => null}
-          createURL={() => '#'}
-          items={[
-            { label: 'blue', value: ['blue'], count: 30, isRefined: false },
-          ]}
-          isFromSearch={false}
-          canRefine={true}
-        />,
-        {
-          context: { canRefine },
-          childContextTypes: { canRefine: PropTypes.func },
-        }
-      );
-
-      expect(canRefine.mock.calls).toHaveLength(1);
-      expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(wrapper.find('.ais-RefinementList__noRefinement')).toHaveLength(0);
-
-      wrapper.setProps({ canRefine: false });
-
-      expect(canRefine.mock.calls).toHaveLength(2);
-      expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(wrapper.find('.ais-RefinementList__noRefinement')).toHaveLength(1);
     });
   });
 });

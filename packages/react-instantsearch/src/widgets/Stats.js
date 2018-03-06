@@ -1,11 +1,12 @@
-import connectStats from '../connectors/connectStats.js';
-import StatsComponent from '../components/Stats.js';
+import connectStats from '../connectors/connectStats';
+import Stats from '../components/Stats';
 
 /**
  * The Stats component displays the total number of matching hits and the time it took to get them (time spent in the Algolia server).
  * @name Stats
  * @kind widget
- * @themeKey ais-Stats__root - the root of the component
+ * @themeKey ais-Stats - the root div of the widget
+ * @themeKey ais-Stats-text - the text of the widget - the count of items for each item
  * @translationkey stats - The string displayed by the stats widget. You get function(n, ms) and you need to return a string. n is a number of hits retrieved, ms is a processed time.
  * @example
  * import React from 'react';
@@ -24,4 +25,5 @@ import StatsComponent from '../components/Stats.js';
  *   );
  * }
  */
-export default connectStats(StatsComponent);
+
+export default connectStats(Stats);

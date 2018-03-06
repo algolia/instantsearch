@@ -31,7 +31,7 @@ const App = () =>
     indexName="..."
   >
     <SearchBox defaultRefinement="hi" />
-    <RefinementList attributeName="category"
+    <RefinementList attribute="category"
       transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])}/>
   </InstantSearch>;
 ```

@@ -5,8 +5,10 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   font-family: Verdana, sans-serif;
+  font-size: 12px;
 }
 
 .content a {
@@ -107,7 +109,7 @@ body {
   top: 120px;
   left: 0;
   bottom: 0;
-  width: 240px;
+  width: 250px;
   padding: 20px;
   border-right: 1px solid #EEE;
   background: #FFFFFF;
@@ -133,73 +135,71 @@ body {
   margin-bottom: 16px;
 }
 
-.content .ais-Panel__title {
-  font-weight: bold;
+.content .ais-Panel-header {
   margin: 4px 0;
   clear: both;
   padding: initial;
-  text-transform: none;
   border-bottom: none;
 }
 
-.content aside .ais-HierarchicalMenu__itemLink, aside a {
+.content .ais-Panel-header h5 {
+  font-weight: bold;
+  text-transform: none;
+}
+
+.content aside .ais-HierarchicalMenu-link, aside a {
   color: #000000;
 }
 
-.content aside .ais-HierarchicalMenu__item{
+.content aside .ais-HierarchicalMenu-item{
   margin-top: 0px;
   font-size: 12px;
 }
 
-.content aside .ais-HierarchicalMenu__item:after{
+.content aside .ais-HierarchicalMenu-item:after{
   content: none;
 }
 
-.content aside .ais-HierarchicalMenu__itemLink:hover, aside a:hover, .ais-StarRating__ratingLink:hover {
+aside a:hover,
+.content aside .ais-HierarchicalMenu-link:hover,
+.ais-RatingMenu-link:hover {
   color: #B32500;
   text-decoration: none;
 }
 
-.content aside .ais-HierarchicalMenu__itemSelected > a, .ais-HierarchicalMenu__itemSelectedParent > a {
+.content aside .ais-HierarchicalMenu-item--selected > a,
+.ais-HierarchicalMenu-item--selected.ais-HierarchicalMenu-item--parent > a {
   font-weight: bold;
 }
 
-.content aside .ais-HierarchicalMenu__itemLink input, aside a input {
+.content aside .ais-HierarchicalMenu-link input, aside a input {
   margin-right: 4px;
 }
 
-.content aside .ais-HierarchicalMenu__itemLabel:before {
+.content aside .ais-HierarchicalMenu-label:before {
   content: "> "
 }
 
-.content aside .ais-HierarchicalMenu__itemItems {
+.content aside .ais-HierarchicalMenu-list--child {
   margin-left: 10px;
 }
 
-.content aside .ais-RefinementList__item {
+.content aside .ais-RefinementList-item {
   font-size: 12px;
 }
 
-.content aside .ais-RefinementList__item label {
+.content aside .ais-RefinementList-label {
   font-weight: 100;
   color: #000000;
 }
 
-.content aside .ais-RefinementList__item label input {
+.content aside .ais-RefinementList-checkbox {
   margin-right: 5px;
 }
 
-.content aside .ais-RefinementList__itemCount, .ais-HierarchicalMenu__itemCount {
+.content aside .ais-RefinementList-count, .ais-HierarchicalMenu-count {
   color: #6F6E6C;
   background-color: initial;
-}
-
-.content aside .ais-RefinementList__itemCount:before, .ais-HierarchicalMenu__itemCount:before {
-  content: '('
-}
-
-.content aside .ais-RefinementList__itemCount:after, .ais-HierarchicalMenu__itemCount:after {
-  content: ')'
 }
 
 .content aside .facet-name {
@@ -368,7 +368,8 @@ body {
   position: absolute;
   top: 60px;
   right: 0;
-  padding: 70px 10px 10px 240px;
+  width: 100%;
+  padding: 70px 10px 10px 260px;
 }
 
 .content .results-wrapper .no-results {
@@ -393,10 +394,13 @@ body {
 
 .content #results-topbar .sort-by {
   float: right;
+  display: flex;
+  align-items: center;
 }
 
 .content #results-topbar .sort-by label {
   margin-right: 5px;
+  margin-bottom: 0;
 }
 
 .content #results-topbar label {
@@ -408,7 +412,7 @@ body {
   display: inline-block;
 }
 
-.content .ais-ClearAll__root {
+.content .ais-ClearRefinements-button {
   display: block;
   margin-bottom: 16px;
   font-size: 13px;
@@ -417,7 +421,7 @@ body {
   color: #000000;
 }
 
-.content .ais-Stats__root {
+.content .ais-Stats-text {
   padding-left: 10px;
   font-size: .8em;
 }
@@ -498,11 +502,15 @@ body {
   color: #a2a2a2;
 }
 
+.content .hit .product-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .content .hit .product-price {
   font-size: 1.1em;
   font-weight: bold;
   color: #000000;
-  float: right;
   letter-spacing: -1px;
 }
 
@@ -518,14 +526,6 @@ body {
   padding: 10px;
 }
 
-.content .ais-price-ranges--item {
-  list-style-type: none;
-}
-
-.content .ais-price-ranges--list {
-  padding: 0;
-}
-
 .content footer {
   margin-top: 10px;
   font-size: 1.2em;
@@ -538,7 +538,7 @@ body {
   clear: both;
 }
 
-.content .ais-RangeInput__inputMin, .ais-RangeInput__inputMax {
+.content .ais-RangeInput-input--min, .ais-RangeInput-input--max {
   width: 50px;
   border-radius: 2px;
   border: solid 1px #888;
@@ -548,19 +548,11 @@ body {
   margin: 0px;
 }
 
-.content .ais-RangeInput__labelMin:before, .ais-RangeInput__labelMax:before {
-  content: '$';
-}
-
-.content .ais-RangeInput__labelMin, .ais-RangeInput__labelMax {
-  min-width: 0px;
-}
-
-.content .ais-RangeInput__separator {
+.content .ais-RangeInput-separator {
   margin: 0px 5px;
 }
 
-.content .ais-RangeInput__submit {
+.content .ais-RangeInput-submit {
   display: block;
   float: right;
   width: 22px;
@@ -572,31 +564,25 @@ body {
   border: solid 1px #888;
   border-radius: 50%;
   text-align: center;
+  background: none;
+  color: #000000;
 }
 
-.content .ais-RangeInput__submit:hover {
+.content .ais-RangeInput-submit:hover {
   color: #0063C3;
   background-color: #FFFFFF;
 }
 
-.content .ais-StarRating__ratingLabel, .ais-StarRating__ratingLabelSelected {
+.content .ais-RatingMenu-label,
+.ais-RatingMenu-item--selected .ais-RatingMenu-label {
   color: #000000;
 }
 
-.content .ais-StarRating__ratingLabelSelected {
+.content .ais-RatingMenu-item--selected .ais-RatingMenu-label {
   font-weight: 700;
 }
 
-.content .ais-StarRating__ratingCount {
+.content .ais-RatingMenu-count {
   color: #6F6E6C;
   background-color: initial;
 }
-
-.content .ais-StarRating__ratingCount::before {
-  content: '('
-}
-
-.content .ais-StarRating__ratingCount::after {
-  content: ')'
-}
-

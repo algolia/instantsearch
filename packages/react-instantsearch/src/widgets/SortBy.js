@@ -1,5 +1,5 @@
-import connectSortBy from '../connectors/connectSortBy.js';
-import SortByComponent from '../components/SortBy.js';
+import connectSortBy from '../connectors/connectSortBy';
+import SortBy from '../components/SortBy';
 
 /**
  * The SortBy component displays a list of indexes allowing a user to change the hits are sorting.
@@ -10,7 +10,9 @@ import SortByComponent from '../components/SortBy.js';
  * @propType {{value: string, label: string}[]} items - The list of indexes to search in.
  * @propType {string} defaultRefinement - The default selected index.
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
- * @themeKey ais-SortBy__root - the root of the component
+ * @themeKey ais-SortBy - the root div of the widget
+ * @themeKey ais-SortBy-select - the select
+ * @themeKey ais-SortBy-option - the select option
  * @example
  * import React from 'react';
  *
@@ -35,4 +37,5 @@ import SortByComponent from '../components/SortBy.js';
  *   );
  * }
  */
-export default connectSortBy(SortByComponent);
+
+export default connectSortBy(SortBy);

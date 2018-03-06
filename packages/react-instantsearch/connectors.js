@@ -22,8 +22,8 @@ export {
 } from './src/connectors/connectInfiniteHits.js';
 export { default as connectMenu } from './src/connectors/connectMenu.js';
 export {
-  default as connectMultiRange,
-} from './src/connectors/connectMultiRange.js';
+  default as connectNumericMenu,
+} from './src/connectors/connectNumericMenu.js';
 export {
   default as connectPagination,
 } from './src/connectors/connectPagination.js';
@@ -45,7 +45,9 @@ export {
 } from './src/connectors/connectSearchBox.js';
 export { default as connectSortBy } from './src/connectors/connectSortBy.js';
 export { default as connectStats } from './src/connectors/connectStats.js';
-export { default as connectToggle } from './src/connectors/connectToggle.js';
+export {
+  default as connectToggleRefinement,
+} from './src/connectors/connectToggleRefinement.js';
 export {
   default as connectStateResults,
 } from './src/connectors/connectStateResults.js';

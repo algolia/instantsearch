@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Link from './Link';
-import classNames from './classNames.js';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import translatable from '../core/translatable';
+import createClassNames from './createClassNames';
+import Link from './Link';
 
-const cx = classNames('Breadcrumb');
+const cx = createClassNames('Breadcrumb');
 
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
@@ -20,21 +21,16 @@ class Breadcrumb extends Component {
     items: itemsPropType,
     refine: PropTypes.func.isRequired,
     rootURL: PropTypes.string,
-    separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    separator: PropTypes.node,
     translate: PropTypes.func.isRequired,
+    className: PropTypes.string,
   };
 
-  static contextTypes = {
-    canRefine: PropTypes.func,
+  static defaultProps = {
+    rootURL: null,
+    separator: ' > ',
+    className: '',
   };
-
-  componentWillMount() {
-    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
-  }
-
-  componentWillReceiveProps(props) {
-    if (this.context.canRefine) this.context.canRefine(props.canRefine);
-  }
 
   render() {
     const {
@@ -45,45 +41,48 @@ class Breadcrumb extends Component {
       rootURL,
       separator,
       translate,
+      className,
     } = this.props;
     const rootPath = canRefine ? (
-      <span {...cx('item')}>
+      <li className={cx('item')}>
         <Link
-          {...cx('itemLink', 'itemLinkRoot')}
+          className={cx('link')}
           onClick={() => (!rootURL ? refine() : null)}
           href={rootURL ? rootURL : createURL()}
         >
-          <span {...cx('rootLabel')}>{translate('rootLabel')}</span>
+          {translate('rootLabel')}
         </Link>
-        <span {...cx('separator')}>{separator}</span>
-      </span>
+      </li>
     ) : null;
 
     const breadcrumb = items.map((item, idx) => {
       const isLast = idx === items.length - 1;
-      return !isLast ? (
-        <span {...cx('item')} key={idx}>
-          <Link
-            {...cx('itemLink')}
-            onClick={() => refine(item.value)}
-            href={createURL(item.value)}
-            key={idx}
-          >
-            <span {...cx('itemLabel')}>{item.label}</span>
-          </Link>
-          <span {...cx('separator')}>{isLast ? '' : separator}</span>
-        </span>
-      ) : (
-        <span {...cx('itemLink', 'itemDisabled', 'item')} key={idx}>
-          <span {...cx('itemLabel')}>{item.label}</span>
-        </span>
+      return (
+        <li className={cx('item', isLast && 'item--selected')} key={idx}>
+          <span className={cx('separator')}>{separator}</span>
+          {!isLast ? (
+            <Link
+              className={cx('link')}
+              onClick={() => refine(item.value)}
+              href={createURL(item.value)}
+            >
+              {item.label}
+            </Link>
+          ) : (
+            item.label
+          )}
+        </li>
       );
     });
 
     return (
-      <div {...cx('root', !canRefine && 'noRefinement')}>
-        {rootPath}
-        {breadcrumb}
+      <div
+        className={classNames(cx('', !canRefine && '-noRefinement'), className)}
+      >
+        <ul className={cx('list')}>
+          {rootPath}
+          {breadcrumb}
+        </ul>
       </div>
     );
   }

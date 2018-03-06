@@ -1,14 +1,13 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import classNames from './classNames';
-
-const cx = classNames('Highlight');
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 function generateKey(i, value) {
   return `split-${i}-${value}`;
 }
 
 export const Highlight = ({
+  cx,
   value,
   highlightedTagName,
   isHighlighted,
@@ -16,40 +15,44 @@ export const Highlight = ({
 }) => {
   const TagName = isHighlighted ? highlightedTagName : nonHighlightedTagName;
   const className = isHighlighted ? 'highlighted' : 'nonHighlighted';
-  return <TagName {...cx(className)}>{value}</TagName>;
+  return <TagName className={cx(className)}>{value}</TagName>;
 };
 
 Highlight.propTypes = {
+  cx: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   isHighlighted: PropTypes.bool.isRequired,
   highlightedTagName: PropTypes.string.isRequired,
   nonHighlightedTagName: PropTypes.string.isRequired,
 };
 
-export default function Highlighter({
+const Highlighter = ({
+  cx,
   hit,
-  attributeName,
+  attribute,
   highlight,
   highlightProperty,
   tagName,
   nonHighlightedTagName,
   separator,
-}) {
+  className,
+}) => {
   const parsedHighlightedValue = highlight({
     hit,
-    attributeName,
+    attribute,
     highlightProperty,
   });
 
   return (
-    <span className="ais-Highlight">
+    <span className={classNames(cx(''), className)}>
       {parsedHighlightedValue.map((item, i) => {
         if (Array.isArray(item)) {
           const isLast = i === parsedHighlightedValue.length - 1;
           return (
-            <span key={generateKey(i, hit[attributeName][i])}>
+            <span key={generateKey(i, hit[attribute][i])}>
               {item.map((element, index) => (
                 <Highlight
+                  cx={cx}
                   key={generateKey(index, element.value)}
                   value={element.value}
                   highlightedTagName={tagName}
@@ -57,13 +60,14 @@ export default function Highlighter({
                   isHighlighted={element.isHighlighted}
                 />
               ))}
-              {!isLast && <span {...cx('separator')}>{separator}</span>}
+              {!isLast && <span className={cx('separator')}>{separator}</span>}
             </span>
           );
         }
 
         return (
           <Highlight
+            cx={cx}
             key={generateKey(i, item.value)}
             value={item.value}
             highlightedTagName={tagName}
@@ -74,20 +78,25 @@ export default function Highlighter({
       })}
     </span>
   );
-}
+};
 
 Highlighter.propTypes = {
+  cx: PropTypes.func.isRequired,
   hit: PropTypes.object.isRequired,
-  attributeName: PropTypes.string.isRequired,
+  attribute: PropTypes.string.isRequired,
   highlight: PropTypes.func.isRequired,
   highlightProperty: PropTypes.string.isRequired,
   tagName: PropTypes.string,
   nonHighlightedTagName: PropTypes.string,
+  className: PropTypes.string,
   separator: PropTypes.node,
 };
 
 Highlighter.defaultProps = {
   tagName: 'em',
   nonHighlightedTagName: 'span',
+  className: '',
   separator: ', ',
 };
+
+export default Highlighter;

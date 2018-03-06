@@ -16,45 +16,15 @@ exports[`react-router recipe App renders without crashing 1`] = `
         }
       }
     >
-      <form
-        action=""
-        className="ais-SearchBox__root"
-        noValidate={true}
-        onReset={[Function]}
-        onSubmit={[Function]}
-        role="search"
+      <div
+        className="ais-SearchBox"
       >
-        <svg
-          style={
-            Object {
-              "display": "none",
-            }
-          }
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <symbol
-            id="sbx-icon-search-13"
-            viewBox="0 0 40 40"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-              fillRule="evenodd"
-            />
-          </symbol>
-          <symbol
-            id="sbx-icon-clear-3"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-              fillRule="evenodd"
-            />
-          </symbol>
-        </svg>
-        <div
-          className="ais-SearchBox__wrapper"
+        <form
+          action=""
+          className="ais-SearchBox-form"
+          noValidate={true}
+          onReset={[Function]}
+          onSubmit={[Function]}
           role="search"
         >
           <input
@@ -62,7 +32,7 @@ exports[`react-router recipe App renders without crashing 1`] = `
             autoComplete="off"
             autoCorrect="off"
             autoFocus={false}
-            className="ais-SearchBox__input"
+            className="ais-SearchBox-input"
             maxLength="512"
             onChange={[Function]}
             placeholder="Search here…"
@@ -72,56 +42,64 @@ exports[`react-router recipe App renders without crashing 1`] = `
             value=""
           />
           <button
-            className="ais-SearchBox__submit"
-            hidden={false}
+            className="ais-SearchBox-submit"
             title="Submit your search query."
             type="submit"
           >
             <svg
-              height="1em"
-              role="img"
-              width="1em"
+              className="ais-SearchBox-submitIcon"
+              height="10"
+              viewBox="0 0 40 40"
+              width="10"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <use
-                xlinkHref="#sbx-icon-search-13"
+              <path
+                d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
               />
             </svg>
           </button>
           <button
-            className="ais-SearchBox__reset"
+            className="ais-SearchBox-reset"
+            hidden={true}
+            onClick={[Function]}
             title="Clear the search query."
             type="reset"
           >
             <svg
-              height="1em"
-              role="img"
-              width="1em"
+              className="ais-SearchBox-resetIcon"
+              height="10"
+              viewBox="0 0 20 20"
+              width="10"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <use
-                xlinkHref="#sbx-icon-clear-3"
+              <path
+                d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
               />
             </svg>
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
       <div
-        className="ais-PoweredBy__root"
+        className="ais-PoweredBy"
       >
         <span
-          className="ais-PoweredBy__searchBy"
+          className="ais-PoweredBy-text"
         >
           Search by
-           
         </span>
+         
         <a
           aria-label="Algolia"
-          className="ais-PoweredBy__algoliaLink"
+          className="ais-PoweredBy-link"
           href="https://www.algolia.com/?utm_source=react-instantsearch&utm_medium=website&utm_content=&utm_campaign=poweredby"
           target="_blank"
         >
           <svg
             baseProfile="basic"
+            className="ais-PoweredBy-logo"
+            height="27"
             viewBox="0 0 1366 362"
+            width="100"
             xmlns="http://www.w3.org/2000/svg"
           >
             <linearGradient
@@ -176,256 +154,577 @@ exports[`react-router recipe App renders without crashing 1`] = `
           Hierarchical Menu
         </p>
         <div
-          className="ais-HierarchicalMenu__root ais-HierarchicalMenu__noRefinement"
+          className="ais-HierarchicalMenu ais-HierarchicalMenu--noRefinement"
         />
         <p>
           Menu
         </p>
         <div
-          className="ais-Menu__root ais-Menu__noRefinement"
+          className="ais-Menu ais-Menu--noRefinement"
         />
         <p>
           Refinement List
         </p>
-        <div>
-          <div
-            className="ais-RefinementList__root ais-RefinementList__noRefinement"
-          />
-        </div>
+        <div
+          className="ais-RefinementList ais-RefinementList--noRefinement"
+        />
         <p>
           Range Ratings
         </p>
         <div
-          className="ais-StarRating__root ais-StarRating__noRefinement"
+          className="ais-RatingMenu ais-RatingMenu--noRefinement"
         >
-          <a
-            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
-            disabled={true}
-            href="?range%5Brating%5D%5Bmin%5D=6&range%5Brating%5D%5Bmax%5D=6&page=1"
-            onClick={[Function]}
+          <svg
+            style={
+              Object {
+                "display": "none",
+              }
+            }
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            <symbol
+              id="ais-RatingMenu-starSymbol"
+              viewBox="0 0 24 24"
             >
-               & Up
-            </span>
-            <span>
-               
-            </span>
-            <span
-              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+              <path
+                d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"
+              />
+            </symbol>
+            <symbol
+              id="ais-RatingMenu-starEmptySymbol"
+              viewBox="0 0 24 24"
             >
-              0
-            </span>
-          </a>
-          <a
-            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
-            disabled={true}
-            href="?range%5Brating%5D%5Bmin%5D=5&range%5Brating%5D%5Bmax%5D=6&page=1"
-            onClick={[Function]}
+              <path
+                d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"
+              />
+            </symbol>
+          </svg>
+          <ul
+            className="ais-RatingMenu-list ais-RatingMenu-list--noRefinement"
           >
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+            <li
+              className="ais-RatingMenu-item ais-RatingMenu-item--disabled"
             >
-               & Up
-            </span>
-            <span>
-               
-            </span>
-            <span
-              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+              <a
+                aria-label="6 & Up"
+                className="ais-RatingMenu-link"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <span
+                  aria-hidden="true"
+                  className="ais-RatingMenu-label"
+                >
+                   & Up
+                </span>
+                 
+                <span
+                  className="ais-RatingMenu-count"
+                >
+                  0
+                </span>
+              </a>
+            </li>
+            <li
+              className="ais-RatingMenu-item ais-RatingMenu-item--disabled"
             >
-              0
-            </span>
-          </a>
-          <a
-            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
-            disabled={true}
-            href="?range%5Brating%5D%5Bmin%5D=4&range%5Brating%5D%5Bmax%5D=6&page=1"
-            onClick={[Function]}
-          >
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+              <a
+                aria-label="5 & Up"
+                className="ais-RatingMenu-link"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <span
+                  aria-hidden="true"
+                  className="ais-RatingMenu-label"
+                >
+                   & Up
+                </span>
+                 
+                <span
+                  className="ais-RatingMenu-count"
+                >
+                  0
+                </span>
+              </a>
+            </li>
+            <li
+              className="ais-RatingMenu-item ais-RatingMenu-item--disabled"
             >
-               & Up
-            </span>
-            <span>
-               
-            </span>
-            <span
-              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+              <a
+                aria-label="4 & Up"
+                className="ais-RatingMenu-link"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <span
+                  aria-hidden="true"
+                  className="ais-RatingMenu-label"
+                >
+                   & Up
+                </span>
+                 
+                <span
+                  className="ais-RatingMenu-count"
+                >
+                  0
+                </span>
+              </a>
+            </li>
+            <li
+              className="ais-RatingMenu-item ais-RatingMenu-item--disabled"
             >
-              0
-            </span>
-          </a>
-          <a
-            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
-            disabled={true}
-            href="?range%5Brating%5D%5Bmin%5D=3&range%5Brating%5D%5Bmax%5D=6&page=1"
-            onClick={[Function]}
-          >
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
+              <a
+                aria-label="3 & Up"
+                className="ais-RatingMenu-link"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <span
+                  aria-hidden="true"
+                  className="ais-RatingMenu-label"
+                >
+                   & Up
+                </span>
+                 
+                <span
+                  className="ais-RatingMenu-count"
+                >
+                  0
+                </span>
+              </a>
+            </li>
+            <li
+              className="ais-RatingMenu-item ais-RatingMenu-item--disabled"
             >
-               & Up
-            </span>
-            <span>
-               
-            </span>
-            <span
-              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
+              <a
+                aria-label="2 & Up"
+                className="ais-RatingMenu-link"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <span
+                  aria-hidden="true"
+                  className="ais-RatingMenu-label"
+                >
+                   & Up
+                </span>
+                 
+                <span
+                  className="ais-RatingMenu-count"
+                >
+                  0
+                </span>
+              </a>
+            </li>
+            <li
+              className="ais-RatingMenu-item ais-RatingMenu-item--disabled"
             >
-              0
-            </span>
-          </a>
-          <a
-            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
-            disabled={true}
-            href="?range%5Brating%5D%5Bmin%5D=2&range%5Brating%5D%5Bmax%5D=6&page=1"
-            onClick={[Function]}
-          >
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
-            >
-               & Up
-            </span>
-            <span>
-               
-            </span>
-            <span
-              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
-            >
-              0
-            </span>
-          </a>
-          <a
-            className="ais-StarRating__ratingLink ais-StarRating__ratingLinkDisabled"
-            disabled={true}
-            href="?range%5Brating%5D%5Bmin%5D=1&range%5Brating%5D%5Bmax%5D=6&page=1"
-            onClick={[Function]}
-          >
-            <span
-              className="ais-StarRating__ratingIcon ais-StarRating__ratingIconDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptyDisabled"
-            />
-            <span
-              className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelDisabled"
-            >
-               & Up
-            </span>
-            <span>
-               
-            </span>
-            <span
-              className="ais-StarRating__ratingCount ais-StarRating__ratingCountDisabled"
-            >
-              0
-            </span>
-          </a>
+              <a
+                aria-label="1 & Up"
+                className="ais-RatingMenu-link"
+              >
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starSymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <svg
+                  aria-hidden="true"
+                  className="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+                  height="24"
+                  width="24"
+                >
+                  <use
+                    xlinkHref="#ais-RatingMenu-starEmptySymbol"
+                  />
+                </svg>
+                 
+                <span
+                  aria-hidden="true"
+                  className="ais-RatingMenu-label"
+                >
+                   & Up
+                </span>
+                 
+                <span
+                  className="ais-RatingMenu-count"
+                >
+                  0
+                </span>
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
       <div
@@ -445,17 +744,26 @@ exports[`react-router recipe App renders without crashing 1`] = `
             }
           }
         >
-          <button
-            className="ais-ClearAll__root"
-            disabled={true}
+          <div
+            className="ais-ClearRefinements"
           >
-            Clear all filters
-          </button>
+            <button
+              className="ais-ClearRefinements-button ais-ClearRefinements-button--disabled"
+              disabled={true}
+              onClick={[Function]}
+            >
+              Clear all filters
+            </button>
+          </div>
         </div>
         <div>
           <div
-            className="ais-Hits__root"
-          />
+            className="ais-Hits"
+          >
+            <ul
+              className="ais-Hits-list"
+            />
+          </div>
         </div>
         <div
           style={

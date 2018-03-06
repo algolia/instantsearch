@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { pick } from 'lodash';
 import translatable from '../core/translatable';
+import createClassNames from './createClassNames';
 import List from './List';
 import Link from './Link';
-import classNames from './classNames.js';
 
-const cx = classNames('HierarchicalMenu');
+const cx = createClassNames('HierarchicalMenu');
 
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
@@ -25,34 +25,27 @@ class HierarchicalMenu extends Component {
     canRefine: PropTypes.bool.isRequired,
     items: itemsPropType,
     showMore: PropTypes.bool,
-    limitMin: PropTypes.number,
-    limitMax: PropTypes.number,
+    className: PropTypes.string,
+    limit: PropTypes.number,
+    showMoreLimit: PropTypes.number,
     transformItems: PropTypes.func,
   };
 
-  static contextTypes = {
-    canRefine: PropTypes.func,
+  static defaultProps = {
+    className: '',
   };
-
-  componentWillMount() {
-    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
-  }
-
-  componentWillReceiveProps(props) {
-    if (this.context.canRefine) this.context.canRefine(props.canRefine);
-  }
 
   renderItem = item => {
     const { createURL, refine } = this.props;
 
     return (
       <Link
-        {...cx('itemLink')}
+        className={cx('link')}
         onClick={() => refine(item.value)}
         href={createURL(item.value)}
       >
-        <span {...cx('itemLabel')}>{item.label}</span>{' '}
-        <span {...cx('itemCount')}>{item.count}</span>
+        <span className={cx('label')}>{item.label}</span>{' '}
+        <span className={cx('count')}>{item.count}</span>
       </Link>
     );
   };
@@ -66,10 +59,11 @@ class HierarchicalMenu extends Component {
           'translate',
           'items',
           'showMore',
-          'limitMin',
-          'limitMax',
+          'limit',
+          'showMoreLimit',
           'isEmpty',
           'canRefine',
+          'className',
         ])}
       />
     );

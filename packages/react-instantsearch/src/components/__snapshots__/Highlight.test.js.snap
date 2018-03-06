@@ -5,27 +5,59 @@ exports[`Highlight parses an highlighted attribute of hit object 1`] = `
   className="ais-Highlight"
 >
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Highlight-nonHighlighted"
   >
     awesome 
   </span>
   <em
-    className="ais-Highlight__highlighted"
+    className="ais-Highlight-highlighted"
   >
     hi
   </em>
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Highlight-nonHighlighted"
   >
     ghlighted 
   </span>
   <em
-    className="ais-Highlight__highlighted"
+    className="ais-Highlight-highlighted"
   >
     hi
   </em>
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Highlight-nonHighlighted"
+  >
+    t!
+  </span>
+</span>
+`;
+
+exports[`Highlight renders a hit with a custom className 1`] = `
+<span
+  className="ais-Highlight MyCustomHighlight"
+>
+  <span
+    className="ais-Highlight-nonHighlighted"
+  >
+    awesome 
+  </span>
+  <em
+    className="ais-Highlight-highlighted"
+  >
+    hi
+  </em>
+  <span
+    className="ais-Highlight-nonHighlighted"
+  >
+    ghlighted 
+  </span>
+  <em
+    className="ais-Highlight-highlighted"
+  >
+    hi
+  </em>
+  <span
+    className="ais-Highlight-nonHighlighted"
   >
     t!
   </span>
@@ -37,27 +69,27 @@ exports[`Highlight renders a hit with a custom tag correctly 1`] = `
   className="ais-Highlight"
 >
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Highlight-nonHighlighted"
   >
     awesome 
   </span>
   <marquee
-    className="ais-Highlight__highlighted"
+    className="ais-Highlight-highlighted"
   >
     hi
   </marquee>
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Highlight-nonHighlighted"
   >
     ghlighted 
   </span>
   <marquee
-    className="ais-Highlight__highlighted"
+    className="ais-Highlight-highlighted"
   >
     hi
   </marquee>
   <span
-    className="ais-Highlight__nonHighlighted"
+    className="ais-Highlight-nonHighlighted"
   >
     t!
   </span>

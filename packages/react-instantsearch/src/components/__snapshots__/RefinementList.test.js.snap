@@ -1,568 +1,609 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`RefinementList applies translations 1`] = `
-<div>
+<div
+  className="ais-RefinementList"
+>
   <div
-    className="ais-RefinementList__root"
+    className="ais-RefinementList-searchBox"
   >
     <div
-      className="ais-RefinementList__SearchBox"
+      className="ais-SearchBox"
     >
       <form
         action=""
-        className="ais-SearchBox__root"
+        className="ais-SearchBox-form"
         noValidate={true}
         onReset={[Function]}
         onSubmit={[Function]}
         role="search"
       >
-        <svg
-          style={
-            Object {
-              "display": "none",
-            }
-          }
-          xmlns="http://www.w3.org/2000/svg"
+        <input
+          autoCapitalize="off"
+          autoComplete="off"
+          autoCorrect="off"
+          autoFocus={false}
+          className="ais-SearchBox-input"
+          maxLength="512"
+          onChange={[Function]}
+          placeholder="placeholder"
+          required={true}
+          spellCheck="false"
+          type="search"
+          value=""
+        />
+        <button
+          className="ais-SearchBox-submit"
+          title="Submit your search query."
+          type="submit"
         >
-          <symbol
-            id="sbx-icon-search-13"
+          <svg
+            className="ais-SearchBox-submitIcon"
+            height="10"
             viewBox="0 0 40 40"
+            width="10"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-              fillRule="evenodd"
             />
-          </symbol>
-          <symbol
-            id="sbx-icon-clear-3"
+          </svg>
+        </button>
+        <button
+          className="ais-SearchBox-reset"
+          hidden={true}
+          title="Clear the search query."
+          type="reset"
+        >
+          <svg
+            className="ais-SearchBox-resetIcon"
+            height="10"
             viewBox="0 0 20 20"
+            width="10"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-              fillRule="evenodd"
             />
-          </symbol>
-        </svg>
-        <div
-          className="ais-SearchBox__wrapper"
-          role="search"
-        >
-          <input
-            autoCapitalize="off"
-            autoComplete="off"
-            autoCorrect="off"
-            autoFocus={false}
-            className="ais-SearchBox__input"
-            maxLength="512"
-            onChange={[Function]}
-            placeholder="placeholder"
-            required={true}
-            spellCheck="false"
-            type="search"
-            value=""
-          />
-          <button
-            className="ais-SearchBox__submit"
-            hidden={false}
-            title="Submit your search query."
-            type="submit"
-          >
-            <svg
-              height="1em"
-              role="img"
-              width="1em"
-            >
-              <use
-                xlinkHref="#sbx-icon-search-13"
-              />
-            </svg>
-          </button>
-          <button
-            className="ais-SearchBox__reset"
-            title="Clear the search query."
-            type="reset"
-          >
-            <svg
-              height="1em"
-              role="img"
-              width="1em"
-            >
-              <use
-                xlinkHref="#sbx-icon-clear-3"
-              />
-            </svg>
-          </button>
-        </div>
+          </svg>
+        </button>
       </form>
     </div>
-    <div
-      className="ais-RefinementList__items"
-    >
-      <div
-        className="ais-RefinementList__item"
-      >
-        <label>
-          <input
-            checked={false}
-            className="ais-RefinementList__itemCheckbox"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel"
-          >
-            white
-          </span>
-           
-          <span
-            className="ais-RefinementList__itemCount"
-          >
-            10
-          </span>
-        </label>
-      </div>
-      <div
-        className="ais-RefinementList__item"
-      >
-        <label>
-          <input
-            checked={false}
-            className="ais-RefinementList__itemCheckbox"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel"
-          >
-            black
-          </span>
-           
-          <span
-            className="ais-RefinementList__itemCount"
-          >
-            20
-          </span>
-        </label>
-      </div>
-      <div
-        className="ais-RefinementList__item"
-      >
-        <label>
-          <input
-            checked={false}
-            className="ais-RefinementList__itemCheckbox"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel"
-          >
-            blue
-          </span>
-           
-          <span
-            className="ais-RefinementList__itemCount"
-          >
-            30
-          </span>
-        </label>
-      </div>
-    </div>
   </div>
+  <ul
+    className="ais-RefinementList-list"
+  >
+    <li
+      className="ais-RefinementList-item"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={false}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          white
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          10
+        </span>
+      </label>
+    </li>
+    <li
+      className="ais-RefinementList-item"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={false}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          black
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          20
+        </span>
+      </label>
+    </li>
+    <li
+      className="ais-RefinementList-item"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={false}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          blue
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          30
+        </span>
+      </label>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`RefinementList default refinement list 1`] = `
-<div>
-  <div
-    className="ais-RefinementList__root"
+<div
+  className="ais-RefinementList"
+>
+  <ul
+    className="ais-RefinementList-list"
   >
-    <div
-      className="ais-RefinementList__items"
+    <li
+      className="ais-RefinementList-item ais-RefinementList-item--selected"
     >
-      <div
-        className="ais-RefinementList__item ais-RefinementList__itemSelected"
+      <label
+        className="ais-RefinementList-label"
       >
-        <label>
-          <input
-            checked={true}
-            className="ais-RefinementList__itemCheckbox ais-RefinementList__itemCheckboxSelected"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox ais-RefinementList__itemBoxSelected"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel ais-RefinementList__itemLabelSelected"
-          >
-            white
-          </span>
-           
-          <span
-            className="ais-RefinementList__itemCount ais-RefinementList__itemCountSelected"
-          >
-            10
-          </span>
-        </label>
-      </div>
-      <div
-        className="ais-RefinementList__item"
-      >
-        <label>
-          <input
-            checked={false}
-            className="ais-RefinementList__itemCheckbox"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel"
-          >
-            black
-          </span>
-           
-          <span
-            className="ais-RefinementList__itemCount"
-          >
-            20
-          </span>
-        </label>
-      </div>
-    </div>
-    <button
-      className="ais-RefinementList__showMore"
-      disabled={false}
-      onClick={[Function]}
+        <input
+          checked={true}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          white
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          10
+        </span>
+      </label>
+    </li>
+    <li
+      className="ais-RefinementList-item"
     >
-      Show more
-    </button>
-  </div>
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={false}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          black
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          20
+        </span>
+      </label>
+    </li>
+  </ul>
+  <button
+    className="ais-RefinementList-showMore"
+    disabled={false}
+    onClick={[Function]}
+  >
+    Show more
+  </button>
+</div>
+`;
+
+exports[`RefinementList default refinement list with custom className 1`] = `
+<div
+  className="ais-RefinementList MyCustomRefinementList"
+>
+  <ul
+    className="ais-RefinementList-list"
+  >
+    <li
+      className="ais-RefinementList-item ais-RefinementList-item--selected"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={true}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          white
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          10
+        </span>
+      </label>
+    </li>
+    <li
+      className="ais-RefinementList-item"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={false}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          black
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          20
+        </span>
+      </label>
+    </li>
+  </ul>
+  <button
+    className="ais-RefinementList-showMore"
+    disabled={false}
+    onClick={[Function]}
+  >
+    Show more
+  </button>
+</div>
+`;
+
+exports[`RefinementList default refinement list with no refinement 1`] = `
+<div
+  className="ais-RefinementList ais-RefinementList--noRefinement"
+>
+  <ul
+    className="ais-RefinementList-list ais-RefinementList-list--noRefinement"
+  >
+    <li
+      className="ais-RefinementList-item ais-RefinementList-item--selected"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={true}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          white
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          10
+        </span>
+      </label>
+    </li>
+    <li
+      className="ais-RefinementList-item"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={false}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          black
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          20
+        </span>
+      </label>
+    </li>
+  </ul>
+  <button
+    className="ais-RefinementList-showMore"
+    disabled={false}
+    onClick={[Function]}
+  >
+    Show more
+  </button>
 </div>
 `;
 
 exports[`RefinementList refinement list with search inside items but no search results 1`] = `
-<div>
+<div
+  className="ais-RefinementList"
+>
   <div
-    className="ais-RefinementList__root"
+    className="ais-RefinementList-searchBox"
   >
     <div
-      className="ais-RefinementList__SearchBox"
+      className="ais-SearchBox"
     >
       <form
         action=""
-        className="ais-SearchBox__root"
+        className="ais-SearchBox-form"
         noValidate={true}
         onReset={[Function]}
         onSubmit={[Function]}
         role="search"
       >
-        <svg
-          style={
-            Object {
-              "display": "none",
-            }
-          }
-          xmlns="http://www.w3.org/2000/svg"
+        <input
+          autoCapitalize="off"
+          autoComplete="off"
+          autoCorrect="off"
+          autoFocus={false}
+          className="ais-SearchBox-input"
+          maxLength="512"
+          onChange={[Function]}
+          placeholder="Search here…"
+          required={true}
+          spellCheck="false"
+          type="search"
+          value=""
+        />
+        <button
+          className="ais-SearchBox-submit"
+          title="Submit your search query."
+          type="submit"
         >
-          <symbol
-            id="sbx-icon-search-13"
+          <svg
+            className="ais-SearchBox-submitIcon"
+            height="10"
             viewBox="0 0 40 40"
+            width="10"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-              fillRule="evenodd"
             />
-          </symbol>
-          <symbol
-            id="sbx-icon-clear-3"
+          </svg>
+        </button>
+        <button
+          className="ais-SearchBox-reset"
+          hidden={true}
+          title="Clear the search query."
+          type="reset"
+        >
+          <svg
+            className="ais-SearchBox-resetIcon"
+            height="10"
             viewBox="0 0 20 20"
+            width="10"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-              fillRule="evenodd"
             />
-          </symbol>
-        </svg>
-        <div
-          className="ais-SearchBox__wrapper"
-          role="search"
-        >
-          <input
-            autoCapitalize="off"
-            autoComplete="off"
-            autoCorrect="off"
-            autoFocus={false}
-            className="ais-SearchBox__input"
-            maxLength="512"
-            onChange={[Function]}
-            placeholder="Search here…"
-            required={true}
-            spellCheck="false"
-            type="search"
-            value=""
-          />
-          <button
-            className="ais-SearchBox__submit"
-            hidden={false}
-            title="Submit your search query."
-            type="submit"
-          >
-            <svg
-              height="1em"
-              role="img"
-              width="1em"
-            >
-              <use
-                xlinkHref="#sbx-icon-search-13"
-              />
-            </svg>
-          </button>
-          <button
-            className="ais-SearchBox__reset"
-            title="Clear the search query."
-            type="reset"
-          >
-            <svg
-              height="1em"
-              role="img"
-              width="1em"
-            >
-              <use
-                xlinkHref="#sbx-icon-clear-3"
-              />
-            </svg>
-          </button>
-        </div>
+          </svg>
+        </button>
       </form>
     </div>
-    <div
-      className="ais-RefinementList__items"
-    >
-      <div
-        className="ais-RefinementList__item ais-RefinementList__itemSelected"
-      >
-        <label>
-          <input
-            checked={true}
-            className="ais-RefinementList__itemCheckbox ais-RefinementList__itemCheckboxSelected"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox ais-RefinementList__itemBoxSelected"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel ais-RefinementList__itemLabelSelected"
-          >
-            white
-          </span>
-           
-          <span
-            className="ais-RefinementList__itemCount ais-RefinementList__itemCountSelected"
-          >
-            10
-          </span>
-        </label>
-      </div>
-      <div
-        className="ais-RefinementList__item"
-      >
-        <label>
-          <input
-            checked={false}
-            className="ais-RefinementList__itemCheckbox"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel"
-          >
-            black
-          </span>
-           
-          <span
-            className="ais-RefinementList__itemCount"
-          >
-            20
-          </span>
-        </label>
-      </div>
-      <div
-        className="ais-RefinementList__item"
-      >
-        <label>
-          <input
-            checked={false}
-            className="ais-RefinementList__itemCheckbox"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel"
-          >
-            blue
-          </span>
-           
-          <span
-            className="ais-RefinementList__itemCount"
-          >
-            30
-          </span>
-        </label>
-      </div>
-    </div>
   </div>
+  <ul
+    className="ais-RefinementList-list"
+  >
+    <li
+      className="ais-RefinementList-item ais-RefinementList-item--selected"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={true}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          white
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          10
+        </span>
+      </label>
+    </li>
+    <li
+      className="ais-RefinementList-item"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={false}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          black
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          20
+        </span>
+      </label>
+    </li>
+    <li
+      className="ais-RefinementList-item"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={false}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        >
+          blue
+        </span>
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          30
+        </span>
+      </label>
+    </li>
+  </ul>
 </div>
 `;
 
 exports[`RefinementList refinement list with search inside items with search results 1`] = `
-<div>
+<div
+  className="ais-RefinementList"
+>
   <div
-    className="ais-RefinementList__root"
+    className="ais-RefinementList-searchBox"
   >
     <div
-      className="ais-RefinementList__SearchBox"
+      className="ais-SearchBox"
     >
       <form
         action=""
-        className="ais-SearchBox__root"
+        className="ais-SearchBox-form"
         noValidate={true}
         onReset={[Function]}
         onSubmit={[Function]}
         role="search"
       >
-        <svg
-          style={
-            Object {
-              "display": "none",
-            }
-          }
-          xmlns="http://www.w3.org/2000/svg"
+        <input
+          autoCapitalize="off"
+          autoComplete="off"
+          autoCorrect="off"
+          autoFocus={false}
+          className="ais-SearchBox-input"
+          maxLength="512"
+          onChange={[Function]}
+          placeholder="Search here…"
+          required={true}
+          spellCheck="false"
+          type="search"
+          value=""
+        />
+        <button
+          className="ais-SearchBox-submit"
+          title="Submit your search query."
+          type="submit"
         >
-          <symbol
-            id="sbx-icon-search-13"
+          <svg
+            className="ais-SearchBox-submitIcon"
+            height="10"
             viewBox="0 0 40 40"
+            width="10"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-              fillRule="evenodd"
             />
-          </symbol>
-          <symbol
-            id="sbx-icon-clear-3"
+          </svg>
+        </button>
+        <button
+          className="ais-SearchBox-reset"
+          hidden={true}
+          title="Clear the search query."
+          type="reset"
+        >
+          <svg
+            className="ais-SearchBox-resetIcon"
+            height="10"
             viewBox="0 0 20 20"
+            width="10"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-              fillRule="evenodd"
             />
-          </symbol>
-        </svg>
-        <div
-          className="ais-SearchBox__wrapper"
-          role="search"
-        >
-          <input
-            autoCapitalize="off"
-            autoComplete="off"
-            autoCorrect="off"
-            autoFocus={false}
-            className="ais-SearchBox__input"
-            maxLength="512"
-            onChange={[Function]}
-            placeholder="Search here…"
-            required={true}
-            spellCheck="false"
-            type="search"
-            value=""
-          />
-          <button
-            className="ais-SearchBox__submit"
-            hidden={false}
-            title="Submit your search query."
-            type="submit"
-          >
-            <svg
-              height="1em"
-              role="img"
-              width="1em"
-            >
-              <use
-                xlinkHref="#sbx-icon-search-13"
-              />
-            </svg>
-          </button>
-          <button
-            className="ais-SearchBox__reset"
-            title="Clear the search query."
-            type="reset"
-          >
-            <svg
-              height="1em"
-              role="img"
-              width="1em"
-            >
-              <use
-                xlinkHref="#sbx-icon-clear-3"
-              />
-            </svg>
-          </button>
-        </div>
+          </svg>
+        </button>
       </form>
     </div>
-    <div
-      className="ais-RefinementList__items"
-    >
-      <div
-        className="ais-RefinementList__item ais-RefinementList__itemSelected"
-      >
-        <label>
-          <input
-            checked={true}
-            className="ais-RefinementList__itemCheckbox ais-RefinementList__itemCheckboxSelected"
-            onChange={[Function]}
-            type="checkbox"
-          />
-          <span
-            className="ais-RefinementList__itemBox ais-RefinementList__itemBox ais-RefinementList__itemBoxSelected"
-          />
-          <span
-            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel ais-RefinementList__itemLabelSelected"
-          />
-           
-          <span
-            className="ais-RefinementList__itemCount ais-RefinementList__itemCountSelected"
-          >
-            10
-          </span>
-        </label>
-      </div>
-    </div>
   </div>
+  <ul
+    className="ais-RefinementList-list"
+  >
+    <li
+      className="ais-RefinementList-item ais-RefinementList-item--selected"
+    >
+      <label
+        className="ais-RefinementList-label"
+      >
+        <input
+          checked={true}
+          className="ais-RefinementList-checkbox"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <span
+          className="ais-RefinementList-labelText"
+        />
+         
+        <span
+          className="ais-RefinementList-count"
+        >
+          10
+        </span>
+      </label>
+    </li>
+  </ul>
 </div>
 `;

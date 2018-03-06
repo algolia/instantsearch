@@ -33,7 +33,7 @@ export const Head = props => (
     <meta property="og:image:height" content="630" />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2"
+      href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/algolia-min.css"
     />
     <link rel="stylesheet" href="../static/instantsearch.css" />
   </NextHead>

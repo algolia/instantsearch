@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# The release script has been updated in order to force the beta release for the
+# v5. Before merging the branch to master we should revert the changes. In all the
+# file there are some comment to revert.
+
 set -e # exit when error
 
 beta=false
@@ -18,11 +22,6 @@ fi
 # npm owner add and npm whoami cannot be moved to yarn yet
 if [[ $(cd packages/react-instantsearch && npm owner ls) != *"$(npm whoami)"* ]]; then
   printf "Release: Not an owner of the npm ris repo, ask for it\n"
-  exit 1
-fi
-
-if [[ $(cd packages/react-instantsearch-theme-algolia && npm owner ls) != *"$(npm whoami)"* ]]; then
-  printf "Release: Not an owner of the npm theme repo, ask for it\n"
   exit 1
 fi
 
@@ -72,11 +71,6 @@ cd packages/react-instantsearch
 mversion $newVersion
 )
 
-(
-cd packages/react-instantsearch-theme-algolia
-mversion $newVersion
-)
-
 mversion $newVersion
 
 # update changelog
@@ -112,17 +106,11 @@ cd packages/react-instantsearch
 VERSION=$newVersion npm run build-and-publish -- -n "$npmFlags"
 )
 
-(
-cd packages/react-instantsearch-theme-algolia -- -n "$npmFlags"
-npm run build-and-publish
-)
-
 printf "\n\nRelease: Package was published to npm."
 
 for d in packages/react-instantsearch/examples/* ; do
     cd $d
     yarn upgrade react-instantsearch@$newVersion
-    yarn upgrade react-instantsearch-theme-algolia@$newVersion
     cd ../../../..
 done
 
@@ -136,3 +124,4 @@ printf "\n\nalmost done, check everything in another terminal tab if you want."
 read -p "=> Update of react-instantsearch version in all examples: when ready, press [ENTER] to push to github"
 
 git push origin master
+git push origin v5

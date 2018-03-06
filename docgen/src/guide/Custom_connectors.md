@@ -212,7 +212,7 @@ const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters, getMetadata
 
   searchForFacetValues(props, searchState, nextRefinement) {
-    return {facetName: props.attributeName, query: nextRefinement};
+    return {facetName: props.attribute, query: nextRefinement};
   },
 })(Widget);
 ```

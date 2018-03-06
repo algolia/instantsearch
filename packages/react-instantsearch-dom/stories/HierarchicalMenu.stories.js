@@ -49,49 +49,10 @@ stories
       <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
         <HierarchicalMenu
           attributes={['category', 'sub_category', 'sub_sub_category']}
-          limitMin={2}
-          limitMax={5}
+          limit={2}
+          showMoreLimit={5}
           showMore={true}
         />
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with panel',
-    () => (
-      <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
-        <Panel title="Category">
-          <HierarchicalMenu
-            attributes={['category', 'sub_category', 'sub_sub_category']}
-          />
-        </Panel>
-      </WrapWithHits>
-    ),
-    {
-      displayName,
-      filterProps,
-    }
-  )
-  .addWithJSX(
-    'with panel but no refinement',
-    () => (
-      <WrapWithHits
-        searchBox={false}
-        hasPlayground={true}
-        linkedStoryGroup="HierarchicalMenu"
-      >
-        <Panel title="Category">
-          <HierarchicalMenu
-            attributes={['category', 'sub_category', 'sub_sub_category']}
-          />
-          <div style={{ display: 'none' }}>
-            <SearchBox defaultRefinement="ds" />
-          </div>
-        </Panel>
       </WrapWithHits>
     ),
     {
@@ -106,10 +67,50 @@ stories
         <HierarchicalMenu
           attributes={['category', 'sub_category', 'sub_sub_category']}
           defaultRefinement={text('defaultSelectedItem', 'Bathroom')}
-          limitMin={number('limitMin', 10)}
-          limitMax={number('limitMax', 20)}
+          limit={number('limit', 10)}
+          showMoreLimit={number('showMoreLimit', 20)}
           showMore={boolean('showMore', true)}
         />
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'with Panel',
+    () => (
+      <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu">
+        <Panel header="Hierarchical Menu" footer="Footer">
+          <HierarchicalMenu
+            attributes={['category', 'sub_category', 'sub_sub_category']}
+          />
+        </Panel>
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'with Panel but no refinement',
+    () => (
+      <WrapWithHits
+        searchBox={false}
+        hasPlayground={true}
+        linkedStoryGroup="HierarchicalMenu"
+      >
+        <Panel header="Hierarchical Menu" footer="Footer">
+          <HierarchicalMenu
+            attributes={['category', 'sub_category', 'sub_sub_category']}
+          />
+        </Panel>
+
+        <div style={{ display: 'none' }}>
+          <SearchBox defaultRefinement="ds" />
+        </div>
       </WrapWithHits>
     ),
     {

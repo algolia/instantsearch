@@ -231,7 +231,7 @@ const CustomCategoriesOrBrands = connectHits(({ hits }) => {
 
 const CategoryOrBrand = ({ hit }) => (
   <div className="multi-index_hit">
-    <Highlight attributeName="name" hit={hit} />
+    <Highlight attribute="name" hit={hit} />
   </div>
 );
 
@@ -257,11 +257,11 @@ const Product = ({ hit }) => {
       </div>
       <div className="multi-index_hit-content">
         <div>
-          <Highlight attributeName="name" hit={hit} />
+          <Highlight attribute="name" hit={hit} />
           <span> - ${hit.price}</span>
         </div>
         <div className="multi-index_hit-description">
-          <Highlight attributeName="brand" hit={hit} />
+          <Highlight attribute="brand" hit={hit} />
         </div>
       </div>
     </div>

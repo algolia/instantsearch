@@ -10,6 +10,20 @@ describe('PoweredBy', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('default with className', () => {
+    const tree = renderer
+      .create(
+        <PoweredBy
+          className="MyCustomPoweredBy"
+          createURL={() => '#'}
+          url="url"
+        />
+      )
+      .toJSON();
+
+    expect(tree).toMatchSnapshot();
+  });
+
   it('applies translations', () => {
     const tree = renderer
       .create(

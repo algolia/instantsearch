@@ -6007,13 +6007,9 @@ react-error-overlay@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-4.0.0.tgz#d198408a85b4070937a98667f500c832f86bd5d4"
 
-react-instantsearch-theme-algolia@4.5.2:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-theme-algolia/-/react-instantsearch-theme-algolia-4.5.2.tgz#42a95fd6f7b3c9b86d25d1a3bee252b16d4d1430"
-
-react-instantsearch@4.5.2:
-  version "4.5.2"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.5.2.tgz#37c359eb0b1ab9d67690351970d6c59d0269f2c7"
+react-instantsearch@5.0.0-beta.1:
+  version "5.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-5.0.0-beta.1.tgz#b3423b9c492da7751e401e0be775f5712011fafd"
   dependencies:
     algoliasearch "^3.24.0"
     algoliasearch-helper "^2.21.0"

@@ -8,7 +8,7 @@ navWeight: 80
 
 All widgets under the `react-instantsearch/dom` namespace are shipped with fixed CSS class names.
 
-The format for those class names is `ais-NameOfWidget__elementModifier`.
+The format for those class names is `ais-NameOfWidget-element--modifier`.
 
 The different class names used by every widgets are described on their respective documentation page. You
 can also inspect the underlying DOM and style accordingly.
@@ -18,58 +18,78 @@ can also inspect the underlying DOM and style accordingly.
 You can style icons colors too, for example the `SearchBox` ones:
 
 ```css
-.ais-SearchBox__reset svg,
-.ais-SearchBox__button svg {
-  fill: red
+.ais-SearchBox-reset svg,
+.ais-SearchBox-submit svg {
+  fill: red;
 }
 ```
 
 ## Loading the theme
 
-We do not load any CSS into your page automatically but we provide an Algolia theme that you can load
-manually.
+We do not load any CSS into your page automatically but we provide two themes that you can load
+manually:
+
+* reset.css
+* algolia.css
+
+We **strongly** recommend that you use at least **reset.css** in order to neglect visual side effects caused by the new HTML semantics.
+
+The `reset` theme is ship with the `algolia` one, so no need to import it when you are using the `algolia` theme.
 
 ### Via CDN
 
-The theme is available on [jsDelivr](https://www.jsdelivr.com/):
-- minified: https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2
-- unminified: https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2/style.css
+The themes are available on jsDelivr:
+
+unminified:
+
+* https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/reset.css
+* https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/algolia.css
+
+minified:
+
+* https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/reset-min.css
+* https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/algolia-min.css
 
 You can either copy paste the content in your own app or use a direct link to jsDelivr:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/reset-min.css">
+
+<!-- or -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/algolia-min.css">
 ```
 
 ### Via npm, Webpack
 
 ```shell
-npm install react-instantsearch-theme-algolia --save
-npm install sass-loader style-loader css-loader autoprefixer postcss-loader --save-dev
+npm install instantsearch.css --save
+npm install style-loader css-loader --save-dev
 ```
 
 App.js:
-```jsx
-import 'react-instantsearch-theme-algolia/style.scss';
-// import 'react-instantsearch-theme-algolia/style.css'
-// import 'react-instantsearch-theme-algolia/style.min.css'
+
+```js
+import 'instantsearch.css/themes/reset.css';
+
+// or
+
+import 'instantsearch.css/themes/algolia.css';
 ```
 
-webpack.config.babel.js:
-```jsx
-import autoprefixer from 'autoprefixer';
+webpack.config.js:
 
-export default {
+```js
+module.exports = {
   module: {
     loaders: [
       {
-        test: /\.scss$/,
-        loaders: ['style?insertAt=top', 'css', 'postcss', 'sass'],
+        test: /\.css$/,
+        loaders: ['style?insertAt=top', 'css'],
       },
     ],
   },
-  postcss: [autoprefixer()],
-}
+};
 ```
 
 ### Other bundlers

@@ -16,12 +16,12 @@ import createConnector from '../core/createConnector';
  * a numeric range.
  * @name connectRange
  * @kind connector
- * @requirements The attribute passed to the `attributeName` prop must be holding numerical values.
- * @propType {string} attributeName - Name of the attribute for faceting
+ * @requirements The attribute passed to the `attribute` prop must be holding numerical values.
+ * @propType {string} attribute - Name of the attribute for faceting
  * @propType {{min?: number, max?: number}} [defaultRefinement] - Default searchState of the widget containing the start and the end of the range.
  * @propType {number} [min] - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} [max] - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
- * @propType {number} [precision=2] - Number of digits after decimal point to use.
+ * @propType {number} [precision=0] - Number of digits after decimal point to use.
  * @providedPropType {function} refine - a function to select a range.
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
@@ -31,7 +31,7 @@ import createConnector from '../core/createConnector';
  */
 
 function getId(props) {
-  return props.attributeName;
+  return props.attribute;
 }
 
 const namespace = 'range';
@@ -183,7 +183,7 @@ export default createConnector({
 
   propTypes: {
     id: PropTypes.string,
-    attributeName: PropTypes.string.isRequired,
+    attribute: PropTypes.string.isRequired,
     defaultRefinement: PropTypes.shape({
       min: PropTypes.number,
       max: PropTypes.number,
@@ -191,18 +191,20 @@ export default createConnector({
     min: PropTypes.number,
     max: PropTypes.number,
     precision: PropTypes.number,
+    header: PropTypes.node,
+    footer: PropTypes.node,
   },
 
   defaultProps: {
-    precision: 2,
+    precision: 0,
   },
 
   getProvidedProps(props, searchState, searchResults) {
-    const { attributeName, precision, min: minBound, max: maxBound } = props;
+    const { attribute, precision, min: minBound, max: maxBound } = props;
     const results = getResults(searchResults, this.context);
-    const hasFacet = results && results.getFacetByName(attributeName);
-    const stats = hasFacet ? results.getFacetStats(attributeName) || {} : {};
-    const facetValues = hasFacet ? results.getFacetValues(attributeName) : [];
+    const hasFacet = results && results.getFacetByName(attribute);
+    const stats = hasFacet ? results.getFacetStats(attribute) || {} : {};
+    const facetValues = hasFacet ? results.getFacetValues(attribute) : [];
 
     const count = facetValues.map(v => ({
       value: v.name,
@@ -259,7 +261,7 @@ export default createConnector({
   },
 
   getSearchParameters(params, props, searchState) {
-    const { attributeName } = props;
+    const { attribute } = props;
     const { min, max } = getCurrentRefinement(
       props,
       searchState,
@@ -267,14 +269,14 @@ export default createConnector({
       this.context
     );
 
-    params = params.addDisjunctiveFacet(attributeName);
+    params = params.addDisjunctiveFacet(attribute);
 
     if (min !== undefined) {
-      params = params.addNumericRefinement(attributeName, '>=', min);
+      params = params.addNumericRefinement(attribute, '>=', min);
     }
 
     if (max !== undefined) {
-      params = params.addNumericRefinement(attributeName, '<=', max);
+      params = params.addNumericRefinement(attribute, '<=', max);
     }
 
     return params;
@@ -298,13 +300,13 @@ export default createConnector({
     if (shouldDisplayMinLabel || shouldDisplayMaxLabel) {
       const fragments = [
         hasMin ? `${minValue} <= ` : '',
-        props.attributeName,
+        props.attribute,
         hasMax ? ` <= ${maxValue}` : '',
       ];
 
       items.push({
         label: fragments.join(''),
-        attributeName: props.attributeName,
+        attribute: props.attribute,
         value: nextState =>
           refine(props, nextState, {}, this._currentRange, this.context),
         currentRefinement: getCurrentRefinementWithRange(

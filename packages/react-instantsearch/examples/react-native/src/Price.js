@@ -48,14 +48,14 @@ class Filters extends Component {
           searchState={this.state.searchState}
         >
           <View style={{ marginTop: 50 }}>
-            <ConnectedRange attributeName="price" />
+            <ConnectedRange attribute="price" />
           </View>
           <Stats
             searchState={this.state.searchState}
             onSearchStateChange={this.onSearchStateChange}
           />
-          <VirtualRefinementList attributeName="type" />
-          <VirtualMenu attributeName="category" />
+          <VirtualRefinementList attribute="type" />
+          <VirtualMenu attribute="category" />
           <VirtualSearchBox />
         </InstantSearch>
       </View>
@@ -110,18 +110,19 @@ class Range extends React.Component {
   };
 
   render() {
-    const slider = this.props.min ? (
-      <MultiSlider
-        values={[
-          Math.trunc(this.state.currentValues.min),
-          Math.trunc(this.state.currentValues.max),
-        ]}
-        min={Math.trunc(this.props.min)}
-        max={Math.trunc(this.props.max)}
-        onValuesChange={this.sliderOneValuesChange}
-        onValuesChangeFinish={this.sliderOneValuesChangeFinish}
-      />
-    ) : null;
+    const slider =
+      this.props.min !== this.props.max ? (
+        <MultiSlider
+          values={[
+            Math.trunc(this.state.currentValues.min),
+            Math.trunc(this.state.currentValues.max),
+          ]}
+          min={Math.trunc(this.props.min)}
+          max={Math.trunc(this.props.max)}
+          onValuesChange={this.sliderOneValuesChange}
+          onValuesChangeFinish={this.sliderOneValuesChangeFinish}
+        />
+      ) : null;
     const content =
       this.props.min !== this.props.max ? (
         <View style={styles.container}>

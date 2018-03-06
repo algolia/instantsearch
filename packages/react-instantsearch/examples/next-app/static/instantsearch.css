@@ -10,6 +10,7 @@ header {
 
 content {
   display: flex;
+  margin: 25px 0;
 }
 
 menu {
@@ -18,6 +19,10 @@ menu {
 
 footer {
   text-align: center;
+}
+
+.ais-Pagination {
+  margin-bottom: 25px;
 }
 
 results {

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import StarRating from 'react-native-star-rating';
+import RatingMenu from 'react-native-star-rating';
 import {
   StyleSheet,
   Text,
@@ -49,14 +49,14 @@ class Filters extends Component {
           onSearchStateChange={this.onSearchStateChange}
           searchState={this.state.searchState}
         >
-          <ConnectedRating attributeName="rating" />
+          <ConnectedRating attribute="rating" />
           <Stats
             searchState={this.state.searchState}
             onSearchStateChange={this.props.onSearchStateChange}
           />
-          <VirtualRefinementList attributeName="type" />
-          <VirtualMenu attributeName="category" />
-          <VirtualRange attributeName="price" />
+          <VirtualRefinementList attribute="type" />
+          <VirtualMenu attribute="category" />
+          <VirtualRange attribute="price" />
           <VirtualSearchBox />
         </InstantSearch>
       </View>
@@ -118,7 +118,7 @@ class Rating extends Component {
         pointerEvents="none"
         style={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}
       >
-        <StarRating
+        <RatingMenu
           disabled={true}
           maxStars={max}
           rating={min}

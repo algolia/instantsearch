@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PanelCallbackHandler expect to render 1`] = `
+<div>
+  Hello content
+</div>
+`;

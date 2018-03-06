@@ -38,8 +38,7 @@ export default {
         loader: 'happypack/loader?id=babel',
       },
       {
-        test: /\.scss$/,
-        exclude: /node_modules/,
+        test: /\.css$/,
         loader: 'happypack/loader?id=style',
       },
     ],
@@ -63,12 +62,7 @@ export default {
       id: 'babel',
     }),
     new HappyPack({
-      loaders: [
-        'style-loader?insertAt=top',
-        'css-loader',
-        'postcss-loader',
-        'sass-loader',
-      ],
+      loaders: ['style-loader?insertAt=top', 'css-loader'],
       id: 'style',
     }),
   ],

@@ -9,6 +9,7 @@ import ScrollToComponent from '../components/ScrollTo.js';
  * @name ScrollTo
  * @kind widget
  * @propType {string} [scrollOn="page"] - Widget state key on which to listen for changes.
+ * @themeKey ais-ScrollTo - the root div of the widget
  * @example
  * import React from 'react';
  *

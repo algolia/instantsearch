@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import {
-  ClearAll,
+  ClearRefinements,
   Highlight,
   Hits,
   InstantSearch,
@@ -18,10 +18,10 @@ const stories = storiesOf('Highlight', module);
 const Default = ({ hit }) => (
   <article>
     <p>
-      <Highlight attributeName="name" hit={hit} />
+      <Highlight attribute="name" hit={hit} />
     </p>
     <p>
-      <Highlight attributeName="description" hit={hit} />
+      <Highlight attribute="description" hit={hit} />
     </p>
   </article>
 );
@@ -34,14 +34,14 @@ const StrongHits = ({ hit }) => (
   <article>
     <p>
       <Highlight
-        attributeName="name"
+        attribute="name"
         tagName={text('tag name (title)', 'strong')}
         hit={hit}
       />
     </p>
     <p>
       <Highlight
-        attributeName="description"
+        attribute="description"
         tagName={text('tag name (description)', 'strong')}
         hit={hit}
       />
@@ -71,11 +71,11 @@ const CustomHits = connectHits(({ hits }) => (
       <div key={hit.objectID} className="hit">
         <div className="hit-content">
           <div>
-            <Highlight attributeName="name" hit={hit} />
+            <Highlight attribute="name" hit={hit} />
           </div>
 
           <div className="hit-tags">
-            <Highlight attributeName="tags" hit={hit} />
+            <Highlight attribute="tags" hit={hit} />
           </div>
         </div>
       </div>
@@ -96,7 +96,7 @@ class AppWithArray extends Component {
             placeholder: 'Search into our furnitures: chair, table, tv unit...',
           }}
         />
-        <ClearAll translations={{ reset: 'Clear all filters' }} />
+        <ClearRefinements translations={{ reset: 'Clear all filters' }} />
         <CustomHits />
         <Pagination />
       </InstantSearch>

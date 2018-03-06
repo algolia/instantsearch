@@ -13,16 +13,15 @@ experiences using [React](https://facebook.github.io/react/) and [Algolia](https
 
 In this tutorial, you'll learn how to:
 
- - install `react-instantsearch` in your [React](https://facebook.github.io/react/) project
- - bootstrap an app using the `<InstantSearch>` component
- - display results from Algolia
- - add widgets to filter the results
- - connect your own component to the search
+* install `react-instantsearch` in your [React](https://facebook.github.io/react/) project
+* bootstrap an app using the `<InstantSearch>` component
+* display results from Algolia
+* add widgets to filter the results
+* connect your own component to the search
 
 **If you prefer to get started by watching a video, [we created one for you](videos/).**
 
 **If you want to use React InstantSearch with React Native, [read our dedicated Getting Started for React Native](guide/React_native.html).**
-
 
 ## Before we start
 
@@ -30,9 +29,10 @@ React InstantSearch is meant to be used with Algolia.
 
 Therefore, you'll need the credentials to an Algolia index. To ease
 this getting started, here are the credentials to an already configured index:
- - `appId`: `latency`
- - `searchKey`: `3d9875e51fbd20c7754e65422f7ce5e1`
- - `indexName`: `bestbuy`
+
+* `appId`: `latency`
+* `searchKey`: `3d9875e51fbd20c7754e65422f7ce5e1`
+* `indexName`: `bestbuy`
 
 It contains sample data for an e-commerce website.
 
@@ -62,9 +62,9 @@ that they can update themselves when needed.
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {InstantSearch} from 'react-instantsearch/dom';
+import { InstantSearch } from 'react-instantsearch/dom';
 
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="latency"
     apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
@@ -72,6 +72,7 @@ const App = () =>
   >
     {/* Search widgets will go there */}
   </InstantSearch>
+);
 
 // Needed only if your js app doesn't do it already.
 // Create-react-app does it for you
@@ -87,12 +88,13 @@ Congrats 🎉! Your application is now connected to Algolia.
 <div class="highlight-key-part">
   <div class="highlight-key-part__title">In this section we've seen:</div>
 
-   - How to connect a part of a [React](https://facebook.github.io/react/) application to Algolia
+* How to connect a part of a [React](https://facebook.github.io/react/) application to Algolia
 
-   - How to configure your Algolia credentials
+* How to configure your Algolia credentials
 
-  > To get more *under the hood* information about the `<InstantSearch>` wrapper
-  > component, [read our guide](guide/<InstantSearch>.html).
+> To get more _under the hood_ information about the `<InstantSearch>` wrapper
+> component, [read our guide](guide/<InstantSearch>.html).
+
 </div>
 
 ## Load the Algolia theme
@@ -105,7 +107,7 @@ We provide an Algolia theme that should be a good start.
 Include it in your webpage with this CDN link or copy paste the raw content:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/react-instantsearch-theme-algolia@4.4.2">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/algolia-min.css">
 ```
 
 Read the [styling](guide/Styling_widgets.html) guide for more information.
@@ -124,7 +126,7 @@ ease the reading of our React code:
 
 ```jsx
 // First, we need to add the Hits component to our import
-import {InstantSearch, Hits} from 'react-instantsearch/dom';
+import { InstantSearch, Hits } from 'react-instantsearch/dom';
 
 // [...]
 
@@ -140,14 +142,15 @@ function Search() {
 We can then call this component in the render of App:
 
 ```jsx
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="latency"
     apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
     indexName="bestbuy"
   >
-   <Search/>
+    <Search />
   </InstantSearch>
+);
 ```
 
 You should now be able to see the results without any styling. This
@@ -159,13 +162,9 @@ of the Hit widget: `hitComponent`. This prop accepts a Component that
 will be used for each hit in the results from Algolia.
 
 ```jsx
-function Product({hit}) {
-  return (
-    <div>
-      {hit.name}
-    </div>
-  );
-};
+function Product({ hit }) {
+  return <div>{hit.name}</div>;
+}
 ```
 
 The widget receives a prop `hit` that contains the content of the
@@ -187,10 +186,10 @@ function Search() {
 <div class="highlight-key-part">
   <div class="highlight-key-part__title">In this section we've seen:</div>
 
-   - how to display the results from Algolia
+* how to display the results from Algolia
 
-   - how to customize the display of those results
-</div>
+* how to customize the display of those results
+  </div>
 
 ## Add a SearchBox
 
@@ -199,7 +198,7 @@ in the Search component that we created before:
 
 ```jsx
 // We need to add the SearchBox to our import
-import {InstantSearch, Hits, SearchBox} from 'react-instantsearch/dom';
+import { InstantSearch, Hits, SearchBox } from 'react-instantsearch/dom';
 
 // [...]
 
@@ -219,19 +218,24 @@ search result component:
 
 ```jsx
 // We need to add the Highlight widget to our import
-import {InstantSearch, Hits, SearchBox, Highlight} from 'react-instantsearch/dom';
+import {
+  InstantSearch,
+  Hits,
+  SearchBox,
+  Highlight
+} from 'react-instantsearch/dom';
 
 // [...]
 
-function Product({hit}) {
+function Product({ hit }) {
   return (
-    <div style={{marginTop: '10px'}}>
+    <div style={{ marginTop: '10px' }}>
       <span className="hit-name">
-        <Highlight attributeName="name" hit={hit} />
+        <Highlight attribute="name" hit={hit} />
       </span>
     </div>
   );
-};
+}
 ```
 
 Now the search displays the results and highlights the part of the hit attribute
@@ -242,12 +246,12 @@ dialog between the user and the data.
 <div class="highlight-key-part">
   <div class="highlight-key-part__title">In this section we've seen:</div>
 
-   - how to add a SearchBox to make queries into the records
+* how to add a SearchBox to make queries into the records
 
-   - how to highlight the matched part of the results
+* how to highlight the matched part of the results
 
-   - the importance of highlighting in a text-based search
-</div>
+* the importance of highlighting in a text-based search
+  </div>
 
 ## Add RefinementList
 
@@ -262,7 +266,13 @@ to filter the products by categories:
 
 ```jsx
 // We need to add the RefinementList to our import
-import {InstantSearch, Hits, SearchBox, Highlight, RefinementList} from 'react-instantsearch/dom';
+import {
+  InstantSearch,
+  Hits,
+  SearchBox,
+  Highlight,
+  RefinementList
+} from 'react-instantsearch/dom';
 
 // [...]
 
@@ -270,14 +280,14 @@ function Search() {
   return (
     <div className="container">
       <SearchBox />
-      <RefinementList attributeName="category" />
+      <RefinementList attribute="category" />
       <Hits hitComponent={Product} />
     </div>
   );
 }
 ```
 
-The `attributeName` props specifies the faceted attribute to use in this widget. This
+The `attribute` props specifies the faceted attribute to use in this widget. This
 attribute should be declared as a facet in the index configuration as well.
 
 The values displayed are computed by Algolia from the results.
@@ -285,37 +295,46 @@ The values displayed are computed by Algolia from the results.
 <div class="highlight-key-part">
   <div class="highlight-key-part__title">In this section we've seen:</div>
 
-   - there are components for all types of refinements
+* there are components for all types of refinements
 
-   - the RefinementList works with facets
+* the RefinementList works with facets
 
-   - facets are computed from the results
-</div>
+* facets are computed from the results
+  </div>
 
 ## Refine the search experience further
 
 We now miss two elements in our search interface:
- - the ability to browse beyond the first page of results
- - the ability to reset the search state
 
-Those two features are implemented respectively with the [Pagination](widgets/Pagination.html), [ClearAll](widgets/ClearAll.html)
+* the ability to browse beyond the first page of results
+* the ability to reset the search state
+
+Those two features are implemented respectively with the [Pagination](widgets/Pagination.html), [ClearRefinements](widgets/ClearRefinements.html)
 and [CurrentRefinements](widgets/CurrentRefinements.html) widgets. Both have nice defaults which means that
 we can use them directly without further configuration.
 
 ```jsx
 // We need to add the RefinementList to our import
-import {InstantSearch, Hits, SearchBox, Highlight, RefinementList,
-Pagination, CurrentRefinements, ClearAll} from 'react-instantsearch/dom';
+import {
+  InstantSearch,
+  Hits,
+  SearchBox,
+  Highlight,
+  RefinementList,
+  Pagination,
+  CurrentRefinements,
+  ClearRefinements
+} from 'react-instantsearch/dom';
 
 // [...]
 
 function Search() {
   return (
     <div className="container">
-      <CurrentRefinements/>
-      <ClearAll/>
+      <CurrentRefinements />
+      <ClearRefinements />
       <SearchBox />
-      <RefinementList attributeName="category" />
+      <RefinementList attribute="category" />
       <Hits hitComponent={Product} />
       <Pagination />
     </div>
@@ -324,16 +343,16 @@ function Search() {
 ```
 
 Current filters will display all the filters currently selected by the user.
-This gives the user a synthetic way of understanding the current search. `ClearAll`
+This gives the user a synthetic way of understanding the current search. `ClearRefinements`
 displays a button to remove all the filters.
 
 <div class="highlight-key-part">
   <div class="highlight-key-part__title">In this section we've seen:</div>
 
-   - how to clear the filters
+* how to clear the filters
 
-   - how to paginate the results
-</div>
+* how to paginate the results
+  </div>
 
 ## Next steps
 

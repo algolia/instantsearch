@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import renderer from 'react-test-renderer';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -36,6 +35,60 @@ describe('Breadcrumb', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('outputs the default breadcrumb with no refinement', () => {
+    const tree = renderer
+      .create(
+        <Breadcrumb
+          refine={() => null}
+          createURL={() => '#'}
+          items={[
+            {
+              value: 'white',
+              label: 'white',
+            },
+            {
+              value: 'white > white1',
+              label: 'white1',
+            },
+            {
+              value: 'white > white1 > white1.1',
+              label: 'white1.1',
+            },
+          ]}
+          canRefine={false}
+        />
+      )
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('outputs the default breadcrumb with a custom className', () => {
+    const tree = renderer.create(
+      <Breadcrumb
+        className="MyCustomBreadcrumb"
+        refine={() => null}
+        createURL={() => '#'}
+        items={[
+          {
+            value: 'white',
+            label: 'white',
+          },
+          {
+            value: 'white > white1',
+            label: 'white1',
+          },
+          {
+            value: 'white > white1 > white1.1',
+            label: 'white1.1',
+          },
+        ]}
+        canRefine={true}
+      />
+    );
+
+    expect(tree.toJSON()).toMatchSnapshot();
+  });
+
   it('refines its value on change', () => {
     const refine = jest.fn();
     const wrapper = mount(
@@ -60,7 +113,7 @@ describe('Breadcrumb', () => {
       />
     );
 
-    const breadcrumb = wrapper.find('.ais-Breadcrumb__root');
+    const breadcrumb = wrapper.find('ul');
 
     expect(breadcrumb.children()).toHaveLength(4);
 
@@ -125,7 +178,7 @@ describe('Breadcrumb', () => {
       />
     );
 
-    const breadcrumb = wrapper.find('.ais-Breadcrumb__root');
+    const breadcrumb = wrapper.find('ul');
 
     expect(breadcrumb.children()).toHaveLength(4);
 
@@ -201,42 +254,5 @@ describe('Breadcrumb', () => {
       )
       .toJSON();
     expect(tree).toMatchSnapshot();
-  });
-
-  describe('Panel compatibility', () => {
-    it('Should indicate when there is no more refinement', () => {
-      const canRefine = jest.fn();
-      const wrapper = mount(
-        <Breadcrumb
-          refine={() => null}
-          createURL={() => '#'}
-          items={[
-            {
-              value: 'white',
-              label: 'white',
-            },
-            {
-              value: 'white > white1',
-              label: 'white1',
-            },
-          ]}
-          canRefine={true}
-        />,
-        {
-          context: { canRefine },
-          childContextTypes: { canRefine: PropTypes.func },
-        }
-      );
-
-      expect(canRefine.mock.calls).toHaveLength(1);
-      expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(wrapper.find('.ais-Breadcrumb__noRefinement')).toHaveLength(0);
-
-      wrapper.setProps({ canRefine: false });
-
-      expect(canRefine.mock.calls).toHaveLength(2);
-      expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(wrapper.find('.ais-Breadcrumb__noRefinement')).toHaveLength(1);
-    });
   });
 });

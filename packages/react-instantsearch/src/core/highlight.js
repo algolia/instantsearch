@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 
 /**
- * Find an highlighted attribute given an `attributeName` and an `highlightProperty`, parses it,
+ * Find an highlighted attribute given an `attribute` and an `highlightProperty`, parses it,
  * and provided an array of objects with the string value and a boolean if this
  * value is highlighted.
  *
@@ -12,7 +12,7 @@ import { get } from 'lodash';
  * @param {string} preTag - string used to identify the start of an highlighted value
  * @param {string} postTag - string used to identify the end of an highlighted value
  * @param {string} highlightProperty - the property that contains the highlight structure in the results
- * @param {string} attributeName - the highlighted attribute to look for
+ * @param {string} attribute - the highlighted attribute to look for
  * @param {object} hit - the actual hit returned by Algolia.
  * @return {object[]} - An array of {value: string, isHighlighted: boolean}.
  */
@@ -20,12 +20,12 @@ export default function parseAlgoliaHit({
   preTag = '<em>',
   postTag = '</em>',
   highlightProperty,
-  attributeName,
+  attribute,
   hit,
 }) {
   if (!hit) throw new Error('`hit`, the matching record, must be provided');
 
-  const highlightObject = get(hit[highlightProperty], attributeName, {});
+  const highlightObject = get(hit[highlightProperty], attribute, {});
 
   if (Array.isArray(highlightObject)) {
     return highlightObject.map(item =>

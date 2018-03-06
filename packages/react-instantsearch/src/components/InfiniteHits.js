@@ -1,66 +1,67 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-
-import classNames from './classNames.js';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import translatable from '../core/translatable';
+import createClassNames from './createClassNames';
 
-const cx = classNames('InfiniteHits');
+const cx = createClassNames('InfiniteHits');
 
 class InfiniteHits extends Component {
   render() {
     const {
-      hitComponent: ItemComponent,
+      hitComponent: HitComponent,
       hits,
       hasMore,
       refine,
       translate,
+      className,
     } = this.props;
-    const renderedHits = hits.map(hit => (
-      <ItemComponent key={hit.objectID} hit={hit} />
-    ));
-    const loadMoreButton = hasMore ? (
-      <button {...cx('loadMore')} onClick={() => refine()}>
-        {translate('loadMore')}
-      </button>
-    ) : (
-      <button {...cx('loadMore')} disabled>
-        {translate('loadMore')}
-      </button>
-    );
 
     return (
-      <div {...cx('root')}>
-        {renderedHits}
-        {loadMoreButton}
+      <div className={classNames(cx(''), className)}>
+        <ul className={cx('list')}>
+          {hits.map(hit => (
+            <li key={hit.objectID} className={cx('item')}>
+              <HitComponent hit={hit} />
+            </li>
+          ))}
+        </ul>
+        <button
+          className={cx('loadMore', !hasMore && 'loadMore--disabled')}
+          onClick={() => refine()}
+          disabled={!hasMore}
+        >
+          {translate('loadMore')}
+        </button>
       </div>
     );
   }
 }
 
 InfiniteHits.propTypes = {
-  hits: PropTypes.array,
-  hitComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func])
-    .isRequired,
+  hits: PropTypes.arrayOf(PropTypes.object).isRequired,
   hasMore: PropTypes.bool.isRequired,
   refine: PropTypes.func.isRequired,
   translate: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  hitComponent: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
 };
 
-/* eslint-disable react/display-name */
 InfiniteHits.defaultProps = {
+  className: '',
   hitComponent: hit => (
     <div
       style={{
         borderBottom: '1px solid #bbb',
         paddingBottom: '5px',
         marginBottom: '5px',
+        wordBreak: 'break-all',
       }}
     >
       {JSON.stringify(hit).slice(0, 100)}...
     </div>
   ),
 };
-/* eslint-enable react/display-name */
 
 export default translatable({
   loadMore: 'Load more',

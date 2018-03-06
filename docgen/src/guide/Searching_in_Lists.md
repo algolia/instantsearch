@@ -12,16 +12,18 @@ or [`connectRefinementList`](connectors/connectRefinementList.html) and [`connec
 In order to make this feature work, you'll also need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
 
 ## Using widgets
-Use the `withSearchBox` prop to add a nice search box to supported widgets:
+
+Use the `searchable` prop to add a nice search box to supported widgets:
+
 - [`<RefinementList>`](widgets/RefinementList.html)
 - [`<Menu>`](widgets/Menu.html)
 
 ```jsx
-<RefinementList attributeName="products" withSearchBox />
+<RefinementList attribute="products" searchable />
 ```
 
 <div class="storybook-section">
-<a class="btn" href="https://community.algolia.com/react-instantsearch/storybook/?selectedKind=RefinementList&selectedStory=with%20search%20for%20facets%20value" target="_blank">View in Storybook</a>
+  <a class="btn" href="https://community.algolia.com/react-instantsearch/storybook/?selectedKind=RefinementList&selectedStory=with%20search%20for%20facets%20value" target="_blank">View in Storybook</a>
 </div>
 
 ## Using connectors
@@ -37,7 +39,7 @@ import {Highlight} from 'react-instantsearch/dom';
 const RefinementListWithSearchBox = connectRefinementList(props => {
   const values = props.items.map(item => {
     const label = item._highlightResult
-      ? <Highlight attributeName="label" hit={item}/>
+      ? <Highlight attribute="label" hit={item}/>
       : item.label;
     return <li key={item.value}>
       <span onClick={() => props.refine(item.value)}>
@@ -52,7 +54,7 @@ const RefinementListWithSearchBox = connectRefinementList(props => {
     </div>
   );
 });
-<RefinementListWithSearchBox attributeName="products"/>
+<RefinementListWithSearchBox attribute="products"/>
 ```
 
 <div class="guide-nav">

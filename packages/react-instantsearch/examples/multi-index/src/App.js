@@ -1,6 +1,5 @@
 import React from 'react';
 import { InstantSearch, Hits, SearchBox, Index } from 'react-instantsearch/dom';
-import 'react-instantsearch-theme-algolia/style.css';
 
 const App = () => (
   <InstantSearch

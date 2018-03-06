@@ -1,34 +1,40 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import createClassNames from './createClassNames';
 import Select from './Select';
-import classNames from './classNames.js';
 
-const cx = classNames('SortBy');
+const cx = createClassNames('SortBy');
 
 class SortBy extends Component {
   static propTypes = {
-    refine: PropTypes.func.isRequired,
-
     items: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
         value: PropTypes.string.isRequired,
       })
     ).isRequired,
-
     currentRefinement: PropTypes.string.isRequired,
-    transformItems: PropTypes.func,
+    refine: PropTypes.func.isRequired,
+    className: PropTypes.string,
+  };
+
+  static defaultProps = {
+    className: '',
   };
 
   render() {
-    const { refine, items, currentRefinement } = this.props;
+    const { items, currentRefinement, refine, className } = this.props;
+
     return (
-      <Select
-        cx={cx}
-        selectedItem={currentRefinement}
-        onSelect={refine}
-        items={items}
-      />
+      <div className={classNames(cx(''), className)}>
+        <Select
+          cx={cx}
+          items={items}
+          selectedItem={currentRefinement}
+          onSelect={refine}
+        />
+      </div>
     );
   }
 }

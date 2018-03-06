@@ -1,5 +1,7 @@
-import connectPagination from '../connectors/connectPagination.js';
-import PaginationComponent from '../components/Pagination.js';
+import React from 'react';
+import connectPagination from '../connectors/connectPagination';
+import PanelCallbackHandler from '../components/PanelCallbackHandler';
+import Pagination from '../components/Pagination';
 
 /**
  * The Pagination widget displays a simple pagination system allowing the user to
@@ -10,18 +12,21 @@ import PaginationComponent from '../components/Pagination.js';
  * @propType {boolean} [showLast=false] - Display the last page link.
  * @propType {boolean} [showPrevious=true] - Display the previous page link.
  * @propType {boolean} [showNext=true] - Display the next page link.
- * @propType {number} [pagesPadding=3] - How many page links to display around the current page.
- * @propType {number} [maxPages=Infinity] - Maximum number of pages to display.
- * @themeKey ais-Pagination__root - The root component of the widget
- * @themeKey ais-Pagination__itemFirst - The first page link item
- * @themeKey ais-Pagination__itemPrevious - The previous page link item
- * @themeKey ais-Pagination__itemPage - The page link item
- * @themeKey ais-Pagination__itemNext - The next page link item
- * @themeKey ais-Pagination__itemLast - The last page link item
- * @themeKey ais-Pagination__itemDisabled - a disabled item
- * @themeKey ais-Pagination__itemSelected - a selected item
- * @themeKey ais-Pagination__itemLink - The link of an item
- * @themeKey ais-Pagination__noRefinement - present when there is no refinement
+ * @propType {number} [padding=3] - How many page links to display around the current page.
+ * @propType {number} [totalPages=Infinity] - Maximum number of pages to display.
+ * @themeKey ais-Pagination - the root div of the widget
+ * @themeKey ais-Pagination--noRefinement - the root div of the widget when there is no refinement
+ * @themeKey ais-Pagination-list - the list of all pagination items
+ * @themeKey ais-Pagination-list--noRefinement - the list of all pagination items when there is no refinement
+ * @themeKey ais-Pagination-item - the pagination list item
+ * @themeKey ais-Pagination-item--firstPage - the "first" pagination list item
+ * @themeKey ais-Pagination-item--lastPage - the "last" pagination list item
+ * @themeKey ais-Pagination-item--previousPage - the "previous" pagination list item
+ * @themeKey ais-Pagination-item--nextPage - the "next" pagination list item
+ * @themeKey ais-Pagination-item--page - the "page" pagination list item
+ * @themeKey ais-Pagination-item--selected - the selected pagination list item
+ * @themeKey ais-Pagination-item--disabled - the disabled pagination list item
+ * @themeKey ais-Pagination-link - the pagination clickable element
  * @translationKey previous - Label value for the previous page link
  * @translationKey next - Label value for the next page link
  * @translationKey first - Label value for the first page link
@@ -49,4 +54,11 @@ import PaginationComponent from '../components/Pagination.js';
  *   );
  * }
  */
-export default connectPagination(PaginationComponent);
+
+const PaginationWidget = props => (
+  <PanelCallbackHandler {...props}>
+    <Pagination {...props} />
+  </PanelCallbackHandler>
+);
+
+export default connectPagination(PaginationWidget);

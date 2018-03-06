@@ -1,12 +1,13 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { range } from 'lodash';
 import { capitalize } from '../core/utils';
 import translatable from '../core/translatable';
+import createClassNames from '../components/createClassNames';
 import LinkList from './LinkList';
-import classNames from './classNames.js';
 
-const cx = classNames('Pagination');
+const cx = createClassNames('Pagination');
 
 // Determines the size of the widget (the number of pages displayed - that the user can directly click on)
 function calculateSize(padding, maxPages) {
@@ -59,8 +60,9 @@ class Pagination extends Component {
     showPrevious: PropTypes.bool,
     showNext: PropTypes.bool,
     showLast: PropTypes.bool,
-    pagesPadding: PropTypes.number,
-    maxPages: PropTypes.number,
+    padding: PropTypes.number,
+    totalPages: PropTypes.number,
+    className: PropTypes.string,
   };
 
   static defaultProps = {
@@ -69,28 +71,17 @@ class Pagination extends Component {
     showPrevious: true,
     showNext: true,
     showLast: false,
-    pagesPadding: 3,
-    maxPages: Infinity,
+    padding: 3,
+    totalPages: Infinity,
+    className: '',
   };
-
-  static contextTypes = {
-    canRefine: PropTypes.func,
-  };
-
-  componentWillMount() {
-    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
-  }
-
-  componentWillReceiveProps(props) {
-    if (this.context.canRefine) this.context.canRefine(props.canRefine);
-  }
 
   getItem(modifier, translationKey, value) {
-    const { nbPages, maxPages, translate } = this.props;
+    const { nbPages, totalPages, translate } = this.props;
     return {
       key: `${modifier}.${value}`,
       modifier,
-      disabled: value < 1 || value >= Math.min(maxPages, nbPages),
+      disabled: value < 1 || value >= Math.min(totalPages, nbPages),
       label: translate(translationKey, value),
       value,
       ariaLabel: translate(`aria${capitalize(translationKey)}`, value),
@@ -99,28 +90,31 @@ class Pagination extends Component {
 
   render() {
     const {
+      listComponent: ListComponent,
       nbPages,
-      maxPages,
+      totalPages,
       currentRefinement,
-      pagesPadding,
+      padding,
       showFirst,
       showPrevious,
       showNext,
       showLast,
       refine,
       createURL,
+      canRefine,
       translate,
-      listComponent: ListComponent,
+      className,
       ...otherProps
     } = this.props;
-    const totalPages = Math.min(nbPages, maxPages);
-    const lastPage = totalPages;
+
+    const maxPages = Math.min(nbPages, totalPages);
+    const lastPage = maxPages;
 
     let items = [];
     if (showFirst) {
       items.push({
         key: 'first',
-        modifier: 'itemFirst',
+        modifier: 'item--firstPage',
         disabled: currentRefinement === 1,
         label: translate('first'),
         value: 1,
@@ -130,7 +124,7 @@ class Pagination extends Component {
     if (showPrevious) {
       items.push({
         key: 'previous',
-        modifier: 'itemPrevious',
+        modifier: 'item--previousPage',
         disabled: currentRefinement === 1,
         label: translate('previous'),
         value: currentRefinement - 1,
@@ -139,9 +133,9 @@ class Pagination extends Component {
     }
 
     items = items.concat(
-      getPages(currentRefinement, totalPages, pagesPadding).map(value => ({
+      getPages(currentRefinement, maxPages, padding).map(value => ({
         key: value,
-        modifier: 'itemPage',
+        modifier: 'item--page',
         label: translate('page', value),
         value,
         selected: value === currentRefinement,
@@ -151,7 +145,7 @@ class Pagination extends Component {
     if (showNext) {
       items.push({
         key: 'next',
-        modifier: 'itemNext',
+        modifier: 'item--nextPage',
         disabled: currentRefinement === lastPage || lastPage <= 1,
         label: translate('next'),
         value: currentRefinement + 1,
@@ -161,7 +155,7 @@ class Pagination extends Component {
     if (showLast) {
       items.push({
         key: 'last',
-        modifier: 'itemLast',
+        modifier: 'item--lastPage',
         disabled: currentRefinement === lastPage || lastPage <= 1,
         label: translate('last'),
         value: lastPage,
@@ -170,13 +164,18 @@ class Pagination extends Component {
     }
 
     return (
-      <ListComponent
-        {...otherProps}
-        cx={cx}
-        items={items}
-        onSelect={refine}
-        createURL={createURL}
-      />
+      <div
+        className={classNames(cx('', !canRefine && '-noRefinement'), className)}
+      >
+        <ListComponent
+          {...otherProps}
+          cx={cx}
+          items={items}
+          onSelect={refine}
+          createURL={createURL}
+          canRefine={canRefine}
+        />
+      </div>
     );
   }
 }

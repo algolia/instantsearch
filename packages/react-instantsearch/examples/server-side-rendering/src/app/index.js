@@ -23,7 +23,7 @@ class App extends Component {
         <Configure hitsPerPage={3} />
         <SearchBox />
         <Hits />
-        <RefinementList attributeName="category" />
+        <RefinementList attribute="category" />
       </InstantSearch>
     );
   }

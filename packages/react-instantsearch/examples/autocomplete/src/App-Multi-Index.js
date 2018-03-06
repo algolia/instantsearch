@@ -2,7 +2,6 @@ import React from 'react';
 import { InstantSearch, Configure, Index } from 'react-instantsearch/dom';
 import { connectAutoComplete } from 'react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
-import 'react-instantsearch-theme-algolia/style.css';
 
 const App = () => (
   <InstantSearch

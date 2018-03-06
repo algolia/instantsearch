@@ -7,9 +7,10 @@ import PoweredByComponent from '../components/PoweredBy.js';
  * Algolia requires that you use this widget if you are on a [community or free plan](https://www.algolia.com/pricing).
  * @name PoweredBy
  * @kind widget
- * @themeKey ais-PoweredBy__root - The root component of the widget
- * @themeKey ais-PoweredBy__searchBy - The powered by label
- * @themeKey ais-PoweredBy__algoliaLink - The algolia logo link
+ * @themeKey ais-PoweredBy - the root div of the widget
+ * @themeKey ais-PoweredBy-text - the text of the widget
+ * @themeKey ais-PoweredBy-link - the link of the logo
+ * @themeKey ais-PoweredBy-logo - the logo of the widget
  * @translationKey searchBy - Label value for the powered by
  * @example
  * import React from 'react';
