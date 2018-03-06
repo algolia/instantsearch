@@ -101,7 +101,7 @@
     "prettier": "1.11.1",
     "pretty-bytes-cli": "2.0.0",
     "prop-types": "15.6.1",
-    "pug": "2.0.0-rc.4",
+    "pug": "2.0.0",
     "qs": "6.5.1",
     "react": "16.2.0",
     "react-autosuggest": "9.3.4",
