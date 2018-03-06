@@ -132,6 +132,7 @@ breadcrumb({
  * }
  * ```
  * @type {WidgetFactory}
+ * @devNovel Breadcrumb
  * @category navigation
  * @param {BreadcrumbWidgetOptions} $0 The Breadcrumb widget options.
  * @return {Widget} A new Breadcrumb widget instance.

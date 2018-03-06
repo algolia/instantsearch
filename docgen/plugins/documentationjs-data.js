@@ -146,10 +146,12 @@ function mapWidgets(widgets, symbols, files) {
     const relatedTypes = findRelatedTypes(symbol, symbols);
     const staticExamples = symbol.tags.filter(t => t.title === 'staticExample');
     const requirements = symbol.tags.find(t => t.title === 'requirements') || { description: '' };
+    const devNovel = symbol.tags.find(t => t.title === 'devNovel') || false;
 
     const symbolWithRelatedType = {
       ...symbol,
       requirements: md.render(requirements.description),
+      devNovel: createDevNovelURL(devNovel),
       relatedTypes,
       staticExamples,
     };
@@ -222,4 +224,8 @@ function findRelatedTypes(functionSymbol, symbols) {
 
 function isCustomType(name) {
   return name && name !== 'Object' && name[0] === name[0].toUpperCase();
+}
+
+function createDevNovelURL(devNovel) {
+  return devNovel ? `dev-novel?selectedStory=${devNovel.description}.default` : '';
 }

@@ -94,6 +94,7 @@ clearAll({
  *
  * The current refined values widget can display a button that has the same behavior.
  * @type {WidgetFactory}
+ * @devNovel ClearAll
  * @category clear-filter
  * @param {ClearAllWidgetOptions} $0 The ClearAll widget options.
  * @returns {Widget} A new instance of the ClearAll widget.

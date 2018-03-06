@@ -96,6 +96,7 @@ infiniteHits({
  * will let the user load more results to the list. This is particularly
  * handy on mobile implementations.
  * @type {WidgetFactory}
+ * @devNovel InfiniteHits
  * @category basic
  * @param {InfiniteHitsWidgetOptions} $0 The options for the InfiniteHits widget.
  * @return {Widget} Creates a new instance of the InfiniteHits widget.

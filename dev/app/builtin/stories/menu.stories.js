@@ -9,7 +9,7 @@ const stories = storiesOf('Menu');
 export default () => {
   stories
     .add(
-      'Default',
+      'default',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.menu({

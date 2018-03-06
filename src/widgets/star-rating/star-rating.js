@@ -130,6 +130,7 @@ starRating({
  * The values inside this attribute must be JavaScript numbers (not strings).
  *
  * @type {WidgetFactory}
+ * @devNovel StarRating
  * @category filter
  * @param {StarWidgetOptions} $0 StarRating widget options.
  * @return {Widget} A new StarRating widget instance.

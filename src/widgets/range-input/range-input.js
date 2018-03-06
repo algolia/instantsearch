@@ -127,6 +127,7 @@ rangeInput({
  *
  * The values inside this attribute must be JavaScript numbers (not strings).
  * @type {WidgetFactory}
+ * @devNovel RangeInput
  * @category filter
  * @param {RangeInputWidgetOptions} $0 The RangeInput widget options.
  * @return {Widget} A new instance of RangeInput widget.
