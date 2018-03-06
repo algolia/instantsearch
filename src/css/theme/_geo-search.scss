@@ -8,7 +8,6 @@
   border: solid 1px #D4D8E3;
   border-radius: $border-radius;
   padding: 8px 15px;
-  outline: none;
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -36,17 +35,12 @@
   padding: 0 15px;
 }
 
-.ais-geo-search--toggle-input {
-  outline: none;
-}
-
 .ais-geo-search--redo {
   @extend .ais-clear-all--link;
   box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: $border-radius;
   padding: 8px 15px;
-  outline: none;
 
   &:hover {
     cursor: pointer;
