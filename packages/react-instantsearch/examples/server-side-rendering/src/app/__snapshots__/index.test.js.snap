@@ -77,7 +77,6 @@ exports[`Server-side rendering recipes App renders without crashing 1`] = `
       </button>
       <button
         className="ais-SearchBox__reset"
-        onClick={[Function]}
         title="Clear the search query."
         type="reset"
       >
