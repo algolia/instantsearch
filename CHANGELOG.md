@@ -1,3 +1,15 @@
+<a name="4.5.2"></a>
+## [4.5.2](https://github.com/algolia/react-instantsearch/compare/v4.5.1...v4.5.2) (2018-03-06)
+
+
+### Bug Fixes
+
+* **connectRange:** update default refinement propTypes ([#978](https://github.com/algolia/react-instantsearch/issues/978)) ([c065fb1](https://github.com/algolia/react-instantsearch/commit/c065fb1))
+* **IndexUtils:** avoid throw an error when cleanUp multi index ([#1019](https://github.com/algolia/react-instantsearch/issues/1019)) ([865a3c3](https://github.com/algolia/react-instantsearch/commit/865a3c3))
+* **SearchBox:** avoid to bind click on reset button ([#979](https://github.com/algolia/react-instantsearch/issues/979)) ([ea3063a](https://github.com/algolia/react-instantsearch/commit/ea3063a))
+
+
+
 <a name="4.5.1"></a>
 ## [4.5.1](https://github.com/algolia/react-instantsearch/compare/v4.5.0...v4.5.1) (2018-02-06)
 
