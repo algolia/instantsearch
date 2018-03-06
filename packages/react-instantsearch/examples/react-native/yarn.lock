@@ -4770,13 +4770,13 @@ react-dom@16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-instantsearch-theme-algolia@4.5.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-theme-algolia/-/react-instantsearch-theme-algolia-4.5.1.tgz#29513fcb54100ea29764cbdf1961312ffc82393b"
+react-instantsearch-theme-algolia@4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-theme-algolia/-/react-instantsearch-theme-algolia-4.5.2.tgz#42a95fd6f7b3c9b86d25d1a3bee252b16d4d1430"
 
-react-instantsearch@4.5.1:
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.5.1.tgz#b079bb643e08f262329922eae2eef9ca076ac5cd"
+react-instantsearch@4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-4.5.2.tgz#37c359eb0b1ab9d67690351970d6c59d0269f2c7"
   dependencies:
     algoliasearch "^3.24.0"
     algoliasearch-helper "^2.21.0"
