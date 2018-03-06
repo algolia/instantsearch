@@ -50,7 +50,6 @@ exports[`geo-search recipe App renders without crashing 1`] = `
       <button
         className="ais-SearchBox-reset"
         hidden={true}
-        onClick={[Function]}
         title="Clear the search query."
         type="reset"
       >
