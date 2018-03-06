@@ -261,7 +261,7 @@ With these steps we introduced a way to provide custom parameters:
 
 And voilà, we have covered how to write a simple custom widget using connectors 🎉 !
 
-Now you can [read more about connectors](../connectors.html) in the docs and create more advanced usages with the same simplicity.  
+Now you can [read more about connectors](connectors.html) in the docs and create more advanced usages with the same simplicity.  
 
 
 
