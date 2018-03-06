@@ -148,7 +148,7 @@ describe('GeoSearch', () => {
     expect(render.mock.calls[0]).toMatchSnapshot();
   });
 
-  it('exepct to render with custom classNames', () => {
+  it('expect to render with custom classNames', () => {
     const container = createContainer();
     const instantSearchInstance = createFakeInstantSearch();
     const helper = createFakeHelper();
@@ -187,7 +187,7 @@ describe('GeoSearch', () => {
     expect(render.mock.calls[0]).toMatchSnapshot();
   });
 
-  it('exepct to render with custom template', () => {
+  it('expect to render with custom template', () => {
     const container = createContainer();
     const instantSearchInstance = createFakeInstantSearch();
     const helper = createFakeHelper();
@@ -226,7 +226,7 @@ describe('GeoSearch', () => {
     expect(actual).toEqual(expectation);
   });
 
-  it('exepct to render with custom paddingBoundingBoc', () => {
+  it('expect to render with custom paddingBoundingBoc', () => {
     const container = createContainer();
     const instantSearchInstance = createFakeInstantSearch();
     const helper = createFakeHelper();
@@ -741,7 +741,7 @@ describe('GeoSearch', () => {
   });
 
   describe('initial position', () => {
-    it('expect to init the position from "initalPostion" when no items are available & map is not yet render', () => {
+    it('expect to init the position from "initialPosition" when no items are available & map is not yet render', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -1303,7 +1303,7 @@ describe('GeoSearch', () => {
       );
     });
 
-    it('expect to not append anyhing when the items are empty', () => {
+    it('expect to not append anything when the items are empty', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();

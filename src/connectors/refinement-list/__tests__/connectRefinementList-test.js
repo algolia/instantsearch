@@ -686,7 +686,7 @@ describe('connectRefinementList', () => {
       })
     );
 
-    // Sinulate the lifecycle
+    // Simulate the lifecycle
     widget.init({
       helper,
       state: helper.state,

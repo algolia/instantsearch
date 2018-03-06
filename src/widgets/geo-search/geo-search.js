@@ -53,7 +53,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
- * @typedef {object} GeoSeachCSSClasses
+ * @typedef {object} GeoSearchCSSClasses
  * @property {string|Array<string>} [root] CSS class to add to the root element.
  * @property {string|Array<string>} [map] CSS class to add to the map element.
  * @property {string|Array<string>} [controls] CSS class to add to the controls element.
@@ -91,8 +91,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {object} googleReference Reference to the global `window.google` object. <br />
  * See [the documentation](https://developers.google.com/maps/documentation/javascript/tutorial) for more information.
- * @property {number} [initialZoom=1] By default the map will set the zoom accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situtations we need to provide a zoom to render the map.
- * @property {LatLng} [initialPosition={ lat: 0, lng: 0 }] By default the map will set the position accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situtations we need to provide a position to render the map. This option is ignored when the `position` is provided.
+ * @property {number} [initialZoom=1] By default the map will set the zoom accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situations we need to provide a zoom to render the map.
+ * @property {LatLng} [initialPosition={ lat: 0, lng: 0 }] By default the map will set the position accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situations we need to provide a position to render the map. This option is ignored when the `position` is provided.
  * @property {Padding} [paddingBoundingBox={ top:0, right: 0, bottom:0, left: 0 }] Add an inner padding on the map when you refine.
  * @property {GeoSearchTemplates} [templates] Templates to use for the widget.
  * @property {GeoSeachCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
@@ -119,7 +119,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * Note that the GeoSearch widget uses the [geosearch](https://www.algolia.com/doc/guides/searching/geo-search) capabilities of Algolia. Your hits **must** have a `_geoloc` attribute in order to be displayed on the map.
  *
- * You are also repsonsible for loading the Google Maps library, it's not shipped with InstantSearch. You need to load the Google Maps library and pass a reference to the widget. You can find more information about how to install the library in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/tutorial).
+ * You are also responsible for loading the Google Maps library, it's not shipped with InstantSearch. You need to load the Google Maps library and pass a reference to the widget. You can find more information about how to install the library in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/tutorial).
  *
  * @type {WidgetFactory}
  * @devNovel GeoSearch

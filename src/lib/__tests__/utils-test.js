@@ -149,7 +149,7 @@ describe('utils.prepareTemplateProps', () => {
 });
 
 describe('utils.renderTemplate', () => {
-  it('expect to proccess templates as string', () => {
+  it('expect to process templates as string', () => {
     const templateKey = 'test';
     const templates = { test: 'it works with {{type}}' };
     const data = { type: 'strings' };
@@ -165,7 +165,7 @@ describe('utils.renderTemplate', () => {
     expect(actual).toBe(expectation);
   });
 
-  it('expect to proccess templates as function', () => {
+  it('expect to process templates as function', () => {
     const templateKey = 'test';
     const templates = { test: data => `it works with ${data.type}` };
     const data = { type: 'functions' };
