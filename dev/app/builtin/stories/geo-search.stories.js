@@ -17,7 +17,10 @@ const wrapWithHitsAndConfiguration = (story, searchParameters) =>
   });
 
 const injectGoogleMaps = fn => {
-  injectScript('https://maps.googleapis.com/maps/api/js?v=3.31', fn);
+  injectScript(
+    'https://maps.googleapis.com/maps/api/js?v=3.31&key=AIzaSyCl2TTJXpwxGuuc2zQZkAlIkWhpYbyjjP8',
+    fn
+  );
 };
 
 export default () => {
