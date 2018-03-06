@@ -125,7 +125,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @devNovel GeoSearch
  * @param {GeoSearchWidgetOptions} $0 Options of the GeoSearch widget.
  * @return {Widget} A new instance of GeoSearch widget.
- * @example
+ * @staticExample
  * search.addWidget(
  *   instantsearch.widgets.geoSearch({
  *     container: '#geo-search-container',
