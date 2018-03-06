@@ -124,4 +124,3 @@ printf "\n\nalmost done, check everything in another terminal tab if you want."
 read -p "=> Update of react-instantsearch version in all examples: when ready, press [ENTER] to push to github"
 
 git push origin master
-git push origin v5
