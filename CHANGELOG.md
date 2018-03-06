@@ -1,3 +1,15 @@
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/algolia/react-instantsearch/compare/v4.5.2...v5.0.0) (2018-03-06)
+
+
+This new version introduce a complete revamp of the naming and the HTML output of most widgets. The goal of this release is to provide improved semantics to our users.
+
+This release also introduces a new CSS naming convention which will be reused across all InstantSearch libraries. This will enable the possibility to develop cross-libraries CSS themes easily.
+
+You can find all the informations for the migration [in our documentation](https://community.algolia.com/react-instantsearch/guide/migration_guide_v5).
+
+
+
 <a name="4.5.2"></a>
 ## [4.5.2](https://github.com/algolia/react-instantsearch/compare/v4.5.1...v4.5.2) (2018-03-06)
 
