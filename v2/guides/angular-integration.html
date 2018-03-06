@@ -291,22 +291,22 @@
 <p>Before going through this guide, it’s well recommended to read the <a href="https://community.algolia.com/instantsearch.js/v2/guides/customization.html">customize widgets</a> and the <a href="https://community.algolia.com/instantsearch.js/v2/connectors.html">introduce to connectors</a> guides for InstantSearch.js</p>
 <h2 id="create-an-angular-app">Create an Angular app <a class="anchor" href="guides/angular-integration.html#create-an-angular-app" aria-hidden="true"></a></h2>
 <p>We will create a default Angular application using the <a href="http://yarn.fyi/@angular/cli">angular-cli</a>, this is done like this:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code>$ ng new [project-name]
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code>$ ng new [project-name]
 $ cd [project-name]
 </code></pre>
 <p>Later, we can serve the application with <code>$ ng serve</code>.</p>
 <h2 id="install-instantsearchjs">Install InstantSearch.js <a class="anchor" href="guides/angular-integration.html#install-instantsearchjs" aria-hidden="true"></a></h2>
 <p>First of all, you need to add InstantSearch.js to your dependencies:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code>$ yarn add instantsearch.js
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code>$ yarn add instantsearch.js
 // OR
 $ npm install instantsearch.js --save
 </code></pre>
 <p>After you have installed InstantSearch.js to your application’s dependencies, we need to instantiate the InstantSearch.js library into an Angular service. So we will generate this new service:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code>$ ng generate service services/instantsearch
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code>$ ng generate service services/instantsearch
 </code></pre>
 <p>Open the new generated file <code>src/app/services/instantsearch.service.ts</code> and here initialize InstantSearch.js</p>
 <p>In order to initialize InstantSearch.js, you need an Algolia account with a configured and non-empty index. For the sake of simplicity, let’s use the credentials of our test index:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-keyword">import</span> { <span class="cm-def">Injectable</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-keyword">import</span> { <span class="cm-def">Injectable</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
 <span class="cm-keyword">import</span> <span class="cm-def">instantsearch</span> <span class="cm-keyword">from</span> <span class="cm-string">&#39;instantsearch.js/es&#39;</span>;
 
 <span class="cm-operator">@</span><span class="cm-variable">Injectable</span>()
@@ -327,10 +327,10 @@ $ npm install instantsearch.js --save
 <h2 id="create-a-hits-component">Create a Hits component <a class="anchor" href="guides/angular-integration.html#create-a-hits-component" aria-hidden="true"></a></h2>
 <p>In order to display results, we are going to use the <a href="https://community.algolia.com/instantsearch.js/v2/connectors.html">connectors</a> API of InstantSearch.js and more specially the <a href="https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html">connectHits</a> connector.</p>
 <p>Start by creating a new component in your Angular application for the hits:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code>$ ng generate component components/hits --inline-style --inline-template
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code>$ ng generate component components/hits --inline-style --inline-template
 </code></pre>
 <p>In your newly created component, let’s inject the <code>InstantSearchService</code> we created before:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-keyword">import</span> { <span class="cm-def">Component</span>, <span class="cm-def">OnInit</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-keyword">import</span> { <span class="cm-def">Component</span>, <span class="cm-def">OnInit</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
 
 <span class="cm-keyword">import</span> { <span class="cm-def">InstantSearchService</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;../../services/instantsearch.service&#39;</span>;
 
@@ -346,7 +346,7 @@ $ npm install instantsearch.js --save
 </code></pre>
 <p>Now we can access the InstantSearch service, therefore we can connect the Angular component to the search. In InstantSearch.js v2, this can be done using the connectors, and in this case, the connectHits.</p>
 <p>At the initialization and each time there is a result update, the callback given to <code>connectHits</code> is called with the fresh results. Since we want to display the hits in our component, we plug the <code>connectHits</code> with <code>updateState</code>.</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-keyword">import</span> { <span class="cm-def">Component</span>, <span class="cm-def">OnInit</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-keyword">import</span> { <span class="cm-def">Component</span>, <span class="cm-def">OnInit</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
 <span class="cm-keyword">import</span> { <span class="cm-def">connectHits</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;instantsearch.js/es/connectors&#39;</span>;
 
 <span class="cm-keyword">import</span> { <span class="cm-def">InstantSearchService</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;../../services/instantsearch.service&#39;</span>;
@@ -387,7 +387,7 @@ $ npm install instantsearch.js --save
 </code></pre>
 <p>Now we have a component which is synced to search state. This state search is accessible in the template of the component.</p>
 <p>To render hits results we will use an <code>ngFor</code> directive:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-variable">template</span>: <span class="cm-string-2">`</span>
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-variable">template</span>: <span class="cm-string-2">`</span>
   <span class="cm-string-2">&lt;div class=&quot;is-hits-root&quot;&gt;</span>
     <span class="cm-string-2">&lt;ul&gt;</span>
       <span class="cm-string-2">&lt;li *ngFor=&quot;let hit of state.hits&quot;&gt;</span>
@@ -401,13 +401,13 @@ $ npm install instantsearch.js --save
 <h2 id="display-your-results">Display your results <a class="anchor" href="guides/angular-integration.html#display-your-results" aria-hidden="true"></a></h2>
 <p>Wherever you need to display hits results you an use the <code>&lt;app-hits&gt;&lt;/app-hits&gt;</code> component that we created before.</p>
 <p>In this section we will display the hits in the main app component, open <code>src/app/app.component.html</code> and add into the markup:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">app-hits</span><span class="cm-tag cm-bracket">&gt;</span><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">app-hits</span><span class="cm-tag cm-bracket">&gt;</span>
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">app-hits</span><span class="cm-tag cm-bracket">&gt;</span><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">app-hits</span><span class="cm-tag cm-bracket">&gt;</span>
 </code></pre>
 <p>It’s normal that you don’t see anything on your page this time, we didn’t start the search yet!</p>
 <p>You should start the search after all the widgets have been registered into your InstantSearch.js search instance (The InstantSearchService we created earlier).</p>
 <p>The safe way to do that, is to use the <a href="https://angular.io/api/core/AfterViewInit">AfterViewInit</a> component life-cycle hook.</p>
 <p>Open your main app component <code>src/app/app.component.ts</code> and implement the <code>AfterViewInit</code> hook and start the <code>InstantSearchService</code> search instance:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-keyword">import</span> { <span class="cm-def">Component</span>, <span class="cm-def">AfterViewInit</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-keyword">import</span> { <span class="cm-def">Component</span>, <span class="cm-def">AfterViewInit</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
 
 <span class="cm-keyword">import</span> { <span class="cm-def">InstantSearchService</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;./services/instantsearch.service&#39;</span>;
 
@@ -430,10 +430,10 @@ $ npm install instantsearch.js --save
 <p>This is pretty cool, but it’s not usable without a search box, let’s build a search box in a similar way.</p>
 <h2 id="interact-with-a-search-box">Interact with a search box <a class="anchor" href="guides/angular-integration.html#interact-with-a-search-box" aria-hidden="true"></a></h2>
 <p>Create a new component for the SearchBox:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code>$ ng generate component components/search-box --inline-template --inline-style
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code>$ ng generate component components/search-box --inline-template --inline-style
 </code></pre>
 <p>In your freshly create component, we need to inject the <code>InstantSearchService</code> and connect the state of the component to the search with the <a href="https://community.algolia.com/instantsearch.js/v2/connectors/connectSearchBox.html">connectSearchBox</a> connector like we did for the Hits component:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-keyword">import</span> { <span class="cm-def">Component</span>, <span class="cm-def">OnInit</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-keyword">import</span> { <span class="cm-def">Component</span>, <span class="cm-def">OnInit</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;@angular/core&#39;</span>;
 <span class="cm-keyword">import</span> { <span class="cm-def">connectSearchBox</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;instantsearch.js/es/connectors&#39;</span>;
 
 <span class="cm-keyword">import</span> { <span class="cm-def">InstantSearchService</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;../../services/instantsearch.service&#39;</span>;
@@ -471,7 +471,7 @@ $ npm install instantsearch.js --save
 }
 </code></pre>
 <p>We are still missing an input for the user to update the query of the search. We will use Angular data binding to update the query and call <code>this.state.refine()</code> function every time the input value changes:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-variable">template</span>: <span class="cm-string-2">`</span>
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-variable">template</span>: <span class="cm-string-2">`</span>
   <span class="cm-string-2">&lt;input</span>
     <span class="cm-string-2">type=&quot;text&quot;</span>
     <span class="cm-string-2">[value]=&quot;state.query&quot;</span>
@@ -480,7 +480,7 @@ $ npm install instantsearch.js --save
 <span class="cm-string-2">`</span>
 </code></pre>
 <p>Add a method <code>handleChange()</code> on your component class that will call <code>this.state.refine()</code>:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-variable">handleChange</span>(<span class="cm-variable">query</span>) {
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-variable">handleChange</span>(<span class="cm-variable">query</span>) {
   <span class="cm-keyword">this</span>.<span class="cm-property">state</span>.<span class="cm-property">refine</span>(<span class="cm-variable">query</span>)
 }
 </code></pre>
@@ -488,13 +488,13 @@ $ npm install instantsearch.js --save
 <h2 id="refining-even-further">Refining even further <a class="anchor" href="guides/angular-integration.html#refining-even-further" aria-hidden="true"></a></h2>
 <p>When you’re searching through data, not everything is easy to know about. That’s why we offer the RefinementList. Implementing a RefinementList is very similar to a SearchBox, but now we have to pass options to the widget.</p>
 <p>So just like the other components, we will start with the bootstrapping command:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code>$ ng generate component components/refinement-list --inline-template --inline-style
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code>$ ng generate component components/refinement-list --inline-template --inline-style
 </code></pre>
 <p>In that component, we’ll import the connectRefinementList first like this:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-keyword">import</span> { <span class="cm-def">connectRefinementList</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;instantsearch.js/es/connectors&#39;</span>;
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-keyword">import</span> { <span class="cm-def">connectRefinementList</span> } <span class="cm-keyword">from</span> <span class="cm-string">&#39;instantsearch.js/es/connectors&#39;</span>;
 </code></pre>
 <p>Once we have that we can setup the state shape and initialize our connector in <code>ngOnInit</code></p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-variable">ngOnInit</span>() {
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-variable">ngOnInit</span>() {
   <span class="cm-comment">// Create a widget which will call `this.updateState` whenever</span>
   <span class="cm-comment">// something changes on the search state itself.</span>
   <span class="cm-keyword">const</span> <span class="cm-def">widget</span> <span class="cm-operator">=</span> <span class="cm-variable">connectRefinementList</span>(<span class="cm-keyword">this</span>.<span class="cm-property">updateState</span>);
@@ -505,7 +505,7 @@ $ npm install instantsearch.js --save
 </code></pre>
 <p>Our RefinementList has some required attributes though, namely the <code>attributeName</code>. This is the name of the attribute that’s used to display this facet.</p>
 <p>In our example, we’ll filter by the values that <code>category</code> has in our objects. We can pass the options when you call the widget like this:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-variable">ngOnInit</span>() {
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-variable">ngOnInit</span>() {
   <span class="cm-keyword">const</span> <span class="cm-def">widget</span> <span class="cm-operator">=</span> <span class="cm-variable">connectRefinementList</span>(<span class="cm-keyword">this</span>.<span class="cm-property">updateState</span>);
   <span class="cm-keyword">this</span>.<span class="cm-property">instantSearchService</span>.<span class="cm-property">search</span>.<span class="cm-property">addWidget</span>(<span class="cm-variable">widget</span>({
     <span class="cm-property">attributeName</span>: <span class="cm-string">&#39;category&#39;</span>
@@ -513,12 +513,12 @@ $ npm install instantsearch.js --save
 }
 </code></pre>
 <p>Next, we make a template and a function to handle the refinement when someone clicks on it. The <code>handleChange()</code> function is simple:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-variable">handleChange</span>(<span class="cm-variable">query</span>) {
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-variable">handleChange</span>(<span class="cm-variable">query</span>) {
   <span class="cm-keyword">this</span>.<span class="cm-property">state</span>.<span class="cm-property">refine</span>(<span class="cm-variable">query</span>);
 }
 </code></pre>
 <p>Now we have all the information needed to build the markup of the component, we can fill in the template like this:</p>
-<pre class="CodeMirror cm-s-mdn-like code-sample"><code><span class="cm-variable">template</span>: <span class="cm-string-2">`</span>
+<pre class="CodeMirror cm-s-mdn-like code-sample code-sample-runnable"><code><span class="cm-variable">template</span>: <span class="cm-string-2">`</span>
   <span class="cm-string-2">&lt;div&gt;</span>
     <span class="cm-string-2">&lt;label</span>
       <span class="cm-string-2">*ngFor=&quot;let item of (state.items ? state.items.slice(0, 10) : [])&quot;</span>
@@ -539,7 +539,7 @@ $ npm install instantsearch.js --save
 <p>We used a <code>Service</code> for the InstantSearch instance, and then connect to that instance with connectors for each widget.</p>
 <p>This service is then started in the app initialisation and injected into every component needing it.</p>
 <p>In each component for a widget, we initialise the connector on <code>ngOnInit</code> and use the component’s state to render a template, while we use the <code>refine</code> function to refine the search even more.</p>
-</div><hr><p><strong>Can't find what you are looking for? <a href="https://github.com/algolia/instantsearch.js/issues/new?title=I could not find what I was looking for&amp;body=Hi! I have a documentation issue on InstantSearch.js, I could not find what I was looking for which is: -- PLEASE FILL IN HERE --">Open an issue</a>, we'll get back to you.</strong></p></div></div></section><section class="footer-new-cta footer-new h300 pos-rel"><div class="container color-white stellar-container vh-center"><div class="col-md-5"><div class="spacer120 hidden-sm"></div><div class="spacer32 visible-xs"></div><header><h2 class="text-normal m-t-none">Start creating stellar search,<span class="cf hidden-xs"></span>no strings attached.</h2><p>Dive into Algolia with our 14-day trial - No credit card required. Plenty of time to see how Algolia can change your business.</p></header></div><div class="col-md-7 pos-rel z-10"><div class="spacer120 inline hidden-sm"></div><div class="spacer32 inline hidden-sm"></div><div class="spacer16 visible-sm"></div><div class="button-holder h200 p-r-large"><div class="spacer16 hidden-md hidden-sm"></div><span class="inline pos-rel"><a class="btn btn-static-primary btn-static-shadow-dark" href="https://algolia.com/users/sign_up">Get Started<svg class="arrow-icon" width="22"><use xlink:href="#arrow-right"></use></svg></a></span></div></div></div></section><div id="footer"><div class="credits"><div class="container pos-rel"><div class="row"><div class="col-md-12 text-center"><a data-no-turbolink="true" href="/"><img width="40" src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo_badge-598a1fe6.svg"></a></div></div><div class="spacer40"></div></div></div></div><svg style="display: none;"><symbol viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" id="search-icon"><path d="M26.806 29.012a16.312 16.312 0 0 1-10.427 3.746C7.33 32.758 0 25.425 0 16.378 0 7.334 7.333 0 16.38 0c9.045 0 16.378 7.333 16.378 16.38 0 3.96-1.406 7.593-3.746 10.426L39.547 37.34c.607.608.61 1.59-.004 2.203a1.56 1.56 0 0 1-2.202.004L26.808 29.012zm-10.427.627c7.32 0 13.26-5.94 13.26-13.26 0-7.325-5.94-13.26-13.26-13.26-7.325 0-13.26 5.935-13.26 13.26 0 7.32 5.935 13.26 13.26 13.26z" fill-rule="evenodd"></path></symbol><symbol viewbox="0 0 46 38" xmlns="http://www.w3.org/2000/svg" id="arrow-right"><path d="M34.852 15.725l-8.624-9.908L24.385 3.7 28.62.014l1.84 2.116 13.1 15.05 1.606 1.846-1.61 1.844-13.1 15.002-1.845 2.114-4.23-3.692 1.85-2.114 9.465-10.84h-24.66v-5.615h23.817zm-26.774 0h-.002 2.96v5.614H0v-5.615h8.078z" fill-rule="evenodd"></path></symbol><symbol xmlns="http://www.w3.org/2000/svg" viewbox="0 0 708.8 717" id="icon-copy"><path d="M658.8 158H490.2c-13.3 0-26 5.3-35.4 14.6l-4.6 4.6V25c0-13.8-11.2-25-25-25H235.6c-6.6 0-13 2.6-17.7 7.3L7.3 218C2.6 222.6 0 229 0 235.6V541c0 13.8 11.2 25 25 25h227.8v101c0 27.6 22.4 50 50 50h356c27.6 0 50-22.4 50-50V208c0-27.6-22.4-50-50-50zm-204 85.4V360H338.2l116.6-116.6zm-253-149.2V209H87L201.8 94.2zM50 516V259h176.8c13.8 0 25-11.2 25-25V50h148.4v177.3L267.5 360c-9.4 9.4-14.6 22.1-14.6 35.4V516H50zm608.8 151h-356V410h177c13.8 0 25-11.2 25-25V208h154v459z"></path></symbol></svg><script src="/instantsearch.js/v2/js/main.4f4f7a929ad535e46541-build.js"></script><script type="text/javascript">var _kmq = _kmq || [];
+</div><hr><p><strong>Can't find what you are looking for? <a href="https://github.com/algolia/instantsearch.js/issues/new?title=I could not find what I was looking for&amp;body=Hi! I have a documentation issue on InstantSearch.js, I could not find what I was looking for which is: -- PLEASE FILL IN HERE --">Open an issue</a>, we'll get back to you.</strong></p></div></div></section><section class="footer-new-cta footer-new h300 pos-rel"><div class="container color-white stellar-container vh-center"><div class="col-md-5"><div class="spacer120 hidden-sm"></div><div class="spacer32 visible-xs"></div><header><h2 class="text-normal m-t-none">Start creating stellar search,<span class="cf hidden-xs"></span>no strings attached.</h2><p>Dive into Algolia with our 14-day trial - No credit card required. Plenty of time to see how Algolia can change your business.</p></header></div><div class="col-md-7 pos-rel z-10"><div class="spacer120 inline hidden-sm"></div><div class="spacer32 inline hidden-sm"></div><div class="spacer16 visible-sm"></div><div class="button-holder h200 p-r-large"><div class="spacer16 hidden-md hidden-sm"></div><span class="inline pos-rel"><a class="btn btn-static-primary btn-static-shadow-dark" href="https://algolia.com/users/sign_up">Get Started<svg class="arrow-icon" width="22"><use xlink:href="#arrow-right"></use></svg></a></span></div></div></div></section><div id="footer"><div class="credits"><div class="container pos-rel"><div class="row"><div class="col-md-12 text-center"><a data-no-turbolink="true" href="/"><img width="40" src="https://www.algolia.com/static_assets/images/flat2/algolia/algolia-logo_badge-598a1fe6.svg"></a></div></div><div class="spacer40"></div></div></div></div><svg style="display: none;"><symbol viewbox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" id="search-icon"><path d="M26.806 29.012a16.312 16.312 0 0 1-10.427 3.746C7.33 32.758 0 25.425 0 16.378 0 7.334 7.333 0 16.38 0c9.045 0 16.378 7.333 16.378 16.38 0 3.96-1.406 7.593-3.746 10.426L39.547 37.34c.607.608.61 1.59-.004 2.203a1.56 1.56 0 0 1-2.202.004L26.808 29.012zm-10.427.627c7.32 0 13.26-5.94 13.26-13.26 0-7.325-5.94-13.26-13.26-13.26-7.325 0-13.26 5.935-13.26 13.26 0 7.32 5.935 13.26 13.26 13.26z" fill-rule="evenodd"></path></symbol><symbol viewbox="0 0 46 38" xmlns="http://www.w3.org/2000/svg" id="arrow-right"><path d="M34.852 15.725l-8.624-9.908L24.385 3.7 28.62.014l1.84 2.116 13.1 15.05 1.606 1.846-1.61 1.844-13.1 15.002-1.845 2.114-4.23-3.692 1.85-2.114 9.465-10.84h-24.66v-5.615h23.817zm-26.774 0h-.002 2.96v5.614H0v-5.615h8.078z" fill-rule="evenodd"></path></symbol><symbol xmlns="http://www.w3.org/2000/svg" viewbox="0 0 708.8 717" id="icon-copy"><path d="M658.8 158H490.2c-13.3 0-26 5.3-35.4 14.6l-4.6 4.6V25c0-13.8-11.2-25-25-25H235.6c-6.6 0-13 2.6-17.7 7.3L7.3 218C2.6 222.6 0 229 0 235.6V541c0 13.8 11.2 25 25 25h227.8v101c0 27.6 22.4 50 50 50h356c27.6 0 50-22.4 50-50V208c0-27.6-22.4-50-50-50zm-204 85.4V360H338.2l116.6-116.6zm-253-149.2V209H87L201.8 94.2zM50 516V259h176.8c13.8 0 25-11.2 25-25V50h148.4v177.3L267.5 360c-9.4 9.4-14.6 22.1-14.6 35.4V516H50zm608.8 151h-356V410h177c13.8 0 25-11.2 25-25V208h154v459z"></path></symbol></svg><script src="/instantsearch.js/v2/js/main.15716b6683509c72ae3d-build.js"></script><script type="text/javascript">var _kmq = _kmq || [];
 var _kmk = _kmk || 'cb5a3adb92e8915a37a36ba1a50f2ce4fae4a1b9';
 function _kms(u){
   setTimeout(function(){

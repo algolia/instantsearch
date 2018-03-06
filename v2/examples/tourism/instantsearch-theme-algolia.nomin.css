@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.5.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button, .ais-range-input--submit {
+/*! instantsearch.js preview-2.6.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button, .ais-range-input--submit, .ais-geo-search--clear, .ais-geo-search--redo {
   color: #FFFFFF;
   display: inline-block;
   background: #3369E7;
@@ -6,7 +6,7 @@
   font-size: 12px;
   text-decoration: none;
   padding: 4px 8px; }
-  .ais-clear-all--link:hover, .ais-current-refined-values--clear-all:hover, .ais-price-ranges--button:hover, .ais-range-input--submit:hover {
+  .ais-clear-all--link:hover, .ais-current-refined-values--clear-all:hover, .ais-price-ranges--button:hover, .ais-range-input--submit:hover, .ais-geo-search--clear:hover, .ais-geo-search--redo:hover {
     text-decoration: none;
     color: #FFFFFF;
     background: #184ECD; }
@@ -18,14 +18,14 @@
 .ais-current-refined-values--clear-all {
   margin-bottom: 5px; }
 
-.ais-current-refined-values--item, .ais-hierarchical-menu--item, .ais-menu--item, .ais-refinement-list--item, .ais-star-rating--item, .ais-toggle--item {
+.ais-current-refined-values--item, .ais-hierarchical-menu--item, .ais-menu--item, .ais-refinement-list--item, .ais-star-rating--item, .ais-toggle--item, .ais-geo-search--toggle-label {
   font-size: 14px;
   line-height: 30px; }
 
-.ais-current-refined-values--link, .ais-hierarchical-menu--link, .ais-menu--link, .ais-refinement-list--label, .ais-toggle--label, .ais-price-ranges--link, .ais-star-rating--link {
+.ais-current-refined-values--link, .ais-hierarchical-menu--link, .ais-menu--link, .ais-refinement-list--label, .ais-toggle--label, .ais-geo-search--toggle-label, .ais-price-ranges--link, .ais-star-rating--link {
   color: #3E82F7;
   text-decoration: none; }
-  .ais-current-refined-values--link:hover, .ais-hierarchical-menu--link:hover, .ais-menu--link:hover, .ais-refinement-list--label:hover, .ais-toggle--label:hover, .ais-price-ranges--link:hover, .ais-star-rating--link:hover {
+  .ais-current-refined-values--link:hover, .ais-hierarchical-menu--link:hover, .ais-menu--link:hover, .ais-refinement-list--label:hover, .ais-toggle--label:hover, .ais-geo-search--toggle-label:hover, .ais-price-ranges--link:hover, .ais-star-rating--link:hover {
     color: #184ECD;
     text-decoration: none; }
 
@@ -82,13 +82,13 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-refinement-list--item {
   line-height: 24px; }
-  .ais-refinement-list--item__active > div > .ais-refinement-list--label, .ais-refinement-list--item__active > div > .ais-toggle--label {
+  .ais-refinement-list--item__active > div > .ais-refinement-list--label, .ais-refinement-list--item__active > div > .ais-toggle--label, .ais-refinement-list--item__active > div > .ais-geo-search--toggle-label {
     font-weight: bold; }
 
-.ais-refinement-list--label, .ais-toggle--label {
+.ais-refinement-list--label, .ais-toggle--label, .ais-geo-search--toggle-label {
   cursor: pointer; }
-  .ais-refinement-list--label input[type="radio"], .ais-toggle--label input[type="radio"],
-  .ais-refinement-list--label input[type="checkbox"], .ais-toggle--label input[type="checkbox"] {
+  .ais-refinement-list--label input[type="radio"], .ais-toggle--label input[type="radio"], .ais-geo-search--toggle-label input[type="radio"],
+  .ais-refinement-list--label input[type="checkbox"], .ais-toggle--label input[type="checkbox"], .ais-geo-search--toggle-label input[type="checkbox"] {
     margin-right: 5px; }
 
 .ais-refinement-list div > button {
@@ -260,6 +260,48 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
     top: 2px;
     height: 14px;
     width: 14px; }
+
+.ais-geo-search {
+  position: relative; }
+
+.ais-geo-search--clear {
+  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  border: solid 1px #D4D8E3;
+  border-radius: 4px;
+  padding: 8px 15px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%); }
+  .ais-geo-search--clear:hover {
+    cursor: pointer; }
+
+.ais-geo-search--control {
+  position: absolute;
+  top: 10px;
+  left: 50px; }
+
+.ais-geo-search--toggle-label {
+  font-size: 12px;
+  background: #FFFFFF;
+  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  border: solid 1px #D4D8E3;
+  border-radius: 4px;
+  padding: 0 15px; }
+
+.ais-geo-search--redo {
+  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  border: solid 1px #D4D8E3;
+  border-radius: 4px;
+  padding: 8px 15px; }
+  .ais-geo-search--redo:hover {
+    cursor: pointer; }
+  .ais-geo-search--redo:disabled {
+    background: #A0B8F3; }
 
 [class^="ais-"] {
   -webkit-box-sizing: border-box;

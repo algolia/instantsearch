@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.5.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
+/*! instantsearch.js preview-2.6.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */
 .ais-search-box {
   position: relative;
   max-width: 300px;
@@ -631,5 +631,30 @@
 .ais-breadcrumb--disabledLabel {
   color: #444444;
   display: inline; }
+
+.ais-geo-search {
+  /* root element */
+  height: 100%; }
+  .ais-geo-search--map {
+    /* map element */
+    height: 100%; }
+  .ais-geo-search--controls {
+    /* map controls */ }
+  .ais-geo-search--clear {
+    /* clear button */ }
+  .ais-geo-search--control {
+    /* refine control */ }
+  .ais-geo-search--toggle-label {
+    /* toggle label */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center; }
+  .ais-geo-search--toggle-input {
+    /* toggle input */ }
+  .ais-geo-search--redo {
+    /* redo button */ }
 
 /*# sourceMappingURL=instantsearch.css.map*/
