@@ -126,6 +126,7 @@ pagination({
  * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
  *
  * @type {WidgetFactory}
+ * @devNovel Pagination
  * @category navigation
  * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
  * @return {Widget} A new instance of Pagination widget.

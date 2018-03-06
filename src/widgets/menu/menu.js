@@ -148,6 +148,7 @@ menu({
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  * @type {WidgetFactory}
+ * @devNovel Menu
  * @category filter
  * @param {MenuWidgetOptions} $0 The Menu widget options.
  * @return {Widget} Creates a new instance of the Menu widget.
