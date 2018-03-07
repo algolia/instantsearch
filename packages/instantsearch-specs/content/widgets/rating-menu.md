@@ -68,4 +68,9 @@ classes:
     description: the label used after the stars
   - name: .ais-RatingMenu-count
     description: the count of ratings for a specific item
+options:
+  - name: attribute
+    description: Attribute to apply the filter to
+  - name: max
+    description: Maximum number of (stars) to display
 ---

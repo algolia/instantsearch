@@ -123,4 +123,20 @@ classes:
     description: the reset button used to clear the content of the input
   - name: .ais-SearchBox-resetIcon
     description: the reset icon used inside the reset button
+options:
+  - name: placeholder
+    description: The placeholder of this input
+  - name: searchAsYouType
+    default: true
+    description: Should we search on every change to the query? If you disable this option, new searches will only be triggered by clicking the search button or by pressing the enter key while the search box is focused.
+  - name: submit
+    default: search
+    description: The accessible text for the 🔎
+  - name: reset
+    default: reset query
+    description: The accessible text for the ❌
+  - name: submit
+    description: a template / function to replace the 🔎
+  - name: reset
+    description: a template / function to replace the ❌
 ---

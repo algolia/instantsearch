@@ -110,4 +110,19 @@ classes:
     description: the button used to display more categories
   - name: .ais-Menu-showMore--disabled
     description: the disabled button used to display more categories
+options:
+  - name: attribute
+    description: Attribute to apply the filter to
+  - name: searchable
+    default: false
+    description: Whether to add a search box to refine this list
+  - name: limit
+    default: 10
+    description: Number of items to show
+  - name: showMoreLimit
+    default: 20
+    description: Number of items to show when the user clicked on "show more items"
+  - name: showMore
+    default: false
+    description: Whether or not to have the option to load more values
 ---

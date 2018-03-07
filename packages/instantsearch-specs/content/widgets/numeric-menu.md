@@ -35,4 +35,9 @@ classes:
     description: the radio input of each refinement item
   - name: .ais-NumericMenu-labelText
     description: the label text of each refinement item
+options:
+  - name: attribute
+    description: Attribute to apply the filter to
+  - name: items
+    description: Array of objects with a label, start and end value. Start and end can individually be left as undefined to only apply a single bound
 ---

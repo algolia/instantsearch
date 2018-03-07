@@ -59,4 +59,14 @@ html: |
 classes:
   - name: .ais-RangeSlider
     description: the root div of the widget
+options:
+  - name: attribute
+    description: Attribute to apply the filter to
+  - name: min
+    description: Minimum value. When this isn’t set, the minimum value will be automatically computed by Algolia using the data in the index.
+  - name: max
+    description: Maximum value. When this isn’t set, the maximum value will be automatically computed by Algolia using the data in the index.
+  - name: precision
+    default: 0
+    description: Number of digits after decimal point to use.
 ---

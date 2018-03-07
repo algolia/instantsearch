@@ -28,4 +28,9 @@ classes:
     description: the label text of each toggle item
   - name: .ais-ToggleRefinement-count
     description: the count of items for each item
+options:
+  - name: attribute
+    description: Attribute to apply the filter to
+  - name: values
+    description: # I don't think both toggling A/B and A/- should be done by the same widget
 ---
