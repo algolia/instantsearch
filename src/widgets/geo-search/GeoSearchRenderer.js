@@ -158,10 +158,10 @@ const renderer = (
   }
 
   if (!items.length && !isRefinedWithMap()) {
-    const intialMapPosition = position || initialPosition;
+    const initialMapPosition = position || initialPosition;
 
     renderState.isUserInteraction = false;
-    renderState.mapInstance.setCenter(intialMapPosition);
+    renderState.mapInstance.setCenter(initialMapPosition);
     renderState.mapInstance.setZoom(initialZoom);
     renderState.isUserInteraction = true;
   }
