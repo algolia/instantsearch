@@ -39,4 +39,7 @@ classes:
     description: the delete button of each catgory
   - name: .ais-CurrentRefinements-reset
     description: the reset button for current selected values
+options:
+  - name: attributes
+    description: Label definitions for the different filters.
 ---

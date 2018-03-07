@@ -10,4 +10,9 @@ classes:
     description: the highlighted text
   - name: .ais-Highlight-nonHighlighted
     description: the normal text
+options:
+  - name: highlightTag
+    default: em
+    # TODO: should this be `mark`?
+    description: DOM tag to use for the highlighted parts, in addition to the classes
 ---

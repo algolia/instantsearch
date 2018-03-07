@@ -55,4 +55,22 @@ classes:
     description: the disabled pagination list item
   - name: .ais-Pagination-link
     description: the pagination clickable element
+options:
+  - name: totalPages
+    description: Maximum page to allow navigating to
+  - name: padding
+    default: 3
+    description: amount of pages to show to the left and right of the current page
+  - name: showFirst
+    default: true
+    description: Whether to show the "first page" control
+  - name: showLast
+    default: true
+    description: Whether to show the "last page" control
+  - name: showNext
+    default: true
+    description: Whether to show the "next page" control
+  - name: showPrevious
+    default: true
+    description: Whether to show the "previous page" control
 ---

@@ -15,4 +15,6 @@ classes:
     description: the select
   - name: .ais-NumericSelector-option
     description: the select options
+options:
+  # TODO: should we remove this?
 ---

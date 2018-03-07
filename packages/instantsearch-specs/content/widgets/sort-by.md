@@ -15,4 +15,7 @@ classes:
     description: the select
   - name: .ais-SortBy-option
     description: the select option
+options:
+  - name: items
+    description: Array of objects with value (the index to search on) and a label
 ---

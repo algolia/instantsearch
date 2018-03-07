@@ -21,4 +21,10 @@ classes:
     description: the clickable button
   - name: .ais-ClearRefinements-button--disabled
     description: the disabled clickable button
+options:
+  - name: excludedAttributes
+    description: Attributes not to clear
+  - name: clearsQuery
+    default: false
+    description: Also clears the query
 ---

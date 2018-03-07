@@ -32,4 +32,7 @@ classes:
     description: the separator of each breadcrumb item
   - name: .ais-Breadcrumb-link
     description: the clickable breadcrumb element
+options:
+  - name: attributes
+    description: Array of attributes to use to generate the breadcrumb
 ---
