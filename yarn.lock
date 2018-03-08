@@ -7401,9 +7401,9 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-places.js@1.4.18:
-  version "1.4.18"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.4.18.tgz#9c5619ee62e7847aa4549d0545cea10a05ff0074"
+places.js@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.6.0.tgz#0fddc485e271eee04103212fb6d0f8b9b1e5b358"
   dependencies:
     algoliasearch "^3.24.0"
     autocomplete.js "^0.28.2"
