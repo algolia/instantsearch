@@ -30,20 +30,17 @@ import RatingMenu from '../components/RatingMenu';
  * @translationKey ratingLabel - Label value for the rating link
  * @example
  * import React from 'react';
+ * import { InstantSearch, RefinementList } from 'react-instantsearch/dom';
  *
- * import { RatingMenu, InstantSearch } from 'react-instantsearch/dom';
- *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <RatingMenu attribute="rating" />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <RefinementList attribute="colors" />
+ *   </InstantSearch>
+ * );
  */
 
 const RatingMenuWidget = props => (

@@ -20,25 +20,24 @@ import Snippet from '../components/Snippet';
  * @themeKey ais-Snippet-nonHighlighted - the normal text
  * @example
  * import React from 'react';
- * import { Snippet, InstantSearch, Hits } from 'react-instantsearch/dom';
+ * import { InstantSearch, SearchBox, Hits, Snippet } from 'react-instantsearch/dom';
  *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <Hits
- *         hitComponent={({ hit }) => (
- *           <p key={hit.objectID}>
- *             <Snippet attribute="description" hit={hit} />
- *           </p>
- *         )}
- *       />
- *     </InstantSearch>
- *   );
- * }
+ * const Hit = ({ hit }) => (
+ *   <div>
+ *     <Snippet attribute="description" hit={hit} />
+ *   </div>
+ * );
+ *
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <SearchBox defaultRefinement="adjustable" />
+ *     <Hits hitComponent={Hit} />
+ *   </InstantSearch>
+ * );
  */
 
 export default connectHighlight(Snippet);

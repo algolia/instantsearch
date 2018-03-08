@@ -17,30 +17,24 @@ import Highlight from '../components/Highlight';
  * @themeKey ais-Highlight-nonHighlighted - part of the text that is not highlighted
  * @example
  * import React from 'react';
+ * import { InstantSearch, SearchBox, Hits, Highlight } from 'react-instantsearch/dom';
  *
- * import { connectHits, Highlight, InstantSearch } from 'react-instantsearch/dom';
- *
- * const CustomHits = connectHits(({ hits }) =>
- * <div>
- *   {hits.map(hit =>
- *     <p key={hit.objectID}>
- *       <Highlight attribute="description" hit={hit} />
- *     </p>
- *   )}
- * </div>
+ * const Hit = ({ hit }) => (
+ *   <div>
+ *     <Highlight attribute="name" hit={hit} />
+ *   </div>
  * );
  *
- * export default function App() {
- *  return (
- *    <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <CustomHits />
- *     </InstantSearch>
- *  );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <SearchBox defaultRefinement="Legi" />
+ *     <Hits hitComponent={Hit} />
+ *   </InstantSearch>
+ * );
  */
 
 export default connectHighlight(Highlight);

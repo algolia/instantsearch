@@ -20,20 +20,17 @@ import InfiniteHits from '../components/InfiniteHits';
  * @translationKey loadMore - the label of load more button
  * @example
  * import React from 'react';
-
- * import { InfiniteHits, InstantSearch } from 'react-instantsearch/dom';
+ * import { InstantSearch, InfiniteHits } from 'react-instantsearch/dom';
  *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <InfiniteHits />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <InfiniteHits />
+ *   </InstantSearch>
+ * );
  */
 
 export default connectInfiniteHits(InfiniteHits);

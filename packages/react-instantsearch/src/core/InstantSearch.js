@@ -36,20 +36,19 @@ function validateNextProps(props, nextProps) {
  * @propType {number} [stalledSearchDelay=200] - The amount of time before considering that the search takes too much time. The time is expressed in milliseconds.
  * @propType {{ Root: string|function, props: object }} [root] - Use this to customize the root element. Default value: `{ Root: 'div' }`
  * @example
- * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
+ * import React from 'react';
+ * import { InstantSearch, SearchBox, Hits } from 'react-instantsearch/dom';
  *
- * export default function Search() {
- *   return (
- *     <InstantSearch
- *       appId="appId"
- *       apiKey="apiKey"
- *       indexName="indexName"
- *     >
- *       <SearchBox />
- *       <Hits />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <SearchBox />
+ *     <Hits />
+ *   </InstantSearch>
+ * );
  */
 class InstantSearch extends Component {
   constructor(props) {

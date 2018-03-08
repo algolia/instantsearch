@@ -69,26 +69,23 @@ import HierarchicalMenu from '../components/HierarchicalMenu';
  * @translationKey showMore - The label of the show more button. Accepts one parameter, a boolean that is true if the values are expanded
  * @example
  * import React from 'react';
-
- * import { HierarchicalMenu, InstantSearch } from 'react-instantsearch/dom';
+ * import { InstantSearch, HierarchicalMenu } from 'react-instantsearch/dom';
  *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <HierarchicalMenu
- *         attributes={[
- *           'category',
- *           'sub_category',
- *           'sub_sub_category',
- *         ]}
- *       />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <HierarchicalMenu
+ *       attributes={[
+ *         'category',
+ *         'sub_category',
+ *         'sub_sub_category',
+ *       ]}
+ *     />
+ *   </InstantSearch>
+ * );
  */
 
 const HierarchicalMenuWidget = props => (

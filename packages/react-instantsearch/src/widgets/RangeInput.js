@@ -25,20 +25,17 @@ import RangeInput from '../components/RangeInput';
  * @translationKey separator - Label value for the input separator
  * @example
  * import React from 'react';
+ * import { InstantSearch, RangeInput } from 'react-instantsearch/dom';
  *
- * import { RangeInput, InstantSearch } from 'react-instantsearch/dom';
- *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <RangeInput attribute="price" />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <RangeInput attribute="price" />
+ *   </InstantSearch>
+ * );
  */
 
 const RangeInputWidget = props => (

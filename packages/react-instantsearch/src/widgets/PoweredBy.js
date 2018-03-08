@@ -14,19 +14,16 @@ import PoweredByComponent from '../components/PoweredBy.js';
  * @translationKey searchBy - Label value for the powered by
  * @example
  * import React from 'react';
+ * import { InstantSearch, PoweredBy } from 'react-instantsearch/dom';
  *
- * import { PoweredBy, InstantSearch } from 'react-instantsearch/dom';
- *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <PoweredBy />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <PoweredBy />
+ *   </InstantSearch>
+ * );
  */
 export default connectPoweredBy(PoweredByComponent);
