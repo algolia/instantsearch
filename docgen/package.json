@@ -18,7 +18,7 @@
     "babel-loader": "7.1.2",
     "babel-preset-env": "1.6.1",
     "babel-preset-stage-2": "6.24.1",
-    "browser-sync": "2.18.13",
+    "browser-sync": "2.23.6",
     "clipboard": "1.7.1",
     "codemirror": "5.34.0",
     "compression": "1.7.1",
