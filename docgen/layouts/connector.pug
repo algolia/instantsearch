@@ -27,7 +27,7 @@ block content
     a.anchor(href=`${navPath}#structure`)
   each t in jsdoc.relatedTypes
     if t
-      +struct(t)
+      +struct(t, jsdoc.relatedTypes)
 
   if jsdoc.examples && jsdoc.examples.length > 0
     script(src="//code.jquery.com/jquery-3.2.1.slim.min.js")
