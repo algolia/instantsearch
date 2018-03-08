@@ -23,24 +23,21 @@ import CurrentRefinements from '../components/CurrentRefinements';
  * @translationKey clearFilter - the remove filter button label
  * @example
  * import React from 'react';
+ * import { InstantSearch, CurrentRefinements, RefinementList } from 'react-instantsearch/dom';
  *
- * import { CurrentRefinements, RefinementList, InstantSearch } from 'react-instantsearch/dom';
- *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <CurrentRefinements />
- *       <RefinementList
-          attribute="colors"
-          defaultRefinement={['Black']}
-        />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <CurrentRefinements />
+ *     <RefinementList
+ *       attribute="colors"
+ *       defaultRefinement={['Black']}
+ *     />
+ *   </InstantSearch>
+ * );
  */
 
 const CurrentRefinementsWidget = props => (

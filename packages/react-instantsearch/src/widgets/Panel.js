@@ -17,27 +17,19 @@ import Panel from '../components/Panel';
  * @themeKey ais-Panel-footer - the footer of the Panel (optional)
  * @example
  * import React from 'react';
+ * import { InstantSearch, Panel, RefinementList } from 'react-instantsearch/dom';
  *
- * import { Panel, InstantSearch } from 'react-instantsearch/dom';
- * import { connectRefinementList } from 'react-instantsearch/connectors';
- *
- * const CustomRefinementList = connectRefinementList(() => (
- *   <div>My custom refinement list</div>
- * ));
- *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <Panel heade="Category">
- *         <CustomRefinementList attribute="category" />
- *       </Panel>
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <Panel header="Category">
+ *       <RefinementList attribute="category" />
+ *     </Panel>
+ *   </InstantSearch>
+ * );
  */
 
 export default Panel;

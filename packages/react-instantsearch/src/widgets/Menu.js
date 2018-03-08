@@ -34,20 +34,17 @@ import Menu from '../components/Menu';
  * @translationkey noResults - The label of the no results text when no search for facet values results are found.
  * @example
  * import React from 'react';
+ * import { InstantSearch, Menu } from 'react-instantsearch/dom';
  *
- * import { Menu, InstantSearch } from 'react-instantsearch/dom';
- *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <Menu attribute="category" />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <Menu attribute="category" />
+ *   </InstantSearch>
+ * );
  */
 
 const MenuWidget = props => (

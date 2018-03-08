@@ -18,23 +18,24 @@ import HitsPerPage from '../components/HitsPerPage';
  * @themeKey ais-HitsPerPage-option - the select option
  * @example
  * import React from 'react';
-
- * import { HitsPerPage, InstantSearch } from 'react-instantsearch/dom';
+ * import { InstantSearch, HitsPerPage, Hits } from 'react-instantsearch/dom';
  *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <HitsPerPage
- *         defaultRefinement={20}
- *         items={[{value: 20, label: 'Show 20 hits'}, {value: 50, label: 'Show 50 hits'}]}
- *       />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <HitsPerPage
+ *       defaultRefinement={5}
+ *       items={[
+ *         { value: 5, label: 'Show 5 hits' },
+ *         { value: 10, label: 'Show 10 hits' },
+ *       ]}
+ *     />
+ *     <Hits />
+ *   </InstantSearch>
+ * );
  */
 
 export default connectHitsPerPage(HitsPerPage);

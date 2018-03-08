@@ -17,20 +17,17 @@ import Hits from '../components/Hits';
  * @themeKey ais-Hits-item - the hit list item
  * @example
  * import React from 'react';
-
- * import { Hits, InstantSearch } from 'react-instantsearch/dom';
+ * import { InstantSearch, Hits } from 'react-instantsearch/dom';
  *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <Hits />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <Hits />
+ *   </InstantSearch>
+ * );
  */
 
 export default connectHits(Hits);

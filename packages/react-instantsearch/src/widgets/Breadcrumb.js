@@ -59,26 +59,31 @@ import Breadcrumb from '../components/Breadcrumb';
  * @translationKey rootLabel - The root's label. Accepts a string
  * @example
  * import React from 'react';
-
- * import { Breadcrumb, InstantSearch } from 'react-instantsearch/dom';
+ * import { Breadcrumb, InstantSearch, HierarchicalMenu } from 'react-instantsearch/dom';
  *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <Breadcrumb
- *         attributes={[
- *           'category',
- *           'sub_category',
- *           'sub_sub_category',
- *         ]}
- *       />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <Breadcrumb
+ *       attributes={[
+ *         'category',
+ *         'sub_category',
+ *         'sub_sub_category',
+ *       ]}
+ *     />
+ *     <HierarchicalMenu
+ *       defaultRefinement="Kitchen & appliances > Pantry"
+ *       attributes={[
+ *         'category',
+ *         'sub_category',
+ *         'sub_sub_category',
+ *       ]}
+ *     />
+ *   </InstantSearch>
+ * );
  */
 
 const BreadcrumbWidget = props => (

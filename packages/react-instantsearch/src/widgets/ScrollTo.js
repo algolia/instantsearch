@@ -12,21 +12,18 @@ import ScrollToComponent from '../components/ScrollTo.js';
  * @themeKey ais-ScrollTo - the root div of the widget
  * @example
  * import React from 'react';
+ * import { InstantSearch, ScrollTo, Hits } from 'react-instantsearch/dom';
  *
- * import { ScrollTo, Hits, InstantSearch } from 'react-instantsearch/dom';
- *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <ScrollTo>
- *         <Hits />
- *       </ScrollTo>
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <ScrollTo>
+ *       <Hits />
+ *     </ScrollTo>
+ *   </InstantSearch>
+ * );
  */
 export default connectScrollTo(ScrollToComponent);

@@ -11,25 +11,25 @@ import React, { Component, Children } from 'react';
  * @propType {string} indexName - index in which to search.
  * @propType {{ Root: string|function, props: object }} [root] - Use this to customize the root element. Default value: `{ Root: 'div' }`
  * @example
- * import {InstantSearch, Index, SearchBox, Hits, Configure} from 'react-instantsearch/dom';
+ * import React from 'react';
+ * import { InstantSearch, Index, SearchBox, Hits, Configure } from 'react-instantsearch/dom';
  *
- * export default function Search() {
- *   return (
- * <InstantSearch
-          appId=""
-          apiKey=""
-          indexName="index1">
-      <SearchBox/>
-      <Configure hitsPerPage={1} />
-      <Index indexName="index1">
-        <Hits />
-      </Index>
-      <Index indexName="index2">
-        <Hits />
-      </Index>
-  </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <Configure hitsPerPage={5} />
+ *     <SearchBox />
+ *     <Index indexName="ikea">
+ *       <Hits />
+ *     </Index>
+ *     <Index indexName="bestbuy">
+ *       <Hits />
+ *     </Index>
+ *   </InstantSearch>
+ * );
  */
 class Index extends Component {
   constructor(props, context) {
@@ -37,9 +37,9 @@ class Index extends Component {
     const { ais: { widgetsManager } } = context;
 
     /*
-     we want <Index> to be seen as a regular widget. 
+     we want <Index> to be seen as a regular widget.
      It means that with only <Index> present a new query will be sent to Algolia.
-     That way you don't need a virtual hits widget to use the connectAutoComplete. 
+     That way you don't need a virtual hits widget to use the connectAutoComplete.
     */
     this.unregisterWidget = widgetsManager.registerWidget(this);
   }
