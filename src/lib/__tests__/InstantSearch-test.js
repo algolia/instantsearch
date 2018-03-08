@@ -88,7 +88,7 @@ describe('InstantSearch lifecycle', () => {
 
     beforeEach(() => {
       // InstantSearch is being called once at the top-level context, so reset the `algoliasearch` spy
-      algoliasearch.reset();
+      algoliasearch.resetHistory();
 
       // Create a spy to act as a clientInstanceFunction that returns a custom client
       createAlgoliaClient = sinon.stub().returns(client);
@@ -301,7 +301,7 @@ describe('InstantSearch lifecycle', () => {
   describe('when render happens', () => {
     const render = sinon.spy();
     beforeEach(() => {
-      render.reset();
+      render.resetHistory();
       const widgets = range(5).map(() => ({ render }));
 
       widgets.forEach(search.addWidget, search);
