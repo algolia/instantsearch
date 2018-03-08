@@ -3482,9 +3482,9 @@ eslint-plugin-jest@20.0.3:
   version "20.0.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-20.0.3.tgz#ec15eba6ac0ab44a67ebf6e02672ca9d7e7cba29"
 
-eslint-plugin-prettier@2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-2.3.1.tgz#e7a746c67e716f335274b88295a9ead9f544e44d"
+eslint-plugin-prettier@2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-2.6.0.tgz#33e4e228bdb06142d03c560ce04ec23f6c767dd7"
   dependencies:
     fast-diff "^1.1.1"
     jest-docblock "^21.0.0"
