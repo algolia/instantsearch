@@ -22,7 +22,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 `;
 
 /**
- * @typedef {Object} CustomBreadcrumbItem
+ * @typedef {Object} BreadcrumbItem
  * @property {string} name Name of the category or subcategory.
  * @property {string} value Value of breadcrumb item.
  */
