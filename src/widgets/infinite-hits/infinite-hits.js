@@ -112,16 +112,14 @@ infiniteHits({
  *   })
  * );
  */
-export default function infiniteHits(
-  {
-    container,
-    cssClasses: userCssClasses = {},
-    showMoreLabel = 'Show more results',
-    templates = defaultTemplates,
-    transformData,
-    escapeHits = false,
-  } = {}
-) {
+export default function infiniteHits({
+  container,
+  cssClasses: userCssClasses = {},
+  showMoreLabel = 'Show more results',
+  templates = defaultTemplates,
+  transformData,
+  escapeHits = false,
+} = {}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
   }

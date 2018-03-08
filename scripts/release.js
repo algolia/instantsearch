@@ -94,10 +94,9 @@ inquirer
       type: 'confirm',
       name: 'confirm',
       message: colors.yellow.underline(
-        `You are on "${currentBranch}" branch. Are you sure you want to release a ${strategy ===
-        'stable'
-          ? 'new stable'
-          : 'beta'} version?`
+        `You are on "${currentBranch}" branch. Are you sure you want to release a ${
+          strategy === 'stable' ? 'new stable' : 'beta'
+        } version?`
       ),
       default: false,
     },
@@ -127,9 +126,9 @@ inquirer
       colors.blue(`
       - Current version is "${currentVersion}"
       - Changelog will be generated only if a fix/feat/performance/breaking is found in git log
-      - You must choose a new ve.rs.ion (semver) ${strategy === 'beta'
-        ? 'with -beta.x suffix'
-        : ''}
+      - You must choose a new ve.rs.ion (semver) ${
+        strategy === 'beta' ? 'with -beta.x suffix' : ''
+      }
     `)
     );
 

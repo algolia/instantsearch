@@ -155,9 +155,9 @@ export class RawRefinementList extends Component {
       this.props.showMore === true && this.props.canToggleShowMore ? (
         <Template
           rootProps={{ onClick: this.props.toggleShowMore }}
-          templateKey={`show-more-${this.props.isShowingMore
-            ? 'active'
-            : 'inactive'}`}
+          templateKey={`show-more-${
+            this.props.isShowingMore ? 'active' : 'inactive'
+          }`}
           {...this.props.templateProps}
         />
       ) : (

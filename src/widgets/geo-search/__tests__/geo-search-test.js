@@ -51,12 +51,10 @@ describe('GeoSearch', () => {
     addListener: jest.fn(),
   });
 
-  const createFakeGoogleReference = (
-    {
-      mapInstance = createFakeMapInstance(),
-      markerInstance = createFakeMarkerInstance(),
-    } = {}
-  ) => ({
+  const createFakeGoogleReference = ({
+    mapInstance = createFakeMapInstance(),
+    markerInstance = createFakeMarkerInstance(),
+  } = {}) => ({
     maps: {
       LatLng: jest.fn(),
       LatLngBounds: jest.fn(() => ({

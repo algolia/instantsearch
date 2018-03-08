@@ -78,14 +78,12 @@ sortBySelector({
  *   })
  * );
  */
-export default function sortBySelector(
-  {
-    container,
-    indices,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
-  } = {}
-) {
+export default function sortBySelector({
+  container,
+  indices,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = false,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

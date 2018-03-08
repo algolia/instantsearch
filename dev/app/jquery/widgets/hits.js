@@ -22,9 +22,11 @@ const renderFn = ({ hits, widgetParams: { containerNode } }) => {
             <h4>${hit._highlightResult.name.value}</h4>
             <p>${hit._highlightResult.description.value}</p>
 
-            ${hit.free_shipping
-              ? '<span class="badge pull-right">Free shipping</span>'
-              : ''}
+            ${
+              hit.free_shipping
+                ? '<span class="badge pull-right">Free shipping</span>'
+                : ''
+            }
           </div>
         </div>
       </div>

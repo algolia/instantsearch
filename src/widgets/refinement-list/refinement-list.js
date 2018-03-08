@@ -225,22 +225,20 @@ refinementList({
  *   })
  * );
  */
-export default function refinementList(
-  {
-    container,
-    attributeName,
-    operator = 'or',
-    sortBy = ['isRefined', 'count:desc', 'name:asc'],
-    limit = 10,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-    showMore = false,
-    searchForFacetValues = false,
-  } = {}
-) {
+export default function refinementList({
+  container,
+  attributeName,
+  operator = 'or',
+  sortBy = ['isRefined', 'count:desc', 'name:asc'],
+  limit = 10,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+  showMore = false,
+  searchForFacetValues = false,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

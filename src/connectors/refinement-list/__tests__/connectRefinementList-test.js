@@ -878,12 +878,16 @@ describe('connectRefinementList', () => {
         facetHits: [
           {
             count: 33,
-            highlighted: `Salvador ${tagConfig.highlightPreTag}Da${tagConfig.highlightPostTag}li`,
+            highlighted: `Salvador ${tagConfig.highlightPreTag}Da${
+              tagConfig.highlightPostTag
+            }li`,
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: `${tagConfig.highlightPreTag}Da${tagConfig.highlightPostTag}vidoff`,
+            highlighted: `${tagConfig.highlightPreTag}Da${
+              tagConfig.highlightPostTag
+            }vidoff`,
             value: 'Davidoff',
           },
         ],

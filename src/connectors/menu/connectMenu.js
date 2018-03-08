@@ -56,54 +56,54 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
-  * **Menu** connector provides the logic to build a widget that will give the user the ability to choose a single value for a specific facet. The typical usage of menu is for navigation in categories.
-  *
-  * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
-  * function to select an item. While selecting a new element, the `refine` will also unselect the
-  * one that is currently selected.
-  *
+ * **Menu** connector provides the logic to build a widget that will give the user the ability to choose a single value for a specific facet. The typical usage of menu is for navigation in categories.
+ *
+ * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
+ * function to select an item. While selecting a new element, the `refine` will also unselect the
+ * one that is currently selected.
+ *
  * **Requirement:** the attribute passed as `attributeName` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
-  * @type {Connector}
-  * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
-  * @param {function} unmountFn Unmount function called when the widget is disposed.
-  * @return {function(CustomMenuWidgetOptions)} Re-usable widget factory for a custom **Menu** widget.
-  * @example
-  * // custom `renderFn` to render the custom Menu widget
-  * function renderFn(MenuRenderingOptions, isFirstRendering) {
-  *   if (isFirstRendering) {
-  *     MenuRenderingOptions.widgetParams.containerNode
-  *       .html('<select></select');
-  *
-  *     MenuRenderingOptions.widgetParams.containerNode
-  *       .find('select')
-  *       .on('change', function(event) {
-  *         MenuRenderingOptions.refine(event.target.value);
-  *       });
-  *   }
-  *
-  *   var options = MenuRenderingOptions.items.map(function(item) {
-  *     return item.isRefined
-  *       ? '<option value="' + item.value + '" selected>' + item.label + '</option>'
-  *       : '<option value="' + item.value + '">' + item.label + '</option>';
-  *   });
-  *
-  *   MenuRenderingOptions.widgetParams.containerNode
-  *     .find('select')
-  *     .html(options);
-  * }
-  *
-  * // connect `renderFn` to Menu logic
-  * var customMenu = instantsearch.connectors.connectMenu(renderFn);
-  *
-  * // mount widget on the page
-  * search.addWidget(
-  *   customMenu({
-  *     containerNode: $('#custom-menu-container'),
-  *     attributeName: 'categories',
-  *     limit: 10,
-  *   })
-  * );
-  */
+ * @type {Connector}
+ * @param {function(MenuRenderingOptions, boolean)} renderFn Rendering function for the custom **Menu** widget. widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
+ * @return {function(CustomMenuWidgetOptions)} Re-usable widget factory for a custom **Menu** widget.
+ * @example
+ * // custom `renderFn` to render the custom Menu widget
+ * function renderFn(MenuRenderingOptions, isFirstRendering) {
+ *   if (isFirstRendering) {
+ *     MenuRenderingOptions.widgetParams.containerNode
+ *       .html('<select></select');
+ *
+ *     MenuRenderingOptions.widgetParams.containerNode
+ *       .find('select')
+ *       .on('change', function(event) {
+ *         MenuRenderingOptions.refine(event.target.value);
+ *       });
+ *   }
+ *
+ *   var options = MenuRenderingOptions.items.map(function(item) {
+ *     return item.isRefined
+ *       ? '<option value="' + item.value + '" selected>' + item.label + '</option>'
+ *       : '<option value="' + item.value + '">' + item.label + '</option>';
+ *   });
+ *
+ *   MenuRenderingOptions.widgetParams.containerNode
+ *     .find('select')
+ *     .html(options);
+ * }
+ *
+ * // connect `renderFn` to Menu logic
+ * var customMenu = instantsearch.connectors.connectMenu(renderFn);
+ *
+ * // mount widget on the page
+ * search.addWidget(
+ *   customMenu({
+ *     containerNode: $('#custom-menu-container'),
+ *     attributeName: 'categories',
+ *     limit: 10,
+ *   })
+ * );
+ */
 export default function connectMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 

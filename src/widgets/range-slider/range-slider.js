@@ -164,22 +164,20 @@ rangeSlider({
  *   })
  * );
  */
-export default function rangeSlider(
-  {
-    container,
-    attributeName,
-    min,
-    max,
-    templates = defaultTemplates,
-    cssClasses: userCssClasses = {},
-    step,
-    pips = true,
-    precision = 0,
-    tooltips = true,
-    autoHideContainer = true,
-    collapsible = false,
-  } = {}
-) {
+export default function rangeSlider({
+  container,
+  attributeName,
+  min,
+  max,
+  templates = defaultTemplates,
+  cssClasses: userCssClasses = {},
+  step,
+  pips = true,
+  precision = 0,
+  tooltips = true,
+  autoHideContainer = true,
+  collapsible = false,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

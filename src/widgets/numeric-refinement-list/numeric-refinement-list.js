@@ -137,18 +137,16 @@ numericRefinementList({
  *   })
  * );
  */
-export default function numericRefinementList(
-  {
-    container,
-    attributeName,
-    options,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-  } = {}
-) {
+export default function numericRefinementList({
+  container,
+  attributeName,
+  options,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+} = {}) {
   if (!container || !attributeName || !options) {
     throw new Error(usage);
   }

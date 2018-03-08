@@ -132,16 +132,14 @@ stats({
  *   })
  * );
  */
-export default function stats(
-  {
-    container,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = true,
-    collapsible = false,
-    transformData,
-    templates = defaultTemplates,
-  } = {}
-) {
+export default function stats({
+  container,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = true,
+  collapsible = false,
+  transformData,
+  templates = defaultTemplates,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }
