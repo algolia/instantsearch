@@ -95,7 +95,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {LatLng} [initialPosition={ lat: 0, lng: 0 }] By default the map will set the position accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situations we need to provide a position to render the map. This option is ignored when the `position` is provided.
  * @property {Padding} [paddingBoundingBox={ top:0, right: 0, bottom:0, left: 0 }] Add an inner padding on the map when you refine.
  * @property {GeoSearchTemplates} [templates] Templates to use for the widget.
- * @property {GeoSeachCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {GeoSearchCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {object} [mapOptions] Option forwarded to the Google Maps constructor. <br />
  * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions) for more information.
  * @property {BuiltInMarkerOptions} [builtInMarker] Options for customize the built-in Google Maps marker. This option is ignored when the `customHTMLMarker` is provided.
