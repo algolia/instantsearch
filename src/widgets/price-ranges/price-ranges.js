@@ -133,18 +133,16 @@ priceRanges({
  *   })
  * );
  */
-export default function priceRanges(
-  {
-    container,
-    attributeName,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    labels: userLabels = {},
-    currency: userCurrency = '$',
-    autoHideContainer = true,
-  } = {}
-) {
+export default function priceRanges({
+  container,
+  attributeName,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  labels: userLabels = {},
+  currency: userCurrency = '$',
+  autoHideContainer = true,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

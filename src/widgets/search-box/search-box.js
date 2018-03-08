@@ -20,6 +20,7 @@ const renderer = ({
   reset,
   magnifier,
   loadingIndicator,
+  // eslint-disable-next-line complexity
 }) => (
   { refine, clear, query, onHistoryChange, isSearchStalled },
   isFirstRendering
@@ -249,21 +250,19 @@ searchBox({
  *   })
  * );
  */
-export default function searchBox(
-  {
-    container,
-    placeholder = '',
-    cssClasses = {},
-    poweredBy = false,
-    wrapInput = true,
-    autofocus = 'auto',
-    searchOnEnterKeyPressOnly = false,
-    reset = true,
-    magnifier = true,
-    loadingIndicator = false,
-    queryHook,
-  } = {}
-) {
+export default function searchBox({
+  container,
+  placeholder = '',
+  cssClasses = {},
+  poweredBy = false,
+  wrapInput = true,
+  autofocus = 'auto',
+  searchOnEnterKeyPressOnly = false,
+  reset = true,
+  magnifier = true,
+  loadingIndicator = false,
+  queryHook,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

@@ -55,7 +55,7 @@ export class RawPriceRanges extends Component {
       [this.props.cssClasses.active]: facetValue.isRefined,
     });
     const key = `${facetValue.from}_${facetValue.to}`;
-    const handleClick = this.refine.bind(this, facetValue);
+    const handleClick = e => this.refine(facetValue, e);
     const data = {
       currency: this.props.currency,
       ...facetValue,

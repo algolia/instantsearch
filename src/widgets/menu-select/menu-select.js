@@ -84,17 +84,17 @@ menuSelect({
  */
 
 /**
-  * @typedef {Object} MenuSelectWidgetOptions
-  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
-  * @property {string} attributeName Name of the attribute for faceting
-  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
-  *
-  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
-  * @property {MenuSelectTemplates} [templates] Customize the output through templating.
-  * @property {string} [limit=10] How many facets values to retrieve [*].
-  * @property {MenuSelectTransforms} [transformData] Set of functions to update the data before passing them to the templates.
-  * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu select.
-  * @property {MenuSelectCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @typedef {Object} MenuSelectWidgetOptions
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
+ * @property {string} attributeName Name of the attribute for faceting
+ * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ *
+ * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ * @property {MenuSelectTemplates} [templates] Customize the output through templating.
+ * @property {string} [limit=10] How many facets values to retrieve [*].
+ * @property {MenuSelectTransforms} [transformData] Set of functions to update the data before passing them to the templates.
+ * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu select.
+ * @property {MenuSelectCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  */
 
 /**

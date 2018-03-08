@@ -32,11 +32,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
-* @typedef {Object} HitsPerPageWidgetOptionsItem
-* @property {number} value Number of hits to display per page.
-* @property {string} label Label to display in the option.
-* @property {boolean} default The default hits per page on first search.
-*/
+ * @typedef {Object} HitsPerPageWidgetOptionsItem
+ * @property {number} value Number of hits to display per page.
+ * @property {string} label Label to display in the option.
+ * @property {boolean} default The default hits per page on first search.
+ */
 
 /**
  * @typedef {Object} HitsPerPageRenderingOptions

@@ -165,7 +165,7 @@ describe('RefinementList', () => {
       const actual = root.find('[templateKey="show-more-inactive"]');
 
       // Then
-      expect(actual.length).toEqual(1);
+      expect(actual).toHaveLength(1);
     });
 
     it('does not add a showMore link when the feature is disabled', () => {
@@ -188,7 +188,7 @@ describe('RefinementList', () => {
         .filter({ templateKey: 'show-more-inactive' });
 
       // Then
-      expect(actual.length).toEqual(0);
+      expect(actual).toHaveLength(0);
     });
 
     it('should displays showLess', () => {
@@ -210,7 +210,7 @@ describe('RefinementList', () => {
       const actual = root.find('[templateKey="show-more-active"]');
 
       // Then
-      expect(actual.length).toEqual(1);
+      expect(actual).toHaveLength(1);
     });
   });
 

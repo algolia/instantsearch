@@ -211,7 +211,7 @@ describe('connectHitsPerPage', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.items.length).toBe(3);
+    expect(firstRenderingOptions.items).toHaveLength(3);
     firstRenderingOptions.refine(firstRenderingOptions.items[0].value);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
 
@@ -226,7 +226,7 @@ describe('connectHitsPerPage', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items.length).toBe(3);
+    expect(secondRenderingOptions.items).toHaveLength(3);
     secondRenderingOptions.refine(secondRenderingOptions.items[0].value);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
   });

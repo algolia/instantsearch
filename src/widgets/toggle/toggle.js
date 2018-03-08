@@ -155,19 +155,17 @@ toggle({
  *   })
  * );
  */
-export default function toggle(
-  {
-    container,
-    attributeName,
-    label,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    transformData,
-    autoHideContainer = true,
-    collapsible = false,
-    values: userValues = { on: true, off: undefined },
-  } = {}
-) {
+export default function toggle({
+  container,
+  attributeName,
+  label,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  transformData,
+  autoHideContainer = true,
+  collapsible = false,
+  values: userValues = { on: true, off: undefined },
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

@@ -133,22 +133,20 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-const geoSearch = (
-  {
-    initialZoom = 1,
-    initialPosition = { lat: 0, lng: 0 },
-    templates: userTemplates = {},
-    cssClasses: userCssClasses = {},
-    paddingBoundingBox: userPaddingBoundingBox = {},
-    builtInMarker: userBuiltInMarker = {},
-    customHTMLMarker: userCustomHTMLMarker = false,
-    enableClearMapRefinement = true,
-    enableRefineControl = true,
-    container,
-    googleReference,
-    ...widgetParams
-  } = {}
-) => {
+const geoSearch = ({
+  initialZoom = 1,
+  initialPosition = { lat: 0, lng: 0 },
+  templates: userTemplates = {},
+  cssClasses: userCssClasses = {},
+  paddingBoundingBox: userPaddingBoundingBox = {},
+  builtInMarker: userBuiltInMarker = {},
+  customHTMLMarker: userCustomHTMLMarker = false,
+  enableClearMapRefinement = true,
+  enableRefineControl = true,
+  container,
+  googleReference,
+  ...widgetParams
+} = {}) => {
   const defaultBuiltInMarker = {
     createOptions: noop,
     events: {},

@@ -51,7 +51,7 @@ describe('numericSelector()', () => {
       nbHits: 0,
     };
     widget.init({ helper });
-    helper.addNumericRefinement.reset();
+    helper.addNumericRefinement.resetHistory();
   });
 
   it('configures the right numericRefinement', () => {

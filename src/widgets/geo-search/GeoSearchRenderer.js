@@ -239,7 +239,8 @@ const renderer = (
           mapInstance: renderState.mapInstance,
           refine,
           paddingBoundingBox,
-        })}
+        })
+      }
       onClearClick={clearMapRefinement}
       templateProps={renderState.templateProps}
     />,

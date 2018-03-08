@@ -57,20 +57,20 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
-  * **HierarchicalMenu** connector provides the logic to build a custom widget
-  * that will give the user the ability to explore facets in a tree-like structure.
-  *
-  * This is commonly used for multi-level categorization of products on e-commerce
-  * websites. From a UX point of view, we suggest not displaying more than two
-  * levels deep.
-  *
-  * There's a complete example available on how to write a custom **HierarchicalMenu**:
-  *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
-  * @type {Connector}
-  * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
-  * @param {function} unmountFn Unmount function called when the widget is disposed.
-  * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
-  */
+ * **HierarchicalMenu** connector provides the logic to build a custom widget
+ * that will give the user the ability to explore facets in a tree-like structure.
+ *
+ * This is commonly used for multi-level categorization of products on e-commerce
+ * websites. From a UX point of view, we suggest not displaying more than two
+ * levels deep.
+ *
+ * There's a complete example available on how to write a custom **HierarchicalMenu**:
+ *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
+ * @type {Connector}
+ * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
+ * @return {function(CustomHierarchicalMenuWidgetOptions)} Re-usable widget factory for a custom **HierarchicalMenu** widget.
+ */
 export default function connectHierarchicalMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 

@@ -9,23 +9,26 @@
     "build": "babel-node build.js"
   },
   "renovate": {
-    "extends": ["config:js-app", "algolia"]
+    "extends": [
+      "config:js-app",
+      "algolia"
+    ]
   },
   "devDependencies": {
     "algolia-frontend-components": "0.0.34",
-    "autoprefixer": "7.2.1",
+    "autoprefixer": "8.1.0",
     "babel-cli": "6.26.0",
-    "babel-loader": "7.1.2",
+    "babel-loader": "7.1.4",
     "babel-preset-env": "1.6.1",
     "babel-preset-stage-2": "6.24.1",
-    "browser-sync": "2.18.13",
+    "browser-sync": "2.23.6",
     "clipboard": "1.7.1",
     "codemirror": "5.34.0",
-    "compression": "1.7.1",
+    "compression": "1.7.2",
     "documentation": "5.3.3",
     "json-loader": "0.5.7",
     "jstransformer-handlebars": "1.0.0",
-    "markdown-it": "8.4.0",
+    "markdown-it": "8.4.1",
     "markdown-it-anchor": "4.0.0",
     "metalsmith": "2.3.0",
     "metalsmith-copy": "0.4.0",
@@ -37,8 +40,8 @@
     "ms-webpack": "2.0.0",
     "netlify-cli": "1.2.2",
     "node-sass": "4.6.1",
-    "postcss-scss": "1.0.2",
-    "pug": "2.0.0-rc.4",
+    "postcss-scss": "1.0.4",
+    "pug": "2.0.1",
     "webpack": "3.10.0",
     "webpack-dev-middleware": "2.0.1",
     "webpack-hot-middleware": "2.20.0"

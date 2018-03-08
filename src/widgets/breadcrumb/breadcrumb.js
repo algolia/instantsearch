@@ -147,18 +147,16 @@ breadcrumb({
  * );
  */
 
-export default function breadcrumb(
-  {
-    attributes,
-    autoHideContainer = false,
-    container,
-    cssClasses: userCssClasses = {},
-    rootPath = null,
-    separator = ' > ',
-    templates = defaultTemplates,
-    transformData,
-  } = {}
-) {
+export default function breadcrumb({
+  attributes,
+  autoHideContainer = false,
+  container,
+  cssClasses: userCssClasses = {},
+  rootPath = null,
+  separator = ' > ',
+  templates = defaultTemplates,
+  transformData,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

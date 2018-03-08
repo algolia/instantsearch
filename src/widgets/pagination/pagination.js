@@ -141,18 +141,16 @@ pagination({
  *   })
  * );
  */
-export default function pagination(
-  {
-    container,
-    labels: userLabels = defaultLabels,
-    cssClasses: userCssClasses = {},
-    maxPages,
-    padding = 3,
-    showFirstLast = true,
-    autoHideContainer = true,
-    scrollTo: userScrollTo = 'body',
-  } = {}
-) {
+export default function pagination({
+  container,
+  labels: userLabels = defaultLabels,
+  cssClasses: userCssClasses = {},
+  maxPages,
+  padding = 3,
+  showFirstLast = true,
+  autoHideContainer = true,
+  scrollTo: userScrollTo = 'body',
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

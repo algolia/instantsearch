@@ -83,14 +83,12 @@ hitsPerPageSelector({
  *   })
  * );
  */
-export default function hitsPerPageSelector(
-  {
-    container,
-    items,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
-  } = {}
-) {
+export default function hitsPerPageSelector({
+  container,
+  items,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = false,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

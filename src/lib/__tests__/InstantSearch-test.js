@@ -88,7 +88,7 @@ describe('InstantSearch lifecycle', () => {
 
     beforeEach(() => {
       // InstantSearch is being called once at the top-level context, so reset the `algoliasearch` spy
-      algoliasearch.reset();
+      algoliasearch.resetHistory();
 
       // Create a spy to act as a clientInstanceFunction that returns a custom client
       createAlgoliaClient = sinon.stub().returns(client);
@@ -301,7 +301,7 @@ describe('InstantSearch lifecycle', () => {
   describe('when render happens', () => {
     const render = sinon.spy();
     beforeEach(() => {
-      render.reset();
+      render.resetHistory();
       const widgets = range(5).map(() => ({ render }));
 
       widgets.forEach(search.addWidget, search);
@@ -386,13 +386,13 @@ describe('InstantSearch lifecycle', () => {
       const widget1 = registerWidget({});
       const widget2 = registerWidget({});
 
-      expect(search.widgets.length).toBe(2);
+      expect(search.widgets).toHaveLength(2);
 
       search.start();
       search.removeWidget(widget1);
       search.removeWidget(widget2);
 
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
     });
 
     it('should unmount a widget with facets configuration', () => {
@@ -401,12 +401,12 @@ describe('InstantSearch lifecycle', () => {
       );
       search.start();
 
-      expect(search.widgets.length).toBe(1);
+      expect(search.widgets).toHaveLength(1);
       expect(search.searchParameters.facets).toEqual(['price']);
 
       search.removeWidget(widget1);
 
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
       expect(search.searchParameters.facets).toEqual([]);
     });
 
@@ -427,7 +427,7 @@ describe('InstantSearch lifecycle', () => {
       );
       search.start();
 
-      expect(search.widgets.length).toBe(1);
+      expect(search.widgets).toHaveLength(1);
       expect(search.searchParameters.hierarchicalFacets).toEqual([
         {
           name: 'price',
@@ -440,7 +440,7 @@ describe('InstantSearch lifecycle', () => {
 
       search.removeWidget(widget1);
 
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
       expect(search.searchParameters.hierarchicalFacets).toEqual([]);
     });
 
@@ -451,12 +451,12 @@ describe('InstantSearch lifecycle', () => {
       );
       search.start();
 
-      expect(search.widgets.length).toBe(1);
+      expect(search.widgets).toHaveLength(1);
       expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
 
       search.removeWidget(widget1);
 
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
       expect(search.searchParameters.disjunctiveFacets).toEqual([]);
     });
 
@@ -467,12 +467,12 @@ describe('InstantSearch lifecycle', () => {
       );
       search.start();
 
-      expect(search.widgets.length).toBe(1);
+      expect(search.widgets).toHaveLength(1);
       expect(search.searchParameters.numericRefinements).toEqual({ price: {} });
 
       search.removeWidget(widget1);
 
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
       expect(search.searchParameters.numericRefinements).toEqual({});
     });
 
@@ -484,13 +484,13 @@ describe('InstantSearch lifecycle', () => {
       );
       search.start();
 
-      expect(search.widgets.length).toBe(1);
+      expect(search.widgets).toHaveLength(1);
       expect(search.searchParameters.facets).toEqual(['categories']);
       expect(search.searchParameters.maxValuesPerFacet).toEqual(10);
 
       search.removeWidget(widget1);
 
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
       expect(search.searchParameters.facets).toEqual([]);
       expect(search.searchParameters.maxValuesPerFacet).toBe(undefined);
     });
@@ -507,13 +507,13 @@ describe('InstantSearch lifecycle', () => {
 
       search.start();
 
-      expect(search.widgets.length).toBe(2);
+      expect(search.widgets).toHaveLength(2);
       expect(search.searchParameters.numericRefinements).toEqual({ price: {} });
       expect(search.searchParameters.disjunctiveFacets).toEqual(['price']);
 
       search.removeWidgets([widget1, widget2]);
 
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
       expect(search.searchParameters.numericRefinements).toEqual({});
       expect(search.searchParameters.disjunctiveFacets).toEqual([]);
     });
@@ -584,7 +584,7 @@ describe('InstantSearch lifecycle', () => {
       search.start();
       expect(helperSearchSpy.callCount).toBe(1);
 
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
 
       const widget1 = registerWidget({ facets: ['price'] });
@@ -599,7 +599,7 @@ describe('InstantSearch lifecycle', () => {
       expect(widget2.init.calledOnce).toBe(true);
       expect(helperSearchSpy.callCount).toBe(3);
 
-      expect(search.widgets.length).toBe(2);
+      expect(search.widgets).toHaveLength(2);
       expect(search.searchParameters.facets).toEqual(['price']);
       expect(search.searchParameters.disjunctiveFacets).toEqual(['categories']);
     });
@@ -608,7 +608,7 @@ describe('InstantSearch lifecycle', () => {
       search.start();
 
       expect(helperSearchSpy.callCount).toBe(1);
-      expect(search.widgets.length).toBe(0);
+      expect(search.widgets).toHaveLength(0);
       expect(search.started).toBe(true);
 
       const widget1 = registerWidget({ facets: ['price'] });
@@ -639,12 +639,12 @@ describe('InstantSearch lifecycle', () => {
     search.addWidgets(widgets);
     search.start();
 
-    expect(search.widgets.length).toBe(5);
+    expect(search.widgets).toHaveLength(5);
     expect(helperSearchSpy.callCount).toBe(1);
 
     search.dispose();
 
-    expect(search.widgets.length).toBe(0);
+    expect(search.widgets).toHaveLength(0);
     expect(helperSearchSpy.callCount).toBe(1);
   });
 });

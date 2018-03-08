@@ -78,7 +78,7 @@ describe('connectCurrentRefinedValues', () => {
     const firstRenderingOptions = rendering.lastCall.args[0];
     const refinements = firstRenderingOptions.refinements;
     expect(typeof firstRenderingOptions.refine).toBe('function');
-    expect(refinements.length).toBe(1);
+    expect(refinements).toHaveLength(1);
     firstRenderingOptions.refine(refinements[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
 
@@ -94,7 +94,7 @@ describe('connectCurrentRefinedValues', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     const otherRefinements = secondRenderingOptions.refinements;
     expect(typeof secondRenderingOptions.refine).toBe('function');
-    expect(otherRefinements.length).toBe(1);
+    expect(otherRefinements).toHaveLength(1);
     secondRenderingOptions.refine(refinements[0]);
     expect(helper.hasRefinements('myFacet')).toBe(false);
   });
@@ -146,7 +146,7 @@ describe('connectCurrentRefinedValues', () => {
 
     const firstRenderingOptions = rendering.mock.calls[0][0];
     const refinements = firstRenderingOptions.refinements;
-    expect(refinements.length).toBe(1);
+    expect(refinements).toHaveLength(1);
     const value = refinements[0];
     expect(value.type).toBe('query');
     expect(value.name).toBe('foobar');
@@ -166,7 +166,7 @@ describe('connectCurrentRefinedValues', () => {
 
     const secondRenderingOptions = rendering.mock.calls[1][0];
     const secondRefinements = secondRenderingOptions.refinements;
-    expect(secondRefinements.length).toBe(1);
+    expect(secondRefinements).toHaveLength(1);
     const secondValue = secondRefinements[0];
     expect(secondValue.type).toBe('query');
     expect(secondValue.name).toBe('foobaz');

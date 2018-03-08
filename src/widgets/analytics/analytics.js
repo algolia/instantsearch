@@ -60,15 +60,13 @@ analytics({
  *   })
  * );
  */
-function analytics(
-  {
-    pushFunction,
-    delay = 3000,
-    triggerOnUIInteraction = false,
-    pushInitialSearch = true,
-    pushPagination = false,
-  } = {}
-) {
+function analytics({
+  pushFunction,
+  delay = 3000,
+  triggerOnUIInteraction = false,
+  pushInitialSearch = true,
+  pushPagination = false,
+} = {}) {
   if (!pushFunction) {
     throw new Error(usage);
   }
