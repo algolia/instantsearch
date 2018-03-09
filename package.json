@@ -119,7 +119,7 @@
     "wdio-visual-regression-service": "0.8.0",
     "webdriverio": "4.12.0",
     "webpack": "3.10.0",
-    "webpack-dev-server": "2.9.7"
+    "webpack-dev-server": "2.11.2"
   },
   "dependencies": {
     "algoliasearch": "3.25.1",
