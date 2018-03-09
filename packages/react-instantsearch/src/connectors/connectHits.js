@@ -9,40 +9,37 @@ import { getResults } from '../core/indexUtils';
  * To configure the number of hits retrieved, use [HitsPerPage widget](widgets/HitsPerPage.html),
  * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
  * prop to a [Configure](guide/Search_parameters.html) widget.
- * 
+ *
  * **Warning:** you will need to use the **objectID** property available on every hit as a key
  * when iterating over them. This will ensure you have the best possible UI experience
- * especially on slow networks. 
+ * especially on slow networks.
  * @name connectHits
  * @kind connector
  * @providedPropType {array.<object>} hits - the records that matched the search state
  * @example
  * import React from 'react';
- *
- * import { Highlight, InstantSearch } from 'react-instantsearch/dom';
+ * import { InstantSearch, Highlight } from 'react-instantsearch/dom';
  * import { connectHits } from 'react-instantsearch/connectors';
-
- * const CustomHits = connectHits(({ hits }) =>
- * <div>
- *   {hits.map(hit =>
- *     <p key={hit.objectID}>
- *       <Highlight attribute="description" hit={hit} />
- *     </p>
- *   )}
- * </div>
+ *
+ * const CustomHits = connectHits(({ hits }) => (
+ *   <div>
+ *     {hits.map(hit =>
+ *       <p key={hit.objectID}>
+ *         <Highlight attribute="name" hit={hit} />
+ *       </p>
+ *     )}
+ *   </div>
  * );
  *
- * export default function App() {
- *  return (
- *    <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <CustomHits />
- *     </InstantSearch>
- *  );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <CustomHits />
+ *   </InstantSearch>
+ * );
  */
 export default createConnector({
   displayName: 'AlgoliaHits',
