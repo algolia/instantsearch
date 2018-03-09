@@ -17,30 +17,34 @@ import { getResults } from '../core/indexUtils';
  * @providedPropType {object} props - component props.
  * @example
  * import React from 'react';
- *
- * import { InstantSearch, Hits } from 'react-instantsearch/dom';
+ * import { InstantSearch, SearchBox, Hits } from 'react-instantsearch/dom';
  * import { connectStateResults } from 'react-instantsearch/connectors';
  *
- * const Content = connectStateResults(
- *      ({ searchState, searchResults }) =>
- *        searchResults && searchResults.nbHits !== 0
- *          ? <Hits/>
- *          : <div>
- *              No results has been found for {searchState.query}
- *            </div>
- * );
+ * const Content = connectStateResults(({ searchState, searchResults }) => {
+ *   const hasResults = searchResults && searchResults.nbHits !== 0;
  *
- * export default function App() {
- *  return (
- *    <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <Content />
- *     </InstantSearch>
- *  );
- * }
+ *    return (
+ *      <div>
+ *        <div hidden={!hasResults}>
+ *          <Hits />
+ *        </div>
+ *        <div hidden={hasResults}>
+ *          <div>No results has been found for {searchState.query}</div>
+ *        </div>
+ *      </div>
+ *    );
+ * });
+ *
+ * const App = () => (
+ *   <InstantSearch
+ *      appId="latency"
+ *      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *      indexName="ikea"
+ *    >
+ *      <SearchBox />
+ *      <Content />
+ *    </InstantSearch>
+ * );
  */
 export default createConnector({
   displayName: 'AlgoliaStateResults',
