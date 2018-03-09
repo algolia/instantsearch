@@ -359,7 +359,7 @@ aws4@^1.2.1, aws4@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.6.0.tgz#83ef5ca860b2b32e4a0deedee8c771b9db57471e"
 
-babel-cli@6.26.0, babel-cli@^6.23.0, babel-cli@^6.24.1:
+babel-cli@6.26.0, babel-cli@^6.23.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-cli/-/babel-cli-6.26.0.tgz#502ab54874d7db88ad00b887a06383ce03d002f1"
   dependencies:
@@ -3582,12 +3582,6 @@ ini@^1.3.3, ini@~1.3.0:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.4.tgz#0537cb79daf59b59a1a517dff706c86ec039162e"
 
-inputformat-to-jstransformer@^1.1.8:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/inputformat-to-jstransformer/-/inputformat-to-jstransformer-1.2.1.tgz#4e0f3c0c9fd61b305801b26944b10256d4a760eb"
-  dependencies:
-    require-one "^1.0.2"
-
 inputformat-to-jstransformer@^1.2.1:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/inputformat-to-jstransformer/-/inputformat-to-jstransformer-1.3.0.tgz#67f261071ad403c0c7193f8a2c5858803504cc02"
@@ -4536,28 +4530,20 @@ metalsmith-copy@0.4.0:
     lodash "^2.4.1"
     minimatch "^3.0.2"
 
-metalsmith-engine-jstransformer@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/metalsmith-engine-jstransformer/-/metalsmith-engine-jstransformer-0.1.2.tgz#6d387f718fd128e05b8ef668ac4bf6a6f8ff462e"
-  dependencies:
-    babel-cli "^6.24.1"
-    babel-preset-env "^1.6.0"
-    extend "^3.0.0"
-    inputformat-to-jstransformer "^1.1.8"
-    is-utf8 "^0.2.1"
-    jstransformer "^1.0.0"
-
 metalsmith-headings@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/metalsmith-headings/-/metalsmith-headings-0.2.0.tgz#b9c4d7e1609e377b45863d47ae39861b86c50529"
   dependencies:
     cheerio "^0.14.0"
 
-metalsmith-in-place@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/metalsmith-in-place/-/metalsmith-in-place-3.0.1.tgz#140644a23f300cf8e46e92afe86598cd71dbbfcb"
+metalsmith-in-place@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/metalsmith-in-place/-/metalsmith-in-place-4.1.1.tgz#d36c6642818062202bdd26eae2c279c7efe7a5bc"
   dependencies:
-    metalsmith-engine-jstransformer "^0.1.2"
+    debug "^3.1.0"
+    inputformat-to-jstransformer "^1.2.1"
+    is-utf8 "^0.2.1"
+    jstransformer "^1.0.0"
     multimatch "^2.1.0"
 
 metalsmith-layouts@2.1.0:
@@ -6090,7 +6076,7 @@ require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
 
-require-one@^1.0.2, require-one@^1.0.3:
+require-one@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/require-one/-/require-one-1.0.3.tgz#0efebcce980fefc3df84ce00f269e19c8b6f4990"
 
