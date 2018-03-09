@@ -27,7 +27,7 @@
     "compression": "1.7.2",
     "documentation": "5.3.3",
     "json-loader": "0.5.7",
-    "jstransformer-handlebars": "1.0.0",
+    "jstransformer-handlebars": "1.1.0",
     "markdown-it": "8.4.1",
     "markdown-it-anchor": "4.0.0",
     "metalsmith": "2.3.0",
