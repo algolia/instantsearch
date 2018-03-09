@@ -39,7 +39,7 @@
     "metalsmith-sass": "1.5.1",
     "ms-webpack": "2.0.0",
     "netlify-cli": "1.2.2",
-    "node-sass": "4.6.1",
+    "node-sass": "4.7.2",
     "postcss-scss": "1.0.4",
     "pug": "2.0.1",
     "webpack": "3.10.0",
