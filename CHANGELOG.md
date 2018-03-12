@@ -1,3 +1,13 @@
+<a name="5.0.1"></a>
+## [5.0.1](https://github.com/algolia/react-instantsearch/compare/v5.0.0...v5.0.1) (2018-03-12)
+
+
+### Bug Fixes
+
+* **connectInfiniteHits:** always provide an array for hits ([#1064](https://github.com/algolia/react-instantsearch/issues/1064)) ([c75e38b](https://github.com/algolia/react-instantsearch/commit/c75e38b))
+
+
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/algolia/react-instantsearch/compare/v4.5.2...v5.0.0) (2018-03-06)
 
