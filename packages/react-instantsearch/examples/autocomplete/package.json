@@ -21,14 +21,9 @@
     "test": "jest"
   },
   "jest": {
-    "notify": false,
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
-    },
-    "setupFiles": [
-      "../../../../shim.js"
-    ],
-    "testEnvironment": "jest-environment-jsdom-11.0.0"
+    }
   },
   "main": "index.js",
   "license": "MIT"

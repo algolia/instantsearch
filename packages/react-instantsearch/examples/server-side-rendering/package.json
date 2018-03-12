@@ -21,11 +21,6 @@
     "webpack": "3.10.0",
     "webpack-node-externals": "1.6.0"
   },
-  "jest": {
-    "setupFiles": [
-      "../../../../shim.js"
-    ]
-  },
   "dependencies": {
     "express": "4.16.2",
     "prop-types": "15.6.0",

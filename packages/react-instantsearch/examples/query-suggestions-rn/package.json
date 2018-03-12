@@ -17,7 +17,6 @@
       "node_modules/(?!react|@expo|expo|@ptomasroos|react-native-router-flux|mobx-react)"
     ],
     "setupFiles": [
-      "../../../../shim.js",
       "./shim-react-native.js"
     ]
   },

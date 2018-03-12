@@ -138,9 +138,6 @@
     "testPathIgnorePatterns": [
       "/packages/react-instantsearch/examples"
     ],
-    "setupFiles": [
-      "./shim.js"
-    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ]

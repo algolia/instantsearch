@@ -19,10 +19,5 @@
     "react-dom": "16.2.0",
     "react-instantsearch": "5.0.0",
     "style-loader": "0.20.1"
-  },
-  "jest": {
-    "setupFiles": [
-      "../../../../shim.js"
-    ]
   }
 }

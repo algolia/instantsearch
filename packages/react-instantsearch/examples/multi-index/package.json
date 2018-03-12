@@ -19,14 +19,9 @@
     "test": "jest"
   },
   "jest": {
-    "notify": false,
-    "testEnvironment": "jest-environment-jsdom-11.0.0",
     "moduleNameMapper": {
       "\\.(css)$": "identity-obj-proxy"
-    },
-    "setupFiles": [
-      "../../../../shim.js"
-    ]
+    }
   },
   "license": "MIT"
 }
