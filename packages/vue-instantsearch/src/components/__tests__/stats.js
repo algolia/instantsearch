@@ -7,7 +7,7 @@ const searchStore = {
   processingTimeMS: 1000,
 };
 
-describe('Stats', () => {
+describe.skip('Stats', () => {
   test('renders proper HTML', () => {
     const Component = Vue.extend(Stats);
     const vm = new Component({

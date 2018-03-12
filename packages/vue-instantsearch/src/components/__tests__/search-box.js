@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import SearchBox from '../SearchBox.vue';
 
-describe('SearchBox component', () => {
+describe.skip('SearchBox', () => {
   test('renders proper HTML', () => {
     const searchStore = {
       query: '',

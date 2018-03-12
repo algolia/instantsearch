@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`allows usage of dot delimited path to access nested attribute 1`] = `
+exports[`Snippet allows usage of dot delimited path to access nested attribute 1`] = `
 
 <span class="ais-snippet">
   nested
@@ -11,7 +11,7 @@ exports[`allows usage of dot delimited path to access nested attribute 1`] = `
 
 `;
 
-exports[`renders proper HTML 1`] = `
+exports[`Snippet renders proper HTML 1`] = `
 
 <span class="ais-snippet">
   con
@@ -23,7 +23,7 @@ exports[`renders proper HTML 1`] = `
 
 `;
 
-exports[`should render an empty string in production if attribute is not snippeted 1`] = `
+exports[`Snippet should render an empty string in production if attribute is not snippeted 1`] = `
 
 <span class="ais-snippet">
 </span>

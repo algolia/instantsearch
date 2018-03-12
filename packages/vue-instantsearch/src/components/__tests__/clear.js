@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Clear from '../Clear.vue';
+import instantsearch from 'instantsearch.js/es/';
 
 describe('Clear component', () => {
   const Component = Vue.extend(Clear);
@@ -18,6 +19,12 @@ describe('Clear component', () => {
     refresh,
   };
 
+  const instance = instantsearch({
+    apiKey: '...',
+    appId: '...',
+    indexName: '...',
+  });
+
   beforeEach(() => {
     stop.mockClear();
     start.mockClear();
@@ -29,7 +36,7 @@ describe('Clear component', () => {
 
   test('can clear the search query and the facets at the same time', () => {
     const vm = new Component({
-      propsData: { searchStore },
+      propsData: { searchStore, instance },
     });
 
     vm.clear();
@@ -43,7 +50,7 @@ describe('Clear component', () => {
   test('can disable query clearing', () => {
     searchStore.query = 'whatever';
     const vm = new Component({
-      propsData: { searchStore, clearsQuery: false },
+      propsData: { searchStore, instance, clearsQuery: false },
     });
     vm.clear();
     expect(searchStore.query).toEqual('whatever');
@@ -56,7 +63,7 @@ describe('Clear component', () => {
   test('can disable facets clearing', () => {
     searchStore.query = 'whatever';
     const vm = new Component({
-      propsData: { searchStore, clearsFacets: false },
+      propsData: { searchStore, instance, clearsFacets: false },
     });
     vm.clear();
     expect(searchStore.query).toEqual('');
@@ -68,7 +75,7 @@ describe('Clear component', () => {
 
   test('has proper HTML rendering', () => {
     const vm = new Component({
-      propsData: { searchStore },
+      propsData: { searchStore, instance },
     });
     vm.$mount();
 
@@ -79,7 +86,7 @@ describe('Clear component', () => {
     searchStore.query = '';
     searchStore.activeRefinements = [];
     const vm = new Component({
-      propsData: { searchStore },
+      propsData: { searchStore, instance },
     });
     vm.$mount();
 

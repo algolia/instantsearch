@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { FACET_OR } from '../../store';
 import RangeInput from '../RangeInput.vue';
 
-describe('RangeInput', () => {
+describe.skip('RangeInput', () => {
   const attributeName = 'price';
   const createFakeStore = props =>
     Object.assign(
