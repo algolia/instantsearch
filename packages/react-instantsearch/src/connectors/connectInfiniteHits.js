@@ -43,17 +43,17 @@ export default createConnector({
   getProvidedProps(props, searchState, searchResults) {
     const results = getResults(searchResults, this.context);
 
+    this._allResults = this._allResults || [];
+
     if (!results) {
-      this._allResults = [];
       return {
-        hits: this._allResults,
+        hits: [],
         hasMore: false,
       };
     }
 
     const { hits, page, nbPages } = results;
 
-    // If it is the same page we do not touch the page result list
     if (page === 0) {
       this._allResults = hits;
     } else if (page > this.previousPage) {
@@ -64,7 +64,9 @@ export default createConnector({
 
     const lastPageIndex = nbPages - 1;
     const hasMore = page < lastPageIndex;
+
     this.previousPage = page;
+
     return {
       hits: this._allResults,
       hasMore,
