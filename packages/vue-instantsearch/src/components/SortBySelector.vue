@@ -46,5 +46,4 @@ export default {
       this.indexName = this.indices[0].name;
     }
   },
-};
-</script>
+};</script>

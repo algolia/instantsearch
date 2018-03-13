@@ -263,5 +263,4 @@ export default {
       this.searchStore.refresh();
     },
   },
-};
-</script>
+};</script>

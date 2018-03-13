@@ -14,15 +14,16 @@ export default {
     widgetParams() {
       const mixinProps = Object.keys(algoliaComponent.props); // classNames, instance, searchStore
 
+      /* eslint-disable no-continue */
       const params = {};
-      for (let i in this.$attrs) {
+      for (const i in this.$attrs) {
         if (mixinProps.indexOf(i) >= 0) continue;
         if (!Object.prototype.hasOwnProperty.call(this.$attrs, i)) continue;
         params[i] = this.$attrs[i];
       }
+      /* eslint-enable no-continue */
 
       return params;
     },
   },
-};
-</script>
+};</script>

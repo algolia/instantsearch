@@ -166,5 +166,4 @@ export default {
       children
     );
   },
-};
-</script>
+};</script>

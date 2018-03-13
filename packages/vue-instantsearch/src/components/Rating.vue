@@ -151,5 +151,4 @@ export default {
       this.searchStore.clearRefinements(this.attributeName);
     },
   },
-};
-</script>
+};</script>

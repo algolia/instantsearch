@@ -39,5 +39,4 @@ export default {
       this.searchStore.resultsPerPage = this.options[0];
     }
   },
-};
-</script>
+};</script>

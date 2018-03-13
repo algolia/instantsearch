@@ -27,5 +27,4 @@ export default {
       return this.searchStore.processingTimeMS;
     },
   },
-};
-</script>
+};</script>

@@ -24,5 +24,4 @@ export default {
       return this.searchStore.query;
     },
   },
-};
-</script>
+};</script>

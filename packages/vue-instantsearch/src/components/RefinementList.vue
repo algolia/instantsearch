@@ -92,5 +92,4 @@ export default {
       this.searchStore.addFacet(this.attributeName, this.operator);
     },
   },
-};
-</script>
+};</script>

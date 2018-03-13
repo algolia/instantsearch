@@ -103,5 +103,4 @@ export default {
       this.goToPage(this.totalPages - 1);
     },
   },
-};
-</script>
+};</script>

@@ -88,5 +88,4 @@ export default {
     AisInput,
     AisClear,
   },
-};
-</script>
+};</script>
