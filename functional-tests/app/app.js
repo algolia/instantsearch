@@ -326,9 +326,9 @@ const logs = {};
  */
 function recorder(algoliasearch, app, key) { // eslint-disable-line
   const client = algoliasearch(app, key);
-  const searchƒ = client.search;
+  const originalSearchFn = client.search;
   client.search = function(queries, cb) {
-    const maybeResults = searchƒ.call(client, queries);
+    const maybeResults = originalSearchFn.call(client, queries);
     maybeResults.then(
       function(res) {
         logs[JSON.stringify(queries)] = JSON.stringify(res);
