@@ -147,4 +147,7 @@ options:
   - name: showLoadingIndicator
     default: false
     description: Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
+  - name: autofocus
+    default: false
+    description: Focus on the input automatically
 ---
