@@ -39,8 +39,8 @@ describe.skip('RefinementList', () => {
     const Component = Vue.extend(RefinementList);
     const addFacetMock = jest.fn();
     const store = Object.assign({}, searchStore, { addFacet: addFacetMock });
+    // eslint-disable-next-line no-new
     new Component({
-      // eslint-disable-line
       propsData: {
         attributeName: 'color',
         searchStore: store,
