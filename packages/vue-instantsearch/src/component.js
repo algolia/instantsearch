@@ -66,22 +66,13 @@ export default {
     }
   },
   created() {
-    /* eslint-disable */
-    console.group(this.$options._componentTag);
-    console.log('passed widget', this.widget && this.widget.name);
-    console.log('connector', this.connector && this.connector.name);
     if (this.connector) {
       this.widgetFactory = this.connector(this.updateData, () => {});
-      this.widget = this.widgetFactory(this.widgetParams);
-      // eslint-disable-next-line no-debugger
-      // debugger;
     }
-    console.log('widget', this.widget);
-    if (this.widget) {
+    if (this.widgetFactory) {
+      this.widget = this.widgetFactory(this.widgetParams);
       this._instance.addWidget(this.widget);
     }
-    console.groupEnd(this.$options._componentTag);
-    /* eslint-enable */
   },
   beforeDestroy() {
     if (this.widget) {
