@@ -38,6 +38,7 @@ You can try most of them out in our playground.
 * [Results per Page Selector](components/results-per-page-selector.html)
 * [Sort by Selector](components/sort-by-selector.html)
 * [Rating](components/rating.html)
+* [Configure](components/configure.html)
 
 ## Registering components
 

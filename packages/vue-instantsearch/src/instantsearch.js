@@ -16,6 +16,7 @@ import Snippet from './components/Snippet';
 import Input from './components/Input.vue';
 import Results from './components/Results.vue';
 import Stats from './components/Stats.vue';
+import Configure from './components/Configure.vue';
 import Pagination from './components/Pagination.vue';
 import ResultsPerPageSelector from './components/ResultsPerPageSelector.vue';
 import TreeMenu from './components/TreeMenu.vue';
@@ -35,6 +36,7 @@ const InstantSearch = {
   Highlight,
   Snippet,
   Input,
+  Configure,
   Results,
   Stats,
   Pagination,
@@ -65,6 +67,7 @@ const InstantSearch = {
     Vue.component('ais-sort-by-selector', SortBySelector);
     Vue.component('ais-search-box', SearchBox);
     Vue.component('ais-clear-all', ClearAll);
+    Vue.component('ais-configure', Configure);
     Vue.component('ais-rating', Rating);
     Vue.component('ais-range-input', RangeInput);
     Vue.component('ais-no-results', NoResults);
