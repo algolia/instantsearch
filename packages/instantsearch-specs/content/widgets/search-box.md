@@ -135,8 +135,16 @@ options:
   - name: reset
     default: reset query
     description: The accessible text for the ❌
+  - name: loading
+    default: loading
+    description: The accessible text for the 🔄
   - name: submit
     description: a template / function to replace the 🔎
   - name: reset
     description: a template / function to replace the ❌
+  - name: loading
+    description: a template / function to replace the 🔄
+  - name: showLoadingIndicator
+    default: false
+    description: Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
 ---
