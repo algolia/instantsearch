@@ -134,4 +134,6 @@ options:
   - name: showMore
     default: false
     description: Whether or not to have the option to load more values
+  - name: sortBy
+    description: array or function to sort the results by
 ---
