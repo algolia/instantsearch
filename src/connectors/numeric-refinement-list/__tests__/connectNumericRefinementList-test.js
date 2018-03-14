@@ -1,6 +1,6 @@
 import sinon from 'sinon';
 import jsHelper from 'algoliasearch-helper';
-const {SearchResults, SearchParameters} = jsHelper;
+const { SearchResults, SearchParameters } = jsHelper;
 
 import connectNumericRefinementList from '../connectNumericRefinementList.js';
 
@@ -415,10 +415,7 @@ describe('connectNumericRefinementList', () => {
         ],
       });
 
-      const helper = jsHelper(
-        { addAlgoliaAgent: () => {} },
-        ''
-      );
+      const helper = jsHelper({ addAlgoliaAgent: () => {} }, '');
       helper.search = () => {};
 
       widget.init({
@@ -462,8 +459,8 @@ describe('connectNumericRefinementList', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {
           numericRefinementList: {
-            'numerics-2': ['27:36']
-          }
+            'numerics-2': ['27:36'],
+          },
         };
         helper.addNumericRefinement('numerics', '>=', 10);
         helper.addNumericRefinement('numerics', '<=', 20);
