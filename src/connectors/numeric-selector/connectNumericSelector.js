@@ -186,19 +186,18 @@ export default function connectNumericSelector(renderFn, unmountFn) {
       getWidgetSearchParameters(searchParam, { uiState }) {
         const value =
           uiState.numericSelector && uiState.numericSelector[attributeName];
+        const currentlyRefinedValue = this._getRefinedValue(searchParam);
 
         if (value) {
-          const clearedSearchParam = searchParam.clearRefinements(
-            attributeName
-          );
-          return clearedSearchParam.addNumericRefinement(
-            attributeName,
-            operator,
-            value
-          );
+          if (value === currentlyRefinedValue) return searchParam;
+          return searchParam
+            .clearRefinements(attributeName)
+            .addNumericRefinement(attributeName, operator, value);
         }
 
-        return searchParam;
+        return searchParam
+          .clearRefinements(attributeName)
+          .addNumericRefinement(attributeName, operator, options[0].value);
       },
 
       _getRefinedValue(state) {

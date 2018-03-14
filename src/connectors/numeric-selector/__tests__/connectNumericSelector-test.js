@@ -377,9 +377,25 @@ describe('connectNumericSelector', () => {
     });
 
     describe('getWidgetSearchParameters', () => {
-      test('should return the same SP if there are no refinements in the UI state', () => {
+      test('should enforce the default value if there are no refinements in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
         const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+
+      test('should return the same SP if the value is the same in both UI State and SP', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        const uiState = {
+          numericSelector: {
+            numerics: 30,
+          },
+        };
+        refine(30);
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
