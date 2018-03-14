@@ -123,7 +123,7 @@ options:
     default: false
     description: Whether to add a search box to refine this list
   - name: operator
-    default: \"or\"
+    default: '"or"'
     description: "How to apply refinements. Possible values: or, and"
   - name: limit
     default: 10
