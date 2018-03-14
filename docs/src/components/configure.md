@@ -21,7 +21,7 @@ Basic usage:
 
 ```html
 <ais-configure></ais-configure>
-``` 
+```
 
 Setting 5 hits per page:
 
