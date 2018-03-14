@@ -23,4 +23,6 @@ options:
   - name: limit
     default: 10
     description: Number of items to show
+  - name: sortBy
+    description: array or function to sort the results by
 ---
