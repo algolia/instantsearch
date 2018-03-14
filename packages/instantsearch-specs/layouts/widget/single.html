@@ -23,9 +23,13 @@
         </div>
       {{ end }}
       <div class="code-wrapper-contents">
-        <div class="code-wrapper-content" data-html="1">
-          {{ .Params.html | safeHTML }}
-        </div>
+        {{ if .Params.html}}
+          <div class="code-wrapper-content" data-html="1">
+            {{ .Params.html | safeHTML }}
+          </div>
+        {{ else }}
+          <p>This widget doesn't render anything</p>
+        {{ end }}
         {{ if .Params.alt1 }}
           <div class="code-wrapper-content" style="display:none" data-html="2">
             {{ .Params.althtml1 | safeHTML }}
@@ -49,6 +53,8 @@
 
     <h3>CSS classes</h3>
 
+    {{ if .Params.classes }}
+
     <p><small><strong>Hint:</strong> hover classes below to see their position.</small></p>
 
     <table>
@@ -63,6 +69,10 @@
         </tr>
       {{ end }}
     </table>
+
+    {{ else }}
+    <p><small><strong>Note:</strong> there are no CSS classes for this widget</small></p>
+    {{ end }}
 
     <h3>Options</h3>
 
