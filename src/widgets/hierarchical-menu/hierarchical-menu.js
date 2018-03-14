@@ -96,8 +96,8 @@ hierarchicalMenu({
  * @typedef {Object} HierarchicalMenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} attributes Array of attributes to use to generate the hierarchy of the menu.
- * @property {number} [limit=10] How much facet values to get [*].
- * @property {string} [separator=" > "] Separator used in the attributes to separate level values. [*].
+ * @property {number} [limit=10] How much facet values to get.
+ * @property {string} [separator=" > "] Separator used in the attributes to separate level values.
  * @property {string} [rootPath] Prefix path to use if the first level is not the root level.
  * @property {boolean} [showParentLevel=true] Show the siblings of the selected parent level of the current refined value. This
  * does not impact the root level.
