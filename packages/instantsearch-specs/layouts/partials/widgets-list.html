@@ -1,29 +1,10 @@
 <aside class="widgets-list">
   <h3>Widgets:</h3>
   <ul>
-    <li><a href="/widgets/breadcrumb">Breadcrumb</a></li>
-    <li><a href="/widgets/clear-refinements">ClearRefinements</a></li>
-    <li><a href="/widgets/current-refinements">CurrentRefinements</a></li>
-    <li><a href="/widgets/hierarchical-menu">HierarchicalMenu</a></li>
-    <li><a href="/widgets/highlight">Highlight</a></li>
-    <li><a href="/widgets/hits">Hits</a></li>
-    <li><a href="/widgets/hits-per-page">HitsPerPage</a></li>
-    <li><a href="/widgets/infinite-hits">InfiniteHits</a></li>
-    <li><a href="/widgets/menu">Menu</a></li>
-    <li><a href="/widgets/menu-select">MenuSelect</a></li>
-    <li><a href="/widgets/numeric-menu">NumericMenu</a></li>
-    <li><a href="/widgets/numeric-selector">NumericSelector</a></li>
-    <li><a href="/widgets/pagination">Pagination</a></li>
-    <li><a href="/widgets/panel">Panel</a></li>
-    <li><a href="/widgets/powered-by">PoweredBy</a></li>
-    <li><a href="/widgets/range-input">RangeInput</a></li>
-    <li><a href="/widgets/range-slider">RangeSlider</a></li>
-    <li><a href="/widgets/rating-menu">RatingMenu</a></li>
-    <li><a href="/widgets/refinement-list">RefinementList</a></li>
-    <li><a href="/widgets/search-box">SearchBox</a></li>
-    <li><a href="/widgets/snippet">Snippet</a></li>
-    <li><a href="/widgets/sort-by">SortBy</a></li>
-    <li><a href="/widgets/stats">Stats</a></li>
-    <li><a href="/widgets/toggle-refinement">ToggleRefinement</a></li>
+    {{ range where .Site.Pages "Type" "==" "widget"}}
+    <li>
+      <a href="{{.Permalink}}">{{.Title}}</a>
+    </li>
+    {{ end }}
   </ul>
 </aside>
