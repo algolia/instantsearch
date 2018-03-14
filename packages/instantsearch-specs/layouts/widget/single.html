@@ -90,7 +90,7 @@
         <tr>
           <td><code>{{ $element.name }}</code></td>
           <td><code>{{ $element.default }}</code></td>
-          <td>{{ $element.description | markdownify }}</td>
+          <td>{{ if $element.description}}{{ $element.description | markdownify }}{{ end }}</td>
         </tr>
       {{ end }}
     </table>
