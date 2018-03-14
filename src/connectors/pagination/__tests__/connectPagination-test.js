@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
+const { SearchResults, SearchParameters }= jsHelper;
 
 import connectPagination from '../connectPagination.js';
 
@@ -114,5 +114,106 @@ describe('connectPagination', () => {
       expect(helper.getPage()).toBe(7);
       expect(helper.search.callCount).toBe(2);
     }
+  });
+
+  describe('routing', () => {
+    const getInitializedWidget = () => {
+      const rendering = jest.fn();
+      const makeWidget = connectPagination(rendering);
+      const widget = makeWidget({});
+
+      const helper = jsHelper(fakeClient, '');
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      return [widget, helper, refine];
+    };
+
+    describe('getWidgetState', () => {
+      test('should give back the object unmodified if the default value is selected', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      test('should add an entry equal to the refinement', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine(4);
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should give back the object unmodified if refinements are already set', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine(4);
+        const uiStateBefore = {
+          page: 5,
+        };
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      test('should return the same SP if there are no refinements in the UI state', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should enforce the default value if no value is in the UI State', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine(4);
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+
+      test('should add the refinements according to the UI state provided', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        const uiState = {
+          page: 2,
+        };
+        refine(10);
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter.page).toBe(1);
+      });
+    });
   });
 });

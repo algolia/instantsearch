@@ -144,7 +144,7 @@ export default function connectPagination(renderFn, unmountFn) {
 
       getWidgetState(fullState, { state }) {
         const page = state.page;
-        if (page === 0) return fullState;
+        if (page === 0 || page + 1 === fullState.page) return fullState;
         return {
           ...fullState,
           page: page + 1,
