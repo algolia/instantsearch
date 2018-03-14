@@ -9,15 +9,17 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/shell/shell';
 import escape from 'escape-html';
 
-export default function highlight(source, lang = 'javascript', inline = false) {
-  const theme = "mdn-like";
+export default function highlight(source, lang = 'javascript', inline = false, runnable = true) {
+  const inlineClassNames = ['CodeMirror', 'cm-s-mdn-like'];
+  const blockClassNames = [...inlineClassNames, 'code-sample'];
+
+  if (runnable) {
+    blockClassNames.push('code-sample-runnable');
+  }
 
   if (lang === 'html') {
     lang = 'htmlmixed';
   }
-
-  const blockTheme = 'cm-s-' + theme;
-  const spanTheme = 'cm-s-' + theme;
 
   let output = '';
   runMode(source, lang, (text, style) => {
@@ -31,8 +33,8 @@ export default function highlight(source, lang = 'javascript', inline = false) {
   });
 
   if (inline) {
-    return `<code class="CodeMirror ${spanTheme}">${output}</code>`;
+    return `<code class="${inlineClassNames.join(' ')}">${output}</code>`;
   }
 
-  return `<pre class="CodeMirror ${blockTheme} code-sample"><code>${output}</code></pre>`;
+  return `<pre class="${blockClassNames.join(' ')}"><code>${output}</code></pre>`;
 }

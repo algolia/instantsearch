@@ -1,9 +1,15 @@
 import React from 'react';
 import sinon from 'sinon';
 import { RawPagination as Pagination } from '../Pagination';
+import Paginator from '../../../connectors/pagination/Paginator';
 import renderer from 'react-test-renderer';
 
 describe('Pagination', () => {
+  const pager = new Paginator({
+    currentPage: 0,
+    total: 20,
+    padding: 3,
+  });
   const defaultProps = {
     cssClasses: {
       root: 'root',
@@ -20,6 +26,9 @@ describe('Pagination', () => {
     labels: { first: '', last: '', next: '', previous: '' },
     currentPage: 0,
     nbHits: 200,
+    pages: pager.pages(),
+    isFirstPage: pager.isFirstPage(),
+    isLastPage: pager.isLastPage(),
     nbPages: 20,
     padding: 3,
     setCurrentPage: () => {},
@@ -39,7 +48,16 @@ describe('Pagination', () => {
 
   it('should disable last page if already on it', () => {
     const tree = renderer
-      .create(<Pagination {...defaultProps} showFirstLast currentPage={19} />)
+      .create(
+        <Pagination
+          {...defaultProps}
+          showFirstLast
+          pages={[13, 14, 15, 16, 17, 18, 19]}
+          currentPage={19}
+          isFirstPage={false}
+          isLastPage={true}
+        />
+      )
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -77,6 +95,7 @@ describe('Pagination', () => {
           currentPage={0}
           nbHits={0}
           nbPages={0}
+          pages={[0]}
         />
       )
       .toJSON();

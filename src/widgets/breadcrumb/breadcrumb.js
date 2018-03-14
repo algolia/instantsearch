@@ -60,7 +60,6 @@ breadcrumb({
   [ cssClasses.{disabledLabel, home, label, root, separator}={} ],
   [ templates.{home, separator}]
   [ transformData.{item} ],
-  
 })`;
 
 /**
@@ -97,7 +96,7 @@ breadcrumb({
 
 /**
  * The breadcrumb widget is a secondary navigation scheme that allows the user to see where the current page is in relation to the facet's hierarchy.
- * 
+ *
  * It reduces the number of actions a user needs to take in order to get to a higher-level page and improve the discoverability of the app or website's sections and pages.
  * It is commonly used for websites with a large amount of data organized into categories with subcategories.
  *
@@ -133,32 +132,31 @@ breadcrumb({
  * }
  * ```
  * @type {WidgetFactory}
+ * @devNovel Breadcrumb
  * @category navigation
  * @param {BreadcrumbWidgetOptions} $0 The Breadcrumb widget options.
  * @return {Widget} A new Breadcrumb widget instance.
  * @example
  * search.addWidget(
- *   instantsearch.widgets.Breadcrumb({
+ *   instantsearch.widgets.breadcrumb({
  *     container: '#breadcrumb',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
- *     templates: { home: 'Home Page' }
+ *     templates: { home: 'Home Page' },
  *     rootPath: 'Cameras & Camcorders > Digital Cameras',
  *   })
  * );
  */
 
-export default function breadcrumb(
-  {
-    attributes,
-    autoHideContainer = false,
-    container,
-    cssClasses: userCssClasses = {},
-    rootPath = null,
-    separator = ' > ',
-    templates = defaultTemplates,
-    transformData,
-  } = {}
-) {
+export default function breadcrumb({
+  attributes,
+  autoHideContainer = false,
+  container,
+  cssClasses: userCssClasses = {},
+  rootPath = null,
+  separator = ' > ',
+  templates = defaultTemplates,
+  transformData,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

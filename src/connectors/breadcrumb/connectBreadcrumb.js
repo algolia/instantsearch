@@ -22,7 +22,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 `;
 
 /**
- * @typedef {Object} CustomBreadcrumbItem
+ * @typedef {Object} BreadcrumbItem
  * @property {string} name Name of the category or subcategory.
  * @property {string} value Value of breadcrumb item.
  */
@@ -44,14 +44,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
-  * **Breadcrumb** connector provides the logic to build a custom widget
-  * that will give the user the ability to see the current path in a hierarchical facet.
-  *
-  * This is commonly used in websites that have a large amount of content organized in a hierarchical manner (usually e-commerce websites).
-  * @type {Connector}
-  * @param {function(BreadcrumbRenderingOptions, boolean)} renderFn Rendering function for the custom **Breadcrumb* widget.
-  * @return {function(CustomBreadcrumbWidgetOptions)} Re-usable widget factory for a custom **Breadcrumb** widget.
-  */
+ * **Breadcrumb** connector provides the logic to build a custom widget
+ * that will give the user the ability to see the current path in a hierarchical facet.
+ *
+ * This is commonly used in websites that have a large amount of content organized in a hierarchical manner (usually e-commerce websites).
+ * @type {Connector}
+ * @param {function(BreadcrumbRenderingOptions, boolean)} renderFn Rendering function for the custom **Breadcrumb* widget.
+ * @return {function(CustomBreadcrumbWidgetOptions)} Re-usable widget factory for a custom **Breadcrumb** widget.
+ */
 export default function connectBreadcrumb(renderFn) {
   checkRendering(renderFn, usage);
   return (widgetParams = {}) => {

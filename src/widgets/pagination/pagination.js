@@ -22,11 +22,19 @@ const renderer = ({
   cssClasses,
   labels,
   showFirstLast,
-  padding,
   autoHideContainer,
   scrollToNode,
 }) => (
-  { createURL, currentRefinement, nbHits, nbPages, refine },
+  {
+    createURL,
+    currentRefinement,
+    nbHits,
+    nbPages,
+    pages,
+    isFirstPage,
+    isLastPage,
+    refine,
+  },
   isFirstRendering
 ) => {
   if (isFirstRendering) return;
@@ -49,7 +57,9 @@ const renderer = ({
       labels={labels}
       nbHits={nbHits}
       nbPages={nbPages}
-      padding={padding}
+      pages={pages}
+      isFirstPage={isFirstPage}
+      isLastPage={isLastPage}
       setCurrentPage={setCurrentPage}
       shouldAutoHideContainer={shouldAutoHideContainer}
       showFirstLast={showFirstLast}
@@ -116,6 +126,7 @@ pagination({
  * beyond the 1000th hits by default. You can find more information on the [Algolia documentation](https://www.algolia.com/doc/guides/searching/pagination/#pagination-limitations).
  *
  * @type {WidgetFactory}
+ * @devNovel Pagination
  * @category navigation
  * @param {PaginationWidgetOptions} $0 Options for the Pagination widget.
  * @return {Widget} A new instance of Pagination widget.
@@ -130,18 +141,16 @@ pagination({
  *   })
  * );
  */
-export default function pagination(
-  {
-    container,
-    labels: userLabels = defaultLabels,
-    cssClasses: userCssClasses = {},
-    maxPages,
-    padding = 3,
-    showFirstLast = true,
-    autoHideContainer = true,
-    scrollTo: userScrollTo = 'body',
-  } = {}
-) {
+export default function pagination({
+  container,
+  labels: userLabels = defaultLabels,
+  cssClasses: userCssClasses = {},
+  maxPages,
+  padding = 3,
+  showFirstLast = true,
+  autoHideContainer = true,
+  scrollTo: userScrollTo = 'body',
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

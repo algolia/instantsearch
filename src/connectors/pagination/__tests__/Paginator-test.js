@@ -10,7 +10,7 @@ describe('paginator: simple cases', () => {
 
     it('should return the pages', () => {
       const pages = pager.pages();
-      expect(pages.length).toBe(5);
+      expect(pages).toHaveLength(5);
       expect(pages).toEqual([0, 1, 2, 3, 4]);
     });
 
@@ -32,7 +32,7 @@ describe('paginator: simple cases', () => {
 
     it('should return the pages', () => {
       const pages = pager.pages();
-      expect(pages.length).toBe(5);
+      expect(pages).toHaveLength(5);
       expect(pages).toEqual([0, 1, 2, 3, 4]);
     });
 
@@ -54,7 +54,7 @@ describe('paginator: simple cases', () => {
 
     it('should return the pages', () => {
       const pages = pager.pages();
-      expect(pages.length).toBe(5);
+      expect(pages).toHaveLength(5);
       expect(pages).toEqual([3, 4, 5, 6, 7]);
     });
 
@@ -76,7 +76,7 @@ describe('paginator: simple cases', () => {
 
     it('should return the pages', () => {
       const pages = pager.pages();
-      expect(pages.length).toBe(5);
+      expect(pages).toHaveLength(5);
       expect(pages).toEqual([5, 6, 7, 8, 9]);
     });
 
@@ -98,7 +98,7 @@ describe('paginator: simple cases', () => {
 
     it('should return the pages', () => {
       const pages = pager.pages();
-      expect(pages.length).toBe(5);
+      expect(pages).toHaveLength(5);
       expect(pages).toEqual([5, 6, 7, 8, 9]);
     });
 
@@ -121,7 +121,7 @@ describe('paginator: number of pages is less than 2*padding+1', () => {
 
   it('should return the pages', () => {
     const pages = pager.pages();
-    expect(pages.length).toBe(1);
+    expect(pages).toHaveLength(1);
     expect(pages).toEqual([0]);
   });
 
@@ -143,7 +143,7 @@ describe('paginator: bug #668', () => {
 
   it('should return the pages', () => {
     const pages = pager.pages();
-    expect(pages.length).toBe(6);
+    expect(pages).toHaveLength(6);
     expect(pages).toEqual([0, 1, 2, 3, 4, 5]);
   });
 

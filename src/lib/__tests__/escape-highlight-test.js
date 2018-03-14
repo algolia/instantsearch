@@ -1,7 +1,7 @@
 import escapeHits from '../escape-highlight';
 
 describe('escapeHits()', () => {
-  it('should escape highlighProperty simple text value', () => {
+  it('should escape highlightProperty simple text value', () => {
     const hits = [
       {
         _highlightResult: {
@@ -36,7 +36,7 @@ describe('escapeHits()', () => {
     expect(escapeHits(hits)).toEqual(output);
   });
 
-  it('should escape highlighProperty nested object value', () => {
+  it('should escape highlightProperty nested object value', () => {
     const hits = [
       {
         _highlightResult: {
@@ -81,7 +81,7 @@ describe('escapeHits()', () => {
     expect(escapeHits(hits)).toEqual(output);
   });
 
-  it('should escape highlighProperty array of string', () => {
+  it('should escape highlightProperty array of string', () => {
     const hits = [
       {
         _highlightResult: {
@@ -128,7 +128,7 @@ describe('escapeHits()', () => {
     expect(escapeHits(hits)).toEqual(output);
   });
 
-  it('should escape highlighProperty array of object', () => {
+  it('should escape highlightProperty array of object', () => {
     const hits = [
       {
         _highlightResult: {

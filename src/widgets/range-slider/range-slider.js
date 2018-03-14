@@ -144,6 +144,7 @@ rangeSlider({
  * The values inside this attribute must be JavaScript numbers (not strings).
  *
  * @type {WidgetFactory}
+ * @devNovel RangeSlider
  * @category filter
  * @param {RangeSliderWidgetOptions} $0 RangeSlider widget options.
  * @return {Widget} A new RangeSlider widget instance.
@@ -163,22 +164,20 @@ rangeSlider({
  *   })
  * );
  */
-export default function rangeSlider(
-  {
-    container,
-    attributeName,
-    min,
-    max,
-    templates = defaultTemplates,
-    cssClasses: userCssClasses = {},
-    step,
-    pips = true,
-    precision = 0,
-    tooltips = true,
-    autoHideContainer = true,
-    collapsible = false,
-  } = {}
-) {
+export default function rangeSlider({
+  container,
+  attributeName,
+  min,
+  max,
+  templates = defaultTemplates,
+  cssClasses: userCssClasses = {},
+  step,
+  pips = true,
+  precision = 0,
+  tooltips = true,
+  autoHideContainer = true,
+  collapsible = false,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

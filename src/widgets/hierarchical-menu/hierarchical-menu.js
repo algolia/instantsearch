@@ -172,6 +172,7 @@ hierarchicalMenu({
  * }
  * ```
  * @type {WidgetFactory}
+ * @devNovel HierarchicalMenu
  * @category filter
  * @param {HierarchicalMenuWidgetOptions} $0 The HierarchicalMenu widget options.
  * @return {Widget} A new HierarchicalMenu widget instance.
@@ -186,22 +187,20 @@ hierarchicalMenu({
  *   })
  * );
  */
-export default function hierarchicalMenu(
-  {
-    container,
-    attributes,
-    separator = ' > ',
-    rootPath = null,
-    showParentLevel = true,
-    limit = 10,
-    sortBy = ['name:asc'],
-    cssClasses: userCssClasses = {},
-    autoHideContainer = true,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-  } = {}
-) {
+export default function hierarchicalMenu({
+  container,
+  attributes,
+  separator = ' > ',
+  rootPath = null,
+  showParentLevel = true,
+  limit = 10,
+  sortBy = ['name:asc'],
+  cssClasses: userCssClasses = {},
+  autoHideContainer = true,
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+} = {}) {
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
   }

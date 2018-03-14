@@ -31,9 +31,9 @@ const renderFn = (
         ${item.stars
           .map(
             star =>
-              `<span class="ais-star-rating--star${star === false
-                ? '__empty'
-                : ''}"></span>`
+              `<span class="ais-star-rating--star${
+                star === false ? '__empty' : ''
+              }"></span>`
           )
           .join('')}
 

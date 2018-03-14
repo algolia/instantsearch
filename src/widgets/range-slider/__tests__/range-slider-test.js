@@ -36,7 +36,7 @@ describe('rangeSlider', () => {
           },
         },
         'indexName',
-        { disjunctiveFacets: ['aNummAttr'] }
+        { disjunctiveFacets: ['aNumAttr'] }
       );
     });
 

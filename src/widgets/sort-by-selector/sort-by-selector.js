@@ -62,6 +62,7 @@ sortBySelector({
  *
  * For the users it is like they are selecting a new sort order.
  * @type {WidgetFactory}
+ * @devNovel SortBySelector
  * @category sort
  * @param {SortByWidgetOptions} $0 Options for the SortBySelector widget
  * @return {Widget} Creates a new instance of the SortBySelector widget.
@@ -77,14 +78,12 @@ sortBySelector({
  *   })
  * );
  */
-export default function sortBySelector(
-  {
-    container,
-    indices,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
-  } = {}
-) {
+export default function sortBySelector({
+  container,
+  indices,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = false,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

@@ -123,6 +123,7 @@ export default function connectRange(renderFn, unmountFn) {
       },
 
       _refine(helper, currentRange) {
+        // eslint-disable-next-line complexity
         return ([nextMin, nextMax] = []) => {
           const { min: currentRangeMin, max: currentRangeMax } = currentRange;
 

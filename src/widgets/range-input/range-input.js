@@ -127,6 +127,7 @@ rangeInput({
  *
  * The values inside this attribute must be JavaScript numbers (not strings).
  * @type {WidgetFactory}
+ * @devNovel RangeInput
  * @category filter
  * @param {RangeInputWidgetOptions} $0 The RangeInput widget options.
  * @return {Widget} A new instance of RangeInput widget.
@@ -145,20 +146,18 @@ rangeInput({
  *   })
  * );
  */
-export default function rangeInput(
-  {
-    container,
-    attributeName,
-    min,
-    max,
-    precision = 0,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    labels: userLabels = {},
-    autoHideContainer = true,
-    collapsible = false,
-  } = {}
-) {
+export default function rangeInput({
+  container,
+  attributeName,
+  min,
+  max,
+  precision = 0,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  labels: userLabels = {},
+  autoHideContainer = true,
+  collapsible = false,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

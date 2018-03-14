@@ -11,7 +11,10 @@ export default function helpers(filenames, metalsmith, cb) {
     },
     highlight(src, opts) {
       const lang = opts && opts.lang;
-      return highlight(src, lang);
+      const inline = opts && opts.inline;
+      const runnable = opts && opts.runnable;
+
+      return highlight(src, lang, inline, runnable);
     },
     maybeActive(navPath, singlePathOrArrayOfPaths) {
       const pathsToTest = [].concat(singlePathOrArrayOfPaths);

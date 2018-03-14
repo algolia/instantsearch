@@ -87,8 +87,8 @@ export const checkUsage = ({
  * **RefinementList** connector provides the logic to build a custom widget that will let the
  * user filter the results based on the values of a specific facet.
  *
-  * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
-  * function to select an item.
+ * This connector provides a `toggleShowMore()` function to display more or less items and a `refine()`
+ * function to select an item.
  * @type {Connector}
  * @param {function(RefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **RefinementList** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.

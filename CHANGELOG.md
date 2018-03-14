@@ -1,3 +1,31 @@
+<a name="2.6.0"></a>
+# [2.6.0](https://github.com/algolia/instantsearch.js/compare/v2.5.2...v2.6.0) (2018-03-06)
+
+
+### Bug Fixes
+
+* **GeoSearch:** add apiKey for Google Maps ([#2773](https://github.com/algolia/instantsearch.js/issues/2773)) ([6c1846f](https://github.com/algolia/instantsearch.js/commit/6c1846f))
+* **GeoSearch:** override button style ([#2772](https://github.com/algolia/instantsearch.js/issues/2772)) ([4d69b50](https://github.com/algolia/instantsearch.js/commit/4d69b50))
+
+
+### Features
+
+* **configure:** add the Configure widget ([#2698](https://github.com/algolia/instantsearch.js/issues/2698)) ([94daabc](https://github.com/algolia/instantsearch.js/commit/94daabc))
+* add GeoSearch widget & connector ([#2743](https://github.com/algolia/instantsearch.js/issues/2743)) ([7fa17ff](https://github.com/algolia/instantsearch.js/commit/7fa17ff))
+
+
+
+<a name="2.5.2"></a>
+## [2.5.2](https://github.com/algolia/instantsearch.js/compare/v2.5.1...v2.5.2) (2018-02-26)
+
+
+### Bug Fixes
+
+* **Template:** harden Symbol checks ([#2749](https://github.com/algolia/instantsearch.js/issues/2749)) ([fab66bc](https://github.com/algolia/instantsearch.js/commit/fab66bc))
+* **yarnrc:** use empty string for save-prefix ([#2739](https://github.com/algolia/instantsearch.js/issues/2739)) ([979e0cd](https://github.com/algolia/instantsearch.js/commit/979e0cd))
+
+
+
 <a name="2.5.1"></a>
 ## [2.5.1](https://github.com/algolia/instantsearch.js/compare/v2.5.0...v2.5.1) (2018-02-13)
 

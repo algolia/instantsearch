@@ -37,9 +37,9 @@ const formatMenuEntry = (createURL, lvl = 0) => item => {
         class="facet-value clearfix"
         data-refine-value="${item.value}"
       >
-        ${item.isRefined
-          ? `<strong>${item.label}</strong>`
-          : item.label} ${countHTML}
+        ${
+          item.isRefined ? `<strong>${item.label}</strong>` : item.label
+        } ${countHTML}
       </a>
     </div>
   `;

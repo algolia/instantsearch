@@ -130,6 +130,7 @@ starRating({
  * The values inside this attribute must be JavaScript numbers (not strings).
  *
  * @type {WidgetFactory}
+ * @devNovel StarRating
  * @category filter
  * @param {StarWidgetOptions} $0 StarRating widget options.
  * @return {Widget} A new StarRating widget instance.
@@ -145,19 +146,17 @@ starRating({
  *   })
  * );
  */
-export default function starRating(
-  {
-    container,
-    attributeName,
-    max = 5,
-    cssClasses: userCssClasses = {},
-    labels = defaultLabels,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-  } = {}
-) {
+export default function starRating({
+  container,
+  attributeName,
+  max = 5,
+  cssClasses: userCssClasses = {},
+  labels = defaultLabels,
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

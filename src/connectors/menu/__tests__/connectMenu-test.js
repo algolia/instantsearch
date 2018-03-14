@@ -341,7 +341,7 @@ describe('connectMenu', () => {
       // Then
       const firstRenderingOptions = rendering.lastCall.args[0];
       expect(firstRenderingOptions.isShowingMore).toBe(false);
-      expect(firstRenderingOptions.items.length).toBe(1);
+      expect(firstRenderingOptions.items).toHaveLength(1);
       expect(firstRenderingOptions.canToggleShowMore).toBe(true);
 
       // When
@@ -350,7 +350,7 @@ describe('connectMenu', () => {
       // Then
       const secondRenderingOptions = rendering.lastCall.args[0];
       expect(secondRenderingOptions.isShowingMore).toBe(true);
-      expect(secondRenderingOptions.items.length).toBe(2);
+      expect(secondRenderingOptions.items).toHaveLength(2);
       expect(firstRenderingOptions.canToggleShowMore).toBe(true);
     });
 
@@ -400,7 +400,7 @@ describe('connectMenu', () => {
       });
 
       const firstRenderingOptions = rendering.lastCall.args[0];
-      expect(firstRenderingOptions.items.length).toBe(1);
+      expect(firstRenderingOptions.items).toHaveLength(1);
       expect(firstRenderingOptions.canToggleShowMore).toBe(false);
     });
   });

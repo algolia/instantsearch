@@ -25,6 +25,7 @@ analytics({
  * This is a headless widget, which means that it does not have a rendered output in the
  * UI.
  * @type {WidgetFactory}
+ * @devNovel Analytics
  * @category analytics
  * @param {AnalyticsWidgetOptions} $0 The Analytics widget options.
  * @return {Widget} A new instance of the Analytics widget.
@@ -59,15 +60,13 @@ analytics({
  *   })
  * );
  */
-function analytics(
-  {
-    pushFunction,
-    delay = 3000,
-    triggerOnUIInteraction = false,
-    pushInitialSearch = true,
-    pushPagination = false,
-  } = {}
-) {
+function analytics({
+  pushFunction,
+  delay = 3000,
+  triggerOnUIInteraction = false,
+  pushInitialSearch = true,
+  pushPagination = false,
+} = {}) {
   if (!pushFunction) {
     throw new Error(usage);
   }

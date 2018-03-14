@@ -73,7 +73,7 @@ describe('connectBreadcrumb', () => {
     });
 
     // Verify that the widget has not been rendered yet at this point
-    expect(rendering.mock.calls.length).toBe(0);
+    expect(rendering.mock.calls).toHaveLength(0);
 
     const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
     helper.search = jest.fn();
@@ -85,7 +85,7 @@ describe('connectBreadcrumb', () => {
     });
 
     // Verify that rendering has been called upon init with isFirstRendering = true
-    expect(rendering.mock.calls.length).toBe(1);
+    expect(rendering.mock.calls).toHaveLength(1);
     expect(rendering.mock.calls[0][0].widgetParams).toEqual({
       attributes: ['category', 'sub_category'],
     });
@@ -122,7 +122,7 @@ describe('connectBreadcrumb', () => {
     });
 
     // Verify that rendering has been called upon render with isFirstRendering = false
-    expect(rendering.mock.calls.length).toBe(2);
+    expect(rendering.mock.calls).toHaveLength(2);
     expect(rendering.mock.calls[1][0].widgetParams).toEqual({
       attributes: ['category', 'sub_category'],
     });

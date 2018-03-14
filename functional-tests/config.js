@@ -25,9 +25,9 @@ let conf = {
     timeout: 50000,
     compilers: ['js:babel-core/register'],
   },
-  baseUrl: `http://${process.env.CI === 'true'
-    ? 'localhost'
-    : '10.200.10.1'}:9000`,
+  baseUrl: `http://${
+    process.env.CI === 'true' ? 'localhost' : '10.200.10.1'
+  }:9000`,
   services: ['visual-regression'],
   visualRegression: {
     compare: new SaveScreenshot({

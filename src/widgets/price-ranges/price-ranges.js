@@ -113,6 +113,7 @@ priceRanges({
  *
  * The values inside this attribute must be JavaScript numbers (not strings).
  * @type {WidgetFactory}
+ * @devNovel PriceRanges
  * @category filter
  * @param {PriceRangeWidgetOptions} $0 The PriceRanges widget options.
  * @return {Widget} A new instance of PriceRanges widget.
@@ -132,18 +133,16 @@ priceRanges({
  *   })
  * );
  */
-export default function priceRanges(
-  {
-    container,
-    attributeName,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    labels: userLabels = {},
-    currency: userCurrency = '$',
-    autoHideContainer = true,
-  } = {}
-) {
+export default function priceRanges({
+  container,
+  attributeName,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  labels: userLabels = {},
+  currency: userCurrency = '$',
+  autoHideContainer = true,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

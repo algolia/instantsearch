@@ -49,14 +49,14 @@ describe('searchBox()', () => {
       widget = searchBox(opts);
       widget.init({ state, helper, onHistoryChange });
       const inputs = container.getElementsByTagName('input');
-      expect(inputs.length).toEqual(1);
+      expect(inputs).toHaveLength(1);
     });
 
     it('add a reset button inside the div', () => {
       widget = searchBox(opts);
       widget.init({ state, helper, onHistoryChange });
       const button = container.getElementsByTagName('button');
-      expect(button.length).toEqual(1);
+      expect(button).toHaveLength(1);
     });
 
     it('add a magnifier inside the div', () => {
@@ -65,7 +65,7 @@ describe('searchBox()', () => {
       const magnifier = container.getElementsByClassName(
         'ais-search-box--magnifier'
       );
-      expect(magnifier.length).toEqual(1);
+      expect(magnifier).toHaveLength(1);
     });
 
     it('sets default HTML attribute to the input', () => {
@@ -192,7 +192,7 @@ describe('searchBox()', () => {
       // Then
       const wrapper = container.querySelectorAll('div.ais-search-box');
       const input = container.querySelectorAll('input')[0];
-      expect(wrapper.length).toEqual(0);
+      expect(wrapper).toHaveLength(0);
       expect(container.firstChild).toEqual(input);
     });
   });
@@ -275,7 +275,7 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      expect($('.ais-search-box--reset-wrapper').length).toEqual(0);
+      expect($('.ais-search-box--reset-wrapper')).toHaveLength(0);
     });
   });
 
@@ -326,7 +326,7 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      expect($('.ais-search-box--powered-by').length).toEqual(0);
+      expect($('.ais-search-box--powered-by')).toHaveLength(0);
     });
 
     it('should not add the element with poweredBy: false', () => {
@@ -340,7 +340,7 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      expect($('.ais-search-box--powered-by').length).toEqual(0);
+      expect($('.ais-search-box--powered-by')).toHaveLength(0);
     });
 
     it('should add the element with poweredBy: true', () => {
@@ -354,7 +354,7 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      expect($('.ais-search-box--powered-by').length).toEqual(1);
+      expect($('.ais-search-box--powered-by')).toHaveLength(1);
     });
 
     it('should contain a link to Algolia with poweredBy: true', () => {
@@ -369,8 +369,10 @@ describe('searchBox()', () => {
 
       // Then
       const actual = $('.ais-search-box--powered-by-link');
-      const url = `https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=${location.hostname}&utm_campaign=poweredby`;
-      expect(actual.length).toEqual(1);
+      const url = `https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=${
+        location.hostname
+      }&utm_campaign=poweredby`;
+      expect(actual).toHaveLength(1);
       expect(actual[0].tagName).toEqual('A');
       expect(actual[0].innerHTML).toEqual('Algolia');
       expect(actual[0].getAttribute('href')).toEqual(url);
@@ -394,8 +396,8 @@ describe('searchBox()', () => {
       // Then
       const root = $('.myroot');
       const link = $('.mylink');
-      expect(root.length).toEqual(1);
-      expect(link.length).toEqual(1);
+      expect(root).toHaveLength(1);
+      expect(link).toHaveLength(1);
       expect(link[0].tagName).toEqual('A');
       expect(link[0].innerHTML).toEqual('Algolia');
     });
@@ -418,8 +420,8 @@ describe('searchBox()', () => {
       // Then
       const root = $('.ais-search-box--powered-by');
       const link = $('.ais-search-box--powered-by-link');
-      expect(root.length).toEqual(1);
-      expect(link.length).toEqual(1);
+      expect(root).toHaveLength(1);
+      expect(link).toHaveLength(1);
     });
 
     it('should let the user define its own string template', () => {
@@ -502,7 +504,7 @@ describe('searchBox()', () => {
 
       // Then
       expect(container.innerHTML).toContain('Foobar');
-      expect($('.should-be-found').length).toEqual(1);
+      expect($('.should-be-found')).toHaveLength(1);
     });
   });
 

@@ -67,6 +67,7 @@ hitsPerPageSelector({
  *
  * You can specify the default hits per page using a boolean in the items[] array. If none is specified, this first hits per page option will be picked.
  * @type {WidgetFactory}
+ * @devNovel HitsPerPageSelector
  * @category basic
  * @param {HitsPerPageSelectorWidgetOptions} $0 The options of the HitPerPageSelector widget.
  * @return {Widget} A new instance of the HitPerPageSelector widget.
@@ -82,14 +83,12 @@ hitsPerPageSelector({
  *   })
  * );
  */
-export default function hitsPerPageSelector(
-  {
-    container,
-    items,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
-  } = {}
-) {
+export default function hitsPerPageSelector({
+  container,
+  items,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = false,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

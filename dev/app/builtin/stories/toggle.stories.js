@@ -9,7 +9,7 @@ const stories = storiesOf('Toggle');
 export default () => {
   stories
     .add(
-      'with single value',
+      'default',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.toggle({

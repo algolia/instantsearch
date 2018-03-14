@@ -44,10 +44,10 @@ mixin type(t, relatedTypes)
     if t.name !== 'Object' && t.name !== 'Array' && t.name[0] === t.name[0].toUpperCase()
       - const symbol = relatedTypes && relatedTypes.find(t2 => t2 && t.name === t2.name) || {};
       - const isExternal = symbol.kind === 'external'
-      if isExternal
+      if symbol.name && isExternal
         - const firstSee = symbol.tags.find(t => t.title === 'see') || {};
         a.typed-link(href=firstSee.description, target='_blank')=t.name
-      else
+      else if symbol.name
         a.typed-link(href=`${navPath}#struct-${t.name}`)=t.name
     else
       | !{t.name}

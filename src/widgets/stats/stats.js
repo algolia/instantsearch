@@ -121,6 +121,7 @@ stats({
  * By default, it will display the **number of hits** and the time taken to compute the
  * results inside the engine.
  * @type {WidgetFactory}
+ * @devNovel Stats
  * @category metadata
  * @param {StatsWidgetOptions} $0 Stats widget options. Some keys are mandatory: `container`,
  * @return {Widget} A new stats widget instance
@@ -131,16 +132,14 @@ stats({
  *   })
  * );
  */
-export default function stats(
-  {
-    container,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = true,
-    collapsible = false,
-    transformData,
-    templates = defaultTemplates,
-  } = {}
-) {
+export default function stats({
+  container,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = true,
+  collapsible = false,
+  transformData,
+  templates = defaultTemplates,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

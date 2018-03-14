@@ -6,9 +6,11 @@
  */
 
 export { default as clearAll } from '../widgets/clear-all/clear-all.js';
+export { default as configure } from '../widgets/configure/configure.js';
 export {
   default as currentRefinedValues,
 } from '../widgets/current-refined-values/current-refined-values.js';
+export { default as geoSearch } from '../widgets/geo-search/geo-search.js';
 export {
   default as hierarchicalMenu,
 } from '../widgets/hierarchical-menu/hierarchical-menu.js';

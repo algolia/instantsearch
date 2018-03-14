@@ -161,7 +161,7 @@ describe('Hits', () => {
       const actual = shallowRender(props).find(Template);
 
       // Then
-      expect(actual.length).toEqual(2);
+      expect(actual).toHaveLength(2);
       expect(actual.at(0).props().templateKey).toEqual('item');
     });
 

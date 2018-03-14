@@ -136,6 +136,7 @@ toggle({
  * in your Algolia settings.
  *
  * @type {WidgetFactory}
+ * @devNovel Toggle
  * @category filter
  * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
  * @return {Widget} A new instance of the Toggle widget
@@ -154,19 +155,17 @@ toggle({
  *   })
  * );
  */
-export default function toggle(
-  {
-    container,
-    attributeName,
-    label,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    transformData,
-    autoHideContainer = true,
-    collapsible = false,
-    values: userValues = { on: true, off: undefined },
-  } = {}
-) {
+export default function toggle({
+  container,
+  attributeName,
+  label,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  transformData,
+  autoHideContainer = true,
+  collapsible = false,
+  values: userValues = { on: true, off: undefined },
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

@@ -116,6 +116,7 @@ numericRefinementList({
  * The values inside this attribute must be JavaScript numbers and not strings.
  *
  * @type {WidgetFactory}
+ * @devNovel NumericRefinementList
  * @category filter
  * @param {NumericRefinementListWidgetOptions} $0 The NumericRefinementList widget options
  * @return {Widget} Creates a new instance of the NumericRefinementList widget.
@@ -136,18 +137,16 @@ numericRefinementList({
  *   })
  * );
  */
-export default function numericRefinementList(
-  {
-    container,
-    attributeName,
-    options,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-  } = {}
-) {
+export default function numericRefinementList({
+  container,
+  attributeName,
+  options,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+} = {}) {
   if (!container || !attributeName || !options) {
     throw new Error(usage);
   }

@@ -20,6 +20,7 @@ const renderer = ({
   reset,
   magnifier,
   loadingIndicator,
+  // eslint-disable-next-line complexity
 }) => (
   { refine, clear, query, onHistoryChange, isSearchStalled },
   isFirstRendering
@@ -233,6 +234,8 @@ searchBox({
  * away.
  *
  * @type {WidgetFactory}
+ * @devNovel SearchBox
+ * @category basic
  * @param {SearchBoxWidgetOptions} $0 Options used to configure a SearchBox widget.
  * @return {Widget} Creates a new instance of the SearchBox widget.
  * @example
@@ -247,21 +250,19 @@ searchBox({
  *   })
  * );
  */
-export default function searchBox(
-  {
-    container,
-    placeholder = '',
-    cssClasses = {},
-    poweredBy = false,
-    wrapInput = true,
-    autofocus = 'auto',
-    searchOnEnterKeyPressOnly = false,
-    reset = true,
-    magnifier = true,
-    loadingIndicator = false,
-    queryHook,
-  } = {}
-) {
+export default function searchBox({
+  container,
+  placeholder = '',
+  cssClasses = {},
+  poweredBy = false,
+  wrapInput = true,
+  autofocus = 'auto',
+  searchOnEnterKeyPressOnly = false,
+  reset = true,
+  magnifier = true,
+  loadingIndicator = false,
+  queryHook,
+} = {}) {
   if (!container) {
     throw new Error(usage);
   }

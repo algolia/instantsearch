@@ -4,6 +4,7 @@ import instantsearch from '../../../../index.js';
 const renderFn = (
   {
     nbPages,
+    pages,
     createURL,
     refine,
     currentRefinement,
@@ -25,22 +26,22 @@ const renderFn = (
   });
 
   if (nbPages > 0) {
-    const pages = Array(...{ length: nbPages })
-      .map(Number.call, Number)
-      .map(
-        page => `
-        <li ${page === currentRefinement ? 'class="active"' : ''}>
-          <a
-            href="${createURL(page)}"
-            data-page=${page}
-          >
-            ${page + 1}
-          </a>
-        </li>
-      `
-      );
-
-    containerNode.find('ul.pagination').html(pages.join(''));
+    containerNode.find('ul.pagination').html(
+      pages
+        .map(
+          page => `
+            <li ${page === currentRefinement ? 'class="active"' : ''}>
+              <a
+                href="${createURL(page)}"
+                data-page=${page}
+              >
+                ${page + 1}
+              </a>
+            </li>
+          `
+        )
+        .join('')
+    );
 
     containerNode.find('a[data-page]').each(function() {
       window.$(this).on('click', e => {

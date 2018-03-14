@@ -149,7 +149,7 @@ describe('utils.prepareTemplateProps', () => {
 });
 
 describe('utils.renderTemplate', () => {
-  it('expect to proccess templates as string', () => {
+  it('expect to process templates as string', () => {
     const templateKey = 'test';
     const templates = { test: 'it works with {{type}}' };
     const data = { type: 'strings' };
@@ -165,7 +165,7 @@ describe('utils.renderTemplate', () => {
     expect(actual).toBe(expectation);
   });
 
-  it('expect to proccess templates as function', () => {
+  it('expect to process templates as function', () => {
     const templateKey = 'test';
     const templates = { test: data => `it works with ${data.type}` };
     const data = { type: 'functions' };
@@ -1227,5 +1227,28 @@ describe('utils.deprecate', () => {
 
     warn.mockReset();
     warn.mockRestore();
+  });
+});
+
+describe('utils.parseAroundLatLngFromString', () => {
+  it('expect to return a LatLng object from string', () => {
+    const samples = [
+      { input: '10,12', expectation: { lat: 10, lng: 12 } },
+      { input: '10,    12', expectation: { lat: 10, lng: 12 } },
+      { input: '10.15,12', expectation: { lat: 10.15, lng: 12 } },
+      { input: '10,12.15', expectation: { lat: 10, lng: 12.15 } },
+    ];
+
+    samples.forEach(({ input, expectation }) => {
+      expect(utils.parseAroundLatLngFromString(input)).toEqual(expectation);
+    });
+  });
+
+  it('expect to throw an error when the parsing fail', () => {
+    const samples = [{ input: '10a,12' }, { input: '10.    12' }];
+
+    samples.forEach(({ input }) => {
+      expect(() => utils.parseAroundLatLngFromString(input)).toThrow();
+    });
   });
 });
