@@ -158,6 +158,14 @@ options:
   - name: showMore
     default: false
     description: Whether or not to have the option to load more values
+  - name: separator
+    default: '" > "'
+    description: Separator used in the attributes to separate level values
+  - name: rootPath
+    description: Prefix path to use if the first level is not the root level.
+  - name: showParentLevel
+    default: true
+    description: Show the siblings of the selected parent level of the current refined value. This does not impact the root level.
   - name: sortBy
     description: array or function to sort the results by
 ---
