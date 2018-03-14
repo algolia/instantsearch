@@ -31,6 +31,8 @@ classes:
 options:
   - name: attribute
     description: Attribute to apply the filter to
-  - name: values
-    description: # I don't think both toggling A/B and A/- should be done by the same widget
+  - name: 'on'
+    description: Refinement to enable if this widget is checked (required)
+  - name: 'off'
+    description: Refinement to enable if this widget is not checked
 ---
