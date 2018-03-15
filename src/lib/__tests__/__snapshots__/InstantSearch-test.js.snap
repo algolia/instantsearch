@@ -91,7 +91,6 @@ Array [
         "addAlgoliaAgent": [Function],
         "algolia": "client",
       },
-      "domain": null,
       "helper": AlgoliaSearchHelper {
         "_currentNbQueries": 0,
         "_events": Object {
