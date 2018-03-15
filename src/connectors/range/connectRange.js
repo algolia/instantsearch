@@ -298,12 +298,19 @@ export default function connectRange(renderFn, unmountFn) {
           attributeName
         );
 
-        if (min === '' && max === '') return fullState;
+        if (
+          (min === '' && max === '') ||
+          (fullState &&
+            fullState.range &&
+            fullState.range[attributeName] === `${min}:${max}`)
+        ) {
+          return fullState;
+        }
 
         return {
           ...fullState,
           range: {
-            ...fullState.priceRanges,
+            ...fullState.range,
             [attributeName]: `${min}:${max}`,
           },
         };

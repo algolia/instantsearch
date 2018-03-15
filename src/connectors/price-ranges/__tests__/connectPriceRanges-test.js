@@ -255,6 +255,20 @@ describe('connectPriceRanges', () => {
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
+      test('should return the same SP if the value from the UI state is the same', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        const uiState = {
+          priceRanges: '10:20',
+        };
+        refine({ from: 10, to: 20 });
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
       test('should add the refinements according to the UI state provided (min and max)', () => {
         const [widget, helper] = getInitializedWidget();
         const uiState = {
