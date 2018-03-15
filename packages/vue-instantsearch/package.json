@@ -24,10 +24,7 @@
   "module": "dist/vue-instantsearch.esm.js",
   "repository": "https://github.com/algolia/vue-instantsearch",
   "scripts": {
-    "build": "yarn run build:cjs && yarn run build:es && yarn run build:umd",
-    "build:cjs": "rollup -c ./build/rollup.cjs.config.js",
-    "build:es": "rollup -c ./build/rollup.es.config.js",
-    "build:umd": "rollup -c ./build/rollup.umd.config.js",
+    "build": "rollup -c",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "storybook:build": "build-storybook -c .storybook -o docs/dist/stories",
     "docs:build": "cd docs && yarn && yarn build",
