@@ -3,7 +3,7 @@
 
 <script>
 import algoliaComponent from '../component';
-import { configure } from 'instantsearch.js/es/widgets';
+import configure from 'instantsearch.js/es/widgets/configure/configure.js';
 
 export default {
   mixins: [algoliaComponent],
