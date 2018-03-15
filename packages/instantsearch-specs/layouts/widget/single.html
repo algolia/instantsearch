@@ -45,11 +45,17 @@
 
     <h3>HTML output</h3>
 
+    {{ if .Params.html }}
+
     <div id="js-pre">
       <pre class="code-output" data-html="1"><code>{{ .Params.html }}</code></pre>
       {{ if .Params.althtml1 }}<pre class="code-output" style="display:none" data-html="2"><code>{{ .Params.althtml1 }}</code></pre>{{ end }}
       {{ if .Params.althtml2 }}<pre class="code-output" style="display:none" data-html="3"><code>{{ .Params.althtml2 }}</code></pre>{{ end }}
     </div>
+
+    {{ else }}
+    <p><small><strong>Note:</strong> there is no HTML output for this widget</small></p>
+    {{ end }}
 
     <h3>CSS classes</h3>
 
