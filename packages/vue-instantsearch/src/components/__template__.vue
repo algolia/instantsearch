@@ -33,5 +33,4 @@ export default {
       };
     },
   },
-};
-</script>
+};</script>
