@@ -21,7 +21,7 @@ export default {
     instance: {
       type: Object,
       default() {
-        return this._instance;
+        return this._localInstance;
       },
     },
     apiKey: {
@@ -109,19 +109,22 @@ export default {
     }
 
     // todo: make it configurable
-    const instance = instantsearch({
+    this._localInstance = instantsearch({
       // appId: this.appId,
       // apiKey: this.apiKey,
       // indexName: this.indexName,
       appId: 'latency',
       apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-      indexName: 'ikea',
+      indexName: 'instant_search',
+      searchParameters: {
+        attributesToSnippet: ['description'],
+      },
     });
-    instance.start();
+    this._localInstance.start();
 
     return {
       _searchStore: this._localSearchStore,
-      _instance: instance,
+      _instance: this._localInstance,
     };
   },
   mounted() {
@@ -141,4 +144,5 @@ export default {
       this._localSearchStore.queryParameters = this.queryParameters;
     },
   },
-};</script>
+};
+</script>

@@ -5,7 +5,7 @@ export function defaultSearchStore() {
     'latency',
     '6be0576ff61c053d5f9a3225e2a90f76'
   );
-  searchStore.indexName = 'ikea';
+  searchStore.indexName = 'instant_search';
   searchStore.queryParameters = { snippetEllipsisText: '…' };
   searchStore.start();
 
