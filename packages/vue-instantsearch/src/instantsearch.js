@@ -23,7 +23,7 @@ import TreeMenu from './components/TreeMenu.vue';
 import Menu from './components/Menu.vue';
 import SortBySelector from './components/SortBySelector.vue';
 import SearchBox from './components/SearchBox.vue';
-import ClearAll from './components/ClearAll.vue';
+import ClearRefinements from './components/ClearRefinements.vue';
 import Rating from './components/Rating.vue';
 import RangeInput from './components/RangeInput.vue';
 import NoResults from './components/NoResults.vue';
@@ -46,7 +46,7 @@ const InstantSearch = {
   Menu,
   SortBySelector,
   SearchBox,
-  ClearAll,
+  ClearRefinements,
   Rating,
   RangeInput,
   NoResults,
@@ -68,7 +68,7 @@ const InstantSearch = {
     Vue.component('ais-menu', Menu);
     Vue.component('ais-sort-by-selector', SortBySelector);
     Vue.component('ais-search-box', SearchBox);
-    Vue.component('ais-clear-all', ClearAll);
+    Vue.component('ais-clear-refinements', ClearRefinements);
     Vue.component('ais-configure', Configure);
     Vue.component('ais-rating', Rating);
     Vue.component('ais-range-input', RangeInput);
@@ -103,7 +103,7 @@ export {
   Menu,
   SortBySelector,
   SearchBox,
-  ClearAll,
+  ClearRefinements,
   Rating,
   RangeInput,
   NoResults,

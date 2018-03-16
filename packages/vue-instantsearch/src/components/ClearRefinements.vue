@@ -22,7 +22,7 @@ export default {
       required: false,
       default: false,
     },
-    excludeAttributes: {
+    excludedAttributes: {
       type: Array,
       required: false,
       default: () => [],
@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-clear',
+      blockClassName: 'ais-clear-refinements',
     };
   },
   beforeCreate() {
@@ -43,7 +43,7 @@ export default {
     widgetParams() {
       return {
         clearsQuery: this.clearsQuery,
-        excludeAttributes: this.excludeAttributes,
+        excludeAttributes: this.excludedAttributes,
       };
     },
   },
