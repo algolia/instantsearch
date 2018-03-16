@@ -79,6 +79,7 @@
     "rollup-plugin-vue": "^3.0.0",
     "rollup-watch": "^4.3.1",
     "vue": "^2.5.13",
+    "vue-json-tree": "^0.3.3",
     "vue-loader": "^14.2.1",
     "vue-template-compiler": "^2.5.13"
   },
