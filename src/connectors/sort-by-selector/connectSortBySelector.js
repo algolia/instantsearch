@@ -159,9 +159,15 @@ export default function connectSortBySelector(renderFn, unmountFn) {
       },
 
       getWidgetState(fullState, { state }) {
-        const isInitialIndex =
-          state.getQueryParameter('index') === this.initialIndex;
-        if (isInitialIndex) return fullState;
+        const currentIndex = state.getQueryParameter('index');
+        const isInitialIndex = currentIndex === this.initialIndex;
+
+        if (
+          isInitialIndex ||
+          (fullState && fullState.sortBy === currentIndex)
+        ) {
+          return fullState;
+        }
 
         return {
           ...fullState,
@@ -170,11 +176,10 @@ export default function connectSortBySelector(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParam, { uiState }) {
-        // Modify and return the searchParam based on uiState
-        // return searchParam.setQueryParameter('page', 0);
-        if (uiState.sortBy)
-          return searchParam.setQueryParameter('index', uiState.sortBy);
-        return searchParam;
+        return searchParam.setQueryParameter(
+          'index',
+          uiState.sortBy || this.initialIndex
+        );
       },
     };
   };
