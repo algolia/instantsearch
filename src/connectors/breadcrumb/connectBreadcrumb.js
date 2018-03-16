@@ -163,21 +163,8 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
         );
       },
 
-      dispose({ state }) {
+      dispose() {
         unmountFn();
-
-        // compute nextState for the search
-        let nextState = state;
-
-        if (state.isHierarchicalFacetRefined(hierarchicalFacetName)) {
-          nextState = state.removeHierarchicalFacetRefinement(
-            hierarchicalFacetName
-          );
-        }
-
-        nextState = nextState.removeHierarchicalFacet(hierarchicalFacetName);
-
-        return nextState;
       },
     };
   };
