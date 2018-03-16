@@ -50,9 +50,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * This is commonly used in websites that have a large amount of content organized in a hierarchical manner (usually e-commerce websites).
  * @type {Connector}
  * @param {function(BreadcrumbRenderingOptions, boolean)} renderFn Rendering function for the custom **Breadcrumb* widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomBreadcrumbWidgetOptions)} Re-usable widget factory for a custom **Breadcrumb** widget.
  */
-export default function connectBreadcrumb(renderFn) {
+export default function connectBreadcrumb(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
   return (widgetParams = {}) => {
     const { attributes, separator = ' > ', rootPath = null } = widgetParams;
@@ -160,6 +161,23 @@ export default function connectBreadcrumb(renderFn) {
           },
           false
         );
+      },
+
+      dispose({ state }) {
+        unmountFn();
+
+        // compute nextState for the search
+        let nextState = state;
+
+        if (state.isHierarchicalFacetRefined(hierarchicalFacetName)) {
+          nextState = state.removeHierarchicalFacetRefinement(
+            hierarchicalFacetName
+          );
+        }
+
+        nextState = nextState.removeHierarchicalFacet(hierarchicalFacetName);
+
+        return nextState;
       },
     };
   };
