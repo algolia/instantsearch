@@ -28,7 +28,7 @@ import { connectMenu } from 'instantsearch.js/es/connectors';
 export default {
   mixins: [algoliaComponent],
   props: {
-    attributeName: {
+    attribute: {
       type: String,
       required: true,
     },
@@ -54,7 +54,7 @@ export default {
     },
     widgetParams() {
       return {
-        attributeName: this.attributeName,
+        attributeName: this.attribute,
         limit: this.limit,
         showMoreLimit: this.showMoreLimit,
         sortBy: this.sortBy,
@@ -69,4 +69,5 @@ export default {
   beforeCreate() {
     this.connector = connectMenu;
   },
-};</script>
+};
+</script>
