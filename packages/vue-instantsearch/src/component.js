@@ -71,13 +71,13 @@ export default {
     }
     if (this.widgetFactory) {
       this.widget = this.widgetFactory(this.widgetParams);
-      this._instance.addWidget(this.widget);
+      this.instance.addWidget(this.widget);
     }
   },
   beforeDestroy() {
     // todo: remove dispose flub
     if (this.widget && this.widget.dispose) {
-      this._instance.removeWidget(this.widget);
+      this.instance.removeWidget(this.widget);
     }
   },
   watch: {
@@ -86,10 +86,10 @@ export default {
         const oldWidget = this.widget;
         this.widget = this.widgetFactory(newVal);
 
-        this._instance.addWidget(this.widget);
+        this.instance.addWidget(this.widget);
         // todo: remove dispose flub
         if (oldWidget.dispose) {
-          this._instance.removeWidget(oldWidget);
+          this.instance.removeWidget(oldWidget);
         }
       }
     },
