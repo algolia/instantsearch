@@ -941,6 +941,7 @@ describe('connectRange', () => {
         });
         expect(uiStateAfter).toBe(uiStateBefore);
       });
+
       test('should add an entry equal to the refinement', () => {
         const [widget, helper, refine] = getInitializedWidget();
         refine([20, 30]);
@@ -951,6 +952,7 @@ describe('connectRange', () => {
         });
         expect(uiStateAfter).toMatchSnapshot();
       });
+
       test('should not override other values in the same namespace', () => {
         const [widget, helper, refine] = getInitializedWidget();
         refine([10, 20]);
