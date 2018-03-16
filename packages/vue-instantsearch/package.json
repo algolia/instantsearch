@@ -95,7 +95,7 @@
       "jest-serializer-html"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!instantsearch\\.js)"
+      "node_modules/(?!(instantsearch\\.js|vue-json-tree))"
     ],
     "transform": {
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
