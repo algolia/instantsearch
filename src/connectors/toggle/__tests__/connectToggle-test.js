@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
+const { SearchResults, SearchParameters } = jsHelper;
 
 import connectToggle from '../connectToggle.js';
 
@@ -425,5 +425,153 @@ describe('connectToggle', () => {
         'false',
       ]);
     }
+  });
+
+  describe('routing', () => {
+    const getInitializedWidget = (config = {}) => {
+      const rendering = jest.fn();
+      const makeWidget = connectToggle(rendering);
+
+      const attributeName = 'isShippingFree';
+      const label = 'Free shipping?';
+      const widget = makeWidget({
+        attributeName,
+        label,
+        ...config,
+      });
+
+      const initialConfig = widget.getConfiguration({});
+      const helper = jsHelper(fakeClient, '', initialConfig);
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      return [widget, helper, refine];
+    };
+
+    describe('getWidgetState', () => {
+      test('should give back the object unmodified if the default value is selected', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      test('should add an entry equal to the refinement', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine({ isRefined: false }); // refinement is based on the previous value (the one passed)
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should return the same UI state if the value if the refinement is the same', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine({ isRefined: false });
+        const uiStateBefore = widget.getWidgetState(
+          {},
+          {
+            state: helper.state,
+            helper,
+          }
+        );
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      test('should return the same SP if no value is in the UI state (one value)', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should enforce the default value if no value is in the UI state (two values)', () => {
+        const [widget, helper] = getInitializedWidget({
+          values: {
+            on: 'free-shipping',
+            off: 'paid-shipping',
+          },
+        });
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should remove the refinement (one value)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine({ isRefined: false });
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+
+      test('should update the SP base on the UI state (two values)', () => {
+        const [widget, helper, refine] = getInitializedWidget({
+          values: {
+            on: 'free-shipping',
+            off: 'paid-shipping',
+          },
+        });
+        refine({ isRefined: false });
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+
+      test('should update the SP base on the UI state - toggled (two values)', () => {
+        const [widget, helper] = getInitializedWidget({
+          values: {
+            on: 'free-shipping',
+            off: 'paid-shipping',
+          },
+        });
+        const uiState = {
+          toggle: {
+            isShippingFree: true,
+          },
+        };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+    });
   });
 });

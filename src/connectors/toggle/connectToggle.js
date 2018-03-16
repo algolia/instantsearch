@@ -279,17 +279,22 @@ export default function connectToggle(renderFn, unmountFn) {
       getWidgetState(fullState, { state }) {
         const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
 
-        if (isRefined) {
-          return {
-            ...fullState,
-            toggle: {
-              ...fullState.toggle,
-              [attributeName]: isRefined,
-            },
-          };
+        if (
+          !isRefined ||
+          (fullState &&
+            fullState.toggle &&
+            fullState.toggle[attributeName] === isRefined)
+        ) {
+          return fullState;
         }
 
-        return fullState;
+        return {
+          ...fullState,
+          toggle: {
+            ...fullState.toggle,
+            [attributeName]: isRefined,
+          },
+        };
       },
 
       getWidgetSearchParameters(searchParam, { uiState }) {
