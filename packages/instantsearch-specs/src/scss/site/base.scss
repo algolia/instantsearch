@@ -283,3 +283,14 @@ body {
     margin-top: 30px;
   }
 }
+
+// Simulate the map
+.code-wrapper-content {
+  .ais-GeoSearch {
+    height: 500px;
+  }
+
+  .ais-GeoSearch-map {
+    background: rgb(229, 227, 223);
+  }
+}
