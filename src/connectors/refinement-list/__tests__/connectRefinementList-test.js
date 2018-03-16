@@ -7,12 +7,11 @@ import connectRefinementList from '../connectRefinementList.js';
 const fakeClient = { addAlgoliaAgent: () => {} };
 
 describe('connectRefinementList', () => {
-  let rendering;
-  let makeWidget;
-  beforeEach(() => {
-    rendering = jest.fn();
-    makeWidget = connectRefinementList(rendering);
-  });
+  const createWidgetFactory = () => {
+    const rendering = jest.fn();
+    const makeWidget = connectRefinementList(rendering);
+    return { rendering, makeWidget };
+  };
 
   it('throws on bad usage', () => {
     expect(connectRefinementList).toThrow();
@@ -41,6 +40,7 @@ describe('connectRefinementList', () => {
 
   describe('options configuring the helper', () => {
     it('`attributeName`', () => {
+      const { makeWidget } = createWidgetFactory();
       const widget = makeWidget({
         attributeName: 'myFacet',
       });
@@ -52,6 +52,7 @@ describe('connectRefinementList', () => {
     });
 
     it('`limit`', () => {
+      const { makeWidget } = createWidgetFactory();
       const widget = makeWidget({
         attributeName: 'myFacet',
         limit: 20,
@@ -72,6 +73,7 @@ describe('connectRefinementList', () => {
     });
 
     it('`operator="and"`', () => {
+      const { makeWidget } = createWidgetFactory();
       const widget = makeWidget({
         attributeName: 'myFacet',
         operator: 'and',
@@ -85,6 +87,7 @@ describe('connectRefinementList', () => {
   });
 
   it('Renders during init and render', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const widget = makeWidget({
@@ -143,6 +146,7 @@ describe('connectRefinementList', () => {
   });
 
   it('Provide a function to clear the refinements at each step', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
     });
@@ -186,6 +190,7 @@ describe('connectRefinementList', () => {
   });
 
   it('If there are too few items then canToggleShowMore is false', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 3,
@@ -236,6 +241,7 @@ describe('connectRefinementList', () => {
   });
 
   it('If there are no showMoreLimit specified, canToggleShowMore is false', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 1,
@@ -289,6 +295,7 @@ describe('connectRefinementList', () => {
   });
 
   it('If there are same amount of items then canToggleShowMore is false', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
@@ -343,6 +350,7 @@ describe('connectRefinementList', () => {
   });
 
   it('If there are enough items then canToggleShowMore is true', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 1,
@@ -400,6 +408,7 @@ describe('connectRefinementList', () => {
   });
 
   it('Show more should toggle between two limits', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 1,
@@ -496,6 +505,7 @@ describe('connectRefinementList', () => {
   });
 
   it('hasExhaustiveItems indicates if the items provided are exhaustive - without other widgets making the maxValuesPerFacet bigger', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
@@ -576,6 +586,7 @@ describe('connectRefinementList', () => {
   });
 
   it('hasExhaustiveItems indicates if the items provided are exhaustive - with an other widgets making the maxValuesPerFacet bigger', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
@@ -656,6 +667,7 @@ describe('connectRefinementList', () => {
   });
 
   it('can search in facet values', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
@@ -758,6 +770,7 @@ describe('connectRefinementList', () => {
   });
 
   it('can search in facet values, and reset pre post tags if needed', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
@@ -860,6 +873,7 @@ describe('connectRefinementList', () => {
   });
 
   it('can search in facet values, and set post and pre tags if escapeFacetValues is true', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
