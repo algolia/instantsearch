@@ -4,17 +4,17 @@ import { storiesOf } from '@storybook/vue';
 storiesOf('__template__', module)
   .addDecorator(previewWrapper)
   .add('default', () => ({
-    template: '<ais-template></ais-template>',
+    template: '<ais-_template></ais-_template>',
   }))
   .add('clearing query', () => ({
     template: `<div>
-      <ais-template :clearsQuery="true"></ais-template>
+      <ais-_template :clearsQuery="true"></ais-_template>
     </div>`,
   }))
   .add('custom rendering', () => ({
-    template: `<ais-template>
+    template: `<ais-_template>
       <template>
         Clear search query
       </template>
-    </ais-template>`,
+    </ais-_template>`,
   }));
