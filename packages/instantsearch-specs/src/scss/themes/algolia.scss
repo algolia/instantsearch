@@ -22,6 +22,7 @@ a[class^='ais-'] {
 .ais-Breadcrumb,
 .ais-ClearRefinements,
 .ais-CurrentRefinements,
+.ais-GeoSearch,
 .ais-HierarchicalMenu,
 .ais-Hits,
 .ais-Results,
@@ -76,6 +77,8 @@ a[class^='ais-'] {
 
 .ais-ClearRefinements-button,
 .ais-CurrentRefinements-reset,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset,
 .ais-HierarchicalMenu-showMore,
 .ais-InfiniteHits-loadMore,
 .ais-InfiniteResults-loadMore,
@@ -96,6 +99,8 @@ a[class^='ais-'] {
 }
 
 .ais-ClearRefinements-button--disabled,
+.ais-GeoSearch-redo--disabled,
+.ais-GeoSearch-reset--disabled,
 .ais-HierarchicalMenu-showMore--disabled,
 .ais-InfiniteHits-loadMore--disabled,
 .ais-InfiniteResults-loadMore--disabled,
@@ -154,6 +159,43 @@ a[class^='ais-'] {
   + .ais-CurrentRefinements-list {
     margin-left: 0.3rem;
   }
+}
+
+.ais-GeoSearch,
+.ais-GeoSearch-map {
+  height: 100%;
+}
+
+.ais-GeoSearch {
+  position: relative;
+}
+
+.ais-GeoSearch-control {
+  position: absolute;
+  top: 0.8rem;
+  left: 3.125rem;
+}
+
+.ais-GeoSearch-label {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  background-color: #fff;
+  border-radius: 5px;
+  transition: background-color 0.2s ease-out;
+  outline: none;
+}
+
+.ais-GeoSearch-label,
+.ais-GeoSearch-redo,
+.ais-GeoSearch-reset {
+  white-space: nowrap;
+}
+
+.ais-GeoSearch-reset {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .ais-HierarchicalMenu-link,
