@@ -48,5 +48,5 @@ options:
     description: list of attributes not to show
   - name: clearsQuery
     default: false
-    name: The clear all button also clears the query
+    description: The clear all button also clears the query
 ---
