@@ -154,7 +154,11 @@ export default function connectSearchBox(renderFn, unmountFn) {
 
       getWidgetState(fullState, { state }) {
         const query = state.query;
-        if (query === '') return fullState;
+
+        if (query === '' || (fullState && fullState.query === query)) {
+          return fullState;
+        }
+
         return {
           ...fullState,
           query,
@@ -162,7 +166,7 @@ export default function connectSearchBox(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParam, { uiState }) {
-        return searchParam.setQuery(uiState.query);
+        return searchParam.setQuery(uiState.query || '');
       },
     };
   };
