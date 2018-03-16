@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
+const { SearchResults, SearchParameters } = jsHelper;
 
 import connectStarRating from '../connectStarRating.js';
 
@@ -201,5 +201,119 @@ describe('connectStarRating', () => {
       ]);
       expect(helper.search.callCount).toBe(2);
     }
+  });
+
+  describe('routing', () => {
+    const getInitializedWidget = (config = {}) => {
+      const rendering = jest.fn();
+      const makeWidget = connectStarRating(rendering);
+
+      const attributeName = 'grade';
+      const widget = makeWidget({
+        attributeName,
+        ...config,
+      });
+
+      const initialConfig = widget.getConfiguration({});
+      const helper = jsHelper(fakeClient, '', initialConfig);
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      return [widget, helper, refine];
+    };
+
+    describe('getWidgetState', () => {
+      test('should give back the object unmodified if the default value is selected', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      test('should add an entry equal to the refinement', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine('3');
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should give back the object unmodified if the value is already in the UI State', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine('3');
+        const uiStateBefore = widget.getWidgetState(
+          {},
+          {
+            state: helper.state,
+            helper,
+          }
+        );
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      test('should return the same SP if no value is in the UI state', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should add the refinements according to the UI state provided', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiState = {
+          starRating: {
+            grade: '2',
+          },
+        };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+
+      test('should return the same SP if the value is consistent with the UI state', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine('2');
+        const uiState = widget.getWidgetState(
+          {},
+          {
+            state: helper.state,
+            helper,
+          }
+        );
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+    });
   });
 });

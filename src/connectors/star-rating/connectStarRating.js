@@ -198,7 +198,13 @@ export default function connectStarRating(renderFn, unmountFn) {
 
       getWidgetState(fullState, { state }) {
         const refinedStar = this._getRefinedStar(state);
-        if (refinedStar === undefined) return fullState;
+        if (
+          refinedStar === undefined ||
+          (fullState &&
+            fullState.starRating &&
+            fullState.starRating[attributeName] === refinedStar)
+        )
+          return fullState;
         return {
           ...fullState,
           starRating: {
@@ -211,6 +217,10 @@ export default function connectStarRating(renderFn, unmountFn) {
       getWidgetSearchParameters(searchParam, { uiState }) {
         const starRatingFromURL =
           uiState.starRating && uiState.starRating[attributeName];
+        const refinedStar = this._getRefinedStar(searchParam);
+
+        if (starRatingFromURL === refinedStar) return searchParam;
+
         let clearedSearchParam = searchParam.clearRefinements(attributeName);
 
         if (starRatingFromURL !== undefined) {
