@@ -1,5 +1,5 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-const SearchResults = algoliasearchHelper.SearchResults;
+const { SearchResults, SearchParameters } = algoliasearchHelper;
 import { tagConfig } from '../../../lib/escape-highlight.js';
 
 import connectRefinementList from '../connectRefinementList.js';
@@ -974,6 +974,133 @@ describe('connectRefinementList', () => {
           value: 'Davidoff',
         },
       ]);
+    });
+  });
+
+  describe('routing', () => {
+    const getInitializedWidget = (config = {}) => {
+      const rendering = jest.fn();
+      const makeWidget = connectRefinementList(rendering);
+
+      const widget = makeWidget({
+        attributeName: 'facetAttribute',
+        ...config,
+      });
+
+      const initialConfig = widget.getConfiguration({}, {});
+      const helper = algoliasearchHelper(fakeClient, '', initialConfig);
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      return [widget, helper, refine];
+    };
+
+    describe('getWidgetState', () => {
+      test('should give back the object unmodified if the default value is selected', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      test('should add an entry equal to the refinement', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine('value');
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should not override other values in the same namespace', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine('value');
+        const uiStateBefore = {
+          refinementList: {
+            otherFacetAttribute: ['val'],
+          },
+        };
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should return the same instance if the value is already in the UI state', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine('value');
+        const uiStateBefore = widget.getWidgetState(
+          {},
+          {
+            state: helper.state,
+            helper,
+          }
+        );
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          state: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      test('should return the same SP if no value is in the UI state', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should add the refinements according to the UI state provided (operator "or")', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiState = {
+          refinementList: {
+            facetAttribute: ['value or'],
+          },
+        };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+
+      test('should add the refinements according to the UI state provided (operator "and")', () => {
+        const [widget, helper] = getInitializedWidget({
+          operator: 'and',
+        });
+        const uiState = {
+          refinementList: {
+            facetAttribute: ['value and'],
+          },
+        };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
     });
   });
 });

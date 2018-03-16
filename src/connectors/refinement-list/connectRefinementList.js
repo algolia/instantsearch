@@ -1,5 +1,6 @@
 import { checkRendering } from '../../lib/utils.js';
 import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
+import isEqual from 'lodash/isEqual';
 
 const usage = `Usage:
 var customRefinementList = connectRefinementList(function render(params) {
@@ -415,7 +416,15 @@ export default function connectRefinementList(renderFn, unmountFn) {
           operator === 'or'
             ? state.getDisjunctiveRefinements(attributeName)
             : state.getConjunctiveRefinements(attributeName);
-        if (values.length === 0) return fullState;
+
+        if (
+          values.length === 0 ||
+          (fullState.refinementList &&
+            isEqual(values, fullState.refinementList[attributeName]))
+        ) {
+          return fullState;
+        }
+
         return {
           ...fullState,
           refinementList: {
