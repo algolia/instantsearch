@@ -75,7 +75,8 @@ export default {
     }
   },
   beforeDestroy() {
-    if (this.widget) {
+    // todo: remove dispose flub
+    if (this.widget && this.widget.dispose) {
       this._instance.removeWidget(this.widget);
     }
   },
@@ -86,7 +87,10 @@ export default {
         this.widget = this.widgetFactory(newVal);
 
         this._instance.addWidget(this.widget);
-        this._instance.removeWidget(oldWidget);
+        // todo: remove dispose flub
+        if (oldWidget.dispose) {
+          this._instance.removeWidget(oldWidget);
+        }
       }
     },
   },
