@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
-const { SearchResults, SearchParameters }= jsHelper;
+const { SearchResults, SearchParameters } = jsHelper;
 
 import connectPagination from '../connectPagination.js';
 

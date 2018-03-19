@@ -192,7 +192,11 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
           (currentRefinements['<='] && currentRefinements['<='][0]) || '';
 
         if (lowerBound !== '' || upperBound !== '') {
-          if (fullState.numericRefinementList && fullState.numericRefinementList[attributeName] === `${lowerBound}:${upperBound}`)
+          if (
+            fullState.numericRefinementList &&
+            fullState.numericRefinementList[attributeName] ===
+              `${lowerBound}:${upperBound}`
+          )
             return fullState;
           return {
             ...fullState,

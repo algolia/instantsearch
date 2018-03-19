@@ -33,14 +33,12 @@ class BrowserHistory {
    * to `createURL`. It gets as an argument an object that contains two methods: `stringify` that
    * creates a query string from an object and `parse` that transforms a query string into an object.
    */
-  constructor(
-    {
-      titleFromUIState,
-      writeTimeout = 400,
-      createURL = defaultCreateURL,
-      parseURL = defaultParseURL,
-    } = {}
-  ) {
+  constructor({
+    titleFromUIState,
+    writeTimeout = 400,
+    createURL = defaultCreateURL,
+    parseURL = defaultParseURL,
+  } = {}) {
     this.titleFromUIState = titleFromUIState;
     this.writeTimer = undefined;
     this.writeTimeout = writeTimeout;
