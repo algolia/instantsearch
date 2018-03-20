@@ -10566,9 +10566,9 @@ pug-filters@^2.1.5:
     resolve "^1.1.6"
     uglify-js "^2.6.1"
 
-pug-filters@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/pug-filters/-/pug-filters-3.0.1.tgz#163ef73bfbb1f1544d032b2b40f45130eb52dccb"
+pug-filters@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/pug-filters/-/pug-filters-3.0.2.tgz#84ecad7bd074901827658c995354c9b245171402"
   dependencies:
     clean-css "^3.3.0"
     constantinople "^3.0.1"
@@ -10664,12 +10664,12 @@ pug-walk@^1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/pug-walk/-/pug-walk-1.1.7.tgz#c00d5c5128bac5806bec15d2b7e7cdabe42531f3"
 
-pug@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/pug/-/pug-2.0.1.tgz#27c151612b53d729abe8e8285aac6bc89345b5d0"
+pug@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/pug/-/pug-2.0.2.tgz#055342acc17ce00cd623c27215f9f1dbdf9134bd"
   dependencies:
     pug-code-gen "^2.0.1"
-    pug-filters "^3.0.1"
+    pug-filters "^3.0.2"
     pug-lexer "^4.0.0"
     pug-linker "^3.0.5"
     pug-load "^2.0.11"
