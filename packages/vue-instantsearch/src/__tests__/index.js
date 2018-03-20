@@ -33,6 +33,7 @@ test('Should register all components when installed', () => {
     'ais-current-refinements',
     expect.any(Object)
   );
+  expect(component).toBeCalledWith('ais-hierarchical-menu', expect.any(Object));
 
-  expect(component).toHaveBeenCalledTimes(22);
+  expect(component).toHaveBeenCalledTimes(23);
 });
