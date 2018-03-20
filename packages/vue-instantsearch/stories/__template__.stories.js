@@ -4,7 +4,7 @@ import { storiesOf } from '@storybook/vue';
 storiesOf('__template__', module)
   .addDecorator(previewWrapper)
   .add('default', () => ({
-    template: '<ais-_template></ais-_template>',
+    template: `<ais-_template></ais-_template>`,
   }))
   .add('clearing query', () => ({
     template: `<div>

@@ -7,8 +7,7 @@
 </template>
 
 <script>
-// todo: remove
-import JsonTree from 'vue-json-tree';
+import JsonTree from 'vue-json-tree'; // todo: remove
 import algoliaComponent from '../component';
 import { connectHierarchicalMenu } from 'instantsearch.js/es/connectors';
 

@@ -1,10 +1,13 @@
 <template>
-  <json-tree :level="2" :data="state"></json-tree>
+  <div>
+    <slot v-bind="state">
+      <json-tree :level="2" :data="state"></json-tree>
+    </slot>
+  </div>
 </template>
 
 <script>
-// todo: remove
-import JsonTree from 'vue-json-tree';
+import JsonTree from 'vue-json-tree'; // todo: remove
 import algoliaComponent from '../component';
 import { connectBreadcrumb } from 'instantsearch.js/es/connectors';
 

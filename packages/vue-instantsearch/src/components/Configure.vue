@@ -1,4 +1,8 @@
 <template>
+  <div>
+    <slot v-bind="state">
+    </slot>
+  </div>
 </template>
 
 <script>
