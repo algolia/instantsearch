@@ -12,8 +12,8 @@ import version from './version.js';
 import * as connectors from '../connectors/index.js';
 import * as widgets from '../widgets/index.js';
 
-import * as routing from './router/index.js';
-import * as stateMapping from './stateMapping/index.js';
+import * as routers from './routers/index.js';
+import * as stateMappings from './stateMappings/index.js';
 
 /**
  * @external SearchParameters
@@ -91,8 +91,8 @@ import * as stateMapping from './stateMapping/index.js';
  */
 const instantsearch = toFactory(InstantSearch);
 
-instantsearch.routing = routing;
-instantsearch.stateMapping = stateMapping;
+instantsearch.routers = routers;
+instantsearch.stateMappings = stateMappings;
 instantsearch.createQueryString =
   algoliasearchHelper.url.getQueryStringFromState;
 instantsearch.connectors = connectors;

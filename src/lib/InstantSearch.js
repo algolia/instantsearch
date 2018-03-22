@@ -9,8 +9,8 @@ import isPlainObject from 'lodash/isPlainObject';
 import { EventEmitter } from 'events';
 import urlSyncWidget from './url-sync.js';
 import RoutingManager from './RoutingManager.js';
-import simpleMapping from './stateMapping/simple.js';
-import historyRouter from './router/history.js';
+import simpleMapping from './stateMappings/simple.js';
+import historyRouter from './routers/history.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
 
