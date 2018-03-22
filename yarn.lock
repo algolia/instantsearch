@@ -11567,9 +11567,9 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-replace-in-file@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/replace-in-file/-/replace-in-file-3.2.0.tgz#c28836ca936af2d56193f671a6c4f6c51fdb6eb1"
+replace-in-file@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/replace-in-file/-/replace-in-file-3.3.0.tgz#ba4d8f8256de78943c13c4e635551ad15662427f"
   dependencies:
     chalk "^2.3.0"
     glob "^7.1.2"
