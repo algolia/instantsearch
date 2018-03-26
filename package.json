@@ -131,7 +131,7 @@
     "algoliasearch": "3.25.1",
     "algoliasearch-helper": "2.24.0",
     "classnames": "2.2.5",
-    "events": "1.1.0",
+    "events": "1.1.1",
     "hogan.js": "3.0.2",
     "lodash": "4.17.5",
     "preact": "8.1.0",
