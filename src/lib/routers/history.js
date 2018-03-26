@@ -34,12 +34,12 @@ class BrowserHistory {
    * creates a query string from an object and `parse` that transforms a query string into an object.
    */
   constructor({
-    titleFromUIState,
+    windowTitle,
     writeDelay = 400,
     createURL = defaultCreateURL,
     parseURL = defaultParseURL,
   } = {}) {
-    this.titleFromUIState = titleFromUIState;
+    this.windowTitle = windowTitle;
     this.writeTimer = undefined;
     this.writeDelay = writeDelay;
     this._createURL = createURL;
@@ -53,7 +53,7 @@ class BrowserHistory {
    */
   write(uiState) {
     const url = this.createURL(uiState);
-    const title = this.titleFromUIState && this.titleFromUIState(uiState);
+    const title = this.windowTitle && this.windowTitle(uiState);
 
     if (this.writeTimer) {
       window.clearTimeout(this.writeTimer);
