@@ -20,7 +20,7 @@ When using a `<Index>` component under an `<InstantSearch>` root component you c
 
 Widgets that targets all the indices, like the SearchBox, should remain under the `<InstantSearch>` root component.
 
-[Read the example](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/multi-index) displaying hits from two different indices.
+[Read the example](https://github.com/algolia/react-instantsearch/tree/master/examples/multi-index) displaying hits from two different indices.
 
 You might also want to:
 
@@ -32,7 +32,7 @@ In this case you will need to use the [`connectAutoComplete`](connectors/connect
 * The current query
 * The refine function to update the query
 
-[Read the example](https://github.com/algolia/react-instantsearch/blob/master/packages/react-instantsearch/examples/autocomplete/src/App-Multi-Index.js) using AutoSuggest to display hits from different indices.
+[Read the example](https://github.com/algolia/react-instantsearch/blob/master/examples/autocomplete/src/App-Multi-Index.js) using AutoSuggest to display hits from different indices.
 
 When using the `<Index>` component the shape of the search state will be modified. See
 [our Search State guide](guide/Search_state.html).

@@ -136,7 +136,7 @@
   "jest": {
     "notify": false,
     "testPathIgnorePatterns": [
-      "/packages/react-instantsearch/examples"
+      "examples/*"
     ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"

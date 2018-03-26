@@ -1,0 +1,26 @@
+{
+  "name": "example-next",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "NODE_ENV=development next build",
+    "start": "next start",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "css-loader": "0.28.9",
+    "jest": "22.1.4",
+    "react-test-renderer": "16.2.0",
+    "style-loader": "0.20.1"
+  },
+  "dependencies": {
+    "next": "4.2.3",
+    "prop-types": "15.6.0",
+    "qs": "6.5.1",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
+    "react-instantsearch": "5.0.1"
+  }
+}

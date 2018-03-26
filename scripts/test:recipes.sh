@@ -5,7 +5,7 @@
 # cause test to fail if one fails
 set -e
 
-for d in packages/react-instantsearch/examples/* ; do
+for d in examples/* ; do
     cd $d
     yarn
     yarn build
@@ -13,5 +13,5 @@ for d in packages/react-instantsearch/examples/* ; do
         then yarn test --runInBand
         else yarn test
     fi
-    cd ../../../..
+    cd ../..
 done

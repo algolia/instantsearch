@@ -11,8 +11,8 @@ with any server-side rendering solution. Such as [Next.js](https://github.com/ze
 
 ## Examples
 
-* Using [Express and ReactDOMServer](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/server-side-rendering).
-* Using  [Next.js](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/next-app).
+* Using [Express and ReactDOMServer](https://github.com/algolia/react-instantsearch/tree/master/examples/server-side-rendering).
+* Using  [Next.js](https://github.com/algolia/react-instantsearch/tree/master/examples/next).
 
 If you are looking for an example using another solution, read how to do custom implementations.
 

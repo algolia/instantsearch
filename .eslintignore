@@ -1,13 +1,11 @@
-# eslint by default only ignores root node_modules/
-packages/*/node_modules
-packages/react-instantsearch/examples/*/node_modules/
-# generated documentation website
-docs/
-docs-production/
-dist/
-build/
-.expo/
-.next/
+# Vendors
+node_modules
 
-# Happo visual regression build
+# Artifacts
+docs
+docs-production
+dist
+build
+.expo
+.next
 test/.happo
