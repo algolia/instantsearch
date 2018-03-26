@@ -33,7 +33,7 @@ hook from the [`<InstantSearch>`](guide/<InstantSearch>.html) root component.
 
 But to update the search parameters, you will need to pass updated props to the `<Configure>` widget, directly modifying the search `state` prop and injecting it will have no effect.
 
-[Read the example](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/geo-search) performing geo-search with `react-instantsearch` to see how you can update search parameters.
+[Read the example](https://github.com/algolia/react-instantsearch/tree/master/examples/geo-search) performing geo-search with `react-instantsearch` to see how you can update search parameters.
 
 <div class="guide-nav">
     <div class="guide-nav-left">

@@ -14,7 +14,7 @@ url for example. The props you need to use are available on the [`<InstantSearch
 * `createURL(searchState)`: Function used by every widget generating links and passed down to every connector. You
 need to return a string.
 
-[Read the example](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/react-router) linking React InstantSearch to [react-router](https://github.com/ReactTraining/react-router).
+[Read the example](https://github.com/algolia/react-instantsearch/tree/master/examples/react-router) linking React InstantSearch to [react-router](https://github.com/ReactTraining/react-router).
 
 **Notes:**
 * The [search state guide](guide/Search_state.html) details all widgets and connectors search state values.

@@ -1,0 +1,28 @@
+{
+  "name": "example-multi-index",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "identity-obj-proxy": "3.0.0",
+    "react-scripts": "1.1.1",
+    "react-test-renderer": "16.2.0"
+  },
+  "dependencies": {
+    "instantsearch.css": "7.0.0",
+    "prop-types": "15.6.0",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
+    "react-instantsearch": "5.0.1"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css)$": "identity-obj-proxy"
+    }
+  }
+}

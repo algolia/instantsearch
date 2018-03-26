@@ -1,0 +1,30 @@
+{
+  "name": "example-autocomplete",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "identity-obj-proxy": "3.0.0",
+    "react-scripts": "1.1.1",
+    "react-test-renderer": "16.2.0"
+  },
+  "dependencies": {
+    "antd": "3.1.5",
+    "lodash": "4.17.4",
+    "prop-types": "15.6.0",
+    "react": "16.2.0",
+    "react-autosuggest": "9.3.2",
+    "react-dom": "16.2.0",
+    "react-instantsearch": "5.0.1"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css)$": "identity-obj-proxy"
+    }
+  }
+}
