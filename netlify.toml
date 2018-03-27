@@ -1,7 +1,8 @@
 [build]
-  publish = "docs-production/"
-  command = "yarn boot && yarn docs:build-preview"
+  publish = "docs-production"
+  command = "yarn docs:build-preview"
 
-  [build.environment]
-    YARN_VERSION = "1.5.1"
-    NODE_ENV = "production"
+[build.environment]
+  YARN_VERSION = "1.5.1"
+  YARN_FLAGS = "--production=false"
+  NODE_ENV = "production"

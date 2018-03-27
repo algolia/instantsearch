@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
@@ -6,7 +5,6 @@ import globals from 'rollup-plugin-node-globals';
 import replace from 'rollup-plugin-replace';
 import uglify from 'rollup-plugin-uglify';
 import filesize from 'rollup-plugin-filesize';
-/* eslint-enable import/no-extraneous-dependencies */
 
 const clear = x => x.filter(Boolean);
 
@@ -17,7 +15,7 @@ const license = `/*! ReactInstantSearch ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
   babel({
-    exclude: 'node_modules/**',
+    exclude: ['../../node_modules/**', 'node_modules/**'],
     // see: https://github.com/rollup/rollup-plugin-babel#helpers
     plugins: ['external-helpers'],
   }),

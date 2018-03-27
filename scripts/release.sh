@@ -41,7 +41,7 @@ git pull origin master
 git fetch origin --tags
 
 # printf "Release: install dependencies"
-yarn boot
+yarn bootstrap
 
 # No need for complex release process for now, only patch releases should be ok
 currentVersion=`cat package.json | json version`
