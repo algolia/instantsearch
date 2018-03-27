@@ -1,4 +1,5 @@
-import isPlainObject from 'lodash/isPlainObject';
+import connectConfigure from '../../connectors/configure/connectConfigure.js';
+
 const usage = `Usage:
 search.addWidget(
   instantsearch.widgets.configure({
@@ -29,23 +30,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function configure(searchParameters = {}) {
-  if (!isPlainObject(searchParameters)) {
+export default function configure({ searchParameters }) {
+  try {
+    // make it clear we do not have default renderFn && unmountFn for this widget
+    const makeWidget = connectConfigure(undefined, undefined);
+    return makeWidget({ searchParameters });
+  } catch (e) {
     throw new Error(usage);
   }
-  return {
-    getConfiguration() {
-      return searchParameters;
-    },
-    init() {},
-    dispose({ state }) {
-      return state.mutateMe(mutableState => {
-        // widgetParams are assumed 'controlled',
-        // so they override whatever other widgets give the state
-        Object.keys(searchParameters).forEach(key => {
-          delete mutableState[key];
-        });
-      });
-    },
-  };
 }
