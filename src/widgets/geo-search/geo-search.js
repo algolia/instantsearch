@@ -119,6 +119,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * Note that the GeoSearch widget uses the [geosearch](https://www.algolia.com/doc/guides/searching/geo-search) capabilities of Algolia. Your hits **must** have a `_geoloc` attribute in order to be displayed on the map.
  *
+ * Currently, the feature is not compatible with multiple values in the _geoloc attribute for the moment.
+ *
  * You are also responsible for loading the Google Maps library, it's not shipped with InstantSearch. You need to load the Google Maps library and pass a reference to the widget. You can find more information about how to install the library in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/tutorial).
  *
  * @type {WidgetFactory}

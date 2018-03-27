@@ -115,6 +115,8 @@ numericRefinementList({
  *
  * The values inside this attribute must be JavaScript numbers and not strings.
  *
+ * Currently, the feature is not compatible with multiple values in the _geoloc attribute for the moment.
+ *
  * @type {WidgetFactory}
  * @devNovel NumericRefinementList
  * @category filter
