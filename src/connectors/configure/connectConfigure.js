@@ -66,6 +66,10 @@ export default function connectConfigure(renderFn, unmountFn) {
 
       refine(helper) {
         return searchParameters => {
+          // remove old `searchParameters` setted by the widget
+          helper.setState(this.removeSearchParameters(helper.getState()));
+
+          // merge new `searchParameters` with the setted one from other widgets
           const actualState = helper.getState();
           const nextSearchParameters = enhanceConfiguration({})(actualState, {
             getConfiguration: () => searchParameters,
@@ -75,7 +79,7 @@ export default function connectConfigure(renderFn, unmountFn) {
           helper.setState(nextSearchParameters).search();
 
           // update original `widgetParams.searchParameter` to the new refined one
-          widgetParams.searchParameters = nextSearchParameters;
+          widgetParams.searchParameters = searchParameters;
         };
       },
 
@@ -93,7 +97,10 @@ export default function connectConfigure(renderFn, unmountFn) {
 
       dispose({ state }) {
         if (isFunction(unmountFn)) unmountFn();
+        return this.removeSearchParameters(state);
+      },
 
+      removeSearchParameters(state) {
         // widgetParams are assumed 'controlled',
         // so they override whatever other widgets give the state
         return state.mutateMe(mutableState => {
