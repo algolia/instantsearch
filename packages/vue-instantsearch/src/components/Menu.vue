@@ -12,7 +12,7 @@
         :class="bem('link')"
         @click.prevent="state.refine(facet.value)"
       >
-        {{facet.label}}
+        {{facet.isRefined ? "x" : ""}} {{facet.label}}
         <span :class="bem('count')">{{facet.count}}</span>
       </a>
     </div>
@@ -69,4 +69,5 @@ export default {
   beforeCreate() {
     this.connector = connectMenu;
   },
-};</script>
+};
+</script>
