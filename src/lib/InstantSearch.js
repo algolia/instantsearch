@@ -3,13 +3,11 @@
 import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite.js';
 import algoliasearchHelper from 'algoliasearch-helper';
 import forEach from 'lodash/forEach';
-import mergeWith from 'lodash/mergeWith';
-import union from 'lodash/union';
-import isPlainObject from 'lodash/isPlainObject';
 import { EventEmitter } from 'events';
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
+import { enhanceConfiguration } from './utils.js';
 
 function defaultCreateURL() {
   return '#';
@@ -363,34 +361,6 @@ Usage: instantsearch({
       }
     });
   }
-}
-
-function enhanceConfiguration(searchParametersFromUrl) {
-  return (configuration, widgetDefinition) => {
-    if (!widgetDefinition.getConfiguration) return configuration;
-
-    // Get the relevant partial configuration asked by the widget
-    const partialConfiguration = widgetDefinition.getConfiguration(
-      configuration,
-      searchParametersFromUrl
-    );
-
-    const customizer = (a, b) => {
-      // always create a unified array for facets refinements
-      if (Array.isArray(a)) {
-        return union(a, b);
-      }
-
-      // avoid mutating objects
-      if (isPlainObject(a)) {
-        return mergeWith({}, a, b, customizer);
-      }
-
-      return undefined;
-    };
-
-    return mergeWith({}, configuration, partialConfiguration, customizer);
-  };
 }
 
 export default InstantSearch;
