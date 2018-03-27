@@ -1,4 +1,5 @@
 import isFunction from 'lodash/isFunction';
+import isPlainObject from 'lodash/isPlainObject';
 
 import { enhanceConfiguration } from '../../lib/utils.js';
 
@@ -37,7 +38,7 @@ var customConfigureWidget = connectConfigure(
 export default function connectConfigure(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     if (
-      !widgetParams.searchParameters ||
+      !isPlainObject(widgetParams.searchParameters) ||
       (isFunction(renderFn) && !isFunction(unmountFn)) ||
       (!isFunction(renderFn) && isFunction(unmountFn))
     ) {

@@ -30,7 +30,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function configure({ searchParameters }) {
+export default function configure(searchParameters) {
   try {
     // make it clear we do not have default renderFn && unmountFn for this widget
     const makeWidget = connectConfigure(undefined, undefined);

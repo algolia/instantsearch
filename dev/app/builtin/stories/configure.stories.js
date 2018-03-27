@@ -14,14 +14,14 @@ export default () => {
       const description = document.createElement('div');
       description.innerHTML = `
         <p>Search parameters provied to the Configure widget:</p>
-        <pre>searchParameters: { hitsPerPage: 1 }</pre>
+        <pre>{ hitsPerPage: 1 }</pre>
       `;
 
       container.appendChild(description);
 
       window.search.addWidget(
         instantsearch.widgets.configure({
-          searchParameters: { hitsPerPage: 1 },
+          hitsPerPage: 1,
         })
       );
     })
