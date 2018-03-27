@@ -658,5 +658,7 @@ Let’s add it to our first `<InstantSearch>`:
 At this point, you know the basics of React InstantSearch. Read the guide to know and do more with it.
 
 <div class="guide-nav">
-Next: <a href="guide/">Guide →</a>
+  <div class="guide-nav-right">
+    Next: <a href="guide/">Guide →</a>
+  </div>
 </div>
