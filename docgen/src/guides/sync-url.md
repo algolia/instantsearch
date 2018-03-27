@@ -36,17 +36,17 @@ const search = instantsearch({
 });
 ```
 
-The stateMapping let you customize the UI state before it is serialized and after it has been parsed.
+The stateMapping lets you customize the UI state before it is serialized and after it has been parsed.
 The default implementation provides no customization options, because each implementation will have
 its own set of customization there.
 
 The mapping is an object that contains two methods:
- - stateToRoute(uiState)
- - routeToState(syncable)
+ - `stateToRoute(uiState)`
+ -  `routeToState(syncable)`
 
-And those two methods should comply to the following rule: for any uiState, uiState must be equal in
-value to routeToState(stateToRoute(uiState)). This means that any transformation applied by stateToRoute
-can be cancelled by routeToState.
+And those two methods should comply to the following rule: for any `uiState`, `uiState` must be equal in
+value to `routeToState(stateToRoute(uiState))`. This means that any transformation applied by `stateToRoute`
+can be cancelled by `routeToState`.
 
 Let's take an example:
 
@@ -55,9 +55,9 @@ Let's take an example:
 // and put the values in a string
 ```
 
-See an live example.
+See a live example.
 
-### Customizing the URL generated
+### Customizing the generated URL
 
 ```javascript
 const search = instantsearch({
@@ -74,9 +74,9 @@ const search = instantsearch({
 });
 ```
 
-Create URL returns a string (the complete URL) and you can use qsModule to serialize the parameters to a query string
+`createURL` returns a string (the complete URL) and you can use qsModule to serialize the parameters to a query string
 
-Read URL should return an UI state
+`readURL` should return an UI state
 
 ## Going further
 
