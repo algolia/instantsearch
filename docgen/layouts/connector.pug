@@ -8,7 +8,9 @@ include mixins/documentationjs/struct.pug
 include mixins/documentationjs/connector-usage.pug
 
 block navigation
-  - let headings = [{tag: 'h2', id: 'description', text: 'Description'}, {tag: 'h2', id:'usage', text:'Usage'}, {tag: 'h2', id:'structure', text: 'Connector options'}]
+  - let headings = [{tag: 'h2', id: 'description', text: 'Description'}]
+  - if(jsdoc.requirements != '') headings.push({tag: 'h2', id:'requirements', text:'Requirements'})
+  - headings.push({tag: 'h2', id:'usage', text:'Usage'}, {tag:'h2', id:'structure', text: 'Options'});
   - if(jsdoc.examples && jsdoc.examples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
   - if(jsdoc.staticExamples && jsdoc.staticExamples.length > 0) headings.push({tag:'h2', id:'example', text: 'Example'});
   +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
@@ -18,6 +20,12 @@ block content
     a.anchor(href=`${navPath}#description`)
   p
     +description(jsdoc.description)
+
+  if jsdoc.requirements
+    h2#requirements Requirements
+      a.anchor(href=`${navPath}#requirements`)
+    p
+      +description(jsdoc.requirements)
 
   h2#usage Usage
     a.anchor(href=`${navPath}#usage`)
