@@ -116,11 +116,13 @@ function mapConnectors(connectors, symbols, files) {
 
     const relatedTypes = findRelatedTypes(symbol, symbols);
     const staticExamples = symbol.tags.filter(t => t.title === 'staticExample');
+    const requirements = symbol.tags.find(t => t.title === 'requirements') || { description: '' };
 
     const symbolWithRelatedType = {
       ...symbol,
       relatedTypes,
       staticExamples,
+      requirements: md.render(requirements.description),
     };
 
     files[fileName] = {
