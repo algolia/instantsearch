@@ -6,4 +6,4 @@
 set -e # exit when error
 
 (cd packages/react-instantsearch && yarn build)
-yarn test:size
+(cd packages/react-instantsearch && yarn test:size)

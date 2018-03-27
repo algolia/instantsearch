@@ -1,8 +1,11 @@
 {
   "private": true,
   "version": "5.0.1",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "boot": "./scripts/boot.sh",
+    "bootstrap": "git clean -dfX && yarn",
     "changelog": "conventional-changelog --preset angular --output-unreleased",
     "start": "NODE_ENV=development babel-node docgen/start.js & NODE_ENV=development yarn docs:storybook-start & wait",
     "docs:build": "babel-node docgen/build.js && yarn docs:storybook-build-production",
@@ -17,9 +20,8 @@
     "test:recipes": "./scripts/test:recipes.sh",
     "test:build": "NODE_ENV=production ./scripts/test:build.sh",
     "test:regressions": "webpack --config test/regressions/webpack.config.js && rm -rf test/screenshots && happo run && babel-node ./test/regressions/normalize.js",
-    "test:size": "bundlesize",
     "argos": "argos upload test/screenshots --token $ARGOS_TOKEN || true",
-    "dev": "jest --watch --bail",
+    "dev": "jest --watch --bail --projects packages/*",
     "docs:storybook-start": "start-storybook -p 6006 -c ./storybook -s ./storybook/public",
     "docs:storybook-build-production": "build-storybook -s ./storybook/public -o docs-production/react-instantsearch/storybook -c ./storybook"
   },
@@ -38,16 +40,13 @@
     "babel-core": "6.26.0",
     "babel-eslint": "8.2.2",
     "babel-loader": "7.1.4",
-    "babel-plugin-external-helpers": "6.22.0",
     "babel-plugin-inline-json-import": "0.2.1",
     "babel-plugin-lodash": "3.3.2",
     "babel-plugin-transform-react-jsx-source": "6.22.0",
-    "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.6.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
     "browser-sync": "2.23.6",
-    "bundlesize": "0.17.0",
     "chokidar": "2.0.3",
     "clipboard": "2.0.0",
     "codemirror": "5.36.0",
@@ -56,9 +55,6 @@
     "conventional-changelog-cli": "1.3.17",
     "css-loader": "0.28.11",
     "doctoc": "1.3.1",
-    "enzyme": "3.3.0",
-    "enzyme-adapter-react-16": "1.1.1",
-    "enzyme-to-json": "3.3.3",
     "escape-html": "1.0.3",
     "eslint": "4.19.1",
     "eslint-config-algolia": "13.1.0",
@@ -78,7 +74,6 @@
     "happypack": "4.0.1",
     "hasha": "3.0.0",
     "instantsearch.css": "7.0.0",
-    "jest": "22.4.3",
     "jsdoc-parse": "1.2.7",
     "json": "9.0.6",
     "jstransformer-markdown-it": "2.0.0",
@@ -111,14 +106,6 @@
     "recursive-readdir": "2.2.2",
     "replace-in-file": "3.4.0",
     "rheostat": "2.1.3",
-    "rollup": "0.57.1",
-    "rollup-plugin-babel": "3.0.3",
-    "rollup-plugin-commonjs": "9.1.0",
-    "rollup-plugin-filesize": "1.5.0",
-    "rollup-plugin-node-globals": "1.2.0",
-    "rollup-plugin-node-resolve": "3.3.0",
-    "rollup-plugin-replace": "2.0.0",
-    "rollup-plugin-uglify": "3.0.0",
     "stat-mode": "0.2.2",
     "storybook-addon-a11y": "3.1.9",
     "storybook-addon-jsx": "5.3.0",
@@ -134,28 +121,10 @@
     "yarn": "1.5.1"
   },
   "jest": {
-    "notify": false,
-    "testPathIgnorePatterns": [
-      "examples/*"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
+    "projects": [
+      "packages/*"
     ]
   },
-  "bundlesize": [
-    {
-      "path": "packages/react-instantsearch/dist/umd/Core.min.js",
-      "maxSize": "8 kB"
-    },
-    {
-      "path": "packages/react-instantsearch/dist/umd/Connectors.min.js",
-      "maxSize": "38 kB"
-    },
-    {
-      "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "62 kB"
-    }
-  ],
   "license": "MIT",
   "author": {
     "name": "Algolia, Inc.",
