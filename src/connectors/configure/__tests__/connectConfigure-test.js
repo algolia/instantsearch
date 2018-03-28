@@ -75,7 +75,7 @@ describe('connectConfigure', () => {
     expect(helper.getState().hitsPerPage).toBe(3);
   });
 
-  it('should dispose all the state setted by configure', () => {
+  it('should dispose all the state set by configure', () => {
     const makeWidget = connectConfigure();
     const widget = makeWidget({ searchParameters: { analytics: true } });
 

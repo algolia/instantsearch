@@ -27,7 +27,7 @@ var customConfigureWidget = connectConfigure(
  */
 
 /**
- * **Configure** connector provides the logic to build a custom widget
+ * The **Configure** connector provides the logic to build a custom widget
  * that will give you ability to override or force some search parameters sent to Algolia API.
  *
  * @type {Connector}
@@ -66,10 +66,10 @@ export default function connectConfigure(renderFn, unmountFn) {
 
       refine(helper) {
         return searchParameters => {
-          // remove old `searchParameters` setted by the widget
+          // remove old `searchParameters` set by the widget
           helper.setState(this.removeSearchParameters(helper.getState()));
 
-          // merge new `searchParameters` with the setted one from other widgets
+          // merge new `searchParameters` with the ones set from other widgets
           const actualState = helper.getState();
           const nextSearchParameters = enhanceConfiguration({})(actualState, {
             getConfiguration: () => searchParameters,
@@ -78,7 +78,7 @@ export default function connectConfigure(renderFn, unmountFn) {
           // trigger a search with the new merged searchParameter
           helper.setState(nextSearchParameters).search();
 
-          // update original `widgetParams.searchParameter` to the new refined one
+          // update original `widgetParams.searchParameters` to the new refined one
           widgetParams.searchParameters = searchParameters;
         };
       },
