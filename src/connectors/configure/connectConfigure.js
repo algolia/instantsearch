@@ -75,7 +75,7 @@ export default function connectConfigure(renderFn, unmountFn) {
             getConfiguration: () => searchParameters,
           });
 
-          // trigger a search with the new merged searchParameter
+          // trigger a search with the new merged searchParameters
           helper.setState(nextSearchParameters).search();
 
           // update original `widgetParams.searchParameters` to the new refined one
