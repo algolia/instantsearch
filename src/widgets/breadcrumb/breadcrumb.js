@@ -1,8 +1,8 @@
-import React, { render } from 'preact-compat';
+import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
-import { connectBreadcrumb } from '../../connectors';
+import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates.js';
 
 import {
@@ -183,7 +183,9 @@ export default function breadcrumb({
   });
 
   try {
-    const makeBreadcrumb = connectBreadcrumb(specializedRenderer);
+    const makeBreadcrumb = connectBreadcrumb(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
+    );
     return makeBreadcrumb({ attributes, rootPath });
   } catch (e) {
     throw new Error(usage);

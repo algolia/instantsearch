@@ -112,6 +112,31 @@ export default () => {
     )
   );
 
+  storiesOf('Breadcrumb').add(
+    'default',
+    wrapWithUnmount(
+      container =>
+        instantsearch.widgets.breadcrumb({
+          container,
+          attributes: [
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ],
+          rootPath: 'Cameras & Camcorders',
+        }),
+      {
+        searchParameters: {
+          hierarchicalFacetsRefinements: {
+            'hierarchicalCategories.lvl0': [
+              'Cameras & Camcorders > Digital Cameras',
+            ],
+          },
+        },
+      }
+    )
+  );
+
   storiesOf('Hits').add(
     'default',
     wrapWithUnmount(container => instantsearch.widgets.hits({ container }))
