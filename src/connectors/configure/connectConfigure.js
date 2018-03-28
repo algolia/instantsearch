@@ -36,12 +36,15 @@ var customConfigureWidget = connectConfigure(
  * @return {function(CustomConfigureWidgetOptions)} Re-usable widget factory for a custom **Configure** widget.
  */
 export default function connectConfigure(renderFn, unmountFn) {
+  if (
+    (isFunction(renderFn) && !isFunction(unmountFn)) ||
+    (!isFunction(renderFn) && isFunction(unmountFn))
+  ) {
+    throw new Error(usage);
+  }
+
   return (widgetParams = {}) => {
-    if (
-      !isPlainObject(widgetParams.searchParameters) ||
-      (isFunction(renderFn) && !isFunction(unmountFn)) ||
-      (!isFunction(renderFn) && isFunction(unmountFn))
-    ) {
+    if (!isPlainObject(widgetParams.searchParameters)) {
       throw new Error(usage);
     }
 
