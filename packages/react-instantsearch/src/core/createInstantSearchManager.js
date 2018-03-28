@@ -1,4 +1,4 @@
-import { omit, isEmpty } from 'lodash';
+import { omit, isEmpty, find } from 'lodash';
 import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
@@ -101,7 +101,7 @@ export default function createInstantSearchManager({
         const targetedIndex = widget.context.multiIndexContext
           ? widget.context.multiIndexContext.targetedIndex
           : widget.props.indexName;
-        const index = indices.find(i => i.targetedIndex === targetedIndex);
+        const index = find(indices, i => i.targetedIndex === targetedIndex);
         if (index) {
           index.widgets.push(widget);
         } else {
