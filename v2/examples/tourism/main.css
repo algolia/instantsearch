@@ -56,12 +56,10 @@ body {
       width: 300px;
       height: 40px;
       border: 0;
-      -webkit-box-shadow: none;
-              box-shadow: none; }
+      box-shadow: none; }
       .aisdemo-navbar .ais-search-box #q:focus {
         outline: none;
-        -webkit-box-shadow: none;
-                box-shadow: none; }
+        box-shadow: none; }
 
 /* FILTERS
 // ------------------------- */
@@ -115,8 +113,7 @@ body {
   .aisdemo-filters #room_types .ais-refinement-list--item label {
     font-size: .8em;
     font-weight: normal;
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
+    box-sizing: border-box;
     width: 100%;
     padding: 9px 10px 7px;
     background: #EDEFED; }

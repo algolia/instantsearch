@@ -45,8 +45,7 @@ header {
       margin-top: 5px; }
       header .searchbox-container .input-group .form-control:focus {
         outline: none;
-        -webkit-box-shadow: none;
-                box-shadow: none; }
+        box-shadow: none; }
       header .searchbox-container .input-group .input-group-btn button {
         padding-left: 20px;
         padding-right: 20px;
@@ -125,8 +124,7 @@ section {
     padding: 10px 0;
     max-width: 100%;
     background: #FFFFFF;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
     section article #stats {
       padding-right: 14px;
       font-size: .8em;

@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.6.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button, .ais-range-input--submit, .ais-geo-search--clear, .ais-geo-search--redo {
+/*! instantsearch.js preview-2.6.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button, .ais-range-input--submit, .ais-geo-search--clear, .ais-geo-search--redo {
   color: #FFFFFF;
   display: inline-block;
   background: #3369E7;
@@ -58,16 +58,12 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
      -moz-appearance: none;
           appearance: none;
   background: #FFFFFF url("data:image/svg+xml;utf8,<svg viewBox='0 0 12 7' xmlns='http://www.w3.org/2000/svg'><path d='M11 1L6.02 6 1 1' stroke-width='1.5' stroke='%23BFC7D8' fill='none' fill-rule='evenodd' stroke-linecap='round'/></svg>") no-repeat center right 16px/10px;
-  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
-          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
+  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;
   border: solid 1px #D4D8E3 !important;
   border-radius: 4px;
   color: #697782;
   font-size: 12px;
-  -webkit-transition: background 0.2s ease, -webkit-box-shadow 0.2s ease;
-  transition: background 0.2s ease, -webkit-box-shadow 0.2s ease;
   transition: background 0.2s ease, box-shadow 0.2s ease;
-  transition: background 0.2s ease, box-shadow 0.2s ease, -webkit-box-shadow 0.2s ease;
   padding: 8px 32px 8px 16px;
   outline: none; }
 
@@ -99,8 +95,7 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-pagination {
   background: #FFFFFF;
-  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: 4px;
   display: inline-block;
@@ -142,8 +137,7 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-price-ranges--input {
   background: #FFFFFF;
-  -webkit-box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-          box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: 4px;
   outline: none; }
@@ -157,8 +151,7 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 
 .ais-range-input--inputMin, .ais-range-input--inputMax {
   background: #FFFFFF;
-  -webkit-box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-          box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  box-shadow: inset 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: 4px;
   outline: none; }
@@ -191,20 +184,15 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
     display: inline-block;
     border: 1px solid #D4D8E3;
     border-radius: 4px;
-    -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-            box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-    -webkit-transition: background .4s ease, -webkit-box-shadow .4s ease;
-    transition: background .4s ease, -webkit-box-shadow .4s ease;
+    box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
     transition: box-shadow .4s ease, background .4s ease;
-    transition: box-shadow .4s ease, background .4s ease, -webkit-box-shadow .4s ease;
     padding: 10px 10px 10px 35px;
     vertical-align: middle;
     white-space: normal;
     height: 100%;
     width: 100%; }
     .ais-search-box--input:focus {
-      -webkit-box-shadow: none;
-              box-shadow: none;
+      box-shadow: none;
       outline: 0; }
   .ais-search-box--reset {
     fill: #BFC7D8;
@@ -265,8 +253,7 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
   position: relative; }
 
 .ais-geo-search--clear {
-  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: 4px;
   padding: 8px 15px;
@@ -286,15 +273,13 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
 .ais-geo-search--toggle-label {
   font-size: 12px;
   background: #FFFFFF;
-  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: 4px;
   padding: 0 15px; }
 
 .ais-geo-search--redo {
-  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border: solid 1px #D4D8E3;
   border-radius: 4px;
   padding: 8px 15px; }
@@ -304,13 +289,11 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
     background: #A0B8F3; }
 
 [class^="ais-"] {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box; }
+  box-sizing: border-box; }
   [class^="ais-"] > *,
   [class^="ais-"] > *::after,
   [class^="ais-"] > *::before {
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box; }
+    box-sizing: border-box; }
 
 .ais-header {
   border-bottom: 2px solid #EEE;

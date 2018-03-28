@@ -1,12 +1,10 @@
 .daterange {
   position: relative;
-  -webkit-box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-          box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
   border-radius: 4px;
 }
 
 .daterange * {
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -28,8 +26,6 @@
 }
 
 .daterange .dr-input {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   border: 1px solid #d4d8e3;
   border-radius: 5px;
@@ -45,20 +41,13 @@
 }
 
 .daterange .dr-input.dr-active {
-  -webkit-box-shadow: 0 0 0 3px rgba(38, 147, 213, 0.3);
   box-shadow: 0 0 0 3px rgba(38, 147, 213, 0.3);
   border-color: #2693d5;
 }
 
 .daterange .dr-input .dr-dates {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
   justify-content: flex-start;
   padding: 0 1.5rem 0 0.75rem;
   min-width: calc(100% - 35px);
@@ -88,8 +77,6 @@
 .daterange .dr-input .dr-dates .dr-dates-dash {
   color: #9ba3a7;
   padding: 0 10px;
-  -webkit-box-flex: 0;
-  -ms-flex-positive: 0;
   flex-grow: 0;
   font-weight: 600;
 }
@@ -97,30 +84,18 @@
 .daterange .dr-input .dr-presets {
   width: 2.1875rem;
   border-left: 1px solid #d4d8e3;
-  -ms-flex-negative: 0;
   flex-shrink: 0;
   cursor: pointer;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  -webkit-box-align: start;
-  -ms-flex-align: start;
   align-items: flex-start;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
 }
 
 .daterange .dr-input .dr-presets.dr-active,
 .daterange .dr-input .dr-presets:hover {
   border-color: #2693d5;
-  -webkit-box-shadow: inset 0 2px 3px #ebf1f4;
   box-shadow: inset 0 2px 3px #ebf1f4;
 }
 
@@ -154,7 +129,6 @@
 .daterange .dr-selections .dr-calendar {
   background-color: #fff;
   font-size: 0.9375rem;
-  -webkit-box-shadow: 0 0 5px #d4d8e3;
   box-shadow: 0 0 5px #d4d8e3;
   border-radius: 5px;
   position: relative;
@@ -163,31 +137,20 @@
   padding-top: 5px;
   top: -5px;
   left: 4px;
-  -webkit-transition: width 0.2s;
   transition: width 0.2s;
   min-width: 210px;
 }
 
 .daterange .dr-selections .dr-calendar .dr-range-switcher {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
   justify-content: space-between;
   padding: 0.375rem 0.5rem;
   font-size: 0.875rem;
 }
 
 .daterange .dr-selections .dr-calendar .dr-range-switcher .dr-switcher {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
   justify-content: space-between;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   border: 1px solid rgba(195, 202, 205, 0.5);
   border-radius: 5px;
@@ -299,8 +262,6 @@
 }
 
 .daterange .dr-selections .dr-calendar .dr-days-of-week-list {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   background-color: #ebf1f4;
   font-size: 0.625rem;
@@ -317,10 +278,7 @@
 }
 
 .daterange .dr-selections .dr-calendar .dr-day-list {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   font-size: 0.9375rem;
 }
@@ -394,7 +352,6 @@
   background-color: #fff;
   color: #2693d5;
   font-size: 0.9375rem;
-  -webkit-box-shadow: 0 0 5px #d4d8e3;
   box-shadow: 0 0 5px #d4d8e3;
   border-radius: 5px;
   position: relative;
@@ -407,11 +364,7 @@
 }
 
 .daterange .dr-selections .dr-list-item {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: end;
-  -ms-flex-align: end;
   align-items: flex-end;
   padding: 0.75rem 0.625rem;
   border-bottom: 1px solid #ebf1f4;
