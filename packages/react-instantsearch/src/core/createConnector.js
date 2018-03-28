@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { has, isEqual } from 'lodash';
+import { has, isEqual, find } from 'lodash';
 import { shallowEqual, getDisplayName, removeEmptyKey } from './utils';
 
 /**
@@ -82,7 +82,8 @@ export default function createConnector(connectorDesc) {
           this.unregisterWidget = widgetsManager.registerWidget(this);
         }
         if (process.env.NODE_ENV === 'development') {
-          const onlyGetProvidedPropsUsage = !Object.keys(connectorDesc).find(
+          const onlyGetProvidedPropsUsage = !find(
+            Object.keys(connectorDesc),
             key =>
               [
                 'getMetadata',
