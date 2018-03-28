@@ -1294,6 +1294,37 @@ describe('connectGeoSearch - dispose', () => {
     expect(actual).toMatchObject(expectation);
   });
 
+  it('expect reset multiple parameters', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch(render, unmount);
+    const widget = customGeoSearch({
+      radius: 100,
+      precision: 25,
+      position: {
+        lat: 10,
+        lng: 12,
+      },
+    });
+
+    const client = createFakeClient();
+    const helper = createFakeHelper(client);
+
+    helper.setState(widget.getConfiguration(new SearchParameters()));
+
+    const expectation = {
+      aroundRadius: undefined,
+      aroundPrecision: undefined,
+      aroundLatLng: undefined,
+    };
+
+    const actual = widget.dispose({ state: helper.getState() });
+
+    expect(unmount).toHaveBeenCalled();
+    expect(actual).toMatchObject(expectation);
+  });
+
   describe('aroundLatLngViaIP', () => {
     it('expect reset aroundLatLngViaIP', () => {
       const render = jest.fn();
