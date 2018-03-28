@@ -328,6 +328,8 @@ const connectGeoSearch = (renderFn, unmountFn) => {
           nextState = state.setQueryParameter('aroundPrecision');
         }
 
+        nextState = nextState.setQueryParameter('insideBoundingBox');
+
         return nextState;
       },
     };
