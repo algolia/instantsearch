@@ -11,24 +11,21 @@ describe('connectConfigure', () => {
     helper = algoliasearchHelper(fakeClient, '', {});
   });
 
-  it('throws on bad usage', () => {
-    // without searchParameters
-    {
+  describe('throws on bad usage', () => {
+    it('without searchParameters', () => {
       const makeWidget = connectConfigure();
       expect(() => makeWidget()).toThrow();
-    }
+    });
 
-    // with a renderFn but no unmountFn
-    {
+    it('with a renderFn but no unmountFn', () => {
       const makeWidget = connectConfigure(jest.fn(), undefined);
       expect(() => makeWidget({ searchParameters: {} })).toThrow();
-    }
+    });
 
-    // with a unmountFn but no renderFn
-    {
+    it('with a unmountFn but no renderFn', () => {
       const makeWidget = connectConfigure(undefined, jest.fn());
       expect(() => makeWidget({ searchParameters: {} })).toThrow();
-    }
+    });
   });
 
   it('should apply searchParameters', () => {
