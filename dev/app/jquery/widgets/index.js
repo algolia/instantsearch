@@ -16,3 +16,4 @@ export { default as stats } from './stats';
 export { default as toggle } from './toggle';
 export { default as infiniteHits } from './infiniteHits';
 export { default as showMoreMenu } from './showMoreMenu';
+export { default as autocomplete } from './autocomplete';
