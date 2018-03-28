@@ -69,11 +69,8 @@ export default function connectConfigure(renderFn, unmountFn) {
 
       refine(helper) {
         return searchParameters => {
-          // remove old `searchParameters` set by the widget
-          helper.setState(this.removeSearchParameters(helper.getState()));
-
           // merge new `searchParameters` with the ones set from other widgets
-          const actualState = helper.getState();
+          const actualState = this.removeSearchParameters(helper.getState());
           const nextSearchParameters = enhanceConfiguration({})(actualState, {
             getConfiguration: () => searchParameters,
           });
@@ -87,7 +84,7 @@ export default function connectConfigure(renderFn, unmountFn) {
       },
 
       render() {
-        if (isFunction(renderFn)) {
+        if (renderFn) {
           renderFn(
             {
               refine: this._refine,
@@ -99,7 +96,7 @@ export default function connectConfigure(renderFn, unmountFn) {
       },
 
       dispose({ state }) {
-        if (isFunction(unmountFn)) unmountFn();
+        if (unmountFn) unmountFn();
         return this.removeSearchParameters(state);
       },
 
