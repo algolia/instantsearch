@@ -54,7 +54,8 @@ describe('connectConfigure', () => {
   });
 
   it('should apply new searchParameters on refine()', () => {
-    const makeWidget = connectConfigure();
+    const renderFn = jest.fn();
+    const makeWidget = connectConfigure(renderFn, jest.fn());
     const widget = makeWidget({ searchParameters: { analytics: true } });
 
     helper.setState(widget.getConfiguration());
@@ -63,7 +64,10 @@ describe('connectConfigure', () => {
     expect(widget.getConfiguration()).toEqual({ analytics: true });
     expect(helper.getState().analytics).toEqual(true);
 
-    widget._refine({ hitsPerPage: 3 });
+    const { refine } = renderFn.mock.calls[0][0];
+    expect(refine).toBe(widget._refine);
+
+    refine({ hitsPerPage: 3 });
 
     expect(widget.getConfiguration()).toEqual({ hitsPerPage: 3 });
     expect(helper.getState().analytics).toBe(undefined);
