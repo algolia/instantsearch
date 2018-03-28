@@ -18,13 +18,11 @@ describe('connectConfigure', () => {
     });
 
     it('with a renderFn but no unmountFn', () => {
-      const makeWidget = connectConfigure(jest.fn(), undefined);
-      expect(() => makeWidget({ searchParameters: {} })).toThrow();
+      expect(() => connectConfigure(jest.fn(), undefined)).toThrow();
     });
 
     it('with a unmountFn but no renderFn', () => {
-      const makeWidget = connectConfigure(undefined, jest.fn());
-      expect(() => makeWidget({ searchParameters: {} })).toThrow();
+      expect(() => connectConfigure(undefined, jest.fn())).toThrow();
     });
   });
 
