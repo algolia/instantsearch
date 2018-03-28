@@ -170,7 +170,10 @@ export default function connectToggle(renderFn, unmountFn) {
         if (hasAnOffValue) {
           // Add filtering on the 'off' value if set
           if (!isRefined) {
-            helper.addDisjunctiveFacetRefinement(attributeName, off);
+            const currentPage = helper.getPage();
+            helper
+              .addDisjunctiveFacetRefinement(attributeName, off)
+              .setPage(currentPage);
           }
         }
 
