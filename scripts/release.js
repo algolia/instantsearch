@@ -116,7 +116,7 @@ inquirer
     }
 
     shell.echo(colors.blue('Install dependencies'));
-    shell.exec('rm -rf node_modules docgen/node_modules');
+    // shell.exec('rm -rf node_modules docgen/node_modules');
     shell.exec('yarn cache clean');
     shell.exec('yarn');
     shell.exec('cd docgen && yarn');
