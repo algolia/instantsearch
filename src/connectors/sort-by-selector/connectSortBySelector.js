@@ -123,7 +123,7 @@ export default function connectSortBySelector(renderFn, unmountFn) {
           );
         }
 
-        this.initialIndex = currentIndex;
+        this.initialIndex = instantSearchInstance.indexName;
         this.setIndex = indexName => helper.setIndex(indexName).search();
 
         renderFn(

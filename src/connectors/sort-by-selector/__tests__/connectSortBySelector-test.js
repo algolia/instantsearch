@@ -4,6 +4,7 @@ import jsHelper from 'algoliasearch-helper';
 const { SearchResults, SearchParameters } = jsHelper;
 
 import connectSortBySelector from '../connectSortBySelector.js';
+import instantSearch from '../../../lib/main.js';
 
 const fakeClient = { addAlgoliaAgent: () => {} };
 
@@ -13,6 +14,12 @@ describe('connectSortBySelector', () => {
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectSortBySelector(rendering);
+    const instantSearchInstance = instantSearch({
+      apiKey: '',
+      appId: '',
+      indexName: 'defaultIndex',
+      createAlgoliaClient: () => fakeClient,
+    });
 
     const indices = [
       { label: 'Sort products by relevance', name: 'relevance' },
@@ -30,6 +37,7 @@ describe('connectSortBySelector', () => {
       state: helper.state,
       createURL: () => '#',
       onHistoryChange: () => {},
+      instantSearchInstance,
     });
 
     {
@@ -78,6 +86,12 @@ describe('connectSortBySelector', () => {
   it('Provides a function to update the index at each step', () => {
     const rendering = sinon.stub();
     const makeWidget = connectSortBySelector(rendering);
+    const instantSearchInstance = instantSearch({
+      apiKey: '',
+      appId: '',
+      indexName: 'defaultIndex',
+      createAlgoliaClient: () => fakeClient,
+    });
 
     const indices = [
       { label: 'Sort products by relevance', name: 'relevance' },
@@ -95,6 +109,7 @@ describe('connectSortBySelector', () => {
       state: helper.state,
       createURL: () => '#',
       onHistoryChange: () => {},
+      instantSearchInstance,
     });
 
     {
@@ -131,6 +146,12 @@ describe('connectSortBySelector', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
       const makeWidget = connectSortBySelector(rendering);
+      const instantSearchInstance = instantSearch({
+        apiKey: '',
+        appId: '',
+        indexName: 'relevance',
+        createAlgoliaClient: () => fakeClient,
+      });
       const indices = [
         { label: 'Sort products by relevance', name: 'relevance' },
         { label: 'Sort products by price', name: 'priceASC' },
@@ -151,6 +172,7 @@ describe('connectSortBySelector', () => {
         state: helper.state,
         createURL: () => '#',
         onHistoryChange: () => {},
+        instantSearchInstance,
       });
 
       const { refine } = rendering.mock.calls[0][0];
