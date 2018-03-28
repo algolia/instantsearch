@@ -37,20 +37,17 @@ import RefinementList from '../components/RefinementList';
  * the [dashboard](https://www.algolia.com/explorer/display/) or using the [API](https://www.algolia.com/doc/guides/searching/faceting/#search-for-facet-values).
  * @example
  * import React from 'react';
+ * import { InstantSearch, RefinementList } from 'react-instantsearch/dom';
  *
- * import { RefinementList, InstantSearch } from '../packages/react-instantsearch/dom';
- *
- * export default function App() {
- *   return (
- *     <InstantSearch
- *       appId="latency"
- *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *       indexName="ikea"
- *     >
- *       <RefinementList attribute="colors" />
- *     </InstantSearch>
- *   );
- * }
+ * const App = () => (
+ *   <InstantSearch
+ *     appId="latency"
+ *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *     indexName="ikea"
+ *   >
+ *     <RefinementList attribute="colors" />
+ *   </InstantSearch>
+ * );
  */
 
 const RefinementListWidget = props => (
