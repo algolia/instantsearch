@@ -2,7 +2,7 @@ import qs from 'qs';
 
 function defaultCreateURL(qsModule, uiState) {
   const { protocol, hostname, port = '', pathname, hash } = window.location;
-  const queryString = qsModule.stringify(uiState, { encode: false });
+  const queryString = qsModule.stringify(uiState);
   const portWithPrefix = port === '' ? '' : `:${port}`;
   // IE <= 11 has no location.origin or buggy. Therefore we don't rely on it
   if (!uiState || Object.keys(uiState).length === 0)
