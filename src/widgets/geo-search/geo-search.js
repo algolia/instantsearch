@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import noop from 'lodash/noop';
-import { bemHelper, renderTemplate } from '../../lib/utils';
+import { unmountComponentAtNode } from 'preact-compat';
+import { getContainerNode, bemHelper, renderTemplate } from '../../lib/utils';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
 import renderer from './GeoSearchRenderer';
 import defaultTemplates from './defaultTemplates';
@@ -175,6 +176,8 @@ const geoSearch = ({
     throw new Error(`Must provide a "googleReference". ${usage}`);
   }
 
+  const containerNode = getContainerNode(container);
+
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     map: cx(bem('map'), userCssClasses.map),
@@ -243,12 +246,20 @@ const geoSearch = ({
     : customHTMLMarker;
 
   try {
-    const makeGeoSearch = connectGeoSearch(renderer);
+    const makeGeoSearch = connectGeoSearch(renderer, () => {
+      unmountComponentAtNode(
+        containerNode.querySelector(`.${cssClasses.controls}`)
+      );
+
+      while (containerNode.firstChild) {
+        containerNode.removeChild(containerNode.firstChild);
+      }
+    });
 
     return makeGeoSearch({
       ...widgetParams,
       renderState: {},
-      container,
+      container: containerNode,
       googleReference,
       initialZoom,
       initialPosition,
