@@ -313,20 +313,22 @@ const connectGeoSearch = (renderFn, unmountFn) => {
         let nextState = state;
 
         if (enableGeolocationWithIP && !position) {
-          nextState = state.setQueryParameter('aroundLatLngViaIP');
+          nextState = nextState.setQueryParameter('aroundLatLngViaIP');
         }
 
         if (position) {
-          nextState = state.setQueryParameter('aroundLatLng');
+          nextState = nextState.setQueryParameter('aroundLatLng');
         }
 
         if (radius) {
-          nextState = state.setQueryParameter('aroundRadius');
+          nextState = nextState.setQueryParameter('aroundRadius');
         }
 
         if (precision) {
-          nextState = state.setQueryParameter('aroundPrecision');
+          nextState = nextState.setQueryParameter('aroundPrecision');
         }
+
+        nextState = nextState.setQueryParameter('insideBoundingBox');
 
         return nextState;
       },
