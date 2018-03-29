@@ -13,7 +13,7 @@ We use the [documentation website][website] as the main way to develop
 React InstantSearch.
 
 ```sh
-yarn bootstrap
+yarn
 yarn start
 ```
 

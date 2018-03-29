@@ -1,5 +1,4 @@
-/docs/
-/docs-production/
+docgen/docs-*
 node_modules/
 dist/
 build/

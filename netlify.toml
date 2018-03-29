@@ -1,5 +1,5 @@
 [build]
-  publish = "docs-production"
+  publish = "docgen/docs-production"
   command = "yarn docs:build-preview"
 
 [build.environment]
