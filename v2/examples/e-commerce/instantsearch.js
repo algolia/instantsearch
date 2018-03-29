@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.6.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.6.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -12771,7 +12771,7 @@ module.exports = baseUniq;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.6.1';
+exports.default = '2.6.2';
 
 /***/ }),
 /* 185 */
@@ -16668,20 +16668,22 @@ var connectGeoSearch = function connectGeoSearch(renderFn, unmountFn) {
         var nextState = state;
 
         if (enableGeolocationWithIP && !position) {
-          nextState = state.setQueryParameter('aroundLatLngViaIP');
+          nextState = nextState.setQueryParameter('aroundLatLngViaIP');
         }
 
         if (position) {
-          nextState = state.setQueryParameter('aroundLatLng');
+          nextState = nextState.setQueryParameter('aroundLatLng');
         }
 
         if (radius) {
-          nextState = state.setQueryParameter('aroundRadius');
+          nextState = nextState.setQueryParameter('aroundRadius');
         }
 
         if (precision) {
-          nextState = state.setQueryParameter('aroundPrecision');
+          nextState = nextState.setQueryParameter('aroundPrecision');
         }
+
+        nextState = nextState.setQueryParameter('insideBoundingBox');
 
         return nextState;
       }
@@ -32385,6 +32387,8 @@ var _noop = __webpack_require__(73);
 
 var _noop2 = _interopRequireDefault(_noop);
 
+var _preactCompat = __webpack_require__(1);
+
 var _utils = __webpack_require__(0);
 
 var _connectGeoSearch = __webpack_require__(204);
@@ -32564,6 +32568,8 @@ var geoSearch = function geoSearch() {
     throw new Error('Must provide a "googleReference". ' + usage);
   }
 
+  var containerNode = (0, _utils.getContainerNode)(container);
+
   var cssClasses = {
     root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     map: (0, _classnames2.default)(bem('map'), userCssClasses.map),
@@ -32617,11 +32623,17 @@ var geoSearch = function geoSearch() {
   var markerOptions = !customHTMLMarker ? builtInMarker : customHTMLMarker;
 
   try {
-    var makeGeoSearch = (0, _connectGeoSearch2.default)(_GeoSearchRenderer2.default);
+    var makeGeoSearch = (0, _connectGeoSearch2.default)(_GeoSearchRenderer2.default, function () {
+      (0, _preactCompat.unmountComponentAtNode)(containerNode.querySelector('.' + cssClasses.controls));
+
+      while (containerNode.firstChild) {
+        containerNode.removeChild(containerNode.firstChild);
+      }
+    });
 
     return makeGeoSearch(_extends({}, widgetParams, {
       renderState: {},
-      container: container,
+      container: containerNode,
       googleReference: googleReference,
       initialZoom: initialZoom,
       initialPosition: initialPosition,
@@ -32736,8 +32748,6 @@ var renderer = function renderer(_ref4, isFirstRendering) {
       renderState = widgetParams.renderState;
 
 
-  var containerNode = (0, _utils.getContainerNode)(container);
-
   if (isFirstRendering) {
     renderState.isUserInteraction = true;
     renderState.isPendingRefine = false;
@@ -32745,7 +32755,7 @@ var renderer = function renderer(_ref4, isFirstRendering) {
 
     var rootElement = document.createElement('div');
     rootElement.className = cssClasses.root;
-    containerNode.appendChild(rootElement);
+    container.appendChild(rootElement);
 
     var mapElement = document.createElement('div');
     mapElement.className = cssClasses.map;
@@ -32897,7 +32907,7 @@ var renderer = function renderer(_ref4, isFirstRendering) {
     },
     onClearClick: clearMapRefinement,
     templateProps: renderState.templateProps
-  }), containerNode.querySelector('.' + cssClasses.controls));
+  }), container.querySelector('.' + cssClasses.controls));
 };
 
 exports.default = renderer;
