@@ -116,7 +116,7 @@ inquirer
     }
 
     shell.echo(colors.blue('Install dependencies'));
-    shell.exec('rm -rf node_modules docgen/node_modules');
+    // shell.exec('rm -rf node_modules docgen/node_modules');
     shell.exec('yarn cache clean');
     shell.exec('yarn');
     shell.exec('cd docgen && yarn');
@@ -186,7 +186,10 @@ inquirer
           'git add src/lib/version.js yarn.lock package.json CHANGELOG.md README.md CONTRIBUTING.md'
         );
         shell.exec(`git commit -m "${commitMessage}"`);
-        shell.exec(`git tag "v${newVersion}"`);
+        // if tagged, it is not possible to generate a nice changelog without manual updates
+        if (strategy === 'stable') {
+          shell.exec(`git tag "v${newVersion}"`);
+        }
 
         shell.echo(
           colors.yellow.underline(
@@ -219,11 +222,11 @@ inquirer
               shell.exec('git push origin develop');
             } else {
               shell.exec(`git push origin ${currentBranch}`);
-              shell.exec('git push origin --tags');
               shell.exec('npm publish --tag beta');
             }
 
             return process.exit(0);
           });
       });
-  });
+  })
+  .catch(e => shell.echo(e));

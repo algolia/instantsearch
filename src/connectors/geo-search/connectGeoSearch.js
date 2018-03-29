@@ -74,7 +74,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * The **GeoSearch** connector provides the logic to build a widget that will display the results on a map. It also provides a way to search for results based on their position. The connector provides functions to manage the search experience (search on map interaction or control the interaction for example).
  *
+ * @requirements
+ *
  * Note that the GeoSearch connector uses the [geosearch](https://www.algolia.com/doc/guides/searching/geo-search) capabilities of Algolia. Your hits **must** have a `_geoloc` attribute in order to be passed to the rendering function.
+ *
+ * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
  *
  * @type {Connector}
  * @param {function(GeoSearchRenderingOptions, boolean)} renderFn Rendering function for the custom **GeoSearch** widget.
@@ -309,20 +313,22 @@ const connectGeoSearch = (renderFn, unmountFn) => {
         let nextState = state;
 
         if (enableGeolocationWithIP && !position) {
-          nextState = state.setQueryParameter('aroundLatLngViaIP');
+          nextState = nextState.setQueryParameter('aroundLatLngViaIP');
         }
 
         if (position) {
-          nextState = state.setQueryParameter('aroundLatLng');
+          nextState = nextState.setQueryParameter('aroundLatLng');
         }
 
         if (radius) {
-          nextState = state.setQueryParameter('aroundRadius');
+          nextState = nextState.setQueryParameter('aroundRadius');
         }
 
         if (precision) {
-          nextState = state.setQueryParameter('aroundPrecision');
+          nextState = nextState.setQueryParameter('aroundPrecision');
         }
+
+        nextState = nextState.setQueryParameter('insideBoundingBox');
 
         return nextState;
       },

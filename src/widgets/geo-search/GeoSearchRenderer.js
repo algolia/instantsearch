@@ -1,5 +1,5 @@
 import React, { render } from 'preact-compat';
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
+import { prepareTemplateProps } from '../../lib/utils';
 import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchControls';
 
 const refineWithMap = ({ refine, paddingBoundingBox, mapInstance }) => {
@@ -76,8 +76,6 @@ const renderer = (
     renderState,
   } = widgetParams;
 
-  const containerNode = getContainerNode(container);
-
   if (isFirstRendering) {
     renderState.isUserInteraction = true;
     renderState.isPendingRefine = false;
@@ -85,7 +83,7 @@ const renderer = (
 
     const rootElement = document.createElement('div');
     rootElement.className = cssClasses.root;
-    containerNode.appendChild(rootElement);
+    container.appendChild(rootElement);
 
     const mapElement = document.createElement('div');
     mapElement.className = cssClasses.map;
@@ -244,7 +242,7 @@ const renderer = (
       onClearClick={clearMapRefinement}
       templateProps={renderState.templateProps}
     />,
-    containerNode.querySelector(`.${cssClasses.controls}`)
+    container.querySelector(`.${cssClasses.controls}`)
   );
 };
 

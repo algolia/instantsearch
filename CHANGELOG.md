@@ -1,3 +1,28 @@
+<a name="2.6.2"></a>
+## [2.6.2](https://github.com/algolia/instantsearch.js/compare/v2.6.1...v2.6.2) (2018-03-29)
+
+
+### Bug Fixes
+
+* **connectGeoSearch:** correctly dispose the connector ([#2845](https://github.com/algolia/instantsearch.js/issues/2845)) ([a4eafd2](https://github.com/algolia/instantsearch.js/commit/a4eafd2))
+* **GeoSearch:** correctly unmount the widget ([#2846](https://github.com/algolia/instantsearch.js/issues/2846)) ([f31ef3c](https://github.com/algolia/instantsearch.js/commit/f31ef3c))
+
+
+
+<a name="2.6.1"></a>
+## [2.6.1](https://github.com/algolia/instantsearch.js/compare/v2.6.0...v2.6.1) (2018-03-28)
+
+
+### Bug Fixes
+
+* **connectBreadcrumb:** allow unmounting ([#2815](https://github.com/algolia/instantsearch.js/issues/2815)) ([c6c353a](https://github.com/algolia/instantsearch.js/commit/c6c353a))
+* **connectBreadcrumb:** update typo in property type items ([#2782](https://github.com/algolia/instantsearch.js/issues/2782)) ([79ebd66](https://github.com/algolia/instantsearch.js/commit/79ebd66))
+* **docgen:** pass the relatedTypes to the struct mixin in connectors layout ([#2780](https://github.com/algolia/instantsearch.js/issues/2780)) ([f7f8b05](https://github.com/algolia/instantsearch.js/commit/f7f8b05))
+* **GeoSearch:** update typo in property type cssClasses ([#2781](https://github.com/algolia/instantsearch.js/issues/2781)) ([419c2ab](https://github.com/algolia/instantsearch.js/commit/419c2ab))
+* **main:** correctly import EventEmitter ([#2814](https://github.com/algolia/instantsearch.js/issues/2814)) ([8fa3649](https://github.com/algolia/instantsearch.js/commit/8fa3649)), closes [#2730](https://github.com/algolia/instantsearch.js/issues/2730)
+
+
+
 <a name="2.6.0"></a>
 # [2.6.0](https://github.com/algolia/instantsearch.js/compare/v2.5.2...v2.6.0) (2018-03-06)
 

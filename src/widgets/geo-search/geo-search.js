@@ -1,6 +1,7 @@
 import cx from 'classnames';
 import noop from 'lodash/noop';
-import { bemHelper, renderTemplate } from '../../lib/utils';
+import { unmountComponentAtNode } from 'preact-compat';
+import { getContainerNode, bemHelper, renderTemplate } from '../../lib/utils';
 import connectGeoSearch from '../../connectors/geo-search/connectGeoSearch';
 import renderer from './GeoSearchRenderer';
 import defaultTemplates from './defaultTemplates';
@@ -119,6 +120,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * Note that the GeoSearch widget uses the [geosearch](https://www.algolia.com/doc/guides/searching/geo-search) capabilities of Algolia. Your hits **must** have a `_geoloc` attribute in order to be displayed on the map.
  *
+ * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
+ *
  * You are also responsible for loading the Google Maps library, it's not shipped with InstantSearch. You need to load the Google Maps library and pass a reference to the widget. You can find more information about how to install the library in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/tutorial).
  *
  * @type {WidgetFactory}
@@ -172,6 +175,8 @@ const geoSearch = ({
   if (!googleReference) {
     throw new Error(`Must provide a "googleReference". ${usage}`);
   }
+
+  const containerNode = getContainerNode(container);
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -241,12 +246,20 @@ const geoSearch = ({
     : customHTMLMarker;
 
   try {
-    const makeGeoSearch = connectGeoSearch(renderer);
+    const makeGeoSearch = connectGeoSearch(renderer, () => {
+      unmountComponentAtNode(
+        containerNode.querySelector(`.${cssClasses.controls}`)
+      );
+
+      while (containerNode.firstChild) {
+        containerNode.removeChild(containerNode.firstChild);
+      }
+    });
 
     return makeGeoSearch({
       ...widgetParams,
       renderState: {},
-      container,
+      container: containerNode,
       googleReference,
       initialZoom,
       initialPosition,

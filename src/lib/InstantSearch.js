@@ -6,7 +6,7 @@ import forEach from 'lodash/forEach';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
-import { EventEmitter } from 'events';
+import EventEmitter from 'events';
 import urlSyncWidget from './url-sync.js';
 import RoutingManager from './RoutingManager.js';
 import simpleMapping from './stateMappings/simple.js';
