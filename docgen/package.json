@@ -22,7 +22,7 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
     "browser-sync": "2.23.6",
-    "chokidar": "2.0.2",
+    "chokidar": "2.0.3",
     "clipboard": "2.0.0",
     "codemirror": "5.36.0",
     "collect-json": "1.0.8",
