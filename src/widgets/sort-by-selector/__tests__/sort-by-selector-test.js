@@ -63,7 +63,7 @@ describe('sortBySelector()', () => {
       hits: [],
       nbHits: 0,
     };
-    widget.init({ helper, instantSearchInstance});
+    widget.init({ helper, instantSearchInstance });
   });
 
   it("doesn't configure anything", () => {
