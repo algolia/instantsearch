@@ -229,6 +229,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         return {
           ...fullState,
           hierarchicalMenu: {
+            ...fullState.hierarchicalMenu,
             [hierarchicalFacetName]: path,
           },
         };
