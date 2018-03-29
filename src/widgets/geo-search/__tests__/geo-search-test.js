@@ -1,5 +1,5 @@
 import last from 'lodash/last';
-import { render } from 'preact-compat';
+import { render, unmountComponentAtNode } from 'preact-compat';
 import algoliasearchHelper from 'algoliasearch-helper';
 import createHTMLMarker from '../createHTMLMarker';
 import renderer from '../GeoSearchRenderer';
@@ -9,6 +9,7 @@ jest.mock('preact-compat', () => {
   const module = require.requireActual('preact-compat');
 
   module.render = jest.fn();
+  module.unmountComponentAtNode = jest.fn();
 
   return module;
 });
@@ -115,6 +116,7 @@ describe('GeoSearch', () => {
   beforeEach(() => {
     render.mockClear();
     renderer.mockClear();
+    unmountComponentAtNode.mockClear();
   });
 
   it('expect to render', () => {
@@ -326,6 +328,39 @@ describe('GeoSearch', () => {
         position: 'right:bottom',
       },
     });
+  });
+
+  it('expect to unmount', () => {
+    const container = createContainer();
+    const instantSearchInstance = createFakeInstantSearch();
+    const helper = createFakeHelper();
+    const googleReference = createFakeGoogleReference();
+
+    const widget = geoSearch({
+      googleReference,
+      container,
+    });
+
+    widget.init({
+      helper,
+      instantSearchInstance,
+      state: helper.state,
+    });
+
+    widget.render({
+      helper,
+      instantSearchInstance,
+      results: {
+        hits: [],
+      },
+    });
+
+    widget.dispose({
+      helper,
+      state: helper.state,
+    });
+
+    expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
   });
 
   describe('setup events', () => {

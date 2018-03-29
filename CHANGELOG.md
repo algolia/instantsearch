@@ -1,3 +1,14 @@
+<a name="2.6.2"></a>
+## [2.6.2](https://github.com/algolia/instantsearch.js/compare/v2.6.1...v2.6.2) (2018-03-29)
+
+
+### Bug Fixes
+
+* **connectGeoSearch:** correctly dispose the connector ([#2845](https://github.com/algolia/instantsearch.js/issues/2845)) ([a4eafd2](https://github.com/algolia/instantsearch.js/commit/a4eafd2))
+* **GeoSearch:** correctly unmount the widget ([#2846](https://github.com/algolia/instantsearch.js/issues/2846)) ([f31ef3c](https://github.com/algolia/instantsearch.js/commit/f31ef3c))
+
+
+
 <a name="2.6.1"></a>
 ## [2.6.1](https://github.com/algolia/instantsearch.js/compare/v2.6.0...v2.6.1) (2018-03-28)
 

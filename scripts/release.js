@@ -229,4 +229,4 @@ inquirer
           });
       });
   })
-  .catch(e => console.error(e));
+  .catch(e => shell.echo(e));
