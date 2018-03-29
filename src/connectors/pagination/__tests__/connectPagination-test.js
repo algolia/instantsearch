@@ -309,38 +309,48 @@ describe('connectPagination', () => {
     describe('getWidgetSearchParameters', () => {
       test('should return the same SP if there are no refinements in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), and the URL contains no parameters
         const uiState = {};
+        // The current state is empty (and page is set to 0 by default)
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the same values should not return a new object
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
       test('should enforce the default value if no value is in the UI State', () => {
         const [widget, helper, refine] = getInitializedWidget();
-        refine(4);
+        // The user presses back (browser), and the URL contains no parameters
         const uiState = {};
+        // The current state is set to page 4
+        refine(4);
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying an empty state, should force back to page 0
         expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter.page).toBe(0);
       });
 
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), and the URL contains some parameters
         const uiState = {
           page: 2,
         };
+        // The current search is set to page 10
         refine(10);
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying a state with new parameters should apply them on the search
         expect(searchParametersAfter).toMatchSnapshot();
         expect(searchParametersAfter.page).toBe(1);
       });

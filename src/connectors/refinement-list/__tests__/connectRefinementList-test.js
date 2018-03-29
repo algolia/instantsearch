@@ -1061,27 +1061,33 @@ describe('connectRefinementList', () => {
     describe('getWidgetSearchParameters', () => {
       test('should return the same SP if no value is in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), the url is empty
         const uiState = {};
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying nothing on an empty search should return the same object
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
       test('should add the refinements according to the UI state provided (operator "or")', () => {
         const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), the URL contains a diskunctive refinement
         const uiState = {
           refinementList: {
             facetAttribute: ['value or'],
           },
         };
+        // The current search is emtpy
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the refinement should yield a new state with a disjunctive refinement
         expect(searchParametersAfter).toMatchSnapshot();
       });
 
@@ -1089,16 +1095,19 @@ describe('connectRefinementList', () => {
         const [widget, helper] = getInitializedWidget({
           operator: 'and',
         });
+        // The user presses back (browser), and there is one value
         const uiState = {
           refinementList: {
             facetAttribute: ['value and'],
           },
         };
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the refinement should yield a new state with a conjunctive refinement
         expect(searchParametersAfter).toMatchSnapshot();
       });
     });

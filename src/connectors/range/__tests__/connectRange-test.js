@@ -987,54 +987,66 @@ describe('connectRange', () => {
     describe('getWidgetSearchParameters', () => {
       test('should return the same SP if no value is in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), and the URL is empty
         const uiState = {};
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying empty parameters on an empty should return the same search parameters
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
       test('should add the refinements according to the UI state provided (min and max)', () => {
         const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), and the URL contains a min and a max
         const uiState = {
           range: {
             price: '20:40',
           },
         };
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the new parameter should set the min and the max
         expect(searchParametersAfter).toMatchSnapshot();
       });
       test('should add the refinements according to the UI state provided (only max)', () => {
         const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), and the URL is empty
         const uiState = {
           range: {
             price: ':30',
           },
         };
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the new parameter should set the max
         expect(searchParametersAfter).toMatchSnapshot();
       });
       test('should add the refinements according to the UI state provided (only min)', () => {
         const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), and the URL is empty
         const uiState = {
           range: {
             price: '10:',
           },
         };
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the new parameter should set the min
         expect(searchParametersAfter).toMatchSnapshot();
       });
     });

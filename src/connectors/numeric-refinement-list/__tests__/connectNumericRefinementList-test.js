@@ -493,27 +493,33 @@ describe('connectNumericRefinementList', () => {
     describe('getWidgetSearchParameters', () => {
       test('should return the same SP if there are no refinements in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+        // The URL contains no parameters
         const uiState = {};
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying empty parameters should yield the previous object
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper] = getInitializedWidget();
+        // The URL state has some parameters
         const uiState = {
           numericRefinementList: {
             numerics: '10:20',
           },
         };
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // The new search state should have the new parameters
         expect(searchParametersAfter).toMatchSnapshot();
       });
     });

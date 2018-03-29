@@ -492,27 +492,33 @@ describe('connectMenu', () => {
     describe('getWidgetSearchParameters', () => {
       test('should return the same SP if there are no refinements in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+        // User presses back in the browser and there are no parameters
         const uiState = {};
+        // The current state is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying no parameters should return the same
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper] = getInitializedWidget();
+        // The URL contains some menu parameters
         const uiState = {
           menu: {
             category: 'pants',
           },
         };
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // It should apply the new parameters on the search
         expect(searchParametersAfter).toMatchSnapshot();
       });
     });

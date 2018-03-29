@@ -379,43 +379,52 @@ describe('connectNumericSelector', () => {
     describe('getWidgetSearchParameters', () => {
       test('should enforce the default value if there are no refinements in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+        // User presses back (browser) and the URL contains nothing
         const uiState = {};
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // The default parameters should be applied
         expect(searchParametersAfter).toMatchSnapshot();
       });
 
       test('should return the same SP if the value is the same in both UI State and SP', () => {
         const [widget, helper, refine] = getInitializedWidget();
+        // User presses back (browser) and the URL contains some refinements
         const uiState = {
           numericSelector: {
             numerics: 30,
           },
         };
+        // The current state has the same parameters
         refine(30);
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the same parameters should not return a new object
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper] = getInitializedWidget();
+        // User presses back (browser) and the URL contains some refinements
         const uiState = {
           numericSelector: {
             numerics: 20,
           },
         };
+        // The current state is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // The new parameters should be applies
         expect(searchParametersAfter).toMatchSnapshot();
       });
     });

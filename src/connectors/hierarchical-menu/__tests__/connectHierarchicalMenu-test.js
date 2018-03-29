@@ -344,23 +344,29 @@ describe('connectHierarchicalMenu', () => {
     describe('getWidgetSearchParameters', () => {
       test('should return the same SP if there are no refinements in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+        // User presses back in the browser and the URL state contains no parameters
         const uiState = {};
+        // The current state is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying an empty UI state should not change the object
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper] = getInitializedWidget();
+        // User presses back in the browser, and the URL contains the following:
         const uiState = {
           hierarchicalMenu: {
             category: ['path'],
           },
         };
+        // The current state is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
+        // The state after the UI is applied on it
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }

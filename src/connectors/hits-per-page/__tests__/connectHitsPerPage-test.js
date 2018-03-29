@@ -316,25 +316,31 @@ describe('connectHitsPerPage', () => {
     describe('getWidgetSearchParameters', () => {
       test('should return the same SP if there are no refinements in the UI state', () => {
         const [widget, helper] = getInitializedWidget();
+        // The URL contains nothing
         const uiState = {};
+        // The current search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the empty UI state should not create a new object
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
 
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper] = getInitializedWidget();
+        // The URL contains some values for the widget
         const uiState = {
           hitsPerPage: 10,
         };
+        // Current the search is empty
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
           { uiState }
         );
+        // Applying the UI state should add the new configuration
         expect(searchParametersAfter).toMatchSnapshot();
       });
     });
