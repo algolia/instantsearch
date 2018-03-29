@@ -5,7 +5,7 @@ import { join } from 'path';
 
 ghpages.clean();
 
-const site = join(__dirname, '../docs-production/react-instantsearch');
+const site = join(__dirname, '../docgen/docs-production/react-instantsearch');
 const logger = msg => console.log(msg);
 const end = err => {
   if (err) {

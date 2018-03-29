@@ -2,8 +2,7 @@
 node_modules
 
 # Artifacts
-docs
-docs-production
+docgen/docs-*
 dist
 build
 .expo

@@ -101,6 +101,7 @@ const common = [
     sourceMap: true,
     sourceMapContents: true,
     outputStyle: 'nested',
+    includePaths: ['../', './'],
   }),
   // since we use @import, autoprefixer is used after sass
   autoprefixer,
