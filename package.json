@@ -135,7 +135,7 @@
     "hogan.js": "3.0.2",
     "lodash": "4.17.5",
     "preact": "8.1.0",
-    "preact-compat": "3.17.0",
+    "preact-compat": "3.18.0",
     "preact-rheostat": "2.1.1",
     "prop-types": "15.5.10",
     "to-factory": "1.0.0"
