@@ -117,7 +117,7 @@
     "webpack-hot-middleware": "2.21.2"
   },
   "engines": {
-    "node": "8.10.0",
+    "node": "8.11.0",
     "yarn": "1.5.1"
   },
   "jest": {
