@@ -203,7 +203,7 @@ function findRelatedTypes(functionSymbol, symbols) {
     } else {
       if (isCustomType(p.name)) {
         const typeSymbol = find(symbols, {name: p.name});
-        if(!typeSymbol) console.warn('Undefined type: ', p.name);
+        if(!typeSymbol) console.warn('Undefined type: ', p.name, JSON.stringify(functionSymbol, null, 2));
         else {
           types = [...types, typeSymbol];
           // iterate over each property to get their types
@@ -211,7 +211,7 @@ function findRelatedTypes(functionSymbol, symbols) {
         }
       } else if(isCustomType(p.type.name)){
         const typeSymbol = find(symbols, {name: p.type.name});
-        if(!typeSymbol) console.warn('Undefined type: ', p.type.name);
+        if(!typeSymbol) console.warn('Undefined type: ', p.type.name, JSON.stringify(functionSymbol, null, 2));
         else {
           types = [...types, typeSymbol];
           // iterate over each property to get their types
