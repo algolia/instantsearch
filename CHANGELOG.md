@@ -1,3 +1,13 @@
+<a name="2.6.3"></a>
+## [2.6.3](https://github.com/algolia/instantsearch.js/compare/v2.6.2...v2.6.3) (2018-03-30)
+
+
+### Bug Fixes
+
+* **rangeSlider:** handles were blocked ([#2849](https://github.com/algolia/instantsearch.js/issues/2849)) ([a2af4f0](https://github.com/algolia/instantsearch.js/commit/a2af4f0))
+
+
+
 <a name="2.6.2"></a>
 ## [2.6.2](https://github.com/algolia/instantsearch.js/compare/v2.6.1...v2.6.2) (2018-03-29)
 
