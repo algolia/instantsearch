@@ -7,6 +7,6 @@ class SimpleUIStateMapping {
   }
 }
 
-export default function(...args) {
-  return new SimpleUIStateMapping(...args);
+export default function() {
+  return new SimpleUIStateMapping();
 }
