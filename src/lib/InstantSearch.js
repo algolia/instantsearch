@@ -15,8 +15,8 @@ import version from './version.js';
 import createHelpers from './createHelpers.js';
 
 const ROUTING_DEFAULT_OPTIONS = {
-  stateMapping: simpleMapping,
-  router: historyRouter,
+  stateMapping: simpleMapping(),
+  router: historyRouter(),
 };
 
 function defaultCreateURL() {
