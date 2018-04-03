@@ -33,10 +33,7 @@
     "algoliasearch-helper": "^2.21.0",
     "classnames": "^2.2.5",
     "lodash": "^4.17.4",
-    "prop-types": "^15.5.10",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-native": "^0.54.2"
+    "prop-types": "^15.5.10"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
@@ -53,6 +50,9 @@
     "enzyme-adapter-react-16": "1.1.1",
     "enzyme-to-json": "3.3.3",
     "jest": "22.4.3",
+    "react": "16.2.0",
+    "react-dom": "16.2.0",
+    "react-native": "0.54.2",
     "react-test-renderer": "16.2.0",
     "rollup": "0.57.1",
     "rollup-plugin-babel": "3.0.3",
