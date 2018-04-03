@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# The release script has been updated in order to force the beta release for the
-# v5. Before merging the branch to master we should revert the changes. In all the
-# file there are some comment to revert.
-
 set -e # exit when error
 
 beta=false
@@ -40,8 +36,10 @@ fi
 git pull origin master
 git fetch origin --tags
 
-# printf "Release: install dependencies"
-yarn
+# Force Yarn to install **all** the dependencies since the NODE_ENV is set
+# to "production". Yarn will install only the production dependencies by default.
+# See: https://yarnpkg.com/en/docs/cli/install#toc-yarn-install-production-true-false
+yarn --production=false
 
 # No need for complex release process for now, only patch releases should be ok
 currentVersion=`cat package.json | json version`
