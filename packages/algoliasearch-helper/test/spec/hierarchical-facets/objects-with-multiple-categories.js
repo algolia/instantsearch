@@ -23,8 +23,6 @@ test('hierarchical facets: objects with multiple categories', function(t) {
 
   helper.toggleRefine('categories', 'beers > IPA');
 
-  var search = sinon.stub(client, 'search');
-
   var algoliaResponse = {
     'results': [{
       'query': 'a',
@@ -96,7 +94,10 @@ test('hierarchical facets: objects with multiple categories', function(t) {
     }]
   }];
 
-  search.yieldsAsync(null, algoliaResponse);
+  client.search = sinon
+    .stub()
+    .resolves(algoliaResponse);
+
   helper.setQuery('a').search();
   helper.once('result', function(content) {
     t.deepEqual(content.hierarchicalFacets, expectedHelperResponse);

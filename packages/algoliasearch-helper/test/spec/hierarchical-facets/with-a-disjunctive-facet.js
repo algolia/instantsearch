@@ -24,11 +24,11 @@ test('hierarchical facets: combined with a disjunctive facet', function(t) {
   helper.toggleRefine('categories', 'beers > IPA');
   helper.toggleRefine('colors', 'blue');
 
-  var search = sinon.stub(client, 'search');
+  client.search = sinon.stub().returns(new Promise(function() {}));
 
   helper.setQuery('a').search();
 
-  var disjunctiveFacetsValuesQuery = search.getCall(0).args[0][1];
+  var disjunctiveFacetsValuesQuery = client.search.getCall(0).args[0][1];
 
   t.deepEqual(
     disjunctiveFacetsValuesQuery.params.facetFilters,

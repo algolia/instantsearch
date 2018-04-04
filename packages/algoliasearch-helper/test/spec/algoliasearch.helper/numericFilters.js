@@ -24,6 +24,8 @@ test('Numeric filters: numeric filters from constructor', function(t) {
         ['attribute2=27', 'attribute2=70']],
       'Serialization of numerical filters');
     t.end();
+
+    return new Promise(function() {});
   };
 
   var helper = algoliasearchHelper(client, 'index', {
@@ -57,6 +59,8 @@ test('Numeric filters: numeric filters from setters', function(t) {
         ['attribute2=27', 'attribute2=70']],
       'Serialization of numerical filters');
     t.end();
+
+    return new Promise(function() {});
   };
 
   var helper = algoliasearchHelper(client, 'index');

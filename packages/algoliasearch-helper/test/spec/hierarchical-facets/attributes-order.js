@@ -22,7 +22,6 @@ test('hierarchical facets: attributes order', function(t) {
     }]
   });
 
-  var search = sinon.stub(client, 'search');
   helper.toggleFacetRefinement('categories', 'beers');
 
   var algoliaResponse = {
@@ -91,7 +90,10 @@ test('hierarchical facets: attributes order', function(t) {
     }]
   }];
 
-  search.yieldsAsync(null, algoliaResponse);
+  client.search = sinon
+    .stub()
+    .resolves(algoliaResponse);
+
   helper.setQuery('a').search();
 
   helper.once('result', function(content) {

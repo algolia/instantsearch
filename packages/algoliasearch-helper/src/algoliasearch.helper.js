@@ -207,15 +207,26 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
   this.emit('searchOnce', tempState);
 
   if (cb) {
-    return this.client.search(
-      queries,
-      function(err, content) {
+    this.client
+      .search(queries)
+      .then(function(content) {
         self._currentNbQueries--;
-        if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
-        if (err) cb(err, null, tempState);
-        else cb(err, new SearchResults(tempState, content.results), tempState);
-      }
-    );
+        if (self._currentNbQueries === 0) {
+          self.emit('searchQueueEmpty');
+        }
+
+        cb(null, new SearchResults(tempState, content.results), tempState);
+      })
+      .catch(function(err) {
+        self._currentNbQueries--;
+        if (self._currentNbQueries === 0) {
+          self.emit('searchQueueEmpty');
+        }
+
+        cb(err, null, tempState);
+      });
+
+    return undefined;
   }
 
   return this.client.search(queries).then(function(content) {
@@ -1201,7 +1212,14 @@ AlgoliaSearchHelper.prototype._search = function() {
 
   this._currentNbQueries++;
 
-  this.client.search(queries, this._dispatchAlgoliaResponse.bind(this, states, queryId));
+  try {
+    this.client.search(queries)
+      .then(this._dispatchAlgoliaResponse.bind(this, states, queryId))
+      .catch(this._dispatchAlgoliaError.bind(this, queryId));
+  } catch (err) {
+    // If we reach this part, we're in an internal error state
+    this.emit('error', err);
+  }
 };
 
 /**
@@ -1212,11 +1230,10 @@ AlgoliaSearchHelper.prototype._search = function() {
  * @param {array.<{SearchParameters, AlgoliaQueries, AlgoliaSearchHelper}>}
  *  state state used for to generate the request
  * @param {number} queryId id of the current request
- * @param {Error} err error if any, null otherwise
  * @param {object} content content of the response
  * @return {undefined}
  */
-AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryId, err, content) {
+AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryId, content) {
   // FIXME remove the number of outdated queries discarded instead of just one
 
   if (queryId < this._lastQueryIdReceived) {
@@ -1227,24 +1244,32 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
   this._currentNbQueries -= (queryId - this._lastQueryIdReceived);
   this._lastQueryIdReceived = queryId;
 
-  if (err) {
-    this.emit('error', err);
+  if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 
-    if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
-  } else {
-    if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
+  var results = content.results;
+  forEach(states, function(s) {
+    var state = s.state;
+    var queriesCount = s.queriesCount;
+    var helper = s.helper;
+    var specificResults = results.splice(0, queriesCount);
 
-    var results = content.results;
-    forEach(states, function(s) {
-      var state = s.state;
-      var queriesCount = s.queriesCount;
-      var helper = s.helper;
-      var specificResults = results.splice(0, queriesCount);
+    var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
+    helper.emit('result', formattedResponse, state);
+  });
+};
 
-      var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
-      helper.emit('result', formattedResponse, state);
-    });
+AlgoliaSearchHelper.prototype._dispatchAlgoliaError = function(queryId, err) {
+  if (queryId < this._lastQueryIdReceived) {
+    // Outdated answer
+    return;
   }
+
+  this._currentNbQueries -= queryId - this._lastQueryIdReceived;
+  this._lastQueryIdReceived = queryId;
+
+  this.emit('error', err);
+
+  if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 };
 
 AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters, numericFilters, tagFilters) {

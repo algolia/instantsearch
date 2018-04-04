@@ -20,7 +20,7 @@ test('hierarchical facets: toggleRefine behavior', function(t) {
     }]
   });
 
-  var search = sinon.stub(client, 'search');
+  client.search = sinon.stub().returns(new Promise(function() {}));
 
   // select `Flying dog`
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
@@ -34,7 +34,7 @@ test('hierarchical facets: toggleRefine behavior', function(t) {
 
   helper.setQuery('a').search();
 
-  var call = search.getCall(0);
+  var call = client.search.getCall(0);
   var queries = call.args[0];
   var hitsQuery = queries[0];
 
@@ -69,7 +69,7 @@ test('hierarchical facets: toggleRefine behavior when root level', function(t) {
     }]
   });
 
-  var search = sinon.stub(client, 'search');
+  client.search = sinon.stub().returns(new Promise(function() {}));
 
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
   helper.toggleRefine('categories', 'beers');
@@ -77,7 +77,7 @@ test('hierarchical facets: toggleRefine behavior when root level', function(t) {
 
   helper.setQuery('a').search();
 
-  var call = search.getCall(0);
+  var call = client.search.getCall(0);
   var queries = call.args[0];
   var hitsQuery = queries[0];
 
@@ -112,7 +112,7 @@ test('hierarchical facets: toggleRefine behavior when different root level', fun
     }]
   });
 
-  var search = sinon.stub(client, 'search');
+  client.search = sinon.stub().returns(new Promise(function() {}));
 
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
   helper.toggleRefine('categories', 'fruits');
@@ -120,7 +120,7 @@ test('hierarchical facets: toggleRefine behavior when different root level', fun
 
   helper.setQuery('a').search();
 
-  var call = search.getCall(0);
+  var call = client.search.getCall(0);
   var queries = call.args[0];
   var hitsQuery = queries[0];
 

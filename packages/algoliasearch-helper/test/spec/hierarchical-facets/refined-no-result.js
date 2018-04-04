@@ -20,7 +20,6 @@ test('hierarchical facets: simple usage', function(t) {
     }]
   });
 
-  var search = sinon.stub(client, 'search');
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
 
   var algoliaResponse = {
@@ -58,7 +57,10 @@ test('hierarchical facets: simple usage', function(t) {
     }]
   };
 
-  search.yieldsAsync(null, algoliaResponse);
+  client.search = sinon
+    .stub()
+    .resolves(algoliaResponse);
+
   helper.setQuery('badquery').search();
 
   helper.once('result', function(content) {

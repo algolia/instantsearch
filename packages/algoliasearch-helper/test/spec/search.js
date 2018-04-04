@@ -12,7 +12,7 @@ test('Search should call the algolia client according to the number of refinemen
   var client = algoliaSearch('dsf', 'dsfdf');
   var mock = sinon.mock(client);
 
-  mock.expects('search').once().yields(null, testData.response);
+  mock.expects('search').once().resolves(testData.response);
 
   var helper = algoliasearchHelper(client, 'test_hotels-node', {
     disjunctiveFacets: ['city']

@@ -23,10 +23,11 @@ test('helper accepts length parameter', function(t) {
     hitsPerPage: 10
   });
 
-  var search = sinon.stub(client, 'search');
+  client.search = sinon.stub().returns(new Promise(function() {}));
+
   helper.setQuery('a').search();
 
-  var searchParams = search.getCall(0).args[0][0].params;
+  var searchParams = client.search.getCall(0).args[0][0].params;
 
   t.equal(searchParams.length, 2, 'searchParams.length was set');
   t.equal(searchParams.hitsPerPage, 10, 'searchParams.hitsPerPage was also set');

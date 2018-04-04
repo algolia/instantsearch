@@ -50,5 +50,7 @@ test('[Derivated helper] detach a derivative helper', function(t) {
       );
       t.end();
     }
+
+    return new Promise(function() {});
   }
 });

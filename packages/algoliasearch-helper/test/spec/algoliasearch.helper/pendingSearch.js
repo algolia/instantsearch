@@ -10,8 +10,10 @@ test('When searchOnce with callback, hasPendingRequests is true', function(t) {
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
-  client.search = function(qs, cb) {
-    triggerCb = function() { cb(null, testData.response); };
+  client.search = function() {
+    return new Promise(function(done) {
+      triggerCb = function() { done(testData.response); };
+    });
   };
 
   var helper = algoliasearchHelper(client, 'test_hotels-node');
@@ -105,8 +107,10 @@ test('When helper.search(), hasPendingRequests is true', function(t) {
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
-  client.search = function(qs, cb) {
-    triggerCb = function() { cb(null, testData.response); };
+  client.search = function() {
+    return new Promise(function(done) {
+      triggerCb = function() { done(testData.response); };
+    });
   };
 
   var helper = algoliasearchHelper(client, 'test_hotels-node');
@@ -136,8 +140,10 @@ test('When helper.search() and one request is discarded, hasPendingRequests is t
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCbs = [];
-  client.search = function(qs, cb) {
-    triggerCbs.push(function() { cb(null, testData().response); });
+  client.search = function() {
+    return new Promise(function(done) {
+      triggerCbs.push(function() { done(testData().response); });
+    });
   };
 
   var helper = algoliasearchHelper(client, 'test_hotels-node');
