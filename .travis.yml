@@ -23,7 +23,8 @@ script:
   - "./scripts/${SCRIPT}"
 env:
   matrix:
-  - SCRIPT=test-ci.sh
+  - SCRIPT=ci/functional-test.sh
+  - SCRIPT=ci/unit-test.sh
   - SCRIPT=validate-commit-msgs.sh
   global:
   - CXX=g++-4.8
