@@ -3,17 +3,17 @@
     <slot name="header"></slot>
 
     <div
-      v-for="facet in facetValues"
-      :key="facet.label"
-      :class="facet.isRefined ? bem('item', 'active') : bem('item')"
+      v-for="item in state.items"
+      :key="item.label"
+      :class="item.isRefined ? bem('item', 'active') : bem('item')"
     >
       <a
         href="#"
         :class="bem('link')"
-        @click.prevent="state.refine(facet.value)"
+        @click.prevent="state.refine(item.value)"
       >
-        {{facet.isRefined ? "x" : ""}} {{facet.label}}
-        <span :class="bem('count')">{{facet.count}}</span>
+        {{item.isRefined ? "x" : ""}} {{item.label}}
+        <span :class="bem('count')">{{item.count}}</span>
       </a>
     </div>
 
@@ -46,11 +46,8 @@ export default {
     },
   },
   computed: {
-    facetValues() {
-      return this.state.items;
-    },
     show() {
-      return this.facetValues.length > 0;
+      return this.state.items.length > 0;
     },
     widgetParams() {
       return {
