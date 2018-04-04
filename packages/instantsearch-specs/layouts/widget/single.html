@@ -6,7 +6,10 @@
   {{ partial "widgets-list.html" . }}
 
   <main class="widgets-details">
-    {{ partial "theme-selector.html" . }}
+    <div class="flex-right bottom-border">
+      {{ partial "edit-page.html" . }}
+      {{ partial "theme-selector.html" . }}
+    </div>
 
     <h2>{{ .Page.Title }}</h2>
 

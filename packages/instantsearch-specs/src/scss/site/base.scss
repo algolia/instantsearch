@@ -183,8 +183,6 @@ body {
 .theme-selector {
   margin: 0;
   padding: 15px 20px;
-  text-align: right;
-  border-bottom: 1px solid #ddd;
 }
 
 .info {
@@ -292,5 +290,31 @@ body {
 
   .ais-GeoSearch-map {
     background: rgb(229, 227, 223);
+  }
+}
+
+.flex-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.bottom-border {
+  border-bottom: 1px solid #ddd;
+}
+
+.link-button {
+  color: inherit;
+  text-decoration: none;
+  padding: 0.4em;
+  border: 1px solid #ddd;
+  border-radius: 0.2em;
+
+  &:focus {
+    border: 1px solid #333;
+  }
+
+  &:active {
+    border: 1px solid black;
   }
 }
