@@ -119,13 +119,11 @@ const IndexResults = connectStateResults(
 );
 
 const AllResults = connectStateResults(({ allSearchResults, children }) => {
-  const noResults =
+  const hasResults =
     allSearchResults &&
-    Object.values(allSearchResults).reduce(
-      (acc, results) => results.nbHits === 0,
-      false
-    );
-  return noResults ? (
+    Object.values(allSearchResults).some(results => results.nbHits > 0);
+
+  return !hasResults ? (
     <div>
       <div>No results in category, products or brand</div>
       <Index indexName="first" />
