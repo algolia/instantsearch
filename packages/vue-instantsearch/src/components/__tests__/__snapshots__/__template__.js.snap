@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Template html should render correctly 1`] = `
+
+<div>
+  <button>
+  </button>
+  <pre>
+    {
+  "hits": []
+}
+  </pre>
+</div>
+
+`;
+
+exports[`Template html should render correctly when \`hits\` is different 1`] = `
+
+<div>
+  <button>
+  </button>
+  <pre>
+    {
+  "hits": [
+    "yo",
+    "how",
+    "are",
+    "you",
+    "doing",
+    "?"
+  ]
+}
+  </pre>
+</div>
+
+`;

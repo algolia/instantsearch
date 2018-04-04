@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@storybook/vue": "^3.3.10",
+    "@vue/test-utils": "^1.0.0-beta.13",
     "babel-eslint": "^8.2.2",
     "babel-jest": "^22.4.1",
     "babel-preset-es2015": "^6.24.0",

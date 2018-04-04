@@ -1,15 +1,20 @@
 <template>
   <div>
-    <slot v-bind="state">
+    <button @click="state.refine('hi')"></button>
+    <pre>{{JSON.stringify(state, null, 2)}}</pre>
+    <!-- <slot v-bind="state">
       <json-tree :level="2" :data="state"></json-tree>
-    </slot>
+    </slot> -->
   </div>
 </template>
 
 <script>
 import JsonTree from 'vue-json-tree'; // todo: remove
 import algoliaComponent from '../component';
-import { connectBreadcrumb } from 'instantsearch.js/es/connectors';
+// import { connectBreadcrumb } from 'instantsearch.js/es/connectors';
+const connect__Template = (renderFn, unmountFn) => ({ someProp }) => ({
+  render: () => renderFn(),
+});
 
 export default {
   components: { 'json-tree': JsonTree },
@@ -27,7 +32,7 @@ export default {
     };
   },
   beforeCreate() {
-    this.connector = connectBreadcrumb;
+    this.connector = connect__Template;
   },
   computed: {
     widgetParams() {
@@ -36,4 +41,5 @@ export default {
       };
     },
   },
-};</script>
+};
+</script>
