@@ -1,21 +1,6 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import isEqual from 'lodash/isEqual';
 
-/**
- * @typedef {function} StateMapping
- * @property {(object) => object} stateToRoute transforms an UI state representation into a route object
- * @property {(object) => object} routeToState transforms route object into an UI state representation
- */
-
-/**
- * @typedef {function} Router
- * @property {(object) => ()} write push a route object into a storage
- * @property {((object) => (object)) => ()} onUpdate sets an event listenere when the storage is updated by a third party
- * @property {() => (object)} read reads the storage and gets a route object
- * @property {(object) => string} createURL transforms a route object into a URL
- * @property {() => ()} dispose cleans up any event listeners
- */
-
 export default class RoutingManager {
   constructor({ instantSearchInstance, router, stateMapping } = {}) {
     this.originalConfig = null;
