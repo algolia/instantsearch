@@ -1446,9 +1446,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bel@5.1.7:
-  version "5.1.7"
-  resolved "https://registry.yarnpkg.com/bel/-/bel-5.1.7.tgz#1aea92e028398a51a4467aba3e83295882601ca4"
+bel@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/bel/-/bel-6.0.0.tgz#8b0c5cdb92c944ccd49d19a2cb8691144c86ab91"
   dependencies:
     hyperx "^2.3.0"
     is-electron "^2.0.0"
