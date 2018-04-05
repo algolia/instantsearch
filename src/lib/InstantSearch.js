@@ -82,6 +82,12 @@ Usage: instantsearch({
       this._searchFunction = searchFunction;
     }
 
+    if (urlSync && routing) {
+      throw new Error(
+        'InstantSearch configuration error: it is not possible to use `urlSync` and `router` at the same time'
+      );
+    }
+
     this.urlSync = urlSync === true ? {} : urlSync;
     if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
     else if (isPlainObject(routing))
