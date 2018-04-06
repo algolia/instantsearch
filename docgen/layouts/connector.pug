@@ -9,6 +9,10 @@ block content
   h2#description Description
     a.anchor(href=`${navPath}#description`)
   div!=h.markdown(description)
+  if requirements
+    h2#requirements Requirements
+      a.anchor(href=`${navPath}#requirements`)
+    div!=h.markdown(requirements)
   h2#proptypes Exposed props
     a.anchor(href=`${navPath}#proptypes`)
   if proptype
@@ -62,10 +66,6 @@ block content
             td(colspan=3)!=h.markdown(type.description)
   else
     p This connector does not provided props to its wrapped component.
-  if requirements
-    h2#requirements Requirements
-      a.anchor(href=`${navPath}#requirements`)
-    div!=h.markdown(requirements)
   if examples
     h2#example Example
       a.anchor(href=`${navPath}#example`)

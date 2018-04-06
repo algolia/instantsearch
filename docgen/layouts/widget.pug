@@ -11,8 +11,12 @@ block content
   div!=h.markdown(description)
   div.storybook-section
     a.btn.btn-cta(href=`${storyBookPublicPath}?selectedKind=${name}&selectedStory=default` target='_blank') See live example
+  if requirements
+    h2#requirements Requirements
+      a.anchor(href=`${navPath}#requirements`)
+    div!=h.markdown(requirements)
   h2#proptypes Props
-    a.anchor(href=`${navPath}#proptypes`)    
+    a.anchor(href=`${navPath}#proptypes`)
   if proptype
     table.api.proptypes
       tbody
@@ -37,10 +41,6 @@ block content
             td(colspan=3)!=h.markdown(type.description)
   else
     p This widget has no props.
-  if requirements
-    h2#requirements Requirements
-      a.anchor(href=`${navPath}#requirements`)
-    div!=h.markdown(requirements)
   if operations
     h2#operations Operations
       a.anchor(href=`${navPath}#operations`)
