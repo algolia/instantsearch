@@ -10,6 +10,9 @@ import RatingMenu from '../components/RatingMenu';
  * @requirements The attribute passed to the `attribute` prop must be holding numerical values.
  * @name RatingMenu
  * @kind widget
+ * @requirements The attribute passed to the `attribute` prop must be present in “attributes for faceting”
+ * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
+ * The values inside the attribute must be JavaScript numbers (not strings).
  * @propType {string} attribute - the name of the attribute in the record
  * @propType {number} [min] - Minimum value for the rating. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} [max] - Maximum value for the rating. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
