@@ -146,7 +146,7 @@ export default function pagination({
   labels: userLabels = defaultLabels,
   cssClasses: userCssClasses = {},
   maxPages,
-  padding = 3,
+  padding,
   showFirstLast = true,
   autoHideContainer = true,
   scrollTo: userScrollTo = 'body',
