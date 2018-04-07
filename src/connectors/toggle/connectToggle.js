@@ -318,17 +318,17 @@ export default function connectToggle(renderFn, unmountFn) {
             attributeName,
             on
           );
-        } else {
-          if (hasAnOffValue)
-            return searchParameters
-              .removeDisjunctiveFacetRefinement(attributeName, on)
-              .addDisjunctiveFacetRefinement(attributeName, off);
-
-          return searchParameters.removeDisjunctiveFacetRefinement(
-            attributeName,
-            on
-          );
         }
+
+        if (hasAnOffValue)
+          return searchParameters
+            .removeDisjunctiveFacetRefinement(attributeName, on)
+            .addDisjunctiveFacetRefinement(attributeName, off);
+
+        return searchParameters.removeDisjunctiveFacetRefinement(
+          attributeName,
+          on
+        );
       },
     };
   };
