@@ -1000,6 +1000,60 @@ describe('connectRange', () => {
         // Applying empty parameters on an empty should return the same search parameters
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
+      test('should return the same SP if the values are the same', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), and the URL is empty
+        const uiState = {
+          range: {
+            price: '10:20',
+          },
+        };
+        refine([10, 20]);
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying empty parameters on an empty should return the same search parameters
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+      test('should return the same SP if the values are the same (only min)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), and the URL is empty
+        const uiState = {
+          range: {
+            price: '10:',
+          },
+        };
+        refine([10, undefined]);
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying empty parameters on an empty should return the same search parameters
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+      test('should return the same SP if the values are the same (only max)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), and the URL is empty
+        const uiState = {
+          range: {
+            price: ':20',
+          },
+        };
+        refine([undefined, 20]);
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying empty parameters on an empty should return the same search parameters
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
       test('should add the refinements according to the UI state provided (min and max)', () => {
         const [widget, helper] = getInitializedWidget();
         // The user presses back (browser), and the URL contains a min and a max

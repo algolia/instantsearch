@@ -320,33 +320,41 @@ export default function connectRange(renderFn, unmountFn) {
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const value = uiState && uiState.range && uiState.range[attributeName];
 
-        if (value && value.indexOf(':') >= 0) {
-          const clearedParams = searchParameters.clearRefinements(
-            attributeName
-          );
-          const [lowerBound, upperBound] = value.split(':');
-          if (
-            (lowerBound || lowerBound === 0) &&
-            (upperBound || upperBound === 0)
-          ) {
-            return clearedParams
-              .addNumericRefinement(attributeName, '>=', lowerBound)
-              .addNumericRefinement(attributeName, '<=', upperBound);
-          }
-          if (lowerBound || lowerBound === 0)
-            return clearedParams.addNumericRefinement(
-              attributeName,
-              '>=',
-              lowerBound
-            );
-          if (upperBound || upperBound === 0)
-            return clearedParams.addNumericRefinement(
-              attributeName,
-              '<=',
-              upperBound
-            );
+        if (!value || value.indexOf(':') === -1) {
+          return searchParameters;
         }
-        return searchParameters;
+
+        const {
+          '>=': previousMin = [NaN],
+          '<=': previousMax = [NaN],
+        } = searchParameters.getNumericRefinements(attributeName);
+        let clearedParams = searchParameters.clearRefinements(attributeName);
+        const [lowerBound, upperBound] = value.split(':').map(parseFloat);
+
+        if (
+          previousMin.includes(lowerBound) &&
+          previousMax.includes(upperBound)
+        ) {
+          return searchParameters;
+        }
+
+        if (isFinite(lowerBound) && !previousMin.includes(lowerBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '>=',
+            lowerBound
+          );
+        }
+
+        if (isFinite(upperBound) && !previousMax.includes(upperBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '<=',
+            upperBound
+          );
+        }
+
+        return clearedParams;
       },
     };
   };
