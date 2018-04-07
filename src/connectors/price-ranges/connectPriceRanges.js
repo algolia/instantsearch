@@ -263,10 +263,21 @@ export default function connectPriceRanges(renderFn, unmountFn) {
           return searchParameters;
         }
 
+        const {
+          '>=': previousMin = [NaN],
+          '<=': previousMax = [NaN],
+        } = searchParameters.getNumericRefinements(attributeName);
         let clearedParams = searchParameters.clearRefinements(attributeName);
         const [lowerBound, upperBound] = value.split(':').map(parseFloat);
 
-        if (isFinite(lowerBound)) {
+        if (
+          previousMin.includes(lowerBound) &&
+          previousMax.includes(upperBound)
+        ) {
+          return searchParameters;
+        }
+
+        if (isFinite(lowerBound) && !previousMin.includes(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attributeName,
             '>=',
@@ -274,7 +285,7 @@ export default function connectPriceRanges(renderFn, unmountFn) {
           );
         }
 
-        if (isFinite(upperBound)) {
+        if (isFinite(upperBound) && !previousMax.includes(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attributeName,
             '<=',

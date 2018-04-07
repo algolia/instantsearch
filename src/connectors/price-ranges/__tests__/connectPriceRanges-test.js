@@ -264,10 +264,50 @@ describe('connectPriceRanges', () => {
         const [widget, helper, refine] = getInitializedWidget();
         // The user presses back (browser), the url contains min and max
         const uiState = {
-          priceRanges: '10:20',
+          priceRanges: {
+            price: '10:20',
+          },
         };
         // The current search has the same parameters
         refine({ from: 10, to: 20 });
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same non empty parameters should yield the same object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should return the same SP if the value from the UI state is the same (only min)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), the url contains min and max
+        const uiState = {
+          priceRanges: {
+            price: '10:',
+          },
+        };
+        // The current search has the same parameters
+        refine({ from: 10 });
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same non empty parameters should yield the same object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should return the same SP if the value from the UI state is the same (only max)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), the url contains min and max
+        const uiState = {
+          priceRanges: {
+            price: ':20',
+          },
+        };
+        // The current search has the same parameters
+        refine({ to: 20 });
         const searchParametersBefore = SearchParameters.make(helper.state);
         const searchParametersAfter = widget.getWidgetSearchParameters(
           searchParametersBefore,
