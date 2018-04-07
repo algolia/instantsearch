@@ -314,7 +314,7 @@ describe('connectSearchBox', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);
@@ -325,7 +325,7 @@ describe('connectSearchBox', () => {
         refine('some query');
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toMatchSnapshot();
@@ -337,12 +337,12 @@ describe('connectSearchBox', () => {
         const uiStateBefore = widget.getWidgetState(
           {},
           {
-            state: helper.state,
+            searchParameters: helper.state,
             helper,
           }
         );
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);

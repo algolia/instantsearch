@@ -411,39 +411,39 @@ export default function connectRefinementList(renderFn, unmountFn) {
         }
       },
 
-      getWidgetState(fullState, { state }) {
+      getWidgetState(uiState, { searchParameters }) {
         const values =
           operator === 'or'
-            ? state.getDisjunctiveRefinements(attributeName)
-            : state.getConjunctiveRefinements(attributeName);
+            ? searchParameters.getDisjunctiveRefinements(attributeName)
+            : searchParameters.getConjunctiveRefinements(attributeName);
 
         if (
           values.length === 0 ||
-          (fullState.refinementList &&
-            isEqual(values, fullState.refinementList[attributeName]))
+          (uiState.refinementList &&
+            isEqual(values, uiState.refinementList[attributeName]))
         ) {
-          return fullState;
+          return uiState;
         }
 
         return {
-          ...fullState,
+          ...uiState,
           refinementList: {
-            ...fullState.refinementList,
+            ...uiState.refinementList,
             [attributeName]: values,
           },
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         const values =
           uiState.refinementList && uiState.refinementList[attributeName];
-        if (values === undefined) return searchParam;
+        if (values === undefined) return searchParameters;
         return values.reduce(
           (sp, v) =>
             operator === 'or'
               ? sp.addDisjunctiveFacetRefinement(attributeName, v)
               : sp.addFacetRefinement(attributeName, v),
-          searchParam.clearRefinements(attributeName)
+          searchParameters.clearRefinements(attributeName)
         );
       },
     };

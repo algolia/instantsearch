@@ -214,40 +214,40 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
         return nextState;
       },
 
-      getWidgetState(fullState, { state }) {
-        const path = state.getHierarchicalFacetBreadcrumb(
+      getWidgetState(uiState, { searchParameters }) {
+        const path = searchParameters.getHierarchicalFacetBreadcrumb(
           hierarchicalFacetName
         );
-        if (!path || path.length === 0) return fullState;
+        if (!path || path.length === 0) return uiState;
         if (
-          fullState.hierarchicalMenu &&
-          isEqual(path, fullState.hierarchicalMenu[hierarchicalFacetName])
+          uiState.hierarchicalMenu &&
+          isEqual(path, uiState.hierarchicalMenu[hierarchicalFacetName])
         ) {
-          return fullState;
+          return uiState;
         }
 
         return {
-          ...fullState,
+          ...uiState,
           hierarchicalMenu: {
-            ...fullState.hierarchicalMenu,
+            ...uiState.hierarchicalMenu,
             [hierarchicalFacetName]: path,
           },
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         if (
           uiState.hierarchicalMenu &&
           uiState.hierarchicalMenu[hierarchicalFacetName]
         ) {
-          return searchParam
+          return searchParameters
             .clearRefinements(hierarchicalFacetName)
             .toggleRefinement(
               hierarchicalFacetName,
               uiState.hierarchicalMenu[hierarchicalFacetName].join(separator)
             );
         } else {
-          return searchParam;
+          return searchParameters;
         }
       },
     };

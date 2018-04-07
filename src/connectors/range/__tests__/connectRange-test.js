@@ -936,7 +936,7 @@ describe('connectRange', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);
@@ -947,7 +947,7 @@ describe('connectRange', () => {
         refine([20, 30]);
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toMatchSnapshot();
@@ -962,7 +962,7 @@ describe('connectRange', () => {
           },
         };
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toMatchSnapshot();
@@ -977,7 +977,7 @@ describe('connectRange', () => {
           },
         };
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);

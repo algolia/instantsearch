@@ -229,35 +229,38 @@ export default function connectPriceRanges(renderFn, unmountFn) {
         return nextState;
       },
 
-      getWidgetState(fullState, { state }) {
-        const { '>=': min = '', '<=': max = '' } = state.getNumericRefinements(
-          attributeName
-        );
+      getWidgetState(uiState, { searchParameters }) {
+        const {
+          '>=': min = '',
+          '<=': max = '',
+        } = searchParameters.getNumericRefinements(attributeName);
 
         if (
           (min === '' && max === '') ||
-          (fullState &&
-            fullState.priceRanges &&
-            fullState.priceRanges[attributeName] === `${min}:${max}`)
+          (uiState &&
+            uiState.priceRanges &&
+            uiState.priceRanges[attributeName] === `${min}:${max}`)
         ) {
-          return fullState;
+          return uiState;
         }
 
         return {
-          ...fullState,
+          ...uiState,
           priceRanges: {
-            ...fullState.priceRanges,
+            ...uiState.priceRanges,
             [attributeName]: `${min}:${max}`,
           },
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         const value =
           uiState && uiState.priceRanges && uiState.priceRanges[attributeName];
 
         if (value && value.indexOf(':') >= 0) {
-          const clearedParams = searchParam.clearRefinements(attributeName);
+          const clearedParams = searchParameters.clearRefinements(
+            attributeName
+          );
           const [lowerBound, upperBound] = value.split(':');
           if (
             (lowerBound || lowerBound === 0) &&
@@ -280,7 +283,7 @@ export default function connectPriceRanges(renderFn, unmountFn) {
               upperBound
             );
         }
-        return searchParam;
+        return searchParameters;
       },
     };
   };

@@ -322,7 +322,7 @@ describe('connectNumericSelector', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -334,7 +334,7 @@ describe('connectNumericSelector', () => {
         refine(20);
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -352,7 +352,7 @@ describe('connectNumericSelector', () => {
         refine(20);
 
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -368,7 +368,7 @@ describe('connectNumericSelector', () => {
         };
         helper.addNumericRefinement('numerics', '=', 20);
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 

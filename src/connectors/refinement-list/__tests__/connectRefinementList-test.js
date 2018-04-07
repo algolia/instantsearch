@@ -1008,7 +1008,7 @@ describe('connectRefinementList', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);
@@ -1019,7 +1019,7 @@ describe('connectRefinementList', () => {
         refine('value');
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toMatchSnapshot();
@@ -1034,7 +1034,7 @@ describe('connectRefinementList', () => {
           },
         };
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toMatchSnapshot();
@@ -1046,12 +1046,12 @@ describe('connectRefinementList', () => {
         const uiStateBefore = widget.getWidgetState(
           {},
           {
-            state: helper.state,
+            searchParameters: helper.state,
             helper,
           }
         );
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);

@@ -196,32 +196,34 @@ export default function connectStarRating(renderFn, unmountFn) {
         return nextState;
       },
 
-      getWidgetState(fullState, { state }) {
-        const refinedStar = this._getRefinedStar(state);
+      getWidgetState(uiState, { searchParameters }) {
+        const refinedStar = this._getRefinedStar(searchParameters);
         if (
           refinedStar === undefined ||
-          (fullState &&
-            fullState.starRating &&
-            fullState.starRating[attributeName] === refinedStar)
+          (uiState &&
+            uiState.starRating &&
+            uiState.starRating[attributeName] === refinedStar)
         )
-          return fullState;
+          return uiState;
         return {
-          ...fullState,
+          ...uiState,
           starRating: {
-            ...fullState.starRating,
+            ...uiState.starRating,
             [attributeName]: refinedStar,
           },
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         const starRatingFromURL =
           uiState.starRating && uiState.starRating[attributeName];
-        const refinedStar = this._getRefinedStar(searchParam);
+        const refinedStar = this._getRefinedStar(searchParameters);
 
-        if (starRatingFromURL === refinedStar) return searchParam;
+        if (starRatingFromURL === refinedStar) return searchParameters;
 
-        let clearedSearchParam = searchParam.clearRefinements(attributeName);
+        let clearedSearchParam = searchParameters.clearRefinements(
+          attributeName
+        );
 
         if (starRatingFromURL !== undefined) {
           for (let val = Number(starRatingFromURL); val <= max; ++val) {

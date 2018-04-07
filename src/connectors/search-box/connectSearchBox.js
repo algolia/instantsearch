@@ -152,21 +152,21 @@ export default function connectSearchBox(renderFn, unmountFn) {
         return state.setQuery('');
       },
 
-      getWidgetState(fullState, { state }) {
-        const query = state.query;
+      getWidgetState(uiState, { searchParameters }) {
+        const query = searchParameters.query;
 
-        if (query === '' || (fullState && fullState.query === query)) {
-          return fullState;
+        if (query === '' || (uiState && uiState.query === query)) {
+          return uiState;
         }
 
         return {
-          ...fullState,
+          ...uiState,
           query,
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
-        return searchParam.setQuery(uiState.query || '');
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        return searchParameters.setQuery(uiState.query || '');
       },
     };
   };

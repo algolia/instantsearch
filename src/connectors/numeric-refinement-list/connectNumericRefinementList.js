@@ -173,14 +173,16 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
         return state.clearRefinements(attributeName);
       },
 
-      getWidgetState(fullState, { state }) {
-        const currentRefinements = state.getNumericRefinements(attributeName);
+      getWidgetState(uiState, { searchParameters }) {
+        const currentRefinements = searchParameters.getNumericRefinements(
+          attributeName
+        );
         const equal = currentRefinements['='] && currentRefinements['='][0];
         if (equal || equal === 0) {
           return {
-            ...fullState,
+            ...uiState,
             numericRefinementList: {
-              ...fullState.numericRefinementList,
+              ...uiState.numericRefinementList,
               [attributeName]: `${currentRefinements['=']}`,
             },
           };
@@ -193,25 +195,25 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
 
         if (lowerBound !== '' || upperBound !== '') {
           if (
-            fullState.numericRefinementList &&
-            fullState.numericRefinementList[attributeName] ===
+            uiState.numericRefinementList &&
+            uiState.numericRefinementList[attributeName] ===
               `${lowerBound}:${upperBound}`
           )
-            return fullState;
+            return uiState;
           return {
-            ...fullState,
+            ...uiState,
             numericRefinementList: {
-              ...fullState.numericRefinementList,
+              ...uiState.numericRefinementList,
               [attributeName]: `${lowerBound}:${upperBound}`,
             },
           };
         }
 
-        return fullState;
+        return uiState;
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
-        const clearedParams = searchParam.clearRefinements(attributeName);
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const clearedParams = searchParameters.clearRefinements(attributeName);
         const value =
           uiState.numericRefinementList &&
           uiState.numericRefinementList[attributeName];

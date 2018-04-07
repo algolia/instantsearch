@@ -158,25 +158,22 @@ export default function connectSortBySelector(renderFn, unmountFn) {
         return state.setIndex(this.initialIndex);
       },
 
-      getWidgetState(fullState, { state }) {
-        const currentIndex = state.getQueryParameter('index');
+      getWidgetState(uiState, { searchParameters }) {
+        const currentIndex = searchParameters.getQueryParameter('index');
         const isInitialIndex = currentIndex === this.initialIndex;
 
-        if (
-          isInitialIndex ||
-          (fullState && fullState.sortBy === currentIndex)
-        ) {
-          return fullState;
+        if (isInitialIndex || (uiState && uiState.sortBy === currentIndex)) {
+          return uiState;
         }
 
         return {
-          ...fullState,
-          sortBy: state.getQueryParameter('index'),
+          ...uiState,
+          sortBy: searchParameters.getQueryParameter('index'),
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
-        return searchParam.setQueryParameter(
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        return searchParameters.setQueryParameter(
           'index',
           uiState.sortBy || this.initialIndex
         );

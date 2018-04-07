@@ -17,11 +17,8 @@ export default class RoutingManager {
     // store the initial state from the storage
     // so that we can compare it with the state after the first render
     // in case the searchFunction has modifyied it.
-    const { helper } = this.instantSearchInstance;
     this.initState = this.getAllUIStates({
-      helper,
-      state,
-      instantSearchInstance: this.instantSearchInstance,
+      searchParameters: state,
     });
   }
 
@@ -37,7 +34,7 @@ export default class RoutingManager {
     return Object.assign(
       {},
       this.getAllSearchParameters({
-        state: this.originalConfig,
+        currentSearchParameters: this.originalConfig,
         uiState: this.originalUIState,
       })
     );
@@ -46,95 +43,95 @@ export default class RoutingManager {
   render({ state }) {
     if (this.firstRender) {
       this.firstRender = false;
-      const { helper } = this.instantSearchInstance;
-      this.router.onUpdate(route => {
-        const uiState = this.stateMapping.routeToState(route);
-        const currentUIState = this.getAllUIStates({
-          helper,
-          state: helper.state,
-          instantSearchInstance: this.instantSearchInstance,
-        });
+      this.setupRouting(state);
+    }
+  }
 
-        if (isEqual(uiState, currentUIState)) return;
-
-        // retrieve a search state from the widgets and the UI state
-        const searchParameters = this.getAllSearchParameters({
-          state,
-          instantSearchInstance: this.instantSearchInstance,
-          uiState,
-        });
-
-        const fullHelperState = Object.assign(
-          {},
-          this.originalConfig,
-          searchParameters
-        );
-
-        if (isEqual(fullHelperState, searchParameters)) return;
-
-        helper
-          .overrideStateWithoutTriggeringChangeEvent(searchParameters)
-          .search();
+  setupRouting(state) {
+    const { helper } = this.instantSearchInstance;
+    this.router.onUpdate(route => {
+      const uiState = this.stateMapping.routeToState(route);
+      const currentUIState = this.getAllUIStates({
+        searchParameters: helper.state,
       });
 
-      helper.on('change', searchState => {
-        // this.renderURLFromState(s)
-        const uiState = this.getAllUIStates({
-          helper,
-          state: searchState,
-          instantSearchInstance: this.instantSearchInstance,
-        });
-        const route = this.stateMapping.stateToRoute(uiState);
-        this.router.write(route);
-      });
+      if (isEqual(uiState, currentUIState)) return;
 
-      // Compare initial state and post first render state, in order
-      // to see if the query has been changed by a searchFunction
-
-      const firstRenderState = this.getAllUIStates({
-        helper,
-        state,
+      const searchParameters = this.getAllSearchParameters({
+        currentSearchParameters: state,
         instantSearchInstance: this.instantSearchInstance,
+        uiState,
       });
 
-      if (!isEqual(this.initState, firstRenderState)) {
-        // force update the URL, if the state has changed since the initial URL read
-        // We do this in order to make a URL update when there is search function
-        // that prevent the search of the initial rendering
-        // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-        this.router.write(firstRenderState);
-      }
+      const fullHelperState = Object.assign(
+        {},
+        this.originalConfig,
+        searchParameters
+      );
+
+      if (isEqual(fullHelperState, searchParameters)) return;
+
+      helper
+        .overrideStateWithoutTriggeringChangeEvent(searchParameters)
+        .search();
+    });
+
+    this.renderURLFromState = searchParameters => {
+      const uiState = this.getAllUIStates({
+        searchParameters,
+      });
+      const route = this.stateMapping.stateToRoute(uiState);
+      this.router.write(route);
+    };
+    helper.on('change', this.renderURLFromState);
+
+    // Compare initial state and post first render state, in order
+    // to see if the query has been changed by a searchFunction
+
+    const firstRenderState = this.getAllUIStates({
+      searchParameters: state,
+    });
+
+    if (!isEqual(this.initState, firstRenderState)) {
+      // force update the URL, if the state has changed since the initial URL read
+      // We do this in order to make a URL update when there is search function
+      // that prevent the search of the initial rendering
+      // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
+      this.router.write(firstRenderState);
     }
   }
 
   dispose() {
-    this.instantSearchInstance.helper.removeListener(
-      'change',
-      this.renderURLFromState
-    );
+    if (this.renderURLFromState) {
+      this.instantSearchInstance.helper.removeListener(
+        'change',
+        this.renderURLFromState
+      );
+    }
     this.router.dispose();
   }
 
-  getAllSearchParameters({ state, uiState }) {
+  getAllSearchParameters({ currentSearchParameters, uiState }) {
     const { widgets } = this.instantSearchInstance;
-    const searchParameters = widgets.reduce((u, w) => {
-      if (!w.getWidgetSearchParameters) return u;
-      return w.getWidgetSearchParameters(u, {
+    const searchParameters = widgets.reduce((sp, w) => {
+      if (!w.getWidgetSearchParameters) return sp;
+      return w.getWidgetSearchParameters(sp, {
         uiState,
       });
-    }, state);
+    }, currentSearchParameters);
     return searchParameters;
   }
 
-  getAllUIStates({ state }) {
+  getAllUIStates({ searchParameters }) {
     const { widgets, helper } = this.instantSearchInstance;
-    const uiState = widgets.reduce((u, w) => {
-      if (!w.getWidgetState) return u;
-      return w.getWidgetState(u, {
-        helper,
-        state,
-      });
-    }, {});
+    const uiState = widgets.filter(w => Boolean(w.getWidgetState)).reduce(
+      (u, w) =>
+        w.getWidgetState(u, {
+          helper,
+          searchParameters,
+        }),
+      {}
+    );
 
     return uiState;
   }
@@ -143,26 +140,24 @@ export default class RoutingManager {
 
   createURL(state) {
     const uiState = this.getAllUIStates({
-      state,
+      searchParameters: state,
     });
     const route = this.stateMapping.stateToRoute(uiState);
     return this.router.createURL(route);
   }
 
   onHistoryChange(fn) {
+    const { helper } = this.instantSearchInstance;
     this.router.onUpdate(route => {
-      const helper = this.instantSearchInstance.helper;
       const uiState = this.stateMapping.routeToState(route);
       const currentUIState = this.getAllUIStates({
-        helper: this.instantSearchInstance.helper,
-        state: helper.state,
-        instantSearchInstance: this.instantSearchInstance,
+        searchParameters: helper.state,
       });
 
       if (isEqual(uiState, currentUIState)) return;
 
       const searchParameters = this.getAllSearchParameters({
-        state: helper.state,
+        currentSearchParameters: helper.state,
         instantSearchInstance: this.instantSearchInstance,
         uiState,
       });

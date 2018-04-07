@@ -437,7 +437,7 @@ describe('connectMenu', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -449,7 +449,7 @@ describe('connectMenu', () => {
         helper.toggleRefinement('category', 'pants');
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -465,7 +465,7 @@ describe('connectMenu', () => {
         };
         helper.toggleRefinement('category', 'pants');
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -481,7 +481,7 @@ describe('connectMenu', () => {
         };
         helper.toggleRefinement('category', 'pants');
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 

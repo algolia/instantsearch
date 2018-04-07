@@ -272,7 +272,7 @@ describe('connectPagination', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -284,7 +284,7 @@ describe('connectPagination', () => {
         refine(4);
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -298,7 +298,7 @@ describe('connectPagination', () => {
           page: 5,
         };
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 

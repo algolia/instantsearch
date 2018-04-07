@@ -293,34 +293,37 @@ export default function connectRange(renderFn, unmountFn) {
         return nextState;
       },
 
-      getWidgetState(fullState, { state }) {
-        const { '>=': min = '', '<=': max = '' } = state.getNumericRefinements(
-          attributeName
-        );
+      getWidgetState(uiState, { searchParameters }) {
+        const {
+          '>=': min = '',
+          '<=': max = '',
+        } = searchParameters.getNumericRefinements(attributeName);
 
         if (
           (min === '' && max === '') ||
-          (fullState &&
-            fullState.range &&
-            fullState.range[attributeName] === `${min}:${max}`)
+          (uiState &&
+            uiState.range &&
+            uiState.range[attributeName] === `${min}:${max}`)
         ) {
-          return fullState;
+          return uiState;
         }
 
         return {
-          ...fullState,
+          ...uiState,
           range: {
-            ...fullState.range,
+            ...uiState.range,
             [attributeName]: `${min}:${max}`,
           },
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         const value = uiState && uiState.range && uiState.range[attributeName];
 
         if (value && value.indexOf(':') >= 0) {
-          const clearedParams = searchParam.clearRefinements(attributeName);
+          const clearedParams = searchParameters.clearRefinements(
+            attributeName
+          );
           const [lowerBound, upperBound] = value.split(':');
           if (
             (lowerBound || lowerBound === 0) &&
@@ -343,7 +346,7 @@ export default function connectRange(renderFn, unmountFn) {
               upperBound
             );
         }
-        return searchParam;
+        return searchParameters;
       },
     };
   };

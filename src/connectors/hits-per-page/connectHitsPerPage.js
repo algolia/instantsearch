@@ -201,36 +201,36 @@ The first one will be picked, you should probably set only one default value`
         unmountFn();
       },
 
-      getWidgetState(fullState, { state }) {
-        const hitsPerPage = state.hitsPerPage;
+      getWidgetState(uiState, { searchParameters }) {
+        const hitsPerPage = searchParameters.hitsPerPage;
         if (
           (defaultValue && hitsPerPage === defaultValue.value) ||
           hitsPerPage === undefined ||
-          fullState.hitsPerPage === hitsPerPage
+          uiState.hitsPerPage === hitsPerPage
         ) {
-          return fullState;
+          return uiState;
         }
 
         return {
-          ...fullState,
+          ...uiState,
           hitsPerPage,
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         const hitsPerPage = uiState.hitsPerPage;
         if (hitsPerPage)
-          return searchParam.setQueryParameter(
+          return searchParameters.setQueryParameter(
             'hitsPerPage',
             uiState.hitsPerPage
           );
         if (defaultValue) {
-          return searchParam.setQueryParameter(
+          return searchParameters.setQueryParameter(
             'hitsPerPage',
             defaultValue.value
           );
         }
-        return searchParam.setQueryParameter('hitsPerPage', undefined);
+        return searchParameters.setQueryParameter('hitsPerPage', undefined);
       },
     };
   };

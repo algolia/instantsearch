@@ -251,47 +251,47 @@ export default function connectMenu(renderFn, unmountFn) {
         return nextState;
       },
 
-      getWidgetState(fullState, { state }) {
-        const [refinedItem] = state.getHierarchicalFacetBreadcrumb(
+      getWidgetState(uiState, { searchParameters }) {
+        const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
           attributeName
         );
 
         if (
           !refinedItem ||
-          (fullState.menu && fullState.menu[attributeName] === refinedItem)
+          (uiState.menu && uiState.menu[attributeName] === refinedItem)
         ) {
-          return fullState;
+          return uiState;
         }
 
         return {
-          ...fullState,
+          ...uiState,
           menu: {
-            ...fullState.menu,
+            ...uiState.menu,
             [attributeName]: refinedItem,
           },
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         if (uiState.menu && uiState.menu[attributeName]) {
           const uiStateRefinedItem = uiState.menu[attributeName];
-          const isAlreadyRefined = searchParam.isHierarchicalFacetRefined(
+          const isAlreadyRefined = searchParameters.isHierarchicalFacetRefined(
             attributeName,
             uiStateRefinedItem
           );
-          if (isAlreadyRefined) return searchParam;
-          return searchParam.toggleRefinement(
+          if (isAlreadyRefined) return searchParameters;
+          return searchParameters.toggleRefinement(
             attributeName,
             uiStateRefinedItem
           );
         }
-        if (searchParam.isHierarchicalFacetRefined(attributeName)) {
-          const [refinedItem] = searchParam.getHierarchicalFacetBreadcrumb(
+        if (searchParameters.isHierarchicalFacetRefined(attributeName)) {
+          const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
             attributeName
           );
-          return searchParam.toggleRefinement(attributeName, refinedItem);
+          return searchParameters.toggleRefinement(attributeName, refinedItem);
         }
-        return searchParam;
+        return searchParameters;
       },
     };
   };

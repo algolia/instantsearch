@@ -187,7 +187,7 @@ describe('connectPriceRanges', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -199,7 +199,7 @@ describe('connectPriceRanges', () => {
         refine({ from: 10, to: 20 });
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -217,7 +217,7 @@ describe('connectPriceRanges', () => {
         };
 
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -235,7 +235,7 @@ describe('connectPriceRanges', () => {
         };
 
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 

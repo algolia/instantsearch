@@ -235,7 +235,7 @@ describe('connectStarRating', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);
@@ -246,7 +246,7 @@ describe('connectStarRating', () => {
         refine('3');
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toMatchSnapshot();
@@ -258,12 +258,12 @@ describe('connectStarRating', () => {
         const uiStateBefore = widget.getWidgetState(
           {},
           {
-            state: helper.state,
+            searchParameters: helper.state,
             helper,
           }
         );
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);
@@ -303,7 +303,7 @@ describe('connectStarRating', () => {
         const uiState = widget.getWidgetState(
           {},
           {
-            state: helper.state,
+            searchParameters: helper.state,
             helper,
           }
         );

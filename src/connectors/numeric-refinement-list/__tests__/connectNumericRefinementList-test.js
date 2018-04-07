@@ -435,7 +435,7 @@ describe('connectNumericRefinementList', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -448,7 +448,7 @@ describe('connectNumericRefinementList', () => {
         helper.addNumericRefinement('numerics', '<=', 20);
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -465,7 +465,7 @@ describe('connectNumericRefinementList', () => {
         helper.addNumericRefinement('numerics', '>=', 10);
         helper.addNumericRefinement('numerics', '<=', 20);
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -482,7 +482,7 @@ describe('connectNumericRefinementList', () => {
         helper.addNumericRefinement('numerics', '>=', 10);
         helper.addNumericRefinement('numerics', '<=', 20);
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 

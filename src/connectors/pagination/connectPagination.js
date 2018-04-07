@@ -165,20 +165,20 @@ export default function connectPagination(renderFn, unmountFn) {
         unmountFn();
       },
 
-      getWidgetState(fullState, { state }) {
-        const page = state.page;
-        if (page === 0 || page + 1 === fullState.page) return fullState;
+      getWidgetState(uiState, { searchParameters }) {
+        const page = searchParameters.page;
+        if (page === 0 || page + 1 === uiState.page) return uiState;
         return {
-          ...fullState,
+          ...uiState,
           page: page + 1,
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         const uiPage = uiState.page;
         if (uiPage)
-          return searchParam.setQueryParameter('page', uiState.page - 1);
-        return searchParam.setQueryParameter('page', 0);
+          return searchParameters.setQueryParameter('page', uiState.page - 1);
+        return searchParameters.setQueryParameter('page', 0);
       },
     };
   };

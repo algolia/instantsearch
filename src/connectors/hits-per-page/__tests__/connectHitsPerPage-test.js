@@ -267,7 +267,7 @@ describe('connectHitsPerPage', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -279,7 +279,7 @@ describe('connectHitsPerPage', () => {
         helper.setQueryParameter('hitsPerPage', 3);
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -291,7 +291,7 @@ describe('connectHitsPerPage', () => {
         helper.setQueryParameter('hitsPerPage', 10);
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -305,7 +305,7 @@ describe('connectHitsPerPage', () => {
         };
         helper.setQueryParameter('hitsPerPage', 10);
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 

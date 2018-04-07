@@ -185,7 +185,7 @@ describe('connectSortBySelector', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);
@@ -196,7 +196,7 @@ describe('connectSortBySelector', () => {
         refine('priceASC');
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toMatchSnapshot();
@@ -208,12 +208,12 @@ describe('connectSortBySelector', () => {
         const uiStateBefore = widget.getWidgetState(
           {},
           {
-            state: helper.state,
+            searchParameters: helper.state,
             helper,
           }
         );
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);

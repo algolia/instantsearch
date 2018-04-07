@@ -289,7 +289,7 @@ describe('connectHierarchicalMenu', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -301,7 +301,7 @@ describe('connectHierarchicalMenu', () => {
         helper.toggleRefinement('category', 'path');
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -317,7 +317,7 @@ describe('connectHierarchicalMenu', () => {
         };
         helper.toggleRefinement('category', 'path');
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 
@@ -333,7 +333,7 @@ describe('connectHierarchicalMenu', () => {
         };
         helper.toggleRefinement('category', 'path');
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
 

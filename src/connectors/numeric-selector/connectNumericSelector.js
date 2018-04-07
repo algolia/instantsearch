@@ -160,42 +160,42 @@ export default function connectNumericSelector(renderFn, unmountFn) {
         return state.removeNumericRefinement(attributeName);
       },
 
-      getWidgetState(fullState, { state }) {
-        const currentRefinement = this._getRefinedValue(state);
+      getWidgetState(uiState, { searchParameters }) {
+        const currentRefinement = this._getRefinedValue(searchParameters);
         if (
           // Does the current state contain the current refinement?
-          (fullState.numericSelector &&
-            currentRefinement === fullState.numericSelector[attributeName]) ||
+          (uiState.numericSelector &&
+            currentRefinement === uiState.numericSelector[attributeName]) ||
           // Is the current value the first option / default value?
           currentRefinement === options[0].value
         ) {
-          return fullState;
+          return uiState;
         }
 
         if (currentRefinement || currentRefinement === 0)
           return {
-            ...fullState,
+            ...uiState,
             numericSelector: {
-              ...fullState.numericSelector,
+              ...uiState.numericSelector,
               [attributeName]: currentRefinement,
             },
           };
-        return fullState;
+        return uiState;
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         const value =
           uiState.numericSelector && uiState.numericSelector[attributeName];
-        const currentlyRefinedValue = this._getRefinedValue(searchParam);
+        const currentlyRefinedValue = this._getRefinedValue(searchParameters);
 
         if (value) {
-          if (value === currentlyRefinedValue) return searchParam;
-          return searchParam
+          if (value === currentlyRefinedValue) return searchParameters;
+          return searchParameters
             .clearRefinements(attributeName)
             .addNumericRefinement(attributeName, operator, value);
         }
 
-        return searchParam
+        return searchParameters
           .clearRefinements(attributeName)
           .addNumericRefinement(attributeName, operator, options[0].value);
       },

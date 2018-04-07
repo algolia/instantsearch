@@ -461,7 +461,7 @@ describe('connectToggle', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);
@@ -472,7 +472,7 @@ describe('connectToggle', () => {
         refine({ isRefined: false }); // refinement is based on the previous value (the one passed)
         const uiStateBefore = {};
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toMatchSnapshot();
@@ -484,12 +484,12 @@ describe('connectToggle', () => {
         const uiStateBefore = widget.getWidgetState(
           {},
           {
-            state: helper.state,
+            searchParameters: helper.state,
             helper,
           }
         );
         const uiStateAfter = widget.getWidgetState(uiStateBefore, {
-          state: helper.state,
+          searchParameters: helper.state,
           helper,
         });
         expect(uiStateAfter).toBe(uiStateBefore);

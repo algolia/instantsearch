@@ -279,46 +279,52 @@ export default function connectToggle(renderFn, unmountFn) {
         return nextState;
       },
 
-      getWidgetState(fullState, { state }) {
-        const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
+      getWidgetState(uiState, { searchParameters }) {
+        const isRefined = searchParameters.isDisjunctiveFacetRefined(
+          attributeName,
+          on
+        );
 
         if (
           !isRefined ||
-          (fullState &&
-            fullState.toggle &&
-            fullState.toggle[attributeName] === isRefined)
+          (uiState &&
+            uiState.toggle &&
+            uiState.toggle[attributeName] === isRefined)
         ) {
-          return fullState;
+          return uiState;
         }
 
         return {
-          ...fullState,
+          ...uiState,
           toggle: {
-            ...fullState.toggle,
+            ...uiState.toggle,
             [attributeName]: isRefined,
           },
         };
       },
 
-      getWidgetSearchParameters(searchParam, { uiState }) {
+      getWidgetSearchParameters(searchParameters, { uiState }) {
         const isRefined = Boolean(
           uiState.toggle && uiState.toggle[attributeName]
         );
 
         if (isRefined) {
           if (hasAnOffValue)
-            return searchParam
+            return searchParameters
               .removeDisjunctiveFacetRefinement(attributeName, off)
               .addDisjunctiveFacetRefinement(attributeName, on);
 
-          return searchParam.addDisjunctiveFacetRefinement(attributeName, on);
+          return searchParameters.addDisjunctiveFacetRefinement(
+            attributeName,
+            on
+          );
         } else {
           if (hasAnOffValue)
-            return searchParam
+            return searchParameters
               .removeDisjunctiveFacetRefinement(attributeName, on)
               .addDisjunctiveFacetRefinement(attributeName, off);
 
-          return searchParam.removeDisjunctiveFacetRefinement(
+          return searchParameters.removeDisjunctiveFacetRefinement(
             attributeName,
             on
           );
