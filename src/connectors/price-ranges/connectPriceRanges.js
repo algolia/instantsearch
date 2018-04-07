@@ -1,6 +1,8 @@
 import { checkRendering } from '../../lib/utils.js';
 import generateRanges from './generate-ranges.js';
 
+import isFinite from 'lodash/isFinite';
+
 const usage = `Usage:
 var customPriceRanges = connectPriceRanges(function render(params, isFirstRendering) {
   // params = {
@@ -257,33 +259,30 @@ export default function connectPriceRanges(renderFn, unmountFn) {
         const value =
           uiState && uiState.priceRanges && uiState.priceRanges[attributeName];
 
-        if (value && value.indexOf(':') >= 0) {
-          const clearedParams = searchParameters.clearRefinements(
-            attributeName
-          );
-          const [lowerBound, upperBound] = value.split(':');
-          if (
-            (lowerBound || lowerBound === 0) &&
-            (upperBound || upperBound === 0)
-          ) {
-            return clearedParams
-              .addNumericRefinement(attributeName, '>=', lowerBound)
-              .addNumericRefinement(attributeName, '<=', upperBound);
-          }
-          if (lowerBound || lowerBound === 0)
-            return clearedParams.addNumericRefinement(
-              attributeName,
-              '>=',
-              lowerBound
-            );
-          if (upperBound || upperBound === 0)
-            return clearedParams.addNumericRefinement(
-              attributeName,
-              '<=',
-              upperBound
-            );
+        if (!value || value.indexOf(':') === -1) {
+          return searchParameters;
         }
-        return searchParameters;
+
+        let clearedParams = searchParameters.clearRefinements(attributeName);
+        const [lowerBound, upperBound] = value.split(':').map(parseFloat);
+
+        if (isFinite(lowerBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '>=',
+            lowerBound
+          );
+        }
+
+        if (isFinite(upperBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '<=',
+            upperBound
+          );
+        }
+
+        return clearedParams;
       },
     };
   };
