@@ -1,7 +1,9 @@
 import sinon from 'sinon';
 
-import jsHelper from 'algoliasearch-helper';
-const { SearchResults, SearchParameters } = jsHelper;
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 
 import connectSortBySelector from '../connectSortBySelector.js';
 import instantSearch from '../../../lib/main.js';

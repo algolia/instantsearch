@@ -1,5 +1,7 @@
-import algoliasearchHelper from 'algoliasearch-helper';
-const { SearchResults, SearchParameters } = algoliasearchHelper;
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 import { tagConfig } from '../../../lib/escape-highlight.js';
 
 import connectRefinementList from '../connectRefinementList.js';
@@ -104,7 +106,7 @@ describe('connectRefinementList', () => {
     // test if widget is not rendered yet at this point
     expect(rendering).not.toHaveBeenCalled();
 
-    const helper = algoliasearchHelper(fakeClient, '', config);
+    const helper = jsHelper(fakeClient, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -151,11 +153,7 @@ describe('connectRefinementList', () => {
       attributeName: 'category',
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      widget.getConfiguration({})
-    );
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
@@ -197,11 +195,7 @@ describe('connectRefinementList', () => {
       showMoreLimit: 10,
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      widget.getConfiguration({})
-    );
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -247,11 +241,7 @@ describe('connectRefinementList', () => {
       limit: 1,
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      widget.getConfiguration({})
-    );
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -302,11 +292,7 @@ describe('connectRefinementList', () => {
       showMoreLimit: 10,
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      widget.getConfiguration({})
-    );
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -357,11 +343,7 @@ describe('connectRefinementList', () => {
       showMoreLimit: 10,
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      widget.getConfiguration({})
-    );
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -415,11 +397,7 @@ describe('connectRefinementList', () => {
       showMoreLimit: 3,
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      widget.getConfiguration({})
-    );
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -511,11 +489,7 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      widget.getConfiguration({})
-    );
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -592,7 +566,7 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', {
+    const helper = jsHelper(fakeClient, '', {
       ...widget.getConfiguration({}),
       maxValuesPerFacet: 3,
     });
@@ -673,11 +647,7 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = algoliasearchHelper(
-      fakeClient,
-      '',
-      widget.getConfiguration({})
-    );
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
       Promise.resolve({
@@ -776,7 +746,7 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', {
+    const helper = jsHelper(fakeClient, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
       ...tagConfig,
@@ -880,7 +850,7 @@ describe('connectRefinementList', () => {
       escapeFacetValues: true,
     });
 
-    const helper = algoliasearchHelper(fakeClient, '', {
+    const helper = jsHelper(fakeClient, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
       ...tagConfig,
@@ -988,7 +958,7 @@ describe('connectRefinementList', () => {
       });
 
       const initialConfig = widget.getConfiguration({}, {});
-      const helper = algoliasearchHelper(fakeClient, '', initialConfig);
+      const helper = jsHelper(fakeClient, '', initialConfig);
       helper.search = jest.fn();
 
       widget.init({

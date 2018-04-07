@@ -1,5 +1,7 @@
-import jsHelper from 'algoliasearch-helper';
-const { SearchResults, SearchParameters } = jsHelper;
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 
 import connectNumericSelector from '../connectNumericSelector.js';
 
