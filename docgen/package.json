@@ -66,6 +66,6 @@
     "webpack": "3.11.0",
     "webpack-bundle-analyzer": "2.11.1",
     "webpack-dev-middleware": "2.0.6",
-    "webpack-hot-middleware": "2.21.2"
+    "webpack-hot-middleware": "2.22.0"
   }
 }
