@@ -155,7 +155,7 @@ const renderer = (
     return;
   }
 
-  if (!items.length && !isRefinedWithMap()) {
+  if (!items.length && !isRefinedWithMap() && !hasMapMoveSinceLastRefine()) {
     const initialMapPosition = position || initialPosition;
 
     renderState.isUserInteraction = false;
