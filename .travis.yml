@@ -10,7 +10,6 @@ addons:
 before_install:
 - git config --global user.email "algobot@users.noreply.github.com"
 - git config --global user.name "algobot"
-script: "./scripts/test-ci.sh"
 branches:
   only:
   - master
@@ -20,7 +19,13 @@ branches:
 sudo: false
 cache:
   yarn: true
+script:
+  - "./scripts/${SCRIPT}"
 env:
+  matrix:
+  - SCRIPT=ci/functional-test.sh
+  - SCRIPT=ci/unit-test.sh
+  - SCRIPT=validate-commit-msgs.sh
   global:
   - CXX=g++-4.8
   - SAUCE_USERNAME=isjs
