@@ -1054,6 +1054,55 @@ describe('connectRange', () => {
         // Applying empty parameters on an empty should return the same search parameters
         expect(searchParametersAfter).toBe(searchParametersBefore);
       });
+
+      test('should keep the unmodified value (max modified)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), and the URL is empty
+        const uiState = {
+          range: {
+            price: '10:20',
+          },
+        };
+        refine([10, 25]);
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying empty parameters on an empty should return the same search parameters
+        expect(
+          searchParametersAfter.getNumericRefinement('price', '>=')[0]
+        ).toBe(10);
+        expect(
+          searchParametersAfter.getNumericRefinement('price', '<=')[0]
+        ).toBe(20);
+      });
+
+      test('should keep the unmodified value (min modified)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), and the URL is empty
+        const uiState = {
+          range: {
+            price: '10:20',
+          },
+        };
+        refine([15, 20]);
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying empty parameters on an empty should return the same search parameters
+        expect(
+          searchParametersAfter.getNumericRefinement('price', '>=')[0]
+        ).toBe(10);
+        expect(
+          searchParametersAfter.getNumericRefinement('price', '<=')[0]
+        ).toBe(20);
+      });
+
       test('should add the refinements according to the UI state provided (min and max)', () => {
         const [widget, helper] = getInitializedWidget();
         // The user presses back (browser), and the URL contains a min and a max

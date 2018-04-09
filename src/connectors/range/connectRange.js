@@ -338,7 +338,7 @@ export default function connectRange(renderFn, unmountFn) {
           return searchParameters;
         }
 
-        if (isFinite(lowerBound) && !previousMin.includes(lowerBound)) {
+        if (isFinite(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attributeName,
             '>=',
@@ -346,7 +346,7 @@ export default function connectRange(renderFn, unmountFn) {
           );
         }
 
-        if (isFinite(upperBound) && !previousMax.includes(upperBound)) {
+        if (isFinite(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attributeName,
             '<=',
