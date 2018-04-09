@@ -371,7 +371,7 @@ Usage: instantsearch({
   }
 }
 
-function enhanceConfiguration(searchParametersFromUrl) {
+export function enhanceConfiguration(searchParametersFromUrl) {
   return (configuration, widgetDefinition) => {
     if (!widgetDefinition.getConfiguration) return configuration;
 
