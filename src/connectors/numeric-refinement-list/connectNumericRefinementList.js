@@ -1,4 +1,5 @@
 import includes from 'lodash/includes';
+import _isFinite from 'lodash/isFinite';
 
 import { checkRendering } from '../../lib/utils.js';
 
@@ -213,42 +214,41 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const clearedParams = searchParameters.clearRefinements(attributeName);
+        let clearedParams = searchParameters.clearRefinements(attributeName);
         const value =
           uiState.numericRefinementList &&
           uiState.numericRefinementList[attributeName];
-        if (value) {
-          const valueAsEqual = value.indexOf(':') === -1 && value;
 
-          if (valueAsEqual) {
-            return clearedParams.addNumericRefinement(
-              attributeName,
-              '=',
-              valueAsEqual
-            );
-          }
+        if (!value) {
+          return clearedParams;
+        }
 
-          const [lowerBound, upperBound] = value.split(':');
-          if (
-            (lowerBound || lowerBound === 0) &&
-            (upperBound || upperBound === 0)
-          ) {
-            return clearedParams
-              .addNumericRefinement(attributeName, '>=', lowerBound)
-              .addNumericRefinement(attributeName, '<=', upperBound);
-          }
-          if (lowerBound || lowerBound === 0)
-            return clearedParams.addNumericRefinement(
-              attributeName,
-              '>=',
-              lowerBound
-            );
-          if (upperBound || upperBound === 0)
-            return clearedParams.addNumericRefinement(
-              attributeName,
-              '<=',
-              upperBound
-            );
+        const valueAsEqual = value.indexOf(':') === -1 && value;
+
+        if (valueAsEqual) {
+          return clearedParams.addNumericRefinement(
+            attributeName,
+            '=',
+            valueAsEqual
+          );
+        }
+
+        const [lowerBound, upperBound] = value.split(':').map(parseFloat);
+
+        if (_isFinite(lowerBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '>=',
+            lowerBound
+          );
+        }
+
+        if (_isFinite(upperBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '<=',
+            upperBound
+          );
         }
 
         return clearedParams;
