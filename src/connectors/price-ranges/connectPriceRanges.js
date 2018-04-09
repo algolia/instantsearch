@@ -277,7 +277,7 @@ export default function connectPriceRanges(renderFn, unmountFn) {
           return searchParameters;
         }
 
-        if (isFinite(lowerBound) && !previousMin.includes(lowerBound)) {
+        if (isFinite(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attributeName,
             '>=',
@@ -285,7 +285,7 @@ export default function connectPriceRanges(renderFn, unmountFn) {
           );
         }
 
-        if (isFinite(upperBound) && !previousMax.includes(upperBound)) {
+        if (isFinite(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
             attributeName,
             '<=',
