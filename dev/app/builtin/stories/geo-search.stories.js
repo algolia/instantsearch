@@ -750,5 +750,29 @@ export default () => {
           ],
         }
       )
+    )
+    .add(
+      'without results',
+      wrapWithHitsAndConfiguration(
+        (container, start) =>
+          injectGoogleMaps(() => {
+            container.style.height = '600px';
+
+            window.search.addWidget(
+              instantsearch.widgets.geoSearch({
+                googleReference: window.google,
+                container,
+                initialPosition,
+                initialZoom,
+                paddingBoundingBox,
+              })
+            );
+
+            start();
+          }),
+        {
+          query: 'dsdsdsds',
+        }
+      )
     );
 };
