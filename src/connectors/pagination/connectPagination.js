@@ -164,6 +164,22 @@ export default function connectPagination(renderFn, unmountFn) {
       dispose() {
         unmountFn();
       },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const page = searchParameters.page;
+        if (page === 0 || page + 1 === uiState.page) return uiState;
+        return {
+          ...uiState,
+          page: page + 1,
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const uiPage = uiState.page;
+        if (uiPage)
+          return searchParameters.setQueryParameter('page', uiState.page - 1);
+        return searchParameters.setQueryParameter('page', 0);
+      },
     };
   };
 }

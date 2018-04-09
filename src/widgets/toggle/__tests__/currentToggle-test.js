@@ -4,6 +4,8 @@ import currentToggle from '../toggle.js';
 import defaultTemplates from '../defaultTemplates.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
+import jsHelper from 'algoliasearch-helper';
+
 describe('currentToggle()', () => {
   describe('good usage', () => {
     let ReactDOM;
@@ -215,6 +217,7 @@ describe('currentToggle()', () => {
               { name: '5', count: 1, isRefined: false },
             ]),
         };
+
         widget = currentToggle({
           container: containerNode,
           attributeName,
@@ -225,10 +228,19 @@ describe('currentToggle()', () => {
           },
           collapsible,
         });
-        widget.getConfiguration();
-        widget.init({ state, helper, createURL, instantSearchInstance });
-        widget.render({ results, helper, state });
-        widget.render({ results, helper, state });
+
+        const config = widget.getConfiguration();
+        const altHelper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+        altHelper.search = () => {};
+
+        widget.init({
+          state: altHelper.state,
+          helper: altHelper,
+          createURL,
+          instantSearchInstance,
+        });
+        widget.render({ results, helper: altHelper, state });
+        widget.render({ results, helper: altHelper, state });
 
         props = {
           facetValues: [
@@ -249,11 +261,12 @@ describe('currentToggle()', () => {
         expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
 
         widget.toggleRefinement({ isRefined: true });
+
         expect(
-          helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 5)
-        ).toBe(true);
+          altHelper.state.isDisjunctiveFacetRefined(attributeName, 5)
+        ).toBe(false);
         expect(
-          helper.addDisjunctiveFacetRefinement.calledWith(attributeName, '\\-2')
+          altHelper.state.isDisjunctiveFacetRefined(attributeName, '\\-2')
         ).toBe(true);
       });
 
@@ -456,25 +469,29 @@ describe('currentToggle()', () => {
             label,
             values: userValues,
           });
-          widget.getConfiguration();
-          const state = {
-            isDisjunctiveFacetRefined: sinon.stub().returns(false),
-          };
+
+          const config = widget.getConfiguration();
+          const altHelper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+          altHelper.search = () => {};
+
           const createURL = () => '#';
-          widget.init({ state, helper, createURL, instantSearchInstance });
+
+          widget.init({
+            state: altHelper.state,
+            helper: altHelper,
+            createURL,
+            instantSearchInstance,
+          });
 
           // When
           toggleOn();
 
           // Then
           expect(
-            helper.removeDisjunctiveFacetRefinement.calledWith(
-              attributeName,
-              'off'
-            )
-          ).toBe(true);
+            altHelper.state.isDisjunctiveFacetRefined(attributeName, 'off')
+          ).toBe(false);
           expect(
-            helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'on')
+            altHelper.state.isDisjunctiveFacetRefined(attributeName, 'on')
           ).toBe(true);
         });
 
@@ -525,20 +542,20 @@ describe('currentToggle()', () => {
           label,
           values: userValues,
         });
-        widget.getConfiguration();
-        const state = {
-          isDisjunctiveFacetRefined: sinon.stub().returns(false),
-        };
-        const helper = {
-          addDisjunctiveFacetRefinement: sinon.spy(),
-        };
+        const config = widget.getConfiguration();
+        const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
 
         // When
-        widget.init({ state, helper, createURL, instantSearchInstance });
+        widget.init({
+          state: helper.state,
+          helper,
+          createURL,
+          instantSearchInstance,
+        });
 
         // Then
         expect(
-          helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'off')
+          helper.state.isDisjunctiveFacetRefined(attributeName, 'off')
         ).toBe(true);
       });
 

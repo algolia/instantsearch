@@ -1,7 +1,11 @@
 import sinon from 'sinon';
-import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
+
 import connectNumericRefinementList from '../connectNumericRefinementList.js';
+
 const fakeClient = { addAlgoliaAgent: () => {} };
 
 const encodeValue = (start, end) =>
@@ -398,5 +402,249 @@ describe('connectNumericRefinementList', () => {
     refine(items[0].value);
 
     expect(helper.state.page).toBe(0);
+  });
+
+  describe('routing', () => {
+    const getInitializedWidget = () => {
+      const rendering = jest.fn();
+      const makeWidget = connectNumericRefinementList(rendering);
+      const widget = makeWidget({
+        attributeName: 'numerics',
+        options: [
+          { name: 'below 10', end: 10 },
+          { name: '10 - 20', start: 10, end: 20 },
+          { name: 'more than 20', start: 20 },
+        ],
+      });
+
+      const helper = jsHelper({ addAlgoliaAgent: () => {} }, '');
+      helper.search = () => {};
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      return [widget, helper, refine];
+    };
+
+    describe('getWidgetState', () => {
+      test('should give back the object unmodified if there are no refinements', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      test('should add an entry equal to the refinement (equal)', () => {
+        const [widget, helper] = getInitializedWidget();
+        helper.addNumericRefinement('numerics', '=', 20);
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should add an entry equal to the refinement (range)', () => {
+        const [widget, helper] = getInitializedWidget();
+        helper.addNumericRefinement('numerics', '>=', 10);
+        helper.addNumericRefinement('numerics', '<=', 20);
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should add an entry equal to the refinement (only min)', () => {
+        const [widget, helper] = getInitializedWidget();
+        helper.addNumericRefinement('numerics', '>=', 10);
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should add an entry equal to the refinement (only max)', () => {
+        const [widget, helper] = getInitializedWidget();
+        helper.addNumericRefinement('numerics', '<=', 20);
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should not override other values in the same namespace', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {
+          numericRefinementList: {
+            'numerics-2': '27:36',
+          },
+        };
+        helper.addNumericRefinement('numerics', '>=', 10);
+        helper.addNumericRefinement('numerics', '<=', 20);
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should give back the object unmodified if refinements are already set', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {
+          numericRefinementList: {
+            numerics: '10:20',
+          },
+        };
+        helper.addNumericRefinement('numerics', '>=', 10);
+        helper.addNumericRefinement('numerics', '<=', 20);
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      test('should return the same SP if there are no refinements in the UI state', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The URL contains no parameters
+        const uiState = {};
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying empty parameters should yield the previous object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should add the refinements according to the UI state provided (only min)', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The URL state has some parameters
+        const uiState = {
+          numericRefinementList: {
+            numerics: '10:',
+          },
+        };
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // The new search state should have the new parameters
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '>=')[0]
+        ).toBe(10);
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '=')
+        ).toBeUndefined();
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '<=')
+        ).toBeUndefined();
+      });
+      test('should add the refinements according to the UI state provided (only max)', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The URL state has some parameters
+        const uiState = {
+          numericRefinementList: {
+            numerics: ':20',
+          },
+        };
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // The new search state should have the new parameters
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '<=')[0]
+        ).toBe(20);
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '=')
+        ).toBeUndefined();
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '>=')
+        ).toBeUndefined();
+      });
+
+      test('should add the refinements according to the UI state provided (range)', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The URL state has some parameters
+        const uiState = {
+          numericRefinementList: {
+            numerics: '10:20',
+          },
+        };
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // The new search state should have the new parameters
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '>=')[0]
+        ).toBe(10);
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '<=')[0]
+        ).toBe(20);
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '=')
+        ).toBeUndefined();
+      });
+
+      test('should add the refinements according to the UI state provided', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The URL state has some parameters
+        const uiState = {
+          numericRefinementList: {
+            numerics: '10',
+          },
+        };
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // The new search state should have the new parameters
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '=')[0]
+        ).toBe(10);
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '>=')
+        ).toBeUndefined();
+        expect(
+          searchParametersAfter.getNumericRefinement('numerics', '<=')
+        ).toBeUndefined();
+      });
+    });
   });
 });

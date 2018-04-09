@@ -12,9 +12,17 @@ import version from './version.js';
 import * as connectors from '../connectors/index.js';
 import * as widgets from '../widgets/index.js';
 
+import * as routers from './routers/index.js';
+import * as stateMappings from './stateMappings/index.js';
+
 /**
  * @external SearchParameters
  * @see https://www.algolia.com/doc/api-reference/search-api-parameters/
+ */
+
+/**
+ * @external InstantSearch
+ * @see /instantsearch.html
  */
 
 /**
@@ -36,6 +44,42 @@ import * as widgets from '../widgets/index.js';
  * @property {function} [getHistoryState] Pass this function to override the
  * default history API state we set to `null`. For example this could be used to force passing
  * {turbolinks: true} to the history API every time we update it.
+ */
+
+/**
+ * @typedef {Object} RouterOptions
+ * @property {Router} [router=HistoryRouter()] The router is the part that will save the UI State.
+ * By default, it uses an instance of the HistoryRouter with the default parameters.
+ * @property {StateMapping} [stateMapping=SimpleStateMapping()] This object transforms the UI state into
+ * the object that willl be saved by the router.
+ */
+
+/**
+ * The state mapping is a way to customize the structure before sending it to the router. It can transform
+ * and filter out the properties. To work correctly, for any state ui S, the following should be valid:
+ * `S = routeToState(stateToRoute(S))`.
+ * @typedef {Object} StateMapping
+ * @property {function} stateToRoute transforms an UI state representation into a route object.
+ * It receives an object that contains the UI State of all the widget in the page. It should
+ * return an object of any form. As long as this form can be read by the `routeToState`.
+ * @property {function} routeToState transforms route object into an UI state representation.
+ * It receives an object that contains the UI State stored by the router. The format is the output
+ * of `stateToRoute`.
+ */
+
+/**
+ * The router is the part that saves and reads the object from the storage (most of the time the URL).
+ * @typedef {Object} Router
+ * @property {function} onUpdate sets an event listener that is triggered when the storage is updated.
+ * The function should accept a callback to trigger when the update happens. In the case of the history
+ * / URL in a browser, the callback will be called by `onPopState`.
+ * @property {function} read reads the storage and gets a route object. It does not take parameters,
+ * and should return an object.
+ * @property {function} write push a route object into a storage. Takes the UI state mapped by the state
+ * mapping configured in the mapping.
+ * @property {function} createURL transforms a route object into a URL. It receives an object and should
+ * return a string. It may return an empty string.
+ * @property {function} dispose cleans up any event listeners.
  */
 
 /**
@@ -67,6 +111,8 @@ import * as widgets from '../widgets/index.js';
  * @property {boolean|UrlSyncOptions} [urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
  * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
+ * @property {RouterOptions} [router] the router configuration used to save the UI State into the URL or
+ * any client side persistence.
  */
 
 /**
@@ -88,6 +134,8 @@ import * as widgets from '../widgets/index.js';
  */
 const instantsearch = toFactory(InstantSearch);
 
+instantsearch.routers = routers;
+instantsearch.stateMappings = stateMappings;
 instantsearch.createQueryString =
   algoliasearchHelper.url.getQueryStringFromState;
 instantsearch.connectors = connectors;

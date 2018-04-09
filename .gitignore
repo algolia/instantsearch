@@ -14,3 +14,5 @@ functional-tests/screenshots/
 
 # Ignore ES6 build files
 es/
+
+yarn-error.log

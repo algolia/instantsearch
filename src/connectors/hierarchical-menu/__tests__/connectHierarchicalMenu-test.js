@@ -2,6 +2,7 @@ import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
+const SearchParameters = jsHelper.SearchParameters;
 
 import connectHierarchicalMenu from '../connectHierarchicalMenu.js';
 
@@ -254,5 +255,124 @@ describe('connectHierarchicalMenu', () => {
         data: null,
       },
     ]);
+  });
+
+  describe('routing', () => {
+    const getInitializedWidget = () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
+      const widget = makeWidget({
+        attributes: ['category', 'subCategory'],
+      });
+
+      const helper = jsHelper(
+        { addAlgoliaAgent: () => {} },
+        '',
+        widget.getConfiguration({})
+      );
+      helper.search = sinon.stub();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      return [widget, helper, refine];
+    };
+
+    describe('getWidgetState', () => {
+      test('should give back the object unmodified if there are no refinements', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      test('should add an entry equal to the refinement', () => {
+        const [widget, helper] = getInitializedWidget();
+        helper.toggleRefinement('category', 'path');
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should not overide other entries in the same namespace', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {
+          hierarchicalMenu: {
+            otherCategory: ['path'],
+          },
+        };
+        helper.toggleRefinement('category', 'path');
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should give back the object unmodified if refinements are already set', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {
+          hierarchicalMenu: {
+            category: ['path'],
+          },
+        };
+        helper.toggleRefinement('category', 'path');
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      test('should return the same SP if there are no refinements in the UI state', () => {
+        const [widget, helper] = getInitializedWidget();
+        // User presses back in the browser and the URL state contains no parameters
+        const uiState = {};
+        // The current state is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying an empty UI state should not change the object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should add the refinements according to the UI state provided', () => {
+        const [widget, helper] = getInitializedWidget();
+        // User presses back in the browser, and the URL contains the following:
+        const uiState = {
+          hierarchicalMenu: {
+            category: ['path'],
+          },
+        };
+        // The current state is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        // The state after the UI is applied on it
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+    });
   });
 });

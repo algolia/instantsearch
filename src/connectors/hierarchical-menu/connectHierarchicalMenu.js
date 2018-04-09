@@ -213,6 +213,43 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
 
         return nextState;
       },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const path = searchParameters.getHierarchicalFacetBreadcrumb(
+          hierarchicalFacetName
+        );
+        if (!path || path.length === 0) return uiState;
+        if (
+          uiState.hierarchicalMenu &&
+          isEqual(path, uiState.hierarchicalMenu[hierarchicalFacetName])
+        ) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          hierarchicalMenu: {
+            ...uiState.hierarchicalMenu,
+            [hierarchicalFacetName]: path,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        if (
+          uiState.hierarchicalMenu &&
+          uiState.hierarchicalMenu[hierarchicalFacetName]
+        ) {
+          return searchParameters
+            .clearRefinements(hierarchicalFacetName)
+            .toggleRefinement(
+              hierarchicalFacetName,
+              uiState.hierarchicalMenu[hierarchicalFacetName].join(separator)
+            );
+        } else {
+          return searchParameters;
+        }
+      },
     };
   };
 }

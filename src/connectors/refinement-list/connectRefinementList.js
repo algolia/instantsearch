@@ -1,5 +1,6 @@
 import { checkRendering } from '../../lib/utils.js';
 import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
+import isEqual from 'lodash/isEqual';
 
 const usage = `Usage:
 var customRefinementList = connectRefinementList(function render(params) {
@@ -408,6 +409,42 @@ export default function connectRefinementList(renderFn, unmountFn) {
             .removeDisjunctiveFacetRefinement(attributeName)
             .removeDisjunctiveFacet(attributeName);
         }
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const values =
+          operator === 'or'
+            ? searchParameters.getDisjunctiveRefinements(attributeName)
+            : searchParameters.getConjunctiveRefinements(attributeName);
+
+        if (
+          values.length === 0 ||
+          (uiState.refinementList &&
+            isEqual(values, uiState.refinementList[attributeName]))
+        ) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          refinementList: {
+            ...uiState.refinementList,
+            [attributeName]: values,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const values =
+          uiState.refinementList && uiState.refinementList[attributeName];
+        if (values === undefined) return searchParameters;
+        return values.reduce(
+          (sp, v) =>
+            operator === 'or'
+              ? sp.addDisjunctiveFacetRefinement(attributeName, v)
+              : sp.addFacetRefinement(attributeName, v),
+          searchParameters.clearRefinements(attributeName)
+        );
       },
     };
   };
