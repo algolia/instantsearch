@@ -164,11 +164,7 @@ describe('RoutingManager', () => {
   });
 
   describe('within instantsearch', () => {
-    test('should write in the router on searchParameters change', () => {
-      let done;
-      const p = new Promise(resolve => {
-        done = resolve;
-      });
+    test('should write in the router on searchParameters change', done => {
       let onUpdateCallback; // eslint-disable-line
       const router = {
         write: jest.fn(),
@@ -214,15 +210,9 @@ describe('RoutingManager', () => {
 
         done();
       });
-
-      return p;
     });
 
-    test('should update the searchParameters on router state update', () => {
-      let done;
-      const p = new Promise(resolve => {
-        done = resolve;
-      });
+    test('should update the searchParameters on router state update', done => {
       let onRouterUpdateCallback;
       const router = {
         write: jest.fn(),
@@ -267,8 +257,6 @@ describe('RoutingManager', () => {
           done();
         });
       });
-
-      return p;
     });
   });
 });
