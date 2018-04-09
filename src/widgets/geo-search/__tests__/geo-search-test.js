@@ -947,6 +947,60 @@ describe('GeoSearch', () => {
       expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
     });
+
+    it('expect to not init the position when the map has moved', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const mapInstance = createFakeMapInstance();
+      const googleReference = createFakeGoogleReference({ mapInstance });
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        enableRefineOnMapMove: false,
+        initialZoom: 8,
+        initialPosition: {
+          lat: 10,
+          lng: 12,
+        },
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      simulateMapReadyEvent(googleReference);
+
+      expect(mapInstance.setCenter).not.toHaveBeenCalled();
+      expect(mapInstance.setZoom).not.toHaveBeenCalled();
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [{ objectID: 123, _geoloc: true }],
+        },
+      });
+
+      // Simulate a refinement
+      simulateEvent(mapInstance, 'dragstart');
+      simulateEvent(mapInstance, 'center_changed');
+      simulateEvent(mapInstance, 'idle');
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [],
+        },
+      });
+
+      expect(mapInstance.setCenter).not.toHaveBeenCalled();
+      expect(mapInstance.setZoom).not.toHaveBeenCalled();
+    });
   });
 
   describe('markers creation', () => {
