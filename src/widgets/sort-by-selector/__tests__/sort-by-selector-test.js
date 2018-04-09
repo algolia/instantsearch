@@ -3,6 +3,10 @@ import expect from 'expect';
 import sortBySelector from '../sort-by-selector';
 import Selector from '../../../components/Selector';
 
+import instantSearch from '../../../lib/main.js';
+
+const fakeClient = { addAlgoliaAgent: () => {} };
+
 describe('sortBySelector call', () => {
   it('throws an exception when no options', () => {
     const container = document.createElement('div');
@@ -26,6 +30,12 @@ describe('sortBySelector()', () => {
   let autoHideContainer;
 
   beforeEach(() => {
+    const instantSearchInstance = instantSearch({
+      apiKey: '',
+      appId: '',
+      indexName: 'defaultIndex',
+      createAlgoliaClient: () => fakeClient,
+    });
     autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = { render: sinon.spy() };
 
@@ -53,7 +63,7 @@ describe('sortBySelector()', () => {
       hits: [],
       nbHits: 0,
     };
-    widget.init({ helper });
+    widget.init({ helper, instantSearchInstance });
   });
 
   it("doesn't configure anything", () => {

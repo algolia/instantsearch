@@ -1,6 +1,8 @@
 import { checkRendering } from '../../lib/utils.js';
 import generateRanges from './generate-ranges.js';
 
+import isFinite from 'lodash/isFinite';
+
 const usage = `Usage:
 var customPriceRanges = connectPriceRanges(function render(params, isFirstRendering) {
   // params = {
@@ -227,6 +229,71 @@ export default function connectPriceRanges(renderFn, unmountFn) {
           .removeFacet(attributeName);
 
         return nextState;
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const {
+          '>=': min = '',
+          '<=': max = '',
+        } = searchParameters.getNumericRefinements(attributeName);
+
+        if (
+          (min === '' && max === '') ||
+          (uiState &&
+            uiState.priceRanges &&
+            uiState.priceRanges[attributeName] === `${min}:${max}`)
+        ) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          priceRanges: {
+            ...uiState.priceRanges,
+            [attributeName]: `${min}:${max}`,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const value =
+          uiState && uiState.priceRanges && uiState.priceRanges[attributeName];
+
+        if (!value || value.indexOf(':') === -1) {
+          return searchParameters;
+        }
+
+        const {
+          '>=': previousMin = [NaN],
+          '<=': previousMax = [NaN],
+        } = searchParameters.getNumericRefinements(attributeName);
+        let clearedParams = searchParameters.clearRefinements(attributeName);
+        const [lowerBound, upperBound] = value.split(':').map(parseFloat);
+
+        if (
+          previousMin.includes(lowerBound) &&
+          previousMax.includes(upperBound)
+        ) {
+          return searchParameters;
+        }
+
+        if (isFinite(lowerBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '>=',
+            lowerBound
+          );
+        }
+
+        if (isFinite(upperBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '<=',
+            upperBound
+          );
+        }
+
+        return clearedParams;
       },
     };
   };

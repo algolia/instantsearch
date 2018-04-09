@@ -151,6 +151,23 @@ export default function connectSearchBox(renderFn, unmountFn) {
         unmountFn();
         return state.setQuery('');
       },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const query = searchParameters.query;
+
+        if (query === '' || (uiState && uiState.query === query)) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          query,
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        return searchParameters.setQuery(uiState.query || '');
+      },
     };
   };
 }

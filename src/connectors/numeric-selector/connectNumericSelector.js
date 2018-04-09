@@ -111,7 +111,7 @@ export default function connectNumericSelector(renderFn, unmountFn) {
           return {
             numericRefinements: {
               [attributeName]: {
-                [operator]: [this._getRefinedValue(searchParametersFromUrl)],
+                [operator]: [value],
               },
             },
           };
@@ -158,6 +158,46 @@ export default function connectNumericSelector(renderFn, unmountFn) {
       dispose({ state }) {
         unmountFn();
         return state.removeNumericRefinement(attributeName);
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const currentRefinement = this._getRefinedValue(searchParameters);
+        if (
+          // Does the current state contain the current refinement?
+          (uiState.numericSelector &&
+            currentRefinement === uiState.numericSelector[attributeName]) ||
+          // Is the current value the first option / default value?
+          currentRefinement === options[0].value
+        ) {
+          return uiState;
+        }
+
+        if (currentRefinement || currentRefinement === 0)
+          return {
+            ...uiState,
+            numericSelector: {
+              ...uiState.numericSelector,
+              [attributeName]: currentRefinement,
+            },
+          };
+        return uiState;
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const value =
+          uiState.numericSelector && uiState.numericSelector[attributeName];
+        const currentlyRefinedValue = this._getRefinedValue(searchParameters);
+
+        if (value) {
+          if (value === currentlyRefinedValue) return searchParameters;
+          return searchParameters
+            .clearRefinements(attributeName)
+            .addNumericRefinement(attributeName, operator, value);
+        }
+
+        return searchParameters
+          .clearRefinements(attributeName)
+          .addNumericRefinement(attributeName, operator, options[0].value);
       },
 
       _getRefinedValue(state) {

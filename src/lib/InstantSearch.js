@@ -8,8 +8,16 @@ import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
 import urlSyncWidget from './url-sync.js';
+import RoutingManager from './RoutingManager.js';
+import simpleMapping from './stateMappings/simple.js';
+import historyRouter from './routers/history.js';
 import version from './version.js';
 import createHelpers from './createHelpers.js';
+
+const ROUTING_DEFAULT_OPTIONS = {
+  stateMapping: simpleMapping(),
+  router: historyRouter(),
+};
 
 function defaultCreateURL() {
   return '#';
@@ -40,6 +48,7 @@ class InstantSearch extends EventEmitter {
     numberLocale,
     searchParameters = {},
     urlSync = null,
+    routing = null,
     searchFunction,
     createAlgoliaClient = defaultCreateAlgoliaClient,
     stalledSearchDelay = 200,
@@ -73,7 +82,19 @@ Usage: instantsearch({
       this._searchFunction = searchFunction;
     }
 
+    if (urlSync && routing) {
+      throw new Error(
+        'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
+      );
+    }
+
     this.urlSync = urlSync === true ? {} : urlSync;
+    if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
+    else if (isPlainObject(routing))
+      this.routing = {
+        ...ROUTING_DEFAULT_OPTIONS,
+        ...routing,
+      };
   }
 
   /**
@@ -193,10 +214,16 @@ Usage: instantsearch({
       }
     });
 
-    // no need to trigger a search if we don't have any widgets left
-    if (this.widgets.length > 0) {
-      this.helper.search();
-    }
+    // If there's multiple call to `removeWidget()` let's wait until they are all made
+    // and then check for widgets.length & make a search on next tick
+    //
+    // This solves an issue where you unmount a page and removing widget by widget
+    setTimeout(() => {
+      // no need to trigger a search if we don't have any widgets left
+      if (this.widgets.length > 0) {
+        this.helper.search();
+      }
+    }, 0);
   }
 
   /**
@@ -234,6 +261,17 @@ Usage: instantsearch({
       this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
       this.widgets.push(syncWidget);
       searchParametersFromUrl = syncWidget.searchParametersFromUrl;
+    } else if (this.routing) {
+      const routingManager = new RoutingManager({
+        ...this.routing,
+        instantSearchInstance: this,
+      });
+      this._onHistoryChange = routingManager.onHistoryChange.bind(
+        routingManager
+      );
+      this._createURL = routingManager.createURL.bind(routingManager);
+      this._createAbsoluteURL = this._createURL;
+      this.widgets.push(routingManager);
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
@@ -365,7 +403,7 @@ Usage: instantsearch({
   }
 }
 
-function enhanceConfiguration(searchParametersFromUrl) {
+export function enhanceConfiguration(searchParametersFromUrl) {
   return (configuration, widgetDefinition) => {
     if (!widgetDefinition.getConfiguration) return configuration;
 

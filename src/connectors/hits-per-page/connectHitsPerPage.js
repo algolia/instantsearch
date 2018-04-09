@@ -1,4 +1,5 @@
 import some from 'lodash/some';
+import find from 'lodash/find';
 
 import { checkRendering } from '../../lib/utils.js';
 
@@ -125,6 +126,8 @@ The first one will be picked, you should probably set only one default value`
       );
     }
 
+    const defaultValue = find(userItems, item => item.default === true);
+
     return {
       getConfiguration() {
         return defaultValues.length > 0
@@ -196,6 +199,38 @@ The first one will be picked, you should probably set only one default value`
 
       dispose() {
         unmountFn();
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const hitsPerPage = searchParameters.hitsPerPage;
+        if (
+          (defaultValue && hitsPerPage === defaultValue.value) ||
+          hitsPerPage === undefined ||
+          uiState.hitsPerPage === hitsPerPage
+        ) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          hitsPerPage,
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const hitsPerPage = uiState.hitsPerPage;
+        if (hitsPerPage)
+          return searchParameters.setQueryParameter(
+            'hitsPerPage',
+            uiState.hitsPerPage
+          );
+        if (defaultValue) {
+          return searchParameters.setQueryParameter(
+            'hitsPerPage',
+            defaultValue.value
+          );
+        }
+        return searchParameters.setQueryParameter('hitsPerPage', undefined);
       },
     };
   };

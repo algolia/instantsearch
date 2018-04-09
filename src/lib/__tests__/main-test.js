@@ -6,7 +6,9 @@ describe('instantsearch()', () => {
   // to ensure the global.window is set
 
   it('includes a version', () => {
-    expect(instantsearch.version).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+    expect(instantsearch.version).toMatch(
+      /^(\d+\.)?(\d+\.)?(\*|\d+)(-beta.\d+)?$/
+    );
   });
 
   it('statically creates a URL', () => {

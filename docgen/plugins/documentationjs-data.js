@@ -59,8 +59,7 @@ export default function({rootJSFile}) {
       metalsmith.metadata().widgetSymbols = groupSymbolsByCategories(filterSymbolsByType('WidgetFactory', mdFormattedSymbols));
 
       console.log('after documentationjs');
-      done();
-    }, (e) => done);
+    }, e => {throw e}).catch(e => console.error(e)).finally(done);
   };
 }
 
@@ -74,7 +73,13 @@ function findInstantSearchFactory(symbols) {
 
 function filterSymbolsByType(type, symbols) {
   return filter(symbols, (s) => {
-    const index = findIndex(s.tags, t => t.title === 'type' && t.type.name === type);
+    const index = findIndex(s.tags, t => {
+      const isTypeTag = t.title === 'type';
+      if(isTypeTag && !(t.type && t.type.name)) {
+        throw new Error('Wrong jsdoc definition for @type in symbol: \n' + JSON.stringify(s, null, 2));
+      }
+      return isTypeTag && t.type.name === type;
+    });
     return index !== -1;
   });
 }
@@ -198,7 +203,7 @@ function findRelatedTypes(functionSymbol, symbols) {
     } else {
       if (isCustomType(p.name)) {
         const typeSymbol = find(symbols, {name: p.name});
-        if(!typeSymbol) console.warn('Undefined type: ', p.name);
+        if(!typeSymbol) console.warn('Undefined type: ', p.name, JSON.stringify(functionSymbol, null, 2));
         else {
           types = [...types, typeSymbol];
           // iterate over each property to get their types
@@ -206,7 +211,7 @@ function findRelatedTypes(functionSymbol, symbols) {
         }
       } else if(isCustomType(p.type.name)){
         const typeSymbol = find(symbols, {name: p.type.name});
-        if(!typeSymbol) console.warn('Undefined type: ', p.type.name);
+        if(!typeSymbol) console.warn('Undefined type: ', p.type.name, JSON.stringify(functionSymbol, null, 2));
         else {
           types = [...types, typeSymbol];
           // iterate over each property to get their types

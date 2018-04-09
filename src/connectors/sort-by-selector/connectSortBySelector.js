@@ -123,7 +123,7 @@ export default function connectSortBySelector(renderFn, unmountFn) {
           );
         }
 
-        this.initialIndex = currentIndex;
+        this.initialIndex = instantSearchInstance.indexName;
         this.setIndex = indexName => helper.setIndex(indexName).search();
 
         renderFn(
@@ -156,6 +156,27 @@ export default function connectSortBySelector(renderFn, unmountFn) {
       dispose({ state }) {
         unmountFn();
         return state.setIndex(this.initialIndex);
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const currentIndex = searchParameters.getQueryParameter('index');
+        const isInitialIndex = currentIndex === this.initialIndex;
+
+        if (isInitialIndex || (uiState && uiState.sortBy === currentIndex)) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          sortBy: searchParameters.getQueryParameter('index'),
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        return searchParameters.setQueryParameter(
+          'index',
+          uiState.sortBy || this.initialIndex
+        );
       },
     };
   };

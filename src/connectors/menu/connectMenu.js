@@ -250,6 +250,49 @@ export default function connectMenu(renderFn, unmountFn) {
 
         return nextState;
       },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
+          attributeName
+        );
+
+        if (
+          !refinedItem ||
+          (uiState.menu && uiState.menu[attributeName] === refinedItem)
+        ) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          menu: {
+            ...uiState.menu,
+            [attributeName]: refinedItem,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        if (uiState.menu && uiState.menu[attributeName]) {
+          const uiStateRefinedItem = uiState.menu[attributeName];
+          const isAlreadyRefined = searchParameters.isHierarchicalFacetRefined(
+            attributeName,
+            uiStateRefinedItem
+          );
+          if (isAlreadyRefined) return searchParameters;
+          return searchParameters.toggleRefinement(
+            attributeName,
+            uiStateRefinedItem
+          );
+        }
+        if (searchParameters.isHierarchicalFacetRefined(attributeName)) {
+          const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
+            attributeName
+          );
+          return searchParameters.toggleRefinement(attributeName, refinedItem);
+        }
+        return searchParameters;
+      },
     };
   };
 }

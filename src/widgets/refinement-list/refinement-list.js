@@ -303,6 +303,6 @@ export default function refinementList({
       escapeFacetValues,
     });
   } catch (e) {
-    throw new Error(e);
+    throw new Error(usage);
   }
 }

@@ -170,7 +170,10 @@ export default function connectToggle(renderFn, unmountFn) {
         if (hasAnOffValue) {
           // Add filtering on the 'off' value if set
           if (!isRefined) {
-            helper.addDisjunctiveFacetRefinement(attributeName, off);
+            const currentPage = helper.getPage();
+            helper
+              .addDisjunctiveFacetRefinement(attributeName, off)
+              .setPage(currentPage);
           }
         }
 
@@ -274,6 +277,58 @@ export default function connectToggle(renderFn, unmountFn) {
           .removeDisjunctiveFacet(attributeName);
 
         return nextState;
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const isRefined = searchParameters.isDisjunctiveFacetRefined(
+          attributeName,
+          on
+        );
+
+        if (
+          !isRefined ||
+          (uiState &&
+            uiState.toggle &&
+            uiState.toggle[attributeName] === isRefined)
+        ) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          toggle: {
+            ...uiState.toggle,
+            [attributeName]: isRefined,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        const isRefined = Boolean(
+          uiState.toggle && uiState.toggle[attributeName]
+        );
+
+        if (isRefined) {
+          if (hasAnOffValue)
+            return searchParameters
+              .removeDisjunctiveFacetRefinement(attributeName, off)
+              .addDisjunctiveFacetRefinement(attributeName, on);
+
+          return searchParameters.addDisjunctiveFacetRefinement(
+            attributeName,
+            on
+          );
+        }
+
+        if (hasAnOffValue)
+          return searchParameters
+            .removeDisjunctiveFacetRefinement(attributeName, on)
+            .addDisjunctiveFacetRefinement(attributeName, off);
+
+        return searchParameters.removeDisjunctiveFacetRefinement(
+          attributeName,
+          on
+        );
       },
     };
   };

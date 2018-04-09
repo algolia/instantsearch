@@ -1,4 +1,5 @@
 import includes from 'lodash/includes';
+import _isFinite from 'lodash/isFinite';
 
 import { checkRendering } from '../../lib/utils.js';
 
@@ -35,7 +36,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {number} start Lower bound of the option (>=).
  * @property {number} end Higher bound of the option (<=).
  * @property {boolean} isRefined True if the value is selected.
- * @property {string} attributeName The name of the attribute in the records.
  */
 
 /**
@@ -172,6 +172,86 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
       dispose({ state }) {
         unmountFn();
         return state.clearRefinements(attributeName);
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const currentRefinements = searchParameters.getNumericRefinements(
+          attributeName
+        );
+        const equal = currentRefinements['='] && currentRefinements['='][0];
+        if (equal || equal === 0) {
+          return {
+            ...uiState,
+            numericRefinementList: {
+              ...uiState.numericRefinementList,
+              [attributeName]: `${currentRefinements['=']}`,
+            },
+          };
+        }
+
+        const lowerBound =
+          (currentRefinements['>='] && currentRefinements['>='][0]) || '';
+        const upperBound =
+          (currentRefinements['<='] && currentRefinements['<='][0]) || '';
+
+        if (lowerBound !== '' || upperBound !== '') {
+          if (
+            uiState.numericRefinementList &&
+            uiState.numericRefinementList[attributeName] ===
+              `${lowerBound}:${upperBound}`
+          )
+            return uiState;
+          return {
+            ...uiState,
+            numericRefinementList: {
+              ...uiState.numericRefinementList,
+              [attributeName]: `${lowerBound}:${upperBound}`,
+            },
+          };
+        }
+
+        return uiState;
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        let clearedParams = searchParameters.clearRefinements(attributeName);
+        const value =
+          uiState.numericRefinementList &&
+          uiState.numericRefinementList[attributeName];
+
+        if (!value) {
+          return clearedParams;
+        }
+
+        const valueAsEqual = value.indexOf(':') === -1 && value;
+
+        if (valueAsEqual) {
+          return clearedParams.addNumericRefinement(
+            attributeName,
+            '=',
+            valueAsEqual
+          );
+        }
+
+        const [lowerBound, upperBound] = value.split(':').map(parseFloat);
+
+        if (_isFinite(lowerBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '>=',
+            lowerBound
+          );
+        }
+
+        if (_isFinite(upperBound)) {
+          clearedParams = clearedParams.addNumericRefinement(
+            attributeName,
+            '<=',
+            upperBound
+          );
+        }
+
+        return clearedParams;
       },
     };
   };

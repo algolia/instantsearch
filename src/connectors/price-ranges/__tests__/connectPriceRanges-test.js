@@ -1,7 +1,9 @@
 import sinon from 'sinon';
 
-import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
+import jsHelper, {
+  SearchResults,
+  SearchParameters,
+} from 'algoliasearch-helper';
 
 import connectPriceRanges from '../connectPriceRanges.js';
 
@@ -156,5 +158,266 @@ describe('connectPriceRanges', () => {
       expect(helper.getNumericRefinement('price', '<=')).toEqual([50]);
       expect(helper.search.callCount).toBe(2);
     }
+  });
+
+  describe('routing', () => {
+    const getInitializedWidget = () => {
+      const rendering = jest.fn();
+      const makeWidget = connectPriceRanges(rendering);
+      const widget = makeWidget({
+        attributeName: 'price',
+      });
+
+      const config = widget.getConfiguration({}, {});
+      const helper = jsHelper(fakeClient, '', config);
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      return [widget, helper, refine];
+    };
+
+    describe('getWidgetState', () => {
+      test('should give back the object unmodified if the default value is selected', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      test('should add an entry equal to the refinement', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine({ from: 10, to: 20 });
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should not override other values in the same namespace', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine({ from: 10, to: 20 });
+
+        const uiStateBefore = {
+          priceRanges: {
+            'price-2': '10:20',
+          },
+        };
+
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toMatchSnapshot();
+      });
+
+      test('should return the same instance if the value is already in the UI state', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        refine({ from: 10, to: 20 });
+
+        const uiStateBefore = {
+          priceRanges: {
+            price: '10:20',
+          },
+        };
+
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      test('should return the same SP if no value is in the UI state', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), the url contains no parameters
+        const uiState = {};
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same empty parameters should yield the same object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should return the same SP if the value from the UI state is the same', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), the url contains min and max
+        const uiState = {
+          priceRanges: {
+            price: '10:20',
+          },
+        };
+        // The current search has the same parameters
+        refine({ from: 10, to: 20 });
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same non empty parameters should yield the same object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should return the same SP if the value from the UI state is the same (only min)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), the url contains min and max
+        const uiState = {
+          priceRanges: {
+            price: '10:',
+          },
+        };
+        // The current search has the same parameters
+        refine({ from: 10 });
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same non empty parameters should yield the same object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should return the same SP if the value from the UI state is the same (only max)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), the url contains min and max
+        const uiState = {
+          priceRanges: {
+            price: ':20',
+          },
+        };
+        // The current search has the same parameters
+        refine({ to: 20 });
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same non empty parameters should yield the same object
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should keep the value that is not modified (min modified)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), the url contains min and max
+        const uiState = {
+          priceRanges: {
+            price: '2:10',
+          },
+        };
+        // The current search has the same parameters
+        refine({ from: 4, to: 10 });
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same non empty parameters should yield the same object
+        expect(
+          searchParametersAfter.getNumericRefinement('price', '>=')[0]
+        ).toBe(2);
+        expect(
+          searchParametersAfter.getNumericRefinement('price', '<=')[0]
+        ).toBe(10);
+      });
+
+      test('should keep the value that is not modified (max modified)', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        // The user presses back (browser), the url contains min and max
+        const uiState = {
+          priceRanges: {
+            price: '2:10',
+          },
+        };
+        // The current search has the same parameters
+        refine({ from: 2, to: 15 });
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the same non empty parameters should yield the same object
+        expect(
+          searchParametersAfter.getNumericRefinement('price', '>=')[0]
+        ).toBe(2);
+        expect(
+          searchParametersAfter.getNumericRefinement('price', '<=')[0]
+        ).toBe(10);
+      });
+
+      test('should add the refinements according to the UI state provided (min and max)', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), the URL contains both min and max
+        const uiState = {
+          priceRanges: {
+            price: '20:40',
+          },
+        };
+        // The current state is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the new parameters should set two numeric refinements
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+
+      test('should add the refinements according to the UI state provided (only max)', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), the URL contains a max
+        const uiState = {
+          priceRanges: {
+            price: ':50',
+          },
+        };
+        // The current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the new parameters should set one refinement
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+
+      test('should add the refinements according to the UI state provided (only min)', () => {
+        const [widget, helper] = getInitializedWidget();
+        // The user presses back (browser), the url contains a min
+        const uiState = {
+          priceRanges: {
+            price: '10:',
+          },
+        };
+        // the current search is empty
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        // Applying the new parameter should set one refinement
+        expect(searchParametersAfter).toMatchSnapshot();
+      });
+    });
   });
 });

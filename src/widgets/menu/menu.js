@@ -100,9 +100,9 @@ menu({
 
 /**
  * @typedef {Object} MenuTemplates
- * @property {string|Function} [header] Header template.
- * @property {string|Function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property {string|Function} [footer] Footer template.
+ * @property {string|function} [header] Header template.
+ * @property {string|function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|function} [footer] Footer template.
  */
 
 /**
