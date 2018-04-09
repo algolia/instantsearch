@@ -1,3 +1,22 @@
+<a name="2.7.0"></a>
+# [2.7.0](https://github.com/algolia/instantsearch.js/compare/v2.6.3...v2.7.0) (2018-04-09)
+
+
+### Bug Fixes
+
+* pagination padding ([#2866](https://github.com/algolia/instantsearch.js/issues/2866)) ([e8c58cc](https://github.com/algolia/instantsearch.js/commit/e8c58cc))
+* **geosearch:** avoid reset map when it already moved ([#2870](https://github.com/algolia/instantsearch.js/issues/2870)) ([f171b8a](https://github.com/algolia/instantsearch.js/commit/f171b8a))
+* **removeWidget:** check for widgets.length on next tick ([#2831](https://github.com/algolia/instantsearch.js/issues/2831)) ([7e639d6](https://github.com/algolia/instantsearch.js/commit/7e639d6))
+
+
+### Features
+
+* **connetConfigure:** add a connector to create a connector widget ([8fdf752](https://github.com/algolia/instantsearch.js/commit/8fdf752))
+* **routing:** provide a mechanism to synchronize the search ([#2829](https://github.com/algolia/instantsearch.js/issues/2829)) ([75b2ca3](https://github.com/algolia/instantsearch.js/commit/75b2ca3)), closes [#2849](https://github.com/algolia/instantsearch.js/issues/2849) [#2849](https://github.com/algolia/instantsearch.js/issues/2849)
+* **size:** add sideEffects false to package.json ([#2861](https://github.com/algolia/instantsearch.js/issues/2861)) ([f5d1ab1](https://github.com/algolia/instantsearch.js/commit/f5d1ab1)), closes [#2859](https://github.com/algolia/instantsearch.js/issues/2859)
+
+
+
 <a name="2.6.3"></a>
 ## [2.6.3](https://github.com/algolia/instantsearch.js/compare/v2.6.2...v2.6.3) (2018-03-30)
 
