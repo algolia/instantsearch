@@ -774,7 +774,7 @@ describe('GeoSearch', () => {
   });
 
   describe('initial position', () => {
-    it('expect to init the position from "initialPosition" when no items are available & map is not yet render', () => {
+    it('expect to init the position from "initialPosition"', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -812,7 +812,7 @@ describe('GeoSearch', () => {
       expect(mapInstance.setZoom).toHaveBeenCalledWith(8);
     });
 
-    it('expect to init the position from "position" when no items are available & map is not yet render', () => {
+    it('expect to init the position from "position"', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -833,9 +833,8 @@ describe('GeoSearch', () => {
         },
       });
 
-      // Simulate the configuration
-      const initialState = widget.getConfiguration({});
-      helper.setState(initialState);
+      // Simulate the configuration for the position
+      helper.setState(widget.getConfiguration({}));
 
       widget.init({
         helper,
@@ -896,7 +895,7 @@ describe('GeoSearch', () => {
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
     });
 
-    it('expect to not init the position when the refinement is coming from the map', () => {
+    it('expect to not init the position when the refinement is from the map', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
