@@ -411,220 +411,7 @@ describe('GeoSearch', () => {
       );
     });
 
-    it('expect to listen for "center_changed" and trigger setMapMoveSinceLastRefine on user interaction', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      expect(mapInstance.addListener).toHaveBeenCalledWith(
-        'center_changed',
-        expect.any(Function)
-      );
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [],
-        },
-      });
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-
-      simulateEvent(mapInstance, 'center_changed');
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
-    });
-
-    it('expect to listen for "center_changed" and do not trigger on programmatic interaction', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      expect(mapInstance.addListener).toHaveBeenCalledWith(
-        'center_changed',
-        expect.any(Function)
-      );
-
-      // Simulate programmatic event
-      lastRenderState(renderer).isUserInteraction = false;
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-
-      simulateEvent(mapInstance, 'center_changed');
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-    });
-
-    it('expect to listen for "zoom_changed", trigger setMapMoveSinceLastRefine and schedule a refine call on user interaction', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      expect(mapInstance.addListener).toHaveBeenCalledWith(
-        'zoom_changed',
-        expect.any(Function)
-      );
-
-      expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-
-      simulateEvent(mapInstance, 'zoom_changed');
-
-      expect(lastRenderState(renderer).isPendingRefine).toBe(true);
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
-    });
-
-    it('expect to listen for "zoom_changed" and do not trigger on programmatic interaction', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      expect(mapInstance.addListener).toHaveBeenCalledWith(
-        'zoom_changed',
-        expect.any(Function)
-      );
-
-      // Simulate programmatic event
-      lastRenderState(renderer).isUserInteraction = false;
-
-      expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-
-      simulateEvent(mapInstance, 'zoom_changed');
-
-      expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-    });
-
-    it('expect to listen for "dragstart" and schedule a refine call on user interaction', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      expect(mapInstance.addListener).toHaveBeenCalledWith(
-        'dragstart',
-        expect.any(Function)
-      );
-
-      expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-
-      simulateEvent(mapInstance, 'dragstart');
-
-      expect(lastRenderState(renderer).isPendingRefine).toBe(true);
-    });
-
-    it('expect to listen for "dragstart" and do not trigger on programmatic interaction', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      expect(mapInstance.addListener).toHaveBeenCalledWith(
-        'dragstart',
-        expect.any(Function)
-      );
-
-      // Simulate programmatic event
-      lastRenderState(renderer).isUserInteraction = false;
-
-      expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-
-      simulateEvent(mapInstance, 'dragstart');
-
-      expect(lastRenderState(renderer).isPendingRefine).toBe(false);
-    });
-
-    it('expect to listen for "idle", call refine and reset the scheduler', () => {
+    it('expect to listen for "idle" call refine and reset the scheduler', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -735,46 +522,176 @@ describe('GeoSearch', () => {
       expect(helper.search).not.toHaveBeenCalled();
     });
 
-    it('expect to listen for "idle" and do not trigger when refine on map move is disabled', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
+    // Use the same tests for all events since all of them trigger the same function
+    ['center_changed', 'zoom_changed', 'dragstart'].forEach(eventName => {
+      it(`expect to listen for "${eventName}" and trigger setMapMoveSinceLastRefine`, () => {
+        const container = createContainer();
+        const instantSearchInstance = createFakeInstantSearch();
+        const helper = createFakeHelper();
+        const mapInstance = createFakeMapInstance();
+        const googleReference = createFakeGoogleReference({ mapInstance });
 
-      // Not the best way to check that refine has been called but I didn't
-      // find an other way to do it. But it works.
-      helper.search = jest.fn();
+        const widget = geoSearch({
+          googleReference,
+          container,
+        });
 
-      const widget = geoSearch({
-        googleReference,
-        container,
-        enableRefineOnMapMove: false,
+        widget.init({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        });
+
+        simulateMapReadyEvent(googleReference);
+
+        expect(mapInstance.addListener).toHaveBeenCalledWith(
+          eventName,
+          expect.any(Function)
+        );
+
+        widget.render({
+          helper,
+          instantSearchInstance,
+          results: {
+            hits: [],
+          },
+        });
+
+        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+          false
+        );
+
+        simulateEvent(mapInstance, eventName);
+
+        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
       });
 
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
+      it(`expect to listen for "${eventName}" and schedule a refine call`, () => {
+        const container = createContainer();
+        const instantSearchInstance = createFakeInstantSearch();
+        const helper = createFakeHelper();
+        const mapInstance = createFakeMapInstance();
+        const googleReference = createFakeGoogleReference({ mapInstance });
+
+        const widget = geoSearch({
+          googleReference,
+          container,
+        });
+
+        widget.init({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        });
+
+        simulateMapReadyEvent(googleReference);
+
+        expect(mapInstance.addListener).toHaveBeenCalledWith(
+          eventName,
+          expect.any(Function)
+        );
+
+        widget.render({
+          helper,
+          instantSearchInstance,
+          results: {
+            hits: [],
+          },
+        });
+
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
+
+        simulateEvent(mapInstance, eventName);
+
+        expect(lastRenderState(renderer).isPendingRefine).toBe(true);
       });
 
-      simulateMapReadyEvent(googleReference);
+      it(`expect to listen for "${eventName}" and not schedule a refine call when refine on map move is disabled`, () => {
+        const container = createContainer();
+        const instantSearchInstance = createFakeInstantSearch();
+        const helper = createFakeHelper();
+        const mapInstance = createFakeMapInstance();
+        const googleReference = createFakeGoogleReference({ mapInstance });
 
-      expect(mapInstance.addListener).toHaveBeenCalledWith(
-        'idle',
-        expect.any(Function)
-      );
+        const widget = geoSearch({
+          googleReference,
+          container,
+          enableRefineOnMapMove: false,
+        });
 
-      simulateEvent(mapInstance, 'dragstart');
-      simulateEvent(mapInstance, 'idle');
+        widget.init({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        });
 
-      expect(lastRenderState(renderer).isPendingRefine).toBe(true);
-      expect(helper.search).not.toHaveBeenCalled();
+        simulateMapReadyEvent(googleReference);
+
+        expect(mapInstance.addListener).toHaveBeenCalledWith(
+          eventName,
+          expect.any(Function)
+        );
+
+        widget.render({
+          helper,
+          instantSearchInstance,
+          results: {
+            hits: [],
+          },
+        });
+
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
+
+        simulateEvent(mapInstance, eventName);
+
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
+      });
+
+      it(`expect to listen for "${eventName}" and do not trigger on programmatic interaction`, () => {
+        const container = createContainer();
+        const instantSearchInstance = createFakeInstantSearch();
+        const helper = createFakeHelper();
+        const mapInstance = createFakeMapInstance();
+        const googleReference = createFakeGoogleReference({ mapInstance });
+
+        const widget = geoSearch({
+          googleReference,
+          container,
+        });
+
+        widget.init({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        });
+
+        simulateMapReadyEvent(googleReference);
+
+        expect(mapInstance.addListener).toHaveBeenCalledWith(
+          eventName,
+          expect.any(Function)
+        );
+
+        // Simulate programmatic event
+        lastRenderState(renderer).isUserInteraction = false;
+
+        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+          false
+        );
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
+
+        simulateEvent(mapInstance, eventName);
+
+        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+          false
+        );
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
+      });
     });
   });
 
   describe('initial position', () => {
-    it('expect to init the position from "initialPosition" when no items are available & map is not yet render', () => {
+    it('expect to init the position from "initialPosition"', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -812,7 +729,7 @@ describe('GeoSearch', () => {
       expect(mapInstance.setZoom).toHaveBeenCalledWith(8);
     });
 
-    it('expect to init the position from "position" when no items are available & map is not yet render', () => {
+    it('expect to init the position from "position"', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -833,9 +750,8 @@ describe('GeoSearch', () => {
         },
       });
 
-      // Simulate the configuration
-      const initialState = widget.getConfiguration({});
-      helper.setState(initialState);
+      // Simulate the configuration for the position
+      helper.setState(widget.getConfiguration({}));
 
       widget.init({
         helper,
@@ -896,7 +812,7 @@ describe('GeoSearch', () => {
       expect(mapInstance.setZoom).not.toHaveBeenCalled();
     });
 
-    it('expect to not init the position when the refinement is coming from the map', () => {
+    it('expect to not init the position when the refinement is from the map', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -906,6 +822,60 @@ describe('GeoSearch', () => {
       const widget = geoSearch({
         googleReference,
         container,
+        initialZoom: 8,
+        initialPosition: {
+          lat: 10,
+          lng: 12,
+        },
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      simulateMapReadyEvent(googleReference);
+
+      expect(mapInstance.setCenter).not.toHaveBeenCalled();
+      expect(mapInstance.setZoom).not.toHaveBeenCalled();
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [{ objectID: 123, _geoloc: true }],
+        },
+      });
+
+      // Simulate a refinement
+      simulateEvent(mapInstance, 'dragstart');
+      simulateEvent(mapInstance, 'center_changed');
+      simulateEvent(mapInstance, 'idle');
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [],
+        },
+      });
+
+      expect(mapInstance.setCenter).not.toHaveBeenCalled();
+      expect(mapInstance.setZoom).not.toHaveBeenCalled();
+    });
+
+    it('expect to not init the position when the map has moved', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const mapInstance = createFakeMapInstance();
+      const googleReference = createFakeGoogleReference({ mapInstance });
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        enableRefineOnMapMove: false,
         initialZoom: 8,
         initialPosition: {
           lat: 10,

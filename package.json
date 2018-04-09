@@ -14,6 +14,7 @@
   "main": "dist-es5-module/index.js",
   "module": "./es/index.js",
   "jsdelivr": "dist/instantsearch.min.js",
+  "sideEffects": false,
   "scripts": {
     "build": "./scripts/build.sh",
     "dev": "./scripts/dev.sh",

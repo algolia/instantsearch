@@ -146,7 +146,7 @@ export default function pagination({
   labels: userLabels = defaultLabels,
   cssClasses: userCssClasses = {},
   maxPages,
-  padding = 3,
+  padding,
   showFirstLast = true,
   autoHideContainer = true,
   scrollTo: userScrollTo = 'body',
@@ -189,7 +189,7 @@ export default function pagination({
     const makeWidget = connectPagination(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ maxPages });
+    return makeWidget({ maxPages, padding });
   } catch (e) {
     throw new Error(usage);
   }

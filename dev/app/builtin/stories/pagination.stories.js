@@ -20,6 +20,17 @@ export default () => {
       })
     )
     .add(
+      'with padding',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            padding: 6,
+          })
+        );
+      })
+    )
+    .add(
       'without autoHideContainer',
       wrapWithHits(container => {
         window.search.addWidget(

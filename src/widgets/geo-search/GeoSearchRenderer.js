@@ -105,31 +105,22 @@ const renderer = (
     });
 
     const setupListenersWhenMapIsReady = () => {
-      renderState.mapInstance.addListener('center_changed', () => {
+      const onChange = () => {
         if (renderState.isUserInteraction) {
           setMapMoveSinceLastRefine();
-        }
-      });
 
-      renderState.mapInstance.addListener('zoom_changed', () => {
-        if (renderState.isUserInteraction) {
-          renderState.isPendingRefine = true;
-          setMapMoveSinceLastRefine();
+          if (isRefineOnMapMove()) {
+            renderState.isPendingRefine = true;
+          }
         }
-      });
+      };
 
-      renderState.mapInstance.addListener('dragstart', () => {
-        if (renderState.isUserInteraction) {
-          renderState.isPendingRefine = true;
-        }
-      });
+      renderState.mapInstance.addListener('center_changed', onChange);
+      renderState.mapInstance.addListener('zoom_changed', onChange);
+      renderState.mapInstance.addListener('dragstart', onChange);
 
       renderState.mapInstance.addListener('idle', () => {
-        if (
-          renderState.isUserInteraction &&
-          renderState.isPendingRefine &&
-          isRefineOnMapMove()
-        ) {
+        if (renderState.isUserInteraction && renderState.isPendingRefine) {
           renderState.isPendingRefine = false;
 
           refineWithMap({
@@ -155,7 +146,7 @@ const renderer = (
     return;
   }
 
-  if (!items.length && !isRefinedWithMap()) {
+  if (!items.length && !isRefinedWithMap() && !hasMapMoveSinceLastRefine()) {
     const initialMapPosition = position || initialPosition;
 
     renderState.isUserInteraction = false;

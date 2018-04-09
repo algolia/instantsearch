@@ -163,8 +163,6 @@ Here are the main files and folders of the project.
   ▸ css/              << The source of the themes (reset / algolia theme)
   ▸ decorators/       << Preact HoC that factorize some behaviour of the widgets
   ▸ lib/              << The core of the library, instantsearch, url
-  ▸ shams/            << Object.freeze sham that avoid breaking your project
-  ▸ shims/            << Shim for getPrototypeOf
   ▸ widgets/          << The source of the widgets (UX + UI)
 ```
 
