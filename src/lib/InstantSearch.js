@@ -84,7 +84,7 @@ Usage: instantsearch({
 
     if (urlSync && routing) {
       throw new Error(
-        'InstantSearch configuration error: it is not possible to use `urlSync` and `router` at the same time'
+        'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
       );
     }
 

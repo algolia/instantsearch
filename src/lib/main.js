@@ -47,7 +47,7 @@ import * as stateMappings from './stateMappings/index.js';
  */
 
 /**
- * @typedef {Object} RouterOptions
+ * @typedef {Object} RoutingOptions
  * @property {Router} [router=HistoryRouter()] The router is the part that will save the UI State.
  * By default, it uses an instance of the HistoryRouter with the default parameters.
  * @property {StateMapping} [stateMapping=SimpleStateMapping()] This object transforms the UI state into
@@ -111,7 +111,7 @@ import * as stateMappings from './stateMappings/index.js';
  * @property {boolean|UrlSyncOptions} [urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
  * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
- * @property {RouterOptions} [router] the router configuration used to save the UI State into the URL or
+ * @property {RoutingOptions} [routing] the router configuration used to save the UI State into the URL or
  * any client side persistence.
  */
 
