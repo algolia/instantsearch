@@ -8,12 +8,6 @@
     "dev": "babel-node start.js",
     "build": "babel-node build.js"
   },
-  "renovate": {
-    "extends": [
-      "config:js-app",
-      "algolia"
-    ]
-  },
   "devDependencies": {
     "algolia-frontend-components": "0.0.34",
     "autoprefixer": "8.1.0",
