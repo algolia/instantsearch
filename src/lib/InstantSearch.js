@@ -100,7 +100,7 @@ Usage: instantsearch({
       }
 
       console.warn(
-        'For advanced usages docs, check out https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync'
+        'For advanced use cases, checkout the documentation: https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync'
       );
       /* eslint-enable no-console */
     }
