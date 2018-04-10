@@ -1,17 +1,17 @@
 import qs from 'qs';
 
-function defaultCreateURL(qsModule, uiState) {
-  const { protocol, hostname, port = '', pathname, hash } = window.location;
-  const queryString = qsModule.stringify(uiState);
+function defaultCreateURL({ qsModule, routeState, location }) {
+  const { protocol, hostname, port = '', pathname, hash } = location;
+  const queryString = qsModule.stringify(routeState);
   const portWithPrefix = port === '' ? '' : `:${port}`;
   // IE <= 11 has no location.origin or buggy. Therefore we don't rely on it
-  if (!uiState || Object.keys(uiState).length === 0)
+  if (!routeState || Object.keys(routeState).length === 0)
     return `${protocol}//${hostname}${portWithPrefix}${pathname}${hash}`;
   else
     return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
 }
 
-function defaultParseURL(qsModule, location) {
+function defaultParseURL({ qsModule, location }) {
   return qsModule.parse(location.search.slice(1));
 }
 
@@ -48,12 +48,12 @@ class BrowserHistory {
 
   /**
    * This method pushes a search state into the URL.
-   * @param {object} uiState a syncable UI state
+   * @param {object} routeState a syncable UI state
    * @return {undefined}
    */
-  write(uiState) {
-    const url = this.createURL(uiState);
-    const title = this.windowTitle && this.windowTitle(uiState);
+  write(routeState) {
+    const url = this.createURL(routeState);
+    const title = this.windowTitle && this.windowTitle(routeState);
 
     if (this.writeTimer) {
       window.clearTimeout(this.writeTimer);
@@ -61,7 +61,7 @@ class BrowserHistory {
 
     this.writeTimer = setTimeout(() => {
       if (title) window.document.title = title;
-      window.history.pushState(uiState, title || '', url);
+      window.history.pushState(routeState, title || '', url);
       this.writeTimer = undefined;
     }, this.writeDelay);
   }
@@ -71,13 +71,13 @@ class BrowserHistory {
    * @return {object} the equivalent to what is store in the URL as an object
    */
   read() {
-    return this.parseURL(qs, window.location);
+    return this.parseURL({ qsModule: qs, location: window.location });
   }
 
   /**
    * This methods sets a callback on the `onpopstate` event of the history API
    * of the current page. This way, the URL sync can keep track of the changes.
-   * @param {function(object)} cb the callback that will receive the latest uiState.
+   * @param {function(object)} cb the callback that will receive the latest routeState.
    * It is called when the URL is updated.
    * @returns {undefined}
    */
@@ -87,14 +87,14 @@ class BrowserHistory {
         window.clearTimeout(this.writeTimer);
         this.writeTimer = undefined;
       }
-      const uiState = event.state;
+      const routeState = event.state;
       // at initial load, the state is read from the URL without
       // update. Therefore the state object is not there. In this
       // case we fallback and read the URL.
-      if (!uiState) {
+      if (!routeState) {
         cb(this.read());
       } else {
-        cb(uiState);
+        cb(routeState);
       }
     };
     window.addEventListener('popstate', this._onPopState);
@@ -107,11 +107,15 @@ class BrowserHistory {
    * This way we can handle cases like using a <base href>, see
    * https://github.com/algolia/instantsearch.js/issues/790 for the original issue
    *
-   * @param {object} uiState a syncable UI state
+   * @param {object} routeState a syncable UI state
    * @returns {string} the full URL for the provided syncable state
    */
-  createURL(uiState) {
-    return this._createURL(qs, uiState);
+  createURL(routeState) {
+    return this._createURL({
+      qsModule: qs,
+      routeState,
+      location: window.location,
+    });
   }
 
   /**
