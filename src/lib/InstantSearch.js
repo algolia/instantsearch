@@ -83,6 +83,11 @@ Usage: instantsearch({
     }
 
     if (urlSync !== null) {
+      if (routing !== null) {
+        throw new Error(
+          'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
+        );
+      }
       /* eslint-disable no-console */
       console.warn(
         'InstantSearch.js: `urlSync` option is deprecated and will be removed in the next major version.'
@@ -98,12 +103,6 @@ Usage: instantsearch({
         'For advanced usages docs, check out https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync'
       );
       /* eslint-enable no-console */
-
-      if (routing !== null) {
-        throw new Error(
-          'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
-        );
-      }
     }
 
     this.urlSync = urlSync === true ? {} : urlSync;
