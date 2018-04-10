@@ -1,7 +1,7 @@
 import qs from 'qs';
 
-function defaultCreateURL(qsModule, uiState) {
-  const { protocol, hostname, port = '', pathname, hash } = window.location;
+function defaultCreateURL({ qsModule, uiState, location }) {
+  const { protocol, hostname, port = '', pathname, hash } = location;
   const queryString = qsModule.stringify(uiState);
   const portWithPrefix = port === '' ? '' : `:${port}`;
   // IE <= 11 has no location.origin or buggy. Therefore we don't rely on it
@@ -11,7 +11,7 @@ function defaultCreateURL(qsModule, uiState) {
     return `${protocol}//${hostname}${portWithPrefix}${pathname}?${queryString}${hash}`;
 }
 
-function defaultParseURL(qsModule, location) {
+function defaultParseURL({ qsModule, location }) {
   return qsModule.parse(location.search.slice(1));
 }
 
@@ -71,7 +71,7 @@ class BrowserHistory {
    * @return {object} the equivalent to what is store in the URL as an object
    */
   read() {
-    return this.parseURL(qs, window.location);
+    return this.parseURL({ qsModule: qs, location: window.location });
   }
 
   /**
@@ -111,7 +111,11 @@ class BrowserHistory {
    * @returns {string} the full URL for the provided syncable state
    */
   createURL(uiState) {
-    return this._createURL(qs, uiState);
+    return this._createURL({
+      qsModule: qs,
+      uiState,
+      location: window.location,
+    });
   }
 
   /**
