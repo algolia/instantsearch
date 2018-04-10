@@ -82,10 +82,28 @@ Usage: instantsearch({
       this._searchFunction = searchFunction;
     }
 
-    if (urlSync && routing) {
-      throw new Error(
-        'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
+    if (urlSync !== null) {
+      /* eslint-disable no-console */
+      console.warn(
+        'InstantSearch.js: `urlSync` option is deprecated and will be removed in the next major version.'
       );
+      console.warn('You can now use the new `routing` option');
+
+      if (urlSync === true) {
+        // when using urlSync: true
+        console.warn('Use it like this: `routing: true`');
+      }
+
+      console.warn(
+        'For advanced usages docs, check out https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync'
+      );
+      /* eslint-enable no-console */
+
+      if (routing !== null) {
+        throw new Error(
+          'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
+        );
+      }
     }
 
     this.urlSync = urlSync === true ? {} : urlSync;
