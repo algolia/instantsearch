@@ -136,6 +136,17 @@ Go to <http://localhost:8080> for the example playground.
 
 Go to <http://localhost:3000> for the documentation website.
 
+## Updating the examples
+
+To update the documentation examples, you must re-build the InstantSearch.js library each time
+you change it via:
+
+```sh
+yarn build
+```
+
+And also relaunch the dev environement afterwards.
+
 ## Folders of the project 🗺
 
 Here are the main files and folders of the project.
