@@ -20,7 +20,7 @@ const refineWithMap = ({ refine, paddingBoundingBox, mapInstance }) => {
     .getProjection()
     .fromLatLngToPoint(mapInstance.getBounds().getSouthWest());
 
-  southWestPoint.x = southWestPoint.x + paddingBoundingBox.right / scale;
+  southWestPoint.x = southWestPoint.x + paddingBoundingBox.left / scale;
   southWestPoint.y = southWestPoint.y - paddingBoundingBox.bottom / scale;
 
   const ne = mapInstance.getProjection().fromPointToLatLng(northEastPoint);
@@ -30,6 +30,41 @@ const refineWithMap = ({ refine, paddingBoundingBox, mapInstance }) => {
     northEast: { lat: ne.lat(), lng: ne.lng() },
     southWest: { lat: sw.lat(), lng: sw.lng() },
   });
+};
+
+const getBoundsWithPadding = ({
+  paddingBoundingBox,
+  bounds,
+  mapInstance,
+  googleReference,
+}) => {
+  const scale = Math.pow(2, mapInstance.getZoom()) || 1;
+
+  const { northEast, southWest } = bounds;
+  const northEastPoint = mapInstance
+    .getProjection()
+    .fromLatLngToPoint(
+      new googleReference.maps.LatLng(northEast.lat, northEast.lng)
+    );
+  const southWestPoint = mapInstance
+    .getProjection()
+    .fromLatLngToPoint(
+      new googleReference.maps.LatLng(southWest.lat, southWest.lng)
+    );
+
+  northEastPoint.x = northEastPoint.x + paddingBoundingBox.right / scale;
+  northEastPoint.y = northEastPoint.y - paddingBoundingBox.top / scale;
+
+  southWestPoint.x = southWestPoint.x - paddingBoundingBox.left / scale;
+  southWestPoint.y = southWestPoint.y + paddingBoundingBox.bottom / scale;
+
+  const ne = mapInstance.getProjection().fromPointToLatLng(northEastPoint);
+  const sw = mapInstance.getProjection().fromPointToLatLng(southWestPoint);
+
+  return {
+    northEast: { lat: ne.lat(), lng: ne.lng() },
+    southWest: { lat: sw.lat(), lng: sw.lng() },
+  };
 };
 
 const collectMarkersForNextRender = (markers, nextIds) =>
@@ -52,6 +87,7 @@ const renderer = (
     clearMapRefinement,
     toggleRefineOnMapMove,
     isRefineOnMapMove,
+    getSearchBounds,
     setMapMoveSinceLastRefine,
     hasMapMoveSinceLastRefine,
     isRefinedWithMap,
@@ -196,14 +232,26 @@ const renderer = (
 
   // Fit the map to the markers when needed
   const hasMarkers = renderState.markers.length;
-  const center = renderState.mapInstance.getCenter();
-  const zoom = renderState.mapInstance.getZoom();
-  const isPositionInitialize = center !== undefined && zoom !== undefined;
-  const enableFitBounds =
-    !hasMapMoveSinceLastRefine() &&
-    (!isRefinedWithMap() || (isRefinedWithMap() && !isPositionInitialize));
+  const boundingBoxFromConnector = getSearchBounds();
+  const enableFitBounds = !hasMapMoveSinceLastRefine() && !isRefinedWithMap();
 
-  if (hasMarkers && enableFitBounds) {
+  if (boundingBoxFromConnector && isRefinedWithMap()) {
+    renderState.isUserInteraction = false;
+    const boundsWithPadding = getBoundsWithPadding({
+      bounds: boundingBoxFromConnector,
+      paddingBoundingBox,
+      mapInstance: renderState.mapInstance,
+      googleReference,
+    });
+    renderState.mapInstance.fitBounds(
+      new googleReference.maps.LatLngBounds(
+        boundsWithPadding.southWest,
+        boundsWithPadding.northEast
+      ),
+      0
+    );
+    renderState.isUserInteraction = true;
+  } else if (hasMarkers && enableFitBounds) {
     const bounds = renderState.markers.reduce(
       (acc, marker) => acc.extend(marker.getPosition()),
       new googleReference.maps.LatLngBounds()
