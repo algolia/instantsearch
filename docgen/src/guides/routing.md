@@ -99,7 +99,7 @@ const search = instantsearch({
       windowTitle(routeState) {
         return `Website / Find ${routeState.q} in ${routeState.brands} brands`;
       },
-      createURL({ qsModule, routeState, location }) {
+      createURL({ routeState, location }) {
         let baseUrl = location.href.split('/search/')[0];
         if (!routeState.q && routeState.brands === 'all' && routeState.p === 1) return baseUrl;
         if (baseUrl[baseUrl.length - 1] !== '/') baseUrl += '/';
@@ -111,8 +111,8 @@ const search = instantsearch({
 
         return `${baseUrl}search/${routeStateArray.join('/')}`;
       },
-      parseURL({ qsModule, location }) {
-        let routeStateString = window.location.href.split('/search/')[1];
+      parseURL({ location }) {
+        let routeStateString = location.href.split('/search/')[1];
         if (routeStateString === undefined) return {};
         const routeStateValues = routeStateString.match(/^q\/(.*?)\/brands\/(.*?)\/p\/(.*?)$/);
         return {
