@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.7.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.7.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -12840,8 +12840,21 @@ var InstantSearch = function (_EventEmitter) {
       _this._searchFunction = searchFunction;
     }
 
-    if (urlSync && routing) {
-      throw new Error('InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time');
+    if (urlSync !== null) {
+      if (routing !== null) {
+        throw new Error('InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time');
+      }
+      /* eslint-disable no-console */
+      console.warn('InstantSearch.js: `urlSync` option is deprecated and will be removed in the next major version.');
+      console.warn('You can now use the new `routing` option');
+
+      if (urlSync === true) {
+        // when using urlSync: true
+        console.warn('Use it like this: `routing: true`');
+      }
+
+      console.warn('For advanced use cases, checkout the documentation: https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync');
+      /* eslint-enable no-console */
     }
 
     _this.urlSync = urlSync === true ? {} : urlSync;
@@ -13449,8 +13462,8 @@ var SimpleUIStateMapping = function () {
     }
   }, {
     key: "routeToState",
-    value: function routeToState(syncable) {
-      return syncable;
+    value: function routeToState(routeState) {
+      return routeState;
     }
   }]);
 
@@ -13486,22 +13499,27 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function defaultCreateURL(qsModule, uiState) {
-  var _window$location = window.location,
-      protocol = _window$location.protocol,
-      hostname = _window$location.hostname,
-      _window$location$port = _window$location.port,
-      port = _window$location$port === undefined ? '' : _window$location$port,
-      pathname = _window$location.pathname,
-      hash = _window$location.hash;
+function defaultCreateURL(_ref) {
+  var qsModule = _ref.qsModule,
+      routeState = _ref.routeState,
+      location = _ref.location;
+  var protocol = location.protocol,
+      hostname = location.hostname,
+      _location$port = location.port,
+      port = _location$port === undefined ? '' : _location$port,
+      pathname = location.pathname,
+      hash = location.hash;
 
-  var queryString = qsModule.stringify(uiState);
+  var queryString = qsModule.stringify(routeState);
   var portWithPrefix = port === '' ? '' : ':' + port;
   // IE <= 11 has no location.origin or buggy. Therefore we don't rely on it
-  if (!uiState || Object.keys(uiState).length === 0) return protocol + '//' + hostname + portWithPrefix + pathname + hash;else return protocol + '//' + hostname + portWithPrefix + pathname + '?' + queryString + hash;
+  if (!routeState || Object.keys(routeState).length === 0) return protocol + '//' + hostname + portWithPrefix + pathname + hash;else return protocol + '//' + hostname + portWithPrefix + pathname + '?' + queryString + hash;
 }
 
-function defaultParseURL(qsModule, location) {
+function defaultParseURL(_ref2) {
+  var qsModule = _ref2.qsModule,
+      location = _ref2.location;
+
   return qsModule.parse(location.search.slice(1));
 }
 
@@ -13524,14 +13542,14 @@ var BrowserHistory = function () {
    * creates a query string from an object and `parse` that transforms a query string into an object.
    */
   function BrowserHistory() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        windowTitle = _ref.windowTitle,
-        _ref$writeDelay = _ref.writeDelay,
-        writeDelay = _ref$writeDelay === undefined ? 400 : _ref$writeDelay,
-        _ref$createURL = _ref.createURL,
-        createURL = _ref$createURL === undefined ? defaultCreateURL : _ref$createURL,
-        _ref$parseURL = _ref.parseURL,
-        parseURL = _ref$parseURL === undefined ? defaultParseURL : _ref$parseURL;
+    var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        windowTitle = _ref3.windowTitle,
+        _ref3$writeDelay = _ref3.writeDelay,
+        writeDelay = _ref3$writeDelay === undefined ? 400 : _ref3$writeDelay,
+        _ref3$createURL = _ref3.createURL,
+        createURL = _ref3$createURL === undefined ? defaultCreateURL : _ref3$createURL,
+        _ref3$parseURL = _ref3.parseURL,
+        parseURL = _ref3$parseURL === undefined ? defaultParseURL : _ref3$parseURL;
 
     _classCallCheck(this, BrowserHistory);
 
@@ -13544,18 +13562,18 @@ var BrowserHistory = function () {
 
   /**
    * This method pushes a search state into the URL.
-   * @param {object} uiState a syncable UI state
+   * @param {object} routeState a syncable UI state
    * @return {undefined}
    */
 
 
   _createClass(BrowserHistory, [{
     key: 'write',
-    value: function write(uiState) {
+    value: function write(routeState) {
       var _this = this;
 
-      var url = this.createURL(uiState);
-      var title = this.windowTitle && this.windowTitle(uiState);
+      var url = this.createURL(routeState);
+      var title = this.windowTitle && this.windowTitle(routeState);
 
       if (this.writeTimer) {
         window.clearTimeout(this.writeTimer);
@@ -13563,7 +13581,7 @@ var BrowserHistory = function () {
 
       this.writeTimer = setTimeout(function () {
         if (title) window.document.title = title;
-        window.history.pushState(uiState, title || '', url);
+        window.history.pushState(routeState, title || '', url);
         _this.writeTimer = undefined;
       }, this.writeDelay);
     }
@@ -13576,13 +13594,13 @@ var BrowserHistory = function () {
   }, {
     key: 'read',
     value: function read() {
-      return this.parseURL(_qs2.default, window.location);
+      return this.parseURL({ qsModule: _qs2.default, location: window.location });
     }
 
     /**
      * This methods sets a callback on the `onpopstate` event of the history API
      * of the current page. This way, the URL sync can keep track of the changes.
-     * @param {function(object)} cb the callback that will receive the latest uiState.
+     * @param {function(object)} cb the callback that will receive the latest routeState.
      * It is called when the URL is updated.
      * @returns {undefined}
      */
@@ -13597,14 +13615,14 @@ var BrowserHistory = function () {
           window.clearTimeout(_this2.writeTimer);
           _this2.writeTimer = undefined;
         }
-        var uiState = event.state;
+        var routeState = event.state;
         // at initial load, the state is read from the URL without
         // update. Therefore the state object is not there. In this
         // case we fallback and read the URL.
-        if (!uiState) {
+        if (!routeState) {
           cb(_this2.read());
         } else {
-          cb(uiState);
+          cb(routeState);
         }
       };
       window.addEventListener('popstate', this._onPopState);
@@ -13617,14 +13635,18 @@ var BrowserHistory = function () {
      * This way we can handle cases like using a <base href>, see
      * https://github.com/algolia/instantsearch.js/issues/790 for the original issue
      *
-     * @param {object} uiState a syncable UI state
+     * @param {object} routeState a syncable UI state
      * @returns {string} the full URL for the provided syncable state
      */
 
   }, {
     key: 'createURL',
-    value: function createURL(uiState) {
-      return this._createURL(_qs2.default, uiState);
+    value: function createURL(routeState) {
+      return this._createURL({
+        qsModule: _qs2.default,
+        routeState: routeState,
+        location: window.location
+      });
     }
 
     /**
@@ -13654,7 +13676,7 @@ var BrowserHistory = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.7.0';
+exports.default = '2.7.1';
 
 /***/ }),
 /* 190 */
@@ -18433,7 +18455,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 
 /**
- * @typedef {Object} RoutingOptions
+ * @typedef {Object|boolean} RoutingOptions
  * @property {Router} [router=HistoryRouter()] The router is the part that will save the UI State.
  * By default, it uses an instance of the HistoryRouter with the default parameters.
  * @property {StateMapping} [stateMapping=SimpleStateMapping()] This object transforms the UI state into

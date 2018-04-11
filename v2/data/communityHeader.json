@@ -69,6 +69,10 @@
         "url": "guides/no-result.html"
       },
       {
+        "name": "Routing and urls",
+        "url": "guides/routing.html"
+      },
+      {
         "name": "Integrate OpenSearch",
         "url": "guides/opensearch.html"
       },
