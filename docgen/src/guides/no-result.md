@@ -22,7 +22,7 @@ There are various strategies that can be implemented for the no-result. This gui
 
 By default, InstantSearch.js will only display "no results" when there are no results. The bare minimum to handle the no-result case is to provide the user with a message that indicates that no results were found in a friendly fashion.
 
-In order to do that, we can use the InstantSeach.js’ Hits widget option [templates.empty](https://community.algolia.com/instantsearch.js/v2/widgets/hits.html#struct-HitsTemplates-empty):
+In order to do that, we can use the InstantSeach.js’ Hits widget option [templates.empty](hits.html#struct-HitsTemplates-empty):
 
 ```javascript
 const search = instantsearch(/* parameters */);

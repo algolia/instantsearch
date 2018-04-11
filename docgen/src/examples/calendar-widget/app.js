@@ -4,6 +4,7 @@ const search = instantsearch({
   appId: 'latency',
   apiKey: '059c79ddd276568e990286944276464a',
   indexName: 'concert_events_instantsearchjs',
+  routing: true
 });
 
 search.addWidget(

@@ -44,7 +44,7 @@ import * as stateMappings from './stateMappings/index.js';
  */
 
 /**
- * @typedef {Object} RoutingOptions
+ * @typedef {Object|boolean} RoutingOptions
  * @property {Router} [router=HistoryRouter()] The router is the part that will save the UI State.
  * By default, it uses an instance of the HistoryRouter with the default parameters.
  * @property {StateMapping} [stateMapping=SimpleStateMapping()] This object transforms the UI state into
