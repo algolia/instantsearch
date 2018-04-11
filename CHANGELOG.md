@@ -1,3 +1,13 @@
+<a name="2.7.1"></a>
+## [2.7.1](https://github.com/algolia/instantsearch.js/compare/v2.7.0...v2.7.1) (2018-04-11)
+
+
+### Bug Fixes
+
+* **history:** provide location and use named parameters ([#2877](https://github.com/algolia/instantsearch.js/issues/2877)) ([761ffa4](https://github.com/algolia/instantsearch.js/commit/761ffa4))
+
+
+
 <a name="2.7.0"></a>
 # [2.7.0](https://github.com/algolia/instantsearch.js/compare/v2.6.3...v2.7.0) (2018-04-09)
 

@@ -17,6 +17,7 @@ don't hesitate to leave a message on the [community forum](https://discourse.alg
 - [Branches organization 🌳](#branches-organization-)
 - [Requirements](#requirements)
 - [Launch the dev environment 👩‍💻](#launch-the-dev-environment-%E2%80%8D)
+- [Updating the examples](#updating-the-examples)
 - [Folders of the project 🗺](#folders-of-the-project-%F0%9F%97%BA)
   - [The source folder](#the-source-folder)
   - [The documentation source](#the-documentation-source)
