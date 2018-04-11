@@ -1,53 +1,50 @@
 /* eslint-disable react/prop-types */
 
-import { createInstantSearch } from './createInstantSearchServer';
-import createConnector from './createConnector';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { SearchParameters } from 'algoliasearch-helper';
+import createConnector from './createConnector';
+import createIndex from './createIndex';
+import { createInstantSearch } from './createInstantSearchServer';
+
 Enzyme.configure({ adapter: new Adapter() });
 
-import createIndex from './createIndex';
-import { isEmpty } from 'lodash';
-import { SearchParameters } from 'algoliasearch-helper';
-
 describe('createInstantSearchServer', () => {
-  const algoliaClient = {
-    addAlgoliaAgent: jest.fn(),
-    search: () => Promise.resolve({ results: [{ query: 'query' }] }),
-  };
-  const algoliaClientFactory = jest.fn(() => algoliaClient);
-  const getSearchParametersCall = jest.fn();
-  const {
-    InstantSearch: CustomInstantSearch,
-    findResultsState,
-  } = createInstantSearch(algoliaClientFactory);
-  const Connected = createConnector({
-    displayName: 'CoolConnector',
-    getProvidedProps: () => null,
-    getSearchParameters: (searchParameters, props, searchState) => {
-      getSearchParametersCall();
-      return isEmpty(searchState)
-        ? searchParameters.setIndex(searchParameters.index)
-        : searchParameters.setIndex(
-            searchState.index
-              ? searchState.index
-              : searchState.indices[searchParameters.index].index
-          );
-    },
-    getMetadata: () => null,
-    getId: () => 'id',
-  })(() => null);
-
-  beforeEach(() => {
-    algoliaClient.addAlgoliaAgent.mockClear();
-    algoliaClientFactory.mockClear();
+  const createAlgoliaClient = () => ({
+    addAlgoliaAgent: () => {},
+    search: () =>
+      Promise.resolve({
+        results: [{ query: 'query' }],
+      }),
   });
+
+  const createWidget = ({ getSearchParameters = () => {} } = {}) =>
+    createConnector({
+      displayName: 'CoolConnector',
+      getProvidedProps: () => null,
+      getSearchParameters: (searchParameters, props, searchState) => {
+        getSearchParameters();
+
+        return isEmpty(searchState)
+          ? searchParameters.setIndex(searchParameters.index)
+          : searchParameters.setIndex(
+              searchState.index
+                ? searchState.index
+                : searchState.indices[searchParameters.index].index
+            );
+      },
+      getMetadata: () => null,
+      getId: () => 'id',
+    })(() => null);
 
   describe('single index', () => {
     it('results shoud be SearchResults from the helper', () => {
+      const { InstantSearch } = createInstantSearch(createAlgoliaClient);
+
       const wrapper = shallow(
-        <CustomInstantSearch
+        <InstantSearch
           appId="app"
           apiKey="key"
           indexName="name"
@@ -64,29 +61,47 @@ describe('createInstantSearchServer', () => {
 
     describe('find results', () => {
       it('searchParameters should be cleaned each time', () => {
-        const App = () => (
-          <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
-            <Connected />
-          </CustomInstantSearch>
+        expect.assertions(1);
+
+        const { InstantSearch, findResultsState } = createInstantSearch(
+          createAlgoliaClient
         );
 
-        expect.assertions(1);
-        return findResultsState(App).then(() => {
-          getSearchParametersCall.mockClear();
-          findResultsState(App).then(() => {
-            expect(getSearchParametersCall).toHaveBeenCalledTimes(2);
-          });
+        const getSearchParameters = jest.fn();
+        const Connected = createWidget({
+          getSearchParameters,
         });
+
+        const App = () => (
+          <InstantSearch appId="app" apiKey="key" indexName="indexName">
+            <Connected />
+          </InstantSearch>
+        );
+
+        return findResultsState(App)
+          .then(() => {
+            getSearchParameters.mockClear();
+            return findResultsState(App);
+          })
+          .then(() => {
+            expect(getSearchParameters).toHaveBeenCalledTimes(2);
+          });
       });
 
       it('without search state', () => {
-        const App = () => (
-          <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
-            <Connected />
-          </CustomInstantSearch>
+        expect.assertions(3);
+
+        const { InstantSearch, findResultsState } = createInstantSearch(
+          createAlgoliaClient
         );
 
-        expect.assertions(3);
+        const Connected = createWidget();
+
+        const App = () => (
+          <InstantSearch appId="app" apiKey="key" indexName="indexName">
+            <Connected />
+          </InstantSearch>
+        );
 
         return findResultsState(App).then(data => {
           expect(data._originalResponse).toBeDefined();
@@ -96,18 +111,24 @@ describe('createInstantSearchServer', () => {
       });
 
       it('with search state', () => {
+        expect.assertions(3);
+
+        const { InstantSearch, findResultsState } = createInstantSearch(
+          createAlgoliaClient
+        );
+
+        const Connected = createWidget();
+
         const App = props => (
-          <CustomInstantSearch
+          <InstantSearch
             appId="app"
             apiKey="key"
             indexName="name"
             searchState={props.searchState}
           >
             <Connected />
-          </CustomInstantSearch>
+          </InstantSearch>
         );
-
-        expect.assertions(3);
 
         return findResultsState(App, {
           searchState: { index: 'index search state' },
@@ -121,12 +142,13 @@ describe('createInstantSearchServer', () => {
   });
 
   describe('multi index', () => {
-    const CustomIndex = createIndex({
-      Root: 'div',
-    });
+    const Index = createIndex({ Root: 'div' });
+
     it('results shoud be SearchResults from the helper', () => {
+      const { InstantSearch } = createInstantSearch(createAlgoliaClient);
+
       const wrapper = shallow(
-        <CustomInstantSearch
+        <InstantSearch
           appId="app"
           apiKey="key"
           indexName="name"
@@ -151,35 +173,55 @@ describe('createInstantSearchServer', () => {
 
     describe('find results', () => {
       it('searchParameters should be cleaned each time', () => {
-        const App = () => (
-          <CustomInstantSearch appId="app" apiKey="key" indexName="indexName">
-            <Connected />
-          </CustomInstantSearch>
-        );
-
         expect.assertions(1);
 
-        return findResultsState(App).then(() => {
-          getSearchParametersCall.mockClear();
-          findResultsState(App).then(() => {
-            expect(getSearchParametersCall).toHaveBeenCalledTimes(2);
-          });
+        const { InstantSearch, findResultsState } = createInstantSearch(
+          createAlgoliaClient
+        );
+
+        const getSearchParameters = jest.fn();
+        const Connected = createWidget({
+          getSearchParameters,
         });
+
+        const App = () => (
+          <InstantSearch appId="app" apiKey="key" indexName="indexName">
+            <Index indexName="index2">
+              <Connected />
+            </Index>
+          </InstantSearch>
+        );
+
+        return findResultsState(App)
+          .then(() => {
+            getSearchParameters.mockClear();
+
+            return findResultsState(App);
+          })
+          .then(() => {
+            expect(getSearchParameters).toHaveBeenCalledTimes(2);
+          });
       });
 
       it('without search state - first api', () => {
-        const App = () => (
-          <CustomInstantSearch appId="app" apiKey="key" indexName="index1">
-            <CustomIndex indexName="index2">
-              <Connected />
-            </CustomIndex>
-            <CustomIndex indexName="index1">
-              <Connected />
-            </CustomIndex>
-          </CustomInstantSearch>
+        expect.assertions(3);
+
+        const { InstantSearch, findResultsState } = createInstantSearch(
+          createAlgoliaClient
         );
 
-        expect.assertions(3);
+        const Connected = createWidget();
+
+        const App = () => (
+          <InstantSearch appId="app" apiKey="key" indexName="index1">
+            <Index indexName="index2">
+              <Connected />
+            </Index>
+            <Index indexName="index1">
+              <Connected />
+            </Index>
+          </InstantSearch>
+        );
 
         return findResultsState(App).then(data => {
           expect(data).toHaveLength(2);
@@ -189,16 +231,22 @@ describe('createInstantSearchServer', () => {
       });
 
       it('without search state - second api', () => {
-        const App = () => (
-          <CustomInstantSearch appId="app" apiKey="key" indexName="index1">
-            <CustomIndex indexName="index2">
-              <Connected />
-            </CustomIndex>
-            <Connected />
-          </CustomInstantSearch>
+        expect.assertions(3);
+
+        const { InstantSearch, findResultsState } = createInstantSearch(
+          createAlgoliaClient
         );
 
-        expect.assertions(3);
+        const Connected = createWidget();
+
+        const App = () => (
+          <InstantSearch appId="app" apiKey="key" indexName="index1">
+            <Index indexName="index2">
+              <Connected />
+            </Index>
+            <Connected />
+          </InstantSearch>
+        );
 
         return findResultsState(App).then(data => {
           expect(data).toHaveLength(2);
@@ -208,23 +256,29 @@ describe('createInstantSearchServer', () => {
       });
 
       it('with search state - first api', () => {
+        expect.assertions(3);
+
+        const { InstantSearch, findResultsState } = createInstantSearch(
+          createAlgoliaClient
+        );
+
+        const Connected = createWidget();
+
         const App = props => (
-          <CustomInstantSearch
+          <InstantSearch
             appId="app"
             apiKey="key"
             indexName="index1"
             searchState={props.searchState}
           >
-            <CustomIndex indexName="index2">
+            <Index indexName="index2">
               <Connected />
-            </CustomIndex>
-            <CustomIndex indexName="index1">
+            </Index>
+            <Index indexName="index1">
               <Connected />
-            </CustomIndex>
-          </CustomInstantSearch>
+            </Index>
+          </InstantSearch>
         );
-
-        expect.assertions(3);
 
         return findResultsState(App, {
           searchState: {
@@ -245,21 +299,27 @@ describe('createInstantSearchServer', () => {
       });
 
       it('with search state - second api', () => {
+        expect.assertions(3);
+
+        const { InstantSearch, findResultsState } = createInstantSearch(
+          createAlgoliaClient
+        );
+
+        const Connected = createWidget();
+
         const App = props => (
-          <CustomInstantSearch
+          <InstantSearch
             appId="app"
             apiKey="key"
             indexName="index1"
             searchState={props.searchState}
           >
-            <CustomIndex indexName="index2">
+            <Index indexName="index2">
               <Connected />
-            </CustomIndex>
+            </Index>
             <Connected />
-          </CustomInstantSearch>
+          </InstantSearch>
         );
-
-        expect.assertions(3);
 
         return findResultsState(App, {
           searchState: {
