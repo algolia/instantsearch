@@ -97,7 +97,9 @@ export default {
     },
   },
   methods: {
-    suit(...args) { return suit(this.widgetName, ...args) },
+    suit(...args) {
+      return suit(this.widgetName, ...args);
+    },
     updateData(state = {}) {
       this.state = state;
     },

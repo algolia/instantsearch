@@ -73,5 +73,4 @@ export default {
       this.isShowingMore = !this.isShowingMore;
     },
   },
-};
-</script>
+};</script>

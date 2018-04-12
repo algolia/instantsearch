@@ -144,5 +144,4 @@ export default {
       this._localSearchStore.queryParameters = this.queryParameters;
     },
   },
-};
-</script>
+};</script>

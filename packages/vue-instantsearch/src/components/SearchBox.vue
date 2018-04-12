@@ -77,5 +77,4 @@ export default {
   components: {
     AisInput,
   },
-};
-</script>
+};</script>
