@@ -11,14 +11,20 @@
 <script>
 import JsonTree from 'vue-json-tree'; // todo: remove
 import algoliaComponent from '../component';
-// import { connectBreadcrumb } from 'instantsearch.js/es/connectors';
-const connect__Template = (renderFn, unmountFn) => ({ someProp }) => ({
+// Uncomment and change here ⬇️
+// import { connectorName } from 'instantsearch.js/es/connectors';
+
+// Remove this part ⬇,️ only here for testing the template
+const connectorName = (renderFn, unmountFn) => ({ someProp }) => ({
   render: () => renderFn(),
 });
 
 export default {
   components: { 'json-tree': JsonTree },
   mixins: [algoliaComponent],
+  // ⬇️ Those are all the options of your widget (attribute, items ...)
+  // You don't need to write down the props that will be forwarded by the connector on render,
+  // They are directly accessible in the state in template
   props: {
     someProp: {
       type: Array,
@@ -28,13 +34,15 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-breadcrumb',
+      blockClassName: 'ais-template', // ◀️ change this
     };
   },
   beforeCreate() {
-    this.connector = connect__Template;
+    this.connector = connectorName; // ◀️ change this to the right connectorName you imported
   },
   computed: {
+    // ⬇️ Those are all the options of your widget (attribute, items ...)
+    // Same as props, just do the mapping
     widgetParams() {
       return {
         someProp: this.someProp,

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 
-import Template from '../__template__.vue';
+import Template from '../__Template.vue';
 
 jest.mock('../../component', () => ({
   data() {
