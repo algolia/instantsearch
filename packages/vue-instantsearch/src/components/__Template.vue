@@ -14,10 +14,12 @@ import algoliaComponent from '../component';
 // Uncomment and change here ⬇️
 // import { connectorName } from 'instantsearch.js/es/connectors';
 
+/* eslint-disable no-unused-vars */
 // Remove this part ⬇,️ only here for testing the template
 const connectorName = (renderFn, unmountFn) => ({ someProp }) => ({
   render: () => renderFn(),
 });
+/* eslint-enable */
 
 export default {
   components: { 'json-tree': JsonTree },
