@@ -5,9 +5,7 @@ jest.mock('../../component');
 
 it('renders correctly', () => {
   __setState({
-    state: {
-      hits: ['yo', 'how', 'are', 'you', 'doing', '?'],
-    },
+    hits: ['yo', 'how', 'are', 'you', 'doing', '?'],
   });
   const wrapper = mount(Template);
   expect(wrapper.html()).toMatchSnapshot();
