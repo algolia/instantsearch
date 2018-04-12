@@ -1,21 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Template html should render correctly 1`] = `
-
-<div>
-  <button>
-    example refine
-  </button>
-  <pre>
-    {
-  "hits": []
-}
-  </pre>
-</div>
-
-`;
-
-exports[`Template html should render correctly when \`hits\` is different 1`] = `
+exports[`renders correctly 1`] = `
 
 <div>
   <button>
