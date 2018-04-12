@@ -35,5 +35,5 @@ test('Should register all components when installed', () => {
   );
   expect(component).toBeCalledWith('ais-hierarchical-menu', expect.any(Object));
 
-  expect(component).toHaveBeenCalledTimes(23);
+  expect(component).toHaveBeenCalledTimes(24);
 });
