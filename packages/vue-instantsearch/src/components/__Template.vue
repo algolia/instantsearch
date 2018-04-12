@@ -1,16 +1,15 @@
 <template>
-  <div>
-    <button @click="state.refine('hi')">example refine</button>
+  <div :class="suit()">
     <slot v-bind="state">
-      <pre>{{JSON.stringify(state, null, 2)}}</pre>
-      <!-- ⬇ use this to dynamically debug the state-->
-      <!-- <json-tree :level="2" :data="state"></json-tree> -->
+      <button @click="state.refine('hi')" :class="suit('button')">example refine</button>
+      <!-- ⬇ use this to dynamically debug the state, remove it when done -->
+      <json-tree :level="2" :data="state"></json-tree>
     </slot>
   </div>
 </template>
 
 <script>
-import JsonTree from 'vue-json-tree'; // todo: remove
+import JsonTree from 'vue-json-tree'; // 👈 When done, remove this
 import algoliaComponent from '../component';
 // Uncomment and change here ⬇️
 // import { connectorName } from 'instantsearch.js/es/connectors';
