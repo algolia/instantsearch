@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 
 import Template from '../__Template.vue';
 
+// ⬇️ This is a needed mock, don't delete it
 jest.mock('../../component', () => ({
   data() {
     return {

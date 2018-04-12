@@ -1,3 +1,5 @@
+import suit from './suit.js';
+
 export default {
   inject: ['_searchStore', '_instance'],
   props: {
@@ -95,22 +97,7 @@ export default {
     },
   },
   methods: {
-    bem(element, subElement) {
-      if (!this.widgetName) {
-        throw new Error('You need to provide `widgetName` in your data');
-      }
-
-      if (element) {
-        const scoppedWidgetName = `ais-${this.widgetName}-${element}`;
-        // output `ais-Widget-Xyz--abc`
-        if (subElement) return `${scoppedWidgetName}--${subElement}`;
-        // output `ais-Widget-Xyz`
-        return scoppedWidgetName;
-      } else {
-        // output `ais-Widget`
-        return `ais-${this.widgetName}`;
-      }
-    },
+    suit(...args) { return suit(this.widgetName, ...args) },
     updateData(state = {}) {
       this.state = state;
     },

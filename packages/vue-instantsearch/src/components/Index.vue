@@ -1,5 +1,5 @@
 <template>
-  <div :class="bem()">
+  <div :class="suit()">
     <slot></slot>
   </div>
 </template>

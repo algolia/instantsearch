@@ -1,20 +1,20 @@
 <template>
-  <div :class="bem()" v-if="show">
+  <div :class="suit()" v-if="show">
 
     <slot name="header"></slot>
 
-    <div v-for="facet in facetValues" :key="facet.name" :class="facet.isRefined ? bem('item', 'active') : bem('item')">
-      <label :class="bem('label')">
+    <div v-for="facet in facetValues" :key="facet.name" :class="facet.isRefined ? suit('item', 'active') : suit('item')">
+      <label :class="suit('label')">
         <input type="checkbox"
-               :class="bem('checkbox')"
+               :class="suit('checkbox')"
                v-model="facet.isRefined"
                @change="toggleRefinement(facet)"
                :value="facet.name"
         >
 
         <slot :count="facet.count" :active="facet.isRefined" :value="facet.name">
-          <span :class="bem('value')">{{facet.name}}</span>
-          <span :class="bem('count')">{{facet.count}}</span>
+          <span :class="suit('value')">{{facet.name}}</span>
+          <span :class="suit('count')">{{facet.count}}</span>
         </slot>
       </label>
     </div>

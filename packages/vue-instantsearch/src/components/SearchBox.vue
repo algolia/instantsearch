@@ -2,7 +2,7 @@
   <form role="search" action="" @submit.prevent="onFormSubmit">
     <slot>
       <ais-input :search-store="searchStore" :placeholder="placeholder" :autofocus="autofocus"></ais-input>
-      <div v-if="showLoadingIndicator" :hidden="!searchStore.isSearchStalled" :class="bem('loading-indicator')" >
+      <div v-if="showLoadingIndicator" :hidden="!searchStore.isSearchStalled" :class="suit('loading-indicator')" >
         <slot name="loading-indicator" >
           <svg width="1em" height="1em" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" stroke="#000">
             <g fill="none" fill-rule="evenodd">
@@ -22,7 +22,7 @@
           </svg>
         </slot>
       </div>
-      <button type="submit" :class="bem('submit')" :hidden="showLoadingIndicator && searchStore.isSearchStalled">
+      <button type="submit" :class="suit('submit')" :hidden="showLoadingIndicator && searchStore.isSearchStalled">
         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 40 40">
           <title>{{ submitTitle }}</title>
           <path

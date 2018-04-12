@@ -1,5 +1,5 @@
 <template>
-  <select :class="bem()" v-model="resultsPerPage">
+  <select :class="suit()" v-model="resultsPerPage">
     <template v-for="option in options">
       <option :value="option" :key="option"><slot :option="option">{{ option }}</slot></option>
     </template>

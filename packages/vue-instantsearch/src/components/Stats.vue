@@ -1,5 +1,5 @@
 <template>
-  <div :class="bem()" v-if="totalResults > 0">
+  <div :class="suit()" v-if="totalResults > 0">
     <slot :totalResults="totalResults" :processingTime="processingTime" :query="query">
       {{ totalResults.toLocaleString() }} results found in {{ processingTime.toLocaleString() }}ms
     </slot>

@@ -1,7 +1,7 @@
 <template>
-  <div :class="bem()" v-if="totalResults <= 0">
+  <div :class="suit()" v-if="totalResults <= 0">
     <slot :query="query">
-      No results matched your query <strong :class="bem('query')">{{query}}</strong>
+      No results matched your query <strong :class="suit('query')">{{query}}</strong>
     </slot>
   </div>
 </template>

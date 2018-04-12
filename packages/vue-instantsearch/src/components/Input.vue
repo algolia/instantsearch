@@ -4,7 +4,7 @@
          autocapitalize="off"
          autocomplete="off"
          spellcheck="false"
-         :class="bem()"
+         :class="suit()"
          v-model="query"
   >
 </template>

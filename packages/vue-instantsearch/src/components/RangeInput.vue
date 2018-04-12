@@ -1,11 +1,11 @@
 <template>
-  <div :class="bem()">
+  <div :class="suit()">
     <slot name="header" />
 
     <form @submit.prevent="onSubmit(refinement)">
       <input
         type="number"
-        :class="bem('input', 'from')"
+        :class="suit('input', 'from')"
         :min="range.min"
         :max="range.max"
         :step="step"
@@ -15,14 +15,14 @@
       />
 
       <slot name="separator">
-        <span :class="bem('separator')">
+        <span :class="suit('separator')">
           to
         </span>
       </slot>
 
       <input
         type="number"
-        :class="bem('input', 'to')"
+        :class="suit('input', 'to')"
         :min="range.min"
         :max="range.max"
         :step="step"
@@ -31,7 +31,7 @@
         @input="refinement.max = $event.target.value"
       />
       <slot name="submit">
-        <button :class="bem('submit')">Ok</button>
+        <button :class="suit('submit')">Ok</button>
       </slot>
     </form>
 

@@ -1,11 +1,11 @@
 <template>
   <button type="reset"
-          :class="[bem(), disabled ? bem(null, 'disabled') : '']"
+          :class="[suit(), disabled ? suit(null, 'disabled') : '']"
           :disabled="disabled"
           @click.prevent="clear"
   >
     <slot>
-      <span :class="bem('label')">Clear</span>
+      <span :class="suit('label')">Clear</span>
     </slot>
   </button>
 </template>

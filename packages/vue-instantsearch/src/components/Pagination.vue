@@ -1,29 +1,29 @@
 <template>
-  <ul :class="bem()" v-show="state.nbHits > 0">
-    <li :class="[bem('item', 'first'), page === 1 ? bem('item', 'disabled', false) : '']">
-      <a href="#" @click.prevent="goToFirstPage" :class="bem('link')">
+  <ul :class="suit()" v-show="state.nbHits > 0">
+    <li :class="[suit('item', 'first'), page === 1 ? suit('item', 'disabled', false) : '']">
+      <a href="#" @click.prevent="goToFirstPage" :class="suit('link')">
         <slot name="first">‹‹</slot>
       </a>
     </li>
-    <li :class="[bem('item', 'previous'), page === 1 ? bem('item', 'disabled', false) : '']">
-      <a href="#" @click.prevent="goToPreviousPage" :class="bem('link')">
+    <li :class="[suit('item', 'previous'), page === 1 ? suit('item', 'disabled', false) : '']">
+      <a href="#" @click.prevent="goToPreviousPage" :class="suit('link')">
         <slot name="previous">‹</slot>
       </a>
     </li>
-    <li v-for="item in pages" :key="item" :class="[bem('item'), page === item ? bem('item', 'active', false) : '']" >
-      <a href="#" @click.prevent="goToPage(item)" :class="bem('link')">
+    <li v-for="item in pages" :key="item" :class="[suit('item'), page === item ? suit('item', 'active', false) : '']" >
+      <a href="#" @click.prevent="goToPage(item)" :class="suit('link')">
         <slot :value="item + 1" :active="item === page">
           {{ item + 1 }}
         </slot>
       </a>
     </li>
-    <li :class="[bem('item', 'next'), page >= totalPages ? bem('item', 'disabled', false) : '']">
-      <a href="#" @click.prevent="goToNextPage" :class="bem('link')">
+    <li :class="[suit('item', 'next'), page >= totalPages ? suit('item', 'disabled', false) : '']">
+      <a href="#" @click.prevent="goToNextPage" :class="suit('link')">
         <slot name="next">›</slot>
       </a>
     </li>
-    <li :class="[bem('item', 'last'), page >= totalPages ? bem('item', 'disabled', false) : '']">
-      <a href="#" @click.prevent="goToLastPage" :class="bem('link')">
+    <li :class="[suit('item', 'last'), page >= totalPages ? suit('item', 'disabled', false) : '']">
+      <a href="#" @click.prevent="goToLastPage" :class="suit('link')">
         <slot name="last">››</slot>
       </a>
     </li>

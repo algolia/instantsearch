@@ -1,19 +1,19 @@
 <template>
-  <div :class="bem()" v-if="show">
+  <div :class="suit()" v-if="show">
     <slot name="header"></slot>
 
     <div
       v-for="item in state.items"
       :key="item.label"
-      :class="item.isRefined ? bem('item', 'active') : bem('item')"
+      :class="item.isRefined ? suit('item', 'active') : suit('item')"
     >
       <a
         href="#"
-        :class="bem('link')"
+        :class="suit('link')"
         @click.prevent="state.refine(item.value)"
       >
         {{item.isRefined ? "x" : ""}} {{item.label}}
-        <span :class="bem('count')">{{item.count}}</span>
+        <span :class="suit('count')">{{item.count}}</span>
       </a>
     </div>
 

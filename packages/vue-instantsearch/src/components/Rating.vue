@@ -1,12 +1,12 @@
 <template>
-  <div :class="bem()" v-if="show">
+  <div :class="suit()" v-if="show">
     <slot name="header"></slot>
 
-    <a href="#" @click.prevent="clear" :class="bem('clear')" v-if="currentValue">
+    <a href="#" @click.prevent="clear" :class="suit('clear')" v-if="currentValue">
       <slot name="clear">Clear</slot>
     </a>
 
-    <div v-for="(facet, key) in facetValues" :key="key" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']" >
+    <div v-for="(facet, key) in facetValues" :key="key" :class="[suit('item'), facet.isRefined ? suit('item', 'active') : '']" >
       <a href="#" @click.prevent="toggleRefinement(facet)">
         <slot :value="facet.value"
               :min="min"
@@ -14,11 +14,11 @@
               :count="facet.count"
         >
           <template v-for="n in max">
-            <span v-if="n <= facet.value" :class="bem('star')" :key="n">&#9733;</span>
-            <span v-else :class="bem('star', 'empty')" :key="n">&#9734;</span>
+            <span v-if="n <= facet.value" :class="suit('star')" :key="n">&#9733;</span>
+            <span v-else :class="suit('star', 'empty')" :key="n">&#9734;</span>
           </template>
           &nbsp;&amp; up
-          <span :class="bem('count')">{{facet.count}}</span>
+          <span :class="suit('count')">{{facet.count}}</span>
         </slot>
       </a>
     </div>

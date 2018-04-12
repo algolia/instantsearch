@@ -82,14 +82,14 @@ export default {
             h(
               'span',
               {
-                class: this.bem('value'),
+                class: this.suit('value'),
               },
               facet.name
             ),
             h(
               'span',
               {
-                class: this.bem('count'),
+                class: this.suit('count'),
               },
               facet.count
             )
@@ -123,8 +123,8 @@ export default {
             'li',
             {
               class: [
-                this.bem('item'),
-                facet.isRefined ? this.bem('item', 'active') : '',
+                this.suit('item'),
+                facet.isRefined ? this.suit('item', 'active') : '',
               ],
             },
             listItemChildren
@@ -135,7 +135,7 @@ export default {
       return h(
         'ul',
         {
-          class: isRoot ? this.bem('list') : '',
+          class: isRoot ? this.suit('list') : '',
         },
         listItems
       );
@@ -161,7 +161,7 @@ export default {
     return h(
       'div',
       {
-        class: this.bem(),
+        class: this.suit(),
       },
       children
     );

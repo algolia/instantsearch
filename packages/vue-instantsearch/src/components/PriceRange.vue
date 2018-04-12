@@ -1,23 +1,23 @@
 <template>
-  <div :class="bem()" v-show="show">
+  <div :class="suit()" v-show="show">
 
     <slot name="header"></slot>
 
-    <span :class="bem('currency', 'left')" v-if="currencyPlacement === 'left'">
+    <span :class="suit('currency', 'left')" v-if="currencyPlacement === 'left'">
       {{ currency }}
     </span>
-    <input :class="bem('input', 'from')" type="number" v-model="from" :placeholder="fromPlaceholder" >
-    <span :class="bem('currency', 'right')" v-if="currencyPlacement === 'right'">
+    <input :class="suit('input', 'from')" type="number" v-model="from" :placeholder="fromPlaceholder" >
+    <span :class="suit('currency', 'right')" v-if="currencyPlacement === 'right'">
       {{ currency }}
     </span>
 
     <slot><span>to&nbsp;</span></slot>
 
-    <span :class="bem('currency', 'left')" v-if="currencyPlacement === 'left'">
+    <span :class="suit('currency', 'left')" v-if="currencyPlacement === 'left'">
       {{ currency }}
     </span>
-    <input :class="bem('input', 'to')" type="number" v-model="to" :placeholder="toPlaceholder" >
-    <span :class="bem('currency', 'right')" v-if="currencyPlacement === 'right'">
+    <input :class="suit('input', 'to')" type="number" v-model="to" :placeholder="toPlaceholder" >
+    <span :class="suit('currency', 'right')" v-if="currencyPlacement === 'right'">
       {{ currency }}
     </span>
 

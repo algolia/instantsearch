@@ -1,5 +1,5 @@
 <template>
-  <div :class="bem()">
+  <div :class="suit()">
     <a :href="algoliaUrl">
       <svg width="130" viewBox="0 0 130 18" xmlns="http://www.w3.org/2000/svg">
         <title>Search by Algolia</title>
