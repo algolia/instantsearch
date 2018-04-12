@@ -95,43 +95,24 @@ export default {
     },
   },
   methods: {
-    bem(element, modifier, outputElement) {
-      if (!this.blockClassName) {
-        throw new Error("You need to provide 'blockClassName' in your data.");
+    bem(element, subElement) {
+      if (!this.widgetName) {
+        throw new Error('You need to provide `widgetName` in your data');
       }
 
-      const blockClassName = this.blockClassName;
-      if (!element && !modifier) {
-        return this.customClassName(blockClassName);
+      if (element) {
+        const scoppedWidgetName = `ais-${this.widgetName}-${element}`;
+        // output `ais-Widget-Xyz--abc`
+        if (subElement) return `${scoppedWidgetName}--${subElement}`;
+        // output `ais-Widget-Xyz`
+        return scoppedWidgetName;
+      } else {
+        // output `ais-Widget`
+        return `ais-${this.widgetName}`;
       }
-
-      if (!element) {
-        const blockModifierClassName = `${blockClassName}--${modifier}`;
-
-        return this.customClassName(blockModifierClassName);
-      }
-
-      const elementClassName = `${blockClassName}__${element}`;
-      if (!modifier) {
-        return this.customClassName(elementClassName);
-      }
-
-      const elementModifierClassName = `${elementClassName}--${modifier}`;
-
-      if (outputElement !== undefined && outputElement === false) {
-        return this.customClassName(elementModifierClassName);
-      }
-      return `${this.customClassName(elementClassName)} ${this.customClassName(
-        elementModifierClassName
-      )}`;
     },
     updateData(state = {}) {
       this.state = state;
-    },
-    customClassName(className) {
-      return !this.classNames[className]
-        ? className
-        : this.classNames[className];
     },
   },
 };
