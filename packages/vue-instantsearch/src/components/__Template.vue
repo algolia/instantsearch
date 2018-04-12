@@ -1,10 +1,9 @@
 <template>
   <div>
-    <button @click="state.refine('hi')"></button>
-    <pre>{{JSON.stringify(state, null, 2)}}</pre>
-    <!-- <slot v-bind="state">
+    <button @click="state.refine('hi')">example refine</button>
+    <slot v-bind="state">
       <json-tree :level="2" :data="state"></json-tree>
-    </slot> -->
+    </slot>
   </div>
 </template>
 
