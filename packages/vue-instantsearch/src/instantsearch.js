@@ -18,7 +18,6 @@ import Results from './components/Results.vue';
 import Stats from './components/Stats.vue';
 import Configure from './components/Configure.vue';
 import Pagination from './components/Pagination.vue';
-import ResultsPerPageSelector from './components/ResultsPerPageSelector.vue';
 import TreeMenu from './components/TreeMenu.vue';
 import Menu from './components/Menu.vue';
 import SortBySelector from './components/SortBySelector.vue';
@@ -33,6 +32,7 @@ import PoweredBy from './components/PoweredBy.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import CurrentRefinements from './components/CurrentRefinements.vue';
 import HierarchicalMenu from './components/HierarchicalMenu.vue';
+import HitsPerPage from './components/HitsPerPage.vue';
 
 const InstantSearch = {
   Index,
@@ -43,7 +43,6 @@ const InstantSearch = {
   Results,
   Stats,
   Pagination,
-  ResultsPerPageSelector,
   TreeMenu,
   Menu,
   SortBySelector,
@@ -58,6 +57,7 @@ const InstantSearch = {
   Breadcrumb,
   CurrentRefinements,
   HierarchicalMenu,
+  HitsPerPage,
 
   install(Vue) {
     Vue.component('ais-index', Index);
@@ -67,7 +67,6 @@ const InstantSearch = {
     Vue.component('ais-results', Results);
     Vue.component('ais-stats', Stats);
     Vue.component('ais-pagination', Pagination);
-    Vue.component('ais-results-per-page-selector', ResultsPerPageSelector);
     Vue.component('ais-tree-menu', TreeMenu);
     Vue.component('ais-menu', Menu);
     Vue.component('ais-sort-by-selector', SortBySelector);
@@ -83,6 +82,7 @@ const InstantSearch = {
     Vue.component('ais-breadcrumb', Breadcrumb);
     Vue.component('ais-current-refinements', CurrentRefinements);
     Vue.component('ais-hierarchical-menu', HierarchicalMenu);
+    Vue.component('ais-hits-per-page', HitsPerPage);
   },
 };
 
@@ -104,7 +104,6 @@ export {
   Results,
   Stats,
   Pagination,
-  ResultsPerPageSelector,
   TreeMenu,
   Menu,
   SortBySelector,
@@ -116,4 +115,5 @@ export {
   RefinementList,
   PriceRange,
   PoweredBy,
+  HitsPerPage,
 };

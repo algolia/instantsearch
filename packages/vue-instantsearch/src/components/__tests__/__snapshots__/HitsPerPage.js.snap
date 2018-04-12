@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+
+<div class="ais-HitsPerPage">
+  <select class="ais-HitsPerPage-select">
+    <option class="ais-HitsPerPage-option"
+            value="10"
+    >
+      10 results
+    </option>
+    <option class="ais-HitsPerPage-option"
+            value="20"
+    >
+      20 results
+    </option>
+  </select>
+</div>
+
+`;

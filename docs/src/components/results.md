@@ -51,7 +51,7 @@ This will totally replace the existing default template and give you access to t
 | Name             | Type    | Default                               | Description                                                                    |
 | ---------------- | ------- | ------------------------------------- | ------------------------------------------------------------------------------ |
 | stack            | Boolean | `false`                               | If true, will append results of next page to current results when page changes |
-| results-per-page | Number  | `` | The number of results to display |
+| hits-per-page | Number  | `` | The number of results to display |
 
 ## Slots
 
