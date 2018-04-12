@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-template', // ◀️ change this
+      blockClassName: 'ais-Template', // ◀️ change this
     };
   },
   beforeCreate() {
