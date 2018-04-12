@@ -66,5 +66,4 @@ export default {
   beforeCreate() {
     this.connector = connectMenu;
   },
-};
-</script>
+};</script>
