@@ -2,7 +2,9 @@
   <div>
     <button @click="state.refine('hi')">example refine</button>
     <slot v-bind="state">
-      <json-tree :level="2" :data="state"></json-tree>
+      <pre>{{JSON.stringify(state, null, 2)}}</pre>
+      <!-- ⬇ use this to dynamically debug the state-->
+      <!-- <json-tree :level="2" :data="state"></json-tree> -->
     </slot>
   </div>
 </template>

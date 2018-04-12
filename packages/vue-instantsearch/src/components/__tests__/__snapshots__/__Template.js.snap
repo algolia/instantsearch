@@ -6,174 +6,11 @@ exports[`Template html should render correctly 1`] = `
   <button>
     example refine
   </button>
-  <span class="json-tree json-tree-root">
-    <span class="json-tree-deep">
-      <span class="json-tree-row json-tree-expando">
-        <span class="json-tree-indent">
-          &nbsp;
-        </span>
-        <span class="json-tree-sign">
-          -
-        </span>
-        <span class="json-tree-indent">
-          &nbsp;
-        </span>
-        <span class="json-tree-open">
-          {
-        </span>
-        <span class="json-tree-collapsed"
-              style="display: none;"
-        >
-          &nbsp;/*&nbsp;2 items&nbsp;*/&nbsp;
-        </span>
-        <span class="json-tree-close"
-              style="display: none;"
-        >
-          }
-        </span>
-        <span class="json-tree-comma"
-              style="display: none;"
-        >
-          ,
-        </span>
-        <span class="json-tree-indent">
-          &nbsp;
-        </span>
-      </span>
-      <span class="json-tree-deeper">
-        <span class="json-tree">
-          <span class="json-tree-deep">
-            <span class="json-tree-row json-tree-expando">
-              <span class="json-tree-indent">
-                &nbsp;
-              </span>
-              <span class="json-tree-sign">
-                -
-              </span>
-              <span class="json-tree-indent">
-                &nbsp;
-              </span>
-              <span class="json-tree-indent">
-                &nbsp;
-              </span>
-              <span class="json-tree-indent">
-                &nbsp;
-              </span>
-              <span class="json-tree-key">
-                "hits"
-              </span>
-              <span class="json-tree-colon">
-                :&nbsp;
-              </span>
-              <span class="json-tree-open">
-                [
-              </span>
-              <span class="json-tree-collapsed"
-                    style="display: none;"
-              >
-                &nbsp;/*&nbsp;no items&nbsp;*/&nbsp;
-              </span>
-              <span class="json-tree-close"
-                    style="display: none;"
-              >
-                ]
-              </span>
-              <span class="json-tree-comma"
-                    style="display: none;"
-              >
-                ,
-              </span>
-              <span class="json-tree-indent">
-                &nbsp;
-              </span>
-            </span>
-            <span class="json-tree-deeper">
-            </span>
-            <span class="json-tree-row">
-              <span class="json-tree-ending">
-                <span class="json-tree-indent">
-                  &nbsp;
-                </span>
-                <span class="json-tree-indent">
-                  &nbsp;
-                </span>
-                <span class="json-tree-indent">
-                  &nbsp;
-                </span>
-                <span class="json-tree-indent">
-                  &nbsp;
-                </span>
-                <span class="json-tree-indent">
-                  &nbsp;
-                </span>
-                <span class="json-tree-close">
-                  ]
-                </span>
-                <span class="json-tree-comma">
-                  ,
-                </span>
-                <span class="json-tree-indent">
-                  &nbsp;
-                </span>
-              </span>
-            </span>
-          </span>
-        </span>
-        <span class="json-tree">
-          <span class="json-tree-row">
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-key">
-              "refine"
-            </span>
-            <span class="json-tree-colon">
-              :&nbsp;
-            </span>
-            <span title="undefined"
-                  class="json-tree-value json-tree-value-function"
-            >
-              undefined
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-          </span>
-        </span>
-      </span>
-      <span class="json-tree-row">
-        <span class="json-tree-ending">
-          <span class="json-tree-indent">
-            &nbsp;
-          </span>
-          <span class="json-tree-indent">
-            &nbsp;
-          </span>
-          <span class="json-tree-indent">
-            &nbsp;
-          </span>
-          <span class="json-tree-close">
-            }
-          </span>
-          <span class="json-tree-indent">
-            &nbsp;
-          </span>
-        </span>
-      </span>
-    </span>
-  </span>
+  <pre>
+    {
+  "hits": []
+}
+  </pre>
 </div>
 
 `;
@@ -182,6 +19,7 @@ exports[`Template html should render correctly when \`hits\` is different 1`] = 
 
 <div>
   <button>
+    example refine
   </button>
   <pre>
     {
