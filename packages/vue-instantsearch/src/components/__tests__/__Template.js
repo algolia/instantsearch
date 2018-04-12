@@ -1,14 +1,15 @@
 import { mount } from '@vue/test-utils';
 import Template from '../__Template.vue';
+import { __setState } from '../../component';
 jest.mock('../../component');
 
 it('renders correctly', () => {
-  const wrapper = mount(Template);
-  wrapper.setData({
+  __setState({
     state: {
       hits: ['yo', 'how', 'are', 'you', 'doing', '?'],
     },
   });
+  const wrapper = mount(Template);
   expect(wrapper.html()).toMatchSnapshot();
 });
 
