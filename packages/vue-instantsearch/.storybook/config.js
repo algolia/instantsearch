@@ -1,5 +1,6 @@
 import { configure } from '@storybook/vue';
 
+import 'instantsearch.css/themes/algolia-min.css';
 import './styles.css';
 
 import Vue from 'vue';
