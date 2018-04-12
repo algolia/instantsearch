@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-hierarchical-menu',
+      widgetName: 'ais-hierarchical-menu',
       isShowingMore: false,
     };
   },
@@ -73,4 +73,5 @@ export default {
       this.isShowingMore = !this.isShowingMore;
     },
   },
-};</script>
+};
+</script>

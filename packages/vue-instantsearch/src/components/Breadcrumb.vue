@@ -28,7 +28,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-breadcrumb',
+      widgetName: 'ais-breadcrumb',
     };
   },
   beforeCreate() {

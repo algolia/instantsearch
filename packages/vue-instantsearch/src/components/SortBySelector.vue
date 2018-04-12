@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-sort-by-selector',
+      widgetName: 'ais-sort-by-selector',
     };
   },
   computed: {
@@ -46,4 +46,5 @@ export default {
       this.indexName = this.indices[0].name;
     }
   },
-};</script>
+};
+</script>

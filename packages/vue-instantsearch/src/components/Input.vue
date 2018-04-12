@@ -17,7 +17,7 @@ export default {
   mixins: [algoliaComponent],
   data() {
     return {
-      blockClassName: 'ais-input',
+      widgetName: 'ais-input',
     };
   },
   beforeCreate() {

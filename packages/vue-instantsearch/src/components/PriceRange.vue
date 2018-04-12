@@ -60,7 +60,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-price-range',
+      widgetName: 'ais-price-range',
     };
   },
   computed: {

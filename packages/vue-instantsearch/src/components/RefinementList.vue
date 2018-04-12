@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-refinement-list',
+      widgetName: 'ais-refinement-list',
     };
   },
   created() {

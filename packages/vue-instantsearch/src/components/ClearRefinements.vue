@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-clear-refinements',
+      widgetName: 'ais-clear-refinements',
     };
   },
   beforeCreate() {
@@ -52,4 +52,5 @@ export default {
       this.state.refine();
     },
   },
-};</script>
+};
+</script>

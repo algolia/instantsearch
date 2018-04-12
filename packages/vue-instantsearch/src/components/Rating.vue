@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-rating',
+      widgetName: 'ais-rating',
     };
   },
   created() {

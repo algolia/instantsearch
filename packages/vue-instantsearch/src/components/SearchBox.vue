@@ -65,7 +65,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-search-box',
+      widgetName: 'ais-search-box',
     };
   },
   methods: {
@@ -77,4 +77,5 @@ export default {
   components: {
     AisInput,
   },
-};</script>
+};
+</script>

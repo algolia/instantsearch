@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-powered-by',
+      widgetName: 'ais-powered-by',
     };
   },
   computed: {

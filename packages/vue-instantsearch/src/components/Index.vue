@@ -76,7 +76,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-index',
+      widgetName: 'ais-index',
     };
   },
   provide() {
@@ -144,4 +144,5 @@ export default {
       this._localSearchStore.queryParameters = this.queryParameters;
     },
   },
-};</script>
+};
+</script>

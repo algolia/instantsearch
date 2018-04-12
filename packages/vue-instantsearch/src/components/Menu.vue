@@ -60,7 +60,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-menu',
+      widgetName: 'ais-menu',
     };
   },
   beforeCreate() {

@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-results',
+      widgetName: 'ais-results',
     };
   },
   beforeCreate() {
@@ -42,4 +42,5 @@ export default {
       };
     },
   },
-};</script>
+};
+</script>

@@ -13,7 +13,7 @@ export default {
   mixins: [algoliaComponent],
   data() {
     return {
-      blockClassName: 'ais-no-results',
+      widgetName: 'ais-no-results',
     };
   },
   computed: {

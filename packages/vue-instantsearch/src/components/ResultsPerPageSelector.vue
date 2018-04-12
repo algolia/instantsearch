@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-results-per-page-selector',
+      widgetName: 'ais-results-per-page-selector',
     };
   },
   computed: {
@@ -39,4 +39,5 @@ export default {
       this.searchStore.resultsPerPage = this.options[0];
     }
   },
-};</script>
+};
+</script>

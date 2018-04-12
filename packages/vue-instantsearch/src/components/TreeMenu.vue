@@ -29,7 +29,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-tree-menu',
+      widgetName: 'ais-tree-menu',
     };
   },
   created() {

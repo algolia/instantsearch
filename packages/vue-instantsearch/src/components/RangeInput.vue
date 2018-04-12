@@ -73,7 +73,7 @@ export default {
 
   data() {
     return {
-      blockClassName: 'ais-range-input',
+      widgetName: 'ais-range-input',
     };
   },
 
