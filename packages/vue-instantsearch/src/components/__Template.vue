@@ -21,6 +21,8 @@ const connectorName = (renderFn, unmountFn) => ({ someProp }) => ({
 /* eslint-enable */
 
 export default {
+  // ⬇️ this is to help you debugging what's in `state`
+  // remove it before pushing the component
   components: { 'json-tree': JsonTree },
   mixins: [algoliaComponent],
   // ⬇️ Those are all the options of your widget (attribute, items ...)
@@ -35,7 +37,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-Template', // ◀️ change this
+      widgetName: 'Template', // ◀️ change this
     };
   },
   beforeCreate() {
