@@ -25,9 +25,9 @@ Custom text:
 
 ```html
 <ais-stats>
-  <template slot-scope="{ totalResults, processingTime, query }">
-    There are {{ totalResults }} matching your query: <b>{{ query }}</b>
-    - <small>{{ processingTime }}ms</small>
+  <template slot-scope="{ hitsPerPage, nbPages, nbHits, page, processingTimeMS, query }">
+    There are {{ nbHits }} matching your query: <b>{{ query }}</b>
+    - <small>{{ processingTimeMS }}ms</small>
   </template>
 </ais-stats>
 ```
@@ -36,7 +36,7 @@ Custom text:
 
 | Name    | Props                               | Default                                                        | Description        |
 |:--------|:------------------------------------|:---------------------------------------------------------------|:-------------------|
-| default | totalResults, processingTime, query | `'{{ totalResults }} results found in {{ processingTime }}ms'` | The text displayed |
+| default | hitsPerPage, nbPages, nbHits, page, processingTimeMS, query | `'{{ nbHits }} results found in {{ processingTimeMS }}ms'` | The text displayed |
 
 
 ## CSS Classes
@@ -44,3 +44,4 @@ Custom text:
 | ClassName   | Description     |
 |:------------|:----------------|
 | `ais-stats` | Container class |
+| `ais-stats-text` | Message container |

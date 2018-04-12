@@ -1,32 +1,18 @@
-import Vue from 'vue';
+import { mount } from '@vue/test-utils';
+
 import Stats from '../Stats.vue';
 
-const searchStore = {
-  query: 'search query',
-  totalResults: 10000,
-  processingTimeMS: 1000,
-};
-
-describe.skip('Stats', () => {
-  test('renders proper HTML', () => {
-    const Component = Vue.extend(Stats);
-    const vm = new Component({
-      propsData: {
-        searchStore,
-      },
-    }).$mount();
-
-    expect(vm.$el.outerHTML).toMatchSnapshot();
+import { __setState } from '../../component';
+jest.mock('../../component');
+it('renders correctly', () => {
+  __setState({
+    hitsPerPage: 50,
+    nbPages: 20,
+    nbHits: 1000,
+    page: 2,
+    processingTimeMS: 12,
+    query: 'ipho',
   });
-
-  test('should not be displayed if there are no results', () => {
-    const Component = Vue.extend(Stats);
-    const vm = new Component({
-      propsData: {
-        searchStore: Object.assign({}, searchStore, { totalResults: 0 }),
-      },
-    }).$mount();
-
-    expect(vm.$el.outerHTML).toMatchSnapshot();
-  });
+  const wrapper = mount(Stats);
+  expect(wrapper.html()).toMatchSnapshot();
 });
