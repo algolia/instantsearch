@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      blockClassName: 'ais-pagination',
+      widgetName: 'pagination',
     };
   },
   beforeCreate() {
