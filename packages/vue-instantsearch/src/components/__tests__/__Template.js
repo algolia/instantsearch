@@ -1,23 +1,12 @@
 import { mount } from '@vue/test-utils';
-
 import Template from '../__Template.vue';
-
-// ⬇️ This is a needed mock, don't delete it
-jest.mock('../../component', () => ({
-  data() {
-    return {
-      state: {
-        hits: [],
-        refine: jest.fn(),
-      },
-    };
-  },
-}));
+jest.mock('../../component');
 
 describe('Template', () => {
   describe('html', () => {
     it('should render correctly', () => {
       const wrapper = mount(Template);
+      wrapper.setData({ state: { hits: [] } });
       expect(wrapper.html()).toMatchSnapshot();
     });
 
