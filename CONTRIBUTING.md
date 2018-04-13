@@ -293,7 +293,7 @@ the test page with your VM. **Do not commit this change**
 ```
 
 Then you should be able debug using the dev setup: `yarn run dev` and the virtual machine. You can also
-run the page used for function tests using `yarn run test:functional:dev:debug`
+run the page used for function tests using `yarn run test:functional:dev:debug-server`
 
 ## Linting ✨
 
