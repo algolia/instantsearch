@@ -10,7 +10,7 @@ import SearchBox from '../components/SearchBox';
  * @propType {boolean} [searchAsYouType=true] - Should we search on every change to the query? If you disable this option, new searches will only be triggered by clicking the search button or by pressing the enter key while the search box is focused.
  * @propType {function} [onSubmit] - Intercept submit event sent from the SearchBox form container.
  * @propType {function} [onReset] - Listen to `reset` event sent from the SearchBox form container.
- * @propType {function} [on*] - Listen to any events sent form the search input itself.
+ * @propType {function} [on*] - Listen to any events sent from the search input itself.
  * @propType {node} [submit] - Change the apparence of the default submit button (magnifying glass).
  * @propType {node} [reset] - Change the apparence of the default reset button (cross).
  * @propType {node} [loadingIndicator] - Change the apparence of the default loading indicator (spinning circle).
