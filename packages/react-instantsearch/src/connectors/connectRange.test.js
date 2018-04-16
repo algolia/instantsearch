@@ -296,6 +296,50 @@ describe('connectRange', () => {
         precision: 2,
       });
 
+      // With a precision of 0 -> parseInt
+      props = getProvidedProps(
+        {
+          attribute: 'ok',
+          min: 5,
+          max: 10,
+          precision: 0,
+        },
+        {
+          range: { ok: { min: '6.9', max: '9.6' } },
+        },
+        {}
+      );
+      expect(props).toEqual({
+        min: 5,
+        max: 10,
+        currentRefinement: { min: 6, max: 9 },
+        count: [],
+        canRefine: false,
+        precision: 0,
+      });
+
+      // With a precision of > 0 -> parseFloat
+      props = getProvidedProps(
+        {
+          attribute: 'ok',
+          min: 5,
+          max: 10,
+          precision: 1,
+        },
+        {
+          range: { ok: { min: '6.9', max: '9.6' } },
+        },
+        {}
+      );
+      expect(props).toEqual({
+        min: 5,
+        max: 10,
+        currentRefinement: { min: 6.9, max: 9.6 },
+        count: [],
+        canRefine: false,
+        precision: 1,
+      });
+
       props = getProvidedProps(
         {
           attribute: 'ok',
