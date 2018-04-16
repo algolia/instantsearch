@@ -21,7 +21,7 @@ Oh you're gonna love templates.
 
 ## Props
 
-Name | Type | Required | Default | Description
+Name | Type | | Default | Description | Required
 ---|---|---|---|---
 option | Type | `defaultValue` | An option | yes
 optionTwo | Type | `defaultValue` | An option2 | no
