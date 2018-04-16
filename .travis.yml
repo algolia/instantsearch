@@ -25,7 +25,8 @@ env:
   matrix:
   - SCRIPT=ci/functional-test.sh
   - SCRIPT=ci/unit-test.sh
-  - SCRIPT=validate-commit-msgs.sh
+  - SCRIPT=ci/validate-commit-msgs.sh
+  - SCRIPT=ci/lint.sh
   global:
   - CXX=g++-4.8
   - SAUCE_USERNAME=isjs
