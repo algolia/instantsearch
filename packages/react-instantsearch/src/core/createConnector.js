@@ -61,7 +61,9 @@ export default function createConnector(connectorDesc) {
       constructor(props, context) {
         super(props, context);
 
-        const { ais: { store, widgetsManager } } = context;
+        const {
+          ais: { store, widgetsManager },
+        } = context;
         const canRender = false;
         this.state = {
           props: this.getProvidedProps({ ...props, canRender }),
@@ -219,7 +221,9 @@ export default function createConnector(connectorDesc) {
       }
 
       getProvidedProps = props => {
-        const { ais: { store } } = this.context;
+        const {
+          ais: { store },
+        } = this.context;
         const {
           results,
           searching,
