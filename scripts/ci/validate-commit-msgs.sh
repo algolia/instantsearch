@@ -46,7 +46,7 @@ for sha in `git log --format=oneline "$RANGE" | cut '-d ' -f1`; do
     EXIT=2
   elif echo $FIRST_LINE | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+(-beta\.[0-9]+)?'; then
     echo "OK (version)"
-  elif echo $FIRST_LINE | grep -qE '^(feat|fix|docs?|style|refactor|perf|tests?|chore|revert)(\(.+\))?: .*'; then
+  elif echo $FIRST_LINE | grep -qE '^(feat|fix|docs?|style|refactor|perf|tests?|chore|revert|build|ci)(\(.+\))?: .*'; then
     echo "OK"
   else
     echo "KO (format): $FIRST_LINE"
