@@ -34,7 +34,7 @@ analytics({
  *   instantsearch.widgets.analytics({
  *     pushFunction: function(formattedParameters, state, results) {
  *       // Google Analytics
- *       // window.ga('set', 'page', '/search/query/?query=' + state.query + '&' + formattedParameters + '&numberOfHits=' + results.nbHits);
+ *       // window.ga('set', 'page', window.location.pathname + window.location.search);
  *       // window.ga('send', 'pageView');
  *
  *       // GTM
@@ -131,14 +131,11 @@ function analytics({
 
     let formattedParams = [];
 
-    const serializedRefinements = serializeRefinements(
-      Object.assign(
-        {},
-        state.state.disjunctiveFacetsRefinements,
-        state.state.facetsRefinements,
-        state.state.hierarchicalFacetsRefinements
-      )
-    );
+    const serializedRefinements = serializeRefinements({
+      ...state.state.disjunctiveFacetsRefinements,
+      ...state.state.facetsRefinements,
+      ...state.state.hierarchicalFacetsRefinements,
+    });
 
     const serializedNumericRefinements = serializeNumericRefinements(
       state.state.numericRefinements

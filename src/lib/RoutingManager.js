@@ -31,13 +31,13 @@ export default class RoutingManager {
       currentConfiguration.index,
       currentConfiguration
     ).state;
-    return Object.assign(
-      {},
-      this.getAllSearchParameters({
+    // The content of getAllSearchParameters is destructured to return a plain object
+    return {
+      ...this.getAllSearchParameters({
         currentSearchParameters: this.originalConfig,
         uiState: this.originalUIState,
-      })
-    );
+      }),
+    };
   }
 
   render({ state }) {
@@ -63,11 +63,10 @@ export default class RoutingManager {
         uiState,
       });
 
-      const fullHelperState = Object.assign(
-        {},
-        this.originalConfig,
-        searchParameters
-      );
+      const fullHelperState = {
+        ...this.originalConfig,
+        ...searchParameters,
+      };
 
       if (isEqual(fullHelperState, searchParameters)) return;
 
@@ -162,11 +161,10 @@ export default class RoutingManager {
         uiState,
       });
 
-      const fullSearchParameters = Object.assign(
-        {},
-        this.originalConfig,
-        searchParameters
-      );
+      const fullSearchParameters = {
+        ...this.originalConfig,
+        ...searchParameters,
+      };
 
       fn(fullSearchParameters);
     });

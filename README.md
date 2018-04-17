@@ -80,7 +80,9 @@ or check how [add it to your own project](https://community.algolia.com/instants
 
 ## Browser support 🌍
 
-We currently support the last two versions of major browsers. (IE10+)
+We currently support the last two versions of major browsers.
+
+If you want support for IE11, we suggest you use [polyfill.io](https://polyfill.io).
 
 ## Contributing, dev, release 🚀
 
