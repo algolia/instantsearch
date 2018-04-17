@@ -11,19 +11,15 @@ test('Should register all components when installed', () => {
     'ais-highlight',
     'ais-snippet',
     'ais-input',
-    'ais-results',
+    'ais-hits',
     'ais-stats',
     'ais-pagination',
-    'ais-tree-menu',
     'ais-menu',
     'ais-sort-by-selector',
     'ais-search-box',
     'ais-clear-refinements',
     'ais-configure',
-    'ais-rating',
-    'ais-range-input',
     'ais-no-results',
-    'ais-refinement-list',
     'ais-price-range',
     'ais-powered-by',
     'ais-breadcrumb',
@@ -35,6 +31,4 @@ test('Should register all components when installed', () => {
   const allInstalledComponents = component.mock.calls.map(call => call[0]);
 
   expect(allInstalledComponents).toEqual(components);
-  expect(components).toHaveLength(23);
-  expect(component).toHaveBeenCalledTimes(23);
 });

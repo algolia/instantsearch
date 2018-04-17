@@ -16,4 +16,19 @@ storiesOf('HitsPerPage', module)
       }, {
         label: '20 results', value: 20, default: true
       }]"></ais-hits-per-page>`,
+  }))
+  .add('custom rendering: radio buttons', () => ({
+    template: `<ais-hits-per-page :items="[{
+        label: '10 results', value: 10
+      }, {
+        label: '20 results', value: 20, default: true
+      }]">
+        <div slot-scope="{items, refine}">
+          <label
+            v-for="(item, itemIndex) in items"
+            @change="refine(item.value)">{{item.label}}
+            <input type="radio" :checked="item.isRefined === true" />
+          </label>
+        </div>
+      </ais-hits-per-page>`,
   }));

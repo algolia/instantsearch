@@ -1,5 +1,5 @@
 <template>
-  <div :class="suit()">
+  <div :class="suit()" v-if="state">
     <slot v-bind="state">
       <span :class="suit('text')">
         {{ state.nbHits.toLocaleString() }} results found in {{ state.processingTimeMS.toLocaleString() }}ms

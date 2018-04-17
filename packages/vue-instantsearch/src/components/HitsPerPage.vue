@@ -1,5 +1,5 @@
 <template>
-  <div :class="suit()">
+  <div :class="suit()" v-if="state">
     <slot v-bind="state">
       <select v-model="selected" :class="suit('select')" @change="handleChange">
         <option

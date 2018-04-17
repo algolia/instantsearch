@@ -4,9 +4,7 @@ import 'instantsearch.css/themes/algolia-min.css';
 import './styles.css';
 
 import Vue from 'vue';
-import InstantSearch, {
-  createStoreFromAlgoliaCredentials,
-} from '../src/instantsearch';
+import InstantSearch from '../src/instantsearch';
 
 Vue.use(InstantSearch);
 

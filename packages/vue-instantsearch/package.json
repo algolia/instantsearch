@@ -44,7 +44,7 @@
     "algoliasearch": "^3.25.1",
     "algoliasearch-helper": "^2.24.0",
     "escape-html": "^1.0.3",
-    "instantsearch.js": "^2.4.1",
+    "instantsearch.js": "^2.7.1",
     "lodash": "^4.17.4"
   },
   "peerDependencies": {
