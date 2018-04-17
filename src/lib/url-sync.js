@@ -1,7 +1,6 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import urlHelper from 'algoliasearch-helper/src/url';
 import isEqual from 'lodash/isEqual';
-import assign from 'lodash/assign';
 
 const AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 
@@ -162,7 +161,10 @@ class URLSync {
     clearTimeout(this.urlUpdateTimeout);
     // compare with helper.state
     const partialHelperState = helper.getState(this.trackedParameters);
-    const fullHelperState = assign({}, this.originalConfig, partialHelperState);
+    const fullHelperState = {
+      ...this.originalConfig,
+      ...partialHelperState,
+    };
 
     if (isEqual(fullHelperState, fullState)) return;
 
@@ -215,7 +217,10 @@ class URLSync {
         qs,
         { mapping: this.mapping }
       );
-      const fullState = assign({}, this.originalConfig, partialState);
+      const fullState = {
+        ...this.originalConfig,
+        ...partialState,
+      };
       fn(fullState);
     });
   }
