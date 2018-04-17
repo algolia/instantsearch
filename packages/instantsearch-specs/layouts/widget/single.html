@@ -11,11 +11,11 @@
       {{ partial "theme-selector.html" . }}
     </div>
 
-    <h2>{{ .Page.Title }}</h2>
+    <h2 id="{{ lower .Page.Title }}">{{ .Page.Title }}</h2>
 
     {{ if .Params.info }}<p class="info">{{ .Params.info }}</p>{{ end }}
 
-    <h3>Widget example</h3>
+    <h3 id="widget-example">Widget example</h3>
 
     <div class="code-wrapper">
       {{ if .Params.alt1 }}
@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <h3>HTML output</h3>
+    <h3 id="html-output">HTML output</h3>
 
     {{ if .Params.html }}
 
@@ -60,7 +60,7 @@
     <p><small><strong>Note:</strong> there is no HTML output for this widget</small></p>
     {{ end }}
 
-    <h3>CSS classes</h3>
+    <h3 id="css-classes">CSS classes</h3>
 
     {{ if .Params.classes }}
 
@@ -83,7 +83,7 @@
     <p><small><strong>Note:</strong> there are no CSS classes for this widget</small></p>
     {{ end }}
 
-    <h3>Options</h3>
+    <h3 id="options">Options</h3>
 
     {{ if .Params.options }}
 
