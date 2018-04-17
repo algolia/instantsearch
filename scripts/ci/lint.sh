@@ -2,4 +2,4 @@
 
 set -ev # exit when error
 
-yarn run test
+yarn run lint

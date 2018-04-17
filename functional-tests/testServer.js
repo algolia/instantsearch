@@ -22,7 +22,7 @@ export default {
       const app = express();
       app.use(compression());
 
-      // in npm run test:functional:dev mode we only watch and compile instantsearch.js
+      // in yarn run test:functional:dev mode we only watch and compile instantsearch.js
       if (process.env.CI !== 'true') {
         app.use(loadNonMinified());
       }
