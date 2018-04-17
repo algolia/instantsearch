@@ -34,7 +34,7 @@ analytics({
  *   instantsearch.widgets.analytics({
  *     pushFunction: function(formattedParameters, state, results) {
  *       // Google Analytics
- *       // window.ga('set', 'page', '/search/query/?query=' + state.query + '&' + formattedParameters + '&numberOfHits=' + results.nbHits);
+ *       // window.ga('set', 'page', window.location.pathname + window.location.search);
  *       // window.ga('send', 'pageView');
  *
  *       // GTM
