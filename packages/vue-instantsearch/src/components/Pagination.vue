@@ -1,5 +1,5 @@
 <template>
-  <div :class="suit()">
+  <div :class="suit()" v-if="state">
     <slot v-bind="state">
       <ul :class="suit('list')">
         <li
@@ -160,4 +160,5 @@ export default {
       this.$emit('page-change', p);
     },
   },
-};</script>
+};
+</script>
