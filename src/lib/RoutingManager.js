@@ -96,7 +96,8 @@ export default class RoutingManager {
       // We do this in order to make a URL update when there is search function
       // that prevent the search of the initial rendering
       // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-      this.router.write(firstRenderState);
+      const route = this.stateMapping.stateToRoute(firstRenderState);
+      this.router.write(route);
     }
   }
 
