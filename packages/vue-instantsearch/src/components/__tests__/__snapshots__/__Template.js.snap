@@ -24,7 +24,7 @@ exports[`renders correctly 1`] = `
         <span class="json-tree-collapsed"
               style="display: none;"
         >
-          &nbsp;/*&nbsp;3 items&nbsp;*/&nbsp;
+          &nbsp;/*&nbsp;1 item&nbsp;*/&nbsp;
         </span>
         <span class="json-tree-close"
               style="display: none;"
@@ -41,78 +41,6 @@ exports[`renders correctly 1`] = `
         </span>
       </span>
       <span class="json-tree-deeper">
-        <span class="json-tree">
-          <span class="json-tree-row">
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-key">
-              "createURL"
-            </span>
-            <span class="json-tree-colon">
-              :&nbsp;
-            </span>
-            <span title="undefined"
-                  class="json-tree-value json-tree-value-function"
-            >
-              undefined
-            </span>
-            <span class="json-tree-comma">
-              ,
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-          </span>
-        </span>
-        <span class="json-tree">
-          <span class="json-tree-row">
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-            <span class="json-tree-key">
-              "refine"
-            </span>
-            <span class="json-tree-colon">
-              :&nbsp;
-            </span>
-            <span title="undefined"
-                  class="json-tree-value json-tree-value-function"
-            >
-              undefined
-            </span>
-            <span class="json-tree-comma">
-              ,
-            </span>
-            <span class="json-tree-indent">
-              &nbsp;
-            </span>
-          </span>
-        </span>
         <span class="json-tree">
           <span class="json-tree-deep">
             <span class="json-tree-row json-tree-expando">

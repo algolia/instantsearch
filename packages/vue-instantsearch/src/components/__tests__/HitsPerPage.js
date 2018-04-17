@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 
+import { __setState } from '../../component';
 import HitsPerPage from '../HitsPerPage.vue';
 jest.mock('../../component');
 
@@ -23,6 +24,9 @@ it('renders correctly', () => {
 });
 
 it('behaves correctly', () => {
+  __setState({
+    refine: jest.fn(),
+  });
   const wrapper = mount(HitsPerPage, {
     propsData: {
       items: [

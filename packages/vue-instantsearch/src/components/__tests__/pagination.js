@@ -3,14 +3,18 @@ import Pagination from '../Pagination.vue';
 import { __setState } from '../../component';
 jest.mock('../../component');
 
+const defaultState = {
+  createURL: () => '#',
+  refine: jest.fn(),
+  pages: [0, 1, 2, 3, 4, 5, 6],
+  nbPages: 20,
+  currentRefinement: 0,
+  isFirstPage: true,
+  isLastPage: false,
+};
+
 it('renders correctly first page', () => {
-  __setState({
-    pages: [0, 1, 2, 3, 4, 5, 6],
-    nbPages: 20,
-    currentRefinement: 0,
-    isFirstPage: true,
-    isLastPage: false,
-  });
+  __setState(defaultState);
   const wrapper = mount(Pagination);
 
   expect(wrapper.html()).toMatchSnapshot();
@@ -18,6 +22,7 @@ it('renders correctly first page', () => {
 
 it('renders correctly another page', () => {
   __setState({
+    ...defaultState,
     pages: [3, 4, 5, 6, 7, 8, 9],
     nbPages: 20,
     currentRefinement: 6,
@@ -31,6 +36,7 @@ it('renders correctly another page', () => {
 
 it('renders correctly last page', () => {
   __setState({
+    ...defaultState,
     pages: [3, 4, 5, 6, 7, 8, 9],
     nbPages: 9,
     currentRefinement: 9,
@@ -44,6 +50,7 @@ it('renders correctly last page', () => {
 
 it('Moves to the first page on that button', () => {
   __setState({
+    ...defaultState,
     isFirstPage: false,
   });
   const wrapper = mount(Pagination);
@@ -56,11 +63,10 @@ it('Moves to the first page on that button', () => {
 });
 
 it('Moves to the next page on that button', () => {
+  const currentRefinement = 5;
   __setState({
-    pages: [0, 1, 2, 3, 4, 5, 6],
-    isLastPage: false,
-    isFirstPage: false,
-    currentRefinement: 5,
+    ...defaultState,
+    currentRefinement,
   });
   const wrapper = mount(Pagination);
 
@@ -68,13 +74,17 @@ it('Moves to the next page on that button', () => {
     '.ais-Pagination-item--nextPage .ais-Pagination-link'
   );
   nextPage.trigger('click');
-  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(6);
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(
+    currentRefinement + 1
+  );
 });
 
 it('Moves to the last page on that button', () => {
+  const nbPages = 1000;
   __setState({
+    ...defaultState,
     isLastPage: false,
-    nbPages: 1000,
+    nbPages,
   });
   const wrapper = mount(Pagination);
 
@@ -82,13 +92,15 @@ it('Moves to the last page on that button', () => {
     '.ais-Pagination-item--lastPage .ais-Pagination-link'
   );
   lastPage.trigger('click');
-  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(999);
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(nbPages - 1);
 });
 
 it('Moves to the previous page on that button', () => {
+  const currentRefinement = 5;
   __setState({
+    ...defaultState,
     isFirstPage: false,
-    currentRefinement: 5,
+    currentRefinement,
   });
   const wrapper = mount(Pagination);
 
@@ -96,5 +108,7 @@ it('Moves to the previous page on that button', () => {
     '.ais-Pagination-item--previousPage .ais-Pagination-link'
   );
   previousPage.trigger('click');
-  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(4);
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(
+    currentRefinement - 1
+  );
 });

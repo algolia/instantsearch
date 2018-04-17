@@ -1,9 +1,6 @@
 import suit from '../suit';
 
-let state = {
-  createURL: () => '#',
-  refine: jest.fn(),
-};
+let state = {};
 
 // we need to have state given by `component` before it is mounted, otherwise
 // we can't render it in most cases (items, hits, etc. are used in the template)
@@ -14,10 +11,7 @@ let state = {
 // This allows us to import this `__setState` function and call it in the test
 // to give the necessary data before mounting.
 export function __setState(newState) {
-  state = {
-    ...state,
-    ...newState,
-  };
+  state = newState;
 }
 
 export default {

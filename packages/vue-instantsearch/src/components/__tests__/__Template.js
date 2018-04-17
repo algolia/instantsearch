@@ -14,6 +14,9 @@ it('renders correctly', () => {
 // ☑️ add another rendering test if it's different given the propsData
 
 it('behaves correctly', () => {
+  __setState({
+    refine: jest.fn(),
+  });
   const wrapper = mount(Template);
   const button = wrapper.find('button');
   button.trigger('click');
