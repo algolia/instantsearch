@@ -25,6 +25,43 @@ function defaultCreateURL() {
 const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) =>
   defaultAlgoliasearch(appId, apiKey);
 
+const THROWAWAY = {
+  checkParameters({
+    appId,
+    apiKey,
+    indexName,
+    createAlgoliaClient,
+    searchClient,
+  }) {
+    if (!searchClient) {
+      if (appId === null || apiKey === null || indexName === null) {
+        const usage = `
+      Usage: instantsearch({
+        appId: 'my_application_id',
+        apiKey: 'my_search_api_key',
+        indexName: 'my_index_name'
+      });`;
+        throw new Error(usage);
+      }
+    }
+
+    if (searchClient && (appId || apiKey)) {
+      throw new Error(
+        'A search client cannot work with an `appId` or an `apiKey`.'
+      );
+    }
+
+    if (searchClient && createAlgoliaClient) {
+      throw new Error(
+        'A search client cannot work with `createAlgoliaClient`.'
+      );
+    }
+  },
+  isSearchClient(params) {
+    return Boolean(params.searchClient);
+  },
+};
+
 /**
  * Widgets are the building blocks of InstantSearch.js. Any
  * valid widget must have at least a `render` or a `init` function.
@@ -52,22 +89,28 @@ class InstantSearch extends EventEmitter {
     searchFunction,
     createAlgoliaClient = defaultCreateAlgoliaClient,
     stalledSearchDelay = 200,
+    searchClient = {},
   }) {
     super();
-    if (appId === null || apiKey === null || indexName === null) {
-      const usage = `
-Usage: instantsearch({
-  appId: 'my_application_id',
-  apiKey: 'my_search_api_key',
-  indexName: 'my_index_name'
-});`;
-      throw new Error(usage);
+
+    // eslint-disable-next-line prefer-rest-params
+    const [THROWAWAY_PARAMS] = arguments;
+
+    THROWAWAY.checkParameters(THROWAWAY_PARAMS);
+
+    if (THROWAWAY.isSearchClient(THROWAWAY_PARAMS)) {
+      const client = searchClient;
+      client.clearCache = client.clearCache || (() => {});
+      client.addAlgoliaAgent = client.addAlgoliaAgent || (() => {});
+
+      this.client = client;
+    } else {
+      const client = createAlgoliaClient(algoliasearch, appId, apiKey);
+      client.addAlgoliaAgent(`instantsearch.js ${version}`);
+
+      this.client = client;
     }
 
-    const client = createAlgoliaClient(algoliasearch, appId, apiKey);
-    client.addAlgoliaAgent(`instantsearch.js ${version}`);
-
-    this.client = client;
     this.helper = null;
     this.indexName = indexName;
     this.searchParameters = { ...searchParameters, index: indexName };
