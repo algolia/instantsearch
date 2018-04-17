@@ -34,6 +34,8 @@ describe('connectGeoSearch - rendering', () => {
       init: expect.any(Function),
       render: expect.any(Function),
       dispose: expect.any(Function),
+      getWidgetState: expect.any(Function),
+      getWidgetSearchParameters: expect.any(Function),
     });
   });
 
@@ -62,6 +64,7 @@ describe('connectGeoSearch - rendering', () => {
         refine: expect.any(Function),
         clearMapRefinement: expect.any(Function),
         isRefinedWithMap: expect.any(Function),
+        getSearchBounds: expect.any(Function),
         toggleRefineOnMapMove: expect.any(Function),
         isRefineOnMapMove: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
