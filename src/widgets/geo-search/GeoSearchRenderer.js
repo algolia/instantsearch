@@ -41,16 +41,16 @@ const getBoundsWithPadding = ({
   const scale = Math.pow(2, mapInstance.getZoom()) || 1;
 
   const { northEast, southWest } = bounds;
-  const northEastPoint = mapInstance
-    .getProjection()
-    .fromLatLngToPoint(
-      new googleReference.maps.LatLng(northEast.lat, northEast.lng)
-    );
-  const southWestPoint = mapInstance
-    .getProjection()
-    .fromLatLngToPoint(
-      new googleReference.maps.LatLng(southWest.lat, southWest.lng)
-    );
+
+  const toPoint = latLng =>
+    mapInstance
+      .getProjection()
+      .fromLatLngToPoint(
+        new googleReference.maps.LatLng(latLng.lat, latLng.lng)
+      );
+
+  const northEastPoint = toPoint(northEast);
+  const southWestPoint = toPoint(southWest);
 
   northEastPoint.x = northEastPoint.x + paddingBoundingBox.right / scale;
   northEastPoint.y = northEastPoint.y - paddingBoundingBox.top / scale;

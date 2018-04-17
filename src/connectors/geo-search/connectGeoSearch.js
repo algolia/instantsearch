@@ -194,8 +194,6 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       widgetState.hasMapMoveSinceLastRefine;
 
     const getSearchBounds = helper => () => {
-      // const refine = helper => ({ northEast: ne, southWest: sw }) => {
-      // const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
       const boundingBox =
         helper.state.insideBoundingBox &&
         helper.state.insideBoundingBox.split(',');
