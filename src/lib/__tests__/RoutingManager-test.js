@@ -258,5 +258,61 @@ describe('RoutingManager', () => {
         });
       });
     });
+
+    test('should apply state mapping on differences after searchfunction', done => {
+      const router = {
+        write: jest.fn(),
+        read: jest.fn(() => ({})),
+        onUpdate: jest.fn(),
+      };
+      const stateMapping = {
+        stateToRoute(uiState) {
+          return {
+            query: uiState.query && uiState.query.toUpperCase(),
+          };
+        },
+        routeToState(routeState) {
+          return routeState;
+        },
+      };
+      const search = instantsearch({
+        appId: 'latency',
+        apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
+        indexName: 'ikea',
+        routing: {
+          router,
+          stateMapping,
+        },
+        searchFunction: helper => {
+          helper.setQuery('test').search();
+        },
+      });
+
+      const widget = {
+        render: jest.fn(),
+        getWidgetSearchParameters: jest.fn(),
+        getWidgetState(uiState, { searchParameters }) {
+          return {
+            ...uiState,
+            query: searchParameters.query,
+          };
+        },
+      };
+      search.addWidget(widget);
+
+      search.start();
+
+      search.once('render', () => {
+        // initialization is done at this point
+
+        expect(search.helper.state.query).toEqual('test');
+
+        expect(router.write).toHaveBeenLastCalledWith({
+          query: 'TEST',
+        });
+
+        done();
+      });
+    });
   });
 });
