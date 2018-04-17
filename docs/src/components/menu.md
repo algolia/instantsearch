@@ -9,7 +9,7 @@ editable: true
 githubSource: docs/src/components/menu.md
 ---
 
-Create a menu based on a facet. A menu displays facet values and let the user selects only one value at a time. It also displays an empty value which lets the user “unselect” any previous selection.
+Create a menu based on a facet. A menu displays a list of facet values and let the user selects only one value at a time.
 
 <a class="btn btn-static-theme" href="stories/?selectedKind=Menu">🕹 try out live</a>
 
@@ -21,24 +21,30 @@ Create a menu based on a facet. A menu displays facet values and let the user se
 
 ## Props
 
-| Name      | Type   | Default                                        | Description                      |
-|-----------|--------|------------------------------------------------|----------------------------------|
-| attribute | String |                                                | The attribute name to refine on. |
-| limit     | Number | `10`                                           | The number of values to display  |
-| sort-by   | Array  | `['isRefined:desc', 'count:desc', 'name:asc']` | The sorting strategy             |
+Name | Type | Default | Description | Required
+---|---|---|---|---
+attribute | String | | The attribute | yes
+limit | Number | 10 | Number of items to show
+showMoreLimit | Number | 20 | Number of items to show when the user clicked on "show more items"
+showMore | Boolean | `false` | Whether or not to have the option to load more values
+sortBy | Array(string) or function | `['isRefined:desc', 'count:desc', 'name:asc']` | array or function to sort the results by
 
-## Slots
+## CSS classes
 
-| Name   | Props | Description                                                                                   |
-|--------|-------|-----------------------------------------------------------------------------------------------|
-| header |       | Add content to the top of the component, which will be hidden when the component is hidden    |
-| footer |       | Add content to the bottom of the component, which will be hidden when the component is hidden |
+Here's a list of CSS classes exposed by this widget. To better understand the underlying
+DOM structure, have a look at the generated DOM in your browser.
 
-## CSS Classes
-
-| ClassName                | Description                 |
-|--------------------------|-----------------------------|
-| `ais-menu`               | Container class             |
-| `ais-menu__item`         | A refinement option         |
-| `ais-menu__item--active` | An active refinement option |
-| `ais-menu__count`        | A refinement option count   |
+Class name | Description
+---|---
+`.ais-Menu` | the root div of the widget
+`.ais-Menu--noRefinement` | the root div of the widget with no refinement
+`.ais-Menu-searchBox` | the search box of the widget
+`.ais-Menu-list` | the list of all menu items
+`.ais-Menu-item` | the menu list item
+`.ais-Menu-item--selected` | the selected menu list item
+`.ais-Menu-link` | the clickable menu element
+`.ais-Menu-label` | the label of each item
+`.ais-Menu-count` | the count of values for each item
+`.ais-Menu-noResults` | the div displayed when there are no results
+`.ais-Menu-showMore` | the button used to display more categories
+`.ais-Menu-showMore--disabled` | the disabled button used to display more categories

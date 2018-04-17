@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item--active">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          foo
+        </span>
+        <span class="ais-Menu-count">
+          2
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          bar
+        </span>
+        <span class="ais-Menu-count">
+          3
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          foobar
+        </span>
+        <span class="ais-Menu-count">
+          4
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`renders correctly with showMore 1`] = `
+
+<div class="ais-Menu">
+  <ul class="ais-Menu-list">
+    <li class="ais-Menu-item--active">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          foo
+        </span>
+        <span class="ais-Menu-count">
+          2
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          bar
+        </span>
+        <span class="ais-Menu-count">
+          3
+        </span>
+      </a>
+    </li>
+    <li class="ais-Menu-item">
+      <a class="ais-Menu-link">
+        <span class="ais-Menu-label">
+          foobar
+        </span>
+        <span class="ais-Menu-count">
+          4
+        </span>
+      </a>
+    </li>
+  </ul>
+  <button class="ais-Menu-showMore">
+    Show more
+  </button>
+</div>
+
+`;
