@@ -9,73 +9,49 @@ editable: true
 githubSource: docs/src/components/pagination.md
 ---
 
-A component to navigate between results pages.
+A component to navigate between different pages of results.
 
 <a class="btn btn-static-theme" href="stories/?selectedKind=Pagination">🕹 try out live</a>
 
 ## Usage
 
-Basic usage:
-
 ```html
-<ais-pagination></ais-pagination>
-```
-
-Customize the number of pages to display around the active one:
-
-```html
-<ais-pagination :padding="5"></ais-pagination>
-```
-
-Scroll to the top of the page after a page was changed:
-
-```vue
-<template>
-    <!-- ... -->
-    <ais-pagination v-on:page-change="onPageChange"></ais-pagination>
-    <!-- ... -->
-</template>
-<script>
-  export default {
-    methods: {
-      onPageChange(page) {
-        window.scrollTo(0,0);
-      }
-    }
-  }
-</script>
+<ais-pagination :padding="3"></ais-pagination>
 ```
 
 ## Props
 
-| Name    | Type   | Default | Description                                       |
-|---------|--------|---------|---------------------------------------------------|
-| padding | Number | `3`     | Number of pages to display around the active page |
+Name | Type | | Default | Description | Required
+---|---|---|---|---
+padding | Number | `3` | the amount of pages to show before and after the current page | no
+totalPages | Number | | Limit the amount of pages that can be reached | no
+showFirst | Boolean | `true` | Show the "first page" button | no
+showLast | Boolean | `true` | Show the "last page" button | no
+showNext | Boolean | `true` | Show the "next page" button | no
+showPrevious | Boolean | `true` | Show the "previous page" button | no
 
-## Slots
+## CSS classes
 
-| Name     | Props        | Default      | Description        |
-|----------|--------------|--------------|--------------------|
-| first    |              | `<<`         | First page text    |
-| previous |              | `<`          | Previous page text |
-| default  | active, item | `{{ item }}` | Page text          |
-| next     |              | `>`          | Next page text     |
-| last     |              | `>>`         | Last page text     |
+Here's a list of CSS classes exposed by this widget. To better understand the underlying
+DOM structure, have a look at the generated DOM in your browser.
 
-## CSS Classes
-
-| ClassName                        | Description        |
-|----------------------------------|--------------------|
-| `ais-pagination`                 | Container class    |
-| `ais-pagination__item`           | Page link item     |
-| `ais-pagination__item--first`    | First link item    |
-| `ais-pagination__item--previous` | Previous link item |
-| `ais-pagination__item--next`     | Next link item     |
-| `ais-pagination__item--last`     | Last link item     |
-| `ais-pagination__link`           | Link anchor        |
+Class name | Description
+---|---
+`.ais-Pagination` | the root div of the widget
+`.ais-Pagination--noRefinement` | the root div of the widget with no refinement
+`.ais-Pagination-list` | the list of all pagination items
+`.ais-Pagination-item` | the pagination list item
+`.ais-Pagination-item--firstPage` | the "first" pagination list item
+`.ais-Pagination-item--lastPage` | the "last" pagination list item
+`.ais-Pagination-item--previousPage` | the "previous" pagination list item
+`.ais-Pagination-item--nextPage` | the "next" pagination list item
+`.ais-Pagination-item--page` | the "page" pagination list item
+`.ais-Pagination-item--selected` | the selected pagination list item
+`.ais-Pagination-item--disabled` | the disabled pagination list item
+`.ais-Pagination-link` | the pagination clickable element
 
 ## Events
 
-| Event name  | Variables  | Description                                                                                  |
-|-------------|------------|----------------------------------------------------------------------------------------------|
-| page-change | page       | Triggered right after a page was changed due to an action taken on the pagination component. |
+Event name | Variables | Description
+---|---|---
+page-change | page | Triggered right after a page was changed due to an action taken on the pagination component.

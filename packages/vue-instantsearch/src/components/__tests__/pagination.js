@@ -1,124 +1,100 @@
-import Vue from 'vue';
+import { mount } from '@vue/test-utils';
 import Pagination from '../Pagination.vue';
+import { __setState } from '../../component';
+jest.mock('../../component');
 
-describe.skip('Pagination', () => {
-  test('renders proper HTML', () => {
-    const searchStore = {
-      page: 2,
-      totalPages: 10,
-      totalResults: 4000,
-    };
-    const Component = Vue.extend(Pagination);
-    const vm = new Component({
-      propsData: {
-        searchStore,
-      },
-    });
-    vm.$mount();
-
-    expect(vm.$el.outerHTML).toMatchSnapshot();
+it('renders correctly first page', () => {
+  __setState({
+    pages: [0, 1, 2, 3, 4, 5, 6],
+    nbPages: 20,
+    currentRefinement: 0,
+    isFirstPage: true,
+    isLastPage: false,
   });
+  const wrapper = mount(Pagination);
 
-  test('accepts custom padding', () => {
-    const searchStore = {
-      page: 5,
-      totalPages: 10,
-      totalResults: 4000,
-    };
-    const Component = Vue.extend(Pagination);
-    const vm = new Component({
-      propsData: {
-        padding: 2,
-        searchStore,
-      },
-    });
-    vm.$mount();
+  expect(wrapper.html()).toMatchSnapshot();
+});
 
-    expect(vm.$el.outerHTML).toMatchSnapshot();
+it('renders correctly another page', () => {
+  __setState({
+    pages: [3, 4, 5, 6, 7, 8, 9],
+    nbPages: 20,
+    currentRefinement: 6,
+    isFirstPage: false,
+    isLastPage: false,
   });
+  const wrapper = mount(Pagination);
 
-  test('it should not try to go to a previous page that would be inferior to 1', () => {
-    const searchStore = {
-      page: 1,
-      totalPages: 20,
-      totalResults: 4000,
-    };
-    const Component = Vue.extend(Pagination);
-    const vm = new Component({
-      propsData: {
-        searchStore,
-      },
-    });
+  expect(wrapper.html()).toMatchSnapshot();
+});
 
-    vm.goToPreviousPage();
-
-    expect(searchStore.page).toEqual(1);
+it('renders correctly last page', () => {
+  __setState({
+    pages: [3, 4, 5, 6, 7, 8, 9],
+    nbPages: 9,
+    currentRefinement: 9,
+    isFirstPage: false,
+    isLastPage: true,
   });
+  const wrapper = mount(Pagination);
 
-  test('it should not try to go to a next page that would be superior to total existing pages', () => {
-    const searchStore = {
-      page: 20,
-      totalPages: 20,
-      totalResults: 4000,
-    };
-    const Component = Vue.extend(Pagination);
-    const vm = new Component({
-      propsData: {
-        searchStore,
-      },
-    });
+  expect(wrapper.html()).toMatchSnapshot();
+});
 
-    vm.goToNextPage();
-
-    expect(searchStore.page).toEqual(20);
+it('Moves to the first page on that button', () => {
+  __setState({
+    isFirstPage: false,
   });
+  const wrapper = mount(Pagination);
 
-  test('it should be hidden if there are no results in the current context', () => {
-    const searchStore = {
-      page: 1,
-      totalPages: 20,
-      totalResults: 0,
-    };
-    const Component = Vue.extend(Pagination);
-    const vm = new Component({
-      propsData: {
-        searchStore,
-      },
-    });
+  const firstPage = wrapper.find(
+    '.ais-Pagination-item--firstPage .ais-Pagination-link'
+  );
+  firstPage.trigger('click');
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(0);
+});
 
-    vm.$mount();
-
-    expect(vm.$el.outerHTML).toMatchSnapshot();
+it('Moves to the next page on that button', () => {
+  __setState({
+    pages: [0, 1, 2, 3, 4, 5, 6],
+    isLastPage: false,
+    isFirstPage: false,
+    currentRefinement: 5,
   });
+  const wrapper = mount(Pagination);
 
-  test('it should emit a "page-change" event when page changes and pass in the page variable', () => {
-    const searchStore = {
-      page: 1,
-      totalPages: 20,
-      totalResults: 4000,
-    };
-    const Component = Vue.extend(Pagination);
-    const vm = new Component({
-      propsData: {
-        searchStore,
-      },
-    });
+  const nextPage = wrapper.find(
+    '.ais-Pagination-item--nextPage .ais-Pagination-link'
+  );
+  nextPage.trigger('click');
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(6);
+});
 
-    const onPageChange = jest.fn();
-    vm.$on('page-change', onPageChange);
-
-    vm.$mount();
-
-    expect(onPageChange).not.toHaveBeenCalled();
-
-    vm.$el
-      .getElementsByTagName('li')[3]
-      .getElementsByTagName('a')[0]
-      .click();
-    expect(onPageChange).toHaveBeenCalledTimes(1);
-
-    const page = searchStore.page;
-    expect(onPageChange).toHaveBeenCalledWith(page);
-    expect(page).toBe(2);
+it('Moves to the last page on that button', () => {
+  __setState({
+    isLastPage: false,
+    nbPages: 1000,
   });
+  const wrapper = mount(Pagination);
+
+  const lastPage = wrapper.find(
+    '.ais-Pagination-item--lastPage .ais-Pagination-link'
+  );
+  lastPage.trigger('click');
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(999);
+});
+
+it('Moves to the previous page on that button', () => {
+  __setState({
+    isFirstPage: false,
+    currentRefinement: 5,
+  });
+  const wrapper = mount(Pagination);
+
+  const previousPage = wrapper.find(
+    '.ais-Pagination-item--previousPage .ais-Pagination-link'
+  );
+  previousPage.trigger('click');
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(4);
 });

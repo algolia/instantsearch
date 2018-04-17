@@ -1,0 +1,267 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly another page 1`] = `
+
+<div class="ais-Pagination">
+  <ul class="ais-Pagination-list">
+    <li class="ais-Pagination-item ais-Pagination-item--firstPage">
+      <a aria-label="First"
+         href="#"
+         class="ais-Pagination-link"
+      >
+        ‹‹
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--previousPage">
+      <a aria-label="Previous"
+         href="#"
+         class="ais-Pagination-link"
+      >
+        ‹
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        4
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        5
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        6
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--selected">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        7
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        8
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        9
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        10
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--nextPage">
+      <a aria-label="Next"
+         href="#"
+         class="ais-Pagination-link"
+      >
+        ›
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--lastPage">
+      <a aria-label="Last"
+         href="#"
+         class="ais-Pagination-link"
+      >
+        ››
+      </a>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`renders correctly first page 1`] = `
+
+<div class="ais-Pagination">
+  <ul class="ais-Pagination-list">
+    <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
+      <span aria-label="Previous"
+            class="ais-Pagination-link"
+      >
+        ‹‹
+      </span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
+      <span aria-label="Previous"
+            class="ais-Pagination-link"
+      >
+        ‹
+      </span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--selected">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        1
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        2
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        3
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        4
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        5
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        6
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        7
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--nextPage">
+      <a aria-label="Next"
+         href="#"
+         class="ais-Pagination-link"
+      >
+        ›
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--lastPage">
+      <a aria-label="Last"
+         href="#"
+         class="ais-Pagination-link"
+      >
+        ››
+      </a>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`renders correctly last page 1`] = `
+
+<div class="ais-Pagination">
+  <ul class="ais-Pagination-list">
+    <li class="ais-Pagination-item ais-Pagination-item--firstPage">
+      <a aria-label="First"
+         href="#"
+         class="ais-Pagination-link"
+      >
+        ‹‹
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--previousPage">
+      <a aria-label="Previous"
+         href="#"
+         class="ais-Pagination-link"
+      >
+        ‹
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        4
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        5
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        6
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        7
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        8
+      </a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        9
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--selected">
+      <a href="#"
+         class="ais-Pagination-link"
+      >
+        10
+      </a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--nextPage ais-Pagination-item--disabled">
+      <span aria-label="Next"
+            class="ais-Pagination-link"
+      >
+        ›
+      </span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--lastPage ais-Pagination-item--disabled">
+      <span aria-label="Last"
+            class="ais-Pagination-link"
+      >
+        ››
+      </span>
+    </li>
+  </ul>
+</div>
+
+`;
