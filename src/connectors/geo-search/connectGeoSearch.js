@@ -213,12 +213,10 @@ const connectGeoSearch = (renderFn, unmountFn) => {
         },
       };
     };
-    let getSearchBoundsInstance;
 
     const init = initArgs => {
       const { state, helper, instantSearchInstance } = initArgs;
       const isFirstRendering = true;
-      getSearchBoundsInstance = getSearchBounds(helper);
 
       widgetState.internalToggleRefineOnMapMove = createInternalToggleRefinementonMapMove(
         noop,
@@ -237,7 +235,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
-          getSearchBounds: getSearchBoundsInstance,
+          getSearchBounds: getSearchBounds(helper),
           toggleRefineOnMapMove,
           isRefineOnMapMove,
           setMapMoveSinceLastRefine,
@@ -290,7 +288,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
-          getSearchBounds: getSearchBoundsInstance,
+          getSearchBounds: getSearchBounds(helper),
           toggleRefineOnMapMove,
           isRefineOnMapMove,
           setMapMoveSinceLastRefine,
