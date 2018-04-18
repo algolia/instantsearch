@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InstantSearch Search Client Properties throws if no \`search()\` method 1`] = `"InstantSearch configuration error: \`searchClient\` must implement a \`search(requests)\` method."`;

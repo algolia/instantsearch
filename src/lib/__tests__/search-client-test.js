@@ -2,6 +2,16 @@ import InstantSearch from '../InstantSearch';
 
 describe('InstantSearch Search Client', () => {
   describe('Properties', () => {
+    it('throws if no `search()` method', () => {
+      expect(() => {
+        // eslint-disable-next-line no-new
+        new InstantSearch({
+          indexName: '',
+          searchClient: {},
+        });
+      }).toThrowErrorMatchingSnapshot();
+    });
+
     it('should have default `addAlgoliaAgent()` and `clearCache()` methods', () => {
       const search = new InstantSearch({
         indexName: '',
