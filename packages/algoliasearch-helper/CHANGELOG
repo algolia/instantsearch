@@ -1,3 +1,11 @@
+2.25.0 - 2018-04-18
+ * chore: fix types in doc for getNumericRefinement (#564) https://github.com/algolia/algoliasearch-helper-js/commit/4113b5b6bdaf3a2e008ffecdc11c16fcda34dff9, closes https://github.com/algolia/algoliasearch-helper-js/issues/564 https://github.com/algolia/algoliasearch-helper-js/issues/556
+ * chore(test): delete indices at the end of the tests (#570) https://github.com/algolia/algoliasearch-helper-js/commit/d70a9500f5b4eafafe022c4e652536feab152417, closes https://github.com/algolia/algoliasearch-helper-js/issues/560
+ * chore: update yarn.lock https://github.com/algolia/algoliasearch-helper-js/commit/afa384441339815d36567bc97125a10f8e9a0a06
+ * docs(readme): fix typo (#565) https://github.com/algolia/algoliasearch-helper-js/commit/36eebb4e04b23f36f752aef3d51e3a04457b32d0, closes https://github.com/algolia/algoliasearch-helper-js/issues/565
+ * feat(search): Promisify `client.search()` (#571) https://github.com/algolia/algoliasearch-helper-js/commit/d12cbda2bb8ebafdf3d5f9e442378d3efb7353ee
+ * feat(sffv): Use client SFFV over index SFFV (#572) https://github.com/algolia/algoliasearch-helper-js/commit/bb17720deed3d6325a28717a9452b278af456582
+
 2.24.0 - 2018-01-31
  * feat: make Helper ready for insights https://github.com/algolia/algoliasearch-helper-js/commit/03f8f31931efe1d9913c57066539b4422963f1bc
 
