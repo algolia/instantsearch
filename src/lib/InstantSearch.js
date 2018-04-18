@@ -35,11 +35,11 @@ const checkOptions = ({
   if (!searchClient) {
     if (appId === null || apiKey === null || indexName === null) {
       const usage = `
-      Usage: instantsearch({
-        appId: 'my_application_id',
-        apiKey: 'my_search_api_key',
-        indexName: 'my_index_name'
-      });`;
+Usage: instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name'
+});`;
       throw new Error(usage);
     }
   } else if (
@@ -50,13 +50,13 @@ const checkOptions = ({
       createAlgoliaClient !== defaultCreateAlgoliaClient)
   ) {
     const usage = `
-        Usage: instantsearch({
-          indexName: 'my_index_name',
-          searchClient: {
-            search(requests) {},
-            searchForFacetValues(requests) {}
-          }
-        });`;
+Usage: instantsearch({
+  indexName: 'my_index_name',
+  searchClient: {
+    search(requests) {},
+    searchForFacetValues(requests) {}
+  }
+});`;
     throw new Error(usage);
   }
 };

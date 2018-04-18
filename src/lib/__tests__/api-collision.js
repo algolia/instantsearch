@@ -1,6 +1,15 @@
 /* eslint no-new: off */
 import InstantSearch from '../InstantSearch';
 
+const usage = `
+Usage: instantsearch({
+  indexName: 'my_index_name',
+  searchClient: {
+    search(requests) {},
+    searchForFacetValues(requests) {}
+  }
+});`;
+
 // FIXME: Test suite to remove once the next major version is released
 describe('InstantSearch API collision', () => {
   describe('with search client', () => {
@@ -23,7 +32,7 @@ describe('InstantSearch API collision', () => {
         new InstantSearch({
           searchClient,
         });
-      }).toThrow();
+      }).toThrow(usage);
     });
 
     it('and appId', () => {
@@ -32,7 +41,7 @@ describe('InstantSearch API collision', () => {
           appId,
           searchClient,
         });
-      }).toThrow();
+      }).toThrow(usage);
     });
 
     it('and apiKey', () => {
@@ -41,7 +50,7 @@ describe('InstantSearch API collision', () => {
           apiKey,
           searchClient,
         });
-      }).toThrow();
+      }).toThrow(usage);
     });
 
     it('and createAlgoliaClient', () => {
@@ -50,7 +59,7 @@ describe('InstantSearch API collision', () => {
           createAlgoliaClient: () => {},
           searchClient,
         });
-      }).toThrow();
+      }).toThrow(usage);
     });
   });
 });
