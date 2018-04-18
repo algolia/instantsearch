@@ -40,6 +40,7 @@ describe('InstantSearch Search Client', () => {
 
       expect(search.helper.state.query).toBe('');
       expect(searchClientSpy.search).toHaveBeenCalledTimes(1);
+      expect(searchClientSpy.search.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('calls the provided searchFunction when used', () => {
@@ -65,7 +66,7 @@ describe('InstantSearch Search Client', () => {
       expect(searchFunctionSpy).toHaveBeenCalledTimes(1);
       expect(search.helper.state.query).toBe('test');
       expect(searchClientSpy.search).toHaveBeenCalledTimes(1);
-      // expect(searchClientSpy.search).toHaveBeenCalledWith('test');
+      expect(searchClientSpy.search.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 });

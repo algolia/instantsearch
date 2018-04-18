@@ -1,3 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`InstantSearch Search Client Lifecycle calls the provided searchFunction when used 1`] = `
+Array [
+  Object {
+    "indexName": "",
+    "params": Object {
+      "facets": Array [],
+      "page": 0,
+      "query": "test",
+      "tagFilters": "",
+    },
+  },
+]
+`;
+
+exports[`InstantSearch Search Client Lifecycle gets called on search 1`] = `
+Array [
+  Object {
+    "indexName": "",
+    "params": Object {
+      "facets": Array [],
+      "page": 0,
+      "query": "",
+      "tagFilters": "",
+    },
+  },
+]
+`;
+
 exports[`InstantSearch Search Client Properties throws if no \`search()\` method 1`] = `"InstantSearch configuration error: \`searchClient\` must implement a \`search(requests)\` method."`;
