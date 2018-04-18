@@ -25,41 +25,40 @@ function defaultCreateURL() {
 const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) =>
   defaultAlgoliasearch(appId, apiKey);
 
-const THROWAWAY = {
-  checkParameters({
-    appId,
-    apiKey,
-    indexName,
-    createAlgoliaClient,
-    searchClient,
-  }) {
-    if (!searchClient) {
-      if (appId === null || apiKey === null || indexName === null) {
-        const usage = `
+const checkOptions = ({
+  appId,
+  apiKey,
+  indexName,
+  createAlgoliaClient,
+  searchClient,
+}) => {
+  if (!searchClient) {
+    if (appId === null || apiKey === null || indexName === null) {
+      const usage = `
       Usage: instantsearch({
         appId: 'my_application_id',
         apiKey: 'my_search_api_key',
         indexName: 'my_index_name'
       });`;
-        throw new Error(usage);
-      }
+      throw new Error(usage);
     }
-
-    if (searchClient && (appId || apiKey)) {
-      throw new Error(
-        'A search client cannot work with an `appId` or an `apiKey`.'
-      );
-    }
-
-    if (searchClient && createAlgoliaClient) {
-      throw new Error(
-        'A search client cannot work with `createAlgoliaClient`.'
-      );
-    }
-  },
-  isSearchClient(params) {
-    return Boolean(params.searchClient);
-  },
+  } else if (
+    searchClient &&
+    (indexName === null ||
+      appId !== null ||
+      apiKey !== null ||
+      createAlgoliaClient !== defaultCreateAlgoliaClient)
+  ) {
+    const usage = `
+        Usage: instantsearch({
+          indexName: 'my_index_name',
+          searchClient: {
+            search(requests) {},
+            searchForFacetValues(requests) {}
+          }
+        });`;
+    throw new Error(usage);
+  }
 };
 
 /**
@@ -78,30 +77,37 @@ const THROWAWAY = {
  * @fires Instantsearch#render This event is triggered each time a render is done
  */
 class InstantSearch extends EventEmitter {
-  constructor({
-    appId = null,
-    apiKey = null,
-    indexName = null,
-    numberLocale,
-    searchParameters = {},
-    urlSync = null,
-    routing = null,
-    searchFunction,
-    createAlgoliaClient = defaultCreateAlgoliaClient,
-    stalledSearchDelay = 200,
-    searchClient = {},
-  }) {
+  constructor(options) {
     super();
 
-    // eslint-disable-next-line prefer-rest-params
-    const [THROWAWAY_PARAMS] = arguments;
+    const {
+      appId = null,
+      apiKey = null,
+      indexName = null,
+      numberLocale,
+      searchParameters = {},
+      urlSync = null,
+      routing = null,
+      searchFunction,
+      createAlgoliaClient = defaultCreateAlgoliaClient,
+      stalledSearchDelay = 200,
+      searchClient = null,
+    } = options;
 
-    THROWAWAY.checkParameters(THROWAWAY_PARAMS);
+    checkOptions({
+      appId,
+      apiKey,
+      indexName,
+      createAlgoliaClient,
+      searchClient,
+    });
 
-    if (THROWAWAY.isSearchClient(THROWAWAY_PARAMS)) {
-      const client = searchClient;
-      client.clearCache = client.clearCache || (() => {});
-      client.addAlgoliaAgent = client.addAlgoliaAgent || (() => {});
+    if (searchClient) {
+      const client = {
+        clearCache() {},
+        addAlgoliaAgent() {},
+        ...searchClient,
+      };
 
       this.client = client;
     } else {
