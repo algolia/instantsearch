@@ -103,6 +103,12 @@ class InstantSearch extends EventEmitter {
     });
 
     if (searchClient) {
+      if (typeof searchClient.search !== 'function') {
+        throw new Error(
+          'InstantSearch configuration error: `searchClient` must implement a `search(requests)` method.'
+        );
+      }
+
       const client = {
         clearCache() {},
         addAlgoliaAgent() {},
