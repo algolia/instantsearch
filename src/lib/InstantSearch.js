@@ -167,6 +167,13 @@ class InstantSearch extends EventEmitter {
         ...ROUTING_DEFAULT_OPTIONS,
         ...routing,
       };
+
+    if (options.createAlgoliaClient) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'InstantSearch.js: `createAlgoliaClient` option is deprecated and will be removed in the next major version. Please use `searchClient` instead.'
+      );
+    }
   }
 
   /**
