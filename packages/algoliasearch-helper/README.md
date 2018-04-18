@@ -357,7 +357,7 @@ helper.addNumericRefinement('numericAttribute', '=', '4').search();
 
 // On another numeric with no previous filter
 helper.addNumericRefinement('numericAttribute2', '=', ['42', '56', '37'] ).search();
-// filter to only the results that match numericAttribute=42 OR numericAttribute2=56 OR numericAttribute2=37
+// filter to only the results that match numericAttribute2=42 OR numericAttribute2=56 OR numericAttribute2=37
 ```
 
 ##### Remove a numeric refinement

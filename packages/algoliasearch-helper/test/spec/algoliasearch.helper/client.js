@@ -8,7 +8,7 @@ var algoliasearch = require('algoliasearch');
 
 function makeFakeClient() {
   var client = algoliasearch('what', 'wait', {});
-  client.search = sinon.spy();
+  client.search = sinon.stub().returns(new Promise(function() {}));
   return client;
 }
 
@@ -52,4 +52,12 @@ test('getClient / setClient', function(t) {
   t.equal(client1._ua, originalUA + ';JS Helper ' + version, 'does not set the helper agent twice, client 1');
 
   t.end();
+});
+
+test('initial client === getClient', function(t) {
+  t.plan(1);
+  var client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+  var helper = algoliaSearchHelper(client, 'ikea', {});
+  helper.setQuery('blah').search();
+  t.equal(client, helper.getClient());
 });

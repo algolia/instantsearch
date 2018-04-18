@@ -25,8 +25,6 @@ test('hierarchical facets: do not trim facetFilters values', function(t) {
   helper.toggleRefine('categories', '  beers > IPA   ');
   helper.toggleRefine('categories', '  beers > IPA   ');
 
-  var search = sinon.stub(client, 'search');
-
   var algoliaResponse = {
     'results': [{
       'query': 'a',
@@ -92,10 +90,13 @@ test('hierarchical facets: do not trim facetFilters values', function(t) {
     }]
   }];
 
-  search.yieldsAsync(null, algoliaResponse);
+  client.search = sinon
+    .stub()
+    .resolves(algoliaResponse);
+
   helper.setQuery('a').search();
   helper.once('result', function(content) {
-    var call = search.getCall(0);
+    var call = client.search.getCall(0);
     var queries = call.args[0];
     var hitsQuery = queries[0];
     var parentValuesQuery = queries[1];

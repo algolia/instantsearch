@@ -142,7 +142,12 @@ test('Change events should only be emitted for meaningful changes', function(t) 
 });
 
 test('search event should be emitted once when the search is triggered and before the request is sent', function(t) {
-  var clientMock = {addAlgoliaAgent: function() {}};
+  var clientMock = {
+    addAlgoliaAgent: function() {},
+    search: function() {
+      return new Promise(function() {});
+    }
+  };
   var helper = algoliaSearchHelper(clientMock, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
@@ -160,6 +165,8 @@ test('search event should be emitted once when the search is triggered and befor
       1,
       'When the client search function is called the search' +
       ' event should have been sent exactly once.');
+
+    return new Promise(function() {});
   };
 
   helper.setQuery('');
@@ -211,6 +218,8 @@ test('searchOnce event should be emitted once when the search is triggered using
       1,
       'When the client search function is called the searchOnce' +
       ' event should have been sent exactly once.');
+
+    return new Promise(function() {});
   };
 
   t.equal(count, 0, 'before search');
@@ -243,7 +252,8 @@ test('searchForFacetValues event should be emitted once when the search is trigg
           1,
           'When the client search function is called the searchOnce' +
           ' event should have been sent exactly once.');
-        return Promise.resolve();
+
+        return new Promise(function() {});
       }
     };
   };

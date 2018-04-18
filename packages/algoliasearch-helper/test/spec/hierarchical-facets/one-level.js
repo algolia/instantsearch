@@ -22,8 +22,6 @@ test('hierarchical facets: only one level deep', function(t) {
 
   helper.toggleRefine('categories', 'beers');
 
-  var search = sinon.stub(client, 'search');
-
   var algoliaResponse = {
     'results': [{
       'query': 'a',
@@ -70,16 +68,19 @@ test('hierarchical facets: only one level deep', function(t) {
     }]
   }];
 
-  search.yieldsAsync(null, algoliaResponse);
+  client.search = sinon
+    .stub()
+    .resolves(algoliaResponse);
+
   helper.setQuery('a').search();
   helper.once('result', function(content) {
-    var call = search.getCall(0);
+    var call = client.search.getCall(0);
     var queries = call.args[0];
     var hitsQuery = queries[0];
     var parentValuesQuery = queries[1];
 
     t.equal(queries.length, 2, 'we made two queries');
-    t.ok(search.calledOnce, 'client.search was called once');
+    t.ok(client.search.calledOnce, 'client.search was called once');
     t.deepEqual(
       hitsQuery.params.facets,
       ['categories.lvl0'],

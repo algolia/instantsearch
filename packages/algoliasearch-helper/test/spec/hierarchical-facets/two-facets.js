@@ -26,8 +26,6 @@ test('hierarchical facets: two hierarchical facets', function(t) {
   helper.toggleRefine('beers', 'IPA');
   helper.toggleRefine('fruits', 'oranges');
 
-  var search = sinon.stub(client, 'search');
-
   var algoliaResponse = {
     'results': [{
       'query': 'a',
@@ -105,7 +103,10 @@ test('hierarchical facets: two hierarchical facets', function(t) {
   }];
 
 
-  search.yieldsAsync(null, algoliaResponse);
+  client.search = sinon
+    .stub()
+    .resolves(algoliaResponse);
+
   helper.setQuery('a').search();
   helper.once('result', function(content) {
     t.deepEqual(content.hierarchicalFacets, expectedHelperResponse);

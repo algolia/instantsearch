@@ -878,9 +878,9 @@ SearchParameters.prototype = {
   },
   /**
    * Return the current refinement for the (attribute, operator)
-   * @param {string} attribute of the record
-   * @param {string} operator applied
-   * @return {number} value of the refinement
+   * @param {string} attribute attribute in the record
+   * @param {string} operator operator applied on the refined values
+   * @return {Array.<number|number[]>} refined values
    */
   getNumericRefinement: function(attribute, operator) {
     return this.numericRefinements[attribute] && this.numericRefinements[attribute][operator];
