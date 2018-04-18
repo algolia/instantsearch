@@ -110,6 +110,7 @@ class InstantSearch extends EventEmitter {
       }
 
       const client = {
+        __proto__: Object.getPrototypeOf(searchClient),
         clearCache() {},
         addAlgoliaAgent() {},
         ...searchClient,
