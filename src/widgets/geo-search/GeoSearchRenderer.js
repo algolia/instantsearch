@@ -2,61 +2,36 @@ import React, { render } from 'preact-compat';
 import { prepareTemplateProps } from '../../lib/utils';
 import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchControls';
 
-const refineWithMap = ({ refine, paddingBoundingBox, mapInstance }) => {
-  // Function for compute the projection of LatLng to Point (pixel)
-  // Builtin in Leaflet: myMapInstance.project(LatLng, zoom)
-  // http://krasimirtsonev.com/blog/article/google-maps-api-v3-convert-latlng-object-to-actual-pixels-point-object
-  // http://leafletjs.com/reference-1.2.0.html#map-project
-  const scale = Math.pow(2, mapInstance.getZoom());
+const INWARD = -1;
+const OUTWARD = 1;
+/**
+ * @param {object} bounds the bounds
+ * @param {number} direction -1 is inward and 1 is outward (use INWARD and OUTWARD)
+ * @return {object} bounds that are usable by applyZoomBounds
+ */
+const getZoomBounds = (bounds, direction) => ({
+  top: bounds.top * -1 * direction,
+  right: bounds.right * direction,
+  bottom: bounds.bottom * direction,
+  left: bounds.left * -1 * direction,
+});
 
-  const northEastPoint = mapInstance
-    .getProjection()
-    .fromLatLngToPoint(mapInstance.getBounds().getNorthEast());
-
-  northEastPoint.x = northEastPoint.x - paddingBoundingBox.right / scale;
-  northEastPoint.y = northEastPoint.y + paddingBoundingBox.top / scale;
-
-  const southWestPoint = mapInstance
-    .getProjection()
-    .fromLatLngToPoint(mapInstance.getBounds().getSouthWest());
-
-  southWestPoint.x = southWestPoint.x + paddingBoundingBox.left / scale;
-  southWestPoint.y = southWestPoint.y - paddingBoundingBox.bottom / scale;
-
-  const ne = mapInstance.getProjection().fromPointToLatLng(northEastPoint);
-  const sw = mapInstance.getProjection().fromPointToLatLng(southWestPoint);
-
-  refine({
-    northEast: { lat: ne.lat(), lng: ne.lng() },
-    southWest: { lat: sw.lat(), lng: sw.lng() },
-  });
-};
-
-const getBoundsWithPadding = ({
-  paddingBoundingBox,
-  bounds,
-  mapInstance,
-  googleReference,
-}) => {
+const applyZoomBounds = ({ zoomBounds, bounds, mapInstance }) => {
   const scale = Math.pow(2, mapInstance.getZoom()) || 1;
 
   const { northEast, southWest } = bounds;
 
   const toPoint = latLng =>
-    mapInstance
-      .getProjection()
-      .fromLatLngToPoint(
-        new googleReference.maps.LatLng(latLng.lat, latLng.lng)
-      );
+    mapInstance.getProjection().fromLatLngToPoint(latLng);
 
   const northEastPoint = toPoint(northEast);
   const southWestPoint = toPoint(southWest);
 
-  northEastPoint.x = northEastPoint.x + paddingBoundingBox.right / scale;
-  northEastPoint.y = northEastPoint.y - paddingBoundingBox.top / scale;
+  northEastPoint.x = northEastPoint.x + zoomBounds.right / scale;
+  northEastPoint.y = northEastPoint.y + zoomBounds.top / scale;
 
-  southWestPoint.x = southWestPoint.x - paddingBoundingBox.left / scale;
-  southWestPoint.y = southWestPoint.y + paddingBoundingBox.bottom / scale;
+  southWestPoint.x = southWestPoint.x + zoomBounds.left / scale;
+  southWestPoint.y = southWestPoint.y + zoomBounds.bottom / scale;
 
   const ne = mapInstance.getProjection().fromPointToLatLng(northEastPoint);
   const sw = mapInstance.getProjection().fromPointToLatLng(southWestPoint);
@@ -65,6 +40,37 @@ const getBoundsWithPadding = ({
     northEast: { lat: ne.lat(), lng: ne.lng() },
     southWest: { lat: sw.lat(), lng: sw.lng() },
   };
+};
+
+const addPaddingToBounds = ({ paddingBoundingBox, bounds, mapInstance }) =>
+  applyZoomBounds({
+    zoomBounds: getZoomBounds(paddingBoundingBox, OUTWARD),
+    bounds,
+    mapInstance,
+  });
+
+const substractPaddingToBounds = ({
+  paddingBoundingBox,
+  bounds,
+  mapInstance,
+}) =>
+  applyZoomBounds({
+    zoomBounds: getZoomBounds(paddingBoundingBox, INWARD),
+    bounds,
+    mapInstance,
+  });
+
+const refineWithMap = ({ refine, paddingBoundingBox, mapInstance }) => {
+  refine(
+    substractPaddingToBounds({
+      paddingBoundingBox,
+      mapInstance,
+      bounds: {
+        northEast: mapInstance.getBounds().getNorthEast(),
+        southWest: mapInstance.getBounds().getSouthWest(),
+      },
+    })
+  );
 };
 
 const collectMarkersForNextRender = (markers, nextIds) =>
@@ -237,11 +243,20 @@ const renderer = (
 
   if (boundingBoxFromConnector && isRefinedWithMap()) {
     renderState.isUserInteraction = false;
-    const boundsWithPadding = getBoundsWithPadding({
-      bounds: boundingBoxFromConnector,
+    const boundsWithLatLng = {
+      southWest: new googleReference.maps.LatLng(
+        boundingBoxFromConnector.southWest.lat,
+        boundingBoxFromConnector.southWest.lng
+      ),
+      northEast: new googleReference.maps.LatLng(
+        boundingBoxFromConnector.northEast.lat,
+        boundingBoxFromConnector.northEast.lng
+      ),
+    };
+    const boundsWithPadding = addPaddingToBounds({
+      bounds: boundsWithLatLng,
       paddingBoundingBox,
       mapInstance: renderState.mapInstance,
-      googleReference,
     });
     renderState.mapInstance.fitBounds(
       new googleReference.maps.LatLngBounds(
