@@ -10,7 +10,7 @@ Usage: instantsearch({
   }
 });`;
 
-// FIXME: Test suite to remove once the next major version is released
+// THROWAWAY: Test suite to remove once the next major version is released
 describe('InstantSearch API collision', () => {
   describe('with search client', () => {
     const appId = 'appId';
