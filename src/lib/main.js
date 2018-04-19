@@ -80,6 +80,12 @@ import * as stateMappings from './stateMappings/index.js';
  */
 
 /**
+ * @typedef {Object} SearchClient
+ * @property {function} search Performs the requests in the hits.
+ * @property {function} searchForFacetValues Performs the requests in the facet values.
+ */
+
+/**
  * @typedef {Object} InstantSearchOptions
  * @property {string} appId The Algolia application ID
  * @property {string} apiKey The Algolia search-only API key
@@ -89,10 +95,10 @@ import * as stateMappings from './stateMappings/index.js';
  * @property {function} [searchFunction] A hook that will be called each time a search needs to be done, with the
  * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
  * searches at page load for example.
- * @property  {function} [createAlgoliaClient] Allows you to provide your own algolia client instead of
- * the one instantiated internally by instantsearch.js. Useful in situations where you need
- * to setup complex mechanism on the client or if you need to share it easily.
- * Usage:
+ * @property  {function} [createAlgoliaClient] _Deprecated in favor of [`searchClient`](instantsearch.html#struct-InstantSearchOptions-searchClient)._<br>
+ * Allows you to provide your own algolia client instead of the one instantiated internally by instantsearch.js.
+ * Useful in situations where you need to setup complex mechanism on the client or if you need to share it easily.
+ * <br>Usage:
  * ```javascript
  * instantsearch({
  *   // other parameters
@@ -110,6 +116,37 @@ import * as stateMappings from './stateMappings/index.js';
  * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
  * @property {RoutingOptions} [routing] the router configuration used to save the UI State into the URL or
  * any client side persistence.
+ * @property {SearchClient} [searchClient] The search client to plug to instantsearch.js. You should start updating with this
+ * syntax to ease the migration to InstantSearch 3.
+ * <br>Usage:
+ * ```javascript
+ * // Using the default Algolia client (https://github.com/algolia/algoliasearch-client-javascript)
+ * // This is the default client used by InstantSearch. Equivalent to:
+ * // instantsearch({
+ * //   appId: 'appId',
+ * //   apiKey: 'apiKey',
+ * //   indexName: 'indexName',
+ * // });
+ * instantsearch({
+ *   indexName: 'indexName',
+ *   searchClient: algoliasearch('appId', 'apiKey')
+ * });
+ *
+ * // Using a custom search client
+ * instantsearch({
+ *   indexName: 'indexName',
+ *   searchClient: {
+ *     search(requests) {
+ *       // fetch response based on requests
+ *       return response;
+ *     },
+ *     searchForFacetValues(requests) {
+ *       // fetch response based on requests
+ *       return response;
+ *     }
+ *   }
+ * });
+ * ```
  */
 
 /**
