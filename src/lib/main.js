@@ -27,26 +27,26 @@ import * as stateMappings from './stateMappings/index.js';
  * @property {Object} [mapping] Object used to define replacement query
  * parameter to use in place of another. Keys are current query parameters
  * and value the new value, e.g. `{ q: 'query' }`.
- * @property {number} [threshold] Idle time in ms after which a new
- * state is created in the browser history. The default value is 700. The url is always updated at each keystroke
+ * @property {number} [threshold=700] Idle time in ms after which a new
+ * state is created in the browser history. The URL is always updated at each keystroke
  * but we only create a "previous search state" (activated when click on back button) every 700ms of idle time.
  * @property {string[]} [trackedParameters] Parameters that will
  * be synchronized in the URL. Default value is `['query', 'attribute:*',
  * 'index', 'page', 'hitsPerPage']`. `attribute:*` means all the faceting attributes will be tracked. You
- * can track only some of them by using [..., 'attribute:color', 'attribute:categories']. All other possible
+ * can track only some of them by using `[..., 'attribute:color', 'attribute:categories']`. All other possible
  * values are all the [attributes of the Helper SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
- * @property {boolean} [useHash] If set to true, the url will be
+ * @property {boolean} [useHash] If set to `true`, the URL will be
  * hash based. Otherwise, it'll use the query parameters using the modern
  * history API.
  * @property {function} [getHistoryState] Pass this function to override the
- * default history API state we set to `null`. For example this could be used to force passing
- * {turbolinks: true} to the history API every time we update it.
+ * default history API state we set to `null`. For example, this could be used to force passing
+ * `{turbolinks: true}` to the history API every time we update it.
  */
 
 /**
  * @typedef {Object|boolean} RoutingOptions
  * @property {Router} [router=HistoryRouter()] The router is the part that will save the UI State.
- * By default, it uses an instance of the HistoryRouter with the default parameters.
+ * By default, it uses an instance of the `HistoryRouter` with the default parameters.
  * @property {StateMapping} [stateMapping=SimpleStateMapping()] This object transforms the UI state into
  * the object that willl be saved by the router.
  */
@@ -56,27 +56,27 @@ import * as stateMappings from './stateMappings/index.js';
  * and filter out the properties. To work correctly, for any state ui S, the following should be valid:
  * `S = routeToState(stateToRoute(S))`.
  * @typedef {Object} StateMapping
- * @property {function} stateToRoute transforms an UI state representation into a route object.
- * It receives an object that contains the UI State of all the widget in the page. It should
- * return an object of any form. As long as this form can be read by the `routeToState`.
- * @property {function} routeToState transforms route object into an UI state representation.
- * It receives an object that contains the UI State stored by the router. The format is the output
+ * @property {function} stateToRoute Transforms a UI state representation into a route object.
+ * It receives an object that contains the UI state of all the widgets in the page. It should
+ * return an object of any form as long as this form can be read by the `routeToState`.
+ * @property {function} routeToState Transforms route object into a UI state representation.
+ * It receives an object that contains the UI state stored by the router. The format is the output
  * of `stateToRoute`.
  */
 
 /**
  * The router is the part that saves and reads the object from the storage (most of the time the URL).
  * @typedef {Object} Router
- * @property {function} onUpdate sets an event listener that is triggered when the storage is updated.
+ * @property {function} onUpdate Sets an event listener that is triggered when the storage is updated.
  * The function should accept a callback to trigger when the update happens. In the case of the history
  * / URL in a browser, the callback will be called by `onPopState`.
- * @property {function} read reads the storage and gets a route object. It does not take parameters,
+ * @property {function} read Reads the storage and gets a route object. It does not take parameters,
  * and should return an object.
- * @property {function} write push a route object into a storage. Takes the UI state mapped by the state
+ * @property {function} write Pushes a route object into a storage. Takes the UI state mapped by the state
  * mapping configured in the mapping.
- * @property {function} createURL transforms a route object into a URL. It receives an object and should
+ * @property {function} createURL Transforms a route object into a URL. It receives an object and should
  * return a string. It may return an empty string.
- * @property {function} dispose cleans up any event listeners.
+ * @property {function} dispose Cleans up any event listeners.
  */
 
 /**
@@ -87,7 +87,7 @@ import * as stateMappings from './stateMappings/index.js';
  * @property {string} [numberLocale] The locale used to display numbers. This will be passed
  * to [`Number.prototype.toLocaleString()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString)
  * @property {function} [searchFunction] A hook that will be called each time a search needs to be done, with the
- * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
+ * helper as a parameter. It's your responsibility to call `helper.search()`. This option allows you to avoid doing
  * searches at page load for example.
  * @property  {function} [createAlgoliaClient] Allows you to provide your own algolia client instead of
  * the one instantiated internally by InstantSearch.js. Useful in situations where you need
@@ -101,14 +101,13 @@ import * as stateMappings from './stateMappings/index.js';
  *   }
  * });
  * ```
- * We forward `algoliasearch` which is the original algoliasearch module imported inside InstantSearch.js
+ * We forward `algoliasearch`, which is the original Algolia search module imported inside InstantSearch.js
  * @property {object} [searchParameters] Additional parameters to pass to
- * the Algolia API.
- * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
- * @property {boolean|UrlSyncOptions} [urlSync] Url synchronization configuration.
- * Setting to `true` will synchronize the needed search parameters with the browser url.
+ * the Algolia API ([see full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)).
+ * @property {boolean|UrlSyncOptions} [urlSync] URL synchronization configuration.
+ * Setting to `true` will synchronize the needed search parameters with the browser URL.
  * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
- * @property {RoutingOptions} [routing] the router configuration used to save the UI State into the URL or
+ * @property {RoutingOptions} [routing] Router configuration used to save the UI State into the URL or
  * any client side persistence.
  */
 
