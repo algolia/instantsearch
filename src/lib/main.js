@@ -104,7 +104,9 @@ import * as stateMappings from './stateMappings/index.js';
  * We forward `algoliasearch`, which is the original Algolia search module imported inside InstantSearch.js
  * @property {object} [searchParameters] Additional parameters to pass to
  * the Algolia API ([see full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)).
- * @property {boolean|UrlSyncOptions} [urlSync] URL synchronization configuration.
+ * @property {boolean|UrlSyncOptions} [urlSync] _Deprecated in favor of [`routing`](instantsearch.html#struct-InstantSearchOptions-routing)._
+ *
+ * URL synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser URL.
  * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
  * @property {RoutingOptions} [routing] Router configuration used to save the UI State into the URL or
