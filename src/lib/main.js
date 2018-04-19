@@ -95,10 +95,12 @@ import * as stateMappings from './stateMappings/index.js';
  * @property {function} [searchFunction] A hook that will be called each time a search needs to be done, with the
  * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
  * searches at page load for example.
- * @property  {function} [createAlgoliaClient] _Deprecated in favor of [`searchClient`](instantsearch.html#struct-InstantSearchOptions-searchClient)._<br>
+ * @property  {function} [createAlgoliaClient] _Deprecated in favor of [`searchClient`](instantsearch.html#struct-InstantSearchOptions-searchClient)._
+ *
  * Allows you to provide your own algolia client instead of the one instantiated internally by instantsearch.js.
  * Useful in situations where you need to setup complex mechanism on the client or if you need to share it easily.
- * <br>Usage:
+ *
+ * Usage:
  * ```javascript
  * instantsearch({
  *   // other parameters
@@ -118,7 +120,8 @@ import * as stateMappings from './stateMappings/index.js';
  * any client side persistence.
  * @property {SearchClient} [searchClient] The search client to plug to instantsearch.js. You should start updating with this
  * syntax to ease the migration to InstantSearch 3.
- * <br>Usage:
+ *
+ * Usage:
  * ```javascript
  * // Using the default Algolia client (https://github.com/algolia/algoliasearch-client-javascript)
  * // This is the default client used by InstantSearch. Equivalent to:
