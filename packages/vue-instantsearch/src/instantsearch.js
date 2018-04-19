@@ -13,7 +13,6 @@ import SortBySelector from './components/SortBySelector.vue';
 import SearchBox from './components/SearchBox.vue';
 import ClearRefinements from './components/ClearRefinements.vue';
 import NoResults from './components/NoResults.vue';
-import PriceRange from './components/PriceRange.vue';
 import PoweredBy from './components/PoweredBy.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import CurrentRefinements from './components/CurrentRefinements.vue';
@@ -34,7 +33,6 @@ const InstantSearch = {
   SearchBox,
   ClearRefinements,
   NoResults,
-  PriceRange,
   PoweredBy,
   Breadcrumb,
   CurrentRefinements,
@@ -55,7 +53,6 @@ const InstantSearch = {
     Vue.component('ais-clear-refinements', ClearRefinements);
     Vue.component('ais-configure', Configure);
     Vue.component('ais-no-results', NoResults);
-    Vue.component('ais-price-range', PriceRange);
     Vue.component('ais-powered-by', PoweredBy);
     Vue.component('ais-breadcrumb', Breadcrumb);
     Vue.component('ais-current-refinements', CurrentRefinements);
@@ -80,7 +77,6 @@ export {
   SearchBox,
   ClearRefinements,
   NoResults,
-  PriceRange,
   PoweredBy,
   HitsPerPage,
 };
