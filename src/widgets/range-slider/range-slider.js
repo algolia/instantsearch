@@ -48,8 +48,8 @@ const renderer = ({
   // Should probably be done on the connector side, but we need to stay
   // backward compatible so we still need to pass [-Infinity, Infinity]
   const values = [
-    minFinite > maxRange ? maxRange : minFinite,
-    maxFinite < minRange ? minRange : maxFinite,
+    minFinite > maxRange ? minRange : minFinite,
+    maxFinite < minRange ? maxRange : maxFinite,
   ];
 
   render(
