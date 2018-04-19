@@ -6,7 +6,6 @@
           v-for="item in state.items"
           :class="item.isRefined ? suit('item', 'active') : suit('item')"
           :key="item.value"
-          @click.prevent="state.refine(item.value)"
         >
           <a
             :href="state.createURL(item.value)"
@@ -88,4 +87,5 @@ export default {
   beforeCreate() {
     this.connector = connectMenu;
   },
-};</script>
+};
+</script>
