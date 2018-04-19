@@ -90,7 +90,7 @@ import * as stateMappings from './stateMappings/index.js';
  * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
  * searches at page load for example.
  * @property  {function} [createAlgoliaClient] Allows you to provide your own algolia client instead of
- * the one instantiated internally by instantsearch.js. Useful in situations where you need
+ * the one instantiated internally by InstantSearch.js. Useful in situations where you need
  * to setup complex mechanism on the client or if you need to share it easily.
  * Usage:
  * ```javascript
@@ -101,7 +101,7 @@ import * as stateMappings from './stateMappings/index.js';
  *   }
  * });
  * ```
- * We forward `algoliasearch` which is the original algoliasearch module imported inside instantsearch.js
+ * We forward `algoliasearch` which is the original algoliasearch module imported inside InstantSearch.js
  * @property {object} [searchParameters] Additional parameters to pass to
  * the Algolia API.
  * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
@@ -114,9 +114,9 @@ import * as stateMappings from './stateMappings/index.js';
 
 /**
  * InstantSearch is the main component of InstantSearch.js. This object
- * manages the widget and let you add new ones.
+ * manages the widget and lets you add new ones.
  *
- * Three parameters are required to get you started with instantsearch.js:
+ * Three parameters are required to get you started with InstantSearch.js:
  *  - `appId`: your algolia application id
  *  - `apiKey`: the search key associated with your application
  *  - `indexName`: the main index that you will use for your new search UI
