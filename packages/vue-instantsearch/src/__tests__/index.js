@@ -20,7 +20,6 @@ test('Should register all components when installed', () => {
     'ais-clear-refinements',
     'ais-configure',
     'ais-no-results',
-    'ais-price-range',
     'ais-powered-by',
     'ais-breadcrumb',
     'ais-current-refinements',
