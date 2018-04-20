@@ -13863,6 +13863,9 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
   return searchForFacetValuesPromise.then(function addIsRefined(content) {
     self._currentNbQueries--;
     if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
+
+    content = Array.isArray(content) ? content[0] : content;
+
     content.facetHits = forEach(content.facetHits, function(f) {
       f.isRefined = isDisjunctive ?
         state.isDisjunctiveFacetRefined(facet, f.value) :
@@ -15516,7 +15519,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":291,"./SearchParameters/shortener":292,"lodash/bind":215,"lodash/forEach":224,"lodash/invert":232,"lodash/isArray":234,"lodash/isEmpty":238,"lodash/isPlainObject":246,"lodash/isString":247,"lodash/map":254,"lodash/mapKeys":255,"lodash/mapValues":256,"lodash/pick":264,"qs":282,"qs/lib/utils":285}],300:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.25.0';
+module.exports = '2.25.1';
 
 },{}]},{},[1])(1)
 });

@@ -1,3 +1,6 @@
+2.25.1 - 2018-04-20
+ * fix(sffv): unwrap content when it comes from multi queries (#574) https://github.com/algolia/algoliasearch-helper-js/commit/fcb15d488a27e57b621fa5b26531626353c8bf41
+
 2.25.0 - 2018-04-18
  * chore: fix types in doc for getNumericRefinement (#564) https://github.com/algolia/algoliasearch-helper-js/commit/4113b5b6bdaf3a2e008ffecdc11c16fcda34dff9, closes https://github.com/algolia/algoliasearch-helper-js/issues/564 https://github.com/algolia/algoliasearch-helper-js/issues/556
  * chore(test): delete indices at the end of the tests (#570) https://github.com/algolia/algoliasearch-helper-js/commit/d70a9500f5b4eafafe022c4e652536feab152417, closes https://github.com/algolia/algoliasearch-helper-js/issues/560
