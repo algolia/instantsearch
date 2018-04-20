@@ -1,7 +1,6 @@
 'use strict';
 
 var map = require('lodash/map');
-var isArray = require('lodash/isArray');
 var isNumber = require('lodash/isNumber');
 var isString = require('lodash/isString');
 function valToNumber(v) {
@@ -9,7 +8,7 @@ function valToNumber(v) {
     return v;
   } else if (isString(v)) {
     return parseFloat(v);
-  } else if (isArray(v)) {
+  } else if (Array.isArray(v)) {
     return map(v, valToNumber);
   }
 

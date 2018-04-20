@@ -15,7 +15,6 @@ var orderBy = require('lodash/orderBy');
 var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
 
-var isArray = require('lodash/isArray');
 var isFunction = require('lodash/isFunction');
 
 var partial = require('lodash/partial');
@@ -648,15 +647,15 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
 
   var options = defaults({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
 
-  if (isArray(options.sortBy)) {
+  if (Array.isArray(options.sortBy)) {
     var order = formatSort(options.sortBy, SearchResults.DEFAULT_SORT);
-    if (isArray(facetValues)) {
+    if (Array.isArray(facetValues)) {
       return orderBy(facetValues, order[0], order[1]);
     }
     // If facetValues is not an array, it's an object thus a hierarchical facet object
     return recSort(partialRight(orderBy, order[0], order[1]), facetValues);
   } else if (isFunction(options.sortBy)) {
-    if (isArray(facetValues)) {
+    if (Array.isArray(facetValues)) {
       return facetValues.sort(options.sortBy);
     }
     // If facetValues is not an array, it's an object thus a hierarchical facet object
