@@ -14,7 +14,7 @@ test('searchForFacetValues calls the client method over the index method', funct
     addAlgoliaAgent: function() {},
     searchForFacetValues: function() {
       clientSearchForFacetValuesCalled++;
-      return Promise.resolve({});
+      return Promise.resolve([{}]);
     },
     initIndex: function() {
       return {
@@ -57,6 +57,62 @@ test('searchForFacetValues calls the index method if no client method', function
 
   helper.searchForFacetValues('facet', 'query', 1).then(function() {
     t.equal(indexSearchForFacetValuesCalled, 1);
+    t.end();
+  });
+});
+
+test('searchForFacetValues resolve with the correct response from client', function(t) {
+  t.plan(3);
+
+  var fakeClient = {
+    addAlgoliaAgent: function() {},
+    searchForFacetValues: function() {
+      return Promise.resolve([
+        {
+          exhaustiveFacetsCount: true,
+          facetHits: [],
+          processingTimeMS: 3
+        }
+      ]);
+    }
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index');
+
+  helper.searchForFacetValues('facet', 'query', 1).then(function(content) {
+    t.equal(content.exhaustiveFacetsCount, true);
+    t.equal(content.facetHits.length, 0);
+    t.equal(content.processingTimeMS, 3);
+
+    t.end();
+  });
+});
+
+test('searchForFacetValues resolve with the correct response from initIndex', function(t) {
+  t.plan(3);
+
+  var fakeClient = {
+    addAlgoliaAgent: function() {},
+    initIndex: function() {
+      return {
+        searchForFacetValues: function() {
+          return Promise.resolve({
+            exhaustiveFacetsCount: true,
+            facetHits: [],
+            processingTimeMS: 3
+          });
+        }
+      };
+    }
+  };
+
+  var helper = algoliasearchHelper(fakeClient, 'index');
+
+  helper.searchForFacetValues('facet', 'query', 1).then(function(content) {
+    t.equal(content.exhaustiveFacetsCount, true);
+    t.equal(content.facetHits.length, 0);
+    t.equal(content.processingTimeMS, 3);
+
     t.end();
   });
 });

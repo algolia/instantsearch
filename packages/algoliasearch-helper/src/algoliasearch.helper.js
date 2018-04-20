@@ -294,6 +294,9 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
   return searchForFacetValuesPromise.then(function addIsRefined(content) {
     self._currentNbQueries--;
     if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
+
+    content = Array.isArray(content) ? content[0] : content;
+
     content.facetHits = forEach(content.facetHits, function(f) {
       f.isRefined = isDisjunctive ?
         state.isDisjunctiveFacetRefined(facet, f.value) :
