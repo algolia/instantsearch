@@ -109,6 +109,8 @@ class InstantSearch extends EventEmitter {
         );
       }
 
+      // We deep copy the search client to avoid mutating the original version
+      // and to copy its prototype (needed for `algoliasearch`)
       const client = Object.create(searchClient);
       client.addAlgoliaAgent = client.addAlgoliaAgent || (() => {});
       client.clearCache = client.clearCache || (() => {});
