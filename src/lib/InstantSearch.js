@@ -312,7 +312,7 @@ Usage: instantsearch({
         const helperSearchFunction = algoliasearchHelper(
           {
             addAlgoliaAgent: () => {},
-            search: () => {},
+            search: () => Promise.resolve({ results: [{}] }),
           },
           helper.state.index,
           helper.state
