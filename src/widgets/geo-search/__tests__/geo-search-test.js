@@ -94,7 +94,9 @@ describe('GeoSearch', () => {
   const createFakeHelper = () =>
     algoliasearchHelper(
       {
-        search() {},
+        search() {
+          return Promise.resolve({ results: [{}] });
+        },
         addAlgoliaAgent() {
           return {};
         },

@@ -4,7 +4,7 @@ import simpleMapping from '../stateMappings/simple.js';
 
 const makeFakeAlgoliaClient = () => ({
   addAlgoliaAgent: () => {},
-  search: () => {},
+  search: () => Promise.resolve({ results: [{}] }),
 });
 
 describe('RoutingManager', () => {

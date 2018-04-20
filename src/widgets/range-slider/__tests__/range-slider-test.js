@@ -30,7 +30,9 @@ describe('rangeSlider', () => {
       container = document.createElement('div');
       helper = new AlgoliasearchHelper(
         {
-          search() {},
+          search() {
+            return Promise.resolve({ results: [{}] });
+          },
           addAlgoliaAgent() {
             return {};
           },
