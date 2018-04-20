@@ -101,7 +101,7 @@ import * as stateMappings from './stateMappings/index.js';
  *   }
  * });
  * ```
- * We forward `algoliasearch`, which is the original Algolia search module imported inside InstantSearch.js
+ * We forward `algoliasearch`, which is the original [Algolia search client](https://www.algolia.com/doc/api-client/javascript/getting-started) imported inside InstantSearch.js
  * @property {object} [searchParameters] Additional parameters to pass to
  * the Algolia API ([see full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)).
  * @property {boolean|UrlSyncOptions} [urlSync] _Deprecated in favor of [`routing`](instantsearch.html#struct-InstantSearchOptions-routing)._
