@@ -72,14 +72,10 @@ test('When searchForFacetValues, hasPendingRequests is true', function(t) {
   var client = algoliaSearch('dsf', 'dsfdf');
 
   var triggerCb;
-  client.initIndex = function() {
-    return {
-      searchForFacetValues: function() {
-        return new Promise(function(done) {
-          triggerCb = function() { done(testData.response); };
-        });
-      }
-    };
+  client.searchForFacetValues = function() {
+    return new Promise(function(done) {
+      triggerCb = function() { done([testData.response]); };
+    });
   };
 
   var helper = algoliasearchHelper(client, 'test_hotels-node');
