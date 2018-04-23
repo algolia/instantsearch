@@ -18,7 +18,7 @@ const defaultState = {
   refine: jest.fn(),
   toggleShowMore: jest.fn(),
 };
-
+//
 it('renders correctly', () => {
   __setState(defaultState);
 
@@ -39,7 +39,7 @@ it('calls `refine()` when click on an element', () => {
   __setState(defaultState);
 
   const wrapper = mount(Menu, { propsData: { attribute: 'foo' } });
-  wrapper.find('ul > li:first-child').trigger('click');
+  wrapper.find('.ais-Menu-link').trigger('click');
 
   expect(defaultState.refine).toHaveBeenCalled();
   expect(defaultState.refine).toHaveBeenCalledWith(defaultState.items[0].value);
