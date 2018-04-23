@@ -9,9 +9,7 @@ editable: true
 githubSource: docgen/src/guides/prepare-for-v3.md
 ---
 
-> Starting with 2.8.0, we are introducing changes and deprecations to prepare for the upcoming InstantSearch.js 3.
-
-InstantSearch has always worked with the [Algolia search client](https://github.com/algolia/algoliasearch-client-javascript) behind the scenes. This will no longer be true for InstantSearch.js 3. To ease the migration to version 3, we recommend applying the changes from this guide now.
+Starting with 2.8.0, we are introducing changes and deprecations to prepare for the upcoming InstantSearch.js 3. InstantSearch has always worked with the [Algolia search client](https://github.com/algolia/algoliasearch-client-javascript) behind the scenes. This will no longer be the default for InstantSearch.js 3. To ease that migration, we recommend applying the changes from this guide now.
 
 ## Initializing InstantSearch
 
