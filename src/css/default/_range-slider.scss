@@ -91,6 +91,7 @@ $range-slider-handle-bg: $white;
     position: absolute;
     background: $white;
     top: -$range-slider-handle-size - 2px;
+    left: -4.5px;
     font-size: .8em;
   }
 
@@ -99,6 +100,7 @@ $range-slider-handle-bg: $white;
     position: absolute;
     text-align: center;
     margin-left: -$range-slider-handle-size;
+    left: -1.5px;
     padding-top: 15px;
     font-size: .8em;
   }
