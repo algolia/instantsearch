@@ -3,15 +3,10 @@ title: ToggleRefinement
 type: widget
 html: |
   <div class="ais-ToggleRefinement">
-    <ul class="ais-ToggleRefinement-list">
-      <li class="ais-ToggleRefinement-item">
-        <label class="ais-ToggleRefinement-label">
-          <input class="ais-ToggleRefinement-checkbox" type="checkbox" value="Free Shipping" />
-          <span class="ais-ToggleRefinement-labelText">Free Shipping</span>
-          <span class="ais-ToggleRefinement-count">18,013</span>
-        </label>
-      </li>
-    </ul>
+    <label class="ais-ToggleRefinement-label">
+      <input class="ais-ToggleRefinement-checkbox" type="checkbox" value="Free Shipping" />
+      <span class="ais-ToggleRefinement-labelText">Free Shipping</span>
+    </label>
   </div>
 classes:
   - name: .ais-ToggleRefinement
