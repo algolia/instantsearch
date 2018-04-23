@@ -44,3 +44,7 @@ const search = instantsearch({
 
 search.start();
 ```
+
+## Deprecations
+
+* [`createAlgoliaClient`](https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-createAlgoliaClient) becomes deprecated in favor of [`searchClient`](https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-searchClient)
