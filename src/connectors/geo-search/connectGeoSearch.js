@@ -359,7 +359,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
 
       getWidgetState(uiState, { searchParameters }) {
         const boundingBox = searchParameters.insideBoundingBox;
-        if (boundingBox) {
+        if (boundingBox && boundingBox !== uiState.boundingBox) {
           return {
             ...uiState,
             boundingBox,
@@ -375,7 +375,10 @@ const connectGeoSearch = (renderFn, unmountFn) => {
             uiState.boundingBox
           );
         }
-        return searchParameters;
+        return searchParameters.setQueryParameter(
+          'insideBoundingBox',
+          undefined
+        );
       },
     };
   };
