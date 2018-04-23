@@ -12,6 +12,10 @@ samp {
 }
 
 // Inline code
+code:empty {
+  display: none;
+}
+
 code {
   padding: 2px 4px;
   font-size: 90%;
