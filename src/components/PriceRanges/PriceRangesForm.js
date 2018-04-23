@@ -40,8 +40,8 @@ class PriceRangesForm extends Component {
 
   handleSubmit(event) {
     const from =
-      this.from.value !== '' ? parseInt(this.from.value, 10) : undefined;
-    const to = this.to.value !== '' ? parseInt(this.to.value, 10) : undefined;
+           this.from.value !== '' ? Math.abs(this.from.value) : undefined;
+    const to = this.to.value !== '' ? Math.abs(this.to.value) : undefined;
 
     this.props.refine({ from, to }, event);
   }
