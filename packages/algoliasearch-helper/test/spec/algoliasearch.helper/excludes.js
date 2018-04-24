@@ -3,9 +3,7 @@
 var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('addExclude should add an exclusion', function(t) {
   var helper = algoliasearchHelper(fakeClient, null, {

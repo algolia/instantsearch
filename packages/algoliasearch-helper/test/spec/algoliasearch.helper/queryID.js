@@ -3,14 +3,11 @@
 var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('the queryid should keep increasing when new requests arrives', function(t) {
   var initialQueryID;
   var client = {
-    addAlgoliaAgent: function() {},
     search: function() {
       initialQueryID++;
       return new Promise(function() {});

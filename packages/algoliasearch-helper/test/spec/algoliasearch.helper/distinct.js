@@ -6,9 +6,7 @@ var forEach = require('lodash/forEach');
 var algoliasearchHelper = require('../../../index.js');
 var requestBuilder = require('../../../src/requestBuilder');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('Distinct not set', function(t) {
   var helper = algoliasearchHelper(fakeClient, null, {

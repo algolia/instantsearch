@@ -2,9 +2,7 @@
 
 var test = require('tape');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('hierarchical facets: add a facet -> set page to 0, trigger change', function(t) {
   t.plan(2);

@@ -3,9 +3,7 @@
 var test = require('tape');
 var algoliasearchHelper = require('../../index');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('getStateFromQueryString should parse insideBoundingBox as float georects and be consistent with the state', function(t) {
   var index = 'indexNameInTheHelper';

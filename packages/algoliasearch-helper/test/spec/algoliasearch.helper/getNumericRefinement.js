@@ -3,9 +3,7 @@
 var test = require('tape');
 var algoliaSearchHelper = require('../../../index.js');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('getNumericRefinement with single value addNumericRefinement', function(t) {
   var helper = algoliaSearchHelper(fakeClient, null);

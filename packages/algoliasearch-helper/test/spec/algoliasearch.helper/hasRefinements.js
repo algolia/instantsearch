@@ -5,9 +5,7 @@ var algoliasearchHelper = require('../../../index');
 
 var _ = require('lodash');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('helper.hasRefinements(attribute)', function(t) {
   var helper;

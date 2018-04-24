@@ -5,9 +5,7 @@ var algoliasearchHelper = require('../../../index');
 
 var _ = require('lodash');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('Conjuctive facet should be declared to be refined', function(t) {
   var h = algoliasearchHelper(fakeClient, '', {});

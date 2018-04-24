@@ -2,9 +2,7 @@
 
 var test = require('tape');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('hierarchical facets: getFacetValues', function(t) {
   var algoliasearchHelper = require('../../../');

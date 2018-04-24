@@ -4,9 +4,7 @@ var test = require('tape');
 var sinon = require('sinon');
 var algoliaSearchHelper = require('../../../index');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('Change events should be emitted as soon as the state change, but search should be triggered (refactored)', function(t) {
   var helper = algoliaSearchHelper(fakeClient, 'Index', {
@@ -143,7 +141,6 @@ test('Change events should only be emitted for meaningful changes', function(t) 
 
 test('search event should be emitted once when the search is triggered and before the request is sent', function(t) {
   var clientMock = {
-    addAlgoliaAgent: function() {},
     search: function() {
       return new Promise(function() {});
     }
@@ -200,7 +197,7 @@ test('search event should be emitted once when the search is triggered and befor
 });
 
 test('searchOnce event should be emitted once when the search is triggered using searchOnce and before the request is sent', function(t) {
-  var clientMock = {addAlgoliaAgent: function() {}};
+  var clientMock = {};
   var helper = algoliaSearchHelper(clientMock, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
@@ -232,7 +229,7 @@ test('searchOnce event should be emitted once when the search is triggered using
 
 test('searchForFacetValues event should be emitted once when the search is triggered using' +
      ' searchForFacetValues and before the request is sent', function(t) {
-  var clientMock = {addAlgoliaAgent: function() {}};
+  var clientMock = {};
   var helper = algoliaSearchHelper(clientMock, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
