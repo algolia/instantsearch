@@ -1487,6 +1487,65 @@ describe('GeoSearch', () => {
       expect(renderer).toHaveBeenCalledTimes(3);
     });
 
+    it('should apply bounds provided by the connector when fitbounds is true and also when the state is forced', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const mapInstance = createFakeMapInstance();
+      const googleReference = createFakeGoogleReference({ mapInstance });
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+        enableRefineOnMapMove: true,
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      // Not really able to do better
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(0);
+
+      // Trigger fitbounds from hits
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: [1, 2] },
+            { objectID: 323, _geoloc: [1, 1] },
+            { objectID: 133, _geoloc: [2, 1] },
+            { objectID: 333, _geoloc: [2, 2] },
+          ],
+        },
+      });
+
+      // Not really able to do better
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+
+      // trigger fitbounds from search parameters
+
+      helper.setQueryParameter('insideBoundingBox', '2,3,4,5');
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 456, _geoloc: true },
+          ],
+        },
+      });
+
+      // Not really able to do better
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(2);
+    });
+
     it('expect to not set the position when there is no markers', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
