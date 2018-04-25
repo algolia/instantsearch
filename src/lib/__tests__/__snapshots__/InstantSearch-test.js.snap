@@ -15,7 +15,6 @@ Array [
       "_lastQueryIdReceived": -1,
       "_queryId": 0,
       "client": Object {
-        "addAlgoliaAgent": [Function],
         "algolia": "client",
       },
       "derivedHelpers": Array [],
@@ -88,7 +87,6 @@ Array [
       "_searchStalledTimer": null,
       "_stalledSearchDelay": 200,
       "client": Object {
-        "addAlgoliaAgent": [Function],
         "algolia": "client",
       },
       "domain": null,
@@ -103,7 +101,6 @@ Array [
         "_lastQueryIdReceived": -1,
         "_queryId": 0,
         "client": Object {
-          "addAlgoliaAgent": [Function],
           "algolia": "client",
         },
         "derivedHelpers": Array [],
