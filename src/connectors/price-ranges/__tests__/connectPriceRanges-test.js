@@ -49,8 +49,8 @@ describe('connectPriceRanges', () => {
         {
           hits: [{ test: 'oneTime' }],
           facets: { price: { 10: 1, 20: 1, 30: 1 } },
+          // eslint-disable-next-line
           facets_stats: {
-            // eslint-disable-line
             price: {
               avg: 20,
               max: 30,
@@ -128,8 +128,8 @@ describe('connectPriceRanges', () => {
         {
           hits: [{ test: 'oneTime' }],
           facets: { price: { 10: 1, 20: 1, 30: 1 } },
+          // eslint-disable-next-line
           facets_stats: {
-            // eslint-disable-line
             price: {
               avg: 20,
               max: 30,
