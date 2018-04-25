@@ -32,7 +32,7 @@
     "fs-extra": "5.0.0",
     "glob": "7.1.2",
     "google-map-react": "0.34.0",
-    "happypack": "4.0.1",
+    "happypack": "5.0.0",
     "hasha": "3.0.0",
     "instantsearch.css": "7.0.0",
     "jsdoc-parse": "1.2.7",

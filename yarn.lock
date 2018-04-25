@@ -6727,9 +6727,9 @@ happo@5.0.0:
     happo-core "^5.0.0"
     happo-viewer "^5.0.0"
 
-happypack@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/happypack/-/happypack-4.0.1.tgz#d71a6520d13c1ddf6cc5ca040cfe22711cba5209"
+happypack@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/happypack/-/happypack-5.0.0.tgz#59606b6161acfbd69e99072e5c63f5d165e48b0e"
   dependencies:
     async "1.5.0"
     json-stringify-safe "5.0.1"
