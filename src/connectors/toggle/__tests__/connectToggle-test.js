@@ -71,8 +71,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-              true: 45, // eslint-disable-line
-              false: 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -167,8 +167,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-              true: 45, // eslint-disable-line
-              false: 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -212,7 +212,7 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-              true: 45, // eslint-disable-line
+              true: 45,
             },
           },
           nbHits: 85,
@@ -220,8 +220,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-              true: 45, // eslint-disable-line
-              false: 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -324,7 +324,7 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-              false: 40, // eslint-disable-line
+              false: 40,
             },
           },
           nbHits: 40,
@@ -332,8 +332,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-              true: 45, // eslint-disable-line
-              false: 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -378,7 +378,7 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-              true: 45, // eslint-disable-line
+              true: 45,
             },
           },
           nbHits: 85,
@@ -386,8 +386,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-              true: 45, // eslint-disable-line
-              false: 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
