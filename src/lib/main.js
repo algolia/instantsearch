@@ -118,8 +118,8 @@ import * as stateMappings from './stateMappings/index.js';
  * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
  * @property {RoutingOptions} [routing] the router configuration used to save the UI State into the URL or
  * any client side persistence.
- * @property {SearchClient} [searchClient] The search client to plug to instantsearch.js. You should start updating with this
- * syntax to ease the migration to InstantSearch 3.
+ * @property {SearchClient} [searchClient] The search client to plug to InstantSearch.js. You should start updating with this
+ * syntax to ease the [migration to InstantSearch 3](./guides/prepare-for-v3.html).
  *
  * Usage:
  * ```javascript
