@@ -131,7 +131,7 @@
   },
   "dependencies": {
     "algoliasearch": "3.27.0",
-    "algoliasearch-helper": "2.25.1",
+    "algoliasearch-helper": "2.26.0",
     "classnames": "2.2.5",
     "events": "1.1.0",
     "hogan.js": "3.0.2",
