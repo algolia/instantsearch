@@ -1,3 +1,9 @@
+2.26.0 - 2018-04-25
+ * chore(deps): pin and upgrade some dependencies (#566) https://github.com/algolia/algoliasearch-helper-js/commit/5edd3b19f8ec115733874bddfb5bf1fa602ceab9
+ * chore(yarn.lock): fixed zuul dependency https://github.com/algolia/algoliasearch-helper-js/commit/ad21c56ddf9ec179e87a01560fdaedb70ba844f0
+ * feat: Make `addAlgoliaAgent()` and `clearCache()` optional (#577) https://github.com/algolia/algoliasearch-helper-js/commit/220b01323d75202d5531dd56d9b8211ff22b902c
+ * refactor(lodash): don't use lodash/isarray (#575) https://github.com/algolia/algoliasearch-helper-js/commit/59736d7d7a3141589fd7b7b2a7d93c67fb0822ff
+
 2.25.1 - 2018-04-20
  * fix(sffv): unwrap content when it comes from multi queries (#574) https://github.com/algolia/algoliasearch-helper-js/commit/fcb15d488a27e57b621fa5b26531626353c8bf41
 
