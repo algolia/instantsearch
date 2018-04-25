@@ -314,7 +314,6 @@ Usage: instantsearch({
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            addAlgoliaAgent: () => {},
             search: () => Promise.resolve({ results: [{}] }),
           },
           helper.state.index,
