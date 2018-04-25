@@ -9893,7 +9893,7 @@ zuul-ngrok@4.0.0:
     ngrok "2.1.8"
     xtend "4.0.1"
 
-zuul@^3.11.1:
+zuul@3.11.1:
   version "3.11.1"
   resolved "https://registry.yarnpkg.com/zuul/-/zuul-3.11.1.tgz#7080bbbf22a6d97f60879b3b8f2a823c5a99bab2"
   dependencies:
