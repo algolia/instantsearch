@@ -12,6 +12,56 @@ function makeFakeClient() {
   return client;
 }
 
+test("client without addAlgoliaAgent() doesn't throw on instanciation", function(t) {
+  var client = {};
+
+  t.doesNotThrow(function() {
+    algoliaSearchHelper(client);
+  });
+
+  t.end();
+});
+
+test('addAlgoliaAgent gets called if exists', function(t) {
+  var client = {
+    addAlgoliaAgent: sinon.stub()
+  };
+
+  t.notOk(client.addAlgoliaAgent.called);
+
+  algoliaSearchHelper(client);
+
+  t.ok(client.addAlgoliaAgent.called);
+
+  t.end();
+});
+
+test("client without clearCache() doesn't throw when clearing cache", function(t) {
+  var client = {};
+  var helper = algoliaSearchHelper(client);
+
+  t.doesNotThrow(function() {
+    helper.clearCache();
+  });
+
+  t.end();
+});
+
+test('clearCache gets called if exists', function(t) {
+  var client = {
+    clearCache: sinon.stub()
+  };
+  var helper = algoliaSearchHelper(client);
+
+  t.notOk(client.clearCache.called);
+
+  helper.clearCache();
+
+  t.ok(client.clearCache.called);
+
+  t.end();
+});
+
 test('setting the agent once', function(t) {
   var client = algoliasearch('what', 'wait', {});
   var originalUA = client._ua;

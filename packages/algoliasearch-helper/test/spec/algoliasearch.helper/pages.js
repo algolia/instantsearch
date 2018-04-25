@@ -3,9 +3,7 @@
 var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('setChange should change the current page', function(t) {
   var helper = algoliasearchHelper(fakeClient, null, null);

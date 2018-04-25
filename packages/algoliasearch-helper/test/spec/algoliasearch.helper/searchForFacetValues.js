@@ -11,7 +11,6 @@ test('searchForFacetValues calls the client method over the index method', funct
   var clientSearchForFacetValuesCalled = 0;
 
   var fakeClient = {
-    addAlgoliaAgent: function() {},
     searchForFacetValues: function() {
       clientSearchForFacetValuesCalled++;
       return Promise.resolve([{}]);
@@ -42,7 +41,6 @@ test('searchForFacetValues calls the index method if no client method', function
   var indexSearchForFacetValuesCalled = 0;
 
   var fakeClient = {
-    addAlgoliaAgent: function() {},
     initIndex: function() {
       return {
         searchForFacetValues: function() {
@@ -120,7 +118,6 @@ test('searchForFacetValues resolve with the correct response from initIndex', fu
 test('index.searchForFacetValues should search for facetValues with the current state', function(t) {
   var lastParameters = null;
   var fakeClient = {
-    addAlgoliaAgent: function() {},
     initIndex: function() {
       return {
         searchForFacetValues: function() {
@@ -152,7 +149,6 @@ test('index.searchForFacetValues should search for facetValues with the current 
 test('index.searchForFacetValues can override the current search state', function(t) {
   var lastParameters = null;
   var fakeClient = {
-    addAlgoliaAgent: function() {},
     initIndex: function() {
       return {
         searchForFacetValues: function() {
@@ -187,7 +183,6 @@ test('index.searchForFacetValues can override the current search state', functio
 test('client.searchForFacetValues should search for facetValues with the current state', function(t) {
   var lastParameters = null;
   var fakeClient = {
-    addAlgoliaAgent: function() {},
     searchForFacetValues: function() {
       lastParameters = arguments[0];
       return Promise.resolve({});
@@ -215,7 +210,6 @@ test('client.searchForFacetValues should search for facetValues with the current
 test('client.searchForFacetValues can override the current search state', function(t) {
   var lastParameters = null;
   var fakeClient = {
-    addAlgoliaAgent: function() {},
     searchForFacetValues: function() {
       lastParameters = arguments[0];
       return Promise.resolve({});

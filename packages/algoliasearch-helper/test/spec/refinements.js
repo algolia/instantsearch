@@ -4,9 +4,7 @@ var test = require('tape');
 var _ = require('lodash');
 var algoliasearchHelper = require('../../index');
 
-var emptyClient = {
-  addAlgoliaAgent: function() {}
-};
+var emptyClient = {};
 
 test('Adding refinments should add an entry to the refinments attribute', function(t) {
   var facetName = 'facet1';

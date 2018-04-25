@@ -3,9 +3,7 @@
 var test = require('tape');
 var algoliaSearchHelper = require('../../../index.js');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('getQuery', function(t) {
   var helper = algoliaSearchHelper(fakeClient, 'IndexName', {

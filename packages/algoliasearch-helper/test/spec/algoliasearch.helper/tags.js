@@ -4,9 +4,7 @@ var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 var requestBuilder = require('../../../src/requestBuilder');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('Tag filters: operations on tags list', function(t) {
   var helper = algoliasearchHelper(fakeClient, null, null);

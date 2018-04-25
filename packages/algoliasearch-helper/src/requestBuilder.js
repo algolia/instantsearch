@@ -4,7 +4,6 @@ var forEach = require('lodash/forEach');
 var map = require('lodash/map');
 var reduce = require('lodash/reduce');
 var merge = require('lodash/merge');
-var isArray = require('lodash/isArray');
 
 var requestBuilder = {
   /**
@@ -141,7 +140,7 @@ var requestBuilder = {
       forEach(operators, function(values, operator) {
         if (facetName !== attribute) {
           forEach(values, function(value) {
-            if (isArray(value)) {
+            if (Array.isArray(value)) {
               var vs = map(value, function(v) {
                 return attribute + operator + v;
               });

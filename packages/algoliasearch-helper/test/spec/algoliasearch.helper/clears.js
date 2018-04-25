@@ -8,7 +8,7 @@ var isEmpty = require('lodash/isEmpty');
 var isUndefined = require('lodash/isUndefined');
 
 function fixture() {
-  var helper = algoliasearchHelper({addAlgoliaAgent: function() {}}, 'Index', {
+  var helper = algoliasearchHelper({}, 'Index', {
     facets: ['facet1', 'facet2', 'both_facet', 'excluded1', 'excluded2'],
     disjunctiveFacets: ['disjunctiveFacet1', 'disjunctiveFacet2', 'both_facet'],
     hierarchicalFacets: [{

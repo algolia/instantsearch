@@ -7,7 +7,6 @@ var algoliasearchHelper = require('../../../../index.js');
 test('[Derivated helper] no derivatives', function(t) {
   t.plan(1);
   var client = {
-    addAlgoliaAgent: function() {},
     search: searchTest
   };
   var helper = algoliasearchHelper(client, '');
@@ -27,7 +26,6 @@ test('[Derivated helper] no derivatives', function(t) {
 test('[Derivated helper] 1 derivatives, no modifications', function(t) {
   t.plan(2);
   var client = {
-    addAlgoliaAgent: function() {},
     search: searchTest
   };
   var helper = algoliasearchHelper(client, '');
@@ -53,7 +51,6 @@ test('[Derivated helper] 1 derivatives, no modifications', function(t) {
 test('[Derivated helper] no derivatives, modification', function(t) {
   t.plan(4);
   var client = {
-    addAlgoliaAgent: function() {},
     search: searchTest
   };
   var helper = algoliasearchHelper(client, '');

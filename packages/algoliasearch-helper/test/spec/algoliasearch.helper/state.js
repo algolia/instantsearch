@@ -10,9 +10,7 @@ var mapKeys = require('lodash/mapKeys');
 
 var qs = require('qs');
 
-var fakeClient = {
-  addAlgoliaAgent: function() {}
-};
+var fakeClient = {};
 
 test('setState should set the state of the helper and trigger a change event', function(t) {
   var state0 = {query: 'a query'};
