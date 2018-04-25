@@ -97,9 +97,6 @@ describe('GeoSearch', () => {
         search() {
           return Promise.resolve({ results: [{}] });
         },
-        addAlgoliaAgent() {
-          return {};
-        },
       },
       'indexName'
     );

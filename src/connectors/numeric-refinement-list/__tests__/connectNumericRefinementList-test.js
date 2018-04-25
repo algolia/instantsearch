@@ -6,8 +6,6 @@ import jsHelper, {
 
 import connectNumericRefinementList from '../connectNumericRefinementList.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
 const mapOptionsToItems = ({ start, end, name: label }) => ({
@@ -36,7 +34,7 @@ describe('connectNumericRefinementList', () => {
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
 
     widget.init({
@@ -93,7 +91,7 @@ describe('connectNumericRefinementList', () => {
       ],
     });
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
 
     widget.init({
@@ -172,7 +170,7 @@ describe('connectNumericRefinementList', () => {
       ],
     });
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
 
     widget.init({
@@ -227,7 +225,7 @@ describe('connectNumericRefinementList', () => {
       options: listOptions,
     });
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
 
     widget.init({
@@ -278,7 +276,7 @@ describe('connectNumericRefinementList', () => {
       options: listOptions,
     });
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
 
     widget.init({
@@ -339,7 +337,7 @@ describe('connectNumericRefinementList', () => {
       options: listOptions,
     });
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -383,7 +381,7 @@ describe('connectNumericRefinementList', () => {
       ],
     });
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
     helper.setPage(2);
 
@@ -417,7 +415,7 @@ describe('connectNumericRefinementList', () => {
         ],
       });
 
-      const helper = jsHelper({ addAlgoliaAgent: () => {} }, '');
+      const helper = jsHelper({}, '');
       helper.search = () => {};
 
       widget.init({

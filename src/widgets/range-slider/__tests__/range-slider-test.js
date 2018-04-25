@@ -33,9 +33,6 @@ describe('rangeSlider', () => {
           search() {
             return Promise.resolve({ results: [{}] });
           },
-          addAlgoliaAgent() {
-            return {};
-          },
         },
         'indexName',
         { disjunctiveFacets: ['aNumAttr'] }

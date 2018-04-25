@@ -15,7 +15,6 @@ describe('InstantSearch life cycle', () => {
 
     const fakeClient = {
       search: jest.fn(() => Promise.resolve({ results: [{}] })),
-      addAlgoliaAgent: () => {},
     };
 
     const search = new InstantSearch({
@@ -61,7 +60,6 @@ describe('InstantSearch life cycle', () => {
         searchResultsPromises.push(results);
         return results;
       }),
-      addAlgoliaAgent: () => {},
     };
 
     const search = new InstantSearch({
@@ -143,7 +141,6 @@ describe('InstantSearch life cycle', () => {
 
     const fakeClient = {
       search: jest.fn(() => Promise.resolve({ results: [{}] })),
-      addAlgoliaAgent: () => {},
     };
 
     const search = new InstantSearch({

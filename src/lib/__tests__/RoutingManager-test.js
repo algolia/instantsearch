@@ -3,7 +3,6 @@ import RoutingManager from '../RoutingManager.js';
 import simpleMapping from '../stateMappings/simple.js';
 
 const makeFakeAlgoliaClient = () => ({
-  addAlgoliaAgent: () => {},
   search: () => Promise.resolve({ results: [{}] }),
 });
 

@@ -7,8 +7,6 @@ import jsHelper, {
 
 import connectStarRating from '../connectStarRating.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectStarRating', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -26,7 +24,7 @@ describe('connectStarRating', () => {
       disjunctiveFacets: [attributeName],
     });
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -114,7 +112,7 @@ describe('connectStarRating', () => {
 
     const config = widget.getConfiguration({});
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -217,7 +215,7 @@ describe('connectStarRating', () => {
       });
 
       const initialConfig = widget.getConfiguration({});
-      const helper = jsHelper(fakeClient, '', initialConfig);
+      const helper = jsHelper({}, '', initialConfig);
       helper.search = jest.fn();
 
       widget.init({

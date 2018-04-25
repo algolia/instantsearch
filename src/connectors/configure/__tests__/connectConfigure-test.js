@@ -3,7 +3,6 @@ import algoliasearchHelper, { SearchParameters } from 'algoliasearch-helper';
 import connectConfigure from '../connectConfigure.js';
 
 const fakeClient = {
-  addAlgoliaAgent: () => {},
   search: jest.fn(() => Promise.resolve({ results: [{}] })),
 };
 

@@ -7,8 +7,6 @@ import jsHelper, {
 
 import connectPriceRanges from '../connectPriceRanges.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectPriceRanges', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -25,7 +23,7 @@ describe('connectPriceRanges', () => {
     const config = widget.getConfiguration();
     expect(config).toEqual({ facets: [attributeName] });
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -51,7 +49,8 @@ describe('connectPriceRanges', () => {
         {
           hits: [{ test: 'oneTime' }],
           facets: { price: { 10: 1, 20: 1, 30: 1 } },
-        facets_stats: { // eslint-disable-line
+          facets_stats: {
+            // eslint-disable-line
             price: {
               avg: 20,
               max: 30,
@@ -102,7 +101,7 @@ describe('connectPriceRanges', () => {
       attributeName,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration());
+    const helper = jsHelper({}, '', widget.getConfiguration());
     helper.search = sinon.stub();
 
     widget.init({
@@ -129,7 +128,8 @@ describe('connectPriceRanges', () => {
         {
           hits: [{ test: 'oneTime' }],
           facets: { price: { 10: 1, 20: 1, 30: 1 } },
-        facets_stats: { // eslint-disable-line
+          facets_stats: {
+            // eslint-disable-line
             price: {
               avg: 20,
               max: 30,
@@ -169,7 +169,7 @@ describe('connectPriceRanges', () => {
       });
 
       const config = widget.getConfiguration({}, {});
-      const helper = jsHelper(fakeClient, '', config);
+      const helper = jsHelper({}, '', config);
       helper.search = jest.fn();
 
       widget.init({

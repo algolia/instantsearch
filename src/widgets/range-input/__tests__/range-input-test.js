@@ -20,9 +20,6 @@ describe('rangeInput', () => {
         search() {
           return Promise.resolve({ results: [{}] });
         },
-        addAlgoliaAgent() {
-          return {};
-        },
       },
       'indexName',
       { disjunctiveFacets: [attributeName] }
