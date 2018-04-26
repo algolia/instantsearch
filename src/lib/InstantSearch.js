@@ -52,10 +52,7 @@ Usage: instantsearch({
     const usage = `
 Usage: instantsearch({
   indexName: 'my_index_name',
-  searchClient: {
-    search(requests) {},
-    searchForFacetValues(requests) {}
-  }
+  searchClient: algoliasearch('appId', 'apiKey')
 });`;
     throw new Error(usage);
   }
