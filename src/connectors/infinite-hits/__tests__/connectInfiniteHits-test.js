@@ -5,8 +5,6 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectInfiniteHits from '../connectInfiniteHits.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectInfiniteHits', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -26,7 +24,7 @@ describe('connectInfiniteHits', () => {
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper(fakeClient, '');
+    const helper = jsHelper({}, '');
     helper.search = sinon.stub();
 
     widget.init({
@@ -70,7 +68,7 @@ describe('connectInfiniteHits', () => {
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = jsHelper({}, '', {});
     helper.search = sinon.stub();
 
     widget.init({
@@ -145,7 +143,7 @@ describe('connectInfiniteHits', () => {
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({ escapeHits: true });
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = jsHelper({}, '', {});
     helper.search = sinon.stub();
 
     widget.init({

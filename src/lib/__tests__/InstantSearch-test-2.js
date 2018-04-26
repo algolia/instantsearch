@@ -14,8 +14,7 @@ describe('InstantSearch life cycle', () => {
     });
 
     const fakeClient = {
-      search: jest.fn(),
-      addAlgoliaAgent: () => {},
+      search: jest.fn(() => Promise.resolve({ results: [{}] })),
     };
 
     const search = new InstantSearch({
@@ -54,18 +53,13 @@ describe('InstantSearch life cycle', () => {
   });
 
   it('triggers the stalled search rendering once if the search does not resolve in time', () => {
-    const searchResultsResolvers = [];
     const searchResultsPromises = [];
     const fakeClient = {
-      search: jest.fn((qs, cb) => {
-        const p = new Promise(resolve =>
-          searchResultsResolvers.push(resolve)
-        ).then(() => {
-          cb(null, fakeResults());
-        });
-        searchResultsPromises.push(p);
+      search: jest.fn(() => {
+        const results = Promise.resolve(fakeResults());
+        searchResultsPromises.push(results);
+        return results;
       }),
-      addAlgoliaAgent: () => {},
     };
 
     const search = new InstantSearch({
@@ -95,9 +89,6 @@ describe('InstantSearch life cycle', () => {
     expect(widget.init).toHaveBeenCalledTimes(1);
     expect(widget.render).not.toHaveBeenCalled();
 
-    // first results come back
-    searchResultsResolvers[0]();
-
     return searchResultsPromises[0].then(() => {
       // render has now been called
       expect(widget.render).toHaveBeenCalledTimes(1);
@@ -126,7 +117,6 @@ describe('InstantSearch life cycle', () => {
         })
       );
 
-      searchResultsResolvers[1]();
       return searchResultsPromises[1].then(() => {
         expect(widget.render).toHaveBeenCalledTimes(3);
         expect(widget.render).toHaveBeenLastCalledWith(
@@ -150,8 +140,7 @@ describe('InstantSearch life cycle', () => {
     });
 
     const fakeClient = {
-      search: jest.fn(),
-      addAlgoliaAgent: () => {},
+      search: jest.fn(() => Promise.resolve({ results: [{}] })),
     };
 
     const search = new InstantSearch({
