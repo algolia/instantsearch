@@ -1456,6 +1456,9 @@ pre,
 samp {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace; }
 
+code:empty {
+  display: none; }
+
 code {
   padding: 2px 4px;
   font-size: 90%;
