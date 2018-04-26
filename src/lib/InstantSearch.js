@@ -102,27 +102,20 @@ class InstantSearch extends EventEmitter {
       searchClient,
     });
 
-    if (searchClient) {
-      if (typeof searchClient.search !== 'function') {
-        throw new Error(
-          'InstantSearch configuration error: `searchClient` must implement a `search(requests)` method.'
-        );
-      }
-
-      // We deep copy the search client to avoid mutating the original version
-      // and to copy its prototype (needed for `algoliasearch`)
-      const client = Object.create(searchClient);
-      client.addAlgoliaAgent = client.addAlgoliaAgent || (() => {});
-      client.clearCache = client.clearCache || (() => {});
-
-      this.client = client;
-    } else {
-      const client = createAlgoliaClient(algoliasearch, appId, apiKey);
-      client.addAlgoliaAgent(`instantsearch.js ${version}`);
-
-      this.client = client;
+    if (searchClient && typeof searchClient.search !== 'function') {
+      throw new Error(
+        'InstantSearch configuration error: `searchClient` must implement a `search(requests)` method.'
+      );
     }
 
+    const client =
+      searchClient || createAlgoliaClient(algoliasearch, appId, apiKey);
+
+    if (typeof client.addAlgoliaAgent === 'function') {
+      client.addAlgoliaAgent(`instantsearch.js ${version}`);
+    }
+
+    this.client = client;
     this.helper = null;
     this.indexName = indexName;
     this.searchParameters = { ...searchParameters, index: indexName };
