@@ -4,10 +4,7 @@ import InstantSearch from '../InstantSearch';
 const usage = `
 Usage: instantsearch({
   indexName: 'my_index_name',
-  searchClient: {
-    search(requests) {},
-    searchForFacetValues(requests) {}
-  }
+  searchClient: algoliasearch('appId', 'apiKey')
 });`;
 
 // THROWAWAY: Test suite to remove once the next major version is released
