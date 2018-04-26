@@ -27,17 +27,17 @@ export default class RoutingManager {
     // like hierarchicalFacet.rootPath are then triggering a default refinement that would
     // be not present if it was not going trough the SearchParameters constructor
     this.originalConfig = algoliasearchHelper(
-      { addAlgoliaAgent() {} },
+      {},
       currentConfiguration.index,
       currentConfiguration
     ).state;
-    return Object.assign(
-      {},
-      this.getAllSearchParameters({
+    // The content of getAllSearchParameters is destructured to return a plain object
+    return {
+      ...this.getAllSearchParameters({
         currentSearchParameters: this.originalConfig,
         uiState: this.originalUIState,
-      })
-    );
+      }),
+    };
   }
 
   render({ state }) {
@@ -63,11 +63,10 @@ export default class RoutingManager {
         uiState,
       });
 
-      const fullHelperState = Object.assign(
-        {},
-        this.originalConfig,
-        searchParameters
-      );
+      const fullHelperState = {
+        ...this.originalConfig,
+        ...searchParameters,
+      };
 
       if (isEqual(fullHelperState, searchParameters)) return;
 
@@ -97,7 +96,8 @@ export default class RoutingManager {
       // We do this in order to make a URL update when there is search function
       // that prevent the search of the initial rendering
       // See: https://github.com/algolia/instantsearch.js/issues/2523#issuecomment-339356157
-      this.router.write(firstRenderState);
+      const route = this.stateMapping.stateToRoute(firstRenderState);
+      this.router.write(route);
     }
   }
 
@@ -162,11 +162,10 @@ export default class RoutingManager {
         uiState,
       });
 
-      const fullSearchParameters = Object.assign(
-        {},
-        this.originalConfig,
-        searchParameters
-      );
+      const fullSearchParameters = {
+        ...this.originalConfig,
+        ...searchParameters,
+      };
 
       fn(fullSearchParameters);
     });

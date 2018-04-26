@@ -7,7 +7,7 @@ import connectClearAll from '../connectClearAll.js';
 
 describe('connectClearAll', () => {
   it('Renders during init and render', () => {
-    const helper = jsHelper({ addAlgoliaAgent: () => {} });
+    const helper = jsHelper({});
     helper.search = sinon.stub();
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
@@ -58,7 +58,7 @@ describe('connectClearAll', () => {
     // test the function received by the rendering function
     // to clear the refinements
 
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
+    const helper = jsHelper({}, '', {
       facets: ['myFacet'],
     });
     helper.search = sinon.stub();
@@ -105,7 +105,7 @@ describe('connectClearAll', () => {
     // test the function received by the rendering function
     // to clear the refinements
 
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
+    const helper = jsHelper({}, '', {
       facets: ['myFacet'],
     });
     helper.search = sinon.stub();
@@ -152,7 +152,7 @@ describe('connectClearAll', () => {
   it('some refinements from results <=> hasRefinements = true', () => {
     // test if the values sent to the rendering function
     // are consistent with the search state
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, undefined, {
+    const helper = jsHelper({}, undefined, {
       facets: ['aFacet'],
     });
     helper.toggleRefinement('aFacet', 'some value');
@@ -184,7 +184,7 @@ describe('connectClearAll', () => {
   it('(clearsQuery: true) query not empty <=> hasRefinements = true', () => {
     // test if the values sent to the rendering function
     // are consistent with the search state
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, undefined, {
+    const helper = jsHelper({}, undefined, {
       facets: ['aFacet'],
     });
     helper.setQuery('no empty');
@@ -219,7 +219,7 @@ describe('connectClearAll', () => {
     // test if the values sent to the rendering function
     // are consistent with the search state
 
-    const helper = jsHelper({ addAlgoliaAgent: () => {} });
+    const helper = jsHelper({});
     helper.setQuery('not empty');
     helper.search = sinon.stub();
 

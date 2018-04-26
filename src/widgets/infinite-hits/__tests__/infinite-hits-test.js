@@ -17,7 +17,7 @@ describe('infiniteHits()', () => {
   let helper;
 
   beforeEach(() => {
-    helper = algoliasearchHelper({ addAlgoliaAgent: () => {} });
+    helper = algoliasearchHelper({});
     helper.search = sinon.spy();
 
     ReactDOM = { render: sinon.spy() };

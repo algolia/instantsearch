@@ -5,8 +5,6 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectHits from '../connectHits.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectHits', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -23,7 +21,7 @@ describe('connectHits', () => {
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = jsHelper({}, '', {});
     helper.search = sinon.stub();
 
     widget.init({
@@ -61,7 +59,7 @@ describe('connectHits', () => {
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({});
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = jsHelper({}, '', {});
     helper.search = sinon.stub();
 
     widget.init({
@@ -97,7 +95,7 @@ describe('connectHits', () => {
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({ escapeHits: true });
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = jsHelper({}, '', {});
     helper.search = sinon.stub();
 
     widget.init({

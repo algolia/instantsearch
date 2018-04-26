@@ -21,7 +21,7 @@
         "logo": "https://community.algolia.com/img/illus-autocomplete.svg",
         "backgroundColor": "#00587f"
       }, {
-        "name": "InstantSearch React",
+        "name": "React InstantSearch",
         "url": "https://community.algolia.com/instantsearch.js/react",
         "logo": "https://community.algolia.com/img/logo-react-instantsearch.svg",
         "backgroundColor": "linear-gradient(45deg, #3369e7, #00aeff), linear-gradient(#fafafa, #fafafa)"
