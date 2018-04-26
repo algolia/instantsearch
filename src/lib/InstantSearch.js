@@ -118,7 +118,7 @@ Usage: instantsearch({
   }
 
   /**
-   * Add a widget. This can be done before and after InstantSearch has been started. Adding a
+   * Adds a widget. This can be done before and after InstantSearch has been started. Adding a
    * widget after InstantSearch started is considered **EXPERIMENTAL** and therefore
    * it is possibly buggy, if you find anything please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20hot%20addWidget).
@@ -132,7 +132,7 @@ Usage: instantsearch({
   }
 
   /**
-   * Add multiple widgets. This can be done before and after the InstantSearch has been started. This feature
+   * Adds multiple widgets. This can be done before and after the InstantSearch has been started. This feature
    * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20addWidgets).
    * @param  {Widget[]} widgets The array of widgets to add to InstantSearch.
@@ -191,7 +191,7 @@ Usage: instantsearch({
   }
 
   /**
-   * Remove multiple widgets. This can be done only after the InstantSearch has been started. This feature
+   * Removes multiple widgets. This can be done only after the InstantSearch has been started. This feature
    * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20addWidgets).
    * @param  {Widget[]} widgets Array of widgets instances to remove from InstantSearch.
@@ -247,7 +247,7 @@ Usage: instantsearch({
   }
 
   /**
-   * The refresh method clears the cached answers from Algolia and triggers a new search.
+   * Clears the cached answers from Algolia and triggers a new search.
    *
    * @return {undefined} Does not return anything
    */
@@ -258,7 +258,7 @@ Usage: instantsearch({
   }
 
   /**
-   * The start method ends the initialization of InstantSearch.js and triggers the
+   * Ends the initialization of InstantSearch.js and triggers the
    * first search. This method should be called after all widgets have been added
    * to the instance of InstantSearch.js. InstantSearch.js also supports adding and removing
    * widgets after the start as an **EXPERIMENTAL** feature.
@@ -358,7 +358,7 @@ Usage: instantsearch({
   }
 
   /**
-   * Remove all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
+   * Removes all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
    * if you find an issue with it, please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20dispose).
    * @return {undefined} This method does not return anything
