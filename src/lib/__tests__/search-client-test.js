@@ -11,22 +11,12 @@ describe('InstantSearch Search Client', () => {
         });
       }).toThrowErrorMatchingSnapshot();
     });
-
-    it('should have default `addAlgoliaAgent()` and `clearCache()` methods', () => {
-      const search = new InstantSearch({
-        indexName: '',
-        searchClient: { search() {} },
-      });
-
-      expect(search.client.addAlgoliaAgent).toBeDefined();
-      expect(search.client.clearCache).toBeDefined();
-    });
   });
 
   describe('Lifecycle', () => {
     it('gets called on search', () => {
       const searchClientSpy = {
-        search: jest.fn(),
+        search: jest.fn(() => Promise.resolve({ results: [{}] })),
       };
 
       const search = new InstantSearch({
@@ -49,7 +39,7 @@ describe('InstantSearch Search Client', () => {
       });
 
       const searchClientSpy = {
-        search: jest.fn(),
+        search: jest.fn(() => Promise.resolve({ results: [{}] })),
       };
 
       const search = new InstantSearch({
