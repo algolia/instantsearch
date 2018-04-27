@@ -31,7 +31,7 @@
     "escape-html": "1.0.3",
     "fs-extra": "5.0.0",
     "glob": "7.1.2",
-    "google-map-react": "0.34.0",
+    "google-map-react": "1.0.0",
     "happypack": "5.0.0",
     "hasha": "3.0.0",
     "instantsearch.css": "7.0.0",
