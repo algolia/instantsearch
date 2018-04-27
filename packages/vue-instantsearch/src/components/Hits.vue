@@ -7,7 +7,9 @@
           :key="itemIndex"
           :class="suit('item')"
         >
-          objectID: {{item.objectID}}, index: {{itemIndex}}
+          <slot name="item" :result="item" :index="itemIndex">
+            objectID: {{item.objectID}}, index: {{itemIndex}}
+          </slot>
         </li>
       </ul>
     </slot>

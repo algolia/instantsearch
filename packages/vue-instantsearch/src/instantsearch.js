@@ -12,7 +12,6 @@ import Menu from './components/Menu.vue';
 import SortBySelector from './components/SortBySelector.vue';
 import SearchBox from './components/SearchBox.vue';
 import ClearRefinements from './components/ClearRefinements.vue';
-import NoResults from './components/NoResults.vue';
 import PoweredBy from './components/PoweredBy.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import CurrentRefinements from './components/CurrentRefinements.vue';
@@ -32,7 +31,6 @@ const InstantSearch = {
   SortBySelector,
   SearchBox,
   ClearRefinements,
-  NoResults,
   PoweredBy,
   Breadcrumb,
   CurrentRefinements,
@@ -52,7 +50,6 @@ const InstantSearch = {
     Vue.component('ais-search-box', SearchBox);
     Vue.component('ais-clear-refinements', ClearRefinements);
     Vue.component('ais-configure', Configure);
-    Vue.component('ais-no-results', NoResults);
     Vue.component('ais-powered-by', PoweredBy);
     Vue.component('ais-breadcrumb', Breadcrumb);
     Vue.component('ais-current-refinements', CurrentRefinements);
@@ -76,7 +73,6 @@ export {
   SortBySelector,
   SearchBox,
   ClearRefinements,
-  NoResults,
   PoweredBy,
   HitsPerPage,
 };
