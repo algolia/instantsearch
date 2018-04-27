@@ -4,11 +4,11 @@ export default function suit(widgetName, element, subElement) {
   }
 
   if (element) {
-    const scoppedWidgetName = `ais-${widgetName}-${element}`;
-    // output `ais-Widget-Xyz--abc`
-    if (subElement) return `${scoppedWidgetName}--${subElement}`;
-    // output `ais-Widget-Xyz`
-    return scoppedWidgetName;
+    const scopedWidgetName = `ais-${widgetName}-${element}`;
+    // output `ais-Widget-xyz--abc`
+    if (subElement) return `${scopedWidgetName}--${subElement}`;
+    // output `ais-Widget-xyz`
+    return scopedWidgetName;
   } else {
     // output `ais-Widget`
     return `ais-${widgetName}`;
