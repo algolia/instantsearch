@@ -4,7 +4,7 @@
       <ul :class="suit('list')">
         <li
           v-for="(item, itemIndex) in items"
-          :key="itemIndex"
+          :key="item.objectID"
           :class="suit('item')"
         >
           <slot name="item" :result="item" :index="itemIndex">
