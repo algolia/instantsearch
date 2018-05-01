@@ -29,7 +29,7 @@
     "compression": "1.7.2",
     "css-loader": "0.28.11",
     "escape-html": "1.0.3",
-    "fs-extra": "5.0.0",
+    "fs-extra": "6.0.0",
     "glob": "7.1.2",
     "google-map-react": "1.0.0",
     "happypack": "5.0.0",
