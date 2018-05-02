@@ -65,7 +65,10 @@ Usage: instantsearch({
     }
 
     const client = createAlgoliaClient(algoliasearch, appId, apiKey);
-    client.addAlgoliaAgent(`instantsearch.js ${version}`);
+
+    if (typeof client.addAlgoliaAgent === 'function') {
+      client.addAlgoliaAgent(`instantsearch.js ${version}`);
+    }
 
     this.client = client;
     this.helper = null;
@@ -311,8 +314,7 @@ Usage: instantsearch({
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            addAlgoliaAgent: () => {},
-            search: () => {},
+            search: () => Promise.resolve({ results: [{}] }),
           },
           helper.state.index,
           helper.state

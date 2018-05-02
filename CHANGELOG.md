@@ -1,3 +1,13 @@
+<a name="2.7.3"></a>
+## [2.7.3](https://github.com/algolia/instantsearch.js/compare/v2.7.2...v2.7.3) (2018-04-26)
+
+
+### Bug Fixes
+
+* **index.es6:** avoid use of Object.assign for IE ([#2908](https://github.com/algolia/instantsearch.js/issues/2908)) ([228b02e](https://github.com/algolia/instantsearch.js/commit/228b02e))
+
+
+
 <a name="2.7.2"></a>
 ## [2.7.2](https://github.com/algolia/instantsearch.js/compare/v2.7.1...v2.7.2) (2018-04-18)
 

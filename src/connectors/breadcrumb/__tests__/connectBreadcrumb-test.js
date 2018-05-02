@@ -75,7 +75,7 @@ describe('connectBreadcrumb', () => {
     // Verify that the widget has not been rendered yet at this point
     expect(rendering.mock.calls).toHaveLength(0);
 
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -154,7 +154,7 @@ describe('connectBreadcrumb', () => {
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
     const config = widget.getConfiguration({});
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -208,7 +208,7 @@ describe('connectBreadcrumb', () => {
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
     const config = widget.getConfiguration({});
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -267,7 +267,7 @@ describe('connectBreadcrumb', () => {
     });
 
     const config = widget.getConfiguration({});
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -427,7 +427,7 @@ describe('connectBreadcrumb', () => {
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
     const config = widget.getConfiguration({});
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({

@@ -9,10 +9,11 @@ import version from './lib/version.js';
 
 // import instantsearch from 'instantsearch.js';
 // -> provides instantsearch object without connectors and widgets
-const instantSearchFactory = Object.assign(toFactory(InstantSearch), {
-  version,
-  createQueryString: algoliasearchHelper.url.getQueryStringFromState,
-});
+const instantSearchFactory = toFactory(InstantSearch);
+
+instantSearchFactory.version = version;
+instantSearchFactory.createQueryString =
+  algoliasearchHelper.url.getQueryStringFromState;
 
 Object.defineProperty(instantSearchFactory, 'widgets', {
   get() {

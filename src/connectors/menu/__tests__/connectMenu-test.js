@@ -7,8 +7,6 @@ import jsHelper, {
 
 import connectMenu from '../connectMenu.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectMenu', () => {
   let rendering;
   let makeWidget;
@@ -86,7 +84,7 @@ describe('connectMenu', () => {
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -132,7 +130,7 @@ describe('connectMenu', () => {
       attributeName: 'category',
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'value');
@@ -171,7 +169,7 @@ describe('connectMenu', () => {
       attributeName: 'category',
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -271,7 +269,7 @@ describe('connectMenu', () => {
 
       // When
       const config = widget.getConfiguration({});
-      const helper = jsHelper(fakeClient, '', config);
+      const helper = jsHelper({}, '', config);
       helper.search = jest.fn();
 
       widget.init({
@@ -296,7 +294,7 @@ describe('connectMenu', () => {
 
       // When
       const config = widget.getConfiguration({});
-      const helper = jsHelper(fakeClient, '', config);
+      const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
       helper.toggleRefinement('category', 'Decoration');
@@ -358,7 +356,7 @@ describe('connectMenu', () => {
 
       // When
       const config = widget.getConfiguration({});
-      const helper = jsHelper(fakeClient, '', config);
+      const helper = jsHelper({}, '', config);
 
       helper.search = jest.fn();
       helper.toggleRefinement('category', 'Decoration');
@@ -407,11 +405,7 @@ describe('connectMenu', () => {
         attributeName: 'category',
       });
 
-      const helper = jsHelper(
-        { addAlgoliaAgent: () => {} },
-        '',
-        widget.getConfiguration({})
-      );
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
       helper.search = sinon.stub();
 
       widget.init({

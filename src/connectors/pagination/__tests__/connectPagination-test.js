@@ -7,8 +7,6 @@ import jsHelper, {
 
 import connectPagination from '../connectPagination.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectPagination', () => {
   it('connectPagination - Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -22,7 +20,7 @@ describe('connectPagination', () => {
     // does not have a getConfiguration method
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
 
     widget.init({
@@ -82,7 +80,7 @@ describe('connectPagination', () => {
 
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
 
     widget.init({
@@ -124,7 +122,7 @@ describe('connectPagination', () => {
 
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -190,7 +188,7 @@ describe('connectPagination', () => {
       padding: 5,
     });
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -254,7 +252,7 @@ describe('connectPagination', () => {
       const makeWidget = connectPagination(rendering);
       const widget = makeWidget({});
 
-      const helper = jsHelper(fakeClient, '');
+      const helper = jsHelper({}, '');
       helper.search = jest.fn();
 
       widget.init({

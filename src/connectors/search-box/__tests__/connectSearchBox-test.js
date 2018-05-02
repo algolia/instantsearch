@@ -5,8 +5,6 @@ import jsHelper, {
 
 import connectSearchBox from '../connectSearchBox.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectSearchBox', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -20,7 +18,7 @@ describe('connectSearchBox', () => {
 
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = () => {};
 
     widget.init({
@@ -67,7 +65,7 @@ describe('connectSearchBox', () => {
 
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -111,7 +109,7 @@ describe('connectSearchBox', () => {
 
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient, '', {
+    const helper = jsHelper({}, '', {
       query: 'bup',
     });
     helper.search = jest.fn();
@@ -166,7 +164,7 @@ describe('connectSearchBox', () => {
       queryHook,
     });
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = jest.fn();
 
     widget.init({
@@ -226,7 +224,7 @@ describe('connectSearchBox', () => {
 
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = () => {};
 
     widget.init({
@@ -266,7 +264,7 @@ describe('connectSearchBox', () => {
 
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = jest.fn();
     helper.setQuery('foobar');
 
@@ -296,7 +294,7 @@ describe('connectSearchBox', () => {
       });
 
       const initialConfig = {};
-      const helper = jsHelper(fakeClient, '', initialConfig);
+      const helper = jsHelper({}, '', initialConfig);
       helper.search = jest.fn();
 
       widget.init({

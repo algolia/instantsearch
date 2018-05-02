@@ -6,10 +6,6 @@ import algoliasearchHelper, {
 } from 'algoliasearch-helper';
 import connectGeoSearch from '../connectGeoSearch';
 
-const createFakeClient = () => ({
-  addAlgoliaAgent: () => {},
-});
-
 const createFakeHelper = client => {
   const helper = algoliasearchHelper(client);
 
@@ -44,7 +40,7 @@ describe('connectGeoSearch - rendering', () => {
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch();
 
-    const client = createFakeClient();
+    const client = {};
     const helper = createFakeHelper(client);
     const instantSearchInstance = { client, helper };
 
@@ -123,8 +119,7 @@ describe('connectGeoSearch - rendering', () => {
       enableRefineOnMapMove: false,
     });
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     widget.init({
       state: helper.state,
@@ -154,8 +149,7 @@ describe('connectGeoSearch - rendering', () => {
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch();
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     widget.render({
       results: new SearchResults(helper.getState(), [
@@ -193,8 +187,7 @@ describe('connectGeoSearch - rendering', () => {
       },
     });
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     // Simulate the configuration or external setter
     helper.setQueryParameter('aroundLatLng', '10, 12');
@@ -271,8 +264,7 @@ describe('connectGeoSearch - rendering', () => {
       },
     });
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     // Simulate the configuration or external setter
     helper.setQueryParameter('insideBoundingBox', [
@@ -327,8 +319,7 @@ describe('connectGeoSearch - rendering', () => {
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch();
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     const northEast = {
       lat: 12,
@@ -393,8 +384,7 @@ describe('connectGeoSearch - rendering', () => {
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch();
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     const northEast = {
       lat: 12,
@@ -459,8 +449,7 @@ describe('connectGeoSearch - rendering', () => {
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch();
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     const northEast = {
       lat: 12,
@@ -525,8 +514,7 @@ describe('connectGeoSearch - rendering', () => {
     const customGeoSearch = connectGeoSearch(render, unmount);
     const widget = customGeoSearch();
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     const northEast = {
       lat: 12,
@@ -592,8 +580,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       const northEast = {
         lat: 12,
@@ -643,8 +630,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       const northEast = {
         lat: 12,
@@ -696,8 +682,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       const northEast = {
         lat: 12,
@@ -760,8 +745,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       const northEast = {
         lat: 12,
@@ -826,8 +810,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       widget.init({
         state: helper.state,
@@ -865,8 +848,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       widget.render({
         results: new SearchResults(helper.getState(), [
@@ -898,8 +880,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       widget.init({
         state: helper.state,
@@ -937,8 +918,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       const results = new SearchResults(helper.getState(), [
         {
@@ -970,8 +950,7 @@ describe('connectGeoSearch - rendering', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       const results = new SearchResults(helper.getState(), [
         {
@@ -1277,8 +1256,7 @@ describe('connectGeoSearch - dispose', () => {
       enableGeolocationWithIP: false,
     });
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     helper
       .setState(widget.getConfiguration(new SearchParameters()))
@@ -1308,8 +1286,7 @@ describe('connectGeoSearch - dispose', () => {
       },
     });
 
-    const client = createFakeClient();
-    const helper = createFakeHelper(client);
+    const helper = createFakeHelper({});
 
     helper.setState(widget.getConfiguration(new SearchParameters()));
 
@@ -1333,8 +1310,7 @@ describe('connectGeoSearch - dispose', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper.setState(widget.getConfiguration(new SearchParameters()));
 
@@ -1357,8 +1333,7 @@ describe('connectGeoSearch - dispose', () => {
         enableGeolocationWithIP: false,
       });
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper
         .setState(widget.getConfiguration(new SearchParameters()))
@@ -1386,8 +1361,7 @@ describe('connectGeoSearch - dispose', () => {
         },
       });
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper
         .setState(widget.getConfiguration(new SearchParameters()))
@@ -1417,8 +1391,7 @@ describe('connectGeoSearch - dispose', () => {
         },
       });
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper.setState(widget.getConfiguration(new SearchParameters()));
 
@@ -1439,8 +1412,7 @@ describe('connectGeoSearch - dispose', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper
         .setState(widget.getConfiguration(new SearchParameters()))
@@ -1467,8 +1439,7 @@ describe('connectGeoSearch - dispose', () => {
         radius: 1000,
       });
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper.setState(widget.getConfiguration(new SearchParameters()));
 
@@ -1489,8 +1460,7 @@ describe('connectGeoSearch - dispose', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper
         .setState(widget.getConfiguration(new SearchParameters()))
@@ -1517,8 +1487,7 @@ describe('connectGeoSearch - dispose', () => {
         precision: 1000,
       });
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper.setState(widget.getConfiguration(new SearchParameters()));
 
@@ -1539,8 +1508,7 @@ describe('connectGeoSearch - dispose', () => {
       const customGeoSearch = connectGeoSearch(render, unmount);
       const widget = customGeoSearch();
 
-      const client = createFakeClient();
-      const helper = createFakeHelper(client);
+      const helper = createFakeHelper({});
 
       helper
         .setState(widget.getConfiguration(new SearchParameters()))

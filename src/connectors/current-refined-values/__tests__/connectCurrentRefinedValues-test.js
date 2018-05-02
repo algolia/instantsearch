@@ -5,7 +5,7 @@ import connectCurrentRefinedValues from '../connectCurrentRefinedValues.js';
 
 describe('connectCurrentRefinedValues', () => {
   it('Renders during init and render', () => {
-    const helper = jsHelper({ addAlgoliaAgent: () => {} });
+    const helper = jsHelper({});
     helper.search = sinon.stub();
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
@@ -58,7 +58,7 @@ describe('connectCurrentRefinedValues', () => {
   it('Provide a function to clear the refinement', () => {
     // For each refinements we get a function that we can call
     // for removing a single refinement
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
+    const helper = jsHelper({}, '', {
       facets: ['myFacet'],
     });
     helper.search = sinon.stub();
@@ -100,7 +100,7 @@ describe('connectCurrentRefinedValues', () => {
   });
 
   it('should clear also the search query', () => {
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {});
+    const helper = jsHelper({}, '', {});
     helper.search = jest.fn();
 
     const rendering = jest.fn();
@@ -128,7 +128,7 @@ describe('connectCurrentRefinedValues', () => {
   });
 
   it('should provide the query as a refinement if clearsQuery is true', () => {
-    const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {});
+    const helper = jsHelper({}, '', {});
     helper.search = jest.fn();
 
     const rendering = jest.fn();
