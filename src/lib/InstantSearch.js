@@ -364,7 +364,7 @@ To help you migrate, please refer to the migration guide: https://community.algo
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            search: () => Promise.resolve({ results: [{}] }),
+            search: () => new Promise(() => {}),
           },
           helper.state.index,
           helper.state
