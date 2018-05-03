@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.7.3 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.7.4 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -13065,7 +13065,7 @@ var InstantSearch = function (_EventEmitter) {
         helper.search = function () {
           var helperSearchFunction = (0, _algoliasearchHelper2.default)({
             search: function search() {
-              return Promise.resolve({ results: [{}] });
+              return new Promise(function () {});
             }
           }, helper.state.index, helper.state);
           helperSearchFunction.once('search', function (state) {
@@ -13697,7 +13697,7 @@ var BrowserHistory = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.7.3';
+exports.default = '2.7.4';
 
 /***/ }),
 /* 191 */
