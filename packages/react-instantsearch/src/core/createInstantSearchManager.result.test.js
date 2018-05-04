@@ -21,26 +21,14 @@ jest.mock('algoliasearch-helper', () => {
 
 const client = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
 client.addAlgoliaAgent = () => {};
-client.search = jest.fn((queries, cb) => {
-  if (cb) {
-    setImmediate(() => {
-      // We do not care about the returned values because we also control how
-      // it will handle in the helper
-      cb(null, null);
-    });
-    return undefined;
-  }
-
-  return new Promise(resolve => {
-    // cf comment above
-    resolve(null);
-  });
-});
+client.search = jest.fn(() => Promise.resolve({ results: [{ hits: [] }] }));
 
 describe('createInstantSearchManager', () => {
   describe('with correct result from algolia', () => {
     describe('on widget lifecycle', () => {
       it('updates the store and searches', () => {
+        expect.assertions(7);
+
         const _dispatchAlgoliaResponse = jest.fn(function(state) {
           this.emit('result', { value: 'results' }, state);
         });
@@ -69,19 +57,18 @@ describe('createInstantSearchManager', () => {
         expect(ism.store.getState().results).toBe(null);
 
         return Promise.resolve()
+          .then(() => {}) // Simulate next tick
           .then(() => {
-            jest.runAllTimers();
-
             const store = ism.store.getState();
+
             expect(_dispatchAlgoliaResponse).toHaveBeenCalledTimes(1);
             expect(store.results).toEqual({ value: 'results' });
             expect(store.error).toBe(null);
 
             ism.widgetsManager.update();
           })
+          .then(() => {})
           .then(() => {
-            jest.runAllTimers();
-
             const store = ism.store.getState();
             expect(_dispatchAlgoliaResponse).toHaveBeenCalledTimes(2);
             expect(store.results).toEqual({ value: 'results' });
@@ -92,6 +79,8 @@ describe('createInstantSearchManager', () => {
 
     describe('on external updates', () => {
       it('updates the store and searches', () => {
+        expect.assertions(7);
+
         const _dispatchAlgoliaResponse = jest.fn(function(state) {
           this.emit('result', { value: 'results' }, state);
         });
@@ -117,8 +106,6 @@ describe('createInstantSearchManager', () => {
 
         return Promise.resolve()
           .then(() => {
-            jest.runAllTimers();
-
             const store = ism.store.getState();
             expect(_dispatchAlgoliaResponse).toHaveBeenCalledTimes(1);
             expect(store.results).toEqual({ value: 'results' });
@@ -126,9 +113,8 @@ describe('createInstantSearchManager', () => {
 
             ism.widgetsManager.update();
           })
+          .then(() => {})
           .then(() => {
-            jest.runAllTimers();
-
             const store = ism.store.getState();
             expect(_dispatchAlgoliaResponse).toHaveBeenCalledTimes(2);
             expect(store.results).toEqual({ value: 'results' });
@@ -139,6 +125,8 @@ describe('createInstantSearchManager', () => {
 
     describe('on search for facet values', () => {
       it('updates the store and searches', () => {
+        expect.assertions(4);
+
         const searchForFacetValues = jest.fn(() =>
           Promise.resolve({
             facetHits: 'results',
@@ -164,8 +152,6 @@ describe('createInstantSearchManager', () => {
 
         expect(ism.store.getState().results).toBe(null);
 
-        jest.runAllTimers();
-
         return Promise.resolve().then(() => {
           const store = ism.store.getState();
 
@@ -185,6 +171,8 @@ describe('createInstantSearchManager', () => {
       });
 
       it('updates the store and searches with maxFacetHits', () => {
+        expect.assertions(4);
+
         const searchForFacetValues = jest.fn(() =>
           Promise.resolve({
             facetHits: 'results',
@@ -213,8 +201,6 @@ describe('createInstantSearchManager', () => {
         });
 
         expect(ism.store.getState().results).toBe(null);
-
-        jest.runAllTimers();
 
         return Promise.resolve().then(() => {
           const store = ism.store.getState();

@@ -72,7 +72,7 @@ describe('createInstantSearchManager', () => {
   });
 
   describe('Widget manager', () => {
-    it('triggers the search when a widget is added', done => {
+    it('triggers the search when a widget is added', () => {
       expect.assertions(2);
 
       const ism = createInstantSearchManager({
@@ -93,10 +93,9 @@ describe('createInstantSearchManager', () => {
       const storeT0 = ism.store.getState();
       expect(storeT0.searching).toBe(false);
 
-      setImmediate(() => {
+      return Promise.resolve().then(() => {
         const storeT1 = ism.store.getState();
         expect(storeT1.searching).toBe(true);
-        done();
       });
     });
   });
@@ -158,6 +157,8 @@ describe('createInstantSearchManager', () => {
 
   describe('Loading state', () => {
     it('should be updated if search is stalled', () => {
+      expect.assertions(10);
+
       const managedClient = makeManagedClient();
       const ism = createInstantSearchManager({
         indexName: 'index',
@@ -190,7 +191,6 @@ describe('createInstantSearchManager', () => {
             isSearchStalled: true,
           });
 
-          managedClient.searchResultsResolvers[0]();
           return managedClient.searchResultsPromises[0];
         })
         .then(() => {
@@ -217,7 +217,6 @@ describe('createInstantSearchManager', () => {
             isSearchStalled: true,
           });
 
-          managedClient.searchResultsResolvers[1]();
           return managedClient.searchResultsPromises[1];
         })
         .then(() => {
@@ -230,6 +229,8 @@ describe('createInstantSearchManager', () => {
 
   describe('client.search', () => {
     it('should be called when there is a new widget', () => {
+      expect.assertions(2);
+
       const client0 = makeClient(defaultResponse());
       expect(client0.search).toHaveBeenCalledTimes(0);
       const ism = createInstantSearchManager({
@@ -250,6 +251,8 @@ describe('createInstantSearchManager', () => {
     });
 
     it('should be called when there is a new client', () => {
+      expect.assertions(4);
+
       const client0 = makeClient(defaultResponse());
       expect(client0.search).toHaveBeenCalledTimes(0);
 
@@ -271,6 +274,8 @@ describe('createInstantSearchManager', () => {
       });
     });
     it('should not be called when the search is skipped', () => {
+      expect.assertions(2);
+
       const client0 = makeClient(defaultResponse());
       expect(client0.search).toHaveBeenCalledTimes(0);
       const ism = createInstantSearchManager({
@@ -300,38 +305,24 @@ function makeClient(response) {
     '249078a3d4337a8231f1665ec5a44966'
   );
   clientInstance.addAlgoliaAgent = () => {};
-  clientInstance.search = jest.fn((queries, cb) => {
+  clientInstance.search = jest.fn(() => {
     const clonedResponse = JSON.parse(JSON.stringify(response));
-    if (cb) {
-      setTimeout(() => {
-        cb(null, clonedResponse);
-      }, 1);
-      return undefined;
-    }
-
-    return new Promise(resolve => {
-      resolve(clonedResponse);
-    });
+    return Promise.resolve(clonedResponse);
   });
 
   return clientInstance;
 }
 
 function makeManagedClient() {
-  const searchResultsResolvers = [];
   const searchResultsPromises = [];
   const fakeClient = {
-    search: jest.fn((qs, cb) => {
-      const p = new Promise(resolve =>
-        searchResultsResolvers.push(resolve)
-      ).then(() => {
-        cb(null, defaultResponse());
-      });
-      searchResultsPromises.push(p);
+    search: jest.fn(() => {
+      const results = Promise.resolve(defaultResponse());
+      searchResultsPromises.push(results);
+      return results;
     }),
     addAlgoliaAgent: () => {},
     searchResultsPromises,
-    searchResultsResolvers,
   };
 
   return fakeClient;
