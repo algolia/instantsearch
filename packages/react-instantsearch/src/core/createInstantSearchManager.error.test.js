@@ -21,24 +21,14 @@ jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
 });
 
 const client = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
-client.search = jest.fn((queries, cb) => {
-  if (cb) {
-    setImmediate(() => {
-      cb(null, null);
-    });
-    return undefined;
-  }
-
-  return new Promise(resolve => {
-    // cf comment above
-    resolve(null);
-  });
-});
+client.search = jest.fn(() => Promise.resolve({ results: [{ hits: [] }] }));
 
 describe('createInstantSearchManager errors', () => {
   describe('with error from algolia', () => {
     describe('on widget lifecycle', () => {
       it('updates the store and searches', () => {
+        expect.assertions(5);
+
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},
@@ -54,28 +44,28 @@ describe('createInstantSearchManager errors', () => {
 
         expect(ism.store.getState().error).toBe(null);
 
-        return Promise.resolve().then(() => {
-          jest.runAllTimers();
+        return Promise.resolve()
+          .then(() => {})
+          .then(() => {
+            const store = ism.store.getState();
+            expect(store.error).toEqual({ count: 0 });
+            expect(store.results).toEqual(null);
 
-          const store = ism.store.getState();
-          expect(store.error).toEqual({ count: 0 });
-          expect(store.results).toEqual(null);
-
-          ism.widgetsManager.update();
-
-          return Promise.resolve().then(() => {
-            jest.runAllTimers();
-
+            ism.widgetsManager.update();
+          })
+          .then(() => {})
+          .then(() => {
             const store1 = ism.store.getState();
             expect(store1.error).toEqual({ count: 1 });
             expect(store1.results).toBe(null);
           });
-        });
       });
     });
 
     describe('on external updates', () => {
       it('updates the store and searches', () => {
+        expect.assertions(3);
+
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},
@@ -87,16 +77,20 @@ describe('createInstantSearchManager errors', () => {
 
         expect(ism.store.getState().error).toBe(null);
 
-        jest.runAllTimers();
-
-        const store = ism.store.getState();
-        expect(store.error).toEqual({ count: 2 });
-        expect(store.results).toBe(null);
+        return Promise.resolve()
+          .then(() => {})
+          .then(() => {
+            const store = ism.store.getState();
+            expect(store.error).toEqual({ count: 2 });
+            expect(store.results).toBe(null);
+          });
       });
     });
 
     describe('on search for facet values', () => {
       it('updates the store and searches', () => {
+        expect.assertions(3);
+
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},
@@ -108,8 +102,6 @@ describe('createInstantSearchManager errors', () => {
 
         expect(ism.store.getState().error).toBe(null);
 
-        jest.runAllTimers();
-
         return Promise.resolve().then(() => {
           const store = ism.store.getState();
           expect(store.error.message).toEqual('error');
@@ -120,6 +112,8 @@ describe('createInstantSearchManager errors', () => {
 
     describe('reset error after a succesful query', () => {
       it('on widget lifecyle', () => {
+        expect.assertions(5);
+
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},
@@ -135,23 +129,21 @@ describe('createInstantSearchManager errors', () => {
 
         expect(ism.store.getState().error).toBe(null);
 
-        return Promise.resolve().then(() => {
-          jest.runAllTimers();
+        return Promise.resolve()
+          .then(() => {})
+          .then(() => {
+            const store = ism.store.getState();
+            expect(store.error).toEqual({ count: 3 });
+            expect(store.results).toEqual(null);
 
-          const store = ism.store.getState();
-          expect(store.error).toEqual({ count: 3 });
-          expect(store.results).toEqual(null);
-
-          ism.widgetsManager.update();
-
-          return Promise.resolve().then(() => {
-            jest.runAllTimers();
-
+            ism.widgetsManager.update();
+          })
+          .then(() => {})
+          .then(() => {
             const store1 = ism.store.getState();
             expect(store1.error).toEqual(null);
             expect(store1.results).toEqual({ count: 4 });
           });
-        });
       });
     });
   });

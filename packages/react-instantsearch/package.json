@@ -29,8 +29,8 @@
     "test:size": "bundlesize"
   },
   "dependencies": {
-    "algoliasearch": "^3.24.0",
-    "algoliasearch-helper": "^2.21.0",
+    "algoliasearch": "^3.27.1",
+    "algoliasearch-helper": "^2.26.0",
     "classnames": "^2.2.5",
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10"

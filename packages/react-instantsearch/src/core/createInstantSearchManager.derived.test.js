@@ -22,27 +22,14 @@ jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
 });
 
 const client = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
-client.addAlgoliaAgent = () => {};
-client.search = jest.fn((queries, cb) => {
-  if (cb) {
-    setImmediate(() => {
-      // We do not care about the returned values because we also control how
-      // it will handle in the helper
-      cb(null, null);
-    });
-    return undefined;
-  }
-
-  return new Promise(resolve => {
-    // cf comment above
-    resolve(null);
-  });
-});
+client.search = jest.fn(() => Promise.resolve({ results: [{ hits: [] }] }));
 
 describe('createInstantSearchManager', () => {
   describe('with correct result from algolia', () => {
     describe('on widget lifecycle', () => {
       it('updates the store and searches', () => {
+        expect.assertions(7);
+
         const ism = createInstantSearchManager({
           indexName: 'first',
           initialState: {},
@@ -76,49 +63,51 @@ describe('createInstantSearchManager', () => {
 
         expect(ism.store.getState().results).toBe(null);
 
-        return Promise.resolve().then(() => {
-          jest.runAllTimers();
-
-          const store = ism.store.getState();
-          expect(store.results.first).toEqual({
-            query: 'first query 1',
-            page: 3,
-            index: 'first',
-          });
-          expect(store.results.second).toEqual({
-            query: 'second query 1',
-            page: 0,
-            index: 'second',
-          });
-          expect(store.error).toBe(null);
-
-          ism.widgetsManager.getWidgets()[0].getSearchParameters = params =>
-            params.setQuery('first query 2');
-          ism.widgetsManager.getWidgets()[1].getSearchParameters = params =>
-            params.setQuery('second query 2');
-
-          ism.widgetsManager.update();
-
-          return Promise.resolve().then(() => {
-            jest.runAllTimers();
-
-            const store1 = ism.store.getState();
+        return Promise.resolve()
+          .then(() => {}) // We need to wait for the next tick
+          .then(() => {
+            const store = ism.store.getState();
             expect(store.results.first).toEqual({
-              query: 'first query 2',
+              query: 'first query 1',
               page: 3,
               index: 'first',
             });
             expect(store.results.second).toEqual({
-              query: 'second query 2',
+              query: 'second query 1',
               page: 0,
               index: 'second',
             });
-            expect(store1.error).toBe(null);
+            expect(store.error).toBe(null);
+
+            ism.widgetsManager.getWidgets()[0].getSearchParameters = params =>
+              params.setQuery('first query 2');
+            ism.widgetsManager.getWidgets()[1].getSearchParameters = params =>
+              params.setQuery('second query 2');
+
+            ism.widgetsManager.update();
+
+            return Promise.resolve()
+              .then(() => {})
+              .then(() => {
+                const store1 = ism.store.getState();
+                expect(store.results.first).toEqual({
+                  query: 'first query 2',
+                  page: 3,
+                  index: 'first',
+                });
+                expect(store.results.second).toEqual({
+                  query: 'second query 2',
+                  page: 0,
+                  index: 'second',
+                });
+                expect(store1.error).toBe(null);
+              });
           });
-        });
       });
 
       it('updates the store and searches with duplicate Index & SortBy', () => {
+        expect.assertions(2);
+
         // <InstantSearch indexName="first">
         //   <SearchBox defaultRefinement="query" />
         //
@@ -174,27 +163,29 @@ describe('createInstantSearchManager', () => {
 
         ism.widgetsManager.update();
 
-        return Promise.resolve().then(() => {
-          jest.runAllTimers();
-
-          expect(ism.store.getState().results).toEqual({
-            first: {
-              index: 'third',
-              query: 'query',
-              page: 0,
-            },
-            second: {
-              index: 'second',
-              query: 'query',
-              page: 0,
-            },
+        return Promise.resolve()
+          .then(() => {})
+          .then(() => {
+            expect(ism.store.getState().results).toEqual({
+              first: {
+                index: 'third',
+                query: 'query',
+                page: 0,
+              },
+              second: {
+                index: 'second',
+                query: 'query',
+                page: 0,
+              },
+            });
           });
-        });
       });
     });
 
     describe('on external updates', () => {
       it('updates the store and searches', () => {
+        expect.assertions(4);
+
         const ism = createInstantSearchManager({
           indexName: 'first',
           initialState: {},
@@ -227,22 +218,25 @@ describe('createInstantSearchManager', () => {
 
         expect(ism.store.getState().results).toBe(null);
 
-        jest.runAllTimers();
-
-        const store = ism.store.getState();
-        expect(store.results.first).toEqual({
-          query: 'first query 1',
-          page: 3,
-          index: 'first',
+        return Promise.resolve().then(() => {
+          const store = ism.store.getState();
+          expect(store.results.first).toEqual({
+            query: 'first query 1',
+            page: 3,
+            index: 'first',
+          });
+          expect(store.results.second).toEqual({
+            query: 'second query 1',
+            page: 0,
+            index: 'second',
+          });
+          expect(store.error).toBe(null);
         });
-        expect(store.results.second).toEqual({
-          query: 'second query 1',
-          page: 0,
-          index: 'second',
-        });
-        expect(store.error).toBe(null);
       });
+
       it('updates the store and searches when switching from mono to multi index', () => {
+        expect.assertions(7);
+
         const ism = createInstantSearchManager({
           indexName: 'first',
           initialState: {},
@@ -275,69 +269,71 @@ describe('createInstantSearchManager', () => {
 
         expect(ism.store.getState().results).toBe(null);
 
-        jest.runAllTimers();
+        return Promise.resolve()
+          .then(() => {
+            const store = ism.store.getState();
+            expect(store.results.first).toEqual({
+              query: 'first query 1',
+              page: 3,
+              index: 'first',
+            });
+            expect(store.results.second).toEqual({
+              query: 'second query 1',
+              page: 0,
+              index: 'second',
+            });
+            expect(store.error).toBe(null);
 
-        let store = ism.store.getState();
-        expect(store.results.first).toEqual({
-          query: 'first query 1',
-          page: 3,
-          index: 'first',
-        });
-        expect(store.results.second).toEqual({
-          query: 'second query 1',
-          page: 0,
-          index: 'second',
-        });
-        expect(store.error).toBe(null);
+            ism.widgetsManager.getWidgets()[0].getSearchParameters = params =>
+              params.setQuery('first query 2');
+            ism.widgetsManager.getWidgets().pop();
+            ism.widgetsManager.getWidgets().pop();
+            ism.widgetsManager.getWidgets().pop();
 
-        ism.widgetsManager.getWidgets()[0].getSearchParameters = params =>
-          params.setQuery('first query 2');
-        ism.widgetsManager.getWidgets().pop();
-        ism.widgetsManager.getWidgets().pop();
-        ism.widgetsManager.getWidgets().pop();
+            ism.onExternalStateUpdate({});
+          })
+          .then(() => {})
+          .then(() => {
+            const store = ism.store.getState();
+            expect(store.results).toEqual({
+              query: 'first query 2',
+              page: 0,
+              index: 'first',
+            });
 
-        ism.onExternalStateUpdate({});
+            ism.widgetsManager.registerWidget({
+              getSearchParameters: params => params.setQuery('second query 2'),
+              context: { multiIndexContext: { targetedIndex: 'second' } },
+              props: {},
+            });
+            ism.widgetsManager.registerWidget({
+              getSearchParameters: params => params.setPage(3),
+              context: { multiIndexContext: { targetedIndex: 'first' } },
+              props: {},
+            });
+            ism.widgetsManager.registerWidget({
+              getSearchParameters: params => params.setIndex('second'),
+              context: { multiIndexContext: { targetedIndex: 'second' } },
+              props: {},
+            });
 
-        jest.runAllTimers();
+            ism.onExternalStateUpdate({});
+          })
+          .then(() => {})
+          .then(() => {
+            const store = ism.store.getState();
 
-        store = ism.store.getState();
-        expect(store.results).toEqual({
-          query: 'first query 2',
-          page: 0,
-          index: 'first',
-        });
-
-        ism.widgetsManager.registerWidget({
-          getSearchParameters: params => params.setQuery('second query 2'),
-          context: { multiIndexContext: { targetedIndex: 'second' } },
-          props: {},
-        });
-        ism.widgetsManager.registerWidget({
-          getSearchParameters: params => params.setPage(3),
-          context: { multiIndexContext: { targetedIndex: 'first' } },
-          props: {},
-        });
-        ism.widgetsManager.registerWidget({
-          getSearchParameters: params => params.setIndex('second'),
-          context: { multiIndexContext: { targetedIndex: 'second' } },
-          props: {},
-        });
-
-        ism.onExternalStateUpdate({});
-
-        jest.runAllTimers();
-
-        store = ism.store.getState();
-        expect(store.results.first).toEqual({
-          query: 'first query 2',
-          page: 3,
-          index: 'first',
-        });
-        expect(store.results.second).toEqual({
-          query: 'second query 2',
-          page: 0,
-          index: 'second',
-        });
+            expect(store.results.first).toEqual({
+              query: 'first query 2',
+              page: 3,
+              index: 'first',
+            });
+            expect(store.results.second).toEqual({
+              query: 'second query 2',
+              page: 0,
+              index: 'second',
+            });
+          });
       });
     });
   });
