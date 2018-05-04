@@ -15,36 +15,30 @@ A search input with a clear and submit button.
 
 ## Usage
 
-Basic usage:
-
 ```html
 <ais-search-box placeholder="Find products..."></ais-search-box>
 ```
 
-With autofocus:
-
-```html
-<ais-search-box :autofocus="true"></ais-search-box>
-```
-
 ## Props
 
-| Name         | Type    | Default    | Description                                               |
-|:-------------|:--------|:-----------|:----------------------------------------------------------|
-| placeholder  | String  | `''`       | The input placeholder                                     |
-| submit-title | String  | `'search'` | The submit button text                                    |
-| clear-title  | String  | `'clear'`  | The clear button text                                     |
-| autofocus    | Boolean | `false`    | Whether to automatically focus on the input when rendered |
+Name | Type | Default | Description | Required
+---|---|---|---|---
+placeholder | String | `'Search here…'` | The input placeholder | no
+submit-title | String | `'search'` | The submit button text | no
+clear-title | String | `'clear'` | The clear button text | no
+autofocus | Boolean | `false` | Whether to automatically focus on the input when rendered | no
 
-## Slots
+## CSS classes
 
-| Name    | Props | Default                                                     | Description     |
-|:--------|:------|:------------------------------------------------------------|:----------------|
-| default |       | Contains the search input, and the clear and submit buttons | First page text |
+Here's a list of CSS classes exposed by this widget. To better understand the underlying
+DOM structure, have a look at the generated DOM in your browser.
 
-## CSS Classes
-
-| ClassName                | Description       |
-|:-------------------------|:------------------|
-| `ais-search-box`         | Container class   |
-| `ais-search-box__submit` | The submit button |
+Class name | Description
+---|---
+`ais-SearchBox` | Container class
+`ais-SearchBox-form` | Wrapping button
+`ais-SearchBox-input` | Search input
+`ais-SearchBox-submit` | Submit button
+`ais-SearchBox-submitIcon` | Magnifier icon used with the search input
+`ais-SearchBox-reset` | Reset button used to clear the content of the input
+`ais-SearchBox-resetIcon` | Reset icon used inside the reset button

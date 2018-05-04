@@ -1,66 +1,126 @@
-import Vue from 'vue';
 import SearchBox from '../SearchBox.vue';
+import { mount } from '@vue/test-utils';
+import { __setState } from '../../component';
+jest.mock('../../component');
 
-describe.skip('SearchBox', () => {
-  test('renders proper HTML', () => {
-    const searchStore = {
-      query: '',
-      activeRefinements: [], // needed for Clear component
-    };
-    const Component = Vue.extend(SearchBox);
-    const vm = new Component({
-      propsData: { searchStore },
-    });
+const defaultState = {};
 
-    vm.$mount();
+test('renders HTML correctly', () => {
+  __setState(defaultState);
+  const wrapper = mount(SearchBox);
 
-    expect(vm.$el.outerHTML).toMatchSnapshot();
+  expect(wrapper.html()).toMatchSnapshot();
+});
+
+test('with autofocus', () => {
+  __setState(defaultState);
+  const wrapper = mount(SearchBox, {
+    propsData: {
+      autofocus: true,
+    },
   });
 
-  test('can be autofocused', () => {
-    const searchStore = {
-      query: '',
-      activeRefinements: [], // needed for Clear component
-    };
-    const Component = Vue.extend(SearchBox);
-    const vm = new Component({
-      propsData: { searchStore, autofocus: true },
-    });
+  expect(wrapper.find('.ais-SearchBox-input').attributes().autofocus).toBe(
+    'autofocus'
+  );
+});
 
-    vm.$mount();
-
-    expect(vm.$el.outerHTML).toMatchSnapshot();
+test('with placeholder', () => {
+  __setState(defaultState);
+  const wrapper = mount(SearchBox, {
+    propsData: {
+      placeholder: 'Search placeholder',
+    },
   });
 
-  test('if search is stalled, hide the submit and display the loader', () => {
-    const searchStore = {
-      query: '',
-      activeRefinements: [], // needed for Clear component
-      isSearchStalled: true,
-    };
-    const Component = Vue.extend(SearchBox);
-    const vm = new Component({
-      propsData: { searchStore, autofocus: true, showLoadingIndicator: true },
-    });
+  expect(wrapper.find('.ais-SearchBox-input').attributes().placeholder).toBe(
+    'Search placeholder'
+  );
+});
 
-    vm.$mount();
-
-    expect(vm.$el.outerHTML).toMatchSnapshot();
+test('with submit title', () => {
+  __setState(defaultState);
+  const wrapper = mount(SearchBox, {
+    propsData: {
+      submitTitle: 'Submit Title',
+    },
   });
 
-  test('if search is not stalled, show the submit and hide the loader', () => {
-    const searchStore = {
-      query: '',
-      activeRefinements: [], // needed for Clear component
-      isSearchStalled: false,
-    };
-    const Component = Vue.extend(SearchBox);
-    const vm = new Component({
-      propsData: { searchStore, autofocus: true, showLoadingIndicator: true },
-    });
+  expect(wrapper.find('.ais-SearchBox-submit').attributes().title).toBe(
+    'Submit Title'
+  );
+});
 
-    vm.$mount();
-
-    expect(vm.$el.outerHTML).toMatchSnapshot();
+test('with clear title', () => {
+  __setState(defaultState);
+  const wrapper = mount(SearchBox, {
+    propsData: {
+      clearTitle: 'Clear Title',
+    },
   });
+
+  expect(wrapper.find('.ais-SearchBox-reset').attributes().title).toBe(
+    'Clear Title'
+  );
+});
+
+test('with stalled search hides the submit and displays the loader', () => {
+  __setState({ ...defaultState, isSearchStalled: true });
+  const wrapper = mount(SearchBox, {
+    propsData: {
+      showLoadingIndicator: true,
+    },
+  });
+
+  expect(wrapper.find('.ais-SearchBox-submit').attributes().hidden).toBe(
+    'hidden'
+  );
+  expect(wrapper.contains('.ais-SearchBox-loadingIndicator')).toBe(true);
+});
+
+test('with stalled search but no `showLoadingIndicator` displays the submit and hides the loader', () => {
+  __setState({ ...defaultState, isSearchStalled: true });
+  const wrapper = mount(SearchBox);
+
+  expect(
+    wrapper.find('.ais-SearchBox-submit').attributes().hidden
+  ).toBeUndefined();
+  expect(wrapper.contains('.ais-SearchBox-loadingIndicator')).toBe(false);
+});
+
+test('with not stalled search displays the submit and hides the loader', () => {
+  __setState(defaultState);
+  const wrapper = mount(SearchBox, {
+    propsData: {
+      showLoadingIndicator: true,
+    },
+  });
+
+  expect(
+    wrapper.find('.ais-SearchBox-submit').attributes().hidden
+  ).toBeUndefined();
+  expect(
+    wrapper.find('.ais-SearchBox-loadingIndicator').attributes().hidden
+  ).toBe('hidden');
+});
+
+test('blurs input on form submit', () => {
+  __setState(defaultState);
+  const wrapper = mount(SearchBox);
+  const input = wrapper.find('.ais-SearchBox-input');
+  input.element.blur = jest.fn();
+
+  wrapper.find('.ais-SearchBox-form').trigger('submit');
+
+  expect(input.element.blur).toHaveBeenCalledTimes(1);
+});
+
+test('refine on empty string on form reset', () => {
+  const state = { ...defaultState, refine: jest.fn() };
+  __setState(state);
+  const wrapper = mount(SearchBox);
+
+  wrapper.find('.ais-SearchBox-form').trigger('reset');
+
+  expect(state.refine).toHaveBeenCalledWith('');
 });
