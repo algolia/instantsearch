@@ -21,7 +21,7 @@
     "babel-preset-env": "1.6.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
-    "browser-sync": "2.24.3",
+    "browser-sync": "2.24.4",
     "chokidar": "2.0.3",
     "clipboard": "2.0.1",
     "codemirror": "5.37.0",
