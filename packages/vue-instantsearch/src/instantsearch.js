@@ -9,6 +9,7 @@ import Stats from './components/Stats.vue';
 import Configure from './components/Configure.vue';
 import Pagination from './components/Pagination.vue';
 import Menu from './components/Menu.vue';
+import MenuSelect from './components/MenuSelect.vue';
 import SortBySelector from './components/SortBySelector.vue';
 import SearchBox from './components/SearchBox.vue';
 import ClearRefinements from './components/ClearRefinements.vue';
@@ -28,6 +29,7 @@ const InstantSearch = {
   Stats,
   Pagination,
   Menu,
+  MenuSelect,
   SortBySelector,
   SearchBox,
   ClearRefinements,
@@ -46,6 +48,7 @@ const InstantSearch = {
     Vue.component('ais-stats', Stats);
     Vue.component('ais-pagination', Pagination);
     Vue.component('ais-menu', Menu);
+    Vue.component('ais-menu-select', MenuSelect);
     Vue.component('ais-sort-by-selector', SortBySelector);
     Vue.component('ais-search-box', SearchBox);
     Vue.component('ais-clear-refinements', ClearRefinements);

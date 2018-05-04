@@ -1,16 +1,17 @@
-export default function suit(widgetName, element, subElement) {
+export default function suit(widgetName, element, modifier) {
   if (!widgetName) {
     throw new Error('You need to provide `widgetName` in your data');
   }
 
+  const elements = [`ais-${widgetName}`];
+
   if (element) {
-    const scopedWidgetName = `ais-${widgetName}-${element}`;
-    // output `ais-Widget-xyz--abc`
-    if (subElement) return `${scopedWidgetName}--${subElement}`;
-    // output `ais-Widget-xyz`
-    return scopedWidgetName;
-  } else {
-    // output `ais-Widget`
-    return `ais-${widgetName}`;
+    elements.push(`-${element}`);
   }
+
+  if (modifier) {
+    elements.push(`--${modifier}`);
+  }
+
+  return elements.join('');
 }
