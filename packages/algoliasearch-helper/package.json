@@ -73,7 +73,7 @@
     "jade": "1.11.0",
     "jsdoc-parse": "1.2.7",
     "jsdoc-to-markdown": "1.3.9",
-    "marked": "0.3.6",
+    "marked": "0.3.19",
     "metalsmith": "2.3.0",
     "metalsmith-changed": "2.0.0",
     "metalsmith-discover-partials": "0.1.0",
