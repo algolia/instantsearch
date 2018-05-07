@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`clearAll() with refinements calls twice ReactDOM.render(<ClearAll props />, container) 1`] = `
+exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearRefinements props />, container) 1`] = `
 <HeaderFooter-AutoHide
   collapsible={false}
   cssClasses={
@@ -35,7 +35,7 @@ exports[`clearAll() with refinements calls twice ReactDOM.render(<ClearAll props
 />
 `;
 
-exports[`clearAll() with refinements calls twice ReactDOM.render(<ClearAll props />, container) 2`] = `
+exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearRefinements props />, container) 2`] = `
 <HeaderFooter-AutoHide
   collapsible={false}
   cssClasses={
@@ -70,7 +70,7 @@ exports[`clearAll() with refinements calls twice ReactDOM.render(<ClearAll props
 />
 `;
 
-exports[`clearAll() without refinements calls twice ReactDOM.render(<ClearAll props />, container) 1`] = `
+exports[`clearRefinements() without refinements calls twice ReactDOM.render(<ClearRefinements props />, container) 1`] = `
 <HeaderFooter-AutoHide
   collapsible={false}
   cssClasses={
@@ -105,7 +105,7 @@ exports[`clearAll() without refinements calls twice ReactDOM.render(<ClearAll pr
 />
 `;
 
-exports[`clearAll() without refinements calls twice ReactDOM.render(<ClearAll props />, container) 2`] = `
+exports[`clearRefinements() without refinements calls twice ReactDOM.render(<ClearRefinements props />, container) 2`] = `
 <HeaderFooter-AutoHide
   collapsible={false}
   cssClasses={

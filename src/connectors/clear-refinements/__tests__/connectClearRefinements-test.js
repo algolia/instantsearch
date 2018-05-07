@@ -3,16 +3,16 @@ import sinon from 'sinon';
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectClearAll from '../connectClearAll.js';
+import connectClearRefinements from '../connectClearRefinements.js';
 
-describe('connectClearAll', () => {
+describe('connectClearRefinements', () => {
   it('Renders during init and render', () => {
     const helper = jsHelper({});
     helper.search = sinon.stub();
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
       foo: 'bar', // dummy param to test `widgetParams`
     });
@@ -66,7 +66,7 @@ describe('connectClearAll', () => {
     helper.toggleRefinement('myFacet', 'myValue');
 
     const rendering = sinon.stub();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({ clearsQuery: false });
 
     widget.init({
@@ -113,7 +113,7 @@ describe('connectClearAll', () => {
     helper.toggleRefinement('myFacet', 'myValue');
 
     const rendering = sinon.stub();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({ clearsQuery: true });
 
     widget.init({
@@ -159,7 +159,7 @@ describe('connectClearAll', () => {
     helper.search = sinon.stub();
 
     const rendering = sinon.stub();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget();
 
     widget.init({
@@ -191,7 +191,7 @@ describe('connectClearAll', () => {
     helper.search = sinon.stub();
 
     const rendering = sinon.stub();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
       clearsQuery: true,
     });
@@ -224,7 +224,7 @@ describe('connectClearAll', () => {
     helper.search = sinon.stub();
 
     const rendering = sinon.stub();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({ clearsQuery: false });
 
     widget.init({

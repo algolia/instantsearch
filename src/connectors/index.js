@@ -1,4 +1,6 @@
-export { default as connectClearAll } from './clear-all/connectClearAll.js';
+export {
+  default as connectClearRefinements,
+} from './clear-refinements/connectClearRefinements.js';
 export {
   default as connectCurrentRefinedValues,
 } from './current-refined-values/connectCurrentRefinedValues.js';

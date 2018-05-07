@@ -1,9 +1,9 @@
 import React from 'react';
 import sinon from 'sinon';
-import { RawClearAll as ClearAll } from '../ClearAll';
+import { RawClearRefinements as ClearRefinements } from '../ClearRefinements';
 import renderer from 'react-test-renderer';
 
-describe('ClearAll', () => {
+describe('ClearRefinements', () => {
   const defaultProps = {
     refine: () => {},
     cssClasses: {
@@ -18,8 +18,10 @@ describe('ClearAll', () => {
     url: '#all-cleared!',
   };
 
-  it('should render <ClearAll />', () => {
-    const tree = renderer.create(<ClearAll {...defaultProps} />).toJSON();
+  it('should render <ClearRefinements />', () => {
+    const tree = renderer
+      .create(<ClearRefinements {...defaultProps} />)
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -28,7 +30,7 @@ describe('ClearAll', () => {
       refine: sinon.spy(),
     };
     const preventDefault = sinon.spy();
-    const component = new ClearAll(props);
+    const component = new ClearRefinements(props);
     ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach(e => {
       const event = { preventDefault };
       event[e] = true;

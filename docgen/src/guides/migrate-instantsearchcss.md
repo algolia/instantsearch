@@ -13,11 +13,11 @@ githubsource: docgen/src/guides/migrate-instantsearchcss.md.md
 This guide contains all the elements to update your widgets for the new markup and options of the widgets
 in v3.
 
-<!-- Template -->
+## Widget – clearAll
 
-## Widget – old name
+### Name update
 
-### Name change?
+The `clearAll` widget has been renamed into `clearRefinements`.
 
 ### Options
 
@@ -25,3 +25,29 @@ in v3.
 
 ### CSS
 
+
+## Connector - connectClearAll
+
+### Name update
+
+The connector `connectClearAll` has been renamed into `connectClearRefinements`.
+
+### Options
+
+<!-- Template -->
+
+## Widget – old name
+
+### Name update?
+
+### Options
+
+### Markup
+
+### CSS
+
+## Connector – old name
+
+### Name update
+
+### Options

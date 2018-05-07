@@ -1,5 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
-import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
+import ClearRefinementsWithHOCs from '../../components/ClearRefinements/ClearRefinements.js';
 import cx from 'classnames';
 
 import {
@@ -8,7 +8,7 @@ import {
   prepareTemplateProps,
 } from '../../lib/utils.js';
 
-import connectClearAll from '../../connectors/clear-all/connectClearAll.js';
+import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements.js';
 
 import defaultTemplates from './defaultTemplates.js';
 
@@ -37,7 +37,7 @@ const renderer = ({
   const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
 
   render(
-    <ClearAllWithHOCs
+    <ClearRefinementsWithHOCs
       refine={refine}
       collapsible={collapsible}
       cssClasses={cssClasses}
@@ -51,13 +51,13 @@ const renderer = ({
 };
 
 const usage = `Usage:
-clearAll({
+clearRefinements({
   container,
   [ cssClasses.{root,header,body,footer,link}={} ],
   [ templates.{header,link,footer}={link: 'Clear all'} ],
   [ autoHideContainer=true ],
   [ collapsible=false ],
-  [ excludeAttributes=[] ]
+  [ excludedAttributes=[] ]
 })`;
 /**
  * @typedef {Object} ClearAllCSSClasses
@@ -78,7 +78,7 @@ clearAll({
 /**
  * @typedef {Object} ClearAllWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string[]} [excludeAttributes] List of attributes names to exclude from clear actions.
+ * @property {string[]} [excludedAttributes] List of attributes names to exclude from clear actions.
  * @property {ClearAllTemplates} [templates] Templates to use for the widget.
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no refinements to clear.
  * @property {ClearAllCSSClasses} [cssClasses] CSS classes to be added.
@@ -94,13 +94,13 @@ clearAll({
  *
  * The current refined values widget can display a button that has the same behavior.
  * @type {WidgetFactory}
- * @devNovel ClearAll
+ * @devNovel clearRefinements
  * @category clear-filter
- * @param {ClearAllWidgetOptions} $0 The ClearAll widget options.
- * @returns {Widget} A new instance of the ClearAll widget.
+ * @param {ClearAllWidgetOptions} $0 The clearRefinements widget options.
+ * @returns {Widget} A new instance of the clearRefinements widget.
  * @example
  * search.addWidget(
- *   instantsearch.widgets.clearAll({
+ *   instantsearch.widgets.clearRefinements({
  *     container: '#clear-all',
  *     templates: {
  *       link: 'Reset everything'
@@ -110,13 +110,13 @@ clearAll({
  *   })
  * );
  */
-export default function clearAll({
+export default function clearRefinements({
   container,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
   collapsible = false,
   autoHideContainer = true,
-  excludeAttributes = [],
+  excludedAttributes = [],
   clearsQuery = false,
 }) {
   if (!container) {
@@ -143,10 +143,10 @@ export default function clearAll({
   });
 
   try {
-    const makeWidget = connectClearAll(specializedRenderer, () =>
+    const makeWidget = connectClearRefinements(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ excludeAttributes, clearsQuery });
+    return makeWidget({ excludedAttributes, clearsQuery });
   } catch (e) {
     throw new Error(usage);
   }

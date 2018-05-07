@@ -8,7 +8,7 @@ export default () => {
   stories.add(
     'default',
     wrapWithHitsAndJquery(containerNode => {
-      window.search.addWidget(widgets.clearAll({ containerNode }));
+      window.search.addWidget(widgets.clearRefinements({ containerNode }));
     })
   );
 };

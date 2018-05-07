@@ -5,7 +5,9 @@
  * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement
  */
 
-export { default as clearAll } from '../widgets/clear-all/clear-all.js';
+export {
+  default as clearRefinements,
+} from '../widgets/clear-refinements/clear-refinements.js';
 export { default as configure } from '../widgets/configure/configure.js';
 export {
   default as currentRefinedValues,
