@@ -64,7 +64,7 @@
     "stat-mode": "0.2.2",
     "style-loader": "0.21.0",
     "webpack": "3.11.0",
-    "webpack-bundle-analyzer": "2.11.1",
+    "webpack-bundle-analyzer": "2.11.2",
     "webpack-dev-middleware": "2.0.6",
     "webpack-hot-middleware": "2.22.1"
   }
