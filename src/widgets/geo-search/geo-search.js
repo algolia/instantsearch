@@ -124,7 +124,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *
  * You are also responsible for loading the Google Maps library, it's not shipped with InstantSearch. You need to load the Google Maps library and pass a reference to the widget. You can find more information about how to install the library in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/tutorial).
  *
- * Don't forget to explicitly set the `height` of the map container, otherwise it won't be shown (it's a requirement of Google Maps).
+ * Don't forget to explicitly set the `height` of the map container (default class `.ais-geo-search--map`), otherwise it won't be shown (it's a requirement of Google Maps).
  *
  * @type {WidgetFactory}
  * @devNovel GeoSearch
