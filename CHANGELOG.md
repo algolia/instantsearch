@@ -1,3 +1,13 @@
+<a name="2.7.4"></a>
+## [2.7.4](https://github.com/algolia/instantsearch.js/compare/v2.7.3...v2.7.4) (2018-05-03)
+
+
+### Bug Fixes
+
+* **searchFunction:** Fix unresolved returned Promise ([#2913](https://github.com/algolia/instantsearch.js/issues/2913)) ([5286c7c](https://github.com/algolia/instantsearch.js/commit/5286c7c))
+
+
+
 <a name="2.7.3"></a>
 ## [2.7.3](https://github.com/algolia/instantsearch.js/compare/v2.7.2...v2.7.3) (2018-04-26)
 

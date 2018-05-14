@@ -159,4 +159,24 @@ describe('InstantSearch life cycle', () => {
 
     jest.runAllTimers();
   });
+
+  it('does not break when providing searchFunction with multiple resquests', () => {
+    const search = new InstantSearch({
+      appId,
+      apiKey,
+      indexName,
+      searchFunction: h => {
+        h.addDisjunctiveFacetRefinement('brand', 'Apple');
+        h.search();
+      },
+      searchParameters: {
+        disjunctiveFacetsRefinements: { brand: ['Apple'] },
+        disjunctiveFacets: ['brand'],
+      },
+    });
+
+    expect(() => {
+      search.start();
+    }).not.toThrow();
+  });
 });

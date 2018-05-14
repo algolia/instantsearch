@@ -7,6 +7,8 @@ import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits';
 import createInfoBox from '../../utils/create-info-box';
 
+const API_KEY = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
+
 const wrapWithHitsAndConfiguration = (story, searchParameters) =>
   wrapWithHits(story, {
     indexName: 'airbnb',
@@ -18,7 +20,7 @@ const wrapWithHitsAndConfiguration = (story, searchParameters) =>
 
 const injectGoogleMaps = fn => {
   injectScript(
-    'https://maps.googleapis.com/maps/api/js?v=3.31&key=AIzaSyCl2TTJXpwxGuuc2zQZkAlIkWhpYbyjjP8',
+    `https://maps.googleapis.com/maps/api/js?v=3.31&key=${API_KEY}`,
     fn
   );
 };
