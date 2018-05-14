@@ -1,0 +1,14 @@
+body {
+  font-family: -apple-system, '.SFNSText-Regular', 'San Francisco', Roboto,
+    'Segoe UI', 'Helvetica Neue', 'Lucida Grande', sans-serif;
+  color: rgb(68, 68, 68);
+}
+
+.playground {
+  padding: 25px;
+  border-bottom: 2px solid #eee;
+}
+
+.showcase {
+  padding: 25px;
+}

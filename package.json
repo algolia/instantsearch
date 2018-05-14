@@ -38,7 +38,7 @@
     "argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
     "serve": "./scripts/serve.sh",
     "fix:prettier": "eslint --fix -c .eslintrc.js .",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 8080 -s .storybook/public",
     "build-storybook": "build-storybook"
   },
   "renovate": {
