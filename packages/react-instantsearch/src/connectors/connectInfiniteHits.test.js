@@ -221,7 +221,7 @@ describe('connectInfiniteHits', () => {
       };
 
       const expectation = {
-        hits: [],
+        hits: [{}, {}, {}],
         hasMore: true,
       };
 
