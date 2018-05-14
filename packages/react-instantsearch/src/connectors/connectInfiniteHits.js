@@ -44,6 +44,7 @@ export default createConnector({
     const results = getResults(searchResults, this.context);
 
     this._allResults = this._allResults || [];
+    this._previousPage = this._previousPage || 0;
 
     if (!results) {
       return {
@@ -56,16 +57,16 @@ export default createConnector({
 
     if (page === 0) {
       this._allResults = hits;
-    } else if (page > this.previousPage) {
+    } else if (page > this._previousPage) {
       this._allResults = [...this._allResults, ...hits];
-    } else if (page < this.previousPage) {
+    } else if (page < this._previousPage) {
       this._allResults = hits;
     }
 
     const lastPageIndex = nbPages - 1;
     const hasMore = page < lastPageIndex;
 
-    this.previousPage = page;
+    this._previousPage = page;
 
     return {
       hits: this._allResults,
