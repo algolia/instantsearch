@@ -37,7 +37,9 @@
     "test:functional:dev:debug-server": "PORT=9090 babel-node scripts/dev-functional-tests-debug-server",
     "argos": "argos upload functional-tests/screenshots --token $ARGOS_TOKEN || true",
     "serve": "./scripts/serve.sh",
-    "fix:prettier": "eslint --fix -c .eslintrc.js ."
+    "fix:prettier": "eslint --fix -c .eslintrc.js .",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "renovate": {
     "extends": [
@@ -52,6 +54,7 @@
     "es"
   ],
   "devDependencies": {
+    "@storybook/html": "4.0.0-alpha.6",
     "argos-cli": "0.0.9",
     "autodll-webpack-plugin": "0.3.9",
     "autoprefixer": "8.1.0",
@@ -69,6 +72,7 @@
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
     "babel-register": "6.26.0",
+    "babel-runtime": "6.26.0",
     "babel-template": "6.26.0",
     "babel-types": "6.26.0",
     "bel": "5.1.7",
@@ -112,13 +116,13 @@
     "raw-loader": "0.5.1",
     "react-test-renderer": "15.6.1",
     "sass-lint": "1.12.1",
-    "uglifyjs-webpack-plugin": "^1.1.4",
     "sass-loader": "6.0.7",
     "scriptjs": "2.5.8",
     "semver": "5.5.0",
     "shelljs": "0.8.1",
     "sinon": "4.4.2",
     "style-loader": "0.20.3",
+    "uglifyjs-webpack-plugin": "^1.1.4",
     "unminified-webpack-plugin": "1.4.1",
     "watch": "1.0.2",
     "wdio-dot-reporter": "0.0.9",
