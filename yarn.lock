@@ -787,9 +787,9 @@
   dependencies:
     "@types/babel-types" "*"
 
-"@types/estree@0.0.38":
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.38.tgz#c1be40aa933723c608820a99a373a16d215a1ca2"
+"@types/estree@0.0.39":
+  version "0.0.39"
+  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
 
 "@types/events@*":
   version "1.2.0"
@@ -6562,12 +6562,13 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-google-map-react@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-1.0.1.tgz#1f6154a280810d80d1311b90bd5782a4552df87a"
+google-map-react@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-1.0.2.tgz#5e79b78014487642e0cb6c6c44498970f97a4a94"
   dependencies:
     "@mapbox/point-geometry" "^0.1.0"
     eventemitter3 "^1.1.0"
+    react-dom "^16.3.2"
     scriptjs "^2.5.7"
 
 got@5.6.0:
@@ -8993,9 +8994,9 @@ material-colors@^1.2.1:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.5.tgz#5292593e6754cb1bcc2b98030e4e0d6a3afc9ea1"
 
-material-ui@0.20.0:
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-0.20.0.tgz#85411bb59c916c9c7703f29dcffc44e3a67d5111"
+material-ui@0.20.1:
+  version "0.20.1"
+  resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-0.20.1.tgz#a0f0f9f801be76a13cf3da9b319a1b97b28925c7"
   dependencies:
     babel-runtime "^6.23.0"
     inline-style-prefixer "^3.0.8"
@@ -11362,7 +11363,7 @@ react-dom@15.4.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
-react-dom@16.3.2:
+react-dom@16.3.2, react-dom@^16.3.2:
   version "16.3.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.3.2.tgz#cb90f107e09536d683d84ed5d4888e9640e0e4df"
   dependencies:
@@ -12374,11 +12375,11 @@ rollup-pluginutils@^2.0.1:
     estree-walker "^0.3.0"
     micromatch "^2.3.11"
 
-rollup@0.58.2:
-  version "0.58.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.58.2.tgz#2feddea8c0c022f3e74b35c48e3c21b3433803ce"
+rollup@0.59.0:
+  version "0.59.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.59.0.tgz#f91a59ae655f1d2ee9fd795d85621eea3dee21ff"
   dependencies:
-    "@types/estree" "0.0.38"
+    "@types/estree" "0.0.39"
     "@types/node" "*"
 
 rst-selector-parser@^2.2.3:
@@ -14354,9 +14355,9 @@ webpack-dev-server@^2.4.1:
     webpack-dev-middleware "1.12.2"
     yargs "6.6.0"
 
-webpack-hot-middleware@2.22.1, webpack-hot-middleware@^2.22.1:
-  version "2.22.1"
-  resolved "https://registry.yarnpkg.com/webpack-hot-middleware/-/webpack-hot-middleware-2.22.1.tgz#2ff865bfebc8e9937bd1619f0f48d6ab601bfea0"
+webpack-hot-middleware@2.22.2:
+  version "2.22.2"
+  resolved "https://registry.yarnpkg.com/webpack-hot-middleware/-/webpack-hot-middleware-2.22.2.tgz#623b77ce591fcd4e1fb99f18167781443e50afac"
   dependencies:
     ansi-html "0.0.7"
     html-entities "^1.2.0"
@@ -14366,6 +14367,15 @@ webpack-hot-middleware@2.22.1, webpack-hot-middleware@^2.22.1:
 webpack-hot-middleware@^2.21.0:
   version "2.21.2"
   resolved "https://registry.yarnpkg.com/webpack-hot-middleware/-/webpack-hot-middleware-2.21.2.tgz#2e2aa65563b8b32546b67e53b5a9667dcd80f327"
+  dependencies:
+    ansi-html "0.0.7"
+    html-entities "^1.2.0"
+    querystring "^0.2.0"
+    strip-ansi "^3.0.0"
+
+webpack-hot-middleware@^2.22.1:
+  version "2.22.1"
+  resolved "https://registry.yarnpkg.com/webpack-hot-middleware/-/webpack-hot-middleware-2.22.1.tgz#2ff865bfebc8e9937bd1619f0f48d6ab601bfea0"
   dependencies:
     ansi-html "0.0.7"
     html-entities "^1.2.0"
