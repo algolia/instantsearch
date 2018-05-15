@@ -16,6 +16,41 @@ search.addWiget(customAutcomplete({
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectAutocomplete.html
 `;
 
+/**
+ * @typedef {Object} Index
+ * @property {string} index Name of the index.
+ * @property {string} label Label of the index (for display purpose).
+ * @property {Object} helper The helper instance used to search into this index.
+ * @property {Object[]} hits The hits resolved from the index matching the query.
+ * @property {Object} resuls The full results object from Algolia API.
+ */
+
+/**
+ * @typedef {Object} AutocompleteRenderingOptions
+ * @property {Index[]} indices The indices with their hits and results.
+ * @property {function(string)} refine Search into the indices with the query provided.
+ * @property {string} currentRefinement The actual value of the query.
+ * @property {Object} widgetParams All original widget options forwarded to the `renderFn`.
+ */
+
+/**
+ * @typedef {Object} CustomAutocompleteWidgetOptions
+ * @property {string[]} [indices = []] Name of the others indices to search into.
+ * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ */
+
+/**
+ * **Autocomplete** connector provides the logic to build a widget that will give the user the ability to search into multiple indices.
+ *
+ * This connector provides a `refine()` function to search for a query and a `currentRefinement` as the current query used to search.
+ *
+ * THere's a complete example available on how to write a custom **Autocomplete** widget:
+ * [autocomplete.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/autocomplete.js)
+ * @type {Connector}
+ * @param {function(AutocompleteRenderingOptions, boolean)} renderFn Rendering function for the custom **Autocomplete** widget.
+ * @param {function} unmountFn Unmount function called when the widget is disposed.
+ * @return {function(CustomAutocompleteWidgetOptions)} Re-usable widget factory for a custom **Autocomplete** widget.
+ */
 export default function connectAutocomplete(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
