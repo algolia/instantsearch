@@ -5,7 +5,6 @@ const usage = `Usage:
 var customAutcomplete = connectAutocomplete(function render(params, isFirstRendering) {
   // params = {
   //   indices,
-  //   hits,
   //   refine,
   //   currentRefinement
   // }
