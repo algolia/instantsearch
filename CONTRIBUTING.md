@@ -8,7 +8,9 @@
 - [Test](#test)
 - [Lint](#lint)
 - [Release](#release)
-- [Update docs](#update-docs)
+  - [Main version](#main-version)
+  - [Maintenance version](#maintenance-version)
+- [Manually update v1/ docs](#manually-update-v1-docs)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
