@@ -79,8 +79,8 @@ search.addWidget(instantsearch.refinementList({
 ## transformData
 
 `transformData` is used to provide function that will transform the data
-passed to the templates. This is particularly handy when using using mustache
-because it only accepts conditionnals over `boolean` value.
+passed to the templates. This is particularly handy when using mustache
+because it only accepts conditionals over `Boolean` values.
 
 Those function map the different template keys available, when it makes sense.
 For example, if a widget accepts an `item` template, you can provide an `item`
