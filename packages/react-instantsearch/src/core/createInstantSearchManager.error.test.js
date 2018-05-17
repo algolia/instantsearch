@@ -33,7 +33,7 @@ describe('createInstantSearchManager errors', () => {
           indexName: 'index',
           initialState: {},
           searchParameters: {},
-          algoliaClient: client,
+          searchClient: client,
         });
 
         ism.widgetsManager.registerWidget({
@@ -70,7 +70,7 @@ describe('createInstantSearchManager errors', () => {
           indexName: 'index',
           initialState: {},
           searchParameters: {},
-          algoliaClient: client,
+          searchClient: client,
         });
 
         ism.onExternalStateUpdate({});
@@ -95,7 +95,7 @@ describe('createInstantSearchManager errors', () => {
           indexName: 'index',
           initialState: {},
           searchParameters: {},
-          algoliaClient: client,
+          searchClient: client,
         });
 
         ism.onSearchForFacetValues({ facetName: 'facetName', query: 'query' });
@@ -118,7 +118,7 @@ describe('createInstantSearchManager errors', () => {
           indexName: 'index',
           initialState: {},
           searchParameters: {},
-          algoliaClient: client,
+          searchClient: client,
         });
 
         ism.widgetsManager.registerWidget({

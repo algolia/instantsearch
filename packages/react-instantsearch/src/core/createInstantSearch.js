@@ -14,6 +14,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
   return class CreateInstantSearch extends Component {
     static propTypes = {
       algoliaClient: PropTypes.object,
+      searchClient: PropTypes.object,
       appId: PropTypes.string,
       apiKey: PropTypes.string,
       children: PropTypes.oneOfType([
@@ -42,16 +43,37 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
     constructor(...args) {
       super(...args);
 
+      if (this.props.searchClient) {
+        if (this.props.appId || this.props.apiKey || this.props.algoliaClient) {
+          throw new Error(
+            'react-instantsearch:: `searchClient` cannot be used with `appId`, `apiKey` or `algoliaClient`.'
+          );
+        }
+      }
+
+      if (this.props.algoliaClient) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          '`algoliaClient` option was renamed `searchClient`. Please use this new option before the next major version.'
+        );
+      }
+
       this.client =
+        this.props.searchClient ||
         this.props.algoliaClient ||
         defaultAlgoliaClient(this.props.appId, this.props.apiKey);
 
-      this.client.addAlgoliaAgent(`react-instantsearch ${version}`);
+      if (typeof this.client.addAlgoliaAgent === 'function') {
+        this.client.addAlgoliaAgent(`react-instantsearch ${version}`);
+      }
     }
 
     componentWillReceiveProps(nextProps) {
       const props = this.props;
-      if (nextProps.algoliaClient) {
+
+      if (nextProps.searchClient) {
+        this.client = nextProps.searchClient;
+      } else if (nextProps.algoliaClient) {
         this.client = nextProps.algoliaClient;
       } else if (
         props.appId !== nextProps.appId ||
@@ -59,7 +81,10 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       ) {
         this.client = defaultAlgoliaClient(nextProps.appId, nextProps.apiKey);
       }
-      this.client.addAlgoliaAgent(`react-instantsearch ${version}`);
+
+      if (typeof this.client.addAlgoliaAgent === 'function') {
+        this.client.addAlgoliaAgent(`react-instantsearch ${version}`);
+      }
     }
 
     render() {
@@ -71,6 +96,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
           onSearchStateChange={this.props.onSearchStateChange}
           onSearchParameters={this.props.onSearchParameters}
           root={this.props.root}
+          searchClient={this.client}
           algoliaClient={this.client}
           refresh={this.props.refresh}
           resultsState={this.props.resultsState}

@@ -16,7 +16,7 @@ const DEFAULT_PROPS = {
   appId: 'foo',
   apiKey: 'bar',
   indexName: 'foobar',
-  algoliaClient: {},
+  searchClient: {},
   root: {
     Root: 'div',
   },
@@ -114,7 +114,7 @@ describe('InstantSearch', () => {
     expect(createInstantSearchManager.mock.calls[0][0]).toEqual({
       indexName: DEFAULT_PROPS.indexName,
       initialState: {},
-      algoliaClient: {},
+      searchClient: {},
       stalledSearchDelay: 200,
     });
   });
@@ -135,7 +135,7 @@ describe('InstantSearch', () => {
     expect(ism.updateClient.mock.calls).toHaveLength(0);
     wrapper.setProps({
       ...DEFAULT_PROPS,
-      algoliaClient: {},
+      searchClient: {},
     });
 
     expect(ism.updateClient.mock.calls).toHaveLength(1);
