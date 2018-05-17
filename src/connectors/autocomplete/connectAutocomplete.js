@@ -55,9 +55,10 @@ export default function connectAutocomplete(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { indices } = widgetParams;
+    const { indices = [] } = widgetParams;
 
-    if (indices && !Array.isArray(indices)) {
+    // user passed a wrong `indices` option type
+    if (!Array.isArray(indices)) {
       throw new Error(usage);
     }
 
@@ -79,25 +80,23 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         ];
 
         // add additionnal indices into `this.indices`
-        if (indices && Array.isArray(indices)) {
-          indices.forEach(({ label, value }) => {
-            const derivedHelper = helper.derive(searchParameters =>
-              searchParameters.setIndex(value)
-            );
+        indices.forEach(({ label, value }) => {
+          const derivedHelper = helper.derive(searchParameters =>
+            searchParameters.setIndex(value)
+          );
 
-            this.indices.push({
-              label,
-              index: value,
-              helper: derivedHelper,
-              results: undefined,
-            });
-
-            // update results then trigger render after a search from any helper
-            derivedHelper.on('result', results =>
-              this.saveResults({ results, index: value })
-            );
+          this.indices.push({
+            label,
+            index: value,
+            helper: derivedHelper,
+            results: undefined,
           });
-        }
+
+          // update results then trigger render after a search from any helper
+          derivedHelper.on('result', results =>
+            this.saveResults({ results, index: value })
+          );
+        });
 
         this.instantSearchInstance = instantSearchInstance;
         this.renderWithAllIndices({ isFirstRendering: true });
