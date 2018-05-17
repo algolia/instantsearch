@@ -114,7 +114,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         }
 
         derivedIndex.results = results;
-        derivedIndex.hits = results ? results.hits : undefined;
+        derivedIndex.hits = results ? results.hits : [];
 
         this.renderWithAllIndices();
       },
