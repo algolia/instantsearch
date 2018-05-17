@@ -100,7 +100,9 @@ describe('connectCurrentRefinedValues', () => {
   });
 
   it('should clear also the search query', () => {
-    const helper = jsHelper({}, '', {});
+    const helper = jsHelper({}, '', {
+      facets: ['myFacet'],
+    });
     helper.search = jest.fn();
 
     const rendering = jest.fn();
@@ -108,6 +110,7 @@ describe('connectCurrentRefinedValues', () => {
     const widget = makeWidget({ clearsQuery: true });
 
     helper.setQuery('foobar');
+    helper.toggleRefinement('myFacet', 'value');
     expect(helper.state.query).toBe('foobar');
 
     widget.init({
@@ -119,12 +122,14 @@ describe('connectCurrentRefinedValues', () => {
 
     // clear current refined values + query
     expect(rendering).toBeCalled();
+    expect(helper.hasRefinements('myFacet')).toBe(true);
 
     const [{ clearAllClick }] = rendering.mock.calls[0];
     clearAllClick();
 
     expect(helper.search).toBeCalled();
     expect(helper.state.query).toBe('');
+    expect(helper.hasRefinements('myFacet')).toBe(false);
   });
 
   it('should provide the query as a refinement if clearsQuery is true', () => {
