@@ -94,7 +94,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
 
           // update results then trigger render after a search from any helper
           derivedHelper.on('result', results =>
-            this.saveResults({ results, index: value })
+            this.saveResults({ results, label })
           );
         });
 
@@ -102,8 +102,8 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         this.renderWithAllIndices({ isFirstRendering: true });
       },
 
-      saveResults({ results, index }) {
-        const derivedIndex = this.indices.find(i => i.index === index);
+      saveResults({ results, label }) {
+        const derivedIndex = this.indices.find(i => i.label === label);
 
         if (
           widgetParams.escapeHits &&
@@ -124,7 +124,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       },
 
       render({ results }) {
-        this.saveResults({ results, index: this.indices[0].index });
+        this.saveResults({ results, label: this.indices[0].label });
       },
 
       renderWithAllIndices({ isFirstRendering = false } = {}) {
