@@ -35,4 +35,9 @@ classes:
 options:
   - name: attributes
     description: Array of attributes to use to generate the breadcrumb
+  - name: separator
+    default: '" > "'
+    description: Separator used in the attributes to separate level values
+  - name: rootPath
+    description: Prefix path to use if the first level is not the root level.
 ---
