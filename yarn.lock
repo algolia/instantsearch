@@ -6562,9 +6562,9 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-google-map-react@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-1.0.2.tgz#5e79b78014487642e0cb6c6c44498970f97a4a94"
+google-map-react@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-1.0.3.tgz#60bcc3caa51dc01f26394c73a5434c769250ef46"
   dependencies:
     "@mapbox/point-geometry" "^0.1.0"
     eventemitter3 "^1.1.0"
