@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash';
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { version } from '../../package.json';
 import { SearchParameters } from 'algoliasearch-helper';
 import createConnector from './createConnector';
 import createIndex from './createIndex';
@@ -13,7 +14,6 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('createInstantSearchServer', () => {
   const createAlgoliaClient = () => ({
-    addAlgoliaAgent: () => {},
     search: () =>
       Promise.resolve({
         results: [{ query: 'query' }],
@@ -38,6 +38,123 @@ describe('createInstantSearchServer', () => {
       getMetadata: () => null,
       getId: () => 'id',
     })(() => null);
+
+  describe('props', () => {
+    it('creates an algolia client using the provided factory', () => {
+      const algoliaClient = {
+        ...createAlgoliaClient(),
+        addAlgoliaAgent: jest.fn(),
+      };
+      const createAlgoliaClientSpy = jest.fn(() => algoliaClient);
+      const { InstantSearch } = createInstantSearch(createAlgoliaClientSpy);
+
+      shallow(<InstantSearch appId="app" apiKey="key" indexName="name" />);
+
+      expect(createAlgoliaClientSpy).toHaveBeenCalledTimes(1);
+      expect(createAlgoliaClientSpy).toHaveBeenCalledWith('app', 'key');
+      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(
+        `react-instantsearch ${version}`
+      );
+    });
+
+    it('uses the provided searchClient', () => {
+      const searchClient = createAlgoliaClient();
+      const createAlgoliaClientSpy = jest.fn(() => searchClient);
+      const { InstantSearch } = createInstantSearch(createAlgoliaClientSpy);
+
+      const wrapper = shallow(
+        <InstantSearch searchClient={searchClient} indexName="name" />
+      );
+
+      expect(wrapper.props().searchClient).toBe(searchClient);
+    });
+
+    it('uses the provided algoliaClient', () => {
+      const algoliaClient = {
+        ...createAlgoliaClient(),
+        addAlgoliaAgent: jest.fn(),
+      };
+      const createAlgoliaClientSpy = jest.fn(() => algoliaClient);
+      const { InstantSearch } = createInstantSearch(createAlgoliaClientSpy);
+
+      const wrapper = shallow(
+        <InstantSearch algoliaClient={algoliaClient} indexName="name" />
+      );
+
+      expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+      expect(wrapper.props().algoliaClient).toBe(algoliaClient);
+    });
+
+    it('does not throw if searchClient does not have a `addAlgoliaAgent()` method', () => {
+      const searchClient = createAlgoliaClient();
+      const createAlgoliaClientSpy = jest.fn(() => searchClient);
+      const { InstantSearch } = createInstantSearch(createAlgoliaClientSpy);
+
+      const trigger = () =>
+        shallow(<InstantSearch indexName="name" searchClient={searchClient} />);
+
+      expect(() => trigger()).not.toThrow();
+    });
+
+    it('does not throw if algoliaClient does not have a `addAlgoliaAgent()` method', () => {
+      const algoliaClient = createAlgoliaClient();
+      const createAlgoliaClientSpy = jest.fn(() => algoliaClient);
+      const { InstantSearch } = createInstantSearch(createAlgoliaClientSpy);
+
+      const trigger = () =>
+        shallow(
+          <InstantSearch indexName="name" algoliaClient={algoliaClient} />
+        );
+
+      expect(() => trigger()).not.toThrow();
+    });
+
+    it('throws if algoliaClient is given with searchClient', () => {
+      const { InstantSearch } = createInstantSearch(createAlgoliaClient);
+
+      const trigger = () =>
+        shallow(
+          <InstantSearch
+            indexName="name"
+            searchClient={createAlgoliaClient()}
+            algoliaClient={createAlgoliaClient()}
+          />
+        );
+
+      expect(() => trigger()).toThrow();
+    });
+
+    it('throws if appId is given with searchClient', () => {
+      const { InstantSearch } = createInstantSearch(createAlgoliaClient);
+
+      const trigger = () =>
+        shallow(
+          <InstantSearch
+            indexName="name"
+            appId="appId"
+            searchClient={createAlgoliaClient()}
+          />
+        );
+
+      expect(() => trigger()).toThrow();
+    });
+
+    it('throws if apiKey is given with searchClient', () => {
+      const { InstantSearch } = createInstantSearch(createAlgoliaClient);
+
+      const trigger = () =>
+        shallow(
+          <InstantSearch
+            indexName="name"
+            apiKey="apiKey"
+            searchClient={createAlgoliaClient()}
+          />
+        );
+
+      expect(() => trigger()).toThrow();
+    });
+  });
 
   describe('single index', () => {
     it('results shoud be SearchResults from the helper', () => {

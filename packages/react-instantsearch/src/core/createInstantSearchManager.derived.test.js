@@ -34,7 +34,7 @@ describe('createInstantSearchManager', () => {
           indexName: 'first',
           initialState: {},
           searchParameters: {},
-          algoliaClient: client,
+          searchClient: client,
         });
 
         ism.widgetsManager.registerWidget({
@@ -122,7 +122,7 @@ describe('createInstantSearchManager', () => {
           indexName: 'first',
           initialState: {},
           searchParameters: {},
-          algoliaClient: client,
+          searchClient: client,
         });
 
         // <SearchBox defaultRefinement="query" />
@@ -190,7 +190,7 @@ describe('createInstantSearchManager', () => {
           indexName: 'first',
           initialState: {},
           searchParameters: {},
-          algoliaClient: client,
+          searchClient: client,
         });
 
         ism.widgetsManager.registerWidget({
@@ -241,7 +241,7 @@ describe('createInstantSearchManager', () => {
           indexName: 'first',
           initialState: {},
           searchParameters: {},
-          algoliaClient: client,
+          searchClient: client,
         });
 
         ism.widgetsManager.registerWidget({
