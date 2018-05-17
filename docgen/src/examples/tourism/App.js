@@ -143,7 +143,7 @@ function HitsMap({ hits }) {
     <GoogleMap
       options={() => options}
       bootstrapURLKeys={{
-        key: 'AIzaSyAl60n7p07HYQK6lVilAe_ggwbBJFktNw8',
+        key: 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ',
       }}
       center={boundsConfig.center}
       zoom={boundsConfig.zoom}
