@@ -140,10 +140,8 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       },
 
       dispose() {
-        // remove `result` listeners for derived helper
-        this.indices
-          .slice(1)
-          .forEach(({ helper }) => helper.removeAllListeners('result'));
+        // detach every derived indices from the main helper instance
+        this.indices.slice(1).forEach(({ helper }) => helper.detach());
 
         unmountFn();
       },
