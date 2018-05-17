@@ -106,7 +106,11 @@ const autocompleteAndSelect = instantsearch.connectors.connectAutocomplete(
     if (!isFirstRendering && indices[0].results) {
       const autocompleteInstance = containerNode.find('select')[0].selectize;
 
+      // first clear options
+      autocompleteInstance.clearOptions();
+      // add new ones
       indices[0].results.hits.forEach(h => autocompleteInstance.addOption(h));
+      // refresh the view
       autocompleteInstance.refreshOptions(autocompleteInstance.isOpen);
     }
   }
