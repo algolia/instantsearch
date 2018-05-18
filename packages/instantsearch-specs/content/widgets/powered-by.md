@@ -35,6 +35,6 @@ classes:
     description: the logo of the widget
 options:
   - name: theme
-    default: ""light""
+    default: '"light"'
     description: If this is rendered on a dark background, put it as `dark`
 ---
