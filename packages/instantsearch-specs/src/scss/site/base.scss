@@ -234,6 +234,7 @@ body {
   padding: 20px;
   border: 1px solid #ddd;
   overflow: auto;
+  transition: .2s background-color ease-in-out;
 }
 
 .code-output code {
@@ -327,4 +328,9 @@ body {
   &:active {
     border: 1px solid black;
   }
+}
+
+.dark {
+  background-color: $dark;
+  color: white;
 }

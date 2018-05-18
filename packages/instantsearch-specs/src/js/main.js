@@ -82,6 +82,13 @@ codeWrapperTabs.forEach(item => {
     document.querySelectorAll('.code-wrapper-content').forEach(item => {
       if (item.getAttribute('data-html') === dataHTML) {
         item.style.display = 'block';
+
+        // have the possibility of styling certain elements as their dark version
+        if (item.querySelector('[class$="--dark"]')) {
+          item.parentNode.classList.add('dark');
+        } else {
+          item.parentNode.classList.remove('dark');
+        }
       } else {
         item.style.display = 'none';
       }
