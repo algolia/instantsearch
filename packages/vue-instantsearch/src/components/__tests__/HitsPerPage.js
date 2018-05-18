@@ -23,7 +23,7 @@ it('renders correctly', () => {
   expect(wrapper.html()).toMatchSnapshot();
 });
 
-it('behaves correctly', () => {
+it('calls `refine` with the `value` on `change`', () => {
   __setState({
     refine: jest.fn(),
   });

@@ -10,7 +10,7 @@ import Configure from './components/Configure.vue';
 import Pagination from './components/Pagination.vue';
 import Menu from './components/Menu.vue';
 import MenuSelect from './components/MenuSelect.vue';
-import SortBySelector from './components/SortBySelector.vue';
+import SortBy from './components/SortBy.vue';
 import SearchBox from './components/SearchBox.vue';
 import ClearRefinements from './components/ClearRefinements.vue';
 import PoweredBy from './components/PoweredBy.vue';
@@ -30,7 +30,7 @@ const InstantSearch = {
   Pagination,
   Menu,
   MenuSelect,
-  SortBySelector,
+  SortBy,
   SearchBox,
   ClearRefinements,
   PoweredBy,
@@ -49,7 +49,7 @@ const InstantSearch = {
     Vue.component('ais-pagination', Pagination);
     Vue.component('ais-menu', Menu);
     Vue.component('ais-menu-select', MenuSelect);
-    Vue.component('ais-sort-by-selector', SortBySelector);
+    Vue.component('ais-sort-by', SortBy);
     Vue.component('ais-search-box', SearchBox);
     Vue.component('ais-clear-refinements', ClearRefinements);
     Vue.component('ais-configure', Configure);
@@ -73,7 +73,7 @@ export {
   Stats,
   Pagination,
   Menu,
-  SortBySelector,
+  SortBy,
   SearchBox,
   ClearRefinements,
   PoweredBy,
