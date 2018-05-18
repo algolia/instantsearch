@@ -21,8 +21,28 @@ Basic usage:
 <ais-powered-by></ais-powered-by>
 ```
 
-## CSS Classes
+Dark background:
 
-| ClassName        | Description     |
-|:-----------------|:----------------|
-| `ais-powered-by` | Container class |
+```html
+<ais-powered-by theme="dark"></ais-powered-by>
+```
+
+## Props
+
+Name | Type | Default | Description | Required
+---|---|---|---|---
+theme | `"light" | "dark"` | `"light"` | Use a version of the logo legible on light or dark backgrounds | no
+
+
+## CSS classes
+
+Here's a list of CSS classes exposed by this widget. To better understand the underlying
+DOM structure, have a look at the generated DOM in your browser.
+
+Class name | Description
+---|---
+`.ais-PoweredBy` | the root div of the widget
+`.ais-PoweredBy--light` | the root div of the widget with light background theme
+`.ais-PoweredBy--dark` | the root div of the widget with dark background theme
+`.ais-PoweredBy-link` | the link
+`.ais-PoweredBy-logo` | the actual illustration
