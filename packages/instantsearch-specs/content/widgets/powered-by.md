@@ -32,7 +32,7 @@ classes:
   - name: .ais-PoweredBy-logo
     description: the logo of the widget
 options:
-  - name: dark
-    default: false
-    description: If this is rendered on a dark background, put it as `true`
+  - name: theme
+    default: ""light""
+    description: If this is rendered on a dark background, put it as `dark`
 ---
