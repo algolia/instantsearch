@@ -11,7 +11,7 @@ const Pit = ({ style, children }) => {
   // Children could be an array, unwrap the value if it's the case
   // see: https://github.com/developit/preact-compat/issues/436
   const value = Array.isArray(children) ? children[0] : children;
-  const pitValue = Math.round(parseFloat(value) * 100) / 100;
+  const pitValue = Math.round(parseInt(value) * 100) / 100;
 
   return (
     <div
