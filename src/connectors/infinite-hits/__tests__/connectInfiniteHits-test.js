@@ -203,4 +203,79 @@ describe('connectInfiniteHits', () => {
     expect(secondRenderingOptions.hits).toEqual(escapedHits);
     expect(secondRenderingOptions.results).toEqual(results);
   });
+
+  it('does not render the same page twice', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({
+      hitsPerPage: 1,
+    });
+
+    const helper = jsHelper({}, '');
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [{ objectID: 'a' }],
+          page: 0,
+          nbPages: 4,
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    helper.setPage(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [{ objectID: 'b' }],
+          page: 1,
+          nbPages: 4,
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenCalledTimes(3);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        hits: [{ objectID: 'a' }, { objectID: 'b' }],
+        results: expect.any(Object),
+      }),
+      false
+    );
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [{ objectID: 'b' }],
+          page: 1,
+          nbPages: 4,
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenCalledTimes(4);
+    const renderingOptions = rendering.mock.calls[3][0];
+    expect(renderingOptions.hits).toEqual([
+      { objectID: 'a' },
+      { objectID: 'b' },
+    ]);
+  });
 });
