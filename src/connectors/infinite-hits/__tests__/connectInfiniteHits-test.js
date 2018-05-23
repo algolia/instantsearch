@@ -11,7 +11,6 @@ describe('connectInfiniteHits', () => {
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({
       escapeHits: true,
-      hitsPerPage: 10,
     });
 
     expect(widget.getConfiguration()).toEqual({
@@ -44,7 +43,6 @@ describe('connectInfiniteHits', () => {
         instantSearchInstance: undefined,
         widgetParams: {
           escapeHits: true,
-          hitsPerPage: 10,
         },
       }),
       true
@@ -70,7 +68,6 @@ describe('connectInfiniteHits', () => {
         instantSearchInstance: undefined,
         widgetParams: {
           escapeHits: true,
-          hitsPerPage: 10,
         },
       }),
       false
@@ -207,9 +204,7 @@ describe('connectInfiniteHits', () => {
   it('does not render the same page twice', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
-    const widget = makeWidget({
-      hitsPerPage: 1,
-    });
+    const widget = makeWidget({});
 
     const helper = jsHelper({}, '');
     helper.search = jest.fn();
