@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
@@ -9,7 +7,7 @@ describe('connectInfiniteHits', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({
       escapeHits: true,
@@ -22,10 +20,10 @@ describe('connectInfiniteHits', () => {
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = jsHelper({}, '');
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -35,13 +33,22 @@ describe('connectInfiniteHits', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      escapeHits: true,
-      hitsPerPage: 10,
-    });
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        hits: [],
+        showMore: expect.any(Function),
+        results: undefined,
+        isLastPage: true,
+        instantSearchInstance: undefined,
+        widgetParams: {
+          escapeHits: true,
+          hitsPerPage: 10,
+        },
+      }),
+      true
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -54,22 +61,29 @@ describe('connectInfiniteHits', () => {
       createURL: () => '#',
     });
 
-    // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      escapeHits: true,
-      hitsPerPage: 10,
-    });
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        hits: [],
+        showMore: expect.any(Function),
+        results: expect.any(Object),
+        isLastPage: false,
+        instantSearchInstance: undefined,
+        widgetParams: {
+          escapeHits: true,
+          hitsPerPage: 10,
+        },
+      }),
+      false
+    );
   });
 
   it('Provides the hits and the whole results', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget();
 
     const helper = jsHelper({}, '', {});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -78,7 +92,7 @@ describe('connectInfiniteHits', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.hits).toEqual([]);
     expect(firstRenderingOptions.results).toBe(undefined);
 
@@ -91,12 +105,12 @@ describe('connectInfiniteHits', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     const { showMore } = secondRenderingOptions;
     expect(secondRenderingOptions.hits).toEqual(hits);
     expect(secondRenderingOptions.results).toEqual(results);
     showMore();
-    expect(helper.search.callCount).toBe(1);
+    expect(helper.search).toHaveBeenCalledTimes(1);
 
     // the results should accumulate if there is an increment in page
     const otherHits = [{ fake: 'data 2' }, { sample: 'infos 2' }];
@@ -112,7 +126,7 @@ describe('connectInfiniteHits', () => {
       createURL: () => '#',
     });
 
-    const thirdRenderingOptions = rendering.lastCall.args[0];
+    const thirdRenderingOptions = rendering.mock.calls[2][0];
     expect(thirdRenderingOptions.hits).toEqual([...hits, ...otherHits]);
     expect(thirdRenderingOptions.results).toEqual(otherResults);
 
@@ -133,18 +147,18 @@ describe('connectInfiniteHits', () => {
       createURL: () => '#',
     });
 
-    const fourthRenderingOptions = rendering.lastCall.args[0];
+    const fourthRenderingOptions = rendering.mock.calls[3][0];
     expect(fourthRenderingOptions.hits).toEqual(thirdHits);
     expect(fourthRenderingOptions.results).toEqual(thirdResults);
   });
 
   it('escape highlight properties if requested', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({ escapeHits: true });
 
     const helper = jsHelper({}, '', {});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -153,7 +167,7 @@ describe('connectInfiniteHits', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.hits).toEqual([]);
     expect(firstRenderingOptions.results).toBe(undefined);
 
@@ -185,7 +199,7 @@ describe('connectInfiniteHits', () => {
       },
     ];
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.hits).toEqual(escapedHits);
     expect(secondRenderingOptions.results).toEqual(results);
   });
