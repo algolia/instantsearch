@@ -511,6 +511,29 @@ describe('utility method for manipulating the search state', () => {
         page: 1,
         namespace: {},
       });
+
+      // It might happen that we try to cleanUp an index that is not
+      // present on the searchState. We should not throw an error in
+      // that case, just return the searchState as it is.
+      searchState = {
+        page: 1,
+        indices: {
+          second: {
+            page: 1,
+          },
+        },
+      };
+
+      searchState = cleanUpValue(searchState, context, 'menu.category');
+
+      expect(searchState).toEqual({
+        page: 1,
+        indices: {
+          second: {
+            page: 1,
+          },
+        },
+      });
     });
 
     it('get results', () => {

@@ -187,30 +187,64 @@ export function getCurrentRefinementValue(
 }
 
 export function cleanUpValue(searchState, context, id) {
-  const index = getIndex(context);
+  const indexName = getIndex(context);
   const { namespace, attributeName } = getNamespaceAndAttributeName(id);
+
   if (hasMultipleIndex(context) && Boolean(searchState.indices)) {
-    return namespace
-      ? {
-          ...searchState,
-          indices: {
-            ...searchState.indices,
-            [index]: {
-              ...searchState.indices[index],
-              [namespace]: omit(
-                searchState.indices[index][namespace],
-                `${attributeName}`
-              ),
-            },
-          },
-        }
-      : omit(searchState, `indices.${index}.${id}`);
-  } else {
-    return namespace
-      ? {
-          ...searchState,
-          [namespace]: omit(searchState[namespace], `${attributeName}`),
-        }
-      : omit(searchState, `${id}`);
+    return cleanUpValueWithMutliIndex({
+      attribute: attributeName,
+      searchState,
+      indexName,
+      id,
+      namespace,
+    });
   }
+
+  return cleanUpValueWithSingleIndex({
+    attribute: attributeName,
+    searchState,
+    id,
+    namespace,
+  });
+}
+
+function cleanUpValueWithSingleIndex({
+  searchState,
+  id,
+  namespace,
+  attribute,
+}) {
+  if (namespace) {
+    return {
+      ...searchState,
+      [namespace]: omit(searchState[namespace], attribute),
+    };
+  }
+
+  return omit(searchState, id);
+}
+
+function cleanUpValueWithMutliIndex({
+  searchState,
+  indexName,
+  id,
+  namespace,
+  attribute,
+}) {
+  const index = searchState.indices[indexName];
+
+  if (namespace && index) {
+    return {
+      ...searchState,
+      indices: {
+        ...searchState.indices,
+        [indexName]: {
+          ...index,
+          [namespace]: omit(index[namespace], attribute),
+        },
+      },
+    };
+  }
+
+  return omit(searchState, `indices.${indexName}.${id}`);
 }
