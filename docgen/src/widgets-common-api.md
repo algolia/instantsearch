@@ -37,7 +37,7 @@ search.addWidget(instantsearch.searchbox({
 `cssClasses` is a parameter that let you specify one or more classes to add to
 some specific element of the rendered widget. When available, this parameter is
 an object of either string or array of strings. The different keys available
-is define in the widget reference.
+is defined in the widget reference.
 
 ```javascript
 const search = instantsearch(/* parameters here */);
