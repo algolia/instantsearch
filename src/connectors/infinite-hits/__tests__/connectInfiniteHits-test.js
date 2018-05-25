@@ -59,6 +59,7 @@ describe('connectInfiniteHits', () => {
       createURL: () => '#',
     });
 
+    expect(rendering).toHaveBeenCalledTimes(2);
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [],
@@ -248,7 +249,6 @@ describe('connectInfiniteHits', () => {
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         hits: [{ objectID: 'a' }, { objectID: 'b' }],
-        results: expect.any(Object),
       }),
       false
     );
@@ -267,10 +267,11 @@ describe('connectInfiniteHits', () => {
     });
 
     expect(rendering).toHaveBeenCalledTimes(4);
-    const renderingOptions = rendering.mock.calls[3][0];
-    expect(renderingOptions.hits).toEqual([
-      { objectID: 'a' },
-      { objectID: 'b' },
-    ]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        hits: [{ objectID: 'a' }, { objectID: 'b' }],
+      }),
+      false
+    );
   });
 });
