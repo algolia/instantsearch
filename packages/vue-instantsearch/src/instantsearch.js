@@ -3,7 +3,6 @@ import Component from './component';
 import Index from './components/Index.vue';
 import Highlight from './components/Highlight';
 import Snippet from './components/Snippet';
-import Input from './components/Input.vue';
 import Hits from './components/Hits.vue';
 import Stats from './components/Stats.vue';
 import Configure from './components/Configure.vue';
@@ -23,7 +22,6 @@ const InstantSearch = {
   Index,
   Highlight,
   Snippet,
-  Input,
   Configure,
   Hits,
   Stats,
@@ -43,7 +41,6 @@ const InstantSearch = {
     Vue.component('ais-index', Index);
     Vue.component('ais-highlight', Highlight);
     Vue.component('ais-snippet', Snippet);
-    Vue.component('ais-input', Input);
     Vue.component('ais-hits', Hits);
     Vue.component('ais-stats', Stats);
     Vue.component('ais-pagination', Pagination);
@@ -68,7 +65,6 @@ export {
   Index,
   Highlight,
   Snippet,
-  Input,
   Hits,
   Stats,
   Pagination,
