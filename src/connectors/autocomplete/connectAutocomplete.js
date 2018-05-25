@@ -116,7 +116,10 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         }
 
         derivedIndex.results = results;
-        derivedIndex.hits = Array.isArray(results.hits) ? results.hits : [];
+        derivedIndex.hits =
+          results && results.hits && Array.isArray(results.hits)
+            ? results.hits
+            : [];
 
         this.renderWithAllIndices();
       },
