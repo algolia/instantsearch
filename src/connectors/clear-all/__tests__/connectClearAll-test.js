@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
@@ -8,10 +6,10 @@ import connectClearAll from '../connectClearAll.js';
 describe('connectClearAll', () => {
   it('Renders during init and render', () => {
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = () => {};
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({
       foo: 'bar', // dummy param to test `widgetParams`
@@ -19,7 +17,7 @@ describe('connectClearAll', () => {
 
     expect(widget.getConfiguration).toBe(undefined);
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).toHaveBeenCalledTimes(0);
 
     widget.init({
       helper,
@@ -29,11 +27,11 @@ describe('connectClearAll', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering.mock.calls[0][1]).toBe(true);
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.hasRefinements).toBe(false);
     expect(firstRenderingOptions.widgetParams).toEqual({
       foo: 'bar', // dummy param to test `widgetParams`
@@ -47,10 +45,10 @@ describe('connectClearAll', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering.mock.calls[1][1]).toBe(false);
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.hasRefinements).toBe(false);
   });
 
@@ -61,11 +59,11 @@ describe('connectClearAll', () => {
     const helper = jsHelper({}, '', {
       facets: ['myFacet'],
     });
-    helper.search = sinon.stub();
+    helper.search = () => {};
     helper.setQuery('not empty');
     helper.toggleRefinement('myFacet', 'myValue');
 
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({ clearsQuery: false });
 
@@ -78,7 +76,7 @@ describe('connectClearAll', () => {
 
     expect(helper.hasRefinements('myFacet')).toBe(true);
     expect(helper.state.query).toBe('not empty');
-    const initClearMethod = rendering.lastCall.args[0].refine;
+    const initClearMethod = rendering.mock.calls[0][0].refine;
     initClearMethod();
 
     expect(helper.hasRefinements('myFacet')).toBe(false);
@@ -95,7 +93,7 @@ describe('connectClearAll', () => {
 
     expect(helper.hasRefinements('myFacet')).toBe(true);
     expect(helper.state.query).toBe('not empty');
-    const renderClearMethod = rendering.lastCall.args[0].refine;
+    const renderClearMethod = rendering.mock.calls[1][0].refine;
     renderClearMethod();
     expect(helper.hasRefinements('myFacet')).toBe(false);
     expect(helper.state.query).toBe('not empty');
@@ -108,11 +106,11 @@ describe('connectClearAll', () => {
     const helper = jsHelper({}, '', {
       facets: ['myFacet'],
     });
-    helper.search = sinon.stub();
+    helper.search = () => {};
     helper.setQuery('a query');
     helper.toggleRefinement('myFacet', 'myValue');
 
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({ clearsQuery: true });
 
@@ -125,7 +123,7 @@ describe('connectClearAll', () => {
 
     expect(helper.hasRefinements('myFacet')).toBe(true);
     expect(helper.state.query).toBe('a query');
-    const initClearMethod = rendering.lastCall.args[0].refine;
+    const initClearMethod = rendering.mock.calls[0][0].refine;
     initClearMethod();
 
     expect(helper.hasRefinements('myFacet')).toBe(false);
@@ -143,7 +141,7 @@ describe('connectClearAll', () => {
 
     expect(helper.hasRefinements('myFacet')).toBe(true);
     expect(helper.state.query).toBe('another query');
-    const renderClearMethod = rendering.lastCall.args[0].refine;
+    const renderClearMethod = rendering.mock.calls[1][0].refine;
     renderClearMethod();
     expect(helper.hasRefinements('myFacet')).toBe(false);
     expect(helper.state.query).toBe('');
@@ -156,9 +154,9 @@ describe('connectClearAll', () => {
       facets: ['aFacet'],
     });
     helper.toggleRefinement('aFacet', 'some value');
-    helper.search = sinon.stub();
+    helper.search = () => {};
 
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget();
 
@@ -169,7 +167,7 @@ describe('connectClearAll', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
+    expect(rendering.mock.calls[0][0].hasRefinements).toBe(true);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -178,7 +176,7 @@ describe('connectClearAll', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
+    expect(rendering.mock.calls[1][0].hasRefinements).toBe(true);
   });
 
   it('(clearsQuery: true) query not empty <-> hasRefinements = true', () => {
@@ -188,9 +186,9 @@ describe('connectClearAll', () => {
       facets: ['aFacet'],
     });
     helper.setQuery('no empty');
-    helper.search = sinon.stub();
+    helper.search = () => {};
 
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({
       clearsQuery: true,
@@ -203,7 +201,7 @@ describe('connectClearAll', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
+    expect(rendering.mock.calls[0][0].hasRefinements).toBe(true);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -212,7 +210,7 @@ describe('connectClearAll', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
+    expect(rendering.mock.calls[1][0].hasRefinements).toBe(true);
   });
 
   it('(clearsQuery: true) no refinements <-> hasRefinements = false', () => {
@@ -221,9 +219,9 @@ describe('connectClearAll', () => {
     const helper = jsHelper({}, undefined, {
       facets: ['aFacet'],
     });
-    helper.search = sinon.stub();
+    helper.search = () => {};
 
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({
       clearsQuery: true,
@@ -236,7 +234,7 @@ describe('connectClearAll', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(false);
+    expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -245,7 +243,7 @@ describe('connectClearAll', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(false);
+    expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
   });
 
   it('(clearsQuery: false) no refinements <=> hasRefinements = false', () => {
@@ -254,9 +252,9 @@ describe('connectClearAll', () => {
 
     const helper = jsHelper({});
     helper.setQuery('not empty');
-    helper.search = sinon.stub();
+    helper.search = () => {};
 
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({ clearsQuery: false });
 
@@ -267,7 +265,7 @@ describe('connectClearAll', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(false);
+    expect(rendering.mock.calls[0][0].hasRefinements).toBe(false);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -276,16 +274,16 @@ describe('connectClearAll', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(false);
+    expect(rendering.mock.calls[1][0].hasRefinements).toBe(false);
   });
 
   it('can exclude some attributes', () => {
     const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
       facets: ['facet'],
     });
-    helper.search = sinon.stub();
+    helper.search = () => {};
 
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({
       excludeAttributes: ['facet'],
@@ -305,7 +303,7 @@ describe('connectClearAll', () => {
 
       expect(helper.hasRefinements('facet')).toBe(true);
 
-      const refine = rendering.lastCall.args[0].refine;
+      const refine = rendering.mock.calls[0][0].refine;
       refine();
 
       expect(helper.hasRefinements('facet')).toBe(true);
@@ -325,7 +323,7 @@ describe('connectClearAll', () => {
 
       expect(helper.hasRefinements('facet')).toBe(true);
 
-      const refine = rendering.lastCall.args[0].refine;
+      const refine = rendering.mock.calls[1][0].refine;
       refine();
 
       expect(helper.hasRefinements('facet')).toBe(true);
@@ -336,9 +334,9 @@ describe('connectClearAll', () => {
     const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
       facets: ['facet'],
     });
-    helper.search = sinon.stub();
+    helper.search = () => {};
 
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({
       excludeAttributes: ['facet'],
@@ -359,7 +357,7 @@ describe('connectClearAll', () => {
 
       expect(helper.hasRefinements('facet')).toBe(true);
 
-      const refine = rendering.lastCall.args[0].refine;
+      const refine = rendering.mock.calls[0][0].refine;
       refine();
 
       expect(helper.hasRefinements('facet')).toBe(true);
@@ -378,7 +376,7 @@ describe('connectClearAll', () => {
 
       expect(helper.hasRefinements('facet')).toBe(true);
 
-      const refine = rendering.lastCall.args[0].refine;
+      const refine = rendering.mock.calls[1][0].refine;
       refine();
 
       expect(helper.hasRefinements('facet')).toBe(true);
@@ -390,9 +388,9 @@ describe('connectClearAll', () => {
       const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', {
         facets: ['facet', 'otherFacet'],
       });
-      helper.search = sinon.stub();
+      helper.search = () => {};
 
-      const rendering = sinon.stub();
+      const rendering = jest.fn();
       const makeWidget = connectClearAll(rendering);
       const widget = makeWidget({
         excludeAttributes: ['facet'],
@@ -412,8 +410,7 @@ describe('connectClearAll', () => {
           onHistoryChange: () => {},
         });
 
-        const createURL = rendering.lastCall.args[0].createURL;
-        const refine = rendering.lastCall.args[0].refine;
+        const { createURL, refine } = rendering.mock.calls[0][0];
 
         // The state represented by the URL should be equal to a state
         // after refining.
@@ -433,8 +430,7 @@ describe('connectClearAll', () => {
           onHistoryChange: () => {},
         });
 
-        const createURL = rendering.lastCall.args[0].createURL;
-        const refine = rendering.lastCall.args[0].refine;
+        const { createURL, refine } = rendering.mock.calls[1][0];
 
         const createURLState = createURL();
         refine();
