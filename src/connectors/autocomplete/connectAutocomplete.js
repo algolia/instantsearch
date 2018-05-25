@@ -76,6 +76,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
             label: 'primary',
             index: helper.getIndex(),
             results: undefined,
+            hits: [],
           },
         ];
 
@@ -90,6 +91,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
             index: value,
             helper: derivedHelper,
             results: undefined,
+            hits: [],
           });
 
           // update results then trigger render after a search from any helper
@@ -114,7 +116,7 @@ export default function connectAutocomplete(renderFn, unmountFn) {
         }
 
         derivedIndex.results = results;
-        derivedIndex.hits = results ? results.hits : [];
+        derivedIndex.hits = Array.isArray(results.hits) ? results.hits : [];
 
         this.renderWithAllIndices();
       },
