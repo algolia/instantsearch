@@ -130,9 +130,12 @@ export default function connectAutocomplete(renderFn, unmountFn) {
       },
 
       renderWithAllIndices({ isFirstRendering = false } = {}) {
+        const currentRefinement = this.indices[0].helper.state.query;
+
         renderFn(
           {
             widgetParams,
+            currentRefinement,
             indices: this.indices,
             instantSearchInstance: this.instantSearchInstance,
             refine: this._refine,
