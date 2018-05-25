@@ -325,7 +325,7 @@ function clearRefinements({
 
   let finalState = helper.state;
 
-  forEach(attributesToClear, attribute => {
+  attributesToClear.forEach(attribute => {
     if (attribute === '_tags') {
       finalState = finalState.clearTags();
     } else {
