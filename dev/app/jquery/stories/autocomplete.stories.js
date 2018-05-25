@@ -116,6 +116,61 @@ const autocompleteAndSelect = instantsearch.connectors.connectAutocomplete(
   }
 );
 
+const multiIndex = instantsearch.connectors.connectAutocomplete(
+  (
+    { indices, currentRefinement, widgetParams: { containerNode } },
+    isFirstRendering
+  ) => {
+    if (isFirstRendering) {
+      containerNode.html(`
+          <div style="width: 100%">
+          <div
+            id="hits0"
+            style="width: 45%; margin-right: 5%; float: left;"
+          >
+          </div>
+
+          <div
+            id="hits1"
+            style="width: 50%; float: right"
+          >
+          </div>
+
+          <div style="clear: both;"></div>
+        </div>
+      `);
+    }
+
+    // display hits
+    indices.forEach(({ hits }, index) => {
+      const hitsHTML =
+        hits.length === 0
+          ? `No results for query ${currentRefinement}`
+          : hits.map(
+              hit => `
+            <div class="hit">
+              <div class="hit-picture">
+                <img src="${hit.image}" />
+              </div>
+
+              <div class="hit-content">
+                <div>
+                  <span>${hit._highlightResult.name.value}</span>
+                </div>
+
+                <div class="hit-type">
+                  ${hit._highlightResult.type.value}
+                </div>
+              </div>
+            </div>
+          `
+            );
+
+      containerNode.find(`#hits${index}`).html(hitsHTML);
+    });
+  }
+);
+
 export default () => {
   stories
     .add(
@@ -128,6 +183,17 @@ export default () => {
       'Autcomplete into hits',
       wrapWithHitsAndJquery(containerNode =>
         window.search.addWidget(autocompleteAndSelect({ containerNode }))
+      )
+    )
+    .add(
+      'Multi index',
+      wrapWithHitsAndJquery(containerNode =>
+        window.search.addWidget(
+          multiIndex({
+            containerNode,
+            indices: [{ label: 'ikea', value: 'ikea' }],
+          })
+        )
       )
     );
 };
