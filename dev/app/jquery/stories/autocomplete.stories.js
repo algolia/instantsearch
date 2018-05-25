@@ -145,7 +145,7 @@ const multiIndex = instantsearch.connectors.connectAutocomplete(
     indices.forEach(({ hits }, index) => {
       const hitsHTML =
         hits.length === 0
-          ? `No results for query ${currentRefinement}`
+          ? `No results for query <em>${currentRefinement}</em>`
           : hits.map(
               hit => `
             <div class="hit">
