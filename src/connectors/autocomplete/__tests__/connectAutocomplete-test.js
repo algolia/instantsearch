@@ -45,9 +45,11 @@ describe('connectAutocomplete', () => {
     helper.search = jest.fn();
 
     widget.init({ helper, instantSearchInstance: {} });
+    expect(renderFn).toHaveBeenCalledTimes(1);
 
     // original helper + derived one
-    expect(widget.indices).toHaveLength(2);
+    const renderOpts = renderFn.mock.calls[0][0];
+    expect(renderOpts.indices).toHaveLength(2);
   });
 
   it('set a query and trigger search on `refine`', () => {
