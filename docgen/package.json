@@ -60,7 +60,7 @@
     "react-tap-event-plugin": "3.0.2",
     "recursive-readdir": "2.2.2",
     "replace-in-file": "3.4.0",
-    "rheostat": "2.1.3",
+    "rheostat": "2.2.0",
     "stat-mode": "0.2.2",
     "style-loader": "0.21.0",
     "webpack": "3.12.0",
