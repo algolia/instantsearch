@@ -84,7 +84,7 @@ const customSearchClient = {
 
 We use the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) in this example to query the server; make sure to take note of the [browser compatibility](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API#Browser_compatibility) before using it in production.
 
-> If you want to transform the data to be passed to your server, you can learn more about all the parameters that the `search()` method supports in the Search Client Specification.
+> If you want to transform the data to be passed to your server, you can learn more about all the parameters that the `search()` method supports in the [Algolia API reference](https://www.algolia.com/doc/api-reference/api-parameters/?language=javascript#parameters-list).
 
 ### Searching for facet values
 
