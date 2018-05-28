@@ -1,3 +1,33 @@
+<a name="2.7.4"></a>
+## [2.7.4](https://github.com/algolia/instantsearch.js/compare/v2.7.3...v2.7.4) (2018-05-03)
+
+
+### Bug Fixes
+
+* **searchFunction:** Fix unresolved returned Promise ([#2913](https://github.com/algolia/instantsearch.js/issues/2913)) ([5286c7c](https://github.com/algolia/instantsearch.js/commit/5286c7c))
+
+
+
+<a name="2.7.3"></a>
+## [2.7.3](https://github.com/algolia/instantsearch.js/compare/v2.7.2...v2.7.3) (2018-04-26)
+
+
+### Bug Fixes
+
+* **index.es6:** avoid use of Object.assign for IE ([#2908](https://github.com/algolia/instantsearch.js/issues/2908)) ([228b02e](https://github.com/algolia/instantsearch.js/commit/228b02e))
+
+
+
+<a name="2.7.2"></a>
+## [2.7.2](https://github.com/algolia/instantsearch.js/compare/v2.7.1...v2.7.2) (2018-04-18)
+
+### Bug Fixes
+
+* **routing:** should apply stateMapping when doing initial write ([#2892](https://github.com/algolia/instantsearch.js/issues/2892)) ([7f62e6dc](https://github.com/algolia/instantsearch.js/commit/7f62e6dc))
+* **ie:** do not rely on Object.assign ([#2885](https://github.com/algolia/instantsearch.js/issues/2885)) ([88497e56](https://github.com/algolia/instantsearch.js/commit/88497e56))
+
+
+
 <a name="2.7.1"></a>
 ## [2.7.1](https://github.com/algolia/instantsearch.js/compare/v2.7.0...v2.7.1) (2018-04-11)
 

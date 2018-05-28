@@ -56,7 +56,7 @@ describe('clearAll()', () => {
     };
     widget.init({
       helper,
-      createURL: () => {},
+      createURL,
       instantSearchInstance: {
         templatesConfig: {},
       },

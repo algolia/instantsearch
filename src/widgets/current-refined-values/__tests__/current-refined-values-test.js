@@ -431,9 +431,11 @@ describe('currentRefinedValues()', () => {
         .toggleTag('tag1')
         .toggleTag('tag2');
 
+      const createURL = () => '#cleared';
+
       initParameters = {
         helper,
-        createURL: () => '',
+        createURL,
         instantSearchInstance: {
           templatesConfig: { randomAttributeNeverUsed: 'value' },
         },
@@ -500,7 +502,7 @@ describe('currentRefinedValues()', () => {
         helper,
         state: helper.state,
         templatesConfig: { randomAttributeNeverUsed: 'value' },
-        createURL: () => '#cleared',
+        createURL,
       };
 
       refinements = [

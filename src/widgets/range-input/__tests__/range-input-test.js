@@ -17,9 +17,8 @@ describe('rangeInput', () => {
   const createHelper = () =>
     new AlgoliasearchHelper(
       {
-        search() {},
-        addAlgoliaAgent() {
-          return {};
+        search() {
+          return Promise.resolve({ results: [{}] });
         },
       },
       'indexName',
