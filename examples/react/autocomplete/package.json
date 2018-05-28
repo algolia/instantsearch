@@ -20,7 +20,7 @@
     "react": "16.2.0",
     "react-autosuggest": "9.3.2",
     "react-dom": "16.2.0",
-    "react-instantsearch": "5.0.3"
+    "react-instantsearch": "5.1.0"
   },
   "jest": {
     "moduleNameMapper": {
