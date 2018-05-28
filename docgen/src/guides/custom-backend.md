@@ -54,7 +54,7 @@ app.post('/sffv', async (req, res) => {
 });
 ```
 
-Once your proxy server is ready, we get back to the frontend and are going to create a search client able to communicate with this server.
+Once your new route is ready, we get back to the frontend and are going to create a search client able to communicate with this server.
 
 ## On the frontend: call your new backend routes
 
@@ -163,7 +163,7 @@ You will now be able to access the property `downloadUrl` on each hit with Insta
 
 Throughout this guide, you’ve learned:
 
-- How to handle Algolia requests on a proxy server
+- How to handle Algolia requests coming from InstantSearch on your own backend
 - How to create a custom search client calling this server
 - How to plug the search client to InstantSearch
 
