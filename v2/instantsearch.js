@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.7.4 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.7.5 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -83,7 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.parseAroundLatLngFromString = exports.deprecate = exports.isReactElement = exports.checkRendering = exports.unescapeRefinement = exports.escapeRefinement = exports.prefixKeys = exports.clearRefinementsAndSearch = exports.clearRefinementsFromState = exports.getRefinements = exports.isDomElement = exports.isSpecialClick = exports.renderTemplate = exports.prepareTemplateProps = exports.bemHelper = exports.getContainerNode = undefined;
+exports.parseAroundLatLngFromString = exports.deprecate = exports.isReactElement = exports.checkRendering = exports.unescapeRefinement = exports.escapeRefinement = exports.prefixKeys = exports.clearRefinements = exports.getAttributesToClear = exports.getRefinements = exports.isDomElement = exports.isSpecialClick = exports.renderTemplate = exports.prepareTemplateProps = exports.bemHelper = exports.getContainerNode = undefined;
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -104,10 +104,6 @@ var _find2 = _interopRequireDefault(_find);
 var _get = __webpack_require__(61);
 
 var _get2 = _interopRequireDefault(_get);
-
-var _isEmpty = __webpack_require__(26);
-
-var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
 var _keys = __webpack_require__(14);
 
@@ -144,8 +140,8 @@ exports.renderTemplate = renderTemplate;
 exports.isSpecialClick = isSpecialClick;
 exports.isDomElement = isDomElement;
 exports.getRefinements = getRefinements;
-exports.clearRefinementsFromState = clearRefinementsFromState;
-exports.clearRefinementsAndSearch = clearRefinementsAndSearch;
+exports.getAttributesToClear = getAttributesToClear;
+exports.clearRefinements = clearRefinements;
 exports.prefixKeys = prefixKeys;
 exports.escapeRefinement = escapeRefinement;
 exports.unescapeRefinement = unescapeRefinement;
@@ -391,36 +387,70 @@ function getRefinements(results, state, clearsQuery) {
   return res;
 }
 
-function clearRefinementsFromState(inputState, attributeNames) {
-  var clearsQuery = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+/**
+ * Clears the refinements of a SearchParameters object based on rules provided.
+ * The white list is first used then the black list is applied. If no white list
+ * is provided, all the current refinements are used.
+ * @param {object} $0 parameters
+ * @param {Helper} $0.helper instance of the Helper
+ * @param {string[]} [$0.whiteList] list of parameters to clear
+ * @param {string[]} [$0.blackList=[]] list of parameters not to remove (will impact the white list)
+ * @param {boolean} [$0.clearsQuery=false] clears the query if need be
+ * @returns {SearchParameters} search parameters with refinements cleared
+ */
+function clearRefinements(_ref3) {
+  var helper = _ref3.helper,
+      whiteList = _ref3.whiteList,
+      _ref3$blackList = _ref3.blackList,
+      blackList = _ref3$blackList === undefined ? [] : _ref3$blackList,
+      _ref3$clearsQuery = _ref3.clearsQuery,
+      clearsQuery = _ref3$clearsQuery === undefined ? false : _ref3$clearsQuery;
 
-  var state = inputState;
+  var attributesToClear = getAttributesToClear({
+    helper: helper,
+    whiteList: whiteList,
+    blackList: blackList
+  });
 
-  if (clearsQuery) {
-    state = state.setQuery('');
-  }
+  var finalState = helper.state;
 
-  if ((0, _isEmpty2.default)(attributeNames)) {
-    state = state.clearTags();
-    state = state.clearRefinements();
-    return state;
-  }
-
-  (0, _forEach2.default)(attributeNames, function (attributeName) {
-    if (attributeName === '_tags') {
-      state = state.clearTags();
+  attributesToClear.forEach(function (attribute) {
+    if (attribute === '_tags') {
+      finalState = finalState.clearTags();
     } else {
-      state = state.clearRefinements(attributeName);
+      finalState = finalState.clearRefinements(attribute);
     }
   });
 
-  return state;
+  if (clearsQuery) {
+    finalState = finalState.setQuery('');
+  }
+
+  return finalState;
 }
 
-function clearRefinementsAndSearch(helper, attributeNames) {
-  var clearsQuery = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+/**
+ * Computes the list of attributes (conjunctive, disjunctive, hierarchical facet + numerical attributes)
+ * to clear based on a optional white and black lists. The white list is applied first then the black list.
+ * @param {object} $0 parameters
+ * @param {Helper} $0.helper instance of the Helper
+ * @param {string[]} [$0.whiteList] attributes to clear (defaults to all attributes)
+ * @param {string[]} [$0.blackList=[]] attributes to keep, will override the white list
+ * @returns {string[]} the list of attributes to clear based on the rules
+ */
+function getAttributesToClear(_ref4) {
+  var helper = _ref4.helper,
+      whiteList = _ref4.whiteList,
+      blackList = _ref4.blackList;
 
-  helper.setState(clearRefinementsFromState(helper.state, attributeNames, clearsQuery)).search();
+  var lastResults = helper.lastResults || {};
+  var attributesToClear = whiteList || getRefinements(lastResults, helper.state).map(function (one) {
+    return one.attributeName;
+  });
+
+  return attributesToClear.filter(function (attribute) {
+    return blackList.indexOf(attribute) === -1;
+  });
 }
 
 function prefixKeys(prefix, obj) {
@@ -1792,7 +1822,7 @@ module.exports = keys;
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28),
+var Symbol = __webpack_require__(27),
     getRawTag = __webpack_require__(224),
     objectToString = __webpack_require__(225);
 
@@ -2329,6 +2359,239 @@ module.exports = identity;
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var baseGetTag = __webpack_require__(15),
+    isArray = __webpack_require__(4),
+    isObjectLike = __webpack_require__(6);
+
+/** `Object#toString` result references. */
+var stringTag = '[object String]';
+
+/**
+ * Checks if `value` is classified as a `String` primitive or object.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a string, else `false`.
+ * @example
+ *
+ * _.isString('abc');
+ * // => true
+ *
+ * _.isString(1);
+ * // => false
+ */
+function isString(value) {
+  return typeof value == 'string' ||
+    (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
+}
+
+module.exports = isString;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var root = __webpack_require__(5);
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports) {
+
+/**
+ * Performs a
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * comparison between two values to determine if they are equivalent.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.eq(object, object);
+ * // => true
+ *
+ * _.eq(object, other);
+ * // => false
+ *
+ * _.eq('a', 'a');
+ * // => true
+ *
+ * _.eq('a', Object('a'));
+ * // => false
+ *
+ * _.eq(NaN, NaN);
+ * // => true
+ */
+function eq(value, other) {
+  return value === other || (value !== value && other !== other);
+}
+
+module.exports = eq;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArray = __webpack_require__(4),
+    isKey = __webpack_require__(96),
+    stringToPath = __webpack_require__(277),
+    toString = __webpack_require__(63);
+
+/**
+ * Casts `value` to a path array if it's not one.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @param {Object} [object] The object to query keys on.
+ * @returns {Array} Returns the cast property path array.
+ */
+function castPath(value, object) {
+  if (isArray(value)) {
+    return value;
+  }
+  return isKey(value, object) ? [value] : stringToPath(toString(value));
+}
+
+module.exports = castPath;
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isSymbol = __webpack_require__(48);
+
+/** Used as references for various `Number` constants. */
+var INFINITY = 1 / 0;
+
+/**
+ * Converts `value` to a string key if it's not a string or symbol.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @returns {string|symbol} Returns the key.
+ */
+function toKey(value) {
+  if (typeof value == 'string' || isSymbol(value)) {
+    return value;
+  }
+  var result = (value + '');
+  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
+}
+
+module.exports = toKey;
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var assignValue = __webpack_require__(98),
+    baseAssignValue = __webpack_require__(49);
+
+/**
+ * Copies properties of `source` to `object`.
+ *
+ * @private
+ * @param {Object} source The object to copy properties from.
+ * @param {Array} props The property identifiers to copy.
+ * @param {Object} [object={}] The object to copy properties to.
+ * @param {Function} [customizer] The function to customize copied values.
+ * @returns {Object} Returns `object`.
+ */
+function copyObject(source, props, object, customizer) {
+  var isNew = !object;
+  object || (object = {});
+
+  var index = -1,
+      length = props.length;
+
+  while (++index < length) {
+    var key = props[index];
+
+    var newValue = customizer
+      ? customizer(object[key], source[key], key, object, source)
+      : undefined;
+
+    if (newValue === undefined) {
+      newValue = source[key];
+    }
+    if (isNew) {
+      baseAssignValue(object, key, newValue);
+    } else {
+      assignValue(object, key, newValue);
+    }
+  }
+  return object;
+}
+
+module.exports = copyObject;
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toFinite = __webpack_require__(154);
+
+/**
+ * Converts `value` to an integer.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted integer.
+ * @example
+ *
+ * _.toInteger(3.2);
+ * // => 3
+ *
+ * _.toInteger(Number.MIN_VALUE);
+ * // => 0
+ *
+ * _.toInteger(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toInteger('3.2');
+ * // => 3
+ */
+function toInteger(value) {
+  var result = toFinite(value),
+      remainder = result % 1;
+
+  return result === result ? (remainder ? result - remainder : result) : 0;
+}
+
+module.exports = toInteger;
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var baseKeys = __webpack_require__(119),
     getTag = __webpack_require__(47),
     isArguments = __webpack_require__(38),
@@ -2406,239 +2669,6 @@ function isEmpty(value) {
 }
 
 module.exports = isEmpty;
-
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseGetTag = __webpack_require__(15),
-    isArray = __webpack_require__(4),
-    isObjectLike = __webpack_require__(6);
-
-/** `Object#toString` result references. */
-var stringTag = '[object String]';
-
-/**
- * Checks if `value` is classified as a `String` primitive or object.
- *
- * @static
- * @since 0.1.0
- * @memberOf _
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a string, else `false`.
- * @example
- *
- * _.isString('abc');
- * // => true
- *
- * _.isString(1);
- * // => false
- */
-function isString(value) {
-  return typeof value == 'string' ||
-    (!isArray(value) && isObjectLike(value) && baseGetTag(value) == stringTag);
-}
-
-module.exports = isString;
-
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var root = __webpack_require__(5);
-
-/** Built-in value references. */
-var Symbol = root.Symbol;
-
-module.exports = Symbol;
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports) {
-
-/**
- * Performs a
- * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
- * comparison between two values to determine if they are equivalent.
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to compare.
- * @param {*} other The other value to compare.
- * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
- * @example
- *
- * var object = { 'a': 1 };
- * var other = { 'a': 1 };
- *
- * _.eq(object, object);
- * // => true
- *
- * _.eq(object, other);
- * // => false
- *
- * _.eq('a', 'a');
- * // => true
- *
- * _.eq('a', Object('a'));
- * // => false
- *
- * _.eq(NaN, NaN);
- * // => true
- */
-function eq(value, other) {
-  return value === other || (value !== value && other !== other);
-}
-
-module.exports = eq;
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isArray = __webpack_require__(4),
-    isKey = __webpack_require__(96),
-    stringToPath = __webpack_require__(277),
-    toString = __webpack_require__(63);
-
-/**
- * Casts `value` to a path array if it's not one.
- *
- * @private
- * @param {*} value The value to inspect.
- * @param {Object} [object] The object to query keys on.
- * @returns {Array} Returns the cast property path array.
- */
-function castPath(value, object) {
-  if (isArray(value)) {
-    return value;
-  }
-  return isKey(value, object) ? [value] : stringToPath(toString(value));
-}
-
-module.exports = castPath;
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isSymbol = __webpack_require__(48);
-
-/** Used as references for various `Number` constants. */
-var INFINITY = 1 / 0;
-
-/**
- * Converts `value` to a string key if it's not a string or symbol.
- *
- * @private
- * @param {*} value The value to inspect.
- * @returns {string|symbol} Returns the key.
- */
-function toKey(value) {
-  if (typeof value == 'string' || isSymbol(value)) {
-    return value;
-  }
-  var result = (value + '');
-  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
-}
-
-module.exports = toKey;
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var assignValue = __webpack_require__(98),
-    baseAssignValue = __webpack_require__(49);
-
-/**
- * Copies properties of `source` to `object`.
- *
- * @private
- * @param {Object} source The object to copy properties from.
- * @param {Array} props The property identifiers to copy.
- * @param {Object} [object={}] The object to copy properties to.
- * @param {Function} [customizer] The function to customize copied values.
- * @returns {Object} Returns `object`.
- */
-function copyObject(source, props, object, customizer) {
-  var isNew = !object;
-  object || (object = {});
-
-  var index = -1,
-      length = props.length;
-
-  while (++index < length) {
-    var key = props[index];
-
-    var newValue = customizer
-      ? customizer(object[key], source[key], key, object, source)
-      : undefined;
-
-    if (newValue === undefined) {
-      newValue = source[key];
-    }
-    if (isNew) {
-      baseAssignValue(object, key, newValue);
-    } else {
-      assignValue(object, key, newValue);
-    }
-  }
-  return object;
-}
-
-module.exports = copyObject;
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var toFinite = __webpack_require__(154);
-
-/**
- * Converts `value` to an integer.
- *
- * **Note:** This method is loosely based on
- * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
- *
- * @static
- * @memberOf _
- * @since 4.0.0
- * @category Lang
- * @param {*} value The value to convert.
- * @returns {number} Returns the converted integer.
- * @example
- *
- * _.toInteger(3.2);
- * // => 3
- *
- * _.toInteger(Number.MIN_VALUE);
- * // => 0
- *
- * _.toInteger(Infinity);
- * // => 1.7976931348623157e+308
- *
- * _.toInteger('3.2');
- * // => 3
- */
-function toInteger(value) {
-  var result = toFinite(value),
-      remainder = result % 1;
-
-  return result === result ? (remainder ? result - remainder : result) : 0;
-}
-
-module.exports = toInteger;
 
 
 /***/ }),
@@ -3636,7 +3666,7 @@ module.exports = ListCache;
 /* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var eq = __webpack_require__(29);
+var eq = __webpack_require__(28);
 
 /**
  * Gets the index at which the `key` is found in `array` of key-value pairs.
@@ -3786,8 +3816,8 @@ module.exports = get;
 /* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var castPath = __webpack_require__(30),
-    toKey = __webpack_require__(31);
+var castPath = __webpack_require__(29),
+    toKey = __webpack_require__(30);
 
 /**
  * The base implementation of `_.get` without support for default values.
@@ -3913,7 +3943,7 @@ module.exports = baseCreate;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseIndexOf = __webpack_require__(43),
-    toInteger = __webpack_require__(33);
+    toInteger = __webpack_require__(32);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
@@ -3989,7 +4019,7 @@ module.exports = isUndefined;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseRest = __webpack_require__(22),
-    eq = __webpack_require__(29),
+    eq = __webpack_require__(28),
     isIterateeCall = __webpack_require__(69),
     keysIn = __webpack_require__(50);
 
@@ -4058,7 +4088,7 @@ module.exports = defaults;
 /* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var eq = __webpack_require__(29),
+var eq = __webpack_require__(28),
     isArrayLike = __webpack_require__(16),
     isIndex = __webpack_require__(41),
     isObject = __webpack_require__(7);
@@ -4103,7 +4133,7 @@ var baseSetData = __webpack_require__(163),
     mergeData = __webpack_require__(343),
     setData = __webpack_require__(171),
     setWrapToString = __webpack_require__(172),
-    toInteger = __webpack_require__(33);
+    toInteger = __webpack_require__(32);
 
 /** Error message constants. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -5126,10 +5156,10 @@ var reduce = __webpack_require__(19);
 var omit = __webpack_require__(143);
 var indexOf = __webpack_require__(66);
 var isNaN = __webpack_require__(306);
-var isEmpty = __webpack_require__(26);
+var isEmpty = __webpack_require__(33);
 var isEqual = __webpack_require__(8);
 var isUndefined = __webpack_require__(67);
-var isString = __webpack_require__(27);
+var isString = __webpack_require__(26);
 var isFunction = __webpack_require__(17);
 var find = __webpack_require__(9);
 var trim = __webpack_require__(157);
@@ -7328,7 +7358,7 @@ module.exports = isKey;
 /* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28),
+var Symbol = __webpack_require__(27),
     arrayMap = __webpack_require__(21),
     isArray = __webpack_require__(4),
     isSymbol = __webpack_require__(48);
@@ -7372,7 +7402,7 @@ module.exports = baseToString;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseAssignValue = __webpack_require__(49),
-    eq = __webpack_require__(29);
+    eq = __webpack_require__(28);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -7557,8 +7587,8 @@ module.exports = baseMerge;
 
 var baseIndexOf = __webpack_require__(43),
     isArrayLike = __webpack_require__(16),
-    isString = __webpack_require__(27),
-    toInteger = __webpack_require__(33),
+    isString = __webpack_require__(26),
+    toInteger = __webpack_require__(32),
     values = __webpack_require__(323);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -7992,9 +8022,9 @@ var pick = __webpack_require__(360);
 var map = __webpack_require__(11);
 var mapKeys = __webpack_require__(179);
 var mapValues = __webpack_require__(180);
-var isString = __webpack_require__(27);
+var isString = __webpack_require__(26);
 var isPlainObject = __webpack_require__(23);
-var isEmpty = __webpack_require__(26);
+var isEmpty = __webpack_require__(33);
 var invert = __webpack_require__(176);
 
 var encode = __webpack_require__(109).encode;
@@ -9711,12 +9741,12 @@ module.exports = hasIn;
 /* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var castPath = __webpack_require__(30),
+var castPath = __webpack_require__(29),
     isArguments = __webpack_require__(38),
     isArray = __webpack_require__(4),
     isIndex = __webpack_require__(41),
     isLength = __webpack_require__(81),
-    toKey = __webpack_require__(31);
+    toKey = __webpack_require__(30);
 
 /**
  * Checks if `path` exists on `object`.
@@ -9787,8 +9817,8 @@ module.exports = baseMap;
 var arrayMap = __webpack_require__(21),
     baseClone = __webpack_require__(144),
     baseUnset = __webpack_require__(301),
-    castPath = __webpack_require__(30),
-    copyObject = __webpack_require__(32),
+    castPath = __webpack_require__(29),
+    copyObject = __webpack_require__(31),
     customOmitClone = __webpack_require__(303),
     flatRest = __webpack_require__(151),
     getAllKeysIn = __webpack_require__(100);
@@ -10394,7 +10424,7 @@ module.exports = isNumber;
 
 var baseFindIndex = __webpack_require__(122),
     baseIteratee = __webpack_require__(10),
-    toInteger = __webpack_require__(33);
+    toInteger = __webpack_require__(32);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
@@ -10509,7 +10539,7 @@ module.exports = trim;
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseAssignValue = __webpack_require__(49),
-    eq = __webpack_require__(29);
+    eq = __webpack_require__(28);
 
 /**
  * This function is like `assignValue` except that it doesn't assign
@@ -11865,7 +11895,7 @@ module.exports = function formatSort(sortBy, defaults) {
 
 var baseGet = __webpack_require__(62),
     baseSet = __webpack_require__(349),
-    castPath = __webpack_require__(30);
+    castPath = __webpack_require__(29);
 
 /**
  * The base implementation of  `_.pickBy` without support for iteratee shorthands.
@@ -13697,7 +13727,7 @@ var BrowserHistory = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.7.4';
+exports.default = '2.7.5';
 
 /***/ }),
 /* 191 */
@@ -13714,18 +13744,6 @@ exports.default = connectClearAll;
 var _utils = __webpack_require__(0);
 
 var usage = 'Usage:\nvar customClearAll = connectClearAll(function render(params, isFirstRendering) {\n  // params = {\n  //   refine,\n  //   hasRefinements,\n  //   createURL,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customClearAll({\n    [ excludeAttributes = [] ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearAll.html\n';
-
-var refine = function refine(_ref) {
-  var helper = _ref.helper,
-      clearAttributes = _ref.clearAttributes,
-      hasRefinements = _ref.hasRefinements,
-      clearsQuery = _ref.clearsQuery;
-  return function () {
-    if (hasRefinements) {
-      (0, _utils.clearRefinementsAndSearch)(helper, clearAttributes, clearsQuery);
-    }
-  };
-};
 
 /**
  * @typedef {Object} CustomClearAllWidgetOptions
@@ -13795,74 +13813,57 @@ function connectClearAll(renderFn, unmountFn) {
 
 
     return {
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      _refine: function _refine() {},
-      _cachedRefine: function _cachedRefine() {
-        this._refine();
-      },
-      init: function init(_ref2) {
-        var helper = _ref2.helper,
-            instantSearchInstance = _ref2.instantSearchInstance,
-            createURL = _ref2.createURL;
+      init: function init(_ref) {
+        var helper = _ref.helper,
+            instantSearchInstance = _ref.instantSearchInstance,
+            createURL = _ref.createURL;
 
-        this._cachedRefine = this._cachedRefine.bind(this);
-
-        var clearAttributes = (0, _utils.getRefinements)({}, helper.state).map(function (one) {
-          return one.attributeName;
-        }).filter(function (one) {
-          return excludeAttributes.indexOf(one) === -1;
+        var attributesToClear = (0, _utils.getAttributesToClear)({
+          helper: helper,
+          blackList: excludeAttributes
         });
 
-        var hasRefinements = clearsQuery ? clearAttributes.length !== 0 || helper.state.query !== '' : clearAttributes.length !== 0;
-        var preparedCreateURL = function preparedCreateURL() {
-          return createURL((0, _utils.clearRefinementsFromState)(helper.state, [], clearsQuery));
+        var hasRefinements = clearsQuery ? attributesToClear.length !== 0 || helper.state.query !== '' : attributesToClear.length !== 0;
+
+        this._refine = function () {
+          helper.setState((0, _utils.clearRefinements)({
+            helper: helper,
+            blackList: excludeAttributes,
+            clearsQuery: clearsQuery
+          })).search();
         };
 
-        this._refine = refine({
-          helper: helper,
-          clearAttributes: clearAttributes,
-          hasRefinements: hasRefinements,
-          clearsQuery: clearsQuery
-        });
+        this._createURL = function () {
+          return createURL((0, _utils.clearRefinements)({
+            helper: helper,
+            blackList: excludeAttributes,
+            clearsQuery: clearsQuery
+          }));
+        };
 
         renderFn({
-          refine: this._cachedRefine,
+          refine: this._refine,
           hasRefinements: hasRefinements,
-          createURL: preparedCreateURL,
+          createURL: this._createURL,
           instantSearchInstance: instantSearchInstance,
           widgetParams: widgetParams
         }, true);
       },
-      render: function render(_ref3) {
-        var results = _ref3.results,
-            state = _ref3.state,
-            createURL = _ref3.createURL,
-            helper = _ref3.helper,
-            instantSearchInstance = _ref3.instantSearchInstance;
+      render: function render(_ref2) {
+        var helper = _ref2.helper,
+            instantSearchInstance = _ref2.instantSearchInstance;
 
-        var clearAttributes = (0, _utils.getRefinements)(results, state).map(function (one) {
-          return one.attributeName;
-        }).filter(function (one) {
-          return excludeAttributes.indexOf(one) === -1;
-        });
-
-        var hasRefinements = clearsQuery ? clearAttributes.length !== 0 || helper.state.query !== '' : clearAttributes.length !== 0;
-        var preparedCreateURL = function preparedCreateURL() {
-          return createURL((0, _utils.clearRefinementsFromState)(state, [], clearsQuery));
-        };
-
-        this._refine = refine({
+        var attributesToClear = (0, _utils.getAttributesToClear)({
           helper: helper,
-          clearAttributes: clearAttributes,
-          hasRefinements: hasRefinements,
-          clearsQuery: clearsQuery
+          blackList: excludeAttributes
         });
+
+        var hasRefinements = clearsQuery ? attributesToClear.length !== 0 || helper.state.query !== '' : attributesToClear.length !== 0;
 
         renderFn({
-          refine: this._cachedRefine,
+          refine: this._refine,
           hasRefinements: hasRefinements,
-          createURL: preparedCreateURL,
+          createURL: this._createURL,
           instantSearchInstance: instantSearchInstance,
           widgetParams: widgetParams
         }, false);
@@ -13894,7 +13895,7 @@ var _isBoolean = __webpack_require__(193);
 
 var _isBoolean2 = _interopRequireDefault(_isBoolean);
 
-var _isString = __webpack_require__(27);
+var _isString = __webpack_require__(26);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -13910,7 +13911,7 @@ var _isFunction = __webpack_require__(17);
 
 var _isFunction2 = _interopRequireDefault(_isFunction);
 
-var _isEmpty = __webpack_require__(26);
+var _isEmpty = __webpack_require__(33);
 
 var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
@@ -14067,7 +14068,7 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
     var attributeNames = (0, _map2.default)(attributes, function (attribute) {
       return attribute.name;
     });
-    var restrictedTo = onlyListedAttributes ? attributeNames : [];
+    var restrictedTo = onlyListedAttributes ? attributeNames : undefined;
 
     var attributesObj = (0, _reduce2.default)(attributes, function (res, attribute) {
       res[attribute.name] = attribute;
@@ -14080,9 +14081,17 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
             createURL = _ref.createURL,
             instantSearchInstance = _ref.instantSearchInstance;
 
-        this._clearRefinementsAndSearch = _utils.clearRefinementsAndSearch.bind(null, helper, restrictedTo, clearsQuery);
+        this._clearRefinementsAndSearch = function () {
+          helper.setState((0, _utils.clearRefinements)({
+            helper: helper,
+            whiteList: restrictedTo,
+            clearsQuery: clearsQuery
+          })).search();
+        };
 
-        var clearAllURL = createURL((0, _utils.clearRefinementsFromState)(helper.state, restrictedTo, clearsQuery));
+        this._createClearAllURL = function () {
+          return createURL((0, _utils.clearRefinements)({ helper: helper, whiteList: restrictedTo, clearsQuery: clearsQuery }));
+        };
 
         var refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes, clearsQuery);
 
@@ -14096,7 +14105,7 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
         renderFn({
           attributes: attributesObj,
           clearAllClick: this._clearRefinementsAndSearch,
-          clearAllURL: clearAllURL,
+          clearAllURL: this._createClearAllURL(),
           refine: _clearRefinement,
           createURL: _createURL,
           refinements: refinements,
@@ -14111,8 +14120,6 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
             createURL = _ref2.createURL,
             instantSearchInstance = _ref2.instantSearchInstance;
 
-        var clearAllURL = createURL((0, _utils.clearRefinementsFromState)(state, restrictedTo, clearsQuery));
-
         var refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes, clearsQuery);
 
         var _createURL = function _createURL(refinement) {
@@ -14125,7 +14132,7 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
         renderFn({
           attributes: attributesObj,
           clearAllClick: this._clearRefinementsAndSearch,
-          clearAllURL: clearAllURL,
+          clearAllURL: this._createClearAllURL(),
           refine: _clearRefinement,
           createURL: _createURL,
           refinements: refinements,
@@ -14903,6 +14910,8 @@ function connectInfiniteHits(renderFn, unmountFn) {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
     var hitsCache = [];
+    var lastReceivedPage = -1;
+
     var getShowMore = function getShowMore(helper) {
       return function () {
         return helper.nextPage().search();
@@ -14935,13 +14944,17 @@ function connectInfiniteHits(renderFn, unmountFn) {
 
         if (state.page === 0) {
           hitsCache = [];
+          lastReceivedPage = -1;
         }
 
         if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
           results.hits = (0, _escapeHighlight2.default)(results.hits);
         }
 
-        hitsCache = [].concat(_toConsumableArray(hitsCache), _toConsumableArray(results.hits));
+        if (lastReceivedPage < state.page) {
+          hitsCache = [].concat(_toConsumableArray(hitsCache), _toConsumableArray(results.hits));
+          lastReceivedPage = state.page;
+        }
 
         var isLastPage = results.nbPages <= results.page + 1;
 
@@ -18617,7 +18630,7 @@ var events = __webpack_require__(107);
 
 var flatten = __webpack_require__(152);
 var forEach = __webpack_require__(18);
-var isEmpty = __webpack_require__(26);
+var isEmpty = __webpack_require__(33);
 var map = __webpack_require__(11);
 
 var url = __webpack_require__(108);
@@ -20048,7 +20061,7 @@ module.exports = baseIsArguments;
 /* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28);
+var Symbol = __webpack_require__(27);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -21503,9 +21516,9 @@ module.exports = baseIsEqualDeep;
 /* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28),
+var Symbol = __webpack_require__(27),
     Uint8Array = __webpack_require__(132),
-    eq = __webpack_require__(29),
+    eq = __webpack_require__(28),
     equalArrays = __webpack_require__(130),
     mapToArray = __webpack_require__(271),
     setToArray = __webpack_require__(93);
@@ -21802,7 +21815,7 @@ var baseIsEqual = __webpack_require__(92),
     isKey = __webpack_require__(96),
     isStrictComparable = __webpack_require__(138),
     matchesStrictComparable = __webpack_require__(139),
-    toKey = __webpack_require__(31);
+    toKey = __webpack_require__(30);
 
 /** Used to compose bitmasks for value comparisons. */
 var COMPARE_PARTIAL_FLAG = 1,
@@ -22001,7 +22014,7 @@ module.exports = baseHasIn;
 var baseProperty = __webpack_require__(282),
     basePropertyDeep = __webpack_require__(283),
     isKey = __webpack_require__(96),
-    toKey = __webpack_require__(31);
+    toKey = __webpack_require__(30);
 
 /**
  * Creates a function that returns the value at `path` of a given object.
@@ -22139,7 +22152,7 @@ module.exports = baseReduce;
 /* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var copyObject = __webpack_require__(32),
+var copyObject = __webpack_require__(31),
     keys = __webpack_require__(14);
 
 /**
@@ -22162,7 +22175,7 @@ module.exports = baseAssign;
 /* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var copyObject = __webpack_require__(32),
+var copyObject = __webpack_require__(31),
     keysIn = __webpack_require__(50);
 
 /**
@@ -22250,7 +22263,7 @@ module.exports = nativeKeysIn;
 /* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var copyObject = __webpack_require__(32),
+var copyObject = __webpack_require__(31),
     getSymbols = __webpack_require__(95);
 
 /**
@@ -22272,7 +22285,7 @@ module.exports = copySymbols;
 /* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var copyObject = __webpack_require__(32),
+var copyObject = __webpack_require__(31),
     getSymbolsIn = __webpack_require__(146);
 
 /**
@@ -22454,7 +22467,7 @@ module.exports = cloneRegExp;
 /* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28);
+var Symbol = __webpack_require__(27);
 
 /** Used to convert symbols to primitives and strings. */
 var symbolProto = Symbol ? Symbol.prototype : undefined,
@@ -22592,10 +22605,10 @@ module.exports = baseIsSet;
 /* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var castPath = __webpack_require__(30),
+var castPath = __webpack_require__(29),
     last = __webpack_require__(149),
     parent = __webpack_require__(302),
-    toKey = __webpack_require__(31);
+    toKey = __webpack_require__(30);
 
 /**
  * The base implementation of `_.unset`.
@@ -22662,7 +22675,7 @@ module.exports = customOmitClone;
 /* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(28),
+var Symbol = __webpack_require__(27),
     isArguments = __webpack_require__(38),
     isArray = __webpack_require__(4);
 
@@ -23130,7 +23143,7 @@ module.exports = baseMergeDeep;
 /* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var copyObject = __webpack_require__(32),
+var copyObject = __webpack_require__(31),
     keysIn = __webpack_require__(50);
 
 /**
@@ -23173,7 +23186,7 @@ module.exports = toPlainObject;
 
 var map = __webpack_require__(11);
 var isNumber = __webpack_require__(155);
-var isString = __webpack_require__(27);
+var isString = __webpack_require__(26);
 function valToNumber(v) {
   if (isNumber(v)) {
     return v;
@@ -23199,7 +23212,7 @@ module.exports = valToNumber;
 var forEach = __webpack_require__(18);
 var filter = __webpack_require__(46);
 var map = __webpack_require__(11);
-var isEmpty = __webpack_require__(26);
+var isEmpty = __webpack_require__(33);
 var indexOf = __webpack_require__(66);
 
 function filterState(state, filters) {
@@ -23283,9 +23296,9 @@ module.exports = filterState;
  */
 
 var isUndefined = __webpack_require__(67);
-var isString = __webpack_require__(27);
+var isString = __webpack_require__(26);
 var isFunction = __webpack_require__(17);
-var isEmpty = __webpack_require__(26);
+var isEmpty = __webpack_require__(33);
 var defaults = __webpack_require__(68);
 
 var reduce = __webpack_require__(19);
@@ -24532,7 +24545,7 @@ module.exports = partialRight;
 
 var baseClamp = __webpack_require__(346),
     baseToString = __webpack_require__(97),
-    toInteger = __webpack_require__(33),
+    toInteger = __webpack_require__(32),
     toString = __webpack_require__(63);
 
 /**
@@ -24779,10 +24792,10 @@ module.exports = pickBy;
 /***/ (function(module, exports, __webpack_require__) {
 
 var assignValue = __webpack_require__(98),
-    castPath = __webpack_require__(30),
+    castPath = __webpack_require__(29),
     isIndex = __webpack_require__(41),
     isObject = __webpack_require__(7),
-    toKey = __webpack_require__(31);
+    toKey = __webpack_require__(30);
 
 /**
  * The base implementation of `_.set`.
@@ -33596,7 +33609,7 @@ var _isBoolean = __webpack_require__(193);
 
 var _isBoolean2 = _interopRequireDefault(_isBoolean);
 
-var _isString = __webpack_require__(27);
+var _isString = __webpack_require__(26);
 
 var _isString2 = _interopRequireDefault(_isString);
 
@@ -34212,6 +34225,8 @@ var usage = 'Usage:\n\ngeoSearch({\n  container,\n  googleReference,\n  [ initia
  * Currently, the feature is not compatible with multiple values in the _geoloc attribute.
  *
  * You are also responsible for loading the Google Maps library, it's not shipped with InstantSearch. You need to load the Google Maps library and pass a reference to the widget. You can find more information about how to install the library in [the Google Maps documentation](https://developers.google.com/maps/documentation/javascript/tutorial).
+ *
+ * Don't forget to explicitly set the `height` of the map container (default class `.ais-geo-search--map`), otherwise it won't be shown (it's a requirement of Google Maps).
  *
  * @type {WidgetFactory}
  * @devNovel GeoSearch
@@ -39686,7 +39701,7 @@ exports.default = (0, _autoHideContainer2.default)((0, _headerFooter2.default)(R
 
 var baseTimes = __webpack_require__(117),
     castFunction = __webpack_require__(90),
-    toInteger = __webpack_require__(33);
+    toInteger = __webpack_require__(32);
 
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
