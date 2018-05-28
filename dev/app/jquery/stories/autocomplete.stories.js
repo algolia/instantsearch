@@ -122,7 +122,7 @@ const multiIndex = instantsearch.connectors.connectAutocomplete(
     isFirstRendering
   ) => {
     if (isFirstRendering) {
-      containerNode.html(`
+      containerNode.append(`
           <div style="width: 100%">
           <div
             id="hits0"
@@ -187,13 +187,22 @@ export default () => {
     )
     .add(
       'Multi index',
-      wrapWithHitsAndJquery(containerNode =>
+      wrapWithHitsAndJquery(containerNode => {
+        containerNode.append('<div id="multi-index-search-box"></div>');
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container: '#multi-index-search-box',
+            placeholder: 'Search into the two indices',
+            poweredBy: false,
+            autofocus: false,
+          })
+        );
         window.search.addWidget(
           multiIndex({
             containerNode,
             indices: [{ label: 'ikea', value: 'ikea' }],
           })
-        )
-      )
+        );
+      })
     );
 };
