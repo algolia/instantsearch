@@ -348,7 +348,7 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
       </main>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <RaisedButton
-          onTouchTap={() => {
+          onClick={() => {
             if (hasMore) {
               refine();
             }
