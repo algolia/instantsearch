@@ -125,7 +125,7 @@ function HitsMap({ hits, onLatLngChange }) {
   }
 
   const availableSpace = {
-    width: document.body.getBoundingClientRect().width * 5 / 12,
+    width: (document.body.getBoundingClientRect().width * 5) / 12,
     height: 400,
   };
 

@@ -14,42 +14,34 @@ function move() {
 
       const value = window.scrollY;
 
-      if (value <= threesold * factor / 2) {
+      if (value <= (threesold * factor) / 2) {
         if (axis === '-y') {
           // eslint-disable-next-line no-unused-expressions
           xtraTransform
-            ? (item.style.cssText = `transform: translateY(-${value /
-                factor *
+            ? (item.style.cssText = `transform: translateY(-${(value / factor) *
                 (threesold / factor)}px) ${xtraTransform}`)
-            : (item.style.cssText = `transform: translateY(-${value /
-                factor *
+            : (item.style.cssText = `transform: translateY(-${(value / factor) *
                 (threesold / factor)}px)`);
         } else if (axis === '-x') {
           // eslint-disable-next-line no-unused-expressions
           xtraTransform
-            ? (item.style.cssText = `transform: translateX(-${value /
-                factor *
+            ? (item.style.cssText = `transform: translateX(-${(value / factor) *
                 (threesold / factor)}px) ${xtraTransform}`)
-            : (item.style.cssText = `transform: translateX(-${value /
-                factor *
+            : (item.style.cssText = `transform: translateX(-${(value / factor) *
                 (threesold / factor)}px)`);
         } else if (axis === '+y') {
           // eslint-disable-next-line no-unused-expressions
           xtraTransform
-            ? (item.style.cssText = `transform: translateY(${value /
-                factor *
+            ? (item.style.cssText = `transform: translateY(${(value / factor) *
                 (threesold / factor)}px) ${xtraTransform}`)
-            : (item.style.cssText = `transform: translateY(${value /
-                factor *
+            : (item.style.cssText = `transform: translateY(${(value / factor) *
                 (threesold / factor)}px)`);
         } else if (axis === '+x') {
           // eslint-disable-next-line no-unused-expressions
           xtraTransform
-            ? (item.style.cssText = `transform: translateX(${value /
-                factor *
+            ? (item.style.cssText = `transform: translateX(${(value / factor) *
                 (threesold / factor)}px) ${xtraTransform}`)
-            : (item.style.cssText = `transform: translateX(${value /
-                factor *
+            : (item.style.cssText = `transform: translateX(${(value / factor) *
                 (threesold / factor)}px)`);
         }
       }
