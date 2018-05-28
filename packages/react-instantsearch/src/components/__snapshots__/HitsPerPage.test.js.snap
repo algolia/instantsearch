@@ -11,14 +11,12 @@ exports[`HitsPerPage renders 1`] = `
   >
     <option
       className="ais-HitsPerPage-option"
-      disabled={undefined}
       value={5}
     >
       show 5 hits
     </option>
     <option
       className="ais-HitsPerPage-option"
-      disabled={undefined}
       value={10}
     >
       show 10 hits
@@ -38,14 +36,12 @@ exports[`HitsPerPage renders with a custom className 1`] = `
   >
     <option
       className="ais-HitsPerPage-option"
-      disabled={undefined}
       value={5}
     >
       show 5 hits
     </option>
     <option
       className="ais-HitsPerPage-option"
-      disabled={undefined}
       value={10}
     >
       show 10 hits
