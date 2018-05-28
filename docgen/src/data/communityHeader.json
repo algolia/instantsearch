@@ -94,7 +94,7 @@
       },
       {
         "name": "Use your own backend",
-        "url": "guides/proxy-backend.html"
+        "url": "guides/custom-backend.html"
       }
     ]
   },
@@ -150,7 +150,7 @@
   },
   {
     "name": "Use your own backend",
-    "url": "guides/proxy-backend.html"
+    "url": "guides/custom-backend.html"
   },
   {
     "name": "instantsearch()",

@@ -6,7 +6,7 @@ category: guides
 withHeadings: true
 navWeight: 21
 editable: true
-githubSource: docgen/src/guides/proxy-backend.md
+githubSource: docgen/src/guides/custom-backend.md
 ---
 
 > This guide is compatible with InstantSearch.js ≥ 2.8.0.
