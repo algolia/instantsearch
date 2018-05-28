@@ -1,3 +1,19 @@
+<a name="5.1.0"></a>
+# [5.1.0](https://github.com/algolia/react-instantsearch/compare/v5.0.3...v5.1.0) (2018-05-28)
+
+
+### Bug Fixes
+
+* **connectInfiniteHits:** always set a value for previous page ([#1195](https://github.com/algolia/react-instantsearch/issues/1195)) ([4c218d5](https://github.com/algolia/react-instantsearch/commit/4c218d5))
+* **indexUtils:** avoid throw an error on cleanUp multi indices ([#1265](https://github.com/algolia/react-instantsearch/issues/1265)) ([12f5ace](https://github.com/algolia/react-instantsearch/commit/12f5ace))
+
+
+### Features
+
+* **searchClient:** Add support for custom Search Clients ([#1216](https://github.com/algolia/react-instantsearch/issues/1216)) ([174cc28](https://github.com/algolia/react-instantsearch/commit/174cc28))
+
+
+
 <a name="5.0.3"></a>
 ## [5.0.3](https://github.com/algolia/react-instantsearch/compare/v5.0.2...v5.0.3) (2018-04-03)
 
