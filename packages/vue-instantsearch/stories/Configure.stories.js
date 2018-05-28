@@ -11,7 +11,7 @@ storiesOf('Configure', module)
       <ais-configure :hitsPerPage="1"></ais-configure>
     </div>`,
   }))
-  .add('toggler', () => ({
+  .add('external toggler', () => ({
     template: `<div>
       <ais-configure :hitsPerPage="hitsPerPage"></ais-configure>
       <button @click="toggleHitsPerPage">hitsPerPage: {{hitsPerPage}}, change</button>
@@ -24,4 +24,15 @@ storiesOf('Configure', module)
         this.hitsPerPage = this.hitsPerPage === 1 ? 5 : 1;
       },
     },
+  }))
+  .add('inline toggler', () => ({
+    template: `
+      <ais-configure :hitsPerPage="1">
+        <template slot-scope="{ searchParameters, refine }">
+          <pre>{{JSON.stringify(searchParameters, null, 2)}}</pre>
+          <button @click="refine({hitsPerPage: searchParameters.hitsPerPage === 1 ? 5 : 1})">
+            hitsPerPage: {{searchParameters.hitsPerPage}}, change
+          </button>
+        </template>
+      </ais-configure>`,
   }));

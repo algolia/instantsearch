@@ -37,12 +37,13 @@ Disable query rules:
 
 ## Props
 
-Any prop given to this widget will be applied as a [search parameter](https://www.algolia.com/doc/api-reference/search-api-parameters/)
-
-## Slots
-
-None
+Any prop given to this widget will be applied as a [search parameter](https://www.algolia.com/doc/api-reference/search-api-parameters/).
 
 ## CSS Classes
 
-None
+Here's a list of CSS classes exposed by this widget. To better understand the underlying
+DOM structure, have a look at the generated DOM in your browser.
+
+Class name | Description
+---|---
+`ais-Configure` | The container of the Configure widget

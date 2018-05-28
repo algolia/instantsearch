@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <slot v-bind="state">
+  <div :class="suit('')" v-if="state">
+    <slot :searchParameters="state.widgetParams.searchParameters" :refine="state.refine">
     </slot>
   </div>
 </template>
@@ -13,6 +13,9 @@ export default {
   mixins: [algoliaComponent],
   beforeCreate() {
     this.connector = connectConfigure;
+  },
+  data() {
+    return { widgetName: 'Configure' };
   },
   computed: {
     widgetParams() {
