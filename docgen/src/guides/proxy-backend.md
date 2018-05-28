@@ -123,7 +123,7 @@ Now, we need to tell InstantSearch to use the search client that we’ve created
 
 ```javascript
 const search = instantsearch({
-  indexName: 'indexName',
+  indexName: 'YOUR_INDEX_NAME',
   searchClient: customSearchClient
 });
 
