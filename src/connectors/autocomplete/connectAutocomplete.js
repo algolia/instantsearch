@@ -20,7 +20,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} Index
  * @property {string} index Name of the index.
  * @property {string} label Label of the index (for display purpose).
- * @property {Object} helper The helper instance used to search into this index.
  * @property {Object[]} hits The hits resolved from the index matching the query.
  * @property {Object} results The full results object from Algolia API.
  */
@@ -139,7 +138,13 @@ export default function connectAutocomplete(renderFn, unmountFn) {
           {
             widgetParams,
             currentRefinement,
-            indices: this.indices,
+            // we do not want to provide the `helper` to the end-user
+            indices: this.indices.map(({ index, label, hits, results }) => ({
+              index,
+              label,
+              hits,
+              results,
+            })),
             instantSearchInstance: this.instantSearchInstance,
             refine: this._refine,
           },
