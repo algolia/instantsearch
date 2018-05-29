@@ -1,3 +1,14 @@
+<a name="2.7.5"></a>
+## [2.7.5](https://github.com/algolia/instantsearch.js/compare/v2.7.4...v2.7.5) (2018-05-28)
+
+
+### Bug Fixes
+
+* **clear-all:** apply excludeAttribute correctly with clearsQuery ([#2935](https://github.com/algolia/instantsearch.js/issues/2935)) ([e782ab8](https://github.com/algolia/instantsearch.js/commit/e782ab8))
+* **connectInfiniteHits:** fix [#2928](https://github.com/algolia/instantsearch.js/issues/2928)  ([#2939](https://github.com/algolia/instantsearch.js/issues/2939)) ([0293a31](https://github.com/algolia/instantsearch.js/commit/0293a31))
+
+
+
 <a name="2.7.4"></a>
 ## [2.7.4](https://github.com/algolia/instantsearch.js/compare/v2.7.3...v2.7.4) (2018-05-03)
 

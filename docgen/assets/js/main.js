@@ -59,3 +59,11 @@ toggleDocumentationSidebar();
 window.addEventListener('resize', () => {
   toggleDocumentationSidebar();
 });
+
+const openIssueLink = document.querySelector('#link-open-issue');
+if (openIssueLink) {
+  openIssueLink.href = openIssueLink.href.replace(
+    /__LOCATION__/g,
+    window.location.href
+  );
+}
