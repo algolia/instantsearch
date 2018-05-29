@@ -124,6 +124,14 @@ export default function infiniteHits({
     throw new Error(`Must provide a container.${usage}`);
   }
 
+  // We have this specific check because unlike the hits, infiniteHits does not support this template.
+  // This can be misleading as they are very similar.
+  if (templates.allItems !== undefined) {
+    throw new Error(
+      'allItems is not a valid template for the infiniteHits widget'
+    );
+  }
+
   const containerNode = getContainerNode(container);
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
