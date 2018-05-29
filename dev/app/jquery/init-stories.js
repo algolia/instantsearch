@@ -15,6 +15,7 @@ import initSortBySelectorStories from './stories/sort-by-selector.stories';
 import initStarRatingStories from './stories/star-rating.stories';
 import initStatsStories from './stories/stats.stories';
 import initToggleStories from './stories/toggle.stories';
+import initAutcompleteStories from './stories/autocomplete.stories';
 
 export default () => {
   initClearAllStories();
@@ -34,4 +35,5 @@ export default () => {
   initStarRatingStories();
   initStatsStories();
   initToggleStories();
+  initAutcompleteStories();
 };
