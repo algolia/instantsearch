@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.7.5 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.7.6 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -13727,7 +13727,7 @@ var BrowserHistory = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.7.5';
+exports.default = '2.7.6';
 
 /***/ }),
 /* 191 */
@@ -18013,6 +18013,9 @@ exports.default = connectGeoSearch;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.default = connectConfigure;
 
 var _isFunction = __webpack_require__(17);
@@ -18083,7 +18086,7 @@ function connectConfigure(renderFn, unmountFn) {
         return function (searchParameters) {
           // merge new `searchParameters` with the ones set from other widgets
           var actualState = _this.removeSearchParameters(helper.getState());
-          var nextSearchParameters = (0, _InstantSearch.enhanceConfiguration)({})(actualState, {
+          var nextSearchParameters = (0, _InstantSearch.enhanceConfiguration)({})(_extends({}, actualState), {
             getConfiguration: function getConfiguration() {
               return searchParameters;
             }
@@ -36009,6 +36012,12 @@ function infiniteHits() {
 
   if (!container) {
     throw new Error('Must provide a container.' + usage);
+  }
+
+  // We have this specific check because unlike the hits, infiniteHits does not support this template.
+  // This can be misleading as they are very similar.
+  if (templates.allItems !== undefined) {
+    throw new Error('allItems is not a valid template for the infiniteHits widget');
   }
 
   var containerNode = (0, _utils.getContainerNode)(container);
