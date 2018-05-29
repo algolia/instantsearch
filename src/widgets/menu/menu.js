@@ -132,7 +132,6 @@ menu({
  * @property {MenuTemplates} [templates] Customize the output through templating.
  * @property {number} [limit=10] How many facets values to retrieve.
  * @property {boolean|MenuShowMoreOptions} [showMore=false] Limit the number of results and display a showMore button.
- * @property {MenuShowMoreTemplates} [templates] Templates to use for the widget.
  * @property {MenuTransforms} [transformData] Set of functions to update the data before passing them to the templates.
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu.
  * @property {MenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
