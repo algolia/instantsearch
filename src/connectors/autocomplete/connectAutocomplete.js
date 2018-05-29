@@ -22,12 +22,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string} label Label of the index (for display purpose).
  * @property {Object} helper The helper instance used to search into this index.
  * @property {Object[]} hits The hits resolved from the index matching the query.
- * @property {Object} resuls The full results object from Algolia API.
+ * @property {Object} results The full results object from Algolia API.
  */
 
 /**
  * @typedef {Object} AutocompleteRenderingOptions
- * @property {Index[]} indices The indices with their hits and results.
+ * @property {Index[]} indices The indices you provided with their hits and results and the main index as first position.
  * @property {function(string)} refine Search into the indices with the query provided.
  * @property {string} currentRefinement The actual value of the query.
  * @property {Object} widgetParams All original widget options forwarded to the `renderFn`.
