@@ -3,7 +3,7 @@ title: Hits
 type: widget
 html: |
   <div class="ais-Hits">
-    <ul class="ais-Hits-list">
+    <ol class="ais-Hits-list">
       <li class="ais-Hits-item">
         Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
       </li>
@@ -28,7 +28,7 @@ html: |
       <li class="ais-Hits-item">
         Hit 4397400: Google - Chromecast - Black
       </li>
-    </ul>
+    </ol>
   </div>
 classes:
   - name: .ais-Hits
