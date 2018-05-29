@@ -101,7 +101,7 @@ menu({
 /**
  * @typedef {Object} MenuTemplates
  * @property {string|function} [header] Header template.
- * @property {string|function(name: string, count: number, isRefined: boolean)} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
+ * @property {string|function({count: number, cssClasses: object, isRefined: boolean, label: string, url: string, value: string}):string} [item] Item template. The string template gets the same values as the function.
  * @property {string|function} [footer] Footer template.
  */
 
