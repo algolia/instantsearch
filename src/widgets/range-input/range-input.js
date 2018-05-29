@@ -138,7 +138,7 @@ rangeInput({
  *     attributeName: 'price',
  *     labels: {
  *       separator: 'to',
- *       button: 'Go'
+ *       submit: 'Go'
  *     },
  *     templates: {
  *       header: 'Price'
