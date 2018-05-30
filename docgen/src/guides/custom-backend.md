@@ -136,7 +136,7 @@ That’s it! InstantSearch is now requesting your own backend and will display t
 
 Now that you’ve got InstantSearch querying your own backend before fetching results from Algolia, you could merge Algolia’s data to yours to offer your users more exhaustive results.
 
-Let’s say you want to add a download URL to each hit on your server to pass it to your frontend. You need to make a few changes to your backend:
+Let’s say you want to fetch users' data for each hit on your server to pass it to your frontend. You need to make a few changes to your backend:
 
 ```javascript
 app.post('/search', async (req, res) => {
@@ -146,9 +146,10 @@ app.post('/search', async (req, res) => {
     ...algoliaResults,
     results: algoliaResults.results.map(result => ({
       ...result,
-      hits: result.hits.map(hit => ({
+      hits: result.hits.map(async hit => ({
         ...hit,
-        downloadUrl: `https://my-website.com/files/${hit.objectID}.zip`,
+        // `getUser()` retrieves a user's data from your own database
+        user: await getUser(hit.userID),
       })),
     })),
   };
@@ -157,7 +158,7 @@ app.post('/search', async (req, res) => {
 });
 ```
 
-You will now be able to access the property `downloadUrl` on each hit with InstantSearch on the frontend.
+You will now be able to access the property `user` on each hit with InstantSearch on the frontend.
 
 ## Conclusion
 
