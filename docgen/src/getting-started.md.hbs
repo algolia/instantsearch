@@ -89,7 +89,7 @@ const search = instantsearch({
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
-  urlSync: true
+  routing: true
 });
 
 search.start();
@@ -102,7 +102,7 @@ You can synchronise the current search with the browser url. It provides two ben
   * Working back/next browser buttons
   * Copy and share the current search url
 
-To configure this feature, pass `urlSync: true` option to `instantsearch()`. The `urlSync` option has more parameters ([see InstantSearch.js API documentation](instantsearch.html)).
+To configure this feature, pass `routing: true` option to `instantsearch()`. The `routing` option has [more parameters](v2/instantsearch.html#struct-RoutingOptions).
 
 Congrats 🎉 ! Your website is now connected to Algolia.
 
@@ -245,7 +245,7 @@ Since the dataset used here is an e-commerce one, let’s add a [RefinementList]
   search.addWidget(
     instantsearch.widgets.refinementList({
       container: '#refinement-list',
-      attributeName: 'category'
+      attributeName: 'categories'
     })
   );
 

@@ -123,3 +123,23 @@
 .my-custom-info-box__text {
   text-align: center;
 }
+
+.story-selector {
+  padding-left: 5px;
+  background: #333;
+}
+
+.tab {
+  height: 30px;
+  display: inline-block;
+  padding: 5px;
+  margin: 5px 2px 0 2px;
+  background: #d6d6d6;
+  color: #777;
+  text-decoration: none;
+}
+
+.tab.active {
+  background: #f7f7f7;
+  color: black;
+}

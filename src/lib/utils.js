@@ -2,7 +2,6 @@ import reduce from 'lodash/reduce';
 import forEach from 'lodash/forEach';
 import find from 'lodash/find';
 import get from 'lodash/get';
-import isEmpty from 'lodash/isEmpty';
 import keys from 'lodash/keys';
 import uniq from 'lodash/uniq';
 import mapKeys from 'lodash/mapKeys';
@@ -18,8 +17,8 @@ export {
   isSpecialClick,
   isDomElement,
   getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
+  getAttributesToClear,
+  clearRefinements,
   prefixKeys,
   escapeRefinement,
   unescapeRefinement,
@@ -301,44 +300,64 @@ function getRefinements(results, state, clearsQuery) {
   return res;
 }
 
-function clearRefinementsFromState(
-  inputState,
-  attributeNames,
-  clearsQuery = false
-) {
-  let state = inputState;
+/**
+ * Clears the refinements of a SearchParameters object based on rules provided.
+ * The white list is first used then the black list is applied. If no white list
+ * is provided, all the current refinements are used.
+ * @param {object} $0 parameters
+ * @param {Helper} $0.helper instance of the Helper
+ * @param {string[]} [$0.whiteList] list of parameters to clear
+ * @param {string[]} [$0.blackList=[]] list of parameters not to remove (will impact the white list)
+ * @param {boolean} [$0.clearsQuery=false] clears the query if need be
+ * @returns {SearchParameters} search parameters with refinements cleared
+ */
+function clearRefinements({
+  helper,
+  whiteList,
+  blackList = [],
+  clearsQuery = false,
+}) {
+  const attributesToClear = getAttributesToClear({
+    helper,
+    whiteList,
+    blackList,
+  });
 
-  if (clearsQuery) {
-    state = state.setQuery('');
-  }
+  let finalState = helper.state;
 
-  if (isEmpty(attributeNames)) {
-    state = state.clearTags();
-    state = state.clearRefinements();
-    return state;
-  }
-
-  forEach(attributeNames, attributeName => {
-    if (attributeName === '_tags') {
-      state = state.clearTags();
+  attributesToClear.forEach(attribute => {
+    if (attribute === '_tags') {
+      finalState = finalState.clearTags();
     } else {
-      state = state.clearRefinements(attributeName);
+      finalState = finalState.clearRefinements(attribute);
     }
   });
 
-  return state;
+  if (clearsQuery) {
+    finalState = finalState.setQuery('');
+  }
+
+  return finalState;
 }
 
-function clearRefinementsAndSearch(
-  helper,
-  attributeNames,
-  clearsQuery = false
-) {
-  helper
-    .setState(
-      clearRefinementsFromState(helper.state, attributeNames, clearsQuery)
-    )
-    .search();
+/**
+ * Computes the list of attributes (conjunctive, disjunctive, hierarchical facet + numerical attributes)
+ * to clear based on a optional white and black lists. The white list is applied first then the black list.
+ * @param {object} $0 parameters
+ * @param {Helper} $0.helper instance of the Helper
+ * @param {string[]} [$0.whiteList] attributes to clear (defaults to all attributes)
+ * @param {string[]} [$0.blackList=[]] attributes to keep, will override the white list
+ * @returns {string[]} the list of attributes to clear based on the rules
+ */
+function getAttributesToClear({ helper, whiteList, blackList }) {
+  const lastResults = helper.lastResults || {};
+  const attributesToClear =
+    whiteList ||
+    getRefinements(lastResults, helper.state).map(one => one.attributeName);
+
+  return attributesToClear.filter(
+    attribute => blackList.indexOf(attribute) === -1
+  );
 }
 
 function prefixKeys(prefix, obj) {

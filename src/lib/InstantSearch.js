@@ -25,6 +25,39 @@ function defaultCreateURL() {
 const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) =>
   defaultAlgoliasearch(appId, apiKey);
 
+const checkOptions = ({
+  appId,
+  apiKey,
+  indexName,
+  createAlgoliaClient,
+  searchClient,
+}) => {
+  if (!searchClient) {
+    if (appId === null || apiKey === null || indexName === null) {
+      const usage = `
+Usage: instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name'
+});`;
+      throw new Error(usage);
+    }
+  } else if (
+    searchClient &&
+    (indexName === null ||
+      appId !== null ||
+      apiKey !== null ||
+      createAlgoliaClient !== defaultCreateAlgoliaClient)
+  ) {
+    const usage = `
+Usage: instantsearch({
+  indexName: 'my_index_name',
+  searchClient: algoliasearch('appId', 'apiKey')
+});`;
+    throw new Error(usage);
+  }
+};
+
 /**
  * Widgets are the building blocks of InstantSearch.js. Any
  * valid widget must have at least a `render` or a `init` function.
@@ -41,30 +74,39 @@ const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) =>
  * @fires Instantsearch#render This event is triggered each time a render is done
  */
 class InstantSearch extends EventEmitter {
-  constructor({
-    appId = null,
-    apiKey = null,
-    indexName = null,
-    numberLocale,
-    searchParameters = {},
-    urlSync = null,
-    routing = null,
-    searchFunction,
-    createAlgoliaClient = defaultCreateAlgoliaClient,
-    stalledSearchDelay = 200,
-  }) {
+  constructor(options) {
     super();
-    if (appId === null || apiKey === null || indexName === null) {
-      const usage = `
-Usage: instantsearch({
-  appId: 'my_application_id',
-  apiKey: 'my_search_api_key',
-  indexName: 'my_index_name'
-});`;
-      throw new Error(usage);
+
+    const {
+      appId = null,
+      apiKey = null,
+      indexName = null,
+      numberLocale,
+      searchParameters = {},
+      urlSync = null,
+      routing = null,
+      searchFunction,
+      createAlgoliaClient = defaultCreateAlgoliaClient,
+      stalledSearchDelay = 200,
+      searchClient = null,
+    } = options;
+
+    checkOptions({
+      appId,
+      apiKey,
+      indexName,
+      createAlgoliaClient,
+      searchClient,
+    });
+
+    if (searchClient && typeof searchClient.search !== 'function') {
+      throw new Error(
+        'InstantSearch configuration error: `searchClient` must implement a `search(requests)` method.'
+      );
     }
 
-    const client = createAlgoliaClient(algoliasearch, appId, apiKey);
+    const client =
+      searchClient || createAlgoliaClient(algoliasearch, appId, apiKey);
 
     if (typeof client.addAlgoliaAgent === 'function') {
       client.addAlgoliaAgent(`instantsearch.js ${version}`);
@@ -115,6 +157,14 @@ Usage: instantsearch({
         ...ROUTING_DEFAULT_OPTIONS,
         ...routing,
       };
+
+    if (options.createAlgoliaClient) {
+      // eslint-disable-next-line no-console
+      console.warn(`
+InstantSearch.js: \`createAlgoliaClient\` option is deprecated and will be removed in the next major version.
+Please use \`searchClient\` instead: https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-searchClient.
+To help you migrate, please refer to the migration guide: https://community.algolia.com/instantsearch.js/v2/guides/prepare-for-v3.html`);
+    }
   }
 
   /**
