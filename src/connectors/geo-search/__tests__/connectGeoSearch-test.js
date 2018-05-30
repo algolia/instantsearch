@@ -30,6 +30,8 @@ describe('connectGeoSearch - rendering', () => {
       init: expect.any(Function),
       render: expect.any(Function),
       dispose: expect.any(Function),
+      getWidgetState: expect.any(Function),
+      getWidgetSearchParameters: expect.any(Function),
     });
   });
 
@@ -58,6 +60,7 @@ describe('connectGeoSearch - rendering', () => {
         refine: expect.any(Function),
         clearMapRefinement: expect.any(Function),
         isRefinedWithMap: expect.any(Function),
+        getSearchBounds: expect.any(Function),
         toggleRefineOnMapMove: expect.any(Function),
         isRefineOnMapMove: expect.any(Function),
         setMapMoveSinceLastRefine: expect.any(Function),
@@ -1522,6 +1525,192 @@ describe('connectGeoSearch - dispose', () => {
 
       expect(unmount).toHaveBeenCalled();
       expect(actual).toMatchObject(expectation);
+    });
+  });
+
+  describe('routing', () => {
+    const getInitializedWidget = (config = {}) => {
+      const rendering = jest.fn();
+      const makeWidget = connectGeoSearch(rendering);
+
+      const widget = makeWidget({
+        ...config,
+      });
+
+      const initialConfig = widget.getConfiguration({});
+      const helper = algoliasearchHelper(createFakeClient(), '', initialConfig);
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      const { refine } = rendering.mock.calls[0][0];
+
+      return [widget, helper, refine];
+    };
+
+    describe('getWidgetState', () => {
+      test('should give back the object unmodified if the default value is selected', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+
+      test('should add an entry equal to the refinement', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        const bbox = {
+          northEast: {
+            lat: '1',
+            lng: '2',
+          },
+          southWest: {
+            lat: '3',
+            lng: '4',
+          },
+        };
+        refine(bbox);
+        const uiStateBefore = {};
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toMatchSnapshot();
+        expect(uiStateAfter.boundingBox).toEqual('1,2,3,4');
+      });
+
+      test('should return the same UI state if the value if the refinement is the same', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        const bbox = {
+          northEast: {
+            lat: '1',
+            lng: '2',
+          },
+          southWest: {
+            lat: '3',
+            lng: '4',
+          },
+        };
+        refine(bbox);
+        const uiStateBefore = widget.getWidgetState(
+          {},
+          {
+            searchParameters: helper.state,
+            helper,
+          }
+        );
+        const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+          searchParameters: helper.state,
+          helper,
+        });
+        expect(uiStateAfter).toBe(uiStateBefore);
+      });
+    });
+
+    describe('getWidgetSearchParameters', () => {
+      test('should return the same SP if no value is in the UI state', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
+
+      test('should remove any previously set boundingBox if none are in the UI state', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        const bbox = {
+          northEast: {
+            lat: '1',
+            lng: '2',
+          },
+          southWest: {
+            lat: '3',
+            lng: '4',
+          },
+        };
+        refine(bbox);
+        const uiState = {};
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter.insideBoundingBox).toBeUndefined();
+      });
+
+      test('should add the boundingBox', () => {
+        const [widget, helper] = getInitializedWidget();
+        const uiState = {
+          boundingBox: '1,2,3,4',
+        };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter.insideBoundingBox).toEqual('1,2,3,4');
+      });
+
+      test('should update the boundingBox', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        const bbox = {
+          northEast: {
+            lat: '1',
+            lng: '2',
+          },
+          southWest: {
+            lat: '3',
+            lng: '4',
+          },
+        };
+        refine(bbox);
+        const uiState = {
+          boundingBox: '2,3,4,5',
+        };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toMatchSnapshot();
+        expect(searchParametersAfter.insideBoundingBox).toEqual('2,3,4,5');
+      });
+
+      test('should return the same object if the values are the same', () => {
+        const [widget, helper, refine] = getInitializedWidget();
+        const bbox = {
+          northEast: {
+            lat: '1',
+            lng: '2',
+          },
+          southWest: {
+            lat: '3',
+            lng: '4',
+          },
+        };
+        refine(bbox);
+        const uiState = {
+          boundingBox: '1,2,3,4',
+        };
+        const searchParametersBefore = SearchParameters.make(helper.state);
+        const searchParametersAfter = widget.getWidgetSearchParameters(
+          searchParametersBefore,
+          { uiState }
+        );
+        expect(searchParametersAfter).toBe(searchParametersBefore);
+      });
     });
   });
 });

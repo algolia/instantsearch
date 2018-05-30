@@ -65,6 +65,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {function(): boolean} isRefinedWithMap Return true if the current refinement is set with the map bounds.
  * @property {function()} toggleRefineOnMapMove Toggle the fact that the user is able to refine on map move.
  * @property {function(): boolean} isRefineOnMapMove Return true if the user is able to refine on map move.
+ * @property {function(): Bounds} getSearchBounds Return the bounding box used for the current search
  * @property {function()} setMapMoveSinceLastRefine Set the fact that the map has moved since the last refinement, should be call on each map move. The call to the function triggers a new rendering only when the value change.
  * @property {function(): boolean} hasMapMoveSinceLastRefine Return true if the map has move since the last refinement.
  * @property {Object} widgetParams All original `CustomGeoSearchWidgetOptions` forwarded to the `renderFn`.
@@ -192,6 +193,27 @@ const connectGeoSearch = (renderFn, unmountFn) => {
     const hasMapMoveSinceLastRefine = () =>
       widgetState.hasMapMoveSinceLastRefine;
 
+    const getSearchBounds = helper => () => {
+      const boundingBox =
+        helper.state.insideBoundingBox &&
+        helper.state.insideBoundingBox.split(',');
+
+      if (!boundingBox) {
+        return undefined;
+      }
+
+      return {
+        northEast: {
+          lat: parseFloat(boundingBox[0]),
+          lng: parseFloat(boundingBox[1]),
+        },
+        southWest: {
+          lat: parseFloat(boundingBox[2]),
+          lng: parseFloat(boundingBox[3]),
+        },
+      };
+    };
+
     const init = initArgs => {
       const { state, helper, instantSearchInstance } = initArgs;
       const isFirstRendering = true;
@@ -213,6 +235,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
+          getSearchBounds: getSearchBounds(helper),
           toggleRefineOnMapMove,
           isRefineOnMapMove,
           setMapMoveSinceLastRefine,
@@ -265,6 +288,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
+          getSearchBounds: getSearchBounds(helper),
           toggleRefineOnMapMove,
           isRefineOnMapMove,
           setMapMoveSinceLastRefine,
@@ -331,6 +355,30 @@ const connectGeoSearch = (renderFn, unmountFn) => {
         nextState = nextState.setQueryParameter('insideBoundingBox');
 
         return nextState;
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const boundingBox = searchParameters.insideBoundingBox;
+        if (boundingBox && boundingBox !== uiState.boundingBox) {
+          return {
+            ...uiState,
+            boundingBox,
+          };
+        }
+        return uiState;
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        if (uiState.boundingBox) {
+          return searchParameters.setQueryParameter(
+            'insideBoundingBox',
+            uiState.boundingBox
+          );
+        }
+        return searchParameters.setQueryParameter(
+          'insideBoundingBox',
+          undefined
+        );
       },
     };
   };

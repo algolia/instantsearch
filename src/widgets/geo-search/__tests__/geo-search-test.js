@@ -1486,7 +1486,7 @@ describe('GeoSearch', () => {
       expect(renderer).toHaveBeenCalledTimes(3);
     });
 
-    it("expect to set the position when it's refine with the map and the map is not render", () => {
+    it('should apply bounds provided by the connector when fitbounds is true and also when the state is forced', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -1496,17 +1496,8 @@ describe('GeoSearch', () => {
       const widget = geoSearch({
         googleReference,
         container,
+        enableRefineOnMapMove: true,
       });
-
-      // Simulate external setter or URLSync
-      helper.setQueryParameter('insideBoundingBox', [
-        [
-          48.84174222399724,
-          2.367719162523599,
-          48.81614630305218,
-          2.284205902635904,
-        ],
-      ]);
 
       widget.init({
         helper,
@@ -1514,24 +1505,30 @@ describe('GeoSearch', () => {
         state: helper.state,
       });
 
+      // Not really able to do better
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(0);
+
+      // Trigger fitbounds from hits
+
       widget.render({
         helper,
         instantSearchInstance,
         results: {
-          hits: [{ objectID: 123, _geoloc: true }],
+          hits: [
+            { objectID: 123, _geoloc: [1, 2] },
+            { objectID: 323, _geoloc: [1, 1] },
+            { objectID: 133, _geoloc: [2, 1] },
+            { objectID: 333, _geoloc: [2, 2] },
+          ],
         },
       });
 
-      // Simulate map setter
-      mapInstance.getZoom.mockImplementation(() => 12);
-      mapInstance.getCenter.mockImplementation(() => ({
-        lat: 10,
-        lng: 12,
-      }));
-
-      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
+      // Not really able to do better
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
-      expect(renderer).toHaveBeenCalledTimes(2);
+
+      // trigger fitbounds from search parameters
+
+      helper.setQueryParameter('insideBoundingBox', '2,3,4,5');
 
       widget.render({
         helper,
@@ -1544,9 +1541,8 @@ describe('GeoSearch', () => {
         },
       });
 
-      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
-      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
-      expect(renderer).toHaveBeenCalledTimes(3);
+      // Not really able to do better
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(2);
     });
 
     it('expect to not set the position when there is no markers', () => {
@@ -1627,70 +1623,6 @@ describe('GeoSearch', () => {
       expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
       expect(renderer).toHaveBeenCalledTimes(3);
-    });
-
-    it("expect to not set the position when it's refine with the map and the map is already render", () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
-
-      // Simulate map setter
-      mapInstance.getZoom.mockImplementation(() => 12);
-      mapInstance.getCenter.mockImplementation(() => ({
-        lat: 10,
-        lng: 12,
-      }));
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
-      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
-      expect(renderer).toHaveBeenCalledTimes(2);
-
-      simulateEvent(mapInstance, 'dragstart');
-      simulateEvent(mapInstance, 'center_changed');
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
-      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
-      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
-      expect(renderer).toHaveBeenCalledTimes(3);
-
-      simulateEvent(mapInstance, 'idle');
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
-      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
-      expect(renderer).toHaveBeenCalledTimes(4);
     });
   });
 });
