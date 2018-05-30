@@ -6,77 +6,80 @@ block navigation
   +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
 
 block content
-  h2#description Description
-    a.anchor(href=`${navPath}#description`)
-  div!=h.markdown(description)
-  div.storybook-section
-    a.btn.btn-cta(href=`${storyBookPublicPath}?selectedKind=${name}&selectedStory=default` target='_blank') See live example
-  if requirements
-    h2#requirements Requirements
-      a.anchor(href=`${navPath}#requirements`)
-    div!=h.markdown(requirements)
-  h2#proptypes Props
-    a.anchor(href=`${navPath}#proptypes`)
-  if proptype
-    table.api.proptypes
-      tbody
-        each type in proptype
-          tr.api-entry-values
-            td.api-entry-name
-              div.api-entry(id=`default-props-entry-${name}-${type.name}`)
-                =`${type.name}${type.isRequired ? '*' : ''}`
-                a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
-            td.api-entry-type
-              span type:
-              = ' '
-              code=type.type
-            td.api-entry-default-value
-              if type.defaultValue
-                span default:
+  if external
+    !=contents
+  else
+    h2#description Description
+      a.anchor(href=`${navPath}#description`)
+    div!=h.markdown(description)
+    div.storybook-section
+      a.btn.btn-cta(href=`${storyBookPublicPath}?selectedKind=${name}&selectedStory=default` target='_blank') See live example
+    if requirements
+      h2#requirements Requirements
+        a.anchor(href=`${navPath}#requirements`)
+      div!=h.markdown(requirements)
+    h2#proptypes Props
+      a.anchor(href=`${navPath}#proptypes`)
+    if proptype
+      table.api.proptypes
+        tbody
+          each type in proptype
+            tr.api-entry-values
+              td.api-entry-name
+                div.api-entry(id=`default-props-entry-${name}-${type.name}`)
+                  =`${type.name}${type.isRequired ? '*' : ''}`
+                  a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
+              td.api-entry-type
+                span type:
                 = ' '
-                code=type.defaultValue
-              else
-                span &nbsp;
-          tr.api-entry-description
-            td(colspan=3)!=h.markdown(type.description)
-  else
-    p This widget has no props.
-  if operations
-    h2#operations Operations
-      a.anchor(href=`${navPath}#operations`)
-    div!=h.markdown(operations)
-  h2#example Example usage
-    a.anchor(href=`${navPath}#example`)
-  if examples
-    each example in examples
-      p!=h.highlight(example, {lang: 'jsx'})
-  h2#classnames CSS classes
-    a.anchor(href=`${navPath}#classnames`)
-  if themekey
-    table.api
-      tbody
-        each type in themekey
-          tr.api-entry-values
-            td.api-entry-name
-              - var themeId = `default-theme-entry-${name}-${type.key}`;
-              div.api-entry(id=themeId)=`.${type.key} {}`
-                a.anchor(href=`${navPath}#${themeId}`)
-          tr.api-entry-description
-            td(colspan=3)!=h.markdown(type.description)
-  else
-    p This widget has no theming options.
-  h2#translations Translation keys
-    a.anchor(href=`${navPath}#translations`)
-  if translationkey
-    table.api
-      tbody
-        each type in translationkey
-          tr.api-entry-values
-            td.api-entry-name
-              - var themeId = `default-theme-entry-${name}-${type.key}`;
-              div.api-entry(id=themeId)=type.key
-                a.anchor(href=`${navPath}#${themeId}`)
-          tr.api-entry-description
-            td(colspan=3)!=h.markdown(type.description)
-  else
-    p This widget has no translations.
+                code=type.type
+              td.api-entry-default-value
+                if type.defaultValue
+                  span default:
+                  = ' '
+                  code=type.defaultValue
+                else
+                  span &nbsp;
+            tr.api-entry-description
+              td(colspan=3)!=h.markdown(type.description)
+    else
+      p This widget has no props.
+    if operations
+      h2#operations Operations
+        a.anchor(href=`${navPath}#operations`)
+      div!=h.markdown(operations)
+    h2#example Example usage
+      a.anchor(href=`${navPath}#example`)
+    if examples
+      each example in examples
+        p!=h.highlight(example, {lang: 'jsx'})
+    h2#classnames CSS classes
+      a.anchor(href=`${navPath}#classnames`)
+    if themekey
+      table.api
+        tbody
+          each type in themekey
+            tr.api-entry-values
+              td.api-entry-name
+                - var themeId = `default-theme-entry-${name}-${type.key}`;
+                div.api-entry(id=themeId)=`.${type.key} {}`
+                  a.anchor(href=`${navPath}#${themeId}`)
+            tr.api-entry-description
+              td(colspan=3)!=h.markdown(type.description)
+    else
+      p This widget has no theming options.
+    h2#translations Translation keys
+      a.anchor(href=`${navPath}#translations`)
+    if translationkey
+      table.api
+        tbody
+          each type in translationkey
+            tr.api-entry-values
+              td.api-entry-name
+                - var themeId = `default-theme-entry-${name}-${type.key}`;
+                div.api-entry(id=themeId)=type.key
+                  a.anchor(href=`${navPath}#${themeId}`)
+            tr.api-entry-description
+              td(colspan=3)!=h.markdown(type.description)
+    else
+      p This widget has no translations.
