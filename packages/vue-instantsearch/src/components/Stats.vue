@@ -1,6 +1,6 @@
 <template>
   <div :class="suit()" v-if="state">
-    <slot v-bind="state">
+    <slot v-bind="state" :results="state.instantSearchInstance.helper.lastResults">
       <span :class="suit('text')">
         {{ state.nbHits.toLocaleString() }} results found in {{ state.processingTimeMS.toLocaleString() }}ms
       </span>
