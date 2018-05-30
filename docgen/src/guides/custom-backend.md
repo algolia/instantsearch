@@ -44,7 +44,7 @@ app.post('/search', async (req, res) => {
 
 ### Supporting *Search For Facet Values*
 
-Algolia offers the concept of [*Search For Facet Values*](https://www.algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=javascript). This enables your refinement lists to be searchable. If your frontend makes use of this feature, via a search box on top of refinement lists, you can create an endpoint `POST /sffv`. Add a new route to support that:
+Algolia offers the concept of [*Search For Facet Values*](https://www.algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=javascript). This enables your refinement lists to be searchable. If your frontend makes use of this feature, via a search box on top of refinement lists, you must create an endpoint `POST /sffv`. Add a new route to support that:
 
 ```javascript
 app.post('/sffv', async (req, res) => {
