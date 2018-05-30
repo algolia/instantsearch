@@ -1,3 +1,14 @@
+<a name="2.7.6"></a>
+## [2.7.6](https://github.com/algolia/instantsearch.js/compare/v2.7.5...v2.7.6) (2018-05-29)
+
+
+### Bug Fixes
+
+* **connectConfigure:** ensure we do not extend `SearchParameters` ([#2945](https://github.com/algolia/instantsearch.js/issues/2945)) ([fdb4a7a](https://github.com/algolia/instantsearch.js/commit/fdb4a7a))
+* **infinite-hits:** fix [#2543](https://github.com/algolia/instantsearch.js/issues/2543) ([#2948](https://github.com/algolia/instantsearch.js/issues/2948)) ([bbf9f8f](https://github.com/algolia/instantsearch.js/commit/bbf9f8f))
+
+
+
 <a name="2.7.5"></a>
 ## [2.7.5](https://github.com/algolia/instantsearch.js/compare/v2.7.4...v2.7.5) (2018-05-28)
 
