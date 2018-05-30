@@ -1,3 +1,14 @@
+<a name="2.8.0"></a>
+# [2.8.0](https://github.com/algolia/instantsearch.js/compare/v2.7.6...v2.8.0) (2018-05-30)
+
+
+### Features
+
+* **connectors:** add connectAutocomplete ([#2841](https://github.com/algolia/instantsearch.js/issues/2841)) ([4bec81e](https://github.com/algolia/instantsearch.js/commit/4bec81e)), closes [/github.com/algolia/instantsearch.js/pull/2841#discussion_r188383882](https://github.com//github.com/algolia/instantsearch.js/pull/2841/issues/discussion_r188383882) [#2313](https://github.com/algolia/instantsearch.js/issues/2313)
+* **search-client:** Add support for Universal Search Clients ([#2894](https://github.com/algolia/instantsearch.js/issues/2894)) ([5df3c74](https://github.com/algolia/instantsearch.js/commit/5df3c74)), closes [#2905](https://github.com/algolia/instantsearch.js/issues/2905)
+
+
+
 <a name="2.7.6"></a>
 ## [2.7.6](https://github.com/algolia/instantsearch.js/compare/v2.7.5...v2.7.6) (2018-05-29)
 
