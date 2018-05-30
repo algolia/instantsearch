@@ -36,7 +36,7 @@ const algoliaClient = algoliasearch('YOUR_APP_ID', 'YOUR_SEARCH_API_KEY');
 
 // Add the search endpoint
 app.post('/search', async (req, res) => {
-  const requests = req.body;
+  const { requests } = req.body;
   const results = await algoliaClient.search(requests);
   res.status(200).send(results);
 });
@@ -48,7 +48,7 @@ Algolia offers the concept of [*Search For Facet Values*](https://www.algolia.co
 
 ```javascript
 app.post('/sffv', async (req, res) => {
-  const requests = req.body;
+  const { requests } = req.body;
   const results = await algoliaClient.searchForFacetValues(requests);
   res.status(200).send(results);
 });
@@ -76,7 +76,7 @@ const customSearchClient = {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requests),
+      body: JSON.stringify({ requests }),
     }).then(res => res.json());
   }
 };
@@ -107,7 +107,7 @@ const customSearchClient = {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requests),
+      body: JSON.stringify({ requests }),
     }).then(res => res.json());
   }
 };
