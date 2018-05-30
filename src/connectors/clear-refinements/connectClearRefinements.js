@@ -1,8 +1,7 @@
 import {
   checkRendering,
-  getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
+  clearRefinements,
+  getAttributesToClear,
 } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -23,17 +22,6 @@ search.addWidget(
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectClearRefinements.html
 `;
-
-const refine = ({
-  helper,
-  clearAttributes,
-  hasRefinements,
-  clearsQuery,
-}) => () => {
-  if (hasRefinements) {
-    clearRefinementsAndSearch(helper, clearAttributes, clearsQuery);
-  }
-};
 
 /**
  * @typedef {Object} CustomClearRefinementsWidgetOptions
@@ -98,38 +86,42 @@ export default function connectClearRefinements(renderFn, unmountFn) {
     const { excludedAttributes = [], clearsQuery = false } = widgetParams;
 
     return {
-      // Provide the same function to the `renderFn` so that way the user
-      // has to only bind it once when `isFirstRendering` for instance
-      _refine() {},
-      _cachedRefine() {
-        this._refine();
-      },
-
       init({ helper, instantSearchInstance, createURL }) {
-        this._cachedRefine = this._cachedRefine.bind(this);
-
-        const clearAttributes = getRefinements({}, helper.state)
-          .map(one => one.attributeName)
-          .filter(one => excludeAttributes.indexOf(one) === -1);
+        const attributesToClear = getAttributesToClear({
+          helper,
+          blackList: excludedAttributes,
+        });
 
         const hasRefinements = clearsQuery
-          ? clearAttributes.length !== 0 || helper.state.query !== ''
-          : clearAttributes.length !== 0;
-        const preparedCreateURL = () =>
-          createURL(clearRefinementsFromState(helper.state, [], clearsQuery));
+          ? attributesToClear.length !== 0 || helper.state.query !== ''
+          : attributesToClear.length !== 0;
 
-        this._refine = refine({
-          helper,
-          clearAttributes,
-          hasRefinements,
-          clearsQuery,
-        });
+        this._refine = () => {
+          helper
+            .setState(
+              clearRefinements({
+                helper,
+                blackList: excludedAttributes,
+                clearsQuery,
+              })
+            )
+            .search();
+        };
+
+        this._createURL = () =>
+          createURL(
+            clearRefinements({
+              helper,
+              blackList: excludedAttributes,
+              clearsQuery,
+            })
+          );
 
         renderFn(
           {
-            refine: this._cachedRefine,
+            refine: this._refine,
             hasRefinements,
-            createURL: preparedCreateURL,
+            createURL: this._createURL,
             instantSearchInstance,
             widgetParams,
           },
@@ -137,29 +129,21 @@ export default function connectClearRefinements(renderFn, unmountFn) {
         );
       },
 
-      render({ results, state, createURL, helper, instantSearchInstance }) {
-        const clearAttributes = getRefinements(results, state)
-          .map(one => one.attributeName)
-          .filter(one => excludeAttributes.indexOf(one) === -1);
+      render({ helper, instantSearchInstance }) {
+        const attributesToClear = getAttributesToClear({
+          helper,
+          blackList: excludedAttributes,
+        });
 
         const hasRefinements = clearsQuery
-          ? clearAttributes.length !== 0 || helper.state.query !== ''
-          : clearAttributes.length !== 0;
-        const preparedCreateURL = () =>
-          createURL(clearRefinementsFromState(state, [], clearsQuery));
-
-        this._refine = refine({
-          helper,
-          clearAttributes,
-          hasRefinements,
-          clearsQuery,
-        });
+          ? attributesToClear.length !== 0 || helper.state.query !== ''
+          : attributesToClear.length !== 0;
 
         renderFn(
           {
-            refine: this._cachedRefine,
+            refine: this._refine,
             hasRefinements,
-            createURL: preparedCreateURL,
+            createURL: this._createURL,
             instantSearchInstance,
             widgetParams,
           },

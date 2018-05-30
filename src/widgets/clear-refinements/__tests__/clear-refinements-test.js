@@ -56,7 +56,7 @@ describe('clearRefinements()', () => {
     };
     widget.init({
       helper,
-      createURL: () => {},
+      createURL,
       instantSearchInstance: {
         templatesConfig: {},
       },
