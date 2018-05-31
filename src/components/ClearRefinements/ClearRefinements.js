@@ -33,21 +33,22 @@ export class RawClearRefinements extends Component {
     const data = { hasRefinements };
 
     return (
-      <a
-        className={
-          hasRefinements
-            ? cssClasses.link
-            : `${cssClasses.link} ${cssClasses.link}-disabled`
-        }
-        href={this.props.url}
-        onClick={this.handleClick}
-      >
-        <Template
-          data={data}
-          templateKey="link"
-          {...this.props.templateProps}
-        />
-      </a>
+      <div className={cssClasses.root}>
+        <button
+          className={
+            hasRefinements ? cssClasses.button : cssClasses.disabledButton
+          }
+          href={this.props.url}
+          onClick={this.handleClick}
+          disabled={!hasRefinements}
+        >
+          <Template
+            data={data}
+            templateKey="button"
+            {...this.props.templateProps}
+          />
+        </button>
+      </div>
     );
   }
 }
@@ -55,7 +56,8 @@ export class RawClearRefinements extends Component {
 RawClearRefinements.propTypes = {
   refine: PropTypes.func.isRequired,
   cssClasses: PropTypes.shape({
-    link: PropTypes.string,
+    root: PropTypes.string,
+    button: PropTypes.string,
   }),
   hasRefinements: PropTypes.bool.isRequired,
   templateProps: PropTypes.object.isRequired,

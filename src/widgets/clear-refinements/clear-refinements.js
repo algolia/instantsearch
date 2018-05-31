@@ -2,17 +2,15 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import ClearRefinementsWithHOCs from '../../components/ClearRefinements/ClearRefinements.js';
 import cx from 'classnames';
 
-import {
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-} from '../../lib/utils.js';
+import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
+
+import { component } from '../../lib/suit.js';
 
 import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements.js';
 
 import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-clear-all');
+const suit = component('ais-clear-all');
 
 const renderer = ({
   containerNode,
@@ -53,8 +51,8 @@ const renderer = ({
 const usage = `Usage:
 clearRefinements({
   container,
-  [ cssClasses.{root,header,body,footer,link}={} ],
-  [ templates.{header,link,footer}={link: 'Clear all'} ],
+  [ cssClasses.{root,header,body,footer,button}={} ],
+  [ templates.{header,button,footer}={button: 'Clear all'} ],
   [ autoHideContainer=true ],
   [ collapsible=false ],
   [ excludedAttributes=[] ]
@@ -65,13 +63,13 @@ clearRefinements({
  * @property {string|string[]} [header] CSS class to add to the header element.
  * @property {string|string[]} [body] CSS class to add to the body element.
  * @property {string|string[]} [footer] CSS class to add to the footer element.
- * @property {string|string[]} [link] CSS class to add to the link element.
+ * @property {string|string[]} [button] CSS class to add to the button element.
  */
 
 /**
  * @typedef {Object} ClearAllTemplates
  * @property {string|function(object):string} [header] Header template.
- * @property {string|function(object):string} [link] Link template.
+ * @property {string|function(object):string} [button] button content template.
  * @property {string|function(object):string} [footer] Footer template.
  */
 
@@ -103,7 +101,7 @@ clearRefinements({
  *   instantsearch.widgets.clearRefinements({
  *     container: '#clear-all',
  *     templates: {
- *       link: 'Reset everything'
+ *       content: 'Reset everything'
  *     },
  *     autoHideContainer: false,
  *     clearsQuery: true,
@@ -126,11 +124,13 @@ export default function clearRefinements({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    link: cx(bem('link'), userCssClasses.link),
+    root: cx(suit(), userCssClasses.root),
+    button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
+    disabledButton: cx(
+      suit({ descendantName: 'button' }),
+      suit({ descendantName: 'button', modifierName: 'disabled'}),
+      userCssClasses.button
+    ),
   };
 
   const specializedRenderer = renderer({

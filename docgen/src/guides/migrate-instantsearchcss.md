@@ -23,6 +23,26 @@ The `clearAll` widget has been renamed into `clearRefinements`.
 
 ### Markup
 
+Previously:
+
+```html
+<div class="ais-root ais-clear-all">
+  <div class="ais-body ais-clear-all--body">
+    <a class="ais-clear-all--link" href="">
+      <div>Clear all</div>
+    </a>
+  </div>
+</div>
+```
+
+Now:
+
+```html
+<div>
+  <button></button>
+</div>
+```
+
 ### CSS
 
 
