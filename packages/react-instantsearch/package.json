@@ -49,7 +49,7 @@
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "enzyme-to-json": "3.3.4",
-    "jest": "23.0.1",
+    "jest": "23.1.0",
     "jest-watch-typeahead": "0.1.0",
     "react": "16.4.0",
     "react-dom": "16.4.0",
