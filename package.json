@@ -98,7 +98,7 @@
     "gh-pages": "1.1.0",
     "happypack": "4.0.1",
     "html-webpack-plugin": "2.30.1",
-    "inquirer": "4.0.0",
+    "inquirer": "5.2.0",
     "jest": "22.4.2",
     "jsdom-global": "3.0.2",
     "json": "9.0.6",
