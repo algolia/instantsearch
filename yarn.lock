@@ -3852,6 +3852,14 @@ external-editor@^2.0.1, external-editor@^2.0.4:
     iconv-lite "^0.4.17"
     tmp "^0.0.33"
 
+external-editor@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/external-editor/-/external-editor-2.2.0.tgz#045511cfd8d133f3846673d1047c154e214ad3d5"
+  dependencies:
+    chardet "^0.4.0"
+    iconv-lite "^0.4.17"
+    tmp "^0.0.33"
+
 extglob@^0.3.1:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/extglob/-/extglob-0.3.2.tgz#2e18ff3d2f49ab2765cec9023f011daa8d8349a1"
@@ -5061,15 +5069,15 @@ inquirer@3.0.6:
     strip-ansi "^3.0.0"
     through "^2.3.6"
 
-inquirer@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-4.0.0.tgz#56c6354ae4e6201917027249bbd7667fca2cc031"
+inquirer@4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-4.0.2.tgz#cc678b4cbc0e183a3500cc63395831ec956ab0a3"
   dependencies:
     ansi-escapes "^3.0.0"
     chalk "^2.0.0"
     cli-cursor "^2.1.0"
     cli-width "^2.0.0"
-    external-editor "^2.0.4"
+    external-editor "^2.1.0"
     figures "^2.0.0"
     lodash "^4.3.0"
     mute-stream "0.0.7"
