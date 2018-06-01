@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 
-import autoHideContainer from '../decorators/autoHideContainer.js';
-import headerFooter from '../decorators/headerFooter.js';
+import panel from './decorators/panel.js';
 
 export class RawSelector extends Component {
   componentWillMount() {
@@ -61,4 +60,4 @@ RawSelector.propTypes = {
   setValue: PropTypes.func.isRequired,
 };
 
-export default autoHideContainer(headerFooter(RawSelector));
+export default panel(RawSelector);

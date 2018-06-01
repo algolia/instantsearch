@@ -5,7 +5,9 @@ import Template from './Template.js';
 import hasKey from 'lodash/has';
 import cx from 'classnames';
 
-class Hits extends Component {
+import panel from './decorators/panel.js';
+
+export class RawHits extends Component {
   renderWithResults() {
     const renderedHits = map(this.props.hits, (hit, position) => {
       const data = {
@@ -78,7 +80,7 @@ class Hits extends Component {
   }
 }
 
-Hits.propTypes = {
+RawHits.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
     item: PropTypes.string,
@@ -90,8 +92,8 @@ Hits.propTypes = {
   templateProps: PropTypes.object.isRequired,
 };
 
-Hits.defaultProps = {
+RawHits.defaultProps = {
   results: { hits: [] },
 };
 
-export default Hits;
+export default panel(RawHits);

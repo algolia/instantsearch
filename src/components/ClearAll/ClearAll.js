@@ -3,8 +3,7 @@ import React, { Component } from 'preact-compat';
 import Template from '../Template.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
-import autoHideContainer from '../../decorators/autoHideContainer.js';
-import headerFooter from '../../decorators/headerFooter.js';
+import panel from '../decorators/panel.js';
 
 export class RawClearAll extends Component {
   componentWillMount() {
@@ -62,4 +61,4 @@ RawClearAll.propTypes = {
   url: PropTypes.string.isRequired,
 };
 
-export default autoHideContainer(headerFooter(RawClearAll));
+export default panel(RawClearAll);

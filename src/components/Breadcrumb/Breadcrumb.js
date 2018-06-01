@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'preact-compat';
 import PropTypes from 'prop-types';
 import Template from '../Template.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import panel from '../decorators/panel.js';
 
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
@@ -81,4 +81,4 @@ class Breadcrumb extends PureComponent {
   }
 }
 
-export default autoHideContainerHOC(Breadcrumb);
+export default panel(Breadcrumb);

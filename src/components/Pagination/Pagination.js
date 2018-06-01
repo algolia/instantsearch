@@ -3,7 +3,7 @@ import React, { Component } from 'preact-compat';
 import defaultsDeep from 'lodash/defaultsDeep';
 import { isSpecialClick } from '../../lib/utils.js';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import panel from '../decorators/panel.js';
 
 import PaginationLink from './PaginationLink.js';
 
@@ -166,4 +166,4 @@ RawPagination.defaultProps = {
   nbPages: 0,
 };
 
-export default autoHideContainerHOC(RawPagination);
+export default panel(RawPagination);
