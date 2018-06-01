@@ -10,14 +10,16 @@ html: |
 alt1: Collapsible
 althtml1: |
   <div class="ais-Panel ais-Panel--collapsible">
-    <div class="ais-Panel-header">Header<button class="ais-Panel-collapseButton" aria-expanded="true">➖</button></div>
+    <div class="ais-Panel-header">Header</div>
+    <button class="ais-Panel-collapseButton" aria-expanded="true">➖</button>
     <div class="ais-Panel-body">Panel content</div>
     <div class="ais-Panel-footer">Footer</div>
   </div>
 alt2: Collapsed
 althtml2: |
   <div class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed">
-    <div class="ais-Panel-header">Header<button class="ais-Panel-collapseButton" aria-expanded="true">➕</button></div>
+    <div class="ais-Panel-header">Header</div>
+    <button class="ais-Panel-collapseButton" aria-expanded="true">➕</button>
     <div class="ais-Panel-body">Panel content</div>
     <div class="ais-Panel-footer">Footer</div>
   </div>
@@ -41,4 +43,6 @@ options:
     description: Text to put before the widget
   - name: footer
     description: Text to put after the widget
+  - name: collapsible
+    description: Makes the panel collapsible
 ---
