@@ -14,8 +14,10 @@ storiesOf('ClearRefinements', module)
   }))
   .add('custom rendering', () => ({
     template: `<ais-clear-refinements :clearsQuery="true">
-      <template>
-        Clear search query
+      <template slot-scope="{refine, hasRefinements}">
+        <button @click="refine()" :disabled="!hasRefinements">
+          Clear search query
+        </button>
       </template>
     </ais-clear-refinements>`,
   }))

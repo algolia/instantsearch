@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly with refinements 1`] = `
+
+<div class="ais-ais-clear-refinements">
+  <button type="reset"
+          class="ais-ais-clear-refinements"
+  >
+    <span class="ais-ais-clear-refinements-label">
+      Clear
+    </span>
+  </button>
+</div>
+
+`;
+
+exports[`renders correctly without refinements 1`] = `
+
+<div class="ais-ais-clear-refinements">
+  <button type="reset"
+          disabled="disabled"
+          class="ais-ais-clear-refinements ais-ais-clear-refinements--disabled"
+  >
+    <span class="ais-ais-clear-refinements-label">
+      Clear
+    </span>
+  </button>
+</div>
+
+`;

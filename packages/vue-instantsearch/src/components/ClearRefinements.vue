@@ -1,13 +1,16 @@
 <template>
-  <button type="reset"
-          :class="[suit(), disabled ? suit(null, 'disabled') : '']"
-          :disabled="disabled"
-          @click.prevent="clear"
-  >
-    <slot>
-      <span :class="suit('label')">Clear</span>
+  <div v-if="state" :class="suit()">
+    <slot :hasRefinements="state.hasRefinements" :refine="state.refine">
+      <button
+        type="reset"
+        :class="[suit(), disabled ? suit(null, 'disabled') : '']"
+        :disabled="disabled"
+        @click.prevent="state.refine"
+      >
+        <span :class="suit('label')">Clear</span>
+      </button>
     </slot>
-  </button>
+  </div>
 </template>
 
 <script>
@@ -45,11 +48,6 @@ export default {
         clearsQuery: this.clearsQuery,
         excludeAttributes: this.excludedAttributes,
       };
-    },
-  },
-  methods: {
-    clear() {
-      this.state.refine();
     },
   },
 };</script>
