@@ -128,7 +128,7 @@ export default function clearRefinements({
     button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
     disabledButton: cx(
       suit({ descendantName: 'button' }),
-      suit({ descendantName: 'button', modifierName: 'disabled'}),
+      suit({ descendantName: 'button', modifierName: 'disabled' }),
       userCssClasses.button
     ),
   };

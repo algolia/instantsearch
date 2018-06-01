@@ -1,5 +1,5 @@
 export default {
   header: '',
-  link: 'Clear all',
+  button: 'Clear all',
   footer: '',
 };

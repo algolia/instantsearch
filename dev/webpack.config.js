@@ -13,7 +13,7 @@ const __DEV__ = process.env.NODE_ENV === 'development';
 const clean = arr => arr.filter(item => item !== false);
 
 module.exports = {
-  devtool: __DEV__ ? 'cheap-module-source-map' : 'source-map',
+  devtool: 'source-map',
 
   entry: __DEV__
     ? {

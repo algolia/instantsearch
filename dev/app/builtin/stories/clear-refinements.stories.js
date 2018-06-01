@@ -4,7 +4,7 @@ import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
-const stories = storiesOf('clearRefinements');
+const stories = storiesOf('ClearRefinements');
 
 export default () => {
   stories
@@ -48,7 +48,7 @@ export default () => {
               autoHideContainer: false,
               clearsQuery: true,
               templates: {
-                link: 'Clear refinements and query',
+                button: 'Clear refinements and query',
               },
             })
           );
