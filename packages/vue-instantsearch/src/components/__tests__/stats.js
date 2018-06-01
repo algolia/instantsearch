@@ -12,7 +12,13 @@ it('renders correctly', () => {
     page: 2,
     processingTimeMS: 12,
     query: 'ipho',
+    instantSearchInstance: {
+      helper: {
+        lastResults: [],
+      },
+    },
   });
+
   const wrapper = mount(Stats);
   expect(wrapper.html()).toMatchSnapshot();
 });

@@ -1,6 +1,15 @@
 <template>
   <div :class="suit()" v-if="state">
-    <slot v-bind="state">
+    <slot
+      :items="items"
+      :createURL="createURL"
+      :refine="refine"
+      :canRefine="canRefine"
+      :widgetParams="widgetParams"
+      :isShowingMore="isShowingMore"
+      :toggleShowMore="toggleShowMore"
+      :canToggleShowMore="canToggleShowMore"
+    >
       <ul :class="suit('list')">
         <li
           v-for="item in state.items"

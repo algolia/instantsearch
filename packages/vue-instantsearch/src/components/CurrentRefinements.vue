@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="state">
     <slot v-bind="state">
       <json-tree :level="2" :data="state"></json-tree>
     </slot>

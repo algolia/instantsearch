@@ -1,6 +1,10 @@
 <template>
   <div :class="suit()" v-if="state">
-    <slot v-bind="state">
+    <slot
+      :items="items"
+      :refine="state.refine"
+      :hasNoResults="state.hasNoResults"
+    >
       <select v-model="selected" :class="suit('select')" @change="handleChange">
         <option
           v-for="(item, itemIndex) in items"
