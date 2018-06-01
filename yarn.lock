@@ -3533,9 +3533,9 @@ eslint-plugin-jasmine@2.9.3:
   version "2.9.3"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jasmine/-/eslint-plugin-jasmine-2.9.3.tgz#05bf3ab827d791691ceee8c21959b9c0d56a6b0c"
 
-eslint-plugin-jest@21.13.0:
-  version "21.13.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.13.0.tgz#9fc903158d79e953aefd861a55e8a8c9f6ab3d36"
+eslint-plugin-jest@21.17.0:
+  version "21.17.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.17.0.tgz#fdb00e2f9ff16987d6ebcf2c75c7add105760bbb"
 
 eslint-plugin-prettier@2.6.0:
   version "2.6.0"
