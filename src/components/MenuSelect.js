@@ -2,8 +2,7 @@ import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 
 import Template from './Template';
-import autoHideContainerHOC from '../decorators/autoHideContainer.js';
-import headerFooterHOC from '../decorators/headerFooter.js';
+import panel from './decorators/panel.js';
 
 class MenuSelect extends Component {
   static propTypes = {
@@ -50,4 +49,4 @@ class MenuSelect extends Component {
   }
 }
 
-export default autoHideContainerHOC(headerFooterHOC(MenuSelect));
+export default panel(MenuSelect);

@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import Hits from './Hits.js';
 
-class InfiniteHits extends Component {
+import { RawHits } from './Hits.js';
+import panel from './decorators/panel.js';
+
+export class RawInfiniteHits extends Component {
   render() {
     const {
       cssClasses,
@@ -20,7 +22,7 @@ class InfiniteHits extends Component {
 
     return (
       <div>
-        <Hits
+        <RawHits
           cssClasses={cssClasses}
           hits={hits}
           results={results}
@@ -32,7 +34,7 @@ class InfiniteHits extends Component {
   }
 }
 
-InfiniteHits.propTypes = {
+RawInfiniteHits.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
     item: PropTypes.string,
@@ -48,4 +50,4 @@ InfiniteHits.propTypes = {
   isLastPage: PropTypes.bool.isRequired,
 };
 
-export default InfiniteHits;
+export default panel(RawInfiniteHits);

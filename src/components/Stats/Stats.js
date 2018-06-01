@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import panel from '../decorators/panel.js';
 
 export class RawStats extends Component {
   shouldComponentUpdate(nextProps) {
@@ -46,4 +45,4 @@ RawStats.propTypes = {
   templateProps: PropTypes.object.isRequired,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawStats));
+export default panel(RawStats);

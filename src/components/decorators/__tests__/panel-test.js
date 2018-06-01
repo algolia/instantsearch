@@ -3,7 +3,7 @@ import expect from 'expect';
 import { shallow } from 'enzyme';
 import { createRenderer } from 'react-test-renderer/shallow';
 
-import headerFooter from '../headerFooter';
+import panel from '../panel.js';
 
 class TestComponent extends Component {
   render() {
@@ -11,12 +11,12 @@ class TestComponent extends Component {
   }
 }
 
-describe('headerFooter', () => {
+describe('panel', () => {
   let renderer;
   let defaultProps;
 
   function render(props = {}) {
-    const HeaderFooter = headerFooter(TestComponent);
+    const HeaderFooter = panel(TestComponent);
     renderer.render(<HeaderFooter {...props} />);
     return renderer.getRenderOutput();
   }
@@ -26,7 +26,7 @@ describe('headerFooter', () => {
       templateProps: {},
       ...extraProps,
     };
-    const componentWrappedInHeaderFooter = headerFooter(TestComponent);
+    const componentWrappedInHeaderFooter = panel(TestComponent);
     return shallow(React.createElement(componentWrappedInHeaderFooter, props));
   }
 
@@ -119,5 +119,19 @@ describe('headerFooter', () => {
       expect(header.props().data.foo).toEqual('bar');
       expect(footer.props().data.foo).toEqual('baz');
     });
+  });
+
+  describe('autoHideContainer', () => {
+    it('hides the component if autoHideContainer is set to true', () => {
+      const props = {
+        shouldAutoHideContainer: true,
+      };
+
+      const actual = render(props);
+
+      expect(actual).toMatchSnapshot();
+    });
+    it('shows the component if autoHideContainer is set to false', () => {});
+    it('shows the component if autoHideContainer is not set', () => {});
   });
 });

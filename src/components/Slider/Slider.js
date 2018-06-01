@@ -11,8 +11,7 @@ import cx from 'classnames';
 
 import Pit from './Pit.js';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import panel from '../decorators/panel.js';
 
 export class RawSlider extends Component {
   static propTypes = {
@@ -112,4 +111,4 @@ export class RawSlider extends Component {
   }
 }
 
-export default autoHideContainerHOC(headerFooterHOC(RawSlider));
+export default panel(RawSlider);

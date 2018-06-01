@@ -6,8 +6,7 @@ import PriceRangesForm from './PriceRangesForm.js';
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import panel from '../decorators/panel.js';
 
 export class RawPriceRanges extends Component {
   componentWillMount() {
@@ -122,4 +121,4 @@ RawPriceRanges.defaultProps = {
   cssClasses: {},
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawPriceRanges));
+export default panel(RawPriceRanges);

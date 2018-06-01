@@ -1,7 +1,6 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import panel from '../decorators/panel.js';
 
 export class RawRangeInput extends Component {
   constructor(props) {
@@ -105,4 +104,4 @@ RawRangeInput.propTypes = {
   refine: PropTypes.func.isRequired,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawRangeInput));
+export default panel(RawRangeInput);

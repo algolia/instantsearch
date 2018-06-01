@@ -3,8 +3,7 @@ import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
 
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer';
+import panel from '../decorators/panel.js';
 
 import { isSpecialClick } from '../../lib/utils.js';
 import map from 'lodash/map';
@@ -145,4 +144,4 @@ RawCurrentRefinedValues.propTypes = {
   templateProps: PropTypes.object.isRequired,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawCurrentRefinedValues));
+export default panel(RawCurrentRefinedValues);

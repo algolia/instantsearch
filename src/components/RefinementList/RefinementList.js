@@ -9,8 +9,7 @@ import isEqual from 'lodash/isEqual';
 
 import SearchBox from '../SearchBox';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import panel from '../decorators/panel.js';
 
 export class RawRefinementList extends Component {
   constructor(props) {
@@ -226,4 +225,4 @@ RawRefinementList.defaultProps = {
   depth: 0,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawRefinementList));
+export default panel(RawRefinementList);

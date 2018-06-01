@@ -7,13 +7,13 @@ import React, { Component } from 'preact-compat';
 import cx from 'classnames';
 import getKey from 'lodash/get';
 
-import Template from '../components/Template.js';
+import Template from '../Template.js';
 
-import { component } from '../lib/suit.js';
+import { component } from '../../lib/suit.js';
 
 const suitPanel = component('Panel');
 
-function headerFooter(ComposedComponent) {
+function panel(ComposedComponent) {
   class HeaderFooter extends Component {
     constructor(props) {
       super(props);
@@ -55,31 +55,42 @@ function headerFooter(ComposedComponent) {
     }
 
     render() {
-      const rootClassnames = cx(suitPanel(), this.props.cssClasses.panelRoot, {
+      const {
+        shouldAutoHideContainer,
+        cssClasses,
+        collapsible,
+        collapsed,
+      } = this.props;
+
+      const rootClassnames = cx(suitPanel(), cssClasses.panelRoot, {
         [suitPanel({
           descendantName: 'root',
           modifierName: 'collapsible',
-        })]: this.props.collapsible,
+        })]: collapsible,
         [suitPanel({
           descendantName: 'root',
           modifierName: 'collapsed',
-        })]: this.props.collapsed,
+        })]: collapsed,
       });
 
       const bodyClassnames = cx(
         suitPanel({ descendantName: 'body' }),
-        this.props.cssClasses.panelBody
+        cssClasses.panelBody
       );
 
       const headerElement = this._getElement({
         type: 'Header',
-        handleClick: this.props.collapsible ? this.handleHeaderClick : null,
+        handleClick: collapsible ? this.handleHeaderClick : null,
       });
 
       const footerElement = this._getElement({ type: 'Footer' });
 
+      const autohideStyle = shouldAutoHideContainer
+        ? { display: 'none' }
+        : null;
+
       return (
-        <div className={rootClassnames}>
+        <div className={rootClassnames} style={autohideStyle}>
           {headerElement}
           <div className={bodyClassnames}>
             <ComposedComponent {...this.props} />
@@ -104,6 +115,7 @@ function headerFooter(ComposedComponent) {
       panelFooter: PropTypes.string,
     }),
     templateProps: PropTypes.object,
+    shouldAutoHideContainer: PropTypes.bool,
   };
 
   HeaderFooter.defaultProps = {
@@ -112,9 +124,9 @@ function headerFooter(ComposedComponent) {
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)
-  HeaderFooter.displayName = `${ComposedComponent.name}-HeaderFooter`;
+  HeaderFooter.displayName = `${ComposedComponent.name}-Panel`;
 
   return HeaderFooter;
 }
 
-export default headerFooter;
+export default panel;

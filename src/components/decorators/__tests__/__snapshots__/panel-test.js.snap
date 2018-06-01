@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`headerFooter autoHideContainer hides the component if autoHideContainer is set to true 1`] = `
+<div
+  className="ais-Panel"
+  style={
+    Object {
+      "display": "",
+    }
+  }
+>
+  <div
+    className="ais-Panel-body"
+  >
+    <TestComponent
+      autoHideContainer={true}
+      collapsible={false}
+      cssClasses={Object {}}
+    />
+  </div>
+</div>
+`;
+
 exports[`headerFooter collapsible when collapsed 1`] = `
 <div
   className="ais-Panel ais-Panel-root--collapsible"
