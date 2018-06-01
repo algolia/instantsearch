@@ -57,8 +57,8 @@ breadcrumb({
   container,
   attributes,
   [ autoHideContainer=true ],
-  [ cssClasses.{disabledLabel, home, label, root, separator}={} ],
-  [ templates.{home, separator}]
+  [ cssClasses.{disabledLabel, home, label, separator, panelRoot, panelHeader, panelBody, panelFooter}={} ],
+  [ templates.{home, separator, panelHeader, panelFooter}]
   [ transformData.{item} ],
 })`;
 
@@ -67,14 +67,19 @@ breadcrumb({
  * @property {string|string[]} [disabledLabel] CSS class to add to the last element of the breadcrumb (which is not clickable).
  * @property {string|string[]} [home] CSS class to add to the first element of the breadcrumb.
  * @property {string|string[]} [label] CSS class to add to the text part of each element of the breadcrumb.
- * @property {string|string[]} [root] CSS class to add to the root element of the widget.
  * @property {string|string[]} [separator] CSS class to add to the separator.
+ * @property {string|string[]} [panelRoot] CSS class for the surrounding panel
+ * @property {string|string[]} [panelHeader] CSS class for the header
+ * @property {string|string[]} [panelBody] CSS class for the body of the panel
+ * @property {string|string[]} [panelFooter] CSS class for the footer
  */
 
 /**
  * @typedef {Object} BreadcrumbTemplates
  * @property {string|function(object):string} [home='Home'] Label of the breadcrumb's first element.
  * @property {string|function(object):string} [separator=''] Symbol used to separate the elements of the breadcrumb.
+ * @property {string|function(object):string} [panelHeader] Content of the header
+ * @property {string|function(object):string} [panelFooter] Content of the header
  */
 
 /**
@@ -170,6 +175,11 @@ export default function breadcrumb({
     label: cx(bem('label'), userCssClasses.label),
     root: cx(bem('root'), userCssClasses.root),
     separator: cx(bem('separator'), userCssClasses.separator),
+    panelRoot: userCssClasses.panelRoot,
+    panelHeader: userCssClasses.panelHeader,
+    panelBody: userCssClasses.panelBody,
+    panelFooter: userCssClasses.panelFooter,
+
   };
 
   const specializedRenderer = renderer({

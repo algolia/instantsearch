@@ -38,7 +38,7 @@ export default () => {
       })
     )
     .add(
-      'with custom home label',
+      'With custom templates: header, footer, home, separator',
       wrapWithHits(container => {
         container.innerHTML = `
         <div id="hierarchicalMenu"></div>
@@ -53,7 +53,52 @@ export default () => {
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ],
-            templates: { home: 'Home Page' },
+            templates: {
+              panelHeader: '🥖 crumb',
+              panelFooter: 'Brought to you by Algolia',
+              home: 'home page',
+              separator: '➖',
+            },
+          })
+        );
+
+        // Custom Widget to toggle refinement
+        window.search.addWidget({
+          init({ helper }) {
+            helper.toggleRefinement(
+              'hierarchicalCategories.lvl0',
+              'Cameras & Camcorders > Digital Cameras'
+            );
+          },
+        });
+      })
+    )
+    .add(
+      'with custom css classes',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="hierarchicalMenu"></div>
+        <div id="breadcrumb"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            templates: {
+              panelHeader: '🥖 crumb',
+              panelFooter: 'Brought to you by Algolia',
+            },
+            cssClasses: {
+              panelRoot: 'breadcrumb-root',
+              panelHeader: 'breadcrumb-header',
+              panelFooter: 'breadcrumb-footer',
+              panelBody: 'breadcrumb-body',
+            },
           })
         );
 
