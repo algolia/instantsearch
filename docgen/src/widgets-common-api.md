@@ -56,7 +56,7 @@ The `templates` are a way to customize to customize the rendering of a widget us
 string-based templates or functions.
 
 In their string format, the templates should be written using
-[mustache](https://mustache.github.io/mustache.5.html).
+[mustache](https://mustache.github.io/mustache.5.html) (more specifically [Hogan](http://twitter.github.io/hogan.js/)).
 
 Like the css classes they can only be written for some specific parts of the rendered
 widget.
