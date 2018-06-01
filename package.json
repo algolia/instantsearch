@@ -119,7 +119,7 @@
     "shelljs": "0.8.1",
     "sinon": "4.4.2",
     "style-loader": "0.20.3",
-    "unminified-webpack-plugin": "1.4.1",
+    "unminified-webpack-plugin": "1.4.2",
     "watch": "1.0.2",
     "wdio-dot-reporter": "0.0.9",
     "wdio-mocha-framework": "0.5.13",
