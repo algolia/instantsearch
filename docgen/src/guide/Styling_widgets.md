@@ -10,7 +10,7 @@ All widgets under the `react-instantsearch/dom` namespace are shipped with fixed
 
 The format for those class names is `ais-NameOfWidget-element--modifier`.
 
-The different class names used by every widgets are described on their respective documentation page. You
+The different class names used by each widget are described on their respective documentation pages. You
 can also inspect the underlying DOM and style accordingly.
 
 ## Styling icons
@@ -34,7 +34,7 @@ manually:
 
 We **strongly** recommend that you use at least **reset.css** in order to neglect visual side effects caused by the new HTML semantics.
 
-The `reset` theme is ship with the `algolia` one, so no need to import it when you are using the `algolia` theme.
+The `reset` theme CSS is included within the `algolia` CSS, so there is no need to import it separately when you are using the `algolia` theme.
 
 ### Via CDN
 
@@ -50,7 +50,7 @@ minified:
 * https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/reset-min.css
 * https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/algolia-min.css
 
-You can either copy paste the content in your own app or use a direct link to jsDelivr:
+You can either copy paste the content into your own app or use a direct link to jsDelivr:
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7.0.0/themes/reset-min.css">
