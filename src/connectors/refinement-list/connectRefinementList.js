@@ -17,6 +17,7 @@ var customRefinementList = connectRefinementList(function render(params) {
   //   widgetParams,
   // }
 });
+
 search.addWidget(
   customRefinementList({
     attributeName,
@@ -27,6 +28,7 @@ search.addWidget(
     [ escapeFacetValues = false ]
   })
 );
+
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html
 `;
 
