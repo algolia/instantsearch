@@ -35,4 +35,11 @@ storiesOf('Configure', module)
           </button>
         </template>
       </ais-configure>`,
+  }))
+  .add('with display of the parameters', () => ({
+    template: `<div>
+      <ais-configure :hitsPerPage="1">
+        <pre slot-scope="{ searchParameters }">{{ searchParameters }}</pre>
+      </ais-configure>
+    </div>`,
   }));

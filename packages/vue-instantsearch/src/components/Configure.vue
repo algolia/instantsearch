@@ -1,6 +1,9 @@
 <template>
   <div :class="suit('')" v-if="state">
-    <slot :searchParameters="state.widgetParams.searchParameters" :refine="state.refine">
+    <slot
+      :refine="state.refine"
+      :searchParameters="state.widgetParams.searchParameters"
+    >
     </slot>
   </div>
 </template>
