@@ -2,27 +2,27 @@
 
 exports[`headerFooter collapsible when collapsed 1`] = `
 <div
-  className="ais-root root ais-root__collapsible ais-root__collapsed"
+  className="ais-Panel ais-Panel-root--collapsible"
 >
   <Unknown
     data={undefined}
     rootProps={
       Object {
-        "className": "ais-header",
+        "className": "ais-Panel-Header",
         "onClick": [Function],
       }
     }
-    templateKey="header"
+    templateKey="panelHeader"
     templates={
       Object {
-        "footer": "yo footer",
-        "header": "yo header",
+        "panelFooter": "yo footer",
+        "panelHeader": "yo header",
       }
     }
     transformData={null}
   />
   <div
-    className="ais-body body"
+    className="ais-Panel-body"
   >
     <TestComponent
       collapsible={
@@ -39,8 +39,8 @@ exports[`headerFooter collapsible when collapsed 1`] = `
       templateProps={
         Object {
           "templates": Object {
-            "footer": "yo footer",
-            "header": "yo header",
+            "panelFooter": "yo footer",
+            "panelHeader": "yo header",
           },
         }
       }
@@ -50,15 +50,15 @@ exports[`headerFooter collapsible when collapsed 1`] = `
     data={undefined}
     rootProps={
       Object {
-        "className": "ais-footer",
+        "className": "ais-Panel-Footer",
         "onClick": null,
       }
     }
-    templateKey="footer"
+    templateKey="panelFooter"
     templates={
       Object {
-        "footer": "yo footer",
-        "header": "yo header",
+        "panelFooter": "yo footer",
+        "panelHeader": "yo header",
       }
     }
     transformData={null}
@@ -68,27 +68,27 @@ exports[`headerFooter collapsible when collapsed 1`] = `
 
 exports[`headerFooter collapsible when true 1`] = `
 <div
-  className="ais-root root ais-root__collapsible"
+  className="ais-Panel ais-Panel-root--collapsible"
 >
   <Unknown
     data={undefined}
     rootProps={
       Object {
-        "className": "ais-header",
+        "className": "ais-Panel-Header",
         "onClick": [Function],
       }
     }
-    templateKey="header"
+    templateKey="panelHeader"
     templates={
       Object {
-        "footer": "yo footer",
-        "header": "yo header",
+        "panelFooter": "yo footer",
+        "panelHeader": "yo header",
       }
     }
     transformData={null}
   />
   <div
-    className="ais-body body"
+    className="ais-Panel-body"
   >
     <TestComponent
       collapsible={true}
@@ -101,8 +101,8 @@ exports[`headerFooter collapsible when true 1`] = `
       templateProps={
         Object {
           "templates": Object {
-            "footer": "yo footer",
-            "header": "yo header",
+            "panelFooter": "yo footer",
+            "panelHeader": "yo header",
           },
         }
       }
@@ -112,15 +112,15 @@ exports[`headerFooter collapsible when true 1`] = `
     data={undefined}
     rootProps={
       Object {
-        "className": "ais-footer",
+        "className": "ais-Panel-Footer",
         "onClick": null,
       }
     }
-    templateKey="footer"
+    templateKey="panelFooter"
     templates={
       Object {
-        "footer": "yo footer",
-        "header": "yo header",
+        "panelFooter": "yo footer",
+        "panelHeader": "yo header",
       }
     }
     transformData={null}
@@ -130,10 +130,10 @@ exports[`headerFooter collapsible when true 1`] = `
 
 exports[`headerFooter should add a footer if such a template is passed 1`] = `
 <div
-  className="ais-root root"
+  className="ais-Panel"
 >
   <div
-    className="ais-body body"
+    className="ais-Panel-body"
   >
     <TestComponent
       collapsible={false}
@@ -146,7 +146,7 @@ exports[`headerFooter should add a footer if such a template is passed 1`] = `
       templateProps={
         Object {
           "templates": Object {
-            "footer": "FOOTER",
+            "panelFooter": "FOOTER",
           },
         }
       }
@@ -156,14 +156,14 @@ exports[`headerFooter should add a footer if such a template is passed 1`] = `
     data={undefined}
     rootProps={
       Object {
-        "className": "ais-footer",
+        "className": "ais-Panel-Footer",
         "onClick": null,
       }
     }
-    templateKey="footer"
+    templateKey="panelFooter"
     templates={
       Object {
-        "footer": "FOOTER",
+        "panelFooter": "FOOTER",
       }
     }
     transformData={null}
@@ -173,26 +173,26 @@ exports[`headerFooter should add a footer if such a template is passed 1`] = `
 
 exports[`headerFooter should add a header if such a template is passed 1`] = `
 <div
-  className="ais-root root"
+  className="ais-Panel"
 >
   <Unknown
     data={undefined}
     rootProps={
       Object {
-        "className": "ais-header",
+        "className": "ais-Panel-Header",
         "onClick": null,
       }
     }
-    templateKey="header"
+    templateKey="panelHeader"
     templates={
       Object {
-        "header": "HEADER",
+        "panelHeader": "HEADER",
       }
     }
     transformData={null}
   />
   <div
-    className="ais-body body"
+    className="ais-Panel-body"
   >
     <TestComponent
       collapsible={false}
@@ -205,7 +205,7 @@ exports[`headerFooter should add a header if such a template is passed 1`] = `
       templateProps={
         Object {
           "templates": Object {
-            "header": "HEADER",
+            "panelHeader": "HEADER",
           },
         }
       }
@@ -216,10 +216,10 @@ exports[`headerFooter should add a header if such a template is passed 1`] = `
 
 exports[`headerFooter should render the component in a root and body 1`] = `
 <div
-  className="ais-root root"
+  className="ais-Panel"
 >
   <div
-    className="ais-body body"
+    className="ais-Panel-body"
   >
     <TestComponent
       collapsible={false}

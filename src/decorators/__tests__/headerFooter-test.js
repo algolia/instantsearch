@@ -50,7 +50,7 @@ describe('headerFooter', () => {
   it('should add a header if such a template is passed', () => {
     // Given
     defaultProps.templateProps.templates = {
-      header: 'HEADER',
+      panelHeader: 'HEADER',
     };
     // When
     const out = render(defaultProps);
@@ -61,7 +61,7 @@ describe('headerFooter', () => {
   it('should add a footer if such a template is passed', () => {
     // Given
     defaultProps.templateProps.templates = {
-      footer: 'FOOTER',
+      panelFooter: 'FOOTER',
     };
     // When
     const out = render(defaultProps);
@@ -72,8 +72,8 @@ describe('headerFooter', () => {
   describe('collapsible', () => {
     beforeEach(() => {
       defaultProps.templateProps.templates = {
-        header: 'yo header',
-        footer: 'yo footer',
+        panelHeader: 'yo header',
+        panelFooter: 'yo footer',
       };
     });
 
@@ -95,25 +95,25 @@ describe('headerFooter', () => {
       // Given
       const props = {
         headerFooterData: {
-          header: {
+          panelHeader: {
             foo: 'bar',
           },
-          footer: {
+          panelFooter: {
             foo: 'baz',
           },
         },
         templateProps: {
           templates: {
-            header: 'header',
-            footer: 'footer',
+            panelHeader: 'header',
+            panelFooter: 'footer',
           },
         },
       };
 
       // When
       const actual = shallowRender(props);
-      const header = actual.find({ templateKey: 'header' });
-      const footer = actual.find({ templateKey: 'footer' });
+      const header = actual.find({ templateKey: 'panelHeader' });
+      const footer = actual.find({ templateKey: 'panelFooter' });
 
       // Then
       expect(header.props().data.foo).toEqual('bar');

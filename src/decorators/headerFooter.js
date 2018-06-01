@@ -9,75 +9,82 @@ import getKey from 'lodash/get';
 
 import Template from '../components/Template.js';
 
+import { component } from '../lib/suit.js';
+
+const suitPanel = component('Panel');
+
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends Component {
     constructor(props) {
       super(props);
-      this.handleHeaderClick = this.handleHeaderClick.bind(this);
+
+      this.handleHeaderClick = () => {
+        this.setState({
+          collapsed: !this.state.collapsed,
+        });
+      };
+
       this.state = {
         collapsed: props.collapsible && props.collapsible.collapsed,
       };
-
-      this._cssClasses = {
-        root: cx('ais-root', this.props.cssClasses.root),
-        body: cx('ais-body', this.props.cssClasses.body),
-      };
-
-      this._footerElement = this._getElement({ type: 'footer' });
     }
+
     _getElement({ type, handleClick = null }) {
+      const elementKey = `panel${type}`;
       const templates =
         this.props.templateProps && this.props.templateProps.templates;
-      if (!templates || !templates[type]) {
+      if (!templates || !templates[elementKey]) {
         return null;
       }
-      const className = cx(this.props.cssClasses[type], `ais-${type}`);
+      const className = cx(
+        suitPanel({ descendantName: type }),
+        this.props.cssClasses[elementKey]
+      );
 
-      const templateData = getKey(this.props, `headerFooterData.${type}`);
+      const templateData = getKey(this.props, `headerFooterData.${elementKey}`);
 
       return (
         <Template
           {...this.props.templateProps}
           data={templateData}
           rootProps={{ className, onClick: handleClick }}
-          templateKey={type}
+          templateKey={elementKey}
           transformData={null}
         />
       );
     }
-    handleHeaderClick() {
-      this.setState({
-        collapsed: !this.state.collapsed,
-      });
-    }
+
     render() {
-      const rootCssClasses = [this._cssClasses.root];
+      const rootClassnames = cx(suitPanel(), this.props.cssClasses.panelRoot, {
+        [suitPanel({
+          descendantName: 'root',
+          modifierName: 'collapsible',
+        })]: this.props.collapsible,
+        [suitPanel({
+          descendantName: 'root',
+          modifierName: 'collapsed',
+        })]: this.props.collapsed,
+      });
 
-      if (this.props.collapsible) {
-        rootCssClasses.push('ais-root__collapsible');
-      }
-
-      if (this.state.collapsed) {
-        rootCssClasses.push('ais-root__collapsed');
-      }
-
-      const cssClasses = {
-        ...this._cssClasses,
-        root: cx(rootCssClasses),
-      };
+      const bodyClassnames = cx(
+        suitPanel({ descendantName: 'body' }),
+        this.props.cssClasses.panelBody
+      );
 
       const headerElement = this._getElement({
-        type: 'header',
+        type: 'Header',
         handleClick: this.props.collapsible ? this.handleHeaderClick : null,
       });
 
+      const footerElement = this._getElement({ type: 'Footer' });
+
       return (
-        <div className={cssClasses.root}>
+        <div className={rootClassnames}>
           {headerElement}
-          <div className={cssClasses.body}>
+          <div className={bodyClassnames}>
             <ComposedComponent {...this.props} />
           </div>
-          {this._footerElement}
+          {footerElement}
         </div>
       );
     }
@@ -91,10 +98,10 @@ function headerFooter(ComposedComponent) {
       }),
     ]),
     cssClasses: PropTypes.shape({
-      root: PropTypes.string,
-      header: PropTypes.string,
-      body: PropTypes.string,
-      footer: PropTypes.string,
+      panelRoot: PropTypes.string,
+      panelHeader: PropTypes.string,
+      panelBody: PropTypes.string,
+      panelFooter: PropTypes.string,
     }),
     templateProps: PropTypes.object,
   };
