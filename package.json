@@ -74,7 +74,7 @@
     "bel": "5.1.7",
     "bundlesize": "0.16.0",
     "collect-json": "1.0.8",
-    "colors": "1.1.2",
+    "colors": "1.3.0",
     "compression": "1.7.2",
     "conventional-changelog-cli": "1.3.16",
     "css-loader": "0.28.10",
