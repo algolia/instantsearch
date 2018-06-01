@@ -72,7 +72,7 @@
     "babel-template": "6.26.0",
     "babel-types": "6.26.0",
     "bel": "5.1.7",
-    "bundlesize": "0.16.0",
+    "bundlesize": "0.17.0",
     "collect-json": "1.0.8",
     "colors": "1.1.2",
     "compression": "1.7.2",
