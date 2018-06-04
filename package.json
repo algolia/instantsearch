@@ -87,7 +87,7 @@
   },
   "engines": {
     "node": "8.11.2",
-    "yarn": "1.5.1"
+    "yarn": "1.7.0"
   },
   "jest": {
     "projects": [

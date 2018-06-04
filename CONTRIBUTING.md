@@ -5,7 +5,7 @@
 To run this project, you will need:
 
 - Node.js >= v8.10.0, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
-- Yarn >= v1.5.1 - [install instructions](https://yarnpkg.com/en/docs/install#alternatives-stable)
+- Yarn >= v1.7.0 - [install instructions](https://yarnpkg.com/en/docs/install#alternatives-stable)
 
 ## Development
 
