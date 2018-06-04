@@ -6,15 +6,35 @@ import find from 'lodash/find';
 import Selector from '../../components/Selector.js';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import defaultTemplates from './defaultTemplates.js';
+
+import {
+  bemHelper,
+  getContainerNode,
+  prepareTemplateProps,
+} from '../../lib/utils.js';
 
 const bem = bemHelper('ais-hits-per-page-selector');
 
-const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
-  { items, refine, hasNoResults },
+const renderer = ({
+  renderState = {},
+  containerNode,
+  cssClasses,
+  autoHideContainer,
+  templates,
+}) => (
+  { items, refine, hasNoResults, instantSearchInstance },
   isFirstRendering
 ) => {
-  if (isFirstRendering) return;
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData: {},
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
 
   const { value: currentValue } =
     find(items, ({ isRefined }) => isRefined) || {};
@@ -26,6 +46,7 @@ const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
       options={items}
       setValue={refine}
       shouldAutoHideContainer={autoHideContainer && hasNoResults}
+      templateProps={renderState.templateProps}
     />,
     containerNode
   );
@@ -35,15 +56,25 @@ const usage = `Usage:
 hitsPerPageSelector({
   container,
   items,
-  [ cssClasses.{root,select,item}={} ],
+  [ cssClasses.{select, item, panelRoot, panelHeader, panelBody, panelFooter}={} ],
+  [ templates.{panelHeader, panelFooter}]
   [ autoHideContainer=false ]
 })`;
 
 /**
  * @typedef {Object} HitsPerPageSelectorCSSClasses
- * @property {string|string[]} [root] CSS classes added to the outer `<div>`.
  * @property {string|string[]} [select] CSS classes added to the parent `<select>`.
  * @property {string|string[]} [item] CSS classes added to each `<option>`.
+ * @property {string|string[]} [panelRoot] CSS class to add to the root panel element
+ * @property {string|string[]} [panelHeader] CSS class to add to the header panel element
+ * @property {string|string[]} [panelBody] CSS class to add to the body panel element
+ * @property {string|string[]} [panelFooter] CSS class to add to the footer panel element
+ */
+
+/**
+ * @typedef {Object} HitsPerPageTemplates
+ * @property {string|function(object):string} [panelHeader=''] Template used for the header of the panel.
+ * @property {string|function(object):string} [panelFooter=''] Template used for the footer of the panel.
  */
 
 /**
@@ -58,6 +89,7 @@ hitsPerPageSelector({
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {HitsPerPageSelectorItems[]} items Array of objects defining the different values and labels.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
+ * @property {HitsPerPageTemplates} [templates] Templates used to customize the widget.
  * @property {HitsPerPageSelectorCSSClasses} [cssClasses] CSS classes to be added.
  */
 
@@ -87,6 +119,7 @@ export default function hitsPerPageSelector({
   container,
   items,
   cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
   autoHideContainer = false,
 } = {}) {
   if (!container) {
@@ -96,17 +129,19 @@ export default function hitsPerPageSelector({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    // We use the same class to avoid regression on existing website. It needs to be replaced
-    // eventually by `bem('select')
     select: cx(bem(null), userCssClasses.select),
     item: cx(bem('item'), userCssClasses.item),
+    panelRoot: userCssClasses.panelRoot,
+    panelHeader: userCssClasses.panelHeader,
+    panelBody: userCssClasses.panelBody,
+    panelFooter: userCssClasses.panelFooter,
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     autoHideContainer,
+    templates,
   });
 
   try {
