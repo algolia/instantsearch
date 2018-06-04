@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 export default {
-  header: '',
+  panelHeader: '',
   item:
     '<a class="{{cssClasses.link}}" href="{{url}}">{{label}} <span class="{{cssClasses.count}}">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>',
-  footer: '',
+  panelFooter: '',
 };
