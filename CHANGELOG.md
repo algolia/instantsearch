@@ -1,3 +1,13 @@
+<a name="5.2.0-beta.0"></a>
+# [5.2.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v5.1.0...v5.2.0-beta.0) (2018-06-04)
+
+
+This new version introduce a complete revamp of the package structure, but it should be completely transparent for the users.
+
+If you have any troubles with this version please open a issue on [Github](https://github.com/algolia/react-instantsearch/issues/new), thanks!
+
+
+
 <a name="5.1.0"></a>
 # [5.1.0](https://github.com/algolia/react-instantsearch/compare/v5.0.3...v5.1.0) (2018-05-28)
 
