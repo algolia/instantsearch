@@ -3597,39 +3597,39 @@ react-dom@16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-instantsearch-core@^5.2.0-beta.0:
-  version "5.2.0-beta.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-5.2.0-beta.0.tgz#d0700c1b27ebb2d3035494d4f540766c03aab3b1"
+react-instantsearch-core@^5.2.0-beta.1:
+  version "5.2.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-5.2.0-beta.1.tgz#edd7329b4413a1627ca8137331b9cca6cbb89762"
   dependencies:
     algoliasearch-helper "^2.26.0"
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
-react-instantsearch-dom@^5.2.0-beta.0:
-  version "5.2.0-beta.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-5.2.0-beta.0.tgz#4955fe04974154b652a12f33d30274073b5125c5"
+react-instantsearch-dom@^5.2.0-beta.1:
+  version "5.2.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-5.2.0-beta.1.tgz#b18bcb7fd5cf143a877822e0912fe793be769647"
   dependencies:
     algoliasearch "^3.27.1"
     algoliasearch-helper "^2.26.0"
     classnames "^2.2.5"
     lodash "^4.17.4"
     prop-types "^15.5.10"
-    react-instantsearch-core "^5.2.0-beta.0"
+    react-instantsearch-core "^5.2.0-beta.1"
 
-react-instantsearch-native@^5.2.0-beta.0:
-  version "5.2.0-beta.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-native/-/react-instantsearch-native-5.2.0-beta.0.tgz#fbf78dd9abaa43e02ad9b83af706d9b9b1fb4bd7"
+react-instantsearch-native@^5.2.0-beta.1:
+  version "5.2.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-native/-/react-instantsearch-native-5.2.0-beta.1.tgz#65d80f7dff18049aa730f768d35b07a0809a8a61"
   dependencies:
     algoliasearch "^3.27.1"
-    react-instantsearch-core "^5.2.0-beta.0"
+    react-instantsearch-core "^5.2.0-beta.1"
 
-react-instantsearch@5.2.0-beta.0:
-  version "5.2.0-beta.0"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-5.2.0-beta.0.tgz#b860989089d9b8237d740b677a9241900643db4b"
+react-instantsearch@5.2.0-beta.1:
+  version "5.2.0-beta.1"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-5.2.0-beta.1.tgz#28008f22871f0af3738763a1ae7352da2569b169"
   dependencies:
-    react-instantsearch-core "^5.2.0-beta.0"
-    react-instantsearch-dom "^5.2.0-beta.0"
-    react-instantsearch-native "^5.2.0-beta.0"
+    react-instantsearch-core "^5.2.0-beta.1"
+    react-instantsearch-dom "^5.2.0-beta.1"
+    react-instantsearch-native "^5.2.0-beta.1"
 
 react-test-renderer@16.2.0:
   version "16.2.0"
