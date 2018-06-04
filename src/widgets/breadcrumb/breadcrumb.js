@@ -58,7 +58,7 @@ breadcrumb({
   attributes,
   [ autoHideContainer=true ],
   [ cssClasses.{disabledLabel, home, label, separator, panelRoot, panelHeader, panelBody, panelFooter}={} ],
-  [ templates.{home, separator}]
+  [ templates.{home, separator, panelHeader, panelFooter}]
   [ transformData.{item} ],
 })`;
 
@@ -175,6 +175,11 @@ export default function breadcrumb({
     label: cx(bem('label'), userCssClasses.label),
     root: cx(bem('root'), userCssClasses.root),
     separator: cx(bem('separator'), userCssClasses.separator),
+    panelRoot: userCssClasses.panelRoot,
+    panelHeader: userCssClasses.panelHeader,
+    panelBody: userCssClasses.panelBody,
+    panelFooter: userCssClasses.panelFooter,
+
   };
 
   const specializedRenderer = renderer({
