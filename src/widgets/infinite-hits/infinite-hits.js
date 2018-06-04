@@ -54,8 +54,8 @@ infiniteHits({
   container,
   [ escapeHits = false ],
   [ showMoreLabel ],
-  [ cssClasses.{root,empty,item,showmore}={} ],
-  [ templates.{empty,item} | templates.{empty} ],
+  [ cssClasses.{root, empty, item, showmore, panelRoot, panelHeader, panelBody, panelFooter}={} ],
+  [ templates.{empty, item, panelHeader, panelFooter} ],
   [ transformData.{empty,item} | transformData.{empty} ],
 })`;
 
@@ -63,6 +63,8 @@ infiniteHits({
  * @typedef {Object} InfiniteHitsTemplates
  * @property {string|function} [empty=""] Template used when there are no results.
  * @property {string|function} [item=""] Template used for each result. This template will receive an object containing a single record.
+ * @property {string|function():string} [panelHeader=''] Template used for the header of the panel.
+ * @property {string|function():string} [panelFooter=''] Template used for the footer of the panel.
  */
 
 /**
@@ -77,6 +79,10 @@ infiniteHits({
  * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
  * @property {string|string[]} [item] CSS class to add to each result.
  * @property {string|string[]} [showmore] CSS class to add to the show more button.
+ * @property {string|string[]} [panelRoot] CSS class to add to the header panel element
+ * @property {string|string[]} [panelHeader] CSS class to add to the header panel element
+ * @property {string|string[]} [panelBody] CSS class to add to the body panel element
+ * @property {string|string[]} [panelFooter] CSS class to add to the footer panel element
  */
 
 /**
@@ -106,7 +112,8 @@ infiniteHits({
  *     container: '#infinite-hits-container',
  *     templates: {
  *       empty: 'No results',
- *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
+ *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}',
+ *       panelHeader: 'The results'
  *     },
  *     escapeHits: true,
  *   })
@@ -138,6 +145,10 @@ export default function infiniteHits({
     item: cx(bem('item'), userCssClasses.item),
     empty: cx(bem(null, 'empty'), userCssClasses.empty),
     showmore: cx(bem('showmore'), userCssClasses.showmore),
+    panelRoot: userCssClasses.panelRoot,
+    panelHeader: userCssClasses.panelHeader,
+    panelBody: userCssClasses.panelBody,
+    panelFooter: userCssClasses.panelFooter,
   };
 
   const specializedRenderer = renderer({

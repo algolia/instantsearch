@@ -23,6 +23,22 @@ export default () => {
       })
     )
     .add(
+      'with header and footer',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.infiniteHits({
+            container,
+            showMoreLabel: 'Show more',
+            templates: {
+              item: '{{name}}',
+              panelHeader: 'Infinite hits',
+              panelFooter: 'Brought to you by Algolia',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with custom css classes',
       wrapWithHits(container => {
         const style = window.document.createElement('style');
@@ -36,10 +52,17 @@ export default () => {
             container,
             showMoreLabel: 'Show more',
             cssClasses: {
+              item: 'item',
               showmore: 'button',
+              panelRoot: 'root',
+              panelHeader: 'header',
+              panelBody: 'body',
+              panelFooter: 'footer',
             },
             templates: {
               item: '{{name}}',
+              panelHeader: 'Infinite hits',
+              panelFooter: 'Brought to you by Algolia',
             },
           })
         );
