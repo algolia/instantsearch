@@ -1,3 +1,13 @@
+<a name="5.2.0-beta.1"></a>
+# [5.2.0-beta.1](https://github.com/algolia/react-instantsearch/compare/v5.2.0-beta.0...v5.2.0-beta.1) (2018-06-04)
+
+
+### Bug Fixes
+
+* **dom:** publish server file ([#1305](https://github.com/algolia/react-instantsearch/issues/1305)) ([bd79693](https://github.com/algolia/react-instantsearch/commit/bd79693))
+
+
+
 <a name="5.2.0-beta.0"></a>
 # [5.2.0-beta.0](https://github.com/algolia/react-instantsearch/compare/v5.1.0...v5.2.0-beta.0) (2018-06-04)
 
