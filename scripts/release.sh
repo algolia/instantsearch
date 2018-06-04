@@ -124,7 +124,15 @@ else
   VERSION=$newVersion lerna run release --scope react-*
 fi
 
-printf "\nRelease: Package was published to NPM\n"
+printf "\nRelease: Package was published to NPM\n\n"
+
+# Wait for the publish to be effective
+sleep 2.5
+
+# Required until Lerna supports the top level package as a member
+# of the Workspaces. Another solution is to move out the stories
+# from the top level package (will be done at some point).
+yarn upgrade react-instantsearch@$newVersion -W -D
 
 for example in examples/* ; do
   (
