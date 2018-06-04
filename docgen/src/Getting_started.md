@@ -61,8 +61,7 @@ that they can update themselves when needed.
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import { InstantSearch } from 'react-instantsearch/dom';
+import { InstantSearch } from 'react-instantsearch-dom';
 
 const App = () => (
   <InstantSearch
@@ -126,7 +125,7 @@ ease the reading of our React code:
 
 ```jsx
 // First, we need to add the Hits component to our import
-import { InstantSearch, Hits } from 'react-instantsearch/dom';
+import { InstantSearch, Hits } from 'react-instantsearch-dom';
 
 // [...]
 
@@ -198,7 +197,7 @@ in the Search component that we created before:
 
 ```jsx
 // We need to add the SearchBox to our import
-import { InstantSearch, Hits, SearchBox } from 'react-instantsearch/dom';
+import { InstantSearch, Hits, SearchBox } from 'react-instantsearch-dom';
 
 // [...]
 
@@ -223,7 +222,7 @@ import {
   Hits,
   SearchBox,
   Highlight
-} from 'react-instantsearch/dom';
+} from 'react-instantsearch-dom';
 
 // [...]
 
@@ -272,7 +271,7 @@ import {
   SearchBox,
   Highlight,
   RefinementList
-} from 'react-instantsearch/dom';
+} from 'react-instantsearch-dom';
 
 // [...]
 
@@ -324,7 +323,7 @@ import {
   Pagination,
   CurrentRefinements,
   ClearRefinements
-} from 'react-instantsearch/dom';
+} from 'react-instantsearch-dom';
 
 // [...]
 

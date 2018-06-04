@@ -40,8 +40,7 @@ tag is `em`, mostly for legacy reasons.
 
 ```jsx
 import React from 'react';
-
-import { InstantSearch, Hits, Highlight } from 'react-instantsearch/dom';
+import { InstantSearch, Hits, Highlight } from 'react-instantsearch-dom';
 
 const Hit = ({ hit }) => (
   <p>
@@ -79,8 +78,7 @@ way as the [widgets](guide/Highlighting_results.html#highlight-and-snippet-widge
 
 ```jsx
 import React from 'react';
-import { connectHighlight } from 'react-instantsearch/connectors';
-import { InstantSearch, Hits } from 'react-instantsearch/dom';
+import { InstantSearch, Hits, connectHighlight } from 'react-instantsearch-dom';
 
 const CustomHighlight = connectHighlight(
   ({ highlight, attribute, hit, highlightProperty }) => {

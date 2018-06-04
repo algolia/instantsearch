@@ -16,10 +16,12 @@ if [ $# -gt 0 ]; then
 fi
 
 # npm owner add and npm whoami cannot be moved to yarn yet
-if [[ $(cd packages/react-instantsearch && npm owner ls) != *"$(npm whoami)"* ]]; then
-  printf "Release: Not an owner of the npm ris repo, ask for it\n"
-  exit 1
-fi
+for package in packages/* ; do
+  if [[ $(cd $package && npm owner ls) != *"$(npm whoami)"* ]]; then
+    printf "Release: Not an owner of \"$package\", ask for it\n"
+    exit 1
+  fi
+done
 
 currentBranch=`git rev-parse --abbrev-ref HEAD`
 if [ $currentBranch != 'master' ]; then
@@ -32,20 +34,17 @@ if [[ -n $(git status --porcelain) ]]; then
   exit 1
 fi
 
-# printf "\n\nRelease: update working tree"
+printf "Release: update working tree\n"
 git pull origin master
 git fetch origin --tags
 
-# Force Yarn to install **all** the dependencies since the NODE_ENV is set
-# to "production". Yarn will install only the production dependencies by default.
-# See: https://yarnpkg.com/en/docs/cli/install#toc-yarn-install-production-true-false
-yarn --production=false
+printf "\nRelease: install dependencies\n"
+yarn
 
-# No need for complex release process for now, only patch releases should be ok
 currentVersion=`cat package.json | json version`
 
 # header
-printf "\n\nRelease: current version is %s" $currentVersion
+printf "\nRelease: current version is %s" $currentVersion
 printf "\nRelease: a changelog will be generated only if a fix/feat/performance/breaking token is found in git log"
 printf "\nRelease: you must choose a new ve.rs.ion (semver)"
 printf "\nRelease: press q to exit the next screen\n\n"
@@ -61,23 +60,47 @@ if $beta; then
 fi
 
 # choose and bump new version
-printf "\n=> Release: please type the new chosen version $additionalInfo >"
+printf "\n=> Release: please type the new chosen version $additionalInfo > "
+
 read -e newVersion
 
-(
-cd packages/react-instantsearch
-mversion $newVersion
-)
+printf "\n"
 
+if [[ "$newVersion" == "" ]]; then
+  printf "\nRelease: The version must be provided\n"
+  exit 1
+fi
+
+versionFilePath='packages/react-instantsearch-core/src/core/version.js'
+if [[ ! -f "$versionFilePath" ]]; then
+  printf "\nRelease: Unable to bump the version at:\n"
+  printf "$versionFilePath\n"
+  exit 1
+fi
+
+# update version in source file
+echo "export default '$newVersion';" > $versionFilePath;
+
+# update version in top level package
 mversion $newVersion
+
+printf "\n"
+
+# update version in packages & dependencies
+lerna publish \
+  --scope react-* \
+  --repo-version $newVersion \
+  --skip-git \
+  --skip-npm \
+  --yes
 
 # update changelog
-printf "\n\nRelease: update changelog"
+printf "\nRelease: update changelog\n"
 changelog=`conventional-changelog -p angular`
 conventional-changelog --preset angular --infile CHANGELOG.md --same-file
 
 # regenerate readme TOC
-printf "\n\nRelease: generate TOCS"
+printf "\nRelease: generate TOCS\n"
 yarn doctoc
 
 # git add and tag
@@ -92,24 +115,22 @@ read -p "=> Release: when ready, press [ENTER] to push to github and publish the
 git push origin master
 git push origin --tags
 
-printf "\n\nRelease: pushed to github, publish on npm"
+printf "\n\nRelease: pushed to GitHub, publish on NPM\n"
 
-npmFlags=''
-if $beta; then
-  npmFlags="--tag beta"
+if $beta
+then
+  VERSION=$newVersion lerna run release:beta --scope react-*
+else
+  VERSION=$newVersion lerna run release --scope react-*
 fi
 
-(
-cd packages/react-instantsearch
-VERSION=$newVersion npm run build-and-publish -- -n "$npmFlags"
-)
+printf "\nRelease: Package was published to NPM\n"
 
-printf "\n\nRelease: Package was published to npm."
-
-for d in examples/* ; do
-    cd $d
+for example in examples/* ; do
+  (
+    cd $example
     yarn upgrade react-instantsearch@$newVersion
-    cd ../..
+  )
 done
 
 commitMessage="chore(deps): update examples to react-instantsearch v$newVersion"

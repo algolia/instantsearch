@@ -14,13 +14,11 @@ import {
   Highlight,
   Panel,
   Configure,
-} from 'react-instantsearch/dom';
-import {
   connectSearchBox,
   connectRefinementList,
   connectHits,
   connectStateResults,
-} from 'react-instantsearch/connectors';
+} from 'react-instantsearch-dom';
 import { withUrlSync } from '../urlSync';
 import 'instantsearch.css/themes/algolia.css';
 

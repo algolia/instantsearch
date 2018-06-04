@@ -11,16 +11,17 @@ React InstantSearch provides a set of DOM widgets with pre-defined DOM structure
 Here's an example using the [`<SearchBox>`](widgets/SearchBox.html):
 
 ```jsx
-import {InstantSearch, SearchBox} from 'react-instantsearch/dom';
+import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
 
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="..."
     apiKey="..."
     indexName="..."
   >
     <SearchBox />
-  </InstantSearch>;
+  </InstantSearch>
+);
 ```
 
 **Notes:**

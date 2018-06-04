@@ -4,28 +4,34 @@
 
 To run this project, you will need:
 
-- Node.js >= v7.10.0, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
-- Yarn >= v0.23.4 - [install instructions](https://yarnpkg.com/en/docs/install#alternatives-tab)
+- Node.js >= v8.10.0, use nvm - [install instructions](https://github.com/creationix/nvm#install-script)
+- Yarn >= v1.5.1 - [install instructions](https://yarnpkg.com/en/docs/install#alternatives-stable)
 
 ## Development
 
-We use the [documentation website][website] as the main way to develop
-React InstantSearch.
+We use the [documentation website][website] as the main way to develop React InstantSearch.
 
 ```sh
 yarn
 yarn start
 ```
 
-Go to <http://localhost:3000>.
+Go to <http://localhost:3000> for the documentation website.
+Go to <http://localhost:6006> for Storybook.
+
+The applications won't reload on code change. To enable the watch mode, run the following command in another tab.
+
+```sh
+yarn watch
+```
 
 ## Code
 
-The code for React InstantSearch is located in [packages/react-instantsearch](packages/react-instantsearch).
+The code for React InstantSearch is located in [packages](packages).
 
 ## Test
 
-We have unit tests written with [Jest](https://facebook.github.io/jest/):
+We have unit tests written with [Jest](https://facebook.github.io/jest):
 
 Single run and linting:
 ```sh
@@ -48,13 +54,13 @@ Files are automatically formatted with prettier.
 ## Release
 
 ```sh
-npm run release
+yarn release
 ```
 
 ### Beta release
 
 ```sh
-npm run release -- --beta
+yarn release --beta
 ```
 
 Append `-beta.x` where x is a number to the version for beta, so 4.0.0-beta.2 for example.
@@ -71,13 +77,7 @@ yarn docs:deploy-production
 yarn docs:deploy-preview
 ```
 
-This uses [netlify](https://www.netlify.com/).
-
-## See next release changelog
-
-```sh
-yarn changelog
-```
+This uses [netlify](https://www.netlify.com).
 
 [logo]: ./docgen/readme-logo.png
-[website]: https://community.algolia.com/react-instantsearch/
+[website]: https://community.algolia.com/react-instantsearch

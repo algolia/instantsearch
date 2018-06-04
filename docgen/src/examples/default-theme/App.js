@@ -15,8 +15,8 @@ import {
   RangeInput,
   Highlight,
   Configure,
-} from 'react-instantsearch/dom';
-import { connectStateResults } from 'react-instantsearch/connectors';
+  connectStateResults,
+} from 'react-instantsearch-dom';
 import { withUrlSync } from '../urlSync';
 import 'instantsearch.css/themes/algolia.css';
 

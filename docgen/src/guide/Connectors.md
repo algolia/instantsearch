@@ -32,7 +32,7 @@ components which are called the **provided props**.
 If you want to create your own search box, you will need to use the [`connectSearchBox()`](connectors/connectSearchBox.html) connector:
 
 ```jsx
-import {connectSearchBox} from 'react-instantsearch/connectors';
+import { connectSearchBox } from 'react-instantsearch-dom';
 
 const MySearchBox = ({currentRefinement, refine}) =>
   <input

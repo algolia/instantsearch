@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import { Panel, SearchBox } from '../packages/react-instantsearch/dom';
 import { object, boolean } from '@storybook/addon-knobs';
-import { displayName, filterProps, WrapWithHits } from './util';
 import { action } from '@storybook/addon-actions';
 import JSXAddon from 'storybook-addon-jsx';
+import { Panel, SearchBox } from 'react-instantsearch-dom';
+import { displayName, filterProps, WrapWithHits } from './util';
 
 setAddon(JSXAddon);
 

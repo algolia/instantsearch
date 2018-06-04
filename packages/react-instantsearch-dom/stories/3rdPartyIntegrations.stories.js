@@ -1,12 +1,9 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { storiesOf } from '@storybook/react';
-import { connectRange } from '../packages/react-instantsearch/connectors';
-import createClassNames from '../packages/react-instantsearch/src/components/createClassNames';
-import { WrapWithHits } from './util';
+import PropTypes from 'prop-types';
 import Rheostat from 'rheostat';
-
-const cx = createClassNames('RangeSlider');
+import { storiesOf } from '@storybook/react';
+import { connectRange } from 'react-instantsearch-dom';
+import { WrapWithHits } from './util';
 
 const stories = storiesOf('Integration With Other Libraries', module);
 
@@ -64,7 +61,7 @@ class Range extends Component {
 
     return min !== max ? (
       <Rheostat
-        className={cx('')}
+        className="ais-RangeSlider"
         min={min}
         max={max}
         values={[currentRefinement.min, currentRefinement.max]}

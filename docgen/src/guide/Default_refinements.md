@@ -15,9 +15,9 @@ The following example will instantiate a search page with a default query of "hi
 will show a fruits menu where the item "Orange" is already selected:
 
 ```jsx
-import {InstantSearch, SearchBox, Menu} from 'react-instantsearch/dom';
+import { InstantSearch, SearchBox, Menu } from 'react-instantsearch-dom';
 
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="..."
     apiKey="..."
@@ -25,7 +25,8 @@ const App = () =>
   >
     <SearchBox defaultRefinement="hi" />
     <Menu attribute="fruits" defaultRefinement="Orange" />
-  </InstantSearch>;
+  </InstantSearch>
+);
 ```
 
 ## Hiding default refinements
@@ -39,26 +40,28 @@ By default the [`<CurrentRefinements>`](widgets/CurrentRefinements.html) widget 
 [`connectCurrentRefinements`](connectors/connectCurrentRefinements.html) connector will display your default refinements. If you want to hide them, you need to filter the items with `transformItems`.
 
 ```jsx
-import {InstantSearch, SearchBox, Menu} from 'react-instantsearch/dom';
-import {connectMenu} from 'react-instantsearch/connectors';
+import { InstantSearch, SearchBox, Menu, connectMenu } from 'react-instantsearch-dom';
 
 const VirtualMenu = connectMenu(() => null);
 
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="..."
     apiKey="..."
     indexName="..."
   >
     <div>
-        <CurrentRefinements
-           transformItems={items => items.filter(item => item.currentRefinement !== 'Orange')}
-        />
-        <SearchBox/>
-        <VirtualMenu attribute="fruits" defaultRefinement={'Orange'} />
-        <Menu attribute="origin" defaultRefinement={'Spain'} />
+      <CurrentRefinements
+        transformItems={items =>
+          items.filter(item => item.currentRefinement !== 'Orange')
+        }
+      />
+      <SearchBox/>
+      <VirtualMenu attribute="fruits" defaultRefinement="Orange" />
+      <Menu attribute="origin" defaultRefinement="Spain" />
     </div>
-  </InstantSearch>;
+  </InstantSearch>
+);
 ```
 
 **Notes:**

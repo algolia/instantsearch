@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Snippet, Hits } from '../packages/react-instantsearch/dom';
 import { storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs';
+import { Snippet, Hits } from 'react-instantsearch-dom';
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Snippet', module);

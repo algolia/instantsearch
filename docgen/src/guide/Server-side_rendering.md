@@ -18,7 +18,7 @@ If you are looking for an example using another solution, read how to do custom 
 
 ## Three steps custom implementation
 
-We provide a new API entry, `createInstantSearch`, available under `'react-instantsearch/server'`.
+We provide a new API entry, `createInstantSearch`, available under `'react-instantsearch-dom/server'`.
 
 When called, `createInstantSearch` returns:
 
@@ -38,8 +38,8 @@ We split this guide in three parts:
 
 ```jsx
 import React, { Component } from 'react';
-import { SearchBox, Hits } from 'react-instantsearch/dom';
-import { createInstantSearch } from 'react-instantsearch/server';
+import { createInstantSearch } from 'react-instantsearch-dom/server';
+import { SearchBox, Hits } from 'react-instantsearch-dom';
 
 // Now we create a dedicated `InstantSearch` component
 const { InstantSearch, findResultsState } = createInstantSearch();
@@ -65,7 +65,7 @@ export { App, findResultsState };
 ```
 
 **Steps:**
-- Use `createInstantSearch()` to get a `findResultsState` function and a dedicated `<InstantSearch>` component (instead of importing the one under `react-instantsearch/dom`)
+- Use `createInstantSearch()` to get a `findResultsState` function and a dedicated `<InstantSearch>` component (instead of importing the one under `react-instantsearch-dom`)
 - Export `<App>` (to be used by browser and server code) and `findResultsState` (to be used by server code)
 
 **Notes:**

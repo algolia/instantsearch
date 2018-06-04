@@ -1,14 +1,14 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
+import { object, text } from '@storybook/addon-knobs';
+import JSXAddon from 'storybook-addon-jsx';
 import {
   Breadcrumb,
   HierarchicalMenu,
   Panel,
-} from '../packages/react-instantsearch/dom';
-import { connectHierarchicalMenu } from '../packages/react-instantsearch/connectors';
-import { object, text } from '@storybook/addon-knobs';
+  connectHierarchicalMenu,
+} from 'react-instantsearch-dom';
 import { displayName, filterProps, WrapWithHits } from './util';
-import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
 

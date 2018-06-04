@@ -1,0 +1,70 @@
+{
+  "name": "react-instantsearch-native",
+  "version": "5.1.0",
+  "description": "⚡ Lightning-fast search for React Native, by Algolia",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "sideEffects": false,
+  "license": "MIT",
+  "homepage": "https://community.algolia.com/react-instantsearch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/react-instantsearch"
+  },
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "keywords": [
+    "algolia",
+    "components",
+    "fast",
+    "instantsearch",
+    "react",
+    "react-native",
+    "search"
+  ],
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "watch": "yarn build:cjs --watch",
+    "build": "yarn build:cjs && yarn build:es",
+    "build:cjs": "babel src --out-dir dist/cjs --ignore __tests__,__mocks__ --quiet",
+    "build:es": "BABEL_ENV=es babel src --out-dir dist/es --ignore __tests__,__mocks__ --quiet",
+    "test": "jest",
+    "release": "yarn clean && yarn build && yarn publish",
+    "release:beta": "yarn clean && yarn build && yarn publish --tag beta"
+  },
+  "dependencies": {
+    "algoliasearch": "^3.27.1",
+    "react-instantsearch-core": "^5.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "babel-core": "6.26.0",
+    "babel-plugin-external-helpers": "6.22.0",
+    "babel-plugin-lodash": "3.3.2",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-2": "6.24.1",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
+    "enzyme-to-json": "3.3.4",
+    "jest": "23.1.0",
+    "react": "16.4.0",
+    "react-dom": "16.4.0",
+    "react-test-renderer": "16.4.0"
+  },
+  "peerDependencies": {
+    "react": ">= 15.3.0 < 17",
+    "react-native": ">= 0.32.0"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  }
+}

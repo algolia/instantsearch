@@ -1,14 +1,10 @@
+import { orderBy } from 'lodash';
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import {
-  Panel,
-  RefinementList,
-  SearchBox,
-} from '../packages/react-instantsearch/dom';
 import { boolean, number, array } from '@storybook/addon-knobs';
-import { displayName, filterProps, WrapWithHits } from './util';
-import { orderBy } from 'lodash';
 import JSXAddon from 'storybook-addon-jsx';
+import { Panel, RefinementList, SearchBox } from 'react-instantsearch-dom';
+import { displayName, filterProps, WrapWithHits } from './util';
 
 setAddon(JSXAddon);
 

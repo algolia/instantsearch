@@ -6,7 +6,7 @@ category: guide
 navWeight: 80
 ---
 
-All widgets under the `react-instantsearch/dom` namespace are shipped with fixed CSS class names.
+All widgets under the `react-instantsearch-dom` namespace are shipped with fixed CSS class names.
 
 The format for those class names is `ais-NameOfWidget-element--modifier`.
 

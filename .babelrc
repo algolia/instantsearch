@@ -1,122 +1,64 @@
-// This could be written a lot more easily using .babelrc.js but currently
-// not released. And the merging around the env option is broken
-// refs: https://github.com/babel/babel/issues/5276
-
 {
   "env": {
     "development": {
       "presets": [
-        ["env", {
-          "targets": {
-            "browsers": [
-              "last 2 versions",
-              "ie >= 9",
-            ],
-          },
-        }],
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": [
+                "last 2 versions",
+                "ie >= 9"
+              ]
+            }
+          }
+        ],
         "react",
-        "stage-2",
+        "stage-2"
       ],
       "plugins": [
-        "lodash",
-        "inline-json-import",
-        ["transform-runtime", {
-            "helpers": false,
-            "polyfill": false,
-            "regenerator": true
-        }],
-        "transform-react-jsx-source",
-        "react-hot-loader/babel",
-        "transform-regenerator"
+        "lodash"
       ]
     },
     "test": {
       "presets": [
-        ["env", {
-          "targets": {
-            "browsers": [
-              "last 2 versions",
-              "ie >= 9",
-            ],
-          },
-        }],
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": [
+                "last 2 versions",
+                "ie >= 9"
+              ]
+            }
+          }
+        ],
         "react",
-        "stage-2",
+        "stage-2"
       ],
       "plugins": [
-        "lodash",
-        "inline-json-import",
-      ],
+        "lodash"
+      ]
     },
     "production": {
       "presets": [
-        ["env", {
-          "targets": {
-            "browsers": [
-              "last 2 versions",
-              "ie >= 9",
-            ],
-          },
-        }],
+        [
+          "env",
+          {
+            "targets": {
+              "browsers": [
+                "last 2 versions",
+                "ie >= 9"
+              ]
+            }
+          }
+        ],
         "react",
-        "stage-2",
+        "stage-2"
       ],
       "plugins": [
-        "lodash",
-        "inline-json-import",
-      ],
-    },
-    "es": {
-      "presets": [
-        ["env", {
-          "targets": {
-            "browsers": [
-              "last 2 versions",
-              "ie >= 9",
-            ],
-          },
-          "modules": false,
-        }],
-        "react",
-        "stage-2",
-      ],
-      "plugins": [
-        "lodash",
-        "inline-json-import",
+        "lodash"
       ]
     }
   }
 }
-
-// Once we are using Babel 7 and babelrc.js, here's the code to use
-// const env = process.env.NODE_ENV || 'development';
-// const modules = process.env.MODULES || 'commonjs';
-// const plugins = ['lodash', 'inline-json-import'];
-//
-// // hot reloading, async/await, jsx source
-// if (env === 'development') {
-//   plugins.push(
-//     ['transform-runtime', {
-//       helpers: false,
-//       polyfill: false,
-//       regenerator: true
-//     }],
-//     'transform-react-jsx-source',
-//     'react-hot-loader/babel',
-//     'transform-regenerator'
-//   );
-// }
-//
-// module.exports = {
-//   plugins,
-//   presets: [
-//     ['env', {
-//       targets: {
-//         browsers: ['last 2 versions', 'ie >= 9']
-//       },
-//       modules
-//     }],
-//     'react',
-//     'stage-2',
-//   ]
-// }

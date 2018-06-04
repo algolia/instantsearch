@@ -21,19 +21,24 @@ prop where you can completely reorder or filter items.
 The following example will show you how to change the default sort order of the [`<RefinementList>`](widgets/RefinementList.html) widget.
 
 ```jsx
-import {InstantSearch, RefinementList} from 'react-instantsearch/dom';
-import {orderBy} from 'lodash';
+import { orderBy } from 'lodash';
+import { InstantSearch, RefinementList } from 'react-instantsearch-dom';
 
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="..."
     apiKey="..."
     indexName="..."
   >
     <SearchBox defaultRefinement="hi" />
-    <RefinementList attribute="category"
-      transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])}/>
-  </InstantSearch>;
+    <RefinementList
+      attribute="category"
+      transformItems={items =>
+        orderBy(items, ['label', 'count'], ['asc', 'desc'])
+      }
+    />
+  </InstantSearch>
+);
 ```
 
 ## Common use cases

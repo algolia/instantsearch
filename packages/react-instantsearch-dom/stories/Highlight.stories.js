@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { storiesOf } from '@storybook/react';
+import { text } from '@storybook/addon-knobs';
 import {
   ClearRefinements,
   Highlight,
@@ -7,10 +9,8 @@ import {
   InstantSearch,
   Pagination,
   SearchBox,
-} from '../packages/react-instantsearch/dom';
-import { storiesOf } from '@storybook/react';
-import { connectHits } from '../packages/react-instantsearch/connectors';
-import { text } from '@storybook/addon-knobs';
+  connectHits,
+} from 'react-instantsearch-dom';
 import { displayName, filterProps, WrapWithHits } from './util';
 
 const stories = storiesOf('Highlight', module);

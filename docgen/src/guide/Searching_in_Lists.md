@@ -34,19 +34,23 @@ You can implement your own search box for searching for items in lists when usin
 * `isFromSearch`, When `true` you are in search mode and the provided `items` are search items results
 
 ```jsx
-import {connectRefinementList} from 'react-instantsearch/connectors';
-import {Highlight} from 'react-instantsearch/dom';
+import { Highlight, connectRefinementList } from 'react-instantsearch-dom';
+
 const RefinementListWithSearchBox = connectRefinementList(props => {
   const values = props.items.map(item => {
     const label = item._highlightResult
       ? <Highlight attribute="label" hit={item}/>
       : item.label;
-    return <li key={item.value}>
-      <span onClick={() => props.refine(item.value)}>
-        {label} {item.isRefined ? '- selected' : ''}
-      </span>
-    </li>;
+
+    return (
+      <li key={item.value}>
+        <span onClick={() => props.refine(item.value)}>
+          {label} {item.isRefined ? '- selected' : ''}
+        </span>
+      </li>
+    );
   });
+
   return (
     <div>
       <input type="search" onInput={e => props.searchForItems(e.target.value)}/>
@@ -54,7 +58,8 @@ const RefinementListWithSearchBox = connectRefinementList(props => {
     </div>
   );
 });
-<RefinementListWithSearchBox attribute="products"/>
+
+<RefinementListWithSearchBox attribute="products" />
 ```
 
 <div class="guide-nav">

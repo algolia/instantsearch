@@ -9,11 +9,9 @@ import {
   RatingMenu,
   Highlight,
   Configure,
-} from 'react-instantsearch/dom';
-import {
   connectSearchBox,
   connectRefinementList,
-} from 'react-instantsearch/connectors';
+} from 'react-instantsearch-dom';
 import 'instantsearch.css/themes/algolia.css';
 import { withUrlSync } from '../urlSync';
 

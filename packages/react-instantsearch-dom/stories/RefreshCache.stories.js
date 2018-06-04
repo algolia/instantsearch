@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { storiesOf } from '@storybook/react';
-import { InstantSearch, SearchBox } from '../packages/react-instantsearch/dom';
+import { InstantSearch, SearchBox } from 'react-instantsearch-dom';
 import { CustomHits } from './util';
 
 const stories = storiesOf('RefreshCache', module);

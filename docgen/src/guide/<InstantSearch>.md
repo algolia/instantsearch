@@ -13,7 +13,7 @@ This component provides the necessary context and information to its children (w
 As for props you will have to pass your Algolia application id, API Key and the index name to be targeted:
 
 ```jsx
-import {InstantSearch} from 'react-instantsearch/dom';
+import { InstantSearch } from 'react-instantsearch-dom';
 
 const App = () =>
   <InstantSearch
@@ -26,7 +26,7 @@ const App = () =>
 ```
 
 **Notes:**
-* Just like we have `react-instantsearch/dom`, there's the corresponding `react-instantsearch/native` import endpoint, use the [React native guide](guide/React_native.html).
+* Just like we have `react-instantsearch-dom`, there's the corresponding `react-instantsearch-native` import endpoint, use the [React native guide](guide/React_native.html).
 * `<InstantSearch>` manages search on a single search index. We have a guide covering [multi index search and
 state synchronization](guide/Multi_index.html).
 * Internally we use [React's context](https://facebook.github.io/react/docs/context.html) to link widgets to

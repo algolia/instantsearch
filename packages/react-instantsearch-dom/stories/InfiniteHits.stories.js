@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { setAddon, storiesOf } from '@storybook/react';
+import JSXAddon from 'storybook-addon-jsx';
 import {
   InfiniteHits,
   Highlight,
   Panel,
   Snippet,
-} from '../packages/react-instantsearch/dom';
+} from 'react-instantsearch-dom';
 import { displayName, filterProps, WrapWithHits } from './util';
-import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
 

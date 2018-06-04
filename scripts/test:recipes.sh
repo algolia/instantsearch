@@ -5,13 +5,11 @@
 # cause test to fail if one fails
 set -e
 
-for d in examples/* ; do
-    cd $d
+for example in examples/* ; do
+  (
+    cd $example
     yarn
     yarn build
-    if [ "$CI" = "true" ]
-        then yarn test --runInBand
-        else yarn test
-    fi
-    cd ../..
+    yarn test
+  )
 done

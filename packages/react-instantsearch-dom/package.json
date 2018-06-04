@@ -1,0 +1,91 @@
+{
+  "name": "react-instantsearch-dom",
+  "version": "5.1.0",
+  "description": "⚡ Lightning-fast search for React DOM, by Algolia",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "sideEffects": false,
+  "license": "MIT",
+  "homepage": "https://community.algolia.com/react-instantsearch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/react-instantsearch"
+  },
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
+  "keywords": [
+    "algolia",
+    "components",
+    "fast",
+    "instantsearch",
+    "react",
+    "react-dom",
+    "search"
+  ],
+  "files": [
+    "README.md",
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "watch": "yarn build:cjs --watch",
+    "build": "yarn build:cjs && yarn build:es && yarn build:umd",
+    "build:cjs": "babel src --out-dir dist/cjs --ignore __tests__,__mocks__ --quiet",
+    "build:es": "BABEL_ENV=es babel src --out-dir dist/es --ignore __tests__,__mocks__ --quiet",
+    "build:umd": "BABEL_ENV=es rollup -c rollup.config.js",
+    "test": "jest",
+    "test:size": "bundlesize",
+    "release": "yarn clean && yarn build && yarn publish",
+    "release:beta": "yarn clean && yarn build && yarn publish --tag beta"
+  },
+  "dependencies": {
+    "algoliasearch": "^3.27.1",
+    "algoliasearch-helper": "^2.26.0",
+    "classnames": "^2.2.5",
+    "lodash": "^4.17.4",
+    "prop-types": "^15.5.10",
+    "react-instantsearch-core": "^5.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "babel-core": "6.26.0",
+    "babel-plugin-external-helpers": "6.22.0",
+    "babel-plugin-lodash": "3.3.2",
+    "babel-preset-env": "1.7.0",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-2": "6.24.1",
+    "bundlesize": "0.17.0",
+    "enzyme": "3.3.0",
+    "enzyme-adapter-react-16": "1.1.1",
+    "enzyme-to-json": "3.3.4",
+    "jest": "23.1.0",
+    "react": "16.4.0",
+    "react-dom": "16.4.0",
+    "react-test-renderer": "16.4.0",
+    "rollup": "0.59.4",
+    "rollup-plugin-babel": "3.0.4",
+    "rollup-plugin-commonjs": "9.1.3",
+    "rollup-plugin-filesize": "1.5.0",
+    "rollup-plugin-node-globals": "1.2.1",
+    "rollup-plugin-node-resolve": "3.3.0",
+    "rollup-plugin-replace": "2.0.0",
+    "rollup-plugin-uglify": "4.0.0"
+  },
+  "peerDependencies": {
+    "react": ">= 15.3.0 < 17",
+    "react-dom": ">= 15.3.0 < 17"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  },
+  "bundlesize": [
+    {
+      "path": "dist/umd/ReactInstantSearchDOM.min.js",
+      "maxSize": "63 kB"
+    }
+  ]
+}

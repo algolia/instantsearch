@@ -23,7 +23,7 @@ If you know that the cache needs to be refreshed conditionally of a specific eve
 
 ```jsx
 import React, { Component } from 'react';
-import { InstantSearch, SearchBox, Hits } from 'react-instantsearch/dom';
+import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
 
 class App extends Component {
   constructor(props) {
@@ -70,7 +70,7 @@ You should use this approach if you cannot use a user action as a specific event
 
 ```jsx
 import React, { Component } from 'react';
-import { InstantSearch, SearchBox, Hits } from 'react-instantsearch/dom';
+import { InstantSearch, SearchBox, Hits } from 'react-instantsearch-dom';
 
 class App extends Component {
   constructor(props) {
