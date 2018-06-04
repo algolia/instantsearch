@@ -26,6 +26,7 @@
   ],
   "files": [
     "README.md",
+    "server.js",
     "dist"
   ],
   "scripts": {
