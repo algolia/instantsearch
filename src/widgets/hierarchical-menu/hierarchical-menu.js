@@ -60,31 +60,31 @@ hierarchicalMenu({
   [ showParentLevel=false ],
   [ limit=10 ],
   [ sortBy=['name:asc'] ],
-  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
-  [ templates.{header, item, footer} ],
+  [ cssClasses.{list, depth, item, active, link, panelRoot , panelHeader, panelBody, panelFooter, }={} ],
+  [ templates.{item, panelHeader, panelFooter} ],
   [ transformData.{item} ],
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
- * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
  * @property {string|string[]} [list] CSS class to add to the list element.
  * @property {string|string[]} [item] CSS class to add to each item element.
  * @property {string|string[]} [depth] CSS class to add to each item element to denote its depth. The actual level will be appended to the given class name (ie. if `depth` is given, the widget will add `depth0`, `depth1`, ... according to the level of each item).
  * @property {string|string[]} [active] CSS class to add to each active element.
  * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
  * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
+ * @property {string|string[]} [panelRoot] CSS class to add to the panel root element.
+ * @property {string|string[]} [panelHeader] CSS class to add to the panel header element.
+ * @property {string|string[]} [panelBody] CSS class to add to the panel body element.
+ * @property {string|string[]} [panelFooter] CSS class to add to the panel footer element.
  */
 
 /**
  * @typedef {Object} HierarchicalMenuTemplates
- * @property {string|function(object):string} [header=''] Header template (root level only).
  * @property {string|function(object):string} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property {string|function(object):string} [footer=''] Footer template (root level only).
+ * @property {string|function(object):string} [panelHeader=''] Header panel template
+ * @property {string|function(object):string} [panelFooter=''] Footer panel template
  */
 
 /**
@@ -182,7 +182,7 @@ hierarchicalMenu({
  *     container: '#hierarchical-categories',
  *     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
  *     templates: {
- *       header: 'Hierarchical categories'
+ *       panelHeader: 'Hierarchical categories'
  *     }
  *   })
  * );
@@ -208,16 +208,16 @@ export default function hierarchicalMenu({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
     list: cx(bem('list'), userCssClasses.list),
     depth: bem('list', 'lvl'),
     item: cx(bem('item'), userCssClasses.item),
     active: cx(bem('item', 'active'), userCssClasses.active),
     link: cx(bem('link'), userCssClasses.link),
     count: cx(bem('count'), userCssClasses.count),
+    panelRoot: userCssClasses.panelRoot,
+    panelHeader: userCssClasses.panelHeader,
+    panelBody: userCssClasses.panelBody,
+    panelFooter: userCssClasses.panelFooter,
   };
 
   const specializedRenderer = renderer({

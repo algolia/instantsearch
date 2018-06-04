@@ -67,7 +67,7 @@ export default () => {
       )
     )
     .add(
-      'with header',
+      'with header and footer',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
@@ -79,7 +79,34 @@ export default () => {
             ],
             rootPath: 'Cameras & Camcorders',
             templates: {
-              header: 'Hierarchical categories',
+              panelHeader: 'Hierarchical categories',
+              panelFooter: 'Brought to you by Algolia',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with custom css classes',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            rootPath: 'Cameras & Camcorders',
+            templates: {
+              panelHeader: 'Hierarchical categories',
+              panelFooter: 'Brought to you by Algolia',
+            },
+            cssClasses: {
+              panelRoot: 'panel-root',
+              panelHeader: 'panel-header',
+              panelBody: 'panel-body',
+              panelFooter: 'panel-footer',
             },
           })
         );
