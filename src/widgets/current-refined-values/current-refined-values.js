@@ -87,25 +87,25 @@ currentRefinedValues({
   [ attributes: [{name[, label, template, transformData]}] ],
   [ onlyListedAttributes = false ],
   [ clearAll = 'before' ] // One of ['before', 'after', false]
-  [ templates.{header,item,clearAll,footer} ],
+  [ templates.{item, clearAll, panelHeader, panelFooter} ],
   [ transformData.{item} ],
   [ autoHideContainer = true ],
-  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
+  [ cssClasses.{clearAll, list, item, link, count, panelRoot, panelHeader, panelBody, panelFooter} = {} ],
   [ collapsible = false ]
   [ clearsQuery = false ]
 })`;
 
 /**
  * @typedef {Object} CurrentRefinedValuesCSSClasses
- * @property {string} [root] CSS classes added to the root element.
- * @property {string} [header] CSS classes added to the header element.
- * @property {string} [body] CSS classes added to the body element.
  * @property {string} [clearAll] CSS classes added to the clearAll element.
  * @property {string} [list] CSS classes added to the list element.
  * @property {string} [item] CSS classes added to the item element.
  * @property {string} [link] CSS classes added to the link element.
  * @property {string} [count] CSS classes added to the count element.
- * @property {string} [footer] CSS classes added to the footer element.
+ * @property {string} [panelRoot] CSS classes added to the panel root element.
+ * @property {string} [panelHeader] CSS classes added to the panel header element.
+ * @property {string} [panelBody] CSS classes added to the panel body element.
+ * @property {string} [panelFooter] CSS classes added to the panel footer element.
  */
 
 /**
@@ -118,10 +118,10 @@ currentRefinedValues({
 
 /**
  * @typedef {Object} CurrentRefinedValuesTemplates
- * @property {string|function(object):string} [header] Header template.
  * @property {string|function(object):string} [item] Item template.
  * @property {string|function(object):string} [clearAll] Clear all template.
- * @property {string|function(object):string} [footer] Footer template.
+ * @property {string|function(object):string} [panelHeader] Header template.
+ * @property {string|function(object):string} [panelFooter] Footer template.
  */
 
 /**
@@ -195,7 +195,7 @@ export default function currentRefinedValues({
     isFunction(transformData) ||
     (isPlainObject(transformData) && isFunction(transformData.item));
 
-  const templatesKeys = ['header', 'item', 'clearAll', 'footer'];
+  const templatesKeys = ['item', 'clearAll', 'panelHeader', 'panelFooter'];
   const templatesOK =
     isPlainObject(templates) &&
     reduce(
@@ -208,15 +208,15 @@ export default function currentRefinedValues({
     );
 
   const userCssClassesKeys = [
-    'root',
-    'header',
-    'body',
     'clearAll',
     'list',
     'item',
     'link',
     'count',
-    'footer',
+    'panelRoot',
+    'panelHeader',
+    'panelBody',
+    'panelFooter',
   ];
   const userCssClassesOK =
     isPlainObject(userCssClasses) &&
@@ -246,15 +246,15 @@ export default function currentRefinedValues({
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
     clearAll: cx(bem('clear-all'), userCssClasses.clearAll),
     list: cx(bem('list'), userCssClasses.list),
     item: cx(bem('item'), userCssClasses.item),
     link: cx(bem('link'), userCssClasses.link),
     count: cx(bem('count'), userCssClasses.count),
-    footer: cx(bem('footer'), userCssClasses.footer),
+    panelRoot: userCssClasses.panelRoot,
+    panelHeader: userCssClasses.panelHeader,
+    panelBody: userCssClasses.panelBody,
+    panelFooter: userCssClasses.panelFooter,
   };
 
   const specializedRenderer = renderer({
