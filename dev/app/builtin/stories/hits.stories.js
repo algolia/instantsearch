@@ -15,6 +15,40 @@ export default () => {
       })
     )
     .add(
+      'With header and footer',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              panelHeader: 'Header',
+              panelFooter: 'panelFooter',
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with custom css classes',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              panelHeader: 'Header',
+              panelFooter: 'panelFooter',
+            },
+            cssClasses: {
+              panelRoot: 'root',
+              panelHeader: 'header',
+              panelBody: 'body',
+              panelFooter: 'footer',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with highlighted array',
       wrapWithHits(
         container => {
