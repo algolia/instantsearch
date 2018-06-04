@@ -105,7 +105,7 @@ yarn doctoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add package.json CHANGELOG.md README.md packages/ yarn.lock
+git add package.json lerna.json CHANGELOG.md README.md packages/ yarn.lock
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
