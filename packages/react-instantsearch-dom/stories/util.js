@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import { linkTo } from '@storybook/addon-links';
 import {
   InstantSearch,
   ClearRefinements,
@@ -7,9 +8,8 @@ import {
   Pagination,
   Highlight,
   Configure,
-} from '../packages/react-instantsearch/dom';
-import { connectHits } from '../packages/react-instantsearch/connectors';
-import { linkTo } from '@storybook/addon-links';
+  connectHits,
+} from 'react-instantsearch-dom';
 import 'instantsearch.css/themes/algolia.css';
 
 export const filterProps = ['linkedStoryGroup', 'hasPlayground'];

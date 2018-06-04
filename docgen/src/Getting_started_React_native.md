@@ -48,8 +48,8 @@ It maintains the state of the search, does the queries, and provides the results
 
 ```jsx
 import React from 'react';
-import { InstantSearch } from 'react-instantsearch/native';
 import { StyleSheet, View, Text } from 'react-native';
+import { InstantSearch } from 'react-instantsearch-native';
 
 export default class App extends React.Component {
   render() {
@@ -118,10 +118,10 @@ On the React Native side we are going to take advantage of the [FlatList](https:
 Let’s create our own React Native Infinite Hits widget:
 
 ```jsx
-// First, we need to add the connectInfiniteHits connector to our import
-import { connectInfiniteHits } from 'react-instantsearch/connectors';
-// We also need to import the FlatList and other React Native component
+// First, we need to import the FlatList and other React Native component
 import { StyleSheet, View, FlatList, Image, Text } from 'react-native';
+// We also need to add the connectInfiniteHits connector to our import
+import { connectInfiniteHits } from 'react-instantsearch-native';
 
 
 // [...]
@@ -199,11 +199,6 @@ This connector gives you two interesting properties:
 On the React Native side we are going to take advantage of the [TextInput](http://facebook.github.io/react-native/releases/0.45/docs/textinput.html#textinput) to render this search box.
 
 ```jsx
-// We need to add the connectSearchBox to our import
-import {
-  connectInfiniteHits,
-  connectSearchBox,
-} from 'react-instantsearch/connectors';
 // We need to add the TextInput to our import
 import {
   StyleSheet,
@@ -213,6 +208,8 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+// We need to add the connectSearchBox to our import
+import { connectInfiniteHits, connectSearchBox } from 'react-instantsearch-native';
 
 // [...]
 
@@ -293,7 +290,7 @@ import {
   connectInfiniteHits,
   connectSearchBox,
   connectHighlight,
-} from 'react-instantsearch/connectors';
+} from 'react-instantsearch-native';
 
 const Highlight = connectHighlight(
   ({ highlight, attribute, hit, highlightProperty }) => {
@@ -380,13 +377,6 @@ This connector gives you two interesting properties:
 On the React Native side we are going to take advantage of the [FlatList](https://facebook.github.io/react-native/docs/flatlist.html) and the [TouchableHighlight](http://facebook.github.io/react-native/releases/0.45/docs/touchablehighlight.html#touchablehighlight) component to render this refinement list.
 
 ```jsx
-// We need to add the RefinementList to our import
-import {
-  connectInfiniteHits,
-  connectSearchBox,
-  connectHighlight,
-  connectRefinementList,
-} from 'react-instantsearch/connectors';
 // We need to add the TouchableHighlight to our import
 import {
   StyleSheet,
@@ -397,6 +387,13 @@ import {
   TextInput,
   TouchableHighlight,
 } from 'react-native';
+// We need to add the RefinementList to our import
+import {
+  connectInfiniteHits,
+  connectSearchBox,
+  connectHighlight,
+  connectRefinementList,
+} from 'react-instantsearch-native';
 
 // [...]
 

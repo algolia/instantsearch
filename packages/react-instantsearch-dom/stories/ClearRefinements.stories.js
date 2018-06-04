@@ -1,12 +1,12 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
+import JSXAddon from 'storybook-addon-jsx';
 import {
   ClearRefinements,
-  Panel,
   RefinementList,
-} from '../packages/react-instantsearch/dom';
+  Panel,
+} from 'react-instantsearch-dom';
 import { displayName, filterProps, WrapWithHits } from './util';
-import JSXAddon from 'storybook-addon-jsx';
 
 setAddon(JSXAddon);
 

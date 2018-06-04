@@ -2,59 +2,55 @@
   "name": "react-instantsearch",
   "version": "5.1.0",
   "description": "⚡ Lightning-fast search for React and React Native apps, by Algolia",
+  "main": "index.js",
+  "module": "es/index.js",
+  "sideEffects": false,
+  "license": "MIT",
+  "homepage": "https://community.algolia.com/react-instantsearch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/react-instantsearch"
+  },
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
   "keywords": [
     "algolia",
     "components",
     "fast",
     "instantsearch",
     "react",
+    "react-dom",
     "react-native",
     "search"
   ],
-  "homepage": "https://community.algolia.com/react-instantsearch",
-  "license": "MIT",
-  "author": {
-    "name": "Algolia, Inc.",
-    "url": "https://www.algolia.com"
-  },
-  "main": "index.js",
-  "module": "es/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/algolia/react-instantsearch"
-  },
   "scripts": {
-    "build": "./scripts/build.sh",
-    "build-and-publish": "./scripts/build-and-publish.sh",
-    "test:size": "bundlesize"
+    "clean": "rm -rf dist",
+    "build": "yarn build:cjs && yarn build:es && yarn build:umd",
+    "build:cjs": "babel connectors.js dom.js index.js native.js server.js --out-dir dist --quiet",
+    "build:es": "BABEL_ENV=es babel connectors.js dom.js index.js native.js server.js --out-dir dist/es --quiet",
+    "build:umd": "BABEL_ENV=es rollup -c rollup.config.js",
+    "test": "jest",
+    "test:size": "bundlesize",
+    "preparePackageFolder": "mkdir -p dist && cp {package.json,README.md} dist",
+    "release": "yarn clean && yarn preparePackageFolder && yarn build && cd dist && yarn publish",
+    "release:beta": "yarn clean && yarn preparePackageFolder && yarn build && cd dist && yarn publish --tag beta"
   },
   "dependencies": {
-    "algoliasearch": "^3.27.1",
-    "algoliasearch-helper": "^2.26.0",
-    "classnames": "^2.2.5",
-    "lodash": "^4.17.4",
-    "prop-types": "^15.5.10"
+    "react-instantsearch-core": "^5.1.0",
+    "react-instantsearch-dom": "^5.1.0",
+    "react-instantsearch-native": "^5.1.0"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-plugin-external-helpers": "6.22.0",
-    "babel-plugin-inline-json-import": "0.2.1",
     "babel-plugin-lodash": "3.3.2",
-    "babel-plugin-transform-react-jsx-source": "6.22.0",
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
     "bundlesize": "0.17.0",
-    "enzyme": "3.3.0",
-    "enzyme-adapter-react-16": "1.1.1",
-    "enzyme-to-json": "3.3.4",
-    "jest": "23.1.0",
-    "jest-watch-typeahead": "0.1.0",
-    "react": "16.4.0",
-    "react-dom": "16.4.0",
-    "react-native": "0.54.2",
-    "react-test-renderer": "16.4.0",
     "rollup": "0.59.4",
     "rollup-plugin-babel": "3.0.4",
     "rollup-plugin-commonjs": "9.1.3",
@@ -67,10 +63,6 @@
   "jest": {
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
     ]
   },
   "bundlesize": [
@@ -80,11 +72,11 @@
     },
     {
       "path": "dist/umd/Connectors.min.js",
-      "maxSize": "38 kB"
+      "maxSize": "40 kB"
     },
     {
       "path": "dist/umd/Dom.min.js",
-      "maxSize": "62 kB"
+      "maxSize": "63 kB"
     }
   ]
 }

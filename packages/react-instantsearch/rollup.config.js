@@ -11,12 +11,12 @@ const clear = x => x.filter(Boolean);
 const version = process.env.VERSION || 'UNRELEASED';
 const algolia = '© Algolia, inc.';
 const link = 'https://community.algolia.com/react-instantsearch';
-const license = `/*! ReactInstantSearch ${version} | ${algolia} | ${link} */`;
+const createLicence = () =>
+  `/*! React InstantSearch ${version} | ${algolia} | ${link} */`;
 
 const plugins = [
   babel({
     exclude: ['../../node_modules/**', 'node_modules/**'],
-    // see: https://github.com/rollup/rollup-plugin-babel#helpers
     plugins: ['external-helpers'],
   }),
   resolve({
@@ -24,10 +24,6 @@ const plugins = [
     preferBuiltins: false,
   }),
   commonjs({
-    // Rollup only support ES modules so we need to transform commonjs modules to ES one.
-    // Can be magically done sometimes, but Rollup needs a bit of help in some use cases.
-    // see doc: https://github.com/rollup/rollup-plugin-commonjs#custom-named-exports
-    // see API: https://github.com/algolia/algoliasearch-helper-js/blob/develop/index.js
     namedExports: {
       'algoliasearch-helper': [
         'version',
@@ -38,9 +34,6 @@ const plugins = [
       ],
     },
   }),
-  // Useful for define process.env variable, inside the AlgoliaSearchClient we
-  // have a dependency on it for RESET_APP_DATA_TIMER.
-  // see: https://github.com/algolia/algoliasearch-client-javascript/blob/bb5d2ce16cf4b5a6e6de8ebae2de2880f783d967/src/AlgoliaSearchCore.js#L13
   globals(),
   replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
@@ -48,7 +41,7 @@ const plugins = [
   filesize(),
 ];
 
-const configuration = ({ input, name, minify = false } = {}) => ({
+const createConfiguration = ({ input, name, minify = false } = {}) => ({
   input,
   external: ['react', 'react-dom'],
   output: {
@@ -59,7 +52,7 @@ const configuration = ({ input, name, minify = false } = {}) => ({
       react: 'React',
       'react-dom': 'ReactDOM',
     },
-    banner: license,
+    banner: createLicence(),
     sourcemap: true,
   },
   plugins: plugins.concat(
@@ -67,7 +60,7 @@ const configuration = ({ input, name, minify = false } = {}) => ({
       minify &&
         uglify({
           output: {
-            preamble: license,
+            preamble: createLicence(),
           },
         }),
     ])
@@ -76,33 +69,33 @@ const configuration = ({ input, name, minify = false } = {}) => ({
 
 export default [
   // Core
-  configuration({
-    input: 'index.js',
+  createConfiguration({
+    input: 'index.umd.js',
     name: 'Core',
   }),
-  configuration({
-    input: 'index.js',
+  createConfiguration({
+    input: 'index.umd.js',
     name: 'Core',
     minify: true,
   }),
 
-  // Dom
-  configuration({
+  // DOM
+  createConfiguration({
     input: 'dom.js',
     name: 'Dom',
   }),
-  configuration({
+  createConfiguration({
     input: 'dom.js',
     name: 'Dom',
     minify: true,
   }),
 
   // Connectors
-  configuration({
+  createConfiguration({
     input: 'connectors.js',
     name: 'Connectors',
   }),
-  configuration({
+  createConfiguration({
     input: 'connectors.js',
     name: 'Connectors',
     minify: true,

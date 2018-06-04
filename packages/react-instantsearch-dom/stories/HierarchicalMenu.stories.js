@@ -1,13 +1,9 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import {
-  HierarchicalMenu,
-  Panel,
-  SearchBox,
-} from '../packages/react-instantsearch/dom';
-import { text, boolean, number } from '@storybook/addon-knobs';
-import { displayName, filterProps, WrapWithHits } from './util';
 import JSXAddon from 'storybook-addon-jsx';
+import { text, boolean, number } from '@storybook/addon-knobs';
+import { HierarchicalMenu, SearchBox, Panel } from 'react-instantsearch-dom';
+import { displayName, filterProps, WrapWithHits } from './util';
 
 setAddon(JSXAddon);
 

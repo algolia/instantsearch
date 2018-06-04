@@ -1,14 +1,10 @@
-import React from 'react';
 import { orderBy } from 'lodash';
+import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs';
-import {
-  MenuSelect,
-  Panel,
-  SearchBox,
-} from '../packages/react-instantsearch/dom';
-import { displayName, filterProps, WrapWithHits } from './util';
 import JSXAddon from 'storybook-addon-jsx';
+import { MenuSelect, Panel, SearchBox } from 'react-instantsearch-dom';
+import { displayName, filterProps, WrapWithHits } from './util';
 
 setAddon(JSXAddon);
 

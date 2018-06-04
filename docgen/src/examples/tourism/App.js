@@ -6,13 +6,11 @@ import {
   Pagination,
   Highlight,
   Configure,
-} from 'react-instantsearch/dom';
-import {
   connectHits,
   connectNumericMenu,
   connectRefinementList,
   connectRange,
-} from 'react-instantsearch/connectors';
+} from 'react-instantsearch-dom';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import GoogleMap from 'google-map-react';

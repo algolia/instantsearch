@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { storiesOf } from '@storybook/react';
+import Autosuggest from 'react-autosuggest';
 import {
   Configure,
   InstantSearch,
@@ -9,13 +10,10 @@ import {
   Pagination,
   SearchBox,
   SortBy,
-} from '../packages/react-instantsearch/dom';
-import {
   connectHits,
   connectAutoComplete,
   connectStateResults,
-} from '../packages/react-instantsearch/connectors';
-import Autosuggest from 'react-autosuggest';
+} from 'react-instantsearch-dom';
 import { displayName, filterProps } from './util';
 
 const stories = storiesOf('<Index>', module);

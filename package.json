@@ -7,22 +7,25 @@
     "docgen"
   ],
   "scripts": {
-    "changelog": "conventional-changelog --preset angular --output-unreleased",
+    "postinstall": "lerna run build:cjs --scope react-instantsearch-*",
     "start": "(cd docgen && yarn start) & yarn docs:storybook-start & wait",
+    "build": "lerna run build --scope react-*",
+    "watch": "lerna run watch --scope react-instantsearch-* --parallel",
     "docs:build": "(cd docgen && yarn build) && yarn docs:storybook-build-production",
     "docs:deploy-production": "NODE_ENV=production yarn docs:build && babel-node scripts/gh-pages.js",
     "docs:build-preview": "./scripts/docs:build-preview.sh",
     "docs:deploy-preview": "NODE_ENV=production yarn docs:build-preview && rm -f preview.zip && zip -r -9 preview.zip docgen/docs-production/ && netlify deploy && rm preview.zip",
-    "release": "NODE_ENV=production ./scripts/release.sh",
+    "release": "./scripts/release.sh",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "docs:doctoc": "doctoc --maxlevel 1 README.md",
     "test": "./scripts/test.sh",
     "test:recipes": "./scripts/test:recipes.sh",
-    "test:build": "NODE_ENV=production ./scripts/test:build.sh",
+    "test:build": "yarn build && yarn test:size",
     "test:regressions": "webpack --config test/regressions/webpack.config.js && rm -rf test/screenshots && happo run && babel-node ./test/regressions/normalize.js",
+    "test:size": "lerna run test:size --scope react-* --parallel",
     "argos": "argos upload test/screenshots --token $ARGOS_TOKEN || true",
-    "dev": "jest --watch --bail --projects packages/*",
+    "dev": "jest --watch --bail",
     "docs:storybook-start": "start-storybook -p 6006 -c ./storybook -s ./storybook/public",
     "docs:storybook-build-production": "build-storybook -s ./storybook/public -o docgen/docs-production/react-instantsearch/storybook -c ./storybook"
   },
@@ -36,12 +39,11 @@
     "@storybook/ui": "3.4.6",
     "algoliasearch": "3.27.1",
     "argos-cli": "0.0.9",
+    "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-eslint": "8.2.3",
     "babel-loader": "7.1.4",
-    "babel-plugin-inline-json-import": "0.2.1",
     "babel-plugin-lodash": "3.3.2",
-    "babel-plugin-transform-react-jsx-source": "6.22.0",
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
@@ -63,7 +65,10 @@
     "happo-core": "5.0.0",
     "happo-target-firefox": "5.0.0",
     "instantsearch.css": "7.1.0",
+    "jest": "23.1.0",
+    "jest-watch-typeahead": "0.1.0",
     "json": "9.0.6",
+    "lerna": "2.11.0",
     "lodash": "4.17.5",
     "mversion": "1.10.1",
     "netlify-cli": "1.2.2",
@@ -72,6 +77,8 @@
     "react": "16.4.0",
     "react-autosuggest": "9.3.4",
     "react-dom": "16.4.0",
+    "react-instantsearch-dom": "5.1.0",
+    "react-native": "0.54.2",
     "rheostat": "2.2.0",
     "storybook-addon-a11y": "3.1.9",
     "storybook-addon-jsx": "5.3.0",
@@ -85,10 +92,10 @@
   "jest": {
     "projects": [
       "packages/*"
+    ],
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
     ]
-  },
-  "author": {
-    "name": "Algolia, Inc.",
-    "url": "https://www.algolia.com"
   }
 }

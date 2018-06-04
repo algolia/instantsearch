@@ -1,6 +1,6 @@
 import React from 'react';
-import { connectStateResults } from '../packages/react-instantsearch/connectors';
 import { storiesOf } from '@storybook/react';
+import { connectStateResults } from 'react-instantsearch-dom';
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Conditionals', module);

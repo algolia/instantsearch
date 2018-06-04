@@ -1,5 +1,6 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
+import JSXAddon from 'storybook-addon-jsx';
 import {
   CurrentRefinements,
   Menu,
@@ -9,9 +10,9 @@ import {
   RangeInput,
   RefinementList,
   ToggleRefinement,
-} from '../packages/react-instantsearch/dom';
+} from 'react-instantsearch-dom';
 import { displayName, filterProps, WrapWithHits } from './util';
-import JSXAddon from 'storybook-addon-jsx';
+
 setAddon(JSXAddon);
 
 const stories = storiesOf('CurrentRefinements', module);

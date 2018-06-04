@@ -2,8 +2,7 @@ docgen/docs-*
 node_modules/
 dist/
 build/
-npm-debug.log
-yarn-error.log
+*.log
 .DS_Store
 .eslintcache
 .idea/

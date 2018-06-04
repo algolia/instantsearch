@@ -1,14 +1,9 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import {
-  Panel,
-  RangeInput,
-  SearchBox,
-} from '../packages/react-instantsearch/dom';
 import { object, number } from '@storybook/addon-knobs';
-import { displayName, filterProps, WrapWithHits } from './util';
-
 import JSXAddon from 'storybook-addon-jsx';
+import { Panel, RangeInput, SearchBox } from 'react-instantsearch-dom';
+import { displayName, filterProps, WrapWithHits } from './util';
 
 setAddon(JSXAddon);
 

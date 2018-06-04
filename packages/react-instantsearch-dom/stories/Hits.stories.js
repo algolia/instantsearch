@@ -1,12 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import {
-  Hits,
-  Highlight,
-  Panel,
-  Snippet,
-} from '../packages/react-instantsearch/dom';
+import { Hits, Highlight, Panel, Snippet } from 'react-instantsearch-dom';
 import { displayName, filterProps, WrapWithHits } from './util';
 import JSXAddon from 'storybook-addon-jsx';
 

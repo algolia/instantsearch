@@ -12,22 +12,22 @@ For example an online shop for clothes could have a page like `https://www.cloth
 that shows hoodies and only hoodies:
 
 ```jsx
-import {InstantSearch, SearchBox} from 'react-instantsearch/dom';
-import {connectMenu} from 'react-instantsearch/connectors';
+import { InstantSearch, SearchBox, connectMenu } from 'react-instantsearch-dom';
 
 const VirtualMenu = connectMenu(() => null);
-const Hoodies = () => <VirtualMenu attribute="clothes" defaultRefinement="hoodies"/>;
+const Hoodies = () => <VirtualMenu attribute="clothes" defaultRefinement="hoodies" />;
 
-const App = () =>
+const App = () => (
   <InstantSearch
     appId="..."
     apiKey="..."
     indexName="..."
   >
     <SearchBox defaultRefinement="hi" />
-    <Hoodies/>
+    <Hoodies />
     <Menu attribute="fruits" defaultRefinement="Orange" />
-  </InstantSearch>;
+  </InstantSearch>
+);
 ```
 In this case, we are using the `VirtualMenu` to pre refine our results (within the `clothes` search, only display `hoodies`). Think of the `VirtualMenu` as a hidden filter where we define attributes and values that will always be applied to our search results
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Configure } from '../packages/react-instantsearch/dom';
 import { storiesOf } from '@storybook/react';
+import { Configure } from 'react-instantsearch-dom';
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Configure', module);

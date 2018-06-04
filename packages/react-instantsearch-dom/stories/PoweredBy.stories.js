@@ -1,8 +1,8 @@
 import React from 'react';
 import { setAddon, storiesOf } from '@storybook/react';
-import { PoweredBy } from '../packages/react-instantsearch/dom';
-import { displayName, filterProps, WrapWithHits } from './util';
 import JSXAddon from 'storybook-addon-jsx';
+import { PoweredBy } from 'react-instantsearch-dom';
+import { displayName, filterProps, WrapWithHits } from './util';
 
 setAddon(JSXAddon);
 

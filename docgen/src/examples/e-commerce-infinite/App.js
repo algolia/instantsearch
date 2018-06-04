@@ -13,13 +13,11 @@ import {
   Highlight,
   Panel,
   Configure,
-} from 'react-instantsearch/dom';
-import {
   connectSearchBox,
   connectRefinementList,
   connectInfiniteHits,
   connectStateResults,
-} from 'react-instantsearch/connectors';
+} from 'react-instantsearch-dom';
 import 'instantsearch.css/themes/algolia.css';
 
 export default function App() {
