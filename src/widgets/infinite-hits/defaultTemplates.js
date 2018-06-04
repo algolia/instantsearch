@@ -3,4 +3,6 @@ export default {
   item(data) {
     return JSON.stringify(data, null, 2);
   },
+  panelHeader: '',
+  panelFooter: '',
 };
