@@ -164,7 +164,7 @@ const MaterialUiSearchBox = ({ currentRefinement, refine }) => {
     <FontIcon
       style={{ color: 'lightgrey' }}
       className="material-icons"
-      onTouchTap={() => refine('')}
+      onClick={() => refine('')}
     >
       {' '}
       clear{' '}
@@ -277,8 +277,7 @@ class MaterialUiSortBy extends React.Component {
             key={item.value}
             value={item.value}
             primaryText={item.label}
-            onTouchTap={e => {
-              e.preventDefault();
+            onClick={() => {
               this.props.refine(item.value);
             }}
           />
@@ -366,7 +365,7 @@ function CustomHits({ hits, marginLeft, hasMore, refine }) {
 function MaterialUiClearAllFilters({ items, refine }) {
   return (
     <FlatButton
-      onTouchTap={() => refine(items)}
+      onClick={() => refine(items)}
       label="Clear All"
       primary
       style={{ height: 48, width: '100%' }}
