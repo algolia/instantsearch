@@ -47,16 +47,19 @@ const renderer = ({
 const usage = `Usage:
 hits({
   container,
-  [ cssClasses.{root,empty,item}={} ],
-  [ templates.{empty,item} | templates.{empty, allItems} ],
+  [ cssClasses.{root, empty, item, panelRoot, panelHeader, panelBody, panelFooter}={} ],
+  [ templates.{empty, item, panelHeader, panelFooter} | templates.{empty, allItems, panelHeader, panelFooter} ],
   [ transformData.{empty,item} | transformData.{empty, allItems} ],
 })`;
-
 /**
  * @typedef {Object} HitsCSSClasses
  * @property {string|string[]} [root] CSS class to add to the wrapping element.
  * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
  * @property {string|string[]} [item] CSS class to add to each result.
+ * @property {string|string[]} [panelRoot] CSS class to add to the root panel element
+ * @property {string|string[]} [panelHeader] CSS class to add to the header panel element
+ * @property {string|string[]} [panelBody] CSS class to add to the body panel element
+ * @property {string|string[]} [panelFooter] CSS class to add to the footer panel element
  */
 
 /**
@@ -64,6 +67,8 @@ hits({
  * @property {string|function(object):string} [empty=''] Template to use when there are no results.
  * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record. The record will have a new property `__hitIndex` for the position of the record in the list of displayed hits.
  * @property {string|function(object):string} [allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
+ * @property {string|function(object):string} [panelHeader=''] Template used for the header of the panel
+ * @property {string|function(object):string} [panelFooter=''] Template used for the footer of the panel
  */
 
 /**
@@ -125,6 +130,10 @@ export default function hits({
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
     empty: cx(bem(null, 'empty'), userCssClasses.empty),
+    panelRoot: userCssClasses.panelRoot,
+    panelHeader: userCssClasses.panelHeader,
+    panelBody: userCssClasses.panelBody,
+    panelFooter: userCssClasses.panelFooter,
   };
 
   const specializedRenderer = renderer({
