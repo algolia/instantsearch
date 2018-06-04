@@ -1,8 +1,8 @@
 export default {
-  header: '',
   item: itemTemplate,
   clearAll: 'Clear all',
-  footer: '',
+  panelHeader: '',
+  panelFooter: '',
 };
 
 function itemTemplate({

@@ -26,14 +26,49 @@ export default () => {
       )
     )
     .add(
-      'with header',
+      'with custom css classes',
       wrapWithHits(
         container => {
           window.search.addWidget(
             instantsearch.widgets.currentRefinedValues({
               container,
               templates: {
-                header: 'Current refinements',
+                panelHeader: 'Current refinements',
+                panelFooter: 'Brought to you by Algolia',
+              },
+              cssClasses: {
+                clearAll: 'ca',
+                list: 'l',
+                item: 'i',
+                link: 'lnk',
+                count: 'cnt',
+                panelRoot: 'crv-root',
+                panelHeader: 'crv-header',
+                panelBody: 'crv-body',
+                panelFooter: 'crv-footer',
+              },
+            })
+          );
+        },
+        {
+          searchParameters: {
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
+          },
+        }
+      )
+    )
+    .add(
+      'with header and footer',
+      wrapWithHits(
+        container => {
+          window.search.addWidget(
+            instantsearch.widgets.currentRefinedValues({
+              container,
+              templates: {
+                panelHeader: 'Current refinements',
+                panelFooter: 'Brought to you by Algolia',
               },
             })
           );
@@ -55,7 +90,7 @@ export default () => {
             container,
             autoHideContainer: false,
             templates: {
-              header: 'Current refinements',
+              panelHeader: 'Current refinements',
             },
           })
         );
