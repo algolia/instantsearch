@@ -3,7 +3,7 @@ export { default as createInstantSearch } from './core/createInstantSearch';
 export { default as createIndex } from './core/createIndex';
 export { default as createConnector } from './core/createConnector';
 
-// Utlis
+// Utils
 export { HIGHLIGHT_TAGS } from './core/highlight';
 export { default as version } from './core/version';
 
