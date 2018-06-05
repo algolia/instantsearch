@@ -1,6 +1,6 @@
 {
   "name": "create-instantsearch-app",
-  "version": "3.0.0-beta.0",
+  "version": "3.0.0-beta.1",
   "license": "MIT",
   "description": "Build InstantSearch apps at the speed of thoughts ⚡️",
   "repository": "algolia/create-instantsearch-app",
