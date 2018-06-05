@@ -5,18 +5,20 @@
   "license": "MIT",
   "scripts": {
     "dev": "next",
-    "build": "NODE_ENV=development next build",
+    "build": "next build",
     "start": "next start",
     "test": "jest"
   },
   "devDependencies": {
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "22.4.3",
     "css-loader": "0.28.9",
     "jest": "22.1.4",
     "react-test-renderer": "16.2.0",
     "style-loader": "0.20.1"
   },
   "dependencies": {
-    "next": "4.2.3",
+    "next": "6.0.3",
     "prop-types": "15.6.0",
     "qs": "6.5.1",
     "react": "16.2.0",
