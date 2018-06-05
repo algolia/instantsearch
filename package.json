@@ -59,7 +59,7 @@
     "eslint-plugin-prettier": "2.6.0",
     "eslint-plugin-react": "7.7.0",
     "fs-extra": "6.0.1",
-    "gh-pages": "1.1.0",
+    "gh-pages": "1.2.0",
     "glob": "7.1.2",
     "happo": "5.0.0",
     "happo-core": "5.0.0",
