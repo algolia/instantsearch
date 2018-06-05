@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - 8
+  - 9
+  - 10
+cache:
+  - yarn: true
+before_install:
+ - curl -o- -L yarnpkg.com/install.sh | bash -s -- --version 1.7.0
+ - export PATH=$HOME/.yarn/bin:$PATH
+script:
+  - "${SCRIPT}"
+env:
+  matrix:
+  - SCRIPT="yarn test && yarn lint"
+  - SCRIPT="yarn test:e2e"

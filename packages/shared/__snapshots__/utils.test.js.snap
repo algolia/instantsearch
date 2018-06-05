@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`checkAppName throws with correct error message 1`] = `
+"Could not create a project called \\"[31m./project-name[39m\\" because of npm naming restrictions.
+  - name cannot start with a period
+  - name can only contain URL-friendly characters"
+`;
+
+exports[`checkAppPath with existing file as path should throw with correct error 1`] = `"Could not create project at path [31mpath[39m because a file of the same name already exists."`;
+
+exports[`checkAppPath with non empty directory as path should throw with correct error 1`] = `"Could not create project in destination folder \\"[31mpath[39m\\" because it is not empty."`;
+
+exports[`checkTemplateConfigFile without \`libraryName\` 1`] = `
+"The template configuration file \`.template.js\` contains errors:
+The key \`libraryName\` is must be the name of the library to use on npm."
+`;

@@ -1,0 +1,12 @@
+{
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "parcel index.html --port 3000",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.8.1"
+  }
+}

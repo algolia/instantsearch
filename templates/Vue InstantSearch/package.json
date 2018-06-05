@@ -1,0 +1,26 @@
+{
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=development webpack-dev-server --port 3000 --hot",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+  },
+  "dependencies": {
+    "vue": "^2.5.16",
+    "vue-instantsearch": "^{{libraryVersion}}"
+  },
+  "devDependencies": {
+    "babel-core": "6.26.0",
+    "babel-loader": "7.1.4",
+    "babel-preset-env": "1.6.1",
+    "babel-preset-stage-3": "6.24.1",
+    "cross-env": "5.1.4",
+    "css-loader": "0.28.11",
+    "file-loader": "1.1.11",
+    "vue-loader": "14.2.2",
+    "vue-template-compiler": "2.5.16",
+    "webpack": "3.11.0",
+    "webpack-dev-server": "2.11.2"
+  }
+}

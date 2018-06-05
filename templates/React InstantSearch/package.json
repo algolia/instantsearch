@@ -1,0 +1,18 @@
+{
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "dependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-instantsearch": "^{{libraryVersion}}",
+    "react-scripts": "1.1.4"
+  },
+  "devDependencies": {
+    "prop-types": "^15.6.1"
+  }
+}

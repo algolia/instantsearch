@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="shortcut icon" href="./favicon.png">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@{{libraryVersion}}/dist/instantsearch.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@{{libraryVersion}}/dist/instantsearch-theme-algolia.min.css">
+  <link rel="stylesheet" href="./src/index.css">
+  <link rel="stylesheet" href="./src/app.css">
+
+  <title>{{name}}</title>
+</head>
+
+<body>
+  <header class="header">
+    <h1 class="header-title">
+      <a href="/">{{name}}</a>
+    </h1>
+    <p class="header-subtitle">
+      using
+      <a href="https://community.algolia.com/instantsearch.js/">
+        InstantSearch.js
+      </a>
+    </p>
+  </header>
+
+  <div class="container">
+    <div class="container-app">
+      <div class="filters">
+        {{#each attributesForFaceting}}
+        <div id="{{this}}-list"></div>
+        {{/each}}
+      </div>
+
+      <div class="search-container">
+        <div id="searchBox"></div>
+        <div id="hits"></div>
+      </div>
+    </div>
+
+    <div id="pagination"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@{{libraryVersion}}/dist/instantsearch.min.js"></script>
+  <script src="./src/app.js"></script>
+</body>
+
+</html>

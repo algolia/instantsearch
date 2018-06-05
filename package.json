@@ -1,33 +1,63 @@
 {
   "name": "create-instantsearch-app",
-  "version": "2.3.0",
-  "description": "Build Algolia InstantSearch app at the speed of thoughts ⚡️",
-  "main": "index.js",
-  "author": "Algolia inc.",
+  "version": "3.0.0",
   "license": "MIT",
+  "description": "Build InstantSearch apps at the speed of thoughts ⚡️",
+  "repository": "algolia/create-instantsearch-app",
+  "author": "Algolia <support@algolia.com>",
+  "main": "index.js",
   "bin": {
-    "create-instantsearch-app": "bin/create-instantsearch-app.js"
+    "create-instantsearch-app": "packages/cli/index.js"
   },
   "scripts": {
-    "format": "prettier --write *.{js,md,json}"
+    "start": "node packages/cli/index.js",
+    "test": "jest ./packages",
+    "test:e2e:templates": "jest './scripts/e2e-templates.test.js'",
+    "test:e2e": "jest './scripts/e2e-*'",
+    "lint": "eslint .",
+    "lint:fix": "yarn lint --fix",
+    "format": "prettier --write *.{js,md,json}",
+    "release-templates": "node ./scripts/release-templates",
+    "release": "standard-version --tag-prefix '' && git push --follow-tags origin master && npm publish && conventional-github-releaser --preset angular && npm run release-templates",
+    "release:beta": "standard-version --prerelease beta --tag-prefix '' && git push --follow-tags origin master && npm publish --tag beta && conventional-github-releaser --preset angular && npm run release-templates"
   },
   "engines": {
-    "node": ">= 7.6"
+    "node": ">= 8"
   },
   "dependencies": {
-    "algoliasearch": "^3.24.9",
-    "colors": "^1.1.2",
-    "commander": "^2.11.0",
-    "jstransformer-handlebars": "^1.0.0",
+    "algoliasearch": "^3.27.1",
+    "chalk": "^2.4.1",
+    "commander": "^2.15.1",
+    "inquirer": "^5.2.0",
+    "jstransformer-handlebars": "^1.1.0",
+    "latest-semver": "^1.0.0",
+    "load-json-file": "^5.0.0",
     "metalsmith": "^2.3.0",
-    "metalsmith-in-place": "^2.0.1",
-    "prompt": "^1.0.0"
+    "metalsmith-ignore": "^0.1.2",
+    "metalsmith-in-place": "^4.1.1",
+    "metalsmith-rename": "^1.0.0",
+    "validate-npm-package-name": "^3.0.0"
   },
   "devDependencies": {
-    "prettier": "^1.10.2"
+    "babel-eslint": "^8.2.3",
+    "conventional-github-releaser": "^3.1.0",
+    "eslint": "^4.19.1",
+    "eslint-config-algolia": "^13.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-html": "^4.0.3",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "jest": "^23.0.1",
+    "jest-image-snapshot": "^2.4.2",
+    "prettier": "^1.13.2",
+    "standard-version": "^4.4.0",
+    "walk-sync": "^0.3.2"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/algolia/create-instantsearch-app"
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/",
+      "<rootDir>/templates/"
+    ]
   }
 }

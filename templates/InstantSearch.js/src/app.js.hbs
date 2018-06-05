@@ -1,0 +1,49 @@
+/* global instantsearch */
+
+const search = instantsearch({
+  appId: '{{appId}}',
+  apiKey: '{{apiKey}}',
+  indexName: '{{indexName}}',
+});
+
+search.addWidget(
+  instantsearch.widgets.searchBox({
+    container: '#searchBox',
+    {{#if searchPlaceholder}}
+    placeholder: '{{searchPlaceholder}}',
+    {{/if}}
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.hits({
+    container: '#hits',
+    {{#if mainAttribute}}
+    templates: {
+      item: `
+        <div>
+          <header>\{{{_highlightResult.{{mainAttribute}}.value}}}</header>
+        </div>
+      `,
+    },
+    {{/if}}
+  })
+);
+
+{{#each attributesForFaceting}}
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: '#{{this}}-list',
+    attributeName: '{{this}}',
+  })
+);
+
+{{/each}}
+
+search.addWidget(
+  instantsearch.widgets.pagination({
+    container: '#pagination',
+  })
+);
+
+search.start();
