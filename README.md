@@ -202,7 +202,7 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 
 [version-svg]: https://img.shields.io/npm/v/create-instantsearch-app.svg?style=flat-square
 [package-url]: https://npmjs.org/package/create-instantsearch-app
-[travis-svg]: https://img.shields.io/travis/algolia/create-instantsearch-app/develop.svg?style=flat-square
+[travis-svg]: https://img.shields.io/travis/algolia/create-instantsearch-app/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/algolia/create-instantsearch-app
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
