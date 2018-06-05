@@ -21,6 +21,11 @@
     "release": "standard-version --tag-prefix '' && git push --follow-tags origin master && npm publish && conventional-github-releaser --preset angular && npm run release-templates",
     "release:beta": "standard-version --prerelease beta --tag-prefix '' && git push --follow-tags origin master && npm publish --tag beta && conventional-github-releaser --preset angular && npm run release-templates"
   },
+  "files": [
+    "index.js",
+    "packages",
+    "templates"
+  ],
   "engines": {
     "node": ">= 8"
   },
