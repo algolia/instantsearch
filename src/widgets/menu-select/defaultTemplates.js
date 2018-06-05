@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 export default {
-  header: '',
+  panelHeader: '',
   item:
     '{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})',
-  footer: '',
+  panelFooter: '',
   seeAllOption: 'See all',
 };
