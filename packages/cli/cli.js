@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 const path = require('path');
 const process = require('process');
 const program = require('commander');
