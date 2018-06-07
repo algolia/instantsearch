@@ -3,14 +3,14 @@
 exports[`renders correctly 1`] = `
 
 <div class="ais-Hits">
-  <ul class="ais-Hits-list">
+  <ol class="ais-Hits-list">
     <li class="ais-Hits-item">
       objectID: one, index: 0
     </li>
     <li class="ais-Hits-item">
       objectID: two, index: 1
     </li>
-  </ul>
+  </ol>
 </div>
 
 `;

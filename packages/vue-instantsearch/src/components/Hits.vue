@@ -1,17 +1,17 @@
 <template>
   <div :class="suit()" v-if="state">
-    <slot v-bind="items">
-      <ul :class="suit('list')">
+    <slot :items="items">
+      <ol :class="suit('list')">
         <li
           v-for="(item, itemIndex) in items"
           :key="item.objectID"
           :class="suit('item')"
         >
-          <slot name="item" :result="item" :index="itemIndex">
+          <slot name="item" :item="item" :index="itemIndex">
             objectID: {{item.objectID}}, index: {{itemIndex}}
           </slot>
         </li>
-      </ul>
+      </ol>
     </slot>
   </div>
 </template>
