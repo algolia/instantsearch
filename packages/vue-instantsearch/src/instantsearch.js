@@ -17,6 +17,7 @@ import Breadcrumb from './components/Breadcrumb.vue';
 import CurrentRefinements from './components/CurrentRefinements.vue';
 import HierarchicalMenu from './components/HierarchicalMenu.vue';
 import HitsPerPage from './components/HitsPerPage.vue';
+import InfiniteHits from './components/InfiniteHits.vue';
 
 const InstantSearch = {
   Index,
@@ -36,6 +37,7 @@ const InstantSearch = {
   CurrentRefinements,
   HierarchicalMenu,
   HitsPerPage,
+  InfiniteHits,
 
   install(Vue) {
     Vue.component('ais-index', Index);
@@ -55,6 +57,7 @@ const InstantSearch = {
     Vue.component('ais-current-refinements', CurrentRefinements);
     Vue.component('ais-hierarchical-menu', HierarchicalMenu);
     Vue.component('ais-hits-per-page', HitsPerPage);
+    Vue.component('ais-infinite-hits', InfiniteHits);
   },
 };
 

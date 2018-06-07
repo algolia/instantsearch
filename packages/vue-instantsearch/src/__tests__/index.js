@@ -24,6 +24,7 @@ test('Should register all components when installed', () => {
     'ais-current-refinements',
     'ais-hierarchical-menu',
     'ais-hits-per-page',
+    'ais-infinite-hits',
   ];
 
   const allInstalledComponents = component.mock.calls.map(call => call[0]);
