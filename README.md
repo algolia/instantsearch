@@ -176,7 +176,7 @@ module.exports = {
 };
 ```
 
-All your template files that need to be injected values should have the `.hbs` extension ([read more on Handlebars](https://handlebarsjs.com)). You can see examples in the [`templates`](templates) folder. Then, pass the path to your template when generating the app.
+The template files support the [Handlebars](https://handlebarsjs.com) syntax to inject values passed to `create-instantsearch-app`. You can see examples in the [`templates`](templates) folder. Then, pass the path to your template when generating the app.
 
 Using the API:
 
