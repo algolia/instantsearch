@@ -7,24 +7,24 @@ test('Should register all components when installed', () => {
   InstantSearch.install(Vue);
 
   const components = [
-    'ais-index',
-    'ais-highlight',
-    'ais-snippet',
-    'ais-hits',
-    'ais-stats',
-    'ais-pagination',
-    'ais-menu',
-    'ais-menu-select',
-    'ais-sort-by',
-    'ais-search-box',
+    'ais-breadcrumb',
     'ais-clear-refinements',
     'ais-configure',
-    'ais-powered-by',
-    'ais-breadcrumb',
     'ais-current-refinements',
     'ais-hierarchical-menu',
+    'ais-highlight',
     'ais-hits-per-page',
+    'ais-hits',
+    'ais-index',
     'ais-infinite-hits',
+    'ais-menu-select',
+    'ais-menu',
+    'ais-pagination',
+    'ais-powered-by',
+    'ais-search-box',
+    'ais-snippet',
+    'ais-sort-by',
+    'ais-stats',
   ];
 
   const allInstalledComponents = component.mock.calls.map(call => call[0]);
