@@ -33,13 +33,19 @@
   padding: 1rem;
 }
 
-.container-app {
-  display: grid;
-  grid-template-columns: 20% 75%;
-  grid-gap: 5%;
+.search-panel {
+  display: flex;
 }
 
-.searchBox {
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
+}
+
+.searchbox {
   margin-bottom: 2rem;
 }
 

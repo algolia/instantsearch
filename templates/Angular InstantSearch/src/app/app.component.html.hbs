@@ -12,15 +12,17 @@
 
 <div class="container">
   <ais-instantsearch [config]="config">
-    <div class="container-app">
-      <div class="filters">
+    <div class="search-panel">
+      {{#if attributesForFaceting}}
+      <div class="search-panel__filters">
         {{#each attributesForFaceting}}
         <ais-refinement-list attribute="{{this}}"></ais-refinement-list>
         {{/each}}
       </div>
 
-      <div class="search-container">
-        <div class="searchBox">
+      {{/if}}
+      <div class="search-panel__results">
+        <div class="searchbox">
           <ais-search-box placeholder="{{searchPlaceholder}}"></ais-search-box>
         </div>
 

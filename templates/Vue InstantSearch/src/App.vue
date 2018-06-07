@@ -18,14 +18,16 @@
         api-key="{{apiKey}}"
         index-name="{{indexName}}"
       >
-        <div class="container-app">
-          <div class="filters">
+        <div class="search-panel">
+          {{#if attributesForFaceting.length}}
+          <div class="search-panel__filters">
             {{#each attributesForFaceting}}
             <ais-refinement-list attribute-name="{{this}}"></ais-refinement-list>
             {{/each}}
           </div>
 
-          <div class="search-container">
+          {{/if}}
+          <div class="search-panel__results">
             <ais-search-box
               placeholder="{{searchPlaceholder}}"
               class="ais-SearchBox-form"
@@ -122,13 +124,19 @@ em {
   padding: 1rem;
 }
 
-.container-app {
-  display: grid;
-  grid-template-columns: 20% 75%;
-  grid-gap: 5%;
+.search-panel {
+  display: flex;
 }
 
-.searchBox {
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
+}
+
+.searchbox {
   margin-bottom: 2rem;
 }
 

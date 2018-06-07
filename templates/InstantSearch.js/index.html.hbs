@@ -31,15 +31,17 @@
   </header>
 
   <div class="container">
-    <div class="container-app">
-      <div class="filters">
+    <div class="search-panel">
+      {{#if attributesForFaceting}}
+      <div class="search-panel__filters">
         {{#each attributesForFaceting}}
         <div id="{{this}}-list"></div>
         {{/each}}
       </div>
 
-      <div class="search-container">
-        <div id="searchBox"></div>
+      {{/if}}
+      <div class="search-panel__results">
+        <div id="searchbox"></div>
         <div id="hits"></div>
       </div>
     </div>

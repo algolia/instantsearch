@@ -38,10 +38,16 @@ em {
   padding: 1rem;
 }
 
-.container-app {
-  display: grid;
-  grid-template-columns: 20% 75%;
-  grid-gap: 5%;
+.search-panel {
+  display: flex;
+}
+
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
 }
 
 .ais-hits {
@@ -59,7 +65,7 @@ em {
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16);
 }
 
-#searchBox {
+#searchbox {
   margin-bottom: 2rem;
 }
 

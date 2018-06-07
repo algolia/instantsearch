@@ -328,13 +328,19 @@ exports[`Templates Angular InstantSearch File content: src/app/app.component.css
   padding: 1rem;
 }
 
-.container-app {
-  display: grid;
-  grid-template-columns: 20% 75%;
-  grid-gap: 5%;
+.search-panel {
+  display: flex;
 }
 
-.searchBox {
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
+}
+
+.searchbox {
   margin-bottom: 2rem;
 }
 
@@ -359,14 +365,14 @@ exports[`Templates Angular InstantSearch File content: src/app/app.component.htm
 
 <div class=\\"container\\">
   <ais-instantsearch [config]=\\"config\\">
-    <div class=\\"container-app\\">
-      <div class=\\"filters\\">
+    <div class=\\"search-panel\\">
+      <div class=\\"search-panel__filters\\">
         <ais-refinement-list attribute=\\"facet1\\"></ais-refinement-list>
         <ais-refinement-list attribute=\\"facet2\\"></ais-refinement-list>
       </div>
 
-      <div class=\\"search-container\\">
-        <div class=\\"searchBox\\">
+      <div class=\\"search-panel__results\\">
+        <div class=\\"searchbox\\">
           <ais-search-box placeholder=\\"Search placeholder\\"></ais-search-box>
         </div>
 
@@ -1020,14 +1026,14 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
   </header>
 
   <div class=\\"container\\">
-    <div class=\\"container-app\\">
-      <div class=\\"filters\\">
+    <div class=\\"search-panel\\">
+      <div class=\\"search-panel__filters\\">
         <div id=\\"facet1-list\\"></div>
         <div id=\\"facet2-list\\"></div>
       </div>
 
-      <div class=\\"search-container\\">
-        <div id=\\"searchBox\\"></div>
+      <div class=\\"search-panel__results\\">
+        <div id=\\"searchbox\\"></div>
         <div id=\\"hits\\"></div>
       </div>
     </div>
@@ -1116,10 +1122,16 @@ exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
   padding: 1rem;
 }
 
-.container-app {
-  display: grid;
-  grid-template-columns: 20% 75%;
-  grid-gap: 5%;
+.search-panel {
+  display: flex;
+}
+
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
 }
 
 .ais-hits {
@@ -1137,7 +1149,7 @@ exports[`Templates InstantSearch.js File content: src/app.css 1`] = `
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16);
 }
 
-#searchBox {
+#searchbox {
   margin-bottom: 2rem;
 }
 
@@ -1158,7 +1170,7 @@ const search = instantsearch({
 
 search.addWidget(
   instantsearch.widgets.searchBox({
-    container: '#searchBox',
+    container: '#searchbox',
     placeholder: 'Search placeholder',
   })
 );
@@ -1385,13 +1397,19 @@ exports[`Templates React InstantSearch File content: src/App.css 1`] = `
   padding: 1rem;
 }
 
-.container-app {
-  display: grid;
-  grid-template-columns: 20% 75%;
-  grid-gap: 5%;
+.search-panel {
+  display: flex;
 }
 
-.searchBox {
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
+}
+
+.searchbox {
   margin-bottom: 2rem;
 }
 
@@ -1436,14 +1454,14 @@ class App extends Component {
             apiKey=\\"apiKey\\"
             indexName=\\"indexName\\"
           >
-            <div className=\\"container-app\\">
-              <div className=\\"filters\\">
+            <div className=\\"search-panel\\">
+              <div className=\\"search-panel__filters\\">
                 <RefinementList attribute=\\"facet1\\" />
                 <RefinementList attribute=\\"facet2\\" />
               </div>
 
-              <div className=\\"search-container\\">
-                <SearchBox className=\\"searchBox\\" placeholder=\\"Search placeholder\\" />
+              <div className=\\"search-panel__results\\">
+                <SearchBox className=\\"searchbox\\" placeholder=\\"Search placeholder\\" />
                 <Hits hitComponent={Hit} />
 
                 <div className=\\"pagination\\">
@@ -1651,13 +1669,13 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
         api-key=\\"apiKey\\"
         index-name=\\"indexName\\"
       >
-        <div class=\\"container-app\\">
-          <div class=\\"filters\\">
+        <div class=\\"search-panel\\">
+          <div class=\\"search-panel__filters\\">
             <ais-refinement-list attribute-name=\\"facet1\\"></ais-refinement-list>
             <ais-refinement-list attribute-name=\\"facet2\\"></ais-refinement-list>
           </div>
 
-          <div class=\\"search-container\\">
+          <div class=\\"search-panel__results\\">
             <ais-search-box
               placeholder=\\"Search placeholder\\"
               class=\\"ais-SearchBox-form\\"
@@ -1752,13 +1770,19 @@ em {
   padding: 1rem;
 }
 
-.container-app {
-  display: grid;
-  grid-template-columns: 20% 75%;
-  grid-gap: 5%;
+.search-panel {
+  display: flex;
 }
 
-.searchBox {
+.search-panel__filters {
+  flex: 1;
+}
+
+.search-panel__results {
+  flex: 3;
+}
+
+.searchbox {
   margin-bottom: 2rem;
 }
 
