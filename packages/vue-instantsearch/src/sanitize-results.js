@@ -1,6 +1,6 @@
 import escapeHtml from 'escape-html';
 
-export default function(
+export default function sanitizeResults(
   results,
   safePreTag,
   safePostTag,
