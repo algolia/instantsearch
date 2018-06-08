@@ -63,7 +63,7 @@
     "glob": "7.1.2",
     "happo": "5.0.0",
     "happo-core": "5.0.0",
-    "happo-target-firefox": "5.0.0",
+    "happo-target-firefox": "5.0.1",
     "instantsearch.css": "7.1.0",
     "jest": "23.1.0",
     "jest-watch-typeahead": "0.1.0",
