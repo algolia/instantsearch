@@ -1,0 +1,491 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+
+<div class="ais-RatingMenu">
+  <svg xmlns="http://www.w3.org/2000/svg"
+       style="display: none;"
+  >
+    <symbol id="ais-RatingMenu-starSymbol"
+            viewbox="0 0 24 24"
+    >
+      <path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z">
+      </path>
+    </symbol>
+    <symbol id="ais-RatingMenu-starEmptySymbol"
+            viewbox="0 0 24 24"
+    >
+      <path d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z">
+      </path>
+    </symbol>
+  </svg>
+  <ul class="ais-RatingMenu-list">
+    <li class="ais-RatingMenu-item">
+      <a href="#"
+         aria-label="1 &amp; Up"
+         class="ais-RatingMenu-link"
+      >
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <span aria-hidden="true"
+              class="ais-RatingMenu-label"
+        >
+          &amp; Up
+        </span>
+        <span class="ais-RatingMenu-count">
+          20
+        </span>
+      </a>
+    </li>
+    <li class="ais-RatingMenu-item">
+      <a href="#"
+         aria-label="2 &amp; Up"
+         class="ais-RatingMenu-link"
+      >
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <span aria-hidden="true"
+              class="ais-RatingMenu-label"
+        >
+          &amp; Up
+        </span>
+        <span class="ais-RatingMenu-count">
+          3
+        </span>
+      </a>
+    </li>
+    <li class="ais-RatingMenu-item">
+      <a href="#"
+         aria-label="3 &amp; Up"
+         class="ais-RatingMenu-link"
+      >
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <span aria-hidden="true"
+              class="ais-RatingMenu-label"
+        >
+          &amp; Up
+        </span>
+        <span class="ais-RatingMenu-count">
+          2000
+        </span>
+      </a>
+    </li>
+    <li class="ais-RatingMenu-item">
+      <a href="#"
+         aria-label="4 &amp; Up"
+         class="ais-RatingMenu-link"
+      >
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <span aria-hidden="true"
+              class="ais-RatingMenu-label"
+        >
+          &amp; Up
+        </span>
+        <span class="ais-RatingMenu-count">
+          8
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`renders correctly when refined 1`] = `
+
+<div class="ais-RatingMenu">
+  <svg xmlns="http://www.w3.org/2000/svg"
+       style="display: none;"
+  >
+    <symbol id="ais-RatingMenu-starSymbol"
+            viewbox="0 0 24 24"
+    >
+      <path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z">
+      </path>
+    </symbol>
+    <symbol id="ais-RatingMenu-starEmptySymbol"
+            viewbox="0 0 24 24"
+    >
+      <path d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z">
+      </path>
+    </symbol>
+  </svg>
+  <ul class="ais-RatingMenu-list">
+    <li class="ais-RatingMenu-item">
+      <a href="#"
+         aria-label="1 &amp; Up"
+         class="ais-RatingMenu-link"
+      >
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <span aria-hidden="true"
+              class="ais-RatingMenu-label"
+        >
+          &amp; Up
+        </span>
+        <span class="ais-RatingMenu-count">
+          20
+        </span>
+      </a>
+    </li>
+    <li class="ais-RatingMenu-item">
+      <a href="#"
+         aria-label="2 &amp; Up"
+         class="ais-RatingMenu-link"
+      >
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <span aria-hidden="true"
+              class="ais-RatingMenu-label"
+        >
+          &amp; Up
+        </span>
+        <span class="ais-RatingMenu-count">
+          3
+        </span>
+      </a>
+    </li>
+    <li class="ais-RatingMenu-item">
+      <a href="#"
+         aria-label="3 &amp; Up"
+         class="ais-RatingMenu-link"
+      >
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <span aria-hidden="true"
+              class="ais-RatingMenu-label"
+        >
+          &amp; Up
+        </span>
+        <span class="ais-RatingMenu-count">
+          2000
+        </span>
+      </a>
+    </li>
+    <li class="ais-RatingMenu-item ais-RatingMenu-item--selected">
+      <a href="#"
+         aria-label="4 &amp; Up"
+         class="ais-RatingMenu-link"
+      >
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full"
+        >
+          <use xlink:href="#ais-RatingMenu-starSymbol">
+          </use>
+        </svg>
+        <svg aria-hidden="true"
+             width="24"
+             height="24"
+             class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty"
+        >
+          <use xlink:href="#ais-RatingMenu-starEmptySymbol">
+          </use>
+        </svg>
+        <span aria-hidden="true"
+              class="ais-RatingMenu-label"
+        >
+          &amp; Up
+        </span>
+        <span class="ais-RatingMenu-count">
+          8
+        </span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+`;
