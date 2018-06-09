@@ -36,7 +36,7 @@ This method should return the props to forward to the composed component.
 
 `searchState` holds the search state of all widgets. You can find the shape of all widgets search state in [the corresponding guide](guide/Search_state.html).
 
-`searchResults` holds the search results, search errors and search loading state, with the shape `{results: ?SearchResults, error: ?Error, loading: bool}`. The `SearchResults` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults).
+`searchResults` holds the search results, search errors and search loading state, with the shape `{results: ?SearchResults, error: ?Error, searching: boolean, searchingForFacetValues: boolean}`. The `SearchResults` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults).
 
 `meta` is the list of metadata from all widgets whose connector defines a `getMetadata` method.
 
