@@ -11,6 +11,7 @@ import MenuSelect from '../components/MenuSelect';
  * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
  * @propType {string} attribute - the name of the attribute in the record
  * @propType {string} [defaultRefinement] - the value of the item selected by default
+ * @propType {number} [limit=10] - the minimum number of diplayed items
  * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @themeKey ais-MenuSelect - the root div of the widget
  * @themeKey ais-MenuSelect-noRefinement - the root div of the widget when there is no refinement
