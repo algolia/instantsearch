@@ -6948,9 +6948,9 @@ happo-core@5.0.0, happo-core@^5.0.0:
     parse-data-uri "^0.2.0"
     pngjs "^3.0.0"
 
-happo-target-firefox@5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/happo-target-firefox/-/happo-target-firefox-5.0.1.tgz#ec81bcac00a6bd08bd24dc9a7c18c4b8a7f4b21d"
+happo-target-firefox@5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/happo-target-firefox/-/happo-target-firefox-5.0.2.tgz#47d766a75060b90c6f7f3207368d950f4686e534"
   dependencies:
     ejs "^2.5.2"
     express "^4.14.0"
