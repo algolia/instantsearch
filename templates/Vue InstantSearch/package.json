@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-dev-server --port 3000 --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "lint": "eslint --ext .js,.vue .",
+    "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "vue": "^2.5.16",
@@ -12,12 +14,20 @@
   },
   "devDependencies": {
     "babel-core": "6.26.0",
+    "babel-eslint": "^8.2.3",
     "babel-loader": "7.1.4",
     "babel-preset-env": "1.6.1",
     "babel-preset-stage-3": "6.24.1",
     "cross-env": "5.1.4",
     "css-loader": "0.28.11",
+    "eslint": "^4.19.1",
+    "eslint-config-algolia": "^13.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-html": "^4.0.3",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "file-loader": "1.1.11",
+    "prettier": "^1.13.4",
     "vue-loader": "14.2.2",
     "vue-template-compiler": "2.5.16",
     "webpack": "3.11.0",

@@ -25,7 +25,8 @@ module.exports = function build(config) {
           // Use `.babelrc.template` as name to not trigger babel
           // when requiring the file `.template.js` in end-to-end tests
           // and rename it `.babelrc` afterwards
-          [/\.babelrc.template$/, '.babelrc'],
+          ['.babelrc.template', '.babelrc'],
+          ['.eslintrc.js.hbs', '.eslintrc.js'],
         ])
       )
       .use(inPlace())

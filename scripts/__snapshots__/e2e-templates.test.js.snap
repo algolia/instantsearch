@@ -945,6 +945,30 @@ Array [
 ]
 `;
 
+exports[`Templates InstantSearch.js File content: .editorconfig 1`] = `
+"root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true"
+`;
+
+exports[`Templates InstantSearch.js File content: .eslintignore 1`] = `
+"/node_modules
+/dist
+/.cache"
+`;
+
+exports[`Templates InstantSearch.js File content: .eslintrc.js 1`] = `
+"module.exports = {
+  extends: 'algolia',
+};"
+`;
+
 exports[`Templates InstantSearch.js File content: .gitignore 1`] = `
 "# See https://help.github.com/ignore-files/ for more about ignoring files.
 
@@ -968,6 +992,14 @@ exports[`Templates InstantSearch.js File content: .gitignore 1`] = `
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*"
+`;
+
+exports[`Templates InstantSearch.js File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
 `;
 
 exports[`Templates InstantSearch.js File content: README.md 1`] = `
@@ -1073,10 +1105,19 @@ exports[`Templates InstantSearch.js File content: package.json 1`] = `
   \\"private\\": true,
   \\"scripts\\": {
     \\"start\\": \\"parcel index.html --port 3000\\",
-    \\"build\\": \\"parcel build index.html\\"
+    \\"build\\": \\"parcel build index.html\\",
+    \\"lint\\": \\"eslint .\\",
+    \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"devDependencies\\": {
-    \\"parcel-bundler\\": \\"^1.8.1\\"
+    \\"babel-eslint\\": \\"^8.2.3\\",
+    \\"eslint\\": \\"^4.19.1\\",
+    \\"eslint-config-algolia\\": \\"^13.1.0\\",
+    \\"eslint-config-prettier\\": \\"^2.9.0\\",
+    \\"eslint-plugin-import\\": \\"^2.12.0\\",
+    \\"eslint-plugin-prettier\\": \\"^2.6.0\\",
+    \\"parcel-bundler\\": \\"^1.8.1\\",
+    \\"prettier\\": \\"^1.13.4\\"
   }
 }"
 `;
@@ -1202,7 +1243,6 @@ search.addWidget(
   })
 );
 
-
 search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
@@ -1227,7 +1267,11 @@ body {
 
 exports[`Templates InstantSearch.js Folder structure: contains the right files 1`] = `
 Array [
+  ".editorconfig",
+  ".eslintignore",
+  ".eslintrc.js",
   ".gitignore",
+  ".prettierrc",
   "README.md",
   "favicon.png",
   "index.html",
@@ -1237,6 +1281,24 @@ Array [
   "src/app.js",
   "src/index.css",
 ]
+`;
+
+exports[`Templates React InstantSearch File content: .editorconfig 1`] = `
+"root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true"
+`;
+
+exports[`Templates React InstantSearch File content: .eslintrc.js 1`] = `
+"module.exports = {
+  extends: 'algolia/react',
+};"
 `;
 
 exports[`Templates React InstantSearch File content: .gitignore 1`] = `
@@ -1261,6 +1323,14 @@ exports[`Templates React InstantSearch File content: .gitignore 1`] = `
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*"
+`;
+
+exports[`Templates React InstantSearch File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
 `;
 
 exports[`Templates React InstantSearch File content: README.md 1`] = `
@@ -1292,7 +1362,9 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
   \\"private\\": true,
   \\"scripts\\": {
     \\"start\\": \\"react-scripts start\\",
-    \\"build\\": \\"react-scripts build\\"
+    \\"build\\": \\"react-scripts build\\",
+    \\"lint\\": \\"eslint .\\",
+    \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"dependencies\\": {
     \\"react\\": \\"^16.3.2\\",
@@ -1301,6 +1373,13 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"react-scripts\\": \\"1.1.4\\"
   },
   \\"devDependencies\\": {
+    \\"eslint\\": \\"^4.19.1\\",
+    \\"eslint-config-algolia\\": \\"^13.1.0\\",
+    \\"eslint-config-prettier\\": \\"^2.9.0\\",
+    \\"eslint-plugin-import\\": \\"^2.12.0\\",
+    \\"eslint-plugin-prettier\\": \\"^2.6.0\\",
+    \\"eslint-plugin-react\\": \\"^7.9.1\\",
+    \\"prettier\\": \\"^1.13.4\\",
     \\"prop-types\\": \\"^15.6.1\\"
   }
 }"
@@ -1515,7 +1594,10 @@ ReactDOM.render(<App />, document.getElementById('root'));"
 
 exports[`Templates React InstantSearch Folder structure: contains the right files 1`] = `
 Array [
+  ".editorconfig",
+  ".eslintrc.js",
   ".gitignore",
+  ".prettierrc",
   "README.md",
   "package.json",
   "public/favicon.png",
@@ -1535,6 +1617,27 @@ exports[`Templates Vue InstantSearch File content: .babelrc 1`] = `
     \\"stage-3\\"
   ]
 }"
+`;
+
+exports[`Templates Vue InstantSearch File content: .editorconfig 1`] = `
+"root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true"
+`;
+
+exports[`Templates Vue InstantSearch File content: .eslintrc.js 1`] = `
+"module.exports = {
+  extends: 'algolia/vue',
+  rules: {
+    'import/no-commonjs': 'off',
+  },
+};"
 `;
 
 exports[`Templates Vue InstantSearch File content: .gitignore 1`] = `
@@ -1626,7 +1729,9 @@ exports[`Templates Vue InstantSearch File content: package.json 1`] = `
   \\"private\\": true,
   \\"scripts\\": {
     \\"start\\": \\"cross-env NODE_ENV=development webpack-dev-server --port 3000 --hot\\",
-    \\"build\\": \\"cross-env NODE_ENV=production webpack --progress --hide-modules\\"
+    \\"build\\": \\"cross-env NODE_ENV=production webpack --progress --hide-modules\\",
+    \\"lint\\": \\"eslint --ext .js,.vue .\\",
+    \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"dependencies\\": {
     \\"vue\\": \\"^2.5.16\\",
@@ -1634,12 +1739,20 @@ exports[`Templates Vue InstantSearch File content: package.json 1`] = `
   },
   \\"devDependencies\\": {
     \\"babel-core\\": \\"6.26.0\\",
+    \\"babel-eslint\\": \\"^8.2.3\\",
     \\"babel-loader\\": \\"7.1.4\\",
     \\"babel-preset-env\\": \\"1.6.1\\",
     \\"babel-preset-stage-3\\": \\"6.24.1\\",
     \\"cross-env\\": \\"5.1.4\\",
     \\"css-loader\\": \\"0.28.11\\",
+    \\"eslint\\": \\"^4.19.1\\",
+    \\"eslint-config-algolia\\": \\"^13.1.0\\",
+    \\"eslint-config-prettier\\": \\"^2.9.0\\",
+    \\"eslint-plugin-html\\": \\"^4.0.3\\",
+    \\"eslint-plugin-import\\": \\"^2.12.0\\",
+    \\"eslint-plugin-prettier\\": \\"^2.6.0\\",
     \\"file-loader\\": \\"1.1.11\\",
+    \\"prettier\\": \\"^1.13.4\\",
     \\"vue-loader\\": \\"14.2.2\\",
     \\"vue-template-compiler\\": \\"2.5.16\\",
     \\"webpack\\": \\"3.11.0\\",
@@ -1888,6 +2001,8 @@ if (process.env.NODE_ENV === 'production') {
 exports[`Templates Vue InstantSearch Folder structure: contains the right files 1`] = `
 Array [
   ".babelrc",
+  ".editorconfig",
+  ".eslintrc.js",
   ".gitignore",
   "README.md",
   "favicon.png",
