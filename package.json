@@ -18,8 +18,8 @@
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write *.{js,md,json}",
     "release-templates": "node ./scripts/release-templates",
-    "release": "standard-version --tag-prefix '' && git push --follow-tags origin master && npm publish && conventional-github-releaser --preset angular && npm run release-templates",
-    "release:beta": "standard-version --prerelease beta --tag-prefix '' && git push --follow-tags origin master && npm publish --tag beta && conventional-github-releaser --preset angular && npm run release-templates"
+    "release": "release-it",
+    "release:beta": "release-it --preRelease=beta"
   },
   "files": [
     "index.js",
@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.2.3",
-    "conventional-github-releaser": "^3.1.0",
     "eslint": "^4.19.1",
     "eslint-config-algolia": "^13.1.0",
     "eslint-config-prettier": "^2.9.0",
@@ -56,7 +55,7 @@
     "jest": "^23.0.1",
     "jest-image-snapshot": "^2.4.2",
     "prettier": "^1.13.2",
-    "standard-version": "^4.4.0",
+    "release-it": "^7.4.7",
     "walk-sync": "^0.3.2"
   },
   "jest": {

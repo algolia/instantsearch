@@ -1,0 +1,9 @@
+{
+  "requireUpstream": false,
+  "increment": "conventional:angular",
+  "src": {
+    "commitMessage": "chore(release): %s",
+    "beforeStartCommand": "npm run lint && npm run test -- --colors && npm run test:e2e -- --colors",
+    "afterReleaseCommand": "npm run release-templates"
+  }
+}
