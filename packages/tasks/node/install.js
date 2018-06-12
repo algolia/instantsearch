@@ -21,17 +21,21 @@ module.exports = function install(config) {
   } catch (err) {
     logger.log();
     logger.log();
-    logger.error(chalk.red('📦  Dependencies could not be installed.'));
-    logger.log(err);
-    logger.log();
-    logger.log('Try to create the app without installing the dependencies:');
-    logger.log(
-      `  ${chalk.cyan('create-instantsearch-app')} ${process.argv
-        .slice(2)
-        .join(' ')} --no-installation`
-    );
 
-    logger.log();
+    if (err.signal !== 'SIGINT') {
+      logger.error(chalk.red('📦  Dependencies could not be installed.'));
+
+      logger.log(err);
+      logger.log();
+      logger.log('Try to create the app without installing the dependencies:');
+      logger.log(
+        `  ${chalk.cyan('create-instantsearch-app')} ${process.argv
+          .slice(2)
+          .join(' ')} --no-installation`
+      );
+      logger.log();
+    }
+
     logger.log();
     logger.error(chalk.red('🛑  Aborting the app generation.'));
     logger.log();
