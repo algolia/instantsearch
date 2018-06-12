@@ -5,6 +5,7 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 const latestSemver = require('latest-semver');
 const loadJsonFile = require('load-json-file');
+const algoliasearch = require('algoliasearch');
 
 const createInstantSearchApp = require('../create-instantsearch-app');
 const {
@@ -89,26 +90,6 @@ const optionsFromArguments = getOptionsFromArguments(options.rawArgs);
 
 const questions = [
   {
-    type: 'input',
-    name: 'appId',
-    message: 'Application ID',
-  },
-  {
-    type: 'input',
-    name: 'apiKey',
-    message: 'Search API key',
-  },
-  {
-    type: 'input',
-    name: 'indexName',
-    message: 'Index name',
-  },
-  {
-    type: 'input',
-    name: 'mainAttribute',
-    message: 'Main searchable attribute',
-  },
-  {
     type: 'list',
     name: 'template',
     message: 'InstantSearch template',
@@ -159,6 +140,45 @@ const questions = [
         ];
       }
     },
+  },
+  {
+    type: 'input',
+    name: 'appId',
+    message: 'Application ID',
+  },
+  {
+    type: 'input',
+    name: 'apiKey',
+    message: 'Search API key',
+  },
+  {
+    type: 'input',
+    name: 'indexName',
+    message: 'Index name',
+  },
+  {
+    type: 'list',
+    name: 'mainAttribute',
+    message: 'Attribute to display',
+    choices: async answers => {
+      const client = algoliasearch(answers.appId, answers.apiKey);
+      const index = client.initIndex(answers.indexName);
+      const defaultAttributes = ['title', 'name', 'description'];
+      let attributes = [];
+
+      try {
+        const { hits } = await index.search({ hitsPerPage: 1 });
+        const [firstHit] = hits;
+        attributes = Object.keys(firstHit._highlightResult).sort(
+          value => !defaultAttributes.includes(value)
+        );
+      } catch (err) {
+        attributes = defaultAttributes;
+      }
+
+      return attributes;
+    },
+    when: ({ appId, apiKey, indexName }) => appId && apiKey && indexName,
   },
 ].filter(question => isQuestionAsked({ question, args: optionsFromArguments }));
 
