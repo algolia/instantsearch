@@ -1073,7 +1073,7 @@ exports[`Templates InstantSearch.js File content: index.html 1`] = `
     <div id=\\"pagination\\"></div>
   </div>
 
-  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0/dist/instantsearch.min.js\\"></script>
+  <script src=\\"https://cdn.jsdelivr.net/npm/instantsearch.js@1.0.0\\"></script>
   <script src=\\"./src/app.js\\"></script>
 </body>
 
