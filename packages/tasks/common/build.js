@@ -26,6 +26,9 @@ module.exports = function build(config) {
           // when requiring the file `.template.js` in end-to-end tests
           // and rename it `.babelrc` afterwards
           ['.babelrc.template', '.babelrc'],
+          // `npx` renames `.gitignore` files to `.npmignore`
+          // See https://github.com/algolia/create-instantsearch-app/issues/48
+          ['.gitignore.template', '.gitignore'],
           ['.eslintrc.js.hbs', '.eslintrc.js'],
         ])
       )
