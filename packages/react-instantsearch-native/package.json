@@ -54,9 +54,9 @@
     "enzyme-adapter-react-16": "1.1.1",
     "enzyme-to-json": "3.3.4",
     "jest": "23.1.0",
-    "react": "16.4.0",
-    "react-dom": "16.4.0",
-    "react-test-renderer": "16.4.0"
+    "react": "16.4.1",
+    "react-dom": "16.4.1",
+    "react-test-renderer": "16.4.1"
   },
   "peerDependencies": {
     "react": ">= 15.3.0 < 17",
