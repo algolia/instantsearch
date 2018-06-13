@@ -212,7 +212,7 @@ describe('connectHitsPerPage', () => {
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.items).toHaveLength(3);
     firstRenderingOptions.refine(firstRenderingOptions.items[0].value);
-    expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
 
     // Reset the hitsPerPage to an actual value
     helper.setQueryParameter('hitsPerPage', 7);
@@ -227,7 +227,7 @@ describe('connectHitsPerPage', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.items).toHaveLength(3);
     secondRenderingOptions.refine(secondRenderingOptions.items[0].value);
-    expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
   });
 
   describe('routing', () => {
