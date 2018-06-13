@@ -210,6 +210,7 @@ async function getConfig() {
   return {
     ...config,
     libraryVersion,
+    name: config.name || appName,
     template: templatePath,
   };
 }
