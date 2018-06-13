@@ -111,6 +111,10 @@ const questions = [
         const versions = await fetchLibraryVersions(libraryName);
         const latestStableVersion = latestSemver(versions);
 
+        if (!latestStableVersion) {
+          return versions;
+        }
+
         return [
           new inquirer.Separator('Latest stable version (recommended)'),
           latestStableVersion,
