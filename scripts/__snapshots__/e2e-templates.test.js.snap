@@ -1610,6 +1610,320 @@ Array [
 ]
 `;
 
+exports[`Templates React InstantSearch Native File content: .babelrc 1`] = `
+"{
+  \\"presets\\": [\\"babel-preset-expo\\"],
+  \\"env\\": {
+    \\"development\\": {
+      \\"plugins\\": [\\"transform-react-jsx-source\\"]
+    }
+  }
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: .editorconfig 1`] = `
+"root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true"
+`;
+
+exports[`Templates React InstantSearch Native File content: .eslintrc.js 1`] = `
+"module.exports = {
+  extends: 'algolia/react',
+};"
+`;
+
+exports[`Templates React InstantSearch Native File content: .gitignore 1`] = `
+"# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# expo
+.expo/
+
+# dependencies
+/node_modules
+
+# misc
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*"
+`;
+
+exports[`Templates React InstantSearch Native File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: .watchmanconfig 1`] = `"{}"`;
+
+exports[`Templates React InstantSearch Native File content: App.js 1`] = `
+"import React from 'react';
+import { StyleSheet, View, SafeAreaView, StatusBar } from 'react-native';
+import algoliasearch from 'algoliasearch/reactnative';
+import { InstantSearch } from 'react-instantsearch-native';
+import SearchBox from './src/SearchBox';
+import InfiniteHits from './src/InfiniteHits';
+
+const searchClient = algoliasearch(
+  'appId',
+  'apiKey'
+);
+
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: '#252b33',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+});
+
+class App extends React.Component {
+  root = {
+    Root: View,
+    props: {
+      style: {
+        flex: 1,
+      },
+    },
+  };
+
+  render() {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <StatusBar barStyle=\\"light-content\\" />
+        <View style={styles.container}>
+          <InstantSearch
+            searchClient={searchClient}
+            indexName=\\"indexName\\"
+            root={this.root}
+          >
+            <SearchBox />
+            <InfiniteHits />
+          </InstantSearch>
+        </View>
+      </SafeAreaView>
+    );
+  }
+}
+
+export default App;"
+`;
+
+exports[`Templates React InstantSearch Native File content: README.md 1`] = `
+"# react-instantsearch-native-app
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
+
+## Get started
+
+To run this project locally, install the dependencies and run the local server:
+
+\`\`\`sh
+npm install
+npm start
+\`\`\`
+
+Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+
+\`\`\`sh
+yarn
+yarn start
+\`\`\`"
+`;
+
+exports[`Templates React InstantSearch Native File content: app.json 1`] = `
+"{
+  \\"expo\\": {
+    \\"sdkVersion\\": \\"27.0.0\\"
+  }
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: package.json 1`] = `
+"{
+  \\"name\\": \\"react-instantsearch-native-app\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"main\\": \\"./node_modules/react-native-scripts/build/bin/crna-entry.js\\",
+  \\"scripts\\": {
+    \\"start\\": \\"react-native-scripts start\\",
+    \\"android\\": \\"react-native-scripts android\\",
+    \\"ios\\": \\"react-native-scripts ios\\",
+    \\"lint\\": \\"eslint .\\",
+    \\"lint:fix\\": \\"npm run lint -- --fix\\"
+  },
+  \\"dependencies\\": {
+    \\"algoliasearch\\": \\"^3.27.1\\",
+    \\"expo\\": \\"^27.0.1\\",
+    \\"prop-types\\": \\"^15.6.1\\",
+    \\"react\\": \\"16.3.1\\",
+    \\"react-instantsearch-native\\": \\"^1.0.0\\",
+    \\"react-native\\": \\"^0.55.2\\"
+  },
+  \\"devDependencies\\": {
+    \\"eslint\\": \\"^4.19.1\\",
+    \\"eslint-config-algolia\\": \\"^13.1.0\\",
+    \\"eslint-config-prettier\\": \\"^2.9.0\\",
+    \\"eslint-plugin-import\\": \\"^2.12.0\\",
+    \\"eslint-plugin-prettier\\": \\"^2.6.0\\",
+    \\"eslint-plugin-react\\": \\"^7.9.1\\",
+    \\"prettier\\": \\"^1.13.4\\",
+    \\"react-native-scripts\\": \\"1.14.0\\"
+  }
+}"
+`;
+
+exports[`Templates React InstantSearch Native File content: src/Highlight.js 1`] = `
+"import React from 'react';
+import { Text } from 'react-native';
+import PropTypes from 'prop-types';
+import { connectHighlight } from 'react-instantsearch-native';
+
+const Highlight = ({ attribute, hit, highlight }) => {
+  const highlights = highlight({
+    highlightProperty: '_highlightResult',
+    attribute,
+    hit,
+  });
+
+  return (
+    <Text>
+      {highlights.map(({ value, isHighlighted }, index) => {
+        const style = {
+          backgroundColor: isHighlighted ? 'yellow' : 'transparent',
+        };
+
+        return (
+          <Text key={index} style={style}>
+            {value}
+          </Text>
+        );
+      })}
+    </Text>
+  );
+};
+
+Highlight.propTypes = {
+  attribute: PropTypes.string.isRequired,
+  hit: PropTypes.object.isRequired,
+  highlight: PropTypes.func.isRequired,
+};
+
+export default connectHighlight(Highlight);"
+`;
+
+exports[`Templates React InstantSearch Native File content: src/InfiniteHits.js 1`] = `
+"import React from 'react';
+import { StyleSheet, View, FlatList } from 'react-native';
+import PropTypes from 'prop-types';
+import { connectInfiniteHits } from 'react-instantsearch-native';
+import Highlight from './Highlight';
+
+const styles = StyleSheet.create({
+  separator: {
+    borderBottomWidth: 1,
+  },
+  item: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
+
+const InfiniteHits = ({ hits, hasMore, refine }) => (
+  <FlatList
+    data={hits}
+    keyExtractor={item => item.objectID}
+    ItemSeparatorComponent={() => <View style={styles.separator} />}
+    onEndReached={() => hasMore && refine()}
+    renderItem={({ item }) => (
+      <View style={styles.item}>
+        <Highlight attribute=\\"mainAttribute\\" hit={item} />
+      </View>
+    )}
+  />
+);
+
+InfiniteHits.propTypes = {
+  hits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  hasMore: PropTypes.bool.isRequired,
+  refine: PropTypes.func.isRequired,
+};
+
+export default connectInfiniteHits(InfiniteHits);"
+`;
+
+exports[`Templates React InstantSearch Native File content: src/SearchBox.js 1`] = `
+"import React from 'react';
+import { StyleSheet, View, TextInput } from 'react-native';
+import PropTypes from 'prop-types';
+import { connectSearchBox } from 'react-instantsearch-native';
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    backgroundColor: '#252b33',
+  },
+  input: {
+    height: 40,
+    padding: 10,
+    backgroundColor: '#FFFFFF',
+  },
+});
+
+const SearchBox = ({ currentRefinement, refine }) => (
+  <View style={styles.container}>
+    <TextInput
+      style={styles.input}
+      onChangeText={value => refine(value)}
+      value={currentRefinement}
+      placeholder=\\"Search placeholder\\"
+    />
+  </View>
+);
+
+SearchBox.propTypes = {
+  currentRefinement: PropTypes.string.isRequired,
+  refine: PropTypes.func.isRequired,
+};
+
+export default connectSearchBox(SearchBox);"
+`;
+
+exports[`Templates React InstantSearch Native Folder structure: contains the right files 1`] = `
+Array [
+  ".babelrc",
+  ".editorconfig",
+  ".eslintrc.js",
+  ".gitignore",
+  ".prettierrc",
+  ".watchmanconfig",
+  "App.js",
+  "README.md",
+  "app.json",
+  "package.json",
+  "src/Highlight.js",
+  "src/InfiniteHits.js",
+  "src/SearchBox.js",
+]
+`;
+
 exports[`Templates Vue InstantSearch File content: .babelrc 1`] = `
 "{
   \\"presets\\": [

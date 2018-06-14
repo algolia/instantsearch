@@ -1,0 +1,31 @@
+{
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "scripts": {
+    "start": "react-native-scripts start",
+    "android": "react-native-scripts android",
+    "ios": "react-native-scripts ios",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "dependencies": {
+    "algoliasearch": "^3.27.1",
+    "expo": "^27.0.1",
+    "prop-types": "^15.6.1",
+    "react": "16.3.1",
+    "react-instantsearch-native": "^{{libraryVersion}}",
+    "react-native": "^0.55.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-algolia": "^13.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "eslint-plugin-react": "^7.9.1",
+    "prettier": "^1.13.4",
+    "react-native-scripts": "1.14.0"
+  }
+}

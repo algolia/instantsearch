@@ -1,0 +1,44 @@
+import React from 'react';
+import { StyleSheet, {{#unless mainAttribute}}Text, {{/unless}}View, FlatList } from 'react-native';
+import PropTypes from 'prop-types';
+import { connectInfiniteHits } from 'react-instantsearch-native';
+{{#if mainAttribute}}
+import Highlight from './Highlight';
+{{/if}}
+
+const styles = StyleSheet.create({
+  separator: {
+    borderBottomWidth: 1,
+  },
+  item: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
+
+const InfiniteHits = ({ hits, hasMore, refine }) => (
+  <FlatList
+    data={hits}
+    keyExtractor={item => item.objectID}
+    ItemSeparatorComponent={() => <View style={styles.separator} />}
+    onEndReached={() => hasMore && refine()}
+    renderItem={({ item }) => (
+      <View style={styles.item}>
+        {{#if mainAttribute}}
+        <Highlight attribute="{{mainAttribute}}" hit={item} />
+        {{else}}
+        <Text>{JSON.stringify(item).slice(0, 100)}</Text>
+        {{/if}}
+      </View>
+    )}
+  />
+);
+
+InfiniteHits.propTypes = {
+  hits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  hasMore: PropTypes.bool.isRequired,
+  refine: PropTypes.func.isRequired,
+};
+
+export default connectInfiniteHits(InfiniteHits);
