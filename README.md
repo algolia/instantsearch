@@ -20,20 +20,6 @@ npm start
 
 Open http://localhost:3000 to see you app.
 
-<details>
-  <summary>I use an older <code>npm</code> version</summary>
-
-[`npm-init <@scope>` ](https://docs.npmjs.com/cli/init) is only available on recent `npm` versions. If it's not available, install `create-instantsearch-app` globally and run the binary.
-
-```
-npm install --global create-instantsearch-app
-create-instantsearch-app my-app
-cd my-app
-npm start
-```
-
-</details>
-
 ---
 
 Alternatively, you can use [Yarn](https://http://yarnpkg.com):
