@@ -41,13 +41,12 @@ function cleanUp(props, searchState, context) {
 
 /**
  * connectSearchBox connector provides the logic to build a widget that will
- * let the user search for a query.
+ * let the user search for a query
  * @name connectSearchBox
  * @kind connector
- * @providedPropType {function} refine - a function to remove a single filter
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
- * @providedPropType {string} currentRefinement - the query to search for.
- * @providedPropType {boolean} isSearchStalled - a flag that indicates if react-is has detected that searches are stalled.
+ * @providedPropType {function} refine - a function to change the current query
+ * @providedPropType {string} currentRefinement - the current query used
+ * @providedPropType {boolean} isSearchStalled - a flag that indicates if InstantSearch has detected that searches are stalled
  */
 export default createConnector({
   displayName: 'AlgoliaSearchBox',
