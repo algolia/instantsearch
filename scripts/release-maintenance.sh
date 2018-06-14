@@ -74,8 +74,7 @@ read -p "=> Release: when ready, press [ENTER] to push to github and publish the
 printf "\n\nRelease: push to github, publish on npm"
 git push origin maintenance
 git push origin --tags
-npm publish
+npm publish --tag maintenance
 
 printf "Release:
-Package was published to npm.
-A job on travis-ci will be automatically launched to finalize the release."
+Package was published to npm."

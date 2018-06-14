@@ -1,3 +1,33 @@
+<a name="1.12.1"></a>
+## [1.12.1](https://github.com/algolia/instantsearch.js/compare/v1.11.15...v1.12.1) (2018-05-16)
+
+
+### Bug Fixes
+
+* **doc:** Absolute URLs for meta images ([b453bb4](https://github.com/algolia/instantsearch.js/commit/b453bb4))
+
+
+### Features
+
+* **algolia:** update the algolia dependencies ([8c17361](https://github.com/algolia/instantsearch.js/commit/8c17361))
+
+
+
+<a name="1.12.0"></a>
+# [1.12.0](https://github.com/algolia/instantsearch.js/compare/v1.11.15...v1.12.0) (2018-05-16)
+
+
+### Bug Fixes
+
+* **doc:** Absolute URLs for meta images ([b453bb4](https://github.com/algolia/instantsearch.js/commit/b453bb4))
+
+
+### Features
+
+* **algolia:** update the algolia dependencies ([8c17361](https://github.com/algolia/instantsearch.js/commit/8c17361))
+
+
+
 <a name="1.11.15"></a>
 ## [1.11.15](https://github.com/algolia/instantsearch.js/compare/v1.11.14...v1.11.15) (2017-06-20)
 

@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "1.11.15",
+  "version": "1.12.1",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "main": "dist-es5-module/index.js",
@@ -99,8 +99,8 @@
     "webpack-dev-server": "1.16.2"
   },
   "dependencies": {
-    "algoliasearch": "^3.21.1",
-    "algoliasearch-helper": "^2.19.0",
+    "algoliasearch": "^3.27.0",
+    "algoliasearch-helper": "^2.26.0",
     "classnames": "^2.2.5",
     "clean-css-cli": "^4.0.8",
     "events": "^1.1.0",
