@@ -1,5 +1,5 @@
-import { orderBy } from 'lodash';
 import React from 'react';
+import orderBy from 'lodash.orderby';
 import { setAddon, storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs';
 import JSXAddon from 'storybook-addon-jsx';
