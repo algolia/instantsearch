@@ -10,10 +10,9 @@ const {
 module.exports = async function getConfiguration({
   options = {},
   answers = {},
-  loadJsonFileFn = loadJsonFile,
 } = {}) {
   const config = options.config
-    ? await loadJsonFileFn(options.config) // From configuration file given as an argument
+    ? await loadJsonFile(options.config) // From configuration file given as an argument
     : { ...options, ...answers }; // From the arguments and the prompt
 
   if (!config.template) {

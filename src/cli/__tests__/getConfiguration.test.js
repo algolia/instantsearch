@@ -1,6 +1,9 @@
 const path = require('path');
+const loadJsonFile = require('load-json-file');
 const utils = require('../../utils');
 const getConfiguration = require('../getConfiguration');
+
+jest.mock('load-json-file');
 
 jest.mock('../../utils', () => ({
   ...require.requireActual('../../utils'),
@@ -63,7 +66,7 @@ test('without stable version available', async () => {
 });
 
 test('with config file overrides all options', async () => {
-  const loadJsonFileFn = jest.fn(x => Promise.resolve(x));
+  loadJsonFile.mockImplementationOnce(x => Promise.resolve(x));
   const ignoredOptions = {
     libraryVersion: '2.0.0',
   };
@@ -81,7 +84,6 @@ test('with config file overrides all options', async () => {
   const configuration = await getConfiguration({
     options,
     answers,
-    loadJsonFileFn,
   });
 
   expect(configuration).toEqual(expect.not.objectContaining(ignoredOptions));

@@ -1,47 +1,48 @@
+const algoliasearch = require('algoliasearch');
 const getAttributesFromIndex = require('../getAttributesFromIndex');
 
-const algoliasearchSuccessFn = () => ({
-  initIndex: () => ({
-    search: jest.fn(() => ({
-      hits: [
-        {
-          _highlightResult: {
-            brand: 'brand',
-            description: 'description',
-            name: 'name',
-            title: 'title',
-          },
-        },
-      ],
-    })),
-  }),
-});
-
-const algoliasearchFailureFn = () => ({
-  initIndex: () => ({
-    search: jest.fn(() => {
-      throw new Error();
-    }),
-  }),
-});
+jest.mock('algoliasearch');
 
 test('with search success should fetch attributes', async () => {
+  algoliasearch.mockImplementationOnce(() => ({
+    initIndex: () => ({
+      search: () => ({
+        hits: [
+          {
+            _highlightResult: {
+              brand: 'brand',
+              description: 'description',
+              name: 'name',
+              title: 'title',
+            },
+          },
+        ],
+      }),
+    }),
+  }));
+
   const attributes = await getAttributesFromIndex({
     appId: 'appId',
     apiKey: 'apiKey',
     indexName: 'indexName',
-    algoliasearchFn: algoliasearchSuccessFn,
   });
 
   expect(attributes).toEqual(['title', 'name', 'description', 'brand']);
 });
 
 test('with search failure should return default attributes', async () => {
+  algoliasearch.mockImplementationOnce(() => ({
+    initIndex: () => ({
+      search: () => {
+        throw new Error();
+      },
+    }),
+  }));
+
   const attributes = await getAttributesFromIndex({
     appId: 'appId',
     apiKey: 'apiKey',
     indexName: 'indexName',
-    algoliasearchFn: algoliasearchFailureFn,
   });
 
   expect(attributes).toEqual(['title', 'name', 'description']);

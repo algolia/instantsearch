@@ -4,9 +4,8 @@ module.exports = async function getAttributesFromIndex({
   appId,
   apiKey,
   indexName,
-  algoliasearchFn = algoliasearch,
 } = {}) {
-  const client = algoliasearchFn(appId, apiKey);
+  const client = algoliasearch(appId, apiKey);
   const index = client.initIndex(indexName);
   const defaultAttributes = ['title', 'name', 'description'];
   let attributes = [];
