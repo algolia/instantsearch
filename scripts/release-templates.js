@@ -148,7 +148,7 @@ build().catch(err => {
     console.error(err);
   }
 
-  execSync(`rm -rf ${BUILD_FOLDER}`);
+  cleanup();
 
   process.exit(1);
 });
