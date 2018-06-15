@@ -28,7 +28,12 @@ module.exports = async function getConfiguration({
 
     libraryVersion = await fetchLibraryVersions(
       templateConfig.libraryName
-    ).then(latestSemver);
+    ).then(
+      versions =>
+        // Return the lastest available version when
+        // the stable version is not available
+        latestSemver(versions) || versions[0]
+    );
   }
 
   return {

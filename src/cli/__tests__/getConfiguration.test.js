@@ -1,5 +1,11 @@
 const path = require('path');
+const utils = require('../../utils');
 const getConfiguration = require('../getConfiguration');
+
+jest.mock('../../utils', () => ({
+  ...require.requireActual('../../utils'),
+  fetchLibraryVersions: jest.fn(() => Promise.resolve(['1.0.0'])),
+}));
 
 test('without template throws', async () => {
   expect.assertions(1);
@@ -40,6 +46,20 @@ test('with options from arguments and prompt merge', async () => {
       libraryVersion: '1.0.0',
     })
   );
+});
+
+test('without stable version available', async () => {
+  utils.fetchLibraryVersions.mockImplementationOnce(() =>
+    Promise.resolve(['1.0.0-beta.0'])
+  );
+
+  const configuration = await getConfiguration({
+    answers: {
+      template: 'InstantSearch.js',
+    },
+  });
+
+  expect(configuration.libraryVersion).toBe('1.0.0-beta.0');
 });
 
 test('with config file overrides all options', async () => {
