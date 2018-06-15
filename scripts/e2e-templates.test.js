@@ -6,7 +6,7 @@ const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 expect.extend({ toMatchImageSnapshot });
 
-const templatesFolder = path.join(__dirname, '../templates');
+const templatesFolder = path.join(__dirname, '../src/templates');
 const templates = fs
   .readdirSync(templatesFolder)
   .map(name => path.join(templatesFolder, name))

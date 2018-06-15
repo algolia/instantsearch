@@ -7,11 +7,11 @@
   "author": "Algolia <support@algolia.com>",
   "main": "index.js",
   "bin": {
-    "create-instantsearch-app": "packages/cli/index.js"
+    "create-instantsearch-app": "src/cli/index.js"
   },
   "scripts": {
-    "start": "node packages/cli/index.js",
-    "test": "jest ./packages",
+    "start": "node src/cli/index.js",
+    "test": "jest ./src",
     "test:e2e:templates": "jest './scripts/e2e-templates.test.js'",
     "test:e2e": "jest './scripts/e2e-*'",
     "lint": "eslint .",
@@ -23,8 +23,7 @@
   },
   "files": [
     "index.js",
-    "packages",
-    "templates"
+    "src"
   ],
   "engines": {
     "node": ">= 8"
@@ -37,6 +36,7 @@
     "jstransformer-handlebars": "^1.1.0",
     "latest-semver": "^1.0.0",
     "load-json-file": "^5.0.0",
+    "lodash.camelcase": "^4.3.0",
     "metalsmith": "^2.3.0",
     "metalsmith-ignore": "^0.1.2",
     "metalsmith-in-place": "^4.1.1",
@@ -62,7 +62,7 @@
   "jest": {
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
-      "<rootDir>/templates/"
+      "<rootDir>/src/templates/"
     ]
   }
 }
