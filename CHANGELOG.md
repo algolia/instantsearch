@@ -1,3 +1,33 @@
+<a name="3.0.0-beta.5"></a>
+# [3.0.0-beta.5](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.4...3.0.0-beta.5) (2018-06-15)
+
+
+### Features
+
+* **templates:** Update Parcel on InstantSearch.js template ([2f9d529](https://github.com/algolia/create-instantsearch-app/commit/2f9d529))
+
+
+
+<a name="3.0.0-beta.4"></a>
+# [3.0.0-beta.4](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.3...3.0.0-beta.4) (2018-06-15)
+
+
+### Bug Fixes
+
+* **cli:** Fallback on latest version when stable unavailable ([#50](https://github.com/algolia/create-instantsearch-app/issues/50)) ([0bd64a2](https://github.com/algolia/create-instantsearch-app/commit/0bd64a2))
+
+
+### Features
+
+* **cli:** Print relative cd path ([#45](https://github.com/algolia/create-instantsearch-app/issues/45)) ([37907e1](https://github.com/algolia/create-instantsearch-app/commit/37907e1))
+* **cli:** Recommend attributes to display in hits ([#43](https://github.com/algolia/create-instantsearch-app/issues/43)) ([0d9cb6a](https://github.com/algolia/create-instantsearch-app/commit/0d9cb6a))
+* **task:** Ignore error log when user aborts during installation ([#42](https://github.com/algolia/create-instantsearch-app/issues/42)) ([9e99aad](https://github.com/algolia/create-instantsearch-app/commit/9e99aad))
+* **template:** Use default IS import from jsDelivr ([#46](https://github.com/algolia/create-instantsearch-app/issues/46)) ([8e0c54b](https://github.com/algolia/create-instantsearch-app/commit/8e0c54b))
+* **templates:** Add React Native template ([#53](https://github.com/algolia/create-instantsearch-app/issues/53)) ([8b14d31](https://github.com/algolia/create-instantsearch-app/commit/8b14d31))
+* **templates:** Warn facets usage with React Native template ([#56](https://github.com/algolia/create-instantsearch-app/issues/56)) ([6502feb](https://github.com/algolia/create-instantsearch-app/commit/6502feb))
+
+
+
 <a name="3.0.0-beta.3"></a>
 # [3.0.0-beta.3](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.2...3.0.0-beta.3) (2018-06-11)
 
