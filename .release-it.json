@@ -1,7 +1,7 @@
 {
   "requireUpstream": false,
   "increment": "conventional:angular",
-  "changelogCommand": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
+  "buildCommand": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
   "src": {
     "commitMessage": "chore(release): %s",
     "beforeStartCommand": "npm run lint && npm run test -- --colors && npm run test:e2e -- --colors",
