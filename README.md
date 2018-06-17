@@ -152,7 +152,7 @@ app.create();
 
 ### Templates
 
-To use your own template, create a file `.template.js` at the root of your template directory. This is the configuration file that `createInstantSearchApp()` reads to retrieve the version of the library to install from `npm` and the [tasks](#tasks) to process.
+To use your own template, create a file `.template.js` at the root of your template directory. This is the configuration file that `createInstantSearchApp()` reads to retrieve the version of the library to install from `npm` and the [lifecycle tasks](#lifecycle) to process.
 
 <h6 align="center">`.template.js`</h6>
 
