@@ -1,3 +1,13 @@
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.5...3.0.0) (2018-06-18)
+
+
+### Bug Fixes
+
+* **cli:** Use latest version when stable unavailable ([#57](https://github.com/algolia/create-instantsearch-app/issues/57)) ([e764cd5](https://github.com/algolia/create-instantsearch-app/commit/e764cd5))
+
+
+
 <a name="3.0.0-beta.5"></a>
 # [3.0.0-beta.5](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.4...3.0.0-beta.5) (2018-06-15)
 
