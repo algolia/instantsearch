@@ -17,6 +17,7 @@
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write *.{js,md,json}",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "release-templates": "node ./scripts/release-templates",
     "release": "release-it",
     "release:beta": "release-it --preRelease=beta"
