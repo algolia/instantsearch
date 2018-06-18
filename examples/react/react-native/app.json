@@ -7,7 +7,6 @@
     "slug": "algolia-react-instantsearch",
     "orientation": "portrait",
     "privacy": "public",
-    "icon":
-      "https://www.algolia.com/static_assets/images/press/downloads/algolia-mark-blue.png"
+    "icon": "./icon.png"
   }
 }
