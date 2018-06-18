@@ -204,7 +204,7 @@ class SearchBox extends Component {
         <Image
           source={{
             uri:
-              'https://d13yacurqjgara.cloudfront.net/users/1090953/avatars/small/3a0f064859092a0e82bedddcee24a4a8.png?148154278',
+              'https://www.algolia.com/static_assets/images/press/downloads/algolia-mark-blue.png',
           }}
           style={styles.algoliaLogo}
         />
