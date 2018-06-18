@@ -161,7 +161,9 @@ The first one will be picked, you should probably set only one default value`
         }
 
         this.setHitsPerPage = value =>
-          helper.setQueryParameter('hitsPerPage', value).search();
+          value === 'undefined' || value === ''
+            ? helper.setQueryParameter('hitsPerPage', undefined).search()
+            : helper.setQueryParameter('hitsPerPage', value).search();
 
         renderFn(
           {

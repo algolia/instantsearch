@@ -273,6 +273,49 @@ describe('connectHitsPerPage', () => {
     expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
   });
 
+  it('Should be able to unselect using an empty string', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+      ],
+    });
+
+    const helper = jsHelper({}, '', {
+      hitsPerPage: 7,
+    });
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    expect(firstRenderingOptions.items).toHaveLength(3);
+    firstRenderingOptions.refine('');
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+
+    // Reset the hitsPerPage to an actual value
+    helper.setQueryParameter('hitsPerPage', 7);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.items).toHaveLength(3);
+    secondRenderingOptions.refine('');
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+  });
+
   describe('routing', () => {
     const getInitializedWidget = () => {
       const rendering = jest.fn();
