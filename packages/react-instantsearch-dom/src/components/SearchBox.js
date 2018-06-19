@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import translatable from '../core/translatable';
-import createClassNames from '../core/createClassNames';
+import { createClassNames } from '../core/utils';
 
 const cx = createClassNames('SearchBox');
 

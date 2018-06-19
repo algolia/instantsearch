@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import translatable from '../core/translatable';
-import createClassNames from '../core/createClassNames';
+import { createClassNames } from '../core/utils';
 import Highlight from '../widgets/Highlight';
 import List from './List';
 
