@@ -61,7 +61,9 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       this.client =
         this.props.searchClient ||
         this.props.algoliaClient ||
-        defaultAlgoliaClient(this.props.appId, this.props.apiKey);
+        defaultAlgoliaClient(this.props.appId, this.props.apiKey, {
+          _useRequestCache: true,
+        });
 
       if (typeof this.client.addAlgoliaAgent === 'function') {
         this.client.addAlgoliaAgent(`react-instantsearch ${version}`);

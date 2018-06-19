@@ -40,7 +40,10 @@ describe('createInstantSearch', () => {
     shallow(<CustomInstantSearch appId="app" apiKey="key" indexName="name" />);
 
     expect(algoliaClientFactory).toHaveBeenCalledTimes(1);
-    expect(algoliaClientFactory).toHaveBeenCalledWith('app', 'key');
+    expect(algoliaClientFactory).toHaveBeenCalledWith('app', 'key', {
+      _useRequestCache: true,
+    });
+
     expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
     expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(
       `react-instantsearch ${version}`
