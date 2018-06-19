@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { translatable } from 'react-instantsearch-core';
 import { createClassNames } from '../core/utils';
-import translatable from '../core/translatable';
 
 const cx = createClassNames('CurrentRefinements');
 
