@@ -1,3 +1,13 @@
+2.26.1 - 2018-06-19
+ * build: Configure Renovate (#579) https://github.com/algolia/algoliasearch-helper-js/commit/95fa18d14b63d70957be49538893aef7d0f93b77
+ * chore(deps): update dependency algolia-frontend-components to v0.0.34 (#580) https://github.com/algolia/algoliasearch-helper-js/commit/27470e2868374f7035340974f8e7ddc2c90f80d6
+ * chore(deps): update dependency algoliasearch to v3.27.1 (#601) https://github.com/algolia/algoliasearch-helper-js/commit/bbadef3994bf68b4b47c0b9312d8f67ae2c5c619
+ * chore(deps): update dependency marked to v0.3.19 (#591) https://github.com/algolia/algoliasearch-helper-js/commit/d5993568ed28fc2e1ee392bb3bb9c8699bd6707f
+ * chore(deps): update dependency sinon to v4.5.0 (#599) https://github.com/algolia/algoliasearch-helper-js/commit/c6a0dd2d6bdd3d5b256d6c1b5ad73e3f22371115
+ * chore(deps): update dependency tape to v4.9.0 (#603) https://github.com/algolia/algoliasearch-helper-js/commit/e29f2349a982e7e5d8efd9e2bd99d7c280ab9a55
+ * doc(params): Add filters to query parameters (#604) https://github.com/algolia/algoliasearch-helper-js/commit/c2e742e48a9093090937bf6abba9fa61227edf9d, closes https://github.com/algolia/algoliasearch-helper-js/issues/528
+ * fix(_dispatchAlgoliaResponse): avoid mutate the client response (#611) https://github.com/algolia/algoliasearch-helper-js/commit/d6bd801f3b3dc07ccd31b57947b8086c3fe07195
+
 2.26.0 - 2018-04-25
  * chore(deps): pin and upgrade some dependencies (#566) https://github.com/algolia/algoliasearch-helper-js/commit/5edd3b19f8ec115733874bddfb5bf1fa602ceab9
  * chore(yarn.lock): fixed zuul dependency https://github.com/algolia/algoliasearch-helper-js/commit/ad21c56ddf9ec179e87a01560fdaedb70ba844f0

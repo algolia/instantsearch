@@ -14860,7 +14860,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
 
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 
-  var results = content.results;
+  var results = content.results.slice();
   forEach(states, function(s) {
     var state = s.state;
     var queriesCount = s.queriesCount;
@@ -15555,7 +15555,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":290,"./SearchParameters/shortener":291,"lodash/bind":212,"lodash/forEach":221,"lodash/invert":229,"lodash/isEmpty":235,"lodash/isPlainObject":244,"lodash/isString":246,"lodash/map":253,"lodash/mapKeys":254,"lodash/mapValues":255,"lodash/pick":263,"qs":281,"qs/lib/utils":284}],299:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.26.0';
+module.exports = '2.26.1';
 
 },{}]},{},[1])(1)
 });
