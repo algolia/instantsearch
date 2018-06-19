@@ -87,6 +87,7 @@ search.start();
 <p align="center">
   <a href="https://codesandbox.io/s/github/algolia/doc-code-samples/tree/master/InstantSearch.js/getting-started" title="Edit on CodeSandbox">
     <img alt="Preview" src="https://user-images.githubusercontent.com/6137112/41590781-27c9d4ba-73b8-11e8-823b-6ae3748db48a.png">
+    <br>
     <img alt="Edit on CodeSandbox" src="https://codesandbox.io/static/img/play-codesandbox.svg">
   </a>
 </p>
