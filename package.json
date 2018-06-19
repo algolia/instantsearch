@@ -77,7 +77,7 @@
     "react": "16.4.1",
     "react-autosuggest": "9.3.4",
     "react-dom": "16.4.1",
-    "react-instantsearch-dom": "5.2.0-beta.1",
+    "react-instantsearch-dom": "5.2.0-beta.2",
     "react-native": "0.54.2",
     "rheostat": "2.2.0",
     "storybook-addon-a11y": "3.1.9",
