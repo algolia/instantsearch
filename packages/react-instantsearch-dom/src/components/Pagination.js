@@ -3,8 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import translatable from '../core/translatable';
-import createClassNames from '../core/createClassNames';
-import { capitalize } from '../core/utils';
+import { createClassNames, capitalize } from '../core/utils';
 import LinkList from './LinkList';
 
 const cx = createClassNames('Pagination');

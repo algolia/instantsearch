@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import createClassNames from '../core/createClassNames';
+import { createClassNames } from '../core/utils';
 import Select from './Select';
 
 const cx = createClassNames('HitsPerPage');

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import createClassNames from '../core/createClassNames';
+import { createClassNames } from '../core/utils';
 
 const cx = createClassNames('ScrollTo');
 

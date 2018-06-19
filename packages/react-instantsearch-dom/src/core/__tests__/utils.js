@@ -1,6 +1,26 @@
 import * as utils from '../utils';
 
 describe('utils', () => {
+  describe('createClassNames', () => {
+    it('expect to return classNames', () => {
+      const cx = utils.createClassNames('Widget');
+
+      const actual = cx('', null, undefined, false, 'one', 'two').split(' ');
+      const expectation = ['ais-Widget', 'ais-Widget-one', 'ais-Widget-two'];
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to return classNames with custom prefix', () => {
+      const cx = utils.createClassNames('Widget', 'ris');
+
+      const actual = cx('', null, undefined, false, 'one', 'two').split(' ');
+      const expectation = ['ris-Widget', 'ris-Widget-one', 'ris-Widget-two'];
+
+      expect(actual).toEqual(expectation);
+    });
+  });
+
   describe('isSpecialClick', () => {
     it('returns true if a modifier key is pressed', () => {
       expect(utils.isSpecialClick({ altKey: true })).toBe(true);
