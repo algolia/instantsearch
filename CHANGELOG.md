@@ -1,3 +1,15 @@
+<a name="5.2.0-beta.2"></a>
+# [5.2.0-beta.2](https://github.com/algolia/react-instantsearch/compare/v5.2.0-beta.1...v5.2.0-beta.2) (2018-06-19)
+
+
+### Features
+
+* export highlight tags from DOM / native ([#1342](https://github.com/algolia/react-instantsearch/issues/1342)) ([28a699e](https://github.com/algolia/react-instantsearch/commit/28a699e))
+* **createInstantSearch:** enable _useRequestCache ([#1346](https://github.com/algolia/react-instantsearch/issues/1346)) ([f772600](https://github.com/algolia/react-instantsearch/commit/f772600))
+* **dom:** export create class name ([#1348](https://github.com/algolia/react-instantsearch/issues/1348)) ([9017468](https://github.com/algolia/react-instantsearch/commit/9017468))
+
+
+
 <a name="5.2.0-beta.1"></a>
 # [5.2.0-beta.1](https://github.com/algolia/react-instantsearch/compare/v5.2.0-beta.0...v5.2.0-beta.1) (2018-06-04)
 
