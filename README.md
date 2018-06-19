@@ -14,7 +14,7 @@
 
 InstantSearch.js is part of the InstantSearch family:
 
-**InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [Vue InstantSearch][vue-instantsearch-github] | [Angular InstantSearch][instantsearch-angular-github] | [React InstantSearch Native)][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
+**InstantSearch.js** | [React InstantSearch][react-instantsearch-github] | [Vue InstantSearch][vue-instantsearch-github] | [Angular InstantSearch][instantsearch-angular-github] | [React InstantSearch Native][react-instantsearch-github] | [InstantSearch Android][instantsearch-android-github] | [InstantSearch iOS][instantsearch-ios-github]
 
 <details>
   <summary><strong>Table of contents</strong></summary>
@@ -86,9 +86,8 @@ search.start();
 
 <p align="center">
   <a href="https://codesandbox.io/s/github/algolia/doc-code-samples/tree/master/InstantSearch.js/getting-started" title="Edit on CodeSandbox">
-    <img alt="Preview" src="https://user-images.githubusercontent.com/6137112/41590090-721fad7a-73b6-11e8-80a4-56bd636c00d3.png">
-    <br>
-    <img alt="View preview" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+    <img alt="Preview" src="https://user-images.githubusercontent.com/6137112/41590781-27c9d4ba-73b8-11e8-823b-6ae3748db48a.png">
+    <img alt="Edit on CodeSandbox" src="https://codesandbox.io/static/img/play-codesandbox.svg">
   </a>
 </p>
 
@@ -104,14 +103,14 @@ We support the last **two versions of major browsers**. To support [IE11](https:
 
 ## Contributing
 
-We welcome all contributors, from casual to regular ❤️
+We welcome all contributors, from casual to regular 💙
 
 * **Bug report**. Is something not working as expected? [Send a bug report](https://github.com/algolia/instantsearch.js/issues/new?template=Bug_report.md).
 * **Feature request**. Would you like to add something to the library? [Send a feature request](https://github.com/algolia/instantsearch.js/issues/new?template=Feature_request.md).
 * **Documentation**. Did you find a typo in the doc? Click on the `edit this page` button.
 * **Development**. If you don't know where to start, you can check the open issues that are [tagged easy](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A++++++%E2%9D%84%EF%B8%8F+easy%22), the [bugs](https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%9D%A4+Bug%22) or [chores](https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%9C%A8+Chore%22).
 
-To get started in your contribution, you need to:
+To get started contributing, you need to:
 
 1.  [Fork the project](https://help.github.com/articles/fork-a-repo/)
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
