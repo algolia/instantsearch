@@ -2,7 +2,7 @@ import { range } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import translatable from '../core/translatable';
+import { translatable } from 'react-instantsearch-core';
 import { createClassNames, capitalize } from '../core/utils';
 import LinkList from './LinkList';
 

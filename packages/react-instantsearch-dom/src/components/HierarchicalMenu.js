@@ -1,8 +1,8 @@
 import { pick } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { translatable } from 'react-instantsearch-core';
 import { createClassNames } from '../core/utils';
-import translatable from '../core/translatable';
 import List from './List';
 import Link from './Link';
 

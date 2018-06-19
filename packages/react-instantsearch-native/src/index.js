@@ -1,6 +1,7 @@
 // Core
 export { createConnector } from 'react-instantsearch-core';
 export { HIGHLIGHT_TAGS } from 'react-instantsearch-core';
+export { translatable } from 'react-instantsearch-core';
 
 // Widget
 export { Configure } from 'react-instantsearch-core';

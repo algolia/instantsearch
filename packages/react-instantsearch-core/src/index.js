@@ -6,6 +6,7 @@ export { default as createConnector } from './core/createConnector';
 // Utils
 export { HIGHLIGHT_TAGS } from './core/highlight';
 export { default as version } from './core/version';
+export { default as translatable } from './core/translatable';
 
 // Widgets
 export { default as Configure } from './widgets/Configure';
