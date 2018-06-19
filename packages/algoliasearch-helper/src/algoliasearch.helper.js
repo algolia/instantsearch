@@ -1253,7 +1253,7 @@ AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryI
 
   if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 
-  var results = content.results;
+  var results = content.results.slice();
   forEach(states, function(s) {
     var state = s.state;
     var queriesCount = s.queriesCount;

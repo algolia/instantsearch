@@ -1012,6 +1012,18 @@ helper.setQueryParameter('hitsPerPage', 20).search();
     </tr>
     <tr>
       <td valign="top" class="td4">
+        <p class="p2"><span class="s2">filters</span></p>
+      </td>
+      <td valign="top" class="td5">
+        <p class="p3"><span class="s1">string</span></p>
+      </td>
+      <td valign="top" class="td6">
+        <p class="p1"><span class="s1">Add filters to the query (similar to WHERE clauses)</span></p>
+        <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc/api-reference/api-parameters/filters/">filters on Algolia.com<span class="s3"></span></a></span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top" class="td4">
         <p class="p2"><span class="s2">getRankingInfo</span></p>
       </td>
       <td valign="top" class="td5">
