@@ -80,6 +80,29 @@ test('Search should call the algolia client according to the number of refinemen
   helper.search('');
 });
 
+test('Search should not mutate the original client response', function(t) {
+  var testData = require('./search.testdata.js')();
+
+  var client = algoliaSearch('dsf', 'dsfdf');
+  var mock = sinon.mock(client);
+
+  mock.expects('search').once().resolves(testData.response);
+
+  var helper = algoliasearchHelper(client, 'test_hotels-node');
+
+  var originalResponseLength = testData.response.results.length;
+
+  helper.on('result', function() {
+    var currentResponseLength = testData.response.results.length;
+
+    t.equal(currentResponseLength, originalResponseLength);
+
+    t.end();
+  });
+
+  helper.search('');
+});
+
 test('no mutating methods should trigger a search', function(t) {
   var client = algoliaSearch('dsf', 'dsfdf');
   sinon.mock(client);
