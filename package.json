@@ -23,7 +23,7 @@
     "test:recipes": "./scripts/test:recipes.sh",
     "test:build": "yarn build && yarn test:size",
     "test:regressions": "webpack --config test/regressions/webpack.config.js && rm -rf test/screenshots && happo run && babel-node ./test/regressions/normalize.js",
-    "test:size": "lerna run test:size --scope react-* --parallel",
+    "test:size": "bundlesize",
     "argos": "argos upload test/screenshots --token $ARGOS_TOKEN || true",
     "dev": "jest --watch --bail",
     "docs:storybook-start": "start-storybook -p 6006 -c ./storybook -s ./storybook/public",
@@ -47,6 +47,7 @@
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
+    "bundlesize": "0.17.0",
     "conventional-changelog-cli": "2.0.1",
     "css-loader": "0.28.11",
     "doctoc": "1.3.1",
@@ -97,5 +98,27 @@
       "jest-watch-typeahead/filename",
       "jest-watch-typeahead/testname"
     ]
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "packages/react-instantsearch/dist/umd/Core.min.js",
+      "maxSize": "8 kB"
+    },
+    {
+      "path": "packages/react-instantsearch/dist/umd/Connectors.min.js",
+      "maxSize": "40 kB"
+    },
+    {
+      "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
+      "maxSize": "63 kB"
+    },
+    {
+      "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
+      "maxSize": "40 kB"
+    },
+    {
+      "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
+      "maxSize": "63 kB"
+    }
+  ]
 }

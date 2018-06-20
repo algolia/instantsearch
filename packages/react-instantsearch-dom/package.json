@@ -37,7 +37,6 @@
     "build:es": "BABEL_ENV=es babel src --out-dir dist/es --ignore __tests__,__mocks__ --quiet",
     "build:umd": "BABEL_ENV=es rollup -c rollup.config.js",
     "test": "jest",
-    "test:size": "bundlesize",
     "release": "yarn clean && yarn build && yarn publish --new-version $VERSION",
     "release:beta": "yarn clean && yarn build && yarn publish --tag beta --new-version $VERSION"
   },
@@ -57,7 +56,6 @@
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
-    "bundlesize": "0.17.0",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "enzyme-to-json": "3.3.4",
@@ -82,11 +80,5 @@
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ]
-  },
-  "bundlesize": [
-    {
-      "path": "dist/umd/ReactInstantSearchDOM.min.js",
-      "maxSize": "63 kB"
-    }
-  ]
+  }
 }
