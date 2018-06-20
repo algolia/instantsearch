@@ -179,7 +179,9 @@ const questions = [
 ].filter(question => isQuestionAsked({ question, args: optionsFromArguments }));
 
 async function run() {
+  console.log();
   console.log(`Creating a new InstantSearch app in ${chalk.green(appPath)}.`);
+  console.log();
 
   const config = {
     ...(await getConfiguration({
