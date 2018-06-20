@@ -32,7 +32,6 @@
     "build:es": "BABEL_ENV=es babel connectors.js dom.js index.js native.js server.js --out-dir dist/es --quiet",
     "build:umd": "BABEL_ENV=es rollup -c rollup.config.js",
     "test": "jest",
-    "test:size": "bundlesize",
     "preparePackageFolder": "mkdir -p dist && cp {package.json,README.md} dist",
     "release": "yarn clean && yarn preparePackageFolder && yarn build && cd dist && yarn publish --new-version $VERSION",
     "release:beta": "yarn clean && yarn preparePackageFolder && yarn build && cd dist && yarn publish --tag beta --new-version $VERSION"
@@ -50,7 +49,6 @@
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
-    "bundlesize": "0.17.0",
     "rollup": "0.60.7",
     "rollup-plugin-babel": "3.0.4",
     "rollup-plugin-commonjs": "9.1.3",
@@ -64,19 +62,5 @@
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ]
-  },
-  "bundlesize": [
-    {
-      "path": "dist/umd/Core.min.js",
-      "maxSize": "8 kB"
-    },
-    {
-      "path": "dist/umd/Connectors.min.js",
-      "maxSize": "40 kB"
-    },
-    {
-      "path": "dist/umd/Dom.min.js",
-      "maxSize": "63 kB"
-    }
-  ]
+  }
 }
