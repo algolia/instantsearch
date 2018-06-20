@@ -62,7 +62,7 @@ search.addWidget(
   })
 );
 
-// 3. Plug the search results to the product container
+// 3. Plug the search results into the product container
 search.addWidget(
   instantsearch.widgets.hits({
     container: document.querySelector('#products'),
@@ -108,7 +108,7 @@ See more examples [on the website](https://community.algolia.com/instantsearch.j
 
 ## Playground
 
-You can get familiar with InstantSearch.js on [this playground](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js).
+You can get to know InstantSearch.js on [this playground](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js).
 
 Start by [adding widgets](https://community.algolia.com/instantsearch.js/v2/widgets.html) and tweaking the display. Once you feel familiar with the library, we recommend following the [getting started guide](https://community.algolia.com/instantsearch.js/v2/getting-started.html).
 
