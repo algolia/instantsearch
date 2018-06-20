@@ -20,23 +20,21 @@ InstantSearch.js is part of the InstantSearch family:
   <summary><strong>Table of contents</strong></summary>
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
+
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
-- [About InstantSearch.js](#about-instantsearchjs)
-- [Getting started](#getting-started)
-- [Documentation](#documentation)
-- [Browser support](#browser-support)
-- [Contributing](#contributing)
-- [License](#license)
+* [About InstantSearch.js](#about-instantsearchjs)
+* [Getting started](#getting-started)
+* [Documentation](#documentation)
+* [Browser support](#browser-support)
+* [Contributing](#contributing)
+* [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 </details>
 
 ## About InstantSearch.js
-
-> ⚡️ Lightning-fast search for your apps
 
 InstantSearch.js is a vanilla JavaScript library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API.
 
@@ -97,6 +95,14 @@ To learn more about the library, follow the [getting started](https://community.
 ## Documentation
 
 The documentation is available at [community.algolia.com/instantsearch.js](https://community.algolia.com/instantsearch.js).
+
+## Demos
+
+| E-commerce                                                                                                                                                                                                                   | Media                                                                                                                                                                                                         | Tourism                                                                                                                                                                                                             |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <a href="https://community.algolia.com/instantsearch.js/v2/examples/e-commerce/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/e-commerce/capture.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://community.algolia.com/instantsearch.js/v2/examples/media/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/media/capture.png" width="250" alt="Media demo preview"></a> | <a href="https://community.algolia.com/instantsearch.js/v2/examples/tourism/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
+
+See more examples [on the website](https://community.algolia.com/instantsearch.js/v2/examples.html).
 
 ## Browser support
 
