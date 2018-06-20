@@ -19,7 +19,7 @@ alt2: Collapsed
 althtml2: |
   <div class="ais-Panel ais-Panel--collapsible ais-Panel--collapsed">
     <div class="ais-Panel-header">Header</div>
-    <button class="ais-Panel-collapseButton" aria-expanded="true">➕</button>
+    <button class="ais-Panel-collapseButton" aria-expanded="false">➕</button>
     <div class="ais-Panel-body">Panel content</div>
     <div class="ais-Panel-footer">Footer</div>
   </div>
