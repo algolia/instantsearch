@@ -20,15 +20,17 @@ InstantSearch.js is part of the InstantSearch family:
   <summary><strong>Table of contents</strong></summary>
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
-
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-* [About InstantSearch.js](#about-instantsearchjs)
-* [Getting started](#getting-started)
-* [Documentation](#documentation)
-* [Browser support](#browser-support)
-* [Contributing](#contributing)
-* [License](#license)
+- [About InstantSearch.js](#about-instantsearchjs)
+- [Getting started](#getting-started)
+- [Documentation](#documentation)
+- [Demos](#demos)
+- [Playground](#playground)
+- [Browser support](#browser-support)
+- [Contributing](#contributing)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -103,6 +105,12 @@ The documentation is available at [community.algolia.com/instantsearch.js](https
 | <a href="https://community.algolia.com/instantsearch.js/v2/examples/e-commerce/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/e-commerce/capture.png" width="250" alt="E-commerce demo preview"></a> | <a href="https://community.algolia.com/instantsearch.js/v2/examples/media/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/media/capture.png" width="250" alt="Media demo preview"></a> | <a href="https://community.algolia.com/instantsearch.js/v2/examples/tourism/"><img src="https://community.algolia.com/instantsearch.js/v2/examples/tourism/capture.png" width="250" alt="Tourism demo preview"></a> |
 
 See more examples [on the website](https://community.algolia.com/instantsearch.js/v2/examples.html).
+
+## Playground
+
+You can get familiar with InstantSearch.js on [this playground](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js).
+
+Start by [adding widgets](https://community.algolia.com/instantsearch.js/v2/widgets.html) and tweaking the display. Once you feel familiar with the library, we recommend following the [getting started guide](https://community.algolia.com/instantsearch.js/v2/getting-started.html).
 
 ## Browser support
 
