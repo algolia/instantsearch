@@ -21,7 +21,7 @@ InstantSearch.js is part of the InstantSearch family:
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 
 - [About InstantSearch.js](#about-instantsearchjs)
 - [Getting started](#getting-started)
