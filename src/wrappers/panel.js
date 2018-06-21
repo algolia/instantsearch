@@ -16,7 +16,7 @@ export default widgetFactory => optionsWithPanelOpts => {
     ...templates,
   };
 
-  const panelBodyContainer = renderPanel({
+  const panel = renderPanel({
     container: getContainerNode(container),
     cssClasses,
     templates: allTemplates,
@@ -25,7 +25,7 @@ export default widgetFactory => optionsWithPanelOpts => {
 
   const widget = widgetFactory({
     ...optionsWithPanelOpts,
-    container: panelBodyContainer,
+    container: panel.body,
     templates: {
       ...optionsWithPanelOpts.templates,
       header: undefined,
@@ -68,12 +68,13 @@ function renderPanel({
   const root = document.createElement('div');
   root.classList = rootClassnames;
 
+  let header;
   if (templates.header) {
     const headerClassnames = cx(
       suitPanel({ descendantName: 'header' }),
       cssClasses.panelRoot
     );
-    const header = document.createElement('div');
+    header = document.createElement('div');
     header.innerHTML = renderTemplate({
       templateKey: 'header',
       templates,
@@ -93,6 +94,17 @@ function renderPanel({
       templates,
     });
     button.classList = buttonClassnames;
+
+    let collapsed = false;
+    button.addEventListener('click', () => {
+      collapsed = !collapsed;
+      root.classList.toggle(suitPanel({ modifierName: 'collapsed' }));
+      button.innerHTML = renderTemplate({
+        templateKey: 'collapseButton',
+        templates,
+        data: { collapsed },
+      });
+    });
     root.appendChild(button);
   }
 
@@ -100,12 +112,13 @@ function renderPanel({
   body.classList = bodyClassnames;
   root.appendChild(body);
 
+  let footer;
   if (templates.footer) {
     const footerClassnames = cx(
       suitPanel({ descendantName: 'footer' }),
       cssClasses.panelRoot
     );
-    const footer = document.createElement('div');
+    footer = document.createElement('div');
     footer.innerHTML = renderTemplate({
       templateKey: 'footer',
       templates,
@@ -116,5 +129,10 @@ function renderPanel({
 
   container.appendChild(root);
 
-  return body;
+  return {
+    root,
+    body,
+    header,
+    footer,
+  };
 }
