@@ -3,6 +3,44 @@ import PropTypes from 'prop-types';
 import Template from '../Template.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
+const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
+  item,
+  idx,
+  items
+) => {
+  const isLast = idx === items.length - 1;
+  const link = isLast ? (
+    item.name
+  ) : (
+    <a
+      className={cssClasses.link}
+      href={createURL(item.value)}
+      onClick={e => {
+        e.preventDefault();
+        refine(item.value);
+      }}
+    >
+      {item.name}
+    </a>
+  );
+
+  const itemClassnames = isLast
+    ? `${cssClasses.item} ${cssClasses.selectedItem}`
+    : cssClasses.item;
+
+  return (
+    <li key={item.name + idx} className={itemClassnames}>
+      <Template
+        rootTagName="span"
+        rootProps={{ className: cssClasses.separator, ariaHidden: true }}
+        templateKey="separator"
+        {...templateProps}
+      />
+      {link}
+    </li>
+  );
+};
+
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
     name: PropTypes.string,
@@ -24,40 +62,12 @@ class Breadcrumb extends PureComponent {
   render() {
     const { createURL, items, refine, cssClasses } = this.props;
 
-    const breadcrumb = items.map((item, idx) => {
-      const isLast = idx === items.length - 1;
-      const label = isLast ? (
-        <a className={`${cssClasses.disabledLabel} ${cssClasses.label}`}>
-          {item.name}
-        </a>
-      ) : (
-        <a
-          className={cssClasses.label}
-          href={createURL(item.value)}
-          onClick={e => {
-            e.preventDefault();
-            refine(item.value);
-          }}
-        >
-          {item.name}
-        </a>
-      );
+    const breadcrumb = items.map(renderLink(this.props));
+    const noRefinement = items.length === 0;
 
-      return [
-        <Template
-          key={item.name + idx}
-          rootProps={{ className: cssClasses.separator }}
-          templateKey="separator"
-          {...this.props.templateProps}
-        />,
-        label,
-      ];
-    });
-
-    const homeClassNames =
-      items.length > 0
-        ? [cssClasses.home, cssClasses.label]
-        : [cssClasses.disabledLabel, cssClasses.home, cssClasses.label];
+    const homeClassnames = noRefinement
+      ? `${cssClasses.item} ${cssClasses.selectedItem}`
+      : cssClasses.item;
 
     const homeOnClickHandler = e => {
       e.preventDefault();
@@ -66,16 +76,24 @@ class Breadcrumb extends PureComponent {
 
     const homeUrl = createURL(null);
 
+    const rootClassnames = noRefinement
+      ? `${cssClasses.root} ${cssClasses.noRefinement}`
+      : cssClasses.root;
+
     return (
-      <div className={cssClasses.root}>
-        <a
-          className={homeClassNames.join(' ')}
-          href={homeUrl}
-          onClick={homeOnClickHandler}
-        >
-          <Template templateKey="home" {...this.props.templateProps} />
-        </a>
-        {breadcrumb}
+      <div className={rootClassnames}>
+        <ul className={cssClasses.list}>
+          <li className={homeClassnames}>
+            <a
+              className={cssClasses.link}
+              href={homeUrl}
+              onClick={homeOnClickHandler}
+            >
+              <Template templateKey="home" {...this.props.templateProps} />
+            </a>
+          </li>
+          {breadcrumb}
+        </ul>
       </div>
     );
   }
