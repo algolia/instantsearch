@@ -127,7 +127,7 @@ We welcome all contributors, from casual to regular 💙
 * **Documentation**. Did you find a typo in the doc? Click on the `edit this page` button.
 * **Development**. If you don't know where to start, you can check the open issues that are [tagged easy](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3A%22Difficulty%3A++++++%E2%9D%84%EF%B8%8F+easy%22), the [bugs](https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%9D%A4+Bug%22) or [chores](https://github.com/algolia/instantsearch.js/issues?q=is%3Aissue+is%3Aopen+label%3A%22%E2%9C%A8+Chore%22).
 
-To get started contributing, you need to:
+To start contributing to code, you need to:
 
 1.  [Fork the project](https://help.github.com/articles/fork-a-repo/)
 1.  [Clone the repository](https://help.github.com/articles/cloning-a-repository/)
