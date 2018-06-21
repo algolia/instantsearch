@@ -18,7 +18,7 @@ export const CustomHits = connectHits(({ hits }) => (
   <div className="hits">
     {hits.map(hit => (
       <div key={hit.objectID} className="hit">
-        <div>
+        {hit.image && (
           <div className="hit-picture">
             <img
               src={`https://res.cloudinary.com/hilnmyskv/image/fetch/h_100,q_100,f_auto/${
@@ -26,7 +26,7 @@ export const CustomHits = connectHits(({ hits }) => (
               }`}
             />
           </div>
-        </div>
+        )}
         <div className="hit-content">
           <div>
             <Highlight attribute="name" hit={hit} />
@@ -74,6 +74,7 @@ export const WrapWithHits = ({
   appId,
   apiKey,
   indexName,
+  hitsElement,
 }) => {
   const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${linkedStoryGroup}.stories.js`;
   const playgroundLink = hasPlayground ? (
@@ -93,6 +94,8 @@ export const WrapWithHits = ({
       </a>
     </div>
   ) : null;
+
+  const hits = hitsElement || <CustomHits />;
 
   const searchParameters = {
     hitsPerPage: 3,
@@ -120,7 +123,7 @@ export const WrapWithHits = ({
               ) : null}
               <ClearRefinements translations={{ reset: 'Clear all filters' }} />
             </div>
-            <CustomHits />
+            {hits}
             <div className="hit-pagination">
               {pagination ? <Pagination showLast={true} /> : null}
             </div>
@@ -142,6 +145,7 @@ WrapWithHits.propTypes = {
   hasPlayground: PropTypes.bool,
   pagination: PropTypes.bool,
   searchParameters: PropTypes.object,
+  hitsElement: PropTypes.element,
 };
 
 // defaultProps added so that they're displayed in the JSX addon

@@ -146,7 +146,7 @@ export function getCurrentRefinementValue(
   context,
   id,
   defaultValue,
-  refinementsCallback
+  refinementsCallback = x => x
 ) {
   const index = getIndex(context);
   const { namespace, attributeName } = getNamespaceAndAttributeName(id);

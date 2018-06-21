@@ -3475,9 +3475,9 @@ inquirer@3.3.0, inquirer@^3.0.6:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-instantsearch.css@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.0.0.tgz#74fb9aa25ce64c80effc663fe92bc9ec785cc5e3"
+instantsearch.css@7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/instantsearch.css/-/instantsearch.css-7.1.0.tgz#49264d2bdc3d6c1f6395812ce9422ed1e987fccb"
 
 internal-ip@1.2.0:
   version "1.2.0"
