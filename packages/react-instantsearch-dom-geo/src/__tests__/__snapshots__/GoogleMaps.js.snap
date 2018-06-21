@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GoogleMaps expect render correctly with the map rendered 1`] = `
+<div
+  className="ais-GeoSearch"
+>
+  <div
+    className="ais-GeoSearch-map"
+  />
+</div>
+`;
+
+exports[`GoogleMaps expect render correctly with the map rendered 2`] = `
+<div
+  className="ais-GeoSearch"
+>
+  <div
+    className="ais-GeoSearch-map"
+  />
+  <div>
+    This is the children
+  </div>
+</div>
+`;
+
+exports[`GoogleMaps expect render correctly without the map rendered 1`] = `
+<div
+  className="ais-GeoSearch"
+>
+  <div
+    className="ais-GeoSearch-map"
+  />
+</div>
+`;

@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CustomMarker with portal expect to render correctly 1`] = `
+<CustomMarker
+  anchor={
+    Object {
+      "x": 0,
+      "y": 0,
+    }
+  }
+  className=""
+  hit={
+    Object {
+      "_geoloc": Object {
+        "lat": 10,
+        "lng": 12,
+      },
+    }
+  }
+>
+  <span>
+    This is the children.
+  </span>
+</CustomMarker>
+`;
+
+exports[`CustomMarker with unstable_renderSubtreeIntoContainer expect to render correctly 1`] = `
+<CustomMarker
+  anchor={
+    Object {
+      "x": 0,
+      "y": 0,
+    }
+  }
+  className=""
+  hit={
+    Object {
+      "_geoloc": Object {
+        "lat": 10,
+        "lng": 12,
+      },
+    }
+  }
+/>
+`;

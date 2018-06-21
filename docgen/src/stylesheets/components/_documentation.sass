@@ -3,7 +3,7 @@ $offset-height: 60px
 
 .documentation-section,
 .examples-section
-  padding-bottom: 300px
+  padding-bottom: 320px
 
   .container
     article
@@ -136,7 +136,6 @@ $offset-height: 60px
       background: #fff
       border: 1px solid #d8d8d8
       border-radius: 2px 2px 0 0
-      margin: -8px 0 0
       padding: 0.75em 1em
       font-family: $paragraphs-font-family
       border-radius: 6px 6px 0 0
@@ -201,6 +200,10 @@ $offset-height: 60px
         display: block
         height: $offset-height
         // margin: (-$offset-height) 0 0
+
+    .sub-component-title
+      &:before
+        height: 10px
 
     .anchor
       margin-left: .2em

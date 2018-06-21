@@ -15,7 +15,7 @@
     "react-test-renderer": "16.2.0"
   },
   "dependencies": {
-    "instantsearch.css": "7.0.0",
+    "instantsearch.css": "7.1.0",
     "lodash": "4.17.4",
     "prop-types": "15.6.0",
     "qs": "6.5.1",

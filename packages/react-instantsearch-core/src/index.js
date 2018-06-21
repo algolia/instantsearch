@@ -20,6 +20,7 @@ export { default as connectConfigure } from './connectors/connectConfigure';
 export {
   default as connectCurrentRefinements,
 } from './connectors/connectCurrentRefinements';
+export { default as connectGeoSearch } from './connectors/connectGeoSearch';
 export {
   default as connectHierarchicalMenu,
 } from './connectors/connectHierarchicalMenu';

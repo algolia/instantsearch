@@ -73,12 +73,14 @@
     "lodash.orderby": "4.6.0",
     "mversion": "1.10.1",
     "netlify-cli": "1.2.2",
+    "places.js": "1.7.3",
     "prettier": "1.13.5",
     "prop-types": "15.6.1",
     "react": "16.4.1",
     "react-autosuggest": "9.3.4",
     "react-dom": "16.4.1",
     "react-instantsearch-dom": "5.2.0-beta.2",
+    "react-instantsearch-dom-maps": "5.2.0-beta.2",
     "react-native": "0.54.2",
     "rheostat": "2.2.0",
     "storybook-addon-a11y": "3.1.9",
@@ -110,15 +112,19 @@
     },
     {
       "path": "packages/react-instantsearch/dist/umd/Dom.min.js",
-      "maxSize": "63 kB"
+      "maxSize": "63.5 kB"
     },
     {
       "path": "packages/react-instantsearch-core/dist/umd/ReactInstantSearchCore.min.js",
-      "maxSize": "40 kB"
+      "maxSize": "40.5 kB"
     },
     {
       "path": "packages/react-instantsearch-dom/dist/umd/ReactInstantSearchDOM.min.js",
       "maxSize": "63 kB"
+    },
+    {
+      "path": "packages/react-instantsearch-dom-geo/dist/umd/ReactInstantSearchDOMMaps.min.js",
+      "maxSize": "10 kB"
     }
   ]
 }
