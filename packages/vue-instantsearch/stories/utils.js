@@ -1,4 +1,4 @@
-const makeTemplate = ({ hits = '', indexName = 'instant_search' }) => `
+const makeTemplate = ({ hits = '', indexName = 'instant_search' } = {}) => `
   <ais-index
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
