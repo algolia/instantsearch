@@ -41,7 +41,11 @@ export default widgetFactory => optionsWithPanelOpts => {
       widget.init(opts);
     },
     render: opts => {
-      // update DOM
+      updatePanel({
+        panel,
+        renderOpts: opts,
+        constructorOpts: optionsWithPanelOpts,
+      });
       widget.render(opts);
     },
     // forward routing specific methods
@@ -135,4 +139,29 @@ function renderPanel({
     header,
     footer,
   };
+}
+
+function updatePanel({
+  panel: { header, footer },
+  renderOpts: { results },
+  constructorOpts: { templates },
+}) {
+  if (header) {
+    header.innerHTML = renderTemplate({
+      templateKey: 'header',
+      templates,
+      data: {
+        results,
+      },
+    });
+  }
+  if (footer) {
+    footer.innerHTML = renderTemplate({
+      templateKey: 'footer',
+      templates,
+      data: {
+        results,
+      },
+    });
+  }
 }
