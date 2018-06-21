@@ -12,6 +12,7 @@ import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
 import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
+import initPanel from './stories/panel.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
 import initRangeInputStories from './stories/range-input.stories.js';
 import initRangeSliderStories from './stories/range-slider.stories';
@@ -50,4 +51,5 @@ export default () => {
   initStarRatingStories();
   initToggleStories();
   initConfigureStories();
+  initPanel();
 };

@@ -9,6 +9,8 @@ import version from './version.js';
 import * as connectors from '../connectors/index.js';
 import * as widgets from '../widgets/index.js';
 
+import * as wrappers from '../wrappers/index.js';
+
 import * as routers from './routers/index.js';
 import * as stateMappings from './stateMappings/index.js';
 
@@ -178,6 +180,7 @@ instantsearch.createQueryString =
   algoliasearchHelper.url.getQueryStringFromState;
 instantsearch.connectors = connectors;
 instantsearch.widgets = widgets;
+instantsearch.wrappers = wrappers;
 instantsearch.version = version;
 
 export default instantsearch;
