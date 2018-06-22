@@ -33,14 +33,16 @@ The code for React InstantSearch is located in [packages](packages).
 
 We have unit tests written with [Jest](https://facebook.github.io/jest):
 
-Single run and linting:
+Single run:
+
 ```sh
 yarn test
 ```
 
 Watch mode:
+
 ```sh
-yarn dev # unit tests watch mode, no lint
+yarn test:watch
 ```
 
 ## Lint
@@ -49,7 +51,7 @@ yarn dev # unit tests watch mode, no lint
 yarn lint
 ```
 
-Files are automatically formatted with prettier.
+Files are automatically formatted with Prettier.
 
 ## Release
 
