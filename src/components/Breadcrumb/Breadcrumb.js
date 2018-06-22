@@ -48,7 +48,7 @@ const itemsPropType = PropTypes.arrayOf(
   })
 );
 
-class Breadcrumb extends PureComponent {
+export class RawBreadcrumb extends PureComponent {
   static propTypes = {
     createURL: PropTypes.func,
     cssClasses: PropTypes.objectOf(PropTypes.string),
@@ -97,4 +97,4 @@ class Breadcrumb extends PureComponent {
   }
 }
 
-export default autoHideContainerHOC(Breadcrumb);
+export default autoHideContainerHOC(RawBreadcrumb);
