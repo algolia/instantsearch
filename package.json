@@ -60,6 +60,12 @@
     "release-it": "^7.4.7",
     "walk-sync": "^0.3.2"
   },
+  "renovate": {
+    "extends": [
+      "config:js-app",
+      "algolia"
+    ]
+  },
   "jest": {
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
