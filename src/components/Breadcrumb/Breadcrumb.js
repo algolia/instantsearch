@@ -54,9 +54,7 @@ class Breadcrumb extends PureComponent {
     cssClasses: PropTypes.objectOf(PropTypes.string),
     items: itemsPropType,
     refine: PropTypes.func.isRequired,
-    separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     templateProps: PropTypes.object.isRequired,
-    translate: PropTypes.func,
   };
 
   render() {

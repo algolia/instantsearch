@@ -16,7 +16,6 @@ const renderer = ({
   containerNode,
   cssClasses,
   renderState,
-  separator,
   templates,
   transformData,
 }) => (
@@ -37,12 +36,10 @@ const renderer = ({
 
   render(
     <Breadcrumb
-      canRefine={canRefine}
-      cssClasses={cssClasses}
       createURL={createURL}
+      cssClasses={cssClasses}
       items={items}
       refine={refine}
-      separator={separator}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
     />,
@@ -153,7 +150,6 @@ export default function breadcrumb({
   container,
   cssClasses: userCssClasses = {},
   rootPath = null,
-  separator = ' > ',
   templates = defaultTemplates,
   transformData,
 } = {}) {
@@ -187,7 +183,6 @@ export default function breadcrumb({
     containerNode,
     cssClasses,
     renderState: {},
-    separator,
     templates,
     transformData,
   });
