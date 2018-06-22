@@ -12,7 +12,17 @@ before_install:
 cache:
   yarn: true
 
+script:
+  - $SCRIPT
+
 env:
+  matrix:
+    - SCRIPT="yarn test:ci"
+    - SCRIPT="yarn lint"
+    - SCRIPT="yarn test:e2e"
+    - SCRIPT="yarn test:build"
+    - SCRIPT="yarn test:examples"
+
   global:
   # ARGOS
   - secure: Zb/aSoJsPUGroCYC8Abjc090BeszQmdC8UqJgkt5/WLuohfdE/Uj0qECTuyOf4LsS/J8qtkET3dYDstTEnS0u9I7BxFbGWjeqGR/ud/qKkf4c8xxQC8EtkMNIxO+a6SaTZZuUZqbfbzP0VUA6OVcWsyCEyHlvzCxpWlqX4C+FYUowdh+z72DqQPei5C9pqDRjdvMfqDn8YuI6A5oxiym/hDydTfGujpzZ90H8aICBcwp0rKnZRWKwCDjVV53aFIc/yDMt9npmHPuE4ITnedTdth/ZW6aiYTB4UUhMKSJANiBact/wOJGaOm/3GzW359Xlo4A1d20u6s8c2oUoq00kyvQuRrE7R9KrX7z6eP+5dOyNbh9eT98y9yz18uD4Bzf9AvV0yhVa7c1p01uZnl5SSlgErwm5u4MhkQ4gp8kKo7AvluurtlY21ao9iypVeia9ahLBHRjq4Q8gtBhR2DZMzhmYal8S4Zm3jKnOH0h1BFlT0dIhcUNuabufO/zNOZC4lvd+VZweGzZWCXG0TBGgmBaj7Vhz8xS/tofqW4omLEQCq7xufXiVEZEMqkFbh5syDUV1EhpssmmN4tO9Hht1joI3xpqbMgMCXN3JVJeCl/mgxmn/lE2RNSXepc/SIWwipUVyzB/a8ItflPavKYUxy9cZz1xyKLPYGn/FUy7RU4=
