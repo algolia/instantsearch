@@ -29,7 +29,9 @@ components which are called the **provided props**.
 
 ## How to use them?
 
-If you want to create your own search box, you will need to use the [`connectSearchBox()`](connectors/connectSearchBox.html) connector:
+If you want to create your own search box, you will need to use the [`connectSearchBox()`](connectors/connectSearchBox.html) connector.
+
+Note that this connected component will only work when rendered as a child or a descendant of the [`<InstantSearch>`](guide/\<InstantSearch\>.html) component.
 
 ```jsx
 import { connectSearchBox } from 'react-instantsearch-dom';
@@ -44,8 +46,6 @@ const MySearchBox = ({currentRefinement, refine}) =>
 // `ConnectedSearchBox` renders a `<MySearchBox>` widget that is connected to
 // the <InstantSearch> state, providing it with `currentRefinement` and `refine` props for
 // reading and manipulating the current query of the search.
-// Note that this `ConnectedSearchBox` widget will only work when rendered
-// as a child or a descendant of the `<InstantSearch>` component.
 const ConnectedSearchBox = connectSearchBox(MySearchBox);
 ```
 
