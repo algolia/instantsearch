@@ -538,14 +538,14 @@ describe('createConnector', () => {
       expect(transitionState.mock.calls).toHaveLength(0);
     });
 
-    it('use shouldUpdate when provided', () => {
-      const shouldUpdate = jest.fn(() => true);
+    it('use shouldComponentUpdate when provided', () => {
+      const shouldComponentUpdate = jest.fn(() => true);
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProvidedProps: () => null,
         getMetadata: () => null,
         getId,
-        shouldUpdate,
+        shouldComponentUpdate,
       })(() => null);
 
       const onSearchStateChange = jest.fn();
@@ -567,8 +567,8 @@ describe('createConnector', () => {
         },
       });
 
-      expect(shouldUpdate).toHaveBeenCalledTimes(1);
-      expect(shouldUpdate).toHaveBeenCalledWith(
+      expect(shouldComponentUpdate).toHaveBeenCalledTimes(1);
+      expect(shouldComponentUpdate).toHaveBeenCalledWith(
         { hello: 'there' },
         { hello: 'there' },
         { canRender: false, props: null },
@@ -577,8 +577,8 @@ describe('createConnector', () => {
 
       wrapper.setProps({ hello: 'here' });
 
-      expect(shouldUpdate).toHaveBeenCalledTimes(2);
-      expect(shouldUpdate).toHaveBeenCalledWith(
+      expect(shouldComponentUpdate).toHaveBeenCalledTimes(2);
+      expect(shouldComponentUpdate).toHaveBeenCalledWith(
         { hello: 'there' },
         { hello: 'here' },
         { canRender: true, props: null },
