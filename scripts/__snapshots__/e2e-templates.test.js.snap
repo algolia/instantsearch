@@ -254,40 +254,40 @@ exports[`Templates Angular InstantSearch File content: package.json 1`] = `
     \\"e2e\\": \\"ng e2e\\"
   },
   \\"dependencies\\": {
-    \\"@angular/animations\\": \\"^6.0.3\\",
-    \\"@angular/common\\": \\"^6.0.3\\",
-    \\"@angular/compiler\\": \\"^6.0.3\\",
-    \\"@angular/core\\": \\"^6.0.3\\",
-    \\"@angular/forms\\": \\"^6.0.3\\",
-    \\"@angular/http\\": \\"^6.0.3\\",
-    \\"@angular/platform-browser\\": \\"^6.0.3\\",
-    \\"@angular/platform-browser-dynamic\\": \\"^6.0.3\\",
-    \\"@angular/router\\": \\"^6.0.3\\",
+    \\"@angular/animations\\": \\"6.0.6\\",
+    \\"@angular/common\\": \\"6.0.6\\",
+    \\"@angular/compiler\\": \\"6.0.6\\",
+    \\"@angular/core\\": \\"6.0.6\\",
+    \\"@angular/forms\\": \\"6.0.6\\",
+    \\"@angular/http\\": \\"6.0.6\\",
+    \\"@angular/platform-browser\\": \\"6.0.6\\",
+    \\"@angular/platform-browser-dynamic\\": \\"6.0.6\\",
+    \\"@angular/router\\": \\"6.0.6\\",
     \\"angular-instantsearch\\": \\"^1.0.0\\",
-    \\"core-js\\": \\"^2.5.4\\",
-    \\"rxjs\\": \\"^6.0.0\\",
-    \\"zone.js\\": \\"^0.8.26\\"
+    \\"core-js\\": \\"2.5.7\\",
+    \\"rxjs\\": \\"6.2.1\\",
+    \\"zone.js\\": \\"0.8.26\\"
   },
   \\"devDependencies\\": {
-    \\"@angular/compiler-cli\\": \\"^6.0.3\\",
-    \\"@angular-devkit/build-angular\\": \\"~0.6.6\\",
-    \\"typescript\\": \\"~2.7.2\\",
-    \\"@angular/cli\\": \\"~6.0.7\\",
-    \\"@angular/language-service\\": \\"^6.0.3\\",
-    \\"@types/jasmine\\": \\"~2.8.6\\",
-    \\"@types/jasminewd2\\": \\"~2.0.3\\",
-    \\"@types/node\\": \\"~8.9.4\\",
-    \\"codelyzer\\": \\"~4.2.1\\",
-    \\"jasmine-core\\": \\"~2.99.1\\",
-    \\"jasmine-spec-reporter\\": \\"~4.2.1\\",
-    \\"karma\\": \\"~1.7.1\\",
-    \\"karma-chrome-launcher\\": \\"~2.2.0\\",
-    \\"karma-coverage-istanbul-reporter\\": \\"~2.0.0\\",
-    \\"karma-jasmine\\": \\"~1.1.1\\",
-    \\"karma-jasmine-html-reporter\\": \\"^0.2.2\\",
-    \\"protractor\\": \\"~5.3.0\\",
-    \\"ts-node\\": \\"~5.0.1\\",
-    \\"tslint\\": \\"~5.9.1\\"
+    \\"@angular/compiler-cli\\": \\"6.0.6\\",
+    \\"@angular-devkit/build-angular\\": \\"0.6.8\\",
+    \\"typescript\\": \\"2.7.2\\",
+    \\"@angular/cli\\": \\"6.0.8\\",
+    \\"@angular/language-service\\": \\"6.0.6\\",
+    \\"@types/jasmine\\": \\"2.8.8\\",
+    \\"@types/jasminewd2\\": \\"2.0.3\\",
+    \\"@types/node\\": \\"8.9.5\\",
+    \\"codelyzer\\": \\"4.2.1\\",
+    \\"jasmine-core\\": \\"2.99.1\\",
+    \\"jasmine-spec-reporter\\": \\"4.2.1\\",
+    \\"karma\\": \\"1.7.1\\",
+    \\"karma-chrome-launcher\\": \\"2.2.0\\",
+    \\"karma-coverage-istanbul-reporter\\": \\"2.0.1\\",
+    \\"karma-jasmine\\": \\"1.1.2\\",
+    \\"karma-jasmine-html-reporter\\": \\"0.2.2\\",
+    \\"protractor\\": \\"5.3.2\\",
+    \\"ts-node\\": \\"5.0.1\\",
+    \\"tslint\\": \\"5.9.1\\"
   }
 }"
 `;
@@ -1110,14 +1110,14 @@ exports[`Templates InstantSearch.js File content: package.json 1`] = `
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"devDependencies\\": {
-    \\"babel-eslint\\": \\"^8.2.3\\",
-    \\"eslint\\": \\"^4.19.1\\",
-    \\"eslint-config-algolia\\": \\"^13.1.0\\",
-    \\"eslint-config-prettier\\": \\"^2.9.0\\",
-    \\"eslint-plugin-import\\": \\"^2.12.0\\",
-    \\"eslint-plugin-prettier\\": \\"^2.6.0\\",
-    \\"parcel-bundler\\": \\"^1.9.0\\",
-    \\"prettier\\": \\"^1.13.4\\"
+    \\"babel-eslint\\": \\"8.2.5\\",
+    \\"eslint\\": \\"4.19.1\\",
+    \\"eslint-config-algolia\\": \\"13.1.0\\",
+    \\"eslint-config-prettier\\": \\"2.9.0\\",
+    \\"eslint-plugin-import\\": \\"2.13.0\\",
+    \\"eslint-plugin-prettier\\": \\"2.6.1\\",
+    \\"parcel-bundler\\": \\"1.9.3\\",
+    \\"prettier\\": \\"1.13.5\\"
   }
 }"
 `;
@@ -1367,20 +1367,20 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"dependencies\\": {
-    \\"react\\": \\"^16.3.2\\",
-    \\"react-dom\\": \\"^16.3.2\\",
+    \\"react\\": \\"16.4.1\\",
+    \\"react-dom\\": \\"16.4.1\\",
     \\"react-instantsearch\\": \\"^1.0.0\\",
     \\"react-scripts\\": \\"1.1.4\\"
   },
   \\"devDependencies\\": {
-    \\"eslint\\": \\"^4.19.1\\",
-    \\"eslint-config-algolia\\": \\"^13.1.0\\",
-    \\"eslint-config-prettier\\": \\"^2.9.0\\",
-    \\"eslint-plugin-import\\": \\"^2.12.0\\",
-    \\"eslint-plugin-prettier\\": \\"^2.6.0\\",
-    \\"eslint-plugin-react\\": \\"^7.9.1\\",
-    \\"prettier\\": \\"^1.13.4\\",
-    \\"prop-types\\": \\"^15.6.1\\"
+    \\"eslint\\": \\"4.19.1\\",
+    \\"eslint-config-algolia\\": \\"13.1.0\\",
+    \\"eslint-config-prettier\\": \\"2.9.0\\",
+    \\"eslint-plugin-import\\": \\"2.13.0\\",
+    \\"eslint-plugin-prettier\\": \\"2.6.1\\",
+    \\"eslint-plugin-react\\": \\"7.10.0\\",
+    \\"prettier\\": \\"1.13.5\\",
+    \\"prop-types\\": \\"15.6.2\\"
   }
 }"
 `;
@@ -1769,21 +1769,21 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"dependencies\\": {
-    \\"algoliasearch\\": \\"^3.27.1\\",
-    \\"expo\\": \\"^27.0.1\\",
-    \\"prop-types\\": \\"^15.6.1\\",
+    \\"algoliasearch\\": \\"3.29.0\\",
+    \\"expo\\": \\"27.1.0\\",
+    \\"prop-types\\": \\"15.6.2\\",
     \\"react\\": \\"16.3.1\\",
     \\"react-instantsearch-native\\": \\"^1.0.0\\",
-    \\"react-native\\": \\"^0.55.2\\"
+    \\"react-native\\": \\"0.55.4\\"
   },
   \\"devDependencies\\": {
-    \\"eslint\\": \\"^4.19.1\\",
-    \\"eslint-config-algolia\\": \\"^13.1.0\\",
-    \\"eslint-config-prettier\\": \\"^2.9.0\\",
-    \\"eslint-plugin-import\\": \\"^2.12.0\\",
-    \\"eslint-plugin-prettier\\": \\"^2.6.0\\",
-    \\"eslint-plugin-react\\": \\"^7.9.1\\",
-    \\"prettier\\": \\"^1.13.4\\",
+    \\"eslint\\": \\"4.19.1\\",
+    \\"eslint-config-algolia\\": \\"13.1.0\\",
+    \\"eslint-config-prettier\\": \\"2.9.0\\",
+    \\"eslint-plugin-import\\": \\"2.13.0\\",
+    \\"eslint-plugin-prettier\\": \\"2.6.1\\",
+    \\"eslint-plugin-react\\": \\"7.10.0\\",
+    \\"prettier\\": \\"1.13.5\\",
     \\"react-native-scripts\\": \\"1.14.0\\"
   }
 }"
@@ -2048,25 +2048,25 @@ exports[`Templates Vue InstantSearch File content: package.json 1`] = `
     \\"lint:fix\\": \\"npm run lint -- --fix\\"
   },
   \\"dependencies\\": {
-    \\"vue\\": \\"^2.5.16\\",
+    \\"vue\\": \\"2.5.16\\",
     \\"vue-instantsearch\\": \\"^1.0.0\\"
   },
   \\"devDependencies\\": {
     \\"babel-core\\": \\"6.26.0\\",
-    \\"babel-eslint\\": \\"^8.2.3\\",
+    \\"babel-eslint\\": \\"8.2.5\\",
     \\"babel-loader\\": \\"7.1.4\\",
     \\"babel-preset-env\\": \\"1.6.1\\",
     \\"babel-preset-stage-3\\": \\"6.24.1\\",
     \\"cross-env\\": \\"5.1.4\\",
     \\"css-loader\\": \\"0.28.11\\",
-    \\"eslint\\": \\"^4.19.1\\",
-    \\"eslint-config-algolia\\": \\"^13.1.0\\",
-    \\"eslint-config-prettier\\": \\"^2.9.0\\",
-    \\"eslint-plugin-html\\": \\"^4.0.3\\",
-    \\"eslint-plugin-import\\": \\"^2.12.0\\",
-    \\"eslint-plugin-prettier\\": \\"^2.6.0\\",
+    \\"eslint\\": \\"4.19.1\\",
+    \\"eslint-config-algolia\\": \\"13.1.0\\",
+    \\"eslint-config-prettier\\": \\"2.9.0\\",
+    \\"eslint-plugin-html\\": \\"4.0.5\\",
+    \\"eslint-plugin-import\\": \\"2.13.0\\",
+    \\"eslint-plugin-prettier\\": \\"2.6.1\\",
     \\"file-loader\\": \\"1.1.11\\",
-    \\"prettier\\": \\"^1.13.4\\",
+    \\"prettier\\": \\"1.13.5\\",
     \\"vue-loader\\": \\"14.2.2\\",
     \\"vue-template-compiler\\": \\"2.5.16\\",
     \\"webpack\\": \\"3.11.0\\",
