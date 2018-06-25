@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { has } from 'lodash';
 
 const withKeysPropType = keys => (props, propName, componentName) => {
@@ -18,20 +18,25 @@ const withKeysPropType = keys => (props, propName, componentName) => {
 
 export default function translatable(defaultTranslations) {
   return Composed => {
-    function Translatable(props) {
-      const { translations, ...otherProps } = props;
-      const translate = (key, ...params) => {
+    class Translatable extends Component {
+      translate = (key, ...params) => {
+        const { translations } = this.props;
+
         const translation =
           translations && has(translations, key)
             ? translations[key]
             : defaultTranslations[key];
+
         if (typeof translation === 'function') {
           return translation(...params);
         }
+
         return translation;
       };
 
-      return <Composed translate={translate} {...otherProps} />;
+      render() {
+        return <Composed translate={this.translate} {...this.props} />;
+      }
     }
 
     const name = Composed.displayName || Composed.name || 'UnknownComponent';
