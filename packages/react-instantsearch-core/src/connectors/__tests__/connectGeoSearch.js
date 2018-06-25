@@ -707,10 +707,10 @@ describe('connectGeoSearch', () => {
       });
     });
 
-    describe('shouldUpdate', () => {
+    describe('shouldComponentUpdate', () => {
       it('expect to always return true', () => {
         const expectation = true;
-        const actual = connector.shouldUpdate();
+        const actual = connector.shouldComponentUpdate();
 
         expect(actual).toBe(expectation);
       });

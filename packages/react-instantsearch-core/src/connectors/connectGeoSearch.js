@@ -222,7 +222,7 @@ export default createConnector({
     };
   },
 
-  shouldUpdate() {
+  shouldComponentUpdate() {
     return true;
   },
 });

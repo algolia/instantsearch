@@ -41,7 +41,7 @@ export default function createConnector(connectorDesc) {
   const hasMetadata = has(connectorDesc, 'getMetadata');
   const hasTransitionState = has(connectorDesc, 'transitionState');
   const hasCleanUp = has(connectorDesc, 'cleanUp');
-  const hasShouldUpdate = has(connectorDesc, 'shouldUpdate');
+  const hasShouldComponentUpdate = has(connectorDesc, 'shouldComponentUpdate');
   const isWidget = hasSearchParameters || hasMetadata || hasTransitionState;
 
   return Composed =>
@@ -211,8 +211,8 @@ export default function createConnector(connectorDesc) {
       }
 
       shouldComponentUpdate(nextProps, nextState) {
-        if (hasShouldUpdate) {
-          return connectorDesc.shouldUpdate.call(
+        if (hasShouldComponentUpdate) {
+          return connectorDesc.shouldComponentUpdate.call(
             this,
             this.props,
             nextProps,
