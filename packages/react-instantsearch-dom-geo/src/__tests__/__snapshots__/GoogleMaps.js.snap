@@ -32,3 +32,26 @@ exports[`GoogleMaps expect render correctly without the map rendered 1`] = `
   />
 </div>
 `;
+
+exports[`GoogleMaps update expect to still render the children when shouldUpdate return false 1`] = `
+<div
+  className="ais-GeoSearch"
+>
+  <div
+    className="ais-GeoSearch-map"
+  />
+</div>
+`;
+
+exports[`GoogleMaps update expect to still render the children when shouldUpdate return false 2`] = `
+<div
+  className="ais-GeoSearch"
+>
+  <div
+    className="ais-GeoSearch-map"
+  />
+  <div>
+    This is the children updated
+  </div>
+</div>
+`;

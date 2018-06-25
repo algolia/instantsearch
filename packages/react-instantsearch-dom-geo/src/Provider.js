@@ -11,6 +11,7 @@ class Provider extends Component {
     hits: PropTypes.arrayOf(PropTypes.object).isRequired,
     isRefineOnMapMove: PropTypes.bool.isRequired,
     hasMapMoveSinceLastRefine: PropTypes.bool.isRequired,
+    isRefineEnable: PropTypes.bool.isRequired,
     refine: PropTypes.func.isRequired,
     toggleRefineOnMapMove: PropTypes.func.isRequired,
     setMapMoveSinceLastRefine: PropTypes.func.isRequired,
@@ -30,6 +31,8 @@ class Provider extends Component {
   };
 
   isPendingRefine = false;
+  boundingBox = null;
+  previousBoundingBox = null;
 
   getChildContext() {
     const {
@@ -71,6 +74,8 @@ class Provider extends Component {
     if (positionChanged || currentRefinementChanged) {
       setMapMoveSinceLastRefine(false);
     }
+
+    this.previousBoundingBox = this.boundingBox;
   }
 
   createBoundingBoxFromHits(hits) {
@@ -99,12 +104,18 @@ class Provider extends Component {
   };
 
   onChange = () => {
-    const { isRefineOnMapMove, setMapMoveSinceLastRefine } = this.props;
+    const {
+      isRefineOnMapMove,
+      isRefineEnable,
+      setMapMoveSinceLastRefine,
+    } = this.props;
 
-    setMapMoveSinceLastRefine(true);
+    if (isRefineEnable) {
+      setMapMoveSinceLastRefine(true);
 
-    if (isRefineOnMapMove) {
-      this.isPendingRefine = true;
+      if (isRefineOnMapMove) {
+        this.isPendingRefine = true;
+      }
     }
   };
 
@@ -119,7 +130,11 @@ class Provider extends Component {
   shouldUpdate = () => {
     const { hasMapMoveSinceLastRefine } = this.props;
 
-    return !this.isPendingRefine && !hasMapMoveSinceLastRefine;
+    return (
+      !this.isPendingRefine &&
+      !hasMapMoveSinceLastRefine &&
+      !isEqual(this.boundingBox, this.previousBoundingBox)
+    );
   };
 
   render() {
@@ -135,6 +150,8 @@ class Provider extends Component {
       !currentRefinement && Boolean(hits.length)
         ? this.createBoundingBoxFromHits(hits)
         : currentRefinement;
+
+    this.boundingBox = boundingBox;
 
     return children({
       onChange: this.onChange,
