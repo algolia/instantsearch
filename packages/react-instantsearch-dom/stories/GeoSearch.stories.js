@@ -34,69 +34,59 @@ const initialPosition = {
   lng: -74.01,
 };
 
-stories.addWithJSX(
-  'default',
-  () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-      <Configure aroundLatLngViaIP hitsPerPage={20} />
+stories
+  .addWithJSX(
+    'default',
+    () => (
+      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+        <Configure aroundLatLngViaIP hitsPerPage={20} />
 
-      <Container>
-        <GoogleMapsLoader apiKey={apiKey}>
-          {google => (
-            <GeoSearch google={google}>
-              {({ hits }) => (
-                <Fragment>
-                  {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
-                </Fragment>
-              )}
-            </GeoSearch>
-          )}
-        </GoogleMapsLoader>
-      </Container>
-    </WrapWithHits>
-  ),
-  {
-    displayName,
-    filterProps,
-  }
-);
+        <Container>
+          <GoogleMapsLoader apiKey={apiKey}>
+            {google => (
+              <GeoSearch google={google}>
+                {({ hits }) => (
+                  <Fragment>
+                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                  </Fragment>
+                )}
+              </GeoSearch>
+            )}
+          </GoogleMapsLoader>
+        </Container>
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
+    'with refine disabled',
+    () => (
+      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+        <Configure aroundLatLngViaIP hitsPerPage={20} />
 
-// With Places
-stories.addWithJSX(
-  'with Places',
-  () => (
-    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
-      <Configure hitsPerPage={20} aroundRadius={5000} />
-
-      <Places
-        defaultRefinement={{
-          lat: 37.7793,
-          lng: -122.419,
-        }}
-      />
-
-      <Container>
-        <GoogleMapsLoader apiKey={apiKey}>
-          {google => (
-            <GeoSearch google={google} initialZoom={12}>
-              {({ hits }) => (
-                <Fragment>
-                  <Control />
-
-                  {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
-                </Fragment>
-              )}
-            </GeoSearch>
-          )}
-        </GoogleMapsLoader>
-      </Container>
-    </WrapWithHits>
-  ),
-  {
-    displayName,
-    filterProps,
-  }
-);
+        <Container>
+          <GoogleMapsLoader apiKey={apiKey}>
+            {google => (
+              <GeoSearch google={google} enableRefine={false}>
+                {({ hits }) => (
+                  <Fragment>
+                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                  </Fragment>
+                )}
+              </GeoSearch>
+            )}
+          </GoogleMapsLoader>
+        </Container>
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  );
 
 // Only UI
 stories
@@ -382,6 +372,43 @@ stories
       filterProps,
     }
   );
+
+// With Places
+stories.addWithJSX(
+  'with Places',
+  () => (
+    <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+      <Configure hitsPerPage={20} aroundRadius={5000} />
+
+      <Places
+        defaultRefinement={{
+          lat: 37.7793,
+          lng: -122.419,
+        }}
+      />
+
+      <Container>
+        <GoogleMapsLoader apiKey={apiKey}>
+          {google => (
+            <GeoSearch google={google} initialZoom={12}>
+              {({ hits }) => (
+                <Fragment>
+                  <Control />
+
+                  {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                </Fragment>
+              )}
+            </GeoSearch>
+          )}
+        </GoogleMapsLoader>
+      </Container>
+    </WrapWithHits>
+  ),
+  {
+    displayName,
+    filterProps,
+  }
+);
 
 stories.addWithJSX('with InfoWindow', () => {
   class Example extends Component {

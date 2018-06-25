@@ -80,9 +80,7 @@ class GoogleMaps extends Component {
       shouldUpdate,
     } = this.props;
 
-    const { isMapReady } = this.state;
-
-    if (!isMapReady || !shouldUpdate()) {
+    if (!shouldUpdate()) {
       return;
     }
 
@@ -96,17 +94,11 @@ class GoogleMaps extends Component {
           boundingBoxPadding
         );
       });
-
-      return;
-    }
-
-    if (!boundingBox) {
+    } else {
       this.lockUserInteration(() => {
         this.instance.setZoom(initialZoom);
         this.instance.setCenter(initialPosition);
       });
-
-      return;
     }
   }
 

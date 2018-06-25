@@ -59,6 +59,7 @@ exports[`GeoSearch Provider expect to render 1`] = `
   }
   hasMapMoveSinceLastRefine={false}
   hits={Array []}
+  isRefineEnable={true}
   isRefineOnMapMove={true}
   refine={[Function]}
   setMapMoveSinceLastRefine={[Function]}

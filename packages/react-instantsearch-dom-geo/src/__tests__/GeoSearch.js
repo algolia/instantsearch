@@ -147,6 +147,29 @@ describe('GeoSearch', () => {
         },
       });
     });
+
+    it('expect to render with enableRefine', () => {
+      const props = {
+        ...defaultProps,
+        enableRefine: false,
+      };
+
+      const connectorProps = {
+        ...defaultConnectorProps,
+      };
+
+      const renderConnectorWrapper = shallow(
+        <ShallowWapper>
+          {renderConnector({ props, connectorProps })}
+        </ShallowWapper>
+      );
+
+      const providerProps = renderConnectorWrapper
+        .find('[testID="Provider"]')
+        .props();
+
+      expect(providerProps.isRefineEnable).toBe(false);
+    });
   });
 
   describe('GoogleMaps', () => {
