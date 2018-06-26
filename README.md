@@ -23,13 +23,14 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [About InstantSearch.js](#about-instantsearchjs)
+- [Why](#why)
 - [Getting started](#getting-started)
 - [Documentation](#documentation)
 - [Demos](#demos)
 - [Playground](#playground)
 - [Browser support](#browser-support)
 - [Contributing](#contributing)
+- [We're hiring](#were-hiring)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -142,8 +143,8 @@ Please read [our contribution process](CONTRIBUTING.md) to learn more.
 Join the InstantSearch squad and help us build tools that will empower thousands of other developers.
 
 Open positions:
- - [Open source software engineer](https://www.algolia.com/careers#60c7c780-1009-4030-8e44-f653fa2ebd36) (Paris)
- - [Engineering manager](https://www.algolia.com/careers#5c247452-db89-4a94-a02d-3c72800dc77d) (Paris)
+ - [Open Source Software Engineer](https://www.algolia.com/careers#60c7c780-1009-4030-8e44-f653fa2ebd36) (Paris)
+ - [Engineering Manager](https://www.algolia.com/careers#5c247452-db89-4a94-a02d-3c72800dc77d) (Paris)
 
 ## License
 
