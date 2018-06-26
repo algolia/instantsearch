@@ -5,8 +5,6 @@ import initVanillaWidgets from './vanilla/init-stories';
 import initUnmountWidgets from './init-unmount-widgets.js';
 
 import '../style.css';
-import '../../src/css/instantsearch.scss';
-import '../../src/css/instantsearch-theme-algolia.scss';
 
 registerDisposer(() => {
   window.search = undefined;
