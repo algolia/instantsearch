@@ -91,6 +91,14 @@
       {
         "name": "Integrate with Angular (2+)",
         "url": "guides/angular-integration.html"
+      },
+      {
+        "name": "Use your own backend",
+        "url": "guides/custom-backend.html"
+      },
+      {
+        "name": "Prepare for v3",
+        "url": "guides/prepare-for-v3.html"
       }
     ]
   },
@@ -143,6 +151,14 @@
   {
     "name": "Migrate from V1",
     "url": "guides/migration.html"
+  },
+  {
+    "name": "Use your own backend",
+    "url": "guides/custom-backend.html"
+  },
+  {
+    "name": "Prepare for v3",
+    "url": "guides/prepare-for-v3.html"
   },
   {
     "name": "instantsearch()",
