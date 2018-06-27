@@ -5,8 +5,6 @@ const SearchParameters = jsHelper.SearchParameters;
 
 import connectHitsPerPage from '../connectHitsPerPage.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectHitsPerPage', () => {
   it('should throw when there is two default items defined', () => {
     expect(() => {
@@ -37,7 +35,7 @@ describe('connectHitsPerPage', () => {
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper(fakeClient, '', {
+    const helper = jsHelper({}, '', {
       hitsPerPage: 3,
     });
     helper.search = sinon.stub();
@@ -117,7 +115,7 @@ describe('connectHitsPerPage', () => {
       ],
     });
 
-    const helper = jsHelper(fakeClient, '', {
+    const helper = jsHelper({}, '', {
       hitsPerPage: 11,
     });
     helper.search = sinon.stub();
@@ -162,7 +160,7 @@ describe('connectHitsPerPage', () => {
       ],
     });
 
-    const helper = jsHelper(fakeClient, '', {
+    const helper = jsHelper({}, '', {
       hitsPerPage: 7,
     });
     helper.search = sinon.stub();
@@ -199,7 +197,7 @@ describe('connectHitsPerPage', () => {
       ],
     });
 
-    const helper = jsHelper(fakeClient, '', {
+    const helper = jsHelper({}, '', {
       hitsPerPage: 7,
     });
     helper.search = sinon.stub();
@@ -243,11 +241,7 @@ describe('connectHitsPerPage', () => {
         ],
       });
 
-      const helper = jsHelper(
-        { addAlgoliaAgent: () => {} },
-        '',
-        widget.getConfiguration({})
-      );
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
       helper.search = sinon.stub();
 
       widget.init({

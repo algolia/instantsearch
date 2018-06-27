@@ -17,6 +17,7 @@ var customRefinementList = connectRefinementList(function render(params) {
   //   widgetParams,
   // }
 });
+
 search.addWidget(
   customRefinementList({
     attributeName,
@@ -27,15 +28,16 @@ search.addWidget(
     [ escapeFacetValues = false ]
   })
 );
+
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html
 `;
 
 export const checkUsage = ({
   attributeName,
   operator,
-  usageMessage,
   showMoreLimit,
   limit,
+  message,
 }) => {
   const noAttributeName = attributeName === undefined;
   const invalidOperator = !/^(and|or)$/.test(operator);
@@ -45,7 +47,7 @@ export const checkUsage = ({
       : false;
 
   if (noAttributeName || invalidOperator || invalidShowMoreLimit) {
-    throw new Error(usageMessage);
+    throw new Error(message);
   }
 };
 
@@ -159,7 +161,13 @@ export default function connectRefinementList(renderFn, unmountFn) {
       escapeFacetValues = false,
     } = widgetParams;
 
-    checkUsage({ attributeName, operator, usage, limit, showMoreLimit });
+    checkUsage({
+      message: usage,
+      attributeName,
+      operator,
+      showMoreLimit,
+      limit,
+    });
 
     const formatItems = ({ name: label, ...item }) => ({
       ...item,

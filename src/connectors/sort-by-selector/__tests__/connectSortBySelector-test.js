@@ -8,8 +8,6 @@ import jsHelper, {
 import connectSortBySelector from '../connectSortBySelector.js';
 import instantSearch from '../../../lib/main.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectSortBySelector', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -20,7 +18,7 @@ describe('connectSortBySelector', () => {
       apiKey: '',
       appId: '',
       indexName: 'defaultIndex',
-      createAlgoliaClient: () => fakeClient,
+      createAlgoliaClient: () => ({}),
     });
 
     const indices = [
@@ -31,7 +29,7 @@ describe('connectSortBySelector', () => {
 
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper(fakeClient, indices[0].name);
+    const helper = jsHelper({}, indices[0].name);
     helper.search = sinon.stub();
 
     widget.init({
@@ -92,7 +90,7 @@ describe('connectSortBySelector', () => {
       apiKey: '',
       appId: '',
       indexName: 'defaultIndex',
-      createAlgoliaClient: () => fakeClient,
+      createAlgoliaClient: () => ({}),
     });
 
     const indices = [
@@ -103,7 +101,7 @@ describe('connectSortBySelector', () => {
       indices,
     });
 
-    const helper = jsHelper(fakeClient, indices[0].name);
+    const helper = jsHelper({}, indices[0].name);
     helper.search = sinon.stub();
 
     widget.init({
@@ -152,7 +150,7 @@ describe('connectSortBySelector', () => {
         apiKey: '',
         appId: '',
         indexName: 'relevance',
-        createAlgoliaClient: () => fakeClient,
+        createAlgoliaClient: () => ({}),
       });
       const indices = [
         { label: 'Sort products by relevance', name: 'relevance' },
@@ -166,7 +164,7 @@ describe('connectSortBySelector', () => {
       });
 
       const initialConfig = {};
-      const helper = jsHelper(fakeClient, 'relevance', initialConfig);
+      const helper = jsHelper({}, 'relevance', initialConfig);
       helper.search = jest.fn();
 
       widget.init({

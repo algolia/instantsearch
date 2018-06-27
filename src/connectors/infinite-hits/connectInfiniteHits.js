@@ -79,6 +79,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     let hitsCache = [];
+    let lastReceivedPage = -1;
+
     const getShowMore = helper => () => helper.nextPage().search();
 
     return {
@@ -105,6 +107,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
       render({ results, state, instantSearchInstance }) {
         if (state.page === 0) {
           hitsCache = [];
+          lastReceivedPage = -1;
         }
 
         if (
@@ -115,7 +118,10 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           results.hits = escapeHits(results.hits);
         }
 
-        hitsCache = [...hitsCache, ...results.hits];
+        if (lastReceivedPage < state.page) {
+          hitsCache = [...hitsCache, ...results.hits];
+          lastReceivedPage = state.page;
+        }
 
         const isLastPage = results.nbPages <= results.page + 1;
 

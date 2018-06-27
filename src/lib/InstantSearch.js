@@ -25,6 +25,39 @@ function defaultCreateURL() {
 const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) =>
   defaultAlgoliasearch(appId, apiKey);
 
+const checkOptions = ({
+  appId,
+  apiKey,
+  indexName,
+  createAlgoliaClient,
+  searchClient,
+}) => {
+  if (!searchClient) {
+    if (appId === null || apiKey === null || indexName === null) {
+      const usage = `
+Usage: instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name'
+});`;
+      throw new Error(usage);
+    }
+  } else if (
+    searchClient &&
+    (indexName === null ||
+      appId !== null ||
+      apiKey !== null ||
+      createAlgoliaClient !== defaultCreateAlgoliaClient)
+  ) {
+    const usage = `
+Usage: instantsearch({
+  indexName: 'my_index_name',
+  searchClient: algoliasearch('appId', 'apiKey')
+});`;
+    throw new Error(usage);
+  }
+};
+
 /**
  * Widgets are the building blocks of InstantSearch.js. Any
  * valid widget must have at least a `render` or a `init` function.
@@ -41,31 +74,43 @@ const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) =>
  * @fires Instantsearch#render This event is triggered each time a render is done
  */
 class InstantSearch extends EventEmitter {
-  constructor({
-    appId = null,
-    apiKey = null,
-    indexName = null,
-    numberLocale,
-    searchParameters = {},
-    urlSync = null,
-    routing = null,
-    searchFunction,
-    createAlgoliaClient = defaultCreateAlgoliaClient,
-    stalledSearchDelay = 200,
-  }) {
+  constructor(options) {
     super();
-    if (appId === null || apiKey === null || indexName === null) {
-      const usage = `
-Usage: instantsearch({
-  appId: 'my_application_id',
-  apiKey: 'my_search_api_key',
-  indexName: 'my_index_name'
-});`;
-      throw new Error(usage);
+
+    const {
+      appId = null,
+      apiKey = null,
+      indexName = null,
+      numberLocale,
+      searchParameters = {},
+      urlSync = null,
+      routing = null,
+      searchFunction,
+      createAlgoliaClient = defaultCreateAlgoliaClient,
+      stalledSearchDelay = 200,
+      searchClient = null,
+    } = options;
+
+    checkOptions({
+      appId,
+      apiKey,
+      indexName,
+      createAlgoliaClient,
+      searchClient,
+    });
+
+    if (searchClient && typeof searchClient.search !== 'function') {
+      throw new Error(
+        'InstantSearch configuration error: `searchClient` must implement a `search(requests)` method.'
+      );
     }
 
-    const client = createAlgoliaClient(algoliasearch, appId, apiKey);
-    client.addAlgoliaAgent(`instantsearch.js ${version}`);
+    const client =
+      searchClient || createAlgoliaClient(algoliasearch, appId, apiKey);
+
+    if (typeof client.addAlgoliaAgent === 'function') {
+      client.addAlgoliaAgent(`instantsearch.js ${version}`);
+    }
 
     this.client = client;
     this.helper = null;
@@ -112,10 +157,18 @@ Usage: instantsearch({
         ...ROUTING_DEFAULT_OPTIONS,
         ...routing,
       };
+
+    if (options.createAlgoliaClient) {
+      // eslint-disable-next-line no-console
+      console.warn(`
+InstantSearch.js: \`createAlgoliaClient\` option is deprecated and will be removed in the next major version.
+Please use \`searchClient\` instead: https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-searchClient.
+To help you migrate, please refer to the migration guide: https://community.algolia.com/instantsearch.js/v2/guides/prepare-for-v3.html`);
+    }
   }
 
   /**
-   * Add a widget. This can be done before and after InstantSearch has been started. Adding a
+   * Adds a widget. This can be done before and after InstantSearch has been started. Adding a
    * widget after InstantSearch started is considered **EXPERIMENTAL** and therefore
    * it is possibly buggy, if you find anything please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20hot%20addWidget).
@@ -129,7 +182,7 @@ Usage: instantsearch({
   }
 
   /**
-   * Add multiple widgets. This can be done before and after the InstantSearch has been started. This feature
+   * Adds multiple widgets. This can be done before and after the InstantSearch has been started. This feature
    * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20addWidgets).
    * @param  {Widget[]} widgets The array of widgets to add to InstantSearch.
@@ -188,7 +241,7 @@ Usage: instantsearch({
   }
 
   /**
-   * Remove multiple widgets. This can be done only after the InstantSearch has been started. This feature
+   * Removes multiple widgets. This can be done only after the InstantSearch has been started. This feature
    * is considered **EXPERIMENTAL** and therefore it is possibly buggy, if you find anything please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20addWidgets).
    * @param  {Widget[]} widgets Array of widgets instances to remove from InstantSearch.
@@ -244,7 +297,7 @@ Usage: instantsearch({
   }
 
   /**
-   * The refresh method clears the cached answers from Algolia and triggers a new search.
+   * Clears the cached answers from Algolia and triggers a new search.
    *
    * @return {undefined} Does not return anything
    */
@@ -255,7 +308,7 @@ Usage: instantsearch({
   }
 
   /**
-   * The start method ends the initialization of InstantSearch.js and triggers the
+   * Ends the initialization of InstantSearch.js and triggers the
    * first search. This method should be called after all widgets have been added
    * to the instance of InstantSearch.js. InstantSearch.js also supports adding and removing
    * widgets after the start as an **EXPERIMENTAL** feature.
@@ -311,8 +364,7 @@ Usage: instantsearch({
       helper.search = () => {
         const helperSearchFunction = algoliasearchHelper(
           {
-            addAlgoliaAgent: () => {},
-            search: () => {},
+            search: () => new Promise(() => {}),
           },
           helper.state.index,
           helper.state
@@ -356,7 +408,7 @@ Usage: instantsearch({
   }
 
   /**
-   * Remove all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
+   * Removes all widgets without triggering a search afterwards. This is an **EXPERIMENTAL** feature,
    * if you find an issue with it, please
    * [open an issue](https://github.com/algolia/instantsearch.js/issues/new?title=Problem%20with%20dispose).
    * @return {undefined} This method does not return anything
