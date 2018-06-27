@@ -14,28 +14,28 @@ describe('connectRefinementList', () => {
   };
 
   it('throws on bad usage', () => {
-    expect(connectRefinementList).toThrow();
+    expect(connectRefinementList).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList({
         operator: 'and',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
 
-    expect(() => connectRefinementList(() => {})()).toThrow();
+    expect(() => connectRefinementList(() => {})()).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList(() => {})({
         operator: 'and',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList(() => {})({
         attributeName: 'company',
         operator: 'YUP',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
   });
 
   describe('options configuring the helper', () => {
