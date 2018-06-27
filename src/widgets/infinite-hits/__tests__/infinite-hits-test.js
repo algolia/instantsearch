@@ -17,7 +17,7 @@ describe('infiniteHits()', () => {
   let helper;
 
   beforeEach(() => {
-    helper = algoliasearchHelper({ addAlgoliaAgent: () => {} });
+    helper = algoliasearchHelper({});
     helper.search = sinon.spy();
 
     ReactDOM = { render: sinon.spy() };
@@ -76,9 +76,17 @@ describe('infiniteHits()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
-  it('does not accept both item and allItems templates', () => {
-    expect(
-      infiniteHits.bind({ container, templates: { item: '', allItems: '' } })
+  it('does not accept allItems templates', () => {
+    expect(() =>
+      infiniteHits({ container, templates: { allItems: '' } })
+    ).toThrow();
+
+    expect(() =>
+      infiniteHits({ container, templates: { allItems: 'not empty' } })
+    ).toThrow();
+
+    expect(() =>
+      infiniteHits({ container, templates: { allItems: () => 'template' } })
     ).toThrow();
   });
 

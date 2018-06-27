@@ -19,7 +19,7 @@ describe('InstantSearch lifecycle', () => {
   let urlSync;
 
   beforeEach(() => {
-    client = { algolia: 'client', addAlgoliaAgent: () => {} };
+    client = { algolia: 'client' };
     helper = algoliaSearchHelper(client);
 
     // when using searchFunction, we lose the reference to

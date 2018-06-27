@@ -5,8 +5,6 @@ import Selector from '../../../components/Selector';
 
 import instantSearch from '../../../lib/main.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('sortBySelector call', () => {
   it('throws an exception when no options', () => {
     const container = document.createElement('div');
@@ -34,7 +32,7 @@ describe('sortBySelector()', () => {
       apiKey: '',
       appId: '',
       indexName: 'defaultIndex',
-      createAlgoliaClient: () => fakeClient,
+      createAlgoliaClient: () => ({}),
     });
     autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = { render: sinon.spy() };

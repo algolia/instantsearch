@@ -37,7 +37,7 @@ search.addWidget(instantsearch.searchbox({
 `cssClasses` is a parameter that let you specify one or more classes to add to
 some specific element of the rendered widget. When available, this parameter is
 an object of either string or array of strings. The different keys available
-is define in the widget reference.
+is defined in the widget reference.
 
 ```javascript
 const search = instantsearch(/* parameters here */);
@@ -56,7 +56,7 @@ The `templates` are a way to customize to customize the rendering of a widget us
 string-based templates or functions.
 
 In their string format, the templates should be written using
-[mustache](https://mustache.github.io/mustache.5.html).
+[mustache](https://mustache.github.io/mustache.5.html) (more specifically [Hogan](http://twitter.github.io/hogan.js/)).
 
 Like the css classes they can only be written for some specific parts of the rendered
 widget.
@@ -79,8 +79,8 @@ search.addWidget(instantsearch.refinementList({
 ## transformData
 
 `transformData` is used to provide function that will transform the data
-passed to the templates. This is particularly handy when using using mustache
-because it only accepts conditionnals over `boolean` value.
+passed to the templates. This is particularly handy when using mustache
+because it only accepts conditionals over `Boolean` values.
 
 Those function map the different template keys available, when it makes sense.
 For example, if a widget accepts an `item` template, you can provide an `item`

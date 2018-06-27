@@ -7,8 +7,6 @@ import jsHelper, {
 
 import connectToggle from '../connectToggle.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectToggle', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -28,7 +26,7 @@ describe('connectToggle', () => {
       disjunctiveFacets: [attributeName],
     });
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -73,8 +71,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-            'true': 45, // eslint-disable-line
-            'false': 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -122,7 +120,7 @@ describe('connectToggle', () => {
       label,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration());
+    const helper = jsHelper({}, '', widget.getConfiguration());
     helper.search = sinon.stub();
 
     widget.init({
@@ -169,8 +167,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-            'true': 45, // eslint-disable-line
-            'false': 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -214,7 +212,7 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-            'true': 45, // eslint-disable-line
+              true: 45,
             },
           },
           nbHits: 85,
@@ -222,8 +220,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-            'true': 45, // eslint-disable-line
-            'false': 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -278,7 +276,7 @@ describe('connectToggle', () => {
       },
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration());
+    const helper = jsHelper({}, '', widget.getConfiguration());
     helper.search = sinon.stub();
 
     widget.init({
@@ -326,7 +324,7 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-            'false': 40, // eslint-disable-line
+              false: 40,
             },
           },
           nbHits: 40,
@@ -334,8 +332,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-            'true': 45, // eslint-disable-line
-            'false': 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -380,7 +378,7 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-            'true': 45, // eslint-disable-line
+              true: 45,
             },
           },
           nbHits: 85,
@@ -388,8 +386,8 @@ describe('connectToggle', () => {
         {
           facets: {
             isShippingFree: {
-            'true': 45, // eslint-disable-line
-            'false': 40, // eslint-disable-line
+              true: 45,
+              false: 40,
             },
           },
           nbHits: 85,
@@ -443,7 +441,7 @@ describe('connectToggle', () => {
       });
 
       const initialConfig = widget.getConfiguration({});
-      const helper = jsHelper(fakeClient, '', initialConfig);
+      const helper = jsHelper({}, '', initialConfig);
       helper.search = jest.fn();
 
       widget.init({

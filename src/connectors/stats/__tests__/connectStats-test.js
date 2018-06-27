@@ -5,8 +5,6 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectStats from '../connectStats.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectStats', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -20,7 +18,7 @@ describe('connectStats', () => {
 
     expect(widget.getConfiguration).toEqual(undefined);
 
-    const helper = jsHelper(fakeClient);
+    const helper = jsHelper({});
     helper.search = sinon.stub();
 
     widget.init({

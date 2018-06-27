@@ -70,7 +70,7 @@ rangeInput({
   [ precision = 0 ],
   [ cssClasses.{root, header, body, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit, footer} ],
   [ templates.{header, footer} ],
-  [ labels.{separator, button} ],
+  [ labels.{separator, submit} ],
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
@@ -138,7 +138,7 @@ rangeInput({
  *     attributeName: 'price',
  *     labels: {
  *       separator: 'to',
- *       button: 'Go'
+ *       submit: 'Go'
  *     },
  *     templates: {
  *       header: 'Price'

@@ -6,7 +6,6 @@ import jsHelper from 'algoliasearch-helper';
 import defaultLabels from '../../../widgets/star-rating/defaultLabels.js';
 import starRating from '../star-rating.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
 const SearchResults = jsHelper.SearchResults;
 
 describe('starRating()', () => {
@@ -30,7 +29,7 @@ describe('starRating()', () => {
       attributeName,
       cssClasses: { body: ['body', 'cx'] },
     });
-    helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    helper = jsHelper({}, '', widget.getConfiguration({}));
     sinon.spy(helper, 'clearRefinements');
     sinon.spy(helper, 'addDisjunctiveFacetRefinement');
     sinon.spy(helper, 'getRefinements');
@@ -155,7 +154,7 @@ describe('starRating()', () => {
       attributeName,
       cssClasses: { body: ['body', 'cx'] },
     });
-    const _helper = jsHelper(fakeClient, '', _widget.getConfiguration({}));
+    const _helper = jsHelper({}, '', _widget.getConfiguration({}));
     _helper.search = sinon.stub();
 
     _widget.init({

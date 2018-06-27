@@ -7,8 +7,6 @@ import jsHelper, {
 
 import connectRange from '../connectRange.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectRange', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -26,7 +24,7 @@ describe('connectRange', () => {
       disjunctiveFacets: [attributeName],
     });
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -134,7 +132,7 @@ describe('connectRange', () => {
       attributeName,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration());
+    const helper = jsHelper({}, '', widget.getConfiguration());
     helper.search = sinon.stub();
 
     widget.init({
@@ -201,7 +199,7 @@ describe('connectRange', () => {
     const attributeName = 'price';
     const widget = makeWidget({ attributeName, min: 0, max: 500 });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration());
+    const helper = jsHelper({}, '', widget.getConfiguration());
     helper.search = sinon.stub();
 
     widget.init({
@@ -240,7 +238,7 @@ describe('connectRange', () => {
       indexName: 'movie',
     });
 
-    const helper = jsHelper(fakeClient, '', configuration);
+    const helper = jsHelper({}, '', configuration);
     helper.search = sinon.stub();
 
     widget.init({
@@ -276,7 +274,7 @@ describe('connectRange', () => {
     const attributeName = 'price';
     const widget = makeWidget({ attributeName });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration());
+    const helper = jsHelper({}, '', widget.getConfiguration());
     helper.search = sinon.stub();
 
     widget.init({
@@ -524,7 +522,7 @@ describe('connectRange', () => {
   describe('_getCurrentRefinement', () => {
     const attributeName = 'price';
     const rendering = () => {};
-    const createHelper = () => jsHelper(fakeClient);
+    const createHelper = () => jsHelper({});
 
     it('expect to return default refinement', () => {
       const widget = connectRange(rendering)({ attributeName });
@@ -567,7 +565,7 @@ describe('connectRange', () => {
     const attributeName = 'price';
     const rendering = () => {};
     const createHelper = () => {
-      const helper = jsHelper(fakeClient);
+      const helper = jsHelper({});
       helper.search = jest.fn();
       const initialClearRefinements = helper.clearRefinements;
       helper.clearRefinements = jest.fn((...args) =>
@@ -918,7 +916,7 @@ describe('connectRange', () => {
       });
 
       const config = widget.getConfiguration({}, {});
-      const helper = jsHelper(fakeClient, '', config);
+      const helper = jsHelper({}, '', config);
       helper.search = jest.fn();
 
       widget.init({
