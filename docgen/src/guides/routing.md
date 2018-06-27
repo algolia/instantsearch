@@ -4,6 +4,7 @@ mainTitle: Guides
 layout: main.pug
 category: guides
 name: routing
+navWeight: 5
 withHeadings: true
 editable: true
 githubSource: docgen/src/guides/routing.md

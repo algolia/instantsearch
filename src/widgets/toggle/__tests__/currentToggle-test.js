@@ -230,7 +230,7 @@ describe('currentToggle()', () => {
         });
 
         const config = widget.getConfiguration();
-        const altHelper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+        const altHelper = jsHelper({}, '', config);
         altHelper.search = () => {};
 
         widget.init({
@@ -471,7 +471,7 @@ describe('currentToggle()', () => {
           });
 
           const config = widget.getConfiguration();
-          const altHelper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+          const altHelper = jsHelper({}, '', config);
           altHelper.search = () => {};
 
           const createURL = () => '#';
@@ -543,7 +543,7 @@ describe('currentToggle()', () => {
           values: userValues,
         });
         const config = widget.getConfiguration();
-        const helper = jsHelper({ addAlgoliaAgent: () => {} }, '', config);
+        const helper = jsHelper({}, '', config);
 
         // When
         widget.init({

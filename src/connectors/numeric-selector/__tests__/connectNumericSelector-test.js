@@ -5,8 +5,6 @@ import jsHelper, {
 
 import connectNumericSelector from '../connectNumericSelector.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectNumericSelector', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
@@ -35,7 +33,7 @@ describe('connectNumericSelector', () => {
     // test if widget is not rendered yet at this point
     expect(rendering).not.toHaveBeenCalled();
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -133,7 +131,7 @@ describe('connectNumericSelector', () => {
     });
 
     const config = widget.getConfiguration({}, {});
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -201,7 +199,7 @@ describe('connectNumericSelector', () => {
     });
 
     const config = widget.getConfiguration({}, {});
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -251,7 +249,7 @@ describe('connectNumericSelector', () => {
     });
 
     const config = widget.getConfiguration({}, {});
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -304,7 +302,7 @@ describe('connectNumericSelector', () => {
       });
 
       const config = widget.getConfiguration({}, {});
-      const helper = jsHelper(fakeClient, '', config);
+      const helper = jsHelper({}, '', config);
       helper.search = jest.fn();
 
       widget.init({

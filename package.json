@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "homepage": "https://community.algolia.com/instantsearch.js/",
   "keywords": [
@@ -98,7 +98,7 @@
     "gh-pages": "1.1.0",
     "happypack": "4.0.1",
     "html-webpack-plugin": "2.30.1",
-    "inquirer": "4.0.0",
+    "inquirer": "5.2.0",
     "jest": "22.4.2",
     "jsdom-global": "3.0.2",
     "json": "9.0.6",
@@ -112,7 +112,7 @@
     "raw-loader": "0.5.1",
     "react-test-renderer": "15.6.1",
     "sass-lint": "1.12.1",
-    "uglifyjs-webpack-plugin": "^1.1.4",
+    "uglifyjs-webpack-plugin": "1.1.4",
     "sass-loader": "6.0.7",
     "scriptjs": "2.5.8",
     "semver": "5.5.0",
@@ -130,8 +130,8 @@
     "webpack-dev-server": "2.11.2"
   },
   "dependencies": {
-    "algoliasearch": "3.25.1",
-    "algoliasearch-helper": "2.24.0",
+    "algoliasearch": "3.27.0",
+    "algoliasearch-helper": "2.26.0",
     "classnames": "2.2.5",
     "events": "1.1.0",
     "hogan.js": "3.0.2",

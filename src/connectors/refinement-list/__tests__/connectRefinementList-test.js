@@ -6,8 +6,6 @@ import { tagConfig } from '../../../lib/escape-highlight.js';
 
 import connectRefinementList from '../connectRefinementList.js';
 
-const fakeClient = { addAlgoliaAgent: () => {} };
-
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {
     const rendering = jest.fn();
@@ -16,28 +14,28 @@ describe('connectRefinementList', () => {
   };
 
   it('throws on bad usage', () => {
-    expect(connectRefinementList).toThrow();
+    expect(connectRefinementList).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList({
         operator: 'and',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
 
-    expect(() => connectRefinementList(() => {})()).toThrow();
+    expect(() => connectRefinementList(() => {})()).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList(() => {})({
         operator: 'and',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList(() => {})({
         attributeName: 'company',
         operator: 'YUP',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
   });
 
   describe('options configuring the helper', () => {
@@ -106,7 +104,7 @@ describe('connectRefinementList', () => {
     // test if widget is not rendered yet at this point
     expect(rendering).not.toHaveBeenCalled();
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = jsHelper({}, '', config);
     helper.search = jest.fn();
 
     widget.init({
@@ -153,7 +151,7 @@ describe('connectRefinementList', () => {
       attributeName: 'category',
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
@@ -195,7 +193,7 @@ describe('connectRefinementList', () => {
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -241,7 +239,7 @@ describe('connectRefinementList', () => {
       limit: 1,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -292,7 +290,7 @@ describe('connectRefinementList', () => {
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -343,7 +341,7 @@ describe('connectRefinementList', () => {
       showMoreLimit: 10,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -397,7 +395,7 @@ describe('connectRefinementList', () => {
       showMoreLimit: 3,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -489,7 +487,7 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
 
     widget.init({
@@ -566,7 +564,7 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = jsHelper(fakeClient, '', {
+    const helper = jsHelper({}, '', {
       ...widget.getConfiguration({}),
       maxValuesPerFacet: 3,
     });
@@ -647,7 +645,7 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
     helper.search = jest.fn();
     helper.searchForFacetValues = jest.fn().mockReturnValue(
       Promise.resolve({
@@ -746,7 +744,7 @@ describe('connectRefinementList', () => {
       limit: 2,
     });
 
-    const helper = jsHelper(fakeClient, '', {
+    const helper = jsHelper({}, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
       ...tagConfig,
@@ -850,7 +848,7 @@ describe('connectRefinementList', () => {
       escapeFacetValues: true,
     });
 
-    const helper = jsHelper(fakeClient, '', {
+    const helper = jsHelper({}, '', {
       ...widget.getConfiguration({}),
       // Here we simulate that another widget has set some highlight tags
       ...tagConfig,
@@ -958,7 +956,7 @@ describe('connectRefinementList', () => {
       });
 
       const initialConfig = widget.getConfiguration({}, {});
-      const helper = jsHelper(fakeClient, '', initialConfig);
+      const helper = jsHelper({}, '', initialConfig);
       helper.search = jest.fn();
 
       widget.init({

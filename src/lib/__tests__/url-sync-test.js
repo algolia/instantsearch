@@ -25,7 +25,7 @@ const makeTestUrlUtils = () => ({
 
 describe('urlSync mechanics', () => {
   test('Generates urls on change', () => {
-    const helper = jsHelper({ addAlgoliaAgent: () => {} });
+    const helper = jsHelper({});
     const urlUtils = makeTestUrlUtils();
     const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });
     urlSyncWidget.init({ state: SearchParameters.make({}) });
@@ -40,7 +40,7 @@ describe('urlSync mechanics', () => {
     expect(urlUtils.lastQs).toMatchSnapshot();
   });
   test('Generated urls should not contain a version', () => {
-    const helper = jsHelper({ addAlgoliaAgent: () => {} });
+    const helper = jsHelper({});
     const urlUtils = makeTestUrlUtils();
     const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });
     urlSyncWidget.init({ state: SearchParameters.make({}) });
@@ -52,7 +52,7 @@ describe('urlSync mechanics', () => {
     expect(urlUtils.lastQs).not.toEqual(expect.stringContaining('is_v'));
   });
   test('updates the URL during the first rendering if it has change since the initial configuration', () => {
-    const helper = jsHelper({ addAlgoliaAgent: () => {} });
+    const helper = jsHelper({});
     const urlUtils = makeTestUrlUtils();
     const urlSyncWidget = urlSync({ urlUtils, threshold: 0 });
     urlSyncWidget.init({ state: SearchParameters.make({}) });

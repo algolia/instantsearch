@@ -12,8 +12,7 @@ import filter from 'lodash/filter';
 
 import {
   getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
+  clearRefinements,
   checkRendering,
 } from '../../lib/utils.js';
 
@@ -187,7 +186,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
     }
 
     const attributeNames = map(attributes, attribute => attribute.name);
-    const restrictedTo = onlyListedAttributes ? attributeNames : [];
+    const restrictedTo = onlyListedAttributes ? attributeNames : undefined;
 
     const attributesObj = reduce(
       attributes,
@@ -200,16 +199,22 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
 
     return {
       init({ helper, createURL, instantSearchInstance }) {
-        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(
-          null,
-          helper,
-          restrictedTo,
-          clearsQuery
-        );
+        this._clearRefinementsAndSearch = () => {
+          helper
+            .setState(
+              clearRefinements({
+                helper,
+                whiteList: restrictedTo,
+                clearsQuery,
+              })
+            )
+            .search();
+        };
 
-        const clearAllURL = createURL(
-          clearRefinementsFromState(helper.state, restrictedTo, clearsQuery)
-        );
+        this._createClearAllURL = () =>
+          createURL(
+            clearRefinements({ helper, whiteList: restrictedTo, clearsQuery })
+          );
 
         const refinements = getFilteredRefinements(
           {},
@@ -228,7 +233,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
           {
             attributes: attributesObj,
             clearAllClick: this._clearRefinementsAndSearch,
-            clearAllURL,
+            clearAllURL: this._createClearAllURL(),
             refine: _clearRefinement,
             createURL: _createURL,
             refinements,
@@ -240,10 +245,6 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
       },
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
-        const clearAllURL = createURL(
-          clearRefinementsFromState(state, restrictedTo, clearsQuery)
-        );
-
         const refinements = getFilteredRefinements(
           results,
           state,
@@ -261,7 +262,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
           {
             attributes: attributesObj,
             clearAllClick: this._clearRefinementsAndSearch,
-            clearAllURL,
+            clearAllURL: this._createClearAllURL(),
             refine: _clearRefinement,
             createURL: _createURL,
             refinements,
