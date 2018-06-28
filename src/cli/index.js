@@ -40,12 +40,9 @@ program
     '--attributes-for-faceting <attributesForFaceting>',
     'The attributes for faceting'
   )
-  .option('-t, --template <template>', 'The InstantSearch template to use')
+  .option('--template <template>', 'The InstantSearch template to use')
   .option('--library-version <template>', 'The version of the library')
-  .option(
-    '-c, --config <config>',
-    'The configuration file to get the options from'
-  )
+  .option('--config <config>', 'The configuration file to get the options from')
   .option('--no-installation', 'Ignore dependency installation')
   .action((dest, opts) => {
     appPath = dest;

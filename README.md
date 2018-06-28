@@ -48,9 +48,9 @@ $ create-instantsearch-app --help
     --index-name <indexName>                           The main index of your search
     --main-attribute <mainAttribute>                   The main searchable attribute of your index
     --attributes-for-faceting <attributesForFaceting>  The attributes for faceting
-    -t, --template <template>                          The InstantSearch template to use
+    --template <template>                              The InstantSearch template to use
     --library-version <template>                       The version of the library
-    -c, --config <config>                              The configuration file to get the options from
+    --config <config>                                  The configuration file to get the options from
     --no-installation                                  Ignore dependency installation
     -h, --help                                         output usage information
 ```
