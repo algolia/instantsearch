@@ -6,6 +6,26 @@
 
 `create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch][react-instantsearch-github], [Vue InstantSearch][vue-instantsearch-github] and [Angular InstantSearch][angular-instantsearch-github]).
 
+<details>
+  <summary><strong>Table of contents</strong></summary>
+
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Get started](#get-started)
+- [Usage](#usage)
+- [API](#api)
+  - [Lifecycle](#lifecycle)
+  - [Templates](#templates)
+- [Previews](#previews)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+</details>
+
 ## Get started
 
 > The tool requires Node ≥ 8.
@@ -55,8 +75,6 @@ $ create-instantsearch-app --help
     -h, --help                                         output usage information
 ```
 
-### Options documentation
-
 #### `--template`
 
 Supported templates are:
@@ -66,6 +84,10 @@ Supported templates are:
 - [`React InstantSearch Native`][react-instantsearch-github]
 - [`Vue InstantSearch`][vue-instantsearch-github]
 - [`Angular InstantSearch`][angular-instantsearch-github]
+
+```
+create-instantsearch-app my-app --template "React InstantSearch"
+```
 
 You can also [create your own template](#templates) and specify its path.
 
