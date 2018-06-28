@@ -44,6 +44,7 @@ function cleanUp(props, searchState, context) {
  * let the user search for a query
  * @name connectSearchBox
  * @kind connector
+ * @propType {string} [defaultRefinement] - Provide a default value for the query
  * @providedPropType {function} refine - a function to change the current query
  * @providedPropType {string} currentRefinement - the current query used
  * @providedPropType {boolean} isSearchStalled - a flag that indicates if InstantSearch has detected that searches are stalled
