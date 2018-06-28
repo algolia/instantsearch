@@ -15,9 +15,7 @@ describe('Redo', () => {
 
   const defaultContext = {
     [STATE_CONTEXT]: {
-      isRefineOnMapMove: true,
       hasMapMoveSinceLastRefine: false,
-      toggleRefineOnMapMove: () => {},
       refineWithInstance: () => {},
     },
     [GOOGLE_MAPS_CONTEXT]: {
@@ -64,65 +62,6 @@ describe('Redo', () => {
 
     expect(wrapper.find('button').prop('disabled')).toBe(false);
     expect(wrapper).toMatchSnapshot();
-  });
-
-  it('expect to disable refine on map move onDidMount', () => {
-    const props = {
-      ...defaultProps,
-    };
-
-    const context = {
-      ...defaultContext,
-      [STATE_CONTEXT]: {
-        ...getStateContext(defaultContext),
-        toggleRefineOnMapMove: jest.fn(),
-      },
-    };
-
-    const wrapper = shallow(<Redo {...props} />, {
-      disableLifecycleMethods: true,
-      context,
-    });
-
-    expect(
-      getStateContext(context).toggleRefineOnMapMove
-    ).toHaveBeenCalledTimes(0);
-
-    wrapper.instance().componentDidMount();
-
-    expect(
-      getStateContext(context).toggleRefineOnMapMove
-    ).toHaveBeenCalledTimes(1);
-  });
-
-  it('expect to only disable refine on map move when value is true onDidMount', () => {
-    const props = {
-      ...defaultProps,
-    };
-
-    const context = {
-      ...defaultContext,
-      [STATE_CONTEXT]: {
-        ...getStateContext(defaultContext),
-        isRefineOnMapMove: false,
-        toggleRefineOnMapMove: jest.fn(),
-      },
-    };
-
-    const wrapper = shallow(<Redo {...props} />, {
-      disableLifecycleMethods: true,
-      context,
-    });
-
-    expect(
-      getStateContext(context).toggleRefineOnMapMove
-    ).toHaveBeenCalledTimes(0);
-
-    wrapper.instance().componentDidMount();
-
-    expect(
-      getStateContext(context).toggleRefineOnMapMove
-    ).toHaveBeenCalledTimes(0);
   });
 
   it('expect to call refineWithInstance on button click', () => {

@@ -28,6 +28,29 @@ describe('GeoSearch', () => {
       .props()
       .children(connectorProps);
 
+  describe('Connector', () => {
+    it('expect to render', () => {
+      const props = {
+        ...defaultProps,
+      };
+
+      const wrapper = shallow(<GeoSearch {...props}>{() => null}</GeoSearch>);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('expect to render with enableRefineOnMapMove', () => {
+      const props = {
+        ...defaultProps,
+        enableRefineOnMapMove: false,
+      };
+
+      const wrapper = shallow(<GeoSearch {...props}>{() => null}</GeoSearch>);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+  });
+
   describe('Provider', () => {
     it('expect to render', () => {
       const props = {

@@ -13,8 +13,6 @@ export class Redo extends Component {
 
   static contextTypes = {
     [STATE_CONTEXT]: PropTypes.shape({
-      isRefineOnMapMove: PropTypes.bool.isRequired,
-      toggleRefineOnMapMove: PropTypes.func.isRequired,
       hasMapMoveSinceLastRefine: PropTypes.bool.isRequired,
       refineWithInstance: PropTypes.func.isRequired,
     }).isRequired,
@@ -29,14 +27,6 @@ export class Redo extends Component {
 
   getGoogleMapsContext() {
     return this.context[GOOGLE_MAPS_CONTEXT];
-  }
-
-  componentDidMount() {
-    const { isRefineOnMapMove, toggleRefineOnMapMove } = this.getStateContext();
-
-    if (isRefineOnMapMove) {
-      toggleRefineOnMapMove();
-    }
   }
 
   render() {

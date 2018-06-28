@@ -12,15 +12,14 @@ class GeoSearch extends Component {
     initialZoom: PropTypes.number,
     initialPosition: LatLngPropType,
     enableRefine: PropTypes.bool,
+    enableRefineOnMapMove: PropTypes.bool,
   };
 
   static defaultProps = {
     initialZoom: 1,
-    initialPosition: {
-      lat: 0,
-      lng: 0,
-    },
+    initialPosition: { lat: 0, lng: 0 },
     enableRefine: true,
+    enableRefineOnMapMove: true,
   };
 
   renderChildrenWithBoundFunction = ({ hits, position, ...rest }) => {
@@ -30,6 +29,7 @@ class GeoSearch extends Component {
       initialZoom,
       initialPosition,
       enableRefine,
+      enableRefineOnMapMove,
       ...mapOptions
     } = this.props;
 
@@ -69,8 +69,13 @@ class GeoSearch extends Component {
   };
 
   render() {
+    const { enableRefineOnMapMove } = this.props;
+
     return (
-      <Connector testID="Connector">
+      <Connector
+        testID="Connector"
+        enableRefineOnMapMove={enableRefineOnMapMove}
+      >
         {this.renderChildrenWithBoundFunction}
       </Connector>
     );

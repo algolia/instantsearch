@@ -11,6 +11,7 @@ describe('Connector', () => {
     position: null,
     currentRefinement: null,
     isRefinedWithMap: false,
+    enableRefineOnMapMove: true,
     refine: () => {},
   };
 
@@ -37,6 +38,24 @@ describe('Connector', () => {
       setMapMoveSinceLastRefine: expect.any(Function),
       refine: expect.any(Function),
     });
+  });
+
+  it('expect to call children with refine on map move disabled', () => {
+    const children = jest.fn(x => x);
+
+    const props = {
+      ...defaultProps,
+      enableRefineOnMapMove: false,
+    };
+
+    shallow(<Connector {...props}>{children}</Connector>);
+
+    expect(children).toHaveBeenCalledTimes(1);
+    expect(children).toHaveBeenCalledWith(
+      expect.objectContaining({
+        isRefineOnMapMove: false,
+      })
+    );
   });
 
   describe('setMapMoveSinceLastRefine', () => {

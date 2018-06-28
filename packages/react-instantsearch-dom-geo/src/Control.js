@@ -9,7 +9,6 @@ const cx = createClassNames('GeoSearch');
 export class Control extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
-    enableRefineOnMapMove: PropTypes.bool,
   };
 
   static contextTypes = {
@@ -24,25 +23,12 @@ export class Control extends Component {
     }).isRequired,
   };
 
-  static defaultProps = {
-    enableRefineOnMapMove: true,
-  };
-
   getStateContext() {
     return this.context[STATE_CONTEXT];
   }
 
   getGoogleMapsContext() {
     return this.context[GOOGLE_MAPS_CONTEXT];
-  }
-
-  componentDidMount() {
-    const { enableRefineOnMapMove } = this.props;
-    const { isRefineOnMapMove, toggleRefineOnMapMove } = this.getStateContext();
-
-    if (!enableRefineOnMapMove && isRefineOnMapMove) {
-      toggleRefineOnMapMove();
-    }
   }
 
   render() {
