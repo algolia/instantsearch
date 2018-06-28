@@ -8,12 +8,10 @@ export default createConnector({
   },
 
   refine(props, searchState, nextValue) {
-    // eslint-disable-next-line no-unused-vars
-    const { boundingBox, ...sliceSearchState } = searchState;
-
     return {
-      ...sliceSearchState,
+      ...searchState,
       aroundLatLng: nextValue,
+      boundingBox: {},
     };
   },
 

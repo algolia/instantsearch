@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import createConnector from '../core/createConnector';
 import {
   getResults,
@@ -68,13 +69,15 @@ const getCurrentRefinement = (props, searchState, context) => {
     props,
     searchState,
     context,
-    getBoundingBoxId()
+    getBoundingBoxId(),
+    {}
   );
 
-  if (!refinement) {
-    return refinement;
+  if (isEmpty(refinement)) {
+    return;
   }
 
+  // eslint-disable-next-line consistent-return
   return {
     northEast: {
       lat: parseFloat(refinement.northEast.lat),
@@ -201,6 +204,7 @@ export default createConnector({
     const items = [];
     const id = getBoundingBoxId();
     const index = getIndex(this.context);
+    const nextRefinement = {};
     const currentRefinement = getCurrentRefinement(
       props,
       searchState,
@@ -210,7 +214,7 @@ export default createConnector({
     if (currentRefinement) {
       items.push({
         label: `${id}: ${currentRefinementToString(currentRefinement)}`,
-        value: nextState => refine(nextState, undefined, this.context),
+        value: nextState => refine(nextState, nextRefinement, this.context),
         currentRefinement,
       });
     }
