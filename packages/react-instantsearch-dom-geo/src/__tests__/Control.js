@@ -10,7 +10,6 @@ Enzyme.configure({ adapter: new Adapter() });
 
 describe('Control', () => {
   const defaultProps = {
-    enableRefineOnMapMove: true,
     translate: x => x,
   };
 
@@ -86,67 +85,6 @@ describe('Control', () => {
     });
 
     expect(wrapper).toMatchSnapshot();
-  });
-
-  it('expect to disable refine on map move onDidMount', () => {
-    const props = {
-      ...defaultProps,
-      enableRefineOnMapMove: false,
-    };
-
-    const context = {
-      ...defaultContext,
-      [STATE_CONTEXT]: {
-        ...getStateContext(defaultContext),
-        toggleRefineOnMapMove: jest.fn(),
-      },
-    };
-
-    const wrapper = shallow(<Control {...props} />, {
-      disableLifecycleMethods: true,
-      context,
-    });
-
-    expect(
-      getStateContext(context).toggleRefineOnMapMove
-    ).toHaveBeenCalledTimes(0);
-
-    wrapper.instance().componentDidMount();
-
-    expect(
-      getStateContext(context).toggleRefineOnMapMove
-    ).toHaveBeenCalledTimes(1);
-  });
-
-  it('expect to only disable refine on map move when previous value is true onDidMount', () => {
-    const props = {
-      ...defaultProps,
-      enableRefineOnMapMove: false,
-    };
-
-    const context = {
-      ...defaultContext,
-      [STATE_CONTEXT]: {
-        ...getStateContext(defaultContext),
-        isRefineOnMapMove: false,
-        toggleRefineOnMapMove: jest.fn(),
-      },
-    };
-
-    const wrapper = shallow(<Control {...props} />, {
-      disableLifecycleMethods: true,
-      context,
-    });
-
-    expect(
-      getStateContext(context).toggleRefineOnMapMove
-    ).toHaveBeenCalledTimes(0);
-
-    wrapper.instance().componentDidMount();
-
-    expect(
-      getStateContext(context).toggleRefineOnMapMove
-    ).toHaveBeenCalledTimes(0);
   });
 
   it('expect to call toggleRefineOnMapMove on input change', () => {

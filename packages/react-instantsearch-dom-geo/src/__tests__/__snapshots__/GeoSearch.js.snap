@@ -1,5 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GeoSearch Connector expect to render 1`] = `
+<AlgoliaGeoSearch(Connector)
+  enableRefineOnMapMove={true}
+  testID="Connector"
+/>
+`;
+
+exports[`GeoSearch Connector expect to render with enableRefineOnMapMove 1`] = `
+<AlgoliaGeoSearch(Connector)
+  enableRefineOnMapMove={false}
+  testID="Connector"
+/>
+`;
+
 exports[`GeoSearch GoogleMaps expect to render 1`] = `
 <GoogleMaps
   google={

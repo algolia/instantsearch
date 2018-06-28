@@ -220,7 +220,7 @@ stories
         <Container>
           <GoogleMapsLoader apiKey={apiKey}>
             {google => (
-              <GeoSearch google={google}>
+              <GeoSearch google={google} enableRefineOnMapMove={false}>
                 {({ hits }) => (
                   <Fragment>
                     <Redo />
@@ -276,10 +276,10 @@ stories
         <Container>
           <GoogleMapsLoader apiKey={apiKey}>
             {google => (
-              <GeoSearch google={google}>
+              <GeoSearch google={google} enableRefineOnMapMove={false}>
                 {({ hits }) => (
                   <Fragment>
-                    <Control enableRefineOnMapMove={false} />
+                    <Control />
 
                     {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
                   </Fragment>

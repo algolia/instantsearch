@@ -9,6 +9,7 @@ export class Connector extends Component {
   static propTypes = {
     hits: PropTypes.arrayOf(PropTypes.object).isRequired,
     isRefinedWithMap: PropTypes.bool.isRequired,
+    enableRefineOnMapMove: PropTypes.bool.isRequired,
     refine: PropTypes.func.isRequired,
     children: PropTypes.func.isRequired,
     position: LatLngPropType,
@@ -16,7 +17,7 @@ export class Connector extends Component {
   };
 
   state = {
-    isRefineOnMapMove: true,
+    isRefineOnMapMove: this.props.enableRefineOnMapMove,
     hasMapMoveSinceLastRefine: false,
   };
 
