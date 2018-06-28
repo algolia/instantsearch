@@ -190,6 +190,15 @@ Using the CLI:
 create-instantsearch-app my-app --template ./my-custom-template
 ```
 
+## Previews
+
+Web templates on CodeSandbox:
+
+- [InstantSearch.js](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js)
+- [React InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch)
+- [Vue InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/vue-instantsearch)
+- [Angular InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/angular-instantsearch)
+
 ## License
 
 Create InstantSearch App is [MIT licensed](LICENSE).
