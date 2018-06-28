@@ -616,7 +616,7 @@ describe('connectGeoSearch', () => {
     });
 
     describe('getMetadata', () => {
-      it('expect to return the meta when boudingBox is provided', () => {
+      it('expect to return the meta when boundingBox is provided', () => {
         const instance = createSingleIndexInstance();
         const props = {};
         const searchState = {
@@ -658,7 +658,7 @@ describe('connectGeoSearch', () => {
         expect(actual).toEqual(expectation);
       });
 
-      it('expect to return an empty meta when boudingBox is omit', () => {
+      it('expect to return an empty meta when boundingBox is omit', () => {
         const instance = createSingleIndexInstance();
         const props = {};
         const searchState = {};
@@ -700,6 +700,7 @@ describe('connectGeoSearch', () => {
 
         const expectation = {
           query: 'studio',
+          boundingBox: {},
           page: 1,
         };
 
@@ -1337,7 +1338,7 @@ describe('connectGeoSearch', () => {
     });
 
     describe('getMetadata', () => {
-      it('expect to return the meta when boudingBox is provided', () => {
+      it('expect to return the meta when boundingBox is provided', () => {
         const instance = createMultiIndexInstance();
         const props = {};
         const searchState = createMultiIndexSearchState({
@@ -1379,7 +1380,7 @@ describe('connectGeoSearch', () => {
         expect(actual).toEqual(expectation);
       });
 
-      it('expect to return an empty meta when boudingBox is omit', () => {
+      it('expect to return an empty meta when boundingBox is omit', () => {
         const instance = createMultiIndexInstance();
         const props = {};
         const searchState = createMultiIndexSearchState();
@@ -1424,6 +1425,7 @@ describe('connectGeoSearch', () => {
           indices: {
             second: {
               query: 'studio',
+              boundingBox: {},
               page: 1,
             },
           },
