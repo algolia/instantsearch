@@ -56,7 +56,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * function renderFn(ClearRefinementsRenderingOptions, isFirstRendering) {
  *   var containerNode = ClearRefinementsRenderingOptions.widgetParams.containerNode;
  *   if (isFirstRendering) {
- *     var markup = $('<button id="custom-clear-all">Clear All</button>');
+ *     var markup = $('<button id="custom-clear-refinements">Clear All</button>');
  *     containerNode.append(markup);
  *
  *     markup.on('click', function(event) {
@@ -65,7 +65,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *     })
  *   }
  *
- *   var clearRefinementsCTA = containerNode.find('#custom-clear-all');
+ *   var clearRefinementsCTA = containerNode.find('#custom-clear-refinements');
  *   clearRefinementsCTA.attr('disabled', !ClearRefinementsRenderingOptions.hasRefinements)
  * };
  *
@@ -75,7 +75,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * // mount widget on the page
  * search.addWidget(
  *   customClearRefinementsWidget({
- *     containerNode: $('#custom-clear-all-container'),
+ *     containerNode: $('#custom-clear-refinements-container'),
  *   })
  * );
  */

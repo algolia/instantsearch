@@ -3,10 +3,7 @@ import React, { Component } from 'preact-compat';
 import Template from '../Template.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
-import autoHideContainer from '../../decorators/autoHideContainer.js';
-import headerFooter from '../../decorators/headerFooter.js';
-
-export class RawClearRefinements extends Component {
+export default class RawClearRefinements extends Component {
   componentWillMount() {
     this.handleClick = this.handleClick.bind(this);
   }
@@ -32,22 +29,25 @@ export class RawClearRefinements extends Component {
     const { hasRefinements, cssClasses } = this.props;
     const data = { hasRefinements };
 
+    const className =
+      !hasRefinements && cssClasses.disabledButton
+        ? `${cssClasses.button} ${cssClasses.disabledButton}`
+        : cssClasses.button;
+
     return (
       <div className={cssClasses.root}>
-        <button
-          className={
-            hasRefinements ? cssClasses.button : cssClasses.disabledButton
-          }
-          href={this.props.url}
-          onClick={this.handleClick}
-          disabled={!hasRefinements}
-        >
-          <Template
-            data={data}
-            templateKey="button"
-            {...this.props.templateProps}
-          />
-        </button>
+        <Template
+          rootTagName="button"
+          rootProps={{
+            className,
+            href: this.props.url,
+            onClick: this.handleClick,
+            disabled: !hasRefinements,
+          }}
+          data={data}
+          templateKey="button"
+          {...this.props.templateProps}
+        />
       </div>
     );
   }
@@ -58,10 +58,9 @@ RawClearRefinements.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
     button: PropTypes.string,
+    disabledButton: PropTypes.string,
   }),
   hasRefinements: PropTypes.bool.isRequired,
   templateProps: PropTypes.object.isRequired,
   url: PropTypes.string.isRequired,
 };
-
-export default autoHideContainer(headerFooter(RawClearRefinements));

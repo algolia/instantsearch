@@ -1,18 +1,19 @@
 import React from 'react';
 import sinon from 'sinon';
-import { RawClearRefinements as ClearRefinements } from '../ClearRefinements';
+import ClearRefinements from '../ClearRefinements';
 import renderer from 'react-test-renderer';
 
 describe('ClearRefinements', () => {
   const defaultProps = {
     refine: () => {},
     cssClasses: {
-      link: 'custom-link',
+      button: 'custom-button',
+      root: 'custom-root',
     },
-    hasRefinements: false,
+    hasRefinements: true,
     templateProps: {
       templates: {
-        link: '',
+        button: '',
       },
     },
     url: '#all-cleared!',
@@ -22,6 +23,28 @@ describe('ClearRefinements', () => {
     const tree = renderer
       .create(<ClearRefinements {...defaultProps} />)
       .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('should render a disabled <ClearRefinements />', () => {
+    const props = {
+      ...defaultProps,
+      hasRefinements: false,
+    };
+    const tree = renderer.create(<ClearRefinements {...props} />).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('should render a disabled <ClearRefinements /> with a custom css class', () => {
+    const props = {
+      ...defaultProps,
+      hasRefinements: false,
+      cssClasses: {
+        ...defaultProps.cssClasses,
+        disabledButton: 'custom-disabled-button',
+      },
+    };
+    const tree = renderer.create(<ClearRefinements {...props} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 

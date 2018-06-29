@@ -78,33 +78,51 @@ The structure is now embeded in a list and each item wraps a separator and the l
 
 ### Name update
 
-The `clearAll` widget has been renamed into `clearRefinements`.
+The `clearAll` widget has been renamed into `clearRefinements`. In order to initialize it, you need to update name in your code:
 
-### Options
+```js
+search.addWidget(
+  instantsearch.widgets.clearRefinements({
+    /* options here */
+  })
+);
+```
 
 ### Markup
 
-Previously:
-
 ```html
-<div class="ais-root ais-clear-all">
-  <div class="ais-body ais-clear-all--body">
-    <a class="ais-clear-all--link" href="">
-      <div>Clear all</div>
-    </a>
-  </div>
+<div class="ais-ClearRefinements">
+  <button class="ais-ClearRefinements-button">
+    Clear refinements
+  </button>
 </div>
 ```
 
-Now:
+### Options
 
-```html
-<div>
-  <button></button>
-</div>
-```
+Options that were renamed (same semantic):
+
+* `excludeAttributes` → `excludedAttributes`
+
+Values for `classNames` have been updated to reflect the markup changes:
+
+* root
+* button
+* disabledButton
+
+Note that `button` and `disabledButton` are independant. If the button enters the disable state, then both classes will be applied.
+
+CSS classes and templates for autohideContainer, header, footer and body have been moved to an external widget wrapper: panel.
 
 ### CSS
+
+| V2                    | V3 equivalent                                 |
+| --------------------- | --------------------------------------------- |
+| ais-clear-all--root   | ais-ClearRefinements                          |
+| ais-clear-all--link   | ais-ClearRefinements-button                   |
+| ais-clear-all--body   | _removed_ handled by the panel widget wrapper |
+| ais-clear-all--header | _removed_ handled by the panel widget wrapper |
+| ais-clear-all--footer | _removed_ handled by the panel widget wrapper |
 
 ## Connector - connectClearAll
 

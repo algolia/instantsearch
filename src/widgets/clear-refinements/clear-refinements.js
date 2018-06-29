@@ -10,16 +10,9 @@ import connectClearRefinements from '../../connectors/clear-refinements/connectC
 
 import defaultTemplates from './defaultTemplates.js';
 
-const suit = component('ais-clear-all');
+const suit = component('ClearRefinements');
 
-const renderer = ({
-  containerNode,
-  cssClasses,
-  collapsible,
-  autoHideContainer,
-  renderState,
-  templates,
-}) => (
+const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   { refine, hasRefinements, createURL, instantSearchInstance },
   isFirstRendering
 ) => {
@@ -32,15 +25,11 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
-
   render(
     <ClearRefinementsWithHOCs
       refine={refine}
-      collapsible={collapsible}
       cssClasses={cssClasses}
       hasRefinements={hasRefinements}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
       url={createURL()}
     />,
@@ -51,38 +40,27 @@ const renderer = ({
 const usage = `Usage:
 clearRefinements({
   container,
-  [ cssClasses.{root,header,body,footer,button}={} ],
-  [ templates.{header,button,footer}={button: 'Clear all'} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
+  [ cssClasses.{button}={} ],
+  [ templates.{button}={button: 'Clear all'} ],
   [ excludedAttributes=[] ]
 })`;
 /**
- * @typedef {Object} ClearAllCSSClasses
+ * @typedef {Object} ClearRefinementsCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
  * @property {string|string[]} [button] CSS class to add to the button element.
  */
 
 /**
- * @typedef {Object} ClearAllTemplates
- * @property {string|function(object):string} [header] Header template.
+ * @typedef {Object} ClearRefinementsTemplates
  * @property {string|function(object):string} [button] button content template.
- * @property {string|function(object):string} [footer] Footer template.
  */
 
 /**
- * @typedef {Object} ClearAllWidgetOptions
+ * @typedef {Object} ClearRefinementsWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} [excludedAttributes] List of attributes names to exclude from clear actions.
- * @property {ClearAllTemplates} [templates] Templates to use for the widget.
- * @property {boolean} [autoHideContainer=true] Hide the container when there are no refinements to clear.
- * @property {ClearAllCSSClasses} [cssClasses] CSS classes to be added.
- * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then.
- * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
- * property is `true`, then the widget is hidden during the first rendering.
+ * @property {ClearRefinementsTemplates} [templates] Templates to use for the widget.
+ * @property {ClearRefinementsCSSClasses} [cssClasses] CSS classes to be added.
  * @property {boolean} [clearsQuery = false] If true, the widget will also clear the query.
  */
 
@@ -94,7 +72,7 @@ clearRefinements({
  * @type {WidgetFactory}
  * @devNovel clearRefinements
  * @category clear-filter
- * @param {ClearAllWidgetOptions} $0 The clearRefinements widget options.
+ * @param {ClearRefinementsWidgetOptions} $0 The clearRefinements widget options.
  * @returns {Widget} A new instance of the clearRefinements widget.
  * @example
  * search.addWidget(
@@ -103,7 +81,6 @@ clearRefinements({
  *     templates: {
  *       content: 'Reset everything'
  *     },
- *     autoHideContainer: false,
  *     clearsQuery: true,
  *   })
  * );
@@ -112,8 +89,6 @@ export default function clearRefinements({
   container,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
-  collapsible = false,
-  autoHideContainer = true,
   excludedAttributes = [],
   clearsQuery = false,
 }) {
@@ -127,17 +102,14 @@ export default function clearRefinements({
     root: cx(suit(), userCssClasses.root),
     button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
     disabledButton: cx(
-      suit({ descendantName: 'button' }),
       suit({ descendantName: 'button', modifierName: 'disabled' }),
-      userCssClasses.button
+      userCssClasses.disabledButton
     ),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    collapsible,
-    autoHideContainer,
     renderState: {},
     templates,
   });
