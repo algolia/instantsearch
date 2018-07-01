@@ -49,6 +49,26 @@ describe('GeoSearch', () => {
 
       expect(wrapper).toMatchSnapshot();
     });
+
+    it('expect to render with defaultRefinement', () => {
+      const props = {
+        ...defaultProps,
+        defaultRefinement: {
+          northEast: {
+            lat: 10,
+            lng: 12,
+          },
+          southWest: {
+            lat: 12,
+            lng: 14,
+          },
+        },
+      };
+
+      const wrapper = shallow(<GeoSearch {...props}>{() => null}</GeoSearch>);
+
+      expect(wrapper).toMatchSnapshot();
+    });
   });
 
   describe('Provider', () => {

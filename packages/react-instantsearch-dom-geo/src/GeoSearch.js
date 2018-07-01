@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { LatLngPropType } from './propTypes';
+import { LatLngPropType, BoundingBoxPropType } from './propTypes';
 import Connector from './Connector';
 import Provider from './Provider';
 import GoogleMaps from './GoogleMaps';
@@ -13,6 +13,7 @@ class GeoSearch extends Component {
     initialPosition: LatLngPropType,
     enableRefine: PropTypes.bool,
     enableRefineOnMapMove: PropTypes.bool,
+    defaultRefinement: BoundingBoxPropType,
   };
 
   static defaultProps = {
@@ -20,6 +21,7 @@ class GeoSearch extends Component {
     initialPosition: { lat: 0, lng: 0 },
     enableRefine: true,
     enableRefineOnMapMove: true,
+    defaultRefinement: null,
   };
 
   renderChildrenWithBoundFunction = ({ hits, position, ...rest }) => {
@@ -30,6 +32,7 @@ class GeoSearch extends Component {
       initialPosition,
       enableRefine,
       enableRefineOnMapMove,
+      defaultRefinement,
       ...mapOptions
     } = this.props;
 
@@ -69,12 +72,13 @@ class GeoSearch extends Component {
   };
 
   render() {
-    const { enableRefineOnMapMove } = this.props;
+    const { enableRefineOnMapMove, defaultRefinement } = this.props;
 
     return (
       <Connector
         testID="Connector"
         enableRefineOnMapMove={enableRefineOnMapMove}
+        defaultRefinement={defaultRefinement}
       >
         {this.renderChildrenWithBoundFunction}
       </Connector>
