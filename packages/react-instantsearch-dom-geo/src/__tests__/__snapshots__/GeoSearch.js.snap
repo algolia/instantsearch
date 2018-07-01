@@ -2,6 +2,26 @@
 
 exports[`GeoSearch Connector expect to render 1`] = `
 <AlgoliaGeoSearch(Connector)
+  defaultRefinement={null}
+  enableRefineOnMapMove={true}
+  testID="Connector"
+/>
+`;
+
+exports[`GeoSearch Connector expect to render with defaultRefinement 1`] = `
+<AlgoliaGeoSearch(Connector)
+  defaultRefinement={
+    Object {
+      "northEast": Object {
+        "lat": 10,
+        "lng": 12,
+      },
+      "southWest": Object {
+        "lat": 12,
+        "lng": 14,
+      },
+    }
+  }
   enableRefineOnMapMove={true}
   testID="Connector"
 />
@@ -9,6 +29,7 @@ exports[`GeoSearch Connector expect to render 1`] = `
 
 exports[`GeoSearch Connector expect to render with enableRefineOnMapMove 1`] = `
 <AlgoliaGeoSearch(Connector)
+  defaultRefinement={null}
   enableRefineOnMapMove={false}
   testID="Connector"
 />

@@ -91,8 +91,10 @@ const getCurrentRefinement = (props, searchState, context) => {
 };
 
 const getCurrentPosition = (props, searchState, context) => {
+  const { defaultRefinement, ...propsWithoutDefaultRefinement } = props;
+
   const aroundLatLng = getCurrentRefinementValue(
-    props,
+    propsWithoutDefaultRefinement,
     searchState,
     context,
     getAroundLatLngId()
@@ -101,7 +103,7 @@ const getCurrentPosition = (props, searchState, context) => {
   if (!aroundLatLng) {
     // Fallback on `configure.aroundLatLng`
     const configureAroundLatLng = getCurrentRefinementValue(
-      props,
+      propsWithoutDefaultRefinement,
       searchState,
       context,
       getConfigureAroundLatLngId()

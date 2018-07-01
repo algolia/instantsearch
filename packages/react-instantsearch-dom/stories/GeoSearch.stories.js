@@ -62,6 +62,44 @@ stories
     }
   )
   .addWithJSX(
+    'with default refinement',
+    () => (
+      <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
+        <Configure aroundLatLngViaIP hitsPerPage={20} />
+
+        <Container>
+          <GoogleMapsLoader apiKey={apiKey}>
+            {google => (
+              <GeoSearch
+                google={google}
+                defaultRefinement={{
+                  northEast: {
+                    lat: 48.871495114865986,
+                    lng: 2.398494434852978,
+                  },
+                  southWest: {
+                    lat: 48.8432595812564,
+                    lng: 2.326310825844189,
+                  },
+                }}
+              >
+                {({ hits }) => (
+                  <Fragment>
+                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                  </Fragment>
+                )}
+              </GeoSearch>
+            )}
+          </GoogleMapsLoader>
+        </Container>
+      </WrapWithHits>
+    ),
+    {
+      displayName,
+      filterProps,
+    }
+  )
+  .addWithJSX(
     'with refine disabled',
     () => (
       <WrapWithHits indexName="airbnb" linkedStoryGroup="GeoSearch">
