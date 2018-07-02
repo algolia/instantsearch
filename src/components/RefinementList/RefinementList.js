@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 import cx from 'classnames';
-import { isSpecialClick } from '../../lib/utils.js';
+import { isSpecialClick } from '../../lib/utils';
 
-import Template from '../Template.js';
-import RefinementListItem from './RefinementListItem.js';
+import Template from '../Template';
+import RefinementListItem from './RefinementListItem';
 import isEqual from 'lodash/isEqual';
 
 import SearchBox from '../SearchBox';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
+import headerFooterHOC from '../../decorators/headerFooter';
 
 export class RawRefinementList extends Component {
   constructor(props) {

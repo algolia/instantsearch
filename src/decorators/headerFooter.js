@@ -7,7 +7,7 @@ import React, { Component } from 'preact-compat';
 import cx from 'classnames';
 import getKey from 'lodash/get';
 
-import Template from '../components/Template.js';
+import Template from '../components/Template';
 
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends Component {

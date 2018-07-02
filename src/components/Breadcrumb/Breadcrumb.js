@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'preact-compat';
 import PropTypes from 'prop-types';
-import Template from '../Template.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import Template from '../Template';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
 
 const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
   item,

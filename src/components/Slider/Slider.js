@@ -9,10 +9,10 @@ import React, { Component } from 'preact-compat';
 import Rheostat from 'preact-rheostat';
 import cx from 'classnames';
 
-import Pit from './Pit.js';
+import Pit from './Pit';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
+import headerFooterHOC from '../../decorators/headerFooter';
 
 export class RawSlider extends Component {
   static propTypes = {

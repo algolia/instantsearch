@@ -1,9 +1,9 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import Selector from '../../components/Selector.js';
-import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import Selector from '../../components/Selector';
+import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector';
+import { bemHelper, getContainerNode } from '../../lib/utils';
 
 const bem = bemHelper('ais-sort-by-selector');
 

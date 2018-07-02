@@ -1,7 +1,7 @@
 /* eslint-disable import/default */
 
 import { action } from 'dev-novel';
-import instantsearch from '../../../index.js';
+import instantsearch from '../../../index';
 import item from './item.html';
 import empty from './no-results.html';
 

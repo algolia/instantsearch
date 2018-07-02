@@ -1,5 +1,5 @@
 import expect from 'expect';
-import { searchBox, prepareScreenshot } from './utils.js';
+import { searchBox, prepareScreenshot } from './utils';
 
 describe('searchBox', () => {
   describe('when there is no query', () => {

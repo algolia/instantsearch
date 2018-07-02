@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import Template from '../Template.js';
-import { isSpecialClick } from '../../lib/utils.js';
+import Template from '../Template';
+import { isSpecialClick } from '../../lib/utils';
 
 export default class RawClearRefinements extends Component {
   componentWillMount() {

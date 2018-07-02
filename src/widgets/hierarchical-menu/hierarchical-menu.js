@@ -2,14 +2,14 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import defaultTemplates from './defaultTemplates.js';
+import RefinementList from '../../components/RefinementList/RefinementList';
+import defaultTemplates from './defaultTemplates';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-hierarchical-menu');
 

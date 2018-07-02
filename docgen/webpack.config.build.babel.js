@@ -1,7 +1,7 @@
 // this is the webpack config when running `yarn run docs:build`
 
 import webpack from 'webpack';
-import webpackConfig from './webpack.config.babel.js';
+import webpackConfig from './webpack.config.babel';
 
 export default {
   ...webpackConfig,

@@ -1,7 +1,7 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import clearRefinements from '../clear-refinements.js';
-import defaultTemplates from '../defaultTemplates.js';
+import clearRefinements from '../clear-refinements';
+import defaultTemplates from '../defaultTemplates';
 
 describe('clearRefinements()', () => {
   let ReactDOM;

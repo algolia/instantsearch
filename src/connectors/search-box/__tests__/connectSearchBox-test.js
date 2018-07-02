@@ -3,7 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectSearchBox from '../connectSearchBox.js';
+import connectSearchBox from '../connectSearchBox';
 
 describe('connectSearchBox', () => {
   it('Renders during init and render', () => {

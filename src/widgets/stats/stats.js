@@ -1,15 +1,15 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import Stats from '../../components/Stats/Stats.js';
-import connectStats from '../../connectors/stats/connectStats.js';
-import defaultTemplates from './defaultTemplates.js';
+import Stats from '../../components/Stats/Stats';
+import connectStats from '../../connectors/stats/connectStats';
+import defaultTemplates from './defaultTemplates';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-stats');
 

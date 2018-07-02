@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 
-import Template from '../Template.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import Template from '../Template';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
+import headerFooterHOC from '../../decorators/headerFooter';
 
 export class RawStats extends Component {
   shouldComponentUpdate(nextProps) {

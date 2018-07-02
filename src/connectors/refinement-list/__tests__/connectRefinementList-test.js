@@ -2,9 +2,9 @@ import jsHelper, {
   SearchResults,
   SearchParameters,
 } from 'algoliasearch-helper';
-import { tagConfig } from '../../../lib/escape-highlight.js';
+import { tagConfig } from '../../../lib/escape-highlight';
 
-import connectRefinementList from '../connectRefinementList.js';
+import connectRefinementList from '../connectRefinementList';
 
 describe('connectRefinementList', () => {
   const createWidgetFactory = () => {

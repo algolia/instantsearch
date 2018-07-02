@@ -1,6 +1,6 @@
 import initAnalyticsStories from './stories/analytics.stories';
-import initBreadcrumbStories from './stories/breadcrumb.stories.js';
-import initClearRefinementsStories from './stories/clear-refinements.stories.js';
+import initBreadcrumbStories from './stories/breadcrumb.stories';
+import initClearRefinementsStories from './stories/clear-refinements.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initGeoSearch from './stories/geo-search.stories';
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
@@ -13,7 +13,7 @@ import initNumericRefinementListStories from './stories/numeric-refinement-list.
 import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
-import initRangeInputStories from './stories/range-input.stories.js';
+import initRangeInputStories from './stories/range-input.stories';
 import initRangeSliderStories from './stories/range-slider.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initReloadStories from './stories/reload.stories';

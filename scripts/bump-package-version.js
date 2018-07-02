@@ -6,7 +6,7 @@ import path from 'path';
 import mversion from 'mversion';
 
 import semver from 'semver';
-import currentVersion from '../src/lib/version.js';
+import currentVersion from '../src/lib/version';
 
 if (!process.env.VERSION) {
   throw new Error(

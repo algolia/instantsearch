@@ -1,9 +1,9 @@
-import dropdowns from './dropdowns.js';
-import move from './mover.js';
-import activateClipboard from './activateClipboard.js';
-import bindRunExamples from './bindRunExamples.js';
+import dropdowns from './dropdowns';
+import move from './mover';
+import activateClipboard from './activateClipboard';
+import bindRunExamples from './bindRunExamples';
 
-import {fixSidebar, followSidebarNavigation} from './fix-sidebar.js';
+import {fixSidebar, followSidebarNavigation} from './fix-sidebar';
 
 import '../../../src/css/instantsearch.scss';
 import '../../../src/css/instantsearch-theme-algolia.scss';

@@ -2,28 +2,28 @@ import headings from 'metalsmith-headings';
 import layouts from 'metalsmith-layouts';
 import msWebpack from 'ms-webpack';
 import navigation from 'metalsmith-navigation';
-import nav from './plugins/navigation.js';
-import searchConfig from './plugins/searchConfig.js';
+import nav from './plugins/navigation';
+import searchConfig from './plugins/searchConfig';
 import sass from 'metalsmith-sass';
 import inPlace from 'metalsmith-in-place';
 import copy from 'metalsmith-copy';
 
-import assets from './plugins/assets.js';
-import helpers from './plugins/helpers.js';
-import ignore from './plugins/ignore.js';
-import markdown from './plugins/markdown.js';
-import onlyChanged from './plugins/onlyChanged.js';
-import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
-import autoprefixer from './plugins/autoprefixer.js';
-import documentationjs from './plugins/documentationjs-data.js';
+import assets from './plugins/assets';
+import helpers from './plugins/helpers';
+import ignore from './plugins/ignore';
+import markdown from './plugins/markdown';
+import onlyChanged from './plugins/onlyChanged';
+import webpackEntryMetadata from './plugins/webpackEntryMetadata';
+import autoprefixer from './plugins/autoprefixer';
+import documentationjs from './plugins/documentationjs-data';
 
 // performance and debug info for metalsmith, when needed see usage below
-// import {start as perfStart, stop as perfStop} from './plugins/perf.js';
+// import {start as perfStart, stop as perfStop} from './plugins/perf';
 
-import webpackStartConfig from './webpack.config.start.babel.js';
+import webpackStartConfig from './webpack.config.start.babel';
 import webpackBuildConfig from './webpack.config.build.babel';
 
-import {rootPath} from './path.js';
+import {rootPath} from './path';
 
 const common = [
   helpers,
