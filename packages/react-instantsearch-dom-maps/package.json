@@ -1,6 +1,5 @@
 {
   "name": "react-instantsearch-dom-maps",
-  "private": true,
   "version": "5.2.0-beta.2",
   "description": "⚡ Lightning-fast search for React DOM & Google Maps, by Algolia",
   "main": "dist/cjs/index.js",
