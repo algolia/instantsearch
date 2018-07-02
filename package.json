@@ -126,7 +126,7 @@
     },
     {
       "path": "packages/react-instantsearch-dom-geo/dist/umd/ReactInstantSearchDOMMaps.min.js",
-      "maxSize": "10 kB"
+      "maxSize": "10.5 kB"
     }
   ]
 }

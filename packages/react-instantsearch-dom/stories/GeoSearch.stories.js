@@ -108,7 +108,12 @@ stories
         <Container>
           <GoogleMapsLoader apiKey={apiKey}>
             {google => (
-              <GeoSearch google={google} enableRefine={false}>
+              <GeoSearch
+                google={google}
+                enableRefine={false}
+                zoomControl={false}
+                gestureHandling="none"
+              >
                 {({ hits }) => (
                   <Fragment>
                     {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
