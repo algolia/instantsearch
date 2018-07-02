@@ -1,5 +1,4 @@
 import React from 'react';
-import sinon from 'sinon';
 import ClearRefinements from '../ClearRefinements';
 import renderer from 'react-test-renderer';
 
@@ -50,19 +49,19 @@ describe('ClearRefinements', () => {
 
   it('should handle clicks (and special clicks)', () => {
     const props = {
-      refine: sinon.spy(),
+      refine: jest.fn(),
     };
-    const preventDefault = sinon.spy();
+    const preventDefault = jest.fn();
     const component = new ClearRefinements(props);
     ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach(e => {
       const event = { preventDefault };
       event[e] = true;
       component.handleClick(event);
-      expect(props.refine.called).toBe(false, 'clearAll never called');
-      expect(preventDefault.called).toBe(false, 'preventDefault never called');
+      expect(props.refine).not.toHaveBeenCalled();
+      expect(preventDefault).not.toHaveBeenCalled();
     });
     component.handleClick({ preventDefault });
-    expect(props.refine.calledOnce).toBe(true, 'clearAll called once');
-    expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
+    expect(props.refine).toHaveBeenCalledTimes(1);
+    expect(preventDefault).toHaveBeenCalledTimes(1);
   });
 });
