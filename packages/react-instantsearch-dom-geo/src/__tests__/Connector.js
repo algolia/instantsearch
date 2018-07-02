@@ -58,6 +58,97 @@ describe('Connector', () => {
     );
   });
 
+  describe('getDerivedStateFromProps', () => {
+    it('expect reset hasMapMoveSinceLastRefine when position change', () => {
+      const nextProps = {
+        ...defaultProps,
+        position: { lat: 12, lng: 14 },
+        currentRefinement: null,
+      };
+
+      const state = {
+        hasMapMoveSinceLastRefine: true,
+        previousPosition: { lat: 10, lng: 12 },
+        previousCurrentRefinement: null,
+      };
+
+      const actual = Connector.getDerivedStateFromProps(nextProps, state);
+
+      const expectation = {
+        hasMapMoveSinceLastRefine: false,
+        previousPosition: { lat: 12, lng: 14 },
+        previousCurrentRefinement: null,
+      };
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect reset hasMapMoveSinceLastRefine when currentRefinement change', () => {
+      const nextProps = {
+        ...defaultProps,
+        position: null,
+        currentRefinement: {
+          northEast: { lat: 12, lng: 14 },
+          southWest: { lat: 14, lng: 16 },
+        },
+      };
+
+      const state = {
+        hasMapMoveSinceLastRefine: true,
+        previousPosition: null,
+        previousCurrentRefinement: {
+          northEast: { lat: 10, lng: 12 },
+          southWest: { lat: 12, lng: 14 },
+        },
+      };
+
+      const actual = Connector.getDerivedStateFromProps(nextProps, state);
+
+      const expectation = {
+        hasMapMoveSinceLastRefine: false,
+        previousPosition: null,
+        previousCurrentRefinement: {
+          northEast: { lat: 12, lng: 14 },
+          southWest: { lat: 14, lng: 16 },
+        },
+      };
+
+      expect(actual).toEqual(expectation);
+    });
+
+    it('expect to not reset hasMapMoveSinceLastRefine when nothing change', () => {
+      const nextProps = {
+        ...defaultProps,
+        position: { lat: 10, lng: 12 },
+        currentRefinement: {
+          northEast: { lat: 10, lng: 12 },
+          southWest: { lat: 12, lng: 14 },
+        },
+      };
+
+      const state = {
+        hasMapMoveSinceLastRefine: true,
+        previousPosition: { lat: 10, lng: 12 },
+        previousCurrentRefinement: {
+          northEast: { lat: 10, lng: 12 },
+          southWest: { lat: 12, lng: 14 },
+        },
+      };
+
+      const actual = Connector.getDerivedStateFromProps(nextProps, state);
+
+      const expectation = {
+        previousPosition: { lat: 10, lng: 12 },
+        previousCurrentRefinement: {
+          northEast: { lat: 10, lng: 12 },
+          southWest: { lat: 12, lng: 14 },
+        },
+      };
+
+      expect(actual).toEqual(expectation);
+    });
+  });
+
   describe('setMapMoveSinceLastRefine', () => {
     it('expect to update the state with the given value', () => {
       const children = jest.fn(x => x);
