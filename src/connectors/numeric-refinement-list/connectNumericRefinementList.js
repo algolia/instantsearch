@@ -1,4 +1,3 @@
-import includes from 'lodash/includes';
 import _isFinite from 'lodash/isFinite';
 
 import { checkRendering } from '../../lib/utils.js';
@@ -358,7 +357,6 @@ function refine(state, attributeName, options, facetValue) {
 
 function hasNumericRefinement(currentRefinements, operator, value) {
   const hasOperatorRefinements = currentRefinements[operator] !== undefined;
-  const includesValue = includes(currentRefinements[operator], value);
 
-  return hasOperatorRefinements && includesValue;
+  return hasOperatorRefinements && currentRefinements[operator].includes(value);
 }
