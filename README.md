@@ -117,7 +117,7 @@ Start by [adding widgets](https://community.algolia.com/instantsearch.js/v2/widg
 
 ## Browser support
 
-We support the last **two versions of major browsers** (Chrome, Edge, Firefox, Safari).
+We support the **last two versions of major browsers** (Chrome, Edge, Firefox, Safari).
 
 To support [IE11](https://en.wikipedia.org/wiki/Internet_Explorer_11), we recommend loading [polyfill.io](https://polyfill.io) with the following URL `https://cdn.polyfill.io/v2/polyfill.min.js?features=default,Array.prototype.includes`
 
