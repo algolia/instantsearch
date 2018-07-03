@@ -95,8 +95,6 @@ search.addWidget(
   <button class="ais-ClearRefinements-button">
     Clear refinements
   </button>
-</div>
-```
 
 ### Options
 
@@ -130,7 +128,32 @@ CSS classes and templates for autohideContainer, header, footer and body have be
 
 The connector `connectClearAll` has been renamed into `connectClearRefinements`.
 
+## Widget - Stats
+
+### Markup
+
+The markup has been updated:
+
+```html
+<div class="ais-Stats">
+  <span class="ais-Stats-text">20,337 results found in 1ms.</span>
+</div>
+```
+
 ### Options
+The values for `cssClasses` have been updated to reflect the new markup:
+
+* `root`
+* `text`
+
+The widget is not able to autohide anymore. Use the panel wrapper instead.
+
+### CSS classe names
+
+| V2              | V3 equivalent  |
+| --------------- | -------------- |
+| ais-stats--body | ais-Stats-text |
+| ais-stats       | ais-Stats      |
 
 <!-- Template -->
 

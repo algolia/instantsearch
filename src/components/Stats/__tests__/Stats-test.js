@@ -1,18 +1,23 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { RawStats as Stats } from '../Stats';
+import Stats from '../Stats';
 
 describe('Stats', () => {
   it('should render <Template data= />', () => {
-    const out = shallow(<Stats {...getProps()} templateProps={{}} />);
+    const cssClasses = {
+      root: 'custom-root',
+      text: 'custom-text',
+    };
+    const out = shallow(
+      <Stats {...getProps()} cssClasses={cssClasses} templateProps={{}} />
+    );
 
     const defaultProps = {
-      cssClasses: {},
       hasManyResults: true,
       hasNoResults: false,
       hasOneResult: false,
     };
-    expect(out.props().data).toMatchObject(defaultProps);
+    expect(out.props().children.props.data).toMatchObject(defaultProps);
     expect(out).toMatchSnapshot();
   });
 

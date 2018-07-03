@@ -2,10 +2,8 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 
 import Template from '../Template';
-import autoHideContainerHOC from '../../decorators/autoHideContainer';
-import headerFooterHOC from '../../decorators/headerFooter';
 
-export class RawStats extends Component {
+export default class Stats extends Component {
   shouldComponentUpdate(nextProps) {
     return (
       this.props.nbHits !== nextProps.nbHits ||
@@ -14,6 +12,7 @@ export class RawStats extends Component {
   }
 
   render() {
+    const { cssClasses } = this.props;
     const data = {
       hasManyResults: this.props.nbHits > 1,
       hasNoResults: this.props.nbHits === 0,
@@ -24,18 +23,28 @@ export class RawStats extends Component {
       page: this.props.page,
       processingTimeMS: this.props.processingTimeMS,
       query: this.props.query,
-      cssClasses: this.props.cssClasses,
     };
 
     return (
-      <Template data={data} templateKey="body" {...this.props.templateProps} />
+      <div className={cssClasses.root}>
+        <Template
+          data={data}
+          templateKey="text"
+          rootProps={{
+            className: cssClasses.text,
+          }}
+          rootTagName="span"
+          {...this.props.templateProps}
+        />
+      </div>
     );
   }
 }
 
-RawStats.propTypes = {
+Stats.propTypes = {
   cssClasses: PropTypes.shape({
-    time: PropTypes.string,
+    root: PropTypes.string,
+    text: PropTypes.string,
   }),
   hitsPerPage: PropTypes.number,
   nbHits: PropTypes.number,
@@ -45,5 +54,3 @@ RawStats.propTypes = {
   query: PropTypes.string,
   templateProps: PropTypes.object.isRequired,
 };
-
-export default autoHideContainerHOC(headerFooterHOC(RawStats));
