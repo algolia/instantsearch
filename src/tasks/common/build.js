@@ -19,6 +19,7 @@ module.exports = function build(config) {
           [/\.js$/, '.js.hbs'],
           [/\.ts$/, '.ts.hbs'],
           [/\.vue$/, '.vue.hbs'],
+          [/\.swift$/, '.swift.hbs'],
           [/\.md$/, '.md.hbs'],
           [/\.json$/, '.json.hbs'],
           [/\.webmanifest$/, '.webmanifest.hbs'],

@@ -20,11 +20,10 @@ module.exports = async function getConfiguration({
   }
 
   const templatePath = getTemplatePath(config.template);
+  const templateConfig = getAppTemplateConfig(templatePath);
   let { libraryVersion } = config;
 
-  if (!libraryVersion) {
-    const templateConfig = getAppTemplateConfig(templatePath);
-
+  if (templateConfig.libraryName && !libraryVersion) {
     libraryVersion = await fetchLibraryVersions(
       templateConfig.libraryName
     ).then(

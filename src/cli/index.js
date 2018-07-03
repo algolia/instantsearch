@@ -142,6 +142,12 @@ const questions = [
         ];
       }
     },
+    when: answers => {
+      const templatePath = getTemplatePath(answers.template);
+      const templateConfig = getAppTemplateConfig(templatePath);
+
+      return Boolean(templateConfig.libraryName);
+    },
   },
   {
     type: 'input',

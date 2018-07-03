@@ -70,9 +70,9 @@ async function build() {
       const app = createInstantSearchApp(appPath, {
         name: appName,
         template: templateTitle,
-        libraryVersion: await fetchLibraryVersions(libraryName).then(
-          latestSemver
-        ),
+        libraryVersion:
+          libraryName &&
+          (await fetchLibraryVersions(libraryName).then(latestSemver)),
         appId: APP_ID,
         apiKey: API_KEY,
         indexName: INDEX_NAME,

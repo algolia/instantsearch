@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Options with unknown template throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, InstantSearch.js, React InstantSearch, React InstantSearch Native, Vue InstantSearch"`;
+exports[`Options with unknown template throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, InstantSearch iOS, InstantSearch.js, React InstantSearch, React InstantSearch Native, Vue InstantSearch"`;
 
 exports[`Options with unvalid name throws 1`] = `
 "Could not create a project called \\"[31m./WrongNpmName[39m\\" because of npm naming restrictions.
@@ -8,8 +8,8 @@ exports[`Options with unvalid name throws 1`] = `
   - name can only contain URL-friendly characters"
 `;
 
-exports[`Options with wrong template path throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, InstantSearch.js, React InstantSearch, React InstantSearch Native, Vue InstantSearch"`;
+exports[`Options with wrong template path throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, InstantSearch iOS, InstantSearch.js, React InstantSearch, React InstantSearch Native, Vue InstantSearch"`;
 
 exports[`Options without path throws 1`] = `"The option \`path\` is required."`;
 
-exports[`Options without template throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, InstantSearch.js, React InstantSearch, React InstantSearch Native, Vue InstantSearch"`;
+exports[`Options without template throws 1`] = `"The template directory must contain a configuration file \`.template.js\` or must be one of those: Angular InstantSearch, InstantSearch iOS, InstantSearch.js, React InstantSearch, React InstantSearch Native, Vue InstantSearch"`;

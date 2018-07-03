@@ -12,8 +12,9 @@
   "scripts": {
     "start": "node src/cli/index.js",
     "test": "jest ./src",
-    "test:e2e:templates": "jest './scripts/e2e-templates.test.js'",
-    "test:e2e": "jest './scripts/e2e-*'",
+    "test:e2e:installs": "jest ./scripts/e2e-installs.test.js",
+    "test:e2e:templates": "jest ./scripts/e2e-templates.test.js",
+    "test:e2e": "jest ./scripts/e2e-*",
     "lint": "eslint .",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write *.{js,md,json}",

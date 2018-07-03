@@ -945,6 +945,796 @@ Array [
 ]
 `;
 
+exports[`Templates InstantSearch iOS File content: .gitignore 1`] = `
+"# Created by https://www.gitignore.io/api/swift
+
+### Swift ###
+# Xcode
+#
+# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+
+## Build generated
+build/
+DerivedData/
+
+## Various settings
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+
+## Other
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+#
+# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
+# Packages/
+# Package.pins
+# Package.resolved
+.build/
+
+# CocoaPods
+#
+# We recommend against adding the Pods directory to your .gitignore. However
+# you should judge for yourself, the pros and cons are mentioned at:
+# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
+#
+# Pods/
+
+# Carthage
+#
+# Add this line if you want to avoid checking in source code from Carthage dependencies.
+# Carthage/Checkouts
+
+Carthage/Build
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/#source-control
+
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+
+# End of https://www.gitignore.io/api/swift"
+`;
+
+exports[`Templates InstantSearch iOS File content: App.xcodeproj/project.pbxproj 1`] = `
+"// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		94AAC2EA92803A83565D7073 /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E045BD52917EA4B39612E12B /* Pods_App.framework */; };
+		E258C9271EE036970076097D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E258C9261EE036970076097D /* AppDelegate.swift */; };
+		E258C9291EE036970076097D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E258C9281EE036970076097D /* ViewController.swift */; };
+		E258C92C1EE036970076097D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E258C92A1EE036970076097D /* Main.storyboard */; };
+		E258C92E1EE036970076097D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E258C92D1EE036970076097D /* Assets.xcassets */; };
+		E258C9311EE036970076097D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E258C92F1EE036970076097D /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7B3645EFB63597C820FD0759 /* Pods-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = \\"Pods-App.release.xcconfig\\"; path = \\"Pods/Target Support Files/Pods-App/Pods-App.release.xcconfig\\"; sourceTree = \\"<group>\\"; };
+		B7E0369A70FFFFD97E30AF6C /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = \\"Pods-App.debug.xcconfig\\"; path = \\"Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig\\"; sourceTree = \\"<group>\\"; };
+		E045BD52917EA4B39612E12B /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E258C9231EE036970076097D /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = \\"App.app\\"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E258C9261EE036970076097D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = \\"<group>\\"; };
+		E258C9281EE036970076097D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = \\"<group>\\"; };
+		E258C92B1EE036970076097D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = \\"<group>\\"; };
+		E258C92D1EE036970076097D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = \\"<group>\\"; };
+		E258C9301EE036970076097D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = \\"<group>\\"; };
+		E258C9321EE036970076097D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = \\"<group>\\"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E258C9201EE036970076097D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94AAC2EA92803A83565D7073 /* Pods_App.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5188048A03FF48C89161FB44 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B7E0369A70FFFFD97E30AF6C /* Pods-App.debug.xcconfig */,
+				7B3645EFB63597C820FD0759 /* Pods-App.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = \\"<group>\\";
+		};
+		D3097422C732829DA51DBC25 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E045BD52917EA4B39612E12B /* Pods_App.framework */,
+			);
+			name = Frameworks;
+			sourceTree = \\"<group>\\";
+		};
+		E258C91A1EE036970076097D = {
+			isa = PBXGroup;
+			children = (
+				E258C9251EE036970076097D /* App */,
+				E258C9241EE036970076097D /* Products */,
+				5188048A03FF48C89161FB44 /* Pods */,
+				D3097422C732829DA51DBC25 /* Frameworks */,
+			);
+			sourceTree = \\"<group>\\";
+		};
+		E258C9241EE036970076097D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E258C9231EE036970076097D /* App.app */,
+			);
+			name = Products;
+			sourceTree = \\"<group>\\";
+		};
+		E258C9251EE036970076097D /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E258C9261EE036970076097D /* AppDelegate.swift */,
+				E258C9281EE036970076097D /* ViewController.swift */,
+				E258C92A1EE036970076097D /* Main.storyboard */,
+				E258C92D1EE036970076097D /* Assets.xcassets */,
+				E258C92F1EE036970076097D /* LaunchScreen.storyboard */,
+				E258C9321EE036970076097D /* Info.plist */,
+			);
+			path = \\"App\\";
+			sourceTree = \\"<group>\\";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E258C9221EE036970076097D /* App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E258C9351EE036970076097D /* Build configuration list for PBXNativeTarget \\"App\\" */;
+			buildPhases = (
+				6ED659C468517EE7AE9D6746 /* [CP] Check Pods Manifest.lock */,
+				E258C91F1EE036970076097D /* Sources */,
+				E258C9201EE036970076097D /* Frameworks */,
+				E258C9211EE036970076097D /* Resources */,
+				483D9B8DF06BBE2B572623D2 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = \\"App\\";
+			productName = \\"App\\";
+			productReference = E258C9231EE036970076097D /* App.app */;
+			productType = \\"com.apple.product-type.application\\";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E258C91B1EE036970076097D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = \\"Guy Daher\\";
+				TargetAttributes = {
+					E258C9221EE036970076097D = {
+						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = K3DV6EU9CV;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = E258C91E1EE036970076097D /* Build configuration list for PBXProject \\"App\\" */;
+			compatibilityVersion = \\"Xcode 3.2\\";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E258C91A1EE036970076097D;
+			productRefGroup = E258C9241EE036970076097D /* Products */;
+			projectDirPath = \\"\\";
+			projectRoot = \\"\\";
+			targets = (
+				E258C9221EE036970076097D /* App */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E258C9211EE036970076097D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E258C9311EE036970076097D /* LaunchScreen.storyboard in Resources */,
+				E258C92E1EE036970076097D /* Assets.xcassets in Resources */,
+				E258C92C1EE036970076097D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		483D9B8DF06BBE2B572623D2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				\\"\${SRCROOT}/Pods/Target Support Files/Pods-App/Pods-App-frameworks.sh\\",
+				\\"\${BUILT_PRODUCTS_DIR}/InstantSearch/InstantSearch.framework\\",
+				\\"\${BUILT_PRODUCTS_DIR}/InstantSearchClient/InstantSearchClient.framework\\",
+				\\"\${BUILT_PRODUCTS_DIR}/InstantSearchCore/InstantSearchCore.framework\\",
+			);
+			name = \\"[CP] Embed Pods Frameworks\\";
+			outputPaths = (
+				\\"\${TARGET_BUILD_DIR}/\${FRAMEWORKS_FOLDER_PATH}/InstantSearch.framework\\",
+				\\"\${TARGET_BUILD_DIR}/\${FRAMEWORKS_FOLDER_PATH}/InstantSearchClient.framework\\",
+				\\"\${TARGET_BUILD_DIR}/\${FRAMEWORKS_FOLDER_PATH}/InstantSearchCore.framework\\",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = \\"\\\\\\"\${SRCROOT}/Pods/Target Support Files/Pods-App/Pods-App-frameworks.sh\\\\\\"\\\\n\\";
+			showEnvVarsInLog = 0;
+		};
+		6ED659C468517EE7AE9D6746 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				\\"\${PODS_PODFILE_DIR_PATH}/Podfile.lock\\",
+				\\"\${PODS_ROOT}/Manifest.lock\\",
+			);
+			name = \\"[CP] Check Pods Manifest.lock\\";
+			outputPaths = (
+				\\"$(DERIVED_FILE_DIR)/Pods-App-checkManifestLockResult.txt\\",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = \\"diff \\\\\\"\${PODS_PODFILE_DIR_PATH}/Podfile.lock\\\\\\" \\\\\\"\${PODS_ROOT}/Manifest.lock\\\\\\" > /dev/null\\\\nif [ $? != 0 ] ; then\\\\n    # print error to STDERR\\\\n    echo \\\\\\"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\\\\\\" >&2\\\\n    exit 1\\\\nfi\\\\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\\\\necho \\\\\\"SUCCESS\\\\\\" > \\\\\\"\${SCRIPT_OUTPUT_FILE_0}\\\\\\"\\\\n\\";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E258C91F1EE036970076097D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E258C9291EE036970076097D /* ViewController.swift in Sources */,
+				E258C9271EE036970076097D /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E258C92A1EE036970076097D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E258C92B1EE036970076097D /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = \\"<group>\\";
+		};
+		E258C92F1EE036970076097D /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E258C9301EE036970076097D /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = \\"<group>\\";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E258C9331EE036970076097D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = \\"gnu++0x\\";
+				CLANG_CXX_LIBRARY = \\"libc++\\";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				\\"CODE_SIGN_IDENTITY[sdk=iphoneos*]\\" = \\"iPhone Developer\\";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					\\"DEBUG=1\\",
+					\\"$(inherited)\\",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = \\"-Onone\\";
+			};
+			name = Debug;
+		};
+		E258C9341EE036970076097D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = \\"gnu++0x\\";
+				CLANG_CXX_LIBRARY = \\"libc++\\";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				\\"CODE_SIGN_IDENTITY[sdk=iphoneos*]\\" = \\"iPhone Developer\\";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = \\"dwarf-with-dsym\\";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = \\"-Owholemodule\\";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E258C9361EE036970076097D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B7E0369A70FFFFD97E30AF6C /* Pods-App.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = K3DV6EU9CV;
+				INFOPLIST_FILE = \\"App/Info.plist\\";
+				LD_RUNPATH_SEARCH_PATHS = \\"$(inherited) @executable_path/Frameworks\\";
+				PRODUCT_BUNDLE_IDENTIFIER = \\"io.daher.Getting-Started-Programatically\\";
+				PRODUCT_NAME = \\"$(TARGET_NAME)\\";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		E258C9371EE036970076097D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7B3645EFB63597C820FD0759 /* Pods-App.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = K3DV6EU9CV;
+				INFOPLIST_FILE = \\"App/Info.plist\\";
+				LD_RUNPATH_SEARCH_PATHS = \\"$(inherited) @executable_path/Frameworks\\";
+				PRODUCT_BUNDLE_IDENTIFIER = \\"io.daher.Getting-Started-Programatically\\";
+				PRODUCT_NAME = \\"$(TARGET_NAME)\\";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E258C91E1EE036970076097D /* Build configuration list for PBXProject \\"App\\" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E258C9331EE036970076097D /* Debug */,
+				E258C9341EE036970076097D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E258C9351EE036970076097D /* Build configuration list for PBXNativeTarget \\"App\\" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E258C9361EE036970076097D /* Debug */,
+				E258C9371EE036970076097D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E258C91B1EE036970076097D /* Project object */;
+}"
+`;
+
+exports[`Templates InstantSearch iOS File content: App.xcodeproj/project.xcworkspace/contents.xcworkspacedata 1`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<Workspace
+   version = \\"1.0\\">
+   <FileRef
+      location = \\"self:App.xcodeproj\\">
+   </FileRef>
+</Workspace>"
+`;
+
+exports[`Templates InstantSearch iOS File content: App.xcworkspace/contents.xcworkspacedata 1`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<Workspace
+   version = \\"1.0\\">
+   <FileRef
+      location = \\"group:App.xcodeproj\\">
+   </FileRef>
+   <FileRef
+      location = \\"group:Pods/Pods.xcodeproj\\">
+   </FileRef>
+</Workspace>"
+`;
+
+exports[`Templates InstantSearch iOS File content: App.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist 1`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE plist PUBLIC \\"-//Apple//DTD PLIST 1.0//EN\\" \\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\\">
+<plist version=\\"1.0\\">
+<dict>
+	<key>IDEDidComputeMac32BitWarning</key>
+	<true/>
+</dict>
+</plist>"
+`;
+
+exports[`Templates InstantSearch iOS File content: App/AppDelegate.swift 1`] = `
+"import UIKit
+import InstantSearch
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var window: UIWindow?
+
+    private let ALGOLIA_APP_ID = \\"appId\\"
+    private let ALGOLIA_API_KEY = \\"apiKey\\"
+    private let ALGOLIA_INDEX_NAME = \\"indexName\\"
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
+        InstantSearch.shared.configure(appID: ALGOLIA_APP_ID, apiKey: ALGOLIA_API_KEY, index: ALGOLIA_INDEX_NAME)
+        InstantSearch.shared.params.attributesToRetrieve = [\\"mainAttribute\\"]
+        InstantSearch.shared.params.attributesToHighlight = [\\"mainAttribute\\"]
+
+        return true
+    }
+
+    func applicationWillResignActive(_ application: UIApplication) {
+        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+    }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    }
+
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    }
+
+    func applicationWillTerminate(_ application: UIApplication) {
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+
+
+}"
+`;
+
+exports[`Templates InstantSearch iOS File content: App/Assets.xcassets/AppIcon.appiconset/Contents.json 1`] = `
+"{
+  \\"images\\" : [
+    {
+      \\"idiom\\" : \\"iphone\\",
+      \\"size\\" : \\"20x20\\",
+      \\"scale\\" : \\"2x\\"
+    },
+    {
+      \\"idiom\\" : \\"iphone\\",
+      \\"size\\" : \\"20x20\\",
+      \\"scale\\" : \\"3x\\"
+    },
+    {
+      \\"idiom\\" : \\"iphone\\",
+      \\"size\\" : \\"29x29\\",
+      \\"scale\\" : \\"2x\\"
+    },
+    {
+      \\"idiom\\" : \\"iphone\\",
+      \\"size\\" : \\"29x29\\",
+      \\"scale\\" : \\"3x\\"
+    },
+    {
+      \\"idiom\\" : \\"iphone\\",
+      \\"size\\" : \\"40x40\\",
+      \\"scale\\" : \\"2x\\"
+    },
+    {
+      \\"idiom\\" : \\"iphone\\",
+      \\"size\\" : \\"40x40\\",
+      \\"scale\\" : \\"3x\\"
+    },
+    {
+      \\"idiom\\" : \\"iphone\\",
+      \\"size\\" : \\"60x60\\",
+      \\"scale\\" : \\"2x\\"
+    },
+    {
+      \\"idiom\\" : \\"iphone\\",
+      \\"size\\" : \\"60x60\\",
+      \\"scale\\" : \\"3x\\"
+    }
+  ],
+  \\"info\\" : {
+    \\"version\\" : 1,
+    \\"author\\" : \\"xcode\\"
+  }
+}"
+`;
+
+exports[`Templates InstantSearch iOS File content: App/Base.lproj/LaunchScreen.storyboard 1`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"no\\"?>
+<document type=\\"com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB\\" version=\\"3.0\\" toolsVersion=\\"11134\\" systemVersion=\\"15F34\\" targetRuntime=\\"iOS.CocoaTouch\\" propertyAccessControl=\\"none\\" useAutolayout=\\"YES\\" launchScreen=\\"YES\\" useTraitCollections=\\"YES\\" colorMatched=\\"YES\\" initialViewController=\\"01J-lp-oVM\\">
+    <dependencies>
+        <plugIn identifier=\\"com.apple.InterfaceBuilder.IBCocoaTouchPlugin\\" version=\\"11106\\"/>
+        <capability name=\\"documents saved in the Xcode 8 format\\" minToolsVersion=\\"8.0\\"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID=\\"EHf-IW-A2E\\">
+            <objects>
+                <viewController id=\\"01J-lp-oVM\\" sceneMemberID=\\"viewController\\">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type=\\"top\\" id=\\"Llm-lL-Icb\\"/>
+                        <viewControllerLayoutGuide type=\\"bottom\\" id=\\"xb3-aO-Qok\\"/>
+                    </layoutGuides>
+                    <view key=\\"view\\" contentMode=\\"scaleToFill\\" id=\\"Ze5-6b-2t3\\">
+                        <rect key=\\"frame\\" x=\\"0.0\\" y=\\"0.0\\" width=\\"375\\" height=\\"667\\"/>
+                        <autoresizingMask key=\\"autoresizingMask\\" widthSizable=\\"YES\\" heightSizable=\\"YES\\"/>
+                        <color key=\\"backgroundColor\\" red=\\"1\\" green=\\"1\\" blue=\\"1\\" alpha=\\"1\\" colorSpace=\\"custom\\" customColorSpace=\\"sRGB\\"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier=\\"IBFirstResponder\\" id=\\"iYj-Kq-Ea1\\" userLabel=\\"First Responder\\" sceneMemberID=\\"firstResponder\\"/>
+            </objects>
+            <point key=\\"canvasLocation\\" x=\\"53\\" y=\\"375\\"/>
+        </scene>
+    </scenes>
+</document>"
+`;
+
+exports[`Templates InstantSearch iOS File content: App/Base.lproj/Main.storyboard 1`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<document type=\\"com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB\\" version=\\"3.0\\" toolsVersion=\\"12120\\" systemVersion=\\"16F71b\\" targetRuntime=\\"iOS.CocoaTouch\\" propertyAccessControl=\\"none\\" useAutolayout=\\"YES\\" useTraitCollections=\\"YES\\" colorMatched=\\"YES\\" initialViewController=\\"BYZ-38-t0r\\">
+    <device id=\\"retina4_7\\" orientation=\\"portrait\\">
+        <adaptation id=\\"fullscreen\\"/>
+    </device>
+    <dependencies>
+        <deployment identifier=\\"iOS\\"/>
+        <plugIn identifier=\\"com.apple.InterfaceBuilder.IBCocoaTouchPlugin\\" version=\\"12088\\"/>
+        <capability name=\\"documents saved in the Xcode 8 format\\" minToolsVersion=\\"8.0\\"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID=\\"tne-QT-ifu\\">
+            <objects>
+                <viewController id=\\"BYZ-38-t0r\\" customClass=\\"ViewController\\" customModule=\\"Getting_Started_Programatically\\" customModuleProvider=\\"target\\" sceneMemberID=\\"viewController\\">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type=\\"top\\" id=\\"y3c-jy-aDJ\\"/>
+                        <viewControllerLayoutGuide type=\\"bottom\\" id=\\"wfy-db-euE\\"/>
+                    </layoutGuides>
+                    <view key=\\"view\\" contentMode=\\"scaleToFill\\" id=\\"8bC-Xf-vdC\\">
+                        <rect key=\\"frame\\" x=\\"0.0\\" y=\\"0.0\\" width=\\"375\\" height=\\"667\\"/>
+                        <autoresizingMask key=\\"autoresizingMask\\" widthSizable=\\"YES\\" heightSizable=\\"YES\\"/>
+                        <color key=\\"backgroundColor\\" red=\\"1\\" green=\\"1\\" blue=\\"1\\" alpha=\\"1\\" colorSpace=\\"custom\\" customColorSpace=\\"sRGB\\"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier=\\"IBFirstResponder\\" id=\\"dkx-z0-nzr\\" sceneMemberID=\\"firstResponder\\"/>
+            </objects>
+            <point key=\\"canvasLocation\\" x=\\"136.80000000000001\\" y=\\"138.98050974512745\\"/>
+        </scene>
+    </scenes>
+</document>"
+`;
+
+exports[`Templates InstantSearch iOS File content: App/Info.plist 1`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?>
+<!DOCTYPE plist PUBLIC \\"-//Apple//DTD PLIST 1.0//EN\\" \\"http://www.apple.com/DTDs/PropertyList-1.0.dtd\\">
+<plist version=\\"1.0\\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+</dict>
+</plist>"
+`;
+
+exports[`Templates InstantSearch iOS File content: App/ViewController.swift 1`] = `
+"import UIKit
+import InstantSearch
+import InstantSearchCore
+
+class ViewController: HitsTableViewController {
+
+    // Create your widgets
+    let searchBar = SearchBarWidget(frame: .zero)
+    let stats = StatsLabelWidget(frame: .zero)
+    let tableView = HitsTableWidget(frame: .zero)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        initUI()
+
+        // and assign tableView to InstantSearch
+        hitsTableView = tableView
+
+        // Add all widgets to InstantSearch
+        InstantSearch.shared.registerAllWidgets(in: self.view)
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath, containing hit: [String : Any]) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: \\"hitCell\\", for: indexPath)
+
+        cell.textLabel?.highlightedTextColor = .blue
+        cell.textLabel?.highlightedBackgroundColor = .yellow
+        cell.textLabel?.highlightedText = SearchResults.highlightResult(hit: hit, path: \\"name\\")?.value
+
+        return cell
+    }
+
+    func initUI() {
+        // Add the declared views to the main view
+        self.view.addSubview(searchBar)
+        self.view.addSubview(stats)
+        self.view.addSubview(tableView)
+
+        // Add autolayout constraints
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        stats.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+
+        let views = [\\"searchBar\\": searchBar, \\"stats\\": stats, \\"tableView\\": tableView]
+        var constraints = [NSLayoutConstraint]()
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: \\"V:|-30-[searchBar]-10-[stats]-10-[tableView]-|\\", options: [], metrics: nil, views:views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: \\"H:|-25-[searchBar]-25-|\\", options: [], metrics: nil, views:views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: \\"H:|-25-[stats]-25-|\\", options: [], metrics: nil, views:views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: \\"H:|-[tableView]-|\\", options: [], metrics: nil, views:views)
+        NSLayoutConstraint.activate(constraints)
+
+        // Register tableView identifier
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: \\"hitCell\\")
+
+        // Style the stats label
+        stats.textAlignment = .center
+        stats.font = UIFont.boldSystemFont(ofSize:18.0)
+    }
+
+}"
+`;
+
+exports[`Templates InstantSearch iOS File content: Podfile 1`] = `
+"# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'App' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for App
+  pod 'InstantSearch'
+
+end"
+`;
+
+exports[`Templates InstantSearch iOS Folder structure: contains the right files 1`] = `
+Array [
+  ".gitignore",
+  "App.xcodeproj/project.pbxproj",
+  "App.xcodeproj/project.xcworkspace/contents.xcworkspacedata",
+  "App.xcworkspace/contents.xcworkspacedata",
+  "App.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist",
+  "App/AppDelegate.swift",
+  "App/Assets.xcassets/AppIcon.appiconset/Contents.json",
+  "App/Base.lproj/LaunchScreen.storyboard",
+  "App/Base.lproj/Main.storyboard",
+  "App/Info.plist",
+  "App/ViewController.swift",
+  "Podfile",
+]
+`;
+
 exports[`Templates InstantSearch.js File content: .editorconfig 1`] = `
 "root = true
 

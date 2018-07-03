@@ -27,14 +27,30 @@ describe('Installation', () => {
   });
 
   describe('Dependencies', () => {
-    test('get installed by default', () => {
-      execSync(
-        `yarn start ${appPath} \
-          --template "InstantSearch.js"`,
-        { stdio: 'ignore' }
-      );
+    describe('Node', () => {
+      test('get installed by default', () => {
+        execSync(
+          `yarn start ${appPath} \
+            --template "InstantSearch.js"`,
+          { stdio: 'ignore' }
+        );
 
-      expect(fs.lstatSync(`${appPath}/node_modules`).isDirectory()).toBe(true);
+        expect(fs.lstatSync(`${appPath}/node_modules`).isDirectory()).toBe(
+          true
+        );
+      });
+    });
+
+    describe('CocoaPods', () => {
+      test('get installed by default', () => {
+        execSync(
+          `yarn start ${appPath} \
+            --template "InstantSearch iOS"`,
+          { stdio: 'ignore' }
+        );
+
+        expect(fs.lstatSync(`${appPath}/Pods`).isDirectory()).toBe(true);
+      });
     });
 
     test('get skipped with the `no-installation` flag', () => {

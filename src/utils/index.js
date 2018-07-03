@@ -60,15 +60,7 @@ function checkAppPath(appPath) {
 
 function getAppTemplateConfig(templatePath, { loadFileFn = require } = {}) {
   try {
-    const templateConfig = loadFileFn(`${templatePath}/.template.js`);
-
-    if (!templateConfig.libraryName) {
-      throw new Error(
-        'The key `libraryName` is must be the name of the library to use on npm.'
-      );
-    }
-
-    return templateConfig;
+    return loadFileFn(`${templatePath}/.template.js`);
   } catch (err) {
     throw new Error(
       `The template configuration file \`.template.js\` contains errors:
