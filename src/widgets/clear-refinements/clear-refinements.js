@@ -1,5 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
-import ClearRefinementsWithHOCs from '../../components/ClearRefinements/ClearRefinements';
+import ClearRefinements from '../../components/ClearRefinements/ClearRefinements.js';
 import cx from 'classnames';
 
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
@@ -26,7 +26,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
   }
 
   render(
-    <ClearRefinementsWithHOCs
+    <ClearRefinements
       refine={refine}
       cssClasses={cssClasses}
       hasRefinements={hasRefinements}

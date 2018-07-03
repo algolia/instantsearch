@@ -23,11 +23,11 @@ in v3.
 
 ### Renamed connectors
 
-### Renamed parameters
-
 | In V2           | In V3                   |
 | --------------- | ----------------------- |
 | connectClearAll | connectClearRefinements |
+
+### Renamed parameters
 
 ## Widget – Breadcrumb
 
@@ -55,7 +55,7 @@ The structure is now embeded in a list and each item wraps a separator and the l
 
 ### Options
 
-* The values for `classnames` has changed to reflect the markup update:
+* The values for `cssClasses` has changed to reflect the markup update:
   * root
   * noRefinement (new)
   * list (new)
@@ -104,7 +104,7 @@ Options that were renamed (same semantic):
 
 * `excludeAttributes` → `excludedAttributes`
 
-Values for `classNames` have been updated to reflect the markup changes:
+Values for `cssClasses` have been updated to reflect the markup changes:
 
 * root
 * button
