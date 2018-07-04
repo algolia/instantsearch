@@ -4,6 +4,9 @@ const chalk = require('chalk');
 module.exports = function install(config) {
   const logger = config.silent ? { log() {}, error() {} } : console;
   const initialDirectory = process.cwd();
+  const execSyncOptions = {
+    stdio: config.silent ? 'ignore' : 'inherit',
+  };
 
   logger.log();
   logger.log('📦  Installing dependencies...');
@@ -12,9 +15,8 @@ module.exports = function install(config) {
   process.chdir(config.path);
 
   try {
-    execSync('pod install', {
-      stdio: config.silent ? 'ignore' : 'inherit',
-    });
+    execSync('pod repo update', execSyncOptions);
+    execSync('pod install', execSyncOptions);
   } catch (err) {
     logger.log();
     logger.log();
