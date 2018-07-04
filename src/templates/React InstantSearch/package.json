@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "16.4.1",
     "react-dom": "16.4.1",
-    "react-instantsearch": "^{{libraryVersion}}",
+    "react-instantsearch-dom": "^{{libraryVersion}}",
     "react-scripts": "1.1.4"
   },
   "devDependencies": {
