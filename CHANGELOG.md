@@ -10,7 +10,7 @@
 ### Features
 
 * **core:** export translatable ([#1351](https://github.com/algolia/react-instantsearch/issues/1351)) ([6d5a89d](https://github.com/algolia/react-instantsearch/commit/6d5a89d))
-* **maps:** add connector & widget ([#1171](https://github.com/algolia/react-instantsearch/issues/1171)) ([16e288a](https://github.com/algolia/react-instantsearch/commit/16e288a)), closes [#1189](https://github.com/algolia/react-instantsearch/issues/1189) [#1192](https://github.com/algolia/react-instantsearch/issues/1192) [#1201](https://github.com/algolia/react-instantsearch/issues/1201) [#1205](https://github.com/algolia/react-instantsearch/issues/1205) [#1207](https://github.com/algolia/react-instantsearch/issues/1207) [#1214](https://github.com/algolia/react-instantsearch/issues/1214) [#1227](https://github.com/algolia/react-instantsearch/issues/1227) [#1236](https://github.com/algolia/react-instantsearch/issues/1236) [#1289](https://github.com/algolia/react-instantsearch/issues/1289)
+* **maps:** add connector & widget ([#1171](https://github.com/algolia/react-instantsearch/issues/1171)) ([16e288a](https://github.com/algolia/react-instantsearch/commit/16e288a))
 
 
 
