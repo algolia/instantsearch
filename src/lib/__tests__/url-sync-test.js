@@ -1,4 +1,4 @@
-import urlSync from '../url-sync.js';
+import urlSync from '../url-sync';
 import jsHelper from 'algoliasearch-helper';
 const SearchParameters = jsHelper.SearchParameters;
 

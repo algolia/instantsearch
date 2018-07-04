@@ -1,10 +1,10 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import Selector from '../../components/Selector.js';
-import connectNumericSelector from '../../connectors/numeric-selector/connectNumericSelector.js';
+import Selector from '../../components/Selector';
+import connectNumericSelector from '../../connectors/numeric-selector/connectNumericSelector';
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils';
 
 const bem = bemHelper('ais-numeric-selector');
 

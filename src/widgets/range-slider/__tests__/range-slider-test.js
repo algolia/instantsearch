@@ -1,6 +1,6 @@
 import AlgoliasearchHelper from 'algoliasearch-helper';
 
-import rangeSlider from '../range-slider.js';
+import rangeSlider from '../range-slider';
 
 const instantSearchInstance = { templatesConfig: undefined };
 

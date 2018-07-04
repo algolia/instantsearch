@@ -1,6 +1,6 @@
 /* eslint-disable import/default */
 /* global $ */
-import instantsearch from '../../../../index.js';
+import instantsearch from '../../../../index';
 
 export default instantsearch.connectors.connectMenu(customMenuRendering);
 function customMenuRendering(opts, isFirstRendering) {

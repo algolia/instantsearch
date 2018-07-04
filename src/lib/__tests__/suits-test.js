@@ -1,4 +1,4 @@
-import { component } from '../suit.js';
+import { component } from '../suit';
 
 describe('suit - component classname generation', () => {
   test('generates a name with the component name, modifier and descendant', () => {

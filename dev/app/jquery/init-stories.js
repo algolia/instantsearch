@@ -1,4 +1,4 @@
-import initClearRefinementsStories from './stories/clear-refinements.stories.js';
+import initClearRefinementsStories from './stories/clear-refinements.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';

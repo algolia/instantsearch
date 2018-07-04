@@ -3,7 +3,7 @@ import sinon from 'sinon';
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectStats from '../connectStats.js';
+import connectStats from '../connectStats';
 
 describe('connectStats', () => {
   it('Renders during init and render', () => {

@@ -1,4 +1,4 @@
-import instantsearch from '../main.js';
+import instantsearch from '../main';
 import forEach from 'lodash/forEach';
 import expect from 'expect';
 

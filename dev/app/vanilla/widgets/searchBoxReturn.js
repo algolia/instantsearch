@@ -1,5 +1,5 @@
 /* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import instantsearch from '../../../../index';
 
 function render({ refine, widgetParams }, isFirstRendering) {
   const { node } = widgetParams;

@@ -1,5 +1,5 @@
-import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
-import { checkRendering } from '../../lib/utils.js';
+import escapeHits, { tagConfig } from '../../lib/escape-highlight';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customHits = connectHits(function render(params, isFirstRendering) {

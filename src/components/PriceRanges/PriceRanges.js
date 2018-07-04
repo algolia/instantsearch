@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 
-import Template from '../Template.js';
-import PriceRangesForm from './PriceRangesForm.js';
+import Template from '../Template';
+import PriceRangesForm from './PriceRangesForm';
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
+import headerFooterHOC from '../../decorators/headerFooter';
 
 export class RawPriceRanges extends Component {
   componentWillMount() {

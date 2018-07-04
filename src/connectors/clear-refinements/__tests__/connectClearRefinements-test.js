@@ -1,7 +1,7 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectClearRefinements from '../connectClearRefinements.js';
+import connectClearRefinements from '../connectClearRefinements';
 
 describe('connectClearRefinements', () => {
   it('Renders during init and render', () => {
@@ -156,7 +156,7 @@ describe('connectClearRefinements', () => {
     helper.toggleRefinement('aFacet', 'some value');
     helper.search = () => {};
 
-    const rendering = jest.fn()
+    const rendering = jest.fn();
     const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget();
 

@@ -1,7 +1,7 @@
 import collectJson from 'collect-json';
 import jsdocParse from 'jsdoc-parse';
 import {forEach, groupBy} from 'lodash';
-import {hasChanged} from './onlyChanged.js';
+import {hasChanged} from './onlyChanged';
 import {join} from 'path';
 
 let cachedFiles;

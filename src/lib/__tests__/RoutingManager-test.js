@@ -1,6 +1,6 @@
-import instantsearch from '../main.js';
-import RoutingManager from '../RoutingManager.js';
-import simpleMapping from '../stateMappings/simple.js';
+import instantsearch from '../main';
+import RoutingManager from '../RoutingManager';
+import simpleMapping from '../stateMappings/simple';
 
 const makeFakeAlgoliaClient = () => ({
   search: () => Promise.resolve({ results: [{}] }),

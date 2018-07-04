@@ -1,7 +1,7 @@
 import path from 'path';
 import { SaveScreenshot } from 'wdio-visual-regression-service/compare';
-import testServer from './testServer.js';
-import { clearAll, searchBox } from './utils.js';
+import testServer from './testServer';
+import { clearAll, searchBox } from './utils';
 const INDEX_PAGE = process.env.INDEX_PAGE || 'index';
 
 function screenshotName(context) {

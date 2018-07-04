@@ -2,7 +2,7 @@ import {
   checkRendering,
   clearRefinements,
   getAttributesToClear,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const usage = `Usage:
 var customClearRefinements = connectClearRefinements(function render(params, isFirstRendering) {

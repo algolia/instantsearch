@@ -1,16 +1,16 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectStarRating from '../../connectors/star-rating/connectStarRating.js';
-import defaultTemplates from './defaultTemplates.js';
-import defaultLabels from './defaultLabels.js';
+import RefinementList from '../../components/RefinementList/RefinementList';
+import connectStarRating from '../../connectors/star-rating/connectStarRating';
+import defaultTemplates from './defaultTemplates';
+import defaultLabels from './defaultLabels';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-star-rating');
 

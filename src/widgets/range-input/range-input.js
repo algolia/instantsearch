@@ -1,13 +1,13 @@
 import React, { render } from 'preact-compat';
 import cx from 'classnames';
-import RangeInput from '../../components/RangeInput/RangeInput.js';
-import connectRange from '../../connectors/range/connectRange.js';
+import RangeInput from '../../components/RangeInput/RangeInput';
+import connectRange from '../../connectors/range/connectRange';
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-} from '../../lib/utils.js';
-import defaultTemplates from './defaultTemplates.js';
+} from '../../lib/utils';
+import defaultTemplates from './defaultTemplates';
 
 const bem = bemHelper('ais-range-input');
 

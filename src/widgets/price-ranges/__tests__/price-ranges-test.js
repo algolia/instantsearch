@@ -1,6 +1,6 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import priceRanges from '../price-ranges.js';
+import priceRanges from '../price-ranges';
 
 const instantSearchInstance = { templatesConfig: undefined };
 

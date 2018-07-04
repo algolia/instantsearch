@@ -4,7 +4,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectNumericRefinementList from '../connectNumericRefinementList.js';
+import connectNumericRefinementList from '../connectNumericRefinementList';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));

@@ -2,7 +2,7 @@ import { registerDisposer, start } from 'dev-novel';
 import initBuiltInWidgets from './builtin/init-stories';
 import initJqueryWidgets from './jquery/init-stories';
 import initVanillaWidgets from './vanilla/init-stories';
-import initUnmountWidgets from './init-unmount-widgets.js';
+import initUnmountWidgets from './init-unmount-widgets';
 
 import '../style.css';
 
