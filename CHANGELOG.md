@@ -1,3 +1,19 @@
+<a name="5.2.0"></a>
+# [5.2.0](https://github.com/algolia/react-instantsearch/compare/v5.2.0-beta.2...v5.2.0) (2018-07-04)
+
+
+### Bug Fixes
+
+* **translatable:** avoid create a new function on every render ([#1383](https://github.com/algolia/react-instantsearch/issues/1383)) ([1285b3b](https://github.com/algolia/react-instantsearch/commit/1285b3b))
+
+
+### Features
+
+* **core:** export translatable ([#1351](https://github.com/algolia/react-instantsearch/issues/1351)) ([6d5a89d](https://github.com/algolia/react-instantsearch/commit/6d5a89d))
+* **maps:** add connector & widget ([#1171](https://github.com/algolia/react-instantsearch/issues/1171)) ([16e288a](https://github.com/algolia/react-instantsearch/commit/16e288a)), closes [#1189](https://github.com/algolia/react-instantsearch/issues/1189) [#1192](https://github.com/algolia/react-instantsearch/issues/1192) [#1201](https://github.com/algolia/react-instantsearch/issues/1201) [#1205](https://github.com/algolia/react-instantsearch/issues/1205) [#1207](https://github.com/algolia/react-instantsearch/issues/1207) [#1214](https://github.com/algolia/react-instantsearch/issues/1214) [#1227](https://github.com/algolia/react-instantsearch/issues/1227) [#1236](https://github.com/algolia/react-instantsearch/issues/1236) [#1289](https://github.com/algolia/react-instantsearch/issues/1289)
+
+
+
 <a name="5.2.0-beta.2"></a>
 # [5.2.0-beta.2](https://github.com/algolia/react-instantsearch/compare/v5.2.0-beta.1...v5.2.0-beta.2) (2018-06-19)
 
