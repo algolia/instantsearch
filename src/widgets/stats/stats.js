@@ -5,19 +5,16 @@ import Stats from '../../components/Stats/Stats';
 import connectStats from '../../connectors/stats/connectStats';
 import defaultTemplates from './defaultTemplates';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
 
-const bem = bemHelper('ais-stats');
+import { component } from '../../lib/suit';
+
+const suit = component('Stats');
 
 const renderer = ({
   containerNode,
   cssClasses,
   collapsible,
-  autoHideContainer,
   renderState,
   templates,
   transformData,
@@ -43,19 +40,23 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+  const statsData = {
+    hitsPerPage,
+    nbHits,
+    nbPages,
+    page,
+    processingTimeMS,
+    query,
+    hasManyResults: nbHits > 1,
+    hasNoResults: nbHits === 0,
+    hasOneResult: nbHits === 1,
+  };
 
   render(
     <Stats
       collapsible={collapsible}
       cssClasses={cssClasses}
-      hitsPerPage={hitsPerPage}
-      nbHits={nbHits}
-      nbPages={nbPages}
-      page={page}
-      processingTimeMS={processingTimeMS}
-      query={query}
-      shouldAutoHideContainer={shouldAutoHideContainer}
+      data={statsData}
       templateProps={renderState.templateProps}
     />,
     containerNode
@@ -65,36 +66,29 @@ const renderer = ({
 const usage = `Usage:
 stats({
   container,
-  [ templates.{header, body, footer} ],
-  [ transformData.{body} ],
-  [ autoHideContainer=true ],
-  [ cssClasses.{root, header, body, footer, time} ],
+  [ templates.{text} ],
+  [ transformData.{text} ],
+  [ cssClasses.{root, text} ],
 })`;
 
 /**
  * @typedef {Object} StatsWidgetTemplates
- * @property {string|function} [header=''] Header template.
- * @property {string|function} [body] Body template, provided with `hasManyResults`,
- * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`.
- * @property {string|function} [footer=''] Footer template.
+ * @property {string|function(StatsData):string} [text] text of the widget.
  */
 
 /**
  * @typedef {Object} StatsWidgetCssClasses
- * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
- * @property {string|string[]} [time] CSS class to add to the element wrapping the time processingTimeMs.
+ * @property {string|string[]} [root] CSS class to add to the root element of the widget.
+ * @property {string|string[]} [text] CSS class to add to the element wrapping the text content of the widget.
  */
 
 /**
  * @typedef {Object} StatsWidgetTransforms
- * @property {function(StatsBodyData):object} [body] Updates the content of object passed to the `body` template.
+ * @property {function(StatsData):object} [text] Updates the content of object passed to the `text` template.
  */
 
 /**
- * @typedef {Object} StatsBodyData
+ * @typedef {Object} StatsData
  * @property {boolean} hasManyResults True if the result set has more than one result.
  * @property {boolean} hasNoResults True if the result set has no result.
  * @property {boolean} hasOneResult True if the result set has exactly one result.
@@ -111,7 +105,6 @@ stats({
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {StatsWidgetTemplates} [templates] Templates to use for the widget.
  * @property {StatsWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
- * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
  * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add.
  */
 
@@ -135,7 +128,6 @@ stats({
 export default function stats({
   container,
   cssClasses: userCssClasses = {},
-  autoHideContainer = true,
   collapsible = false,
   transformData,
   templates = defaultTemplates,
@@ -147,18 +139,14 @@ export default function stats({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    header: cx(bem('header'), userCssClasses.header),
-    root: cx(bem(null), userCssClasses.root),
-    time: cx(bem('time'), userCssClasses.time),
+    root: cx(suit(), userCssClasses.root),
+    text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     collapsible,
-    autoHideContainer,
     renderState: {},
     templates,
     transformData,

@@ -1,49 +1,48 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
+import isEqual from 'lodash/isEqual';
 
 import Template from '../Template';
-import autoHideContainerHOC from '../../decorators/autoHideContainer';
-import headerFooterHOC from '../../decorators/headerFooter';
 
-export class RawStats extends Component {
+export default class Stats extends Component {
   shouldComponentUpdate(nextProps) {
-    return (
-      this.props.nbHits !== nextProps.nbHits ||
-      this.props.processingTimeMS !== nextProps.processingTimeMS
-    );
+    return isEqual(this.props.data, nextProps.data);
   }
 
   render() {
-    const data = {
-      hasManyResults: this.props.nbHits > 1,
-      hasNoResults: this.props.nbHits === 0,
-      hasOneResult: this.props.nbHits === 1,
-      hitsPerPage: this.props.hitsPerPage,
-      nbHits: this.props.nbHits,
-      nbPages: this.props.nbPages,
-      page: this.props.page,
-      processingTimeMS: this.props.processingTimeMS,
-      query: this.props.query,
-      cssClasses: this.props.cssClasses,
-    };
+    const { cssClasses, data } = this.props;
 
     return (
-      <Template data={data} templateKey="body" {...this.props.templateProps} />
+      <div className={cssClasses.root}>
+        <Template
+          data={data}
+          templateKey="text"
+          rootProps={{
+            className: cssClasses.text,
+          }}
+          rootTagName="span"
+          {...this.props.templateProps}
+        />
+      </div>
     );
   }
 }
 
-RawStats.propTypes = {
+Stats.propTypes = {
   cssClasses: PropTypes.shape({
-    time: PropTypes.string,
+    root: PropTypes.string,
+    text: PropTypes.string,
   }),
-  hitsPerPage: PropTypes.number,
-  nbHits: PropTypes.number,
-  nbPages: PropTypes.number,
-  page: PropTypes.number,
-  processingTimeMS: PropTypes.number,
-  query: PropTypes.string,
+  data: PropTypes.shape({
+    hasManyResults: PropTypes.bool,
+    hasNoResults: PropTypes.bool,
+    hasOneResult: PropTypes.bool,
+    hitsPerPage: PropTypes.number,
+    nbHits: PropTypes.number,
+    nbPages: PropTypes.number,
+    page: PropTypes.number,
+    processingTimeMS: PropTypes.number,
+    query: PropTypes.string,
+  }),
   templateProps: PropTypes.object.isRequired,
 };
-
-export default autoHideContainerHOC(headerFooterHOC(RawStats));
