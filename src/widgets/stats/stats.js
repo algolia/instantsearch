@@ -40,16 +40,23 @@ const renderer = ({
     return;
   }
 
+  const statsData = {
+    hitsPerPage,
+    nbHits,
+    nbPages,
+    page,
+    processingTimeMS,
+    query,
+    hasManyResults: nbHits > 1,
+    hasNoResults: nbHits === 0,
+    hasOneResult: nbHits === 1,
+  };
+
   render(
     <Stats
       collapsible={collapsible}
       cssClasses={cssClasses}
-      hitsPerPage={hitsPerPage}
-      nbHits={nbHits}
-      nbPages={nbPages}
-      page={page}
-      processingTimeMS={processingTimeMS}
-      query={query}
+      data={statsData}
       templateProps={renderState.templateProps}
     />,
     containerNode

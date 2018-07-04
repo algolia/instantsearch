@@ -1,29 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
+import isEqual from 'lodash/isEqual';
 
 import Template from '../Template';
 
 export default class Stats extends Component {
   shouldComponentUpdate(nextProps) {
-    return (
-      this.props.nbHits !== nextProps.nbHits ||
-      this.props.processingTimeMS !== nextProps.processingTimeMS
-    );
+    return isEqual(this.props.data, nextProps.data);
   }
 
   render() {
-    const { cssClasses } = this.props;
-    const data = {
-      hasManyResults: this.props.nbHits > 1,
-      hasNoResults: this.props.nbHits === 0,
-      hasOneResult: this.props.nbHits === 1,
-      hitsPerPage: this.props.hitsPerPage,
-      nbHits: this.props.nbHits,
-      nbPages: this.props.nbPages,
-      page: this.props.page,
-      processingTimeMS: this.props.processingTimeMS,
-      query: this.props.query,
-    };
+    const { cssClasses, data } = this.props;
 
     return (
       <div className={cssClasses.root}>
@@ -46,11 +33,16 @@ Stats.propTypes = {
     root: PropTypes.string,
     text: PropTypes.string,
   }),
-  hitsPerPage: PropTypes.number,
-  nbHits: PropTypes.number,
-  nbPages: PropTypes.number,
-  page: PropTypes.number,
-  processingTimeMS: PropTypes.number,
-  query: PropTypes.string,
+  data: PropTypes.shape({
+    hasManyResults: PropTypes.bool,
+    hasNoResults: PropTypes.bool,
+    hasOneResult: PropTypes.bool,
+    hitsPerPage: PropTypes.number,
+    nbHits: PropTypes.number,
+    nbPages: PropTypes.number,
+    page: PropTypes.number,
+    processingTimeMS: PropTypes.number,
+    query: PropTypes.string,
+  }),
   templateProps: PropTypes.object.isRequired,
 };
