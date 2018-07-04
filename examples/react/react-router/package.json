@@ -9,11 +9,11 @@
     "test": "jest"
   },
   "devDependencies": {
+    "history": "^4.7.2",
     "identity-obj-proxy": "3.0.0",
     "jest-environment-jsdom-11.0.0": "20.1.9",
     "react-scripts": "1.1.0",
-    "react-test-renderer": "16.2.0",
-    "history": "^4.7.2"
+    "react-test-renderer": "16.2.0"
   },
   "dependencies": {
     "instantsearch.css": "7.1.0",
@@ -22,7 +22,7 @@
     "qs": "6.5.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-instantsearch": "5.2.0-beta.2",
+    "react-instantsearch": "5.2.0",
     "react-router-dom": "4.2.2"
   },
   "jest": {
