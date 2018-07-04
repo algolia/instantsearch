@@ -17,15 +17,17 @@ in v3.
 
 ### Renamed widgets
 
-| In V2 | In V3 |
-| ----- | ----- |
+| In V2    | In V3            |
+| -------- | ---------------- |
+| clearAll | clearRefinements |
 
+### Renamed connectors
+
+| In V2           | In V3                   |
+| --------------- | ----------------------- |
+| connectClearAll | connectClearRefinements |
 
 ### Renamed parameters
-
-| In V2 | In V3 |
-| ----- | ----- |
-
 
 ## Widget – Breadcrumb
 
@@ -53,7 +55,7 @@ The structure is now embeded in a list and each item wraps a separator and the l
 
 ### Options
 
-* The values for `classnames` has changed to reflect the markup update:
+* The values for `cssClasses` has changed to reflect the markup update:
   * root
   * noRefinement (new)
   * list (new)
@@ -72,14 +74,78 @@ The structure is now embeded in a list and each item wraps a separator and the l
 | ais-breadcrumb--disabledLabel | ais-Breadcrumb-item--selected        |
 | ais-breadcrumb--separator     | ais-Breadcrumb-separator             |
 
+## Widget – clearAll
+
+### Name update
+
+The `clearAll` widget has been renamed into `clearRefinements`. In order to initialize it, you need to update name in your code:
+
+```js
+search.addWidget(
+  instantsearch.widgets.clearRefinements({
+    /* options here */
+  })
+);
+```
+
+### Markup
+
+```html
+<div class="ais-ClearRefinements">
+  <button class="ais-ClearRefinements-button">
+    Clear refinements
+  </button>
+</div>
+```
+
+### Options
+
+Options that were renamed (same semantic):
+
+* `excludeAttributes` → `excludedAttributes`
+
+Values for `cssClasses` have been updated to reflect the markup changes:
+
+* root
+* button
+* disabledButton
+
+Note that `button` and `disabledButton` are independant. If the button enters the disable state, then both classes will be applied.
+
+CSS classes and templates for autohideContainer, header, footer and body have been moved to an external widget wrapper: panel.
+
+### CSS
+
+| V2                    | V3 equivalent                                 |
+| --------------------- | --------------------------------------------- |
+| ais-clear-all--root   | ais-ClearRefinements                          |
+| ais-clear-all--link   | ais-ClearRefinements-button                   |
+| ais-clear-all--body   | _removed_ handled by the panel widget wrapper |
+| ais-clear-all--header | _removed_ handled by the panel widget wrapper |
+| ais-clear-all--footer | _removed_ handled by the panel widget wrapper |
+
+## Connector - connectClearAll
+
+### Name update
+
+The connector `connectClearAll` has been renamed into `connectClearRefinements`.
+
+### Options
+
 <!-- Template -->
 
 ## Widget – old name
 
-### Name change?
+### Name update?
 
 ### Options
 
 ### Markup
 
 ### CSS
+
+## Connector – old name
+
+### Name update
+
+### Options

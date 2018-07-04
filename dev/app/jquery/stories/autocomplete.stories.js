@@ -2,8 +2,8 @@
 
 import { action, storiesOf } from 'dev-novel';
 
-import instantsearch from '../../../../index.js';
-import { wrapWithHitsAndJquery } from '../../utils/wrap-with-hits.js';
+import instantsearch from '../../../../index';
+import { wrapWithHitsAndJquery } from '../../utils/wrap-with-hits';
 
 const stories = storiesOf('Autocomplete');
 

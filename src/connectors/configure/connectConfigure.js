@@ -1,7 +1,7 @@
 import isFunction from 'lodash/isFunction';
 import isPlainObject from 'lodash/isPlainObject';
 
-import { enhanceConfiguration } from '../../lib/InstantSearch.js';
+import { enhanceConfiguration } from '../../lib/InstantSearch';
 
 const usage = `Usage:
 var customConfigureWidget = connectConfigure(

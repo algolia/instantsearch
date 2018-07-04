@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 
-import autoHideContainer from '../decorators/autoHideContainer.js';
-import headerFooter from '../decorators/headerFooter.js';
+import autoHideContainer from '../decorators/autoHideContainer';
+import headerFooter from '../decorators/headerFooter';
 
 export class RawSelector extends Component {
   componentWillMount() {

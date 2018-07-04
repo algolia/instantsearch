@@ -1,5 +1,5 @@
 /* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import instantsearch from '../../../../index';
 
 const renderFn = (
   { refine, hasRefinements, widgetParams: { containerNode } },
@@ -20,4 +20,4 @@ const renderFn = (
   clearAllCTA.attr('disabled', !hasRefinements);
 };
 
-export default instantsearch.connectors.connectClearAll(renderFn);
+export default instantsearch.connectors.connectClearRefinements(renderFn);

@@ -1,4 +1,4 @@
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {

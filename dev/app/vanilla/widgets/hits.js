@@ -1,5 +1,5 @@
 /* eslint-disable import/default */
-import instantsearch from '../../../../index.js';
+import instantsearch from '../../../../index';
 import bel from 'bel';
 
 function render({ hits, widgetParams: { containerNode } }) {

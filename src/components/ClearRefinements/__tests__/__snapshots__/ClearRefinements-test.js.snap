@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ClearRefinements should render <ClearRefinements /> 1`] = `
+<div
+  className="custom-root"
+>
+  <button
+    className="custom-button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+    disabled={false}
+    href="#all-cleared!"
+    onClick={[Function]}
+  />
+</div>
+`;
+
+exports[`ClearRefinements should render a disabled <ClearRefinements /> 1`] = `
+<div
+  className="custom-root"
+>
+  <button
+    className="custom-button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+    disabled={true}
+    href="#all-cleared!"
+    onClick={[Function]}
+  />
+</div>
+`;
+
+exports[`ClearRefinements should render a disabled <ClearRefinements /> with a custom css class 1`] = `
+<div
+  className="custom-root"
+>
+  <button
+    className="custom-button custom-disabled-button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+    disabled={true}
+    href="#all-cleared!"
+    onClick={[Function]}
+  />
+</div>
+`;

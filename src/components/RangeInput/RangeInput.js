@@ -1,7 +1,7 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
+import headerFooterHOC from '../../decorators/headerFooter';
 
 export class RawRangeInput extends Component {
   constructor(props) {

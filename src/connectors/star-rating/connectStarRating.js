@@ -1,4 +1,4 @@
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customStarRating = connectStarRating(function render(params, isFirstRendering) {

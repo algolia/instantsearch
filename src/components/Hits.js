@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 import map from 'lodash/map';
-import Template from './Template.js';
+import Template from './Template';
 import hasKey from 'lodash/has';
 import cx from 'classnames';
 

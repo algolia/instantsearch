@@ -3,7 +3,7 @@ import expect from 'expect';
 import sortBySelector from '../sort-by-selector';
 import Selector from '../../../components/Selector';
 
-import instantSearch from '../../../lib/main.js';
+import instantSearch from '../../../lib/main';
 
 describe('sortBySelector call', () => {
   it('throws an exception when no options', () => {

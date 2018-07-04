@@ -1,7 +1,7 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import hits from '../hits.js';
-import defaultTemplates from '../defaultTemplates.js';
+import hits from '../hits';
+import defaultTemplates from '../defaultTemplates';
 
 describe('hits call', () => {
   it('throws an exception when no container', () => {

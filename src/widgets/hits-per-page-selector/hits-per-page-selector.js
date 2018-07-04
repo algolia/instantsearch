@@ -3,10 +3,10 @@ import cx from 'classnames';
 
 import find from 'lodash/find';
 
-import Selector from '../../components/Selector.js';
-import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
+import Selector from '../../components/Selector';
+import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage';
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils';
 
 const bem = bemHelper('ais-hits-per-page-selector');
 

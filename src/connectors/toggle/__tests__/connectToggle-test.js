@@ -5,7 +5,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectToggle from '../connectToggle.js';
+import connectToggle from '../connectToggle';
 
 describe('connectToggle', () => {
   it('Renders during init and render', () => {

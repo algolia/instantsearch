@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import metalsmith from 'metalsmith';
-import config from './config.js';
+import config from './config';
 
 
 export default function builder({

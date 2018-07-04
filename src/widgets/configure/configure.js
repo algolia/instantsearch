@@ -1,4 +1,4 @@
-import connectConfigure from '../../connectors/configure/connectConfigure.js';
+import connectConfigure from '../../connectors/configure/connectConfigure';
 
 const usage = `Usage:
 search.addWidget(

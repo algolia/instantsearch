@@ -1,15 +1,15 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import defaultTemplates from './defaultTemplates.js';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectToggle from '../../connectors/toggle/connectToggle.js';
+import defaultTemplates from './defaultTemplates';
+import RefinementList from '../../components/RefinementList/RefinementList';
+import connectToggle from '../../connectors/toggle/connectToggle';
 
 import {
   bemHelper,
   getContainerNode,
   prepareTemplateProps,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-toggle');
 

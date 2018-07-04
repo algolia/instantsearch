@@ -3,10 +3,10 @@ import defaults from 'lodash/defaults';
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import Pagination from '../../components/Pagination/Pagination.js';
-import connectPagination from '../../connectors/pagination/connectPagination.js';
+import Pagination from '../../components/Pagination/Pagination';
+import connectPagination from '../../connectors/pagination/connectPagination';
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import { bemHelper, getContainerNode } from '../../lib/utils';
 
 const defaultLabels = {
   previous: '‹',

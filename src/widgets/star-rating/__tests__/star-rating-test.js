@@ -3,8 +3,8 @@ import expect from 'expect';
 
 import jsHelper from 'algoliasearch-helper';
 
-import defaultLabels from '../../../widgets/star-rating/defaultLabels.js';
-import starRating from '../star-rating.js';
+import defaultLabels from '../../../widgets/star-rating/defaultLabels';
+import starRating from '../star-rating';
 
 const SearchResults = jsHelper.SearchResults;
 

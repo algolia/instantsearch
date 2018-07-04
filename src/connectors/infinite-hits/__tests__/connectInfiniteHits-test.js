@@ -1,7 +1,7 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectInfiniteHits from '../connectInfiniteHits.js';
+import connectInfiniteHits from '../connectInfiniteHits';
 
 describe('connectInfiniteHits', () => {
   it('Renders during init and render', () => {

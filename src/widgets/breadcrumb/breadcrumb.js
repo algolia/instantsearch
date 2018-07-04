@@ -3,11 +3,11 @@ import cx from 'classnames';
 
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
-import defaultTemplates from './defaultTemplates.js';
+import defaultTemplates from './defaultTemplates';
 
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
 
-import { component } from '../../lib/suit.js';
+import { component } from '../../lib/suit';
 
 const suit = component('Breadcrumb');
 

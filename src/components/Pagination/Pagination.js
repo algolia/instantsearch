@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 import defaultsDeep from 'lodash/defaultsDeep';
-import { isSpecialClick } from '../../lib/utils.js';
+import { isSpecialClick } from '../../lib/utils';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
 
-import PaginationLink from './PaginationLink.js';
+import PaginationLink from './PaginationLink';
 
 import cx from 'classnames';
 

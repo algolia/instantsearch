@@ -1,4 +1,4 @@
-import templates from './defaultShowMoreTemplates.js';
+import templates from './defaultShowMoreTemplates';
 
 const defaultShowMoreConfig = {
   templates,

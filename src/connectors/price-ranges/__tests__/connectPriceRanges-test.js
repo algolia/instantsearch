@@ -5,7 +5,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectPriceRanges from '../connectPriceRanges.js';
+import connectPriceRanges from '../connectPriceRanges';
 
 describe('connectPriceRanges', () => {
   it('Renders during init and render', () => {

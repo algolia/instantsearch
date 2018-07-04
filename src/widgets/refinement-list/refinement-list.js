@@ -2,18 +2,18 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import filter from 'lodash/filter';
 
-import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
-import defaultTemplates from './defaultTemplates.js';
-import sffvDefaultTemplates from './defaultTemplates.searchForFacetValue.js';
-import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
+import RefinementList from '../../components/RefinementList/RefinementList';
+import connectRefinementList from '../../connectors/refinement-list/connectRefinementList';
+import defaultTemplates from './defaultTemplates';
+import sffvDefaultTemplates from './defaultTemplates.searchForFacetValue';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
   prefixKeys,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-refinement-list');
 
