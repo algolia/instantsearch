@@ -4,7 +4,7 @@
 
 [![Build Status][travis-svg]][travis-url] [![Version][version-svg]][package-url] [![License][license-image]][license-url]
 
-`create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch][react-instantsearch-github], [Vue InstantSearch][vue-instantsearch-github] and [Angular InstantSearch][angular-instantsearch-github]).
+`create-instantsearch-app` is a command line utility that helps you quick start your InstantSearch app using any [Algolia][algolia-website] InstantSearch flavor ([InstantSearch.js][instantsearchjs-github], [React InstantSearch][react-instantsearch-github], [Vue InstantSearch][vue-instantsearch-github], [Angular InstantSearch][angular-instantsearch-github], [InstantSearch iOS][instantsearch-ios-github] and [InstantSearch Android][instantsearch-android-github]).
 
 <p align="center">
   <img src="preview.png" width="800" alt="Preview">
@@ -88,6 +88,8 @@ Supported templates are:
 - [`React InstantSearch Native`][react-instantsearch-github]
 - [`Vue InstantSearch`][vue-instantsearch-github]
 - [`Angular InstantSearch`][angular-instantsearch-github]
+- [`InstantSearch iOS`][instantsearch-ios-github]
+- [`InstantSearch Android`][instantsearch-android-github]
 
 ```
 create-instantsearch-app my-app --template "React InstantSearch"
@@ -245,3 +247,5 @@ Create InstantSearch App is [MIT licensed](LICENSE).
 [react-instantsearch-github]: https://github.com/algolia/react-instantsearch
 [vue-instantsearch-github]: https://github.com/algolia/vue-instantsearch
 [angular-instantsearch-github]: https://github.com/algolia/angular-instantsearch
+[instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
+[instantsearch-android-github]: https://github.com/algolia/instantsearch-android
