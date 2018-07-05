@@ -1,0 +1,25 @@
+import algoliasearch from 'algoliasearch';
+import autocomplete from 'autocomplete.js';
+
+const client = algoliasearch('{{appId}}', '{{apiKey}}');
+const index = client.initIndex('{{indexName}}');
+
+const $hits = document.querySelector('#hits');
+
+autocomplete('#searchBox input[type=search]', { hint: false }, [
+  {
+    source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
+    displayKey: '{{mainAttribute}}',
+    templates: {
+      suggestion(suggestion) {
+        {{#if mainAttribute}}
+        return suggestion._highlightResult.{{mainAttribute}}.value;
+        {{else}}
+        return JSON.stringify(suggestion);
+        {{/if}}
+      },
+    },
+  },
+]).on('autocomplete:selected', (event, suggestion, dataset) => {
+  console.log({ suggestion, dataset });
+});
