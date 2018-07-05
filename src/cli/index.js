@@ -13,6 +13,7 @@ const {
   getAppTemplateConfig,
   fetchLibraryVersions,
   getAllTemplates,
+  getTemplatesByCategory,
   getTemplatePath,
 } = require('../utils');
 const getOptionsFromArguments = require('./getOptionsFromArguments');
@@ -89,9 +90,21 @@ try {
 const questions = [
   {
     type: 'list',
+    pageSize: 10,
     name: 'template',
     message: 'InstantSearch template',
-    choices: getAllTemplates(),
+    choices: () => {
+      const templatesByCategory = getTemplatesByCategory();
+
+      return Object.entries(templatesByCategory).reduce(
+        (templates, [category, values]) => [
+          ...templates,
+          new inquirer.Separator(category),
+          ...values,
+        ],
+        []
+      );
+    },
     validate(input) {
       return Boolean(input);
     },

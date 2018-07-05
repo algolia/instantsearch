@@ -88,6 +88,30 @@ function getAllTemplates() {
   return templates;
 }
 
+function getTemplatesByCategory() {
+  const templatePaths = fs
+    .readdirSync(TEMPLATES_FOLDER)
+    .map(name => path.join(TEMPLATES_FOLDER, name))
+    .filter(source => fs.lstatSync(source).isDirectory());
+
+  const templates = templatePaths.reduce((allTemplates, source) => {
+    const name = path.basename(source);
+
+    const { category } = require(`${source}/.template.js`);
+
+    if (!category) {
+      return allTemplates;
+    }
+
+    return {
+      ...allTemplates,
+      [category]: [...(allTemplates[category] || []), name],
+    };
+  }, {});
+
+  return templates;
+}
+
 function getTemplatePath(templateName) {
   const supportedTemplates = getAllTemplates();
 
@@ -114,4 +138,5 @@ module.exports = {
   fetchLibraryVersions,
   getAllTemplates,
   getTemplatePath,
+  getTemplatesByCategory,
 };

@@ -3,6 +3,7 @@ const install = require('../../tasks/node/install');
 const teardown = require('../../tasks/node/teardown');
 
 module.exports = {
+  category: 'Mobile',
   libraryName: 'react-instantsearch-native',
   templateName: 'react-instantsearch-native',
   appName: 'react-instantsearch-native-app',

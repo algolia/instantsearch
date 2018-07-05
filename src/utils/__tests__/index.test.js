@@ -85,3 +85,39 @@ describe('checkTemplateConfigFile', () => {
     }).not.toThrow();
   });
 });
+
+describe('getTemplatesByCategory', () => {
+  beforeAll(() => {
+    mockReaddirSync.mockImplementation(() => [
+      'InstantSearch.js',
+      'Angular InstantSearch',
+      'React InstantSearch',
+      'Vue InstantSearch',
+      'React InstantSearch Native',
+      'InstantSearch iOS',
+      'InstantSearch Android',
+    ]);
+    mockLstatSync.mockImplementation(() => ({ isDirectory: () => true }));
+  });
+
+  test('return the correct templates and categories', () => {
+    expect(utils.getTemplatesByCategory()).toEqual({
+      Web: expect.arrayContaining([
+        'InstantSearch.js',
+        'Angular InstantSearch',
+        'React InstantSearch',
+        'Vue InstantSearch',
+      ]),
+      Mobile: expect.arrayContaining([
+        'React InstantSearch Native',
+        'InstantSearch iOS',
+        'InstantSearch Android',
+      ]),
+    });
+  });
+
+  afterAll(() => {
+    mockReaddirSync.mockReset();
+    mockLstatSync.mockReset();
+  });
+});

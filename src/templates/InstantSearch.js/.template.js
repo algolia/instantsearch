@@ -2,6 +2,7 @@ const install = require('../../tasks/node/install');
 const teardown = require('../../tasks/node/teardown');
 
 module.exports = {
+  category: 'Web',
   libraryName: 'instantsearch.js',
   templateName: 'instantsearch.js',
   appName: 'instantsearch.js-app',
