@@ -220,12 +220,15 @@ create-instantsearch-app my-app --template ./my-custom-template
 
 ## Previews
 
-Web templates on CodeSandbox:
+You can use the web templates on CodeSandbox:
 
 - [InstantSearch.js](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/instantsearch.js)
 - [React InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/react-instantsearch)
 - [Vue InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/vue-instantsearch)
 - [Angular InstantSearch](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/angular-instantsearch)
+- [Autocomplete.js](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/autocomplete.js)
+- [JavaScript Client](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/javascript-client)
+- [JavaScript Helper](https://codesandbox.io/s/github/algolia/create-instantsearch-app/tree/templates/javascript-helper)
 
 ## License
 
