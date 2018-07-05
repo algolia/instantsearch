@@ -263,7 +263,7 @@ exports[`Templates Angular InstantSearch File content: package.json 1`] = `
     \\"@angular/platform-browser\\": \\"6.0.6\\",
     \\"@angular/platform-browser-dynamic\\": \\"6.0.6\\",
     \\"@angular/router\\": \\"6.0.6\\",
-    \\"angular-instantsearch\\": \\"^1.0.0\\",
+    \\"angular-instantsearch\\": \\"1.0.0\\",
     \\"core-js\\": \\"2.5.7\\",
     \\"rxjs\\": \\"6.2.1\\",
     \\"zone.js\\": \\"0.8.26\\"
@@ -2777,7 +2777,7 @@ exports[`Templates React InstantSearch File content: package.json 1`] = `
   \\"dependencies\\": {
     \\"react\\": \\"16.4.1\\",
     \\"react-dom\\": \\"16.4.1\\",
-    \\"react-instantsearch-dom\\": \\"^1.0.0\\",
+    \\"react-instantsearch-dom\\": \\"1.0.0\\",
     \\"react-scripts\\": \\"1.1.4\\"
   },
   \\"devDependencies\\": {
@@ -3181,7 +3181,7 @@ exports[`Templates React InstantSearch Native File content: package.json 1`] = `
     \\"expo\\": \\"27.1.0\\",
     \\"prop-types\\": \\"15.6.2\\",
     \\"react\\": \\"16.3.1\\",
-    \\"react-instantsearch-native\\": \\"^1.0.0\\",
+    \\"react-instantsearch-native\\": \\"1.0.0\\",
     \\"react-native\\": \\"0.55.4\\"
   },
   \\"devDependencies\\": {
@@ -3457,7 +3457,7 @@ exports[`Templates Vue InstantSearch File content: package.json 1`] = `
   },
   \\"dependencies\\": {
     \\"vue\\": \\"2.5.16\\",
-    \\"vue-instantsearch\\": \\"^1.0.0\\"
+    \\"vue-instantsearch\\": \\"1.0.0\\"
   },
   \\"devDependencies\\": {
     \\"babel-core\\": \\"6.26.0\\",
