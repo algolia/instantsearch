@@ -2999,6 +2999,320 @@ Array [
 ]
 `;
 
+exports[`Templates JavaScript Client File content: .editorconfig 1`] = `
+"root = true
+
+[*]
+charset = utf-8
+indent_style = space
+indent_size = 2
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true"
+`;
+
+exports[`Templates JavaScript Client File content: .eslintignore 1`] = `
+"/node_modules
+/dist
+/.cache"
+`;
+
+exports[`Templates JavaScript Client File content: .eslintrc.js 1`] = `
+"module.exports = {
+  extends: 'algolia',
+};"
+`;
+
+exports[`Templates JavaScript Client File content: .gitignore 1`] = `
+"# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/dist
+/.cache
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*"
+`;
+
+exports[`Templates JavaScript Client File content: .prettierrc 1`] = `
+"{
+  \\"singleQuote\\": true,
+  \\"proseWrap\\": \\"never\\",
+  \\"trailingComma\\": \\"es5\\"
+}"
+`;
+
+exports[`Templates JavaScript Client File content: README.md 1`] = `
+"# javascript-client-app
+
+_This project was generated with [create-instantsearch-app](https://github.com/algolia/create-instantsearch-app) by [Algolia](https://algolia.com)._
+
+## Get started
+
+To run this project locally, install the dependencies and run the local server:
+
+\`\`\`sh
+npm install
+npm start
+\`\`\`
+
+Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
+
+\`\`\`sh
+yarn
+yarn start
+\`\`\`"
+`;
+
+exports[`Templates JavaScript Client File content: index.html 1`] = `
+"<!DOCTYPE html>
+<html lang=\\"en\\">
+
+<head>
+  <meta charset=\\"utf-8\\">
+  <meta name=\\"viewport\\" content=\\"width=device-width, initial-scale=1, shrink-to-fit=no\\">
+  <meta name=\\"theme-color\\" content=\\"#000000\\">
+
+  <link rel=\\"manifest\\" href=\\"./manifest.webmanifest\\">
+  <link rel=\\"shortcut icon\\" href=\\"./favicon.png\\">
+
+  <link rel=\\"stylesheet\\" href=\\"./src/index.css\\">
+  <link rel=\\"stylesheet\\" href=\\"./src/app.css\\">
+
+  <title>javascript-client-app</title>
+</head>
+
+<body>
+  <header class=\\"header\\">
+    <h1 class=\\"header-title\\">
+      <a href=\\"/\\">javascript-client-app</a>
+    </h1>
+    <p class=\\"header-subtitle\\">using the
+      <a href=\\"https://github.com/algolia/algoliasearch-client-javascript\\">Algolia Search API Client for JavaScript</a>
+    </p>
+  </header>
+
+  <div class=\\"container\\">
+    <div class=\\"container-app\\">
+      <div class=\\"filters\\"></div>
+
+      <div class=\\"search-container\\">
+        <div id=\\"searchBox\\">
+          <form role=\\"search\\">
+            <input type=\\"search\\" placeholder=\\"Search placeholder\\" />
+          </form>
+        </div>
+        <div id=\\"hits\\"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src=\\"./src/app.js\\"></script>
+</body>
+
+</html>"
+`;
+
+exports[`Templates JavaScript Client File content: manifest.webmanifest 1`] = `
+"{
+  \\"short_name\\": \\"javascript-client-app\\",
+  \\"name\\": \\"javascript-client-app Sample\\",
+  \\"icons\\": [
+    {
+      \\"src\\": \\"favicon.png\\",
+      \\"sizes\\": \\"64x64 32x32 24x24 16x16\\",
+      \\"type\\": \\"image/x-icon\\"
+    }
+  ],
+  \\"start_url\\": \\"./index.html\\",
+  \\"display\\": \\"standalone\\",
+  \\"theme_color\\": \\"#000000\\",
+  \\"background_color\\": \\"#ffffff\\"
+}"
+`;
+
+exports[`Templates JavaScript Client File content: package.json 1`] = `
+"{
+  \\"name\\": \\"javascript-client-app\\",
+  \\"version\\": \\"1.0.0\\",
+  \\"private\\": true,
+  \\"scripts\\": {
+    \\"start\\": \\"parcel index.html --port 3000\\",
+    \\"build\\": \\"parcel build index.html\\",
+    \\"lint\\": \\"eslint .\\",
+    \\"lint:fix\\": \\"npm run lint -- --fix\\"
+  },
+  \\"dependencies\\": {
+    \\"algoliasearch\\": \\"1.0.0\\"
+  },
+  \\"devDependencies\\": {
+    \\"babel-eslint\\": \\"8.2.5\\",
+    \\"eslint\\": \\"4.19.1\\",
+    \\"eslint-config-algolia\\": \\"13.1.0\\",
+    \\"eslint-config-prettier\\": \\"2.9.0\\",
+    \\"eslint-plugin-import\\": \\"2.13.0\\",
+    \\"eslint-plugin-prettier\\": \\"2.6.1\\",
+    \\"parcel-bundler\\": \\"1.9.4\\",
+    \\"prettier\\": \\"1.13.7\\"
+  }
+}"
+`;
+
+exports[`Templates JavaScript Client File content: src/app.css 1`] = `
+"em {
+  background: cyan;
+  font-style: normal;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 0.5rem 1rem;
+  background-image: linear-gradient(73deg, #3369e7, #1cc7d0);
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.header a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  font-weight: normal;
+}
+
+.header-title::after {
+  content: ' ▸ ';
+  padding: 0 0.5rem;
+}
+
+.header-subtitle {
+  font-size: 1.2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.container-app {
+  display: grid;
+}
+
+#searchBox input[type=\\"search\\"] {
+  width: 100%;
+  padding: 12px;
+  font: inherit;
+  border-radius: 2px;
+  border: 1px solid rgba(150, 150, 150, 0.16);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16);
+}
+
+.ais-hits {
+  display: grid;
+  grid-template-columns: 49% 49%;
+  grid-gap: 2%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ais-hits--item {
+  min-height: 100px;
+  padding: 1rem;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid rgba(150, 150, 150, 0.16);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.16);
+  margin-bottom: 1rem;
+}
+
+#searchBox {
+  margin-bottom: 2rem;
+}"
+`;
+
+exports[`Templates JavaScript Client File content: src/app.js 1`] = `
+"import algoliasearch from 'algoliasearch';
+
+const client = algoliasearch('appId', 'apiKey');
+const index = client.initIndex('indexName');
+
+const $searchBox = document.querySelector('#searchBox input[type=search]');
+const $hits = document.querySelector('#hits');
+
+function renderHits(query) {
+  index.search(query).then(result => {
+    // Please sanitize user-provided data when using \`innerHTML\` to avoid XSS
+    $hits.innerHTML = \`
+      <ul class=\\"ais-hits\\">
+        \${result.hits
+          .map(hit => \`<li class=\\"ais-hits--item\\">\${hit._highlightResult.mainAttribute.value}</li>\`)
+          .join('')}
+      </ul>\`;
+  });
+}
+
+$searchBox.addEventListener('input', event => {
+  const query = event.target.value;
+
+  renderHits(query);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderHits('');
+});"
+`;
+
+exports[`Templates JavaScript Client File content: src/index.css 1`] = `
+"body,
+h1 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}"
+`;
+
+exports[`Templates JavaScript Client Folder structure: contains the right files 1`] = `
+Array [
+  ".editorconfig",
+  ".eslintignore",
+  ".eslintrc.js",
+  ".gitignore",
+  ".prettierrc",
+  "README.md",
+  "favicon.png",
+  "index.html",
+  "manifest.webmanifest",
+  "package.json",
+  "src/app.css",
+  "src/app.js",
+  "src/index.css",
+]
+`;
+
 exports[`Templates React InstantSearch File content: .editorconfig 1`] = `
 "root = true
 

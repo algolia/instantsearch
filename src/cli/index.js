@@ -12,7 +12,6 @@ const {
   checkAppName,
   getAppTemplateConfig,
   fetchLibraryVersions,
-  getAllTemplates,
   getTemplatesByCategory,
   getTemplatePath,
 } = require('../utils');

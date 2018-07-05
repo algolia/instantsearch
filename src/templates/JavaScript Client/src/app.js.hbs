@@ -1,0 +1,29 @@
+import algoliasearch from 'algoliasearch';
+
+const client = algoliasearch('{{appId}}', '{{apiKey}}');
+const index = client.initIndex('{{indexName}}');
+
+const $searchBox = document.querySelector('#searchBox input[type=search]');
+const $hits = document.querySelector('#hits');
+
+function renderHits(query) {
+  index.search(query).then(result => {
+    // Please sanitize user-provided data when using `innerHTML` to avoid XSS
+    $hits.innerHTML = `
+      <ul class="ais-hits">
+        ${result.hits
+          .map(hit => `<li class="ais-hits--item">{{#if mainAttribute}}${hit._highlightResult.{{mainAttribute}}.value}{{else}}${JSON.stringify(hit)}{{/if}}</li>`)
+          .join('')}
+      </ul>`;
+  });
+}
+
+$searchBox.addEventListener('input', event => {
+  const query = event.target.value;
+
+  renderHits(query);
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderHits('');
+});
