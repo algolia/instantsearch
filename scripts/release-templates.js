@@ -84,17 +84,21 @@ async function build() {
 
       await app.create();
 
-      const packagePath = `${appPath}/package.json`;
-      const packageConfig = JSON.parse(fs.readFileSync(packagePath));
-      const packageConfigFilled = {
-        ...packageConfig,
-        keywords,
-      };
+      try {
+        const packagePath = `${appPath}/package.json`;
+        const packageConfig = JSON.parse(fs.readFileSync(packagePath));
+        const packageConfigFilled = {
+          ...packageConfig,
+          keywords,
+        };
 
-      fs.writeFileSync(
-        packagePath,
-        JSON.stringify(packageConfigFilled, null, 2)
-      );
+        fs.writeFileSync(
+          packagePath,
+          JSON.stringify(packageConfigFilled, null, 2)
+        );
+      } catch (error) {
+        // There's no `package.json` file (it's not a web template).
+      }
     })
   );
 
