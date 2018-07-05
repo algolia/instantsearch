@@ -80,24 +80,29 @@ describe('Templates', () => {
       });
 
       test('File content', () => {
-        generatedFiles.forEach(filePath => {
-          if (['.png', '.ico', '.jpg'].includes(filePath.slice(-4))) {
-            const image = fs.readFileSync(`${templatePath}/${filePath}`);
+        generatedFiles
+          .filter(filePath => !['.jar'].includes(filePath.slice(-4)))
+          .forEach(filePath => {
+            if (['.png', '.ico', '.jpg'].includes(filePath.slice(-4))) {
+              const image = fs.readFileSync(`${templatePath}/${filePath}`);
 
-            expect(image).toMatchImageSnapshot({
-              customSnapshotIdentifier: `e2e-installs-${
-                templateConfig.templateName
-              }-${path.basename(filePath)}`,
-            });
-          } else {
-            const fileContent = fs
-              .readFileSync(`${appPath}/${filePath}`)
-              .toString()
-              .trim();
+              expect(image).toMatchImageSnapshot({
+                customSnapshotsDir: path.resolve(
+                  `./scripts/__image_snapshots__/${
+                    templateConfig.templateName
+                  }/${path.dirname(filePath)}`
+                ),
+                customSnapshotIdentifier: path.basename(filePath),
+              });
+            } else {
+              const fileContent = fs
+                .readFileSync(`${appPath}/${filePath}`)
+                .toString()
+                .trim();
 
-            expect(fileContent).toMatchSnapshot(filePath);
-          }
-        });
+              expect(fileContent).toMatchSnapshot(filePath);
+            }
+          });
       });
     });
   });

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/activity_main"
+    xmlns:algolia="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.instantsearch.app.MainActivity">
+
+    <com.example.instantsearch.ui.views.SearchBox
+        android:id="@+id/search_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"/>
+
+    <com.example.instantsearch.ui.views.Hits
+        android:id="@+id/hits"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_box"
+        algolia:itemLayout="@layout/hits_item"/>
+</RelativeLayout>

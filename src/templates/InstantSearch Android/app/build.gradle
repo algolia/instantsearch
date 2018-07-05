@@ -1,0 +1,32 @@
+apply plugin: 'com.android.application'
+
+android {
+    dataBinding.enabled true
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
+    defaultConfig {
+        applicationId "com.example.instantsearch.app"
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.example:instantsearch-android:1.12.0'
+    testImplementation 'junit:junit:4.12'
+}
