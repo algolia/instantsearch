@@ -24,6 +24,4 @@ $searchBox.addEventListener('input', event => {
   renderHits(query);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderHits('');
-});
+renderHits('');

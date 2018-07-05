@@ -3277,9 +3277,7 @@ $searchBox.addEventListener('input', event => {
   renderHits(query);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderHits('');
-});"
+renderHits('');"
 `;
 
 exports[`Templates JavaScript Client File content: src/index.css 1`] = `
