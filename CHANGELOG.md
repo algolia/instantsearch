@@ -1,3 +1,26 @@
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/algolia/create-instantsearch-app/compare/3.0.0...3.1.0) (2018-07-05)
+
+
+### Bug Fixes
+
+* **cli:** Remove command shortcuts ([#67](https://github.com/algolia/create-instantsearch-app/issues/67)) ([4bc6ba1](https://github.com/algolia/create-instantsearch-app/commit/4bc6ba1))
+* **ios:** run pod repo update before install ([#72](https://github.com/algolia/create-instantsearch-app/issues/72)) ([1d10805](https://github.com/algolia/create-instantsearch-app/commit/1d10805))
+* **templates:** Pin library dependencies ([#79](https://github.com/algolia/create-instantsearch-app/issues/79)) ([8ea5a77](https://github.com/algolia/create-instantsearch-app/commit/8ea5a77))
+
+
+### Features
+
+* **cli:**  Add template categories ([#76](https://github.com/algolia/create-instantsearch-app/issues/76)) ([a04e9c6](https://github.com/algolia/create-instantsearch-app/commit/a04e9c6))
+* **cli:** Add empty lines before intro line ([b4b4fcc](https://github.com/algolia/create-instantsearch-app/commit/b4b4fcc))
+* **templates:** Add Android template ([#73](https://github.com/algolia/create-instantsearch-app/issues/73)) ([d35e9c9](https://github.com/algolia/create-instantsearch-app/commit/d35e9c9))
+* **templates:** Add Autocomplete.js template ([#80](https://github.com/algolia/create-instantsearch-app/issues/80)) ([fe9a51c](https://github.com/algolia/create-instantsearch-app/commit/fe9a51c))
+* **templates:** Add iOS template ([#69](https://github.com/algolia/create-instantsearch-app/issues/69)) ([aa061f8](https://github.com/algolia/create-instantsearch-app/commit/aa061f8))
+* **templates:** Add JavaScript Client template ([#77](https://github.com/algolia/create-instantsearch-app/issues/77)) ([1dc0d03](https://github.com/algolia/create-instantsearch-app/commit/1dc0d03))
+* **templates:** Add JavaScript Helper template ([#78](https://github.com/algolia/create-instantsearch-app/issues/78)) ([34d0e94](https://github.com/algolia/create-instantsearch-app/commit/34d0e94))
+
+
+
 <a name="3.0.0"></a>
 # [3.0.0](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.5...3.0.0) (2018-06-18)
 
