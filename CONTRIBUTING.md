@@ -34,6 +34,7 @@ When [creating a template](README.md#templates), you will need to run end-to-end
 
 - [Node](https://nodejs.org) ≥ 8
 - [Yarn](https://yarnpkg.com)
+- [CocoaPods](https://cocoapods.org) (to run end-to-end tests)
 
 ## Workflow
 
