@@ -13,9 +13,13 @@ class InfiniteHits extends Component {
       templateProps,
     } = this.props;
     const btn = this.props.isLastPage ? (
-      <button disabled className={cssClasses.showmoreButton}>{showMoreLabel}</button>
+      <button disabled className={cssClasses.showmoreButton}>
+        {showMoreLabel}
+      </button>
     ) : (
-      <button onClick={showMore} className={cssClasses.showmoreButton}>{showMoreLabel}</button>
+      <button onClick={showMore} className={cssClasses.showmoreButton}>
+        {showMoreLabel}
+      </button>
     );
 
     return (
