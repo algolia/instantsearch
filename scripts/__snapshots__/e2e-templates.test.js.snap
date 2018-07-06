@@ -27,7 +27,9 @@ Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
 \`\`\`sh
 yarn
 yarn start
-\`\`\`"
+\`\`\`
+
+Open http://localhost:3000 to see your app."
 `;
 
 exports[`Templates Angular InstantSearch File content: angular.json 1`] = `
@@ -1021,7 +1023,9 @@ Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
 \`\`\`sh
 yarn
 yarn start
-\`\`\`"
+\`\`\`
+
+Open http://localhost:3000 to see your app."
 `;
 
 exports[`Templates Autocomplete.js File content: index.html 1`] = `
@@ -2737,7 +2741,9 @@ Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
 \`\`\`sh
 yarn
 yarn start
-\`\`\`"
+\`\`\`
+
+Open http://localhost:3000 to see your app."
 `;
 
 exports[`Templates InstantSearch.js File content: index.html 1`] = `
@@ -3075,7 +3081,9 @@ Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
 \`\`\`sh
 yarn
 yarn start
-\`\`\`"
+\`\`\`
+
+Open http://localhost:3000 to see your app."
 `;
 
 exports[`Templates JavaScript Client File content: index.html 1`] = `
@@ -3387,7 +3395,9 @@ Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
 \`\`\`sh
 yarn
 yarn start
-\`\`\`"
+\`\`\`
+
+Open http://localhost:3000 to see your app."
 `;
 
 exports[`Templates JavaScript Helper File content: index.html 1`] = `
@@ -3688,7 +3698,9 @@ Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
 \`\`\`sh
 yarn
 yarn start
-\`\`\`"
+\`\`\`
+
+Open http://localhost:3000 to see your app."
 `;
 
 exports[`Templates React InstantSearch File content: package.json 1`] = `
@@ -4317,7 +4329,9 @@ Alternatively, you may use [Yarn](https://http://yarnpkg.com/):
 \`\`\`sh
 yarn
 yarn start
-\`\`\`"
+\`\`\`
+
+Open http://localhost:3000 to see your app."
 `;
 
 exports[`Templates Vue InstantSearch File content: index.html 1`] = `

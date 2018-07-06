@@ -42,8 +42,6 @@ npm start
 
 > [`npx`](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) is a tool introduced in `npm@5.2.0` that makes it possible to run CLI tools hosted on the npm registry.
 
-Open http://localhost:3000 to see you app.
-
 ---
 
 Alternatively, you can use [Yarn](https://http://yarnpkg.com):
