@@ -54,7 +54,7 @@ infiniteHits({
   container,
   [ escapeHits = false ],
   [ showMoreLabel ],
-  [ cssClasses.{root,empty,item,showmore}={} ],
+  [ cssClasses.{root,empty,item,showmore,showmoreButton}={} ],
   [ templates.{empty,item} | templates.{empty} ],
   [ transformData.{empty,item} | transformData.{empty} ],
 })`;
@@ -76,7 +76,8 @@ infiniteHits({
  * @property {string|string[]} [root] CSS class to add to the wrapping element.
  * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
  * @property {string|string[]} [item] CSS class to add to each result.
- * @property {string|string[]} [showmore] CSS class to add to the show more button.
+ * @property {string|string[]} [showmore] CSS class to add to the show more button container.
+ * @property {string|string[]} [showmoreButton] CSS class to add to the show more button.
  */
 
 /**
@@ -138,6 +139,7 @@ export default function infiniteHits({
     item: cx(bem('item'), userCssClasses.item),
     empty: cx(bem(null, 'empty'), userCssClasses.empty),
     showmore: cx(bem('showmore'), userCssClasses.showmore),
+    showmoreButton: cx(bem('showmoreButton'), userCssClasses.showmoreButton),
   };
 
   const specializedRenderer = renderer({
