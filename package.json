@@ -63,7 +63,7 @@
     "eslint-plugin-prettier": "2.6.2",
     "jest": "23.3.0",
     "jest-image-snapshot": "2.4.3",
-    "prettier": "1.13.2",
+    "prettier": "1.13.7",
     "release-it": "7.4.7",
     "walk-sync": "0.3.2"
   },

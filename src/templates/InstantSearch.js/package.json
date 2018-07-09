@@ -16,6 +16,6 @@
     "eslint-plugin-import": "2.13.0",
     "eslint-plugin-prettier": "2.6.2",
     "parcel-bundler": "1.9.4",
-    "prettier": "1.13.5"
+    "prettier": "1.13.7"
   }
 }
