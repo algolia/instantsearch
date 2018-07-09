@@ -100,7 +100,31 @@ describe('Templates', () => {
                 .toString()
                 .trim();
 
-              expect(fileContent).toMatchSnapshot(filePath);
+              if (path.basename(filePath) === 'package.json') {
+                // Only snapshot partial dependencies for Renovate to update
+                // dependencies without the CI failing.
+                // See: https://github.com/algolia/create-instantsearch-app/issues/110
+                const {
+                  dependencies = {},
+                  devDependencies = {}, // eslint-disable-line no-unused-vars
+                  ...packageRest
+                } = JSON.parse(fileContent);
+                const { libraryName } = templateConfig;
+                const packageContent = {
+                  ...packageRest,
+                  partialDependencies: libraryName
+                    ? {
+                        [libraryName]: dependencies[libraryName],
+                      }
+                    : {},
+                };
+
+                expect(JSON.stringify(packageContent, null, 2)).toMatchSnapshot(
+                  filePath
+                );
+              } else {
+                expect(fileContent).toMatchSnapshot(filePath);
+              }
             }
           });
       });
