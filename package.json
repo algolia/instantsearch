@@ -36,7 +36,7 @@
     "node": ">= 8"
   },
   "dependencies": {
-    "algoliasearch": "3.27.1",
+    "algoliasearch": "3.29.0",
     "chalk": "2.4.1",
     "commander": "2.16.0",
     "inquirer": "5.2.0",
