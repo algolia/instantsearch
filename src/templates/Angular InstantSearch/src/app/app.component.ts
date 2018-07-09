@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import * as algoliasearch from "algoliasearch";
 
 @Component({
   selector: 'app-root',
@@ -7,8 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   config = {
-    appId: '{{appId}}',
-    apiKey: '{{apiKey}}',
     indexName: '{{indexName}}',
+    searchClient: algoliasearch('{{appId}}', '{{apiKey}}'),
   };
 }

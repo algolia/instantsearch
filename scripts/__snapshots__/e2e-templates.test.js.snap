@@ -378,6 +378,7 @@ describe('AppComponent', () => {
 
 exports[`Templates Angular InstantSearch File content: src/app/app.component.ts 1`] = `
 "import { Component } from '@angular/core';
+import * as algoliasearch from \\"algoliasearch\\";
 
 @Component({
   selector: 'app-root',
@@ -386,9 +387,8 @@ exports[`Templates Angular InstantSearch File content: src/app/app.component.ts 
 })
 export class AppComponent {
   config = {
-    appId: 'appId',
-    apiKey: 'apiKey',
     indexName: 'indexName',
+    searchClient: algoliasearch('appId', 'apiKey'),
   };
 }"
 `;
