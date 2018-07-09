@@ -8,6 +8,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
       "item": "ais-infinite-hits--item",
       "root": "ais-infinite-hits root cx",
       "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
     }
   }
   hits={
@@ -56,6 +57,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
       "item": "ais-infinite-hits--item",
       "root": "ais-infinite-hits root cx",
       "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
     }
   }
   hits={
@@ -104,6 +106,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       "item": "ais-infinite-hits--item",
       "root": "ais-infinite-hits root cx",
       "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
     }
   }
   hits={
@@ -154,6 +157,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       "item": "ais-infinite-hits--item",
       "root": "ais-infinite-hits root cx",
       "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
     }
   }
   hits={
