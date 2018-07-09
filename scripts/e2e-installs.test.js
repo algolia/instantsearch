@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const { execSync } = require('child_process');
 
 describe('Installation', () => {
@@ -27,29 +28,51 @@ describe('Installation', () => {
   });
 
   describe('Dependencies', () => {
-    describe('Node', () => {
-      test('get installed by default', () => {
-        execSync(
-          `yarn start ${appPath} \
-            --template "InstantSearch.js"`,
-          { stdio: 'ignore' }
-        );
+    describe('Web', () => {
+      const templatesFolder = path.join(__dirname, '../src/templates');
+      const templates = [
+        'Angular InstantSearch',
+        'Autocomplete.js',
+        'InstantSearch.js',
+        'JavaScript Client',
+        'JavaScript Helper',
+        'React InstantSearch',
+        'React InstantSearch Native',
+        'Vue InstantSearch',
+      ]
+        .map(name => path.join(templatesFolder, name))
+        .filter(source => fs.lstatSync(source).isDirectory());
 
-        expect(fs.lstatSync(`${appPath}/node_modules`).isDirectory()).toBe(
-          true
-        );
+      templates.forEach(templatePath => {
+        const templateName = path.basename(templatePath);
+
+        describe(templateName, () => {
+          test('get installed correctly', () => {
+            execSync(
+              `yarn start ${appPath} \
+                  --template "${templateName}"`,
+              { stdio: 'ignore' }
+            );
+
+            expect(fs.lstatSync(`${appPath}/node_modules`).isDirectory()).toBe(
+              true
+            );
+          });
+        });
       });
     });
 
-    describe('CocoaPods', () => {
-      test('get installed by default', () => {
-        execSync(
-          `yarn start ${appPath} \
-            --template "InstantSearch iOS"`,
-          { stdio: 'ignore' }
-        );
+    describe('Mobile', () => {
+      describe('InstantSearch iOS', () => {
+        test('get installed correctly', () => {
+          execSync(
+            `yarn start ${appPath} \
+                --template "InstantSearch iOS"`,
+            { stdio: 'ignore' }
+          );
 
-        expect(fs.lstatSync(`${appPath}/Pods`).isDirectory()).toBe(true);
+          expect(fs.lstatSync(`${appPath}/Pods`).isDirectory()).toBe(true);
+        });
       });
     });
 
