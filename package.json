@@ -3,6 +3,10 @@
   "version": "3.1.0",
   "license": "MIT",
   "description": "⚡️ Build InstantSearch apps at the speed of thoughts",
+  "keywords": [
+    "algolia",
+    "instantsearch"
+  ],
   "repository": "algolia/create-instantsearch-app",
   "author": "Algolia <support@algolia.com>",
   "main": "index.js",
