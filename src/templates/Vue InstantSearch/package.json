@@ -30,7 +30,7 @@
     "prettier": "1.13.7",
     "vue-loader": "14.2.2",
     "vue-template-compiler": "2.5.16",
-    "webpack": "3.11.0",
+    "webpack": "3.12.0",
     "webpack-dev-server": "2.11.2"
   }
 }
