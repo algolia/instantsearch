@@ -9,6 +9,7 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
+    "algoliasearch": "3.29.0",
     "react": "16.4.1",
     "react-dom": "16.4.1",
     "react-instantsearch-dom": "{{libraryVersion}}",

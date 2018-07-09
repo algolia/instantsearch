@@ -3761,6 +3761,7 @@ exports[`Templates React InstantSearch File content: src/App.css 1`] = `
 
 exports[`Templates React InstantSearch File content: src/App.js 1`] = `
 "import React, { Component } from 'react';
+import algoliasearch from 'algoliasearch/lite';
 import {
   InstantSearch,
   Hits,
@@ -3771,6 +3772,11 @@ import {
 } from 'react-instantsearch-dom';
 import PropTypes from 'prop-types';
 import './App.css';
+
+const searchClient = algoliasearch(
+ 'appId',
+ 'apiKey'
+);
 
 class App extends Component {
   render() {
@@ -3789,11 +3795,7 @@ class App extends Component {
         </header>
 
         <div className=\\"container\\">
-          <InstantSearch
-            appId=\\"appId\\"
-            apiKey=\\"apiKey\\"
-            indexName=\\"indexName\\"
-          >
+          <InstantSearch searchClient={searchClient} indexName=\\"indexName\\">
             <div className=\\"search-panel\\">
               <div className=\\"search-panel__filters\\">
                 <RefinementList attribute=\\"facet1\\" />
