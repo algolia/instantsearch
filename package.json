@@ -38,7 +38,7 @@
   "dependencies": {
     "algoliasearch": "3.27.1",
     "chalk": "2.4.1",
-    "commander": "2.15.1",
+    "commander": "2.16.0",
     "inquirer": "5.2.0",
     "jstransformer-handlebars": "1.1.0",
     "latest-semver": "1.0.0",
