@@ -48,7 +48,7 @@
     "metalsmith-sass": "1.5.1",
     "ms-webpack": "2.0.0",
     "postcss": "6.0.23",
-    "postcss-loader": "2.1.5",
+    "postcss-loader": "2.1.6",
     "postcss-scss": "1.0.6",
     "prop-types": "15.6.1",
     "pug": "2.0.3",
