@@ -13,6 +13,9 @@ describe('GoogleMapsLoader', () => {
     apiKey: 'API_KEY',
   };
 
+  const flushPendingMicroTasks = () =>
+    new Promise(resolve => setImmediate(resolve));
+
   it('expect to call Google Maps API', () => {
     const children = jest.fn(x => x);
 
@@ -22,10 +25,12 @@ describe('GoogleMapsLoader', () => {
 
     shallow(<GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>);
 
-    expect(injectScript).toHaveBeenLastCalledWith(
-      'https://maps.googleapis.com/maps/api/js?v=3.31&key=API_KEY',
-      expect.any(Function)
-    );
+    return flushPendingMicroTasks().then(() => {
+      expect(injectScript).toHaveBeenLastCalledWith(
+        'https://maps.googleapis.com/maps/api/js?v=3.31&key=API_KEY',
+        expect.any(Function)
+      );
+    });
   });
 
   it('expect to call Google Maps API with a custom API Key', () => {
@@ -38,10 +43,12 @@ describe('GoogleMapsLoader', () => {
 
     shallow(<GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>);
 
-    expect(injectScript).toHaveBeenLastCalledWith(
-      'https://maps.googleapis.com/maps/api/js?v=3.31&key=CUSTOM_API_KEY',
-      expect.any(Function)
-    );
+    return flushPendingMicroTasks().then(() => {
+      expect(injectScript).toHaveBeenLastCalledWith(
+        'https://maps.googleapis.com/maps/api/js?v=3.31&key=CUSTOM_API_KEY',
+        expect.any(Function)
+      );
+    });
   });
 
   it('expect to call Google Maps API with a custom endpoint', () => {
@@ -55,10 +62,12 @@ describe('GoogleMapsLoader', () => {
 
     shallow(<GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>);
 
-    expect(injectScript).toHaveBeenLastCalledWith(
-      'https://maps.googleapis.com/maps/api/js?v=3.32&places,geometry&key=API_KEY',
-      expect.any(Function)
-    );
+    return flushPendingMicroTasks().then(() => {
+      expect(injectScript).toHaveBeenLastCalledWith(
+        'https://maps.googleapis.com/maps/api/js?v=3.32&places,geometry&key=API_KEY',
+        expect.any(Function)
+      );
+    });
   });
 
   it("expect to render nothing when it's loading", () => {
@@ -87,7 +96,7 @@ describe('GoogleMapsLoader', () => {
       ...defaultProps,
     };
 
-    injectScript.mockImplementationOnce((endpoint, callback) => {
+    injectScript.mockImplementationOnce((_, callback) => {
       global.google = google;
       callback();
     });
@@ -96,11 +105,13 @@ describe('GoogleMapsLoader', () => {
       <GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>
     );
 
-    expect(wrapper.type).not.toBe(null);
-    expect(children).toHaveBeenCalledTimes(1);
-    expect(children).toHaveBeenCalledWith(google);
+    return flushPendingMicroTasks().then(() => {
+      expect(wrapper.type).not.toBe(null);
+      expect(children).toHaveBeenCalledTimes(1);
+      expect(children).toHaveBeenCalledWith(google);
 
-    delete global.google;
+      delete global.google;
+    });
   });
 
   it('expect to not call setState when we unmount before loading is complete', () => {
@@ -119,13 +130,15 @@ describe('GoogleMapsLoader', () => {
       <GoogleMapsLoader {...props}>{children}</GoogleMapsLoader>
     );
 
-    expect(wrapper.type).not.toBe(null);
-    expect(children).not.toHaveBeenCalled();
+    return flushPendingMicroTasks().then(() => {
+      expect(wrapper.type).not.toBe(null);
+      expect(children).not.toHaveBeenCalled();
 
-    wrapper.unmount();
+      wrapper.unmount();
 
-    triggerLoadingComplete();
+      triggerLoadingComplete();
 
-    expect(children).not.toHaveBeenCalled();
+      expect(children).not.toHaveBeenCalled();
+    });
   });
 });
