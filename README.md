@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://community.algolia.com/instantsearch.js">
-    <img alt="InstantSearch.js" src="https://community.algolia.com/instantsearch.js/v2/assets/img/instantsearch-medal.svg" width="250">
+    <img alt="InstantSearch.js" src="./docgen/assets/img/instantsearch-medal.svg" width="250">
   </a>
 
   <p align="center">
