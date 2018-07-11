@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import injectScript from 'scriptjs';
 
 class GoogleMapsLoader extends Component {
   static propTypes = {
@@ -20,16 +19,21 @@ class GoogleMapsLoader extends Component {
   isUnmounting = false;
 
   componentDidMount() {
-    const { apiKey, endpoint } = this.props;
-    const operator = endpoint.indexOf('?') !== -1 ? '&' : '?';
-    const endpointWithCredentials = `${endpoint}${operator}key=${apiKey}`;
+    // Inline the import to avoid to run the module on the server (rely on `document`)
+    // Under the hood we use `dynamic-import-node` to transpile the `import` to `require`
+    // see: https://github.com/algolia/react-instantsearch/issues/1425
+    return import('scriptjs').then(({ default: injectScript }) => {
+      const { apiKey, endpoint } = this.props;
+      const operator = endpoint.indexOf('?') !== -1 ? '&' : '?';
+      const endpointWithCredentials = `${endpoint}${operator}key=${apiKey}`;
 
-    injectScript(endpointWithCredentials, () => {
-      if (!this.isUnmounting) {
-        this.setState(() => ({
-          google: window.google,
-        }));
-      }
+      injectScript(endpointWithCredentials, () => {
+        if (!this.isUnmounting) {
+          this.setState(() => ({
+            google: window.google,
+          }));
+        }
+      });
     });
   }
 
