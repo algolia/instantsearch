@@ -19,7 +19,7 @@
     "react-native": "0.55.4"
   },
   "devDependencies": {
-    "eslint": "4.19.1",
+    "eslint": "5.1.0",
     "eslint-config-algolia": "13.1.0",
     "eslint-config-prettier": "2.9.0",
     "eslint-plugin-import": "2.13.0",
