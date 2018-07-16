@@ -1,3 +1,13 @@
+<a name="5.2.1"></a>
+## [5.2.1](https://github.com/algolia/react-instantsearch/compare/v5.2.0...v5.2.1) (2018-07-16)
+
+
+### Bug Fixes
+
+* **GoogleMapsLoader:** inline the import to scriptjs ([#1427](https://github.com/algolia/react-instantsearch/issues/1427)) ([8019416](https://github.com/algolia/react-instantsearch/commit/8019416))
+
+
+
 <a name="5.2.0"></a>
 # [5.2.0](https://github.com/algolia/react-instantsearch/compare/v5.2.0-beta.2...v5.2.0) (2018-07-04)
 
