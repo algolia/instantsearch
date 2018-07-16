@@ -61,7 +61,7 @@
     "eslint-plugin-import": "2.13.0",
     "eslint-plugin-jest": "21.17.0",
     "eslint-plugin-prettier": "2.6.2",
-    "jest": "23.3.0",
+    "jest": "23.4.1",
     "jest-image-snapshot": "2.4.3",
     "prettier": "1.13.7",
     "release-it": "7.4.7",
