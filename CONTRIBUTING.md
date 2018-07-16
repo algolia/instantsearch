@@ -1,4 +1,8 @@
-[![React InstantSearch logo][logo]][website]
+<p align="center">
+  <a href="https://community.algolia.com/react-instantsearch">
+    <img alt="React InstantSearch" src="./docgen/assets/img/InstantSearch-React-medal.svg" width="250">
+  </a>
+</p>
 
 ### Requirements
 
@@ -81,5 +85,6 @@ yarn docs:deploy-preview
 
 This uses [netlify](https://www.netlify.com).
 
-[logo]: ./docgen/readme-logo.png
+<!-- Links -->
+
 [website]: https://community.algolia.com/react-instantsearch
