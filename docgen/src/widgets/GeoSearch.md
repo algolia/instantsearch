@@ -72,7 +72,7 @@ const App = () => (
 <!-- Avoid the huge margin on the pseudo element -->
 <h3 class="sub-component-title">Decription</h3>
 
-This component provides the `hits` to display. All the other geo components need to be nested under it.
+This component provides the `hits` to display. All the other geo components need to be nested under it. All the options avaible on the Google Maps class can be provided as props.
 
 <!-- Avoid the huge margin on the pseudo element -->
 <h3 class="sub-component-title">Usage</h3>
@@ -577,7 +577,7 @@ The component has no props.
 <!-- Avoid the huge margin on the pseudo element -->
 <h3 class="sub-component-title">Decription</h3>
 
-This component disable the refine on map move behaviour.
+When refined on map move is disabled this component displays a button to redo the search on the current map view.
 
 <!-- Avoid the huge margin on the pseudo element -->
 <h3 class="sub-component-title">Usage</h3>
@@ -592,7 +592,7 @@ const App = () => (
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="airbnb"
   >
-    <GeoSearch google={window.google}>
+    <GeoSearch google={window.google} enableRefineOnMapMove={false}>
       {({ hits }) => (
         <Redo />
       )}
