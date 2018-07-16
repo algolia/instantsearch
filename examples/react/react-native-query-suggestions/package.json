@@ -24,7 +24,7 @@
     "lodash": "4.17.4",
     "prop-types": "15.6.0",
     "react": "16.2.0",
-    "react-instantsearch": "5.2.0",
+    "react-instantsearch": "5.2.2",
     "react-native": "0.52.0",
     "react-native-animatable": "1.2.4",
     "react-native-vector-icons": "4.5.0",
