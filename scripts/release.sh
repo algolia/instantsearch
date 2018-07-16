@@ -132,6 +132,7 @@ sleep 2.5
 # Required until Lerna supports the top level package as a member
 # of the Workspaces. Another solution is to move out the stories
 # from the top level package (will be done at some point).
+yarn
 yarn upgrade react-instantsearch-dom@$newVersion -D
 yarn upgrade react-instantsearch-dom-maps@$newVersion -D
 
@@ -143,7 +144,7 @@ for example in examples/* ; do
 done
 
 commitMessage="chore(deps): update examples to react-instantsearch v$newVersion"
-git add .
+git add examples package.json yarn.lock
 printf "$commitMessage" | git commit --file -
 
 printf "\n\nUpdate of react-instantsearch version in all examples\n"
