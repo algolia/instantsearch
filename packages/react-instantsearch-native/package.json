@@ -1,6 +1,6 @@
 {
   "name": "react-instantsearch-native",
-  "version": "5.2.1",
+  "version": "5.2.2",
   "description": "⚡ Lightning-fast search for React Native, by Algolia",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.27.1",
-    "react-instantsearch-core": "^5.2.1"
+    "react-instantsearch-core": "^5.2.2"
   },
   "devDependencies": {
     "babel-cli": "6.26.0",
