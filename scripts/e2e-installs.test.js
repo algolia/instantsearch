@@ -37,7 +37,6 @@ describe('Installation', () => {
         'JavaScript Client',
         'JavaScript Helper',
         'React InstantSearch',
-        'React InstantSearch Native',
         'Vue InstantSearch',
       ]
         .map(name => path.join(templatesFolder, name))
@@ -47,7 +46,7 @@ describe('Installation', () => {
         const templateName = path.basename(templatePath);
 
         describe(templateName, () => {
-          test('get installed correctly', () => {
+          test('installs and builds correctly', () => {
             execSync(
               `yarn start ${appPath} \
                   --template "${templateName}"`,
@@ -57,14 +56,32 @@ describe('Installation', () => {
             expect(fs.lstatSync(`${appPath}/node_modules`).isDirectory()).toBe(
               true
             );
+
+            expect(() => {
+              execSync(`cd ${appPath} && yarn build`, { stdio: 'ignore' });
+            }).not.toThrow();
           });
         });
       });
     });
 
     describe('Mobile', () => {
+      describe('React InstantSearch Native', () => {
+        test('installs correctly', () => {
+          execSync(
+            `yarn start ${appPath} \
+                --template "React InstantSearch Native"`,
+            { stdio: 'ignore' }
+          );
+
+          expect(fs.lstatSync(`${appPath}/node_modules`).isDirectory()).toBe(
+            true
+          );
+        });
+      });
+
       describe('InstantSearch iOS', () => {
-        test('get installed correctly', () => {
+        test('installs correctly', () => {
           execSync(
             `yarn start ${appPath} \
                 --template "InstantSearch iOS"`,
