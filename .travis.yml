@@ -15,4 +15,4 @@ script:
 env:
   matrix:
   - SCRIPT="yarn test && yarn lint"
-  - SCRIPT="yarn test:e2e"
+  - SCRIPT="travis_wait 20 yarn test:e2e"
