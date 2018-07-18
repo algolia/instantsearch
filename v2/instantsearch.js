@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.8.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.9.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -13701,7 +13701,7 @@ var BrowserHistory = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.8.1';
+exports.default = '2.9.0';
 
 /***/ }),
 /* 190 */
@@ -14306,7 +14306,7 @@ var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(functi
  * levels deep.
  *
  * There's a complete example available on how to write a custom **HierarchicalMenu**:
- *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
+ *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/jquery/widgets/hierarchicalMenu.js)
  * @type {Connector}
  * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
@@ -36208,7 +36208,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n  [ showMoreLabel ],\n  [ cssClasses.{root,empty,item,showmore}={} ],\n  [ templates.{empty,item} | templates.{empty} ],\n  [ transformData.{empty,item} | transformData.{empty} ],\n})';
+var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n  [ showMoreLabel ],\n  [ cssClasses.{root,empty,item,showmore,showmoreButton}={} ],\n  [ templates.{empty,item} | templates.{empty} ],\n  [ transformData.{empty,item} | transformData.{empty} ],\n})';
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
@@ -36227,7 +36227,8 @@ var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n
  * @property {string|string[]} [root] CSS class to add to the wrapping element.
  * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
  * @property {string|string[]} [item] CSS class to add to each result.
- * @property {string|string[]} [showmore] CSS class to add to the show more button.
+ * @property {string|string[]} [showmore] CSS class to add to the show more button container.
+ * @property {string|string[]} [showmoreButton] CSS class to add to the show more button.
  */
 
 /**
@@ -36291,7 +36292,8 @@ function infiniteHits() {
     root: (0, _classnames2.default)(bem(null), userCssClasses.root),
     item: (0, _classnames2.default)(bem('item'), userCssClasses.item),
     empty: (0, _classnames2.default)(bem(null, 'empty'), userCssClasses.empty),
-    showmore: (0, _classnames2.default)(bem('showmore'), userCssClasses.showmore)
+    showmore: (0, _classnames2.default)(bem('showmore'), userCssClasses.showmore),
+    showmoreButton: (0, _classnames2.default)(bem('showmoreButton'), userCssClasses.showmoreButton)
   };
 
   var specializedRenderer = renderer({
@@ -36368,11 +36370,11 @@ var InfiniteHits = function (_Component) {
 
       var btn = this.props.isLastPage ? _preactCompat2.default.createElement(
         'button',
-        { disabled: true },
+        { disabled: true, className: cssClasses.showmoreButton },
         showMoreLabel
       ) : _preactCompat2.default.createElement(
         'button',
-        { onClick: showMore },
+        { onClick: showMore, className: cssClasses.showmoreButton },
         showMoreLabel
       );
 
@@ -42826,7 +42828,7 @@ var usage = 'Usage:\nmenuSelect({\n  container,\n  attributeName,\n  [ sortBy=[\
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {MenuSelectTemplates} [templates] Customize the output through templating.
- * @property {string} [limit=10] How many facets values to retrieve.
+ * @property {number} [limit=10] How many facets values to retrieve.
  * @property {MenuSelectTransforms} [transformData] Set of functions to update the data before passing them to the templates.
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu select.
  * @property {MenuSelectCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
