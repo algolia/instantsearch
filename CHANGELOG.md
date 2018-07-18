@@ -1,3 +1,13 @@
+<a name="2.9.0"></a>
+# [2.9.0](https://github.com/algolia/instantsearch.js/compare/v2.8.1...v2.9.0) (2018-07-18)
+
+
+### Features
+
+* **infiniteHits:** add showmoreButton to cssClasses ([#3026](https://github.com/algolia/instantsearch.js/issues/3026)) ([8287de0](https://github.com/algolia/instantsearch.js/commit/8287de0))
+
+
+
 <a name="2.8.1"></a>
 ## [2.8.1](https://github.com/algolia/instantsearch.js/compare/v2.8.0...v2.8.1) (2018-07-03)
 
