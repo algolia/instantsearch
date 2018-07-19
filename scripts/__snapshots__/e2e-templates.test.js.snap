@@ -386,6 +386,11 @@ exports[`Templates Angular InstantSearch File content: src/app/app.component.ts 
 "import { Component } from '@angular/core';
 import * as algoliasearch from 'algoliasearch';
 
+const searchClient = algoliasearch(
+  'appId',
+  'apiKey'
+);
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -394,7 +399,7 @@ import * as algoliasearch from 'algoliasearch';
 export class AppComponent {
   config = {
     indexName: 'indexName',
-    searchClient: algoliasearch('appId', 'apiKey'),
+    searchClient,
   };
 }"
 `;
@@ -3780,8 +3785,8 @@ import PropTypes from 'prop-types';
 import './App.css';
 
 const searchClient = algoliasearch(
- 'appId',
- 'apiKey'
+  'appId',
+  'apiKey'
 );
 
 class App extends Component {
