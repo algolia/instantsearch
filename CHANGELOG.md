@@ -1,3 +1,33 @@
+<a name="3.2.0"></a>
+# [3.2.0](https://github.com/algolia/create-instantsearch-app/compare/3.1.0...3.2.0) (2018-07-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency algoliasearch to v3.29.0 ([#106](https://github.com/algolia/create-instantsearch-app/issues/106)) ([73f64f3](https://github.com/algolia/create-instantsearch-app/commit/73f64f3))
+* **deps:** update dependency commander to v2.16.0 ([#107](https://github.com/algolia/create-instantsearch-app/issues/107)) ([6c31090](https://github.com/algolia/create-instantsearch-app/commit/6c31090))
+* **deps:** update dependency inquirer to v6 ([#127](https://github.com/algolia/create-instantsearch-app/issues/127)) ([185c2a3](https://github.com/algolia/create-instantsearch-app/commit/185c2a3))
+* **deps:** update dependency react to v16.4.1 ([#133](https://github.com/algolia/create-instantsearch-app/issues/133)) ([fe5090f](https://github.com/algolia/create-instantsearch-app/commit/fe5090f))
+* **deps:** update dependency react-native to v0.56.0 ([#134](https://github.com/algolia/create-instantsearch-app/issues/134)) ([c578859](https://github.com/algolia/create-instantsearch-app/commit/c578859))
+* **deps:** update dependency rxjs to v6.2.2 ([#135](https://github.com/algolia/create-instantsearch-app/issues/135)) ([15429d6](https://github.com/algolia/create-instantsearch-app/commit/15429d6))
+* **templates:** Fix failing default tests in Angular ([#138](https://github.com/algolia/create-instantsearch-app/issues/138)) ([2974e98](https://github.com/algolia/create-instantsearch-app/commit/2974e98))
+* **templates:** Use single quotes in Angular ([#137](https://github.com/algolia/create-instantsearch-app/issues/137)) ([b461f86](https://github.com/algolia/create-instantsearch-app/commit/b461f86))
+
+
+### Features
+
+* **templates:** Add types for AlgoliaSearch in Angular ([#116](https://github.com/algolia/create-instantsearch-app/issues/116)) ([63ab3c1](https://github.com/algolia/create-instantsearch-app/commit/63ab3c1))
+* **templates:** Reorder Angular `devDependencies` ([#115](https://github.com/algolia/create-instantsearch-app/issues/115)) ([2fd585a](https://github.com/algolia/create-instantsearch-app/commit/2fd585a))
+* **templates:** Use `searchClient` in Angular ([#114](https://github.com/algolia/create-instantsearch-app/issues/114)) ([6b6cb2f](https://github.com/algolia/create-instantsearch-app/commit/6b6cb2f))
+* **templates:** Use `searchClient` in React ([#113](https://github.com/algolia/create-instantsearch-app/issues/113)) ([33e646c](https://github.com/algolia/create-instantsearch-app/commit/33e646c))
+
+
+### Reverts
+
+* chore(deps): update dependency typescript to v2.9.2 ([#132](https://github.com/algolia/create-instantsearch-app/issues/132)) ([1c0819b](https://github.com/algolia/create-instantsearch-app/commit/1c0819b))
+
+
+
 <a name="3.1.0"></a>
 # [3.1.0](https://github.com/algolia/create-instantsearch-app/compare/3.0.0...3.1.0) (2018-07-05)
 
