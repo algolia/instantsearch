@@ -1,6 +1,64 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`menu snapshot 1`] = `
+exports[`menu render renders transformed items 1`] = `
+<HeaderFooter-AutoHide
+  canToggleShowMore={false}
+  collapsible={false}
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "active": "ais-menu--item__active",
+      "body": "ais-menu--body",
+      "count": "ais-menu--count",
+      "footer": "ais-menu--footer",
+      "header": "ais-menu--header",
+      "item": "ais-menu--item",
+      "link": "ais-menu--link",
+      "list": "ais-menu--list",
+      "root": "ais-menu",
+    }
+  }
+  facetValues={
+    Array [
+      Object {
+        "label": "foo",
+        "transformed": true,
+        "url": "#",
+        "value": undefined,
+      },
+      Object {
+        "label": "bar",
+        "transformed": true,
+        "url": "#",
+        "value": undefined,
+      },
+    ]
+  }
+  isShowingMore={false}
+  shouldAutoHideContainer={false}
+  showMore={false}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+        "item": false,
+      },
+    }
+  }
+  toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
+/>
+`;
+
+exports[`menu render snapshot 1`] = `
 <HeaderFooter-AutoHide
   canToggleShowMore={false}
   collapsible={false}

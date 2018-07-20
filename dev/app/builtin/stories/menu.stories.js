@@ -20,6 +20,22 @@ export default () => {
       })
     )
     .add(
+      'with transformed items',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.menu({
+            container,
+            attributeName: 'categories',
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                label: `${item.label} (transformed)`,
+              })),
+          })
+        );
+      })
+    )
+    .add(
       'with show more and header',
       wrapWithHits(container => {
         window.search.addWidget(

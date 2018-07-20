@@ -230,6 +230,59 @@ describe('connectMenu', () => {
     ]);
   });
 
+  it('provides the correct transformed facet values', () => {
+    const widget = makeWidget({
+      attributeName: 'category',
+      transformItems: items =>
+        items.map(item => ({
+          ...item,
+          label: 'transformed',
+        })),
+    });
+
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    helper.search = sinon.stub();
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.init({
+      helper,
+      state: helper.state,
+    });
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    expect(firstRenderingOptions.items).toEqual([]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.items).toEqual([
+      expect.objectContaining({ label: 'transformed' }),
+      expect.objectContaining({ label: 'transformed' }),
+    ]);
+  });
+
   describe('showMore', () => {
     it('should throw when `showMoreLimit` is lower than `limit`', () => {
       expect(() =>
