@@ -55,6 +55,24 @@ describe('infiniteHits()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
+  it('renders transformed items', () => {
+    const state = { page: 0 };
+    widget = infiniteHits({
+      container,
+      transformItems: items =>
+        items.map(item => ({ ...item, transformed: true })),
+    });
+
+    widget.init({ helper, instantSearchInstance: {} });
+    widget.render({
+      results,
+      state,
+      instantSearchInstance: {},
+    });
+
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+  });
+
   it('if it is the last page, then the props should contain isLastPage true', () => {
     const state = { page: 0 };
     widget.render({
