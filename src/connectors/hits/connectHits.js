@@ -12,6 +12,7 @@ var customHits = connectHits(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customHits({
+    [ transformItems ]
     [ escapeHits = false ]
   })
 );
@@ -28,6 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomHitsWidgetOptions
  * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -77,8 +79,14 @@ export default function connectHits(renderFn, unmountFn) {
     },
 
     render({ results, instantSearchInstance }) {
-      if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
-        results.hits = escapeHits(results.hits);
+      if (results.hits && results.hits.length > 0) {
+        if (typeof widgetParams.transformItems === 'function') {
+          results.hits = widgetParams.transformItems(results.hits);
+        }
+
+        if (widgetParams.escapeHits) {
+          results.hits = escapeHits(results.hits);
+        }
       }
 
       renderFn(

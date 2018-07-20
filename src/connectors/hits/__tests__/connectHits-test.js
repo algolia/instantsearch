@@ -143,4 +143,43 @@ describe('connectHits', () => {
     expect(secondRenderingOptions.hits).toEqual(escapedHits);
     expect(secondRenderingOptions.results).toEqual(results);
   });
+
+  it('transform items if requested', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHits(rendering);
+    const widget = makeWidget({
+      transformItems: items => items.map(() => ({ name: 'transformed' })),
+    });
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.hits).toEqual([]);
+    expect(firstRenderingOptions.results).toBe(undefined);
+
+    const hits = [{ name: 'name 1' }, { name: 'name 2' }];
+
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.hits).toEqual([
+      { name: 'transformed' },
+      { name: 'transformed' },
+    ]);
+    expect(secondRenderingOptions.results).toEqual(results);
+  });
 });

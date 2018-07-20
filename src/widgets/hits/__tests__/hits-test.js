@@ -43,6 +43,19 @@ describe('hits()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
+  it('renders transformed items', () => {
+    widget = hits({
+      container,
+      transformItems: items =>
+        items.map(item => ({ ...item, transformed: true })),
+    });
+
+    widget.init({ instantSearchInstance: {} });
+    widget.render({ results });
+
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+  });
+
   it('does not accept both item and allItems templates', () => {
     expect(
       hits.bind({ container, templates: { item: '', allItems: '' } })
