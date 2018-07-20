@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`breadcrumb() render renders transformed items correctly 1`] = `
+<Breadcrumb-AutoHide
+  canRefine={true}
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "disabledLabel": "ais-breadcrumb--disabledLabel",
+      "home": "ais-breadcrumb--home",
+      "item": "ais-breadcrumb--item",
+      "label": "ais-breadcrumb--label",
+      "root": "ais-breadcrumb--root",
+      "separator": "ais-breadcrumb--separator",
+    }
+  }
+  items={
+    Array [
+      Object {
+        "name": "Cameras & Camcorders",
+        "transformed": true,
+        "value": "Cameras & Camcorders > Digital Cameras",
+      },
+      Object {
+        "name": "Digital Cameras",
+        "transformed": true,
+        "value": null,
+      },
+    ]
+  }
+  refine={[Function]}
+  separator=" > "
+  shouldAutoHideContainer={false}
+  templateProps={
+    Object {
+      "templates": Object {
+        "home": "Home",
+        "separator": "",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "home": false,
+        "separator": false,
+      },
+    }
+  }
+/>
+`;
