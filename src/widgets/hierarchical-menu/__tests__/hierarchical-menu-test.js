@@ -218,6 +218,19 @@ describe('hierarchicalMenu()', () => {
       expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
 
+    it('has a transformItems options', () => {
+      widget = hierarchicalMenu({
+        ...options,
+        transformItems: items =>
+          items.map(item => ({ ...item, transformed: true })),
+      });
+
+      widget.init({ helper, createURL, instantSearchInstance: {} });
+      widget.render({ results, state });
+
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+    });
+
     it('sets shouldAutoHideContainer to true when no results', () => {
       data = {};
       widget = hierarchicalMenu(options);

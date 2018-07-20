@@ -84,5 +84,25 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with transformed items',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                label: `${item.label} (transformed)`,
+              })),
+          })
+        );
+      })
     );
 };
