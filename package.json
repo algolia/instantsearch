@@ -46,7 +46,7 @@
     "lodash.camelcase": "4.3.0",
     "metalsmith": "2.3.0",
     "metalsmith-ignore": "0.1.2",
-    "metalsmith-in-place": "4.1.1",
+    "metalsmith-in-place": "4.2.0",
     "metalsmith-rename": "1.0.0",
     "validate-npm-package-name": "3.0.0"
   },

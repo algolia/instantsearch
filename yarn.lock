@@ -4082,9 +4082,9 @@ metalsmith-ignore@0.1.2:
   dependencies:
     multimatch "^0.1.0"
 
-metalsmith-in-place@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/metalsmith-in-place/-/metalsmith-in-place-4.1.1.tgz#d36c6642818062202bdd26eae2c279c7efe7a5bc"
+metalsmith-in-place@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/metalsmith-in-place/-/metalsmith-in-place-4.2.0.tgz#14361719b8c315d5d147f93a28d5777236b954d7"
   dependencies:
     debug "^3.1.0"
     inputformat-to-jstransformer "^1.2.1"
