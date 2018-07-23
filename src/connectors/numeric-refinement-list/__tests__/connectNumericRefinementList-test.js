@@ -77,6 +77,45 @@ describe('connectNumericRefinementList', () => {
     });
   });
 
+  it('Renders during init and render with transformed items', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectNumericRefinementList(rendering);
+    const widget = makeWidget({
+      attributeName: 'numerics',
+      options: [{ name: 'below 10', end: 10 }],
+      transformItems: items =>
+        items.map(item => ({
+          ...item,
+          label: 'transformed',
+        })),
+    });
+
+    const helper = jsHelper({});
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(rendering.lastCall.args[0].items).toEqual([
+      expect.objectContaining({ label: 'transformed' }),
+    ]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbHits: 0 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering.lastCall.args[0].items).toEqual([
+      expect.objectContaining({ label: 'transformed' }),
+    ]);
+  });
+
   it('Provide a function to update the refinements at each step', () => {
     const rendering = sinon.stub();
     const makeWidget = connectNumericRefinementList(rendering);

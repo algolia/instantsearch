@@ -96,6 +96,21 @@ describe('numericRefinementList()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
+  it('renders with transformed items', () => {
+    widget = numericRefinementList({
+      container,
+      attributeName: 'price',
+      options,
+      transformItems: items =>
+        items.map(item => ({ ...item, transformed: true })),
+    });
+
+    widget.init({ helper, instantSearchInstance: {} });
+    widget.render({ state, results, createURL });
+
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+  });
+
   it("doesn't call the refinement functions if not refined", () => {
     widget.render({ state, results, createURL });
     expect(helper.state.clearRefinements.called).toBe(
