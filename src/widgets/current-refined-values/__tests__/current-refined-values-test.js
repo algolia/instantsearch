@@ -995,6 +995,22 @@ describe('currentRefinedValues()', () => {
       });
     });
 
+    describe('options.transformItems', () => {
+      it('should transform passed items', () => {
+        const widget = currentRefinedValues({
+          ...parameters,
+          transformItems: items =>
+            items.map(item => ({ ...item, transformed: true })),
+        });
+
+        widget.init(initParameters);
+        widget.render(renderParameters);
+
+        expect(ReactDOM.render.calledOnce).toBe(true);
+        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+      });
+    });
+
     describe('options.autoHideContainer', () => {
       describe('without refinements', () => {
         beforeEach(() => {

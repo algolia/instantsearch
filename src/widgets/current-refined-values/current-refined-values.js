@@ -91,8 +91,9 @@ currentRefinedValues({
   [ transformData.{item} ],
   [ autoHideContainer = true ],
   [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
-  [ collapsible = false ]
-  [ clearsQuery = false ]
+  [ collapsible = false ],
+  [ clearsQuery = false ],
+  [ transformItems ]
 })`;
 
 /**
@@ -148,6 +149,7 @@ currentRefinedValues({
  * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
  * property is `true`, then the widget is hidden during the first rendering.
  * @property {boolean} [clearsQuery=false] If true, the clear all button also clears the active search query.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -189,6 +191,7 @@ export default function currentRefinedValues({
   cssClasses: userCssClasses = {},
   collapsible = false,
   clearsQuery = false,
+  transformItems,
 }) {
   const transformDataOK =
     isUndefined(transformData) ||
@@ -278,6 +281,7 @@ export default function currentRefinedValues({
       onlyListedAttributes,
       clearAll,
       clearsQuery,
+      transformItems,
     });
   } catch (e) {
     throw new Error(usage);
