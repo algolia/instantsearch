@@ -64,6 +64,30 @@ export default () => {
         start();
       })
     )
+  ).add(
+    'with transformed items',
+    wrapWithHitsAndConfiguration((container, start) =>
+      injectGoogleMaps(() => {
+        container.style.height = '600px';
+
+        window.search.addWidget(
+          instantsearch.widgets.geoSearch({
+            googleReference: window.google,
+            container,
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                _geoloc: {
+                  lat: item._geoloc.lat + 2,
+                  lng: item._geoloc.lng + 2,
+                },
+              })),
+          })
+        );
+
+        start();
+      })
+    )
   );
 
   // With IP

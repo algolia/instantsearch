@@ -27,6 +27,7 @@ search.addWidget(
     [ position ],
     [ radius ],
     [ precision ],
+    [ transformItems ],
   })
 );
 
@@ -55,6 +56,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more informations.
  * @property {number} [precision] Precision of geo search (in meters). <br />
  * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more informations.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -137,6 +139,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       position,
       radius,
       precision,
+      transformItems = items => items,
     } = widgetParams;
 
     const widgetState = {
@@ -258,9 +261,11 @@ const connectGeoSearch = (renderFn, unmountFn) => {
         renderArgs
       );
 
+      const items = transformItems(results.hits.filter(hit => hit._geoloc));
+
       renderFn(
         {
-          items: results.hits.filter(hit => hit._geoloc),
+          items,
           position: getPositionFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
