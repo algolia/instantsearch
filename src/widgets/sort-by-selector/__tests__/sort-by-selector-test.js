@@ -81,6 +81,20 @@ describe('sortBySelector()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
+  it('renders transformed items', () => {
+    widget = sortBySelector({
+      container,
+      indices,
+      transformItems: items =>
+        items.map(item => ({ ...item, transformed: true })),
+    });
+
+    widget.init({ helper, instantSearchInstance: {} });
+    widget.render({ helper, results });
+
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+  });
+
   it('sets the underlying index', () => {
     widget.setIndex('index-b');
     expect(helper.setIndex.calledOnce).toBe(true, 'setIndex called once');

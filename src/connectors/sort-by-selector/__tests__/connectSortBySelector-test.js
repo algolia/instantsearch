@@ -83,6 +83,51 @@ describe('connectSortBySelector', () => {
     }
   });
 
+  it('Renders with transformed items', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectSortBySelector(rendering);
+    const instantSearchInstance = instantSearch({
+      indexName: 'defaultIndex',
+      searchClient: { search() {} },
+    });
+
+    const indices = [
+      { label: 'Sort products by relevance', name: 'relevance' },
+      { label: 'Sort products by price', name: 'priceASC' },
+    ];
+    const widget = makeWidget({
+      indices,
+      transformItems: items =>
+        items.map(item => ({ ...item, label: 'transformed' })),
+    });
+
+    const helper = jsHelper({}, indices[0].name);
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      instantSearchInstance,
+    });
+
+    expect(rendering.lastCall.args[0].options).toEqual([
+      { label: 'transformed', value: 'relevance' },
+      { label: 'transformed', value: 'priceASC' },
+    ]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      helper,
+      state: helper.state,
+      instantSearchInstance,
+    });
+
+    expect(rendering.lastCall.args[0].options).toEqual([
+      { label: 'transformed', value: 'relevance' },
+      { label: 'transformed', value: 'priceASC' },
+    ]);
+  });
+
   it('Provides a function to update the index at each step', () => {
     const rendering = sinon.stub();
     const makeWidget = connectSortBySelector(rendering);
