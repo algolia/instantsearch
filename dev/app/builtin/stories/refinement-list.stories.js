@@ -115,5 +115,55 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with transformed items',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.refinementList({
+            container,
+            attributeName: 'brand',
+            operator: 'or',
+            limit: 10,
+            templates: {
+              header: 'Transformed brands',
+            },
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                label: `${item.label} (transformed)`,
+                highlighted: `${item.highlighted} (transformed)`,
+              })),
+          })
+        );
+      })
+    )
+    .add(
+      'with searchable transformed items',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.refinementList({
+            container,
+            attributeName: 'brand',
+            operator: 'or',
+            limit: 10,
+            templates: {
+              header: 'Transformed searchable brands',
+            },
+            searchForFacetValues: {
+              placeholder: 'Find other brands...',
+              templates: {
+                noResults: 'No results',
+              },
+            },
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                label: `${item.label} (transformed)`,
+                highlighted: `${item.highlighted} (transformed)`,
+              })),
+          })
+        );
+      })
     );
 };

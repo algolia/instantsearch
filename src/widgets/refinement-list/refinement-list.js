@@ -99,6 +99,7 @@ refinementList({
   [ showMore.{templates: {active, inactive}, limit} ],
   [ collapsible=false ],
   [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive, escapeFacetValues}],
+  [ transformItems ],
 })`;
 
 /**
@@ -176,6 +177,7 @@ refinementList({
  * @property {string} attributeName Name of the attribute for faceting.
  * @property {"and"|"or"} [operator="or"] How to apply refinements. Possible values: `or`, `and`
  * @property {string[]|function} [sortBy=["isRefined", "count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc` `count:desc` `name:asc` `name:desc` `isRefined`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
@@ -238,6 +240,7 @@ export default function refinementList({
   autoHideContainer = true,
   showMore = false,
   searchForFacetValues = false,
+  transformItems,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -301,6 +304,7 @@ export default function refinementList({
       showMoreLimit,
       sortBy,
       escapeFacetValues,
+      transformItems,
     });
   } catch (e) {
     throw new Error(usage);

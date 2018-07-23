@@ -25,7 +25,8 @@ search.addWidget(
     [ limit ],
     [ showMoreLimit ],
     [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-    [ escapeFacetValues = false ]
+    [ escapeFacetValues = false ],
+    [ transformItems ]
   })
 );
 
@@ -69,6 +70,7 @@ export const checkUsage = ({
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  * @property {boolean} [escapeFacetValues = false] Escapes the content of the facet values.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -159,6 +161,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
       showMoreLimit,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
       escapeFacetValues = false,
+      transformItems = items => items,
     } = widgetParams;
 
     checkUsage({
@@ -267,12 +270,12 @@ export default function connectRefinementList(renderFn, unmountFn) {
               ? escapeFacets(results.facetHits)
               : results.facetHits;
 
-            const normalizedFacetValues = facetValues.map(
-              ({ value, ...item }) => ({
+            const normalizedFacetValues = transformItems(
+              facetValues.map(({ value, ...item }) => ({
                 ...item,
                 value,
                 label: value,
-              })
+              }))
             );
 
             render({
@@ -369,7 +372,9 @@ export default function connectRefinementList(renderFn, unmountFn) {
         } = renderOptions;
 
         const facetValues = results.getFacetValues(attributeName, { sortBy });
-        const items = facetValues.slice(0, this.getLimit()).map(formatItems);
+        const items = transformItems(
+          facetValues.slice(0, this.getLimit()).map(formatItems)
+        );
 
         const maxValuesPerFacetConfig = state.getQueryParameter(
           'maxValuesPerFacet'

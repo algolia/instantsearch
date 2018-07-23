@@ -185,6 +185,23 @@ describe('refinementList()', () => {
         expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
       });
     });
+
+    it('renders transformed items correctly', () => {
+      widget = refinementList({
+        ...options,
+        transformItems: items =>
+          items.map(item => ({ ...item, transformed: true })),
+      });
+
+      widget.init({
+        helper,
+        createURL,
+        instantSearchInstance,
+      });
+      widget.render({ results, helper, state });
+
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+    });
   });
 
   describe('show more', () => {
