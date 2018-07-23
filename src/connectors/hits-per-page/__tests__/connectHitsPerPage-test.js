@@ -76,6 +76,45 @@ describe('connectHitsPerPage', () => {
     });
   });
 
+  it('Renders during init and render with transformed items', () => {
+    const rendering = sinon.stub();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+      ],
+      transformItems: items =>
+        items.map(item => ({ ...item, label: 'transformed' })),
+    });
+
+    const helper = jsHelper({}, '', {
+      hitsPerPage: 3,
+    });
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+    });
+
+    expect(rendering.lastCall.args[0].items).toEqual([
+      expect.objectContaining({ label: 'transformed' }),
+      expect.objectContaining({ label: 'transformed' }),
+    ]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+    });
+
+    expect(rendering.lastCall.args[0].items).toEqual([
+      expect.objectContaining({ label: 'transformed' }),
+      expect.objectContaining({ label: 'transformed' }),
+    ]);
+  });
+
   it('Configures the search with the default hitsPerPage provided', () => {
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPage(rendering);

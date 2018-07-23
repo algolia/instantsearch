@@ -84,6 +84,23 @@ describe('hitsPerPageSelector()', () => {
     expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
   });
 
+  it('renders transformed items', () => {
+    widget = hitsPerPageSelector({
+      container,
+      items: [
+        { value: 10, label: '10 results' },
+        { value: 20, label: '20 results', default: true },
+      ],
+      transformItems: widgetItems =>
+        widgetItems.map(item => ({ ...item, transformed: true })),
+    });
+
+    widget.init({ helper, state: helper.state });
+    widget.render({ results, state });
+
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+  });
+
   it('sets the underlying hitsPerPage', () => {
     widget.init({ helper, state: helper.state });
     widget.setHitsPerPage(helper, helper.state, 10);

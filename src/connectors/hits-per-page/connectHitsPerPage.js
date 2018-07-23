@@ -20,6 +20,7 @@ search.addWidget(
       {value: 10, label: '10 results per page'},
       {value: 42, label: '42 results per page'},
     ],
+    [ transformItems ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHitsPerPage.html
@@ -50,6 +51,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} HitsPerPageWidgetOptions
  * @property {HitsPerPageWidgetOptionsItem[]} items Array of objects defining the different values and labels.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -111,7 +113,7 @@ export default function connectHitsPerPage(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { items: userItems } = widgetParams;
+    const { items: userItems, transformItems = items => items } = widgetParams;
     let items = userItems;
 
     if (!items) {
@@ -167,7 +169,7 @@ The first one will be picked, you should probably set only one default value`
 
         renderFn(
           {
-            items: this._transformItems(state),
+            items: transformItems(this._normalizeItems(state)),
             refine: this.setHitsPerPage,
             hasNoResults: true,
             widgetParams,
@@ -182,7 +184,7 @@ The first one will be picked, you should probably set only one default value`
 
         renderFn(
           {
-            items: this._transformItems(state),
+            items: transformItems(this._normalizeItems(state)),
             refine: this.setHitsPerPage,
             hasNoResults,
             widgetParams,
@@ -192,7 +194,7 @@ The first one will be picked, you should probably set only one default value`
         );
       },
 
-      _transformItems({ hitsPerPage }) {
+      _normalizeItems({ hitsPerPage }) {
         return items.map(item => ({
           ...item,
           isRefined: Number(item.value) === Number(hitsPerPage),
