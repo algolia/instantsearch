@@ -1,3 +1,18 @@
+<a name="3.3.0"></a>
+# [3.3.0](https://github.com/algolia/create-instantsearch-app/compare/3.2.0...3.3.0) (2018-07-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency metalsmith-in-place to v4.2.0 ([#146](https://github.com/algolia/create-instantsearch-app/issues/146)) ([a7dc371](https://github.com/algolia/create-instantsearch-app/commit/a7dc371))
+
+
+### Features
+
+* **templates:** Update InstantSearch.js to 2.9.0 ([b36ce30](https://github.com/algolia/create-instantsearch-app/commit/b36ce30))
+
+
+
 <a name="3.2.0"></a>
 # [3.2.0](https://github.com/algolia/create-instantsearch-app/compare/3.1.0...3.2.0) (2018-07-19)
 
