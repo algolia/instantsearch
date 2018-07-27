@@ -12,8 +12,8 @@ var customHits = connectHits(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customHits({
+    [ escapeHits = false ],
     [ transformItems ]
-    [ escapeHits = false ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html
@@ -61,47 +61,51 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 export default function connectHits(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetParams = {}) => ({
-    getConfiguration() {
-      return widgetParams.escapeHits ? tagConfig : undefined;
-    },
+  return (widgetParams = {}) => {
+    const { transformItems = items => items } = widgetParams;
 
-    init({ instantSearchInstance }) {
-      renderFn(
-        {
-          hits: [],
-          results: undefined,
-          instantSearchInstance,
-          widgetParams,
-        },
-        true
-      );
-    },
+    return {
+      getConfiguration() {
+        return widgetParams.escapeHits ? tagConfig : undefined;
+      },
 
-    render({ results, instantSearchInstance }) {
-      if (results.hits && results.hits.length > 0) {
-        if (typeof widgetParams.transformItems === 'function') {
-          results.hits = widgetParams.transformItems(results.hits);
-        }
+      init({ instantSearchInstance }) {
+        renderFn(
+          {
+            hits: [],
+            results: undefined,
+            instantSearchInstance,
+            widgetParams,
+          },
+          true
+        );
+      },
 
-        if (widgetParams.escapeHits) {
+      render({ results, instantSearchInstance }) {
+        results.hits = transformItems(results.hits);
+
+        if (
+          widgetParams.escapeHits &&
+          results.hits &&
+          results.hits.length > 0
+        ) {
           results.hits = escapeHits(results.hits);
         }
-      }
 
-      renderFn(
-        {
-          hits: results.hits,
-          results,
-          instantSearchInstance,
-          widgetParams,
-        },
-        false
-      );
-    },
+        renderFn(
+          {
+            hits: results.hits,
+            results,
+            instantSearchInstance,
+            widgetParams,
+          },
+          false
+        );
+      },
 
-    dispose() {
-      unmountFn();
-    },
-  });
+      dispose() {
+        unmountFn();
+      },
+    };
+  };
 }
