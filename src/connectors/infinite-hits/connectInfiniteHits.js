@@ -14,8 +14,8 @@ var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRend
 });
 search.addWidget(
   customInfiniteHits({
-    escapeHits: true,
-    transformItems: items => items.map(item => item),
+    [ escapeHits: true ],
+    [ transformItems ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html
@@ -80,6 +80,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
+    const { transformItems = items => items } = widgetParams;
     let hitsCache = [];
     let lastReceivedPage = -1;
 
@@ -112,14 +113,14 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           lastReceivedPage = -1;
         }
 
-        if (results.hits && results.hits.length > 0) {
-          if (typeof widgetParams.transformItems === 'function') {
-            results.hits = widgetParams.transformItems(results.hits);
-          }
+        results.hits = transformItems(results.hits);
 
-          if (widgetParams.escapeHits) {
-            results.hits = escapeHits(results.hits);
-          }
+        if (
+          widgetParams.escapeHits &&
+          results.hits &&
+          results.hits.length > 0
+        ) {
+          results.hits = escapeHits(results.hits);
         }
 
         if (lastReceivedPage < state.page) {
