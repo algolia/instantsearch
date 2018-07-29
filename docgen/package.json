@@ -49,7 +49,7 @@
     "ms-webpack": "2.0.0",
     "postcss": "7.0.0",
     "postcss-loader": "2.1.6",
-    "postcss-scss": "1.0.6",
+    "postcss-scss": "2.0.0",
     "prop-types": "15.6.1",
     "pug": "2.0.3",
     "qs": "6.5.2",
