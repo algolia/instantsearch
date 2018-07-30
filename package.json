@@ -64,7 +64,7 @@
     "jest": "23.4.2",
     "jest-image-snapshot": "2.4.3",
     "prettier": "1.13.7",
-    "release-it": "7.4.7",
+    "release-it": "7.4.8",
     "walk-sync": "0.3.2"
   },
   "renovate": {
