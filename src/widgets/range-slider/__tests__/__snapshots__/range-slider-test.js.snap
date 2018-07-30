@@ -16,7 +16,6 @@ exports[`rangeSlider widget usage max option will use the results min when only 
   pips={true}
   refine={[Function]}
   shouldAutoHideContainer={false}
-  step={undefined}
   templateProps={
     Object {
       "templates": Object {
@@ -57,7 +56,6 @@ exports[`rangeSlider widget usage min option sets the right range 1`] = `
   pips={true}
   refine={[Function]}
   shouldAutoHideContainer={false}
-  step={undefined}
   templateProps={
     Object {
       "templates": Object {
@@ -98,7 +96,6 @@ exports[`rangeSlider widget usage min option will use the results max when only 
   pips={true}
   refine={[Function]}
   shouldAutoHideContainer={false}
-  step={undefined}
   templateProps={
     Object {
       "templates": Object {
@@ -143,7 +140,6 @@ exports[`rangeSlider widget usage should \`collapse\` when options is provided 1
   pips={true}
   refine={[Function]}
   shouldAutoHideContainer={true}
-  step={undefined}
   templateProps={
     Object {
       "templates": Object {
@@ -184,7 +180,6 @@ exports[`rangeSlider widget usage should \`shouldAutoHideContainer\` when range 
   pips={true}
   refine={[Function]}
   shouldAutoHideContainer={true}
-  step={undefined}
   templateProps={
     Object {
       "templates": Object {
@@ -225,7 +220,6 @@ exports[`rangeSlider widget usage should render without results 1`] = `
   pips={true}
   refine={[Function]}
   shouldAutoHideContainer={true}
-  step={undefined}
   templateProps={
     Object {
       "templates": Object {
@@ -266,7 +260,6 @@ exports[`rangeSlider widget usage with results calls twice ReactDOM.render 1`] =
   pips={true}
   refine={[Function]}
   shouldAutoHideContainer={false}
-  step={undefined}
   templateProps={
     Object {
       "templates": Object {
@@ -307,7 +300,6 @@ exports[`rangeSlider widget usage with results calls twice ReactDOM.render 2`] =
   pips={true}
   refine={[Function]}
   shouldAutoHideContainer={false}
-  step={undefined}
   templateProps={
     Object {
       "templates": Object {
