@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 const SearchParameters = jsHelper.SearchParameters;
@@ -65,7 +63,7 @@ describe('connectHierarchicalMenu', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'sub_category'],
@@ -86,10 +84,10 @@ describe('connectHierarchicalMenu', () => {
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = jsHelper({}, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -99,12 +97,14 @@ describe('connectHierarchicalMenu', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      attributes: ['category', 'sub_category'],
-    });
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        widgetParams: { attributes: ['category', 'sub_category'] },
+      }),
+      true
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -114,22 +114,24 @@ describe('connectHierarchicalMenu', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      attributes: ['category', 'sub_category'],
-    });
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        widgetParams: { attributes: ['category', 'sub_category'] },
+      }),
+      false
+    );
   });
 
   it('Provide a function to clear the refinements at each step', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'sub_category'],
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
 
@@ -140,7 +142,7 @@ describe('connectHierarchicalMenu', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
@@ -154,7 +156,7 @@ describe('connectHierarchicalMenu', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderToggleRefinement } = secondRenderingOptions;
     renderToggleRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
@@ -163,14 +165,14 @@ describe('connectHierarchicalMenu', () => {
   });
 
   it('provides the correct facet values', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
 
@@ -181,11 +183,15 @@ describe('connectHierarchicalMenu', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
     // During the first rendering there are no facet values
     // The function get an empty array so that it doesn't break
     // over null-ish values.
-    expect(firstRenderingOptions.items).toEqual([]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [],
+      }),
+      expect.anything()
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -215,42 +221,46 @@ describe('connectHierarchicalMenu', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items).toEqual([
-      {
-        label: 'Decoration',
-        value: 'Decoration',
-        count: 880,
-        isRefined: true,
-        data: [
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
           {
-            label: 'Candle holders & candles',
-            value: 'Decoration > Candle holders & candles',
-            count: 193,
-            isRefined: false,
-            data: null,
+            label: 'Decoration',
+            value: 'Decoration',
+            count: 880,
+            isRefined: true,
+            data: [
+              {
+                label: 'Candle holders & candles',
+                value: 'Decoration > Candle holders & candles',
+                count: 193,
+                isRefined: false,
+                data: null,
+              },
+              {
+                label: 'Frames & pictures',
+                value: 'Decoration > Frames & pictures',
+                count: 173,
+                isRefined: false,
+                data: null,
+              },
+            ],
           },
           {
-            label: 'Frames & pictures',
-            value: 'Decoration > Frames & pictures',
-            count: 173,
+            label: 'Outdoor',
+            value: 'Outdoor',
+            count: 47,
             isRefined: false,
             data: null,
           },
         ],
-      },
-      {
-        label: 'Outdoor',
-        value: 'Outdoor',
-        count: 47,
-        isRefined: false,
-        data: null,
-      },
-    ]);
+      }),
+      expect.anything()
+    );
   });
 
   it('provides the correct transformed facet values', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
       attributes: ['category', 'subCategory'],
@@ -262,7 +272,7 @@ describe('connectHierarchicalMenu', () => {
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
 
@@ -271,8 +281,10 @@ describe('connectHierarchicalMenu', () => {
       state: helper.state,
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.items).toEqual([]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({ items: [] }),
+      expect.anything()
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -301,11 +313,15 @@ describe('connectHierarchicalMenu', () => {
       helper,
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items).toEqual([
-      expect.objectContaining({ label: 'transformed' }),
-      expect.objectContaining({ label: 'transformed' }),
-    ]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          expect.objectContaining({ label: 'transformed' }),
+          expect.objectContaining({ label: 'transformed' }),
+        ],
+      }),
+      expect.anything()
+    );
   });
 
   describe('routing', () => {
@@ -317,7 +333,7 @@ describe('connectHierarchicalMenu', () => {
       });
 
       const helper = jsHelper({}, '', widget.getConfiguration({}));
-      helper.search = sinon.stub();
+      helper.search = jest.fn();
 
       widget.init({
         helper,
