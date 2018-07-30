@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper, {
   SearchResults,
   SearchParameters,
@@ -11,7 +9,7 @@ describe('connectMenu', () => {
   let rendering;
   let makeWidget;
   beforeEach(() => {
-    rendering = sinon.stub();
+    rendering = jest.fn();
     makeWidget = connectMenu(rendering);
   });
 
@@ -82,10 +80,10 @@ describe('connectMenu', () => {
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = jsHelper({}, '', config);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -95,16 +93,18 @@ describe('connectMenu', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
-
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.canRefine).toBe(false);
-    expect(firstRenderingOptions.widgetParams).toEqual({
-      attributeName: 'myFacet',
-      limit: 9,
-    });
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        canRefine: false,
+        widgetParams: {
+          attributeName: 'myFacet',
+          limit: 9,
+        },
+      }),
+      true
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -114,15 +114,17 @@ describe('connectMenu', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
-
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.canRefine).toBe(false);
-    expect(secondRenderingOptions.widgetParams).toEqual({
-      attributeName: 'myFacet',
-      limit: 9,
-    });
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        canRefine: false,
+        widgetParams: {
+          attributeName: 'myFacet',
+          limit: 9,
+        },
+      }),
+      false
+    );
   });
 
   it('Provide a function to clear the refinements at each step', () => {
@@ -131,7 +133,7 @@ describe('connectMenu', () => {
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'value');
 
@@ -142,7 +144,7 @@ describe('connectMenu', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
@@ -156,7 +158,7 @@ describe('connectMenu', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderRefine } = secondRenderingOptions;
     renderRefine('value');
     expect(helper.hasRefinements('category')).toBe(false);
@@ -170,7 +172,7 @@ describe('connectMenu', () => {
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
 
@@ -181,11 +183,13 @@ describe('connectMenu', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
     // During the first rendering there are no facet values
     // The function get an empty array so that it doesn't break
     // over null-ish values.
-    expect(firstRenderingOptions.items).toEqual([]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({ items: [] }),
+      expect.anything()
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -211,23 +215,27 @@ describe('connectMenu', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items).toEqual([
-      {
-        label: 'Decoration',
-        value: 'Decoration',
-        count: 880,
-        isRefined: true,
-        data: null,
-      },
-      {
-        label: 'Outdoor',
-        value: 'Outdoor',
-        count: 47,
-        isRefined: false,
-        data: null,
-      },
-    ]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          {
+            label: 'Decoration',
+            value: 'Decoration',
+            count: 880,
+            isRefined: true,
+            data: null,
+          },
+          {
+            label: 'Outdoor',
+            value: 'Outdoor',
+            count: 47,
+            isRefined: false,
+            data: null,
+          },
+        ],
+      }),
+      expect.anything()
+    );
   });
 
   it('provides the correct transformed facet values', () => {
@@ -241,7 +249,7 @@ describe('connectMenu', () => {
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     helper.toggleRefinement('category', 'Decoration');
 
@@ -250,8 +258,12 @@ describe('connectMenu', () => {
       state: helper.state,
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.items).toEqual([]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [],
+      }),
+      expect.anything()
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [
@@ -276,11 +288,15 @@ describe('connectMenu', () => {
       helper,
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items).toEqual([
-      expect.objectContaining({ label: 'transformed' }),
-      expect.objectContaining({ label: 'transformed' }),
-    ]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          expect.objectContaining({ label: 'transformed' }),
+          expect.objectContaining({ label: 'transformed' }),
+        ],
+      }),
+      expect.anything()
+    );
   });
 
   describe('showMore', () => {
@@ -332,9 +348,12 @@ describe('connectMenu', () => {
         onHistoryChange: () => {},
       });
 
-      // Then
-      const firstRenderingOptions = rendering.lastCall.args[0];
-      expect(firstRenderingOptions.isShowingMore).toBe(false);
+      expect(rendering).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          isShowingMore: false,
+        }),
+        expect.anything()
+      );
     });
 
     it('should toggle `isShowingMore` when `toggleShowMore` is called', () => {
@@ -384,7 +403,8 @@ describe('connectMenu', () => {
       });
 
       // Then
-      const firstRenderingOptions = rendering.lastCall.args[0];
+      const firstRenderingOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(firstRenderingOptions.isShowingMore).toBe(false);
       expect(firstRenderingOptions.items).toHaveLength(1);
       expect(firstRenderingOptions.canToggleShowMore).toBe(true);
@@ -393,7 +413,8 @@ describe('connectMenu', () => {
       firstRenderingOptions.toggleShowMore();
 
       // Then
-      const secondRenderingOptions = rendering.lastCall.args[0];
+      const secondRenderingOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(secondRenderingOptions.isShowingMore).toBe(true);
       expect(secondRenderingOptions.items).toHaveLength(2);
       expect(firstRenderingOptions.canToggleShowMore).toBe(true);
@@ -444,7 +465,8 @@ describe('connectMenu', () => {
         createURL: () => '#',
       });
 
-      const firstRenderingOptions = rendering.lastCall.args[0];
+      const firstRenderingOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(firstRenderingOptions.items).toHaveLength(1);
       expect(firstRenderingOptions.canToggleShowMore).toBe(false);
     });
@@ -459,7 +481,7 @@ describe('connectMenu', () => {
       });
 
       const helper = jsHelper({}, '', widget.getConfiguration({}));
-      helper.search = sinon.stub();
+      helper.search = jest.fn();
 
       widget.init({
         helper,
