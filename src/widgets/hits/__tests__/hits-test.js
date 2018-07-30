@@ -1,5 +1,3 @@
-import expect from 'expect';
-import sinon from 'sinon';
 import hits from '../hits.js';
 import defaultTemplates from '../defaultTemplates.js';
 
@@ -17,7 +15,7 @@ describe('hits()', () => {
   let results;
 
   beforeEach(() => {
-    ReactDOM = { render: sinon.spy() };
+    ReactDOM = { render: jest.fn() };
     hits.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
@@ -36,11 +34,11 @@ describe('hits()', () => {
     widget.render({ results });
     widget.render({ results });
 
-    expect(ReactDOM.render.callCount).toBe(2);
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
   });
 
   it('renders transformed items', () => {
@@ -53,7 +51,7 @@ describe('hits()', () => {
     widget.init({ instantSearchInstance: {} });
     widget.render({ results });
 
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('does not accept both item and allItems templates', () => {

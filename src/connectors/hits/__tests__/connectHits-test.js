@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
@@ -9,7 +7,7 @@ describe('connectHits', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({ escapeHits: true });
 
@@ -19,10 +17,10 @@ describe('connectHits', () => {
     });
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = jsHelper({}, '', {});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -31,13 +29,12 @@ describe('connectHits', () => {
       onHistoryChange: () => {},
     });
 
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
-    // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      escapeHits: true,
-    });
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({ widgetParams: { escapeHits: true } }),
+      true
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -46,21 +43,21 @@ describe('connectHits', () => {
       createURL: () => '#',
     });
 
+    expect(rendering).toHaveBeenCalledTimes(2);
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      escapeHits: true,
-    });
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({ widgetParams: { escapeHits: true } }),
+      false
+    );
   });
 
   it('Provides the hits and the whole results', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({});
 
     const helper = jsHelper({}, '', {});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -69,9 +66,13 @@ describe('connectHits', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.hits).toEqual([]);
-    expect(firstRenderingOptions.results).toBe(undefined);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        hits: [],
+        results: undefined,
+      }),
+      expect.anything()
+    );
 
     const hits = [{ fake: 'data' }, { sample: 'infos' }];
 
@@ -85,18 +86,22 @@ describe('connectHits', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.hits).toEqual(hits);
-    expect(secondRenderingOptions.results).toEqual(results);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        hits,
+        results,
+      }),
+      expect.anything()
+    );
   });
 
   it('escape highlight properties if requested', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({ escapeHits: true });
 
     const helper = jsHelper({}, '', {});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -105,9 +110,13 @@ describe('connectHits', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.hits).toEqual([]);
-    expect(firstRenderingOptions.results).toBe(undefined);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        hits: [],
+        results: undefined,
+      }),
+      expect.anything()
+    );
 
     const hits = [
       {
@@ -139,9 +148,13 @@ describe('connectHits', () => {
 
     escapedHits.__escaped = true;
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.hits).toEqual(escapedHits);
-    expect(secondRenderingOptions.results).toEqual(results);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        hits: escapedHits,
+        results,
+      }),
+      expect.anything()
+    );
   });
 
   it('transform items if requested', () => {
@@ -161,9 +174,11 @@ describe('connectHits', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.mock.calls[0][0];
-    expect(firstRenderingOptions.hits).toEqual([]);
-    expect(firstRenderingOptions.results).toBe(undefined);
+    expect(rendering).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({ hits: [], results: undefined }),
+      expect.anything()
+    );
 
     const hits = [{ name: 'name 1' }, { name: 'name 2' }];
 
@@ -175,11 +190,13 @@ describe('connectHits', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.mock.calls[1][0];
-    expect(secondRenderingOptions.hits).toEqual([
-      { name: 'transformed' },
-      { name: 'transformed' },
-    ]);
-    expect(secondRenderingOptions.results).toEqual(results);
+    expect(rendering).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        hits: [{ name: 'transformed' }, { name: 'transformed' }],
+        results,
+      }),
+      expect.anything()
+    );
   });
 });
