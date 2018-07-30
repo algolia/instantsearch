@@ -2,49 +2,35 @@
 
 exports[`PriceRanges individual methods getForm should call the PriceRangesForm 1`] = `
 <form
-  className={undefined}
   onSubmit={[Function]}
 >
-  <label
-    className={undefined}
-  >
-    <span
-      className={undefined}
-    >
+  <label>
+    <span>
       $
        
     </span>
     <input
-      className={undefined}
       onChange={[Function]}
       type="number"
       value=""
     />
   </label>
-  <span
-    className={undefined}
-  >
+  <span>
      
      
   </span>
-  <label
-    className={undefined}
-  >
-    <span
-      className={undefined}
-    >
+  <label>
+    <span>
       $
        
     </span>
     <input
-      className={undefined}
       onChange={[Function]}
       type="number"
       value=""
     />
   </label>
   <button
-    className={undefined}
     type="submit"
   >
     hello
@@ -94,15 +80,11 @@ exports[`PriceRanges individual methods getItemFromFacetValue should display one
 
 exports[`PriceRanges render should have the right number of items 1`] = `
 <div>
-  <div
-    className={undefined}
-  >
+  <div>
     <div
       className=""
     >
       <a
-        className={undefined}
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -118,8 +100,6 @@ exports[`PriceRanges render should have the right number of items 1`] = `
       className=""
     >
       <a
-        className={undefined}
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -135,8 +115,6 @@ exports[`PriceRanges render should have the right number of items 1`] = `
       className=""
     >
       <a
-        className={undefined}
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -152,8 +130,6 @@ exports[`PriceRanges render should have the right number of items 1`] = `
       className=""
     >
       <a
-        className={undefined}
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -167,47 +143,33 @@ exports[`PriceRanges render should have the right number of items 1`] = `
     </div>
   </div>
   <form
-    className={undefined}
     onSubmit={[Function]}
   >
-    <label
-      className={undefined}
-    >
-      <span
-        className={undefined}
-      >
+    <label>
+      <span>
          
       </span>
       <input
-        className={undefined}
         onChange={[Function]}
         type="number"
         value=""
       />
     </label>
-    <span
-      className={undefined}
-    >
+    <span>
        
        
     </span>
-    <label
-      className={undefined}
-    >
-      <span
-        className={undefined}
-      >
+    <label>
+      <span>
          
       </span>
       <input
-        className={undefined}
         onChange={[Function]}
         type="number"
         value=""
       />
     </label>
     <button
-      className={undefined}
       type="submit"
     />
   </form>
@@ -223,8 +185,6 @@ exports[`PriceRanges render should wrap the output in a list CSS class 1`] = `
       className=""
     >
       <a
-        className={undefined}
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -240,8 +200,6 @@ exports[`PriceRanges render should wrap the output in a list CSS class 1`] = `
       className=""
     >
       <a
-        className={undefined}
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -257,8 +215,6 @@ exports[`PriceRanges render should wrap the output in a list CSS class 1`] = `
       className=""
     >
       <a
-        className={undefined}
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -274,8 +230,6 @@ exports[`PriceRanges render should wrap the output in a list CSS class 1`] = `
       className=""
     >
       <a
-        className={undefined}
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -289,47 +243,33 @@ exports[`PriceRanges render should wrap the output in a list CSS class 1`] = `
     </div>
   </div>
   <form
-    className={undefined}
     onSubmit={[Function]}
   >
-    <label
-      className={undefined}
-    >
-      <span
-        className={undefined}
-      >
+    <label>
+      <span>
          
       </span>
       <input
-        className={undefined}
         onChange={[Function]}
         type="number"
         value=""
       />
     </label>
-    <span
-      className={undefined}
-    >
+    <span>
        
        
     </span>
-    <label
-      className={undefined}
-    >
-      <span
-        className={undefined}
-      >
+    <label>
+      <span>
          
       </span>
       <input
-        className={undefined}
         onChange={[Function]}
         type="number"
         value=""
       />
     </label>
     <button
-      className={undefined}
       type="submit"
     />
   </form>

@@ -5,7 +5,6 @@ exports[`headerFooter collapsible when collapsed 1`] = `
   className="ais-root root ais-root__collapsible ais-root__collapsed"
 >
   <Unknown
-    data={undefined}
     rootProps={
       Object {
         "className": "ais-header",
@@ -47,7 +46,6 @@ exports[`headerFooter collapsible when collapsed 1`] = `
     />
   </div>
   <Unknown
-    data={undefined}
     rootProps={
       Object {
         "className": "ais-footer",
@@ -71,7 +69,6 @@ exports[`headerFooter collapsible when true 1`] = `
   className="ais-root root ais-root__collapsible"
 >
   <Unknown
-    data={undefined}
     rootProps={
       Object {
         "className": "ais-header",
@@ -109,7 +106,6 @@ exports[`headerFooter collapsible when true 1`] = `
     />
   </div>
   <Unknown
-    data={undefined}
     rootProps={
       Object {
         "className": "ais-footer",
@@ -153,7 +149,6 @@ exports[`headerFooter should add a footer if such a template is passed 1`] = `
     />
   </div>
   <Unknown
-    data={undefined}
     rootProps={
       Object {
         "className": "ais-footer",
@@ -176,7 +171,6 @@ exports[`headerFooter should add a header if such a template is passed 1`] = `
   className="ais-root root"
 >
   <Unknown
-    data={undefined}
     rootProps={
       Object {
         "className": "ais-header",
