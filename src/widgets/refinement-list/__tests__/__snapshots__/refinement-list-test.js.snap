@@ -45,7 +45,6 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
   }
   isFromSearch={false}
   isShowingMore={false}
-  searchFacetValues={undefined}
   searchIsAlwaysActive={false}
   searchPlaceholder="Search for other..."
   shouldAutoHideContainer={false}
