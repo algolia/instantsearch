@@ -34,7 +34,7 @@
     "@types/algoliasearch": "3.27.5",
     "@types/jasmine": "2.8.8",
     "@types/jasminewd2": "2.0.3",
-    "@types/node": "8.10.21",
+    "@types/node": "8.10.22",
     "codelyzer": "4.4.2",
     "jasmine-core": "2.99.1",
     "jasmine-spec-reporter": "4.2.1",
