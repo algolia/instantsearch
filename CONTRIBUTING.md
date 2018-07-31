@@ -1,8 +1,6 @@
 # Contributing to Create InstantSearch App
 
-Thank you for wanting to get involved in Create InstantSearch App!
-
-The goal of the package is to enable users to create InstantSearch applications quickly.
+Thank you for wanting to get involved in Create InstantSearch App! The goal of the package is to enable users to create InstantSearch applications quickly.
 
 ## Core concepts
 
@@ -26,15 +24,27 @@ The `create-instantsearch-app` CLI is based on the module `createInstantSearchAp
   package.json
 ```
 
-### Creating a template
+### Adding a template
 
-When [creating a template](README.md#templates), you will need to run end-to-end tests (`yarn run test:e2e:templates`) to update all the [snapshots](https://facebook.github.io/jest/docs/en/snapshot-testing.html). These snapshots are meant to avoid regressions that can potentially happen when we unintentionally update a behavior in the source code.
+When [adding a template](README.md#templates), you will need to run end-to-end tests (`yarn run test:e2e:templates`) to update all the [snapshots](https://facebook.github.io/jest/docs/en/snapshot-testing.html). These snapshots are meant to avoid regressions that can potentially happen when we unintentionally update a behavior in the source code.
 
 ## Requirements
 
 - [Node](https://nodejs.org) ≥ 8
 - [Yarn](https://yarnpkg.com)
-- [CocoaPods](https://cocoapods.org) (to run end-to-end tests)
+- [CocoaPods](https://cocoapods.org) (to run end-to-end tests for the [InstantSearch iOS template](https://github.com/algolia/create-instantsearch-app/tree/master/src/templates/InstantSearch%20iOS))
+
+## Conventions
+
+### Commits
+
+This project follows the [conventional changelog](https://conventionalcommits.org/) approach. This means that all commit messages should be formatted using the following scheme:
+
+```
+type(scope): description
+```
+
+These commits are then used to generate the [changelog](CHANGELOG.md).
 
 ## Workflow
 
@@ -49,13 +59,13 @@ Code contributions are always welcome, although you should make sure to [open an
 You will need to follow these steps:
 
 - [Fork the repository](https://help.github.com/articles/fork-a-repo/)
-- Clone the project: `git clone https://github.com/algolia/create-instantsearch-app.git`
+- Clone your fork
 - Install the dependencies: `yarn`
 - [Create a new branch](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/#creating-a-branch)
   - `fix/issue-number` for a fix
   - `feat/name-of-the-feature` for a feature
   - `docs/what-you-changed` for documentation
-- Apply your changes
+- Make your changes
 - Run tests:
   - `yarn lint`
   - `yarn test`
@@ -64,27 +74,42 @@ You will need to follow these steps:
 
 We will then review your pull request!
 
-### Releases
+### Releasing
 
-- [Generate a new GitHub token](https://github.com/settings/tokens/new) with the scope `repo` (necessary for creating GitHub releases)
-- Store this token in an [environment variable](https://en.wikipedia.org/wiki/Environment_variable) called `GITHUB_TOKEN_CISA`
-- Make sure you're on the `master` branch
-- Run commands (do not use `yarn` for releasing):
-  - `npm run release:beta` for a new beta version
-  - `npm run release` for a new stable version
-- Follow the command-line instructions
+We rely on [release-it](https://github.com/webpro/release-it) to release new versions of Create InstantSearch App.
 
-## Conventions
+#### Release flow
 
-### Commits
+1.  Bump the project version in [`package.json`](package.json) based on [the commits](#conventions)
+1.  Generate the changelog
+1.  Commit the new release
+1.  Create the new release tag
+1.  Push to GitHub
+1.  Create the new release on GitHub
+1.  Publish to npm
+1.  Push the generated templates to the [`templates`](https://github.com/algolia/create-instantsearch-app/tree/templates) branch (usable on CodeSandbox)
 
-This project follows the [conventional changelog](https://conventionalcommits.org/) approach. This means that all commit messages should be formatted using the following scheme:
+#### Release steps
+
+To release a new version of the package, you need to:
+
+1.  [Generate a new GitHub token](https://github.com/settings/tokens/new) with the scope `repo` (necessary for creating GitHub releases)
+1.  Store this token in an [environment variable](https://en.wikipedia.org/wiki/Environment_variable) called `GITHUB_TOKEN_CISA`
+1.  Make sure you're on the `master` branch
+1.  Run commands (_do not_ use `yarn` for releasing):
+    - `npm run release:beta` for a new beta version
+    - `npm run release` for a new stable version
+1.  Follow the command-line instructions
+
+### Updating templates on CodeSandbox
+
+If the InstantSearch versions are outdated in the CodeSandbox templates, make sure you're on the `master` branch and that your working directory is clean, then run:
 
 ```
-type(scope): description
+npm run release-templates
 ```
 
-These commits are then used to generate the [changelog](CHANGELOG.md).
+It will regenerate the templates, fetch the latest InstantSearch versions from the npm index and push to the [`templates`](https://github.com/algolia/create-instantsearch-app/tree/templates) branch (usable on CodeSandbox).
 
 ---
 
