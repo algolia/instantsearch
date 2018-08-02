@@ -1,5 +1,5 @@
 ---
-layout: main.jade
+layout: main.pug
 title: Algolia JS Helper
 subtitle: A set of utilities for further customizing search behavior
 ---

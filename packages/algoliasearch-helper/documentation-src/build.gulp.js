@@ -112,7 +112,7 @@ function makeMetalsmithBuilder() {
     }))
     .use(headings('h2, h3'))
     .use(layouts({
-      engine: 'jade',
+      engine: 'pug',
       directory: src.layouts
     }));
 }
@@ -165,7 +165,7 @@ gulp.task('doc:all:watch', ['doc:content', 'doc:js', 'doc:style'], function() {
   gulp.watch(src.stylesheets, ['doc:style:watch']);
   gulp.watch(src.content + '/**/*.md', ['doc:content:watch']);
   gulp.watch(src.partials + '/**/*.hbs', ['doc:content:watch']);
-  gulp.watch(src.layouts + '/**/*.jade', ['doc:content:watch']);
+  gulp.watch(src.layouts + '/**/*.pug', ['doc:content:watch']);
   gulp.watch(src.content + '/**/*.md', ['doc:content:watch']);
   gulp.watch('../src/**/*.js', ['doc:content:watch']);
   gulp.watch(src.js + '**/*.js', ['doc:js:watch']);

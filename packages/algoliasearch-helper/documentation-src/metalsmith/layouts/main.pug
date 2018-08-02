@@ -5,7 +5,7 @@ html
     meta(charset='utf-8')
     meta(content='width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no', name='viewport')
     link(href='#', rel='icon', type='image/x-icon')
-    include ./common/metas.jade
+    include ./common/metas.pug
     // Use title if it's in the page YAML frontmatter
     title= title
     link(href='https://fonts.googleapis.com/css?family=Montserrat:500,600|Open+Sans', rel='stylesheet', type='text/css')
@@ -20,7 +20,7 @@ html
       '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
       })(window,document,'script','dataLayer','GTM-N8JP8G');
   body(class=page_classes)
-    include ./common/header.jade
+    include ./common/header.pug
     section.hero-section.shrink
       .container
         .hero-container
@@ -66,4 +66,4 @@ html
             a(href='https://community.algolia.com/instantsearch.js/') instantsearch.js
             | .
           a.btn.btn-cta(href='examples.html#use-with-frameworks') Examples
-    include ./common/footer.jade
+    include ./common/footer.pug

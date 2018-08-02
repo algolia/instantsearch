@@ -1,5 +1,5 @@
 ---
-layout: documentation.jade
+layout: documentation.pug
 title: Getting started with the helper
 ---
 

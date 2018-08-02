@@ -1,5 +1,5 @@
 ---
-layout: documentation.jade
+layout: documentation.pug
 title: Helper core concepts
 ---
 
