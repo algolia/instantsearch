@@ -20,7 +20,7 @@
     "@angular/platform-browser": "6.1.1",
     "@angular/platform-browser-dynamic": "6.1.1",
     "@angular/router": "6.1.1",
-    "algoliasearch": "3.29.0",
+    "algoliasearch": "3.30.0",
     "angular-instantsearch": "{{libraryVersion}}",
     "core-js": "2.5.7",
     "rxjs": "6.2.2",
