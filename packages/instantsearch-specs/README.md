@@ -29,3 +29,14 @@ npm version (major|minor|patch) -m "Version x.x.x"
 npm publish
 git push origin <tag_name>
 ```
+
+## Implemented versions
+
+InstantSearch.css is a living standard. This table tracks down the version implemented in each InstantSearch:
+
+| Project | Version     |
+| ------- | ----------- |
+| Angular | 7.1.0       |
+| React   | 7.1.0       |
+| Vanilla | In progress |
+| Vue     | In progress |
