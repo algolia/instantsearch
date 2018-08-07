@@ -61,13 +61,7 @@ class List extends Component {
   };
 
   renderItem = (item, resetQuery) => {
-    const items = item.items && (
-      <ul className={this.props.cx('list', 'list--child')}>
-        {item.items
-          .slice(0, this.getLimit())
-          .map(child => this.renderItem(child, item))}
-      </ul>
-    );
+    const itemHasChildren = item.items && Boolean(item.items.length);
 
     return (
       <li
@@ -76,11 +70,17 @@ class List extends Component {
           'item',
           item.isRefined && 'item--selected',
           item.noRefinement && 'item--noRefinement',
-          items && 'item--parent'
+          itemHasChildren && 'item--parent'
         )}
       >
         {this.props.renderItem(item, resetQuery)}
-        {items}
+        {itemHasChildren && (
+          <ul className={this.props.cx('list', 'list--child')}>
+            {item.items
+              .slice(0, this.getLimit())
+              .map(child => this.renderItem(child, item))}
+          </ul>
+        )}
       </li>
     );
   };
