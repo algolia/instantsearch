@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.9.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.10.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -8437,7 +8437,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-var usage = 'Usage:\nvar customMenu = connectMenu(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   widgetParams,\n  //   isShowingMore,\n  //   toggleShowMore\n  // }\n});\nsearch.addWidget(\n  customMenu({\n    attributeName,\n    [ limit ],\n    [ showMoreLimit ]\n    [ sortBy = [\'name:asc\'] ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectMenu.html\n';
+var usage = 'Usage:\nvar customMenu = connectMenu(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   createURL,\n  //   refine,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   widgetParams,\n  //   isShowingMore,\n  //   toggleShowMore\n  // }\n});\nsearch.addWidget(\n  customMenu({\n    attributeName,\n    [ limit ],\n    [ showMoreLimit ]\n    [ sortBy = [\'name:asc\'] ]\n    [ transformItems ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectMenu.html\n';
 
 /**
  * @typedef {Object} MenuItem
@@ -8455,6 +8455,7 @@ var usage = 'Usage:\nvar customMenu = connectMenu(function render(params, isFirs
  * @property {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -8529,7 +8530,11 @@ function connectMenu(renderFn, unmountFn) {
         limit = _widgetParams$limit === undefined ? 10 : _widgetParams$limit,
         _widgetParams$sortBy = widgetParams.sortBy,
         sortBy = _widgetParams$sortBy === undefined ? ['name:asc'] : _widgetParams$sortBy,
-        showMoreLimit = widgetParams.showMoreLimit;
+        showMoreLimit = widgetParams.showMoreLimit,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
 
     if (!attributeName || !isNaN(showMoreLimit) && showMoreLimit < limit) {
@@ -8611,7 +8616,7 @@ function connectMenu(renderFn, unmountFn) {
             instantSearchInstance = _ref3.instantSearchInstance;
 
         var facetItems = results.getFacetValues(attributeName, { sortBy: sortBy }).data || [];
-        var items = facetItems.slice(0, this.getLimit()).map(function (_ref4) {
+        var items = transformItems(facetItems.slice(0, this.getLimit()).map(function (_ref4) {
           var label = _ref4.name,
               value = _ref4.path,
               item = _objectWithoutProperties(_ref4, ['name', 'path']);
@@ -8620,7 +8625,7 @@ function connectMenu(renderFn, unmountFn) {
             label: label,
             value: value
           });
-        });
+        }));
 
         this.toggleShowMore = this.createToggleShowMore({
           results: results,
@@ -13701,7 +13706,7 @@ var BrowserHistory = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.9.0';
+exports.default = '2.10.0';
 
 /***/ }),
 /* 190 */
@@ -13905,7 +13910,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   attributes,\n  //   clearAllClick,\n  //   clearAllPosition,\n  //   clearAllURL,\n  //   refine,\n  //   createURL,\n  //   refinements,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customCurrentRefinedValues({\n    [ attributes = [] ],\n    [ onlyListedAttributes = false ],\n    [ clearsQuery = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectCurrentRefinedValues.html\n';
+var usage = 'Usage:\nvar customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   attributes,\n  //   clearAllClick,\n  //   clearAllPosition,\n  //   clearAllURL,\n  //   refine,\n  //   createURL,\n  //   refinements,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customCurrentRefinedValues({\n    [ attributes = [] ],\n    [ onlyListedAttributes = false ],\n    [ clearsQuery = false ],\n    [ transformItems ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectCurrentRefinedValues.html\n';
 
 /**
  * @typedef {Object} CurrentRefinement
@@ -13942,6 +13947,7 @@ var usage = 'Usage:\nvar customCurrentRefinedValues = connectCurrentRefinedValue
  * set with no special treatment for the label.
  * @property {boolean} [onlyListedAttributes = false] Limit the displayed refinement to the list specified.
  * @property {boolean} [clearsQuery = false] Clears also the active search query when using clearAll.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -14026,7 +14032,11 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
         _widgetParams$onlyLis = widgetParams.onlyListedAttributes,
         onlyListedAttributes = _widgetParams$onlyLis === undefined ? false : _widgetParams$onlyLis,
         _widgetParams$clearsQ = widgetParams.clearsQuery,
-        clearsQuery = _widgetParams$clearsQ === undefined ? false : _widgetParams$clearsQ;
+        clearsQuery = _widgetParams$clearsQ === undefined ? false : _widgetParams$clearsQ,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
 
     var attributesOK = (0, _isArray2.default)(attributes) && (0, _reduce2.default)(attributes, function (res, val) {
@@ -14067,7 +14077,7 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
           return createURL((0, _utils.clearRefinements)({ helper: helper, whiteList: restrictedTo, clearsQuery: clearsQuery }));
         };
 
-        var refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes, clearsQuery);
+        var refinements = transformItems(getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes, clearsQuery));
 
         var _createURL = function _createURL(refinement) {
           return createURL(clearRefinementFromState(helper.state, refinement));
@@ -14094,7 +14104,7 @@ function connectCurrentRefinedValues(renderFn, unmountFn) {
             createURL = _ref2.createURL,
             instantSearchInstance = _ref2.instantSearchInstance;
 
-        var refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes, clearsQuery);
+        var refinements = transformItems(getFilteredRefinements(results, state, attributeNames, onlyListedAttributes, clearsQuery));
 
         var _createURL = function _createURL(refinement) {
           return createURL(clearRefinementFromState(helper.state, refinement));
@@ -14265,7 +14275,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHierarchicalMenu({\n    attributes,\n    [ separator = \' > \' ],\n    [ rootPath = null ],\n    [ showParentLevel = true ],\n    [ limit = 10 ],\n    [ sortBy = [\'name:asc\'] ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html\n';
+var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHierarchicalMenu({\n    attributes,\n    [ separator = \' > \' ],\n    [ rootPath = null ],\n    [ showParentLevel = true ],\n    [ limit = 10 ],\n    [ sortBy = [\'name:asc\'] ],\n    [ transformItems ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html\n';
 
 /**
  * @typedef {Object} HierarchicalMenuItem
@@ -14287,6 +14297,7 @@ var usage = 'Usage:\nvar customHierarchicalMenu = connectHierarchicalMenu(functi
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -14327,7 +14338,11 @@ function connectHierarchicalMenu(renderFn, unmountFn) {
         _widgetParams$limit = widgetParams.limit,
         limit = _widgetParams$limit === undefined ? 10 : _widgetParams$limit,
         _widgetParams$sortBy = widgetParams.sortBy,
-        sortBy = _widgetParams$sortBy === undefined ? ['name:asc'] : _widgetParams$sortBy;
+        sortBy = _widgetParams$sortBy === undefined ? ['name:asc'] : _widgetParams$sortBy,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
 
     if (!attributes || !attributes.length) {
@@ -14409,7 +14424,7 @@ function connectHierarchicalMenu(renderFn, unmountFn) {
             createURL = _ref4.createURL,
             instantSearchInstance = _ref4.instantSearchInstance;
 
-        var items = this._prepareFacetValues(results.getFacetValues(hierarchicalFacetName, { sortBy: sortBy }).data || [], state);
+        var items = transformItems(this._prepareFacetValues(results.getFacetValues(hierarchicalFacetName, { sortBy: sortBy }).data || [], state));
 
         // Bind createURL to this specific attribute
         function _createURL(facetValue) {
@@ -14491,7 +14506,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHits({\n    [ escapeHits = false ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html\n';
+var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHits({\n    [ escapeHits = false ],\n    [ transformItems ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html\n';
 
 /**
  * @typedef {Object} HitsRenderingOptions
@@ -14503,6 +14518,7 @@ var usage = 'Usage:\nvar customHits = connectHits(function render(params, isFirs
 /**
  * @typedef {Object} CustomHitsWidgetOptions
  * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -14536,6 +14552,12 @@ function connectHits(renderFn, unmountFn) {
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
+
+
     return {
       getConfiguration: function getConfiguration() {
         return widgetParams.escapeHits ? _escapeHighlight.tagConfig : undefined;
@@ -14553,6 +14575,8 @@ function connectHits(renderFn, unmountFn) {
       render: function render(_ref2) {
         var results = _ref2.results,
             instantSearchInstance = _ref2.instantSearchInstance;
+
+        results.hits = transformItems(results.hits);
 
         if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
           results.hits = (0, _escapeHighlight2.default)(results.hits);
@@ -14601,7 +14625,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var usage = 'Usage:\nvar customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHitsPerPage({\n    items: [\n      {value: 5, label: \'5 results per page\', default: true},\n      {value: 10, label: \'10 results per page\'},\n      {value: 42, label: \'42 results per page\'},\n    ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHitsPerPage.html\n';
+var usage = 'Usage:\nvar customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customHitsPerPage({\n    items: [\n      {value: 5, label: \'5 results per page\', default: true},\n      {value: 10, label: \'10 results per page\'},\n      {value: 42, label: \'42 results per page\'},\n    ],\n    [ transformItems ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHitsPerPage.html\n';
 
 /**
  * @typedef {Object} HitsPerPageRenderingOptionsItem
@@ -14628,6 +14652,7 @@ var usage = 'Usage:\nvar customHitsPerPage = connectHitsPerPage(function render(
 /**
  * @typedef {Object} HitsPerPageWidgetOptions
  * @property {HitsPerPageWidgetOptionsItem[]} items Array of objects defining the different values and labels.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -14690,7 +14715,11 @@ function connectHitsPerPage(renderFn, unmountFn) {
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var userItems = widgetParams.items;
+    var userItems = widgetParams.items,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
     var items = userItems;
 
@@ -14739,7 +14768,7 @@ function connectHitsPerPage(renderFn, unmountFn) {
         };
 
         renderFn({
-          items: this._transformItems(state),
+          items: transformItems(this._normalizeItems(state)),
           refine: this.setHitsPerPage,
           hasNoResults: true,
           widgetParams: widgetParams,
@@ -14754,14 +14783,14 @@ function connectHitsPerPage(renderFn, unmountFn) {
         var hasNoResults = results.nbHits === 0;
 
         renderFn({
-          items: this._transformItems(state),
+          items: transformItems(this._normalizeItems(state)),
           refine: this.setHitsPerPage,
           hasNoResults: hasNoResults,
           widgetParams: widgetParams,
           instantSearchInstance: instantSearchInstance
         }, false);
       },
-      _transformItems: function _transformItems(_ref3) {
+      _normalizeItems: function _normalizeItems(_ref3) {
         var hitsPerPage = _ref3.hitsPerPage;
 
         return items.map(function (item) {
@@ -14821,7 +14850,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   showMore,\n  //   isLastPage,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customInfiniteHits({\n    escapeHits: true,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html\n';
+var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function render(params, isFirstRendering) {\n  // params = {\n  //   hits,\n  //   results,\n  //   showMore,\n  //   isLastPage,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customInfiniteHits({\n    [ escapeHits: true ],\n    [ transformItems ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html\n';
 
 /**
  * @typedef {Object} InfiniteHitsRenderingOptions
@@ -14835,6 +14864,7 @@ var usage = 'Usage:\nvar customInfiniteHits = connectInfiniteHits(function rende
 /**
  * @typedef {Object} CustomInfiniteHitsWidgetOptions
  * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -14882,6 +14912,10 @@ function connectInfiniteHits(renderFn, unmountFn) {
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
     var hitsCache = [];
     var lastReceivedPage = -1;
@@ -14920,6 +14954,8 @@ function connectInfiniteHits(renderFn, unmountFn) {
           hitsCache = [];
           lastReceivedPage = -1;
         }
+
+        results.hits = transformItems(results.hits);
 
         if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
           results.hits = (0, _escapeHighlight2.default)(results.hits);
@@ -14975,7 +15011,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   hasNoResults,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //  }\n});\nsearch.addWidget(\n  customNumericRefinementList({\n    attributeName,\n    options,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html\n';
+var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   hasNoResults,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //  }\n});\nsearch.addWidget(\n  customNumericRefinementList({\n    attributeName,\n    options,\n    transformItems,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html\n';
 
 /**
  * @typedef {Object} NumericRefinementListOption
@@ -14996,6 +15032,7 @@ var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementL
  * @typedef {Object} CustomNumericRefinementListWidgetOptions
  * @property {string} attributeName Name of the attribute for filtering.
  * @property {NumericRefinementListOption[]} options List of all the options.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -15071,7 +15108,11 @@ function connectNumericRefinementList(renderFn, unmountFn) {
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var attributeName = widgetParams.attributeName,
-        options = widgetParams.options;
+        options = widgetParams.options,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
 
     if (!attributeName || !options) {
@@ -15109,7 +15150,7 @@ function connectNumericRefinementList(renderFn, unmountFn) {
 
         renderFn({
           createURL: this._createURL(helper.state),
-          items: this._prepareItems(helper.state),
+          items: transformItems(this._prepareItems(helper.state)),
           hasNoResults: true,
           refine: this._refine,
           instantSearchInstance: instantSearchInstance,
@@ -15123,7 +15164,7 @@ function connectNumericRefinementList(renderFn, unmountFn) {
 
         renderFn({
           createURL: this._createURL(state),
-          items: this._prepareItems(state),
+          items: transformItems(this._prepareItems(state)),
           hasNoResults: results.nbHits === 0,
           refine: this._refine,
           instantSearchInstance: instantSearchInstance,
@@ -15294,7 +15335,7 @@ var _utils = __webpack_require__(0);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customNumericSelector({\n    attributeName,\n    options,\n    [ operator = \'=\' ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericSelector.html\n';
+var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customNumericSelector({\n    attributeName,\n    options,\n    [ operator = \'=\' ],\n    [ transformItems ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericSelector.html\n';
 
 /**
  * @typedef {Object} NumericSelectorOption
@@ -15308,6 +15349,7 @@ var usage = 'Usage:\nvar customNumericSelector = connectNumericSelector(function
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
  * @property {NumericSelectorOption[]} options Array of objects defining the different values and labels.
  * @property {string} [operator = '＝'] The operator to use to refine. Supports following operators: <, <=, =, >, >= and !=.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -15377,7 +15419,11 @@ function connectNumericSelector(renderFn, unmountFn) {
     var attributeName = widgetParams.attributeName,
         options = widgetParams.options,
         _widgetParams$operato = widgetParams.operator,
-        operator = _widgetParams$operato === undefined ? '=' : _widgetParams$operato;
+        operator = _widgetParams$operato === undefined ? '=' : _widgetParams$operato,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
 
     if (!attributeName || !options) {
@@ -15408,7 +15454,7 @@ function connectNumericSelector(renderFn, unmountFn) {
 
         renderFn({
           currentRefinement: this._getRefinedValue(helper.state),
-          options: options,
+          options: transformItems(options),
           refine: this._refine,
           hasNoResults: true,
           instantSearchInstance: instantSearchInstance,
@@ -15422,7 +15468,7 @@ function connectNumericSelector(renderFn, unmountFn) {
 
         renderFn({
           currentRefinement: this._getRefinedValue(helper.state),
-          options: options,
+          options: transformItems(options),
           refine: this._refine,
           hasNoResults: results.nbHits === 0,
           instantSearchInstance: instantSearchInstance,
@@ -16048,7 +16094,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-var usage = 'Usage:\nvar customRefinementList = connectRefinementList(function render(params) {\n  // params = {\n  //   isFromSearch,\n  //   createURL,\n  //   items,\n  //   refine,\n  //   searchForItems,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   toggleShowMore,\n  //   isShowingMore,\n  //   widgetParams,\n  // }\n});\n\nsearch.addWidget(\n  customRefinementList({\n    attributeName,\n    [ operator = \'or\' ],\n    [ limit ],\n    [ showMoreLimit ],\n    [ sortBy = [\'isRefined\', \'count:desc\', \'name:asc\'] ],\n    [ escapeFacetValues = false ]\n  })\n);\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html\n';
+var usage = 'Usage:\nvar customRefinementList = connectRefinementList(function render(params) {\n  // params = {\n  //   isFromSearch,\n  //   createURL,\n  //   items,\n  //   refine,\n  //   searchForItems,\n  //   instantSearchInstance,\n  //   canRefine,\n  //   toggleShowMore,\n  //   isShowingMore,\n  //   widgetParams,\n  // }\n});\n\nsearch.addWidget(\n  customRefinementList({\n    attributeName,\n    [ operator = \'or\' ],\n    [ limit ],\n    [ showMoreLimit ],\n    [ sortBy = [\'isRefined\', \'count:desc\', \'name:asc\'] ],\n    [ escapeFacetValues = false ],\n    [ transformItems ]\n  })\n);\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html\n';
 
 var checkUsage = exports.checkUsage = function checkUsage(_ref) {
   var attributeName = _ref.attributeName,
@@ -16084,6 +16130,7 @@ var checkUsage = exports.checkUsage = function checkUsage(_ref) {
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  * @property {boolean} [escapeFacetValues = false] Escapes the content of the facet values.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -16177,7 +16224,11 @@ function connectRefinementList(renderFn, unmountFn) {
         _widgetParams$sortBy = widgetParams.sortBy,
         sortBy = _widgetParams$sortBy === undefined ? ['isRefined', 'count:desc', 'name:asc'] : _widgetParams$sortBy,
         _widgetParams$escapeF = widgetParams.escapeFacetValues,
-        escapeFacetValues = _widgetParams$escapeF === undefined ? false : _widgetParams$escapeF;
+        escapeFacetValues = _widgetParams$escapeF === undefined ? false : _widgetParams$escapeF,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
 
     checkUsage({
@@ -16266,7 +16317,7 @@ function connectRefinementList(renderFn, unmountFn) {
             helper.searchForFacetValues(attributeName, query, limit, tags).then(function (results) {
               var facetValues = escapeFacetValues ? (0, _escapeHighlight.escapeFacets)(results.facetHits) : results.facetHits;
 
-              var normalizedFacetValues = facetValues.map(function (_ref4) {
+              var normalizedFacetValues = transformItems(facetValues.map(function (_ref4) {
                 var value = _ref4.value,
                     item = _objectWithoutProperties(_ref4, ['value']);
 
@@ -16274,7 +16325,7 @@ function connectRefinementList(renderFn, unmountFn) {
                   value: value,
                   label: value
                 });
-              });
+              }));
 
               _render({
                 items: normalizedFacetValues,
@@ -16367,7 +16418,7 @@ function connectRefinementList(renderFn, unmountFn) {
 
 
         var facetValues = results.getFacetValues(attributeName, { sortBy: sortBy });
-        var items = facetValues.slice(0, this.getLimit()).map(formatItems);
+        var items = transformItems(facetValues.slice(0, this.getLimit()).map(formatItems));
 
         var maxValuesPerFacetConfig = state.getQueryParameter('maxValuesPerFacet');
         var currentLimit = this.getLimit();
@@ -16634,7 +16685,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customSortBySelector({ indices })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html\n';
+var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {\n  // params = {\n  //   currentRefinement,\n  //   options,\n  //   refine,\n  //   hasNoResults,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customSortBySelector({\n    indices,\n    [ transformItems ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html\n';
 
 /**
  * @typedef {Object} SortBySelectorIndices
@@ -16645,6 +16696,7 @@ var usage = 'Usage:\nvar customSortBySelector = connectSortBySelector(function r
 /**
  * @typedef {Object} CustomSortBySelectorWidgetOptions
  * @property {SortBySelectorIndices[]} indices Array of objects defining the different indices to choose from.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -16717,7 +16769,11 @@ function connectSortBySelector(renderFn, unmountFn) {
 
   return function () {
     var widgetParams = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var indices = widgetParams.indices;
+    var indices = widgetParams.indices,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
 
     if (!indices) {
@@ -16755,7 +16811,7 @@ function connectSortBySelector(renderFn, unmountFn) {
 
         renderFn({
           currentRefinement: currentIndex,
-          options: selectorOptions,
+          options: transformItems(selectorOptions),
           refine: this.setIndex,
           hasNoResults: true,
           widgetParams: widgetParams,
@@ -16769,7 +16825,7 @@ function connectSortBySelector(renderFn, unmountFn) {
 
         renderFn({
           currentRefinement: helper.getIndex(),
-          options: selectorOptions,
+          options: transformItems(selectorOptions),
           refine: this.setIndex,
           hasNoResults: results.nbHits === 0,
           widgetParams: widgetParams,
@@ -17486,7 +17542,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\nvar customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customBreadcrumb({\n    attributes,\n    [ rootPath = null ],\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectBreadcrumb.html\n';
+var usage = 'Usage:\nvar customBreadcrumb = connectBreadcrumb(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  // }\n});\nsearch.addWidget(\n  customBreadcrumb({\n    attributes,\n    [ rootPath = null ],\n    [ transformItems ]\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectBreadcrumb.html\n';
 
 /**
  * @typedef {Object} BreadcrumbItem
@@ -17498,6 +17554,7 @@ var usage = 'Usage:\nvar customBreadcrumb = connectBreadcrumb(function renderFn(
  * @typedef {Object} CustomBreadcrumbWidgetOptions
  * @property {string[]} attributes Attributes to use to generate the hierarchy of the breadcrumb.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  */
@@ -17528,7 +17585,11 @@ function connectBreadcrumb(renderFn, unmountFn) {
         _widgetParams$separat = widgetParams.separator,
         separator = _widgetParams$separat === undefined ? ' > ' : _widgetParams$separat,
         _widgetParams$rootPat = widgetParams.rootPath,
-        rootPath = _widgetParams$rootPat === undefined ? null : _widgetParams$rootPat;
+        rootPath = _widgetParams$rootPat === undefined ? null : _widgetParams$rootPat,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
     var _attributes = _slicedToArray(attributes, 1),
         hierarchicalFacetName = _attributes[0];
@@ -17607,7 +17668,7 @@ function connectBreadcrumb(renderFn, unmountFn) {
             facetName = _state$hierarchicalFa[0].name;
 
         var facetsValues = results.getFacetValues(facetName);
-        var items = shiftItemsValues(prepareItems(facetsValues));
+        var items = transformItems(shiftItemsValues(prepareItems(facetsValues)));
 
         renderFn({
           canRefine: items.length > 0,
@@ -17669,7 +17730,7 @@ var _utils = __webpack_require__(0);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var usage = 'Usage:\n\nvar customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   position,\n  //   refine,\n  //   clearMapRefinement,\n  //   isRefinedWithMap,\n  //   toggleRefineOnMapMove,\n  //   isRefineOnMapMove,\n  //   setMapMoveSinceLastRefine,\n  //   hasMapMoveSinceLastRefine,\n  //   hasMapMoveSinceLastRefine,\n  //   widgetParams,\n  //   instantSearchInstance,\n  // }\n});\n\nsearch.addWidget(\n  customGeoSearch({\n    [ enableRefineOnMapMove = true ],\n    [ enableGeolocationWithIP = true ],\n    [ position ],\n    [ radius ],\n    [ precision ],\n  })\n);\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectGeoSearch.html\n';
+var usage = 'Usage:\n\nvar customGeoSearch = connectGeoSearch(function render(params, isFirstRendering) {\n  // params = {\n  //   items,\n  //   position,\n  //   refine,\n  //   clearMapRefinement,\n  //   isRefinedWithMap,\n  //   toggleRefineOnMapMove,\n  //   isRefineOnMapMove,\n  //   setMapMoveSinceLastRefine,\n  //   hasMapMoveSinceLastRefine,\n  //   hasMapMoveSinceLastRefine,\n  //   widgetParams,\n  //   instantSearchInstance,\n  // }\n});\n\nsearch.addWidget(\n  customGeoSearch({\n    [ enableRefineOnMapMove = true ],\n    [ enableGeolocationWithIP = true ],\n    [ position ],\n    [ radius ],\n    [ precision ],\n    [ transformItems ],\n  })\n);\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectGeoSearch.html\n';
 
 /**
  * @typedef {Object} LatLng
@@ -17693,6 +17754,7 @@ var usage = 'Usage:\n\nvar customGeoSearch = connectGeoSearch(function render(pa
  * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more informations.
  * @property {number} [precision] Precision of geo search (in meters). <br />
  * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more informations.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -17776,7 +17838,11 @@ var connectGeoSearch = function connectGeoSearch(renderFn, unmountFn) {
         enableGeolocationWithIP = _widgetParams$enableG === undefined ? true : _widgetParams$enableG,
         position = widgetParams.position,
         radius = widgetParams.radius,
-        precision = widgetParams.precision;
+        precision = widgetParams.precision,
+        _widgetParams$transfo = widgetParams.transformItems,
+        transformItems = _widgetParams$transfo === undefined ? function (items) {
+      return items;
+    } : _widgetParams$transfo;
 
 
     var widgetState = {
@@ -17903,10 +17969,12 @@ var connectGeoSearch = function connectGeoSearch(renderFn, unmountFn) {
 
       widgetState.internalSetMapMoveSinceLastRefine = createInternalSetMapMoveSinceLastRefine(render, renderArgs);
 
+      var items = transformItems(results.hits.filter(function (hit) {
+        return hit._geoloc;
+      }));
+
       renderFn({
-        items: results.hits.filter(function (hit) {
-          return hit._geoloc;
-        }),
+        items: items,
         position: getPositionFromState(state),
         refine: refine(helper),
         clearMapRefinement: clearMapRefinement(helper),
@@ -33969,7 +34037,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\ncurrentRefinedValues({\n  container,\n  [ attributes: [{name[, label, template, transformData]}] ],\n  [ onlyListedAttributes = false ],\n  [ clearAll = \'before\' ] // One of [\'before\', \'after\', false]\n  [ templates.{header,item,clearAll,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer = true ],\n  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],\n  [ collapsible = false ]\n  [ clearsQuery = false ]\n})';
+var usage = 'Usage:\ncurrentRefinedValues({\n  container,\n  [ attributes: [{name[, label, template, transformData]}] ],\n  [ onlyListedAttributes = false ],\n  [ clearAll = \'before\' ] // One of [\'before\', \'after\', false]\n  [ templates.{header,item,clearAll,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer = true ],\n  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],\n  [ collapsible = false ],\n  [ clearsQuery = false ],\n  [ transformItems ]\n})';
 
 /**
  * @typedef {Object} CurrentRefinedValuesCSSClasses
@@ -34024,6 +34092,7 @@ var usage = 'Usage:\ncurrentRefinedValues({\n  container,\n  [ attributes: [{nam
  * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
  * property is `true`, then the widget is hidden during the first rendering.
  * @property {boolean} [clearsQuery=false] If true, the clear all button also clears the active search query.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -34072,7 +34141,8 @@ function currentRefinedValues(_ref3) {
       _ref3$collapsible = _ref3.collapsible,
       collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
       _ref3$clearsQuery = _ref3.clearsQuery,
-      clearsQuery = _ref3$clearsQuery === undefined ? false : _ref3$clearsQuery;
+      clearsQuery = _ref3$clearsQuery === undefined ? false : _ref3$clearsQuery,
+      transformItems = _ref3.transformItems;
 
   var transformDataOK = (0, _isUndefined2.default)(transformData) || (0, _isFunction2.default)(transformData) || (0, _isPlainObject2.default)(transformData) && (0, _isFunction2.default)(transformData.item);
 
@@ -34124,7 +34194,8 @@ function currentRefinedValues(_ref3) {
       attributes: attributes,
       onlyListedAttributes: onlyListedAttributes,
       clearAll: clearAll,
-      clearsQuery: clearsQuery
+      clearsQuery: clearsQuery,
+      transformItems: transformItems
     });
   } catch (e) {
     throw new Error(usage);
@@ -35311,7 +35382,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separator=\' > \' ],\n  [ rootPath ],\n  [ showParentLevel=false ],\n  [ limit=10 ],\n  [ sortBy=[\'name:asc\'] ],\n  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],\n  [ templates.{header, item, footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ]\n})';
+var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separator=\' > \' ],\n  [ rootPath ],\n  [ showParentLevel=false ],\n  [ limit=10 ],\n  [ sortBy=[\'name:asc\'] ],\n  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],\n  [ templates.{header, item, footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ],\n  [ transformItems ]\n})';
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
@@ -35377,6 +35448,7 @@ var usage = 'Usage:\nhierarchicalMenu({\n  container,\n  attributes,\n  [ separa
  * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
  * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
  * property is `true`, then the widget is hidden during the first rendering.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -35455,7 +35527,8 @@ function hierarchicalMenu() {
       templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       _ref3$collapsible = _ref3.collapsible,
       collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
-      transformData = _ref3.transformData;
+      transformData = _ref3.transformData,
+      transformItems = _ref3.transformItems;
 
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
@@ -35496,7 +35569,8 @@ function hierarchicalMenu() {
       rootPath: rootPath,
       showParentLevel: showParentLevel,
       limit: limit,
-      sortBy: sortBy
+      sortBy: sortBy,
+      transformItems: transformItems
     });
   } catch (e) {
     throw new Error(usage);
@@ -35844,7 +35918,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nhits({\n  container,\n  [ cssClasses.{root,empty,item}={} ],\n  [ templates.{empty,item} | templates.{empty, allItems} ],\n  [ transformData.{empty,item} | transformData.{empty, allItems} ],\n})';
+var usage = 'Usage:\nhits({\n  container,\n  [ transformItems ],\n  [ cssClasses.{root,empty,item}={} ],\n  [ templates.{empty,item} | templates.{empty, allItems} ],\n  [ transformData.{empty,item} | transformData.{empty, allItems} ],\n})';
 
 /**
  * @typedef {Object} HitsCSSClasses
@@ -35874,6 +35948,7 @@ var usage = 'Usage:\nhits({\n  container,\n  [ cssClasses.{root,empty,item}={} ]
  * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -35896,6 +35971,7 @@ var usage = 'Usage:\nhits({\n  container,\n  [ cssClasses.{root,empty,item}={} ]
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
  *     escapeHits: true,
+ *     transformItems: items => items.map(item => item),
  *   })
  * );
  */
@@ -35907,7 +35983,8 @@ function hits(_ref3) {
       templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       transformData = _ref3.transformData,
       _ref3$escapeHits = _ref3.escapeHits,
-      escapeHits = _ref3$escapeHits === undefined ? false : _ref3$escapeHits;
+      escapeHits = _ref3$escapeHits === undefined ? false : _ref3$escapeHits,
+      transformItems = _ref3.transformItems;
 
   if (!container) {
     throw new Error('Must provide a container.' + usage);
@@ -35936,7 +36013,7 @@ function hits(_ref3) {
     var makeHits = (0, _connectHits2.default)(specializedRenderer, function () {
       return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
-    return makeHits({ escapeHits: escapeHits });
+    return makeHits({ escapeHits: escapeHits, transformItems: transformItems });
   } catch (e) {
     throw new Error(usage);
   }
@@ -36049,7 +36126,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nhitsPerPageSelector({\n  container,\n  items,\n  [ cssClasses.{root,select,item}={} ],\n  [ autoHideContainer=false ]\n})';
+var usage = 'Usage:\nhitsPerPageSelector({\n  container,\n  items,\n  [ cssClasses.{root,select,item}={} ],\n  [ autoHideContainer=false ],\n  [ transformItems ]\n})';
 
 /**
  * @typedef {Object} HitsPerPageSelectorCSSClasses
@@ -36071,6 +36148,7 @@ var usage = 'Usage:\nhitsPerPageSelector({\n  container,\n  items,\n  [ cssClass
  * @property {HitsPerPageSelectorItems[]} items Array of objects defining the different values and labels.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {HitsPerPageSelectorCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -36102,7 +36180,8 @@ function hitsPerPageSelector() {
       _ref5$cssClasses = _ref5.cssClasses,
       userCssClasses = _ref5$cssClasses === undefined ? {} : _ref5$cssClasses,
       _ref5$autoHideContain = _ref5.autoHideContainer,
-      autoHideContainer = _ref5$autoHideContain === undefined ? false : _ref5$autoHideContain;
+      autoHideContainer = _ref5$autoHideContain === undefined ? false : _ref5$autoHideContain,
+      transformItems = _ref5.transformItems;
 
   if (!container) {
     throw new Error(usage);
@@ -36128,7 +36207,7 @@ function hitsPerPageSelector() {
     var makeHitsPerPageSelector = (0, _connectHitsPerPage2.default)(specializedRenderer, function () {
       return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
-    return makeHitsPerPageSelector({ items: items });
+    return makeHitsPerPageSelector({ items: items, transformItems: transformItems });
   } catch (e) {
     throw new Error(usage);
   }
@@ -36208,7 +36287,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n  [ showMoreLabel ],\n  [ cssClasses.{root,empty,item,showmore,showmoreButton}={} ],\n  [ templates.{empty,item} | templates.{empty} ],\n  [ transformData.{empty,item} | transformData.{empty} ],\n})';
+var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n  [ transformItems ],\n  [ showMoreLabel ],\n  [ cssClasses.{root,empty,item,showmore,showmoreButton}={} ],\n  [ templates.{empty,item} | templates.{empty} ],\n  [ transformData.{empty,item} | transformData.{empty} ],\n})';
 
 /**
  * @typedef {Object} InfiniteHitsTemplates
@@ -36239,6 +36318,7 @@ var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n
  * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -36261,6 +36341,7 @@ var usage = '\nUsage:\ninfiniteHits({\n  container,\n  [ escapeHits = false ],\n
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
  *     escapeHits: true,
+ *     transformItems: items => items.map(item => item),
  *   })
  * );
  */
@@ -36275,7 +36356,8 @@ function infiniteHits() {
       templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       transformData = _ref3.transformData,
       _ref3$escapeHits = _ref3.escapeHits,
-      escapeHits = _ref3$escapeHits === undefined ? false : _ref3$escapeHits;
+      escapeHits = _ref3$escapeHits === undefined ? false : _ref3$escapeHits,
+      transformItems = _ref3.transformItems;
 
   if (!container) {
     throw new Error('Must provide a container.' + usage);
@@ -36309,7 +36391,7 @@ function infiniteHits() {
     var makeInfiniteHits = (0, _connectInfiniteHits2.default)(specializedRenderer, function () {
       return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
-    return makeInfiniteHits({ escapeHits: escapeHits });
+    return makeInfiniteHits({ escapeHits: escapeHits, transformItems: transformItems });
   } catch (e) {
     throw new Error(usage);
   }
@@ -36515,7 +36597,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nmenu({\n  container,\n  attributeName,\n  [ sortBy=[\'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root,list,item} ],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer ],\n  [ showMore.{templates: {active, inactive}, limit} ],\n  [ collapsible=false ]\n})';
+var usage = 'Usage:\nmenu({\n  container,\n  attributeName,\n  [ sortBy=[\'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root,list,item} ],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer ],\n  [ showMore.{templates: {active, inactive}, limit} ],\n  [ collapsible=false ],\n  [ transformItems ]\n})';
 
 /**
  * @typedef {Object} MenuCSSClasses
@@ -36568,6 +36650,7 @@ var usage = 'Usage:\nmenu({\n  container,\n  attributeName,\n  [ sortBy=[\'name:
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu.
  * @property {MenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -36612,7 +36695,8 @@ function menu(_ref3) {
       _ref3$autoHideContain = _ref3.autoHideContainer,
       autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
       _ref3$showMore = _ref3.showMore,
-      showMore = _ref3$showMore === undefined ? false : _ref3$showMore;
+      showMore = _ref3$showMore === undefined ? false : _ref3$showMore,
+      transformItems = _ref3.transformItems;
 
   if (!container) {
     throw new Error(usage);
@@ -36656,7 +36740,13 @@ function menu(_ref3) {
     var makeWidget = (0, _connectMenu2.default)(specializedRenderer, function () {
       return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
-    return makeWidget({ attributeName: attributeName, limit: limit, sortBy: sortBy, showMoreLimit: showMoreLimit });
+    return makeWidget({
+      attributeName: attributeName,
+      limit: limit,
+      sortBy: sortBy,
+      showMoreLimit: showMoreLimit,
+      transformItems: transformItems
+    });
   } catch (e) {
     throw new Error(usage);
   }
@@ -36807,7 +36897,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ operator=\'or\' ],\n  [ sortBy=[\'isRefined\', \'count:desc\', \'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ],\n  [ showMore.{templates: {active, inactive}, limit} ],\n  [ collapsible=false ],\n  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive, escapeFacetValues}],\n})';
+var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ operator=\'or\' ],\n  [ sortBy=[\'isRefined\', \'count:desc\', \'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer=true ],\n  [ collapsible=false ],\n  [ showMore.{templates: {active, inactive}, limit} ],\n  [ collapsible=false ],\n  [ searchForFacetValues.{placeholder, templates: {noResults}, isAlwaysActive, escapeFacetValues}],\n  [ transformItems ],\n})';
 
 /**
  * @typedef {Object} SearchForFacetTemplates
@@ -36884,6 +36974,7 @@ var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ opera
  * @property {string} attributeName Name of the attribute for faceting.
  * @property {"and"|"or"} [operator="or"] How to apply refinements. Possible values: `or`, `and`
  * @property {string[]|function} [sortBy=["isRefined", "count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc` `count:desc` `name:asc` `name:desc` `isRefined`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
@@ -36955,7 +37046,8 @@ function refinementList() {
       _ref3$showMore = _ref3.showMore,
       showMore = _ref3$showMore === undefined ? false : _ref3$showMore,
       _ref3$searchForFacetV = _ref3.searchForFacetValues,
-      searchForFacetValues = _ref3$searchForFacetV === undefined ? false : _ref3$searchForFacetV;
+      searchForFacetValues = _ref3$searchForFacetV === undefined ? false : _ref3$searchForFacetV,
+      transformItems = _ref3.transformItems;
 
   if (!container) {
     throw new Error(usage);
@@ -37008,7 +37100,8 @@ function refinementList() {
       limit: limit,
       showMoreLimit: showMoreLimit,
       sortBy: sortBy,
-      escapeFacetValues: escapeFacetValues
+      escapeFacetValues: escapeFacetValues,
+      transformItems: transformItems
     });
   } catch (e) {
     throw new Error(usage);
@@ -37120,7 +37213,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nnumericRefinementList({\n  container,\n  attributeName,\n  options,\n  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer ],\n  [ collapsible=false ]\n})';
+var usage = 'Usage:\nnumericRefinementList({\n  container,\n  attributeName,\n  options,\n  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],\n  [ templates.{header,item,footer} ],\n  [ transformData.{item} ],\n  [ autoHideContainer ],\n  [ collapsible=false ],\n  [ transformItems ]\n})';
 
 /**
  * @typedef {Object} NumericRefinementListCSSClasses
@@ -37164,6 +37257,7 @@ var usage = 'Usage:\nnumericRefinementList({\n  container,\n  attributeName,\n  
  * @property {boolean} [autoHideContainer=true] Hide the container when no results match.
  * @property {NumericRefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -37211,7 +37305,8 @@ function numericRefinementList() {
       collapsible = _ref3$collapsible === undefined ? false : _ref3$collapsible,
       transformData = _ref3.transformData,
       _ref3$autoHideContain = _ref3.autoHideContainer,
-      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain;
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      transformItems = _ref3.transformItems;
 
   if (!container || !attributeName || !options) {
     throw new Error(usage);
@@ -37244,7 +37339,11 @@ function numericRefinementList() {
     var makeNumericRefinementList = (0, _connectNumericRefinementList2.default)(specializedRenderer, function () {
       return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
-    return makeNumericRefinementList({ attributeName: attributeName, options: options });
+    return makeNumericRefinementList({
+      attributeName: attributeName,
+      options: options,
+      transformItems: transformItems
+    });
   } catch (e) {
     throw new Error(usage);
   }
@@ -37323,7 +37422,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage: numericSelector({\n  container,\n  attributeName,\n  options,\n  cssClasses.{root,select,item},\n  autoHideContainer\n})';
+var usage = 'Usage: numericSelector({\n  container,\n  attributeName,\n  options,\n  cssClasses.{root,select,item},\n  autoHideContainer,\n  transformItems\n})';
 
 /**
  * @typedef {Object} NumericOption
@@ -37346,6 +37445,7 @@ var usage = 'Usage: numericSelector({\n  container,\n  attributeName,\n  options
  * @property {NumericOption[]} options Array of objects defining the different values and labels.
  * @property {string} [operator='='] The operator to use to refine.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  * @property {NumericSelectorCSSClasses} [cssClasses] CSS classes to be added.
  */
 
@@ -37389,7 +37489,8 @@ function numericSelector(_ref3) {
       _ref3$cssClasses = _ref3.cssClasses,
       userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
       _ref3$autoHideContain = _ref3.autoHideContainer,
-      autoHideContainer = _ref3$autoHideContain === undefined ? false : _ref3$autoHideContain;
+      autoHideContainer = _ref3$autoHideContain === undefined ? false : _ref3$autoHideContain,
+      transformItems = _ref3.transformItems;
 
   var containerNode = (0, _utils.getContainerNode)(container);
   if (!container || !options || options.length === 0 || !attributeName) {
@@ -37414,7 +37515,12 @@ function numericSelector(_ref3) {
     var makeNumericSelector = (0, _connectNumericSelector2.default)(specializedRenderer, function () {
       return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
-    return makeNumericSelector({ operator: operator, attributeName: attributeName, options: options });
+    return makeNumericSelector({
+      operator: operator,
+      attributeName: attributeName,
+      options: options,
+      transformItems: transformItems
+    });
   } catch (e) {
     throw new Error(usage);
   }
@@ -41281,7 +41387,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nsortBySelector({\n  container,\n  indices,\n  [cssClasses.{root,select,item}={}],\n  [autoHideContainer=false]\n})';
+var usage = 'Usage:\nsortBySelector({\n  container,\n  indices,\n  [cssClasses.{root,select,item}={}],\n  [autoHideContainer=false],\n  [transformItems]\n})';
 
 /**
  * @typedef {Object} SortByWidgetCssClasses
@@ -41302,6 +41408,7 @@ var usage = 'Usage:\nsortBySelector({\n  container,\n  indices,\n  [cssClasses.{
  * @property {SortByIndexDefinition[]} indices Array of objects defining the different indices to choose from.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -41333,7 +41440,8 @@ function sortBySelector() {
       _ref3$cssClasses = _ref3.cssClasses,
       userCssClasses = _ref3$cssClasses === undefined ? {} : _ref3$cssClasses,
       _ref3$autoHideContain = _ref3.autoHideContainer,
-      autoHideContainer = _ref3$autoHideContain === undefined ? false : _ref3$autoHideContain;
+      autoHideContainer = _ref3$autoHideContain === undefined ? false : _ref3$autoHideContain,
+      transformItems = _ref3.transformItems;
 
   if (!container) {
     throw new Error(usage);
@@ -41359,7 +41467,7 @@ function sortBySelector() {
     var makeWidget = (0, _connectSortBySelector2.default)(specializedRenderer, function () {
       return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
-    return makeWidget({ indices: indices });
+    return makeWidget({ indices: indices, transformItems: transformItems });
   } catch (e) {
     throw new Error(usage);
   }
@@ -42447,7 +42555,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nbreadcrumb({\n  container,\n  attributes,\n  [ autoHideContainer=true ],\n  [ cssClasses.{disabledLabel, home, label, root, separator}={} ],\n  [ templates.{home, separator}]\n  [ transformData.{item} ],\n})';
+var usage = 'Usage:\nbreadcrumb({\n  container,\n  attributes,\n  [ autoHideContainer=true ],\n  [ cssClasses.{disabledLabel, home, label, root, separator}={} ],\n  [ templates.{home, separator}]\n  [ transformData.{item} ],\n  [ transformItems ],\n})';
 
 /**
  * @typedef {Object} BreadcrumbCSSClasses
@@ -42479,6 +42587,7 @@ var usage = 'Usage:\nbreadcrumb({\n  container,\n  attributes,\n  [ autoHideCont
  * @property {BreadcrumbTransforms} [transformData] Set of functions to transform the data passed to the templates.
  * @property {boolean} [autoHideContainer=true] Hides the container when there are no items in the breadcrumb.
  * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -42548,7 +42657,8 @@ function breadcrumb() {
       separator = _ref3$separator === undefined ? ' > ' : _ref3$separator,
       _ref3$templates = _ref3.templates,
       templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
-      transformData = _ref3.transformData;
+      transformData = _ref3.transformData,
+      transformItems = _ref3.transformItems;
 
   if (!container) {
     throw new Error(usage);
@@ -42579,7 +42689,7 @@ function breadcrumb() {
     var makeBreadcrumb = (0, _connectBreadcrumb2.default)(specializedRenderer, function () {
       return (0, _preactCompat.unmountComponentAtNode)(containerNode);
     });
-    return makeBreadcrumb({ attributes: attributes, rootPath: rootPath });
+    return makeBreadcrumb({ attributes: attributes, rootPath: rootPath, transformItems: transformItems });
   } catch (e) {
     throw new Error(usage);
   }
@@ -42796,7 +42906,7 @@ var renderer = function renderer(_ref) {
   };
 };
 
-var usage = 'Usage:\nmenuSelect({\n  container,\n  attributeName,\n  [ sortBy=[\'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root,select,option,header,footer} ]\n  [ templates.{header,item,footer,seeAllOption} ],\n  [ transformData.{item} ],\n  [ autoHideContainer ]\n})';
+var usage = 'Usage:\nmenuSelect({\n  container,\n  attributeName,\n  [ sortBy=[\'name:asc\'] ],\n  [ limit=10 ],\n  [ cssClasses.{root,select,option,header,footer} ]\n  [ templates.{header,item,footer,seeAllOption} ],\n  [ transformData.{item} ],\n  [ autoHideContainer ]\n  [ transformItems ]\n})';
 
 /**
  * @typedef {Object} MenuSelectCSSClasses
@@ -42832,6 +42942,7 @@ var usage = 'Usage:\nmenuSelect({\n  container,\n  attributeName,\n  [ sortBy=[\
  * @property {MenuSelectTransforms} [transformData] Set of functions to update the data before passing them to the templates.
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu select.
  * @property {MenuSelectCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -42865,7 +42976,8 @@ function menuSelect(_ref3) {
       templates = _ref3$templates === undefined ? _defaultTemplates2.default : _ref3$templates,
       transformData = _ref3.transformData,
       _ref3$autoHideContain = _ref3.autoHideContainer,
-      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain;
+      autoHideContainer = _ref3$autoHideContain === undefined ? true : _ref3$autoHideContain,
+      transformItems = _ref3.transformItems;
 
   if (!container || !attributeName) {
     throw new Error(usage);
@@ -42891,7 +43003,7 @@ function menuSelect(_ref3) {
 
   try {
     var makeWidget = (0, _connectMenu2.default)(specializedRenderer);
-    return makeWidget({ attributeName: attributeName, limit: limit, sortBy: sortBy });
+    return makeWidget({ attributeName: attributeName, limit: limit, sortBy: sortBy, transformItems: transformItems });
   } catch (e) {
     throw new Error(usage);
   }
