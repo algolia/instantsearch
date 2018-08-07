@@ -1,4 +1,3 @@
-import sinon from 'sinon';
 import hierarchicalMenu from '../hierarchical-menu';
 
 describe('hierarchicalMenu()', () => {
@@ -12,7 +11,7 @@ describe('hierarchicalMenu()', () => {
     container = document.createElement('div');
     attributes = ['hello', 'world'];
     options = {};
-    ReactDOM = { render: sinon.spy() };
+    ReactDOM = { render: jest.fn() };
     hierarchicalMenu.__Rewire__('render', ReactDOM.render);
   });
 
@@ -139,13 +138,13 @@ describe('hierarchicalMenu()', () => {
 
     beforeEach(() => {
       data = { data: [{ name: 'foo' }, { name: 'bar' }] };
-      results = { getFacetValues: sinon.spy(() => data) };
+      results = { getFacetValues: jest.fn(() => data) };
       helper = {
-        toggleRefinement: sinon.stub().returnsThis(),
-        search: sinon.spy(),
+        toggleRefinement: jest.fn().mockReturnThis(),
+        search: jest.fn(),
       };
       state = {
-        toggleRefinement: sinon.spy(),
+        toggleRefinement: jest.fn(),
       };
       options = { container, attributes };
       createURL = () => '#';
@@ -167,41 +166,35 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu({ ...options, cssClasses: userCssClasses });
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('calls ReactDOM.render', () => {
       widget = hierarchicalMenu(options);
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render.calledOnce).toBe(true);
-      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('asks for results.getFacetValues', () => {
       widget = hierarchicalMenu(options);
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(results.getFacetValues.calledOnce).toBe(true);
-      expect(results.getFacetValues.getCall(0).args).toEqual([
-        'hello',
-        {
-          sortBy: ['name:asc'],
-        },
-      ]);
+      expect(results.getFacetValues).toHaveBeenCalledTimes(1);
+      expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
+        sortBy: ['name:asc'],
+      });
     });
 
     it('has a sortBy option', () => {
       widget = hierarchicalMenu({ ...options, sortBy: ['count:asc'] });
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(results.getFacetValues.calledOnce).toBe(true);
-      expect(results.getFacetValues.getCall(0).args).toEqual([
-        'hello',
-        {
-          sortBy: ['count:asc'],
-        },
-      ]);
+      expect(results.getFacetValues).toHaveBeenCalledTimes(1);
+      expect(results.getFacetValues).toHaveBeenCalledWith('hello', {
+        sortBy: ['count:asc'],
+      });
     });
 
     it('has a templates option', () => {
@@ -215,7 +208,20 @@ describe('hierarchicalMenu()', () => {
       });
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    it('has a transformItems options', () => {
+      widget = hierarchicalMenu({
+        ...options,
+        transformItems: items =>
+          items.map(item => ({ ...item, transformed: true })),
+      });
+
+      widget.init({ helper, createURL, instantSearchInstance: {} });
+      widget.render({ results, state });
+
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('sets shouldAutoHideContainer to true when no results', () => {
@@ -223,7 +229,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu(options);
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('sets facetValues to empty array when no results', () => {
@@ -231,7 +237,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu(options);
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
-      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
     it('has a toggleRefinement method', () => {
@@ -239,12 +245,11 @@ describe('hierarchicalMenu()', () => {
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
       const elementToggleRefinement =
-        ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+        ReactDOM.render.mock.calls[0][0].props.toggleRefinement;
       elementToggleRefinement('mom');
-      expect(helper.toggleRefinement.calledOnce).toBe(true);
-      expect(helper.toggleRefinement.getCall(0).args).toEqual(['hello', 'mom']);
-      expect(helper.search.calledOnce).toBe(true);
-      expect(helper.toggleRefinement.calledBefore(helper.search)).toBe(true);
+      expect(helper.toggleRefinement).toHaveBeenCalledTimes(1);
+      expect(helper.toggleRefinement).toHaveBeenCalledWith('hello', 'mom');
+      expect(helper.search).toHaveBeenCalledTimes(1);
     });
 
     it('has a limit option', () => {
@@ -281,7 +286,7 @@ describe('hierarchicalMenu()', () => {
       widget.init({ helper, createURL, instantSearchInstance: {} });
       widget.render({ results, state });
       const actualFacetValues =
-        ReactDOM.render.firstCall.args[0].props.facetValues;
+        ReactDOM.render.mock.calls[0][0].props.facetValues;
       expect(actualFacetValues).toEqual(expectedFacetValues);
     });
 

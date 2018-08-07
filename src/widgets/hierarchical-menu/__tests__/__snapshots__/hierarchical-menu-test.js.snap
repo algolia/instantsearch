@@ -102,6 +102,59 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
 />
 `;
 
+exports[`hierarchicalMenu() render has a transformItems options 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={false}
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "active": "ais-hierarchical-menu--item__active",
+      "body": "ais-hierarchical-menu--body",
+      "count": "ais-hierarchical-menu--count",
+      "depth": "ais-hierarchical-menu--list__lvl",
+      "footer": "ais-hierarchical-menu--footer",
+      "header": "ais-hierarchical-menu--header",
+      "item": "ais-hierarchical-menu--item",
+      "link": "ais-hierarchical-menu--link",
+      "list": "ais-hierarchical-menu--list",
+      "root": "ais-hierarchical-menu",
+    }
+  }
+  facetValues={
+    Array [
+      Object {
+        "label": "foo",
+        "transformed": true,
+        "value": undefined,
+      },
+      Object {
+        "label": "bar",
+        "transformed": true,
+        "value": undefined,
+      },
+    ]
+  }
+  shouldAutoHideContainer={false}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+        "item": false,
+      },
+    }
+  }
+  toggleRefinement={[Function]}
+/>
+`;
+
 exports[`hierarchicalMenu() render sets facetValues to empty array when no results 1`] = `
 <HeaderFooter-AutoHide
   collapsible={false}

@@ -36,7 +36,8 @@ hitsPerPageSelector({
   container,
   items,
   [ cssClasses.{root,select,item}={} ],
-  [ autoHideContainer=false ]
+  [ autoHideContainer=false ],
+  [ transformItems ]
 })`;
 
 /**
@@ -59,6 +60,7 @@ hitsPerPageSelector({
  * @property {HitsPerPageSelectorItems[]} items Array of objects defining the different values and labels.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {HitsPerPageSelectorCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -88,6 +90,7 @@ export default function hitsPerPageSelector({
   items,
   cssClasses: userCssClasses = {},
   autoHideContainer = false,
+  transformItems,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -114,7 +117,7 @@ export default function hitsPerPageSelector({
       specializedRenderer,
       () => unmountComponentAtNode(containerNode)
     );
-    return makeHitsPerPageSelector({ items });
+    return makeHitsPerPageSelector({ items, transformItems });
   } catch (e) {
     throw new Error(usage);
   }

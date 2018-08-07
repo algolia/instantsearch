@@ -53,3 +53,32 @@ exports[`sortBySelector() calls twice ReactDOM.render(<Selector props />, contai
   shouldAutoHideContainer={false}
 />
 `;
+
+exports[`sortBySelector() renders transformed items 1`] = `
+<HeaderFooter-AutoHide
+  cssClasses={
+    Object {
+      "item": "ais-sort-by-selector--item",
+      "root": "ais-sort-by-selector",
+      "select": "ais-sort-by-selector",
+    }
+  }
+  currentValue="index-a"
+  options={
+    Array [
+      Object {
+        "label": "Index A",
+        "transformed": true,
+        "value": "index-a",
+      },
+      Object {
+        "label": "Index B",
+        "transformed": true,
+        "value": "index-b",
+      },
+    ]
+  }
+  setValue={[Function]}
+  shouldAutoHideContainer={false}
+/>
+`;

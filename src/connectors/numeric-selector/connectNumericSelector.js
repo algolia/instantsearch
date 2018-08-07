@@ -15,7 +15,8 @@ search.addWidget(
   customNumericSelector({
     attributeName,
     options,
-    [ operator = '=' ]
+    [ operator = '=' ],
+    [ transformItems ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericSelector.html
@@ -33,6 +34,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
  * @property {NumericSelectorOption[]} options Array of objects defining the different values and labels.
  * @property {string} [operator = '＝'] The operator to use to refine. Supports following operators: <, <=, =, >, >= and !=.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -98,7 +100,12 @@ export default function connectNumericSelector(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { attributeName, options, operator = '=' } = widgetParams;
+    const {
+      attributeName,
+      options,
+      operator = '=',
+      transformItems = items => items,
+    } = widgetParams;
 
     if (!attributeName || !options) {
       throw new Error(usage);
@@ -131,7 +138,7 @@ export default function connectNumericSelector(renderFn, unmountFn) {
         renderFn(
           {
             currentRefinement: this._getRefinedValue(helper.state),
-            options,
+            options: transformItems(options),
             refine: this._refine,
             hasNoResults: true,
             instantSearchInstance,
@@ -145,7 +152,7 @@ export default function connectNumericSelector(renderFn, unmountFn) {
         renderFn(
           {
             currentRefinement: this._getRefinedValue(helper.state),
-            options,
+            options: transformItems(options),
             refine: this._refine,
             hasNoResults: results.nbHits === 0,
             instantSearchInstance,

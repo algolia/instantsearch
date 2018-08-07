@@ -1,6 +1,3 @@
-import sinon from 'sinon';
-import map from 'lodash/map';
-import filter from 'lodash/filter';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import { prepareTemplateProps } from '../../../lib/utils';
@@ -359,12 +356,12 @@ describe('currentRefinedValues()', () => {
 
     function setRefinementsInExpectedProps() {
       expectedProps.refinements = refinements;
-      expectedProps.clearRefinementClicks = map(refinements, () => () => {});
-      expectedProps.clearRefinementURLs = map(refinements, () => '#cleared');
+      expectedProps.clearRefinementClicks = refinements.map(() => () => {});
+      expectedProps.clearRefinementURLs = refinements.map(() => '#cleared');
     }
 
     beforeEach(() => {
-      ReactDOM = { render: sinon.spy() };
+      ReactDOM = { render: jest.fn() };
       currentRefinedValues.__Rewire__('render', ReactDOM.render);
 
       parameters = {
@@ -634,11 +631,11 @@ describe('currentRefinedValues()', () => {
       widget.render(renderParameters);
       widget.render(renderParameters);
 
-      expect(ReactDOM.render.callCount).toBe(2);
-      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-      expect(ReactDOM.render.firstCall.args[1]).toBe(parameters.container);
-      expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-      expect(ReactDOM.render.secondCall.args[1]).toBe(parameters.container);
+      expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[0][1]).toBe(parameters.container);
+      expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[1][1]).toBe(parameters.container);
     });
 
     describe('options.container', () => {
@@ -652,9 +649,9 @@ describe('currentRefinedValues()', () => {
         const widget = currentRefinedValues(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
-        expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-        expect(ReactDOM.render.firstCall.args[1]).toBe(element);
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        expect(ReactDOM.render.mock.calls[0][1]).toBe(element);
       });
 
       it('should render with a HTMLElement container', () => {
@@ -665,9 +662,9 @@ describe('currentRefinedValues()', () => {
         const widget = currentRefinedValues(parameters);
         widget.init(initParameters);
         widget.render(renderParameters);
-        expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-        expect(ReactDOM.render.firstCall.args[1]).toBe(element);
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+        expect(ReactDOM.render.mock.calls[0][1]).toBe(element);
       });
     });
 
@@ -695,8 +692,8 @@ describe('currentRefinedValues()', () => {
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('should render all attributes with an empty array', () => {
@@ -717,8 +714,8 @@ describe('currentRefinedValues()', () => {
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('should render and pass all attributes defined in each objects', () => {
@@ -739,8 +736,7 @@ describe('currentRefinedValues()', () => {
             },
           ];
 
-          refinements = filter(
-            refinements,
+          refinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
                 refinement.attributeName
@@ -769,8 +765,8 @@ describe('currentRefinedValues()', () => {
             },
           };
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
       });
 
@@ -797,8 +793,8 @@ describe('currentRefinedValues()', () => {
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('should render all attributes with an empty array', () => {
@@ -819,8 +815,8 @@ describe('currentRefinedValues()', () => {
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('should render and pass all attributes defined in each objects', () => {
@@ -848,15 +844,13 @@ describe('currentRefinedValues()', () => {
             count: 42,
             exhaustive: true,
           });
-          const firstRefinements = filter(
-            refinements,
+          const firstRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
                 refinement.attributeName
               ) !== -1
           );
-          const otherRefinements = filter(
-            refinements,
+          const otherRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
                 refinement.attributeName
@@ -886,8 +880,8 @@ describe('currentRefinedValues()', () => {
             },
           };
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
       });
 
@@ -921,15 +915,13 @@ describe('currentRefinedValues()', () => {
             count: 42,
             exhaustive: true,
           });
-          const firstRefinements = filter(
-            refinements,
+          const firstRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
                 refinement.attributeName
               ) !== -1
           );
-          const otherRefinements = filter(
-            refinements,
+          const otherRefinements = refinements.filter(
             refinement =>
               ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(
                 refinement.attributeName
@@ -959,8 +951,8 @@ describe('currentRefinedValues()', () => {
             },
           };
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
       });
     });
@@ -975,8 +967,8 @@ describe('currentRefinedValues()', () => {
 
         expectedProps.clearAllPosition = 'before';
 
-        expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
 
@@ -990,8 +982,24 @@ describe('currentRefinedValues()', () => {
 
         expectedProps.templateProps.templates.item = 'MY CUSTOM TEMPLATE';
 
-        expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      });
+    });
+
+    describe('options.transformItems', () => {
+      it('should transform passed items', () => {
+        const widget = currentRefinedValues({
+          ...parameters,
+          transformItems: items =>
+            items.map(item => ({ ...item, transformed: true })),
+        });
+
+        widget.init(initParameters);
+        widget.render(renderParameters);
+
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
 
@@ -1014,8 +1022,8 @@ describe('currentRefinedValues()', () => {
           widget.init(initParameters);
           widget.render(renderParameters);
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
@@ -1028,8 +1036,8 @@ describe('currentRefinedValues()', () => {
 
           expectedProps.shouldAutoHideContainer = false;
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
       });
 
@@ -1043,8 +1051,8 @@ describe('currentRefinedValues()', () => {
 
           expectedProps.shouldAutoHideContainer = false;
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
 
         it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
@@ -1056,8 +1064,8 @@ describe('currentRefinedValues()', () => {
 
           expectedProps.shouldAutoHideContainer = false;
 
-          expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+          expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+          expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
         });
       });
     });
@@ -1073,8 +1081,8 @@ describe('currentRefinedValues()', () => {
         expectedProps.cssClasses.body =
           'ais-current-refined-values--body custom-passed-body';
 
-        expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
 
       it('should work with an array', () => {
@@ -1087,8 +1095,8 @@ describe('currentRefinedValues()', () => {
         expectedProps.cssClasses.body =
           'ais-current-refined-values--body custom-body custom-body-2';
 
-        expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
 
@@ -1107,19 +1115,19 @@ describe('currentRefinedValues()', () => {
           count: 42,
           exhaustive: true,
         });
-        const firstRefinements = filter(refinements, {
-          attributeName: 'disjunctiveFacet',
-        });
-        const secondRefinements = filter(refinements, {
-          attributeName: 'facetExclude',
-        });
-        const otherRefinements = filter(
-          refinements,
-          refinement =>
-            ['disjunctiveFacet', 'facetExclude'].indexOf(
-              refinement.attributeName
-            ) === -1
+        const firstRefinements = refinements.filter(
+          refinement => refinement.attributeName === 'disjunctiveFacet'
         );
+        const secondRefinements = refinements.filter(
+          refinement => refinement.attributeName === 'facetExclude'
+        );
+        const otherRefinements = refinements.filter(
+          refinement =>
+            !['disjunctiveFacet', 'facetExclude'].includes(
+              refinement.attributeName
+            )
+        );
+
         refinements = []
           .concat(firstRefinements)
           .concat(secondRefinements)
@@ -1135,8 +1143,8 @@ describe('currentRefinedValues()', () => {
           facetExclude: { name: 'facetExclude' },
         };
 
-        expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+        expect(ReactDOM.render).toHaveBeenCalledTimes(1);
+        expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
       });
     });
 

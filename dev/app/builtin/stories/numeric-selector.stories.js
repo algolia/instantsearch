@@ -45,4 +45,29 @@ export default () => {
       );
     })
   );
+  stories.add(
+    'with transformed items',
+    wrapWithHits(container => {
+      window.search.addWidget(
+        instantsearch.widgets.numericSelector({
+          container,
+          operator: '=',
+          attributeName: 'rating',
+          options: [
+            { label: 'No rating selected', value: undefined },
+            { label: 'Rating: 5', value: 5 },
+            { label: 'Rating: 4', value: 4 },
+            { label: 'Rating: 3', value: 3 },
+            { label: 'Rating: 2', value: 2 },
+            { label: 'Rating: 1', value: 1 },
+          ],
+          transformItems: items =>
+            items.map(item => ({
+              ...item,
+              label: `${item.label} (transformed)`,
+            })),
+        })
+      );
+    })
+  );
 };

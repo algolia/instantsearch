@@ -47,6 +47,7 @@ const renderer = ({
 const usage = `Usage:
 hits({
   container,
+  [ transformItems ],
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty, allItems} ],
   [ transformData.{empty,item} | transformData.{empty, allItems} ],
@@ -80,6 +81,7 @@ hits({
  * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -102,6 +104,7 @@ hits({
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
  *     escapeHits: true,
+ *     transformItems: items => items.map(item => item),
  *   })
  * );
  */
@@ -111,6 +114,7 @@ export default function hits({
   templates = defaultTemplates,
   transformData,
   escapeHits = false,
+  transformItems,
 }) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -139,7 +143,7 @@ export default function hits({
     const makeHits = connectHits(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeHits({ escapeHits });
+    return makeHits({ escapeHits, transformItems });
   } catch (e) {
     throw new Error(usage);
   }

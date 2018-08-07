@@ -12,7 +12,8 @@ var customHits = connectHits(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customHits({
-    [ escapeHits = false ]
+    [ escapeHits = false ],
+    [ transformItems ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHits.html
@@ -28,6 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomHitsWidgetOptions
  * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -59,41 +61,51 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 export default function connectHits(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetParams = {}) => ({
-    getConfiguration() {
-      return widgetParams.escapeHits ? tagConfig : undefined;
-    },
+  return (widgetParams = {}) => {
+    const { transformItems = items => items } = widgetParams;
 
-    init({ instantSearchInstance }) {
-      renderFn(
-        {
-          hits: [],
-          results: undefined,
-          instantSearchInstance,
-          widgetParams,
-        },
-        true
-      );
-    },
+    return {
+      getConfiguration() {
+        return widgetParams.escapeHits ? tagConfig : undefined;
+      },
 
-    render({ results, instantSearchInstance }) {
-      if (widgetParams.escapeHits && results.hits && results.hits.length > 0) {
-        results.hits = escapeHits(results.hits);
-      }
+      init({ instantSearchInstance }) {
+        renderFn(
+          {
+            hits: [],
+            results: undefined,
+            instantSearchInstance,
+            widgetParams,
+          },
+          true
+        );
+      },
 
-      renderFn(
-        {
-          hits: results.hits,
-          results,
-          instantSearchInstance,
-          widgetParams,
-        },
-        false
-      );
-    },
+      render({ results, instantSearchInstance }) {
+        results.hits = transformItems(results.hits);
 
-    dispose() {
-      unmountFn();
-    },
-  });
+        if (
+          widgetParams.escapeHits &&
+          results.hits &&
+          results.hits.length > 0
+        ) {
+          results.hits = escapeHits(results.hits);
+        }
+
+        renderFn(
+          {
+            hits: results.hits,
+            results,
+            instantSearchInstance,
+            widgetParams,
+          },
+          false
+        );
+      },
+
+      dispose() {
+        unmountFn();
+      },
+    };
+  };
 }

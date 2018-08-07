@@ -19,6 +19,7 @@ search.addWidget(
     [ limit ],
     [ showMoreLimit ]
     [ sortBy = ['name:asc'] ]
+    [ transformItems ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectMenu.html
@@ -40,6 +41,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -113,6 +115,7 @@ export default function connectMenu(renderFn, unmountFn) {
       limit = 10,
       sortBy = ['name:asc'],
       showMoreLimit,
+      transformItems = items => items,
     } = widgetParams;
 
     if (!attributeName || (!isNaN(showMoreLimit) && showMoreLimit < limit)) {
@@ -200,13 +203,15 @@ export default function connectMenu(renderFn, unmountFn) {
       render({ results, instantSearchInstance }) {
         const facetItems =
           results.getFacetValues(attributeName, { sortBy }).data || [];
-        const items = facetItems
-          .slice(0, this.getLimit())
-          .map(({ name: label, path: value, ...item }) => ({
-            ...item,
-            label,
-            value,
-          }));
+        const items = transformItems(
+          facetItems
+            .slice(0, this.getLimit())
+            .map(({ name: label, path: value, ...item }) => ({
+              ...item,
+              label,
+              value,
+            }))
+        );
 
         this.toggleShowMore = this.createToggleShowMore({
           results,

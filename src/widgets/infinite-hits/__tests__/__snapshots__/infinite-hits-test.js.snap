@@ -199,3 +199,54 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
   }
 />
 `;
+
+exports[`infiniteHits() renders transformed items 1`] = `
+<InfiniteHits
+  cssClasses={
+    Object {
+      "empty": "ais-infinite-hits__empty",
+      "item": "ais-infinite-hits--item",
+      "root": "ais-infinite-hits",
+      "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
+    }
+  }
+  hits={
+    Array [
+      Object {
+        "first": "hit",
+        "second": "hit",
+        "transformed": true,
+      },
+    ]
+  }
+  isLastPage={false}
+  results={
+    Object {
+      "hits": Array [
+        Object {
+          "first": "hit",
+          "second": "hit",
+          "transformed": true,
+        },
+      ],
+    }
+  }
+  showMore={[Function]}
+  showMoreLabel="Show more results"
+  templateProps={
+    Object {
+      "templates": Object {
+        "empty": "No results",
+        "item": [Function],
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "empty": false,
+        "item": false,
+      },
+    }
+  }
+/>
+`;

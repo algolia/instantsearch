@@ -54,6 +54,44 @@ describe('connectCurrentRefinedValues', () => {
     });
   });
 
+  it('Renders transformed items during init and render', () => {
+    const helper = jsHelper({}, '', {
+      facets: ['myFacet'],
+    });
+    helper.search = () => {};
+    const rendering = jest.fn();
+    const makeWidget = connectCurrentRefinedValues(rendering);
+    const widget = makeWidget({
+      transformItems: items =>
+        items.map(item => ({ ...item, name: 'transformed' })),
+    });
+
+    helper.addFacetRefinement('myFacet', 'value');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.refinements).toEqual([
+      expect.objectContaining({ name: 'transformed' }),
+    ]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[0][0];
+    expect(secondRenderingOptions.refinements).toEqual([
+      expect.objectContaining({ name: 'transformed' }),
+    ]);
+  });
+
   it('Provide a function to clear the refinement', () => {
     // For each refinements we get a function that we can call
     // for removing a single refinement

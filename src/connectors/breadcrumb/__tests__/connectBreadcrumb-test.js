@@ -202,6 +202,64 @@ describe('connectBreadcrumb', () => {
     ]);
   });
 
+  it('provides the correct facet values when transformed', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectBreadcrumb(rendering);
+    const widget = makeWidget({
+      attributes: ['category', 'sub_category'],
+      transformItems: items =>
+        items.map(item => ({ ...item, name: 'transformed' })),
+    });
+
+    const config = widget.getConfiguration({});
+    const helper = jsHelper({}, '', config);
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items).toEqual([]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              Decoration: 880,
+            },
+            subCategory: {
+              'Decoration > Candle holders & candles': 193,
+              'Decoration > Frames & pictures': 173,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              Decoration: 880,
+              Outdoor: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items).toEqual([
+      expect.objectContaining({ name: 'transformed' }),
+    ]);
+  });
+
   it('returns the correct URL', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);

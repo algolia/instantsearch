@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import algoliasearchHelper from 'algoliasearch-helper';
 const SearchParameters = algoliasearchHelper.SearchParameters;
 import refinementList from '../refinement-list.js';
@@ -16,11 +14,11 @@ describe('refinementList()', () => {
   beforeEach(() => {
     container = document.createElement('div');
 
-    ReactDOM = { render: sinon.spy() };
+    ReactDOM = { render: jest.fn() };
     refinementList.__Rewire__('render', ReactDOM.render);
-    autoHideContainer = sinon.stub().returnsArg(0);
+    autoHideContainer = jest.fn();
     refinementList.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returnsArg(0);
+    headerFooter = jest.fn();
     refinementList.__Rewire__('headerFooterHOC', headerFooter);
   });
 
@@ -52,9 +50,9 @@ describe('refinementList()', () => {
     beforeEach(() => {
       options = { container, attributeName: 'attributeName' };
       results = {
-        getFacetValues: sinon
-          .stub()
-          .returns([{ name: 'foo' }, { name: 'bar' }]),
+        getFacetValues: jest
+          .fn()
+          .mockReturnValue([{ name: 'foo' }, { name: 'bar' }]),
       };
       state = SearchParameters.make({});
       createURL = () => '#';
@@ -78,7 +76,7 @@ describe('refinementList()', () => {
 
         // When
         renderWidget({ cssClasses });
-        const actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
+        const actual = ReactDOM.render.mock.calls[0][0].props.cssClasses;
 
         // Then
         expect(actual.root).toBe('ais-refinement-list root cx');
@@ -97,26 +95,26 @@ describe('refinementList()', () => {
     describe('autoHideContainer', () => {
       it('should set shouldAutoHideContainer to false if there are facetValues', () => {
         // Given
-        results.getFacetValues = sinon
-          .stub()
-          .returns([{ name: 'foo' }, { name: 'bar' }]);
+        results.getFacetValues = jest
+          .fn()
+          .mockReturnValue([{ name: 'foo' }, { name: 'bar' }]);
 
         // When
         renderWidget();
         const actual =
-          ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
+          ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer;
 
         // Then
         expect(actual).toBe(false);
       });
       it('should set shouldAutoHideContainer to true if no facet values', () => {
         // Given
-        results.getFacetValues = sinon.stub().returns([]);
+        results.getFacetValues = jest.fn().mockReturnValue([]);
 
         // When
         renderWidget();
         const actual =
-          ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
+          ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer;
 
         // Then
         expect(actual).toBe(true);
@@ -140,11 +138,11 @@ describe('refinementList()', () => {
             isRefined: false,
           },
         ];
-        results.getFacetValues = sinon.stub().returns(facetValues);
+        results.getFacetValues = jest.fn().mockReturnValue(facetValues);
 
         // When
         renderWidget();
-        const props = ReactDOM.render.firstCall.args[0].props;
+        const props = ReactDOM.render.mock.calls[0][0].props;
 
         // Then
         expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
@@ -164,7 +162,7 @@ describe('refinementList()', () => {
             isRefined: false,
           },
         ];
-        results.getFacetValues = sinon.stub().returns(facetValues);
+        results.getFacetValues = jest.fn().mockReturnValue(facetValues);
         const renderOptions = { results, helper, state };
 
         // When
@@ -173,7 +171,7 @@ describe('refinementList()', () => {
         widget.render(renderOptions);
 
         // Then
-        let props = ReactDOM.render.firstCall.args[0].props;
+        let props = ReactDOM.render.mock.calls[0][0].props;
         expect(props.headerFooterData.header.refinedFacetsCount).toEqual(1);
 
         // When... second render call
@@ -181,9 +179,26 @@ describe('refinementList()', () => {
         widget.render(renderOptions);
 
         // Then
-        props = ReactDOM.render.secondCall.args[0].props;
+        props = ReactDOM.render.mock.calls[1][0].props;
         expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
       });
+    });
+
+    it('renders transformed items correctly', () => {
+      widget = refinementList({
+        ...options,
+        transformItems: items =>
+          items.map(item => ({ ...item, transformed: true })),
+      });
+
+      widget.init({
+        helper,
+        createURL,
+        instantSearchInstance,
+      });
+      widget.render({ results, helper, state });
+
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
   });
 
