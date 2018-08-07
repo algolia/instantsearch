@@ -58,7 +58,8 @@ InfiniteHits.defaultProps = {
         wordBreak: 'break-all',
       }}
     >
-      {JSON.stringify(hit).slice(0, 100)}...
+      {JSON.stringify(hit).slice(0, 100)}
+      ...
     </div>
   ),
 };

@@ -45,7 +45,8 @@ const Header = () => (
       />
     </a>
     <a href="./" className="logo">
-      You<i className="fa fa-youtube-play" />
+      You
+      <i className="fa fa-youtube-play" />
     </a>
     <SearchBox />
   </header>
@@ -112,14 +113,18 @@ const Stars = ({ rating }) => {
   }
   return (
     <span className="stars">
-      {stars.map((active, idx) => <Star key={idx} active={active} />)}
+      {stars.map((active, idx) => (
+        <Star key={idx} active={active} />
+      ))}
     </span>
   );
 };
 const Genre = ({ name }) => <span className="badge">{name}</span>;
 const Genres = ({ genres }) => (
   <p className="genre">
-    {genres.map((genre, idx) => <Genre name={genre} key={idx} />)}
+    {genres.map((genre, idx) => (
+      <Genre name={genre} key={idx} />
+    ))}
   </p>
 );
 
