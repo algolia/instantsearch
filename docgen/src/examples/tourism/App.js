@@ -298,8 +298,8 @@ function HitComponent({ hit }) {
 function HitDescription({ hit }) {
   return (
     <p>
-      {hit.room_type} - <Highlight attribute="city" hit={hit} />
-      , <Highlight attribute="country" hit={hit} />
+      {hit.room_type} - <Highlight attribute="city" hit={hit} />,{' '}
+      <Highlight attribute="country" hit={hit} />
     </p>
   );
 }

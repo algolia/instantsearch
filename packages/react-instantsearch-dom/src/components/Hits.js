@@ -36,7 +36,8 @@ Hits.defaultProps = {
         wordBreak: 'break-all',
       }}
     >
-      {JSON.stringify(props).slice(0, 100)}...
+      {JSON.stringify(props).slice(0, 100)}
+      ...
     </div>
   ),
 };

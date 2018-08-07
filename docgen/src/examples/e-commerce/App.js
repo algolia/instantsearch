@@ -154,7 +154,9 @@ const CustomColorRefinementList = ({ items, refine, createURL }) =>
 function CustomHits({ hits }) {
   return (
     <main id="hits">
-      {hits.map(hit => <Hit item={hit} key={hit.objectID} />)}
+      {hits.map(hit => (
+        <Hit item={hit} key={hit.objectID} />
+      ))}
     </main>
   );
 }

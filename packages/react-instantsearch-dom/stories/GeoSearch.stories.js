@@ -47,7 +47,9 @@ stories
               <GeoSearch google={google}>
                 {({ hits }) => (
                   <Fragment>
-                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                    {hits.map(hit => (
+                      <Marker key={hit.objectID} hit={hit} />
+                    ))}
                   </Fragment>
                 )}
               </GeoSearch>
@@ -85,7 +87,9 @@ stories
               >
                 {({ hits }) => (
                   <Fragment>
-                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                    {hits.map(hit => (
+                      <Marker key={hit.objectID} hit={hit} />
+                    ))}
                   </Fragment>
                 )}
               </GeoSearch>
@@ -116,7 +120,9 @@ stories
               >
                 {({ hits }) => (
                   <Fragment>
-                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                    {hits.map(hit => (
+                      <Marker key={hit.objectID} hit={hit} />
+                    ))}
                   </Fragment>
                 )}
               </GeoSearch>
@@ -149,7 +155,9 @@ stories
               >
                 {({ hits }) => (
                   <Fragment>
-                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                    {hits.map(hit => (
+                      <Marker key={hit.objectID} hit={hit} />
+                    ))}
                   </Fragment>
                 )}
               </GeoSearch>
@@ -175,7 +183,9 @@ stories
               <GeoSearch google={google} streetViewControl>
                 {({ hits }) => (
                   <Fragment>
-                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                    {hits.map(hit => (
+                      <Marker key={hit.objectID} hit={hit} />
+                    ))}
                   </Fragment>
                 )}
               </GeoSearch>
@@ -268,7 +278,9 @@ stories
                   <Fragment>
                     <Redo />
 
-                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                    {hits.map(hit => (
+                      <Marker key={hit.objectID} hit={hit} />
+                    ))}
                   </Fragment>
                 )}
               </GeoSearch>
@@ -296,7 +308,9 @@ stories
                   <Fragment>
                     <Control />
 
-                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                    {hits.map(hit => (
+                      <Marker key={hit.objectID} hit={hit} />
+                    ))}
                   </Fragment>
                 )}
               </GeoSearch>
@@ -324,7 +338,9 @@ stories
                   <Fragment>
                     <Control />
 
-                    {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                    {hits.map(hit => (
+                      <Marker key={hit.objectID} hit={hit} />
+                    ))}
                   </Fragment>
                 )}
               </GeoSearch>
@@ -438,7 +454,9 @@ stories.addWithJSX(
                 <Fragment>
                   <Control />
 
-                  {hits.map(hit => <Marker key={hit.objectID} hit={hit} />)}
+                  {hits.map(hit => (
+                    <Marker key={hit.objectID} hit={hit} />
+                  ))}
                 </Fragment>
               )}
             </GeoSearch>

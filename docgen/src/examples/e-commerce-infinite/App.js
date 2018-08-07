@@ -151,7 +151,9 @@ const CustomColorRefinementList = ({ items, refine, createURL }) =>
 function CustomHits({ hits, refine, hasMore }) {
   return (
     <main id="hits">
-      {hits.map(hit => <Hit item={hit} key={hit.objectID} />)}
+      {hits.map(hit => (
+        <Hit item={hit} key={hit.objectID} />
+      ))}
       <button
         className="btn btn-primary btn-block btn-load-more"
         onClick={refine}

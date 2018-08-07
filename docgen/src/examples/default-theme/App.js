@@ -149,9 +149,9 @@ const CustomResults = connectStateResults(({ searchState, searchResults }) => (
       </div>
     ) : (
       <div className="no-results">
-        No results found matching &quot;<span className="query">
-          {searchState.query}
-        </span>&quot;
+        No results found matching &quot;
+        <span className="query">{searchState.query}</span>
+        &quot;
       </div>
     )}
   </div>
