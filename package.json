@@ -86,7 +86,7 @@
     "react-native": "0.54.2",
     "rheostat": "2.2.0",
     "storybook-addon-a11y": "3.1.9",
-    "storybook-addon-jsx": "5.3.0",
+    "storybook-addon-jsx": "5.4.0",
     "style-loader": "0.21.0",
     "webpack": "3.12.0"
   },
