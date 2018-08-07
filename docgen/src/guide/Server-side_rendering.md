@@ -78,8 +78,8 @@ export { App, findResultsState };
 ```jsx
 import React from 'react';
 import { createServer } from 'http';
-import { App, findResultsState } from './app.js';
 import { renderToString } from 'react-dom/server';
+import { App, findResultsState } from './App';
 
 const server = createServer((req, res) => {
   const searchState = {query: 'chair'};
