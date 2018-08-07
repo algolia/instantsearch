@@ -18,7 +18,11 @@ const createIndex = defaultRoot => {
   CreateIndex.propTypes = {
     indexName: PropTypes.string.isRequired,
     root: PropTypes.shape({
-      Root: PropTypes.oneOfType([PropTypes.string, PropTypes.func]).isRequired,
+      Root: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.func,
+        PropTypes.object,
+      ]).isRequired,
       props: PropTypes.object,
     }),
     children: PropTypes.node,
