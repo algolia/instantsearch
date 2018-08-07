@@ -11971,9 +11971,9 @@ react-dom@^16.0.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-element-to-jsx-string@^13.1.0:
-  version "13.2.0"
-  resolved "https://registry.yarnpkg.com/react-element-to-jsx-string/-/react-element-to-jsx-string-13.2.0.tgz#550bb9670e4d8c82977934c14db14469d156a70d"
+react-element-to-jsx-string@^14.0.1:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/react-element-to-jsx-string/-/react-element-to-jsx-string-14.0.1.tgz#6c4b8b7a1ec8a255fe2be1ca10b532065e2e219b"
   dependencies:
     is-plain-object "2.0.4"
     stringify-object "3.2.2"
@@ -13735,13 +13735,13 @@ storybook-addon-a11y@3.1.9:
     axe-core "^2.0.7"
     prop-types "^15.5.10"
 
-storybook-addon-jsx@5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/storybook-addon-jsx/-/storybook-addon-jsx-5.3.0.tgz#acf54c93d403afbf6d68fe934cf41504d674b94c"
+storybook-addon-jsx@5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/storybook-addon-jsx/-/storybook-addon-jsx-5.4.0.tgz#3e703bdecf54621269f2aa394004265cf1e9bda9"
   dependencies:
     js-beautify "^1.7.5"
     react-copy-to-clipboard "^5.0.1"
-    react-element-to-jsx-string "^13.1.0"
+    react-element-to-jsx-string "^14.0.1"
 
 stream-browserify@^2.0.1:
   version "2.0.1"
