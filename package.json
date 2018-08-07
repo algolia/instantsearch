@@ -39,7 +39,7 @@
     "@storybook/addons": "3.4.10",
     "@storybook/react": "3.4.10",
     "@storybook/ui": "3.4.10",
-    "algoliasearch": "3.29.0",
+    "algoliasearch": "3.30.0",
     "argos-cli": "0.0.9",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
