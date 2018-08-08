@@ -11005,9 +11005,9 @@ pkginfo@0.x.x:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.4.1.tgz#b5418ef0439de5425fc4995042dced14fb2a84ff"
 
-places.js@1.7.3:
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.7.3.tgz#70d9791fc6e6e7f3359a1cadcc8876914cdfdd65"
+places.js@1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/places.js/-/places.js-1.9.0.tgz#0178fdd37d9a456b47bf260ea617a38ab345af7c"
   dependencies:
     algolia-aerial "^1.3.4"
     algoliasearch "^3.27.1"
