@@ -33,14 +33,14 @@ describe('Templates', () => {
         appPath = `${temporaryDirectory}/${templateConfig.appName}`;
 
         const config = {
-          name: `${templateConfig.appName}`,
+          name: templateConfig.appName,
           template: templateName,
           libraryVersion: '1.0.0',
           appId: 'appId',
           apiKey: 'apiKey',
           indexName: 'indexName',
           searchPlaceholder: 'Search placeholder',
-          mainAttribute: 'mainAttribute',
+          attributesToDisplay: ['attribute1', 'attribute2'],
           attributesForFaceting: ['facet1', 'facet2'],
         };
 

@@ -16,11 +16,29 @@ $searchBox.addEventListener('input', event => {
 helper.on('result', result => {
   // Please sanitize user-provided data when using `innerHTML` to avoid XSS
   $hits.innerHTML = `
-    <ul class="ais-hits">
+    <ol class="ais-hits">
       ${result.hits
-        .map(hit => `<li class="ais-hits--item">{{#if mainAttribute}}${hit._highlightResult.{{mainAttribute}}.value}{{else}}${JSON.stringify(hit)}{{/if}}</li>`)
+        .map(
+          hit =>
+            `<li class="ais-hits--item">
+              <article>
+              {{#if attributesToDisplay}}
+                <h1>${hit._highlightResult.{{attributesToDisplay.[0]}}.value}</h1>
+                {{#each attributesToDisplay}}
+                {{#unless @first}}
+                <p>${hit._highlightResult.{{this}}.value}</p>
+                {{/unless}}
+                {{/each}}
+              {{else}}
+                <p>
+                  <code>${JSON.stringify(hit).slice(0, 100)}...</code>
+                </p>
+              {{/if}}
+              </article>
+            </li>`
+        )
         .join('')}
-    </ul>`;
+    </ol>`;
 });
 
 helper.search();

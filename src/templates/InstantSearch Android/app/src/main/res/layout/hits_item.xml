@@ -1,21 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:algolia="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<layout
+    xmlns:algolia="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp"
+    >
 
         <TextView
-            android:id="@+id/{{mainAttribute}}"
+            android:id="@+id/{{attributesToDisplay.[0]}}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="{{mainAttribute}}"
+            android:text="{{attributesToDisplay.[0]}}"
             android:textSize="20sp"
-            algolia:attribute='@{"{{mainAttribute}}"}'
+            android:textStyle="bold"
+            algolia:attribute='@{"{{attributesToDisplay.[0]}}"}'
             algolia:highlightColor="@color/colorAccent"
             algolia:highlighted="@{true}"/>
+
+        {{#each attributesToDisplay}}
+        {{#unless @first}}
+        <TextView
+            android:id="@+id/{{this}}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="{{this}}"
+            android:textSize="20sp"
+            algolia:attribute='@{"{{this}}"}'
+            algolia:highlightColor="@color/colorAccent"
+            algolia:highlighted="@{true}"
+          />
+
+        {{/unless}}
+        {{/each}}
+          <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="description"
+            android:textSize="20sp"
+            algolia:attribute='@{"description"}'
+            algolia:highlightColor="@color/colorAccent"
+            algolia:highlighted="@{true}"
+        />
     </LinearLayout>
 </layout>

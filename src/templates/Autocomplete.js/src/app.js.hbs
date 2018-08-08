@@ -9,11 +9,11 @@ const $hits = document.querySelector('#hits');
 autocomplete('#searchBox input[type=search]', { hint: false }, [
   {
     source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
-    displayKey: '{{mainAttribute}}',
+    displayKey: '{{attributesToDisplay.[0]}}',
     templates: {
       suggestion(suggestion) {
-        {{#if mainAttribute}}
-        return suggestion._highlightResult.{{mainAttribute}}.value;
+        {{#if attributesToDisplay.[0]}}
+        return suggestion._highlightResult.{{attributesToDisplay.[0]}}.value;
         {{else}}
         return JSON.stringify(suggestion);
         {{/if}}

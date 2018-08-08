@@ -345,7 +345,27 @@ exports[`Templates Angular InstantSearch File content: src/app/app.component.htm
           <ais-search-box placeholder=\\"Search placeholder\\"></ais-search-box>
         </div>
 
-        <ais-hits></ais-hits>
+        <ais-hits>
+          <ng-template let-hits=\\"hits\\" let-results=\\"results\\">
+            <div *ngIf=\\"hits.length === 0\\">
+              No results found matching <strong></strong>.
+            </div>
+
+            <ol class=\\"ais-Hits-list\\">
+              <li class=\\"ais-Hits-item\\" *ngFor=\\"let hit of hits\\">
+                <article>
+                  <h1>
+                    <ais-highlight attribute=\\"attribute1\\" [hit]=\\"hit\\"></ais-highlight>
+                  </h1>
+
+                  <p>
+                    <ais-highlight attribute=\\"attribute2\\" [hit]=\\"hit\\"></ais-highlight>
+                  </p>
+                </article>
+              </li>
+            </ol>
+          </ng-template>
+        </ais-hits>
 
         <div class=\\"pagination\\">
           <ais-pagination></ais-pagination>
@@ -1181,10 +1201,10 @@ const $hits = document.querySelector('#hits');
 autocomplete('#searchBox input[type=search]', { hint: false }, [
   {
     source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
-    displayKey: 'mainAttribute',
+    displayKey: 'attribute1',
     templates: {
       suggestion(suggestion) {
-        return suggestion._highlightResult.mainAttribute.value;
+        return suggestion._highlightResult.attribute1.value;
       },
     },
   },
@@ -1276,7 +1296,7 @@ dependencies {
     })
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.example:instantsearch-android:1.12.0'
+    implementation 'com.algolia:instantsearch-android:1.12.1'
     testImplementation 'junit:junit:4.12'
 }"
 `;
@@ -1309,7 +1329,7 @@ exports[`Templates InstantSearch Android File content: app/proguard-rules.pro 1`
 #-renamesourcefileattribute SourceFile"
 `;
 
-exports[`Templates InstantSearch Android File content: app/src/androidTest/java/com/algolia/instantsearch/mvp/ExampleInstrumentedTest.java 1`] = `
+exports[`Templates InstantSearch Android File content: app/src/androidTest/java/com/example/instantsearch/app/ExampleInstrumentedTest.java 1`] = `
 "package com.example.instantsearch.app;
 
 import android.content.Context;
@@ -1362,44 +1382,19 @@ exports[`Templates InstantSearch Android File content: app/src/main/AndroidManif
 </manifest>"
 `;
 
-exports[`Templates InstantSearch Android File content: app/src/main/java/com/algolia/instantsearch/app/MainActivity.java 1`] = `
+exports[`Templates InstantSearch Android File content: app/src/main/java/com/example/instantsearch/app/MainActivity.java 1`] = `
 "package com.example.instantsearch.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.example.instantsearch.helpers.Searcher;
-import com.example.instantsearch.helpers.InstantSearch;
+import com.algolia.instantsearch.helpers.Searcher;
+import com.algolia.instantsearch.helpers.InstantSearch;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ALGOLIA_APP_ID = \\"appId\\";
     private static final String ALGOLIA_SEARCH_API_KEY = \\"apiKey\\";
     private static final String ALGOLIA_INDEX_NAME = \\"indexName\\";
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        final Searcher searcher = Searcher.create(ALGOLIA_APP_ID, ALGOLIA_SEARCH_API_KEY, ALGOLIA_INDEX_NAME);
-        final InstantSearch helper = new InstantSearch(this, searcher);
-        helper.search(); // First empty search to display default results
-    }
-}"
-`;
-
-exports[`Templates InstantSearch Android File content: app/src/main/java/com/algolia/instantsearch/mvp/MainActivity.java 1`] = `
-"package com.example.instantsearch.app;
-
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
-import com.example.instantsearch.helpers.Searcher;
-import com.example.instantsearch.helpers.InstantSearch;
-
-public class MainActivity extends AppCompatActivity {
-    private static final String ALGOLIA_APP_ID = \\"latency\\";
-    private static final String ALGOLIA_SEARCH_API_KEY = \\"3d9875e51fbd20c7754e65422f7ce5e1\\";
-    private static final String ALGOLIA_INDEX_NAME = \\"bestbuy\\";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1424,13 +1419,13 @@ exports[`Templates InstantSearch Android File content: app/src/main/res/layout/a
     android:orientation=\\"vertical\\"
     tools:context=\\"com.example.instantsearch.app.MainActivity\\">
 
-    <com.example.instantsearch.ui.views.SearchBox
+    <com.algolia.instantsearch.ui.views.SearchBox
         android:id=\\"@+id/search_box\\"
         android:layout_width=\\"match_parent\\"
         android:layout_height=\\"wrap_content\\"
-        android:layout_marginBottom=\\"10dp\\"/>
+        android:layout_marginBottom=\\"16dp\\"/>
 
-    <com.example.instantsearch.ui.views.Hits
+    <com.algolia.instantsearch.ui.views.Hits
         android:id=\\"@+id/hits\\"
         android:layout_width=\\"match_parent\\"
         android:layout_height=\\"wrap_content\\"
@@ -1441,24 +1436,52 @@ exports[`Templates InstantSearch Android File content: app/src/main/res/layout/a
 
 exports[`Templates InstantSearch Android File content: app/src/main/res/layout/hits_item.xml 1`] = `
 "<?xml version=\\"1.0\\" encoding=\\"utf-8\\"?>
-<layout xmlns:algolia=\\"http://schemas.android.com/apk/res-auto\\"
-        xmlns:android=\\"http://schemas.android.com/apk/res/android\\">
+<layout
+    xmlns:algolia=\\"http://schemas.android.com/apk/res-auto\\"
+    xmlns:android=\\"http://schemas.android.com/apk/res/android\\"
+>
 
     <LinearLayout
         android:layout_width=\\"match_parent\\"
         android:layout_height=\\"wrap_content\\"
-        android:orientation=\\"vertical\\">
+        android:orientation=\\"vertical\\"
+        android:padding=\\"16dp\\"
+    >
 
         <TextView
-            android:id=\\"@+id/mainAttribute\\"
+            android:id=\\"@+id/attribute1\\"
             android:layout_width=\\"wrap_content\\"
             android:layout_height=\\"wrap_content\\"
-            android:layout_marginTop=\\"10dp\\"
-            android:text=\\"mainAttribute\\"
+            android:text=\\"attribute1\\"
             android:textSize=\\"20sp\\"
-            algolia:attribute='@{\\"mainAttribute\\"}'
+            android:textStyle=\\"bold\\"
+            algolia:attribute='@{\\"attribute1\\"}'
             algolia:highlightColor=\\"@color/colorAccent\\"
             algolia:highlighted=\\"@{true}\\"/>
+
+        <TextView
+            android:id=\\"@+id/attribute2\\"
+            android:layout_width=\\"wrap_content\\"
+            android:layout_height=\\"wrap_content\\"
+            android:layout_marginTop=\\"16dp\\"
+            android:text=\\"attribute2\\"
+            android:textSize=\\"20sp\\"
+            algolia:attribute='@{\\"attribute2\\"}'
+            algolia:highlightColor=\\"@color/colorAccent\\"
+            algolia:highlighted=\\"@{true}\\"
+          />
+
+          <TextView
+            android:id=\\"@+id/description\\"
+            android:layout_width=\\"wrap_content\\"
+            android:layout_height=\\"wrap_content\\"
+            android:layout_marginTop=\\"16dp\\"
+            android:text=\\"description\\"
+            android:textSize=\\"20sp\\"
+            algolia:attribute='@{\\"description\\"}'
+            algolia:highlightColor=\\"@color/colorAccent\\"
+            algolia:highlighted=\\"@{true}\\"
+        />
     </LinearLayout>
 </layout>"
 `;
@@ -1813,10 +1836,9 @@ Array [
   "app/.gitignore",
   "app/build.gradle",
   "app/proguard-rules.pro",
-  "app/src/androidTest/java/com/algolia/instantsearch/mvp/ExampleInstrumentedTest.java",
+  "app/src/androidTest/java/com/example/instantsearch/app/ExampleInstrumentedTest.java",
   "app/src/main/AndroidManifest.xml",
-  "app/src/main/java/com/algolia/instantsearch/app/MainActivity.java",
-  "app/src/main/java/com/algolia/instantsearch/mvp/MainActivity.java",
+  "app/src/main/java/com/example/instantsearch/app/MainActivity.java",
   "app/src/main/res/layout/activity_main.xml",
   "app/src/main/res/layout/hits_item.xml",
   "app/src/main/res/mipmap-hdpi/ic_launcher.png",
@@ -2349,8 +2371,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         InstantSearch.shared.configure(appID: ALGOLIA_APP_ID, apiKey: ALGOLIA_API_KEY, index: ALGOLIA_INDEX_NAME)
-        InstantSearch.shared.params.attributesToRetrieve = [\\"mainAttribute\\"]
-        InstantSearch.shared.params.attributesToHighlight = [\\"mainAttribute\\"]
+        InstantSearch.shared.params.attributesToRetrieve = [\\"attribute1\\", \\"attribute2\\"]
+        InstantSearch.shared.params.attributesToHighlight = [\\"attribute1\\", \\"attribute2\\"]
 
         return true
     }
@@ -2566,7 +2588,7 @@ class ViewController: HitsTableViewController {
 
         cell.textLabel?.highlightedTextColor = .blue
         cell.textLabel?.highlightedBackgroundColor = .yellow
-        cell.textLabel?.highlightedText = SearchResults.highlightResult(hit: hit, path: \\"name\\")?.value
+        cell.textLabel?.highlightedText = SearchResults.highlightResult(hit: hit, path: \\"attribute1\\")?.value
 
         return cell
     }
@@ -2901,9 +2923,10 @@ search.addWidget(
     container: '#hits',
     templates: {
       item: \`
-        <div>
-          <header>{{{_highlightResult.mainAttribute.value}}}</header>
-        </div>
+        <article>
+          <h1>{{{_highlightResult.attribute1.value}}}</h1>
+          <p>{{{_highlightResult.attribute2.value}}}</p>
+        </article>
       \`,
     },
   })
@@ -3186,12 +3209,12 @@ exports[`Templates JavaScript Client File content: src/app.css 1`] = `
   display: grid;
   grid-template-columns: 49% 49%;
   grid-gap: 2%;
-  list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .ais-hits--item {
+  list-style: none;
   min-height: 100px;
   padding: 1rem;
   background: #fff;
@@ -3219,11 +3242,19 @@ function renderHits(query) {
   index.search(query).then(result => {
     // Please sanitize user-provided data when using \`innerHTML\` to avoid XSS
     $hits.innerHTML = \`
-      <ul class=\\"ais-hits\\">
+      <ol class=\\"ais-hits\\">
         \${result.hits
-          .map(hit => \`<li class=\\"ais-hits--item\\">\${hit._highlightResult.mainAttribute.value}</li>\`)
+          .map(
+            hit =>
+              \`<li class=\\"ais-hits--item\\">
+                <article>
+                  <h1>\${hit._highlightResult.attribute1.value}</h1>
+                  <p>\${hit._highlightResult.attribute2.value}</p>
+                </article>
+              </li>\`
+          )
           .join('')}
-      </ul>\`;
+      </ol>\`;
   });
 }
 
@@ -3486,13 +3517,12 @@ exports[`Templates JavaScript Helper File content: src/app.css 1`] = `
   display: grid;
   grid-template-columns: 49% 49%;
   grid-gap: 2%;
-  list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .ais-hits--item {
-  min-height: 100px;
+  list-style: none;
   padding: 1rem;
   background: #fff;
   border-radius: 4px;
@@ -3525,11 +3555,19 @@ $searchBox.addEventListener('input', event => {
 helper.on('result', result => {
   // Please sanitize user-provided data when using \`innerHTML\` to avoid XSS
   $hits.innerHTML = \`
-    <ul class=\\"ais-hits\\">
+    <ol class=\\"ais-hits\\">
       \${result.hits
-        .map(hit => \`<li class=\\"ais-hits--item\\">\${hit._highlightResult.mainAttribute.value}</li>\`)
+        .map(
+          hit =>
+            \`<li class=\\"ais-hits--item\\">
+              <article>
+                <h1>\${hit._highlightResult.attribute1.value}</h1>
+                <p>\${hit._highlightResult.attribute2.value}</p>
+              </article>
+            </li>\`
+        )
         .join('')}
-    </ul>\`;
+    </ol>\`;
 });
 
 helper.search();"
@@ -3831,9 +3869,14 @@ class App extends Component {
 
 function Hit(props) {
   return (
-    <div>
-      <Highlight attribute=\\"mainAttribute\\" hit={props.hit} />
-    </div>
+    <article>
+      <h1>
+        <Highlight attribute=\\"attribute1\\" hit={props.hit} />
+      </h1>
+      <p>
+        <Highlight attribute=\\"attribute2\\" hit={props.hit} />
+      </p>
+    </article>
   );
 }
 
@@ -4089,7 +4132,7 @@ export default connectHighlight(Highlight);"
 
 exports[`Templates React InstantSearch Native File content: src/InfiniteHits.js 1`] = `
 "import React from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { connectInfiniteHits } from 'react-instantsearch-native';
 import Highlight from './Highlight';
@@ -4097,11 +4140,14 @@ import Highlight from './Highlight';
 const styles = StyleSheet.create({
   separator: {
     borderBottomWidth: 1,
+    borderColor: '#ddd',
   },
   item: {
     padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  titleText: {
+    fontWeight: 'bold',
   },
 });
 
@@ -4113,7 +4159,12 @@ const InfiniteHits = ({ hits, hasMore, refine }) => (
     onEndReached={() => hasMore && refine()}
     renderItem={({ item }) => (
       <View style={styles.item}>
-        <Highlight attribute=\\"mainAttribute\\" hit={item} />
+        <Text style={styles.titleText}>
+          <Highlight attribute=\\"attribute1\\" hit={item} />
+        </Text>
+        <Text>
+          <Highlight attribute=\\"attribute2\\" hit={item} />
+        </Text>
       </View>
     )}
   />
@@ -4136,13 +4187,20 @@ import { connectSearchBox } from 'react-instantsearch-native';
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    backgroundColor: '#252b33',
+    padding: 16,
   },
   input: {
-    height: 40,
-    padding: 10,
-    backgroundColor: '#FFFFFF',
+    height: 48,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
 });
 
@@ -4357,9 +4415,14 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
 
             <ais-results class=\\"ais-Hits-list\\">
               <template slot-scope=\\"{ result }\\">
-                <div class=\\"ais-Hits-item\\">
-                  <ais-highlight :result=\\"result\\" attribute-name=\\"mainAttribute\\"></ais-highlight>
-                </div>
+                <article class=\\"ais-Hits-item\\">
+                  <h1>
+                    <ais-highlight :result=\\"result\\" attribute-name=\\"attribute1\\"></ais-highlight>
+                  </h1>
+                  <p>
+                    <ais-highlight :result=\\"result\\" attribute-name=\\"attribute2\\"></ais-highlight>
+                  </p>
+                </article>
               </template>
             </ais-results>
 

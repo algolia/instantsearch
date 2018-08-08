@@ -42,11 +42,11 @@ test('with valid template should not ask', () => {
   ).toBe(false);
 });
 
-test('with indexName should ask mainAttribute', () => {
+test('with indexName should ask attributesToDisplay', () => {
   expect(
     isQuestionAsked({
       question: {
-        name: 'mainAttribute',
+        name: 'attributesToDisplay',
       },
       args: { indexName: 'INDEX_NAME' },
     })

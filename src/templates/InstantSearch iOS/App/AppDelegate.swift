@@ -13,8 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         InstantSearch.shared.configure(appID: ALGOLIA_APP_ID, apiKey: ALGOLIA_API_KEY, index: ALGOLIA_INDEX_NAME)
-        InstantSearch.shared.params.attributesToRetrieve = ["{{mainAttribute}}"]
-        InstantSearch.shared.params.attributesToHighlight = ["{{mainAttribute}}"]
+        InstantSearch.shared.params.attributesToRetrieve = [{{#each attributesToDisplay}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}]
+        InstantSearch.shared.params.attributesToHighlight = [{{#each attributesToDisplay}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}]
 
         return true
     }

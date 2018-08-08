@@ -41,15 +41,26 @@
               }"
             ></ais-search-box>
 
+            {{#if attributesToDisplay}}
             <ais-results class="ais-Hits-list">
-              {{#if mainAttribute}}
               <template slot-scope="{ result }">
-                <div class="ais-Hits-item">
-                  <ais-highlight :result="result" attribute-name="{{mainAttribute}}"></ais-highlight>
-                </div>
+                <article class="ais-Hits-item">
+                  <h1>
+                    <ais-highlight :result="result" attribute-name="{{attributesToDisplay.[0]}}"></ais-highlight>
+                  </h1>
+                  {{#each attributesToDisplay}}
+                  {{#unless @first}}
+                  <p>
+                    <ais-highlight :result="result" attribute-name="{{this}}"></ais-highlight>
+                  </p>
+                  {{/unless}}
+                  {{/each}}
+                </article>
               </template>
-              {{/if}}
             </ais-results>
+            {{else}}
+            <ais-results class="ais-Hits-list"></ais-results>
+            {{/if}}
 
             <div class="pagination">
               <ais-pagination

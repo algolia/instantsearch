@@ -55,13 +55,12 @@ em {
   display: grid;
   grid-template-columns: 49% 49%;
   grid-gap: 2%;
-  list-style: none;
   padding: 0;
   margin: 0;
 }
 
 .ais-hits--item {
-  min-height: 100px;
+  list-style: none;
   padding: 1rem;
   background: #fff;
   border-radius: 4px;

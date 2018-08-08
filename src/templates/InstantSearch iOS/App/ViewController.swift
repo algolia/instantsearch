@@ -26,7 +26,7 @@ class ViewController: HitsTableViewController {
 
         cell.textLabel?.highlightedTextColor = .blue
         cell.textLabel?.highlightedBackgroundColor = .yellow
-        cell.textLabel?.highlightedText = SearchResults.highlightResult(hit: hit, path: "name")?.value
+        cell.textLabel?.highlightedText = SearchResults.highlightResult(hit: hit, path: "{{attributesToDisplay.[0]}}")?.value
 
         return cell
     }

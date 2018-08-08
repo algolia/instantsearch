@@ -27,6 +27,6 @@ dependencies {
     })
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.example:instantsearch-android:1.12.0'
+    implementation 'com.algolia:instantsearch-android:1.12.1'
     testImplementation 'junit:junit:4.12'
 }

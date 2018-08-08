@@ -9,13 +9,13 @@
     android:orientation="vertical"
     tools:context="com.example.instantsearch.app.MainActivity">
 
-    <com.example.instantsearch.ui.views.SearchBox
+    <com.algolia.instantsearch.ui.views.SearchBox
         android:id="@+id/search_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="16dp"/>
 
-    <com.example.instantsearch.ui.views.Hits
+    <com.algolia.instantsearch.ui.views.Hits
         android:id="@+id/hits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -24,10 +24,6 @@ const GITHUB_REPOSITORY =
 const TEMPLATES_BRANCH = 'templates';
 const BUILD_FOLDER = 'build';
 
-const APP_ID = 'latency';
-const API_KEY = '6be0576ff61c053d5f9a3225e2a90f76';
-const INDEX_NAME = 'instant_search';
-
 function cleanup() {
   if (fs.existsSync(BUILD_FOLDER)) {
     execSync(`rm -rf ${BUILD_FOLDER}`);
@@ -73,10 +69,10 @@ async function build() {
         libraryVersion:
           libraryName &&
           (await fetchLibraryVersions(libraryName).then(latestSemver)),
-        appId: APP_ID,
-        apiKey: API_KEY,
-        indexName: INDEX_NAME,
-        mainAttribute: 'name',
+        appId: 'latency',
+        apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
+        indexName: 'instant_search',
+        attributesToDisplay: ['name', 'description'],
         attributesForFaceting: ['brand'],
         installation: false,
         silent: true,

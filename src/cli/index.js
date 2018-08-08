@@ -33,8 +33,8 @@ program
   .option('--api-key <apiKey>', 'The Algolia search API key')
   .option('--index-name <indexName>', 'The main index of your search')
   .option(
-    '--main-attribute <mainAttribute>',
-    'The main searchable attribute of your index'
+    '--attributes-to-display <attributesToDisplay>',
+    'The attributes of your index to display'
   )
   .option(
     '--attributes-for-faceting <attributesForFaceting>',
@@ -75,6 +75,10 @@ if (!appPath) {
 
 const optionsFromArguments = getOptionsFromArguments(options.rawArgs);
 const appName = optionsFromArguments.name || path.basename(appPath);
+const attributesToDisplay = (optionsFromArguments.attributesToDisplay || '')
+  .split(',')
+  .filter(Boolean)
+  .map(x => x.trim());
 
 try {
   checkAppPath(appPath);
@@ -177,10 +181,11 @@ const questions = [
     message: 'Index name',
   },
   {
-    type: 'list',
-    name: 'mainAttribute',
+    type: 'checkbox',
+    name: 'attributesToDisplay',
     message: 'Attribute to display',
     suffix: `\n  ${chalk.gray('Used to generate the default result template')}`,
+    pageSize: 10,
     choices: async answers => [
       {
         name: 'None',
@@ -190,7 +195,9 @@ const questions = [
       new inquirer.Separator('From your index'),
       ...(await getAttributesFromIndex(answers)),
     ],
-    when: ({ appId, apiKey, indexName }) => appId && apiKey && indexName,
+    filter: attributes => attributes.filter(Boolean),
+    when: ({ appId, apiKey, indexName }) =>
+      !attributesToDisplay.length > 0 && appId && apiKey && indexName,
   },
 ].filter(question => isQuestionAsked({ question, args: optionsFromArguments }));
 
@@ -204,6 +211,7 @@ async function run() {
       options: {
         ...optionsFromArguments,
         name: appName,
+        attributesToDisplay,
       },
       answers: await inquirer.prompt(questions),
     })),

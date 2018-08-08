@@ -8,7 +8,7 @@ import {
   RefinementList,
   {{/if}}
   Pagination,
-  {{#if mainAttribute}}
+  {{#if attributesToDisplay}}
   Highlight,
   {{/if}}
 } from 'react-instantsearch-dom';
@@ -65,13 +65,24 @@ class App extends Component {
 
 function Hit(props) {
   return (
-    <div>
-      {{#if mainAttribute}}
-      <Highlight attribute="{{mainAttribute}}" hit={props.hit} />
+    <article>
+      {{#if attributesToDisplay}}
+      <h1>
+        <Highlight attribute="{{attributesToDisplay.[0]}}" hit={props.hit} />
+      </h1>
+      {{#each attributesToDisplay}}
+      {{#unless @first}}
+      <p>
+        <Highlight attribute="{{this}}" hit={props.hit} />
+      </p>
+      {{/unless}}
+      {{/each}}
       {{else}}
-      <code>{JSON.stringify(props.hit)}</code>
+      <p>
+        <code>{JSON.stringify(props.hit).slice(0, 100)}...</code>
+      </p>
       {{/if}}
-    </div>
+    </article>
   );
 }
 

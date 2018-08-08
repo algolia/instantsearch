@@ -5,13 +5,20 @@ import { connectSearchBox } from 'react-instantsearch-native';
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    backgroundColor: '#252b33',
+    padding: 16,
   },
   input: {
-    height: 40,
-    padding: 10,
-    backgroundColor: '#FFFFFF',
+    height: 48,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: '#fff',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
   },
 });
 
