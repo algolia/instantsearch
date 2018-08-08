@@ -225,17 +225,17 @@ export default () => {
     'with position from Places',
     wrapWithHitsAndConfiguration((container, start) =>
       injectGoogleMaps(() => {
-        const placesElemeent = document.createElement('input');
+        const placesElement = document.createElement('input');
         const mapElement = document.createElement('div');
         mapElement.style.height = '500px';
         mapElement.style.marginTop = '20px';
 
-        container.appendChild(placesElemeent);
+        container.appendChild(placesElement);
         container.appendChild(mapElement);
 
         window.search.addWidget(
           instantsearchPlacesWidget({
-            container: placesElemeent,
+            container: placesElement,
             defaultPosition: [position.lat, position.lng],
           })
         );
