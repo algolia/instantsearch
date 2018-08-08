@@ -2,6 +2,30 @@
 
 Thank you for wanting to get involved in Create InstantSearch App! The goal of the package is to enable users to create InstantSearch applications quickly.
 
+<details>
+  <summary><strong>Contents</strong></summary>
+
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Core concepts](#core-concepts)
+  - [Folder structure](#folder-structure)
+  - [Adding a template](#adding-a-template)
+- [Requirements](#requirements)
+- [Conventions](#conventions)
+  - [Commits](#commits)
+- [Workflow](#workflow)
+  - [Filing issues](#filing-issues)
+  - [Contributing to the code](#contributing-to-the-code)
+  - [Releasing](#releasing)
+  - [Updating templates on CodeSandbox](#updating-templates-on-codesandbox)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+</details>
+
 ## Core concepts
 
 The `create-instantsearch-app` CLI is based on the module `createInstantSearchApp(path, options?, tasks?)`.

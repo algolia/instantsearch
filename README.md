@@ -11,7 +11,7 @@
 </p>
 
 <details>
-  <summary><strong>Table of contents</strong></summary>
+  <summary><strong>Contents</strong></summary>
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -21,8 +21,7 @@
 - [Get started](#get-started)
 - [Usage](#usage)
 - [API](#api)
-  - [Lifecycle](#lifecycle)
-  - [Templates](#templates)
+- [Tutorials](#tutorials)
 - [Previews](#previews)
 - [License](#license)
 
@@ -54,7 +53,7 @@ yarn start
 
 ## Usage
 
-This package comes with the module `createInstantSearchApp(path, options?, tasks?)` and the command-line tool `create-instantsearch-app`.
+This package comes with the module `createInstantSearchApp(path, options?)` and the command-line tool `create-instantsearch-app`.
 
 ```
 $ create-instantsearch-app --help
@@ -93,13 +92,13 @@ Supported templates are:
 create-instantsearch-app my-app --template "React InstantSearch"
 ```
 
-You can also [create your own template](#templates) and specify its path.
+You can also [create your own template](docs/custom-templates.md) and specify its path.
 
 #### `--config`
 
 The `config` flag is handy to automate app generations.
 
-<h6 align="center">`config.json`</h6>
+<h6 align="center">config.json</h6>
 
 ```json
 {
@@ -123,7 +122,7 @@ create-instantsearch-app my-app --config config.json
 
 ## API
 
-`create-instantsearch-app` is based on the module `createInstantSearchApp(path, options?, tasks?)`.
+`create-instantsearch-app` is based on the module `createInstantSearchApp(path, options?)`. The same [camel cased](https://en.wikipedia.org/wiki/Camel_case) options as the CLI are available.
 
 ```javascript
 const createInstantSearchApp = require('create-instantsearch-app');
@@ -138,83 +137,10 @@ const app = createInstantSearchApp('~/lab/my-app', {
 app.create().then(() => console.log('App generated!'));
 ```
 
-### Lifecycle
+## Tutorials
 
-The app generation follows this lifecycle:
-
-![Lifecycle](https://user-images.githubusercontent.com/6137112/41421858-f838c2a6-6ff7-11e8-8cef-4cc07f1f4f44.png)
-
-<details>
-  <summary>Alternative text</summary>
-
-1.  **Setup**
-2.  **Build**
-3.  **Install**
-4.  (**Clean**) _if the installation fails_
-5.  **Teardown**
-
-</details>
-
-Each task can be plugged to the third argument of `createInstantSearchApp(path, options?, tasks?)` and is passed the configuration of the app.
-
-<h6 align="center">Tasks example</h6>
-
-```javascript
-const app = createInstantSearchApp(
-  'my-app',
-  { template: 'InstantSearch.js' },
-  {
-    setup(config) {
-      // Check the project requirements
-    },
-    teardown(config) {
-      // Go to the project folder
-    },
-  }
-);
-
-app.create();
-```
-
-### Templates
-
-To use your own template, create a file `.template.js` at the root of your template directory. This is the configuration file that `createInstantSearchApp()` reads to retrieve the version of the library to install from `npm` and the [lifecycle tasks](#lifecycle) to process.
-
-<h6 align="center">`.template.js`</h6>
-
-```javascript
-const { execSync } = require('child_process');
-
-module.exports = {
-  libraryName: 'algoliasearch-helper',
-  tasks: {
-    install(config) {
-      execSync(`cd ${config.path} && npm install`);
-    },
-    teardown(config) {
-      console.log('Begin by running: npm start');
-    },
-  },
-};
-```
-
-The template files support the [Handlebars](https://handlebarsjs.com) syntax to inject values passed to `create-instantsearch-app`. You can see examples in the [`templates`](templates) folder. Then, pass the path to your template when generating the app.
-
-Using the API:
-
-```javascript
-const app = createInstantSearchApp('my-app', {
-  template: './my-custom-template',
-});
-
-app.create();
-```
-
-Using the CLI:
-
-```
-create-instantsearch-app my-app --template ./my-custom-template
-```
+- [Creating a custom template](docs/custom-templates.md)
+- [Deploying an InstantSearch App](docs/deploy.md)
 
 ## Previews
 
