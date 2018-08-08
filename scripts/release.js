@@ -79,7 +79,7 @@ const strategy = currentBranch !== 'develop' || forceBeta ? 'beta' : 'stable';
 function rollback(newVersion) {
   if (strategy === 'stable') {
     // reset master
-    shell.exec('git reset --hard origin master');
+    shell.exec('git reset --hard origin/master');
     shell.exec('git checkout develop');
   } else {
     // remove last commit
