@@ -1,3 +1,18 @@
+<a name="2.10.0"></a>
+# [2.10.0](https://github.com/algolia/instantsearch.js/compare/v2.9.0...v2.10.0) (2018-08-08)
+
+
+### Bug Fixes
+
+* **release:** provide interactive TTY for npm publish ([#3053](https://github.com/algolia/instantsearch.js/issues/3053)) ([ede9460](https://github.com/algolia/instantsearch.js/commit/ede9460))
+
+
+### Features
+
+* Implement `transformItems` API ([#3042](https://github.com/algolia/instantsearch.js/issues/3042)) ([1510a94](https://github.com/algolia/instantsearch.js/commit/1510a94))
+
+
+
 <a name="2.9.0"></a>
 # [2.9.0](https://github.com/algolia/instantsearch.js/compare/v2.8.1...v2.9.0) (2018-07-18)
 
