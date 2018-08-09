@@ -50,7 +50,7 @@
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
-    "enzyme": "3.3.0",
+    "enzyme": "3.4.1",
     "enzyme-adapter-react-16": "1.2.0",
     "enzyme-to-json": "3.3.4",
     "jest": "23.4.2",
