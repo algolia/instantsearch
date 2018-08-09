@@ -1,8 +1,8 @@
-import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
+import { previewWrapper } from './utils';
 
 storiesOf('ClearRefinements', module)
-  .addDecorator(previewWrapper)
+  .addDecorator(previewWrapper())
   .add('default', () => ({
     template: '<ais-clear-refinements></ais-clear-refinements>',
   }))

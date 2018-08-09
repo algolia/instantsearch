@@ -1,8 +1,8 @@
-import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
+import { previewWrapper } from './utils';
 
 storiesOf('NoResults', module)
-  .addDecorator(previewWrapper)
+  .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `<ais-no-results ref="child"></ais-no-results>`,
     mounted() {

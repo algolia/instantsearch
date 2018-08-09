@@ -1,8 +1,8 @@
-import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
+import { previewWrapper } from './utils';
 
 storiesOf('MenuSelect', module)
-  .addDecorator(previewWrapper)
+  .addDecorator(previewWrapper())
   .add('simple usage', () => ({
     template: '<ais-menu-select attribute="brand" />',
   }))

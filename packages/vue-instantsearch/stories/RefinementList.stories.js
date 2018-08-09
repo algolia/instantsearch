@@ -1,8 +1,8 @@
-import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
+import { previewWrapper } from './utils';
 
 storiesOf('RefinementList', module)
-  .addDecorator(previewWrapper)
+  .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `<ais-refinement-list attribute-name="materials"></ais-refinement-list>`,
   }))

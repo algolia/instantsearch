@@ -1,8 +1,8 @@
-import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
+import { previewWrapper } from './utils';
 
 storiesOf('HitsPerPage', module)
-  .addDecorator(previewWrapper)
+  .addDecorator(previewWrapper())
   .add('simple usage', () => ({
     template: `<ais-hits-per-page :items="[{
         label: '10 results', value: 10, default: true,
