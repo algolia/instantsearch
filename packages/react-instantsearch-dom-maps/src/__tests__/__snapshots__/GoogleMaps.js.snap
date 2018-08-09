@@ -40,6 +40,9 @@ exports[`GoogleMaps update expect to still render the children when shouldUpdate
   <div
     className="ais-GeoSearch-map"
   />
+  <div>
+    This is the children
+  </div>
 </div>
 `;
 

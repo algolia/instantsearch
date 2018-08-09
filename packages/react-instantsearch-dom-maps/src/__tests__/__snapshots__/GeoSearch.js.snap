@@ -5,7 +5,9 @@ exports[`GeoSearch Connector expect to render 1`] = `
   defaultRefinement={null}
   enableRefineOnMapMove={true}
   testID="Connector"
-/>
+>
+  <Component />
+</AlgoliaGeoSearch(Connector)>
 `;
 
 exports[`GeoSearch Connector expect to render with defaultRefinement 1`] = `
@@ -24,7 +26,9 @@ exports[`GeoSearch Connector expect to render with defaultRefinement 1`] = `
   }
   enableRefineOnMapMove={true}
   testID="Connector"
-/>
+>
+  <Component />
+</AlgoliaGeoSearch(Connector)>
 `;
 
 exports[`GeoSearch Connector expect to render with enableRefineOnMapMove 1`] = `
@@ -32,7 +36,9 @@ exports[`GeoSearch Connector expect to render with enableRefineOnMapMove 1`] = `
   defaultRefinement={null}
   enableRefineOnMapMove={false}
   testID="Connector"
-/>
+>
+  <Component />
+</AlgoliaGeoSearch(Connector)>
 `;
 
 exports[`GeoSearch GoogleMaps expect to render 1`] = `
@@ -100,5 +106,7 @@ exports[`GeoSearch Provider expect to render 1`] = `
   setMapMoveSinceLastRefine={[Function]}
   testID="Provider"
   toggleRefineOnMapMove={[Function]}
-/>
+>
+  <Component />
+</Provider>
 `;
