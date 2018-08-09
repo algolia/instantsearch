@@ -1,20 +1,22 @@
 <template>
-  <div :class="suit()" v-if="state">
+  <div
+    v-if="state"
+    :class="[suit(''), !state.canRefine && suit('', 'noRefinement')]"
+  >
     <slot
-      :items="items"
-      :createURL="createURL"
-      :refine="refine"
-      :canRefine="canRefine"
-      :widgetParams="widgetParams"
-      :isShowingMore="isShowingMore"
-      :toggleShowMore="toggleShowMore"
-      :canToggleShowMore="canToggleShowMore"
+      :items="state.items"
+      :can-refine="state.canRefine"
+      :can-toggle-show-more="state.canToggleShowMore"
+      :is-showing-more="state.isShowingMore"
+      :refine="state.refine"
+      :create-URL="state.createURL"
+      :toggle-show-more="state.toggleShowMore"
     >
       <ul :class="suit('list')">
         <li
           v-for="item in state.items"
-          :class="item.isRefined ? suit('item', 'active') : suit('item')"
           :key="item.value"
+          :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
         >
           <a
             :href="state.createURL(item.value)"
@@ -28,19 +30,23 @@
       </ul>
 
       <button
-        v-if="showMore && state.canToggleShowMore"
+        v-if="showShowMoreButton"
+        :class="[suit('showMore'), !state.canToggleShowMore && suit('showMore', 'disabled')]"
+        :disabled="!state.canToggleShowMore"
         @click.prevent="state.toggleShowMore()"
-        :class="state.canToggleShowMore ? suit('showMore') : suit('showMore', 'disabled')"
       >
-        {{state.isShowingMore ? showLessLabel : showMoreLabel}}
+        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
+          {{state.isShowingMore ? 'Show less' : 'Show more'}}
+        </slot>
       </button>
     </slot>
   </div>
 </template>
 
 <script>
-import algoliaComponent from '../component';
+import isFunction from 'lodash/isFunction';
 import { connectMenu } from 'instantsearch.js/es/connectors';
+import algoliaComponent from '../component';
 
 export default {
   mixins: [algoliaComponent],
@@ -49,34 +55,39 @@ export default {
       type: String,
       required: true,
     },
+    // @TODO
+    // searchable: {
+    //   type: Boolean,
+    //   default: false,
+    // },
     limit: {
       type: Number,
       default: 10,
+    },
+    showMoreLimit: {
+      type: Number,
+      default: 20,
     },
     showMore: {
       type: Boolean,
       default: false,
     },
-    showMoreLimit: {
-      type: Number,
-    },
     sortBy: {
       default() {
-        return ['isRefined:desc', 'count:desc', 'name:asc'];
+        return ['name:asc', 'count:desc'];
+      },
+      validator(value) {
+        return Array.isArray(value) || isFunction(value);
       },
     },
-    showMoreLabel: {
-      type: String,
-      default() {
-        return 'Show more';
-      },
-    },
-    showLessLabel: {
-      type: String,
-      default() {
-        return 'Show less';
-      },
-    },
+  },
+  beforeCreate() {
+    this.connector = connectMenu;
+  },
+  data() {
+    return {
+      widgetName: 'Menu',
+    };
   },
   computed: {
     widgetParams() {
@@ -87,13 +98,8 @@ export default {
         sortBy: this.sortBy,
       };
     },
-  },
-  data() {
-    return {
-      widgetName: 'Menu',
-    };
-  },
-  beforeCreate() {
-    this.connector = connectMenu;
+    showShowMoreButton() {
+      return this.state.canRefine && this.showMore;
+    },
   },
 };</script>
