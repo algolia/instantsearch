@@ -35,8 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} NumericRefinementListItem
  * @property {string} label Name of the option.
- * @property {number} start Lower bound of the option (>=).
- * @property {number} end Higher bound of the option (<=).
+ * @property {string} value URL encoded value of the form `min:max`
  * @property {boolean} isRefined True if the value is selected.
  */
 
