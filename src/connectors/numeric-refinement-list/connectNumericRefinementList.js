@@ -35,7 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} NumericRefinementListItem
  * @property {string} label Name of the option.
- * @property {string} value URL encoded value of the form `min:max`
+ * @property {string} value URL encoded of the bounds object with the form `{start, end}`. This value can be used verbatim in the webpage and can be read by `refine` directly. If you want to inspect the value, you can do `JSON.parse(window.decodeURI(value))` to get the object.
  * @property {boolean} isRefined True if the value is selected.
  */
 
