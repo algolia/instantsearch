@@ -12,6 +12,7 @@ import Index from './components/Index.vue';
 import InfiniteHits from './components/InfiniteHits.vue';
 import Menu from './components/Menu.vue';
 import MenuSelect from './components/MenuSelect.vue';
+import NumericMenu from './components/NumericMenu.vue';
 import Pagination from './components/Pagination.vue';
 import PoweredBy from './components/PoweredBy.vue';
 import RatingMenu from './components/RatingMenu.vue';
@@ -53,8 +54,9 @@ const InstantSearch = {
     Vue.component('ais-hits', Hits);
     Vue.component('ais-index', Index);
     Vue.component('ais-infinite-hits', InfiniteHits);
-    Vue.component('ais-menu-select', MenuSelect);
     Vue.component('ais-menu', Menu);
+    Vue.component('ais-menu-select', MenuSelect);
+    Vue.component('ais-numeric-menu', NumericMenu);
     Vue.component('ais-pagination', Pagination);
     Vue.component('ais-powered-by', PoweredBy);
     Vue.component('ais-rating-menu', RatingMenu);
