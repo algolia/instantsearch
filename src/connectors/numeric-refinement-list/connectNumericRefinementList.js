@@ -13,13 +13,15 @@ var customNumericRefinementList = connectNumericRefinementList(function renderFn
   //   widgetParams,
   //  }
 });
+
 search.addWidget(
   customNumericRefinementList({
     attributeName,
     options,
-    transformItems,
+    [ transformItems ],
   })
 );
+
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html
 `;
 
