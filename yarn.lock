@@ -5716,9 +5716,9 @@ eslint-plugin-import@2.13.0:
     read-pkg-up "^2.0.0"
     resolve "^1.6.0"
 
-eslint-plugin-jest@21.20.2:
-  version "21.20.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.20.2.tgz#136dfe946e9a015e643f074ade2fdb9932e8bab3"
+eslint-plugin-jest@21.21.0:
+  version "21.21.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.21.0.tgz#f0afd138c4acb5f0cd7698318fb49c7d49f3bf45"
 
 eslint-plugin-prettier@2.6.2:
   version "2.6.2"
