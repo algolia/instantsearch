@@ -12,7 +12,7 @@ export const HIGHLIGHT_TAGS = {
  * @param {string} preTag - string used to identify the start of an highlighted value
  * @param {string} postTag - string used to identify the end of an highlighted value
  * @param {string} highlightedValue - highlighted attribute as returned by Algolia highlight feature
- * @return {object[]} - An array of {value: string, isDefined: boolean}.
+ * @return {object[]} - An array of {value: string, isHighlighted: boolean}.
  */
 function parseHighlightedAttribute({ preTag, postTag, highlightedValue = '' }) {
   const splitByPreTag = highlightedValue.split(preTag);
@@ -54,7 +54,7 @@ function parseHighlightedAttribute({ preTag, postTag, highlightedValue = '' }) {
  *
  * In order to use this feature, highlight must be activated in the configuration of
  * the index. The `preTag` and `postTag` attributes are respectively highlightPreTag and
- * highligtPostTag in Algolia configuration.
+ * highlightPostTag in Algolia configuration.
  *
  * @param {string} preTag - string used to identify the start of an highlighted value
  * @param {string} postTag - string used to identify the end of an highlighted value
