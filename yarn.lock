@@ -103,9 +103,9 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.0.tgz#50c1e2260ac0ed9439a181de3725a0168d59c48a"
 
-"@octokit/rest@15.9.4":
-  version "15.9.4"
-  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.9.4.tgz#c6cf0f483275d9c798b18419b7c9d417493bb70f"
+"@octokit/rest@15.9.5":
+  version "15.9.5"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-15.9.5.tgz#e356d202bd0b517e381f705ad77d98ccb84e0c65"
   dependencies:
     before-after-hook "^1.1.0"
     btoa-lite "^1.0.0"
@@ -4963,11 +4963,11 @@ regjsparser@^0.1.4:
   dependencies:
     jsesc "~0.5.0"
 
-release-it@7.4.8:
-  version "7.4.8"
-  resolved "https://registry.yarnpkg.com/release-it/-/release-it-7.4.8.tgz#2b5d8b89c17b4690934d671849643893129d146d"
+release-it@7.5.0:
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/release-it/-/release-it-7.5.0.tgz#5da42150d184b710e9b64869ed7f51a83a9d81a3"
   dependencies:
-    "@octokit/rest" "15.9.4"
+    "@octokit/rest" "15.9.5"
     async-retry "1.2.1"
     babel-preset-env "1.7.0"
     babel-register "6.26.0"
@@ -4992,7 +4992,7 @@ release-it@7.4.8:
     tmp-promise "1.0.5"
     update-notifier "2.5.0"
     uuid "3.3.2"
-    window-size "1.1.0"
+    window-size "1.1.1"
     yargs-parser "10.1.0"
 
 remark-parse@^1.1.0:
@@ -6085,9 +6085,9 @@ window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
 
-window-size@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/window-size/-/window-size-1.1.0.tgz#3b402d3244f35561db2c9761ad9d1e5286b07a2d"
+window-size@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/window-size/-/window-size-1.1.1.tgz#9858586580ada78ab26ecd6978a6e03115c1af20"
   dependencies:
     define-property "^1.0.0"
     is-number "^3.0.0"
