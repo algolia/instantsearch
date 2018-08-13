@@ -73,4 +73,6 @@ options:
   - name: showPrevious
     default: true
     description: Whether to show the "previous page" control
+  - name: transformItems
+  description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
 ---

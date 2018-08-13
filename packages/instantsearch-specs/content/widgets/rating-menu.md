@@ -73,4 +73,6 @@ options:
     description: Attribute to apply the filter to
   - name: max
     description: Maximum number of (stars) to display
+  - name: transformItems
+  description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
 ---
