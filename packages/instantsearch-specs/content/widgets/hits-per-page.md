@@ -19,5 +19,5 @@ options:
   - name: items
     description: Array of objects with the value, the label and a boolean "default" which decides which item to select by default
   - name: transformItems
-  description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
+    description: Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them
 ---
