@@ -15,6 +15,7 @@ import MenuSelect from './components/MenuSelect.vue';
 import NumericMenu from './components/NumericMenu.vue';
 import Pagination from './components/Pagination.vue';
 import PoweredBy from './components/PoweredBy.vue';
+import RangeInput from './components/RangeInput.vue';
 import RatingMenu from './components/RatingMenu.vue';
 import SearchBox from './components/SearchBox.vue';
 import Snippet from './components/Snippet';
@@ -37,6 +38,7 @@ const InstantSearch = {
   MenuSelect,
   Pagination,
   PoweredBy,
+  RangeInput,
   RatingMenu,
   SearchBox,
   Snippet,
@@ -59,6 +61,7 @@ const InstantSearch = {
     Vue.component('ais-numeric-menu', NumericMenu);
     Vue.component('ais-pagination', Pagination);
     Vue.component('ais-powered-by', PoweredBy);
+    Vue.component('ais-range-input', RangeInput);
     Vue.component('ais-rating-menu', RatingMenu);
     Vue.component('ais-search-box', SearchBox);
     Vue.component('ais-snippet', Snippet);
@@ -85,6 +88,7 @@ export {
   MenuSelect,
   Pagination,
   PoweredBy,
+  RangeInput,
   RatingMenu,
   SearchBox,
   Snippet,

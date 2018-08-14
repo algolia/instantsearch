@@ -2,7 +2,7 @@ import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
 
 storiesOf('__template__', module)
-  .addDecorator(previewWrapper)
+  .addDecorator(previewWrapper())
   .add('simple usage', () => ({
     template: `<ais-_template></ais-_template>`,
   }))
