@@ -4,34 +4,38 @@ import { previewWrapper } from './utils';
 storiesOf('ClearRefinements', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
-    template: '<ais-clear-refinements></ais-clear-refinements>',
+    template: `
+      <ais-clear-refinements />
+    `,
   }))
-  .add('clearing query', () => ({
-    template: `<div>
-      <ais-clear-refinements :clearsQuery="true"></ais-clear-refinements>
-      <span>TIP: type something first</span>
-    </div>`,
+  .add('with clears query', () => ({
+    template: `
+      <div>
+        <div class="preview-spacer">
+          <ais-clear-refinements :clearsQuery="true" />
+        </div>
+
+        <span>TIP: type something first</span>
+      </div>
+    `,
   }))
-  .add('custom rendering', () => ({
-    template: `<ais-clear-refinements :clearsQuery="true">
-      <template slot-scope="{refine, hasRefinements}">
-        <button @click="refine()" :disabled="!hasRefinements">
-          Clear search query
+  .add('with a custom label', () => ({
+    template: `
+      <ais-clear-refinements>
+        <template slot="resetLabel">Remove the refinements</template>
+      </ais-clear-refinements>
+    `,
+  }))
+  .add('with a custom render', () => ({
+    template: `
+      <ais-clear-refinements>
+        <button
+          slot-scope="{ canRefine, refine }"
+          :disabled="!canRefine"
+          @click="refine()"
+        >
+          Clear the search query
         </button>
-      </template>
-    </ais-clear-refinements>`,
-  }))
-  .add('toggler', () => ({
-    template: `<div>
-      <ais-clear-refinements :clearsQuery="clearsQuery"></ais-clear-refinements>
-      <button @click="toggleClearsQuery">clearsQuery: {{clearsQuery}}, change</button>
-    </div>`,
-    data() {
-      return { clearsQuery: false };
-    },
-    methods: {
-      toggleClearsQuery() {
-        this.clearsQuery = !this.clearsQuery;
-      },
-    },
+      </ais-clear-refinements>
+    `,
   }));

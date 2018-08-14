@@ -33,14 +33,28 @@ body {
   border-radius: 4px 0 0;
 }
 
+.preview-spacer {
+  margin-bottom: 10px;
+}
+
 .container-playground {
   border-left: solid 1px #e4e4e4;
   border-right: solid 1px #e4e4e4;
   border-bottom: solid 1px #e4e4e4;
+  display: flex;
 }
 
 .container-playground::after {
   content: 'Playground';
+}
+
+.panel-left {
+  width: 160px;
+  margin-right: 20px;
+}
+
+.panel-right {
+  flex: 1;
 }
 
 .playground-hits {

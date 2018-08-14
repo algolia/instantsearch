@@ -35,11 +35,17 @@ export const previewWrapper = ({
       </div>
 
       <div class="container container-playground">
-        <ais-search-box />
-        <ais-hits>
-          ${hits}
-        </ais-hits>
-        <ais-pagination />
+        <div class="panel-left">
+          <!-- @TODO: replace with a RefinementList  -->
+          <ais-menu attribute="brand" />
+        </div>
+        <div class="panel-right">
+          <ais-search-box />
+          <ais-hits>
+            ${hits}
+          </ais-hits>
+          <ais-pagination />
+        </div>
       </div>
     </ais-index>
   `,
