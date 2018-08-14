@@ -74,7 +74,7 @@ export default {
     },
     sortBy: {
       default() {
-        return ['name:asc', 'count:desc'];
+        return ['count:desc', 'name:asc'];
       },
       validator(value) {
         return Array.isArray(value) || isFunction(value);

@@ -298,35 +298,27 @@ describe('default render', () => {
 describe('custom default render', () => {
   const defaultScopedSlot = `
     <div
-      slot-scope="{
-        items,
-        canRefine,
-        canToggleShowMore,
-        isShowingMore,
-        refine,
-        createURL,
-        toggleShowMore,
-      }"
-      :class="[!canRefine && 'no-refinement']"
+      slot-scope="state"
+      :class="[!state.canRefine && 'no-refinement']"
     >
       <ol>
         <li
-          v-for="item in items"
+          v-for="item in state.items"
           :key="item.value"
         >
           <a
-            :href="createURL(item.value)"
-            @click.prevent="refine(item.value)"
+            :href="state.createURL(item.value)"
+            @click.prevent="state.refine(item.value)"
           >
             {{item.label}} - {{item.count}}
           </a>
         </li>
       </ol>
       <button
-        :disabled="!canToggleShowMore"
-        @click.prevent="toggleShowMore"
+        :disabled="!state.canToggleShowMore"
+        @click.prevent="state.toggleShowMore"
       >
-        {{ isShowingMore ? 'Show less' : 'Show more' }}
+        {{ state.isShowingMore ? 'Show less' : 'Show more' }}
       </button>
     </div>
   `;
