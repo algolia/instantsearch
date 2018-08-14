@@ -9,6 +9,9 @@ const stories = storiesOf('Integration With Other Libraries', module);
 
 stories.add('Airbnb Rheostat', () => (
   <WrapWithHits linkedStoryGroup="3rdPartyIntegrations">
+    <h3 style={{ marginBottom: 50, textAlign: 'center' }}>
+      ⚠️ This example only works with the version 2.x of Rheostat ️️⚠️
+    </h3>
     <ConnectedRange attribute="price" />
   </WrapWithHits>
 ));
