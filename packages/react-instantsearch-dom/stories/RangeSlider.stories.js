@@ -10,11 +10,18 @@ setAddon(JSXAddon);
 
 const stories = storiesOf('RangeSlider', module);
 
+const Warning = () => (
+  <h3 style={{ marginBottom: 50, textAlign: 'center' }}>
+    ⚠️ This example only works with the version 2.x of Rheostat ️️⚠️
+  </h3>
+);
+
 stories
   .addWithJSX(
     'default',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
+        <Warning />
         <Range attribute="price" />
       </WrapWithHits>
     ),
@@ -27,6 +34,7 @@ stories
     'providing default value',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
+        <Warning />
         <Range attribute="price" defaultRefinement={{ min: 50, max: 200 }} />
       </WrapWithHits>
     ),
@@ -39,6 +47,7 @@ stories
     'custom min/max bounds',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
+        <Warning />
         <Range attribute="price" min={30} max={100} />
       </WrapWithHits>
     ),
@@ -51,6 +60,7 @@ stories
     'with Panel',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
+        <Warning />
         <Panel header="Range Slider" footer="Footer">
           <Range attribute="price" />
         </Panel>
@@ -65,6 +75,7 @@ stories
     'playground',
     () => (
       <WrapWithHits linkedStoryGroup="RangeSlider">
+        <Warning />
         <Range
           attribute="price"
           defaultRefinement={object('default value', { min: 150, max: 200 })}
