@@ -58,7 +58,7 @@
     "react-hot-loader": "4.3.4",
     "react-tap-event-plugin": "3.0.3",
     "recursive-readdir": "2.2.2",
-    "replace-in-file": "3.4.0",
+    "replace-in-file": "3.4.2",
     "rheostat": "2.2.0",
     "stat-mode": "0.2.2",
     "style-loader": "0.22.1",
