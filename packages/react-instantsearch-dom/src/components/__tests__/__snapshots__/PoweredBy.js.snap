@@ -14,6 +14,7 @@ exports[`PoweredBy applies translations 1`] = `
     aria-label="Algolia"
     className="ais-PoweredBy-link"
     href="url"
+    rel="noopener noreferrer"
     target="_blank"
   >
     <svg
@@ -73,6 +74,7 @@ exports[`PoweredBy default 1`] = `
     aria-label="Algolia"
     className="ais-PoweredBy-link"
     href="url"
+    rel="noopener noreferrer"
     target="_blank"
   >
     <svg
@@ -132,6 +134,7 @@ exports[`PoweredBy default with className 1`] = `
     aria-label="Algolia"
     className="ais-PoweredBy-link"
     href="url"
+    rel="noopener noreferrer"
     target="_blank"
   >
     <svg

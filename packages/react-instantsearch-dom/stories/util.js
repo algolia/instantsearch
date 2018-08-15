@@ -89,7 +89,12 @@ export const WrapWithHits = ({
   const footer = linkedStoryGroup ? (
     <div className="footer-container">
       {playgroundLink}
-      <a target="_blank" href={sourceCodeUrl} className="source-code-url">
+      <a
+        href={sourceCodeUrl}
+        className="source-code-url"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <div>View source code</div>
       </a>
     </div>
