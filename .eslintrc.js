@@ -6,4 +6,10 @@ module.exports = {
     // eslint-config-algolia is released (> 13.1.0)
     'no-unused-vars': ['error', { ignoreRestSiblings: true }],
   },
+  settings: {
+    react: {
+      pragma: 'React',
+      version: '16.2',
+    },
+  },
 };

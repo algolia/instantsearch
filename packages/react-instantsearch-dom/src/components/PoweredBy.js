@@ -62,6 +62,7 @@ class PoweredBy extends Component {
           target="_blank"
           className={cx('link')}
           aria-label="Algolia"
+          rel="noopener noreferrer"
         >
           <AlgoliaLogo />
         </a>
