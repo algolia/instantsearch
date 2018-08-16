@@ -11914,17 +11914,17 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-autosuggest@9.3.4:
-  version "9.3.4"
-  resolved "https://registry.yarnpkg.com/react-autosuggest/-/react-autosuggest-9.3.4.tgz#e47ff800081b2f7c678165bfb7cc84b07f462336"
+react-autosuggest@9.4.0:
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/react-autosuggest/-/react-autosuggest-9.4.0.tgz#3146bc9afa4f171bed067c542421edec5ca94294"
   dependencies:
     prop-types "^15.5.10"
-    react-autowhatever "^10.1.0"
+    react-autowhatever "^10.1.2"
     shallow-equal "^1.0.0"
 
-react-autowhatever@^10.1.0:
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/react-autowhatever/-/react-autowhatever-10.1.1.tgz#ee938c068d38fc2b7781755e663032a30ed53656"
+react-autowhatever@^10.1.2:
+  version "10.1.2"
+  resolved "https://registry.yarnpkg.com/react-autowhatever/-/react-autowhatever-10.1.2.tgz#200ffc41373b2189e3f6140ac7bdb82363a79fd3"
   dependencies:
     prop-types "^15.5.8"
     react-themeable "^1.1.0"
