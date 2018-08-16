@@ -11,23 +11,19 @@ html: |
 classes:
   - name: .ais-ToggleRefinement
     description: the root div of the widget
-  - name: .ais-ToggleRefinement-list
-    description: the list of toggles
-  - name: .ais-ToggleRefinement-item
-    description: the toggle list item
   - name: .ais-ToggleRefinement-label
-    description: the label of each toggle item
+    description: the label of the toggle
   - name: .ais-ToggleRefinement-checkbox
-    description: the checkbox input of each toggle item
+    description: the checkbox input of the toggle
   - name: .ais-ToggleRefinement-labelText
-    description: the label text of each toggle item
+    description: the label text of the toggle
   - name: .ais-ToggleRefinement-count
-    description: the count of items for each item
+    description: the count of items of the toggle
 options:
   - name: attribute
     description: Attribute to apply the filter to
   - name: 'on'
-    description: Refinement to enable if this widget is checked (required)
+    description: Refinement to enable if this widget is checked
   - name: 'off'
     description: Refinement to enable if this widget is not checked
 ---
