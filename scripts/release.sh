@@ -87,11 +87,9 @@ mversion $newVersion
 printf "\n"
 
 # update version in packages & dependencies
-lerna publish \
-  --scope react-* \
-  --repo-version $newVersion \
-  --skip-git \
-  --skip-npm \
+lerna version $newVersion \
+  --no-git-tag-version \
+  --no-push \
   --yes
 
 # update changelog
@@ -105,7 +103,7 @@ yarn doctoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add package.json lerna.json CHANGELOG.md README.md packages/ yarn.lock
+git add package.json lerna.json CHANGELOG.md README.md packages/ docgen/ yarn.lock
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
