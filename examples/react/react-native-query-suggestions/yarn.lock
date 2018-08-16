@@ -4774,39 +4774,39 @@ react-devtools-core@3.0.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
-react-instantsearch-core@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-5.2.2.tgz#37177e0ad71bb9dfaf11c87af89315a45594a443"
+react-instantsearch-core@^5.2.3:
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-core/-/react-instantsearch-core-5.2.3.tgz#35d57433356c9c994d2e7146ff6b7df6b6679e30"
   dependencies:
     algoliasearch-helper "^2.26.0"
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
-react-instantsearch-dom@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-5.2.2.tgz#cc8c23c61b45a74d04414a69f54a80f5fda3f783"
+react-instantsearch-dom@^5.2.3:
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-dom/-/react-instantsearch-dom-5.2.3.tgz#d83d7db0cb4c0c096f17fdad7dd271ff28534e00"
   dependencies:
     algoliasearch "^3.27.1"
     algoliasearch-helper "^2.26.0"
     classnames "^2.2.5"
     lodash "^4.17.4"
     prop-types "^15.5.10"
-    react-instantsearch-core "^5.2.2"
+    react-instantsearch-core "^5.2.3"
 
-react-instantsearch-native@^5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/react-instantsearch-native/-/react-instantsearch-native-5.2.2.tgz#36b8533e9f2c75d93132429f05aab1f316f54b8e"
+react-instantsearch-native@^5.2.3:
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/react-instantsearch-native/-/react-instantsearch-native-5.2.3.tgz#982d15c18f8c29cae7efc1e41837c4fa23d25f33"
   dependencies:
     algoliasearch "^3.27.1"
-    react-instantsearch-core "^5.2.2"
+    react-instantsearch-core "^5.2.3"
 
-react-instantsearch@5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-5.2.2.tgz#d11d958a5b1d376168452cf2e4015983861203e4"
+react-instantsearch@5.2.3:
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/react-instantsearch/-/react-instantsearch-5.2.3.tgz#77b95a894d839785d1ae8ec14e81e9f208f463ae"
   dependencies:
-    react-instantsearch-core "^5.2.2"
-    react-instantsearch-dom "^5.2.2"
-    react-instantsearch-native "^5.2.2"
+    react-instantsearch-core "^5.2.3"
+    react-instantsearch-dom "^5.2.3"
+    react-instantsearch-native "^5.2.3"
 
 react-native-animatable@1.2.4:
   version "1.2.4"
