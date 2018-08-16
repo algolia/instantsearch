@@ -41,6 +41,7 @@ export const previewWrapper = ({
         </div>
         <div class="panel-right">
           <ais-search-box />
+          <ais-stats />
           <ais-hits>
             ${hits}
           </ais-hits>

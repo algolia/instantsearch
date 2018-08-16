@@ -21,6 +21,7 @@ import SearchBox from './components/SearchBox.vue';
 import Snippet from './components/Snippet';
 import SortBy from './components/SortBy.vue';
 import Stats from './components/Stats.vue';
+import ToggleRefinement from './components/ToggleRefinement.vue';
 
 const InstantSearch = {
   Breadcrumb,
@@ -44,6 +45,7 @@ const InstantSearch = {
   Snippet,
   SortBy,
   Stats,
+  ToggleRefinement,
 
   install(Vue) {
     Vue.component('ais-breadcrumb', Breadcrumb);
@@ -67,6 +69,7 @@ const InstantSearch = {
     Vue.component('ais-snippet', Snippet);
     Vue.component('ais-sort-by', SortBy);
     Vue.component('ais-stats', Stats);
+    Vue.component('ais-toggle-refinement', ToggleRefinement);
   },
 };
 
@@ -94,4 +97,5 @@ export {
   Snippet,
   SortBy,
   Stats,
+  ToggleRefinement,
 };

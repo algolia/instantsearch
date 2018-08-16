@@ -57,6 +57,11 @@ body {
   flex: 1;
 }
 
+.panel-right .ais-Stats {
+  margin-top: 5px;
+  font-style: italic;
+}
+
 .playground-hits {
   list-style: none;
   padding: 0;
