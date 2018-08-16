@@ -1,3 +1,14 @@
+<a name="5.2.3"></a>
+## [5.2.3](https://github.com/algolia/react-instantsearch/compare/v5.2.2...v5.2.3) (2018-08-16)
+
+
+### Bug Fixes
+
+* Allow object as type for Root (closes [#1446](https://github.com/algolia/react-instantsearch/issues/1446)) ([#1461](https://github.com/algolia/react-instantsearch/issues/1461)) ([7c2317b](https://github.com/algolia/react-instantsearch/commit/7c2317b))
+* **List:** render children list only when required ([#1472](https://github.com/algolia/react-instantsearch/issues/1472)) ([9eb2cbb](https://github.com/algolia/react-instantsearch/commit/9eb2cbb)), closes [#1459](https://github.com/algolia/react-instantsearch/issues/1459)
+
+
+
 <a name="5.2.2"></a>
 ## [5.2.2](https://github.com/algolia/react-instantsearch/compare/v5.2.1...v5.2.2) (2018-07-16)
 
