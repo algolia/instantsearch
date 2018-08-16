@@ -91,6 +91,7 @@ exports[`react-router recipe App renders without crashing 1`] = `
           aria-label="Algolia"
           className="ais-PoweredBy-link"
           href="https://www.algolia.com/?utm_source=react-instantsearch&utm_medium=website&utm_content=&utm_campaign=poweredby"
+          rel="noopener noreferrer"
           target="_blank"
         >
           <svg
