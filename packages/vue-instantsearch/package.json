@@ -31,9 +31,9 @@
     "docs:build:dev": "cd docs && yarn && yarn build:dev",
     "docs:watch": "cd docs && yarn && yarn dev",
     "docs:deploy": "cd docs && yarn && yarn deploy",
-    "test": "jest --verbose --coverage && yarn run lint",
-    "test:update": "jest --verbose --updateSnapshot",
-    "test:watch": "jest --verbose --watchAll --notify",
+    "test": "jest --coverage && yarn run lint",
+    "test:update": "jest --updateSnapshot",
+    "test:watch": "jest --watch",
     "lint": "eslint --ext .js,.vue .",
     "lint:fix": "eslint --ext .js,.vue . --fix",
     "format": "prettier --write '**/*.{js,md,vue,css}'",
@@ -69,6 +69,7 @@
     "jest": "^23.4.2",
     "jest-serializer-html": "^5.0.0",
     "jest-vue-preprocessor": "^1.4.0",
+    "jest-watch-typeahead": "^0.2.0",
     "prettier": "^1.12.1",
     "rollup": "^0.58.2",
     "rollup-plugin-buble": "^0.19.2",
@@ -103,6 +104,10 @@
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
     },
-    "testURL": "https://example.com"
+    "testURL": "https://example.com",
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ]
   }
 }
