@@ -202,6 +202,49 @@ describe('connectBreadcrumb', () => {
     ]);
   });
 
+  it('provides items from an empty results', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectBreadcrumb(rendering);
+    const widget = makeWidget({
+      attributes: ['category', 'sub_category'],
+    });
+
+    const config = widget.getConfiguration({});
+    const helper = jsHelper({}, '', config);
+
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items).toEqual([]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {},
+        },
+        {
+          hits: [],
+          facets: {},
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items).toEqual([]);
+  });
+
   it('provides the correct facet values when transformed', () => {
     const rendering = jest.fn();
     const makeWidget = connectBreadcrumb(rendering);
@@ -551,6 +594,7 @@ describe('connectBreadcrumb', () => {
       ],
     });
   });
+
   it('Provides an additional configuration if the existing one is different', () => {
     const makeWidget = connectBreadcrumb(() => {});
     const widget = makeWidget({ attributes: ['category', 'sub_category'] });
