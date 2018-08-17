@@ -53,8 +53,9 @@ Usage:
 infiniteHits({
   container,
   [ escapeHits = false ],
+  [ transformItems ],
   [ showMoreLabel ],
-  [ cssClasses.{root,empty,item,showmore}={} ],
+  [ cssClasses.{root,empty,item,showmore,showmoreButton}={} ],
   [ templates.{empty,item} | templates.{empty} ],
   [ transformData.{empty,item} | transformData.{empty} ],
 })`;
@@ -76,7 +77,8 @@ infiniteHits({
  * @property {string|string[]} [root] CSS class to add to the wrapping element.
  * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
  * @property {string|string[]} [item] CSS class to add to each result.
- * @property {string|string[]} [showmore] CSS class to add to the show more button.
+ * @property {string|string[]} [showmore] CSS class to add to the show more button container.
+ * @property {string|string[]} [showmoreButton] CSS class to add to the show more button.
  */
 
 /**
@@ -87,6 +89,7 @@ infiniteHits({
  * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
  * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -109,6 +112,7 @@ infiniteHits({
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
  *     escapeHits: true,
+ *     transformItems: items => items.map(item => item),
  *   })
  * );
  */
@@ -119,6 +123,7 @@ export default function infiniteHits({
   templates = defaultTemplates,
   transformData,
   escapeHits = false,
+  transformItems,
 } = {}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -138,6 +143,7 @@ export default function infiniteHits({
     item: cx(bem('item'), userCssClasses.item),
     empty: cx(bem(null, 'empty'), userCssClasses.empty),
     showmore: cx(bem('showmore'), userCssClasses.showmore),
+    showmoreButton: cx(bem('showmoreButton'), userCssClasses.showmoreButton),
   };
 
   const specializedRenderer = renderer({
@@ -153,7 +159,7 @@ export default function infiniteHits({
     const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeInfiniteHits({ escapeHits });
+    return makeInfiniteHits({ escapeHits, transformItems });
   } catch (e) {
     throw new Error(usage);
   }

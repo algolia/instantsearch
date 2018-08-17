@@ -34,7 +34,8 @@ search.addWidget(
   customCurrentRefinedValues({
     [ attributes = [] ],
     [ onlyListedAttributes = false ],
-    [ clearsQuery = false ]
+    [ clearsQuery = false ],
+    [ transformItems ],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectCurrentRefinedValues.html
@@ -75,6 +76,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * set with no special treatment for the label.
  * @property {boolean} [onlyListedAttributes = false] Limit the displayed refinement to the list specified.
  * @property {boolean} [clearsQuery = false] Clears also the active search query when using clearAll.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -157,6 +159,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
       attributes = [],
       onlyListedAttributes = false,
       clearsQuery = false,
+      transformItems = items => items,
     } = widgetParams;
 
     const attributesOK =
@@ -216,12 +219,14 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
             clearRefinements({ helper, whiteList: restrictedTo, clearsQuery })
           );
 
-        const refinements = getFilteredRefinements(
-          {},
-          helper.state,
-          attributeNames,
-          onlyListedAttributes,
-          clearsQuery
+        const refinements = transformItems(
+          getFilteredRefinements(
+            {},
+            helper.state,
+            attributeNames,
+            onlyListedAttributes,
+            clearsQuery
+          )
         );
 
         const _createURL = refinement =>
@@ -245,12 +250,14 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
       },
 
       render({ results, helper, state, createURL, instantSearchInstance }) {
-        const refinements = getFilteredRefinements(
-          results,
-          state,
-          attributeNames,
-          onlyListedAttributes,
-          clearsQuery
+        const refinements = transformItems(
+          getFilteredRefinements(
+            results,
+            state,
+            attributeNames,
+            onlyListedAttributes,
+            clearsQuery
+          )
         );
 
         const _createURL = refinement =>

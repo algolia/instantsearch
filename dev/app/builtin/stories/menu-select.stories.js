@@ -4,7 +4,7 @@ import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
-const stories = storiesOf('Menu');
+const stories = storiesOf('Menu-select');
 
 export default () => {
   stories
@@ -12,25 +12,9 @@ export default () => {
       'default',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.menu({
+          instantsearch.widgets.menuSelect({
             container,
             attributeName: 'categories',
-          })
-        );
-      })
-    )
-    .add(
-      'with transformed items',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.menu({
-            container,
-            attributeName: 'categories',
-            transformItems: items =>
-              items.map(item => ({
-                ...item,
-                label: `${item.label} (transformed)`,
-              })),
           })
         );
       })
@@ -39,7 +23,7 @@ export default () => {
       'with show more and header',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.menu({
+          instantsearch.widgets.menuSelect({
             container,
             attributeName: 'categories',
             limit: 3,
@@ -58,13 +42,17 @@ export default () => {
       })
     )
     .add(
-      'as a Select DOM element',
+      'with custom item template',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.menuSelect({
             container,
             attributeName: 'categories',
             limit: 10,
+            templates: {
+              header: 'Categories (menu widget)',
+              item: '{{label}}',
+            },
           })
         );
       })

@@ -87,3 +87,49 @@ exports[`hits() calls twice ReactDOM.render(<Hits props />, container) 2`] = `
   }
 />
 `;
+
+exports[`hits() renders transformed items 1`] = `
+<Hits
+  cssClasses={
+    Object {
+      "empty": "ais-hits__empty",
+      "item": "ais-hits--item",
+      "root": "ais-hits",
+    }
+  }
+  hits={
+    Array [
+      Object {
+        "first": "hit",
+        "second": "hit",
+        "transformed": true,
+      },
+    ]
+  }
+  results={
+    Object {
+      "hits": Array [
+        Object {
+          "first": "hit",
+          "second": "hit",
+          "transformed": true,
+        },
+      ],
+    }
+  }
+  templateProps={
+    Object {
+      "templates": Object {
+        "empty": "No results",
+        "item": [Function],
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "empty": false,
+        "item": false,
+      },
+    }
+  }
+/>
+`;

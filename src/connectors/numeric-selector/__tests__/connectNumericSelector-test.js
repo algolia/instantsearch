@@ -74,6 +74,55 @@ describe('connectNumericSelector', () => {
     });
   });
 
+  it('Renders during init and render with transformed items', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectNumericSelector(rendering);
+    const listOptions = [
+      { name: '10', value: 10 },
+      { name: '20', value: 20 },
+      { name: '30', value: 30 },
+    ];
+    const widget = makeWidget({
+      attributeName: 'numerics',
+      options: listOptions,
+      transformItems: items =>
+        items.map(item => ({ ...item, label: 'transformed' })),
+    });
+
+    const config = widget.getConfiguration({}, {});
+
+    const helper = jsHelper({}, '', config);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.options).toEqual([
+      { name: '10', value: 10, label: 'transformed' },
+      { name: '20', value: 20, label: 'transformed' },
+      { name: '30', value: 30, label: 'transformed' },
+    ]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbHits: 0 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.options).toEqual([
+      { name: '10', value: 10, label: 'transformed' },
+      { name: '20', value: 20, label: 'transformed' },
+      { name: '30', value: 30, label: 'transformed' },
+    ]);
+  });
+
   it('Reads the default value from the URL if possible', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly

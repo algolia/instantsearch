@@ -1,3 +1,51 @@
+<a name="2.10.1"></a>
+## [2.10.1](https://github.com/algolia/instantsearch.js/compare/v2.10.0...v2.10.1) (2018-08-17)
+
+
+### Bug Fixes
+
+* **connectBreadcrumb:** ensure that data is an array ([#3067](https://github.com/algolia/instantsearch.js/issues/3067)) ([759f709](https://github.com/algolia/instantsearch.js/commit/759f709))
+
+
+
+<a name="2.10.0"></a>
+# [2.10.0](https://github.com/algolia/instantsearch.js/compare/v2.9.0...v2.10.0) (2018-08-08)
+
+
+### Bug Fixes
+
+* **release:** provide interactive TTY for npm publish ([#3053](https://github.com/algolia/instantsearch.js/issues/3053)) ([ede9460](https://github.com/algolia/instantsearch.js/commit/ede9460))
+
+
+### Features
+
+* Implement `transformItems` API ([#3042](https://github.com/algolia/instantsearch.js/issues/3042)) ([1510a94](https://github.com/algolia/instantsearch.js/commit/1510a94))
+
+
+
+<a name="2.9.0"></a>
+# [2.9.0](https://github.com/algolia/instantsearch.js/compare/v2.8.1...v2.9.0) (2018-07-18)
+
+
+### Features
+
+* **infiniteHits:** add showmoreButton to cssClasses ([#3026](https://github.com/algolia/instantsearch.js/issues/3026)) ([8287de0](https://github.com/algolia/instantsearch.js/commit/8287de0))
+
+
+
+<a name="2.8.1"></a>
+## [2.8.1](https://github.com/algolia/instantsearch.js/compare/v2.8.0...v2.8.1) (2018-07-03)
+
+
+### Bug Fixes
+
+* **connectHitsPerPage:** default value should not break the API  ([#3006](https://github.com/algolia/instantsearch.js/issues/3006)) ([6635304](https://github.com/algolia/instantsearch.js/commit/6635304)), closes [#2732](https://github.com/algolia/instantsearch.js/issues/2732)
+* **connectRefinementList:** throw error with usage ([#2962](https://github.com/algolia/instantsearch.js/issues/2962)) ([f60222d](https://github.com/algolia/instantsearch.js/commit/f60222d))
+* **sourcemap:** provide good url ([#3011](https://github.com/algolia/instantsearch.js/issues/3011)) ([9632ade](https://github.com/algolia/instantsearch.js/commit/9632ade))
+* **warning:** make sure suggested import is possible ([#3014](https://github.com/algolia/instantsearch.js/issues/3014)) ([eb27152](https://github.com/algolia/instantsearch.js/commit/eb27152))
+
+
+
 <a name="2.8.0"></a>
 # [2.8.0](https://github.com/algolia/instantsearch.js/compare/v2.7.6...v2.8.0) (2018-05-30)
 

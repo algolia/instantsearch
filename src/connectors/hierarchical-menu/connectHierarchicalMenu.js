@@ -21,6 +21,7 @@ search.addWidget(
     [ showParentLevel = true ],
     [ limit = 10 ],
     [ sortBy = ['name:asc'] ],
+    [ transformItems ],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectHierarchicalMenu.html
@@ -46,6 +47,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property  {string[]|function} [sortBy = ['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -65,7 +67,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * levels deep.
  *
  * There's a complete example available on how to write a custom **HierarchicalMenu**:
- *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/custom-widgets/jquery/hierarchicalMenu.js)
+ *  [hierarchicalMenu.js](https://github.com/algolia/instantsearch.js/blob/develop/dev/app/jquery/widgets/hierarchicalMenu.js)
  * @type {Connector}
  * @param {function(HierarchicalMenuRenderingOptions)} renderFn Rendering function for the custom **HierarchicalMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
@@ -82,6 +84,7 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
       showParentLevel = true,
       limit = 10,
       sortBy = ['name:asc'],
+      transformItems = items => items,
     } = widgetParams;
 
     if (!attributes || !attributes.length) {
@@ -168,9 +171,12 @@ export default function connectHierarchicalMenu(renderFn, unmountFn) {
       },
 
       render({ results, state, createURL, instantSearchInstance }) {
-        const items = this._prepareFacetValues(
-          results.getFacetValues(hierarchicalFacetName, { sortBy }).data || [],
-          state
+        const items = transformItems(
+          this._prepareFacetValues(
+            results.getFacetValues(hierarchicalFacetName, { sortBy }).data ||
+              [],
+            state
+          )
         );
 
         // Bind createURL to this specific attribute

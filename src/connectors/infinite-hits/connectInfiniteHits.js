@@ -14,7 +14,8 @@ var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRend
 });
 search.addWidget(
   customInfiniteHits({
-    escapeHits: true,
+    [ escapeHits: true ],
+    [ transformItems ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectInfiniteHits.html
@@ -32,6 +33,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomInfiniteHitsWidgetOptions
  * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -78,6 +80,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
+    const { transformItems = items => items } = widgetParams;
     let hitsCache = [];
     let lastReceivedPage = -1;
 
@@ -109,6 +112,8 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
           hitsCache = [];
           lastReceivedPage = -1;
         }
+
+        results.hits = transformItems(results.hits);
 
         if (
           widgetParams.escapeHits &&

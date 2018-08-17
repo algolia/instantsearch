@@ -17,6 +17,7 @@ var customRefinementList = connectRefinementList(function render(params) {
   //   widgetParams,
   // }
 });
+
 search.addWidget(
   customRefinementList({
     attributeName,
@@ -24,18 +25,20 @@ search.addWidget(
     [ limit ],
     [ showMoreLimit ],
     [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-    [ escapeFacetValues = false ]
+    [ escapeFacetValues = false ],
+    [ transformItems ]
   })
 );
+
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRefinementList.html
 `;
 
 export const checkUsage = ({
   attributeName,
   operator,
-  usageMessage,
   showMoreLimit,
   limit,
+  message,
 }) => {
   const noAttributeName = attributeName === undefined;
   const invalidOperator = !/^(and|or)$/.test(operator);
@@ -45,7 +48,7 @@ export const checkUsage = ({
       : false;
 
   if (noAttributeName || invalidOperator || invalidShowMoreLimit) {
-    throw new Error(usageMessage);
+    throw new Error(message);
   }
 };
 
@@ -67,6 +70,7 @@ export const checkUsage = ({
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  * @property {boolean} [escapeFacetValues = false] Escapes the content of the facet values.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -157,9 +161,16 @@ export default function connectRefinementList(renderFn, unmountFn) {
       showMoreLimit,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
       escapeFacetValues = false,
+      transformItems = items => items,
     } = widgetParams;
 
-    checkUsage({ attributeName, operator, usage, limit, showMoreLimit });
+    checkUsage({
+      message: usage,
+      attributeName,
+      operator,
+      showMoreLimit,
+      limit,
+    });
 
     const formatItems = ({ name: label, ...item }) => ({
       ...item,
@@ -259,12 +270,12 @@ export default function connectRefinementList(renderFn, unmountFn) {
               ? escapeFacets(results.facetHits)
               : results.facetHits;
 
-            const normalizedFacetValues = facetValues.map(
-              ({ value, ...item }) => ({
+            const normalizedFacetValues = transformItems(
+              facetValues.map(({ value, ...item }) => ({
                 ...item,
                 value,
                 label: value,
-              })
+              }))
             );
 
             render({
@@ -361,7 +372,9 @@ export default function connectRefinementList(renderFn, unmountFn) {
         } = renderOptions;
 
         const facetValues = results.getFacetValues(attributeName, { sortBy });
-        const items = facetValues.slice(0, this.getLimit()).map(formatItems);
+        const items = transformItems(
+          facetValues.slice(0, this.getLimit()).map(formatItems)
+        );
 
         const maxValuesPerFacetConfig = state.getQueryParameter(
           'maxValuesPerFacet'

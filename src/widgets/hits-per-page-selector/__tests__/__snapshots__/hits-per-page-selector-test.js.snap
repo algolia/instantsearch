@@ -28,3 +28,35 @@ exports[`hitsPerPageSelector() calls twice ReactDOM.render(<Selector props />, c
   shouldAutoHideContainer={false}
 />
 `;
+
+exports[`hitsPerPageSelector() renders transformed items 1`] = `
+<HeaderFooter-AutoHide
+  cssClasses={
+    Object {
+      "item": "ais-hits-per-page-selector--item",
+      "root": "ais-hits-per-page-selector",
+      "select": "ais-hits-per-page-selector",
+    }
+  }
+  currentValue={10}
+  options={
+    Array [
+      Object {
+        "isRefined": true,
+        "label": "10 results",
+        "transformed": true,
+        "value": 10,
+      },
+      Object {
+        "default": true,
+        "isRefined": false,
+        "label": "20 results",
+        "transformed": true,
+        "value": 20,
+      },
+    ]
+  }
+  setValue={[Function]}
+  shouldAutoHideContainer={false}
+/>
+`;

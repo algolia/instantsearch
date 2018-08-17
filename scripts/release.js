@@ -2,6 +2,7 @@
 
 /* eslint-disable no-process-exit */
 /* eslint-disable import/no-commonjs */
+const childProcess = require('child_process');
 
 const colors = require('colors/safe');
 const inquirer = require('inquirer');
@@ -78,7 +79,7 @@ const strategy = currentBranch !== 'develop' || forceBeta ? 'beta' : 'stable';
 function rollback(newVersion) {
   if (strategy === 'stable') {
     // reset master
-    shell.exec('git reset --hard origin master');
+    shell.exec('git reset --hard origin/master');
     shell.exec('git checkout develop');
   } else {
     // remove last commit
@@ -214,17 +215,36 @@ inquirer
 
             shell.echo(colors.blue('Push to github, publish on npm'));
             if (strategy === 'stable') {
+              // This command requires interactive TTY and therefore we have to use the native child_process module. https://github.com/shelljs/shelljs/wiki/FAQ#running-interactive-programs-with-exec
+              // shell.exec('npm publish')
+              try {
+                childProcess.execFileSync('npm', ['publish'], {
+                  stdio: 'inherit',
+                });
+              } catch (e) {
+                return rollback(newVersion);
+              }
+
               shell.exec('git push origin master');
               shell.exec('git push origin --tags');
-              shell.exec('npm publish');
+
               shell.exec(`VERSION=${newVersion} npm run docs:publish`);
+
               shell.exec('git checkout develop');
               shell.exec('git pull origin develop');
               shell.exec('git merge master');
               shell.exec('git push origin develop');
             } else {
+              try {
+                // shell.exec('npm publish --tag beta');
+                childProcess.execFileSync('npm', ['publish', '--tag', 'beta'], {
+                  stdio: 'inherit',
+                });
+              } catch (e) {
+                return rollback(newVersion);
+              }
+
               shell.exec(`git push origin ${currentBranch}`);
-              shell.exec('npm publish --tag beta');
             }
 
             return process.exit(0);

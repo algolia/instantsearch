@@ -14,28 +14,28 @@ describe('connectRefinementList', () => {
   };
 
   it('throws on bad usage', () => {
-    expect(connectRefinementList).toThrow();
+    expect(connectRefinementList).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList({
         operator: 'and',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
 
-    expect(() => connectRefinementList(() => {})()).toThrow();
+    expect(() => connectRefinementList(() => {})()).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList(() => {})({
         operator: 'and',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
 
     expect(() =>
       connectRefinementList(() => {})({
         attributeName: 'company',
         operator: 'YUP',
       })
-    ).toThrow();
+    ).toThrow(/Usage:/);
   });
 
   describe('options configuring the helper', () => {
@@ -143,6 +143,69 @@ describe('connectRefinementList', () => {
       attributeName: 'myFacet',
       limit: 9,
     });
+  });
+
+  it('transforms items if requested', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attributeName: 'category',
+      transformItems: items =>
+        items.map(item => ({
+          ...item,
+          label: 'transformed',
+          value: 'transformed',
+          highlighted: 'transformed',
+        })),
+    });
+
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items).toEqual([]);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+              c2: 47,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items).toEqual([
+      expect.objectContaining({
+        label: 'transformed',
+        value: 'transformed',
+        highlighted: 'transformed',
+      }),
+      expect.objectContaining({
+        label: 'transformed',
+        value: 'transformed',
+        highlighted: 'transformed',
+      }),
+    ]);
   });
 
   it('Provide a function to clear the refinements at each step', () => {
@@ -733,6 +796,110 @@ describe('connectRefinementList', () => {
           label: 'Davidoff',
           value: 'Davidoff',
         },
+      ]);
+    });
+  });
+
+  it('can search in facet values with transformed items', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+      transformItems: items =>
+        items.map(item => ({
+          ...item,
+          label: 'transformed',
+          value: 'transformed',
+          highlighted: 'transformed',
+        })),
+    });
+
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
+      Promise.resolve({
+        exhaustiveFacetsCount: true,
+        facetHits: [
+          {
+            count: 33,
+            highlighted: 'will be transformed',
+            value: 'will be transformed',
+          },
+          {
+            count: 9,
+            highlighted: 'will be transformed',
+            value: 'will be transformed',
+          },
+        ],
+        processingTimeMS: 1,
+      })
+    );
+
+    // Simulate the lifecycle
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+    expect(rendering).toHaveBeenCalledTimes(1);
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    expect(rendering).toHaveBeenCalledTimes(2);
+    // Simulation end
+
+    const search = rendering.mock.calls[1][0].searchForItems;
+    search('transfo');
+
+    const [
+      sffvFacet,
+      sffvQuery,
+      maxNbItems,
+      paramOverride,
+    ] = helper.searchForFacetValues.mock.calls[0];
+
+    expect(sffvQuery).toBe('transfo');
+    expect(sffvFacet).toBe('category');
+    expect(maxNbItems).toBe(2);
+    expect(paramOverride).toEqual({
+      highlightPreTag: undefined,
+      highlightPostTag: undefined,
+    });
+
+    return Promise.resolve().then(() => {
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        expect.objectContaining({
+          highlighted: 'transformed',
+          label: 'transformed',
+          value: 'transformed',
+        }),
+        expect.objectContaining({
+          highlighted: 'transformed',
+          label: 'transformed',
+          value: 'transformed',
+        }),
       ]);
     });
   });

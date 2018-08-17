@@ -1,4 +1,3 @@
-import sinon from 'sinon';
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 const SearchParameters = jsHelper.SearchParameters;
@@ -20,7 +19,7 @@ describe('connectHitsPerPage', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
@@ -33,12 +32,12 @@ describe('connectHitsPerPage', () => {
     expect(widget.getConfiguration()).toEqual({});
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = jsHelper({}, '', {
       hitsPerPage: 3,
     });
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -48,15 +47,19 @@ describe('connectHitsPerPage', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      items: [
-        { value: 3, label: '3 items per page' },
-        { value: 10, label: '10 items per page' },
-      ],
-    });
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        widgetParams: {
+          items: [
+            { value: 3, label: '3 items per page' },
+            { value: 10, label: '10 items per page' },
+          ],
+        },
+      }),
+      true
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -66,18 +69,71 @@ describe('connectHitsPerPage', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        widgetParams: {
+          items: [
+            { value: 3, label: '3 items per page' },
+            { value: 10, label: '10 items per page' },
+          ],
+        },
+      }),
+      false
+    );
+  });
+
+  it('Renders during init and render with transformed items', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
       items: [
         { value: 3, label: '3 items per page' },
         { value: 10, label: '10 items per page' },
       ],
+      transformItems: items =>
+        items.map(item => ({ ...item, label: 'transformed' })),
     });
+
+    const helper = jsHelper({}, '', {
+      hitsPerPage: 3,
+    });
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+    });
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          expect.objectContaining({ label: 'transformed' }),
+          expect.objectContaining({ label: 'transformed' }),
+        ],
+      }),
+      true
+    );
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+    });
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          expect.objectContaining({ label: 'transformed' }),
+          expect.objectContaining({ label: 'transformed' }),
+        ],
+      }),
+      false
+    );
   });
 
   it('Configures the search with the default hitsPerPage provided', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
@@ -92,7 +148,7 @@ describe('connectHitsPerPage', () => {
   });
 
   it('Does not configures the search when there is no default value', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
@@ -105,7 +161,7 @@ describe('connectHitsPerPage', () => {
   });
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
@@ -118,7 +174,7 @@ describe('connectHitsPerPage', () => {
     const helper = jsHelper({}, '', {
       hitsPerPage: 11,
     });
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -127,7 +183,7 @@ describe('connectHitsPerPage', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine } = firstRenderingOptions;
     expect(helper.getQueryParameter('hitsPerPage')).toBe(11);
     refine(3);
@@ -140,17 +196,17 @@ describe('connectHitsPerPage', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     const { refine: renderSetValue } = secondRenderingOptions;
     expect(helper.getQueryParameter('hitsPerPage')).toBe(3);
     renderSetValue(10);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(10);
 
-    expect(helper.search.callCount).toBe(2);
+    expect(helper.search).toHaveBeenCalledTimes(2);
   });
 
   it('provides the current hitsPerPage value', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
@@ -163,7 +219,7 @@ describe('connectHitsPerPage', () => {
     const helper = jsHelper({}, '', {
       hitsPerPage: 7,
     });
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -172,7 +228,7 @@ describe('connectHitsPerPage', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.items).toMatchSnapshot();
     firstRenderingOptions.refine(3);
 
@@ -183,12 +239,12 @@ describe('connectHitsPerPage', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toMatchSnapshot();
   });
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectHitsPerPage(rendering);
     const widget = makeWidget({
       items: [
@@ -200,7 +256,7 @@ describe('connectHitsPerPage', () => {
     const helper = jsHelper({}, '', {
       hitsPerPage: 7,
     });
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -209,10 +265,10 @@ describe('connectHitsPerPage', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     expect(firstRenderingOptions.items).toHaveLength(3);
     firstRenderingOptions.refine(firstRenderingOptions.items[0].value);
-    expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
 
     // Reset the hitsPerPage to an actual value
     helper.setQueryParameter('hitsPerPage', 7);
@@ -224,10 +280,96 @@ describe('connectHitsPerPage', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     expect(secondRenderingOptions.items).toHaveLength(3);
     secondRenderingOptions.refine(secondRenderingOptions.items[0].value);
-    expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+  });
+
+  it('the option for unselecting values should work even if stringified', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+      ],
+    });
+
+    const helper = jsHelper({}, '', {
+      hitsPerPage: 7,
+    });
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items).toHaveLength(3);
+    firstRenderingOptions.refine(`${firstRenderingOptions.items[0].value}`);
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+
+    // Reset the hitsPerPage to an actual value
+    helper.setQueryParameter('hitsPerPage', 7);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items).toHaveLength(3);
+    secondRenderingOptions.refine(`${secondRenderingOptions.items[0].value}`);
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+  });
+
+  it('Should be able to unselect using an empty string', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHitsPerPage(rendering);
+    const widget = makeWidget({
+      items: [
+        { value: 3, label: '3 items per page' },
+        { value: 10, label: '10 items per page' },
+      ],
+    });
+
+    const helper = jsHelper({}, '', {
+      hitsPerPage: 7,
+    });
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.items).toHaveLength(3);
+    firstRenderingOptions.refine('');
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
+
+    // Reset the hitsPerPage to an actual value
+    helper.setQueryParameter('hitsPerPage', 7);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.items).toHaveLength(3);
+    secondRenderingOptions.refine('');
+    expect(helper.getQueryParameter('hitsPerPage')).not.toBeDefined();
   });
 
   describe('routing', () => {
@@ -242,7 +384,7 @@ describe('connectHitsPerPage', () => {
       });
 
       const helper = jsHelper({}, '', widget.getConfiguration({}));
-      helper.search = sinon.stub();
+      helper.search = jest.fn();
 
       widget.init({
         helper,

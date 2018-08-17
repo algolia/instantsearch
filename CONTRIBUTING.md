@@ -1,4 +1,8 @@
-[![InstantSearch.js logo][logo]][website]
+<p align="center">
+  <a href="https://community.algolia.com/instantsearch.js">
+    <img alt="InstantSearch.js" src="./docgen/assets/img/instantsearch-medal.svg" width="250">
+  </a>
+</p>
 
 Hello and welcome to the contributing guide guide for InstantSearch.js. Thanks for considering
 participating in our project 🙇
@@ -355,5 +359,6 @@ npm run release -- --beta
 
 The documentation website is created and pushed during the release of main version.
 
-[logo]: https://community.algolia.com/instantsearch.js/v2/assets/img/InstantSearch-JavaScript.svg
+<!-- Links -->
+
 [website]: https://community.algolia.com/instantsearch.js

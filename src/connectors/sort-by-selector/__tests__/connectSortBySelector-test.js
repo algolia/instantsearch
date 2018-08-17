@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import jsHelper, {
   SearchResults,
   SearchParameters,
@@ -12,13 +10,11 @@ describe('connectSortBySelector', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectSortBySelector(rendering);
     const instantSearchInstance = instantSearch({
-      apiKey: '',
-      appId: '',
       indexName: 'defaultIndex',
-      createAlgoliaClient: () => ({}),
+      searchClient: { search() {} },
     });
 
     const indices = [
@@ -30,7 +26,7 @@ describe('connectSortBySelector', () => {
     expect(widget.getConfiguration).toBe(undefined);
 
     const helper = jsHelper({}, indices[0].name);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -40,25 +36,19 @@ describe('connectSortBySelector', () => {
       instantSearchInstance,
     });
 
-    {
-      // should call the rendering once with isFirstRendering to true
-      expect(rendering.callCount).toBe(1);
-      const isFirstRendering = rendering.lastCall.args[1];
-      expect(isFirstRendering).toBe(true);
-
-      // should provide good values for the first rendering
-      const {
-        currentRefinement,
-        options,
-        widgetParams,
-      } = rendering.lastCall.args[0];
-      expect(currentRefinement).toBe(helper.state.index);
-      expect(widgetParams).toEqual({ indices });
-      expect(options).toEqual([
-        { label: 'Sort products by relevance', value: 'relevance' },
-        { label: 'Sort products by price', value: 'priceASC' },
-      ]);
-    }
+    // should call the rendering once with isFirstRendering to true
+    expect(rendering).toHaveBeenCalledTimes(1);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        currentRefinement: helper.state.index,
+        widgetParams: { indices },
+        options: [
+          { label: 'Sort products by relevance', value: 'relevance' },
+          { label: 'Sort products by price', value: 'priceASC' },
+        ],
+      }),
+      true
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -67,30 +57,82 @@ describe('connectSortBySelector', () => {
       createURL: () => '#',
     });
 
-    {
-      // Should call the rendering a second time, with isFirstRendering to false
-      expect(rendering.callCount).toBe(2);
-      const isFirstRendering = rendering.lastCall.args[1];
-      expect(isFirstRendering).toBe(false);
+    // Should call the rendering a second time, with isFirstRendering to false
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        currentRefinement: helper.state.index,
+        widgetParams: { indices },
+        options: [
+          { label: 'Sort products by relevance', value: 'relevance' },
+          { label: 'Sort products by price', value: 'priceASC' },
+        ],
+      }),
+      false
+    );
+  });
 
-      // should provide good values after the first search
-      const { currentRefinement, options } = rendering.lastCall.args[0];
-      expect(currentRefinement).toBe(helper.state.index);
-      expect(options).toEqual([
-        { label: 'Sort products by relevance', value: 'relevance' },
-        { label: 'Sort products by price', value: 'priceASC' },
-      ]);
-    }
+  it('Renders with transformed items', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectSortBySelector(rendering);
+    const instantSearchInstance = instantSearch({
+      indexName: 'defaultIndex',
+      searchClient: { search() {} },
+    });
+
+    const indices = [
+      { label: 'Sort products by relevance', name: 'relevance' },
+      { label: 'Sort products by price', name: 'priceASC' },
+    ];
+    const widget = makeWidget({
+      indices,
+      transformItems: items =>
+        items.map(item => ({ ...item, label: 'transformed' })),
+    });
+
+    const helper = jsHelper({}, indices[0].name);
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      instantSearchInstance,
+    });
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        options: [
+          { label: 'transformed', value: 'relevance' },
+          { label: 'transformed', value: 'priceASC' },
+        ],
+      }),
+      expect.anything()
+    );
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      helper,
+      state: helper.state,
+      instantSearchInstance,
+    });
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        options: [
+          { label: 'transformed', value: 'relevance' },
+          { label: 'transformed', value: 'priceASC' },
+        ],
+      }),
+      expect.anything()
+    );
   });
 
   it('Provides a function to update the index at each step', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectSortBySelector(rendering);
     const instantSearchInstance = instantSearch({
-      apiKey: '',
-      appId: '',
       indexName: 'defaultIndex',
-      createAlgoliaClient: () => ({}),
+      searchClient: { search() {} },
     });
 
     const indices = [
@@ -102,7 +144,7 @@ describe('connectSortBySelector', () => {
     });
 
     const helper = jsHelper({}, indices[0].name);
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -115,12 +157,13 @@ describe('connectSortBySelector', () => {
     {
       // first rendering
       expect(helper.state.index).toBe(indices[0].name);
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, currentRefinement } = renderOptions;
       expect(currentRefinement).toBe(helper.state.index);
       refine('bip');
       expect(helper.state.index).toBe('bip');
-      expect(helper.search.callCount).toBe(1);
+      expect(helper.search).toHaveBeenCalledTimes(1);
     }
 
     widget.render({
@@ -133,12 +176,13 @@ describe('connectSortBySelector', () => {
     {
       // Second rendering
       expect(helper.state.index).toBe('bip');
-      const renderOptions = rendering.lastCall.args[0];
+      const renderOptions =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, currentRefinement } = renderOptions;
       expect(currentRefinement).toBe('bip');
       refine('bop');
       expect(helper.state.index).toBe('bop');
-      expect(helper.search.callCount).toBe(2);
+      expect(helper.search).toHaveBeenCalledTimes(2);
     }
   });
 
@@ -147,10 +191,8 @@ describe('connectSortBySelector', () => {
       const rendering = jest.fn();
       const makeWidget = connectSortBySelector(rendering);
       const instantSearchInstance = instantSearch({
-        apiKey: '',
-        appId: '',
         indexName: 'relevance',
-        createAlgoliaClient: () => ({}),
+        searchClient: { search() {} },
       });
       const indices = [
         { label: 'Sort products by relevance', name: 'relevance' },

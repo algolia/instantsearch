@@ -3070,6 +3070,223 @@ exports[`currentRefinedValues() render() options.templates should pass it in tem
 />
 `;
 
+exports[`currentRefinedValues() render() options.transformItems should transform passed items 1`] = `
+<HeaderFooter-AutoHide
+  attributes={
+    Object {
+      "_tags": Object {
+        "name": "_tags",
+      },
+      "disjunctiveFacet": Object {
+        "name": "disjunctiveFacet",
+      },
+      "facet": Object {
+        "name": "facet",
+      },
+      "facetExclude": Object {
+        "name": "facetExclude",
+      },
+      "hierarchicalFacet": Object {
+        "name": "hierarchicalFacet",
+      },
+      "numericDisjunctiveFacet": Object {
+        "name": "numericDisjunctiveFacet",
+      },
+      "numericFacet": Object {
+        "name": "numericFacet",
+      },
+    }
+  }
+  clearAllClick={[Function]}
+  clearAllPosition="after"
+  clearAllURL="#cleared"
+  clearRefinementClicks={
+    Array [
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+      [Function],
+    ]
+  }
+  clearRefinementURLs={
+    Array [
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+      "#cleared",
+    ]
+  }
+  collapsible={false}
+  cssClasses={
+    Object {
+      "body": "ais-current-refined-values--body body-css-class",
+      "clearAll": "ais-current-refined-values--clear-all clear-all-css-class",
+      "count": "ais-current-refined-values--count count-css-class",
+      "footer": "ais-current-refined-values--footer footer-css-class",
+      "header": "ais-current-refined-values--header header-css-class",
+      "item": "ais-current-refined-values--item item-css-class",
+      "link": "ais-current-refined-values--link link-css-class",
+      "list": "ais-current-refined-values--list list-css-class",
+      "root": "ais-current-refined-values root-css-class",
+    }
+  }
+  refinements={
+    Array [
+      Object {
+        "attributeName": "facet",
+        "computedLabel": "facet-val1",
+        "count": 1,
+        "exhaustive": true,
+        "name": "facet-val1",
+        "transformed": true,
+        "type": "facet",
+      },
+      Object {
+        "attributeName": "facet",
+        "computedLabel": "facet-val2",
+        "count": 2,
+        "exhaustive": true,
+        "name": "facet-val2",
+        "transformed": true,
+        "type": "facet",
+      },
+      Object {
+        "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val1",
+        "exclude": true,
+        "name": "facetExclude-val1",
+        "transformed": true,
+        "type": "exclude",
+      },
+      Object {
+        "attributeName": "facetExclude",
+        "computedLabel": "facetExclude-val2",
+        "exclude": true,
+        "name": "facetExclude-val2",
+        "transformed": true,
+        "type": "exclude",
+      },
+      Object {
+        "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val1",
+        "count": 3,
+        "exhaustive": true,
+        "name": "disjunctiveFacet-val1",
+        "transformed": true,
+        "type": "disjunctive",
+      },
+      Object {
+        "attributeName": "disjunctiveFacet",
+        "computedLabel": "disjunctiveFacet-val2",
+        "count": 4,
+        "exhaustive": true,
+        "name": "disjunctiveFacet-val2",
+        "transformed": true,
+        "type": "disjunctive",
+      },
+      Object {
+        "attributeName": "hierarchicalFacet",
+        "computedLabel": "hierarchicalFacet-val2",
+        "count": 6,
+        "exhaustive": true,
+        "name": "hierarchicalFacet-val2",
+        "transformed": true,
+        "type": "hierarchical",
+      },
+      Object {
+        "attributeName": "numericFacet",
+        "computedLabel": "≥ 1",
+        "name": "1",
+        "numericValue": 1,
+        "operator": ">=",
+        "transformed": true,
+        "type": "numeric",
+      },
+      Object {
+        "attributeName": "numericFacet",
+        "computedLabel": "≤ 2",
+        "name": "2",
+        "numericValue": 2,
+        "operator": "<=",
+        "transformed": true,
+        "type": "numeric",
+      },
+      Object {
+        "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≥ 3",
+        "name": "3",
+        "numericValue": 3,
+        "operator": ">=",
+        "transformed": true,
+        "type": "numeric",
+      },
+      Object {
+        "attributeName": "numericDisjunctiveFacet",
+        "computedLabel": "≤ 4",
+        "name": "4",
+        "numericValue": 4,
+        "operator": "<=",
+        "transformed": true,
+        "type": "numeric",
+      },
+      Object {
+        "attributeName": "_tags",
+        "computedLabel": "tag1",
+        "name": "tag1",
+        "transformed": true,
+        "type": "tag",
+      },
+      Object {
+        "attributeName": "_tags",
+        "computedLabel": "tag2",
+        "name": "tag2",
+        "transformed": true,
+        "type": "tag",
+      },
+    ]
+  }
+  shouldAutoHideContainer={false}
+  templateProps={
+    Object {
+      "templates": Object {
+        "clearAll": "CLEAR ALL",
+        "footer": "FOOTER",
+        "header": "HEADER",
+        "item": "ITEM",
+      },
+      "templatesConfig": Object {
+        "randomAttributeNeverUsed": "value",
+      },
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "clearAll": true,
+        "footer": true,
+        "header": true,
+        "item": true,
+      },
+    }
+  }
+/>
+`;
+
 exports[`currentRefinedValues() render() should render twice <CurrentRefinedValues ... /> 1`] = `
 <HeaderFooter-AutoHide
   attributes={
