@@ -1,0 +1,250 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`custom default render renders correctly 1`] = `
+
+<div class="ais-Breadcrumb">
+  <ul class>
+    <li>
+      <a>
+        TV &amp; Home Theater
+      </a>
+    </li>
+    <li>
+      <a>
+        Streaming Media Players
+      </a>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`custom default render renders correctly with an URL for the href 1`] = `
+
+<div class="ais-Breadcrumb">
+  <ul class>
+    <li>
+      <a href="/TV &amp; Home Theater">
+        TV &amp; Home Theater
+      </a>
+    </li>
+    <li>
+      <a href="/TV &amp; Home Theater > Streaming Media Players">
+        Streaming Media Players
+      </a>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`custom default render renders correctly without refinement 1`] = `
+
+<div class="ais-Breadcrumb ais-Breadcrumb--noRefinement">
+  <ul class="noRefinement">
+  </ul>
+</div>
+
+`;
+
+exports[`custom rootLabel render renders correctly 1`] = `
+
+<div class="ais-Breadcrumb">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item">
+      <a class="ais-Breadcrumb-link">
+        Home page
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <a class="ais-Breadcrumb-link">
+        TV &amp; Home Theater
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <span>
+        Streaming Media Players
+      </span>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`custom rootLabel render renders correctly without refinement 1`] = `
+
+<div class="ais-Breadcrumb ais-Breadcrumb--noRefinement">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span>
+        Home page
+      </span>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`custom separator render renders correctly 1`] = `
+
+<div class="ais-Breadcrumb">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item">
+      <a class="ais-Breadcrumb-link">
+        Home
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        ~~
+      </span>
+      <a class="ais-Breadcrumb-link">
+        TV &amp; Home Theater
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        ~~
+      </span>
+      <span>
+        Streaming Media Players
+      </span>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`default render renders correctly 1`] = `
+
+<div class="ais-Breadcrumb">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item">
+      <a class="ais-Breadcrumb-link">
+        Home
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <a class="ais-Breadcrumb-link">
+        TV &amp; Home Theater
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <span>
+        Streaming Media Players
+      </span>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`default render renders correctly with a selected item 1`] = `
+
+<div class="ais-Breadcrumb">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item">
+      <a class="ais-Breadcrumb-link">
+        Home
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <a class="ais-Breadcrumb-link">
+        TV &amp; Home Theater
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <span>
+        Streaming Media Players
+      </span>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`default render renders correctly with an URL for the href 1`] = `
+
+<div class="ais-Breadcrumb">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item">
+      <a href="/undefined"
+         class="ais-Breadcrumb-link"
+      >
+        Home
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <a href="/TV &amp; Home Theater"
+         class="ais-Breadcrumb-link"
+      >
+        TV &amp; Home Theater
+      </a>
+    </li>
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span aria-hidden="true"
+            class="ais-Breadcrumb-separator"
+      >
+        &gt;
+      </span>
+      <span>
+        Streaming Media Players
+      </span>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`default render renders correctly without refinement 1`] = `
+
+<div class="ais-Breadcrumb ais-Breadcrumb--noRefinement">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span>
+        Home
+      </span>
+    </li>
+  </ul>
+</div>
+
+`;

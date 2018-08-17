@@ -1,34 +1,74 @@
 <template>
-  <div>
-    <slot v-bind="state">
-      <json-tree :level="2" :data="state"></json-tree>
+  <div
+    v-if="state"
+    :class="[suit(''), !state.canRefine && suit('', 'noRefinement')]"
+  >
+    <slot
+      :items="state.items"
+      :can-refine="state.canRefine"
+      :refine="state.refine"
+      :create-URL="state.createURL"
+    >
+      <ul :class="suit('list')">
+        <li :class="[suit('item'), !state.items.length && suit('item', 'selected')]">
+          <a
+            v-if="Boolean(state.items.length)"
+            :href="state.createURL()"
+            :class="suit('link')"
+            @click.prevent="state.refine()"
+          >
+            <slot name="rootLabel">Home</slot>
+          </a>
+          <span v-else>
+            <slot name="rootLabel">Home</slot>
+          </span>
+        </li>
+        <li
+          v-for="(item, index) in state.items"
+          :key="item.name"
+          :class="[suit('item'), isLastItem(index) && suit('item', 'selected')]"
+        >
+          <span :class="suit('separator')" aria-hidden="true">
+            <slot name="separator">></slot>
+          </span>
+          <a
+            v-if="!isLastItem(index)"
+            :href="state.createURL(item.value)"
+            :class="suit('link')"
+            @click.prevent="state.refine(item.value)"
+          >
+            {{ item.name }}
+          </a>
+          <span v-else>
+            {{ item.name }}
+          </span>
+        </li>
+      </ul>
     </slot>
   </div>
 </template>
 
 <script>
-import JsonTree from 'vue-json-tree'; // todo: remove
-import algoliaComponent from '../component';
 import { connectBreadcrumb } from 'instantsearch.js/es/connectors';
+import algoliaComponent from '../component';
 
 export default {
-  components: { 'json-tree': JsonTree },
   mixins: [algoliaComponent],
   props: {
     attributes: {
       type: Array,
       required: true,
     },
-    rootPath: {
+    separator: {
       type: String,
     },
-    separator: {
+    rootPath: {
       type: String,
     },
   },
   data() {
     return {
-      widgetName: 'ais-breadcrumb',
+      widgetName: 'Breadcrumb',
     };
   },
   beforeCreate() {
@@ -38,9 +78,14 @@ export default {
     widgetParams() {
       return {
         attributes: this.attributes,
-        rootPath: this.rootPath,
         separator: this.separator,
+        rootPath: this.rootPath,
       };
+    },
+  },
+  methods: {
+    isLastItem(index) {
+      return this.state.items.length - 1 === index;
     },
   },
 };</script>
