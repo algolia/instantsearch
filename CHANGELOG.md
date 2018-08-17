@@ -1,3 +1,13 @@
+<a name="2.10.1"></a>
+## [2.10.1](https://github.com/algolia/instantsearch.js/compare/v2.10.0...v2.10.1) (2018-08-17)
+
+
+### Bug Fixes
+
+* **connectBreadcrumb:** ensure that data is an array ([#3067](https://github.com/algolia/instantsearch.js/issues/3067)) ([759f709](https://github.com/algolia/instantsearch.js/commit/759f709))
+
+
+
 <a name="2.10.0"></a>
 # [2.10.0](https://github.com/algolia/instantsearch.js/compare/v2.9.0...v2.10.0) (2018-08-08)
 
