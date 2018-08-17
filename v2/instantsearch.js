@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.10.0 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.10.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -13706,7 +13706,7 @@ var BrowserHistory = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.10.0';
+exports.default = '2.10.1';
 
 /***/ }),
 /* 190 */
@@ -15011,7 +15011,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   hasNoResults,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //  }\n});\nsearch.addWidget(\n  customNumericRefinementList({\n    attributeName,\n    options,\n    transformItems,\n  })\n);\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html\n';
+var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {\n  // params = {\n  //   createURL,\n  //   items,\n  //   hasNoResults,\n  //   refine,\n  //   instantSearchInstance,\n  //   widgetParams,\n  //  }\n});\n\nsearch.addWidget(\n  customNumericRefinementList({\n    attributeName,\n    options,\n    [ transformItems ],\n  })\n);\n\nFull documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html\n';
 
 /**
  * @typedef {Object} NumericRefinementListOption
@@ -15023,8 +15023,7 @@ var usage = 'Usage:\nvar customNumericRefinementList = connectNumericRefinementL
 /**
  * @typedef {Object} NumericRefinementListItem
  * @property {string} label Name of the option.
- * @property {number} start Lower bound of the option (>=).
- * @property {number} end Higher bound of the option (<=).
+ * @property {string} value URL encoded of the bounds object with the form `{start, end}`. This value can be used verbatim in the webpage and can be read by `refine` directly. If you want to inspect the value, you can do `JSON.parse(window.decodeURI(value))` to get the object.
  * @property {boolean} isRefined True if the value is selected.
  */
 
@@ -17667,8 +17666,9 @@ function connectBreadcrumb(renderFn, unmountFn) {
         var _state$hierarchicalFa = _slicedToArray(state.hierarchicalFacets, 1),
             facetName = _state$hierarchicalFa[0].name;
 
-        var facetsValues = results.getFacetValues(facetName);
-        var items = transformItems(shiftItemsValues(prepareItems(facetsValues)));
+        var facetValues = results.getFacetValues(facetName);
+        var data = Array.isArray(facetValues.data) ? facetValues.data : [];
+        var items = transformItems(shiftItemsValues(prepareItems(data)));
 
         renderFn({
           canRefine: items.length > 0,
@@ -17686,16 +17686,15 @@ function connectBreadcrumb(renderFn, unmountFn) {
   };
 }
 
-function prepareItems(obj) {
-  return obj.data.reduce(function (result, currentItem) {
+function prepareItems(data) {
+  return data.reduce(function (result, currentItem) {
     if (currentItem.isRefined) {
       result.push({
         name: currentItem.name,
         value: currentItem.path
       });
       if (Array.isArray(currentItem.data)) {
-        var children = prepareItems(currentItem);
-        result = result.concat(children);
+        result = result.concat(prepareItems(currentItem.data));
       }
     }
     return result;
