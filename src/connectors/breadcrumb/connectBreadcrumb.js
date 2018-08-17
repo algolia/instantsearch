@@ -154,10 +154,9 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
       render({ instantSearchInstance, results, state }) {
         const [{ name: facetName }] = state.hierarchicalFacets;
 
-        const facetsValues = results.getFacetValues(facetName);
-        const items = transformItems(
-          shiftItemsValues(prepareItems(facetsValues))
-        );
+        const facetValues = results.getFacetValues(facetName);
+        const data = Array.isArray(facetValues.data) ? facetValues.data : [];
+        const items = transformItems(shiftItemsValues(prepareItems(data)));
 
         renderFn(
           {
@@ -179,16 +178,15 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
   };
 }
 
-function prepareItems(obj) {
-  return obj.data.reduce((result, currentItem) => {
+function prepareItems(data) {
+  return data.reduce((result, currentItem) => {
     if (currentItem.isRefined) {
       result.push({
         name: currentItem.name,
         value: currentItem.path,
       });
       if (Array.isArray(currentItem.data)) {
-        const children = prepareItems(currentItem);
-        result = result.concat(children);
+        result = result.concat(prepareItems(currentItem.data));
       }
     }
     return result;
