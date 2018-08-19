@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     widgetParams() {
-      return {}
-    }
-  }
+      return {};
+    },
+  },
 };</script>

@@ -1,48 +1,39 @@
 <a name="1.5.0"></a>
-# [1.5.0](https://github.com/algolia/vue-instantsearch/compare/v1.4.0...v1.5.0) (2018-03-02)
 
+# [1.5.0](https://github.com/algolia/vue-instantsearch/compare/v1.4.0...v1.5.0) (2018-03-02)
 
 ### Bug Fixes
 
 * **menu:** avoid error when no facet values are retrieved ([0dbb683](https://github.com/algolia/vue-instantsearch/commit/0dbb683))
 
-
 ### Features
 
 * **Pagination:** pass in the page when emitting the page change event ([#394](https://github.com/algolia/vue-instantsearch/issues/394)) ([a349e19](https://github.com/algolia/vue-instantsearch/commit/a349e19))
 
-
-
 <a name="1.4.0"></a>
-# [1.4.0](https://github.com/algolia/vue-instantsearch/compare/v1.3.4...v1.4.0) (2018-02-06)
 
+# [1.4.0](https://github.com/algolia/vue-instantsearch/compare/v1.3.4...v1.4.0) (2018-02-06)
 
 ### Bug Fixes
 
 * **Highlight:** only warn once for possibly missing highlighting ([#386](https://github.com/algolia/vue-instantsearch/issues/386)) ([92ab6c4](https://github.com/algolia/vue-instantsearch/commit/92ab6c4)), closes [#385](https://github.com/algolia/vue-instantsearch/issues/385)
-
 
 ### Features
 
 * **loading-indicator:** add API ([148577f](https://github.com/algolia/vue-instantsearch/commit/148577f))
 * **loading-indicator:** initial implementation ([6bdf9a7](https://github.com/algolia/vue-instantsearch/commit/6bdf9a7))
 
-
-
 <a name="1.3.4"></a>
-## [1.3.4](https://github.com/algolia/vue-instantsearch/compare/v1.3.3...v1.3.4) (2018-01-24)
 
+## [1.3.4](https://github.com/algolia/vue-instantsearch/compare/v1.3.3...v1.3.4) (2018-01-24)
 
 ### Bug Fixes
 
 * **doc:** `queryParameters` is not a function ([#377](https://github.com/algolia/vue-instantsearch/issues/377)) ([cd87cad](https://github.com/algolia/vue-instantsearch/commit/cd87cad))
 
-
 ### Features
 
 * **Results:** add `index` (position) ([#382](https://github.com/algolia/vue-instantsearch/issues/382)) ([16c2c64](https://github.com/algolia/vue-instantsearch/commit/16c2c64))
-
-
 
 <a name="1.3.3"></a>
 

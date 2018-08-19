@@ -57,10 +57,12 @@ export default {
   },
   methods: {
     refine() {
-      const minValue = this.$refs.minInput.value && parseInt(this.$refs.minInput.value, 10);
-      const maxValue = this.$refs.maxInput.value && parseInt(this.$refs.maxInput.value, 10);
+      const minValue =
+        this.$refs.minInput.value && parseInt(this.$refs.minInput.value, 10);
+      const maxValue =
+        this.$refs.maxInput.value && parseInt(this.$refs.maxInput.value, 10);
 
       this.state.refine([minValue, maxValue]);
-    }
+    },
   },
 };</script>

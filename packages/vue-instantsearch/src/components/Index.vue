@@ -16,11 +16,11 @@ export default {
       apiKey: this.apiKey,
       indexName: this.indexName,
       routing: this.routing,
-      stalledSearchDelay: this.stalledSearchDelay
+      stalledSearchDelay: this.stalledSearchDelay,
     });
 
     return {
-      instantSearchInstance: this.instantSearchInstance
+      instantSearchInstance: this.instantSearchInstance,
     };
   },
   props: {
@@ -37,11 +37,11 @@ export default {
       required: true,
     },
     routing: {
-      type: [Boolean, Object]
+      type: [Boolean, Object],
     },
     stalledSearchDelay: {
-      type: Number
-    }
+      type: Number,
+    },
   },
   data() {
     return {
@@ -60,5 +60,5 @@ export default {
     suit(...args) {
       return suit(this.widgetName, ...args);
     },
-  }
+  },
 };</script>

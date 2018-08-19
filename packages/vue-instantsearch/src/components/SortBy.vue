@@ -29,7 +29,7 @@
 
 <script>
 import algoliaComponent from '../component';
-import { connectSortBySelector } from 'instantsearch.js/es/connectors'
+import { connectSortBySelector } from 'instantsearch.js/es/connectors';
 
 export default {
   mixins: [algoliaComponent],
@@ -47,11 +47,11 @@ export default {
   computed: {
     widgetParams() {
       return {
-        indices: this.items
-      }
-    }
+        indices: this.items,
+      };
+    },
   },
   beforeCreate() {
-    this.connector = connectSortBySelector
+    this.connector = connectSortBySelector;
   },
 };</script>
