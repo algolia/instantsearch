@@ -2,9 +2,9 @@
 
 import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
 
-const stories = storiesOf('ClearAll');
+const stories = storiesOf('ClearRefinements');
 
 export default () => {
   stories
@@ -13,7 +13,7 @@ export default () => {
       wrapWithHits(
         container => {
           window.search.addWidget(
-            instantsearch.widgets.clearAll({
+            instantsearch.widgets.clearRefinements({
               container,
               autoHideContainer: false,
             })
@@ -31,7 +31,7 @@ export default () => {
       'with nothing to clear',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.clearAll({
+          instantsearch.widgets.clearRefinements({
             container,
             autoHideContainer: false,
           })
@@ -43,12 +43,12 @@ export default () => {
       wrapWithHits(
         container => {
           window.search.addWidget(
-            instantsearch.widgets.clearAll({
+            instantsearch.widgets.clearRefinements({
               container,
               autoHideContainer: false,
               clearsQuery: true,
               templates: {
-                link: 'Clear refinements and query',
+                button: 'Clear refinements and query',
               },
             })
           );

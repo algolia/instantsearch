@@ -1,17 +1,17 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import defaultTemplates from './defaultTemplates.js';
-import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
-import connectMenu from '../../connectors/menu/connectMenu.js';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+import defaultTemplates from './defaultTemplates';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig';
+import connectMenu from '../../connectors/menu/connectMenu';
+import RefinementList from '../../components/RefinementList/RefinementList';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
   prefixKeys,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-menu');
 

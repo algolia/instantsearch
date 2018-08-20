@@ -1,18 +1,18 @@
 // we use the full path to the lite build to solve a meteor.js issue:
 // https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
-import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite.js';
+import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite';
 import algoliasearchHelper from 'algoliasearch-helper';
 import forEach from 'lodash/forEach';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
-import urlSyncWidget from './url-sync.js';
-import RoutingManager from './RoutingManager.js';
-import simpleMapping from './stateMappings/simple.js';
-import historyRouter from './routers/history.js';
-import version from './version.js';
-import createHelpers from './createHelpers.js';
+import urlSyncWidget from './url-sync';
+import RoutingManager from './RoutingManager';
+import simpleMapping from './stateMappings/simple';
+import historyRouter from './routers/history';
+import version from './version';
+import createHelpers from './createHelpers';
 
 const ROUTING_DEFAULT_OPTIONS = {
   stateMapping: simpleMapping(),

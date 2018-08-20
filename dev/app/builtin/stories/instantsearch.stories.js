@@ -1,7 +1,7 @@
 /* eslint-disable import/default */
 
 import { storiesOf } from 'dev-novel';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
 
 const stories = storiesOf('Instantsearch');
 

@@ -8,7 +8,7 @@ import webpackConfig from './webpack.config.start.babel';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import compression from 'compression';
-import config from './config.js';
+import config from './config';
 
 export default function() {
   const compiler = webpack(webpackConfig);

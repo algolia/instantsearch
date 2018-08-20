@@ -1,4 +1,4 @@
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 import Paginator from './Paginator';
 
 const usage = `Usage:

@@ -1,7 +1,7 @@
 import some from 'lodash/some';
 import find from 'lodash/find';
 
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering } from '../../lib/utils';
 
 const usage = `Usage:
 var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {

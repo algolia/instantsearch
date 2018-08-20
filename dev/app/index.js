@@ -1,11 +1,9 @@
 import { registerDisposer, start } from 'dev-novel';
 import initBuiltInWidgets from './builtin/init-stories';
 import initJqueryWidgets from './jquery/init-stories';
-import initUnmountWidgets from './init-unmount-widgets.js';
+import initUnmountWidgets from './init-unmount-widgets';
 
 import '../style.css';
-import '../../src/css/instantsearch.scss';
-import '../../src/css/instantsearch-theme-algolia.scss';
 
 registerDisposer(() => {
   window.search = undefined;

@@ -2,8 +2,8 @@ import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 
 import Template from './Template';
-import autoHideContainerHOC from '../decorators/autoHideContainer.js';
-import headerFooterHOC from '../decorators/headerFooter.js';
+import autoHideContainerHOC from '../decorators/autoHideContainer';
+import headerFooterHOC from '../decorators/headerFooter';
 
 class MenuSelect extends Component {
   static propTypes = {

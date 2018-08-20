@@ -2,7 +2,7 @@ import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 const SearchParameters = jsHelper.SearchParameters;
 
-import connectHierarchicalMenu from '../connectHierarchicalMenu.js';
+import connectHierarchicalMenu from '../connectHierarchicalMenu';
 
 describe('connectHierarchicalMenu', () => {
   it('It should compute getConfiguration() correctly', () => {

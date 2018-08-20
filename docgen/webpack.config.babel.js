@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import { join } from 'path';
 import autoprefixer from 'autoprefixer';
-import config from './config.js';
+import config from './config';
 
 export default {
   devtool: 'source-map',

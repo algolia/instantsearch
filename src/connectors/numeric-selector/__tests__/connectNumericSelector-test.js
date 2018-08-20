@@ -3,7 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectNumericSelector from '../connectNumericSelector.js';
+import connectNumericSelector from '../connectNumericSelector';
 
 describe('connectNumericSelector', () => {
   it('Renders during init and render', () => {

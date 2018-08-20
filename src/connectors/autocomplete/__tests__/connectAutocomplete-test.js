@@ -1,5 +1,5 @@
 import jsHelper from 'algoliasearch-helper';
-import connectAutocomplete from '../connectAutocomplete.js';
+import connectAutocomplete from '../connectAutocomplete';
 
 const fakeClient = { addAlgoliaAgent: () => {} };
 

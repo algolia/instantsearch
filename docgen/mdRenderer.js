@@ -1,7 +1,7 @@
 import MarkdownIt from 'markdown-it';
 import markdownItAnchor from 'markdown-it-anchor';
 
-import highlight from './syntaxHighlighting.js';
+import highlight from './syntaxHighlighting';
 
 const md =
   new MarkdownIt('default', {

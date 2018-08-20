@@ -1,9 +1,9 @@
 import {watch} from 'chokidar';
 
-import devServer from './devServer.js';
-import builder from './builder.js';
+import devServer from './devServer';
+import builder from './builder';
 import {start as middlewares} from './middlewares';
-import {rootPath} from './path.js';
+import {rootPath} from './path';
 
 // we build once at start
 builder({middlewares}, err => {

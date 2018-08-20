@@ -1,15 +1,15 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import InfiniteHits from '../../components/InfiniteHits.js';
-import defaultTemplates from './defaultTemplates.js';
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
+import InfiniteHits from '../../components/InfiniteHits';
+import defaultTemplates from './defaultTemplates';
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-infinite-hits');
 

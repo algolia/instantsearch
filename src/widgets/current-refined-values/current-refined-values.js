@@ -9,8 +9,8 @@ import isPlainObject from 'lodash/isPlainObject';
 import isFunction from 'lodash/isFunction';
 import reduce from 'lodash/reduce';
 
-import CurrentRefinedValuesWithHOCs from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
-import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
+import CurrentRefinedValuesWithHOCs from '../../components/CurrentRefinedValues/CurrentRefinedValues';
+import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues';
 import defaultTemplates from './defaultTemplates';
 
 import {
@@ -18,7 +18,7 @@ import {
   bemHelper,
   getContainerNode,
   prepareTemplateProps,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-current-refined-values');
 

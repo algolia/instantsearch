@@ -1,4 +1,4 @@
-import numericRefinementList from '../numeric-refinement-list.js';
+import numericRefinementList from '../numeric-refinement-list';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));

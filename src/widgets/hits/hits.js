@@ -1,15 +1,15 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import Hits from '../../components/Hits.js';
-import connectHits from '../../connectors/hits/connectHits.js';
-import defaultTemplates from './defaultTemplates.js';
+import Hits from '../../components/Hits';
+import connectHits from '../../connectors/hits/connectHits';
+import defaultTemplates from './defaultTemplates';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-hits');
 

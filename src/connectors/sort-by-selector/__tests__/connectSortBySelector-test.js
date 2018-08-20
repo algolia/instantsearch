@@ -3,8 +3,8 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectSortBySelector from '../connectSortBySelector.js';
-import instantSearch from '../../../lib/main.js';
+import connectSortBySelector from '../connectSortBySelector';
+import instantSearch from '../../../lib/main';
 
 describe('connectSortBySelector', () => {
   it('Renders during init and render', () => {

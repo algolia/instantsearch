@@ -1,15 +1,15 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
-import PriceRanges from '../../components/PriceRanges/PriceRanges.js';
-import connectPriceRanges from '../../connectors/price-ranges/connectPriceRanges.js';
-import defaultTemplates from './defaultTemplates.js';
+import PriceRanges from '../../components/PriceRanges/PriceRanges';
+import connectPriceRanges from '../../connectors/price-ranges/connectPriceRanges';
+import defaultTemplates from './defaultTemplates';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const bem = bemHelper('ais-price-ranges');
 

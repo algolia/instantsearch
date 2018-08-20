@@ -1,6 +1,6 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
-import connectCurrentRefinedValues from '../connectCurrentRefinedValues.js';
+import connectCurrentRefinedValues from '../connectCurrentRefinedValues';
 
 describe('connectCurrentRefinedValues', () => {
   it('Renders during init and render', () => {

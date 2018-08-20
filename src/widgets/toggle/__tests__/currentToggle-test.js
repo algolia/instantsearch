@@ -1,8 +1,8 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import currentToggle from '../toggle.js';
-import defaultTemplates from '../defaultTemplates.js';
-import RefinementList from '../../../components/RefinementList/RefinementList.js';
+import currentToggle from '../toggle';
+import defaultTemplates from '../defaultTemplates';
+import RefinementList from '../../../components/RefinementList/RefinementList';
 
 import jsHelper from 'algoliasearch-helper';
 

@@ -5,7 +5,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectStarRating from '../connectStarRating.js';
+import connectStarRating from '../connectStarRating';
 
 describe('connectStarRating', () => {
   it('Renders during init and render', () => {

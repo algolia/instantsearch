@@ -14,7 +14,7 @@ import {
   getRefinements,
   clearRefinements,
   checkRendering,
-} from '../../lib/utils.js';
+} from '../../lib/utils';
 
 const usage = `Usage:
 var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {

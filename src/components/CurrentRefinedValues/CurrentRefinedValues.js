@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 
-import Template from '../Template.js';
+import Template from '../Template';
 
-import headerFooterHOC from '../../decorators/headerFooter.js';
+import headerFooterHOC from '../../decorators/headerFooter';
 import autoHideContainerHOC from '../../decorators/autoHideContainer';
 
-import { isSpecialClick } from '../../lib/utils.js';
+import { isSpecialClick } from '../../lib/utils';
 import map from 'lodash/map';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';

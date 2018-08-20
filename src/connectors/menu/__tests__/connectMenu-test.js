@@ -3,7 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectMenu from '../connectMenu.js';
+import connectMenu from '../connectMenu';
 
 describe('connectMenu', () => {
   let rendering;

@@ -1,5 +1,5 @@
 import markdown from 'markdown-it';
-import highlight from '../syntaxHighlighting.js';
+import highlight from '../syntaxHighlighting';
 
 const md = markdown();
 

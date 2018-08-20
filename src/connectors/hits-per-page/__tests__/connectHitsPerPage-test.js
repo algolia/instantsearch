@@ -2,7 +2,7 @@ import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 const SearchParameters = jsHelper.SearchParameters;
 
-import connectHitsPerPage from '../connectHitsPerPage.js';
+import connectHitsPerPage from '../connectHitsPerPage';
 
 describe('connectHitsPerPage', () => {
   it('should throw when there is two default items defined', () => {

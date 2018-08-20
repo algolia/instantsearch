@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import Hits from './Hits.js';
+import Hits from './Hits';
 
 class InfiniteHits extends Component {
   render() {

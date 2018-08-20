@@ -2,7 +2,7 @@
 
 import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
 
 const stories = storiesOf('Breadcrumb');
 export default () => {
@@ -37,6 +37,40 @@ export default () => {
         });
       })
     )
+    .add(
+      'With custom separators',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="hierarchicalMenu"></div>
+        <div id="breadcrumb"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            templates: {
+              separator: ' + ',
+            },
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+          })
+        );
+
+        // Custom Widget to toggle refinement
+        window.search.addWidget({
+          init({ helper }) {
+            helper.toggleRefinement(
+              'hierarchicalCategories.lvl0',
+              'Cameras & Camcorders > Digital Cameras'
+            );
+          },
+        });
+      })
+    )
+
     .add(
       'with custom home label',
       wrapWithHits(container => {
@@ -113,7 +147,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.breadcrumb({
             container: '#breadcrumb',
-            separator: ' / ',
             attributes: [
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',

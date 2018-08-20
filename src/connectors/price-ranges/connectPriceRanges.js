@@ -1,5 +1,5 @@
-import { checkRendering } from '../../lib/utils.js';
-import generateRanges from './generate-ranges.js';
+import { checkRendering } from '../../lib/utils';
+import generateRanges from './generate-ranges';
 
 import isFinite from 'lodash/isFinite';
 

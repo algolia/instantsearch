@@ -1,7 +1,7 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectHits from '../connectHits.js';
+import connectHits from '../connectHits';
 
 describe('connectHits', () => {
   it('Renders during init and render', () => {

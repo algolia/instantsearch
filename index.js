@@ -3,6 +3,6 @@
 
 /* eslint-disable import/no-commonjs */
 
-import main from './src/lib/main.js';
+import main from './src/lib/main';
 
 module.exports = main;

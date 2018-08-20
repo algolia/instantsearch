@@ -1,5 +1,5 @@
-import { checkRendering } from '../../lib/utils.js';
-import { tagConfig, escapeFacets } from '../../lib/escape-highlight.js';
+import { checkRendering } from '../../lib/utils';
+import { tagConfig, escapeFacets } from '../../lib/escape-highlight';
 import isEqual from 'lodash/isEqual';
 
 const usage = `Usage:
