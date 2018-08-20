@@ -65,7 +65,7 @@
     "jest-image-snapshot": "2.5.0",
     "prettier": "1.14.2",
     "release-it": "7.5.0",
-    "walk-sync": "0.3.2"
+    "walk-sync": "0.3.3"
   },
   "renovate": {
     "extends": [
