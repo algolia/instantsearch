@@ -28,7 +28,7 @@ exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 1`] = `
         "text": "{{#hasNoResults}}No results{{/hasNoResults}}
   {{#hasOneResult}}1 result{{/hasOneResult}}
   {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-  <span class=\\"{{cssClasses.time}}\\">found in {{processingTimeMS}}ms</span>",
+  found in {{processingTimeMS}}ms",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -68,7 +68,7 @@ exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 2`] = `
         "text": "{{#hasNoResults}}No results{{/hasNoResults}}
   {{#hasOneResult}}1 result{{/hasOneResult}}
   {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-  <span class=\\"{{cssClasses.time}}\\">found in {{processingTimeMS}}ms</span>",
+  found in {{processingTimeMS}}ms",
       },
       "templatesConfig": undefined,
       "transformData": undefined,

@@ -12,7 +12,6 @@ exports[`Breadcrumb should render <Breadcrumb /> 1`] = `
     >
       <a
         className="link"
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -40,7 +39,6 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
     >
       <a
         className="link"
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -66,7 +64,6 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
       />
       <a
         className="link"
-        href={undefined}
         onClick={[Function]}
       >
         name0
