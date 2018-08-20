@@ -22,9 +22,9 @@ InstantSearch has always worked with the [Algolia search client](https://github.
 
 ```javascript
 const search = instantsearch({
-  appId: "appId",
-  apiKey: "apiKey",
-  indexName: "indexName"
+  appId: 'appId',
+  apiKey: 'apiKey',
+  indexName: 'indexName',
 });
 
 search.start();
@@ -38,8 +38,8 @@ search.start();
 
 ```javascript
 const search = instantsearch({
-  indexName: "indexName",
-  searchClient: algoliasearch("appId", "apiKey")
+  indexName: 'indexName',
+  searchClient: algoliasearch('appId', 'apiKey'),
 });
 
 search.start();
@@ -59,7 +59,7 @@ search.addWidget(
     transformData: function(item) {
       item.count = 0;
       return item;
-    }
+    },
   })
 );
 ```
@@ -78,7 +78,7 @@ search.addWidget(
         item.count = 0;
         return item;
       });
-    }
+    },
   })
 );
 ```
@@ -95,10 +95,10 @@ search.addWidget(
         value: 'facetValue',
         count: 100,
       }); // injecting new values
-      items.splice(0,1); // removing items
+      items.splice(0, 1); // removing items
       items.sort((a, b) => b.count - a.count); // custom sort
-      return item;
-    }
+      return items;
+    },
   })
 );
 ```
