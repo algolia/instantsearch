@@ -32,7 +32,8 @@ sortBySelector({
   container,
   indices,
   [cssClasses.{root,select,item}={}],
-  [autoHideContainer=false]
+  [autoHideContainer=false],
+  [transformItems]
 })`;
 
 /**
@@ -54,6 +55,7 @@ sortBySelector({
  * @property {SortByIndexDefinition[]} indices Array of objects defining the different indices to choose from.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -83,6 +85,7 @@ export default function sortBySelector({
   indices,
   cssClasses: userCssClasses = {},
   autoHideContainer = false,
+  transformItems,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -108,7 +111,7 @@ export default function sortBySelector({
     const makeWidget = connectSortBySelector(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ indices });
+    return makeWidget({ indices, transformItems });
   } catch (e) {
     throw new Error(usage);
   }

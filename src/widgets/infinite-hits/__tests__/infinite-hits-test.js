@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-import expect from 'expect';
 import algoliasearchHelper from 'algoliasearch-helper';
 import infiniteHits from '../infinite-hits';
 
@@ -18,9 +16,9 @@ describe('infiniteHits()', () => {
 
   beforeEach(() => {
     helper = algoliasearchHelper({});
-    helper.search = sinon.spy();
+    helper.search = jest.fn();
 
-    ReactDOM = { render: sinon.spy() };
+    ReactDOM = { render: jest.fn() };
     infiniteHits.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
@@ -45,14 +43,32 @@ describe('infiniteHits()', () => {
     widget.render({ results, state });
     widget.render({ results, state });
 
-    expect(ReactDOM.render.calledTwice).toBe(
-      true,
+    expect(ReactDOM.render).toHaveBeenCalledTimes(
+      2,
       'ReactDOM.render called twice'
     );
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
+  });
+
+  it('renders transformed items', () => {
+    const state = { page: 0 };
+    widget = infiniteHits({
+      container,
+      transformItems: items =>
+        items.map(item => ({ ...item, transformed: true })),
+    });
+
+    widget.init({ helper, instantSearchInstance: {} });
+    widget.render({
+      results,
+      state,
+      instantSearchInstance: {},
+    });
+
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('if it is the last page, then the props should contain isLastPage true', () => {
@@ -66,14 +82,14 @@ describe('infiniteHits()', () => {
       state,
     });
 
-    expect(ReactDOM.render.calledTwice).toBe(
-      true,
+    expect(ReactDOM.render).toHaveBeenCalledTimes(
+      2,
       'ReactDOM.render called twice'
     );
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
   });
 
   it('does not accept allItems templates', () => {
@@ -96,7 +112,7 @@ describe('infiniteHits()', () => {
     widget.showMore();
 
     expect(helper.state.page).toBe(1);
-    expect(helper.search.callCount).toBe(1);
+    expect(helper.search).toHaveBeenCalledTimes(1);
   });
 
   afterEach(() => {

@@ -44,5 +44,24 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with transformed items',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.infiniteHits({
+            container,
+            showMoreLabel: 'Show more',
+            templates: {
+              item: '{{name}}',
+            },
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                name: `${item.name} (transformed)`,
+              })),
+          })
+        );
+      })
     );
 };

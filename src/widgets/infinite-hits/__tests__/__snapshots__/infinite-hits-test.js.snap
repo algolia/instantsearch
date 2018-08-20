@@ -8,6 +8,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
       "item": "ais-infinite-hits--item",
       "root": "ais-infinite-hits root cx",
       "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
     }
   }
   hits={
@@ -56,6 +57,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
       "item": "ais-infinite-hits--item",
       "root": "ais-infinite-hits root cx",
       "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
     }
   }
   hits={
@@ -104,6 +106,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       "item": "ais-infinite-hits--item",
       "root": "ais-infinite-hits root cx",
       "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
     }
   }
   hits={
@@ -154,6 +157,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       "item": "ais-infinite-hits--item",
       "root": "ais-infinite-hits root cx",
       "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
     }
   }
   hits={
@@ -175,6 +179,57 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
       ],
       "nbPages": 2,
       "page": 1,
+    }
+  }
+  showMore={[Function]}
+  showMoreLabel="Show more results"
+  templateProps={
+    Object {
+      "templates": Object {
+        "empty": "No results",
+        "item": [Function],
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "empty": false,
+        "item": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`infiniteHits() renders transformed items 1`] = `
+<InfiniteHits
+  cssClasses={
+    Object {
+      "empty": "ais-infinite-hits__empty",
+      "item": "ais-infinite-hits--item",
+      "root": "ais-infinite-hits",
+      "showmore": "ais-infinite-hits--showmore",
+      "showmoreButton": "ais-infinite-hits--showmoreButton",
+    }
+  }
+  hits={
+    Array [
+      Object {
+        "first": "hit",
+        "second": "hit",
+        "transformed": true,
+      },
+    ]
+  }
+  isLastPage={false}
+  results={
+    Object {
+      "hits": Array [
+        Object {
+          "first": "hit",
+          "second": "hit",
+          "transformed": true,
+        },
+      ],
     }
   }
   showMore={[Function]}

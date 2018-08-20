@@ -15,12 +15,10 @@ exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
       className="ais-body"
     >
       <select
-        className={undefined}
         onChange={[Function]}
         value=""
       >
         <option
-          className={undefined}
           value=""
         >
           <div
@@ -32,7 +30,6 @@ exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
           />
         </option>
         <option
-          className={undefined}
           value="foo"
         >
           <div
@@ -44,7 +41,6 @@ exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
           />
         </option>
         <option
-          className={undefined}
           value="bar"
         >
           <div

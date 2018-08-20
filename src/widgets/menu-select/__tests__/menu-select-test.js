@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-
 import menuSelect from '../menu-select';
 
 describe('menuSelect', () => {
@@ -13,26 +11,55 @@ describe('menuSelect', () => {
     expect(menuSelect.bind(null, { attributeName })).toThrow(/^Usage/);
   });
 
-  it('render correctly', () => {
-    const data = { data: [{ name: 'foo' }, { name: 'bar' }] };
-    const results = { getFacetValues: sinon.spy(() => data) };
-    const state = { toggleRefinement: sinon.spy() };
-    const helper = {
-      toggleRefinement: sinon.stub().returnsThis(),
-      search: sinon.spy(),
-      state,
-    };
-    const createURL = () => '#';
-    const ReactDOM = { render: sinon.spy() };
-    menuSelect.__Rewire__('render', ReactDOM.render);
-    const widget = menuSelect({
-      container: document.createElement('div'),
-      attributeName: 'test',
+  describe('render', () => {
+    let ReactDOM;
+    let data;
+    let results;
+    let state;
+    let helper;
+
+    beforeEach(() => {
+      ReactDOM = { render: jest.fn() };
+      menuSelect.__Rewire__('render', ReactDOM.render);
+
+      data = { data: [{ name: 'foo' }, { name: 'bar' }] };
+      results = { getFacetValues: jest.fn(() => data) };
+      state = { toggleRefinement: jest.fn() };
+      helper = {
+        toggleRefinement: jest.fn().mockReturnThis(),
+        search: jest.fn(),
+        state,
+      };
     });
-    const instantSearchInstance = { templatesConfig: undefined };
-    widget.init({ helper, createURL, instantSearchInstance });
-    widget.render({ results, createURL, state });
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    menuSelect.__ResetDependency__('render');
+
+    it('renders correctly', () => {
+      const widget = menuSelect({
+        container: document.createElement('div'),
+        attributeName: 'test',
+      });
+
+      widget.init({ helper, createURL: () => '#', instantSearchInstance: {} });
+      widget.render({ results, createURL: () => '#', state });
+
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    it('renders transformed items correctly', () => {
+      const widget = menuSelect({
+        container: document.createElement('div'),
+        attributeName: 'test',
+        transformItems: items =>
+          items.map(item => ({ ...item, transformed: true })),
+      });
+
+      widget.init({ helper, createURL: () => '#', instantSearchInstance: {} });
+      widget.render({ results, createURL: () => '#', state });
+
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    });
+
+    afterEach(() => {
+      menuSelect.__ResetDependency__('render');
+    });
   });
 });

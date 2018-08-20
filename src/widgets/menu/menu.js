@@ -82,7 +82,8 @@ menu({
   [ transformData.{item} ],
   [ autoHideContainer ],
   [ showMore.{templates: {active, inactive}, limit} ],
-  [ collapsible=false ]
+  [ collapsible=false ],
+  [ transformItems ]
 })`;
 
 /**
@@ -136,6 +137,7 @@ menu({
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu.
  * @property {MenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -174,6 +176,7 @@ export default function menu({
   transformData,
   autoHideContainer = true,
   showMore = false,
+  transformItems,
 }) {
   if (!container) {
     throw new Error(usage);
@@ -220,7 +223,13 @@ export default function menu({
     const makeWidget = connectMenu(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ attributeName, limit, sortBy, showMoreLimit });
+    return makeWidget({
+      attributeName,
+      limit,
+      sortBy,
+      showMoreLimit,
+      transformItems,
+    });
   } catch (e) {
     throw new Error(usage);
   }

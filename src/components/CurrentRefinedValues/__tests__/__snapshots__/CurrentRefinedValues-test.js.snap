@@ -1491,7 +1491,6 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
     >
       <a
         className="link-class"
-        href={undefined}
         onClick={[Function]}
       >
         <div
@@ -1508,7 +1507,6 @@ exports[`CurrentRefinedValues options.refinements can be used with numeric filte
     >
       <a
         className="link-class"
-        href={undefined}
         onClick={[Function]}
       >
         <div

@@ -31,7 +31,8 @@ const usage = `Usage: numericSelector({
   attributeName,
   options,
   cssClasses.{root,select,item},
-  autoHideContainer
+  autoHideContainer,
+  transformItems
 })`;
 
 /**
@@ -55,6 +56,7 @@ const usage = `Usage: numericSelector({
  * @property {NumericOption[]} options Array of objects defining the different values and labels.
  * @property {string} [operator='='] The operator to use to refine.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  * @property {NumericSelectorCSSClasses} [cssClasses] CSS classes to be added.
  */
 
@@ -96,6 +98,7 @@ export default function numericSelector({
   options,
   cssClasses: userCssClasses = {},
   autoHideContainer = false,
+  transformItems,
 }) {
   const containerNode = getContainerNode(container);
   if (!container || !options || options.length === 0 || !attributeName) {
@@ -121,7 +124,12 @@ export default function numericSelector({
       specializedRenderer,
       () => unmountComponentAtNode(containerNode)
     );
-    return makeNumericSelector({ operator, attributeName, options });
+    return makeNumericSelector({
+      operator,
+      attributeName,
+      options,
+      transformItems,
+    });
   } catch (e) {
     throw new Error(usage);
   }

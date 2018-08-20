@@ -168,5 +168,40 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'with transformed items',
+      wrapWithHits(container => {
+        container.innerHTML = `
+          <div id="hierarchicalMenu"></div>
+          <div id="breadcrumb"></div>
+        `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                name: `${item.name} (transformed)`,
+              })),
+          })
+        );
+
+        // Custom Widget to toggle refinement
+        window.search.addWidget({
+          init({ helper }) {
+            helper.toggleRefinement(
+              'hierarchicalCategories.lvl0',
+              'Cameras & Camcorders > Digital Cameras'
+            );
+          },
+        });
+      })
     );
 };

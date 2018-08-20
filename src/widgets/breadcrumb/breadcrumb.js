@@ -55,6 +55,7 @@ breadcrumb({
   [ cssClasses.{root, noRefinements, list, item, selectedItem, separator, link}={} ],
   [ templates.{home, separator}]
   [ transformData.{item} ],
+  [ transformItems ],
 })`;
 
 /**
@@ -89,6 +90,7 @@ breadcrumb({
  * @property {BreadcrumbTransforms} [transformData] Set of functions to transform the data passed to the templates.
  * @property {boolean} [autoHideContainer=true] Hides the container when there are no items in the breadcrumb.
  * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -152,6 +154,7 @@ export default function breadcrumb({
   rootPath = null,
   templates = defaultTemplates,
   transformData,
+  transformItems,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -191,7 +194,7 @@ export default function breadcrumb({
     const makeBreadcrumb = connectBreadcrumb(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeBreadcrumb({ attributes, rootPath });
+    return makeBreadcrumb({ attributes, rootPath, transformItems });
   } catch (e) {
     throw new Error(usage);
   }

@@ -1,4 +1,3 @@
-import sinon from 'sinon';
 import jsHelper, {
   SearchResults,
   SearchParameters,
@@ -18,7 +17,7 @@ describe('connectNumericRefinementList', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
       attributeName: 'numerics',
@@ -32,10 +31,10 @@ describe('connectNumericRefinementList', () => {
     expect(widget.getConfiguration).toBe(undefined);
 
     // test if widget is not rendered yet at this point
-    expect(rendering.callCount).toBe(0);
+    expect(rendering).toHaveBeenCalledTimes(0);
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -45,17 +44,21 @@ describe('connectNumericRefinementList', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = true
-    expect(rendering.callCount).toBe(1);
+    expect(rendering).toHaveBeenCalledTimes(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      attributeName: 'numerics',
-      options: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
-      ],
-    });
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        widgetParams: {
+          attributeName: 'numerics',
+          options: [
+            { name: 'below 10', end: 10 },
+            { name: '10 - 20', start: 10, end: 20 },
+            { name: 'more than 20', start: 20 },
+          ],
+        },
+      }),
+      true
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{ nbHits: 0 }]),
@@ -65,20 +68,69 @@ describe('connectNumericRefinementList', () => {
     });
 
     // test that rendering has been called during init with isFirstRendering = false
-    expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
-    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+    expect(rendering).toHaveBeenCalledTimes(2);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        widgetParams: {
+          attributeName: 'numerics',
+          options: [
+            { name: 'below 10', end: 10 },
+            { name: '10 - 20', start: 10, end: 20 },
+            { name: 'more than 20', start: 20 },
+          ],
+        },
+      }),
+      false
+    );
+  });
+
+  it('Renders during init and render with transformed items', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectNumericRefinementList(rendering);
+    const widget = makeWidget({
       attributeName: 'numerics',
-      options: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
-      ],
+      options: [{ name: 'below 10', end: 10 }],
+      transformItems: items =>
+        items.map(item => ({
+          ...item,
+          label: 'transformed',
+        })),
     });
+
+    const helper = jsHelper({});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [expect.objectContaining({ label: 'transformed' })],
+      }),
+      expect.anything()
+    );
+
+    widget.render({
+      results: new SearchResults(helper.state, [{ nbHits: 0 }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [expect.objectContaining({ label: 'transformed' })],
+      }),
+      expect.anything()
+    );
   });
 
   it('Provide a function to update the refinements at each step', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
       attributeName: 'numerics',
@@ -92,7 +144,7 @@ describe('connectNumericRefinementList', () => {
     });
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -101,7 +153,7 @@ describe('connectNumericRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
+    const firstRenderingOptions = rendering.mock.calls[0][0];
     const { refine, items } = firstRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({});
     refine(items[0].value);
@@ -131,7 +183,7 @@ describe('connectNumericRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
+    const secondRenderingOptions = rendering.mock.calls[1][0];
     const {
       refine: renderToggleRefinement,
       items: renderFacetValues,
@@ -159,7 +211,7 @@ describe('connectNumericRefinementList', () => {
   });
 
   it('provides the correct facet values', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
       attributeName: 'numerics',
@@ -171,7 +223,7 @@ describe('connectNumericRefinementList', () => {
     });
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -180,16 +232,20 @@ describe('connectNumericRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.items).toEqual([
-      {
-        label: 'below 10',
-        value: encodeValue(undefined, 10),
-        isRefined: false,
-      },
-      { label: '10 - 20', value: encodeValue(10, 20), isRefined: false },
-      { label: 'more than 20', value: encodeValue(20), isRefined: false },
-    ]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          {
+            label: 'below 10',
+            value: encodeValue(undefined, 10),
+            isRefined: false,
+          },
+          { label: '10 - 20', value: encodeValue(10, 20), isRefined: false },
+          { label: 'more than 20', value: encodeValue(20), isRefined: false },
+        ],
+      }),
+      expect.anything()
+    );
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -198,20 +254,24 @@ describe('connectNumericRefinementList', () => {
       createURL: () => '#',
     });
 
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.items).toEqual([
-      {
-        label: 'below 10',
-        value: encodeValue(undefined, 10),
-        isRefined: false,
-      },
-      { label: '10 - 20', value: encodeValue(10, 20), isRefined: false },
-      { label: 'more than 20', value: encodeValue(20), isRefined: false },
-    ]);
+    expect(rendering).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          {
+            label: 'below 10',
+            value: encodeValue(undefined, 10),
+            isRefined: false,
+          },
+          { label: '10 - 20', value: encodeValue(10, 20), isRefined: false },
+          { label: 'more than 20', value: encodeValue(20), isRefined: false },
+        ],
+      }),
+      expect.anything()
+    );
   });
 
   it('provides isRefined for the currently selected value', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const listOptions = [
       { name: 'below 10', end: 10 },
@@ -226,7 +286,7 @@ describe('connectNumericRefinementList', () => {
     });
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -235,7 +295,8 @@ describe('connectNumericRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    let refine = rendering.lastCall.args[0].refine;
+    let refine =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0].refine;
 
     listOptions.forEach((option, i) => {
       refine(encodeValue(option.start, option.end));
@@ -254,7 +315,8 @@ describe('connectNumericRefinementList', () => {
       // Then we modify the isRefined value of the one that is supposed to be refined
       expectedResults[i].isRefined = true;
 
-      const renderingParameters = rendering.lastCall.args[0];
+      const renderingParameters =
+        rendering.mock.calls[rendering.mock.calls.length - 1][0];
       expect(renderingParameters.items).toEqual(expectedResults);
 
       refine = renderingParameters.refine;
@@ -262,7 +324,7 @@ describe('connectNumericRefinementList', () => {
   });
 
   it('when the state is cleared, the "no value" value should be refined', () => {
-    const rendering = sinon.stub();
+    const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const listOptions = [
       { name: 'below 10', end: 10 },
@@ -277,7 +339,7 @@ describe('connectNumericRefinementList', () => {
     });
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
 
     widget.init({
       helper,
@@ -286,7 +348,8 @@ describe('connectNumericRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    const refine = rendering.lastCall.args[0].refine;
+    const refine =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0].refine;
     // a user selects a value in the refinement list
     refine(encodeValue(listOptions[0].start, listOptions[0].end));
 
@@ -301,7 +364,8 @@ describe('connectNumericRefinementList', () => {
     const expectedResults0 = [...listOptions].map(mapOptionsToItems);
     expectedResults0[0].isRefined = true;
 
-    const renderingParameters0 = rendering.lastCall.args[0];
+    const renderingParameters0 =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0];
     expect(renderingParameters0.items).toEqual(expectedResults0);
 
     // All the refinements are cleared by a third party
@@ -318,7 +382,8 @@ describe('connectNumericRefinementList', () => {
     const expectedResults1 = [...listOptions].map(mapOptionsToItems);
     expectedResults1[4].isRefined = true;
 
-    const renderingParameters1 = rendering.lastCall.args[0];
+    const renderingParameters1 =
+      rendering.mock.calls[rendering.mock.calls.length - 1][0];
     expect(renderingParameters1.items).toEqual(expectedResults1);
   });
 
@@ -382,7 +447,7 @@ describe('connectNumericRefinementList', () => {
     });
 
     const helper = jsHelper({});
-    helper.search = sinon.stub();
+    helper.search = jest.fn();
     helper.setPage(2);
 
     widget.init({

@@ -1,12 +1,11 @@
 import React from 'preact-compat';
 import PropTypes from 'prop-types';
-import includes from 'lodash/includes';
 import cx from 'classnames';
 
 const Pit = ({ style, children }) => {
   // first, end & middle
   const positionValue = Math.round(parseFloat(style.left));
-  const shouldDisplayValue = includes([0, 50, 100], positionValue);
+  const shouldDisplayValue = [0, 50, 100].includes(positionValue);
 
   // Children could be an array, unwrap the value if it's the case
   // see: https://github.com/developit/preact-compat/issues/436

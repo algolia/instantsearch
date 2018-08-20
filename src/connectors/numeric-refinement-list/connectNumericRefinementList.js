@@ -1,4 +1,3 @@
-import includes from 'lodash/includes';
 import _isFinite from 'lodash/isFinite';
 
 import { checkRendering } from '../../lib/utils';
@@ -14,12 +13,15 @@ var customNumericRefinementList = connectNumericRefinementList(function renderFn
   //   widgetParams,
   //  }
 });
+
 search.addWidget(
   customNumericRefinementList({
     attributeName,
     options,
+    [ transformItems ],
   })
 );
+
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html
 `;
 
@@ -33,8 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} NumericRefinementListItem
  * @property {string} label Name of the option.
- * @property {number} start Lower bound of the option (>=).
- * @property {number} end Higher bound of the option (<=).
+ * @property {string} value URL encoded of the bounds object with the form `{start, end}`. This value can be used verbatim in the webpage and can be read by `refine` directly. If you want to inspect the value, you can do `JSON.parse(window.decodeURI(value))` to get the object.
  * @property {boolean} isRefined True if the value is selected.
  */
 
@@ -42,6 +43,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @typedef {Object} CustomNumericRefinementListWidgetOptions
  * @property {string} attributeName Name of the attribute for filtering.
  * @property {NumericRefinementListOption[]} options List of all the options.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -115,7 +117,11 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { attributeName, options } = widgetParams;
+    const {
+      attributeName,
+      options,
+      transformItems = items => items,
+    } = widgetParams;
 
     if (!attributeName || !options) {
       throw new Error(usage);
@@ -145,7 +151,7 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
         renderFn(
           {
             createURL: this._createURL(helper.state),
-            items: this._prepareItems(helper.state),
+            items: transformItems(this._prepareItems(helper.state)),
             hasNoResults: true,
             refine: this._refine,
             instantSearchInstance,
@@ -159,7 +165,7 @@ export default function connectNumericRefinementList(renderFn, unmountFn) {
         renderFn(
           {
             createURL: this._createURL(state),
-            items: this._prepareItems(state),
+            items: transformItems(this._prepareItems(state)),
             hasNoResults: results.nbHits === 0,
             refine: this._refine,
             instantSearchInstance,
@@ -358,7 +364,6 @@ function refine(state, attributeName, options, facetValue) {
 
 function hasNumericRefinement(currentRefinements, operator, value) {
   const hasOperatorRefinements = currentRefinements[operator] !== undefined;
-  const includesValue = includes(currentRefinements[operator], value);
 
-  return hasOperatorRefinements && includesValue;
+  return hasOperatorRefinements && currentRefinements[operator].includes(value);
 }

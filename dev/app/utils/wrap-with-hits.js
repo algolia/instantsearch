@@ -17,7 +17,7 @@ export const wrapWithHits = (
     ...otherInstantSearchConfig
   } = instantSearchConfig;
 
-  const urlLogger = action('[URL sync] pushstate: query string');
+  const urlLogger = action('Routing state');
   window.search = instantsearch({
     appId,
     apiKey,
@@ -26,18 +26,14 @@ export const wrapWithHits = (
       hitsPerPage: 3,
       ...searchParameters,
     },
-    urlSync: {
-      urlUtils: {
-        onpopstate() {},
-        pushState(qs) {
-          urlLogger(this.createURL(qs));
+    routing: {
+      router: {
+        write: routeState => {
+          urlLogger(JSON.stringify(routeState, null, 2));
         },
-        createURL(qs) {
-          return qs;
-        },
-        readUrl() {
-          return '';
-        },
+        read: () => ({}),
+        createURL: () => '',
+        onUpdate: () => {},
       },
     },
     ...otherInstantSearchConfig,

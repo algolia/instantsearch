@@ -19,7 +19,7 @@ Object.defineProperty(instantSearchFactory, 'widgets', {
   get() {
     throw new ReferenceError(
       `You can't access 'instantsearch.widgets' directly from the ES6 build.
-Import the widgets this way: 'import {SearchBox} from "instantsearch.js/es/widgets"'`
+Import the widgets this way: 'import {searchBox} from "instantsearch.js/es/widgets"'`
     );
   },
 });

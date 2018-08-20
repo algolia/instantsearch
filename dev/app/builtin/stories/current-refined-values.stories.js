@@ -80,5 +80,30 @@ export default () => {
           },
         }
       )
+    )
+    .add(
+      'with transformed items',
+      wrapWithHits(
+        container => {
+          window.search.addWidget(
+            instantsearch.widgets.currentRefinedValues({
+              container,
+              clearsQuery: true,
+              transformItems: items =>
+                items.map(item => ({
+                  ...item,
+                  name: `${item.name} (transformed)`,
+                })),
+            })
+          );
+        },
+        {
+          searchParameters: {
+            disjunctiveFacetsRefinements: { brand: ['Apple', 'Samsung'] },
+            disjunctiveFacets: ['brand'],
+            numericRefinements: { price: { '>=': [100] } },
+          },
+        }
+      )
     );
 };

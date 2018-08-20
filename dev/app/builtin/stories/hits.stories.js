@@ -15,6 +15,21 @@ export default () => {
       })
     )
     .add(
+      'with transformed items',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                name: `${item.name} (transformed)`,
+              })),
+          })
+        );
+      })
+    )
+    .add(
       'with highlighted array',
       wrapWithHits(
         container => {

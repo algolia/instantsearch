@@ -64,7 +64,8 @@ hierarchicalMenu({
   [ templates.{header, item, footer} ],
   [ transformData.{item} ],
   [ autoHideContainer=true ],
-  [ collapsible=false ]
+  [ collapsible=false ],
+  [ transformItems ]
 })`;
 /**
  * @typedef {Object} HierarchicalMenuCSSClasses
@@ -131,6 +132,7 @@ hierarchicalMenu({
  * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then
  * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
  * property is `true`, then the widget is hidden during the first rendering.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -200,6 +202,7 @@ export default function hierarchicalMenu({
   templates = defaultTemplates,
   collapsible = false,
   transformData,
+  transformItems,
 } = {}) {
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
@@ -242,6 +245,7 @@ export default function hierarchicalMenu({
       showParentLevel,
       limit,
       sortBy,
+      transformItems,
     });
   } catch (e) {
     throw new Error(usage);

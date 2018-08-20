@@ -13,7 +13,10 @@ var customSortBySelector = connectSortBySelector(function render(params, isFirst
   // }
 });
 search.addWidget(
-  customSortBySelector({ indices })
+  customSortBySelector({
+    indices,
+    [ transformItems ]
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html
 `;
@@ -27,6 +30,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomSortBySelectorWidgetOptions
  * @property {SortBySelectorIndices[]} indices Array of objects defining the different indices to choose from.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -98,7 +102,7 @@ export default function connectSortBySelector(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { indices } = widgetParams;
+    const { indices, transformItems = items => items } = widgetParams;
 
     if (!indices) {
       throw new Error(usage);
@@ -129,7 +133,7 @@ export default function connectSortBySelector(renderFn, unmountFn) {
         renderFn(
           {
             currentRefinement: currentIndex,
-            options: selectorOptions,
+            options: transformItems(selectorOptions),
             refine: this.setIndex,
             hasNoResults: true,
             widgetParams,
@@ -143,7 +147,7 @@ export default function connectSortBySelector(renderFn, unmountFn) {
         renderFn(
           {
             currentRefinement: helper.getIndex(),
-            options: selectorOptions,
+            options: transformItems(selectorOptions),
             refine: this.setIndex,
             hasNoResults: results.nbHits === 0,
             widgetParams,

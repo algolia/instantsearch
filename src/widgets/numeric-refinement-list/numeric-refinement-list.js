@@ -58,7 +58,8 @@ numericRefinementList({
   [ templates.{header,item,footer} ],
   [ transformData.{item} ],
   [ autoHideContainer ],
-  [ collapsible=false ]
+  [ collapsible=false ],
+  [ transformItems ]
 })`;
 
 /**
@@ -103,6 +104,7 @@ numericRefinementList({
  * @property {boolean} [autoHideContainer=true] Hide the container when no results match.
  * @property {NumericRefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -146,6 +148,7 @@ export default function numericRefinementList({
   collapsible = false,
   transformData,
   autoHideContainer = true,
+  transformItems,
 } = {}) {
   if (!container || !attributeName || !options) {
     throw new Error(usage);
@@ -179,7 +182,11 @@ export default function numericRefinementList({
       specializedRenderer,
       () => unmountComponentAtNode(containerNode)
     );
-    return makeNumericRefinementList({ attributeName, options });
+    return makeNumericRefinementList({
+      attributeName,
+      options,
+      transformItems,
+    });
   } catch (e) {
     throw new Error(usage);
   }

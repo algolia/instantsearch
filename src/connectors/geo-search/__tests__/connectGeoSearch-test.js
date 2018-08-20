@@ -175,6 +175,48 @@ describe('connectGeoSearch - rendering', () => {
     );
   });
 
+  it('expect to render with transformed hits', () => {
+    const render = jest.fn();
+    const unmount = jest.fn();
+
+    const customGeoSearch = connectGeoSearch(render, unmount);
+    const widget = customGeoSearch({
+      transformItems: items =>
+        items.map(item => ({
+          ...item,
+          _geoloc: {
+            lat: 20,
+            lng: 20,
+          },
+        })),
+    });
+
+    const helper = createFakeHelper({});
+
+    widget.render({
+      results: new SearchResults(helper.getState(), [
+        {
+          hits: [
+            { objectID: 123, _geoloc: { lat: 10, lng: 12 } },
+            { objectID: 456 },
+            { objectID: 789, _geoloc: { lat: 10, lng: 12 } },
+          ],
+        },
+      ]),
+      helper,
+    });
+
+    expect(render).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        items: [
+          { objectID: 123, _geoloc: { lat: 20, lng: 20 } },
+          { objectID: 789, _geoloc: { lat: 20, lng: 20 } },
+        ],
+      }),
+      false
+    );
+  });
+
   it('expect to render with position from the state', () => {
     const render = jest.fn();
     const unmount = jest.fn();

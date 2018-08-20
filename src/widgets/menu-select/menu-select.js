@@ -59,6 +59,7 @@ menuSelect({
   [ templates.{header,item,footer,seeAllOption} ],
   [ transformData.{item} ],
   [ autoHideContainer ]
+  [ transformItems ]
 })`;
 
 /**
@@ -91,10 +92,11 @@ menuSelect({
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {MenuSelectTemplates} [templates] Customize the output through templating.
- * @property {string} [limit=10] How many facets values to retrieve.
+ * @property {number} [limit=10] How many facets values to retrieve.
  * @property {MenuSelectTransforms} [transformData] Set of functions to update the data before passing them to the templates.
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu select.
  * @property {MenuSelectCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
@@ -124,6 +126,7 @@ export default function menuSelect({
   templates = defaultTemplates,
   transformData,
   autoHideContainer = true,
+  transformItems,
 }) {
   if (!container || !attributeName) {
     throw new Error(usage);
@@ -149,7 +152,7 @@ export default function menuSelect({
 
   try {
     const makeWidget = connectMenu(specializedRenderer);
-    return makeWidget({ attributeName, limit, sortBy });
+    return makeWidget({ attributeName, limit, sortBy, transformItems });
   } catch (e) {
     throw new Error(usage);
   }

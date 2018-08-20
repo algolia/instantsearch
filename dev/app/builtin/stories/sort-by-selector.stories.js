@@ -7,19 +7,40 @@ import { wrapWithHits } from '../../utils/wrap-with-hits';
 const stories = storiesOf('SortBySelector');
 
 export default () => {
-  stories.add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.sortBySelector({
-          container,
-          indices: [
-            { name: 'instant_search', label: 'Most relevant' },
-            { name: 'instant_search_price_asc', label: 'Lowest price' },
-            { name: 'instant_search_price_desc', label: 'Highest price' },
-          ],
-        })
-      );
-    })
-  );
+  stories
+    .add(
+      'default',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.sortBySelector({
+            container,
+            indices: [
+              { name: 'instant_search', label: 'Most relevant' },
+              { name: 'instant_search_price_asc', label: 'Lowest price' },
+              { name: 'instant_search_price_desc', label: 'Highest price' },
+            ],
+          })
+        );
+      })
+    )
+    .add(
+      'with transformed items',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.sortBySelector({
+            container,
+            indices: [
+              { name: 'instant_search', label: 'Most relevant' },
+              { name: 'instant_search_price_asc', label: 'Lowest price' },
+              { name: 'instant_search_price_desc', label: 'Highest price' },
+            ],
+            transformItems: items =>
+              items.map(item => ({
+                ...item,
+                label: `${item.label} (transformed)`,
+              })),
+          })
+        );
+      })
+    );
 };

@@ -1,5 +1,3 @@
-import sinon from 'sinon';
-import expect from 'expect';
 import sortBySelector from '../sort-by-selector';
 import Selector from '../../../components/Selector';
 
@@ -34,8 +32,8 @@ describe('sortBySelector()', () => {
       indexName: 'defaultIndex',
       createAlgoliaClient: () => ({}),
     });
-    autoHideContainer = sinon.stub().returns(Selector);
-    ReactDOM = { render: sinon.spy() };
+    autoHideContainer = jest.fn().mockReturnValue(Selector);
+    ReactDOM = { render: jest.fn() };
 
     sortBySelector.__Rewire__('render', ReactDOM.render);
     sortBySelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
@@ -52,9 +50,9 @@ describe('sortBySelector()', () => {
     };
     widget = sortBySelector({ container, indices, cssClasses });
     helper = {
-      getIndex: sinon.stub().returns('index-a'),
-      setIndex: sinon.stub().returnsThis(),
-      search: sinon.spy(),
+      getIndex: jest.fn().mockReturnValue('index-a'),
+      setIndex: jest.fn().mockReturnThis(),
+      search: jest.fn(),
     };
 
     results = {
@@ -71,20 +69,34 @@ describe('sortBySelector()', () => {
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {
     widget.render({ helper, results });
     widget.render({ helper, results });
-    expect(ReactDOM.render.calledTwice).toBe(
-      true,
+    expect(ReactDOM.render).toHaveBeenCalledTimes(
+      2,
       'ReactDOM.render called twice'
     );
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
+  });
+
+  it('renders transformed items', () => {
+    widget = sortBySelector({
+      container,
+      indices,
+      transformItems: items =>
+        items.map(item => ({ ...item, transformed: true })),
+    });
+
+    widget.init({ helper, instantSearchInstance: {} });
+    widget.render({ helper, results });
+
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it('sets the underlying index', () => {
     widget.setIndex('index-b');
-    expect(helper.setIndex.calledOnce).toBe(true, 'setIndex called once');
-    expect(helper.search.calledOnce).toBe(true, 'search called once');
+    expect(helper.setIndex).toHaveBeenCalledTimes(1, 'setIndex called once');
+    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
   it('should throw if there is no name attribute in a passed object', () => {
@@ -96,7 +108,7 @@ describe('sortBySelector()', () => {
   });
 
   it('must include the current index at initialization time', () => {
-    helper.getIndex = sinon.stub().returns('non-existing-index');
+    helper.getIndex = jest.fn().mockReturnValue('non-existing-index');
     expect(() => {
       widget.init({ helper });
     }).toThrow(/Index non-existing-index not present/);

@@ -13,9 +13,13 @@ class InfiniteHits extends Component {
       templateProps,
     } = this.props;
     const btn = this.props.isLastPage ? (
-      <button disabled>{showMoreLabel}</button>
+      <button disabled className={cssClasses.showmoreButton}>
+        {showMoreLabel}
+      </button>
     ) : (
-      <button onClick={showMore}>{showMoreLabel}</button>
+      <button onClick={showMore} className={cssClasses.showmoreButton}>
+        {showMoreLabel}
+      </button>
     );
 
     return (
@@ -39,6 +43,7 @@ InfiniteHits.propTypes = {
     allItems: PropTypes.string,
     empty: PropTypes.string,
     showmore: PropTypes.string,
+    showmoreButton: PropTypes.string,
   }),
   hits: PropTypes.array,
   results: PropTypes.object,

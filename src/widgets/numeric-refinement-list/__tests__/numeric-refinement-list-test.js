@@ -1,6 +1,3 @@
-import expect from 'expect';
-import sinon from 'sinon';
-import cloneDeep from 'lodash/cloneDeep';
 import numericRefinementList from '../numeric-refinement-list';
 
 const encodeValue = (start, end) =>
@@ -44,7 +41,7 @@ describe('numericRefinementList()', () => {
   let state;
 
   beforeEach(() => {
-    ReactDOM = { render: sinon.spy() };
+    ReactDOM = { render: jest.fn() };
     numericRefinementList.__Rewire__('render', ReactDOM.render);
 
     options = [
@@ -64,23 +61,23 @@ describe('numericRefinementList()', () => {
     });
     helper = {
       state: {
-        getNumericRefinements: sinon.stub().returns([]),
+        getNumericRefinements: jest.fn().mockReturnValue([]),
       },
-      addNumericRefinement: sinon.spy(),
-      search: sinon.spy(),
-      setState: sinon.stub().returnsThis(),
+      addNumericRefinement: jest.fn(),
+      search: jest.fn(),
+      setState: jest.fn().mockReturnThis(),
     };
     state = {
-      getNumericRefinements: sinon.stub().returns([]),
-      clearRefinements: sinon.stub().returnsThis(),
-      addNumericRefinement: sinon.stub().returnsThis(),
+      getNumericRefinements: jest.fn().mockReturnValue([]),
+      clearRefinements: jest.fn().mockReturnThis(),
+      addNumericRefinement: jest.fn().mockReturnThis(),
     };
     results = {
       hits: [],
     };
 
-    helper.state.clearRefinements = sinon.stub().returns(helper.state);
-    helper.state.addNumericRefinement = sinon.stub().returns(helper.state);
+    helper.state.clearRefinements = jest.fn().mockReturnValue(helper.state);
+    helper.state.addNumericRefinement = jest.fn().mockReturnValue(helper.state);
     createURL = () => '#';
     widget.init({ helper, instantSearchInstance: {} });
   });
@@ -89,101 +86,121 @@ describe('numericRefinementList()', () => {
     widget.render({ state, results, createURL });
     widget.render({ state, results, createURL });
 
-    expect(ReactDOM.render.callCount).toBe(2);
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+    expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+    expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
+  });
+
+  it('renders with transformed items', () => {
+    widget = numericRefinementList({
+      container,
+      attributeName: 'price',
+      options,
+      transformItems: items =>
+        items.map(item => ({ ...item, transformed: true })),
+    });
+
+    widget.init({ helper, instantSearchInstance: {} });
+    widget.render({ state, results, createURL });
+
+    expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
   });
 
   it("doesn't call the refinement functions if not refined", () => {
     widget.render({ state, results, createURL });
-    expect(helper.state.clearRefinements.called).toBe(
-      false,
+    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+      0,
       'clearRefinements called one'
     );
-    expect(helper.state.addNumericRefinement.called).toBe(
-      false,
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
+      0,
       'addNumericRefinement never called'
     );
-    expect(helper.search.called).toBe(false, 'search never called');
+    expect(helper.search).toHaveBeenCalledTimes(0, 'search never called');
   });
 
   it('calls the refinement functions if refined with "4"', () => {
     widget._refine(encodeValue(4, 4));
-    expect(helper.state.clearRefinements.calledOnce).toBe(
-      true,
+    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+      1,
       'clearRefinements called once'
     );
-    expect(helper.state.addNumericRefinement.calledOnce).toBe(
-      true,
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
+      1,
       'addNumericRefinement called once'
     );
-    expect(helper.state.addNumericRefinement.getCall(0).args).toEqual([
+    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
+      1,
       'price',
       '=',
-      4,
-    ]);
-    expect(helper.search.calledOnce).toBe(true, 'search called once');
+      4
+    );
+    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
   it('calls the refinement functions if refined with "between 5 and 10"', () => {
     widget._refine(encodeValue(5, 10));
-    expect(helper.state.clearRefinements.calledOnce).toBe(
-      true,
+    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+      1,
       'clearRefinements called once'
     );
-    expect(helper.state.addNumericRefinement.calledTwice).toBe(
-      true,
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
+      2,
       'addNumericRefinement called twice'
     );
-    expect(helper.state.addNumericRefinement.getCall(0).args).toEqual([
+    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
+      1,
       'price',
       '>=',
-      5,
-    ]);
-    expect(helper.state.addNumericRefinement.getCall(1).args).toEqual([
+      5
+    );
+    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
+      2,
       'price',
       '<=',
-      10,
-    ]);
-    expect(helper.search.calledOnce).toBe(true, 'search called once');
+      10
+    );
+    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
   it('calls two times the refinement functions if refined with "less than 4"', () => {
     widget._refine(encodeValue(undefined, 4));
-    expect(helper.state.clearRefinements.calledOnce).toBe(
-      true,
+    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+      1,
       'clearRefinements called once'
     );
-    expect(helper.state.addNumericRefinement.calledOnce).toBe(
-      true,
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
+      1,
       'addNumericRefinement called once'
     );
-    expect(helper.state.addNumericRefinement.getCall(0).args).toEqual([
+    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
+      1,
       'price',
       '<=',
-      4,
-    ]);
-    expect(helper.search.calledOnce).toBe(true, 'search called once');
+      4
+    );
+    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
   it('calls two times the refinement functions if refined with "more than 10"', () => {
     widget._refine(encodeValue(10));
-    expect(helper.state.clearRefinements.calledOnce).toBe(
-      true,
+    expect(helper.state.clearRefinements).toHaveBeenCalledTimes(
+      1,
       'clearRefinements called once'
     );
-    expect(helper.state.addNumericRefinement.calledOnce).toBe(
-      true,
+    expect(helper.state.addNumericRefinement).toHaveBeenCalledTimes(
+      1,
       'addNumericRefinement called once'
     );
-    expect(helper.state.addNumericRefinement.getCall(0).args).toEqual([
+    expect(helper.state.addNumericRefinement).toHaveBeenNthCalledWith(
+      1,
       'price',
       '>=',
-      10,
-    ]);
-    expect(helper.search.calledOnce).toBe(true, 'search called once');
+      10
+    );
+    expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
   it('does not alter the initial options when rendering', () => {
@@ -193,7 +210,7 @@ describe('numericRefinementList()', () => {
 
     // Given
     const initialOptions = [{ start: 0, end: 5, name: '1-5' }];
-    const initialOptionsClone = cloneDeep(initialOptions);
+    const initialOptionsClone = [...initialOptions];
     const testWidget = numericRefinementList({
       container,
       attributeName: 'price',

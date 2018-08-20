@@ -202,6 +202,58 @@ describe('connectInfiniteHits', () => {
     expect(secondRenderingOptions.results).toEqual(results);
   });
 
+  it('transform items if requested', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({
+      transformItems: items => items.map(() => ({ name: 'transformed' })),
+    });
+
+    const helper = jsHelper({}, '', {});
+    helper.search = jest.fn();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.mock.calls[0][0];
+    expect(firstRenderingOptions.hits).toEqual([]);
+    expect(firstRenderingOptions.results).toBe(undefined);
+
+    const hits = [
+      {
+        name: 'name 1',
+      },
+      {
+        name: 'name 2',
+      },
+    ];
+
+    const results = new SearchResults(helper.state, [{ hits }]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const transformedHits = [
+      {
+        name: 'transformed',
+      },
+      {
+        name: 'transformed',
+      },
+    ];
+
+    const secondRenderingOptions = rendering.mock.calls[1][0];
+    expect(secondRenderingOptions.hits).toEqual(transformedHits);
+    expect(secondRenderingOptions.results).toEqual(results);
+  });
+
   it('does not render the same page twice', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);

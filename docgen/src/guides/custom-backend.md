@@ -44,7 +44,7 @@ app.post('/search', async (req, res) => {
 
 ### Supporting *Search For Facet Values*
 
-Algolia offers the concept of [*Search For Facet Values*](https://www.algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=javascript). This enables your refinement lists to be searchable. If your frontend makes use of this feature, via a search box on top of refinement lists, you can create an endpoint `POST /sffv`. Add a new route to support that:
+Algolia offers the concept of [*Search For Facet Values*](https://www.algolia.com/doc/api-reference/api-methods/search-for-facet-values/?language=javascript). This enables your refinement lists to be searchable. If your frontend makes use of this feature, via a search box on top of refinement lists, you must create an endpoint `POST /sffv`. Add a new route to support that:
 
 ```javascript
 app.post('/sffv', async (req, res) => {
@@ -136,7 +136,9 @@ That’s it! InstantSearch is now requesting your own backend and will display t
 
 Now that you’ve got InstantSearch querying your own backend before fetching results from Algolia, you could merge Algolia’s data to yours to offer your users more exhaustive results.
 
-Let’s say you want to fetch users' data for each hit on your server to pass it to your frontend. You need to make a few changes to your backend:
+A recurring problem with e-commerce websites using Algolia is to manage the remaining stock for each product; it is sometimes hard to keep track of the exact number of items. An approach made possible with a custom backend is to only store the item's availability on each Algolia record (`none`, `low`, `medium`, `high`) and to fetch the exact stock on your database.
+
+You need to make a few changes to your backend:
 
 ```javascript
 app.post('/search', async (req, res) => {
@@ -148,8 +150,8 @@ app.post('/search', async (req, res) => {
       ...result,
       hits: result.hits.map(async hit => ({
         ...hit,
-        // `getUser()` retrieves a user's data from your own database
-        user: await getUser(hit.userID),
+        // `getStock()` retrieves a product's exact stock from your own database
+        stock: await getStock(hit.productID),
       })),
     })),
   };
@@ -158,7 +160,7 @@ app.post('/search', async (req, res) => {
 });
 ```
 
-You will now be able to access the property `user` on each hit with InstantSearch on the frontend.
+You will now be able to access the property `stock` on each hit with InstantSearch on the frontend.
 
 ## Conclusion
 

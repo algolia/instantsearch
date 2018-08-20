@@ -16,6 +16,7 @@ search.addWidget(
   customBreadcrumb({
     attributes,
     [ rootPath = null ],
+    [ transformItems ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectBreadcrumb.html
@@ -31,6 +32,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @typedef {Object} CustomBreadcrumbWidgetOptions
  * @property {string[]} attributes Attributes to use to generate the hierarchy of the breadcrumb.
  * @property {string} [rootPath = null] Prefix path to use if the first level is not the root level.
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  */
@@ -56,7 +58,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 export default function connectBreadcrumb(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
   return (widgetParams = {}) => {
-    const { attributes, separator = ' > ', rootPath = null } = widgetParams;
+    const {
+      attributes,
+      separator = ' > ',
+      rootPath = null,
+      transformItems = items => items,
+    } = widgetParams;
     const [hierarchicalFacetName] = attributes;
 
     if (!attributes || !Array.isArray(attributes) || attributes.length === 0) {
@@ -147,8 +154,9 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
       render({ instantSearchInstance, results, state }) {
         const [{ name: facetName }] = state.hierarchicalFacets;
 
-        const facetsValues = results.getFacetValues(facetName);
-        const items = shiftItemsValues(prepareItems(facetsValues));
+        const facetValues = results.getFacetValues(facetName);
+        const data = Array.isArray(facetValues.data) ? facetValues.data : [];
+        const items = transformItems(shiftItemsValues(prepareItems(data)));
 
         renderFn(
           {
@@ -170,16 +178,15 @@ export default function connectBreadcrumb(renderFn, unmountFn) {
   };
 }
 
-function prepareItems(obj) {
-  return obj.data.reduce((result, currentItem) => {
+function prepareItems(data) {
+  return data.reduce((result, currentItem) => {
     if (currentItem.isRefined) {
       result.push({
         name: currentItem.name,
         value: currentItem.path,
       });
       if (Array.isArray(currentItem.data)) {
-        const children = prepareItems(currentItem);
-        result = result.concat(children);
+        result = result.concat(prepareItems(currentItem.data));
       }
     }
     return result;
