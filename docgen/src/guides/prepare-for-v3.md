@@ -106,4 +106,4 @@ search.addWidget(
 ## Deprecations
 
 * [`createAlgoliaClient`](https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-createAlgoliaClient) becomes deprecated in favor of [`searchClient`](https://community.algolia.com/instantsearch.js/v2/instantsearch.html#struct-InstantSearchOptions-searchClient)
-* transformData becomes deprecated in favore of transformItems in all widgets
+* `transformData` becomes deprecated in favor of `transformItems` in all widgets
