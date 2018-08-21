@@ -10,7 +10,7 @@
 
 ---
 
-[![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
+[![Version][version-svg]][package-url] [![Build Status][ci-svg]][ci-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
 React InstantSearch is a React library that lets you create an instant-search result experience using [Algolia][algolia-website]’s search API. It is part of the InstantSearch family:
 
@@ -103,8 +103,8 @@ React InstantSearch is [MIT licensed](LICENSE).
 [instantsearch-ios-github]: https://github.com/algolia/instantsearch-ios
 [instantsearch-vue-github]: https://github.com/algolia/vue-instantsearch
 [instantsearch-angular-github]: https://github.com/algolia/angular-instantsearch
-[travis-svg]: https://img.shields.io/travis/algolia/react-instantsearch/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/algolia/react-instantsearch
+[ci-svg]: https://circleci.com/gh/algolia/react-instantsearch.svg?style=svg
+[ci-url]: https://circleci.com/gh/algolia/react-instantsearch
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 [downloads-image]: https://img.shields.io/npm/dm/react-instantsearch.svg?style=flat-square
