@@ -82,6 +82,7 @@
     "rollup-plugin-vue": "^3.0.0",
     "rollup-watch": "^4.3.1",
     "vue": "^2.5.17",
+    "vue-jest": "^2.6.0",
     "vue-json-tree": "^0.3.3",
     "vue-loader": "^14.2.2",
     "vue-template-compiler": "^2.5.17"
@@ -101,8 +102,8 @@
       "node_modules/(?!(instantsearch\\.js|vue-json-tree))"
     ],
     "transform": {
-      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
-      ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
+      "^.+\\.js$": "babel-jest",
+      "^.+\\.vue$": "vue-jest"
     },
     "testURL": "https://example.com",
     "watchPlugins": [
