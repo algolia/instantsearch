@@ -1,0 +1,101 @@
+aliases:
+  - &install_yarn_version
+    name: Install specific Yarn version
+    command: |
+      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.9.4
+      echo 'export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"' >> $BASH_ENV
+
+  - &restore_yarn_cache
+    name: Restore Yarn cache
+    keys:
+      - yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+
+  - &save_yarn_cache
+    name: Save Yarn cache
+    key: yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+    paths:
+      - ~/.cache/yarn
+
+  - &run_yarn_install
+    name: Install dependencies
+    command: yarn install
+
+defaults: &defaults
+  working_directory: ~/react-instantsearch
+  docker:
+    - image: circleci/node:8.11.4
+
+version: 2
+jobs:
+  test_build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Build & Test packages size
+          command: yarn test:build
+
+  test_unit:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Lint & Code styles
+          command: yarn lint
+      - run:
+          name: Unit Tests
+          command: yarn test:ci
+
+  test_e2e:
+    <<: *defaults
+    docker:
+      - image: circleci/node:8.11.4-browsers
+    environment:
+      FIREFOX_VERSION: '56.0'
+    steps:
+      - checkout
+      - run:
+          name: Install specific FF version
+          command: |
+            wget -O "/tmp/firefox-$FIREFOX_VERSION.tar.bz2" "https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2"
+            tar -jxf "/tmp/firefox-$FIREFOX_VERSION.tar.bz2" -C "/tmp/"
+            sudo mv "/tmp/firefox" "/opt/firefox-$FIREFOX_VERSION"
+            sudo ln -sf "/opt/firefox-$FIREFOX_VERSION/firefox" "/usr/bin/firefox"
+            hash -r
+            firefox --version
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: E2E Tests
+          command: yarn test:e2e
+
+  test_examples:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: *install_yarn_version
+      - restore_cache: *restore_yarn_cache
+      - run: *run_yarn_install
+      - save_cache: *save_yarn_cache
+      - run:
+          name: Build & Test examples
+          command: yarn test:examples
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - test_build
+      - test_unit
+      - test_e2e
+      - test_examples
