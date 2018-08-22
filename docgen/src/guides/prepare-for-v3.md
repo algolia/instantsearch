@@ -45,7 +45,7 @@ const search = instantsearch({
 search.start();
 ```
 
-## transformData vs transformItems
+## `transformData` vs `transformItems`
 
 Since InstantSearch.js first public release, we have provided an option to customize the values used in the widgets. This method was letting you map 1-1 the values with other values. With react-instantsearch, we implemented a slightly different API that allowed for mapping but also completly change the content of the list of values. This API is way more powerful and therefore it will be the one that we want to push forward with.
 
@@ -56,10 +56,10 @@ search.addWidget(
   instantsearch.widget.refinementList({
     container: '#someDomNode',
     attributeName: 'facet',
-    transformData: function(item) {
-      item.count = 0;
-      return item;
-    },
+    transformData: (item) => ({
+      ...item,
+      count: 0;
+    }),
   })
 );
 ```
@@ -73,11 +73,11 @@ search.addWidget(
   instantsearch.widget.refinementList({
     container: '#someDomNode',
     attributeName: 'facet',
-    transformItems: function(items) {
-      return items.map(function(item) {
-        item.count = 0;
-        return item;
-      });
+    transformItems: (items) => {
+      return items.map((item) => ({
+        ...item,
+        count: 0;
+      }));
     },
   })
 );
@@ -90,14 +90,17 @@ search.addWidget(
   instantsearch.widget.refinementList({
     container: '#someDomNode',
     attributeName: 'facet',
-    transformItems: function(items) {
-      items.push({
-        value: 'facetValue',
-        count: 100,
-      }); // injecting new values
-      items.splice(0, 1); // removing items
-      items.sort((a, b) => b.count - a.count); // custom sort
-      return items;
+    transformItems: items => {
+      const updatedItems = [
+        ...items,
+        {
+          value: 'facetValue',
+          count: 100,
+        }, // Adding new values
+      ];
+      updatedItems.splice(0, 1); // removing items
+      updatedItems.sort((a, b) => b.count - a.count); // custom sort
+      return updatedItems;
     },
   })
 );
