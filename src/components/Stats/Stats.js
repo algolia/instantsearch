@@ -6,13 +6,6 @@ import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 
 export class RawStats extends Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      this.props.nbHits !== nextProps.nbHits ||
-      this.props.processingTimeMS !== nextProps.processingTimeMS
-    );
-  }
-
   render() {
     const data = {
       hasManyResults: this.props.nbHits > 1,
