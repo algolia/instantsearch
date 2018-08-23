@@ -43,7 +43,6 @@
   "dependencies": {
     "algoliasearch": "^3.30.0",
     "algoliasearch-helper": "^2.26.1",
-    "escape-html": "^1.0.3",
     "instantsearch.js": "^2.10.0",
     "lodash": "^4.17.10"
   },
