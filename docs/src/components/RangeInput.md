@@ -26,7 +26,7 @@ Name | Type | Default | Description | Required
 attribute | String | `defaultValue` | The name of the attribute in your record | yes
 min | Number | - | Minimum value of the range | no
 max | Number | - | Maximum value of the range | no
-precision | Number | - | Number of digits after the decimal point to enforce | no
+precision | Number | 0 | Number of digits after the decimal point to enforce | no
 
 ## CSS classes
 
@@ -36,11 +36,21 @@ DOM structure, have a look at the generated DOM in your browser.
 Class name | Description
 ---|---
 `ais-RangeInput` | Container class
+`ais-RangeInput--noRefinement` | Class added on the container when there are no refinements possible
 `ais-RangeInput-form` | The form wrapper around the inputs and the submit button
-`ais-RangeInput-separator` | The separator between the min and the max 
-`ais-RangeInput-submit` | The button that triggers the submission of the formubmission of the form
+`ais-RangeInput-separator` | The separator between the min and the max
+`ais-RangeInput-button` | The button that triggers the submission of the form submission of the form
 `ais-RangeInput-label` | Enclosing label of an input
 `ais-RangeInput-input` | An input
 `ais-RangeInput-input--min` | The minimum bound of the range
 `ais-RangeInput-input--max` | The maximum bound of the range
-`ais-RangeInput-item--selected` | Selected item
+
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ refine: (min, max) => void, currentRefinements: [number, number], noRefinements, range: {min: number, max: number}}` | Slot to override the DOM output. `refine` takes the updated values and then trigger the search. The `currentRefinements` contains the min and the max as set in the search state (and should be used to render the input values).
+minLabel | | Slot for giving the min input a label
+maxLabel | | Slot for giving the max input a label
+separator| | Slot for modifying the separator between the two inputs
+submitLabel | | Slot for modifying the label on the submit button
