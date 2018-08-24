@@ -3,6 +3,7 @@ import { __setState } from '../../component';
 import Menu from '../Menu.vue';
 
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const apple = {
   value: 'Apple',
@@ -108,7 +109,7 @@ it('accepts a sortBy prop', () => {
 
 describe('default render', () => {
   it('renders correctly', () => {
-    __setState(defaultState);
+    __setState({ ...defaultState });
 
     const wrapper = mount(Menu, {
       propsData: defaultProps,
@@ -171,7 +172,7 @@ describe('default render', () => {
   });
 
   it('renders correctly with show more button', () => {
-    __setState(defaultState);
+    __setState({ ...defaultState });
 
     const wrapper = mount(Menu, {
       propsData: {
@@ -242,7 +243,7 @@ describe('default render', () => {
   });
 
   it('renders correctly without a show more button (showMore)', () => {
-    __setState(defaultState);
+    __setState({ ...defaultState });
 
     const wrapper = mount(Menu, {
       propsData: {
@@ -293,6 +294,27 @@ describe('default render', () => {
 
     expect(toggleShowMore).toHaveBeenCalledTimes(1);
   });
+
+  it('calls the Panel mixin with `canRefine`', () => {
+    __setState({ ...defaultState });
+
+    const wrapper = mount(Menu, {
+      propsData: defaultProps,
+    });
+
+    const mapStateToCanRefine = () =>
+      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+    expect(mapStateToCanRefine()).toBe(true);
+
+    wrapper.setData({
+      state: {
+        canRefine: false,
+      },
+    });
+
+    expect(mapStateToCanRefine()).toBe(false);
+  });
 });
 
 describe('custom default render', () => {
@@ -324,7 +346,7 @@ describe('custom default render', () => {
   `;
 
   it('renders correctly', () => {
-    __setState(defaultState);
+    __setState({ ...defaultState });
 
     const wrapper = mount(Menu, {
       propsData: defaultProps,
@@ -454,7 +476,7 @@ describe('custom showMoreLabel render', () => {
   `;
 
   it('renders correctly with a custom show more label', () => {
-    __setState(defaultState);
+    __setState({ ...defaultState });
 
     const wrapper = mount(Menu, {
       propsData: {

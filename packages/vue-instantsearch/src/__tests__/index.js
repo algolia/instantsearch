@@ -21,6 +21,7 @@ test('Should register all components when installed', () => {
     'ais-menu-select',
     'ais-numeric-menu',
     'ais-pagination',
+    'ais-panel',
     'ais-powered-by',
     'ais-range-input',
     'ais-rating-menu',

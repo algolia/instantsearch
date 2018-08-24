@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default render renders correctly 1`] = `
+
+<div class="ais-Panel">
+  <div class="ais-Panel-body">
+    <p>
+      This is the body of the Panel.
+    </p>
+  </div>
+</div>
+
+`;
+
+exports[`default render renders correctly with footer 1`] = `
+
+<div class="ais-Panel">
+  <div class="ais-Panel-body">
+    <p>
+      This is the body of the Panel.
+    </p>
+  </div>
+  <div class="ais-Panel-footer">
+    <span>
+      Footer
+    </span>
+  </div>
+</div>
+
+`;
+
+exports[`default render renders correctly with header 1`] = `
+
+<div class="ais-Panel">
+  <div class="ais-Panel-header">
+    <span>
+      Header
+    </span>
+  </div>
+  <div class="ais-Panel-body">
+    <p>
+      This is the body of the Panel.
+    </p>
+  </div>
+</div>
+
+`;
+
+exports[`default render renders correctly without refinement 1`] = `
+
+<div class="ais-Panel ais-Panel--noRefinement">
+  <div class="ais-Panel-body">
+    <p>
+      This is the body of the Panel.
+    </p>
+  </div>
+</div>
+
+`;

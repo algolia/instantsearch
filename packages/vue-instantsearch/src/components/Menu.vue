@@ -46,10 +46,16 @@
 <script>
 import isFunction from 'lodash/isFunction';
 import { connectMenu } from 'instantsearch.js/es/connectors';
+import { createPanelConsumerMixin } from '../panel';
 import algoliaComponent from '../component';
 
 export default {
-  mixins: [algoliaComponent],
+  mixins: [
+    algoliaComponent,
+    createPanelConsumerMixin({
+      mapStateToCanRefine: state => state.canRefine,
+    }),
+  ],
   props: {
     attribute: {
       type: String,

@@ -46,4 +46,13 @@ storiesOf('Menu', module)
         </ol>
       </ais-menu>
     `,
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Menu</template>
+        <ais-menu attribute="brand" />
+        <template slot="footer">Footer</template>
+      </ais-panel>
+    `,
   }));
