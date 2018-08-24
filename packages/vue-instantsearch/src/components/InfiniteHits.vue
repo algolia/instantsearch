@@ -30,6 +30,13 @@ import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 
 export default {
   mixins: [algoliaComponent],
+  props: {
+    escapeHTML: {
+      type: Boolean,
+      default: true,
+      required: false
+    }
+  },
   data() {
     return {
       widgetName: 'InfiniteHits',
@@ -46,6 +53,11 @@ export default {
     },
     isLastPage() {
       return this.state.isLastPage;
+    },
+    widgetParams() {
+      return {
+        escapeHits: this.escapeHTML,
+      };
     },
   },
   methods: {

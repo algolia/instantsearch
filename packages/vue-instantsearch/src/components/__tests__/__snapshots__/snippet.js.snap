@@ -1,31 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Snippet allows usage of dot delimited path to access nested attribute 1`] = `
+exports[`allows usage of dot delimited path to access nested attribute 1`] = `
 
-<span class="ais-snippet">
+<span class="ais-Snippet">
   nested
-  <em>
+  <mark class="ais-Snippet-highlighted">
     val
-  </em>
+  </mark>
 </span>
 
 `;
 
-exports[`Snippet renders proper HTML 1`] = `
+exports[`renders proper HTML 1`] = `
 
-<span class="ais-snippet">
+<span class="ais-Snippet">
   con
-  <em>
+  <mark class="ais-Snippet-highlighted">
     ten
-  </em>
+  </mark>
   t
 </span>
 
 `;
 
-exports[`Snippet should render an empty string in production if attribute is not snippeted 1`] = `
+exports[`renders proper HTML with highlightTagName 1`] = `
 
-<span class="ais-snippet">
+<span class="ais-Snippet">
+  con
+  <marquee class="ais-Snippet-highlighted">
+    ten
+  </marquee>
+  t
+</span>
+
+`;
+
+exports[`should render an empty string in production if attribute is not snippeted 1`] = `
+
+<span class="ais-Snippet">
 </span>
 
 `;

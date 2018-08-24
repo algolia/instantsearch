@@ -23,8 +23,8 @@ storiesOf('Hits', module)
       <div slot-scope="{ items }">
         <marquee>before everything</marquee>
         <div
-          v-for="(item, itemIndex) in items"
-          :key="itemIndex"
+          v-for="item in items"
+          :key="item.objectID"
         >
           custom objectID: {{item.objectID}}
         </div>

@@ -1,14 +1,12 @@
-import Vue from 'vue';
-import Highlight from '../Highlight';
+import { mount } from '@vue/test-utils';
+import Highlight from '../Highlight.vue';
 
-function restoreTestProcessEnv() {
+afterEach(() => {
   process.env.NODE_ENV = 'test';
-}
-
-afterEach(restoreTestProcessEnv);
+});
 
 test('renders proper HTML', () => {
-  const result = {
+  const hit = {
     _highlightResult: {
       attr: {
         value: `con<em>ten</em>t`,
@@ -16,72 +14,71 @@ test('renders proper HTML', () => {
     },
   };
 
-  const vm = new Vue({
-    render(h) {
-      return h('highlight', {
-        props: {
-          attributeName: 'attr',
-          result,
-        },
-      });
+  const wrapper = mount(Highlight, {
+    propsData: {
+      attribute: 'attr',
+      hit,
     },
-    components: {
-      Highlight,
-    },
-  }).$mount();
+  });
 
-  expect(vm.$el.outerHTML).toMatchSnapshot();
+  expect(wrapper.html()).toMatchSnapshot();
+});
+
+test('renders proper HTML with highlightTagName', () => {
+  const hit = {
+    _highlightResult: {
+      attr: {
+        value: `con<em>ten</em>t`,
+      },
+    },
+  };
+
+  const wrapper = mount(Highlight, {
+    propsData: {
+      attribute: 'attr',
+      highlightedTagName: 'marquee',
+      hit,
+    },
+  });
+
+  expect(wrapper.html()).toMatchSnapshot();
 });
 
 test('should render an empty string in production if attribute is not highlighted', () => {
   process.env.NODE_ENV = 'production';
-  const result = {
+  const hit = {
     _highlightResult: {},
   };
 
-  const vm = new Vue({
-    render(h) {
-      return h('highlight', {
-        props: {
-          attributeName: 'attr',
-          result,
-        },
-      });
+  const wrapper = mount(Highlight, {
+    propsData: {
+      attribute: 'attr',
+      hit,
     },
-    components: {
-      Highlight,
-    },
-  }).$mount();
+  });
 
-  expect(vm.$el.outerHTML).toMatchSnapshot();
+  expect(wrapper.html()).toMatchSnapshot();
 });
 
-test('should throw an error when not in production if attribute is not highlighted', () => {
-  global.console = { error: jest.fn() };
+test('should warn when not in production if attribute is not highlighted', () => {
+  global.console.warn = jest.fn();
 
-  const result = {
+  const hit = {
     _highlightResult: {},
   };
 
-  new Vue({
-    render(h) {
-      return h('highlight', {
-        props: {
-          attributeName: 'attr',
-          result,
-        },
-      });
+  mount(Highlight, {
+    propsData: {
+      attribute: 'attr',
+      hit,
     },
-    components: {
-      Highlight,
-    },
-  }).$mount();
+  });
 
-  expect(global.console.error).toHaveBeenCalled();
+  expect(global.console.warn).toHaveBeenCalledTimes(1);
 });
 
 test('allows usage of dot delimited path to access nested attribute', () => {
-  const result = {
+  const hit = {
     _highlightResult: {
       attr: {
         nested: {
@@ -91,19 +88,12 @@ test('allows usage of dot delimited path to access nested attribute', () => {
     },
   };
 
-  const vm = new Vue({
-    render(h) {
-      return h('highlight', {
-        props: {
-          attributeName: 'attr.nested',
-          result,
-        },
-      });
+  const wrapper = mount(Highlight, {
+    propsData: {
+      attribute: 'attr.nested',
+      hit,
     },
-    components: {
-      Highlight,
-    },
-  }).$mount();
+  });
 
-  expect(vm.$el.outerHTML).toMatchSnapshot();
+  expect(wrapper.html()).toMatchSnapshot();
 });

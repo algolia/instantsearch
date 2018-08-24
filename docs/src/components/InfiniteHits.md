@@ -21,7 +21,9 @@ Displays an infinite list of hits along with a load more button.
 
 ## Props
 
-None.
+Name | Type | Default | Description | Required
+---|---|---|---|---
+escapeHTML | Boolean | true | Escape raw HTML in the hits | no
 
 ## CSS classes
 

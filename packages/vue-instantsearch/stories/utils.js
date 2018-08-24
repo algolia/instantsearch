@@ -1,4 +1,6 @@
 export const previewWrapper = ({
+  appId = 'latency',
+  apiKey = '6be0576ff61c053d5f9a3225e2a90f76',
   indexName = 'instant_search',
   hits = `
     <ol
@@ -15,7 +17,9 @@ export const previewWrapper = ({
           :style="{ backgroundImage: 'url(' + item.image + ')' }"
         />
         <div class="playground-hits-desc">
-          <p>{{ item.name }}</p>
+          <p>
+            <ais-highlight attribute="name" :item="item">
+          </p>
           <p>Rating: {{ item.rating }}✭</p>
           <p>Price: {{ item.price }}$</p>
         </div>
@@ -29,8 +33,8 @@ export const previewWrapper = ({
 } = {}) => () => ({
   template: `
     <ais-index
-      appId="latency"
-      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+      appId="${appId}"
+      apiKey="${apiKey}"
       indexName="${indexName}"
     >
       <ais-configure :hitsPerPage="3" />

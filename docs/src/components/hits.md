@@ -19,13 +19,13 @@ When you want to override how a single item looks:
 
 ```html
 <ais-hits>
-  <template slot="item" slot-scope="{ result }">
+  <template slot="item" slot-scope="{ item }">
     <h2>
-      <a :href="result.url">
-        {{ result.title }}
+      <a :href="item.url">
+        {{ item.title }}
       </a>
     </h2>
-    <p>{{ result.description }}</p>
+    <p>{{ item.description }}</p>
   </template>
 </ais-hits>
 ```
@@ -34,7 +34,7 @@ When you want to override the complete hits:
 
 ```html
 <ais-hits>
-  <template slot="default" slot-scope="items">
+  <template slot="default" slot-scope="{ items }">
     <div v-for="(item, itemIndex) in items" :key="itemIndex">
       <h2>
         <a :href="item.url">
@@ -51,7 +51,7 @@ When you want to show something custom if there are no results:
 
 ```html
 <ais-hits>
-  <template slot="default" slot-scope="items">
+  <template slot="default" slot-scope="{ items }">
     <div v-if="items.length <= 0">
       No results found.
     </div>
@@ -69,7 +69,9 @@ When you want to show something custom if there are no results:
 
 ## Props
 
-Hits does not accept any props
+Name | Type | Default | Description | Required
+---|---|---|---|---
+escapeHTML | Boolean | true | Escape raw HTML in the hits | no
 
 ## CSS classes
 

@@ -58,7 +58,7 @@ Slots come in two flavors, simple `slots` and `scoped slots`.
 Here is an example of adding a header to a `RefinementList` component:
 
 ```html
-<ais-refinement-list attribute-name="brand">
+<ais-refinement-list attribute="brand">
   <h3 slot="header">Filter by Brand</h3>
 </ais-refinement-list>
 ```

@@ -22,9 +22,16 @@ import { connectHits } from 'instantsearch.js/es/connectors';
 
 export default {
   mixins: [algoliaComponent],
+  props: {
+    escapeHTML: {
+      type: Boolean,
+      default: true,
+      required: false
+    }
+  },
   data() {
     return {
-      widgetName: 'Hits',
+      widgetName: "Hits"
     };
   },
   beforeCreate() {
@@ -34,6 +41,11 @@ export default {
     // Fixes InstantSearch.js connectors API: every list of things must be called `items`
     items() {
       return this.state.hits;
+    },
+    widgetParams() {
+      return {
+        escapeHits: this.escapeHTML,
+      };
     },
   },
 };</script>
