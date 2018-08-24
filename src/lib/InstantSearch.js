@@ -307,6 +307,78 @@ To help you migrate, please refer to the migration guide: https://community.algo
     }
   }
 
+  serialize() {
+    return {
+      searchParameters: this.helper.lastResults._state,
+      searchResults: this.helper.lastResults,
+    };
+  }
+
+  // Inject the data from the client when SSR is used
+  // We can use a props to provide it down the tree
+  inject({ searchParameters, searchResults }) {
+    this.searchParameters = searchParameters;
+    // Maybe re-use the same results to avoid the blink + request
+    this.searchResults = new algoliasearchHelper.SearchResults(
+      new algoliasearchHelper.SearchParameters(this.initialSearchParameters),
+      searchResults._rawResults
+    );
+  }
+
+  ssr(nextSearchParameters) {
+    const initialSearchParameters = enhanceConfiguration({})(
+      nextSearchParameters,
+      { getConfiguration: () => this.searchParameters }
+    );
+
+    this.helper = algoliasearchHelper(
+      this.client,
+      initialSearchParameters.index || this.indexName,
+      initialSearchParameters
+    );
+
+    return new Promise((resolve, reject) => {
+      this.helper.once('result', () => {
+        this.helper.removeAllListeners();
+        resolve();
+      });
+
+      this.helper.once('error', error => {
+        this.helper.removeAllListeners();
+        reject(error);
+      });
+
+      this.helper.search();
+    });
+  }
+
+  renderWidget(widget) {
+    if (widget.init) {
+      widget.init({
+        templatesConfig: this.templatesConfig,
+        state: this.helper.state,
+        helper: this.helper,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+        instantSearchInstance: this,
+      });
+    }
+
+    if (widget.render) {
+      widget.render({
+        templatesConfig: this.templatesConfig,
+        results: this.helper.lastResults,
+        state: this.helper.lastResults._state,
+        helper: this.helper,
+        createURL: () => '#',
+        instantSearchInstance: this,
+        searchMetadata: {
+          isSearchStalled: false,
+        },
+      });
+    }
+  }
+
   /**
    * Ends the initialization of InstantSearch.js and triggers the
    * first search. This method should be called after all widgets have been added
