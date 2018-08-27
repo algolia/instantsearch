@@ -13,7 +13,7 @@
     "react": "16.4.2",
     "react-dom": "16.4.2",
     "react-instantsearch-dom": "{{libraryVersion}}",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.5"
   },
   "devDependencies": {
     "eslint": "5.4.0",
