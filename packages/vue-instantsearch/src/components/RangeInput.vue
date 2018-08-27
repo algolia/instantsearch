@@ -12,11 +12,11 @@
       <input
         type="number"
         :class="[suit('input'), suit('input', 'min')]"
-        :max="maxPossibleValue"
-        :min="minPossibleValue"
-        :placeholder="minPossibleValue"
         :step="step"
-        :value="state.start && state.start[0]"
+        :min="state.range.min"
+        :max="state.range.max"
+        :placeholder="state.range.min"
+        :value="values.min"
         @change="minInput = $event.currentTarget.value"
       />
     </label>
@@ -26,11 +26,11 @@
       <input
         :class="[suit('input'), suit('input', 'max')]"
         type="number"
-        :max="maxPossibleValue"
-        :min="minPossibleValue"
-        :placeholder="maxPossibleValue"
         :step="step"
-        :value="state.start && state.start[1]"
+        :min="state.range.min"
+        :max="state.range.max"
+        :placeholder="state.range.max"
+        :value="values.max"
         @change="maxInput = $event.currentTarget.value"
       />
     </label>
@@ -96,11 +96,14 @@ export default {
     step() {
       return 1 / Math.pow(10, this.precision);
     },
-    minPossibleValue() {
-      return Math.max(this.min, this.state.range.min);
-    },
-    maxPossibleValue() {
-      return Math.min(this.max, this.state.range.max);
+    values() {
+      const [minValue, maxValue] = this.state.start;
+      const { min: minRange, max: maxRange } = this.state.range;
+
+      return {
+        min: minValue !== -Infinity && minValue !== minRange ? minValue : null,
+        max: maxValue !== Infinity && maxValue !== maxRange ? maxValue : null,
+      };
     },
   },
   methods: {
