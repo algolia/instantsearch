@@ -158,7 +158,7 @@ export default {
     widgetParams() {
       return {
         padding: this.padding,
-        totalPages: this.totalPages,
+        maxPages: this.totalPages,
       };
     },
   },

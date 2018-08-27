@@ -13,6 +13,34 @@ const defaultState = {
   isLastPage: false,
 };
 
+it('accepts a padding prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const wrapper = mount(Pagination, {
+    propsData: {
+      padding: 5,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.padding).toBe(5);
+});
+
+it('accepts a totalPages prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const wrapper = mount(Pagination, {
+    propsData: {
+      totalPages: 10,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.maxPages).toBe(10);
+});
+
 it('renders correctly first page', () => {
   __setState(defaultState);
   const wrapper = mount(Pagination);
