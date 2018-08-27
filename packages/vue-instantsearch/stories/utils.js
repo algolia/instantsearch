@@ -18,7 +18,7 @@ export const previewWrapper = ({
         />
         <div class="playground-hits-desc">
           <p>
-            <ais-highlight attribute="name" :item="item">
+            <ais-highlight attribute="name" :hit="item" />
           </p>
           <p>Rating: {{ item.rating }}✭</p>
           <p>Price: {{ item.price }}$</p>
