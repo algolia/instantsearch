@@ -969,6 +969,118 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
+  it('can search in facet values and show more values', () => {
+    const { makeWidget, rendering } = createWidgetFactory();
+    const widget = makeWidget({
+      attributeName: 'category',
+      limit: 2,
+    });
+
+    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    helper.search = jest.fn();
+    helper.searchForFacetValues = jest.fn().mockReturnValue(
+      Promise.resolve({
+        exhaustiveFacetsCount: true,
+        facetHits: [
+          {
+            count: 33,
+            highlighted: 'Salvador <em>Da</em>li',
+            value: 'Salvador Dali',
+          },
+          {
+            count: 9,
+            highlighted: '<em>Da</em>vidoff',
+            value: 'Davidoff',
+          },
+        ],
+        processingTimeMS: 1,
+      })
+    );
+
+    // Simulate the lifecycle
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    widget.render({
+      results: new SearchResults(helper.state, [
+        {
+          hits: [],
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+        {
+          facets: {
+            category: {
+              c1: 880,
+            },
+          },
+        },
+      ]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+    expect(rendering).toHaveBeenCalledTimes(2);
+    // Simulation end
+
+    const searchItems = rendering.mock.calls[1][0].items;
+    const search = rendering.mock.calls[1][0].searchForItems;
+    search('da');
+
+    const [
+      sffvFacet,
+      sffvQuery,
+      maxNbItems,
+      paramOverride,
+    ] = helper.searchForFacetValues.mock.calls[0];
+
+    expect(sffvQuery).toBe('da');
+    expect(sffvFacet).toBe('category');
+    expect(maxNbItems).toBe(2);
+    expect(paramOverride).toEqual({
+      highlightPreTag: undefined,
+      highlightPostTag: undefined,
+    });
+
+    return Promise.resolve().then(() => {
+      expect(rendering).toHaveBeenCalledTimes(3);
+      expect(rendering.mock.calls[2][0].isFromSearch).toBe(true);
+      expect(rendering.mock.calls[2][0].items).toEqual([
+        {
+          count: 33,
+          highlighted: 'Salvador <em>Da</em>li',
+          label: 'Salvador Dali',
+          value: 'Salvador Dali',
+        },
+        {
+          count: 9,
+          highlighted: '<em>Da</em>vidoff',
+          label: 'Davidoff',
+          value: 'Davidoff',
+        },
+      ]);
+
+      // when the search is empty we should simulate the search as if it was from an actual search
+      search('');
+      return Promise.resolve().then(() => {
+        expect(rendering).toHaveBeenCalledTimes(4);
+        const {
+          isFromSearch,
+          items: newSearchItems,
+        } = rendering.mock.calls[3][0];
+        expect(newSearchItems).toBe(searchItems);
+        expect(isFromSearch).toBe(false);
+      });
+    });
+  });
+
   it('can search in facet values with transformed items', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
