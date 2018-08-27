@@ -31,7 +31,7 @@
     "@angular-devkit/build-angular": "0.7.5",
     "@angular/cli": "6.1.5",
     "@angular/language-service": "6.1.4",
-    "@types/algoliasearch": "3.27.5",
+    "@types/algoliasearch": "3.27.6",
     "@types/jasmine": "2.8.8",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "8.10.26",
