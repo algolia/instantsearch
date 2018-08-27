@@ -13,11 +13,14 @@ storiesOf('SearchBox', module)
     template: '<ais-search-box autofocus></ais-search-box>',
   }))
   .add('with custom rendering', () => ({
-    template: `<ais-search-box autofocus>
-      <input
-        placeholder="Custom SearchBox"
-        slot-scope="{ refine }"
-        @input="refine($event.currentTarget.value)"
-      >
-    </ais-search-box>`,
+    template: `
+      <ais-search-box autofocus>
+        <input
+          placeholder="Custom SearchBox"
+          slot-scope="{ currentRefinement, refine }"
+          :value="currentRefinement"
+          @input="refine($event.currentTarget.value)"
+        />
+      </ais-search-box>
+    `,
   }));

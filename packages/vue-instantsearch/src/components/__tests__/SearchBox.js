@@ -64,8 +64,35 @@ test('with clear title', () => {
   );
 });
 
-test('with stalled search hides the submit and displays the loader', () => {
-  __setState({ ...defaultState, isSearchStalled: true });
+test('with reset button hidden without refinement', () => {
+  __setState({ ...defaultState });
+
+  const wrapper = mount(SearchBox);
+
+  expect(wrapper.find('.ais-SearchBox-reset').attributes().hidden).toBe(
+    'hidden'
+  );
+});
+
+test('with reset button visible with refinement', () => {
+  __setState({
+    ...defaultState,
+    query: 'Hello',
+  });
+
+  const wrapper = mount(SearchBox);
+
+  expect(
+    wrapper.find('.ais-SearchBox-reset').attributes().hidden
+  ).toBeUndefined();
+});
+
+test('with stalled search hides the submit, reset and displays the loader', () => {
+  __setState({
+    ...defaultState,
+    isSearchStalled: true,
+  });
+
   const wrapper = mount(SearchBox, {
     propsData: {
       showLoadingIndicator: true,
@@ -75,20 +102,30 @@ test('with stalled search hides the submit and displays the loader', () => {
   expect(wrapper.find('.ais-SearchBox-submit').attributes().hidden).toBe(
     'hidden'
   );
+
+  expect(wrapper.find('.ais-SearchBox-reset').attributes().hidden).toBe(
+    'hidden'
+  );
+
   expect(wrapper.contains('.ais-SearchBox-loadingIndicator')).toBe(true);
 });
 
-test('with stalled search but no `showLoadingIndicator` displays the submit and hides the loader', () => {
+test('with stalled search but no `showLoadingIndicator` displays the submit and hides reset, loader', () => {
   __setState({ ...defaultState, isSearchStalled: true });
   const wrapper = mount(SearchBox);
 
   expect(
     wrapper.find('.ais-SearchBox-submit').attributes().hidden
   ).toBeUndefined();
+
+  expect(wrapper.find('.ais-SearchBox-reset').attributes().hidden).toBe(
+    'hidden'
+  );
+
   expect(wrapper.contains('.ais-SearchBox-loadingIndicator')).toBe(false);
 });
 
-test('with not stalled search displays the submit and hides the loader', () => {
+test('with not stalled search displays the submit and hides reset, loader', () => {
   __setState(defaultState);
   const wrapper = mount(SearchBox, {
     propsData: {
@@ -99,6 +136,11 @@ test('with not stalled search displays the submit and hides the loader', () => {
   expect(
     wrapper.find('.ais-SearchBox-submit').attributes().hidden
   ).toBeUndefined();
+
+  expect(wrapper.find('.ais-SearchBox-reset').attributes().hidden).toBe(
+    'hidden'
+  );
+
   expect(
     wrapper.find('.ais-SearchBox-loadingIndicator').attributes().hidden
   ).toBe('hidden');

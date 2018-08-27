@@ -38,6 +38,7 @@ exports[`renders HTML correctly 1`] = `
     </button>
     <button type="reset"
             title="Clear"
+            hidden="hidden"
             class="ais-SearchBox-reset"
     >
       <svg role="img"
