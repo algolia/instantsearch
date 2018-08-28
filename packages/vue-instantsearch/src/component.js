@@ -1,4 +1,4 @@
-import suit from './suit.js';
+import suit from './suit';
 
 export default {
   inject: {

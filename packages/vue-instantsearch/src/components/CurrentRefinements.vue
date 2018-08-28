@@ -1,7 +1,10 @@
 <template>
   <div v-if="state">
     <slot v-bind="state">
-      <json-tree :level="2" :data="state"></json-tree>
+      <json-tree
+        :level="2"
+        :data="state"
+      />
     </slot>
   </div>
 </template>
@@ -17,6 +20,9 @@ export default {
   props: {
     attributes: {
       type: Array,
+      default() {
+        return [];
+      },
     },
   },
   data() {
@@ -34,4 +40,5 @@ export default {
       };
     },
   },
-};</script>
+};
+</script>

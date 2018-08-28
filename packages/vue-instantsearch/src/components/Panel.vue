@@ -1,13 +1,19 @@
 <template>
   <div :class="[suit(''), !canRefine && suit('', 'noRefinement')]">
-    <div v-if="$slots.header" :class="suit('header')">
-      <slot name="header"></slot>
+    <div
+      v-if="$slots.header"
+      :class="suit('header')"
+    >
+      <slot name="header" />
     </div>
     <div class="ais-Panel-body">
-      <slot></slot>
+      <slot />
     </div>
-    <div v-if="$slots.footer" :class="suit('footer')">
-      <slot name="footer"></slot>
+    <div
+      v-if="$slots.footer"
+      :class="suit('footer')"
+    >
+      <slot name="footer" />
     </div>
   </div>
 </template>
@@ -28,4 +34,5 @@ export default {
       return suit(this.widgetName, ...args);
     },
   },
-};</script>
+};
+</script>

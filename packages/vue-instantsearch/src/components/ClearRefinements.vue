@@ -1,9 +1,12 @@
 <template>
-  <div v-if="state" :class="suit('')">
+  <div
+    v-if="state"
+    :class="suit('')"
+  >
     <slot
       :can-refine="canRefine"
       :refine="state.refine"
-      :create-URL="state.createURL"
+      :createURL="state.createURL"
     >
       <button
         type="reset"
@@ -62,4 +65,5 @@ export default {
       return this.state.hasRefinements;
     },
   },
-};</script>
+};
+</script>

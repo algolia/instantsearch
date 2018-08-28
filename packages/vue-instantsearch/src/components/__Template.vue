@@ -1,9 +1,17 @@
 <template>
   <div :class="suit()">
     <slot v-bind="state">
-      <button @click="state.refine('hi')" :class="suit('button')">example refine</button>
+      <button
+        @click="state.refine('hi')"
+        :class="suit('button')"
+      >
+        example refine
+      </button>
       <!-- ⬇ use this to dynamically debug the state, remove it when done -->
-      <json-tree :level="2" :data="state"></json-tree>
+      <json-tree
+        :level="2"
+        :data="state"
+      />
     </slot>
   </div>
 </template>
@@ -53,4 +61,5 @@ export default {
       };
     },
   },
-};</script>
+};
+</script>

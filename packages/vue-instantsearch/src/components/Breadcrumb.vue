@@ -7,7 +7,7 @@
       :items="state.items"
       :can-refine="state.canRefine"
       :refine="state.refine"
-      :create-URL="state.createURL"
+      :createURL="state.createURL"
     >
       <ul :class="suit('list')">
         <li :class="[suit('item'), !state.items.length && suit('item', 'selected')]">
@@ -28,7 +28,10 @@
           :key="item.name"
           :class="[suit('item'), isLastItem(index) && suit('item', 'selected')]"
         >
-          <span :class="suit('separator')" aria-hidden="true">
+          <span
+            :class="suit('separator')"
+            aria-hidden="true"
+          >
             <slot name="separator">></slot>
           </span>
           <a
@@ -61,9 +64,11 @@ export default {
     },
     separator: {
       type: String,
+      default: ' > ',
     },
     rootPath: {
       type: String,
+      default: null,
     },
   },
   data() {
@@ -88,4 +93,5 @@ export default {
       return this.state.items.length - 1 === index;
     },
   },
-};</script>
+};
+</script>

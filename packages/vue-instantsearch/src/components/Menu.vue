@@ -9,7 +9,7 @@
       :can-toggle-show-more="state.canToggleShowMore"
       :is-showing-more="state.isShowingMore"
       :refine="state.refine"
-      :create-URL="state.createURL"
+      :createURL="state.createURL"
       :toggle-show-more="state.toggleShowMore"
     >
       <ul :class="suit('list')">
@@ -23,8 +23,8 @@
             :class="suit('link')"
             @click.prevent="state.refine(item.value)"
           >
-            <span :class="suit('label')">{{item.label}}</span>
-            <span :class="suit('count')">{{item.count}}</span>
+            <span :class="suit('label')">{{ item.label }}</span>
+            <span :class="suit('count')">{{ item.count }}</span>
           </a>
         </li>
       </ul>
@@ -35,8 +35,11 @@
         :disabled="!state.canToggleShowMore"
         @click.prevent="state.toggleShowMore()"
       >
-        <slot name="showMoreLabel" :is-showing-more="state.isShowingMore">
-          {{state.isShowingMore ? 'Show less' : 'Show more'}}
+        <slot
+          name="showMoreLabel"
+          :is-showing-more="state.isShowingMore"
+        >
+          {{ state.isShowingMore ? 'Show less' : 'Show more' }}
         </slot>
       </button>
     </slot>
@@ -108,4 +111,5 @@ export default {
       return this.state.canRefine && this.showMore;
     },
   },
-};</script>
+};
+</script>

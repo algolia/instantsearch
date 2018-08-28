@@ -60,4 +60,5 @@ export default {
       required: true,
     },
   },
-};</script>
+};
+</script>

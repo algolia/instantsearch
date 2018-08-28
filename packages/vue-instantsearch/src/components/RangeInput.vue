@@ -1,43 +1,57 @@
 <template>
-<div v-if="state" :class="{[suit()]: true, [suit(undefined, 'noRefinement')]: noRefinement}">
-  <slot
-    :currentRefinements="state.start"
-    :refine="refine"
-    :noRefinement="noRefinement"
-    :range="state.range"
+  <div
+    v-if="state"
+    :class="{[suit()]: true, [suit(undefined, 'noRefinement')]: noRefinement}"
   >
-  <form :class="suit('form')" @submit.prevent="refine(minInput, maxInput)">
-    <label :class="suit('label')">
-      <slot name="minLabel"></slot>
-      <input
-        type="number"
-        :class="[suit('input'), suit('input', 'min')]"
-        :step="step"
-        :min="state.range.min"
-        :max="state.range.max"
-        :placeholder="state.range.min"
-        :value="values.min"
-        @change="minInput = $event.currentTarget.value"
-      />
-    </label>
-    <span :class="suit('separator')"><slot name="separator">to</slot></span>
-    <label :class="suit('label')">
-      <slot name="maxLabel"></slot>
-      <input
-        :class="[suit('input'), suit('input', 'max')]"
-        type="number"
-        :step="step"
-        :min="state.range.min"
-        :max="state.range.max"
-        :placeholder="state.range.max"
-        :value="values.max"
-        @change="maxInput = $event.currentTarget.value"
-      />
-    </label>
-    <button :class="suit('submit')" type="submit"><slot name="submitLabel">Go</slot></button>
-  </form>
-  </slot>
-</div>
+    <slot
+      :currentRefinements="state.start"
+      :refine="refine"
+      :noRefinement="noRefinement"
+      :range="state.range"
+    >
+      <form
+        :class="suit('form')"
+        @submit.prevent="refine(minInput, maxInput)"
+      >
+        <label :class="suit('label')">
+          <slot name="minLabel" />
+          <input
+            type="number"
+            :class="[suit('input'), suit('input', 'min')]"
+            :step="step"
+            :min="state.range.min"
+            :max="state.range.max"
+            :placeholder="state.range.min"
+            :value="values.min"
+            @change="minInput = $event.currentTarget.value"
+          >
+        </label>
+        <span :class="suit('separator')">
+          <slot name="separator">to</slot>
+        </span>
+        <label :class="suit('label')">
+          <slot name="maxLabel" />
+          <input
+            :class="[suit('input'), suit('input', 'max')]"
+            type="number"
+            :step="step"
+            :min="state.range.min"
+            :max="state.range.max"
+            :placeholder="state.range.max"
+            :value="values.max"
+            @change="maxInput = $event.currentTarget.value"
+          >
+        </label>
+        <button
+          :class="suit('submit')"
+          type="submit"
+        >
+          <slot name="submitLabel">Go</slot>
+        </button>
+      </form>
+
+    </slot>
+  </div>
 </template>
 
 <script>
@@ -111,4 +125,5 @@ export default {
       this.state.refine([min, max]);
     },
   },
-};</script>
+};
+</script>

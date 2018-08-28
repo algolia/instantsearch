@@ -1,5 +1,8 @@
 <template>
-  <div :class="suit()" v-if="state">
+  <div
+    v-if="state"
+    :class="suit()"
+  >
     <slot
       :currentRefinement="currentRefinement"
       :isSearchStalled="state.isSearchStalled"
@@ -70,7 +73,11 @@
           </svg>
         </button>
 
-        <span v-if="showLoadingIndicator" :hidden="!state.isSearchStalled" :class="suit('loadingIndicator')">
+        <span
+          v-if="showLoadingIndicator"
+          :hidden="!state.isSearchStalled"
+          :class="suit('loadingIndicator')"
+        >
           <slot name="loading-indicator">
             <svg
               role="img"
@@ -82,9 +89,20 @@
               viewBox="0 0 38 38"
               :class="suit('loadingIcon')"
             >
-              <g fill="none" fill-rule="evenodd">
-                <g transform="translate(1 1)" stroke-width="2">
-                  <circle stroke-opacity=".5" cx="18" cy="18" r="18"/>
+              <g
+                fill="none"
+                fill-rule="evenodd"
+              >
+                <g
+                  transform="translate(1 1)"
+                  stroke-width="2"
+                >
+                  <circle
+                    stroke-opacity=".5"
+                    cx="18"
+                    cy="18"
+                    r="18"
+                  />
                   <path d="M36 18c0-9.94-8.06-18-18-18">
                     <animateTransform
                       attributeName="transform"
@@ -160,4 +178,5 @@ export default {
       },
     },
   },
-};</script>
+};
+</script>

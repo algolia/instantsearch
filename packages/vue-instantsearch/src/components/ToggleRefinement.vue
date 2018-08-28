@@ -7,7 +7,7 @@
       :value="state.value"
       :can-refine="canRefine"
       :refine="state.refine"
-      :create-URL="state.createURL"
+      :createURL="state.createURL"
     >
       <label :class="suit('label')">
         <input
@@ -17,7 +17,7 @@
           :value="on"
           :checked="state.value.isRefined"
           @change="state.refine(state.value)"
-        />
+        >
         <span :class="suit('labelText')">
           {{ state.value.name }}
         </span>
@@ -83,4 +83,5 @@ export default {
       return Boolean(this.state.value.count);
     },
   },
-};</script>
+};
+</script>

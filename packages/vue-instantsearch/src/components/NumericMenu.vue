@@ -7,7 +7,7 @@
       :items="state.items"
       :can-refine="canRefine"
       :refine="state.refine"
-      :create-URL="state.createURL"
+      :createURL="state.createURL"
     >
       <ul :class="[suit('list')]">
         <li
@@ -23,7 +23,7 @@
               :value="item.value"
               :checked="item.isRefined"
               @change="state.refine($event.target.value)"
-            />
+            >
             <span :class="suit('labelText')">
               {{ item.label }}
             </span>
@@ -93,4 +93,5 @@ export default {
       return !this.state.hasNoResults;
     },
   },
-};</script>
+};
+</script>

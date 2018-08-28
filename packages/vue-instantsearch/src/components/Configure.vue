@@ -1,10 +1,12 @@
 <template>
-  <div :class="suit('')" v-if="state">
+  <div
+    v-if="state"
+    :class="suit('')"
+  >
     <slot
       :refine="state.refine"
       :searchParameters="state.widgetParams.searchParameters"
-    >
-    </slot>
+    />
   </div>
 </template>
 
@@ -27,4 +29,5 @@ export default {
       };
     },
   },
-};</script>
+};
+</script>

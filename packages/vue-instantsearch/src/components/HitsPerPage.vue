@@ -1,17 +1,25 @@
 <template>
-  <div :class="suit()" v-if="state">
+  <div
+    v-if="state"
+    :class="suit('')"
+  >
     <slot
       :items="items"
       :refine="state.refine"
       :hasNoResults="state.hasNoResults"
     >
-      <select v-model="selected" :class="suit('select')" @change="handleChange">
+      <select
+        :class="suit('select')"
+        v-model="selected"
+        @change="handleChange"
+      >
         <option
           v-for="(item, itemIndex) in items"
           :key="itemIndex"
           :class="suit('option')"
-          :value="item.value">
-            {{ item.label }}
+          :value="item.value"
+        >
+          {{ item.label }}
         </option>
       </select>
     </slot>
@@ -52,4 +60,5 @@ export default {
       };
     },
   },
-};</script>
+};
+</script>

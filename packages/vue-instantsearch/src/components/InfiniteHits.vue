@@ -1,14 +1,25 @@
 <template>
-  <div :class="suit()" v-if="state">
-    <slot :items="items" :isLastPage="isLastPage" :refine="refine">
+  <div
+    v-if="state"
+    :class="suit('')"
+  >
+    <slot
+      :items="items"
+      :isLastPage="isLastPage"
+      :refine="refine"
+    >
       <ol :class="suit('list')">
         <li
           v-for="(item, index) in items"
           :class="suit('item')"
           :key="item.objectID"
         >
-          <slot name="item" :item="item" :index="index">
-            objectID: {{item.objectID}}, index: {{index}}
+          <slot
+            name="item"
+            :item="item"
+            :index="index"
+          >
+            objectID: {{ item.objectID }}, index: {{ index }}
           </slot>
         </li>
       </ol>
@@ -34,8 +45,8 @@ export default {
     escapeHTML: {
       type: Boolean,
       default: true,
-      required: false
-    }
+      required: false,
+    },
   },
   data() {
     return {
@@ -67,4 +78,5 @@ export default {
       this.state.showMore();
     },
   },
-};</script>
+};
+</script>

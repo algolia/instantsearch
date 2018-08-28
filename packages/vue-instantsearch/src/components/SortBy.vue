@@ -20,7 +20,7 @@
           :value="item.value"
           :selected="item.value === state.currentRefinement"
         >
-          {{item.label}}
+          {{ item.label }}
         </option>
       </select>
     </slot>
@@ -54,4 +54,5 @@ export default {
   beforeCreate() {
     this.connector = connectSortBySelector;
   },
-};</script>
+};
+</script>

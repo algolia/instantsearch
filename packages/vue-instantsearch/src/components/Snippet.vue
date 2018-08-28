@@ -1,6 +1,8 @@
 <template>
-  <span :class="suit('')" v-html="innerHTML">
-  </span>
+  <span
+    :class="suit('')"
+    v-html="innerHTML"
+  />
 </template>
 
 <script>
@@ -30,20 +32,20 @@ export default {
   },
   methods: {
     suit(block, modifier) {
-      return suit(this.widgetName, block, modifier)
-    }
+      return suit(this.widgetName, block, modifier);
+    },
   },
   computed: {
     innerHTML() {
       const attributeValue =
-        getPropertyByPath(
-          this.hit,
-          `_snippetResult.${this.attribute}.value`
-        ) || '';
+        getPropertyByPath(this.hit, `_snippetResult.${this.attribute}.value`) ||
+        '';
 
       if (process.env.NODE_ENV !== 'production' && attributeValue === '') {
         warn(
-          `The "${this.attribute}" attribute might currently not be configured to be snippeted in Algolia.
+          `The "${
+            this.attribute
+          }" attribute might currently not be configured to be snippeted in Algolia.
         See https://www.algolia.com/doc/api-reference/api-parameters/attributesToSnippet/.`
         );
       }

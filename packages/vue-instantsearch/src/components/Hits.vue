@@ -1,5 +1,8 @@
 <template>
-  <div :class="suit()" v-if="state">
+  <div
+    v-if="state"
+    :class="suit('')"
+  >
     <slot :items="items">
       <ol :class="suit('list')">
         <li
@@ -7,8 +10,12 @@
           :key="item.objectID"
           :class="suit('item')"
         >
-          <slot name="item" :item="item" :index="itemIndex">
-            objectID: {{item.objectID}}, index: {{itemIndex}}
+          <slot
+            name="item"
+            :item="item"
+            :index="itemIndex"
+          >
+            objectID: {{ item.objectID }}, index: {{ itemIndex }}
           </slot>
         </li>
       </ol>
@@ -26,12 +33,12 @@ export default {
     escapeHTML: {
       type: Boolean,
       default: true,
-      required: false
-    }
+      required: false,
+    },
   },
   data() {
     return {
-      widgetName: "Hits"
+      widgetName: 'Hits',
     };
   },
   beforeCreate() {
@@ -48,4 +55,5 @@ export default {
       };
     },
   },
-};</script>
+};
+</script>

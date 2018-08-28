@@ -1,5 +1,8 @@
 <template>
-  <div :class="suit()" v-if="state">
+  <div
+    v-if="state"
+    :class="suit('')"
+  >
     <slot
       :refine="refine"
       :createURL="state.createURL"
@@ -27,7 +30,12 @@
             >‹‹</a>
           </template>
           <template v-else>
-            <span :class="suit('link')" aria-label="Previous">‹‹</span>
+            <span
+              :class="suit('link')"
+              aria-label="Previous"
+            >
+              ‹‹
+            </span>
           </template>
         </li>
         <li
@@ -43,10 +51,17 @@
               aria-label="Previous"
               :href="state.createURL(state.currentRefinement - 1)"
               @click.prevent="refine(state.currentRefinement - 1)"
-            >‹</a>
+            >
+              ‹
+            </a>
           </template>
           <template v-else>
-            <span :class="suit('link')" aria-label="Previous">‹</span>
+            <span
+              :class="suit('link')"
+              aria-label="Previous"
+            >
+              ‹
+            </span>
           </template>
         </li>
 
@@ -55,14 +70,15 @@
             [suit('item')]:true,
             [suit('item', 'selected')]: state.currentRefinement === page
           }"
-          v-for="page in state.pages" :key="page"
+          v-for="page in state.pages"
+          :key="page"
         >
           <a
             :class="suit('link')"
             :href="state.createURL(page)"
             @click.prevent="refine(page)"
           >
-            {{page + 1}}
+            {{ page + 1 }}
           </a>
         </li>
 
@@ -82,7 +98,12 @@
             >›</a>
           </template>
           <template v-else>
-            <span :class="suit('link')" aria-label="Next">›</span>
+            <span
+              :class="suit('link')"
+              aria-label="Next"
+            >
+              ›
+            </span>
           </template>
         </li>
         <li
@@ -101,7 +122,12 @@
             >››</a>
           </template>
           <template v-else>
-            <span :class="suit('link')" aria-label="Last">››</span>
+            <span
+              :class="suit('link')"
+              aria-label="Last"
+            >
+              ››
+            </span>
           </template>
         </li>
       </ul>
@@ -125,6 +151,7 @@ export default {
     },
     totalPages: {
       type: Number,
+      default: undefined,
       validator(value) {
         return value > 0;
       },
@@ -170,4 +197,5 @@ export default {
       this.$emit('page-change', p);
     },
   },
-};</script>
+};
+</script>

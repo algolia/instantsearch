@@ -9,7 +9,7 @@
       :can-toggle-show-more="canToggleShowMore"
       :is-showing-more="isShowingMore"
       :refine="state.refine"
-      :create-URL="state.createURL"
+      :createURL="state.createURL"
       :toggle-show-more="toggleShowMore"
     >
       <hierarchical-menu-list
@@ -26,7 +26,10 @@
         :disabled="!canToggleShowMore"
         @click.prevent="toggleShowMore"
       >
-        <slot name="showMoreLabel" :is-showing-more="isShowingMore">
+        <slot
+          name="showMoreLabel"
+          :is-showing-more="isShowingMore"
+        >
           {{ isShowingMore ? 'Show less' : 'Show more' }}
         </slot>
       </button>
@@ -63,18 +66,21 @@ export default {
     },
     sortBy: {
       type: [Array, Function],
+      default() {
+        return ['name:asc'];
+      },
     },
     separator: {
       type: String,
+      default: ' > ',
     },
     rootPath: {
       type: String,
+      default: null,
     },
     showParentLevel: {
       type: Boolean,
-      // explicit otherwise Vue coerces the default value
-      // to false because of the `Boolean` prop type
-      default: undefined,
+      default: true,
     },
   },
   data() {
@@ -127,4 +133,5 @@ export default {
       );
     },
   },
-};</script>
+};
+</script>
