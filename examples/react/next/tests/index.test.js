@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import App from '../pages/index.js';
+import App from '../pages/index';
 
 describe('Next app recipes', () => {
   it('App renders without crashing', () => {

@@ -1,5 +1,5 @@
-import highlight from '../syntaxHighlighting.js';
-import md from '../mdRenderer.js';
+import highlight from '../syntaxHighlighting';
+import md from '../mdRenderer';
 
 // this plugin provides ATM one helper to easily compute the publicPath of assets
 export default function helpers(filenames, metalsmith, cb) {

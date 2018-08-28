@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { App } from './index.js';
+import { App } from './index';
 
 describe('Server-side rendering recipes', () => {
   it('App renders without crashing', () => {

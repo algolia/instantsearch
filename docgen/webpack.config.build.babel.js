@@ -1,8 +1,8 @@
 // this is the webpack config when running `yarn docs:build`
 
 import webpack from 'webpack';
-import webpackConfig from './webpack.config.babel.js';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import webpackConfig from './webpack.config.babel';
 
 const {
   optimize: { UglifyJsPlugin },

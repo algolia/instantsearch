@@ -1,5 +1,5 @@
-import builder from './builder.js';
-import revAssets from './plugins/rev-assets.js';
+import builder from './builder';
+import revAssets from './plugins/rev-assets';
 import { build as middlewares } from './middlewares';
 
 builder({ middlewares }, err => {
