@@ -1,8 +1,8 @@
-import { Head, App, findResultsState } from '../components';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Router from 'next/router';
 import qs from 'qs';
+import { Head, App, findResultsState } from '../components';
 
 const updateAfter = 700;
 

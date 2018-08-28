@@ -1,9 +1,9 @@
-import dropdowns from './dropdowns.js';
-import move from './mover.js';
-import activateClipboard from './activateClipboard.js';
-import { fixSidebar, followSidebarNavigation } from './fix-sidebar.js';
-import alg from 'algolia-frontend-components/javascripts.js';
-import './editThisPage.js';
+import dropdowns from './dropdowns';
+import move from './mover';
+import activateClipboard from './activateClipboard';
+import { fixSidebar, followSidebarNavigation } from './fix-sidebar';
+import alg from 'algolia-frontend-components/javascripts';
+import './editThisPage';
 
 const docSearch = {
   apiKey: '5cb6763f264e31381e18639a1147634c',

@@ -3,8 +3,7 @@ import path from 'path';
 import glob from 'glob';
 import hasha from 'hasha';
 import replace from 'replace-in-file';
-
-import config from '../config.js';
+import config from '../config';
 
 const DIST_PATH = path.resolve(config.docsDist);
 
