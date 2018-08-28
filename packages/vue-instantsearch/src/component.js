@@ -27,11 +27,14 @@ export default {
     this.instantSearchInstance.removeWidget(this.widget);
   },
   watch: {
-    widgetParams(nextWidgetParams) {
-      this.state = null;
-      this.instantSearchInstance.removeWidget(this.widget);
-      this.widget = this.factory(nextWidgetParams);
-      this.instantSearchInstance.addWidget(this.widget);
+    widgetParams: {
+      handler(nextWidgetParams) {
+        this.state = null;
+        this.instantSearchInstance.removeWidget(this.widget);
+        this.widget = this.factory(nextWidgetParams);
+        this.instantSearchInstance.addWidget(this.widget);
+      },
+      deep: true,
     },
   },
   methods: {
