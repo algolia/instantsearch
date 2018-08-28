@@ -111,4 +111,19 @@ storiesOf('HierarchicalMenu', module)
         </ol>
       </ais-hierarchical-menu>
     `,
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Hierarchical Menu</template>
+        <ais-hierarchical-menu
+          :attributes="[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ]"
+        />
+        <template slot="footer">Footer</template>
+      </ais-panel>
+    `,
   }));

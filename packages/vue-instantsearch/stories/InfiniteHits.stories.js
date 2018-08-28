@@ -43,4 +43,13 @@ storiesOf('InfiniteHits', module)
         <ais-infinite-hits />
       </div>
     `,
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Infinite Hits</template>
+        <ais-infinite-hits />
+        <template slot="footer">Footer</template>
+      </ais-panel>
+    `,
   }));

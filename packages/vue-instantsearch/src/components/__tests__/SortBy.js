@@ -1,8 +1,9 @@
 import { mount } from '@vue/test-utils';
-import SortBy from '../SortBy.vue';
 import { __setState } from '../../component';
+import SortBy from '../SortBy.vue';
 
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const defaultState = {
   options: [
@@ -87,4 +88,25 @@ it('calls `refine` when the selection changes with the `value`', () => {
   expect(refine).toHaveBeenCalledTimes(1);
   expect(refine).toHaveBeenLastCalledWith('some_index_quality');
   expect(selectedOption.element.selected).toBe(true);
+});
+
+it('calls the Panel mixin with `hasNoResults`', () => {
+  __setState({ ...defaultState });
+
+  const wrapper = mount(SortBy, {
+    propsData: defaultProps,
+  });
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      hasNoResults: true,
+    },
+  });
+
+  expect(mapStateToCanRefine()).toBe(false);
 });

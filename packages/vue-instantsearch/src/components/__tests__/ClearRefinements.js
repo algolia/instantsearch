@@ -3,6 +3,7 @@ import { __setState } from '../../component';
 import ClearRefinements from '../ClearRefinements.vue';
 
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const defaultState = {
   hasRefinements: true,
@@ -189,4 +190,25 @@ describe('custom resetLabel render', () => {
     expect(wrapper.find('button').text()).toBe('Remove the refinements');
     expect(wrapper.html()).toMatchSnapshot();
   });
+});
+
+it('calls the Panel mixin with `hasRefinement`', () => {
+  __setState({
+    hasRefinements: true,
+  });
+
+  const wrapper = mount(ClearRefinements);
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      hasRefinements: false,
+    },
+  });
+
+  expect(mapStateToCanRefine()).toBe(false);
 });

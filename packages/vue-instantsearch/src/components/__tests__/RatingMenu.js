@@ -1,7 +1,13 @@
 import { mount } from '@vue/test-utils';
 import RatingMenu from '../RatingMenu.vue';
 import { __setState } from '../../component';
+
 jest.mock('../../component');
+jest.mock('../../panel');
+
+const defaultProps = {
+  attribute: 'popularity',
+};
 
 it('renders correctly', () => {
   __setState({
@@ -12,11 +18,11 @@ it('renders correctly', () => {
       { isRefined: false, count: 8, value: 4 },
     ],
   });
+
   const wrapper = mount(RatingMenu, {
-    propsData: {
-      attribute: 'hi',
-    },
+    propsData: defaultProps,
   });
+
   expect(wrapper.html()).toMatchSnapshot();
 });
 
@@ -29,11 +35,11 @@ it('renders correctly when refined', () => {
       { isRefined: true, count: 8, value: 4 },
     ],
   });
+
   const wrapper = mount(RatingMenu, {
-    propsData: {
-      attribute: 'hi',
-    },
+    propsData: defaultProps,
   });
+
   expect(wrapper.html()).toMatchSnapshot();
 });
 
@@ -47,12 +53,33 @@ it('calls refine when clicked on link', () => {
     ],
     refine: jest.fn(),
   });
+
   const wrapper = mount(RatingMenu, {
-    propsData: {
-      attribute: 'hi',
+    propsData: defaultProps,
+  });
+
+  wrapper.find('.ais-RatingMenu-link').trigger('click');
+
+  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(1);
+});
+
+it('calls the Panel mixin with `hasNoResults`', () => {
+  __setState({ hasNoResults: false });
+
+  const wrapper = mount(RatingMenu, {
+    propsData: defaultProps,
+  });
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      hasNoResults: true,
     },
   });
-  const link = wrapper.find('.ais-RatingMenu-link');
-  link.trigger('click');
-  expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(1);
+
+  expect(mapStateToCanRefine()).toBe(false);
 });

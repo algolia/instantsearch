@@ -24,10 +24,16 @@
 
 <script>
 import { connectClearAll } from 'instantsearch.js/es/connectors';
+import { createPanelConsumerMixin } from '../panel';
 import algoliaComponent from '../component';
 
 export default {
-  mixins: [algoliaComponent],
+  mixins: [
+    algoliaComponent,
+    createPanelConsumerMixin({
+      mapStateToCanRefine: state => state.hasRefinements,
+    }),
+  ],
   props: {
     clearsQuery: {
       type: Boolean,

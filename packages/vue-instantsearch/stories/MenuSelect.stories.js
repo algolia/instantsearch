@@ -4,7 +4,9 @@ import { previewWrapper } from './utils';
 storiesOf('MenuSelect', module)
   .addDecorator(previewWrapper())
   .add('simple usage', () => ({
-    template: '<ais-menu-select attribute="brand" />',
+    template: `
+      <ais-menu-select attribute="brand" />
+    `,
   }))
   .add('with a limit', () => ({
     template: `
@@ -51,5 +53,14 @@ storiesOf('MenuSelect', module)
           </option>
         </select>
       </ais-menu-select>
+    `,
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Menu Select</template>
+        <ais-menu-select attribute="brand" />
+        <template slot="footer">Footer</template>
+      </ais-panel>
     `,
   }));

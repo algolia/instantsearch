@@ -1,7 +1,9 @@
 import { mount } from '@vue/test-utils';
-import Pagination from '../Pagination.vue';
 import { __setState } from '../../component';
+import Pagination from '../Pagination.vue';
+
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const defaultState = {
   createURL: () => '#',
@@ -139,4 +141,23 @@ it('Moves to the previous page on that button', () => {
   expect(wrapper.vm.state.refine).toHaveBeenLastCalledWith(
     currentRefinement - 1
   );
+});
+
+it('calls the Panel mixin with `nbPages`', () => {
+  __setState({ ...defaultState });
+
+  const wrapper = mount(Pagination);
+
+  const mapStateToCanRefine = () =>
+    wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+  expect(mapStateToCanRefine()).toBe(true);
+
+  wrapper.setData({
+    state: {
+      nbPages: 1,
+    },
+  });
+
+  expect(mapStateToCanRefine()).toBe(false);
 });

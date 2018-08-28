@@ -3,6 +3,7 @@ import MenuSelect from '../MenuSelect.vue';
 import { __setState } from '../../component';
 
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const defaultState = {
   canRefine: true,
@@ -174,6 +175,27 @@ describe('default render', () => {
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('Apple');
+  });
+
+  it('calls the Panel mixin with `canRefine`', () => {
+    __setState({ ...defaultState });
+
+    const wrapper = mount(MenuSelect, {
+      propsData: defaultProps,
+    });
+
+    const mapStateToCanRefine = () =>
+      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+    expect(mapStateToCanRefine()).toBe(true);
+
+    wrapper.setData({
+      state: {
+        canRefine: false,
+      },
+    });
+
+    expect(mapStateToCanRefine()).toBe(false);
   });
 });
 

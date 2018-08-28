@@ -27,4 +27,13 @@ storiesOf('Pagination', module)
         <span slot="last">->></span>
         <span slot="default" slot-scope="{value, active}" :style="{color: active ? 'red' : 'green'}">{{value.toLocaleString()}} </span>
       </ais-pagination>`,
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Pagination</template>
+        <ais-pagination />
+        <template slot="footer">Footer</template>
+      </ais-panel>
+    `,
   }));

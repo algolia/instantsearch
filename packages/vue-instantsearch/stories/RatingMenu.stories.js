@@ -9,10 +9,8 @@ storiesOf('RatingMenu', module)
   )
   .add('default', () => ({
     template: `
-      <div>
-        <ais-rating-menu attribute="rating">
-        </ais-rating-menu>
-      </div>`,
+      <ais-rating-menu attribute="rating" />
+    `,
   }))
   .add('custom rendering', () => ({
     template: `
@@ -30,4 +28,13 @@ storiesOf('RatingMenu', module)
           </template>
         </ais-rating-menu>
       </div>`,
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Rating Menu</template>
+        <ais-rating-menu attribute="rating" />
+        <template slot="footer">Footer</template>
+      </ais-panel>
+    `,
   }));

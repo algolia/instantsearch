@@ -32,4 +32,19 @@ storiesOf('SortBy', module)
         </ul>
       </ais-sort-by>
     `,
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Sort By</template>
+        <ais-sort-by
+          :items="[
+            { name: 'instant_search', label: 'Featured' },
+            { name: 'instant_search_price_asc', label: 'Price asc.' },
+            { name: 'instant_search_price_desc', label: 'Price desc.' },
+          ]"
+        />
+        <template slot="footer">Footer</template>
+      </ais-panel>
+    `,
   }));

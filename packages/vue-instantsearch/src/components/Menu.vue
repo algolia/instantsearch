@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import isFunction from 'lodash/isFunction';
 import { connectMenu } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../panel';
 import algoliaComponent from '../component';
@@ -82,11 +81,9 @@ export default {
       default: false,
     },
     sortBy: {
+      type: [Array, Function],
       default() {
         return ['count:desc', 'name:asc'];
-      },
-      validator(value) {
-        return Array.isArray(value) || isFunction(value);
       },
     },
   },

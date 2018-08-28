@@ -1,12 +1,12 @@
 <template>
   <div
     v-if="state"
-    :class="{[suit()]: true, [suit(undefined, 'noRefinement')]: noRefinement}"
+    :class="[suit(''), !canRefine && suit('', 'noRefinement')]"
   >
     <slot
       :currentRefinements="state.start"
       :refine="refine"
-      :noRefinement="noRefinement"
+      :can-refine="canRefine"
       :range="state.range"
     >
       <form
@@ -49,17 +49,25 @@
           <slot name="submitLabel">Go</slot>
         </button>
       </form>
-
     </slot>
   </div>
 </template>
 
 <script>
-import algoliaComponent from '../component';
 import { connectRange } from 'instantsearch.js/es/connectors';
+import algoliaComponent from '../component';
+import { createPanelConsumerMixin } from '../panel';
+
+const mapStateToCanRefine = state =>
+  state && state.range && state.range.min !== state.range.max;
 
 export default {
-  mixins: [algoliaComponent],
+  mixins: [
+    algoliaComponent,
+    createPanelConsumerMixin({
+      mapStateToCanRefine,
+    }),
+  ],
   props: {
     attribute: {
       type: String,
@@ -100,12 +108,8 @@ export default {
         precision: this.precision,
       };
     },
-    noRefinement() {
-      return Boolean(
-        this.state &&
-          this.state.range &&
-          this.state.range.min === this.state.range.max
-      );
+    canRefine() {
+      return mapStateToCanRefine(this.state);
     },
     step() {
       return 1 / Math.pow(10, this.precision);

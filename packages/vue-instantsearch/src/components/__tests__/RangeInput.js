@@ -3,6 +3,7 @@ import { __setState } from '../../component';
 import RangeInput from '../RangeInput.vue';
 
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const defaultRange = {
   min: 0,
@@ -243,6 +244,38 @@ describe('rendering', () => {
     });
 
     expect(wrapper.find('.ais-RangeInput-input--max').element.value).toBe('');
+  });
+
+  it('calls the Panel mixin with `range`', () => {
+    __setState({
+      ...defaultState,
+      range: {
+        min: 0,
+        max: 10,
+      },
+    });
+
+    const wrapper = mount(RangeInput, {
+      propsData: {
+        attribute: 'price',
+      },
+    });
+
+    const mapStateToCanRefine = () =>
+      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+    expect(mapStateToCanRefine()).toBe(true);
+
+    wrapper.setData({
+      state: {
+        range: {
+          min: 0,
+          max: 0,
+        },
+      },
+    });
+
+    expect(mapStateToCanRefine()).toBe(false);
   });
 });
 

@@ -3,6 +3,7 @@ import { __setState } from '../../component';
 import HierarchicalMenu from '../HierarchicalMenu.vue';
 
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const apple = {
   label: 'Apple',
@@ -470,6 +471,27 @@ describe('default render', () => {
     wrapper.find('button').trigger('click');
 
     expect(wrapper.vm.isShowingMore).toBe(true);
+  });
+
+  it('calls the Panel mixin with `items.length`', () => {
+    __setState({ ...defaultState });
+
+    const wrapper = mount(HierarchicalMenu, {
+      propsData: defaultProps,
+    });
+
+    const mapStateToCanRefine = () =>
+      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+    expect(mapStateToCanRefine()).toBe(true);
+
+    wrapper.setData({
+      state: {
+        items: [],
+      },
+    });
+
+    expect(mapStateToCanRefine()).toBe(false);
   });
 });
 

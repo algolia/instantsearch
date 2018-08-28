@@ -35,9 +35,17 @@
 <script>
 import { connectToggle } from 'instantsearch.js/es/connectors';
 import algoliaComponent from '../component';
+import { createPanelConsumerMixin } from '../panel';
+
+const mapStateToCanRefine = state => Boolean(state.value.count);
 
 export default {
-  mixins: [algoliaComponent],
+  mixins: [
+    algoliaComponent,
+    createPanelConsumerMixin({
+      mapStateToCanRefine,
+    }),
+  ],
   props: {
     attribute: {
       type: String,
@@ -80,7 +88,7 @@ export default {
       };
     },
     canRefine() {
-      return Boolean(this.state.value.count);
+      return mapStateToCanRefine(this.state);
     },
   },
 };

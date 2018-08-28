@@ -3,6 +3,7 @@ import { __setState } from '../../component';
 import Breadcrumb from '../Breadcrumb.vue';
 
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const defaultItems = [
   {
@@ -167,6 +168,27 @@ describe('default render', () => {
 
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith('TV & Home Theater');
+  });
+
+  it('calls the Panel mixin with `canRefine`', () => {
+    __setState({ ...defaultState });
+
+    const wrapper = mount(Breadcrumb, {
+      propsData: defaultProps,
+    });
+
+    const mapStateToCanRefine = () =>
+      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+    expect(mapStateToCanRefine()).toBe(true);
+
+    wrapper.setData({
+      state: {
+        canRefine: false,
+      },
+    });
+
+    expect(mapStateToCanRefine()).toBe(false);
   });
 });
 

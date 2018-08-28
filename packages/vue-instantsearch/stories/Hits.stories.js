@@ -30,4 +30,13 @@ storiesOf('Hits', module)
         </div>
       </div>
     </ais-hits>`,
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Hits</template>
+        <ais-hits />
+        <template slot="footer">Footer</template>
+      </ais-panel>
+    `,
   }));

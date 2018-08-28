@@ -71,4 +71,16 @@ storiesOf('Breadcrumb', module)
     data: () => ({
       attributes,
     }),
+  }))
+  .add('with a Panel', () => ({
+    template: `
+      <ais-panel>
+        <template slot="header">Breadcrumb</template>
+        <ais-breadcrumb :attributes="attributes" />
+        <template slot="footer">Footer</template>
+      </ais-panel>
+    `,
+    data: () => ({
+      attributes,
+    }),
   }));

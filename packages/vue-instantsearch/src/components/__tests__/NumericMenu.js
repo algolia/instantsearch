@@ -3,6 +3,7 @@ import { __setState } from '../../component';
 import NumericMenu from '../NumericMenu.vue';
 
 jest.mock('../../component');
+jest.mock('../../panel');
 
 const all = {
   label: 'All',
@@ -183,6 +184,27 @@ describe('default render', () => {
     expect(refine).toHaveBeenCalledTimes(1);
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('100'));
     expect(refine).toHaveBeenCalledWith(expect.stringContaining('500'));
+  });
+
+  it('calls the Panel mixin with `hasNoResults`', () => {
+    __setState({ ...defaultState });
+
+    const wrapper = mount(NumericMenu, {
+      propsData: defaultProps,
+    });
+
+    const mapStateToCanRefine = () =>
+      wrapper.vm.mapStateToCanRefine(wrapper.vm.state);
+
+    expect(mapStateToCanRefine()).toBe(true);
+
+    wrapper.setData({
+      state: {
+        hasNoResults: true,
+      },
+    });
+
+    expect(mapStateToCanRefine()).toBe(false);
   });
 });
 
