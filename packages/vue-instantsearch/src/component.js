@@ -19,27 +19,31 @@ export default {
     };
   },
   created() {
-    this.widgetFactory = this.connector(this.updateData, () => {});
-    this.widget = this.widgetFactory(this.widgetParams);
+    this.factory = this.connector(this.updateState, () => {});
+    this.widget = this.factory(this.widgetParams);
     this.instantSearchInstance.addWidget(this.widget);
   },
   beforeDestroy() {
     this.instantSearchInstance.removeWidget(this.widget);
   },
   watch: {
-    widgetParams(newVal) {
-      const oldWidget = this.widget;
-      this.widget = this.widgetFactory(newVal);
+    widgetParams(nextWidgetParams) {
+      this.state = null;
+      this.instantSearchInstance.removeWidget(this.widget);
+      this.widget = this.factory(nextWidgetParams);
       this.instantSearchInstance.addWidget(this.widget);
-      this.instantSearchInstance.removeWidget(oldWidget);
     },
   },
   methods: {
     suit(...args) {
       return suit(this.widgetName, ...args);
     },
-    updateData(state = {}) {
-      this.state = state;
+    updateState(state = {}, isFirstRender) {
+      if (!isFirstRender) {
+        // Avoid updating the state on first render
+        // otherwise there will be a flash of placeholder data
+        this.state = state;
+      }
     },
   },
 };
