@@ -28,6 +28,7 @@ Container.propTypes = {
 };
 
 const apiKey = 'AIzaSyBawL8VbstJDdU5397SUX7pEt9DslAwWgQ';
+const endpoint = 'https://maps.googleapis.com/maps/api/js?v=weekly';
 const initialZoom = 12;
 const initialPosition = {
   lat: 40.71,
@@ -42,7 +43,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google}>
                 {({ hits }) => (
@@ -70,7 +71,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch
                 google={google}
@@ -110,7 +111,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch
                 google={google}
@@ -146,7 +147,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch
                 google={google}
@@ -178,7 +179,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google} streetViewControl>
                 {({ hits }) => (
@@ -206,7 +207,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google}>
                 {({ hits }) => (
@@ -239,7 +240,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google}>
                 {({ hits }) => (
@@ -271,7 +272,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google} enableRefineOnMapMove={false}>
                 {({ hits }) => (
@@ -301,7 +302,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google}>
                 {({ hits }) => (
@@ -331,7 +332,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google} enableRefineOnMapMove={false}>
                 {({ hits }) => (
@@ -361,7 +362,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google}>
                 {({ hits }) => (
@@ -399,7 +400,7 @@ stories
         <Configure aroundLatLngViaIP hitsPerPage={20} />
 
         <Container>
-          <GoogleMapsLoader apiKey={apiKey}>
+          <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
             {google => (
               <GeoSearch google={google}>
                 {({ hits }) => (
@@ -447,7 +448,7 @@ stories.addWithJSX(
       />
 
       <Container>
-        <GoogleMapsLoader apiKey={apiKey}>
+        <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
           {google => (
             <GeoSearch google={google} initialZoom={12}>
               {({ hits }) => (
@@ -521,7 +522,7 @@ stories.addWithJSX('with InfoWindow', () => {
   }
 
   return (
-    <GoogleMapsLoader apiKey={apiKey}>
+    <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
       {google => <Example google={google} />}
     </GoogleMapsLoader>
   );
@@ -607,7 +608,7 @@ stories.addWithJSX('with hits communication (custom)', () => {
           <Configure aroundLatLngViaIP hitsPerPage={20} />
 
           <Container>
-            <GoogleMapsLoader apiKey={apiKey}>
+            <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
               {google => (
                 <GeoSearch google={google}>
                   {({ hits }) => (
@@ -649,7 +650,7 @@ stories.addWithJSX('with unmount', () => {
 
           {visible && (
             <Container>
-              <GoogleMapsLoader apiKey={apiKey}>
+              <GoogleMapsLoader apiKey={apiKey} endpoint={endpoint}>
                 {google => (
                   <GeoSearch google={google}>
                     {({ hits }) => (

@@ -27,7 +27,7 @@ describe('GoogleMapsLoader', () => {
 
     return flushPendingMicroTasks().then(() => {
       expect(injectScript).toHaveBeenLastCalledWith(
-        'https://maps.googleapis.com/maps/api/js?v=3.31&key=API_KEY',
+        'https://maps.googleapis.com/maps/api/js?v=quarterly&key=API_KEY',
         expect.any(Function)
       );
     });
@@ -45,7 +45,7 @@ describe('GoogleMapsLoader', () => {
 
     return flushPendingMicroTasks().then(() => {
       expect(injectScript).toHaveBeenLastCalledWith(
-        'https://maps.googleapis.com/maps/api/js?v=3.31&key=CUSTOM_API_KEY',
+        'https://maps.googleapis.com/maps/api/js?v=quarterly&key=CUSTOM_API_KEY',
         expect.any(Function)
       );
     });
