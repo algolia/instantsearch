@@ -43,7 +43,6 @@ export default [
           dangerousForOf: true,
         },
       }),
-      replace(processEnv({ NODE_ENV: 'production' })),
       uglify(),
       filesize(),
     ],
