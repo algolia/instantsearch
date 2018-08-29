@@ -7,6 +7,11 @@ import uglify from 'rollup-plugin-uglify';
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
 
+const processEnv = conf => ({
+  // parenthesis to avoid syntax errors in places where {} is interpreted as a block
+  'process.env': `(${JSON.stringify(conf)})`,
+});
+
 export default [
   {
     input: 'src/instantsearch.js',
@@ -38,6 +43,7 @@ export default [
           dangerousForOf: true,
         },
       }),
+      replace(processEnv({ NODE_ENV: 'production' })),
       uglify(),
       filesize(),
     ],
@@ -64,12 +70,8 @@ export default [
           dangerousForOf: true,
         },
       }),
+      replace(processEnv({ NODE_ENV: 'production' })),
       commonjs(),
-      replace({
-        'process.env': JSON.stringify({
-          NODE_ENV: 'production',
-        }),
-      }),
       uglify(),
       filesize(),
     ],
