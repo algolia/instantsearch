@@ -28,7 +28,7 @@ import { getResults } from '../core/indexUtils';
  *       </p>
  *     )}
  *   </div>
- * );
+ * ));
  *
  * const App = () => (
  *   <InstantSearch
