@@ -1,5 +1,8 @@
-import algoliasearchHelper from 'algoliasearch-helper';
 import isEqual from 'lodash/isEqual';
+import algoliasearchHelper from 'algoliasearch-helper';
+// import { getSearchBoxWidgetState } from '../connectors/search-box/connectSearchBox';
+// import { getMenuWidgetStates } from '../connectors/menu/connectMenu';
+// import { getPaginationWidgetState } from '../connectors/pagination/connectPagination';
 
 export default class RoutingManager {
   constructor({ instantSearchInstance, router, stateMapping } = {}) {
@@ -31,6 +34,7 @@ export default class RoutingManager {
       currentConfiguration.index,
       currentConfiguration
     ).state;
+
     // The content of getAllSearchParameters is destructured to return a plain object
     return {
       ...this.getAllSearchParameters({
@@ -142,12 +146,37 @@ export default class RoutingManager {
     const uiState = this.getAllUIStates({
       searchParameters: state,
     });
+
+    // const uiState = {};
+
+    // const searchBoxUiState = getSearchBoxWidgetState(uiState, {
+    //   searchParameters: state,
+    // });
+
+    // const menuUiState = getMenuWidgetStates(searchBoxUiState, {
+    //   searchParameters: state,
+    // });
+
+    // const paginationUiState = getPaginationWidgetState(menuUiState, {
+    //   searchParameters: state,
+    // });
+
     const route = this.stateMapping.stateToRoute(uiState);
-    return this.router.createURL(route);
+    const url = this.router.createURL(route);
+
+    // console.log('---');
+    // console.log(state);
+    // console.log(uiState);
+    // console.log(route);
+    // console.log(url);
+    // console.log('---');
+
+    return url;
   }
 
   onHistoryChange(fn) {
     const { helper } = this.instantSearchInstance;
+
     this.router.onUpdate(route => {
       const uiState = this.stateMapping.routeToState(route);
       const currentUIState = this.getAllUIStates({
@@ -169,6 +198,5 @@ export default class RoutingManager {
 
       fn(fullSearchParameters);
     });
-    return;
   }
 }

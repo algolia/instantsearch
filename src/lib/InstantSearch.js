@@ -325,9 +325,26 @@ To help you migrate, please refer to the migration guide: https://community.algo
     );
   }
 
-  ssr(nextSearchParameters) {
+  ssr(state) {
+    // Use a Memory router for SSR - that takes the initial state to allow the URL creation
+    // if (this.routing) {
+    //   const routingManager = new RoutingManager({
+    //     ...this.routing,
+    //     instantSearchInstance: this,
+    //   });
+    //   this._onHistoryChange = routingManager.onHistoryChange.bind(
+    //     routingManager
+    //   );
+    //   this._createURL = routingManager.createURL.bind(routingManager);
+    //   this._createAbsoluteURL = this._createURL;
+    // } else {
+    //   this._createURL = defaultCreateURL;
+    //   this._createAbsoluteURL = defaultCreateURL;
+    //   this._onHistoryChange = function() {};
+    // }
+
     const initialSearchParameters = enhanceConfiguration({})(
-      nextSearchParameters,
+      state.configuration,
       { getConfiguration: () => this.searchParameters }
     );
 
@@ -338,6 +355,7 @@ To help you migrate, please refer to the migration guide: https://community.algo
     );
 
     return new Promise((resolve, reject) => {
+      // Do not rely on result for real
       this.helper.once('result', () => {
         this.helper.removeAllListeners();
         resolve();
@@ -358,7 +376,7 @@ To help you migrate, please refer to the migration guide: https://community.algo
         templatesConfig: this.templatesConfig,
         state: this.helper.state,
         helper: this.helper,
-        createURL: () => '#',
+        createURL: defaultCreateURL,
         onHistoryChange: () => {},
         instantSearchInstance: this,
       });
@@ -370,7 +388,7 @@ To help you migrate, please refer to the migration guide: https://community.algo
         results: this.helper.lastResults,
         state: this.helper.lastResults._state,
         helper: this.helper,
-        createURL: () => '#',
+        createURL: defaultCreateURL,
         instantSearchInstance: this,
         searchMetadata: {
           isSearchStalled: false,

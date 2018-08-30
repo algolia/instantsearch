@@ -71,7 +71,14 @@ class BrowserHistory {
    * @return {object} the equivalent to what is store in the URL as an object
    */
   read() {
-    return this.parseURL({ qsModule: qs, location: window.location });
+    return this.parseURL({
+      qsModule: qs,
+      location: window.location,
+      // location: {
+      //   // Refinement are set from there
+      //   search: '?query=iphone&page=6',
+      // },
+    });
   }
 
   /**
@@ -115,6 +122,13 @@ class BrowserHistory {
       qsModule: qs,
       routeState,
       location: window.location,
+      // location: {
+      //   protocol: 'http:',
+      //   hostname: 'localhost',
+      //   port: '',
+      //   pathname: '/',
+      //   hash: '',
+      // },
     });
   }
 
