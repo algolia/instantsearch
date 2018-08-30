@@ -35,6 +35,15 @@ var customConfigureWidget = connectConfigure(
  * @param {function} unmountFn Unmount function called when the widget is disposed.
  * @return {function(CustomConfigureWidgetOptions)} Re-usable widget factory for a custom **Configure** widget.
  */
+
+export const getConfigureSearchParameters = (searchParameters, { uiState }) => {
+  if (!uiState.configure) {
+    return searchParameters;
+  }
+
+  return searchParameters.setQueryParameters(uiState.configure);
+};
+
 export default function connectConfigure(renderFn, unmountFn) {
   if (
     (isFunction(renderFn) && !isFunction(unmountFn)) ||

@@ -106,17 +106,120 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
+
+export const getWidgetParams = ({
+  attributeName,
+  limit = 10,
+  sortBy = ['name:asc'],
+  showMoreLimit,
+  transformItems = items => items,
+} = {}) => ({
+  attributeName,
+  limit,
+  showMoreLimit,
+  sortBy,
+  transformItems,
+});
+
+export const getConfiguration = ({
+  attributeName,
+  limit,
+  showMoreLimit,
+}) => configuration => {
+  const widgetConfiguration = {
+    hierarchicalFacets: [
+      {
+        name: attributeName,
+        attributes: [attributeName],
+      },
+    ],
+  };
+
+  const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+
+  widgetConfiguration.maxValuesPerFacet = Math.max(
+    currentMaxValuesPerFacet,
+    showMoreLimit || limit
+  );
+
+  return widgetConfiguration;
+};
+
+export const getMenuWidgetState = attribute => (
+  uiState,
+  { searchParameters }
+) => {
+  const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
+    attribute
+  );
+
+  if (
+    !refinedItem ||
+    (uiState.menu && uiState.menu[attribute] === refinedItem)
+  ) {
+    return uiState;
+  }
+
+  return {
+    ...uiState,
+    menu: {
+      ...uiState.menu,
+      [attribute]: refinedItem,
+    },
+  };
+};
+
+export const getMenuWidgetStates = (uiState, { searchParameters }) =>
+  searchParameters.hierarchicalFacets.reduce(
+    (acc, hierarchicalFacet) =>
+      getMenuWidgetState(hierarchicalFacet.name)(acc, {
+        searchParameters,
+      }),
+    uiState
+  );
+
+export const getMenuWidgetSearchParameters = attribute => (
+  searchParameters,
+  { uiState }
+) => {
+  if (uiState.menu && uiState.menu[attribute]) {
+    const uiStateRefinedItem = uiState.menu[attribute];
+    const isAlreadyRefined = searchParameters.isHierarchicalFacetRefined(
+      attribute,
+      uiStateRefinedItem
+    );
+
+    if (isAlreadyRefined) {
+      return searchParameters;
+    }
+
+    return searchParameters.toggleRefinement(attribute, uiStateRefinedItem);
+  }
+
+  if (searchParameters.isHierarchicalFacetRefined(attribute)) {
+    const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
+      attribute
+    );
+
+    const next = searchParameters.toggleRefinement(attribute, refinedItem);
+
+    return next;
+  }
+
+  return searchParameters;
+};
+
 export default function connectMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetParams = {}) => {
+  return widgetParams => {
     const {
       attributeName,
-      limit = 10,
-      sortBy = ['name:asc'],
+      limit,
+      sortBy,
       showMoreLimit,
-      transformItems = items => items,
-    } = widgetParams;
+      transformItems,
+    } = getWidgetParams(widgetParams);
 
     if (!attributeName || (!isNaN(showMoreLimit) && showMoreLimit < limit)) {
       throw new Error(usage);
@@ -157,24 +260,11 @@ export default function connectMenu(renderFn, unmountFn) {
         };
       },
 
-      getConfiguration(configuration) {
-        const widgetConfiguration = {
-          hierarchicalFacets: [
-            {
-              name: attributeName,
-              attributes: [attributeName],
-            },
-          ],
-        };
-
-        const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-        widgetConfiguration.maxValuesPerFacet = Math.max(
-          currentMaxValuesPerFacet,
-          showMoreLimit || limit
-        );
-
-        return widgetConfiguration;
-      },
+      getConfiguration: getConfiguration({
+        attributeName,
+        limit,
+        showMoreLimit,
+      }),
 
       init({ helper, createURL, instantSearchInstance }) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
@@ -256,48 +346,8 @@ export default function connectMenu(renderFn, unmountFn) {
         return nextState;
       },
 
-      getWidgetState(uiState, { searchParameters }) {
-        const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
-          attributeName
-        );
-
-        if (
-          !refinedItem ||
-          (uiState.menu && uiState.menu[attributeName] === refinedItem)
-        ) {
-          return uiState;
-        }
-
-        return {
-          ...uiState,
-          menu: {
-            ...uiState.menu,
-            [attributeName]: refinedItem,
-          },
-        };
-      },
-
-      getWidgetSearchParameters(searchParameters, { uiState }) {
-        if (uiState.menu && uiState.menu[attributeName]) {
-          const uiStateRefinedItem = uiState.menu[attributeName];
-          const isAlreadyRefined = searchParameters.isHierarchicalFacetRefined(
-            attributeName,
-            uiStateRefinedItem
-          );
-          if (isAlreadyRefined) return searchParameters;
-          return searchParameters.toggleRefinement(
-            attributeName,
-            uiStateRefinedItem
-          );
-        }
-        if (searchParameters.isHierarchicalFacetRefined(attributeName)) {
-          const [refinedItem] = searchParameters.getHierarchicalFacetBreadcrumb(
-            attributeName
-          );
-          return searchParameters.toggleRefinement(attributeName, refinedItem);
-        }
-        return searchParameters;
-      },
+      getWidgetState: getMenuWidgetState(attributeName),
+      getWidgetSearchParameters: getMenuWidgetSearchParameters(attributeName),
     };
   };
 }

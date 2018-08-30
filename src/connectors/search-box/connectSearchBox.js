@@ -75,6 +75,23 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
+
+export const getSearchBoxWidgetState = (uiState, { searchParameters }) => {
+  const query = searchParameters.query;
+
+  if (query === '' || (uiState && uiState.query === query)) {
+    return uiState;
+  }
+
+  return {
+    ...uiState,
+    query,
+  };
+};
+
+export const getSearchBoxSearchParameters = (searchParameters, { uiState }) =>
+  searchParameters.setQuery(uiState.query || '');
+
 export default function connectSearchBox(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
@@ -152,22 +169,8 @@ export default function connectSearchBox(renderFn, unmountFn) {
         return state.setQuery('');
       },
 
-      getWidgetState(uiState, { searchParameters }) {
-        const query = searchParameters.query;
-
-        if (query === '' || (uiState && uiState.query === query)) {
-          return uiState;
-        }
-
-        return {
-          ...uiState,
-          query,
-        };
-      },
-
-      getWidgetSearchParameters(searchParameters, { uiState }) {
-        return searchParameters.setQuery(uiState.query || '');
-      },
+      getWidgetState: getSearchBoxWidgetState,
+      getWidgetSearchParameters: getSearchBoxSearchParameters,
     };
   };
 }

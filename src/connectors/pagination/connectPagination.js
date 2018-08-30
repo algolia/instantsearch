@@ -97,6 +97,33 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
+
+export const getPaginationWidgetState = (uiState, { searchParameters }) => {
+  const page = searchParameters.page;
+
+  if (page === 0 || page + 1 === uiState.page) {
+    return uiState;
+  }
+
+  return {
+    ...uiState,
+    page: page + 1,
+  };
+};
+
+export const getPaginationSearchParameters = (
+  searchParameters,
+  { uiState }
+) => {
+  const page = uiState.page;
+
+  if (page) {
+    return searchParameters.setQueryParameter('page', page - 1);
+  }
+
+  return searchParameters.setQueryParameter('page', 0);
+};
+
 export default function connectPagination(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
@@ -165,21 +192,8 @@ export default function connectPagination(renderFn, unmountFn) {
         unmountFn();
       },
 
-      getWidgetState(uiState, { searchParameters }) {
-        const page = searchParameters.page;
-        if (page === 0 || page + 1 === uiState.page) return uiState;
-        return {
-          ...uiState,
-          page: page + 1,
-        };
-      },
-
-      getWidgetSearchParameters(searchParameters, { uiState }) {
-        const uiPage = uiState.page;
-        if (uiPage)
-          return searchParameters.setQueryParameter('page', uiState.page - 1);
-        return searchParameters.setQueryParameter('page', 0);
-      },
+      getWidgetState: getPaginationWidgetState,
+      getWidgetSearchParameters: getPaginationSearchParameters,
     };
   };
 }
