@@ -1,43 +1,119 @@
 <template>
-  <div v-if="state">
-    <slot v-bind="state">
-      <json-tree
-        :level="2"
-        :data="state"
-      />
+  <div
+    :class="[suit(''), noRefinement && suit('','noRefinement')]"
+    v-if="state"
+  >
+    <slot
+      :refine="state.refine"
+      :clear-all="state.clearAllClick"
+      :items="refinements"
+    >
+      <ul :class="suit('list')">
+        <li
+          v-for="item in refinements"
+          :key="item.attributeName"
+        >
+          <slot
+            name="item"
+            :refine="state.refine"
+            :item="item"
+          >
+            <span :class="suit('item')">
+              <span :class="suit('label')">{{ item.attributeName | capitalize }}: {{ item.computedLabel }}</span>
+              <button
+                :class="suit('delete')"
+                @click="state.refine(item)"
+              >✕</button>
+            </span>
+          </slot>
+        </li>
+      </ul>
+      <button
+        :class="suit('reset')"
+        @click="state.clearAllClick()"
+        v-if="refinements.length > 0"
+      >
+        <slot
+          name="clearAllLabel"
+          :items="refinements"
+        >Clear all</slot>
+      </button>
     </slot>
   </div>
 </template>
 
 <script>
-import JsonTree from 'vue-json-tree'; // todo: remove
 import algoliaComponent from '../component';
 import { connectCurrentRefinedValues } from 'instantsearch.js/es/connectors';
+import { createPanelConsumerMixin } from '../panel';
 
 export default {
-  components: { 'json-tree': JsonTree },
-  mixins: [algoliaComponent],
+  mixins: [
+    algoliaComponent,
+    createPanelConsumerMixin({
+      mapStateToCanRefine: state => state.refinements.length > 0,
+    }),
+  ],
   props: {
-    attributes: {
+    transformItems: {
+      type: Function,
+      required: false,
+      default: x => x,
+    },
+    clearsQuery: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+    excludedAttributes: {
       type: Array,
-      default() {
-        return [];
-      },
+      default: () => [],
+      required: false,
     },
   },
   data() {
     return {
-      widgetName: 'ais-breadcrumb',
+      widgetName: 'CurrentRefinements',
     };
   },
   beforeCreate() {
     this.connector = connectCurrentRefinedValues;
   },
   computed: {
+    noRefinement() {
+      return this.refinements.length === 0;
+    },
+    refinements() {
+      // excludedAttributes isn't implemented in IS.js
+      return this.state.refinements
+        .filter(
+          ({ attributeName }) =>
+            this.excludedAttributes.indexOf(attributeName) === -1
+        )
+        .map(item => {
+          if (item.type === 'query') {
+            // eslint-disable-next-line no-param-reassign
+            item.attributeName = 'query';
+          }
+          return item;
+        });
+    },
     widgetParams() {
       return {
-        attributes: this.attributes,
+        transformItems: this.transformItems,
+        clearsQuery: this.clearsQuery,
       };
+    },
+  },
+  filters: {
+    capitalize(value) {
+      if (!value) return '';
+      return (
+        value
+          .toString()
+          .charAt(0)
+          .toUpperCase() + value.toString().slice(1)
+      );
     },
   },
 };

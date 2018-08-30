@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly (empty) 1`] = `
+
+<div class="ais-CurrentRefinements ais-CurrentRefinements--noRefinement">
+  <ul class="ais-CurrentRefinements-list">
+  </ul>
+</div>
+
+`;
+
+exports[`renders correctly (with query) 1`] = `
+
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li>
+      <span class="ais-CurrentRefinements-item">
+        <span class="ais-CurrentRefinements-label">
+          Query: some query
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+  <button class="ais-CurrentRefinements-reset">
+    Clear all
+  </button>
+</div>
+
+`;
+
+exports[`renders correctly (with refinements) 1`] = `
+
+<div class="ais-CurrentRefinements">
+  <ul class="ais-CurrentRefinements-list">
+    <li>
+      <span class="ais-CurrentRefinements-item">
+        <span class="ais-CurrentRefinements-label">
+          Brands: apple
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+    <li>
+      <span class="ais-CurrentRefinements-item">
+        <span class="ais-CurrentRefinements-label">
+          Colors: red
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+    <li>
+      <span class="ais-CurrentRefinements-item">
+        <span class="ais-CurrentRefinements-label">
+          Requirements: free
+        </span>
+        <button class="ais-CurrentRefinements-delete">
+          ✕
+        </button>
+      </span>
+    </li>
+  </ul>
+  <button class="ais-CurrentRefinements-reset">
+    Clear all
+  </button>
+</div>
+
+`;
