@@ -2,13 +2,62 @@ import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
 storiesOf('RefinementList', module)
-  .addDecorator(previewWrapper())
+  .addDecorator(previewWrapper({ filters: '' }))
   .add('default', () => ({
-    template: `<ais-refinement-list attribute-name="materials"></ais-refinement-list>`,
+    template: `<ais-refinement-list attribute="brand"></ais-refinement-list>`,
   }))
-  .add('custom rendering', () => ({
-    template: `<ais-refinement-list attribute-name="materials">
-      <h3 slot="header">Materials</h3>
-      <hr slot="footer" />
+  .add('with searchbox', () => ({
+    template: `
+      <ais-refinement-list 
+        attribute="brand"
+        searchable
+      >
+      </ais-refinement-list>`,
+  }))
+  .add('with show more', () => ({
+    template: `
+      <ais-refinement-list 
+        attribute="brand"
+        show-more
+      >
+      </ais-refinement-list>`,
+  }))
+  .add('item custom rendering', () => ({
+    template: `
+    <ais-refinement-list attribute="brand">
+      <template slot="item" slot-scope="{item, refine}">
+        <button
+          @click="refine(item.value)"
+        >
+          {{item.isRefined ? '☑️ ' : ''}}{{item.value}}
+        </button>
+      </template>
+    </ais-refinement-list>`,
+  }))
+  .add('full custom rendering', () => ({
+    template: `
+    <ais-refinement-list attribute="brand" searchable show-more>
+      <template slot-scope="{
+        items,
+        refine,
+        searchForItems,
+        toggleShowMore,
+        isShowingMore
+      }">
+        <input @input="searchForItems($event.target.value)"/>
+        <button
+          v-for="item in items"
+          :key="item.value"
+          @click="refine(item.value)"
+          style="font: inherit"
+        >
+          {{item.isRefined ? '☑️ ' : ''}}
+          <span v-html="item.highlighted"></span>
+        </button>
+        <!-- this gets undefined when searching? -->
+        <button @click="toggleShowMore">
+          Show {{isShowingMore ? 'less' : 'more'}}
+        </button>
+      </template>
     </ais-refinement-list>`,
   }));

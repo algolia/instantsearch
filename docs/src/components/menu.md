@@ -9,7 +9,7 @@ editable: true
 githubSource: docs/src/components/menu.md
 ---
 
-Create a menu based on a facet. A menu displays a list of facet values and let the user selects only one value at a time.
+Create a menu based on a facet. A menu displays a list of facet values and let the user selects only one value at a time. Make sure that the attribute you used is in `attributesForFaceting`.
 
 <a class="btn btn-static-theme" href="stories/?selectedKind=Menu">🕹 try out live</a>
 

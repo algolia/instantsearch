@@ -1,0 +1,196 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly (empty) 1`] = `
+
+<div class="ais-RefinementList ais-RefinementList--noRefinement">
+  <ul class="ais-RefinementList-list">
+  </ul>
+</div>
+
+`;
+
+exports[`renders correctly 1`] = `
+
+<div class="ais-RefinementList ais-RefinementList--noRefinement">
+  <ul class="ais-RefinementList-list">
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="yo"
+        >
+        <span class="ais-RefinementList-labelText">
+          yo
+        </span>
+        <span class="ais-RefinementList-count">
+          20
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="how"
+        >
+        <span class="ais-RefinementList-labelText">
+          how
+        </span>
+        <span class="ais-RefinementList-count">
+          10
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="are"
+        >
+        <span class="ais-RefinementList-labelText">
+          are
+        </span>
+        <span class="ais-RefinementList-count">
+          8
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="you"
+        >
+        <span class="ais-RefinementList-labelText">
+          you
+        </span>
+        <span class="ais-RefinementList-count">
+          9
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="doing"
+        >
+        <span class="ais-RefinementList-labelText">
+          doing
+        </span>
+        <span class="ais-RefinementList-count">
+          100
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="?"
+        >
+        <span class="ais-RefinementList-labelText">
+          ?
+        </span>
+        <span class="ais-RefinementList-count">
+          0
+        </span>
+      </label>
+    </li>
+  </ul>
+</div>
+
+`;
+
+exports[`renders correctly when it's searchable 1`] = `
+
+<div class="ais-RefinementList ais-RefinementList--noRefinement">
+  <ul class="ais-RefinementList-list">
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="yo"
+        >
+        <span class="ais-RefinementList-labelText">
+          yo
+        </span>
+        <span class="ais-RefinementList-count">
+          20
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="how"
+        >
+        <span class="ais-RefinementList-labelText">
+          how
+        </span>
+        <span class="ais-RefinementList-count">
+          10
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="are"
+        >
+        <span class="ais-RefinementList-labelText">
+          are
+        </span>
+        <span class="ais-RefinementList-count">
+          8
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="you"
+        >
+        <span class="ais-RefinementList-labelText">
+          you
+        </span>
+        <span class="ais-RefinementList-count">
+          9
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="doing"
+        >
+        <span class="ais-RefinementList-labelText">
+          doing
+        </span>
+        <span class="ais-RefinementList-count">
+          100
+        </span>
+      </label>
+    </li>
+    <li class="ais-RefinementList-item">
+      <label class="ais-RefinementList-label">
+        <input type="checkbox"
+               class="ais-RefinementList-checkbox"
+               value="?"
+        >
+        <span class="ais-RefinementList-labelText">
+          ?
+        </span>
+        <span class="ais-RefinementList-count">
+          0
+        </span>
+      </label>
+    </li>
+  </ul>
+</div>
+
+`;

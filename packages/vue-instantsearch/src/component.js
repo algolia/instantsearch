@@ -19,12 +19,16 @@ export default {
     };
   },
   created() {
-    this.factory = this.connector(this.updateState, () => {});
-    this.widget = this.factory(this.widgetParams);
-    this.instantSearchInstance.addWidget(this.widget);
+    if (this.connector) {
+      this.factory = this.connector(this.updateState, () => {});
+      this.widget = this.factory(this.widgetParams);
+      this.instantSearchInstance.addWidget(this.widget);
+    }
   },
   beforeDestroy() {
-    this.instantSearchInstance.removeWidget(this.widget);
+    if (this.widget) {
+      this.instantSearchInstance.removeWidget(this.widget);
+    }
   },
   watch: {
     widgetParams: {

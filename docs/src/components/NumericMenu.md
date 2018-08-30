@@ -33,8 +33,8 @@ The numeric menu list is a widget that displays a list of numeric filters in a l
 Name | Type | Default | Description | Required
 ---|---|---|---|---
 attribute | String | - | The attribute | Yes
-items | Array<{ label: string, start?: number, end?: number }> | - | Array of available options for the widget | Yes
-transformItems | (items: Array<{ label: string, value: string, isRefined: boolean }>) | x => x | Function to modify the items being displayed, e.g. for filtering or sorting them. Takes the items as parameter and expects them back in return. | -
+items | `Array<{ label: string, start?: number, end?: number }>` | - | Array of available options for the widget | Yes
+transformItems | `(items: Array<{ label: string, value: string, isRefined: boolean }>)` | x => x | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 
 ## CSS classes
 
