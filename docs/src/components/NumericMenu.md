@@ -34,7 +34,7 @@ Name | Type | Default | Description | Required
 ---|---|---|---|---
 attribute | String | - | The attribute | Yes
 items | Array<{ label: string, start?: number, end?: number }> | - | Array of available options for the widget | Yes
-transformItems | (items: Array<{ label: string, value: string, isRefined: boolean }>) | x => x | Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return. | -
+transformItems | (items: Array<{ label: string, value: string, isRefined: boolean }>) | x => x | Function to modify the items being displayed, e.g. for filtering or sorting them. Takes the items as parameter and expects them back in return. | -
 
 ## CSS classes
 
