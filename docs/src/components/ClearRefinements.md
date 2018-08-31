@@ -25,7 +25,6 @@ Name | Type | Default | Description | Required
 ---|---|---|---|---
 clearsQuery | `boolean` | `false` | Also clears the query | -
 excludedAttributes | `string[]` | `[]` | Attributes not to clear | -
-transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 
 ## Slots
 

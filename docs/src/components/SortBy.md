@@ -6,13 +6,12 @@ category: Components
 withHeadings: true
 navWeight: 15
 editable: true
-githubSource: docs/src/components/sort-by.md
+githubSource: docs/src/components/SortBy.md
 ---
 
 A component that lets the user change the sorting by changing the index the search is operated on.
 
-To be able to sort results with the Algolia engine, you need to have different indices.
-To read more about sorting with Algolia, please checkout the [official documentation about sorting](https://www.algolia.com/doc/guides/relevance/sorting/#guides).
+To be able to sort results with the Algolia engine, you need to have different indices. To read more about sorting with Algolia, please checkout the [official documentation about sorting](https://www.algolia.com/doc/guides/relevance/sorting/#guides).
 
 <a class="btn btn-static-theme" href="stories/?selectedKind=SortBy">🕹 try out live</a>
 
@@ -64,11 +63,11 @@ Customize the rendering:
 Name | Type | Default | Description | Required
 ---|---|---|---|---
 items | Array |  | An array of objects, each one containing a `value` and a `label` key. | yes
+transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 
 ## CSS classes
 
-Here's a list of CSS classes exposed by this widget. To better understand the underlying
-DOM structure, have a look at the generated DOM in your browser.
+Here's a list of CSS classes exposed by this widget. To better understand the underlying DOM structure, have a look at the generated DOM in your browser.
 
 Class name | Description
 ---|---

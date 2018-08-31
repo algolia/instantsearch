@@ -5,6 +5,20 @@ import HitsPerPage from '../HitsPerPage.vue';
 jest.mock('../../component');
 jest.mock('../../panel');
 
+const defaultState = {
+  items: [
+    {
+      label: '10 results',
+      value: 10,
+      default: true,
+    },
+    {
+      label: '20 results',
+      value: 20,
+    },
+  ],
+};
+
 const defaultProps = {
   items: [
     {
@@ -19,7 +33,24 @@ const defaultProps = {
   ],
 };
 
+it('accepts a transformItems prop', () => {
+  __setState({ ...defaultState });
+
+  const transformItems = () => {};
+
+  const wrapper = mount(HitsPerPage, {
+    propsData: {
+      ...defaultProps,
+      transformItems,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
+});
+
 it('renders correctly', () => {
+  __setState({ ...defaultState });
+
   const wrapper = mount(HitsPerPage, {
     propsData: defaultProps,
   });
@@ -29,6 +60,7 @@ it('renders correctly', () => {
 
 it('calls `refine` with the `value` on `change`', () => {
   __setState({
+    ...defaultState,
     refine: jest.fn(),
   });
 
@@ -36,7 +68,7 @@ it('calls `refine` with the `value` on `change`', () => {
     propsData: defaultProps,
   });
 
-  // This is bad 👇🏽 but the only way for now to trigger changes
+  // This is bad👇🏽 but the only way for now to trigger changes
   // on a select: https://github.com/vuejs/vue-test-utils/issues/260
   wrapper.vm.selected = 20;
 
@@ -46,7 +78,10 @@ it('calls `refine` with the `value` on `change`', () => {
 });
 
 it('calls the Panel mixin with `hasNoResults`', () => {
-  __setState({ hasNoResults: false });
+  __setState({
+    ...defaultState,
+    hasNoResults: false,
+  });
 
   const wrapper = mount(HitsPerPage, {
     propsData: defaultProps,

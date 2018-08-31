@@ -49,6 +49,28 @@ storiesOf('Breadcrumb', module)
       attributes,
     }),
   }))
+  .add('with a transform items', () => ({
+    template: `
+      <ais-breadcrumb
+        :attributes="attributes"
+        :transformItems="transformItems"
+      >
+        <template slot="rootLabel" slot-scope="_">HOME</template>
+      </ais-breadcrumb>
+    `,
+    data: () => ({
+      attributes,
+    }),
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign({}, item, {
+            name: item.name.toUpperCase(),
+          })
+        );
+      },
+    },
+  }))
   .add('with a custom render', () => ({
     template: `
       <ais-breadcrumb :attributes="attributes">

@@ -55,11 +55,11 @@ export default {
       type: Array,
       required: true,
     },
-    // @TODO: use an external prop for common props
     transformItems: {
       type: Function,
-      required: false,
-      default: items => items,
+      default(items) {
+        return items;
+      },
     },
   },
   beforeCreate() {

@@ -30,9 +30,10 @@ Displays a `select` element allowing users to choose the number of hits to displ
 
 ## Props
 
-Name | Type | Required | Default | Description | 
+Name | Type | Required | Default | Description |
 ---|---|---|---|---
 items | `[<Object>, ...]` | yes | no | Array of possible values for the select, example: <br/>`[{label: 'Ten results', value: 10, default}, {label: 'Twenty results', value: 20}]`.<br/>The item with `default: true` will be the one applied by default.
+transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 
 ## CSS classes
 
@@ -41,5 +42,5 @@ DOM structure, have a look at the generated DOM in your browser.
 
 Class name | Description
 ---|---
-`ais-HitsPerPage` | Container class  
+`ais-HitsPerPage` | Container class
 `ais-HitsPerPage-select` | A refinement option

@@ -3,7 +3,7 @@ import { previewWrapper } from './utils';
 
 storiesOf('MenuSelect', module)
   .addDecorator(previewWrapper())
-  .add('simple usage', () => ({
+  .add('default', () => ({
     template: `
       <ais-menu-select attribute="brand" />
     `,
@@ -16,7 +16,7 @@ storiesOf('MenuSelect', module)
       />
     `,
   }))
-  .add('custom sort', () => ({
+  .add('with a custom sort', () => ({
     template: `
       <ais-menu-select
         attribute="brand"
@@ -24,7 +24,7 @@ storiesOf('MenuSelect', module)
       />
     `,
   }))
-  .add('custom label', () => ({
+  .add('with a custom label', () => ({
     template: `
       <ais-menu-select
         attribute="brand"
@@ -32,7 +32,25 @@ storiesOf('MenuSelect', module)
       />
     `,
   }))
-  .add('custom rendering', () => ({
+  .add('with transform items', () => ({
+    template: `
+      <ais-menu-select
+        attribute="brand"
+        label="SEE ALL"
+        :transformItems="transformItems"
+      />
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign({}, item, {
+            label: item.label.toUpperCase(),
+          })
+        );
+      },
+    },
+  }))
+  .add('with a custom rendering', () => ({
     template: `
       <ais-menu-select attribute="brand">
         <select

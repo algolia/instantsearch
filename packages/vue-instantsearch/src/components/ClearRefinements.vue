@@ -37,18 +37,11 @@ export default {
   props: {
     clearsQuery: {
       type: Boolean,
-      required: false,
       default: false,
     },
     excludedAttributes: {
       type: Array,
-      required: false,
       default: () => [],
-    },
-    transformItems: {
-      type: Function,
-      required: false,
-      default: x => x,
     },
   },
   data() {

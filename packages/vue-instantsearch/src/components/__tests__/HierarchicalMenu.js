@@ -230,6 +230,23 @@ it('accepts a sortBy prop', () => {
   expect(wrapper.vm.widgetParams.sortBy).toEqual(['count:asc']);
 });
 
+it('accepts a transformItems prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const transformItems = () => {};
+
+  const wrapper = mount(HierarchicalMenu, {
+    propsData: {
+      ...defaultProps,
+      transformItems,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
+});
+
 describe('default render', () => {
   it('renders correctly', () => {
     __setState({ ...defaultState });

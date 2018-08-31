@@ -8,7 +8,7 @@ storiesOf('RefinementList', module)
   }))
   .add('with searchbox', () => ({
     template: `
-      <ais-refinement-list 
+      <ais-refinement-list
         attribute="brand"
         searchable
       >
@@ -16,11 +16,28 @@ storiesOf('RefinementList', module)
   }))
   .add('with show more', () => ({
     template: `
-      <ais-refinement-list 
+      <ais-refinement-list
         attribute="brand"
         show-more
       >
       </ais-refinement-list>`,
+  }))
+  .add('with transform items', () => ({
+    template: `
+      <ais-refinement-list
+        attribute="brand"
+        :transform-items="transformItems"
+      />
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign(item, {
+            label: item.label.toLocaleUpperCase(),
+          })
+        );
+      },
+    },
   }))
   .add('item custom rendering', () => ({
     template: `

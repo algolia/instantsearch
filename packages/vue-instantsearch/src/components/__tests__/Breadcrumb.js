@@ -72,6 +72,23 @@ it('accepts a rootPath prop', () => {
   expect(wrapper.vm.widgetParams.rootPath).toBe('TV & Home Theater');
 });
 
+it('accepts a transformItems prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const transformItems = () => {};
+
+  const wrapper = mount(Breadcrumb, {
+    propsData: {
+      ...defaultProps,
+      transformItems,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
+});
+
 describe('default render', () => {
   it('renders correctly', () => {
     __setState({ ...defaultState });

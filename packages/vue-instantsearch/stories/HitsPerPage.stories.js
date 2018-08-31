@@ -3,31 +3,64 @@ import { previewWrapper } from './utils';
 
 storiesOf('HitsPerPage', module)
   .addDecorator(previewWrapper())
-  .add('simple usage', () => ({
-    template: `<ais-hits-per-page :items="[{
-        label: '10 results', value: 10, default: true,
-      }, {
-        label: '20 results', value: 20
-      }]"></ais-hits-per-page>`,
+  .add('default', () => ({
+    template: `
+      <ais-hits-per-page
+        :items="[
+          { label: '3 results', value: 3, default: true },
+          { label: '6 results', value: 6 }
+        ]"
+      />
+    `,
   }))
-  .add('default on second element', () => ({
-    template: `<ais-hits-per-page :items="[{
-        label: '10 results', value: 10
-      }, {
-        label: '20 results', value: 20, default: true
-      }]"></ais-hits-per-page>`,
+  .add('with different default', () => ({
+    template: `
+      <ais-hits-per-page
+        :items="[
+          { label: '3 results', value: 3 },
+          { label: '6 results', value: 6, default: true }
+        ]"
+      />
+    `,
   }))
-  .add('custom rendering: radio buttons', () => ({
-    template: `<ais-hits-per-page :items="[{
-        label: '10 results', value: 10
-      }, {
-        label: '20 results', value: 20, default: true
-      }]">
-        <div slot-scope="{items, refine}">
+  .add('with transform items', () => ({
+    template: `
+      <ais-hits-per-page
+        :items="[
+          { label: '3 results', value: 3, default: true },
+          { label: '6 results', value: 6 }
+        ]"
+        :transform-items="transformItems"
+      />
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign({}, item, {
+            label: item.label.toUpperCase(),
+          })
+        );
+      },
+    },
+  }))
+  .add('with a custom render', () => ({
+    template: `
+      <ais-hits-per-page
+        :items="[
+          { label: '3 results', value: 3, default: true },
+          { label: '6 results', value: 6 }
+        ]"
+      >
+        <div slot-scope="{ items, refine }">
           <label
             v-for="(item, itemIndex) in items"
-            @change="refine(item.value)">{{item.label}}
-            <input type="radio" :checked="item.isRefined === true" />
+            @change="refine(item.value)"
+          >
+            <input
+              type="radio"
+              :checked="item.isRefined"
+            >
+            {{item.label}}
           </label>
         </div>
       </ais-hits-per-page>`,
@@ -38,8 +71,8 @@ storiesOf('HitsPerPage', module)
         <template slot="header">Hits per page</template>
         <ais-hits-per-page
           :items="[
-            { label: '10 results', value: 10, default: true },
-            { label: '20 results', value: 20 }
+            { label: '3 results', value: 3, default: true },
+            { label: '6 results', value: 6 }
           ]"
         />
         <template slot="footer">Footer</template>

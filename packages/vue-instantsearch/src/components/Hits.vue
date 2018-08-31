@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import algoliaComponent from '../component';
 import { connectHits } from 'instantsearch.js/es/connectors';
+import algoliaComponent from '../component';
 
 export default {
   mixins: [algoliaComponent],
@@ -33,7 +33,12 @@ export default {
     escapeHTML: {
       type: Boolean,
       default: true,
-      required: false,
+    },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
     },
   },
   data() {
@@ -45,13 +50,13 @@ export default {
     this.connector = connectHits;
   },
   computed: {
-    // Fixes InstantSearch.js connectors API: every list of things must be called `items`
     items() {
       return this.state.hits;
     },
     widgetParams() {
       return {
         escapeHits: this.escapeHTML,
+        transformItems: this.transformItems,
       };
     },
   },

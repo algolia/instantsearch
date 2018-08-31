@@ -26,6 +26,36 @@ const defaultState = {
   showMore: () => {},
 };
 
+it('accepts a escapeHTML prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const wrapper = mount(InfiniteHits, {
+    propsData: {
+      escapeHTML: true,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.escapeHits).toBe(true);
+});
+
+it('accepts a transformItems prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const transformItems = () => {};
+
+  const wrapper = mount(InfiniteHits, {
+    propsData: {
+      transformItems,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
+});
+
 it('renders correctly', () => {
   __setState({
     ...defaultState,

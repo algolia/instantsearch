@@ -4,7 +4,7 @@
     :class="suit('')"
   >
     <slot
-      :items="items"
+      :items="state.items"
       :refine="state.refine"
       :hasNoResults="state.hasNoResults"
     >
@@ -14,8 +14,8 @@
         @change="handleChange"
       >
         <option
-          v-for="(item, itemIndex) in items"
-          :key="itemIndex"
+          v-for="item in state.items"
+          :key="item.value"
           :class="suit('option')"
           :value="item.value"
         >
@@ -44,6 +44,15 @@ export default {
       required: true,
       default: () => [],
     },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
+    },
+  },
+  beforeCreate() {
+    this.connector = connectHitsPerPage;
   },
   data() {
     return {
@@ -51,19 +60,17 @@ export default {
       selected: this.items.find(item => item.default === true).value,
     };
   },
-  methods: {
-    handleChange() {
-      this.state.refine(this.selected);
-    },
-  },
-  beforeCreate() {
-    this.connector = connectHitsPerPage;
-  },
   computed: {
     widgetParams() {
       return {
         items: this.items,
+        transformItems: this.transformItems,
       };
+    },
+  },
+  methods: {
+    handleChange() {
+      this.state.refine(this.selected);
     },
   },
 };

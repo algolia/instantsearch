@@ -6,6 +6,24 @@ storiesOf('Hits', module)
   .add('simple usage', () => ({
     template: `<ais-hits></ais-hits>`,
   }))
+  .add('with transform items', () => ({
+    template: `
+      <ais-hits :transform-items="transformItems">
+        <div slot="item" slot-scope="{ item }">
+          <h2>{{item.name}}</h2>
+        </div>
+      </ais-hits>
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign({}, item, {
+            name: item.name.toUpperCase(),
+          })
+        );
+      },
+    },
+  }))
   .add('custom rendering', () => ({
     template: `
     <ais-hits>

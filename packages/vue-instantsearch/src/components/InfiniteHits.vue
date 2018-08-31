@@ -5,7 +5,7 @@
   >
     <slot
       :items="items"
-      :isLastPage="isLastPage"
+      :is-last-page="state.isLastPage"
       :refine="refine"
     >
       <ol :class="suit('list')">
@@ -25,8 +25,8 @@
       </ol>
 
       <button
-        :class="[suit('loadMore'), isLastPage && suit('loadMore', 'disabled')]"
-        :disabled="isLastPage"
+        :class="[suit('loadMore'), state.isLastPage && suit('loadMore', 'disabled')]"
+        :disabled="state.isLastPage"
         @click="refine"
       >
         Show more results
@@ -45,7 +45,12 @@ export default {
     escapeHTML: {
       type: Boolean,
       default: true,
-      required: false,
+    },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
     },
   },
   data() {
@@ -57,18 +62,16 @@ export default {
     this.connector = connectInfiniteHits;
   },
   computed: {
+    widgetParams() {
+      return {
+        escapeHits: this.escapeHTML,
+        transformItems: this.transformItems,
+      };
+    },
     items() {
       // Fixes InstantSearch.js connectors API: every list
       // of things must be called `items`
       return this.state.hits;
-    },
-    isLastPage() {
-      return this.state.isLastPage;
-    },
-    widgetParams() {
-      return {
-        escapeHits: this.escapeHTML,
-      };
     },
   },
   methods: {

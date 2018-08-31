@@ -76,6 +76,12 @@ export default {
       type: String,
       default: null,
     },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
+    },
   },
   data() {
     return {
@@ -91,6 +97,7 @@ export default {
         attributes: this.attributes,
         separator: this.separator,
         rootPath: this.rootPath,
+        transformItems: this.transformItems,
       };
     },
   },

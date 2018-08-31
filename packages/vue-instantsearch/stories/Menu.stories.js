@@ -27,6 +27,20 @@ storiesOf('Menu', module)
       <ais-menu attribute="brand" :sort-by="['isRefined:desc', 'name:asc']" />
     `,
   }))
+  .add('with transform items', () => ({
+    template: `
+      <ais-menu attribute="brand" :transform-items="transformItems" />
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign(item, {
+            label: item.label.toLocaleUpperCase(),
+          })
+        );
+      },
+    },
+  }))
   .add('with a custom render', () => ({
     template: `
       <ais-menu attribute="brand">

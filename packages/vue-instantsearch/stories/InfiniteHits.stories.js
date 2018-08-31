@@ -6,7 +6,25 @@ storiesOf('InfiniteHits', module)
   .add('simple usage', () => ({
     template: `<ais-infinite-hits />`,
   }))
-  .add('custom rendering', () => ({
+  .add('with transform items', () => ({
+    template: `
+      <ais-infinite-hits :transform-items="transformItems">
+        <div slot="item" slot-scope="{ item, index }">
+          {{item.name}} - {{index}}
+        </div>
+      </ais-infinite-hits>
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign({}, item, {
+            name: item.name.toUpperCase(),
+          })
+        );
+      },
+    },
+  }))
+  .add('with a custom render', () => ({
     template: `
       <ais-infinite-hits>
         <div slot-scope="{ items, isLastPage, refine }">
@@ -27,7 +45,7 @@ storiesOf('InfiniteHits', module)
       </ais-infinite-hits>
     `,
   }))
-  .add('custom item rendering', () => ({
+  .add('with a custom item render', () => ({
     template: `
       <ais-infinite-hits>
         <div slot="item" slot-scope="{ item, index }">
@@ -36,7 +54,7 @@ storiesOf('InfiniteHits', module)
       </ais-infinite-hits>
     `,
   }))
-  .add('disabled button', () => ({
+  .add('with a disabled button', () => ({
     template: `
       <div>
         <ais-configure query="dsdsds" />

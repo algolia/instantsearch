@@ -17,7 +17,7 @@ storiesOf('NumericMenu', module)
       />
     `,
   }))
-  .add('with transformItems', () => ({
+  .add('with transform items', () => ({
     template: `
       <ais-numeric-menu
         attribute="price"

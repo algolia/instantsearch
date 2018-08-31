@@ -39,22 +39,6 @@ it('accepts an excludeAttributes prop', () => {
   expect(wrapper.vm.widgetParams.excludeAttributes).toEqual(['brand']);
 });
 
-it('accepts a transformItems prop', () => {
-  __setState({
-    ...defaultState,
-  });
-
-  const transformItems = x => x;
-
-  const wrapper = mount(ClearRefinements, {
-    propsData: {
-      transformItems,
-    },
-  });
-
-  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
-});
-
 describe('default render', () => {
   it('renders correctly', () => {
     __setState({

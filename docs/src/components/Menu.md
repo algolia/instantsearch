@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 6
 editable: true
-githubSource: docs/src/components/menu.md
+githubSource: docs/src/components/Menu.md
 ---
 
 Create a menu based on a facet. A menu displays a list of facet values and let the user selects only one value at a time. Make sure that the attribute you used is in `attributesForFaceting`.
@@ -28,6 +28,7 @@ limit | number | 10 | Number of items to show | -
 showMoreLimit | number | 20 | Number of items to show when the user clicked on "show more" | -
 showMore | boolean | `false` | Whether or not to have the option to load more values | -
 sortBy | string[] or function | `['name:asc', 'count:desc']` | Array or function to sort the results by | -
+transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 
 ## CSS classes
 

@@ -44,6 +44,15 @@ export default {
       type: Array,
       required: true,
     },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
+    },
+  },
+  beforeCreate() {
+    this.connector = connectSortBySelector;
   },
   data() {
     return {
@@ -54,11 +63,9 @@ export default {
     widgetParams() {
       return {
         indices: this.items,
+        transformItems: this.transformItems,
       };
     },
-  },
-  beforeCreate() {
-    this.connector = connectSortBySelector;
   },
 };
 </script>

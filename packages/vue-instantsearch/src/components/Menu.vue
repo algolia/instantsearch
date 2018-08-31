@@ -86,6 +86,12 @@ export default {
         return ['count:desc', 'name:asc'];
       },
     },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
+    },
   },
   beforeCreate() {
     this.connector = connectMenu;
@@ -102,6 +108,7 @@ export default {
         limit: this.limit,
         showMoreLimit: this.showMoreLimit,
         sortBy: this.sortBy,
+        transformItems: this.transformItems,
       };
     },
     showShowMoreButton() {

@@ -90,6 +90,12 @@ export default {
       type: Boolean,
       default: true,
     },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
+    },
   },
   data() {
     return {
@@ -109,6 +115,7 @@ export default {
         rootPath: this.rootPath,
         showParentLevel: this.showParentLevel,
         sortBy: this.sortBy,
+        transformItems: this.transformItems,
       };
     },
     items() {

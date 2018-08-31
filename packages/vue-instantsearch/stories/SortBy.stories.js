@@ -14,7 +14,28 @@ storiesOf('SortBy', module)
       />
     `,
   }))
-  .add('custom display', () => ({
+  .add('with transform items', () => ({
+    template: `
+      <ais-sort-by
+        :items="[
+          { name: 'instant_search', label: 'Featured' },
+          { name: 'instant_search_price_asc', label: 'Price asc.' },
+          { name: 'instant_search_price_desc', label: 'Price desc.' },
+        ]"
+        :transform-items="transformItems"
+      />
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign({}, item, {
+            label: item.label.toUpperCase(),
+          })
+        );
+      },
+    },
+  }))
+  .add('with custom render', () => ({
     template: `
       <ais-sort-by
         :items="[

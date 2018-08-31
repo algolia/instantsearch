@@ -107,6 +107,25 @@ it('accepts a sortBy prop', () => {
   expect(wrapper.vm.widgetParams.sortBy).toEqual(['name:desc']);
 });
 
+it('accepts a transformItems prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const transformItems = () => {};
+
+  const props = {
+    ...defaultProps,
+    transformItems,
+  };
+
+  const wrapper = mount(Menu, {
+    propsData: props,
+  });
+
+  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
+});
+
 describe('default render', () => {
   it('renders correctly', () => {
     __setState({ ...defaultState });

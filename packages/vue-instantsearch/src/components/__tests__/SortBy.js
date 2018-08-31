@@ -23,6 +23,21 @@ const defaultProps = {
   ],
 };
 
+it('accepts transformItems prop', () => {
+  __setState({ ...defaultState });
+
+  const transformItems = () => {};
+
+  const wrapper = mount(SortBy, {
+    propsData: {
+      ...defaultProps,
+      transformItems,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
+});
+
 it('renders correctly', () => {
   __setState({ ...defaultState });
 

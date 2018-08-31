@@ -23,9 +23,10 @@ Show the currently refined values and allow them to be unset.
 
 Name | Type | Default | Description | Required
 ---|---|---|---|---
-transformItems | Function | | Allows you to format and change the attributes | no
-clears-query | Boolean | `false` | Should the 'clear all' button also clear the query? | no
-excluded-attributes | Array | `[]` | Attributes not to show or clear | no
+transformItems | Function | | Allows you to format and change the attributes | -
+clearsQuery | Boolean | `false` | Should the 'clear all' button also clear the query? | -
+excludedAttributes | Array | `[]` | Attributes not to show or clear | -
+transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 
 ## Slots
 

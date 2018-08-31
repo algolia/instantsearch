@@ -18,7 +18,7 @@ const defaultProps = {
   attribute: 'brand',
 };
 
-it('accepts an attribute', () => {
+it('accepts an attribute prop', () => {
   __setState({
     ...defaultState,
   });
@@ -34,7 +34,7 @@ it('accepts an attribute', () => {
   expect(wrapper.vm.widgetParams.attributeName).toBe('brand');
 });
 
-it('accepts a limit', () => {
+it('accepts a limit prop', () => {
   __setState({
     ...defaultState,
   });
@@ -51,7 +51,7 @@ it('accepts a limit', () => {
   expect(wrapper.vm.widgetParams.limit).toBe(5);
 });
 
-it('accepts a sortBy', () => {
+it('accepts a sortBy prop', () => {
   __setState({
     ...defaultState,
   });
@@ -66,6 +66,25 @@ it('accepts a sortBy', () => {
   });
 
   expect(wrapper.vm.widgetParams.sortBy).toEqual(['name:desc']);
+});
+
+it('accepts a transformItems prop', () => {
+  __setState({
+    ...defaultState,
+  });
+
+  const transformItems = () => {};
+
+  const props = {
+    ...defaultProps,
+    transformItems,
+  };
+
+  const wrapper = mount(MenuSelect, {
+    propsData: props,
+  });
+
+  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
 });
 
 describe('default render', () => {

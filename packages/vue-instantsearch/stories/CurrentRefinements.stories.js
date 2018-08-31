@@ -4,44 +4,64 @@ import { previewWrapper } from './utils';
 storiesOf('CurrentRefinements', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
-    template: '<ais-current-refinements></ais-current-refinements>',
+    template: `
+      <ais-current-refinements />
+    `,
   }))
   .add('with a refinement to clear', () => ({
-    template: `<div>
-      <ais-current-refinements :clears-query="true"></ais-current-refinements>
-      <ais-menu attribute="brand"></ais-menu>
-    </div>`,
+    template: `
+      <ais-current-refinements :clears-query="true" />
+    `,
   }))
   .add('with multiple refinements to clear', () => ({
-    template: `<div>
-      <ais-current-refinements :clears-query="true"></ais-current-refinements>
-      <ais-menu attribute="brand"></ais-menu>
-      <hr />
-      <ais-hierarchical-menu :attributes="[
-        'hierarchicalCategories.lvl0',
-        'hierarchicalCategories.lvl1',
-        'hierarchicalCategories.lvl2',
-      ]"></ais-hierarchical-menu>
-      <hr />
-      <ais-range-input attribute="price" />
-    </div>`,
+    template: `
+      <div>
+        <ais-current-refinements :clears-query="true" />
+        <hr />
+        <ais-hierarchical-menu
+          :attributes="[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ]"
+        />
+        <hr />
+        <ais-range-input attribute="price" />
+      </div>
+    `,
   }))
   .add('with excluded attributes', () => ({
     template: `
-    <div>
-      excludes: Brand
-      <ais-current-refinements
-        :excluded-attributes="['brand']"
-        :clearsQuery="true"
-      ></ais-current-refinements>
-      <ais-menu attribute="brand"></ais-menu>
-      <hr />
-      <ais-hierarchical-menu :attributes="[
-        'hierarchicalCategories.lvl0',
-        'hierarchicalCategories.lvl1',
-        'hierarchicalCategories.lvl2',
-      ]"></ais-hierarchical-menu>
-      <hr />
-      <ais-range-input attribute="price" />
-    </div>`,
+      <div>
+        excludes: Brand
+        <ais-current-refinements
+          :excluded-attributes="['brand']"
+          :clears-query="true"
+        />
+        <hr />
+        <ais-hierarchical-menu
+          :attributes="[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ]"
+        />
+        <hr />
+        <ais-range-input attribute="price" />
+      </div>
+    `,
+  }))
+  .add('with transform items', () => ({
+    template: `
+      <ais-current-refinements :transform-items="transformItems" />
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign({}, item, {
+            computedLabel: item.computedLabel.toUpperCase(),
+          })
+        );
+      },
+    },
   }));

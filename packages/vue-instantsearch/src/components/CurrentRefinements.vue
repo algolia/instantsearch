@@ -55,20 +55,19 @@ export default {
     }),
   ],
   props: {
-    transformItems: {
-      type: Function,
-      required: false,
-      default: x => x,
-    },
     clearsQuery: {
       type: Boolean,
       default: false,
-      required: false,
     },
     excludedAttributes: {
       type: Array,
       default: () => [],
-      required: false,
+    },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
     },
   },
   data() {

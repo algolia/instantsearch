@@ -1,8 +1,25 @@
 import { mount } from '@vue/test-utils';
 import CurrentRefinements from '../CurrentRefinements.vue';
 import { __setState } from '../../component';
+
 jest.mock('../../component');
 jest.mock('../../panel');
+
+it('accepts a transformItems prop', () => {
+  __setState({
+    refinements: [],
+  });
+
+  const transformItems = () => {};
+
+  const wrapper = mount(CurrentRefinements, {
+    propsData: {
+      transformItems,
+    },
+  });
+
+  expect(wrapper.vm.widgetParams.transformItems).toBe(transformItems);
+});
 
 it('renders correctly (empty)', () => {
   __setState({

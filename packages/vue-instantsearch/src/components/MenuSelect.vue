@@ -51,20 +51,23 @@ export default {
     },
     limit: {
       type: Number,
-      required: false,
       default: 10,
     },
     sortBy: {
       type: [Array, Function],
-      required: false,
       default() {
         return ['name:asc'];
       },
     },
     label: {
       type: String,
-      required: false,
       default: 'See all',
+    },
+    transformItems: {
+      type: Function,
+      default(items) {
+        return items;
+      },
     },
   },
   data() {
@@ -81,6 +84,7 @@ export default {
         attributeName: this.attribute,
         limit: this.limit,
         sortBy: this.sortBy,
+        transformItems: this.transformItems,
       };
     },
     items() {

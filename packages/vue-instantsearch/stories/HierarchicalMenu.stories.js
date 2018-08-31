@@ -28,6 +28,28 @@ storiesOf('HierarchicalMenu', module)
       />
     `,
   }))
+  .add('with transform items', () => ({
+    template: `
+      <ais-hierarchical-menu
+        :attributes="[
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+        ]"
+        :transform-items="transformItems"
+      />
+    `,
+    methods: {
+      transformItems(items) {
+        return items.map(item =>
+          Object.assign({}, item, {
+            label: item.label.toUpperCase(),
+            data: item.data ? this.transformItems(item.data) : item.data,
+          })
+        );
+      },
+    },
+  }))
   .add('with a custom label', () => ({
     template: `
       <ais-hierarchical-menu
