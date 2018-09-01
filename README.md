@@ -150,7 +150,7 @@ Open positions:
 
 ## License
 
-InstantSearch.js is [MIT licensed](LICENSE.md).
+InstantSearch.js is [MIT licensed][license-url].
 
 <!-- Badges -->
 
