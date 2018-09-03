@@ -43,7 +43,7 @@ npm start
 
 ---
 
-Alternatively, you can use [Yarn](https://http://yarnpkg.com):
+Alternatively, you can use [Yarn](https://yarnpkg.com):
 
 ```
 yarn create instantsearch-app my-app
