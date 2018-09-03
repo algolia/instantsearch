@@ -914,6 +914,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           facets: {
             category: {
               c1: 880,
+              c2: 880,
+              c3: 880,
+              c4: 880,
             },
           },
         },
@@ -921,6 +924,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
           facets: {
             category: {
               c1: 880,
+              c2: 880,
+              c3: 880,
+              c4: 880,
             },
           },
         },
@@ -969,11 +975,14 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
   });
 
-  it('can search in facet values and show more values', () => {
+  it('can search in facet values and then show more values', () => {
     const { makeWidget, rendering } = createWidgetFactory();
     const widget = makeWidget({
       attributeName: 'category',
       limit: 2,
+      showMore: {
+        limit: 10,
+      },
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -1030,8 +1039,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     expect(rendering).toHaveBeenCalledTimes(2);
     // Simulation end
 
-    const searchItems = rendering.mock.calls[1][0].items;
-    const search = rendering.mock.calls[1][0].searchForItems;
+    // The test implement the following scenario:
+    // - toggle show more (internal state for show more: showing more)
+    // - search (show more is not active)
+    // - go back to empty string in search -> show more values
+    // - toggle show more again -> showing less values
+
+    const {
+      items: showLessItems,
+      searchForItems: search,
+      toggleShowMore,
+    } = rendering.mock.calls[1][0];
+    toggleShowMore();
+    const { items: showMoreItems } = rendering.mock.calls[2][0];
+
     search('da');
 
     const [
@@ -1050,9 +1071,9 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
     });
 
     return Promise.resolve().then(() => {
-      expect(rendering).toHaveBeenCalledTimes(3);
-      expect(rendering.mock.calls[2][0].isFromSearch).toBe(true);
-      expect(rendering.mock.calls[2][0].items).toEqual([
+      expect(rendering).toHaveBeenCalledTimes(4);
+      expect(rendering.mock.calls[3][0].isFromSearch).toBe(true);
+      expect(rendering.mock.calls[3][0].items).toEqual([
         {
           count: 33,
           highlighted: 'Salvador <em>Da</em>li',
@@ -1070,13 +1091,18 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/refinement-
       // when the search is empty we should simulate the search as if it was from an actual search
       search('');
       return Promise.resolve().then(() => {
-        expect(rendering).toHaveBeenCalledTimes(4);
+        expect(rendering).toHaveBeenCalledTimes(5);
         const {
           isFromSearch,
-          items: newSearchItems,
-        } = rendering.mock.calls[3][0];
-        expect(newSearchItems).toBe(searchItems);
+          items: newShowMoreItems,
+        } = rendering.mock.calls[4][0];
+        expect(newShowMoreItems).toEqual(showMoreItems);
         expect(isFromSearch).toBe(false);
+
+        toggleShowMore();
+
+        const { items: newShowLessItems } = rendering.mock.calls[5][0];
+        expect(newShowLessItems).toEqual(showLessItems);
       });
     });
   });
