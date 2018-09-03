@@ -1,3 +1,39 @@
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/algolia/create-instantsearch-app/compare/3.3.0...4.0.0) (2018-09-03)
+
+
+### Bug Fixes
+
+* **cli:** Update question for "Attribute to display" ([#149](https://github.com/algolia/create-instantsearch-app/issues/149)) ([1ccd5b9](https://github.com/algolia/create-instantsearch-app/commit/1ccd5b9))
+* **deps:** update dependency algoliasearch to v3.30.0 ([#174](https://github.com/algolia/create-instantsearch-app/issues/174)) ([1e9a2a1](https://github.com/algolia/create-instantsearch-app/commit/1e9a2a1))
+* **deps:** update dependency commander to v2.17.0 ([#175](https://github.com/algolia/create-instantsearch-app/issues/175)) ([08819c5](https://github.com/algolia/create-instantsearch-app/commit/08819c5))
+* **deps:** update dependency commander to v2.17.1 ([#191](https://github.com/algolia/create-instantsearch-app/issues/191)) ([f0beb2e](https://github.com/algolia/create-instantsearch-app/commit/f0beb2e))
+* **deps:** update dependency expo to v27.1.1 ([#163](https://github.com/algolia/create-instantsearch-app/issues/163)) ([4fbba69](https://github.com/algolia/create-instantsearch-app/commit/4fbba69))
+* **deps:** update dependency expo to v29 ([#155](https://github.com/algolia/create-instantsearch-app/issues/155)) ([53b63bb](https://github.com/algolia/create-instantsearch-app/commit/53b63bb))
+* **deps:** update dependency inquirer to v6.1.0 ([#192](https://github.com/algolia/create-instantsearch-app/issues/192)) ([493185e](https://github.com/algolia/create-instantsearch-app/commit/493185e))
+* **deps:** update dependency inquirer to v6.2.0 ([#217](https://github.com/algolia/create-instantsearch-app/issues/217)) ([08ee151](https://github.com/algolia/create-instantsearch-app/commit/08ee151))
+* **deps:** update dependency react-native to v0.56.0 ([#193](https://github.com/algolia/create-instantsearch-app/issues/193)) ([2826658](https://github.com/algolia/create-instantsearch-app/commit/2826658))
+* **deps:** update dependency react-scripts to v1.1.5 ([#218](https://github.com/algolia/create-instantsearch-app/issues/218)) ([4ca0ab9](https://github.com/algolia/create-instantsearch-app/commit/4ca0ab9))
+* **deps:** update dependency rxjs to v6.3.1 ([#228](https://github.com/algolia/create-instantsearch-app/issues/228)) ([5eb3149](https://github.com/algolia/create-instantsearch-app/commit/5eb3149))
+* **deps:** update react monorepo to v16.4.2 ([#177](https://github.com/algolia/create-instantsearch-app/issues/177)) ([c9cdb13](https://github.com/algolia/create-instantsearch-app/commit/c9cdb13))
+
+
+### Features
+
+* **cli:** Accept multiple attributes to display ([#153](https://github.com/algolia/create-instantsearch-app/issues/153)) ([0b93202](https://github.com/algolia/create-instantsearch-app/commit/0b93202)), closes [#151](https://github.com/algolia/create-instantsearch-app/issues/151)
+
+
+### Reverts
+
+* fix(deps): update dependency react-native to v0.56.0 ([#193](https://github.com/algolia/create-instantsearch-app/issues/193)) ([#229](https://github.com/algolia/create-instantsearch-app/issues/229)) ([14d2e58](https://github.com/algolia/create-instantsearch-app/commit/14d2e58))
+
+
+### BREAKING CHANGES
+
+* **cli:** The option `mainAttribute` has been renamed `attributesToDisplay` and now accepts multiple attributes.
+
+
+
 <a name="3.3.0"></a>
 # [3.3.0](https://github.com/algolia/create-instantsearch-app/compare/3.2.0...3.3.0) (2018-07-24)
 
@@ -107,12 +143,7 @@
 
 
 <a name="3.0.0-beta.3"></a>
-# [3.0.0-beta.3](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.2...3.0.0-beta.3) (2018-06-11)
-
-
-
-<a name="3.0.0-beta.2"></a>
-# [3.0.0-beta.2](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.1...3.0.0-beta.2) (2018-06-11)
+# [3.0.0-beta.3](https://github.com/algolia/create-instantsearch-app/compare/3.0.0-beta.1...3.0.0-beta.3) (2018-06-11)
 
 
 ### Bug Fixes
