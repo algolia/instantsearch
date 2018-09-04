@@ -50,6 +50,8 @@
     "vue": "^2.2.2"
   },
   "devDependencies": {
+    "@storybook/addon-knobs": "^3.4.10",
+    "@storybook/addon-options": "^3.4.10",
     "@storybook/vue": "3.4.10",
     "@vue/test-utils": "1.0.0-beta.24",
     "babel-eslint": "8.2.6",

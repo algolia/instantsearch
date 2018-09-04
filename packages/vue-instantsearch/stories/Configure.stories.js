@@ -1,8 +1,10 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
+import { withKnobs, object } from '@storybook/addon-knobs/vue';
 
 storiesOf('Configure', module)
   .addDecorator(previewWrapper())
+  .addDecorator(withKnobs)
   .add('default', () => ({
     template: '<ais-configure></ais-configure>',
   }))
@@ -34,12 +36,25 @@ storiesOf('Configure', module)
             hitsPerPage: {{searchParameters.hitsPerPage}}, change
           </button>
         </template>
-      </ais-configure>`,
+      </ais-configure>
+    `,
   }))
   .add('with display of the parameters', () => ({
-    template: `<div>
+    template: `
       <ais-configure :hitsPerPage="1">
         <pre slot-scope="{ searchParameters }">{{ searchParameters }}</pre>
       </ais-configure>
-    </div>`,
+    `,
+  }))
+  .add('playground', () => ({
+    template: `
+      <ais-configure v-bind="knobs">
+        <pre slot-scope="{ searchParameters }">{{ searchParameters }}</pre>
+      </ais-configure>
+    `,
+    data() {
+      return {
+        knobs: object('search parameters', { hitsPerPage: 1 }),
+      };
+    },
   }));
