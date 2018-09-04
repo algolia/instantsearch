@@ -38,6 +38,39 @@ export default () => {
       })
     )
     .add(
+      'With custom separators',
+      wrapWithHits(container => {
+        container.innerHTML = `
+        <div id="hierarchicalMenu"></div>
+        <div id="breadcrumb"></div>
+      `;
+
+        window.search.addWidget(
+          instantsearch.widgets.breadcrumb({
+            container: '#breadcrumb',
+            templates: {
+              separator: ' + ',
+            },
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ],
+          })
+        );
+
+        // Custom Widget to toggle refinement
+        window.search.addWidget({
+          init({ helper }) {
+            helper.toggleRefinement(
+              'hierarchicalCategories.lvl0',
+              'Cameras & Camcorders > Digital Cameras'
+            );
+          },
+        });
+      })
+    )
+    .add(
       'with custom home label',
       wrapWithHits(container => {
         container.innerHTML = `
