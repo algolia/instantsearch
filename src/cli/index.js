@@ -183,7 +183,7 @@ const questions = [
   {
     type: 'checkbox',
     name: 'attributesToDisplay',
-    message: 'Attribute to display',
+    message: 'Attributes to display',
     suffix: `\n  ${chalk.gray('Used to generate the default result template')}`,
     pageSize: 10,
     choices: async answers => [
