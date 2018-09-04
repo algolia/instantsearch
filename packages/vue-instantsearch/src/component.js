@@ -26,7 +26,11 @@ export default {
     }
   },
   beforeDestroy() {
-    if (this.widget) {
+    if (
+      this.widget &&
+      this.widget.dispose &&
+      this.instantSearchInstance.started // a widget can't be removed if IS is not started
+    ) {
       this.instantSearchInstance.removeWidget(this.widget);
     }
   },
@@ -34,7 +38,10 @@ export default {
     widgetParams: {
       handler(nextWidgetParams) {
         this.state = null;
-        this.instantSearchInstance.removeWidget(this.widget);
+        // a widget can't be removed if IS is not started
+        if (this.widget.dispose && this.instantSearchInstance.started) {
+          this.instantSearchInstance.removeWidget(this.widget);
+        }
         this.widget = this.factory(nextWidgetParams);
         this.instantSearchInstance.addWidget(this.widget);
       },

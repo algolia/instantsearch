@@ -9,6 +9,7 @@ const createFakeComponent = localVue =>
 const createFakeInstance = () => ({
   addWidget: jest.fn(),
   removeWidget: jest.fn(),
+  started: true,
 });
 
 it('adds a widget on create', () => {
@@ -44,7 +45,10 @@ it('removes a widget on destroy', () => {
   const instance = createFakeInstance();
   const Test = createFakeComponent(localVue);
 
-  const widget = { render: () => {} };
+  const widget = {
+    render: () => {},
+    dispose: () => {},
+  };
   const factory = jest.fn(() => widget);
   const connector = jest.fn(() => factory);
   const widgetParams = {
@@ -74,7 +78,10 @@ it('updates widget on widget params change', () => {
   const instance = createFakeInstance();
   const Test = createFakeComponent(localVue);
 
-  const widget = { render: () => {} };
+  const widget = {
+    render: () => {},
+    dispose: () => {},
+  };
   const factory = jest.fn(() => widget);
   const connector = jest.fn(() => factory);
 

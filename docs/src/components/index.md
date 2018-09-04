@@ -18,51 +18,49 @@ This component automatically provides the search state to all its children.
 Basic usage:
 
 ```html
-<ais-index index-name="your_indexName"
-           app-id="YourAppID"
-           api-key="YourSearchAPIKey"
->
-  <!-- Add your InstantSearch components here. -->
-</ais-index>
+<template>
+  <ais-index
+    index-name="your_indexName"
+    :search-client="searchClient"
+  >
+    <!-- Add your InstantSearch components here. -->
+  </ais-index>
+</template>
+
+<!-- You need to instantiate the search client in your script -->
+<script>
+import algoliasearch from 'algoliasearch/lite';
+
+export default {
+  data() {
+    return {
+      searchClient: algoliasearch(
+        'latency',
+        '3d9875e51fbd20c7754e65422f7ce5e1'
+      ),
+    };
+  },
+};
+</script>
 ```
-
-Provide search query parameters:
-
-```html
-<ais-index index-name="your_indexName"
-           app-id="YourAppID"
-           api-key="YourSearchAPIKey"
-           :query-parameters="{
-             distinct: true,
-             attributeForDistinct: 'product_id'
-           }"
->
-  <!-- Add your InstantSearch components here. -->
-</ais-index>
-```
-
 
 ## Props
-
-| Name             | Type    | Default | Description                                                                                                                                        |
-|------------------|---------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| api-key          | String  | ``      | The API key                                                                                                                                        |
-| app-id           | String  | ``      | The application ID                                                                                                                                 |
-| index-name       | String  | ``      | The index name                                                                                                                                     |
-| query            | String  | ``      | The search query                                                                                                                                   |
-| query-parameters | Object  | ``      | The search query parameters. Available options are [documented here](https://www.algolia.com/doc/api-reference/search-api-parameters/). |
-| cache            | Boolean | `true`  | Whether to cache results or not. See [the documentation](https://www.algolia.com/doc/tutorials/getting-started/quick-start-with-the-api-client/javascript/#cache)       |
-| auto-search      | Boolean | `true`  | Whether to initiate a query to Algolia when this component is mounted                                                                               |
-| stalledSearchDelay | number | `200`  | Time before the search is considered unresponsive. Used to display a loading indicator. |
+Name | Type | Default | Description | Required
+---|---|---|---|---
+`search-client` | Object | | The instance of a search client. Usage with Algolia is done via [`algoliasearch`](https://npm.im/algoliasearch) | yes
+`index-name` | String  | | The index to target for the search | yes
+`searchFunction` | `(AlgoliaHelper) => void` | | A hook that will be called each time a search needs to be done, with the [helper](https://community.algolia.com/algoliasearch-helper-js/) as a parameter. It’s your responsibility to call `helper.search()ù . This option allows you to avoid doing searches at page load for example. | no
+`stalled-search-delay` | Number | `200`  | Time (in ms) before the search is considered unresponsive. Used to display a loading indicator. | no
+`routing` | Boolean or Object | `false` | Enable the default routing feature by passing `true`. More advanced usage is documented [here](https://community.algolia.com/instantsearch.js/v2/guides/routing.html). | no
 
 ## Slots
 
-| Name    | Description                                                                      |
-|---------|----------------------------------------------------------------------------------|
-| default | Can contain anything. All InstantSearch components will have the index injected. |
+Name | Description
+---|---
+default | Can contain anything. All InstantSearch components are required to be inside a `ais-index` component.
 
 ## CSS Classes
 
-| ClassName   | Description     |
-|-------------|-----------------|
-| `ais-index` | Container class |
+Class name | Description
+---|---
+`ais-Index` | Container class

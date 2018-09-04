@@ -11,25 +11,13 @@ import suit from '../suit';
 
 export default {
   provide() {
-    this.instantSearchInstance = instantsearch({
-      appId: this.appId,
-      apiKey: this.apiKey,
-      indexName: this.indexName,
-      routing: this.routing,
-      stalledSearchDelay: this.stalledSearchDelay,
-    });
-
     return {
       instantSearchInstance: this.instantSearchInstance,
     };
   },
   props: {
-    apiKey: {
-      type: String,
-      required: true,
-    },
-    appId: {
-      type: String,
+    searchClient: {
+      type: Object,
       required: true,
     },
     indexName: {
@@ -44,10 +32,21 @@ export default {
       type: Number,
       default: 200,
     },
+    searchFunction: {
+      type: Function,
+      default: null,
+    },
   },
   data() {
     return {
       widgetName: 'Index',
+      instantSearchInstance: instantsearch({
+        searchClient: this.searchClient,
+        indexName: this.indexName,
+        routing: this.routing,
+        stalledSearchDelay: this.stalledSearchDelay,
+        searchFunction: this.searchFunction,
+      }),
     };
   },
   mounted() {
