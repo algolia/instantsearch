@@ -1,8 +1,10 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
+import { withKnobs, boolean } from '@storybook/addon-knobs/vue';
 
 storiesOf('CurrentRefinements', module)
   .addDecorator(previewWrapper())
+  .addDecorator(withKnobs)
   .add('default', () => ({
     template: `
       <ais-current-refinements />
@@ -64,4 +66,9 @@ storiesOf('CurrentRefinements', module)
         );
       },
     },
+  }))
+  .add('playground', () => ({
+    template: `
+      <ais-current-refinements :clears-query="${boolean('clears-query')}" />
+    `,
   }));
