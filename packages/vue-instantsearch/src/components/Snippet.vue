@@ -6,11 +6,12 @@
 </template>
 
 <script>
-import suit from '../suit';
+import suit from '../mixins/suit';
 import { getPropertyByPath } from '../util/object';
 import { warn } from '../util/warn';
 
 export default {
+  mixins: [suit],
   props: {
     hit: {
       type: Object,
@@ -29,11 +30,6 @@ export default {
     return {
       widgetName: 'Snippet',
     };
-  },
-  methods: {
-    suit(block, modifier) {
-      return suit(this.widgetName, block, modifier);
-    },
   },
   computed: {
     innerHTML() {

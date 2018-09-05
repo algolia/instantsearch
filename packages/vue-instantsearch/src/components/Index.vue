@@ -7,9 +7,10 @@
 
 <script>
 import instantsearch from 'instantsearch.js/es/';
-import suit from '../suit';
+import suit from '../mixins/suit';
 
 export default {
+  mixins: [suit],
   provide() {
     return {
       instantSearchInstance: this.instantSearchInstance,
@@ -56,11 +57,6 @@ export default {
     this.$nextTick(() => {
       this.instantSearchInstance.start();
     });
-  },
-  methods: {
-    suit(...args) {
-      return suit(this.widgetName, ...args);
-    },
   },
 };
 </script>

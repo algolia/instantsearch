@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils';
 import MenuSelect from '../MenuSelect.vue';
-import { __setState } from '../../component';
+import { __setState } from '../../mixins/component';
 
-jest.mock('../../component');
-jest.mock('../../panel');
+jest.mock('../../mixins/component');
+jest.mock('../../mixins/panel');
 
 const defaultState = {
   canRefine: true,

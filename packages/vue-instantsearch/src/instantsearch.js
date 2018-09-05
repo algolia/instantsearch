@@ -1,4 +1,4 @@
-import Component from './component';
+import Component from './mixins/component';
 
 import Breadcrumb from './components/Breadcrumb.vue';
 import ClearRefinements from './components/ClearRefinements.vue';

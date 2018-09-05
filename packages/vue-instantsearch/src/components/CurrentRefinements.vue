@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import algoliaComponent from '../component';
+import algoliaComponent from '../mixins/component';
 import { connectCurrentRefinedValues } from 'instantsearch.js/es/connectors';
-import { createPanelConsumerMixin } from '../panel';
+import { createPanelConsumerMixin } from '../mixins/panel';
 
 export default {
   mixins: [

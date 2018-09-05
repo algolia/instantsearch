@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import PoweredBy from '../PoweredBy.vue';
-jest.mock('../../component');
+jest.mock('../../mixins/component');
 
 test('includes the hostname in the URL', () => {
   const wrapper = mount(PoweredBy);

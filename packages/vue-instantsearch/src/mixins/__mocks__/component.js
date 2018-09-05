@@ -1,4 +1,4 @@
-import suit from '../suit';
+import suit from '../../util/suit';
 
 let state = {};
 

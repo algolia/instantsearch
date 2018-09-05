@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import algoliaComponent from '../component';
+import algoliaComponent from '../mixins/component';
 import { connectStats } from 'instantsearch.js/es/connectors';
 
 export default {

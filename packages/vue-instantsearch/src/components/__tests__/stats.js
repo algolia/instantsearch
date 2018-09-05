@@ -2,8 +2,8 @@ import { mount } from '@vue/test-utils';
 
 import Stats from '../Stats.vue';
 
-import { __setState } from '../../component';
-jest.mock('../../component');
+import { __setState } from '../../mixins/component';
+jest.mock('../../mixins/component');
 it('renders correctly', () => {
   __setState({
     hitsPerPage: 50,

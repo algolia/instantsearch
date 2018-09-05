@@ -18,7 +18,7 @@
 
 <script>
 import JsonTree from 'vue-json-tree'; // 👈 When done, remove this
-import algoliaComponent from '../component';
+import algoliaComponent from '../mixins/component';
 // Uncomment and change here ⬇️
 // import { connectorName } from 'instantsearch.js/es/connectors';
 

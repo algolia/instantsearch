@@ -23,7 +23,7 @@
 
 <script>
 import { connectSearchBox } from 'instantsearch.js/es/connectors';
-import algoliaComponent from '../component';
+import algoliaComponent from '../mixins/component';
 import SearchInput from './SearchInput.vue';
 
 export default {

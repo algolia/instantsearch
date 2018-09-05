@@ -25,7 +25,7 @@
 
 <script>
 import { connectHits } from 'instantsearch.js/es/connectors';
-import algoliaComponent from '../component';
+import algoliaComponent from '../mixins/component';
 
 export default {
   mixins: [algoliaComponent],

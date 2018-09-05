@@ -137,8 +137,8 @@
 
 <script>
 import { connectPagination } from 'instantsearch.js/es/connectors';
-import { createPanelConsumerMixin } from '../panel';
-import algoliaComponent from '../component';
+import { createPanelConsumerMixin } from '../mixins/panel';
+import algoliaComponent from '../mixins/component';
 
 export default {
   mixins: [

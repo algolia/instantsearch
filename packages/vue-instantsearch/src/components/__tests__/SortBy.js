@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils';
-import { __setState } from '../../component';
+import { __setState } from '../../mixins/component';
 import SortBy from '../SortBy.vue';
 
-jest.mock('../../component');
-jest.mock('../../panel');
+jest.mock('../../mixins/component');
+jest.mock('../../mixins/panel');
 
 const defaultState = {
   options: [

@@ -1,9 +1,9 @@
 import { mount } from '@vue/test-utils';
 import CurrentRefinements from '../CurrentRefinements.vue';
-import { __setState } from '../../component';
+import { __setState } from '../../mixins/component';
 
-jest.mock('../../component');
-jest.mock('../../panel');
+jest.mock('../../mixins/component');
+jest.mock('../../mixins/panel');
 
 it('accepts a transformItems prop', () => {
   __setState({

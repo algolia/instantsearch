@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
-import { __setState } from '../../component';
+import { __setState } from '../../mixins/component';
 import InfiniteHits from '../InfiniteHits.vue';
 
-jest.mock('../../component');
+jest.mock('../../mixins/component');
 
 const defaultState = {
   hits: [

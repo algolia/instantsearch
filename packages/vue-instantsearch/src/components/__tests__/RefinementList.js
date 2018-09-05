@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
 import RefinementList from '../RefinementList.vue';
-import { __setState } from '../../component';
-jest.mock('../../component');
-jest.mock('../../panel');
+import { __setState } from '../../mixins/component';
+jest.mock('../../mixins/component');
+jest.mock('../../mixins/panel');
 
 const defaultState = {
   items: [

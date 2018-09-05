@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import algoliaComponent from '../component';
+import algoliaComponent from '../mixins/component';
 
 export default {
   mixins: [algoliaComponent],

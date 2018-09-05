@@ -81,8 +81,8 @@
 </template>
 
 <script>
-import algoliaComponent from '../component';
-import { createPanelConsumerMixin } from '../panel';
+import algoliaComponent from '../mixins/component';
+import { createPanelConsumerMixin } from '../mixins/panel';
 import { connectRefinementList } from 'instantsearch.js/es/connectors';
 import AisSearchInput from './SearchInput.vue';
 import AisHighlight from './Highlight.vue';

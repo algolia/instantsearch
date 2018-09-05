@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
-import { __setState } from '../../component';
+import { __setState } from '../../mixins/component';
 import Hits from '../Hits.vue';
 
-jest.mock('../../component');
+jest.mock('../../mixins/component');
 
 const defaultState = {
   hits: [{ objectID: 'one' }, { objectID: 'two' }],

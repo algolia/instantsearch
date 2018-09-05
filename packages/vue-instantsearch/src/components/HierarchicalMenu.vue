@@ -39,8 +39,8 @@
 
 <script>
 import { connectHierarchicalMenu } from 'instantsearch.js/es/connectors';
-import algoliaComponent from '../component';
-import { createPanelConsumerMixin } from '../panel';
+import algoliaComponent from '../mixins/component';
+import { createPanelConsumerMixin } from '../mixins/panel';
 import HierarchicalMenuList from './HierarchicalMenuList.vue';
 
 const mapStateToCanRefine = state => state.items.length > 0;
