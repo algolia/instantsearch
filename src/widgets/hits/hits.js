@@ -4,14 +4,10 @@ import cx from 'classnames';
 import Hits from '../../components/Hits.js';
 import connectHits from '../../connectors/hits/connectHits.js';
 import defaultTemplates from './defaultTemplates.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-
-const bem = bemHelper('ais-hits');
+const suit = component('Hits');
 
 const renderer = ({
   renderState,
@@ -80,7 +76,7 @@ hits({
  * @property {HitsTemplates} [templates] Templates to use for the widget.
  * @property {HitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property {HitsCSSClasses} [cssClasses] CSS classes to add.
- * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -103,7 +99,6 @@ hits({
  *       empty: 'No results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
- *     escapeHits: true,
  *     transformItems: items => items.map(item => item),
  *   })
  * );
@@ -113,7 +108,7 @@ export default function hits({
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   transformData,
-  escapeHits = false,
+  escapeHTML = true,
   transformItems,
 }) {
   if (!container) {
@@ -126,9 +121,9 @@ export default function hits({
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty),
+    root: cx(suit(), userCssClasses.root),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
   };
 
   const specializedRenderer = renderer({
@@ -143,7 +138,7 @@ export default function hits({
     const makeHits = connectHits(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeHits({ escapeHits, transformItems });
+    return makeHits({ escapeHTML, transformItems });
   } catch (e) {
     throw new Error(usage);
   }

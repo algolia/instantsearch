@@ -40,10 +40,9 @@ InfiniteHits.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
     item: PropTypes.string,
-    allItems: PropTypes.string,
-    empty: PropTypes.string,
-    showmore: PropTypes.string,
-    showmoreButton: PropTypes.string,
+    list: PropTypes.string,
+    loadMore: PropTypes.string,
+    loadMoreDisabled: PropTypes.string,
   }),
   hits: PropTypes.array,
   results: PropTypes.object,

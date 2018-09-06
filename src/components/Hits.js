@@ -14,6 +14,7 @@ class Hits extends Component {
       };
       return (
         <Template
+          rootTagName="li"
           data={data}
           key={data.objectID}
           rootProps={{ className: this.props.cssClasses.item }}
@@ -23,30 +24,27 @@ class Hits extends Component {
       );
     });
 
-    return <div className={this.props.cssClasses.root}>{renderedHits}</div>;
+    return <ol className={this.props.cssClasses.root}>{renderedHits}</ol>;
   }
 
   renderAllResults() {
     const className = cx(
       this.props.cssClasses.root,
-      this.props.cssClasses.allItems
+      this.props.cssClasses.list
     );
 
     return (
       <Template
         data={this.props.results}
         rootProps={{ className }}
-        templateKey="allItems"
+        templateKey="list"
         {...this.props.templateProps}
       />
     );
   }
 
   renderNoResults() {
-    const className = cx(
-      this.props.cssClasses.root,
-      this.props.cssClasses.empty
-    );
+    const className = cx(this.props.cssClasses.root);
     return (
       <Template
         data={this.props.results}
@@ -59,18 +57,15 @@ class Hits extends Component {
 
   render() {
     const hasResults = this.props.results.hits.length > 0;
-    const hasAllItemsTemplate = hasKey(
-      this.props,
-      'templateProps.templates.allItems'
-    );
+    const hasListTemplate = hasKey(this.props, 'templateProps.templates.list');
 
     if (!hasResults) {
       return this.renderNoResults();
     }
 
-    // If a allItems template is defined, it takes precedence over our looping
+    // If a `list` template is defined, it takes precedence over our looping
     // through hits
-    if (hasAllItemsTemplate) {
+    if (hasListTemplate) {
       return this.renderAllResults();
     }
 
@@ -82,8 +77,7 @@ Hits.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
     item: PropTypes.string,
-    allItems: PropTypes.string,
-    empty: PropTypes.string,
+    list: PropTypes.string,
   }),
   hits: PropTypes.array,
   results: PropTypes.object,

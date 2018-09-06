@@ -1,4 +1,5 @@
 import React from 'react';
+import renderer from 'react-test-renderer';
 import { shallow } from 'enzyme';
 import Hits from '../Hits';
 import Template from '../Template';
@@ -38,7 +39,6 @@ describe('Hits', () => {
         },
         cssClasses: {
           root: 'my_root',
-          empty: 'my_empty',
         },
       };
 
@@ -46,13 +46,12 @@ describe('Hits', () => {
       const actual = shallowRender(props);
 
       // Then
-      expect(actual.props().rootProps.className).toContain('my_empty');
       expect(actual.props().rootProps.className).toContain('my_root');
     });
   });
 
-  describe('allItems template', () => {
-    it('should use the allItems template if defined', () => {
+  describe('list template', () => {
+    it('should use the list template if defined', () => {
       // Given
       const props = {
         results: {
@@ -65,7 +64,7 @@ describe('Hits', () => {
         },
         templateProps: {
           templates: {
-            allItems: 'all items',
+            list: 'list',
           },
         },
       };
@@ -74,10 +73,10 @@ describe('Hits', () => {
       const actual = shallowRender(props);
 
       // Then
-      expect(actual.props().templateKey).toEqual('allItems');
+      expect(actual.props().templateKey).toEqual('list');
     });
 
-    it('should set the allItems CSS class to the template', () => {
+    it('should set the list CSS class to the template', () => {
       // Given
       const props = {
         results: {
@@ -90,12 +89,12 @@ describe('Hits', () => {
         },
         templateProps: {
           templates: {
-            allItems: 'all items',
+            list: 'list',
           },
         },
         cssClasses: {
           root: 'my_root',
-          allItems: 'my_all_items',
+          list: 'my_list',
         },
       };
 
@@ -103,7 +102,7 @@ describe('Hits', () => {
       const actual = shallowRender(props);
 
       // Then
-      expect(actual.props().rootProps.className).toContain('my_all_items');
+      expect(actual.props().rootProps.className).toContain('my_list');
       expect(actual.props().rootProps.className).toContain('my_root');
     });
 
@@ -121,7 +120,7 @@ describe('Hits', () => {
         results,
         templateProps: {
           templates: {
-            allItems: 'all items',
+            list: 'list',
           },
         },
       };
@@ -193,7 +192,7 @@ describe('Hits', () => {
       expect(actual.props().rootProps.className).toContain('my_item');
     });
 
-    it('should wrap the items in a root div element', () => {
+    it('should wrap the items in a root ol element', () => {
       // Given
       const props = {
         results: {
@@ -222,7 +221,7 @@ describe('Hits', () => {
       const actual = shallowRender(props);
 
       // Then
-      expect(actual.name()).toEqual('div');
+      expect(actual.name()).toEqual('ol');
       expect(actual.props().className).toContain('my_root');
     });
 
@@ -314,6 +313,39 @@ describe('Hits', () => {
       // Then
       expect(actual.at(0).key()).toEqual('BAR');
       expect(actual.at(1).key()).toEqual('BAZ');
+    });
+  });
+
+  describe('markup', () => {
+    it('should render <Hits />', () => {
+      const hits = [
+        {
+          objectID: 'one',
+          foo: 'bar',
+        },
+        {
+          objectID: 'two',
+          foo: 'baz',
+        },
+      ];
+
+      const props = {
+        results: { hits },
+        hits,
+        cssClasses: {
+          root: 'root',
+          list: 'list',
+          item: 'item',
+        },
+        templateProps: {
+          templates: {
+            item: 'item',
+          },
+        },
+      };
+      const tree = renderer.create(<Hits {...props} />).toJSON();
+
+      expect(tree).toMatchSnapshot();
     });
   });
 });

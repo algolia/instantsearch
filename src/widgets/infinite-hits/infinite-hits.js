@@ -4,14 +4,10 @@ import cx from 'classnames';
 import InfiniteHits from '../../components/InfiniteHits.js';
 import defaultTemplates from './defaultTemplates.js';
 import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-
-const bem = bemHelper('ais-infinite-hits');
+const suit = component('InfiniteHits');
 
 const renderer = ({
   cssClasses,
@@ -52,7 +48,7 @@ const usage = `
 Usage:
 infiniteHits({
   container,
-  [ escapeHits = false ],
+  [ escapeHTML = true ],
   [ transformItems ],
   [ showMoreLabel ],
   [ cssClasses.{root,empty,item,showmore,showmoreButton}={} ],
@@ -88,7 +84,7 @@ infiniteHits({
  * @property  {string} [showMoreLabel="Show more results"] label used on the show more button.
  * @property  {InfiniteHitsTransforms} [transformData] Method to change the object passed to the templates.
  * @property  {InfiniteHitsCSSClasses} [cssClasses] CSS classes to add.
- * @property {boolean} [escapeHits = false] Escape HTML entities from hits string values.
+ * @property {boolean} [escapeHTML = true] Escape HTML entities from hits string values.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -111,7 +107,6 @@ infiniteHits({
  *       empty: 'No results',
  *       item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
  *     },
- *     escapeHits: true,
  *     transformItems: items => items.map(item => item),
  *   })
  * );
@@ -122,7 +117,7 @@ export default function infiniteHits({
   showMoreLabel = 'Show more results',
   templates = defaultTemplates,
   transformData,
-  escapeHits = false,
+  escapeHTML = true,
   transformItems,
 } = {}) {
   if (!container) {
@@ -139,11 +134,14 @@ export default function infiniteHits({
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty),
-    showmore: cx(bem('showmore'), userCssClasses.showmore),
-    showmoreButton: cx(bem('showmoreButton'), userCssClasses.showmoreButton),
+    root: cx(suit(), userCssClasses.root),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    loadMore: cx(suit({ descendantName: 'loadMore' }), userCssClasses.loadMore),
+    loadMoreDisabled: cx(
+      suit({ descendantName: 'loadMore', modifierName: 'disabled' }),
+      userCssClasses.loadMoreDisabled
+    ),
   };
 
   const specializedRenderer = renderer({
@@ -159,7 +157,7 @@ export default function infiniteHits({
     const makeInfiniteHits = connectInfiniteHits(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeInfiniteHits({ escapeHits, transformItems });
+    return makeInfiniteHits({ escapeHTML, transformItems });
   } catch (e) {
     throw new Error(usage);
   }
