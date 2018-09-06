@@ -6,7 +6,11 @@ import cx from 'classnames';
 import Pagination from '../../components/Pagination/Pagination.js';
 import connectPagination from '../../connectors/pagination/connectPagination.js';
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import { getContainerNode } from '../../lib/utils.js';
+
+import { component } from '../../lib/suit';
+
+const suit = component('Pagination');
 
 const defaultLabels = {
   previous: '‹',
@@ -15,14 +19,15 @@ const defaultLabels = {
   last: '»',
 };
 
-const bem = bemHelper('ais-pagination');
-
 const renderer = ({
   containerNode,
   cssClasses,
   labels,
-  showFirstLast,
-  autoHideContainer,
+  totalPages,
+  showFirst,
+  showLast,
+  showPrevious,
+  showNext,
   scrollToNode,
 }) => (
   {
@@ -47,8 +52,6 @@ const renderer = ({
     }
   };
 
-  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
-
   render(
     <Pagination
       createURL={createURL}
@@ -58,11 +61,14 @@ const renderer = ({
       nbHits={nbHits}
       nbPages={nbPages}
       pages={pages}
+      totalPages={totalPages}
       isFirstPage={isFirstPage}
       isLastPage={isLastPage}
       setCurrentPage={setCurrentPage}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      showFirstLast={showFirstLast}
+      showFirst={showFirst}
+      showLast={showLast}
+      showPrevious={showPrevious}
+      showNext={showNext}
     />,
     containerNode
   );
@@ -71,27 +77,31 @@ const renderer = ({
 const usage = `Usage:
 pagination({
   container,
-  [ cssClasses.{root,item,page,previous,next,first,last,active,disabled}={} ],
+  [ cssClasses.{root, noRefinement, list, item, itemFirstPage, itemLastPage, itemPreviousPage, itemNextPage, itemPage, selectedItem, disabledItem, link}={} ],
   [ labels.{previous,next,first,last} ],
-  [ maxPages ],
+  [ totalPages ],
   [ padding=3 ],
-  [ showFirstLast=true ],
-  [ autoHideContainer=true ],
+  [ showFirst=true ],
+  [ showLast=true ],
+  [ showPrevious=true ],
+  [ showNext=true ],
   [ scrollTo='body' ]
 })`;
 
 /**
  * @typedef {Object} PaginationCSSClasses
- * @property  {string|string[]} [root] CSS classes added to the parent `<ul>`.
+ * @property  {string|string[]} [root] CSS classes added to the root element of the widget.
+ * @property {string|string[]} [noRefinement] CSS class to add to the root element of the widget if there are no refinements.
+ * @property  {string|string[]} [list] CSS classes added to the wrapping `<ul>`.
  * @property  {string|string[]} [item] CSS classes added to each `<li>`.
+ * @property  {string|string[]} [itemFirstPage] CSS classes added to the first `<li>`.
+ * @property  {string|string[]} [itemLastPage] CSS classes added to the last `<li>`.
+ * @property  {string|string[]} [itemPreviousPage] CSS classes added to the previous `<li>`.
+ * @property  {string|string[]} [itemNextPage] CSS classes added to the next `<li>`.
+ * @property  {string|string[]} [itemPage] CSS classes added to page `<li>`.
+ * @property  {string|string[]} [selectedItem] CSS classes added to the selected `<li>`.
+ * @property  {string|string[]} [disabledItem] CSS classes added to the disabled `<li>`.
  * @property  {string|string[]} [link] CSS classes added to each link.
- * @property  {string|string[]} [page] CSS classes added to page `<li>`.
- * @property  {string|string[]} [previous] CSS classes added to the previous `<li>`.
- * @property  {string|string[]} [next] CSS classes added to the next `<li>`.
- * @property  {string|string[]} [first] CSS classes added to the first `<li>`.
- * @property  {string|string[]} [last] CSS classes added to the last `<li>`.
- * @property  {string|string[]} [active] CSS classes added to the active `<li>`.
- * @property  {string|string[]} [disabled] CSS classes added to the disabled `<li>`.
  */
 
 /**
@@ -105,11 +115,13 @@ pagination({
 /**
  * @typedef {Object} PaginationWidgetOptions
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property  {number} [maxPages] The max number of pages to browse.
+ * @property  {number} [totalPages] The max number of pages to browse.
  * @property  {number} [padding=3] The number of pages to display on each side of the current page.
  * @property  {string|HTMLElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable.
- * @property  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed.
- * @property  {boolean} [autoHideContainer=true] Hide the container when no results match.
+ * @property  {boolean} [showFirst=true] Whether to show the “first page” control
+ * @property  {boolean} [showLast=true] Whether to show the last page” control
+ * @property  {boolean} [showNext=true] Whether to show the “next page” control
+ * @property  {boolean} [showPrevious=true] 	Whether to show the “previous page” control
  * @property  {PaginationLabels} [labels] Text to display in the various links (prev, next, first, last).
  * @property  {PaginationCSSClasses} [cssClasses] CSS classes to be added.
  */
@@ -137,7 +149,8 @@ pagination({
  *     maxPages: 20,
  *     // default is to scroll to 'body', here we disable this behavior
  *     scrollTo: false,
- *     showFirstLast: false,
+ *     showFirst: false,
+ *     showLast: false,
  *   })
  * );
  */
@@ -146,9 +159,11 @@ export default function pagination({
   labels: userLabels = defaultLabels,
   cssClasses: userCssClasses = {},
   maxPages,
-  padding,
-  showFirstLast = true,
-  autoHideContainer = true,
+  padding = 3,
+  showFirst = true,
+  showLast = true,
+  showPrevious = true,
+  showNext = true,
   scrollTo: userScrollTo = 'body',
 } = {}) {
   if (!container) {
@@ -161,16 +176,42 @@ export default function pagination({
   const scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    page: cx(bem('item', 'page'), userCssClasses.page),
-    previous: cx(bem('item', 'previous'), userCssClasses.previous),
-    next: cx(bem('item', 'next'), userCssClasses.next),
-    first: cx(bem('item', 'first'), userCssClasses.first),
-    last: cx(bem('item', 'last'), userCssClasses.last),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    disabled: cx(bem('item', 'disabled'), userCssClasses.disabled),
+    root: cx(suit(), userCssClasses.root),
+    noRefinement: cx(
+      suit({ modifierName: 'noRefinement' }),
+      userCssClasses.noRefinement
+    ),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    firstPageItem: cx(
+      suit({ descendantName: 'item', modifierName: 'firstPage' }),
+      userCssClasses.firstPageItem
+    ),
+    lastPageItem: cx(
+      suit({ descendantName: 'item', modifierName: 'lastPage' }),
+      userCssClasses.lastPageItem
+    ),
+    previousPageItem: cx(
+      suit({ descendantName: 'item', modifierName: 'previousPage' }),
+      userCssClasses.previousPageItem
+    ),
+    nextPageItem: cx(
+      suit({ descendantName: 'item', modifierName: 'nextPage' }),
+      userCssClasses.nextPageItem
+    ),
+    pageItem: cx(
+      suit({ descendantName: 'item', modifierName: 'page' }),
+      userCssClasses.pageItem
+    ),
+    selectedItem: cx(
+      suit({ descendantName: 'item', modifierName: 'selected' }),
+      userCssClasses.selectedItem
+    ),
+    disabledItem: cx(
+      suit({ descendantName: 'item', modifierName: 'disabled' }),
+      userCssClasses.disabledItem
+    ),
+    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
   };
 
   const labels = defaults(userLabels, defaultLabels);
@@ -179,9 +220,11 @@ export default function pagination({
     containerNode,
     cssClasses,
     labels,
-    showFirstLast,
+    showFirst,
+    showLast,
+    showPrevious,
+    showNext,
     padding,
-    autoHideContainer,
     scrollToNode,
   });
 

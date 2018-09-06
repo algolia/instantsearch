@@ -1,20 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`pagination() calls twice ReactDOM.render(<Pagination props />, container) 1`] = `
-<RawPagination-AutoHide
+<Pagination
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-pagination--item__active active",
-      "disabled": "ais-pagination--item__disabled disabled",
-      "first": "ais-pagination--item__first first",
-      "item": "ais-pagination--item item",
-      "last": "ais-pagination--item__last last",
-      "link": "ais-pagination--link link",
-      "next": "ais-pagination--item__next next",
-      "page": "ais-pagination--item__page page",
-      "previous": "ais-pagination--item__previous previous",
-      "root": "ais-pagination root cx",
+      "disabledItem": "ais-Pagination-item--disabled",
+      "firstPageItem": "ais-Pagination-item--firstPage",
+      "item": "ais-Pagination-item item",
+      "lastPageItem": "ais-Pagination-item--lastPage",
+      "link": "ais-Pagination-link link",
+      "list": "ais-Pagination-list",
+      "nextPageItem": "ais-Pagination-item--nextPage",
+      "noRefinement": "ais-Pagination--noRefinement",
+      "pageItem": "ais-Pagination-item--page",
+      "previousPageItem": "ais-Pagination-item--previousPage",
+      "root": "ais-Pagination root cx",
+      "selectedItem": "ais-Pagination-item--selected",
     }
   }
   currentPage={0}
@@ -42,26 +44,30 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
     ]
   }
   setCurrentPage={[Function]}
-  shouldAutoHideContainer={false}
-  showFirstLast={true}
+  showFirst={true}
+  showLast={true}
+  showNext={true}
+  showPrevious={true}
 />
 `;
 
 exports[`pagination() calls twice ReactDOM.render(<Pagination props />, container) 2`] = `
-<RawPagination-AutoHide
+<Pagination
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-pagination--item__active active",
-      "disabled": "ais-pagination--item__disabled disabled",
-      "first": "ais-pagination--item__first first",
-      "item": "ais-pagination--item item",
-      "last": "ais-pagination--item__last last",
-      "link": "ais-pagination--link link",
-      "next": "ais-pagination--item__next next",
-      "page": "ais-pagination--item__page page",
-      "previous": "ais-pagination--item__previous previous",
-      "root": "ais-pagination root cx",
+      "disabledItem": "ais-Pagination-item--disabled",
+      "firstPageItem": "ais-Pagination-item--firstPage",
+      "item": "ais-Pagination-item item",
+      "lastPageItem": "ais-Pagination-item--lastPage",
+      "link": "ais-Pagination-link link",
+      "list": "ais-Pagination-list",
+      "nextPageItem": "ais-Pagination-item--nextPage",
+      "noRefinement": "ais-Pagination--noRefinement",
+      "pageItem": "ais-Pagination-item--page",
+      "previousPageItem": "ais-Pagination-item--previousPage",
+      "root": "ais-Pagination root cx",
+      "selectedItem": "ais-Pagination-item--selected",
     }
   }
   currentPage={0}
@@ -89,7 +95,9 @@ exports[`pagination() calls twice ReactDOM.render(<Pagination props />, containe
     ]
   }
   setCurrentPage={[Function]}
-  shouldAutoHideContainer={false}
-  showFirstLast={true}
+  showFirst={true}
+  showLast={true}
+  showNext={true}
+  showPrevious={true}
 />
 `;

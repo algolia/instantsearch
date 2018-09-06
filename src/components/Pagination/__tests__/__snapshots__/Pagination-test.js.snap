@@ -5,11 +5,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
   className="root"
 >
   <li
-    className="item first"
+    className="item firstPageItem"
   >
     <a
       aria-label="First"
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -20,11 +20,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item previous"
+    className="item previousPageItem"
   >
     <a
       aria-label="Previous"
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -35,11 +35,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={14}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 14,
@@ -50,11 +50,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={15}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 15,
@@ -65,11 +65,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={16}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 16,
@@ -80,11 +80,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={17}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 17,
@@ -95,11 +95,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={18}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 18,
@@ -110,11 +110,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={19}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 19,
@@ -125,11 +125,11 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item page active"
+    className="item pageItem selectedItem"
   >
     <a
       aria-label={20}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 20,
@@ -140,10 +140,10 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item next disabled"
+    className="item nextPageItem disabledItem"
   >
     <span
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -152,10 +152,10 @@ exports[`Pagination should disable last page if already on it 1`] = `
     />
   </li>
   <li
-    className="item last disabled"
+    className="item lastPageItem disabledItem"
   >
     <span
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -171,10 +171,10 @@ exports[`Pagination should display the first/last link 1`] = `
   className="root"
 >
   <li
-    className="item first disabled"
+    className="item firstPageItem disabledItem"
   >
     <span
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -183,23 +183,11 @@ exports[`Pagination should display the first/last link 1`] = `
     />
   </li>
   <li
-    className="item previous disabled"
-  >
-    <span
-      className=""
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "",
-        }
-      }
-    />
-  </li>
-  <li
-    className="item page active"
+    className="item pageItem selectedItem"
   >
     <a
       aria-label={1}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 1,
@@ -210,11 +198,11 @@ exports[`Pagination should display the first/last link 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={2}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 2,
@@ -225,11 +213,11 @@ exports[`Pagination should display the first/last link 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={3}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 3,
@@ -240,11 +228,11 @@ exports[`Pagination should display the first/last link 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={4}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 4,
@@ -255,11 +243,11 @@ exports[`Pagination should display the first/last link 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={5}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 5,
@@ -270,11 +258,11 @@ exports[`Pagination should display the first/last link 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={6}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 6,
@@ -285,11 +273,11 @@ exports[`Pagination should display the first/last link 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={7}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 7,
@@ -300,26 +288,11 @@ exports[`Pagination should display the first/last link 1`] = `
     />
   </li>
   <li
-    className="item next"
-  >
-    <a
-      aria-label="Next"
-      className=""
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "",
-        }
-      }
-      href="[1]"
-      onClick={[Function]}
-    />
-  </li>
-  <li
-    className="item last"
+    className="item lastPageItem"
   >
     <a
       aria-label="Last"
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -337,10 +310,10 @@ exports[`Pagination should have all buttons disabled if there are no results 1`]
   className="root"
 >
   <li
-    className="item first disabled"
+    className="item firstPageItem disabledItem"
   >
     <span
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -349,10 +322,10 @@ exports[`Pagination should have all buttons disabled if there are no results 1`]
     />
   </li>
   <li
-    className="item previous disabled"
+    className="item previousPageItem disabledItem"
   >
     <span
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -361,11 +334,11 @@ exports[`Pagination should have all buttons disabled if there are no results 1`]
     />
   </li>
   <li
-    className="item page active"
+    className="item pageItem selectedItem"
   >
     <a
       aria-label={1}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 1,
@@ -376,10 +349,10 @@ exports[`Pagination should have all buttons disabled if there are no results 1`]
     />
   </li>
   <li
-    className="item next disabled"
+    className="item nextPageItem disabledItem"
   >
     <span
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -388,10 +361,10 @@ exports[`Pagination should have all buttons disabled if there are no results 1`]
     />
   </li>
   <li
-    className="item last disabled"
+    className="item lastPageItem disabledItem"
   >
     <span
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": "",
@@ -407,23 +380,11 @@ exports[`Pagination should render five elements 1`] = `
   className="root"
 >
   <li
-    className="item previous disabled"
-  >
-    <span
-      className=""
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "",
-        }
-      }
-    />
-  </li>
-  <li
-    className="item page active"
+    className="item pageItem selectedItem"
   >
     <a
       aria-label={1}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 1,
@@ -434,11 +395,11 @@ exports[`Pagination should render five elements 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={2}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 2,
@@ -449,11 +410,11 @@ exports[`Pagination should render five elements 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={3}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 3,
@@ -464,11 +425,11 @@ exports[`Pagination should render five elements 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={4}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 4,
@@ -479,11 +440,11 @@ exports[`Pagination should render five elements 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={5}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 5,
@@ -494,11 +455,11 @@ exports[`Pagination should render five elements 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={6}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 6,
@@ -509,32 +470,17 @@ exports[`Pagination should render five elements 1`] = `
     />
   </li>
   <li
-    className="item page"
+    className="item pageItem"
   >
     <a
       aria-label={7}
-      className=""
+      className="link"
       dangerouslySetInnerHTML={
         Object {
           "__html": 7,
         }
       }
       href="[6]"
-      onClick={[Function]}
-    />
-  </li>
-  <li
-    className="item next"
-  >
-    <a
-      aria-label="Next"
-      className=""
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "",
-        }
-      }
-      href="[1]"
       onClick={[Function]}
     />
   </li>
