@@ -2,14 +2,13 @@ import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput.js';
 import connectRange from '../../connectors/range/connectRange.js';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
 import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-range-input');
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+
+import { component } from '../../lib/suit';
+
+const suit = component('RangeInput');
 
 const renderer = ({
   containerNode,
@@ -171,18 +170,25 @@ export default function rangeInput({
   };
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    form: cx(bem('form'), userCssClasses.form),
-    fieldset: cx(bem('fieldset'), userCssClasses.fieldset),
-    labelMin: cx(bem('labelMin'), userCssClasses.labelMin),
-    inputMin: cx(bem('inputMin'), userCssClasses.inputMin),
-    separator: cx(bem('separator'), userCssClasses.separator),
-    labelMax: cx(bem('labelMax'), userCssClasses.labelMax),
-    inputMax: cx(bem('inputMax'), userCssClasses.inputMax),
-    submit: cx(bem('submit'), userCssClasses.submit),
-    footer: cx(bem('footer'), userCssClasses.footer),
+    root: cx(suit(), userCssClasses.root),
+    noRefinement: cx(suit({ modifierName: 'noRefinement' })),
+    form: cx(suit({ descendantName: 'form' }), userCssClasses.form),
+    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
+    currency: cx(suit({ descendantName: 'currency' }), userCssClasses.currency),
+    input: cx(suit({ descendantName: 'input' }), userCssClasses.input),
+    inputMin: cx(
+      suit({ descendantName: 'input', modifierName: 'min' }),
+      userCssClasses.inputMin
+    ),
+    inputMax: cx(
+      suit({ descendantName: 'input', modifierName: 'max' }),
+      userCssClasses.inputMax
+    ),
+    separator: cx(
+      suit({ descendantName: 'separator' }),
+      userCssClasses.separator
+    ),
+    button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
   };
 
   const specializedRenderer = renderer({
