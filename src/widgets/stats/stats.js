@@ -5,13 +5,11 @@ import Stats from '../../components/Stats/Stats.js';
 import connectStats from '../../connectors/stats/connectStats.js';
 import defaultTemplates from './defaultTemplates.js';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
 
-const bem = bemHelper('ais-stats');
+import { component } from '../../lib/suit';
+
+const suit = component('Stats');
 
 const renderer = ({
   containerNode,
@@ -65,36 +63,31 @@ const renderer = ({
 const usage = `Usage:
 stats({
   container,
-  [ templates.{header, body, footer} ],
-  [ transformData.{body} ],
+  [ templates.{text} ],
+  [ transformData.{text} ],
   [ autoHideContainer=true ],
-  [ cssClasses.{root, header, body, footer, time} ],
+  [ cssClasses.{root, text} ],
 })`;
 
 /**
  * @typedef {Object} StatsWidgetTemplates
- * @property {string|function} [header=''] Header template.
- * @property {string|function} [body] Body template, provided with `hasManyResults`,
+ * @property {string|function} [text] Text template, provided with `hasManyResults`,
  * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`.
- * @property {string|function} [footer=''] Footer template.
  */
 
 /**
  * @typedef {Object} StatsWidgetCssClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
- * @property {string|string[]} [time] CSS class to add to the element wrapping the time processingTimeMs.
+ * @property {string|string[]} [text] CSS class to add to the text span element.
  */
 
 /**
  * @typedef {Object} StatsWidgetTransforms
- * @property {function(StatsBodyData):object} [body] Updates the content of object passed to the `body` template.
+ * @property {function(StatsTextData):object} [text] Updates the content of object passed to the `text` template.
  */
 
 /**
- * @typedef {Object} StatsBodyData
+ * @typedef {Object} StatsTextData
  * @property {boolean} hasManyResults True if the result set has more than one result.
  * @property {boolean} hasNoResults True if the result set has no result.
  * @property {boolean} hasOneResult True if the result set has exactly one result.
@@ -110,7 +103,7 @@ stats({
  * @typedef {Object} StatsWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {StatsWidgetTemplates} [templates] Templates to use for the widget.
- * @property {StatsWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
+ * @property {StatsWidgetTransforms} [transformData] Object that contains the functions to be applied on the data before being used for templating. Valid keys are `text` for the text template.
  * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
  * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add.
  */
@@ -147,11 +140,8 @@ export default function stats({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    header: cx(bem('header'), userCssClasses.header),
-    root: cx(bem(null), userCssClasses.root),
-    time: cx(bem('time'), userCssClasses.time),
+    root: cx(suit(), userCssClasses.root),
+    text: cx(suit({ descendantName: 'text' }), userCssClasses.text),
   };
 
   const specializedRenderer = renderer({

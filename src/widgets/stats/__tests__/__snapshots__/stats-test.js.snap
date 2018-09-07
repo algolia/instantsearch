@@ -1,15 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 1`] = `
-<HeaderFooter-AutoHide
+<RawStats-AutoHide
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-stats--body body cx",
-      "footer": "ais-stats--footer",
-      "header": "ais-stats--header",
-      "root": "ais-stats",
-      "time": "ais-stats--time",
+      "root": "ais-Stats",
+      "text": "ais-Stats-text text cx",
     }
   }
   hitsPerPage={2}
@@ -22,19 +19,14 @@ exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 1`] = `
   templateProps={
     Object {
       "templates": Object {
-        "body": "{{#hasNoResults}}No results{{/hasNoResults}}
-  {{#hasOneResult}}1 result{{/hasOneResult}}
-  {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-  <span class=\\"{{cssClasses.time}}\\">found in {{processingTimeMS}}ms</span>",
-        "footer": "",
-        "header": "",
+        "text": "{{#hasNoResults}}No results{{/hasNoResults}}
+    {{#hasOneResult}}1 result{{/hasOneResult}}
+    {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}} found in {{processingTimeMS}}ms",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "body": false,
-        "footer": false,
-        "header": false,
+        "text": false,
       },
     }
   }
@@ -42,15 +34,12 @@ exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 1`] = `
 `;
 
 exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 2`] = `
-<HeaderFooter-AutoHide
+<RawStats-AutoHide
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-stats--body body cx",
-      "footer": "ais-stats--footer",
-      "header": "ais-stats--header",
-      "root": "ais-stats",
-      "time": "ais-stats--time",
+      "root": "ais-Stats",
+      "text": "ais-Stats-text text cx",
     }
   }
   hitsPerPage={2}
@@ -63,19 +52,14 @@ exports[`stats() calls twice ReactDOM.render(<Stats props />, container) 2`] = `
   templateProps={
     Object {
       "templates": Object {
-        "body": "{{#hasNoResults}}No results{{/hasNoResults}}
-  {{#hasOneResult}}1 result{{/hasOneResult}}
-  {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-  <span class=\\"{{cssClasses.time}}\\">found in {{processingTimeMS}}ms</span>",
-        "footer": "",
-        "header": "",
+        "text": "{{#hasNoResults}}No results{{/hasNoResults}}
+    {{#hasOneResult}}1 result{{/hasOneResult}}
+    {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}} found in {{processingTimeMS}}ms",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "body": false,
-        "footer": false,
-        "header": false,
+        "text": false,
       },
     }
   }
