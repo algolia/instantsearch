@@ -52,9 +52,14 @@ export default {
       type: String,
       default: 'Clear',
     },
+    value: {
+      type: String,
+      default: undefined,
+    },
   },
   data() {
     return {
+      localValue: '',
       widgetName: 'SearchBox',
     };
   },
@@ -71,12 +76,27 @@ export default {
     },
   },
   computed: {
+    isControlled() {
+      return typeof this.value !== 'undefined';
+    },
     currentRefinement: {
       get() {
-        return this.state.query || '';
+        // if the input is controlled, but not up to date
+        // this means it didn't search, and we should pretend it was `set`
+        if (this.isControlled && this.value !== this.localValue) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          this.localValue = this.value;
+          this.$emit('input', this.value);
+          this.state.refine(this.value);
+        }
+        return this.value || this.localValue || this.state.query || '';
       },
-      set(value) {
-        this.state.refine(value);
+      set(val) {
+        this.localValue = val;
+        this.state.refine(val);
+        if (this.isControlled) {
+          this.$emit('input', val);
+        }
       },
     },
   },
