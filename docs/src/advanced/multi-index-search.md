@@ -28,16 +28,11 @@ However, if you end up finding yourself trying to manually merge records coming 
 
 ## How it works
 
-Every [search store](getting-started/search-store.html) is in charge of fetching the results from a single
-Algolia index.
+Every `ais-index` component is in charge of fetching the results from a single Algolia index.
 
-To implement a search experience that fetches results from two indices,
-you need to have two search stores.
+To implement a search experience that fetches results from two indices, you need to have two `ais-index` components.
 
 **Tip: you can fetch results from as many indices as you want. 💥**
-
-As a reminder, before diving into some code, every time you use an [Index
-component](components/index.html), a search store is automatically instantiated.
 
 ## Independent Multi-Index searches
 
@@ -70,6 +65,8 @@ export default {
 ```
 
 In this example we display results from two indices, but we are still using two search boxes.
+
+**Note: here, and in the other examples we put `_useRequestCache` to true. This is a feature that caches the requests rather than the responses and avoids extra queries being done here**
 
 ## Grouped Multi-Index searches
 
