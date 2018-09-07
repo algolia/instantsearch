@@ -5,12 +5,10 @@ html: |
   <div class="ais-RangeInput">
     <form class="ais-RangeInput-form">
       <label class="ais-RangeInput-label">
-        <span class="ais-RangeInput-currency">$</span>
         <input class="ais-RangeInput-input ais-RangeInput-input--min" type="number" />
       </label>
       <span class="ais-RangeInput-separator">to</span>
       <label class="ais-RangeInput-label">
-        <span class="ais-RangeInput-currency">$</span>
         <input class="ais-RangeInput-input ais-RangeInput-input--max" type="number" />
       </label>
       <button class="ais-RangeInput-submit" type="submit">Go</button>
@@ -25,8 +23,6 @@ classes:
     description: the wrapping form
   - name: .ais-RangeInput-label
     description: the label wrapping inputs
-  - name: .ais-RangeInput-currency
-    description: the currency used next to each input
   - name: .ais-RangeInput-input
     description: the input (number)
   - name: .ais-RangeInput-input--min
