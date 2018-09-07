@@ -39,15 +39,15 @@ It contains sample data for an e-commerce website.
 This guide also expects you to have a working [React](https://facebook.github.io/react/) project. If you need to setup a React project, we suggest you use
 [facebookincubator/create-react-app](https://github.com/facebookincubator/create-react-app#getting-started) which is the official React-CLI from Facebook.
 
-## Install `react-instantsearch`
+## Install `react-instantsearch-dom`
 
-React InstantSearch is available in the [npm](https://www.npmjs.com) registry. Install it:
+React InstantSearch is available in the [npm](https://www.npmjs.com) registry. To install it:
 
 ```shell
-yarn add react-instantsearch
+yarn add react-instantsearch-dom
 ```
 
-Note: we use `yarn add` to install dependencies but React InstantSearch is also installable via `npm install`.
+Note: we use `yarn add` to install dependencies but React InstantSearch is also installable via `npm install react-instantsearch-dom`.
 
 ## Add the `<InstantSearch>` component
 
