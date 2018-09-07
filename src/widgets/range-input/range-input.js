@@ -64,7 +64,7 @@ const renderer = ({
 const usage = `Usage:
 rangeInput({
   container,
-  attributeName,
+  attribute,
   [ min ],
   [ max ],
   [ precision = 0 ],
@@ -106,7 +106,7 @@ rangeInput({
 /**
  * @typedef {Object} RangeInputWidgetOptions
  * @property {string|HTMLElement} container Valid CSS Selector as a string or DOMElement.
- * @property {string} attributeName Name of the attribute for faceting.
+ * @property {string} attribute Name of the attribute for faceting.
  * @property {number} [min] Minimal slider value, default to automatically computed from the result set.
  * @property {number} [max] Maximal slider value, defaults to automatically computed from the result set.
  * @property {number} [precision = 0] Number of digits after decimal point to use.
@@ -121,7 +121,7 @@ rangeInput({
  * The range input widget allows a user to select a numeric range using a minimum and maximum input.
  *
  * @requirements
- * The attribute passed to `attributeName` must be declared as an
+ * The attribute passed to `attribute` must be declared as an
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
@@ -135,7 +135,7 @@ rangeInput({
  * search.addWidget(
  *   instantsearch.widgets.rangeInput({
  *     container: '#range-input',
- *     attributeName: 'price',
+ *     attribute: 'price',
  *     labels: {
  *       separator: 'to',
  *       submit: 'Go'
@@ -148,7 +148,7 @@ rangeInput({
  */
 export default function rangeInput({
   container,
-  attributeName,
+  attribute,
   min,
   max,
   precision = 0,
@@ -199,7 +199,7 @@ export default function rangeInput({
     const makeWidget = connectRange(specializedRenderer);
 
     return makeWidget({
-      attributeName,
+      attribute,
       min,
       max,
       precision,

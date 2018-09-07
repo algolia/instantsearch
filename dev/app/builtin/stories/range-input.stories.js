@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeInput({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             templates: {
               header: 'Range input',
             },
@@ -28,7 +28,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeInput({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             min: 500,
             max: 0,
             templates: {
@@ -44,7 +44,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeInput({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             collapsible: true,
             templates: {
               header: 'Range input',
@@ -59,7 +59,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeInput({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             precision: 2,
             templates: {
               header: 'Range input',
@@ -74,7 +74,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeInput({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             min: 10,
             templates: {
               header: 'Range input',
@@ -89,7 +89,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeInput({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             max: 500,
             templates: {
               header: 'Range input',
@@ -104,7 +104,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeInput({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             min: 10,
             max: 500,
             templates: {

@@ -73,7 +73,7 @@ const renderer = ({
 const usage = `Usage:
 rangeSlider({
   container,
-  attributeName,
+  attribute,
   [ min ],
   [ max ],
   [ pips = true ],
@@ -116,7 +116,7 @@ rangeSlider({
 /**
  * @typedef {Object} RangeSliderWidgetOptions
  * @property  {string|HTMLElement} container CSS Selector or DOMElement to insert the widget.
- * @property  {string} attributeName Name of the attribute for faceting.
+ * @property  {string} attribute Name of the attribute for faceting.
  * @property  {boolean|RangeSliderTooltipOptions} [tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the raw value.
  * You can also provide an object with a format function as an attribute.
@@ -137,7 +137,7 @@ rangeSlider({
  * results based on a single numeric range.
  *
  * @requirements
- * The attribute passed to `attributeName` must be declared as an
+ * The attribute passed to `attribute` must be declared as an
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
@@ -152,7 +152,7 @@ rangeSlider({
  * search.addWidget(
  *   instantsearch.widgets.rangeSlider({
  *     container: '#price',
- *     attributeName: 'price',
+ *     attribute: 'price',
  *     templates: {
  *       header: 'Price'
  *     },
@@ -166,7 +166,7 @@ rangeSlider({
  */
 export default function rangeSlider({
   container,
-  attributeName,
+  attribute,
   min,
   max,
   templates = defaultTemplates,
@@ -206,7 +206,7 @@ export default function rangeSlider({
     const makeWidget = connectRange(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ attributeName, min, max, precision });
+    return makeWidget({ attribute, min, max, precision });
   } catch (e) {
     throw new Error(usage);
   }
