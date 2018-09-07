@@ -15,21 +15,16 @@ Take a look at a [live multi-index search example](examples/multi-index-search.h
 
 ## When to use multi-index search
 
-You will need multi-index search when, in the same UI, you want to display results
-coming from different indices.
+You will need multi-index search when, in the same UI, you want to display results coming from different indices.
 
 Here are two reasons to store your data in multiple indices:
 
 - To have different ranking rules or settings depending on the type of data inside the index
 - To make it easier to display only the results of a given type in a given area of your page
 
-If you don't need specific settings for part of your index, and you expect
-to see all results inter-mixed on the same area of your page, then chances are
-you won't need to implement a multi-index search experience.
+If you don't need specific settings for part of your index, and you expect to see all results inter-mixed on the same area of your page, then chances are you won't need to implement a multi-index search experience.
 
-However, if you end up finding yourself trying to manually merge records coming
-from different indices, you have probably missed an opportunity to use 
-multi-index search.
+However, if you end up finding yourself trying to manually merge records coming from different indices, you have probably missed an opportunity to use multi-index search.
 
 ## How it works
 
@@ -51,82 +46,90 @@ Let's take a look at what a minimal example of multi-index search looks like:
 ```html
 <!-- App.vue -->
 <template>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first">
+  <ais-index :search-client="searchClient" index-name="first">
     <ais-search-box />
-    <ais-results />
+    <ais-hits />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second">
+  <ais-index :search-client="searchClient" index-name="second">
     <ais-search-box />
-    <ais-results />
+    <ais-hits />
   </ais-index>
 </template>
-```
 
-In this example, we display results from two indices, but we are still using two search boxes.
-
-## Correlated Multi-Index searches
-
-Here's how to bind a single input displaying results from multiple indices:
-
-**Note:** For now it's not possible to bind the provided [Search Box component](components/search-box.html) directly to different indices, as we have not yet implemented that.
-
-```html
-<!-- App.vue -->
-<template>
-  <input v-model="query">
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first" :query="query">
-    <ais-results />
-  </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second" :query="query">
-    <ais-results />
-  </ais-index>
-</template>
 <script>
+import algoliasearch from 'algoliasearch';
+
 export default {
-  data: function() {
+  data() {
     return {
-      query: ''
-    }
-  }
-}
+      searchClient: algoliasearch('xxx', 'xxx', { _useRequestCache: true }),
+    };
+  },
+};
 </script>
 ```
 
-We bind the `query` value using the [`v-model` directive](https://vuejs.org/v2/guide/forms.html#v-model-with-Components) so that as the value changes, it gets propagated to `data.query`.
+In this example we display results from two indices, but we are still using two search boxes.
 
-Then the query value is sent to both indices:
+## Grouped Multi-Index searches
+
+Here's how to bind a single input displaying results from multiple indices:
 
 ```html
-<ais-index :query="query">
+<!-- App.vue -->
+<template>
+  <ais-index :search-client="searchClient" index-name="first">
+    <ais-search-box v-model="query" />
+    <ais-hits />
+  </ais-index>
+  <ais-index :search-client="searchClient"index-name="second">
+    <ais-search-box v-model="query" hidden/>
+    <ais-hits />
+  </ais-index>
+</template>
+
+<script>
+import algoliasearch from 'algoliasearch';
+
+export default {
+  data() {
+    return {
+      query: '',
+      searchClient: algoliasearch('xxx', 'xxx', { _useRequestCache: true }),
+    };
+  },
+};
+</script>
 ```
 
-The query property of the index will set the query on the underlying store as it changes.
+We bind the `query` value using the [`v-model` directive](https://vuejs.org/v2/guide/forms.html#v-model-with-Components) so that as the value changes, it gets propagated to the query for both search boxes. Note that we made the second search box invisible by hiding it, but it's still rendered and thus still has an impact on the page
 
-Now when we change the value of the input, the query is changed in both stores at the same time.
-The 2 stores will in turn fetch new results from Algolia and display them.
-
-**Tip: You can bind any query parameter value to the index by binding an object to `queryParameters`.**
-
-Here is the same example as above with a different syntax, binding the `query`.
+It's also possible to bind this model on configure, this has the advantage that other things than the query also can be synchronized if necessary, like for example a menu. Here's an example of using the `ais-configure` widget to synchronize the query.
 
 ```html
 <!-- App.vue -->
 <template>
   <input v-model="query">
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="first" :query-parameters="{query: query}">
+  <ais-index :search-client="searchClient" index-name="first">
+    <ais-configure :query="query" />
     <ais-results />
   </ais-index>
-  <ais-index app-id="xxxxxx" api-key="xxxxxx" index-name="second" :query-parameters="{query: query}">
+  <ais-index :search-client="searchClient" index-name="second">
+    <ais-configure :query="query" />
     <ais-results />
   </ais-index>
 </template>
+
 <script>
+import algoliasearch from 'algoliasearch';
+
 export default {
   data: function() {
     return {
-      query: ''
-    }
-  }
-}
+      query: '',
+      searchClient: algoliasearch('xxx', 'xxx', { _useRequestCache: true }),
+    };
+  },
+};
 </script>
 ```
