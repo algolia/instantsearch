@@ -1,7 +1,6 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
 
 export class RawRangeInput extends Component {
   constructor(props) {
@@ -37,12 +36,17 @@ export class RawRangeInput extends Component {
     const { min, max, step, cssClasses, labels } = this.props;
     const isDisabled = min >= max;
 
+    const hasRefinements = Boolean(minValue || maxValue);
+    const rootClassNames = hasRefinements
+      ? cssClasses.root
+      : `${cssClasses.root} ${cssClasses.noRefinement}`;
+
     return (
-      <form className={cssClasses.form} onSubmit={this.onSubmit}>
-        <fieldset className={cssClasses.fieldset}>
-          <label className={cssClasses.labelMin}>
+      <div className={rootClassNames}>
+        <form className={cssClasses.form} onSubmit={this.onSubmit}>
+          <label className={cssClasses.label}>
             <input
-              className={cssClasses.inputMin}
+              className={`${cssClasses.input} ${cssClasses.inputMin}`}
               type="number"
               min={min}
               max={max}
@@ -53,10 +57,12 @@ export class RawRangeInput extends Component {
               disabled={isDisabled}
             />
           </label>
+
           <span className={cssClasses.separator}>{labels.separator}</span>
-          <label className={cssClasses.labelMax}>
+
+          <label className={cssClasses.label}>
             <input
-              className={cssClasses.inputMax}
+              className={`${cssClasses.input} ${cssClasses.inputMax}`}
               type="number"
               min={min}
               max={max}
@@ -67,15 +73,16 @@ export class RawRangeInput extends Component {
               disabled={isDisabled}
             />
           </label>
+
           <button
-            role="button"
-            className={cssClasses.submit}
+            type="submit"
+            className={cssClasses.button}
             disabled={isDisabled}
           >
             {labels.submit}
           </button>
-        </fieldset>
-      </form>
+        </form>
+      </div>
     );
   }
 }
@@ -107,4 +114,4 @@ RawRangeInput.propTypes = {
   refine: PropTypes.func.isRequired,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawRangeInput));
+export default autoHideContainerHOC(RawRangeInput);

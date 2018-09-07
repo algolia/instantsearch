@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`rangeInput expect to render with custom classNames 1`] = `
-<HeaderFooter-AutoHide
+<RawRangeInput-AutoHide
   collapsible={false}
   cssClasses={
     Object {
@@ -52,7 +52,7 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
 `;
 
 exports[`rangeInput expect to render with custom labels 1`] = `
-<HeaderFooter-AutoHide
+<RawRangeInput-AutoHide
   collapsible={false}
   cssClasses={
     Object {
@@ -103,7 +103,7 @@ exports[`rangeInput expect to render with custom labels 1`] = `
 `;
 
 exports[`rangeInput expect to render with refinement 1`] = `
-<HeaderFooter-AutoHide
+<RawRangeInput-AutoHide
   collapsible={false}
   cssClasses={
     Object {
@@ -154,7 +154,7 @@ exports[`rangeInput expect to render with refinement 1`] = `
 `;
 
 exports[`rangeInput expect to render with refinement at boundaries 1`] = `
-<HeaderFooter-AutoHide
+<RawRangeInput-AutoHide
   collapsible={false}
   cssClasses={
     Object {
@@ -205,7 +205,7 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
 `;
 
 exports[`rangeInput expect to render with results 1`] = `
-<HeaderFooter-AutoHide
+<RawRangeInput-AutoHide
   collapsible={false}
   cssClasses={
     Object {
@@ -256,7 +256,7 @@ exports[`rangeInput expect to render with results 1`] = `
 `;
 
 exports[`rangeInput expect to render without results 1`] = `
-<HeaderFooter-AutoHide
+<RawRangeInput-AutoHide
   collapsible={false}
   cssClasses={
     Object {
