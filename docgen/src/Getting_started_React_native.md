@@ -29,7 +29,7 @@ It contains sample data for an e-commerce website.
 
 This guide also expects you to have a working [React Native](https://facebook.github.io/react-native/) project. If you need to setup a [React Native](https://facebook.github.io/react-native/) project, we suggest you use [create-react-native-app](https://github.com/react-community/create-react-native-app) which is the [easiest way to start building a new React Native application](https://facebook.github.io/react-native/docs/getting-started.html). You can get your React Native app running within a few seconds and see the results using the [iOS Expo client](https://itunes.apple.com/app/apple-store/id982107779?ct=www&mt=8) or the [Android Expo client](https://play.google.com/store/apps/details?id=host.exp.exponent&referrer=www).
 
-## Install react-instantsearch-native
+## Install `react-instantsearch-native`
 
 React InstantSearch is available in the [npm](https://www.npmjs.com) registry. To install it:
 
