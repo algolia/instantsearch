@@ -39,7 +39,7 @@ const makeHits = instantsearch.connectors.connectHits(function renderHits({hits}
 });
 
 const search = instantsearch(/* options */);
-search.add(makeHits());
+search.addWidget(makeHits());
 ```
 
 ## Reusability of connectors
@@ -60,8 +60,8 @@ const makeHits = connectHits(function renderHits({hits, widgetParams}) {
 });
 
 const search = instantsearch(/* options */);
-search.add(makeHits({container: $('#hits-1')}));
-search.add(makeHits({container: $('#hits-2')}));
+search.addWidget(makeHits({container: $('#hits-1')}));
+search.addWidget(makeHits({container: $('#hits-2')}));
 ```
 
 ## When is the rendering function called?
@@ -90,5 +90,5 @@ const makeHits = instantsearch.connectors.connectHits(function renderHits({hits}
 });
 
 const search = instantsearch(/* options */);
-search.add(makeHits());
+search.addWidget(makeHits());
 ```
