@@ -29,7 +29,7 @@
     "file-loader": "1.1.11",
     "prettier": "1.14.2",
     "vue-loader": "14.2.3",
-    "vue-template-compiler": "2.5.16",
+    "vue-template-compiler": "2.5.17",
     "webpack": "3.12.0",
     "webpack-dev-server": "2.11.3"
   }
