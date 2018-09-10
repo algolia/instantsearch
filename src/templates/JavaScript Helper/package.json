@@ -13,7 +13,7 @@
     "algoliasearch-helper": "{{libraryVersion}}"
   },
   "devDependencies": {
-    "babel-eslint": "8.2.6",
+    "babel-eslint": "9.0.0",
     "eslint": "5.5.0",
     "eslint-config-algolia": "13.2.3",
     "eslint-config-prettier": "3.0.1",
