@@ -58,7 +58,11 @@ const search = instantsearch({
         return {
           query: uiState.query,
           // we use the character ~ as it is one that is rarely present in data and renders well in urls
-          brands: uiState.refinementList && uiState.refinementList.brand.join('~'),
+          brands:
+            (uiState.refinementList &&
+            uiState.refinementList.brand &&
+              uiState.refinementList.brand.join('~')) ||
+            'all',
           page: uiState.page
         };
       },
@@ -127,7 +131,11 @@ const search = instantsearch({
       stateToRoute(uiState) {
         return {
           q: uiState.query || '',
-          brands: uiState.refinementList && uiState.refinementList.brand.join('~') || 'all',
+          brands:
+            (uiState.refinementList &&
+              uiState.refinementList.brand &&
+              uiState.refinementList.brand.join('~')) ||
+            'all',
           p: uiState.page || 1
         };
       },
