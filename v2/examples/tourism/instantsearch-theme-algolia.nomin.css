@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.10.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button, .ais-range-input--submit, .ais-geo-search--clear, .ais-geo-search--redo {
+/*! instantsearch.js preview-2.10.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */.ais-clear-all--link, .ais-current-refined-values--clear-all, .ais-price-ranges--button, .ais-range-input--submit, .ais-geo-search--clear, .ais-geo-search--redo {
   color: #FFFFFF;
   display: inline-block;
   background: #3369E7;
@@ -181,6 +181,7 @@ select.ais-hits-per-page-selector, select.ais-numeric-selector, select.ais-sort-
             appearance: none;
     font: inherit;
     background: #FFFFFF;
+    color: #000000;
     display: inline-block;
     border: 1px solid #D4D8E3;
     border-radius: 4px;

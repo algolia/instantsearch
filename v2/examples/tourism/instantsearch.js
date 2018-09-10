@@ -1,4 +1,4 @@
-/*! instantsearch.js preview-2.10.1 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
+/*! instantsearch.js preview-2.10.2 | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */(function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
@@ -13706,7 +13706,7 @@ var BrowserHistory = function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = '2.10.1';
+exports.default = '2.10.2';
 
 /***/ }),
 /* 190 */
@@ -41978,11 +41978,6 @@ var RawStats = exports.RawStats = function (_Component) {
   }
 
   _createClass(RawStats, [{
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate(nextProps) {
-      return this.props.nbHits !== nextProps.nbHits || this.props.processingTimeMS !== nextProps.processingTimeMS;
-    }
-  }, {
     key: 'render',
     value: function render() {
       var data = {
