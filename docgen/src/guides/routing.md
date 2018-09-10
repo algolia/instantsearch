@@ -60,7 +60,7 @@ const search = instantsearch({
           // we use the character ~ as it is one that is rarely present in data and renders well in urls
           brands:
             (uiState.refinementList &&
-            uiState.refinementList.brand &&
+              uiState.refinementList.brand &&
               uiState.refinementList.brand.join('~')) ||
             'all',
           page: uiState.page
