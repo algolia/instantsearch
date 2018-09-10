@@ -26,7 +26,7 @@
     "eslint-plugin-html": "4.0.5",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-prettier": "2.6.2",
-    "file-loader": "1.1.11",
+    "file-loader": "2.0.0",
     "prettier": "1.14.2",
     "vue-loader": "14.2.3",
     "vue-template-compiler": "2.5.17",
