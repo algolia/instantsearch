@@ -20,10 +20,7 @@ stories
         <div>
           <ClearRefinements />
           <div style={{ display: 'none' }}>
-            <RefinementList
-              attribute="category"
-              defaultRefinement={['Dining']}
-            />
+            <RefinementList attribute="brand" defaultRefinement={['Apple']} />
           </div>
         </div>
       </WrapWithHits>
@@ -53,7 +50,7 @@ stories
           clearsQuery
           translations={{ reset: 'Clear refinements and query' }}
         />
-        <RefinementList attribute="category" defaultRefinement={['Dining']} />
+        <RefinementList attribute="brand" defaultRefinement={['Apple']} />
       </WrapWithHits>
     ),
     {
@@ -70,7 +67,7 @@ stories
         </Panel>
 
         <div style={{ display: 'none' }}>
-          <RefinementList attribute="category" defaultRefinement={['Dining']} />
+          <RefinementList attribute="brand" defaultRefinement={['Apple']} />
         </div>
       </WrapWithHits>
     ),

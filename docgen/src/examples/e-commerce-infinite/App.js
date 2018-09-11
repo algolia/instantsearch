@@ -14,7 +14,6 @@ import {
   Panel,
   Configure,
   connectSearchBox,
-  connectRefinementList,
   connectInfiniteHits,
   connectStateResults,
 } from 'react-instantsearch-dom';
@@ -25,7 +24,7 @@ export default function App() {
     <InstantSearch
       appId="latency"
       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="ikea"
+      indexName="instant_search"
     >
       <Configure hitsPerPage={16} />
       <Header />
@@ -66,7 +65,11 @@ const Facets = () => (
     <section className="facet-wrapper">
       <div className="facet-category-title facet">Show results for</div>
       <HierarchicalMenu
-        attributes={['category', 'sub_category', 'sub_sub_category']}
+        attributes={[
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+        ]}
       />
     </section>
 
@@ -74,20 +77,11 @@ const Facets = () => (
       <div className="facet-category-title facet">Refine By</div>
 
       <Panel header={<h5>Type</h5>}>
-        <RefinementList attribute="type" operator="or" limit={5} searchable />
+        <RefinementList attribute="type" operator="or" limit={5} />
       </Panel>
 
-      <Panel header={<h5>Materials</h5>}>
-        <RefinementList
-          attribute="materials"
-          operator="or"
-          limit={5}
-          searchable
-        />
-      </Panel>
-
-      <Panel header={<h5>Colors</h5>}>
-        <ConnectedColorRefinementList attribute="colors" operator="or" />
+      <Panel header={<h5>Brand</h5>}>
+        <RefinementList attribute="brand" operator="or" limit={5} searchable />
       </Panel>
 
       <Panel header={<h5>Rating</h5>}>
@@ -100,7 +94,7 @@ const Facets = () => (
     </section>
 
     <div className="thank-you">
-      Data courtesy of <a href="http://www.ikea.com/">ikea.com</a>
+      Data courtesy of <a href="https://developer.bestbuy.com/">Best Buy</a>
     </div>
   </aside>
 );
@@ -122,31 +116,6 @@ const CustomSearchBox = ({ currentRefinement, refine }) => (
     </span>
   </div>
 );
-
-const ColorItem = ({ item, createURL, refine }) => {
-  const active = item.isRefined ? 'checked' : '';
-  return (
-    <a
-      className={`${active} facet-color`}
-      href={createURL(item.value)}
-      onClick={e => {
-        e.preventDefault();
-        refine(item.value);
-      }}
-      data-facet-value={item.label}
-    />
-  );
-};
-
-const CustomColorRefinementList = ({ items, refine, createURL }) =>
-  items.map(item => (
-    <ColorItem
-      key={item.label}
-      item={item}
-      refine={refine}
-      createURL={createURL}
-    />
-  ));
 
 function CustomHits({ hits, refine, hasMore }) {
   return (
@@ -228,11 +197,11 @@ const CustomResults = connectStateResults(({ searchState, searchResult }) => {
             <label>Sort by</label>
             <SortBy
               items={[
-                { value: 'ikea', label: 'Featured' },
-                { value: 'ikea_price_asc', label: 'Price asc.' },
-                { value: 'ikea_price_desc', label: 'Price desc.' },
+                { value: 'instant_search', label: 'Featured' },
+                { value: 'instant_search_price_asc', label: 'Price asc.' },
+                { value: 'instant_search_price_desc', label: 'Price desc.' },
               ]}
-              defaultRefinement="ikea"
+              defaultRefinement="instant_search"
             />
           </div>
           <Stats />
@@ -244,7 +213,4 @@ const CustomResults = connectStateResults(({ searchState, searchResult }) => {
 });
 
 const ConnectedSearchBox = connectSearchBox(CustomSearchBox);
-const ConnectedColorRefinementList = connectRefinementList(
-  CustomColorRefinementList
-);
 const ConnectedHits = connectInfiniteHits(CustomHits);

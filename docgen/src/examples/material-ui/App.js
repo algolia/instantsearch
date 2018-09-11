@@ -50,7 +50,7 @@ const MaterialUiExample = props => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-    indexName="ikea"
+    indexName="instant_search"
     searchState={props.searchState}
     createURL={props.createURL}
     onSearchStateChange={props.onSearchStateChange}
@@ -98,11 +98,11 @@ class Content extends React.Component {
             <ConnectedSearchBox />
             <ConnectedSortBy
               items={[
-                { value: 'ikea', label: 'Featured' },
-                { value: 'ikea_price_desc', label: 'Price (desc)' },
-                { value: 'ikea_price_asc', label: 'Price (asc)' },
+                { value: 'instant_search', label: 'Featured' },
+                { value: 'instant_search_price_desc', label: 'Price (desc)' },
+                { value: 'instant_search_price_asc', label: 'Price (asc)' },
               ]}
-              defaultRefinement="ikea"
+              defaultRefinement="instant_search"
             />
           </div>
         </AppBar>

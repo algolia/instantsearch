@@ -24,7 +24,7 @@ const App = props => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-    indexName="ikea"
+    indexName="instant_search"
     searchState={props.searchState}
     createURL={props.createURL}
     onSearchStateChange={props.onSearchStateChange}
@@ -64,12 +64,16 @@ const Facets = () => (
 
     <Panel header="Categories">
       <HierarchicalMenu
-        attributes={['category', 'sub_category', 'sub_sub_category']}
+        attributes={[
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+        ]}
       />
     </Panel>
 
-    <Panel header="Materials">
-      <RefinementList attribute="materials" operator="or" limit={10} />
+    <Panel header="Categories">
+      <RefinementList attribute="categories" operator="or" limit={10} />
     </Panel>
 
     <Panel header="Rating">
@@ -81,7 +85,7 @@ const Facets = () => (
     </Panel>
 
     <div className="thank-you">
-      Data courtesy of <a href="http://www.ikea.com/">ikea.com</a>
+      Data courtesy of <a href="https://developer.bestbuy.com/">Best Buy</a>
     </div>
   </aside>
 );
@@ -131,11 +135,11 @@ const CustomResults = connectStateResults(({ searchState, searchResults }) => (
         <label>Sort by</label>
         <SortBy
           items={[
-            { value: 'ikea', label: 'Featured' },
-            { value: 'ikea_price_asc', label: 'Price asc.' },
-            { value: 'ikea_price_desc', label: 'Price desc.' },
+            { value: 'instant_search', label: 'Featured' },
+            { value: 'instant_search_price_asc', label: 'Price asc.' },
+            { value: 'instant_search_price_desc', label: 'Price desc.' },
           ]}
-          defaultRefinement="ikea"
+          defaultRefinement="instant_search"
         />
       </div>
     </section>

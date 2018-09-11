@@ -16,7 +16,7 @@ stories
       <InstantSearch
         appId="latency"
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="ikea"
+        indexName="instant_search"
       >
         <SearchBox />
         <Hits />
@@ -33,7 +33,7 @@ stories
       <InstantSearch
         appId="latency"
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="ikea"
+        indexName="instant_search"
         root={{
           Root: 'div',
           props: {
@@ -56,7 +56,7 @@ stories
     'with algolia search client',
     () => (
       <InstantSearch
-        indexName="ikea"
+        indexName="instant_search"
         searchClient={algoliasearch(
           'latency',
           '6be0576ff61c053d5f9a3225e2a90f76'
@@ -75,7 +75,7 @@ stories
     'with custom search client',
     () => (
       <InstantSearch
-        indexName="ikea"
+        indexName="instant_search"
         searchClient={{
           search() {
             return Promise.resolve({

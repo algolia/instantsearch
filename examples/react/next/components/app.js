@@ -50,7 +50,7 @@ export default class extends React.Component {
       <InstantSearch
         appId="latency"
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="ikea"
+        indexName="instant_search"
         resultsState={this.props.resultsState}
         onSearchStateChange={this.props.onSearchStateChange}
         searchState={this.props.searchState}
@@ -63,7 +63,7 @@ export default class extends React.Component {
         </header>
         <content>
           <menu>
-            <RefinementList attribute="category" />
+            <RefinementList attribute="categories" />
           </menu>
           <results>
             <Hits hitComponent={HitComponent} />

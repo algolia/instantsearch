@@ -14,9 +14,9 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="ToggleRefinement">
         <ToggleRefinement
-          attribute="materials"
-          label="Made with solid pine"
-          value={'Solid pine'}
+          attribute="free_shipping"
+          label="Free shipping"
+          value={true}
         />
       </WrapWithHits>
     ),
@@ -30,9 +30,9 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="ToggleRefinement">
         <ToggleRefinement
-          attribute="materials"
-          label="Made with solid pine"
-          value="Solid pine"
+          attribute="free_shipping"
+          label="Free shipping"
+          value={true}
           defaultRefinement={true}
         />
       </WrapWithHits>
@@ -48,9 +48,9 @@ stories
       <WrapWithHits linkedStoryGroup="ToggleRefinement">
         <Panel header="Toggle Refinement" footer="Footer">
           <ToggleRefinement
-            attribute="materials"
-            label="Made with solid pine"
-            value="Solid pine"
+            attribute="free_shipping"
+            label="Free shipping"
+            value={true}
           />
         </Panel>
       </WrapWithHits>
