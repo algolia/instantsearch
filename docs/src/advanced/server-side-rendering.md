@@ -8,6 +8,7 @@ navWeight: 2
 editable: true
 githubSource: docs/src/advanced/server-side-rendering.md
 ---
+> NOTE: this guide has not yet been updated for v2
 
 We have a full example: https://github.com/algolia/vue-instantsearch-examples/tree/master/examples/ssr.
 

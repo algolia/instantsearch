@@ -8,6 +8,7 @@ navWeight: 3
 editable: true
 githubSource: docs/src/getting-started/using-components.md
 ---
+> NOTE: this guide has not yet been updated for v2
 
 Vue InstantSearch comes pre-packaged with many components necessary to build a full-featured search experience.
 

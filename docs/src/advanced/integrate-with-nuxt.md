@@ -9,6 +9,8 @@ editable: true
 githubSource: docs/src/advanced/integrate-with-nuxt.md
 ---
 
+> NOTE: this guide has not yet been updated for v2
+
 [Nuxt.js](https://nuxtjs.org) is a framework built on top of Vue.js that helps you build robust applications.
 Nuxt.js has a strong focus on making sure your application can be [server side rendered](https://nuxtjs.org/guide/#server-rendered).
 

@@ -8,6 +8,7 @@ navWeight: 7
 editable: true
 githubSource: docs/src/getting-started/styling.md
 ---
+> NOTE: this guide has not yet been updated for v2
 
 Vue InstantSearch does not come with any styling but makes sure you can adapt the look & feel to your existing design.
 

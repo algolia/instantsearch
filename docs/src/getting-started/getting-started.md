@@ -9,6 +9,9 @@ editable: true
 githubSource: docs/src/getting-started/getting-started.md
 ---
 
+> NOTE: this guide has not yet been updated for v2
+
+
 ## Welcome to Vue InstantSearch
 
 Vue InstantSearch is the ultimate toolbox for creating instant-search

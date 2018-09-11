@@ -8,6 +8,7 @@ navWeight: 3
 editable: true
 githubSource: docs/src/advanced/vue-router-url-sync.md
 ---
+> NOTE: this guide has not yet been updated for v2
 
 In this guide you'll learn how to synchronize your InstantSearch experience with the [official Vue-Router](https://github.com/vuejs/vue-router).
 

@@ -9,6 +9,8 @@ editable: true
 githubSource: docs/src/advanced/multi-index-search.md
 ---
 
+> NOTE: this guide **has** been updated for v2
+
 In this guide, you'll learn how to get results out of searching from multiple indices simultaneously.
 
 Take a look at a [live multi-index search example](examples/multi-index-search.html) to quickly grasp what we are talking about.

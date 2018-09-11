@@ -9,6 +9,8 @@ editable: true
 githubSource: docs/src/getting-started/custom-components.md
 ---
 
+> NOTE: this guide has not yet been updated for v2
+
 You can build your own components when the provided ones are not sufficient. Since we try
 as hard as possible to provide an out-of-the-box experience, we would love to hear
 about your custom component use case before you build it.
