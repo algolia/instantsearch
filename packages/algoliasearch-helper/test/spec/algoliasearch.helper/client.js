@@ -107,7 +107,7 @@ test('getClient / setClient', function(t) {
 test('initial client === getClient', function(t) {
   t.plan(1);
   var client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
-  var helper = algoliaSearchHelper(client, 'ikea', {});
+  var helper = algoliaSearchHelper(client, 'instant_search', {});
   helper.setQuery('blah').search();
   t.equal(client, helper.getClient());
 });
