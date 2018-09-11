@@ -1,15 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`menuSelect render renders correctly 1`] = `
-<HeaderFooter-AutoHide
+<MenuSelect
   canRefine={true}
   cssClasses={
     Object {
-      "footer": "ais-menu-select--footer",
-      "header": "ais-menu-select--header",
-      "option": "ais-menu-select--option",
-      "root": "ais-menu-select",
-      "select": "ais-menu-select--select",
+      "option": "ais-menuSelect-option",
+      "root": "ais-menuSelect",
+      "select": "ais-menuSelect-select",
     }
   }
   items={
@@ -25,20 +23,15 @@ exports[`menuSelect render renders correctly 1`] = `
     ]
   }
   refine={[Function]}
-  shouldAutoHideContainer={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
         "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
         "seeAllOption": "See all",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
         "seeAllOption": false,
       },
@@ -48,15 +41,13 @@ exports[`menuSelect render renders correctly 1`] = `
 `;
 
 exports[`menuSelect render renders transformed items correctly 1`] = `
-<HeaderFooter-AutoHide
+<MenuSelect
   canRefine={true}
   cssClasses={
     Object {
-      "footer": "ais-menu-select--footer",
-      "header": "ais-menu-select--header",
-      "option": "ais-menu-select--option",
-      "root": "ais-menu-select",
-      "select": "ais-menu-select--select",
+      "option": "ais-menuSelect-option",
+      "root": "ais-menuSelect",
+      "select": "ais-menuSelect-select",
     }
   }
   items={
@@ -74,20 +65,15 @@ exports[`menuSelect render renders transformed items correctly 1`] = `
     ]
   }
   refine={[Function]}
-  shouldAutoHideContainer={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
         "item": "{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})",
         "seeAllOption": "See all",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
         "seeAllOption": false,
       },

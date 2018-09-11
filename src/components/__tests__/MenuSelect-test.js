@@ -11,6 +11,7 @@ describe('MenuSelect', () => {
       refine: () => {},
       templateProps: { templates: defaultTemplates },
       shouldAutoHideContainer: false,
+      cssClasses: {},
     };
     const tree = renderer.create(<MenuSelect {...props} />).toJSON();
     expect(tree).toMatchSnapshot();

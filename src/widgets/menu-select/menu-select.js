@@ -5,18 +5,15 @@ import connectMenu from '../../connectors/menu/connectMenu';
 import defaultTemplates from './defaultTemplates';
 import MenuSelect from '../../components/MenuSelect';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
 
-const bem = bemHelper('ais-menu-select');
+import { component } from '../../lib/suit';
+
+const suit = component('menuSelect');
 
 const renderer = ({
   containerNode,
   cssClasses,
-  autoHideContainer,
   renderState,
   templates,
   transformData,
@@ -34,15 +31,12 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && !canRefine;
-
   render(
     <MenuSelect
       cssClasses={cssClasses}
       items={items}
       refine={refine}
       templateProps={renderState.templateProps}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       canRefine={canRefine}
     />,
     containerNode
@@ -52,31 +46,26 @@ const renderer = ({
 const usage = `Usage:
 menuSelect({
   container,
-  attributeName,
+  attribute,
   [ sortBy=['name:asc'] ],
   [ limit=10 ],
-  [ cssClasses.{root,select,option,header,footer} ]
-  [ templates.{header,item,footer,seeAllOption} ],
+  [ cssClasses.{root,select,option} ]
+  [ templates.{item,seeAllOption} ],
   [ transformData.{item} ],
-  [ autoHideContainer ]
   [ transformItems ]
 })`;
 
 /**
  * @typedef {Object} MenuSelectCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
  * @property {string|string[]} [select] CSS class to add to the select element.
  * @property {string|string[]} [option] CSS class to add to the option element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
  */
 
 /**
  * @typedef {Object} MenuSelectTemplates
- * @property {string|function} [header] Header template.
  * @property {string|function(label: string, count: number, isRefined: boolean, value: string)} [item] Item template, provided with `label`, `count`, `isRefined` and `value` data properties.
  * @property {string} [seeAllOption='See all'] Label of the see all option in the select.
- * @property {string|function} [footer] Footer template.
  */
 
 /**
@@ -87,14 +76,13 @@ menuSelect({
 /**
  * @typedef {Object} MenuSelectWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string} attributeName Name of the attribute for faceting
+ * @property {string} attribute Name of the attribute for faceting
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {MenuSelectTemplates} [templates] Customize the output through templating.
  * @property {number} [limit=10] How many facets values to retrieve.
  * @property {MenuSelectTransforms} [transformData] Set of functions to update the data before passing them to the templates.
- * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu select.
  * @property {MenuSelectCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -109,42 +97,35 @@ menuSelect({
  * search.addWidget(
  *   instantsearch.widgets.menuSelect({
  *     container: '#categories-menuSelect',
- *     attributeName: 'hierarchicalCategories.lvl0',
+ *     attribute: 'hierarchicalCategories.lvl0',
  *     limit: 10,
- *     templates: {
- *       header: 'Categories'
- *     }
  *   })
  * );
  */
 export default function menuSelect({
   container,
-  attributeName,
+  attribute,
   sortBy = ['name:asc'],
   limit = 10,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   transformData,
-  autoHideContainer = true,
   transformItems,
 }) {
-  if (!container || !attributeName) {
+  if (!container || !attribute) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    select: cx(bem('select'), userCssClasses.select),
-    option: cx(bem('option'), userCssClasses.option),
+    root: cx(suit(), userCssClasses.root),
+    select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
+    option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    autoHideContainer,
     renderState: {},
     templates,
     transformData,
@@ -152,7 +133,7 @@ export default function menuSelect({
 
   try {
     const makeWidget = connectMenu(specializedRenderer);
-    return makeWidget({ attributeName, limit, sortBy, transformItems });
+    return makeWidget({ attribute, limit, sortBy, transformItems });
   } catch (e) {
     throw new Error(usage);
   }
