@@ -175,7 +175,7 @@ describe('RoutingManager', () => {
       const search = instantsearch({
         appId: 'latency',
         apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-        indexName: 'ikea',
+        indexName: 'bestbuy',
         routing: {
           router,
         },
@@ -223,7 +223,7 @@ describe('RoutingManager', () => {
       const search = instantsearch({
         appId: 'latency',
         apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-        indexName: 'ikea',
+        indexName: 'bestbuy',
         routing: {
           router,
         },
@@ -277,7 +277,7 @@ describe('RoutingManager', () => {
       const search = instantsearch({
         appId: 'latency',
         apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-        indexName: 'ikea',
+        indexName: 'bestbuy',
         routing: {
           router,
           stateMapping,

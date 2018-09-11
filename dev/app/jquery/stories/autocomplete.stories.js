@@ -200,7 +200,7 @@ export default () => {
         window.search.addWidget(
           multiIndex({
             containerNode,
-            indices: [{ label: 'ikea', value: 'ikea' }],
+            indices: [{ label: 'bestbuy', value: 'bestbuy' }],
           })
         );
       })
