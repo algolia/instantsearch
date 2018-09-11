@@ -61,7 +61,7 @@ Wrap.propTypes = {
 Wrap.defaultProps = {
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-  indexName: 'ikea',
+  indexName: 'instant_search',
 };
 
 export const WrapWithHits = ({
@@ -121,8 +121,7 @@ export const WrapWithHits = ({
               {searchBox ? (
                 <SearchBox
                   translations={{
-                    placeholder:
-                      'Search into our furnitures: chair, table, tv unit...',
+                    placeholder: 'Search into our products: phones, tv...',
                   }}
                 />
               ) : null}
@@ -157,7 +156,7 @@ WrapWithHits.propTypes = {
 WrapWithHits.defaultProps = {
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-  indexName: 'ikea',
+  indexName: 'instant_search',
 };
 
 // retrieves the displayName of the React Component

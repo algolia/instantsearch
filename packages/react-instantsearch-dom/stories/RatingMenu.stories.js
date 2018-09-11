@@ -117,7 +117,7 @@ stories
           <RatingMenu attribute="rating" />
 
           <div style={{ display: 'none' }}>
-            <SearchBox defaultRefinement="ds" />
+            <SearchBox defaultRefinement="tututututututu" />
           </div>
         </Panel>
       </WrapWithHits>
@@ -139,7 +139,7 @@ stories
           <RatingMenu attribute="rating" min={1} max={5} />
 
           <div style={{ display: 'none' }}>
-            <SearchBox defaultRefinement="ds" />
+            <SearchBox defaultRefinement="tutututututu" />
           </div>
         </Panel>
       </WrapWithHits>

@@ -22,12 +22,12 @@ import ClearRefinements from '../components/ClearRefinements';
  *   <InstantSearch
  *     appId="latency"
  *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *     indexName="ikea"
+ *     indexName="instant_search"
  *   >
  *     <ClearRefinements />
  *     <RefinementList
- *       attribute="colors"
- *       defaultRefinement={['Black']}
+ *       attribute="brand"
+ *       defaultRefinement={['Apple']}
  *     />
  *   </InstantSearch>
  * );

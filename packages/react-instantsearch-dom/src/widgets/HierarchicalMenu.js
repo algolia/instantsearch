@@ -75,13 +75,13 @@ import HierarchicalMenu from '../components/HierarchicalMenu';
  *   <InstantSearch
  *     appId="latency"
  *     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
- *     indexName="ikea"
+ *     indexName="instant_search"
  *   >
  *     <HierarchicalMenu
  *       attributes={[
- *         'category',
- *         'sub_category',
- *         'sub_sub_category',
+ *         'hierarchicalCategories.lvl0',
+ *         'hierarchicalCategories.lvl1',
+ *         'hierarchicalCategories.lvl2',
  *       ]}
  *     />
  *   </InstantSearch>

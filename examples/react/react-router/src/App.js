@@ -53,7 +53,7 @@ class App extends Component {
       <InstantSearch
         appId="latency"
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="ikea"
+        indexName="instant_search"
         searchState={this.state.searchState}
         onSearchStateChange={this.onSearchStateChange}
         createURL={createURL}
@@ -76,12 +76,16 @@ class App extends Component {
               <p>Hierarchical Menu</p>
               <HierarchicalMenu
                 id="categories"
-                attributes={['category', 'sub_category', 'sub_sub_category']}
+                attributes={[
+                  'hierarchicalCategories.lvl0',
+                  'hierarchicalCategories.lvl1',
+                  'hierarchicalCategories.lvl2',
+                ]}
               />
               <p>Menu</p>
               <Menu attribute="type" />
               <p>Refinement List</p>
-              <RefinementList attribute="colors" />
+              <RefinementList attribute="brand" />
               <p>Range Ratings</p>
               <RatingMenu attribute="rating" max={6} />
             </div>

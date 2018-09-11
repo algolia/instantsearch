@@ -22,12 +22,20 @@ stories
       <div>
         <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
           <Breadcrumb
-            attributes={['category', 'sub_category', 'sub_sub_category']}
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
           />
           <hr />
           <HierarchicalMenu
-            attributes={['category', 'sub_category', 'sub_sub_category']}
-            defaultRefinement="Cooking > Kitchen textiles"
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+            defaultRefinement="Cameras & Camcorders > Digital Cameras"
             showMoreLimit={3}
             showMore={true}
           />
@@ -42,28 +50,44 @@ stories
   .add('with custom component', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
       <Breadcrumb
-        attributes={['category', 'sub_category', 'sub_sub_category']}
+        attributes={[
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+        ]}
         separator={<span> ⚡ </span>}
       />
       <hr />
       <VirtualHierarchicalMenu
-        attributes={['category', 'sub_category', 'sub_sub_category']}
-        defaultRefinement="Winter holidays > Toys & play"
+        attributes={[
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+        ]}
+        defaultRefinement="Cameras & Camcorders > Digital Cameras"
       />
     </WrapWithHits>
   ))
   .add('playground', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
       <Breadcrumb
-        attributes={['category', 'sub_category', 'sub_sub_category']}
+        attributes={[
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+        ]}
         separator={text('separator', ' / ')}
         translations={object('translations', {
           rootLabel: 'Home',
         })}
       />
       <VirtualHierarchicalMenu
-        attributes={['category', 'sub_category', 'sub_sub_category']}
-        defaultRefinement="Cooking > Bakeware"
+        attributes={[
+          'hierarchicalCategories.lvl0',
+          'hierarchicalCategories.lvl1',
+          'hierarchicalCategories.lvl2',
+        ]}
+        defaultRefinement="Cameras & Camcorders > Digital Cameras"
       />
     </WrapWithHits>
   ))
@@ -73,13 +97,21 @@ stories
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
         <Panel header="Breadcrumb" footer="footer">
           <Breadcrumb
-            attributes={['category', 'sub_category', 'sub_sub_category']}
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
           />
         </Panel>
         <hr />
         <HierarchicalMenu
-          attributes={['category', 'sub_category', 'sub_sub_category']}
-          defaultRefinement="Cooking > Bakeware"
+          attributes={[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ]}
+          defaultRefinement="Cameras & Camcorders > Digital Cameras"
         />
       </WrapWithHits>
     ),
@@ -94,7 +126,11 @@ stories
       <WrapWithHits hasPlayground={true} linkedStoryGroup="Breadcrumb">
         <Panel header="Breadcrumb" footer="footer">
           <Breadcrumb
-            attributes={['category', 'sub_category', 'sub_sub_category']}
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
           />
         </Panel>
       </WrapWithHits>

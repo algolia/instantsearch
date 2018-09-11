@@ -25,8 +25,8 @@ stories
         <CurrentRefinements />
         <hr />
         <RefinementList
-          attribute="category"
-          defaultRefinement={['Dining', 'Other']}
+          attribute="brand"
+          defaultRefinement={['Apple', 'Samsung']}
         />
       </WrapWithHits>
     ),
@@ -41,7 +41,7 @@ stories
       <WrapWithHits linkedStoryGroup="CurrentRefinements">
         <CurrentRefinements />
         <hr />
-        <Menu attribute="category" defaultRefinement="Dining" />
+        <Menu attribute="brand" defaultRefinement="Apple" />
       </WrapWithHits>
     ),
     {
@@ -56,8 +56,12 @@ stories
         <CurrentRefinements />
         <hr />
         <HierarchicalMenu
-          attributes={['category', 'sub_category', 'sub_sub_category']}
-          defaultRefinement="Eating"
+          attributes={[
+            'hierarchicalCategories.lvl0',
+            'hierarchicalCategories.lvl1',
+            'hierarchicalCategories.lvl2',
+          ]}
+          defaultRefinement="Cameras & Camcorders > Digital Cameras"
         />
       </WrapWithHits>
     ),
@@ -73,9 +77,9 @@ stories
         <CurrentRefinements />
         <hr />
         <ToggleRefinement
-          attribute="materials"
-          label="Made with solid pine"
-          value={'Solid pine'}
+          attribute="free_shipping"
+          label="Free Shipping"
+          value={true}
         />
       </WrapWithHits>
     ),
@@ -133,7 +137,7 @@ stories
         </Panel>
 
         <div style={{ display: 'none' }}>
-          <RefinementList attribute="category" defaultRefinement={['Dining']} />
+          <RefinementList attribute="brand" defaultRefinement={['Apple']} />
         </div>
       </WrapWithHits>
     ),

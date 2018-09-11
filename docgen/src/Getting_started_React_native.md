@@ -23,7 +23,7 @@ React InstantSearch is meant to be used with Algolia, therefore, you’ll need t
 
 * appId: latency
 * searchKey: 3d9875e51fbd20c7754e65422f7ce5e1
-* indexName: ikea
+* indexName: instant_search
 
 It contains sample data for an e-commerce website.
 
@@ -58,7 +58,7 @@ export default class App extends React.Component {
         <InstantSearch
           appId="latency"
           apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-          indexName="ikea"
+          indexName="instant_search"
         >
           <Text>
             Congrats 🎉! Your application is now connected to Algolia!
@@ -171,7 +171,7 @@ const App = () =>
   <InstantSearch
     appId="latency"
     apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
-    indexName="ikea"
+    indexName="instant_search"
   >
    <Hits/>
   </InstantSearch>
@@ -247,7 +247,7 @@ const App = () =>
     <InstantSearch
       appId="latency"
       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="ikea"
+      indexName="instant_search"
     >
       <View
         style={{
@@ -432,7 +432,7 @@ const App = () =>
     <InstantSearch
       appId="latency"
       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="ikea"
+      indexName="instant_search"
     >
       <View
         style={{
@@ -441,7 +441,7 @@ const App = () =>
       >
         <SearchBox />
       </View>
-      <RefinementList attribute="category" />
+      <RefinementList attribute="categories" />
       <Hits />
     </InstantSearch>
   </View>
@@ -505,11 +505,11 @@ class Categories extends React.Component {
             <InstantSearch
               appId="latency"
               apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-              indexName="ikea"
+              indexName="instant_search"
               onSearchStateChange={this.props.onSearchStateChange}
               searchState={this.props.searchState}
             >
-              <RefinementList attribute="category" />
+              <RefinementList attribute="categories" />
               <TouchableHighlight
                 onPress={() => {
                   this.props.setModalVisible(!this.props.modalVisible);
@@ -555,7 +555,7 @@ export default class App extends React.Component {
         <InstantSearch
           appId="latency"
           apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-          indexName="ikea"
+          indexName="instant_search"
           onSearchStateChange={this.onSearchStateChange}
           searchState={this.state.searchState}
         >
@@ -610,7 +610,7 @@ Let’s add it to our first `<InstantSearch>`:
 <InstantSearch
   appId="latency"
   apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-  indexName="ikea"
+  indexName="instant_search"
   onSearchStateChange={this.onSearchStateChange}
   searchState={this.state.searchState}
 >
@@ -631,7 +631,7 @@ Let’s add it to our first `<InstantSearch>`:
     </TouchableHighlight>
   </View>
   <Hits />
-  <VirtualRefinementList attribute="category" />
+  <VirtualRefinementList attribute="categories" />
   <Categories
     setModalVisible={this.setModalVisible}
     modalVisible={this.state.modalVisible}

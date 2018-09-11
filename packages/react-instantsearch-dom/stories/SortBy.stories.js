@@ -15,11 +15,11 @@ stories
       <WrapWithHits linkedStoryGroup="SortBy">
         <SortBy
           items={[
-            { value: 'ikea', label: 'Featured' },
-            { value: 'ikea_price_asc', label: 'Price asc.' },
-            { value: 'ikea_price_desc', label: 'Price desc.' },
+            { value: 'instant_search', label: 'Featured' },
+            { value: 'instant_search_price_asc', label: 'Price asc.' },
+            { value: 'instant_search_price_desc', label: 'Price desc.' },
           ]}
-          defaultRefinement="ikea"
+          defaultRefinement="instant_search"
         />
       </WrapWithHits>
     ),
@@ -34,11 +34,11 @@ stories
       <WrapWithHits linkedStoryGroup="SortBy">
         <SortBy
           items={[
-            { value: 'ikea' },
-            { value: 'ikea_price_asc' },
-            { value: 'ikea_price_desc' },
+            { value: 'instant_search' },
+            { value: 'instant_search_price_asc' },
+            { value: 'instant_search_price_desc' },
           ]}
-          defaultRefinement="ikea"
+          defaultRefinement="instant_search"
         />
       </WrapWithHits>
     ),
@@ -54,11 +54,11 @@ stories
         <Panel header="Sort By" footer="Footer">
           <SortBy
             items={[
-              { value: 'ikea', label: 'Featured' },
-              { value: 'ikea_price_asc', label: 'Price asc.' },
-              { value: 'ikea_price_desc', label: 'Price desc.' },
+              { value: 'instant_search', label: 'Featured' },
+              { value: 'instant_search_price_asc', label: 'Price asc.' },
+              { value: 'instant_search_price_desc', label: 'Price desc.' },
             ]}
-            defaultRefinement="ikea"
+            defaultRefinement="instant_search"
           />
         </Panel>
       </WrapWithHits>

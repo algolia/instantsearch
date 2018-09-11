@@ -27,7 +27,7 @@ class AppWithRefresh extends Component {
       <InstantSearch
         appId="latency"
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="ikea"
+        indexName="instant_search"
         refresh={this.state.refresh}
         onSearchStateChange={this.onSearchStateChange}
       >
@@ -64,12 +64,14 @@ class AppWithRefresh extends Component {
             to open your network tab in the developer tools.
             <ol>
               <li>
-                Type a query in the SearchBox (for instance &apos;clock&apos;).
-                You should see 5 requests to Algolia (one per letter)
+                Type a query in the SearchBox (for instance
+                &apos;cellphones&apos;). You should see 10 requests to Algolia
+                (one per letter)
               </li>
               <li>
-                Type &apos;clock&apos; again, you will see that no additional
-                query is made since the results are retrieved from the cache
+                Type &apos;cellphones&apos; again, you will see that no
+                additional query is made since the results are retrieved from
+                the cache
               </li>
               <li>
                 Make sure the SearchBox is empty, click on the &apos;Refresh
@@ -156,14 +158,14 @@ class App extends Component {
       <InstantSearch
         appId="latency"
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="ikea"
+        indexName="instant_search"
         refresh={this.state.refresh}
       >
         <span>{this.state.count} s elapsed since last refresh</span>
 
         <SearchBox
           translations={{
-            placeholder: 'Search our furnitures: chairs, tables etc.',
+            placeholder: 'Search our products: phones, tv, etc.',
           }}
         />
 

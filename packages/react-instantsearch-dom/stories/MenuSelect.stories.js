@@ -15,7 +15,7 @@ stories
     'default',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
-        <MenuSelect attribute="category" />
+        <MenuSelect attribute="brand" />
       </WrapWithHits>
     ),
     {
@@ -27,7 +27,7 @@ stories
     'with default selected item',
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
-        <MenuSelect attribute="category" defaultRefinement="Eating" />
+        <MenuSelect attribute="brand" defaultRefinement="Apple" />
       </WrapWithHits>
     ),
     {
@@ -40,7 +40,7 @@ stories
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
         <MenuSelect
-          attribute="category"
+          attribute="brand"
           transformItems={items =>
             orderBy(items, ['label', 'count'], ['asc', 'desc'])
           }
@@ -57,8 +57,8 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="MenuSelect">
         <MenuSelect
-          attribute="category"
-          defaultRefinement={text('defaultSelectedItem', 'Bathroom')}
+          attribute="brand"
+          defaultRefinement={text('defaultSelectedItem', 'Apple')}
         />
       </WrapWithHits>
     ),
@@ -72,8 +72,8 @@ stories
     () => (
       <WrapWithHits linkedStoryGroup="MenuSelect">
         <MenuSelect
-          attribute="category"
-          defaultRefinement={text('defaultSelectedItem', 'Bathroom')}
+          attribute="brand"
+          defaultRefinement={text('defaultSelectedItem', 'Apple')}
           transformItems={items =>
             items.map(({ count, ...item }) => ({
               ...item,
@@ -93,7 +93,7 @@ stories
     () => (
       <WrapWithHits hasPlayground={true} linkedStoryGroup="MenuSelect">
         <Panel header="Menu select" footer="Footer">
-          <MenuSelect attribute="category" />
+          <MenuSelect attribute="brand" />
         </Panel>
       </WrapWithHits>
     ),
@@ -111,7 +111,7 @@ stories
         linkedStoryGroup="MenuSelect"
       >
         <Panel header="Menu select" footer="Footer">
-          <MenuSelect attribute="category" />
+          <MenuSelect attribute="brand" />
         </Panel>
 
         <div style={{ display: 'none' }}>

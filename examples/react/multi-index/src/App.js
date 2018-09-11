@@ -5,12 +5,12 @@ const App = () => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-    indexName="bestbuy"
+    indexName="airbnb"
   >
     <SearchBox />
     <p>Results in first dataset</p>
     <Hits />
-    <Index indexName="ikea">
+    <Index indexName="instant_search">
       <p>Results in second dataset</p>
       <Hits />
     </Index>

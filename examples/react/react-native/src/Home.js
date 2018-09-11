@@ -86,9 +86,11 @@ const styles = StyleSheet.create({
   },
   itemContent: {
     paddingLeft: 15,
+    display: 'flex',
+    marginRight: 5,
   },
   itemName: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
     paddingBottom: 5,
   },
@@ -131,7 +133,7 @@ class Home extends Component {
         <InstantSearch
           appId="latency"
           apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-          indexName="ikea"
+          indexName="instant_search"
           searchState={this.state.searchState}
           onSearchStateChange={this.onSearchStateChange}
         >
@@ -142,11 +144,11 @@ class Home extends Component {
             <ConnectedStats />
             <ConnectedSortBy
               items={[
-                { value: 'ikea', label: 'Featured' },
-                { value: 'ikea_price_desc', label: 'Price desc' },
-                { value: 'ikea_price_asc', label: 'Price asc' },
+                { value: 'instant_search', label: 'Featured' },
+                { value: 'instant_search_price_desc', label: 'Price desc' },
+                { value: 'instant_search_price_asc', label: 'Price asc' },
               ]}
-              defaultRefinement={'ikea'}
+              defaultRefinement={'instant_search'}
             />
             <Filters
               searchState={this.state.searchState}
@@ -156,7 +158,7 @@ class Home extends Component {
           <ConnectedHits />
           <VirtualRefinementList attribute="type" />
           <VirtualRange attribute="price" />
-          <VirtualMenu attribute="category" />
+          <VirtualMenu attribute="categories" />
           <VirtualRange attribute="rating" />
         </InstantSearch>
       </View>
@@ -225,7 +227,7 @@ class Hits extends Component {
 
   _renderRow = (hit, sectionId, rowId) => (
     <View style={styles.item} key={rowId}>
-      <Image style={{ height: 100, width: 100 }} source={{ uri: hit.image }} />
+      <Image style={{ height: 70, width: 70 }} source={{ uri: hit.image }} />
       <View style={styles.itemContent}>
         <Text style={styles.itemName}>
           <Highlight
