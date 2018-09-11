@@ -159,3 +159,7 @@ If you're using this, and have suggestions, [please get in touch](https://github
 This widget is new, but still waiting for reviews and will be added in a next version of the alpha.
 
 If you have a good, or better naming idea for this, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
+
+4. changing props on `ais-index`. 
+
+In this beta it isn't possible to change props on `ais-index`. The next alpha will have handling will handle all prop changes, except `searchFunction` and `routing`. If you have a need for those to be changed as well, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
