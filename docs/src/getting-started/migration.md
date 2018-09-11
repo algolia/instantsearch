@@ -13,7 +13,7 @@ githubSource: docs/src/getting-started/migration.md
 
 Vue InstantSearch v2 has just been released as the first alpha version. An alpha version means that there are known limitations, and this shouldn't be used in a production environment without knowing the risks of options that can be changed without major version. 
 
-This also means that we are still in a state where things can change where necessary. If you have any feedback here, please get in touch.
+This also means that we are still in a state where things can change where necessary. If you have any feedback here, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
 
 ### Renamed components
 
@@ -75,7 +75,7 @@ Some options have been renamed. Largely those are:
 * anything in a list -> items / item
 * header / footer -> wrap the widget in an `ais-panel`
 
-If you see anything not mentioned here, please get in touch.
+If you see anything not mentioned here, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
 
 ### Removed options
 
@@ -137,7 +137,7 @@ In this alpha version there's no server side rendering support. To align this wi
 
 The reason we chose not to enable SSR yet, is because we are looking for a elegant way of integrating it, without needing to write lots of custom code for the server side parts. 
 
-If you're using this, and have suggestions, please get in touch.
+If you're using this, and have suggestions, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
 
 2. Search store
 
@@ -145,17 +145,17 @@ The search store no longer exists. Custom widgets are either made by making a co
 
 You no longer need to copy a widget to give it custom rendering. Now you can fill in the `default` slot, which will have everything needed to render that component.
 
-If you're using this, and have suggestions or questions, please get in touch.
+If you're using this, and have suggestions or questions, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
 
 
 3. Routing
 
 Routing is not fully fleshed out yet. It's possible to set the `routing` prop to `true` or an object with the options, but it doesn't integrate with Vue Router yet at this point.
 
-If you're using this, and have suggestions, please get in touch.
+If you're using this, and have suggestions, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
 
 3. `ais-state-results`
 
 This widget is new, but still waiting for reviews and will be added in a next version of the alpha.
 
-If you have a good, or better naming idea for this, please get in touch.
+If you have a good, or better naming idea for this, [please get in touch](https://github.com/algolia/vue-instantsearch/issues/new?template=v2_feedback.md).
