@@ -1,22 +1,23 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { RawRangeInput } from '../RangeInput';
+import RangeInput from '../RangeInput';
 
-describe('RawRangeInput', () => {
+describe('RangeInput', () => {
   const defaultProps = {
     min: 0,
     max: 500,
     step: 1,
     values: {},
     cssClasses: {
+      root: 'root',
+      noRefinement: 'noRefinement',
       form: 'form',
-      fieldset: 'fieldset',
-      labelMin: 'labelMin',
+      label: 'label',
+      input: 'input',
       inputMin: 'inputMin',
-      separator: 'separator',
-      labelMax: 'labelMax',
       inputMax: 'inputMax',
-      submit: 'submit',
+      separator: 'separator',
+      button: 'button',
     },
     labels: {
       separator: 'to',
@@ -26,7 +27,7 @@ describe('RawRangeInput', () => {
   };
 
   const shallowRender = props =>
-    shallow(<RawRangeInput {...defaultProps} {...props} />);
+    shallow(<RangeInput {...defaultProps} {...props} />);
 
   it('expect to render', () => {
     const props = {};

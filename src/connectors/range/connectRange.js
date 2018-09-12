@@ -16,7 +16,7 @@ var customRange = connectRange(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customRange({
-    attributeName,
+    attribute,
     [ min ],
     [ max ],
     [ precision = 2 ],
@@ -27,7 +27,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomRangeWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting.
+ * @property {string} attribute Name of the attribute for faceting.
  * @property {number} [min = undefined] Minimal range value, default to automatically computed from the result set.
  * @property {number} [max = undefined] Maximal range value, default to automatically computed from the result set.
  * @property {number} [precision = 2] Number of digits after decimal point to use.
@@ -61,13 +61,13 @@ export default function connectRange(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     const {
-      attributeName,
+      attribute,
       min: minBound,
       max: maxBound,
       precision = 2,
     } = widgetParams;
 
-    if (!attributeName) {
+    if (!attribute) {
       throw new Error(usage);
     }
 
@@ -110,11 +110,9 @@ export default function connectRange(renderFn, unmountFn) {
       },
 
       _getCurrentRefinement(helper) {
-        const [minValue] =
-          helper.getNumericRefinement(attributeName, '>=') || [];
+        const [minValue] = helper.getNumericRefinement(attribute, '>=') || [];
 
-        const [maxValue] =
-          helper.getNumericRefinement(attributeName, '<=') || [];
+        const [maxValue] = helper.getNumericRefinement(attribute, '<=') || [];
 
         const min = _isFinite(minValue) ? minValue : -Infinity;
         const max = _isFinite(maxValue) ? maxValue : Infinity;
@@ -127,8 +125,8 @@ export default function connectRange(renderFn, unmountFn) {
         return ([nextMin, nextMax] = []) => {
           const { min: currentRangeMin, max: currentRangeMax } = currentRange;
 
-          const [min] = helper.getNumericRefinement(attributeName, '>=') || [];
-          const [max] = helper.getNumericRefinement(attributeName, '<=') || [];
+          const [min] = helper.getNumericRefinement(attribute, '>=') || [];
+          const [max] = helper.getNumericRefinement(attribute, '<=') || [];
 
           const isResetMin = nextMin === undefined || nextMin === '';
           const isResetMax = nextMax === undefined || nextMax === '';
@@ -178,11 +176,11 @@ export default function connectRange(renderFn, unmountFn) {
           const hasMaxChange = max !== newNextMax;
 
           if ((hasMinChange || hasMaxChange) && (isMinValid && isMaxValid)) {
-            helper.clearRefinements(attributeName);
+            helper.clearRefinements(attribute);
 
             if (isValidNewNextMin) {
               helper.addNumericRefinement(
-                attributeName,
+                attribute,
                 '>=',
                 formatToNumber(newNextMin)
               );
@@ -190,7 +188,7 @@ export default function connectRange(renderFn, unmountFn) {
 
             if (isValidNewNextMax) {
               helper.addNumericRefinement(
-                attributeName,
+                attribute,
                 '<=',
                 formatToNumber(newNextMax)
               );
@@ -203,7 +201,7 @@ export default function connectRange(renderFn, unmountFn) {
 
       getConfiguration(currentConfiguration) {
         const configuration = {
-          disjunctiveFacets: [attributeName],
+          disjunctiveFacets: [attribute],
         };
 
         const isBoundsDefined = hasMinBound || hasMaxBound;
@@ -211,7 +209,7 @@ export default function connectRange(renderFn, unmountFn) {
         const boundsAlreadyDefined =
           currentConfiguration &&
           currentConfiguration.numericRefinements &&
-          currentConfiguration.numericRefinements[attributeName] !== undefined;
+          currentConfiguration.numericRefinements[attribute] !== undefined;
 
         const isMinBoundValid = _isFinite(minBound);
         const isMaxBoundValid = _isFinite(maxBound);
@@ -221,14 +219,14 @@ export default function connectRange(renderFn, unmountFn) {
             : isMinBoundValid || isMaxBoundValid;
 
         if (isBoundsDefined && !boundsAlreadyDefined && isAbleToRefine) {
-          configuration.numericRefinements = { [attributeName]: {} };
+          configuration.numericRefinements = { [attribute]: {} };
 
           if (hasMinBound) {
-            configuration.numericRefinements[attributeName]['>='] = [minBound];
+            configuration.numericRefinements[attribute]['>='] = [minBound];
           }
 
           if (hasMaxBound) {
-            configuration.numericRefinements[attributeName]['<='] = [maxBound];
+            configuration.numericRefinements[attribute]['<='] = [maxBound];
           }
         }
 
@@ -261,7 +259,7 @@ export default function connectRange(renderFn, unmountFn) {
 
       render({ results, helper, instantSearchInstance }) {
         const facetsFromResults = results.disjunctiveFacets || [];
-        const facet = find(facetsFromResults, { name: attributeName });
+        const facet = find(facetsFromResults, { name: attribute });
         const stats = (facet && facet.stats) || {};
 
         const currentRange = this._getCurrentRange(stats);
@@ -287,8 +285,8 @@ export default function connectRange(renderFn, unmountFn) {
         unmountFn();
 
         const nextState = state
-          .removeNumericRefinement(attributeName)
-          .removeDisjunctiveFacet(attributeName);
+          .removeNumericRefinement(attribute)
+          .removeDisjunctiveFacet(attribute);
 
         return nextState;
       },
@@ -297,13 +295,13 @@ export default function connectRange(renderFn, unmountFn) {
         const {
           '>=': min = '',
           '<=': max = '',
-        } = searchParameters.getNumericRefinements(attributeName);
+        } = searchParameters.getNumericRefinements(attribute);
 
         if (
           (min === '' && max === '') ||
           (uiState &&
             uiState.range &&
-            uiState.range[attributeName] === `${min}:${max}`)
+            uiState.range[attribute] === `${min}:${max}`)
         ) {
           return uiState;
         }
@@ -312,13 +310,13 @@ export default function connectRange(renderFn, unmountFn) {
           ...uiState,
           range: {
             ...uiState.range,
-            [attributeName]: `${min}:${max}`,
+            [attribute]: `${min}:${max}`,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const value = uiState && uiState.range && uiState.range[attributeName];
+        const value = uiState && uiState.range && uiState.range[attribute];
 
         if (!value || value.indexOf(':') === -1) {
           return searchParameters;
@@ -327,8 +325,8 @@ export default function connectRange(renderFn, unmountFn) {
         const {
           '>=': previousMin = [NaN],
           '<=': previousMax = [NaN],
-        } = searchParameters.getNumericRefinements(attributeName);
-        let clearedParams = searchParameters.clearRefinements(attributeName);
+        } = searchParameters.getNumericRefinements(attribute);
+        let clearedParams = searchParameters.clearRefinements(attribute);
         const [lowerBound, upperBound] = value.split(':').map(parseFloat);
 
         if (
@@ -340,7 +338,7 @@ export default function connectRange(renderFn, unmountFn) {
 
         if (_isFinite(lowerBound)) {
           clearedParams = clearedParams.addNumericRefinement(
-            attributeName,
+            attribute,
             '>=',
             lowerBound
           );
@@ -348,7 +346,7 @@ export default function connectRange(renderFn, unmountFn) {
 
         if (_isFinite(upperBound)) {
           clearedParams = clearedParams.addNumericRefinement(
-            attributeName,
+            attribute,
             '<=',
             upperBound
           );
