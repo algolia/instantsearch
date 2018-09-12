@@ -5,6 +5,10 @@ category: examples
 navWeight: 1000
 examplesCTA: 'Go to live demo'
 examples: [{
+    id: 'e-commerce',
+    title: 'E-commerce',
+    description: 'This demos shows the usage of react-instantsearch in the context of an e-commerce website.'
+  }, {
     id: 'media',
     title: 'Media',
     description: 'This demos shows the usage of react-instantsearch in the context of a media website'
