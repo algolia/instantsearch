@@ -57,7 +57,7 @@ clearRefinements({
   [ templates.{header,link,footer}={link: 'Clear all'} ],
   [ autoHideContainer=true ],
   [ collapsible=false ],
-  [ excludeAttributes=[] ]
+  [ excludedAttributes=[] ]
 })`;
 /**
  * @typedef {Object} ClearAllCSSClasses
@@ -78,7 +78,7 @@ clearRefinements({
 /**
  * @typedef {Object} ClearAllWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string[]} [excludeAttributes] List of attributes names to exclude from clear actions.
+ * @property {string[]} [excludedAttributes] List of attributes names to exclude from clear actions.
  * @property {ClearAllTemplates} [templates] Templates to use for the widget.
  * @property {boolean} [autoHideContainer=true] Hide the container when there are no refinements to clear.
  * @property {ClearAllCSSClasses} [cssClasses] CSS classes to be added.
@@ -116,7 +116,7 @@ export default function clearRefinements({
   cssClasses: userCssClasses = {},
   collapsible = false,
   autoHideContainer = true,
-  excludeAttributes = [],
+  excludedAttributes = [],
   clearsQuery = false,
 }) {
   if (!container) {
@@ -146,7 +146,7 @@ export default function clearRefinements({
     const makeWidget = connectClearRefinements(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ excludeAttributes, clearsQuery });
+    return makeWidget({ excludedAttributes, clearsQuery });
   } catch (e) {
     throw new Error(usage);
   }

@@ -16,7 +16,7 @@ var customClearRefinements = connectClearRefinements(function render(params, isF
 });
 search.addWidget(
   customClearRefinements({
-    [ excludeAttributes = [] ],
+    [ excludedAttributes = [] ],
     [ clearsQuery = false ]
   })
 );
@@ -25,7 +25,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomClearRefinementsWidgetOptions
- * @property {string[]} [excludeAttributes = []] Every attributes that should not be removed when calling `refine()`.
+ * @property {string[]} [excludedAttributes = []] Every attributes that should not be removed when calling `refine()`.
  * @property {boolean} [clearsQuery = false] If `true`, `refine()` also clears the current search query.
  */
 
@@ -44,7 +44,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * This connector provides a `refine` function to remove the current refined facets.
  *
  * The behaviour of this function can be changed with widget options. If `clearsQuery`
- * is set to `true`, `refine` will also clear the query and `excludeAttributes` can
+ * is set to `true`, `refine` will also clear the query and `excludedAttributes` can
  * prevent certain attributes from being cleared.
  *
  * @type {Connector}
@@ -83,13 +83,13 @@ export default function connectClearRefinements(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { excludeAttributes = [], clearsQuery = false } = widgetParams;
+    const { excludedAttributes = [], clearsQuery = false } = widgetParams;
 
     return {
       init({ helper, instantSearchInstance, createURL }) {
         const attributesToClear = getAttributesToClear({
           helper,
-          blackList: excludeAttributes,
+          blackList: excludedAttributes,
         });
 
         const hasRefinements = clearsQuery
@@ -101,7 +101,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
             .setState(
               clearRefinements({
                 helper,
-                blackList: excludeAttributes,
+                blackList: excludedAttributes,
                 clearsQuery,
               })
             )
@@ -112,7 +112,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
           createURL(
             clearRefinements({
               helper,
-              blackList: excludeAttributes,
+              blackList: excludedAttributes,
               clearsQuery,
             })
           );
@@ -132,7 +132,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       render({ helper, instantSearchInstance }) {
         const attributesToClear = getAttributesToClear({
           helper,
-          blackList: excludeAttributes,
+          blackList: excludedAttributes,
         });
 
         const hasRefinements = clearsQuery

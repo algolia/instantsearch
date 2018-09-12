@@ -286,7 +286,7 @@ describe('connectClearRefinements', () => {
     const rendering = jest.fn();
     const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
-      excludeAttributes: ['facet'],
+      excludedAttributes: ['facet'],
     });
 
     helper.toggleRefinement('facet', 'value');
@@ -339,7 +339,7 @@ describe('connectClearRefinements', () => {
     const rendering = jest.fn();
     const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
-      excludeAttributes: ['facet'],
+      excludedAttributes: ['facet'],
       clearsQuery: true,
     });
 
@@ -393,7 +393,7 @@ describe('connectClearRefinements', () => {
       const rendering = jest.fn();
       const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({
-        excludeAttributes: ['facet'],
+        excludedAttributes: ['facet'],
         clearsQuery: true,
       });
 
