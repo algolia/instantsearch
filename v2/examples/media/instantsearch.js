@@ -36973,9 +36973,9 @@ var usage = 'Usage:\nrefinementList({\n  container,\n  attributeName,\n  [ opera
  * @property {string} attributeName Name of the attribute for faceting.
  * @property {"and"|"or"} [operator="or"] How to apply refinements. Possible values: `or`, `and`
  * @property {string[]|function} [sortBy=["isRefined", "count:desc", "name:asc"]] How to sort refinements. Possible values: `count:asc` `count:desc` `name:asc` `name:desc` `isRefined`.
- * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
  * @property {SearchForFacetOptions|boolean} [searchForFacetValues=false] Add a search input to let the user search for more facet values. In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
  * @property {RefinementListShowMoreOptions|boolean} [showMore=false] Limit the number of results and display a showMore button.
