@@ -31,6 +31,28 @@ permalink: /examples/
 
     .spacer40
     .demo-item.clearfix
+      %a.pull-left.link-thumbnail{href: '{{ "/examples/e-commerce/" | prepend: site.baseurl }}'}
+        %img.m-b.img-thumbnail.m-r{src: '{{ "/examples/e-commerce/capture.png" | prepend: site.baseurl }}', width: 270}
+      %a{href: '{{ "/examples/e-commerce/" | prepend: site.baseurl }}'}
+        %h3 E-commerce
+      %p An instant-search experience helps shoppers more easily find and buy what they want.
+      .built-with.m-b
+        {% image 'icon-widget-searchbox.svg' title='searchBox' width=30 %}
+        {% image 'icon-widget-results.svg' title='hits' width=30 %}
+        {% image 'icon-widget-stats.svg' title='stats' width=30 %}
+        {% image 'icon-widget-clearall.svg' title='clearAll' width=30 %}
+        {% image 'icon-widget-index.svg' title='sortBySelector' width=30 %}
+        {% image 'icon-widget-pagination.svg' title='pagination' width=30 %}
+        {% image 'icon-widget-hierarchical.svg' title='hierarchicalMenu' width=30 %}
+        {% image 'icon-widget-refinement.svg' title='refinementList' width=30 %}
+        {% image 'icon-widget-pricerange.svg' title='priceRanges' width=30 %}
+        {% image 'icon-widget-star-rating.svg' title='starRating' width=30 %}
+      %a{href: '{{ "https://github.com/algolia/instantsearch.js/tree/maintenance/docs/examples/e-commerce" }}'} View code <i class="fa fa-github"></i>
+      %span or
+      %a{href: '{{ "/examples/e-commerce.zip" | prepend: site.baseurl }}'} download
+
+    .spacer40
+    .demo-item.clearfix
       %a.pull-left.link-thumbnail{href: '{{ "/examples/tourism/" | prepend: site.baseurl }}'}
         %img.m-b.img-thumbnail.m-r{src: '{{ "/examples/tourism/capture.png" | prepend: site.baseurl }}', width: 270}
       %a{href: '{{ "/examples/tourism/" | prepend: site.baseurl }}'}
