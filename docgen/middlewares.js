@@ -37,6 +37,10 @@ const common = [
   }),
   assets({
     source: '../dist',
+    destination: './examples/e-commerce',
+  }),
+  assets({
+    source: '../dist',
     destination: './examples/tourism',
   }),
   searchConfig(),
