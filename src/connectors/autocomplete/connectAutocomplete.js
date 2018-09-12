@@ -34,7 +34,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomAutocompleteWidgetOptions
- * @property {{value: String, label: String}[]} [indices = []] Name of the others indices to search into.
+ * @property {{value: string, label: string}[]} [indices = []] Name of the others indices to search into.
  * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
  */
 
