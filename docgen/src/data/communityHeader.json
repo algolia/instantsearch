@@ -10,7 +10,7 @@
           "name": "InstantSearch.js",
           "url": "https://community.algolia.com/instantsearch.js/v2",
           "logo":
-            "http://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_black.svg",
+            "https://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_black.svg",
           "backgroundColor": "#fecf50"
         },
         {
@@ -25,14 +25,14 @@
           "name": "Android InstantSearch",
           "url": "https://community.algolia.com/instantsearch-android/",
           "logo":
-            "http://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_white.svg",
+            "https://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_white.svg",
           "backgroundColor": "linear-gradient(112deg, #21c7d0, #2dde98)"
         },
         {
           "name": "Vue InstantSearch",
           "url": "https://community.algolia.com/vue-instantsearch/",
           "logo":
-            "http://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_white.svg",
+            "https://res.cloudinary.com/hilnmyskv/image/upload/v1500619122/instantsearch-icon_white.svg",
           "backgroundColor": "linear-gradient(to right, #4DBA87, #2F9088)"
         },
         {
