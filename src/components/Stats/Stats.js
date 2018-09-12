@@ -3,7 +3,7 @@ import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
 
-export class RawStats extends Component {
+export class Stats extends Component {
   shouldComponentUpdate(nextProps) {
     return (
       this.props.nbHits !== nextProps.nbHits ||
@@ -39,7 +39,7 @@ export class RawStats extends Component {
   }
 }
 
-RawStats.propTypes = {
+Stats.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
     text: PropTypes.string,
@@ -53,4 +53,4 @@ RawStats.propTypes = {
   templateProps: PropTypes.object.isRequired,
 };
 
-export default RawStats;
+export default Stats;

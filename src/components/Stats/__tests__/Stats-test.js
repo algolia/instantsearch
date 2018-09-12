@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { RawStats as Stats } from '../Stats';
+import Stats from '../Stats';
 import renderer from 'react-test-renderer';
 import defaultTemplates from '../../../widgets/stats/defaultTemplates';
 
