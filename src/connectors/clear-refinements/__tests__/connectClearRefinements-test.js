@@ -1,16 +1,16 @@
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
 
-import connectClearAll from '../connectClearAll.js';
+import connectClearRefinements from '../connectClearRefinements';
 
-describe('connectClearAll', () => {
+describe('connectClearRefinements', () => {
   it('Renders during init and render', () => {
     const helper = jsHelper({});
     helper.search = () => {};
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
       foo: 'bar', // dummy param to test `widgetParams`
     });
@@ -64,7 +64,7 @@ describe('connectClearAll', () => {
     helper.toggleRefinement('myFacet', 'myValue');
 
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({ clearsQuery: false });
 
     widget.init({
@@ -111,7 +111,7 @@ describe('connectClearAll', () => {
     helper.toggleRefinement('myFacet', 'myValue');
 
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({ clearsQuery: true });
 
     widget.init({
@@ -157,7 +157,7 @@ describe('connectClearAll', () => {
     helper.search = () => {};
 
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget();
 
     widget.init({
@@ -189,7 +189,7 @@ describe('connectClearAll', () => {
     helper.search = () => {};
 
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
       clearsQuery: true,
     });
@@ -222,7 +222,7 @@ describe('connectClearAll', () => {
     helper.search = () => {};
 
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
       clearsQuery: true,
     });
@@ -255,7 +255,7 @@ describe('connectClearAll', () => {
     helper.search = () => {};
 
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({ clearsQuery: false });
 
     widget.init({
@@ -284,7 +284,7 @@ describe('connectClearAll', () => {
     helper.search = () => {};
 
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
       excludeAttributes: ['facet'],
     });
@@ -337,7 +337,7 @@ describe('connectClearAll', () => {
     helper.search = () => {};
 
     const rendering = jest.fn();
-    const makeWidget = connectClearAll(rendering);
+    const makeWidget = connectClearRefinements(rendering);
     const widget = makeWidget({
       excludeAttributes: ['facet'],
       clearsQuery: true,
@@ -391,7 +391,7 @@ describe('connectClearAll', () => {
       helper.search = () => {};
 
       const rendering = jest.fn();
-      const makeWidget = connectClearAll(rendering);
+      const makeWidget = connectClearRefinements(rendering);
       const widget = makeWidget({
         excludeAttributes: ['facet'],
         clearsQuery: true,

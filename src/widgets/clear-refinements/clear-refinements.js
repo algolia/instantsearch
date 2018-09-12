@@ -1,5 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
-import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
+import ClearAll from '../../components/ClearRefinements/ClearRefinements.js';
 import cx from 'classnames';
 
 import {
@@ -8,7 +8,7 @@ import {
   prepareTemplateProps,
 } from '../../lib/utils.js';
 
-import connectClearAll from '../../connectors/clear-all/connectClearAll.js';
+import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements.js';
 
 import defaultTemplates from './defaultTemplates.js';
 
@@ -37,7 +37,7 @@ const renderer = ({
   const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
 
   render(
-    <ClearAllWithHOCs
+    <ClearAll
       refine={refine}
       collapsible={collapsible}
       cssClasses={cssClasses}
@@ -51,7 +51,7 @@ const renderer = ({
 };
 
 const usage = `Usage:
-clearAll({
+clearRefinements({
   container,
   [ cssClasses.{root,header,body,footer,link}={} ],
   [ templates.{header,link,footer}={link: 'Clear all'} ],
@@ -100,7 +100,7 @@ clearAll({
  * @returns {Widget} A new instance of the ClearAll widget.
  * @example
  * search.addWidget(
- *   instantsearch.widgets.clearAll({
+ *   instantsearch.widgets.clearRefinements({
  *     container: '#clear-all',
  *     templates: {
  *       link: 'Reset everything'
@@ -110,7 +110,7 @@ clearAll({
  *   })
  * );
  */
-export default function clearAll({
+export default function clearRefinements({
   container,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
@@ -143,7 +143,7 @@ export default function clearAll({
   });
 
   try {
-    const makeWidget = connectClearAll(specializedRenderer, () =>
+    const makeWidget = connectClearRefinements(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ excludeAttributes, clearsQuery });

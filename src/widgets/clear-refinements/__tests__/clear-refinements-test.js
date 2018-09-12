@@ -1,9 +1,9 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import clearAll from '../clear-all';
-import defaultTemplates from '../defaultTemplates.js';
+import clearRefinements from '../clear-refinements';
+import defaultTemplates from '../defaultTemplates';
 
-describe('clearAll()', () => {
+describe('clearRefinements()', () => {
   let ReactDOM;
   let container;
   let widget;
@@ -16,10 +16,10 @@ describe('clearAll()', () => {
     ReactDOM = { render: sinon.spy() };
     createURL = sinon.stub().returns('#all-cleared');
 
-    clearAll.__Rewire__('render', ReactDOM.render);
+    clearRefinements.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
-    widget = clearAll({
+    widget = clearRefinements({
       container,
       autoHideContainer: true,
       cssClasses: { root: ['root', 'cx'] },
@@ -74,7 +74,7 @@ describe('clearAll()', () => {
       props.shouldAutoHideContainer = true;
     });
 
-    it('calls twice ReactDOM.render(<ClearAll props />, container)', () => {
+    it('calls twice ReactDOM.render(<ClearRefinements props />, container)', () => {
       widget.render({
         results,
         helper,
@@ -124,7 +124,7 @@ describe('clearAll()', () => {
   });
 
   afterEach(() => {
-    clearAll.__ResetDependency__('render');
-    clearAll.__ResetDependency__('defaultTemplates');
+    clearRefinements.__ResetDependency__('render');
+    clearRefinements.__ResetDependency__('defaultTemplates');
   });
 });
