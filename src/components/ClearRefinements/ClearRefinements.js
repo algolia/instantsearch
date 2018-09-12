@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
+import cx from 'classnames';
+
 import Template from '../Template.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
@@ -29,22 +31,24 @@ export class ClearRefinements extends Component {
     const { hasRefinements, cssClasses } = this.props;
     const data = { hasRefinements };
 
+    const rootClassNames = cx(cssClasses.root);
+    const buttonClassNames = cx(cssClasses.button, {
+      [cssClasses.disabledButton]: hasRefinements,
+    });
+
     return (
-      <a
-        className={
-          hasRefinements
-            ? cssClasses.link
-            : `${cssClasses.link} ${cssClasses.link}-disabled`
-        }
-        href={this.props.url}
-        onClick={this.handleClick}
-      >
+      <div className={rootClassNames}>
         <Template
           data={data}
-          templateKey="link"
+          templateKey="resetLabel"
+          rootTagName="button"
+          rootProps={{
+            className: buttonClassNames,
+            onClick: this.handleClick,
+          }}
           {...this.props.templateProps}
         />
-      </a>
+      </div>
     );
   }
 }
@@ -52,7 +56,9 @@ export class ClearRefinements extends Component {
 ClearRefinements.propTypes = {
   refine: PropTypes.func.isRequired,
   cssClasses: PropTypes.shape({
-    link: PropTypes.string,
+    root: PropTypes.string,
+    button: PropTypes.string,
+    disabledButton: PropTypes.string,
   }),
   hasRefinements: PropTypes.bool.isRequired,
   templateProps: PropTypes.object.isRequired,

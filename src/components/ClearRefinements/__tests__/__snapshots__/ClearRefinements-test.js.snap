@@ -1,17 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ClearAll should render <ClearRefinements /> 1`] = `
-<a
-  className="custom-link custom-link-disabled"
-  href="#all-cleared!"
-  onClick={[Function]}
+<div
+  className="root"
 >
-  <div
+  <button
+    className="button"
     dangerouslySetInnerHTML={
       Object {
         "__html": "",
       }
     }
+    onClick={[Function]}
   />
-</a>
+</div>
 `;

@@ -7,12 +7,14 @@ describe('ClearAll', () => {
   const defaultProps = {
     refine: () => {},
     cssClasses: {
-      link: 'custom-link',
+      root: 'root',
+      button: 'button',
+      disabledButton: 'disabled',
     },
     hasRefinements: false,
     templateProps: {
       templates: {
-        link: '',
+        resetLabel: '',
       },
     },
     url: '#all-cleared!',
