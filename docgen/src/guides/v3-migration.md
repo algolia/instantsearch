@@ -69,12 +69,48 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 </div>
 ```
 
+### clearRefinements -- previously clearAll
+
+#### Options
+
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |
+
+#### CSS classes
+
+| Before                | After                                   |
+| --------------------- | --------------------------------------- |
+| `ais-clear-all`       | `ais-ClearRefinements`                  |
+| `ais-clear-all--body` |                                         |
+| `ais-clear-all--link` |                                         |
+|                       | `ais-ClearRefinements-button`           |
+|                       | `ais-ClearRefinements-button--disabled` |
+
+#### Markup
+
+```html
+<div class="ais-ClearRefinements">
+  <button class="ais-ClearRefinements-button">
+    Clear refinements
+  </button>
+</div>
+```
+
 ## Connectors
 
 ### connectRange
 
-#### Widget options
+#### Options
 
 | Before          | After       |
 | --------------- | ----------- |
 | `attributeName` | `attribute` |
+
+### connectClearRefinements -- previously connectClearAll
+
+#### Options
+
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |
