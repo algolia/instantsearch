@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>E-commerce search with instantsearch.js by Algolia</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.css" />
+  
+  <link rel="stylesheet" type="text/css" href="main.css" />
+  <!--[if lte IE 9]>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <div class="container-fluid">
+    <header class="content-wrapper">
+      <a href="https://community.algolia.com/instantsearch.js/" class="is-logo"><img src="logo-is.png" width="40"></a>
+      <a href="./" class="logo">amazing</a>
+      <div class="input-group">
+        <input type="text" class="form-control" id="q" />
+        <span class="input-group-btn">
+          <button class="btn btn-default"><i class="fa fa-search"></i></button>
+        </span>
+      </div>
+    </header>
+
+    <div class="content-wrapper">
+
+      <aside>
+        <div id="clear-all"></div>
+        <section class="facet-wrapper">
+          <div class="facet-category-title" class="facet">Show results for</div>
+          <div id="categories"></div>
+        </section>
+
+        <section class="facet-wrapper">
+          <div class="facet-category-title">Refine by</div>
+          <div id="types" class="facet"></div>
+          <div id="brands" class="facet"></div>
+          <div id="rating" class="facet"></div>
+          <div id="prices" class="facet"></div>
+        </section>
+
+        <div class="thank-you">
+          Data courtesy of <a href="https://developer.bestbuy.com/">Best Buy</a>
+        </div>
+      </aside>
+
+      <div class="results-wrapper">
+        <section id="results-topbar">
+          <div class="sort-by">
+            <label>Sort by</label>
+            <div id="sort-by-selector"></div>
+          </div>
+
+          <div id="stats" class="text-muted"></div>
+        </section>
+
+        <main id="hits"></main>
+        <section id="pagination"></section>
+      </div>
+
+    </div>
+  </div>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@1/dist/instantsearch.min.js"></script>
+  
+
+  <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+  <script src="search.js"></script>
+
+</body>
+
+</html>
