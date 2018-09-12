@@ -1,24 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Hits markup should render <Hits /> 1`] = `
-<ol
+<div
   className="root"
 >
-  <li
-    className="item"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "item",
+  <ol
+    className="list"
+  >
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "item",
+        }
       }
-    }
-  />
-  <li
-    className="item"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "item",
+    />
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "item",
+        }
       }
-    }
-  />
-</ol>
+    />
+  </ol>
+</div>
 `;

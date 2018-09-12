@@ -4,6 +4,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
 <InfiniteHits
   cssClasses={
     Object {
+      "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
@@ -20,6 +21,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
     ]
   }
   isLastPage={false}
+  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -31,7 +33,6 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 1
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
@@ -53,6 +54,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
 <InfiniteHits
   cssClasses={
     Object {
+      "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
@@ -69,6 +71,7 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
     ]
   }
   isLastPage={false}
+  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -80,7 +83,6 @@ exports[`infiniteHits() calls twice ReactDOM.render(<Hits props />, container) 2
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
@@ -102,6 +104,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
 <InfiniteHits
   cssClasses={
     Object {
+      "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
@@ -118,6 +121,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     ]
   }
   isLastPage={false}
+  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -131,7 +135,6 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
@@ -153,6 +156,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
 <InfiniteHits
   cssClasses={
     Object {
+      "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
@@ -169,6 +173,7 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     ]
   }
   isLastPage={true}
+  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -182,7 +187,6 @@ exports[`infiniteHits() if it is the last page, then the props should contain is
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {
@@ -204,6 +208,7 @@ exports[`infiniteHits() renders transformed items 1`] = `
 <InfiniteHits
   cssClasses={
     Object {
+      "emptyRoot": "ais-InfiniteHits--empty",
       "item": "ais-InfiniteHits-item",
       "list": "ais-InfiniteHits-list",
       "loadMore": "ais-InfiniteHits-loadMore",
@@ -221,6 +226,7 @@ exports[`infiniteHits() renders transformed items 1`] = `
     ]
   }
   isLastPage={false}
+  loadMoreLabel="Show more results"
   results={
     Object {
       "hits": Array [
@@ -233,7 +239,6 @@ exports[`infiniteHits() renders transformed items 1`] = `
     }
   }
   showMore={[Function]}
-  showMoreLabel="Show more results"
   templateProps={
     Object {
       "templates": Object {

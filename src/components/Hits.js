@@ -2,16 +2,16 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 import map from 'lodash/map';
 import Template from './Template.js';
-import hasKey from 'lodash/has';
 import cx from 'classnames';
 
 class Hits extends Component {
-  renderWithResults() {
+  renderResults() {
     const renderedHits = map(this.props.hits, (hit, position) => {
       const data = {
         ...hit,
         __hitIndex: position,
       };
+
       return (
         <Template
           rootTagName="li"
@@ -24,27 +24,19 @@ class Hits extends Component {
       );
     });
 
-    return <ol className={this.props.cssClasses.root}>{renderedHits}</ol>;
+    return (
+      <div className={this.props.cssClasses.root}>
+        <ol className={this.props.cssClasses.list}>{renderedHits}</ol>
+      </div>
+    );
   }
 
-  renderAllResults() {
+  renderEmpty() {
     const className = cx(
       this.props.cssClasses.root,
-      this.props.cssClasses.list
+      this.props.cssClasses.emptyRoot
     );
 
-    return (
-      <Template
-        data={this.props.results}
-        rootProps={{ className }}
-        templateKey="list"
-        {...this.props.templateProps}
-      />
-    );
-  }
-
-  renderNoResults() {
-    const className = cx(this.props.cssClasses.root);
     return (
       <Template
         data={this.props.results}
@@ -57,25 +49,19 @@ class Hits extends Component {
 
   render() {
     const hasResults = this.props.results.hits.length > 0;
-    const hasListTemplate = hasKey(this.props, 'templateProps.templates.list');
 
     if (!hasResults) {
-      return this.renderNoResults();
+      return this.renderEmpty();
     }
 
-    // If a `list` template is defined, it takes precedence over our looping
-    // through hits
-    if (hasListTemplate) {
-      return this.renderAllResults();
-    }
-
-    return this.renderWithResults();
+    return this.renderResults();
   }
 }
 
 Hits.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
+    emptyRoot: PropTypes.string,
     item: PropTypes.string,
     list: PropTypes.string,
   }),

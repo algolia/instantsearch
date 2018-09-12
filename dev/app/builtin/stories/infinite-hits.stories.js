@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.infiniteHits({
             container,
-            showMoreLabel: 'Show more',
+            loadMoreLabel: 'Show more',
             templates: {
               item: '{{name}}',
             },
@@ -34,9 +34,9 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.infiniteHits({
             container,
-            showMoreLabel: 'Show more',
+            loadMoreLabel: 'Show more',
             cssClasses: {
-              showmore: 'button',
+              loadMore: 'button',
             },
             templates: {
               item: '{{name}}',
@@ -51,7 +51,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.infiniteHits({
             container,
-            showMoreLabel: 'Show more',
+            loadMoreLabel: 'Show more',
             templates: {
               item: '{{name}}',
             },

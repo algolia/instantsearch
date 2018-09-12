@@ -8,20 +8,22 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 #### Options
 
-| Before       | After        |
-| ------------ | ------------ |
-| `escapeHits` | `escapeHTML` |
+| Before          | After           |
+| --------------- | --------------- |
+| `escapeHits`    | `escapeHTML`    |
+| `showMoreLabel` | `loadMoreLabel` |
 
-`escapeHTML` becomes `true` by default.
+* `escapeHTML` becomes `true` by default.
+* `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
 
-| Before            | After            |
-| ----------------- | ---------------- |
-| `ais-hits`        | `ais-Hits`       |
-|                   | `ais-Hits--list` |
-| `ais-hits--item`  | `ais-Hits--item` |
-| `ais-hits--empty` |                  |
+| Before            | After             |
+| ----------------- | ----------------- |
+| `ais-hits`        | `ais-Hits`        |
+| `ais-hits--empty` | `ais-Hits--empty` |
+|                   | `ais-Hits--list`  |
+| `ais-hits--item`  | `ais-Hits--item`  |
 
 #### Markup
 
@@ -71,9 +73,9 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 | Before                              | After                                 |
 | ----------------------------------- | ------------------------------------- |
 | `ais-infinite-hits`                 | `ais-InfiniteHits`                    |
+| `ais-infinite-hits--empty`          | `ais-InfiniteHits--empty`             |
 |                                     | `ais-InfiniteHits--list`              |
 | `ais-infinite-hits--item`           | `ais-InfiniteHits--item`              |
-| `ais-infinite-hits--empty`          |                                       |
 | `ais-infinite-hits--showmore`       |                                       |
 | `ais-infinite-hits--showmoreButton` | `ais-InfiniteHits-loadMore`           |
 |                                     | `ais-InfiniteHits-loadMore--disabled` |

@@ -4,6 +4,7 @@ exports[`hits() calls twice ReactDOM.render(<Hits props />, container) 1`] = `
 <Hits
   cssClasses={
     Object {
+      "emptyRoot": "ais-Hits--empty",
       "item": "ais-Hits-item",
       "list": "ais-Hits-list",
       "root": "ais-Hits root cx",
@@ -48,6 +49,7 @@ exports[`hits() calls twice ReactDOM.render(<Hits props />, container) 2`] = `
 <Hits
   cssClasses={
     Object {
+      "emptyRoot": "ais-Hits--empty",
       "item": "ais-Hits-item",
       "list": "ais-Hits-list",
       "root": "ais-Hits root cx",
@@ -92,6 +94,7 @@ exports[`hits() renders transformed items 1`] = `
 <Hits
   cssClasses={
     Object {
+      "emptyRoot": "ais-Hits--empty",
       "item": "ais-Hits-item",
       "list": "ais-Hits-list",
       "root": "ais-Hits",

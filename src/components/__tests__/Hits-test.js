@@ -38,7 +38,8 @@ describe('Hits', () => {
           hits: [],
         },
         cssClasses: {
-          root: 'my_root',
+          root: 'root',
+          emptyRoot: 'emptyRoot',
         },
       };
 
@@ -46,90 +47,7 @@ describe('Hits', () => {
       const actual = shallowRender(props);
 
       // Then
-      expect(actual.props().rootProps.className).toContain('my_root');
-    });
-  });
-
-  describe('list template', () => {
-    it('should use the list template if defined', () => {
-      // Given
-      const props = {
-        results: {
-          hits: [
-            {
-              objectID: 'one',
-              foo: 'bar',
-            },
-          ],
-        },
-        templateProps: {
-          templates: {
-            list: 'list',
-          },
-        },
-      };
-
-      // When
-      const actual = shallowRender(props);
-
-      // Then
-      expect(actual.props().templateKey).toEqual('list');
-    });
-
-    it('should set the list CSS class to the template', () => {
-      // Given
-      const props = {
-        results: {
-          hits: [
-            {
-              objectID: 'one',
-              foo: 'bar',
-            },
-          ],
-        },
-        templateProps: {
-          templates: {
-            list: 'list',
-          },
-        },
-        cssClasses: {
-          root: 'my_root',
-          list: 'my_list',
-        },
-      };
-
-      // When
-      const actual = shallowRender(props);
-
-      // Then
-      expect(actual.props().rootProps.className).toContain('my_list');
-      expect(actual.props().rootProps.className).toContain('my_root');
-    });
-
-    it('should pass the list of all results to the template', () => {
-      // Given
-      const results = {
-        hits: [
-          {
-            objectID: 'one',
-            foo: 'bar',
-          },
-        ],
-      };
-      const props = {
-        results,
-        templateProps: {
-          templates: {
-            list: 'list',
-          },
-        },
-      };
-
-      // When
-      const actual = shallowRender(props);
-
-      // Then
-      expect(actual.props().data).toEqual(results);
+      expect(actual.props().rootProps.className).toContain('root');
     });
   });
 
@@ -181,7 +99,7 @@ describe('Hits', () => {
           },
         },
         cssClasses: {
-          item: 'my_item',
+          item: 'item',
         },
       };
 
@@ -189,10 +107,10 @@ describe('Hits', () => {
       const actual = shallowRender(props).find(Template);
 
       // Then
-      expect(actual.props().rootProps.className).toContain('my_item');
+      expect(actual.props().rootProps.className).toContain('item');
     });
 
-    it('should wrap the items in a root ol element', () => {
+    it('should wrap the items in a root div element', () => {
       // Given
       const props = {
         results: {
@@ -213,7 +131,7 @@ describe('Hits', () => {
           },
         },
         cssClasses: {
-          root: 'my_root',
+          root: 'root',
         },
       };
 
@@ -221,8 +139,8 @@ describe('Hits', () => {
       const actual = shallowRender(props);
 
       // Then
-      expect(actual.name()).toEqual('ol');
-      expect(actual.props().className).toContain('my_root');
+      expect(actual.name()).toEqual('div');
+      expect(actual.props().className).toContain('root');
     });
 
     it('should pass each result data to each item template', () => {

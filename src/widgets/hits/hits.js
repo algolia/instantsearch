@@ -45,14 +45,15 @@ hits({
   container,
   [ transformItems ],
   [ cssClasses.{root,empty,item}={} ],
-  [ templates.{empty,item} | templates.{empty, allItems} ],
-  [ transformData.{empty,item} | transformData.{empty, allItems} ],
+  [ templates.{empty,item} ],
+  [ transformData.{empty,item} ],
 })`;
 
 /**
  * @typedef {Object} HitsCSSClasses
  * @property {string|string[]} [root] CSS class to add to the wrapping element.
  * @property {string|string[]} [empty] CSS class to add to the wrapping element when no results.
+ * @property {string|string[]} [list] CSS class to add to the list of results.
  * @property {string|string[]} [item] CSS class to add to each result.
  */
 
@@ -60,14 +61,12 @@ hits({
  * @typedef {Object} HitsTemplates
  * @property {string|function(object):string} [empty=''] Template to use when there are no results.
  * @property {string|function(object):string} [item=''] Template to use for each result. This template will receive an object containing a single record. The record will have a new property `__hitIndex` for the position of the record in the list of displayed hits.
- * @property {string|function(object):string} [allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
  */
 
 /**
  * @typedef {Object} HitsTransforms
  * @property {function(object):object} [empty] Method used to change the object passed to the `empty` template.
  * @property {function(object):object} [item] Method used to change the object passed to the `item` template.
- * @property {function(object):object} [allItems] Method used to change the object passed to the `allItems` template.
  */
 
 /**
@@ -122,8 +121,9 @@ export default function hits({
   const containerNode = getContainerNode(container);
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
-    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    emptyRoot: cx(suit({ modifierName: 'empty' }), userCssClasses.emptyRoot),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
   };
 
   const specializedRenderer = renderer({

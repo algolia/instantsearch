@@ -1,36 +1,81 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import Hits from './Hits.js';
+import map from 'lodash/map';
+import cx from 'classnames';
+import Template from './Template.js';
 
 class InfiniteHits extends Component {
+  renderResults() {
+    const renderedHits = map(this.props.hits, (hit, position) => {
+      const data = {
+        ...hit,
+        __hitIndex: position,
+      };
+
+      return (
+        <Template
+          rootTagName="li"
+          data={data}
+          key={data.objectID}
+          rootProps={{ className: cx(this.props.cssClasses.item) }}
+          templateKey="item"
+          {...this.props.templateProps}
+        />
+      );
+    });
+
+    return <ol className={cx(this.props.cssClasses.list)}>{renderedHits}</ol>;
+  }
+
+  renderEmpty() {
+    return (
+      <Template
+        data={this.props.results}
+        rootProps={{
+          className: cx(
+            this.props.cssClasses.root,
+            this.props.cssClasses.emptyRoot
+          ),
+        }}
+        templateKey="empty"
+        {...this.props.templateProps}
+      />
+    );
+  }
+
   render() {
     const {
       cssClasses,
       hits,
-      results,
       showMore,
-      showMoreLabel,
-      templateProps,
+      loadMoreLabel,
+      isLastPage,
     } = this.props;
-    const btn = this.props.isLastPage ? (
-      <button disabled className={cssClasses.showmoreButton}>
-        {showMoreLabel}
+
+    if (hits.length === 0) {
+      return this.renderEmpty();
+    }
+
+    const hitsList = this.renderResults();
+
+    const loadMoreButton = isLastPage ? (
+      <button disabled className={cx(cssClasses.loadMore)}>
+        {loadMoreLabel}
       </button>
     ) : (
-      <button onClick={showMore} className={cssClasses.showmoreButton}>
-        {showMoreLabel}
+      <button
+        onClick={showMore}
+        className={cx(cssClasses.loadMore, cssClasses.disabledLoadMore)}
+      >
+        {loadMoreLabel}
       </button>
     );
 
     return (
-      <div>
-        <Hits
-          cssClasses={cssClasses}
-          hits={hits}
-          results={results}
-          templateProps={templateProps}
-        />
-        <div className={cssClasses.showmore}>{btn}</div>
+      <div className={cx(cssClasses.root)}>
+        {hitsList}
+
+        {loadMoreButton}
       </div>
     );
   }
@@ -39,15 +84,16 @@ class InfiniteHits extends Component {
 InfiniteHits.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
-    item: PropTypes.string,
+    emptyRoot: PropTypes.string,
     list: PropTypes.string,
+    item: PropTypes.string,
     loadMore: PropTypes.string,
-    loadMoreDisabled: PropTypes.string,
+    disabledLoadMore: PropTypes.string,
   }),
   hits: PropTypes.array,
   results: PropTypes.object,
   showMore: PropTypes.func,
-  showMoreLabel: PropTypes.string,
+  loadMoreLabel: PropTypes.string,
   templateProps: PropTypes.object.isRequired,
   isLastPage: PropTypes.bool.isRequired,
 };
