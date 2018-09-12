@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`rangeInput expect to render with custom classNames 1`] = `
-<RawRangeInput-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
@@ -26,7 +26,6 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
   max={0}
   min={0}
   refine={[Function]}
-  shouldAutoHideContainer={true}
   step={1}
   templateProps={
     Object {
@@ -52,7 +51,7 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
 `;
 
 exports[`rangeInput expect to render with custom labels 1`] = `
-<RawRangeInput-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
@@ -77,7 +76,6 @@ exports[`rangeInput expect to render with custom labels 1`] = `
   max={0}
   min={0}
   refine={[Function]}
-  shouldAutoHideContainer={true}
   step={1}
   templateProps={
     Object {
@@ -103,7 +101,7 @@ exports[`rangeInput expect to render with custom labels 1`] = `
 `;
 
 exports[`rangeInput expect to render with refinement 1`] = `
-<RawRangeInput-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
@@ -128,7 +126,6 @@ exports[`rangeInput expect to render with refinement 1`] = `
   max={500}
   min={10}
   refine={[Function]}
-  shouldAutoHideContainer={false}
   step={1}
   templateProps={
     Object {
@@ -154,7 +151,7 @@ exports[`rangeInput expect to render with refinement 1`] = `
 `;
 
 exports[`rangeInput expect to render with refinement at boundaries 1`] = `
-<RawRangeInput-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
@@ -179,7 +176,6 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
   max={500}
   min={10}
   refine={[Function]}
-  shouldAutoHideContainer={false}
   step={1}
   templateProps={
     Object {
@@ -205,7 +201,7 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
 `;
 
 exports[`rangeInput expect to render with results 1`] = `
-<RawRangeInput-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
@@ -230,7 +226,6 @@ exports[`rangeInput expect to render with results 1`] = `
   max={500}
   min={10}
   refine={[Function]}
-  shouldAutoHideContainer={false}
   step={1}
   templateProps={
     Object {
@@ -256,7 +251,7 @@ exports[`rangeInput expect to render with results 1`] = `
 `;
 
 exports[`rangeInput expect to render without results 1`] = `
-<RawRangeInput-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
@@ -281,7 +276,6 @@ exports[`rangeInput expect to render without results 1`] = `
   max={0}
   min={0}
   refine={[Function]}
-  shouldAutoHideContainer={true}
   step={1}
   templateProps={
     Object {

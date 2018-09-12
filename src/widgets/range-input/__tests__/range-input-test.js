@@ -223,26 +223,6 @@ describe('rangeInput', () => {
     });
   });
 
-  it('expect to render hidden', () => {
-    const container = createContainer();
-    const helper = createHelper();
-    const results = [];
-
-    const widget = rangeInput({
-      container,
-      attribute,
-      min: 20,
-      max: 20,
-    });
-
-    widget.init({ helper, instantSearchInstance });
-    widget.render({ results, helper });
-
-    expect(ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer).toBe(
-      true
-    );
-  });
-
   it('expect to call refine', () => {
     const container = createContainer();
     const helper = createHelper();

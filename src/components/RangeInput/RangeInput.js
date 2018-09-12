@@ -1,8 +1,7 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
-export class RawRangeInput extends Component {
+export class RangeInput extends Component {
   constructor(props) {
     super(props);
 
@@ -87,7 +86,7 @@ export class RawRangeInput extends Component {
   }
 }
 
-RawRangeInput.propTypes = {
+RangeInput.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
@@ -100,7 +99,6 @@ RawRangeInput.propTypes = {
     noRefinement: PropTypes.string.isRequired,
     form: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    currency: PropTypes.string.isRequired,
     input: PropTypes.string.isRequired,
     inputMin: PropTypes.string.isRequired,
     inputMax: PropTypes.string.isRequired,
@@ -114,4 +112,4 @@ RawRangeInput.propTypes = {
   refine: PropTypes.func.isRequired,
 };
 
-export default autoHideContainerHOC(RawRangeInput);
+export default RangeInput;

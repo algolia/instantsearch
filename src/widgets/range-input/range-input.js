@@ -15,7 +15,6 @@ const renderer = ({
   templates,
   cssClasses,
   labels,
-  autoHideContainer,
   collapsible,
   renderState,
 }) => (
@@ -36,7 +35,6 @@ const renderer = ({
   const [minValue, maxValue] = start;
 
   const step = 1 / Math.pow(10, widgetParams.precision);
-  const shouldAutoHideContainer = autoHideContainer && rangeMin === rangeMax;
 
   const values = {
     min: minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
@@ -52,7 +50,6 @@ const renderer = ({
       cssClasses={cssClasses}
       labels={labels}
       refine={refine}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       collapsible={collapsible}
       templateProps={renderState.templateProps}
     />,
@@ -70,7 +67,6 @@ rangeInput({
   [ cssClasses.{root, header, body, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit, footer} ],
   [ templates.{header, footer} ],
   [ labels.{separator, submit} ],
-  [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
 
@@ -112,7 +108,6 @@ rangeInput({
  * @property {RangeInputClasses} [cssClasses] CSS classes to add.
  * @property {RangeInputTemplates} [templates] Templates to use for the widget.
  * @property {RangeInputLabels} [labels] Labels to use for the widget.
- * @property {boolean} [autoHideContainer=true] Hide the container when no refinements available.
  * @property {boolean} [collapsible=false] Hide the widget body and footer when clicking on header.
  */
 
@@ -154,7 +149,6 @@ export default function rangeInput({
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   labels: userLabels = {},
-  autoHideContainer = true,
   collapsible = false,
 } = {}) {
   if (!container) {
@@ -196,7 +190,6 @@ export default function rangeInput({
     cssClasses,
     templates,
     labels,
-    autoHideContainer,
     collapsible,
     renderState: {},
   });

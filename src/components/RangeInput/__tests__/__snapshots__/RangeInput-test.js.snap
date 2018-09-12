@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RawRangeInput expect to render 1`] = `
+exports[`RangeInput expect to render 1`] = `
 <div
   className="root noRefinement"
 >
@@ -52,7 +52,7 @@ exports[`RawRangeInput expect to render 1`] = `
 </div>
 `;
 
-exports[`RawRangeInput expect to render with disabled state 1`] = `
+exports[`RangeInput expect to render with disabled state 1`] = `
 <div
   className="root noRefinement"
 >
@@ -104,7 +104,7 @@ exports[`RawRangeInput expect to render with disabled state 1`] = `
 </div>
 `;
 
-exports[`RawRangeInput expect to render with values 1`] = `
+exports[`RangeInput expect to render with values 1`] = `
 <div
   className="root"
 >
@@ -158,7 +158,7 @@ exports[`RawRangeInput expect to render with values 1`] = `
 </div>
 `;
 
-exports[`RawRangeInput onChange expect to update the state when max change 1`] = `
+exports[`RangeInput onChange expect to update the state when max change 1`] = `
 <div
   className="root"
 >
@@ -211,7 +211,7 @@ exports[`RawRangeInput onChange expect to update the state when max change 1`] =
 </div>
 `;
 
-exports[`RawRangeInput onChange expect to update the state when min change 1`] = `
+exports[`RangeInput onChange expect to update the state when min change 1`] = `
 <div
   className="root"
 >
@@ -264,7 +264,7 @@ exports[`RawRangeInput onChange expect to update the state when min change 1`] =
 </div>
 `;
 
-exports[`RawRangeInput willReceiveProps expect to update the empty state from given props 1`] = `
+exports[`RangeInput willReceiveProps expect to update the empty state from given props 1`] = `
 <div
   className="root noRefinement"
 >
@@ -316,7 +316,7 @@ exports[`RawRangeInput willReceiveProps expect to update the empty state from gi
 </div>
 `;
 
-exports[`RawRangeInput willReceiveProps expect to update the empty state from given props 2`] = `
+exports[`RangeInput willReceiveProps expect to update the empty state from given props 2`] = `
 <div
   className="root noRefinement"
 >
@@ -368,7 +368,7 @@ exports[`RawRangeInput willReceiveProps expect to update the empty state from gi
 </div>
 `;
 
-exports[`RawRangeInput willReceiveProps expect to update the state from given props 1`] = `
+exports[`RangeInput willReceiveProps expect to update the state from given props 1`] = `
 <div
   className="root"
 >
@@ -422,7 +422,7 @@ exports[`RawRangeInput willReceiveProps expect to update the state from given pr
 </div>
 `;
 
-exports[`RawRangeInput willReceiveProps expect to update the state from given props 2`] = `
+exports[`RangeInput willReceiveProps expect to update the state from given props 2`] = `
 <div
   className="root"
 >

@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { RawRangeInput } from '../RangeInput';
+import RangeInput from '../RangeInput';
 
-describe('RawRangeInput', () => {
+describe('RangeInput', () => {
   const defaultProps = {
     min: 0,
     max: 500,
@@ -13,7 +13,6 @@ describe('RawRangeInput', () => {
       noRefinement: 'noRefinement',
       form: 'form',
       label: 'label',
-      currency: 'currency',
       input: 'input',
       inputMin: 'inputMin',
       inputMax: 'inputMax',
@@ -28,7 +27,7 @@ describe('RawRangeInput', () => {
   };
 
   const shallowRender = props =>
-    shallow(<RawRangeInput {...defaultProps} {...props} />);
+    shallow(<RangeInput {...defaultProps} {...props} />);
 
   it('expect to render', () => {
     const props = {};
