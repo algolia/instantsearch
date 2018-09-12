@@ -15,7 +15,6 @@ const renderer = ({
   containerNode,
   cssClasses,
   collapsible,
-  autoHideContainer,
   renderState,
   templates,
   transformData,
@@ -41,8 +40,6 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
-
   render(
     <Stats
       collapsible={collapsible}
@@ -53,7 +50,6 @@ const renderer = ({
       page={page}
       processingTimeMS={processingTimeMS}
       query={query}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
     />,
     containerNode
@@ -65,7 +61,6 @@ stats({
   container,
   [ templates.{text} ],
   [ transformData.{text} ],
-  [ autoHideContainer=true ],
   [ cssClasses.{root, text} ],
 })`;
 
@@ -104,7 +99,6 @@ stats({
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {StatsWidgetTemplates} [templates] Templates to use for the widget.
  * @property {StatsWidgetTransforms} [transformData] Object that contains the functions to be applied on the data before being used for templating. Valid keys are `text` for the text template.
- * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
  * @property {StatsWidgetCssClasses} [cssClasses] CSS classes to add.
  */
 
@@ -128,7 +122,6 @@ stats({
 export default function stats({
   container,
   cssClasses: userCssClasses = {},
-  autoHideContainer = true,
   collapsible = false,
   transformData,
   templates = defaultTemplates,
@@ -148,7 +141,6 @@ export default function stats({
     containerNode,
     cssClasses,
     collapsible,
-    autoHideContainer,
     renderState: {},
     templates,
     transformData,
