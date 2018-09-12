@@ -2,21 +2,19 @@ import React, { render } from 'preact-compat';
 import cx from 'classnames';
 import RangeInput from '../../components/RangeInput/RangeInput.js';
 import connectRange from '../../connectors/range/connectRange.js';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
 import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-range-input');
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+
+import { component } from '../../lib/suit';
+
+const suit = component('RangeInput');
 
 const renderer = ({
   containerNode,
   templates,
   cssClasses,
   labels,
-  autoHideContainer,
   collapsible,
   renderState,
 }) => (
@@ -37,7 +35,6 @@ const renderer = ({
   const [minValue, maxValue] = start;
 
   const step = 1 / Math.pow(10, widgetParams.precision);
-  const shouldAutoHideContainer = autoHideContainer && rangeMin === rangeMax;
 
   const values = {
     min: minValue !== -Infinity && minValue !== rangeMin ? minValue : undefined,
@@ -53,7 +50,6 @@ const renderer = ({
       cssClasses={cssClasses}
       labels={labels}
       refine={refine}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       collapsible={collapsible}
       templateProps={renderState.templateProps}
     />,
@@ -64,14 +60,13 @@ const renderer = ({
 const usage = `Usage:
 rangeInput({
   container,
-  attributeName,
+  attribute,
   [ min ],
   [ max ],
   [ precision = 0 ],
   [ cssClasses.{root, header, body, form, fieldset, labelMin, inputMin, separator, labelMax, inputMax, submit, footer} ],
   [ templates.{header, footer} ],
   [ labels.{separator, submit} ],
-  [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
 
@@ -106,14 +101,13 @@ rangeInput({
 /**
  * @typedef {Object} RangeInputWidgetOptions
  * @property {string|HTMLElement} container Valid CSS Selector as a string or DOMElement.
- * @property {string} attributeName Name of the attribute for faceting.
+ * @property {string} attribute Name of the attribute for faceting.
  * @property {number} [min] Minimal slider value, default to automatically computed from the result set.
  * @property {number} [max] Maximal slider value, defaults to automatically computed from the result set.
  * @property {number} [precision = 0] Number of digits after decimal point to use.
  * @property {RangeInputClasses} [cssClasses] CSS classes to add.
  * @property {RangeInputTemplates} [templates] Templates to use for the widget.
  * @property {RangeInputLabels} [labels] Labels to use for the widget.
- * @property {boolean} [autoHideContainer=true] Hide the container when no refinements available.
  * @property {boolean} [collapsible=false] Hide the widget body and footer when clicking on header.
  */
 
@@ -121,7 +115,7 @@ rangeInput({
  * The range input widget allows a user to select a numeric range using a minimum and maximum input.
  *
  * @requirements
- * The attribute passed to `attributeName` must be declared as an
+ * The attribute passed to `attribute` must be declared as an
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
@@ -135,7 +129,7 @@ rangeInput({
  * search.addWidget(
  *   instantsearch.widgets.rangeInput({
  *     container: '#range-input',
- *     attributeName: 'price',
+ *     attribute: 'price',
  *     labels: {
  *       separator: 'to',
  *       submit: 'Go'
@@ -148,14 +142,13 @@ rangeInput({
  */
 export default function rangeInput({
   container,
-  attributeName,
+  attribute,
   min,
   max,
   precision = 0,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   labels: userLabels = {},
-  autoHideContainer = true,
   collapsible = false,
 } = {}) {
   if (!container) {
@@ -171,18 +164,24 @@ export default function rangeInput({
   };
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    form: cx(bem('form'), userCssClasses.form),
-    fieldset: cx(bem('fieldset'), userCssClasses.fieldset),
-    labelMin: cx(bem('labelMin'), userCssClasses.labelMin),
-    inputMin: cx(bem('inputMin'), userCssClasses.inputMin),
-    separator: cx(bem('separator'), userCssClasses.separator),
-    labelMax: cx(bem('labelMax'), userCssClasses.labelMax),
-    inputMax: cx(bem('inputMax'), userCssClasses.inputMax),
-    submit: cx(bem('submit'), userCssClasses.submit),
-    footer: cx(bem('footer'), userCssClasses.footer),
+    root: cx(suit(), userCssClasses.root),
+    noRefinement: cx(suit({ modifierName: 'noRefinement' })),
+    form: cx(suit({ descendantName: 'form' }), userCssClasses.form),
+    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
+    input: cx(suit({ descendantName: 'input' }), userCssClasses.input),
+    inputMin: cx(
+      suit({ descendantName: 'input', modifierName: 'min' }),
+      userCssClasses.inputMin
+    ),
+    inputMax: cx(
+      suit({ descendantName: 'input', modifierName: 'max' }),
+      userCssClasses.inputMax
+    ),
+    separator: cx(
+      suit({ descendantName: 'separator' }),
+      userCssClasses.separator
+    ),
+    button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
   };
 
   const specializedRenderer = renderer({
@@ -190,7 +189,6 @@ export default function rangeInput({
     cssClasses,
     templates,
     labels,
-    autoHideContainer,
     collapsible,
     renderState: {},
   });
@@ -199,7 +197,7 @@ export default function rangeInput({
     const makeWidget = connectRange(specializedRenderer);
 
     return makeWidget({
-      attributeName,
+      attribute,
       min,
       max,
       precision,
