@@ -27,6 +27,7 @@ placeholder | String | `'Search here…'` | The input placeholder | no
 submit-title | String | `'search'` | The submit button text | no
 clear-title | String | `'clear'` | The clear button text | no
 autofocus | Boolean | `false` | Whether to automatically focus on the input when rendered | no
+show-loading-indicator | Boolean | `false` | Show a spinner in the search box if a delay is passed and no results are returned yet | no
 
 ## CSS classes
 

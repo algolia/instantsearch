@@ -50,6 +50,32 @@ export default {
       }),
     };
   },
+  watch: {
+    searchClient(searchClient) {
+      this.instantSearchInstance.helper.setClient(searchClient).search();
+    },
+    indexName(indexName) {
+      this.instantSearchInstance.helper.setIndex(indexName).search();
+    },
+    stalledSearchDelay(stalledSearchDelay) {
+      // private InstantSearch.js API:
+      this.instantSearchInstance._stalledSearchDelay = stalledSearchDelay;
+    },
+    routing() {
+      throw new Error(
+        'routing configuration can not be changed dynamically at this point.' +
+          '\n\n' +
+          'Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md'
+      );
+    },
+    searchFunction() {
+      throw new Error(
+        'searchFunction configuration can not be changed dynamically at this point.' +
+          '\n\n' +
+          'Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md'
+      );
+    },
+  },
   mounted() {
     // from the documentation: https://vuejs.org/v2/api/#mounted
     // "Note that mounted does not guarantee that all child components have also been mounted. If you want to
