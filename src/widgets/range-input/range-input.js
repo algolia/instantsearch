@@ -168,7 +168,6 @@ export default function rangeInput({
     noRefinement: cx(suit({ modifierName: 'noRefinement' })),
     form: cx(suit({ descendantName: 'form' }), userCssClasses.form),
     label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
-    currency: cx(suit({ descendantName: 'currency' }), userCssClasses.currency),
     input: cx(suit({ descendantName: 'input' }), userCssClasses.input),
     inputMin: cx(
       suit({ descendantName: 'input', modifierName: 'min' }),

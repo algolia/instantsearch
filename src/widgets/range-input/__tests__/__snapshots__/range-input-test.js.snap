@@ -6,7 +6,6 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
   cssClasses={
     Object {
       "button": "ais-RangeInput-button",
-      "currency": "ais-RangeInput-currency",
       "form": "ais-RangeInput-form custom-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max custom-inputMax",
@@ -56,7 +55,6 @@ exports[`rangeInput expect to render with custom labels 1`] = `
   cssClasses={
     Object {
       "button": "ais-RangeInput-button",
-      "currency": "ais-RangeInput-currency",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -106,7 +104,6 @@ exports[`rangeInput expect to render with refinement 1`] = `
   cssClasses={
     Object {
       "button": "ais-RangeInput-button",
-      "currency": "ais-RangeInput-currency",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -156,7 +153,6 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
   cssClasses={
     Object {
       "button": "ais-RangeInput-button",
-      "currency": "ais-RangeInput-currency",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -206,7 +202,6 @@ exports[`rangeInput expect to render with results 1`] = `
   cssClasses={
     Object {
       "button": "ais-RangeInput-button",
-      "currency": "ais-RangeInput-currency",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
@@ -256,7 +251,6 @@ exports[`rangeInput expect to render without results 1`] = `
   cssClasses={
     Object {
       "button": "ais-RangeInput-button",
-      "currency": "ais-RangeInput-currency",
       "form": "ais-RangeInput-form",
       "input": "ais-RangeInput-input",
       "inputMax": "ais-RangeInput-input--max",
