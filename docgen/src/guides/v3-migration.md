@@ -16,7 +16,7 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 | Before                       | After                          |
 | ---------------------------- | ------------------------------ |
-| `ais-root`                   | `ais-RangeInput`               |
+| `ais-range-input`            | `ais-RangeInput`               |
 |                              | `ais-RangeInput--noRefinement` |
 | `ais-range-input--body`      |                                |
 | `ais-range-input--form`      | `ais-RangeInput-form`          |
