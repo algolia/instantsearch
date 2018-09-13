@@ -4,6 +4,41 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 ## Widgets
 
+### Breadcrumb
+
+#### CSS classes
+
+| Before                          | After                           |
+| ------------------------------- | ------------------------------- |
+| `ais-breadcrumb`                | `ais-Breadcrumb`                |
+|                                 | `ais-Breadcrumb--noRefinement`  |
+| `ais-breadcrumb`                | `ais-Breadcrumb-list`           |
+| `ais-breadcrumb--separator`     | `ais-Breadcrumb-separator`      |
+| `ais-breadcrumb--label`         | `ais-Breadcrumb-link`           |
+| `ais-breadcrumb--disabledLabel` |                                 |
+|                                 | `ais-Breadcrumb-item`           |
+|                                 | `ais-Breadcrumb-item--selected` |
+
+#### Markup
+
+```html
+<div class="ais-Breadcrumb">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item">
+      <a class="ais-Breadcrumb-link" href="#">Home</a>
+    </li>
+    <li class="ais-Breadcrumb-item">
+      <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+      <a class="ais-Breadcrumb-link" href="#">Cooking</a>
+    </li>
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+      Kitchen textiles
+    </li>
+  </ul>
+</div>
+```
+
 ### Stats
 
 #### CSS classes
