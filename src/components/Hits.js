@@ -2,18 +2,19 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 import map from 'lodash/map';
 import Template from './Template.js';
-import hasKey from 'lodash/has';
 import cx from 'classnames';
 
 class Hits extends Component {
-  renderWithResults() {
+  renderResults() {
     const renderedHits = map(this.props.hits, (hit, position) => {
       const data = {
         ...hit,
         __hitIndex: position,
       };
+
       return (
         <Template
+          rootTagName="li"
           data={data}
           key={data.objectID}
           rootProps={{ className: this.props.cssClasses.item }}
@@ -23,30 +24,19 @@ class Hits extends Component {
       );
     });
 
-    return <div className={this.props.cssClasses.root}>{renderedHits}</div>;
-  }
-
-  renderAllResults() {
-    const className = cx(
-      this.props.cssClasses.root,
-      this.props.cssClasses.allItems
-    );
-
     return (
-      <Template
-        data={this.props.results}
-        rootProps={{ className }}
-        templateKey="allItems"
-        {...this.props.templateProps}
-      />
+      <div className={this.props.cssClasses.root}>
+        <ol className={this.props.cssClasses.list}>{renderedHits}</ol>
+      </div>
     );
   }
 
-  renderNoResults() {
+  renderEmpty() {
     const className = cx(
       this.props.cssClasses.root,
-      this.props.cssClasses.empty
+      this.props.cssClasses.emptyRoot
     );
+
     return (
       <Template
         data={this.props.results}
@@ -59,31 +49,21 @@ class Hits extends Component {
 
   render() {
     const hasResults = this.props.results.hits.length > 0;
-    const hasAllItemsTemplate = hasKey(
-      this.props,
-      'templateProps.templates.allItems'
-    );
 
     if (!hasResults) {
-      return this.renderNoResults();
+      return this.renderEmpty();
     }
 
-    // If a allItems template is defined, it takes precedence over our looping
-    // through hits
-    if (hasAllItemsTemplate) {
-      return this.renderAllResults();
-    }
-
-    return this.renderWithResults();
+    return this.renderResults();
   }
 }
 
 Hits.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
+    emptyRoot: PropTypes.string,
     item: PropTypes.string,
-    allItems: PropTypes.string,
-    empty: PropTypes.string,
+    list: PropTypes.string,
   }),
   hits: PropTypes.array,
   results: PropTypes.object,

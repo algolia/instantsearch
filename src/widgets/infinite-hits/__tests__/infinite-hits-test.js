@@ -24,7 +24,7 @@ describe('infiniteHits()', () => {
     container = document.createElement('div');
     widget = infiniteHits({
       container,
-      escapeHits: true,
+      escapeHTML: true,
       cssClasses: { root: ['root', 'cx'] },
     });
     widget.init({ helper, instantSearchInstance: {} });

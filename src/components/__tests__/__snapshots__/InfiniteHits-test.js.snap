@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InfiniteHits markup should render <InfiniteHits /> on first page 1`] = `
+<div
+  className="root"
+>
+  <ol
+    className="list"
+  >
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "item",
+        }
+      }
+    />
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "item",
+        }
+      }
+    />
+  </ol>
+  <button
+    className="loadMore disabledLoadMore"
+  />
+</div>
+`;
+
+exports[`InfiniteHits markup should render <InfiniteHits /> on last page 1`] = `
+<div
+  className="root"
+>
+  <ol
+    className="list"
+  >
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "item",
+        }
+      }
+    />
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "item",
+        }
+      }
+    />
+  </ol>
+  <button
+    className="loadMore"
+    disabled={true}
+  />
+</div>
+`;
+
+exports[`InfiniteHits markup should render <InfiniteHits /> without hits on first page 1`] = `
+<div
+  className="root emptyRoot"
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "empty",
+    }
+  }
+/>
+`;
+
+exports[`InfiniteHits markup should render <InfiniteHits /> without hits on last page 1`] = `
+<div
+  className="root emptyRoot"
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "empty",
+    }
+  }
+/>
+`;

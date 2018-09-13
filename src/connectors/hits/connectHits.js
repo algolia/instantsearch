@@ -1,4 +1,4 @@
-import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
+import escapeHTML, { tagConfig } from '../../lib/escape-highlight.js';
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -12,7 +12,7 @@ var customHits = connectHits(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customHits({
-    [ escapeHits = false ],
+    [ escapeHTML = true ],
     [ transformItems ]
   })
 );
@@ -28,7 +28,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomHitsWidgetOptions
- * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {boolean} [escapeHTML = true] Whether to escape HTML tags from `hits[i]._highlightResult`.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -66,7 +66,7 @@ export default function connectHits(renderFn, unmountFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHits ? tagConfig : undefined;
+        return widgetParams.escapeHTML ? tagConfig : undefined;
       },
 
       init({ instantSearchInstance }) {
@@ -85,11 +85,11 @@ export default function connectHits(renderFn, unmountFn) {
         results.hits = transformItems(results.hits);
 
         if (
-          widgetParams.escapeHits &&
+          widgetParams.escapeHTML &&
           results.hits &&
           results.hits.length > 0
         ) {
-          results.hits = escapeHits(results.hits);
+          results.hits = escapeHTML(results.hits);
         }
 
         renderFn(
