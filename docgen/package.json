@@ -11,7 +11,7 @@
     "algolia-aerial": "1.5.3",
     "algolia-frontend-components": "0.0.35",
     "async": "2.6.1",
-    "autoprefixer": "9.1.3",
+    "autoprefixer": "9.1.5",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.0",
     "babel-loader": "7.1.5",
