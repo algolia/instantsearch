@@ -21,7 +21,7 @@ describe('stats()', () => {
     stats.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
-    widget = stats({ container, cssClasses: { body: ['body', 'cx'] } });
+    widget = stats({ container, cssClasses: { text: ['text', 'cx'] } });
     results = {
       hits: [{}, {}],
       nbHits: 20,

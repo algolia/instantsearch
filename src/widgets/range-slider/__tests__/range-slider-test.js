@@ -6,17 +6,17 @@ const instantSearchInstance = { templatesConfig: undefined };
 
 describe('rangeSlider', () => {
   it('throws an exception when no container', () => {
-    const attributeName = '';
-    expect(() => rangeSlider({ attributeName })).toThrow(/^Usage:/);
+    const attribute = '';
+    expect(() => rangeSlider({ attribute })).toThrow(/^Usage:/);
   });
 
-  it('throws an exception when no attributeName', () => {
+  it('throws an exception when no attribute', () => {
     const container = document.createElement('div');
     expect(() => rangeSlider({ container })).toThrow(/^Usage:/);
   });
 
   describe('widget usage', () => {
-    const attributeName = 'aNumAttr';
+    const attribute = 'aNumAttr';
 
     let ReactDOM;
     let container;
@@ -48,7 +48,7 @@ describe('rangeSlider', () => {
     it('should render without results', () => {
       widget = rangeSlider({
         container,
-        attributeName,
+        attribute,
         cssClasses: { root: ['root', 'cx'] },
       });
 
@@ -63,7 +63,7 @@ describe('rangeSlider', () => {
       const results = {
         disjunctiveFacets: [
           {
-            name: attributeName,
+            name: attribute,
             stats: {
               min: 65,
               max: 65,
@@ -74,7 +74,7 @@ describe('rangeSlider', () => {
 
       widget = rangeSlider({
         container,
-        attributeName,
+        attribute,
         cssClasses: { root: ['root', 'cx'] },
       });
 
@@ -93,7 +93,7 @@ describe('rangeSlider', () => {
 
       widget = rangeSlider({
         container,
-        attributeName,
+        attribute,
         collapsible: {
           collapsed: true,
         },
@@ -111,34 +111,34 @@ describe('rangeSlider', () => {
 
     describe('min option', () => {
       it('refines when no previous configuration', () => {
-        widget = rangeSlider({ container, attributeName, min: 100 });
+        widget = rangeSlider({ container, attribute, min: 100 });
         expect(widget.getConfiguration()).toEqual({
-          disjunctiveFacets: [attributeName],
-          numericRefinements: { [attributeName]: { '>=': [100] } },
+          disjunctiveFacets: [attribute],
+          numericRefinements: { [attribute]: { '>=': [100] } },
         });
       });
 
       it('does not refine when previous configuration', () => {
         widget = rangeSlider({
           container,
-          attributeName: 'aNumAttr',
+          attribute: 'aNumAttr',
           min: 100,
         });
         expect(
           widget.getConfiguration({
-            numericRefinements: { [attributeName]: {} },
+            numericRefinements: { [attribute]: {} },
           })
         ).toEqual({
-          disjunctiveFacets: [attributeName],
+          disjunctiveFacets: [attribute],
         });
       });
 
       it('works along with max option', () => {
-        widget = rangeSlider({ container, attributeName, min: 100, max: 200 });
+        widget = rangeSlider({ container, attribute, min: 100, max: 200 });
         expect(widget.getConfiguration()).toEqual({
-          disjunctiveFacets: [attributeName],
+          disjunctiveFacets: [attribute],
           numericRefinements: {
-            [attributeName]: {
+            [attribute]: {
               '>=': [100],
               '<=': [200],
             },
@@ -147,7 +147,7 @@ describe('rangeSlider', () => {
       });
 
       it('sets the right range', () => {
-        widget = rangeSlider({ container, attributeName, min: 100, max: 200 });
+        widget = rangeSlider({ container, attribute, min: 100, max: 200 });
         helper.setState(widget.getConfiguration());
         widget.init({ helper, instantSearchInstance });
         widget.render({ results: {}, helper });
@@ -160,7 +160,7 @@ describe('rangeSlider', () => {
         const results = {
           disjunctiveFacets: [
             {
-              name: attributeName,
+              name: attribute,
               stats: {
                 min: 1.99,
                 max: 4999.98,
@@ -169,7 +169,7 @@ describe('rangeSlider', () => {
           ],
         };
 
-        widget = rangeSlider({ container, attributeName, min: 100 });
+        widget = rangeSlider({ container, attribute, min: 100 });
         helper.setState(widget.getConfiguration());
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
@@ -182,21 +182,21 @@ describe('rangeSlider', () => {
 
     describe('max option', () => {
       it('refines when no previous configuration', () => {
-        widget = rangeSlider({ container, attributeName, max: 100 });
+        widget = rangeSlider({ container, attribute, max: 100 });
         expect(widget.getConfiguration()).toEqual({
-          disjunctiveFacets: [attributeName],
-          numericRefinements: { [attributeName]: { '<=': [100] } },
+          disjunctiveFacets: [attribute],
+          numericRefinements: { [attribute]: { '<=': [100] } },
         });
       });
 
       it('does not refine when previous configuration', () => {
-        widget = rangeSlider({ container, attributeName, max: 100 });
+        widget = rangeSlider({ container, attribute, max: 100 });
         expect(
           widget.getConfiguration({
-            numericRefinements: { [attributeName]: {} },
+            numericRefinements: { [attribute]: {} },
           })
         ).toEqual({
-          disjunctiveFacets: [attributeName],
+          disjunctiveFacets: [attribute],
         });
       });
 
@@ -204,7 +204,7 @@ describe('rangeSlider', () => {
         const results = {
           disjunctiveFacets: [
             {
-              name: attributeName,
+              name: attribute,
               stats: {
                 min: 1.99,
                 max: 4999.98,
@@ -213,7 +213,7 @@ describe('rangeSlider', () => {
           ],
         };
 
-        widget = rangeSlider({ container, attributeName, max: 100 });
+        widget = rangeSlider({ container, attribute, max: 100 });
         helper.setState(widget.getConfiguration());
         widget.init({ helper, instantSearchInstance });
         widget.render({ results, helper });
@@ -228,13 +228,13 @@ describe('rangeSlider', () => {
       let results;
 
       beforeEach(() => {
-        widget = rangeSlider({ container, attributeName });
+        widget = rangeSlider({ container, attribute });
         widget.init({ helper, instantSearchInstance });
 
         results = {
           disjunctiveFacets: [
             {
-              name: attributeName,
+              name: attribute,
               stats: {
                 min: 1.99,
                 max: 4999.98,
@@ -248,7 +248,7 @@ describe('rangeSlider', () => {
 
       it('configures the disjunctiveFacets', () => {
         expect(widget.getConfiguration()).toEqual({
-          disjunctiveFacets: [attributeName],
+          disjunctiveFacets: [attribute],
         });
       });
 
@@ -279,9 +279,7 @@ describe('rangeSlider', () => {
         const state1 = helper.state;
 
         expect(helper.search).toHaveBeenCalledTimes(1);
-        expect(state1).toEqual(
-          state0.addNumericRefinement(attributeName, '>=', 3)
-        );
+        expect(state1).toEqual(state0.addNumericRefinement(attribute, '>=', 3));
       });
 
       it('calls the refinement function if refined with max-1', () => {
@@ -294,7 +292,7 @@ describe('rangeSlider', () => {
 
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
-          state0.addNumericRefinement(attributeName, '<=', 4999)
+          state0.addNumericRefinement(attribute, '<=', 4999)
         );
       });
 
@@ -309,21 +307,21 @@ describe('rangeSlider', () => {
         expect(helper.search).toHaveBeenCalledTimes(1);
         expect(state1).toEqual(
           state0
-            .addNumericRefinement(attributeName, '>=', 3)
-            .addNumericRefinement(attributeName, '<=', 4999)
+            .addNumericRefinement(attribute, '>=', 3)
+            .addNumericRefinement(attribute, '<=', 4999)
         );
       });
 
       it("expect to clamp the min value to the max range when it's greater than range", () => {
         widget = rangeSlider({
           container,
-          attributeName,
+          attribute,
         });
 
         widget.init({ helper, instantSearchInstance });
 
-        helper.addNumericRefinement(attributeName, '>=', 5550);
-        helper.addNumericRefinement(attributeName, '<=', 6000);
+        helper.addNumericRefinement(attribute, '>=', 5550);
+        helper.addNumericRefinement(attribute, '<=', 6000);
 
         widget.render({ results, helper });
 
@@ -333,13 +331,13 @@ describe('rangeSlider', () => {
       it("expect to clamp the max value to the min range when it's lower than range", () => {
         widget = rangeSlider({
           container,
-          attributeName,
+          attribute,
         });
 
         widget.init({ helper, instantSearchInstance });
 
-        helper.addNumericRefinement(attributeName, '>=', -50);
-        helper.addNumericRefinement(attributeName, '<=', 0);
+        helper.addNumericRefinement(attribute, '>=', -50);
+        helper.addNumericRefinement(attribute, '<=', 0);
 
         widget.render({ results, helper });
 

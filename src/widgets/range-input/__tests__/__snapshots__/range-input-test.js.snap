@@ -1,22 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`rangeInput expect to render with custom classNames 1`] = `
-<HeaderFooter-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-range-input--body custom-body",
-      "fieldset": "ais-range-input--fieldset custom-fieldset",
-      "footer": "ais-range-input--footer custom-footer",
-      "form": "ais-range-input--form custom-form",
-      "header": "ais-range-input--header custom-header",
-      "inputMax": "ais-range-input--inputMax custom-inputMax",
-      "inputMin": "ais-range-input--inputMin custom-inputMin",
-      "labelMax": "ais-range-input--labelMax custom-labelMax",
-      "labelMin": "ais-range-input--labelMin custom-labelMin",
-      "root": "ais-range-input custom-root",
-      "separator": "ais-range-input--separator custom-separator",
-      "submit": "ais-range-input--submit custom-submit",
+      "button": "ais-RangeInput-button",
+      "form": "ais-RangeInput-form custom-form",
+      "input": "ais-RangeInput-input",
+      "inputMax": "ais-RangeInput-input--max custom-inputMax",
+      "inputMin": "ais-RangeInput-input--min custom-inputMin",
+      "label": "ais-RangeInput-label",
+      "noRefinement": "ais-RangeInput--noRefinement",
+      "root": "ais-RangeInput custom-root",
+      "separator": "ais-RangeInput-separator custom-separator",
     }
   }
   labels={
@@ -28,7 +25,6 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
   max={0}
   min={0}
   refine={[Function]}
-  shouldAutoHideContainer={true}
   step={1}
   templateProps={
     Object {
@@ -54,22 +50,19 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
 `;
 
 exports[`rangeInput expect to render with custom labels 1`] = `
-<HeaderFooter-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-range-input--body",
-      "fieldset": "ais-range-input--fieldset",
-      "footer": "ais-range-input--footer",
-      "form": "ais-range-input--form",
-      "header": "ais-range-input--header",
-      "inputMax": "ais-range-input--inputMax",
-      "inputMin": "ais-range-input--inputMin",
-      "labelMax": "ais-range-input--labelMax",
-      "labelMin": "ais-range-input--labelMin",
-      "root": "ais-range-input",
-      "separator": "ais-range-input--separator",
-      "submit": "ais-range-input--submit",
+      "button": "ais-RangeInput-button",
+      "form": "ais-RangeInput-form",
+      "input": "ais-RangeInput-input",
+      "inputMax": "ais-RangeInput-input--max",
+      "inputMin": "ais-RangeInput-input--min",
+      "label": "ais-RangeInput-label",
+      "noRefinement": "ais-RangeInput--noRefinement",
+      "root": "ais-RangeInput",
+      "separator": "ais-RangeInput-separator",
     }
   }
   labels={
@@ -81,7 +74,6 @@ exports[`rangeInput expect to render with custom labels 1`] = `
   max={0}
   min={0}
   refine={[Function]}
-  shouldAutoHideContainer={true}
   step={1}
   templateProps={
     Object {
@@ -107,22 +99,19 @@ exports[`rangeInput expect to render with custom labels 1`] = `
 `;
 
 exports[`rangeInput expect to render with refinement 1`] = `
-<HeaderFooter-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-range-input--body",
-      "fieldset": "ais-range-input--fieldset",
-      "footer": "ais-range-input--footer",
-      "form": "ais-range-input--form",
-      "header": "ais-range-input--header",
-      "inputMax": "ais-range-input--inputMax",
-      "inputMin": "ais-range-input--inputMin",
-      "labelMax": "ais-range-input--labelMax",
-      "labelMin": "ais-range-input--labelMin",
-      "root": "ais-range-input",
-      "separator": "ais-range-input--separator",
-      "submit": "ais-range-input--submit",
+      "button": "ais-RangeInput-button",
+      "form": "ais-RangeInput-form",
+      "input": "ais-RangeInput-input",
+      "inputMax": "ais-RangeInput-input--max",
+      "inputMin": "ais-RangeInput-input--min",
+      "label": "ais-RangeInput-label",
+      "noRefinement": "ais-RangeInput--noRefinement",
+      "root": "ais-RangeInput",
+      "separator": "ais-RangeInput-separator",
     }
   }
   labels={
@@ -134,7 +123,6 @@ exports[`rangeInput expect to render with refinement 1`] = `
   max={500}
   min={10}
   refine={[Function]}
-  shouldAutoHideContainer={false}
   step={1}
   templateProps={
     Object {
@@ -160,22 +148,19 @@ exports[`rangeInput expect to render with refinement 1`] = `
 `;
 
 exports[`rangeInput expect to render with refinement at boundaries 1`] = `
-<HeaderFooter-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-range-input--body",
-      "fieldset": "ais-range-input--fieldset",
-      "footer": "ais-range-input--footer",
-      "form": "ais-range-input--form",
-      "header": "ais-range-input--header",
-      "inputMax": "ais-range-input--inputMax",
-      "inputMin": "ais-range-input--inputMin",
-      "labelMax": "ais-range-input--labelMax",
-      "labelMin": "ais-range-input--labelMin",
-      "root": "ais-range-input",
-      "separator": "ais-range-input--separator",
-      "submit": "ais-range-input--submit",
+      "button": "ais-RangeInput-button",
+      "form": "ais-RangeInput-form",
+      "input": "ais-RangeInput-input",
+      "inputMax": "ais-RangeInput-input--max",
+      "inputMin": "ais-RangeInput-input--min",
+      "label": "ais-RangeInput-label",
+      "noRefinement": "ais-RangeInput--noRefinement",
+      "root": "ais-RangeInput",
+      "separator": "ais-RangeInput-separator",
     }
   }
   labels={
@@ -187,7 +172,6 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
   max={500}
   min={10}
   refine={[Function]}
-  shouldAutoHideContainer={false}
   step={1}
   templateProps={
     Object {
@@ -213,22 +197,19 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
 `;
 
 exports[`rangeInput expect to render with results 1`] = `
-<HeaderFooter-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-range-input--body",
-      "fieldset": "ais-range-input--fieldset",
-      "footer": "ais-range-input--footer",
-      "form": "ais-range-input--form",
-      "header": "ais-range-input--header",
-      "inputMax": "ais-range-input--inputMax",
-      "inputMin": "ais-range-input--inputMin",
-      "labelMax": "ais-range-input--labelMax",
-      "labelMin": "ais-range-input--labelMin",
-      "root": "ais-range-input",
-      "separator": "ais-range-input--separator",
-      "submit": "ais-range-input--submit",
+      "button": "ais-RangeInput-button",
+      "form": "ais-RangeInput-form",
+      "input": "ais-RangeInput-input",
+      "inputMax": "ais-RangeInput-input--max",
+      "inputMin": "ais-RangeInput-input--min",
+      "label": "ais-RangeInput-label",
+      "noRefinement": "ais-RangeInput--noRefinement",
+      "root": "ais-RangeInput",
+      "separator": "ais-RangeInput-separator",
     }
   }
   labels={
@@ -240,7 +221,6 @@ exports[`rangeInput expect to render with results 1`] = `
   max={500}
   min={10}
   refine={[Function]}
-  shouldAutoHideContainer={false}
   step={1}
   templateProps={
     Object {
@@ -266,22 +246,19 @@ exports[`rangeInput expect to render with results 1`] = `
 `;
 
 exports[`rangeInput expect to render without results 1`] = `
-<HeaderFooter-AutoHide
+<RangeInput
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-range-input--body",
-      "fieldset": "ais-range-input--fieldset",
-      "footer": "ais-range-input--footer",
-      "form": "ais-range-input--form",
-      "header": "ais-range-input--header",
-      "inputMax": "ais-range-input--inputMax",
-      "inputMin": "ais-range-input--inputMin",
-      "labelMax": "ais-range-input--labelMax",
-      "labelMin": "ais-range-input--labelMin",
-      "root": "ais-range-input",
-      "separator": "ais-range-input--separator",
-      "submit": "ais-range-input--submit",
+      "button": "ais-RangeInput-button",
+      "form": "ais-RangeInput-form",
+      "input": "ais-RangeInput-input",
+      "inputMax": "ais-RangeInput-input--max",
+      "inputMin": "ais-RangeInput-input--min",
+      "label": "ais-RangeInput-label",
+      "noRefinement": "ais-RangeInput--noRefinement",
+      "root": "ais-RangeInput",
+      "separator": "ais-RangeInput-separator",
     }
   }
   labels={
@@ -293,7 +270,6 @@ exports[`rangeInput expect to render without results 1`] = `
   max={0}
   min={0}
   refine={[Function]}
-  shouldAutoHideContainer={true}
   step={1}
   templateProps={
     Object {
