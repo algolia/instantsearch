@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ClearAll should render <ClearRefinements /> 1`] = `
+exports[`ClearRefinements should render <ClearRefinements /> 1`] = `
 <div
   className="root"
 >
@@ -17,18 +17,18 @@ exports[`ClearAll should render <ClearRefinements /> 1`] = `
 </div>
 `;
 
-exports[`ClearAll should render <ClearRefinements /> with a specific class when no refinements 1`] = `
+exports[`ClearRefinements should render <ClearRefinements /> with a specific class when no refinements 1`] = `
 <div
   className="root"
 >
   <button
-    className="button"
+    className="button disabled"
     dangerouslySetInnerHTML={
       Object {
         "__html": "",
       }
     }
-    disabled={false}
+    disabled={true}
     onClick={[Function]}
   />
 </div>

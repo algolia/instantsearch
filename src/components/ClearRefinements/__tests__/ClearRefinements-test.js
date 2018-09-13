@@ -2,7 +2,7 @@ import React from 'react';
 import ClearRefinements from '../ClearRefinements';
 import renderer from 'react-test-renderer';
 
-describe('ClearAll', () => {
+describe('ClearRefinements', () => {
   const defaultProps = {
     refine: () => {},
     cssClasses: {
@@ -28,7 +28,7 @@ describe('ClearAll', () => {
 
   it('should render <ClearRefinements /> with a specific class when no refinements', () => {
     const tree = renderer
-      .create(<ClearRefinements {...defaultProps} hasRefinements={true} />)
+      .create(<ClearRefinements {...defaultProps} hasRefinements={false} />)
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
