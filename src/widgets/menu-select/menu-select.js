@@ -9,7 +9,7 @@ import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
 
 import { component } from '../../lib/suit';
 
-const suit = component('menuSelect');
+const suit = component('MenuSelect');
 
 const renderer = ({
   containerNode,
