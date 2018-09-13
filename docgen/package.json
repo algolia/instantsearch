@@ -55,7 +55,7 @@
     "qs": "6.5.2",
     "react": "16.4.2",
     "react-dom": "16.4.2",
-    "react-hot-loader": "4.3.5",
+    "react-hot-loader": "4.3.6",
     "react-tap-event-plugin": "3.0.3",
     "recursive-readdir": "2.2.2",
     "replace-in-file": "3.4.2",
