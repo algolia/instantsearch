@@ -85,5 +85,5 @@ export const wrapWithHits = (
   });
 };
 
-export const wrapWithHitsAndJquery = fn =>
-  wrapWithHits(container => fn(window.$(container)));
+export const wrapWithHitsAndJquery = (fn, config = {}) =>
+  wrapWithHits(container => fn(window.$(container)), config);
