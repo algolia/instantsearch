@@ -5,15 +5,15 @@ export function clearAll() {
 }
 
 export const searchBox = {
-  selector: '#search-box',
+  selector: 'body #search-box',
   set(query) {
-    return browser.setValue('#search-box', query);
+    return browser.setValue('body #search-box', query);
   },
   clear() {
-    return browser.clearElement('#search-box');
+    return browser.clearElement('body #search-box');
   },
   get() {
-    return browser.getValue('#search-box');
+    return browser.getValue('body #search-box');
   },
 };
 
