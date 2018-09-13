@@ -68,7 +68,7 @@
     "happo-core": "5.0.0",
     "happo-target-firefox": "5.0.2",
     "instantsearch.css": "7.1.0",
-    "jest": "23.5.0",
+    "jest": "23.6.0",
     "jest-watch-typeahead": "0.2.0",
     "json": "9.0.6",
     "lerna": "3.2.1",
