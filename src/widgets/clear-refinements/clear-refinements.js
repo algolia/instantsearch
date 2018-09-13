@@ -1,5 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
-import ClearAll from '../../components/ClearRefinements/ClearRefinements.js';
+import ClearRefinements from '../../components/ClearRefinements/ClearRefinements.js';
 import cx from 'classnames';
 
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
@@ -32,7 +32,7 @@ const renderer = ({
   const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
 
   render(
-    <ClearAll
+    <ClearRefinements
       refine={refine}
       collapsible={collapsible}
       cssClasses={cssClasses}
@@ -54,23 +54,23 @@ clearRefinements({
   [ excludedAttributes=[] ]
 })`;
 /**
- * @typedef {Object} ClearAllCSSClasses
+ * @typedef {Object} ClearRefinementsCSSClasses
  * @property {string|string[]} [root] CSS class to add to the wrapper element.
  * @property {string|string[]} [button] CSS class to add to the button of the widget.
  * @property {string|string[]} [disabledButton] CSS class to add to the button when there are no refinements.
  */
 
 /**
- * @typedef {Object} ClearAllTemplates
+ * @typedef {Object} ClearRefinementsTemplates
  * @property {string|string[]} [resetLabel] Template for the content of the button
  */
 
 /**
- * @typedef {Object} ClearAllWidgetOptions
+ * @typedef {Object} ClearRefinementsWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} [excludedAttributes] List of attributes names to exclude from clear actions.
- * @property {ClearAllTemplates} [templates] Templates to use for the widget.
- * @property {ClearAllCSSClasses} [cssClasses] CSS classes to be added.
+ * @property {ClearRefinementsTemplates} [templates] Templates to use for the widget.
+ * @property {ClearRefinementsCSSClasses} [cssClasses] CSS classes to be added.
  * @property {boolean} [clearsQuery = false] If true, the widget will also clear the query.
  */
 
@@ -80,10 +80,10 @@ clearRefinements({
  *
  * The current refined values widget can display a button that has the same behavior.
  * @type {WidgetFactory}
- * @devNovel ClearAll
+ * @devNovel ClearRefinements
  * @category clear-filter
- * @param {ClearAllWidgetOptions} $0 The ClearAll widget options.
- * @returns {Widget} A new instance of the ClearAll widget.
+ * @param {ClearRefinementsWidgetOptions} $0 The ClearRefinements widget options.
+ * @returns {Widget} A new instance of the ClearRefinements widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.clearRefinements({
