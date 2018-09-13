@@ -32,18 +32,28 @@ class MenuSelect extends Component {
           value={selectedValue}
           onChange={this.handleSelectChange}
         >
-          <option value="" className={cssClasses.option}>
-            <Template templateKey="seeAllOption" {...templateProps} />
-          </option>
+          <Template
+            templateKey="seeAllOption"
+            rootTagName="option"
+            rootProps={{
+              value: '',
+              className: cssClasses.option,
+            }}
+            {...templateProps}
+          />
 
           {items.map(item => (
-            <option
+            <Template
+              data={item}
+              templateKey="item"
+              rootTagName="option"
               key={item.value}
-              value={item.value}
-              className={cssClasses.option}
-            >
-              <Template data={item} templateKey="item" {...templateProps} />
-            </option>
+              rootProps={{
+                value: item.value,
+                className: cssClasses.option,
+              }}
+              {...templateProps}
+            />
           ))}
         </select>
       </div>
