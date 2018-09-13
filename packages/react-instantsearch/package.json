@@ -49,7 +49,7 @@
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
-    "rollup": "0.65.0",
+    "rollup": "0.65.2",
     "rollup-plugin-babel": "3.0.7",
     "rollup-plugin-commonjs": "9.1.6",
     "rollup-plugin-filesize": "4.0.1",
