@@ -79,7 +79,7 @@
     "prettier": "1.14.2",
     "prop-types": "15.6.1",
     "react": "16.4.2",
-    "react-autosuggest": "9.4.0",
+    "react-autosuggest": "9.4.1",
     "react-dom": "16.4.2",
     "react-instantsearch-dom": "5.2.3",
     "react-instantsearch-dom-maps": "5.2.3",
