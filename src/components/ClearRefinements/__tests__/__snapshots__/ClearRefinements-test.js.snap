@@ -11,6 +11,24 @@ exports[`ClearAll should render <ClearRefinements /> 1`] = `
         "__html": "",
       }
     }
+    disabled={false}
+    onClick={[Function]}
+  />
+</div>
+`;
+
+exports[`ClearAll should render <ClearRefinements /> with a specific class when no refinements 1`] = `
+<div
+  className="root"
+>
+  <button
+    className="button"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "",
+      }
+    }
+    disabled={false}
     onClick={[Function]}
   />
 </div>

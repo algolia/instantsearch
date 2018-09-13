@@ -2,17 +2,15 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import ClearAll from '../../components/ClearRefinements/ClearRefinements.js';
 import cx from 'classnames';
 
-import {
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-} from '../../lib/utils.js';
+import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
+
+import { component } from '../../lib/suit';
 
 import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements.js';
 
 import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-clear-all');
+const suit = component('ClearRefinements');
 
 const renderer = ({
   containerNode,
@@ -21,10 +19,7 @@ const renderer = ({
   autoHideContainer,
   renderState,
   templates,
-}) => (
-  { refine, hasRefinements, createURL, instantSearchInstance },
-  isFirstRendering
-) => {
+}) => ({ refine, hasRefinements, instantSearchInstance }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
@@ -44,7 +39,6 @@ const renderer = ({
       hasRefinements={hasRefinements}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
-      url={createURL()}
     />,
     containerNode
   );
@@ -53,26 +47,22 @@ const renderer = ({
 const usage = `Usage:
 clearRefinements({
   container,
-  [ cssClasses.{root,header,body,footer,link}={} ],
-  [ templates.{header,link,footer}={link: 'Clear all'} ],
+  [ cssClasses.{root,button,disabledButton}={} ],
+  [ templates.{resetLabel}={resetLabel: 'Clear all refinements'} ],
   [ autoHideContainer=true ],
   [ collapsible=false ],
   [ excludedAttributes=[] ]
 })`;
 /**
  * @typedef {Object} ClearAllCSSClasses
- * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
- * @property {string|string[]} [link] CSS class to add to the link element.
+ * @property {string|string[]} [root] CSS class to add to the wrapper element.
+ * @property {string|string[]} [button] CSS class to add to the button of the widget.
+ * @property {string|string[]} [disabledButton] CSS class to add to the button when there are no refinements.
  */
 
 /**
  * @typedef {Object} ClearAllTemplates
- * @property {string|function(object):string} [header] Header template.
- * @property {string|function(object):string} [link] Link template.
- * @property {string|function(object):string} [footer] Footer template.
+ * @property {string|string[]} [resetLabel] Template for the content of the button
  */
 
 /**
@@ -80,11 +70,7 @@ clearRefinements({
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string[]} [excludedAttributes] List of attributes names to exclude from clear actions.
  * @property {ClearAllTemplates} [templates] Templates to use for the widget.
- * @property {boolean} [autoHideContainer=true] Hide the container when there are no refinements to clear.
  * @property {ClearAllCSSClasses} [cssClasses] CSS classes to be added.
- * @property {boolean|{collapsed: boolean}} [collapsible=false] Makes the widget collapsible. The user can then.
- * choose to hide the content of the widget. This option can also be an object with the property collapsed. If this
- * property is `true`, then the widget is hidden during the first rendering.
  * @property {boolean} [clearsQuery = false] If true, the widget will also clear the query.
  */
 
@@ -103,9 +89,8 @@ clearRefinements({
  *   instantsearch.widgets.clearRefinements({
  *     container: '#clear-all',
  *     templates: {
- *       link: 'Reset everything'
+ *       resetLabel: 'Reset everything'
  *     },
- *     autoHideContainer: false,
  *     clearsQuery: true,
  *   })
  * );
@@ -126,11 +111,12 @@ export default function clearRefinements({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    link: cx(bem('link'), userCssClasses.link),
+    root: cx(suit(), userCssClasses.root),
+    button: cx(suit({ descendantName: 'button' }), userCssClasses.button),
+    disabledButton: cx(
+      suit({ descendantName: 'button', modifierName: 'disabled' }),
+      userCssClasses.disabledButton
+    ),
   };
 
   const specializedRenderer = renderer({

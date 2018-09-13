@@ -5,11 +5,9 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-clear-all--body",
-      "footer": "ais-clear-all--footer",
-      "header": "ais-clear-all--header",
-      "link": "ais-clear-all--link",
-      "root": "ais-clear-all root cx",
+      "button": "ais-ClearRefinements-button myButton",
+      "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+      "root": "ais-ClearRefinements myRoot",
     }
   }
   hasRefinements={true}
@@ -18,20 +16,15 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "link": "Clear all",
+        "resetLabel": "Clear all refinements",
       },
       "templatesConfig": Object {},
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "link": false,
+        "resetLabel": false,
       },
     }
   }
-  url="#all-cleared"
 />
 `;
 
@@ -40,11 +33,9 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-clear-all--body",
-      "footer": "ais-clear-all--footer",
-      "header": "ais-clear-all--header",
-      "link": "ais-clear-all--link",
-      "root": "ais-clear-all root cx",
+      "button": "ais-ClearRefinements-button myButton",
+      "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+      "root": "ais-ClearRefinements myRoot",
     }
   }
   hasRefinements={true}
@@ -53,20 +44,15 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "link": "Clear all",
+        "resetLabel": "Clear all refinements",
       },
       "templatesConfig": Object {},
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "link": false,
+        "resetLabel": false,
       },
     }
   }
-  url="#all-cleared"
 />
 `;
 
@@ -75,11 +61,9 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-clear-all--body",
-      "footer": "ais-clear-all--footer",
-      "header": "ais-clear-all--header",
-      "link": "ais-clear-all--link",
-      "root": "ais-clear-all root cx",
+      "button": "ais-ClearRefinements-button myButton",
+      "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+      "root": "ais-ClearRefinements myRoot",
     }
   }
   hasRefinements={false}
@@ -88,20 +72,15 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "link": "Clear all",
+        "resetLabel": "Clear all refinements",
       },
       "templatesConfig": Object {},
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "link": false,
+        "resetLabel": false,
       },
     }
   }
-  url="#all-cleared"
 />
 `;
 
@@ -110,11 +89,9 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
   collapsible={false}
   cssClasses={
     Object {
-      "body": "ais-clear-all--body",
-      "footer": "ais-clear-all--footer",
-      "header": "ais-clear-all--header",
-      "link": "ais-clear-all--link",
-      "root": "ais-clear-all root cx",
+      "button": "ais-ClearRefinements-button myButton",
+      "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+      "root": "ais-ClearRefinements myRoot",
     }
   }
   hasRefinements={false}
@@ -123,19 +100,14 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "link": "Clear all",
+        "resetLabel": "Clear all refinements",
       },
       "templatesConfig": Object {},
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "link": false,
+        "resetLabel": false,
       },
     }
   }
-  url="#all-cleared"
 />
 `;

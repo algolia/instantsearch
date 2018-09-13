@@ -1,5 +1,3 @@
 export default {
-  header: '',
-  link: 'Clear all',
-  footer: '',
+  resetLabel: 'Clear all refinements',
 };
