@@ -43,7 +43,7 @@
     "material-ui": "0.20.2",
     "metalsmith": "2.3.0",
     "metalsmith-headings": "0.2.0",
-    "metalsmith-layouts": "2.1.0",
+    "metalsmith-layouts": "2.2.0",
     "metalsmith-navigation": "0.2.9",
     "metalsmith-sass": "1.5.1",
     "ms-webpack": "2.0.0",

@@ -10384,9 +10384,9 @@ metalsmith-headings@0.2.0:
   dependencies:
     cheerio "^0.14.0"
 
-metalsmith-layouts@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/metalsmith-layouts/-/metalsmith-layouts-2.1.0.tgz#523ce8778795a1fffd3390fa4a88e27911b47846"
+metalsmith-layouts@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/metalsmith-layouts/-/metalsmith-layouts-2.2.0.tgz#6b3da481efba9d4c37cd477d10515a82ba942b83"
   dependencies:
     debug "^3.1.0"
     inputformat-to-jstransformer "^1.2.1"
