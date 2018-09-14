@@ -26,6 +26,12 @@ Name | Type | Default | Description | Required
 option | Type | `defaultValue` | An option | yes
 optionTwo | Type | `defaultValue` | An option2 | no
 
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ canRefine: boolean, refine: (value: string) => void, createURL: (value: string) => string }` | Slot to override the DOM output
+
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying

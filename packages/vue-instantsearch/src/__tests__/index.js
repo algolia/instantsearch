@@ -7,6 +7,7 @@ test('Should register all components when installed', () => {
   InstantSearch.install(Vue);
 
   const components = [
+    'ais-autocomplete',
     'ais-breadcrumb',
     'ais-clear-refinements',
     'ais-configure',

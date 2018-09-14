@@ -20,6 +20,7 @@ You can try most of them out in our playground.
 <a class="btn btn-static-theme" href="stories/">🕹 try out live</a>
 
 * [Index](components/index.html)
+* [Autocomplete](components/Autocomplete.html)
 * [Breadcrumb](components/Breadcrumb.html)
 * [ClearRefinements](components/ClearRefinements.html)
 * [CurrentRefinements](components/CurrentRefinements.html)

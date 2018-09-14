@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+
+<div class="ais-Autocomplete">
+  <p>
+    This widget doesn't render anything without a filled in default slot.
+  </p>
+  <p>
+    query, function to refine and results are provided.
+  </p>
+  <pre>
+    refine: Function
+  </pre>
+  <pre>
+    currentRefinement: ""
+  </pre>
+  <details>
+    <summary>
+      <code>
+        indices
+      </code>
+      :
+    </summary>
+    <pre>
+      [
+  {
+    "index": "bla",
+    "label": "bla bla bla ",
+    "hits": [
+      {
+        "objectID": 1,
+        "name": "hi"
+      }
+    ],
+    "results": {}
+  }
+]
+    </pre>
+  </details>
+</div>
+
+`;
