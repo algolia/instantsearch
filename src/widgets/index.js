@@ -40,9 +40,7 @@ export { default as searchBox } from '../widgets/search-box/search-box.js';
 export {
   default as rangeSlider,
 } from '../widgets/range-slider/range-slider.js';
-export {
-  default as sortBySelector,
-} from '../widgets/sort-by-selector/sort-by-selector.js';
+export { default as sortBy } from '../widgets/sort-by/sort-by.js';
 export { default as starRating } from '../widgets/star-rating/star-rating.js';
 export { default as stats } from '../widgets/stats/stats.js';
 export { default as toggle } from '../widgets/toggle/toggle.js';

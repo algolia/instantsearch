@@ -3,15 +3,15 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectSortBySelector from '../connectSortBySelector.js';
+import connectSortBy from '../connectSortBy.js';
 import instantSearch from '../../../lib/main.js';
 
-describe('connectSortBySelector', () => {
+describe('connectSortBy', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = jest.fn();
-    const makeWidget = connectSortBySelector(rendering);
+    const makeWidget = connectSortBy(rendering);
     const instantSearchInstance = instantSearch({
       indexName: 'defaultIndex',
       searchClient: { search() {} },
@@ -74,7 +74,7 @@ describe('connectSortBySelector', () => {
 
   it('Renders with transformed items', () => {
     const rendering = jest.fn();
-    const makeWidget = connectSortBySelector(rendering);
+    const makeWidget = connectSortBy(rendering);
     const instantSearchInstance = instantSearch({
       indexName: 'defaultIndex',
       searchClient: { search() {} },
@@ -129,7 +129,7 @@ describe('connectSortBySelector', () => {
 
   it('Provides a function to update the index at each step', () => {
     const rendering = jest.fn();
-    const makeWidget = connectSortBySelector(rendering);
+    const makeWidget = connectSortBy(rendering);
     const instantSearchInstance = instantSearch({
       indexName: 'defaultIndex',
       searchClient: { search() {} },
@@ -189,7 +189,7 @@ describe('connectSortBySelector', () => {
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
-      const makeWidget = connectSortBySelector(rendering);
+      const makeWidget = connectSortBy(rendering);
       const instantSearchInstance = instantSearch({
         indexName: 'relevance',
         searchClient: { search() {} },

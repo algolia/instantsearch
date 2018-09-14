@@ -272,12 +272,12 @@ export default () => {
     )
   );
 
-  storiesOf('SortBySelector').add(
+  storiesOf('SortBy').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.sortBySelector({
+      instantsearch.widgets.sortBy({
         container,
-        indices: [
+        items: [
           { name: 'instant_search', label: 'Most relevant' },
           { name: 'instant_search_price_asc', label: 'Lowest price' },
           { name: 'instant_search_price_desc', label: 'Highest price' },

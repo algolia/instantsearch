@@ -1,10 +1,10 @@
 /* eslint-disable import/default */
 
 import { storiesOf } from 'dev-novel';
-import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import instantsearch from '../../../..';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
 
-const stories = storiesOf('SortBySelector');
+const stories = storiesOf('SortBy');
 
 export default () => {
   stories
@@ -12,7 +12,7 @@ export default () => {
       'default',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.sortBySelector({
+          instantsearch.widgets.sortBy({
             container,
             items: [
               { name: 'instant_search', label: 'Most relevant' },
@@ -27,7 +27,7 @@ export default () => {
       'with transformed items',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.sortBySelector({
+          instantsearch.widgets.sortBy({
             container,
             items: [
               { name: 'instant_search', label: 'Most relevant' },

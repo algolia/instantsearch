@@ -1,19 +1,19 @@
-import sortBySelector from '../sort-by-selector';
-import instantSearch from '../../../lib/main.js';
+import sortBy from '../sort-by';
+import instantSearch from '../../../lib/main';
 
-describe('sortBySelector call', () => {
+describe('sortBy call', () => {
   it('throws an exception when no options', () => {
     const container = document.createElement('div');
-    expect(sortBySelector.bind(null, { container })).toThrow(/^Usage/);
+    expect(sortBy.bind(null, { container })).toThrow(/^Usage/);
   });
 
   it('throws an exception when no items', () => {
     const items = [];
-    expect(sortBySelector.bind(null, { items })).toThrow(/^Usage/);
+    expect(sortBy.bind(null, { items })).toThrow(/^Usage/);
   });
 });
 
-describe('sortBySelector()', () => {
+describe('sortBy()', () => {
   let ReactDOM;
   let container;
   let items;
@@ -31,7 +31,7 @@ describe('sortBySelector()', () => {
     });
     ReactDOM = { render: jest.fn() };
 
-    sortBySelector.__Rewire__('render', ReactDOM.render);
+    sortBy.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
     items = [
@@ -43,7 +43,7 @@ describe('sortBySelector()', () => {
       select: 'custom-select',
       item: 'custom-item',
     };
-    widget = sortBySelector({ container, items, cssClasses });
+    widget = sortBy({ container, items, cssClasses });
     helper = {
       getIndex: jest.fn().mockReturnValue('index-a'),
       setIndex: jest.fn().mockReturnThis(),
@@ -75,7 +75,7 @@ describe('sortBySelector()', () => {
   });
 
   it('renders transformed items', () => {
-    widget = sortBySelector({
+    widget = sortBy({
       container,
       items,
       transformItems: allItems =>
@@ -110,6 +110,6 @@ describe('sortBySelector()', () => {
   });
 
   afterEach(() => {
-    sortBySelector.__ResetDependency__('render');
+    sortBy.__ResetDependency__('render');
   });
 });

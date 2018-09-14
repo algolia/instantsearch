@@ -2,9 +2,9 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
-import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
+import connectSortBy from '../../connectors/sort-by/connectSortBy.js';
 import { getContainerNode } from '../../lib/utils.js';
-import { component } from '../../lib/suit';
+import { component } from '../../lib/suit.js';
 
 const suit = component('SortBy');
 
@@ -15,18 +15,20 @@ const renderer = ({ containerNode, cssClasses }) => (
   if (isFirstRendering) return;
 
   render(
-    <Selector
-      cssClasses={cssClasses}
-      currentValue={currentRefinement}
-      options={options}
-      setValue={refine}
-    />,
+    <div className={cx(cssClasses.root)}>
+      <Selector
+        cssClasses={cssClasses}
+        currentValue={currentRefinement}
+        options={options}
+        setValue={refine}
+      />
+    </div>,
     containerNode
   );
 };
 
 const usage = `Usage:
-sortBySelector({
+sortBy({
   container,
   items,
   [cssClasses.{root,select,option}={}],
@@ -62,13 +64,13 @@ sortBySelector({
  *
  * For the users it is like they are selecting a new sort order.
  * @type {WidgetFactory}
- * @devNovel SortBySelector
+ * @devNovel SortBy
  * @category sort
- * @param {SortByWidgetOptions} $0 Options for the SortBySelector widget
- * @return {Widget} Creates a new instance of the SortBySelector widget.
+ * @param {SortByWidgetOptions} $0 Options for the SortBy widget
+ * @return {Widget} Creates a new instance of the SortBy widget.
  * @example
  * search.addWidget(
- *   instantsearch.widgets.sortBySelector({
+ *   instantsearch.widgets.sortBy({
  *     container: '#sort-by-container',
  *     items: [
  *       {name: 'instant_search', label: 'Most relevant'},
@@ -78,7 +80,7 @@ sortBySelector({
  *   })
  * );
  */
-export default function sortBySelector({
+export default function sortBy({
   container,
   items,
   cssClasses: userCssClasses = {},
@@ -102,7 +104,7 @@ export default function sortBySelector({
   });
 
   try {
-    const makeWidget = connectSortBySelector(specializedRenderer, () =>
+    const makeWidget = connectSortBy(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ items, transformItems });
