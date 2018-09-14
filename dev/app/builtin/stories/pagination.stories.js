@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.pagination({
             container,
-            maxPages: 20,
+            totalPages: 20,
           })
         );
       })
@@ -26,17 +26,6 @@ export default () => {
           instantsearch.widgets.pagination({
             container,
             padding: 6,
-          })
-        );
-      })
-    )
-    .add(
-      'without autoHideContainer',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.pagination({
-            container,
-            autoHideContainer: false,
           })
         );
       })
