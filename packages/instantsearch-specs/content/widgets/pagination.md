@@ -5,7 +5,7 @@ html: |
   <div class="ais-Pagination">
     <ul class="ais-Pagination-list">
       <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
-        <span class="ais-Pagination-link" aria-label="Previous">‹‹</span>
+        <span class="ais-Pagination-link" aria-label="First">‹‹</span>
       </li>
       <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
         <span class="ais-Pagination-link" aria-label="Previous">‹</span>
@@ -26,7 +26,7 @@ html: |
         <a class="ais-Pagination-link" aria-label="Next" href="#">›</a>
       </li>
       <li class="ais-Pagination-item ais-Pagination-item--lastPage">
-        <a class="ais-Pagination-link" aria-label="Next" href="#">››</a>
+        <a class="ais-Pagination-link" aria-label="Last" href="#">››</a>
       </li>
     </ul>
   </div>
