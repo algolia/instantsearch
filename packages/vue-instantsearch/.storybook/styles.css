@@ -98,3 +98,7 @@ body {
 .playground-hits-desc > p:last-child {
   margin: 0;
 }
+
+.autosuggest__results_item-highlighted {
+  background-color: rgb(206, 202, 202);
+}
