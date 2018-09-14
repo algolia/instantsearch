@@ -77,7 +77,7 @@ const renderer = ({
 const usage = `Usage:
 pagination({
   container,
-  [ cssClasses.{root, noRefinement, list, item, itemFirstPage, itemLastPage, itemPreviousPage, itemNextPage, itemPage, selectedItem, disabledItem, link}={} ],
+  [ cssClasses.{root, noRefinementRoot, list, item, itemFirstPage, itemLastPage, itemPreviousPage, itemNextPage, itemPage, selectedItem, disabledItem, link}={} ],
   [ labels.{previous,next,first,last} ],
   [ totalPages ],
   [ padding=3 ],
@@ -91,7 +91,7 @@ pagination({
 /**
  * @typedef {Object} PaginationCSSClasses
  * @property  {string|string[]} [root] CSS classes added to the root element of the widget.
- * @property {string|string[]} [noRefinement] CSS class to add to the root element of the widget if there are no refinements.
+ * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element of the widget if there are no refinements.
  * @property  {string|string[]} [list] CSS classes added to the wrapping `<ul>`.
  * @property  {string|string[]} [item] CSS classes added to each `<li>`.
  * @property  {string|string[]} [itemFirstPage] CSS classes added to the first `<li>`.
@@ -177,9 +177,9 @@ export default function pagination({
 
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
-    noRefinement: cx(
+    noRefinementRoot: cx(
       suit({ modifierName: 'noRefinement' }),
-      userCssClasses.noRefinement
+      userCssClasses.noRefinementRoot
     ),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),

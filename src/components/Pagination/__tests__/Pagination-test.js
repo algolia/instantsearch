@@ -13,7 +13,7 @@ describe('Pagination', () => {
   const defaultProps = {
     cssClasses: {
       root: 'root',
-      noRefinement: 'noRefinement',
+      noRefinementRoot: 'noRefinementRoot',
       list: 'list',
       item: 'item',
       firstPageItem: 'firstPageItem',

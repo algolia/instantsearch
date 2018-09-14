@@ -132,7 +132,7 @@ Pagination.propTypes = {
   createURL: PropTypes.func,
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
-    noRefinement: PropTypes.string,
+    noRefinementRoot: PropTypes.string,
     list: PropTypes.string,
     item: PropTypes.string,
     firstPageItem: PropTypes.string,
