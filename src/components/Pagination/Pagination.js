@@ -117,13 +117,19 @@ export class Pagination extends Component {
 
   render() {
     return (
-      <ul className={cx(this.props.cssClasses.root)}>
-        {this.props.showFirst && this.firstPageLink(this.props)}
-        {this.props.showPrevious && this.previousPageLink(this.props)}
-        {this.pages(this.props)}
-        {this.props.showNext && this.nextPageLink(this.props)}
-        {this.props.showLast && this.lastPageLink(this.props)}
-      </ul>
+      <div
+        className={cx(this.props.cssClasses.root, {
+          [this.props.cssClasses.noRefinementRoot]: this.props.isFirstPage,
+        })}
+      >
+        <ul className={cx(this.props.cssClasses.list)}>
+          {this.props.showFirst && this.firstPageLink(this.props)}
+          {this.props.showPrevious && this.previousPageLink(this.props)}
+          {this.pages(this.props)}
+          {this.props.showNext && this.nextPageLink(this.props)}
+          {this.props.showLast && this.lastPageLink(this.props)}
+        </ul>
+      </div>
     );
   }
 }
