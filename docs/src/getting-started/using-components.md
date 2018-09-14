@@ -42,6 +42,7 @@ You can try most of them out in our playground.
 * [PoweredBy](components/powered-by.html)
 * [Rating](components/rating-menu.html)
 * [SearchBox](components/search-box.html)
+* [SearchState](components/SearchState.html)
 * [Snippet](components/snippet.html)
 * [Stats](components/stats.html)
 

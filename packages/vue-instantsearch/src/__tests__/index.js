@@ -28,6 +28,7 @@ test('Should register all components when installed', () => {
     'ais-rating-menu',
     'ais-refinement-list',
     'ais-search-box',
+    'ais-search-state',
     'ais-snippet',
     'ais-sort-by',
     'ais-stats',

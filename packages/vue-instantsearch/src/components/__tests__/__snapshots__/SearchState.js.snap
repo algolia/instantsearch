@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`allows default slot to render whatever they want (falsy query) 1`] = `
+
+<div class="ais-SearchState">
+  <p>
+    There's no query
+  </p>
+</div>
+
+`;
+
+exports[`allows default slot to render whatever they want (truthy query) 1`] = `
+
+<div class="ais-SearchState">
+  <p>
+    Query is here
+  </p>
+</div>
+
+`;
+
+exports[`renders explanation if no slot is used 1`] = `
+
+<div class="ais-SearchState">
+  <p>
+    Use this component to have a different layout based on a certain state.
+  </p>
+  <p>
+    Fill in the slot, and get access to the following things on the
+    <code>
+      slot-scope
+    </code>
+    :
+  </p>
+  <pre>
+    [
+  "query",
+  "hits",
+  "page"
+]
+  </pre>
+</div>
+
+`;
