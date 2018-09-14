@@ -3,17 +3,16 @@ import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
 import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+import { getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-const bem = bemHelper('ais-sort-by-selector');
+const suit = component('SortBy');
 
-const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
-  { currentRefinement, options, refine, hasNoResults },
+const renderer = ({ containerNode, cssClasses }) => (
+  { currentRefinement, options, refine },
   isFirstRendering
 ) => {
   if (isFirstRendering) return;
-
-  const shouldAutoHideContainer = autoHideContainer && hasNoResults;
 
   render(
     <Selector
@@ -21,7 +20,6 @@ const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
       currentValue={currentRefinement}
       options={options}
       setValue={refine}
-      shouldAutoHideContainer={shouldAutoHideContainer}
     />,
     containerNode
   );
@@ -30,8 +28,8 @@ const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
 const usage = `Usage:
 sortBySelector({
   container,
-  indices,
-  [cssClasses.{root,select,item}={}],
+  items,
+  [cssClasses.{root,select,option}={}],
   [autoHideContainer=false],
   [transformItems]
 })`;
@@ -40,7 +38,7 @@ sortBySelector({
  * @typedef {Object} SortByWidgetCssClasses
  * @property {string|string[]} [root] CSS classes added to the outer `<div>`.
  * @property {string|string[]} [select] CSS classes added to the parent `<select>`.
- * @property {string|string[]} [item] CSS classes added to each `<option>`.
+ * @property {string|string[]} [option] CSS classes added to each `<option>`.
  */
 
 /**
@@ -52,7 +50,7 @@ sortBySelector({
 /**
  * @typedef {Object} SortByWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {SortByIndexDefinition[]} indices Array of objects defining the different indices to choose from.
+ * @property {SortByIndexDefinition[]} items Array of objects defining the different indices to choose from.
  * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
@@ -72,7 +70,7 @@ sortBySelector({
  * search.addWidget(
  *   instantsearch.widgets.sortBySelector({
  *     container: '#sort-by-container',
- *     indices: [
+ *     items: [
  *       {name: 'instant_search', label: 'Most relevant'},
  *       {name: 'instant_search_price_asc', label: 'Lowest price'},
  *       {name: 'instant_search_price_desc', label: 'Highest price'}
@@ -82,9 +80,8 @@ sortBySelector({
  */
 export default function sortBySelector({
   container,
-  indices,
+  items,
   cssClasses: userCssClasses = {},
-  autoHideContainer = false,
   transformItems,
 } = {}) {
   if (!container) {
@@ -94,24 +91,21 @@ export default function sortBySelector({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    // We use the same class to avoid regression on existing website. It needs to be replaced
-    // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item),
+    root: cx(suit(), userCssClasses.root),
+    select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
+    option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    autoHideContainer,
   });
 
   try {
     const makeWidget = connectSortBySelector(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ indices, transformItems });
+    return makeWidget({ items, transformItems });
   } catch (e) {
     throw new Error(usage);
   }

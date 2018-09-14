@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.sortBySelector({
             container,
-            indices: [
+            items: [
               { name: 'instant_search', label: 'Most relevant' },
               { name: 'instant_search_price_asc', label: 'Lowest price' },
               { name: 'instant_search_price_desc', label: 'Highest price' },
@@ -29,7 +29,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.sortBySelector({
             container,
-            indices: [
+            items: [
               { name: 'instant_search', label: 'Most relevant' },
               { name: 'instant_search_price_asc', label: 'Lowest price' },
               { name: 'instant_search_price_desc', label: 'Highest price' },

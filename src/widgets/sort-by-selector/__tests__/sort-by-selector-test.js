@@ -1,6 +1,4 @@
 import sortBySelector from '../sort-by-selector';
-import Selector from '../../../components/Selector';
-
 import instantSearch from '../../../lib/main.js';
 
 describe('sortBySelector call', () => {
@@ -9,21 +7,20 @@ describe('sortBySelector call', () => {
     expect(sortBySelector.bind(null, { container })).toThrow(/^Usage/);
   });
 
-  it('throws an exception when no indices', () => {
-    const indices = [];
-    expect(sortBySelector.bind(null, { indices })).toThrow(/^Usage/);
+  it('throws an exception when no items', () => {
+    const items = [];
+    expect(sortBySelector.bind(null, { items })).toThrow(/^Usage/);
   });
 });
 
 describe('sortBySelector()', () => {
   let ReactDOM;
   let container;
-  let indices;
+  let items;
   let cssClasses;
   let widget;
   let helper;
   let results;
-  let autoHideContainer;
 
   beforeEach(() => {
     const instantSearchInstance = instantSearch({
@@ -32,14 +29,12 @@ describe('sortBySelector()', () => {
       indexName: 'defaultIndex',
       createAlgoliaClient: () => ({}),
     });
-    autoHideContainer = jest.fn().mockReturnValue(Selector);
     ReactDOM = { render: jest.fn() };
 
     sortBySelector.__Rewire__('render', ReactDOM.render);
-    sortBySelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
 
     container = document.createElement('div');
-    indices = [
+    items = [
       { name: 'index-a', label: 'Index A' },
       { name: 'index-b', label: 'Index B' },
     ];
@@ -48,7 +43,7 @@ describe('sortBySelector()', () => {
       select: 'custom-select',
       item: 'custom-item',
     };
-    widget = sortBySelector({ container, indices, cssClasses });
+    widget = sortBySelector({ container, items, cssClasses });
     helper = {
       getIndex: jest.fn().mockReturnValue('index-a'),
       setIndex: jest.fn().mockReturnThis(),
@@ -82,9 +77,9 @@ describe('sortBySelector()', () => {
   it('renders transformed items', () => {
     widget = sortBySelector({
       container,
-      indices,
-      transformItems: items =>
-        items.map(item => ({ ...item, transformed: true })),
+      items,
+      transformItems: allItems =>
+        allItems.map(item => ({ ...item, transformed: true })),
     });
 
     widget.init({ helper, instantSearchInstance: {} });
@@ -100,8 +95,8 @@ describe('sortBySelector()', () => {
   });
 
   it('should throw if there is no name attribute in a passed object', () => {
-    indices.length = 0;
-    indices.push({ label: 'Label without a name' });
+    items.length = 0;
+    items.push({ label: 'Label without a name' });
     expect(() => {
       widget.init({ helper });
     }).toThrow(/Index index-a not present/);
@@ -116,6 +111,5 @@ describe('sortBySelector()', () => {
 
   afterEach(() => {
     sortBySelector.__ResetDependency__('render');
-    sortBySelector.__ResetDependency__('autoHideContainerHOC');
   });
 });

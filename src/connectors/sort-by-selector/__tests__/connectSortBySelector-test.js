@@ -17,15 +17,15 @@ describe('connectSortBySelector', () => {
       searchClient: { search() {} },
     });
 
-    const indices = [
+    const items = [
       { label: 'Sort products by relevance', name: 'relevance' },
       { label: 'Sort products by price', name: 'priceASC' },
     ];
-    const widget = makeWidget({ indices });
+    const widget = makeWidget({ items });
 
     expect(widget.getConfiguration).toBe(undefined);
 
-    const helper = jsHelper({}, indices[0].name);
+    const helper = jsHelper({}, items[0].name);
     helper.search = jest.fn();
 
     widget.init({
@@ -41,7 +41,7 @@ describe('connectSortBySelector', () => {
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         currentRefinement: helper.state.index,
-        widgetParams: { indices },
+        widgetParams: { items },
         options: [
           { label: 'Sort products by relevance', value: 'relevance' },
           { label: 'Sort products by price', value: 'priceASC' },
@@ -62,7 +62,7 @@ describe('connectSortBySelector', () => {
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         currentRefinement: helper.state.index,
-        widgetParams: { indices },
+        widgetParams: { items },
         options: [
           { label: 'Sort products by relevance', value: 'relevance' },
           { label: 'Sort products by price', value: 'priceASC' },
@@ -80,17 +80,17 @@ describe('connectSortBySelector', () => {
       searchClient: { search() {} },
     });
 
-    const indices = [
+    const items = [
       { label: 'Sort products by relevance', name: 'relevance' },
       { label: 'Sort products by price', name: 'priceASC' },
     ];
     const widget = makeWidget({
-      indices,
-      transformItems: items =>
-        items.map(item => ({ ...item, label: 'transformed' })),
+      items,
+      transformItems: allItems =>
+        allItems.map(item => ({ ...item, label: 'transformed' })),
     });
 
-    const helper = jsHelper({}, indices[0].name);
+    const helper = jsHelper({}, items[0].name);
     helper.search = jest.fn();
 
     widget.init({
@@ -135,15 +135,15 @@ describe('connectSortBySelector', () => {
       searchClient: { search() {} },
     });
 
-    const indices = [
+    const items = [
       { label: 'Sort products by relevance', name: 'relevance' },
       { label: 'Sort products by price', name: 'priceASC' },
     ];
     const widget = makeWidget({
-      indices,
+      items,
     });
 
-    const helper = jsHelper({}, indices[0].name);
+    const helper = jsHelper({}, items[0].name);
     helper.search = jest.fn();
 
     widget.init({
@@ -156,7 +156,7 @@ describe('connectSortBySelector', () => {
 
     {
       // first rendering
-      expect(helper.state.index).toBe(indices[0].name);
+      expect(helper.state.index).toBe(items[0].name);
       const renderOptions =
         rendering.mock.calls[rendering.mock.calls.length - 1][0];
       const { refine, currentRefinement } = renderOptions;
@@ -194,14 +194,14 @@ describe('connectSortBySelector', () => {
         indexName: 'relevance',
         searchClient: { search() {} },
       });
-      const indices = [
+      const items = [
         { label: 'Sort products by relevance', name: 'relevance' },
         { label: 'Sort products by price', name: 'priceASC' },
         { label: 'Sort products by magic', name: 'other' },
       ];
 
       const widget = makeWidget({
-        indices,
+        items,
         ...config,
       });
 

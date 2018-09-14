@@ -14,7 +14,7 @@ var customSortBySelector = connectSortBySelector(function render(params, isFirst
 });
 search.addWidget(
   customSortBySelector({
-    indices,
+    items,
     [ transformItems ]
   })
 );
@@ -22,21 +22,21 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 `;
 
 /**
- * @typedef {Object} SortBySelectorIndices
+ * @typedef {Object} SortBySelectorItems
  * @property {string} name Name of the index to target.
  * @property {string} label Label to display for the targeted index.
  */
 
 /**
  * @typedef {Object} CustomSortBySelectorWidgetOptions
- * @property {SortBySelectorIndices[]} indices Array of objects defining the different indices to choose from.
+ * @property {SortBySelectorItems[]} items Array of objects defining the different indices to choose from.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
  * @typedef {Object} SortBySelectorRenderingOptions
  * @property {string} currentRefinement The currently selected index.
- * @property {SortBySelectorIndices[]} options All the available indices
+ * @property {SortBySelectorItems[]} options All the available indices
  * @property {function(string)} refine Switches indices and triggers a new search.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams All original `CustomSortBySelectorWidgetOptions` forwarded to the `renderFn`.
@@ -102,13 +102,13 @@ export default function connectSortBySelector(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { indices, transformItems = items => items } = widgetParams;
+    const { items, transformItems = x => x } = widgetParams;
 
-    if (!indices) {
+    if (!items) {
       throw new Error(usage);
     }
 
-    const selectorOptions = indices.map(({ label, name }) => ({
+    const selectorOptions = items.map(({ label, name }) => ({
       label,
       value: name,
     }));
@@ -116,10 +116,7 @@ export default function connectSortBySelector(renderFn, unmountFn) {
     return {
       init({ helper, instantSearchInstance }) {
         const currentIndex = helper.getIndex();
-        const isIndexInList = find(
-          indices,
-          ({ name }) => name === currentIndex
-        );
+        const isIndexInList = find(items, ({ name }) => name === currentIndex);
 
         if (!isIndexInList) {
           throw new Error(
