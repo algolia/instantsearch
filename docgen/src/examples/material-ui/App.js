@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
 import {
   InstantSearch,
@@ -36,8 +35,6 @@ import {
 } from 'material-ui';
 import SortIcon from 'material-ui/svg-icons/content/sort';
 import { withUrlSync } from '../urlSync';
-
-injectTapEventPlugin();
 
 const App = props => (
   <MuiThemeProvider>
