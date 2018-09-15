@@ -55,7 +55,7 @@
     "qs": "6.5.2",
     "react": "16.5.1",
     "react-dom": "16.5.1",
-    "react-hot-loader": "4.3.7",
+    "react-hot-loader": "4.3.8",
     "react-instantsearch-dom": "5.2.3",
     "recursive-readdir": "2.2.2",
     "replace-in-file": "3.4.2",
