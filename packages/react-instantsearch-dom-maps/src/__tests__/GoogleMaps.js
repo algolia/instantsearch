@@ -385,8 +385,8 @@ describe('GoogleMaps', () => {
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(0);
 
-      expect(mapInstance.setZoom).toHaveBeenCalledTimes(0);
-      expect(mapInstance.setCenter).toHaveBeenCalledTimes(0);
+      expect(mapInstance.setZoom).toHaveBeenCalledTimes(1); // cDM
+      expect(mapInstance.setCenter).toHaveBeenCalledTimes(1); // cDM
 
       wrapper.setProps({
         boundingBoxPadding: 0,
@@ -417,8 +417,8 @@ describe('GoogleMaps', () => {
         0
       );
 
-      expect(mapInstance.setZoom).toHaveBeenCalledTimes(0);
-      expect(mapInstance.setCenter).toHaveBeenCalledTimes(0);
+      expect(mapInstance.setZoom).toHaveBeenCalledTimes(1); // cDM
+      expect(mapInstance.setCenter).toHaveBeenCalledTimes(1); // cDM
     });
 
     it('expect to call setCenter & setZoom when boundingBox is not provided', () => {
@@ -447,14 +447,17 @@ describe('GoogleMaps', () => {
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(0);
 
-      expect(mapInstance.setZoom).toHaveBeenCalledTimes(0);
-      expect(mapInstance.setCenter).toHaveBeenCalledTimes(0);
+      expect(mapInstance.setZoom).toHaveBeenCalledTimes(1); // cDM
+      expect(mapInstance.setCenter).toHaveBeenCalledTimes(1); // cDM
 
       wrapper.setProps();
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(0);
 
+      expect(mapInstance.setZoom).toHaveBeenCalledTimes(2); // cDM + cDU
       expect(mapInstance.setZoom).toHaveBeenCalledWith(1);
+
+      expect(mapInstance.setCenter).toHaveBeenCalledTimes(2); // cDM + cDU
       expect(mapInstance.setCenter).toHaveBeenCalledWith({
         lat: 0,
         lng: 0,

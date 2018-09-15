@@ -31,6 +31,9 @@ describe('CustomMarker', () => {
   beforeEach(() => {
     utils.registerEvents.mockClear();
     utils.registerEvents.mockReset();
+
+    // Register default implementation
+    utils.registerEvents.mockImplementation(() => jest.fn());
   });
 
   describe('creation', () => {
@@ -149,7 +152,7 @@ describe('CustomMarker', () => {
         }
       );
 
-      expect(utils.registerEvents).toHaveBeenCalledTimes(1);
+      expect(utils.registerEvents).toHaveBeenCalledTimes(2); // cDM + cDU
       expect(utils.registerEvents).toHaveBeenCalledWith(
         expect.any(Object),
         expect.any(Object),
@@ -176,7 +179,7 @@ describe('CustomMarker', () => {
         ...defaultProps,
       };
 
-      const wrapper = shallow(
+      shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
         </CustomMarker>,
@@ -189,11 +192,6 @@ describe('CustomMarker', () => {
           },
         }
       );
-
-      expect(removeEventListeners).toHaveBeenCalledTimes(0);
-
-      // Simulate the update
-      wrapper.instance().componentDidUpdate();
 
       expect(removeEventListeners).toHaveBeenCalledTimes(1);
     });
@@ -208,13 +206,11 @@ describe('CustomMarker', () => {
 
       createHTMLMarker.mockImplementationOnce(() => factory);
 
-      utils.registerEvents.mockImplementation(() => () => {});
-
       const props = {
         ...defaultProps,
       };
 
-      const wrapper = shallow(
+      shallow(
         <CustomMarker {...props}>
           <span>This is the children.</span>
         </CustomMarker>,
@@ -228,13 +224,8 @@ describe('CustomMarker', () => {
         }
       );
 
-      expect(utils.registerEvents).toHaveBeenCalledTimes(1);
-
-      // Simulate the update
-      wrapper.instance().componentDidUpdate();
-
-      expect(utils.registerEvents).toHaveBeenCalledTimes(2);
-      expect(utils.registerEvents).toHaveBeenLastCalledWith(
+      expect(utils.registerEvents).toHaveBeenCalledTimes(2); // cDM + cDU
+      expect(utils.registerEvents).toHaveBeenCalledWith(
         expect.any(Object),
         expect.any(Object),
         marker
@@ -556,7 +547,7 @@ describe('CustomMarker', () => {
         ...defaultProps,
       };
 
-      // Use `mount` instead of `shallow` to trigger didUpdate
+      // Use `mount` instead of `shallow` to avoid issue with `unstable_renderSubtreeIntoContainer`
       const wrapper = mount(
         <CustomMarker {...props}>
           <span>This is the children.</span>
@@ -617,7 +608,8 @@ describe('CustomMarker', () => {
         ...defaultProps,
       };
 
-      const wrapper = shallow(
+      // Use `mount` instead of `shallow` to avoid issue with `unstable_renderSubtreeIntoContainer`
+      const wrapper = mount(
         <CustomMarker {...props}>
           <span>This is the children.</span>
         </CustomMarker>,
@@ -633,7 +625,6 @@ describe('CustomMarker', () => {
 
       wrapper.unmount();
 
-      expect(unmountComponentAtNode).toHaveBeenCalledTimes(1);
       expect(unmountComponentAtNode).toHaveBeenCalledWith(marker.element);
 
       unmountComponentAtNode.mockReset();
