@@ -4,6 +4,7 @@ import InstantSearch from 'vue-instantsearch';
 
 Vue.use(InstantSearch);
 
+// eslint-disable-next-line no-new
 new Vue({
   el: '#app',
   render: h => h(App),

@@ -39,19 +39,25 @@
                 'ais-search-box__submit': 'ais-SearchBox-submit',
                 'ais-search-box__loading-indicator': 'ais-SearchBox-loadingIndicator',
               }"
-            ></ais-search-box>
+            />
 
             {{#if attributesToDisplay}}
             <ais-results class="ais-Hits-list">
               <template slot-scope="{ result }">
                 <article class="ais-Hits-item">
                   <h1>
-                    <ais-highlight :result="result" attribute-name="{{attributesToDisplay.[0]}}"></ais-highlight>
+                    <ais-highlight
+                      :result="result"
+                      attribute-name="{{attributesToDisplay.[0]}}"
+                    />
                   </h1>
                   {{#each attributesToDisplay}}
                   {{#unless @first}}
                   <p>
-                    <ais-highlight :result="result" attribute-name="{{this}}"></ais-highlight>
+                    <ais-highlight
+                      :result="result"
+                      attribute-name="{{this}}"
+                    />
                   </p>
                   {{/unless}}
                   {{/each}}
@@ -59,7 +65,7 @@
               </template>
             </ais-results>
             {{else}}
-            <ais-results class="ais-Hits-list"></ais-results>
+            <ais-results class="ais-Hits-list" />
             {{/if}}
 
             <div class="pagination">
@@ -74,7 +80,7 @@
                   'ais-pagination__item--last': 'ais-Pagination-item--last',
                   'ais-pagination__link': 'ais-Pagination-link',
                 }"
-              ></ais-pagination>
+              />
             </div>
           </div>
         </div>

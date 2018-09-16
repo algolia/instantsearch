@@ -4411,16 +4411,22 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
                 'ais-search-box__submit': 'ais-SearchBox-submit',
                 'ais-search-box__loading-indicator': 'ais-SearchBox-loadingIndicator',
               }\\"
-            ></ais-search-box>
+            />
 
             <ais-results class=\\"ais-Hits-list\\">
               <template slot-scope=\\"{ result }\\">
                 <article class=\\"ais-Hits-item\\">
                   <h1>
-                    <ais-highlight :result=\\"result\\" attribute-name=\\"attribute1\\"></ais-highlight>
+                    <ais-highlight
+                      :result=\\"result\\"
+                      attribute-name=\\"attribute1\\"
+                    />
                   </h1>
                   <p>
-                    <ais-highlight :result=\\"result\\" attribute-name=\\"attribute2\\"></ais-highlight>
+                    <ais-highlight
+                      :result=\\"result\\"
+                      attribute-name=\\"attribute2\\"
+                    />
                   </p>
                 </article>
               </template>
@@ -4438,7 +4444,7 @@ exports[`Templates Vue InstantSearch File content: src/App.vue 1`] = `
                   'ais-pagination__item--last': 'ais-Pagination-item--last',
                   'ais-pagination__link': 'ais-Pagination-link',
                 }\\"
-              ></ais-pagination>
+              />
             </div>
           </div>
         </div>
@@ -4529,6 +4535,7 @@ import InstantSearch from 'vue-instantsearch';
 
 Vue.use(InstantSearch);
 
+// eslint-disable-next-line no-new
 new Vue({
   el: '#app',
   render: h => h(App),
