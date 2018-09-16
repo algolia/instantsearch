@@ -29,7 +29,7 @@
   "devDependencies": {
     "@angular/compiler-cli": "6.1.7",
     "@angular-devkit/build-angular": "0.8.2",
-    "@angular/cli": "6.2.1",
+    "@angular/cli": "6.2.2",
     "@angular/language-service": "6.1.7",
     "@types/algoliasearch": "3.27.6",
     "@types/jasmine": "2.8.8",
