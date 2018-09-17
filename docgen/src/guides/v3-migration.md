@@ -244,11 +244,14 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 | Before                 | After                            |
 | ---------------------- | -------------------------------- |
 | `poweredBy`            | use the dedicated widget         |
-| `searchOnKeyPressOnly` | `searchAsYouType`                |
 | `wrapInput`            | Use the connectSearchBox instead |
+| `searchOnKeyPressOnly` | `searchAsYouType`                |
 | `reset`                | `showReset`                      |
 | `magnifier`            | `showMagnifier`                  |
 | `loadingIndicator`     | `showLoadingIndicator`           |
+
+With the drop of wrapInput, we decided not to accept `input` as a container anymore. If you
+want complete control over the rendering, you should use the `connectSearchBox`.
 
 The search box does not support powered-by. If you're using a community plan, you should now
 use the powered-by widget to display the Algolia logo.

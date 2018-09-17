@@ -12,7 +12,6 @@ const renderer = ({
   containerNode,
   cssClasses,
   placeholder,
-  poweredBy,
   templates,
   autofocus,
   searchOnEnterKeyPressOnly,
@@ -57,11 +56,6 @@ const renderer = ({
       addLoadingIndicator(input, loadingIndicator, templates);
 
     addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
-
-    // Optional "powered by Algolia" widget
-    if (poweredBy) {
-      addPoweredBy(input, poweredBy, templates);
-    }
 
     // When the page is coming from BFCache
     // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
@@ -162,26 +156,13 @@ const usage = `Usage:
 searchBox({
   container,
   [ placeholder ],
-  [ cssClasses.{input,poweredBy} ],
-  [ poweredBy=false || poweredBy.{template, cssClasses.{root,link}} ],
+  [ cssClasses.{input} ],
   [ wrapInput ],
   [ autofocus ],
   [ searchOnEnterKeyPressOnly ],
   [ queryHook ]
   [ reset=true || reset.{template, cssClasses.{root}} ]
 })`;
-
-/**
- * @typedef {Object} SearchBoxPoweredByCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the root element.
- * @property  {string|string[]} [link] CSS class to add to the link element.
- */
-
-/**
- * @typedef {Object} SearchBoxPoweredByOption
- * @property {function|string} template Template used for displaying the link. Can accept a function or a Hogan string.
- * @property {SearchBoxPoweredByCSSClasses} [cssClasses] CSS classes added to the powered-by badge.
- */
 
 /**
  * @typedef {Object} SearchBoxResetOption
@@ -212,7 +193,6 @@ searchBox({
  * @typedef {Object} SearchBoxWidgetOptions
  * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget. If the CSS selector or the HTMLElement is an existing input, the widget will use it.
  * @property  {string} [placeholder] Input's placeholder.
- * @property  {boolean|SearchBoxPoweredByOption} [poweredBy=false] Define if a "powered by Algolia" link should be added near the input.
  * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
  * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
  * @property  {boolean|SearchBoxLoadingIndicatorOption} [loadingIndicator=false] Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
@@ -244,7 +224,6 @@ searchBox({
  *     container: '#q',
  *     placeholder: 'Search for products',
  *     autofocus: false,
- *     poweredBy: true,
  *     reset: true,
  *     loadingIndicator: false
  *   })
@@ -254,7 +233,6 @@ export default function searchBox({
   container,
   placeholder = '',
   cssClasses = {},
-  poweredBy = false,
   wrapInput = true,
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
@@ -274,16 +252,10 @@ export default function searchBox({
     autofocus = 'auto';
   }
 
-  // Convert to object if only set to true
-  if (poweredBy === true) {
-    poweredBy = {};
-  }
-
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     placeholder,
-    poweredBy,
     templates: defaultTemplates,
     autofocus,
     searchOnEnterKeyPressOnly,
@@ -483,48 +455,6 @@ function addLoadingIndicator(
   );
 
   input.parentNode.appendChild(htmlNode);
-}
-
-/**
- * Adds a powered by in the searchbox widget
- * @private
- * @param {HTMLElement} input the DOM node of the input of the searchbox
- * @param {object} poweredBy the user options (cssClasses and template)
- * @param {object} templates the default templates
- * @returns {undefined} returns nothing
- */
-function addPoweredBy(input, poweredBy, { poweredBy: poweredbyTemplate }) {
-  // Default values
-  poweredBy = {
-    cssClasses: {},
-    template: poweredbyTemplate,
-    ...poweredBy,
-  };
-
-  const poweredByCSSClasses = {
-    root: cx(bem('powered-by'), poweredBy.cssClasses.root),
-    link: cx(bem('powered-by-link'), poweredBy.cssClasses.link),
-  };
-
-  const url =
-    'https://www.algolia.com/?' +
-    'utm_source=instantsearch.js&' +
-    'utm_medium=website&' +
-    `utm_content=${location.hostname}&` +
-    'utm_campaign=poweredby';
-
-  const stringNode = renderTemplate({
-    templateKey: 'template',
-    templates: poweredBy,
-    data: {
-      cssClasses: poweredByCSSClasses,
-      url,
-    },
-  });
-
-  const htmlNode = createNodeFromString(stringNode);
-
-  input.parentNode.insertBefore(htmlNode, input.nextSibling);
 }
 
 // Cross-browser way to create a DOM node from a string. We wrap in
