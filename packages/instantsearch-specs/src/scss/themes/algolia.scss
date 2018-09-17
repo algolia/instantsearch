@@ -168,7 +168,7 @@ a[class^='ais-'] {
 .ais-GeoSearch-control {
   position: absolute;
   top: 0.8rem;
-  left: 3.125rem;
+  left: 3.75rem;
 }
 
 .ais-GeoSearch-label {
@@ -177,6 +177,7 @@ a[class^='ais-'] {
   background-color: #fff;
   border-radius: 5px;
   transition: background-color 0.2s ease-out;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px;
   outline: none;
 }
 
