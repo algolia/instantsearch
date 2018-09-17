@@ -89,7 +89,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       init({ helper, instantSearchInstance, createURL }) {
         const attributesToClear = getAttributesToClear({
           helper,
-          blackList: excludedAttributes,
+          excludedAttributes,
         });
 
         const hasRefinements = clearsQuery
@@ -101,7 +101,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
             .setState(
               clearRefinements({
                 helper,
-                blackList: excludedAttributes,
+                excludedAttributes,
                 clearsQuery,
               })
             )
@@ -112,7 +112,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
           createURL(
             clearRefinements({
               helper,
-              blackList: excludedAttributes,
+              excludedAttributes,
               clearsQuery,
             })
           );
@@ -132,7 +132,7 @@ export default function connectClearRefinements(renderFn, unmountFn) {
       render({ helper, instantSearchInstance }) {
         const attributesToClear = getAttributesToClear({
           helper,
-          blackList: excludedAttributes,
+          excludedAttributes,
         });
 
         const hasRefinements = clearsQuery

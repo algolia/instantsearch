@@ -7,15 +7,16 @@ const stories = storiesOf('ClearAll');
 export default () => {
   stories.add(
     'default',
-    wrapWithHitsAndJquery(containerNode => {
-      window.search.addWidget(widgets.clearRefinements({ containerNode }));
-    },
-    {
-      searchParameters: {
-        disjunctiveFacetsRefinements: { brand: ['Apple'] },
-        disjunctiveFacets: ['brand'],
+    wrapWithHitsAndJquery(
+      containerNode => {
+        window.search.addWidget(widgets.clearRefinements({ containerNode }));
       },
-    }
+      {
+        searchParameters: {
+          disjunctiveFacetsRefinements: { brand: ['Apple'] },
+          disjunctiveFacets: ['brand'],
+        },
+      }
     )
   );
 };

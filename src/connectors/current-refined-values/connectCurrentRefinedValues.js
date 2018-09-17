@@ -207,7 +207,7 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
             .setState(
               clearRefinements({
                 helper,
-                whiteList: restrictedTo,
+                includedAttributes: restrictedTo,
                 clearsQuery,
               })
             )
@@ -216,7 +216,11 @@ export default function connectCurrentRefinedValues(renderFn, unmountFn) {
 
         this._createClearAllURL = () =>
           createURL(
-            clearRefinements({ helper, whiteList: restrictedTo, clearsQuery })
+            clearRefinements({
+              helper,
+              includedAttributes: restrictedTo,
+              clearsQuery,
+            })
           );
 
         const refinements = transformItems(
