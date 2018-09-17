@@ -15,7 +15,6 @@ const renderer = ({
   templates,
   autofocus,
   searchOnEnterKeyPressOnly,
-  wrapInput,
   reset,
   magnifier,
   loadingIndicator,
@@ -26,36 +25,17 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
-    const input = createInput(containerNode);
-    const isInputTargeted = input === containerNode;
-    let queryFromInput = query;
 
-    if (isInputTargeted) {
-      // To replace the node, we need to create an intermediate node
-      const placeholderNode = document.createElement('div');
-      input.parentNode.insertBefore(placeholderNode, input);
-      const parentNode = input.parentNode;
-      const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
-      parentNode.replaceChild(wrappedInput, placeholderNode);
-
-      const initialInputValue = input.value;
-
-      // if the input contains a value, we provide it to the state
-      if (initialInputValue) {
-        queryFromInput = initialInputValue;
-        refine(initialInputValue, false);
-      }
-    } else {
-      const wrappedInput = wrapInput ? wrapInputFn(input, cssClasses) : input;
-      containerNode.appendChild(wrappedInput);
-    }
+    const input = document.createElement('input');
+    const wrappedInput = wrapInputFn(input, cssClasses);
+    containerNode.appendChild(wrappedInput);
 
     if (magnifier) addMagnifier(input, magnifier, templates);
     if (reset) addReset(input, reset, templates, clear);
     if (loadingIndicator)
       addLoadingIndicator(input, loadingIndicator, templates);
 
-    addDefaultAttributesToInput(placeholder, input, queryFromInput, cssClasses);
+    addDefaultAttributesToInput(placeholder, input, query, cssClasses);
 
     // When the page is coming from BFCache
     // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
@@ -67,7 +47,7 @@ const renderer = ({
     // - use back button
     // - input query is empty (because <input> autocomplete = off)
     window.addEventListener('pageshow', () => {
-      input.value = queryFromInput;
+      input.value = query;
     });
 
     // Update value when query change outside of the input
@@ -75,9 +55,9 @@ const renderer = ({
       input.value = fullState.query || '';
     });
 
-    if (autofocus === true || (autofocus === 'auto' && queryFromInput === '')) {
+    if (autofocus === true || (autofocus === 'auto' && query === '')) {
       input.focus();
-      input.setSelectionRange(queryFromInput.length, queryFromInput.length);
+      input.setSelectionRange(query.length, query.length);
     }
 
     // search on enter
@@ -127,7 +107,7 @@ function renderAfterInit({
   loadingIndicator,
   isSearchStalled,
 }) {
-  const input = getInput(containerNode);
+  const input = containerNode.querySelector('input');
   const isFocused = document.activeElement === input;
   if (!isFocused && query !== input.value) {
     input.value = query;
@@ -157,7 +137,6 @@ searchBox({
   container,
   [ placeholder ],
   [ cssClasses.{input} ],
-  [ wrapInput ],
   [ autofocus ],
   [ searchOnEnterKeyPressOnly ],
   [ queryHook ]
@@ -178,8 +157,7 @@ searchBox({
 
 /**
  * @typedef {Object} SearchBoxCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the
- * wrapping `<div>` (if `wrapInput` set to `true`).
+ * @property  {string|string[]} [root] CSS class to add to the wrapping `<div>`
  * @property  {string|string[]} [input] CSS class to add to the input.
  */
 
@@ -196,7 +174,6 @@ searchBox({
  * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
  * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
  * @property  {boolean|SearchBoxLoadingIndicatorOption} [loadingIndicator=false] Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
- * @property  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`.
  * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
  * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
  * once `<Enter>` is pressed only.
@@ -233,7 +210,6 @@ export default function searchBox({
   container,
   placeholder = '',
   cssClasses = {},
-  wrapInput = true,
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
   reset = true,
@@ -247,6 +223,10 @@ export default function searchBox({
 
   const containerNode = getContainerNode(container);
 
+  if (containerNode.tagName === 'INPUT') {
+    throw new Error(`container should not be an INPUT`);
+  }
+
   // Only possible values are 'auto', true and false
   if (typeof autofocus !== 'boolean') {
     autofocus = 'auto';
@@ -259,7 +239,6 @@ export default function searchBox({
     templates: defaultTemplates,
     autofocus,
     searchOnEnterKeyPressOnly,
-    wrapInput,
     reset,
     magnifier,
     loadingIndicator,
@@ -280,31 +259,6 @@ export default function searchBox({
 // in any case: typing, copy pasting with mouse..
 // 'onpropertychange' is the IE8 alternative until we support IE8
 // but it's flawed: http://help.dottoro.com/ljhxklln.php
-
-function createInput(containerNode) {
-  // Returns reference to targeted input if present, or create a new one
-  if (containerNode.tagName === 'INPUT') {
-    return containerNode;
-  }
-  return document.createElement('input');
-}
-
-function getInput(containerNode) {
-  // Returns reference to targeted input if present, or look for it inside
-  if (containerNode.tagName === 'INPUT') {
-    return containerNode;
-  }
-  return containerNode.querySelector('input');
-}
-
-function wrapInputFn(input, cssClasses) {
-  // Wrap input in a .ais-search-box div
-  const wrapper = document.createElement('div');
-  const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
-  CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
-  wrapper.appendChild(input);
-  return wrapper;
-}
 
 function addListener(el, type, fn) {
   if (el.addEventListener) {
@@ -463,4 +417,13 @@ function createNodeFromString(stringNode, rootClassname = '') {
   const tmpNode = document.createElement('div');
   tmpNode.innerHTML = `<span class="${rootClassname}">${stringNode.trim()}</span>`;
   return tmpNode.firstChild;
+}
+
+function wrapInputFn(input, cssClasses) {
+  // Wrap input in a .ais-search-box div
+  const wrapper = document.createElement('div');
+  const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
+  CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
+  wrapper.appendChild(input);
+  return wrapper;
 }
