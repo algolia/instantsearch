@@ -1,13 +1,11 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import clearAll from '../clear-all';
-import defaultTemplates from '../defaultTemplates.js';
+import clearRefinements from '../clear-refinements';
 
-describe('clearAll()', () => {
+describe('clearRefinements()', () => {
   let ReactDOM;
   let container;
   let widget;
-  let props;
   let results;
   let helper;
   let createURL;
@@ -16,13 +14,16 @@ describe('clearAll()', () => {
     ReactDOM = { render: sinon.spy() };
     createURL = sinon.stub().returns('#all-cleared');
 
-    clearAll.__Rewire__('render', ReactDOM.render);
+    clearRefinements.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
-    widget = clearAll({
+    widget = clearRefinements({
       container,
-      autoHideContainer: true,
-      cssClasses: { root: ['root', 'cx'] },
+      cssClasses: {
+        root: ['myRoot'],
+        button: ['myButton'],
+        disabledButton: ['disabled'],
+      },
     });
 
     results = {};
@@ -34,26 +35,6 @@ describe('clearAll()', () => {
       search: sinon.spy(),
     };
 
-    props = {
-      refine: sinon.spy(),
-      cssClasses: {
-        root: 'ais-clear-all root cx',
-        header: 'ais-clear-all--header',
-        body: 'ais-clear-all--body',
-        footer: 'ais-clear-all--footer',
-        link: 'ais-clear-all--link',
-      },
-      collapsible: false,
-      hasRefinements: false,
-      shouldAutoHideContainer: true,
-      templateProps: {
-        templates: defaultTemplates,
-        templatesConfig: {},
-        transformData: undefined,
-        useCustomCompileOptions: { header: false, footer: false, link: false },
-      },
-      url: '#all-cleared',
-    };
     widget.init({
       helper,
       createURL,
@@ -70,11 +51,9 @@ describe('clearAll()', () => {
   describe('without refinements', () => {
     beforeEach(() => {
       helper.state.facetsRefinements = {};
-      props.hasRefinements = false;
-      props.shouldAutoHideContainer = true;
     });
 
-    it('calls twice ReactDOM.render(<ClearAll props />, container)', () => {
+    it('calls twice ReactDOM.render(<ClearRefinements props />, container)', () => {
       widget.render({
         results,
         helper,
@@ -104,8 +83,6 @@ describe('clearAll()', () => {
   describe('with refinements', () => {
     beforeEach(() => {
       helper.state.facetsRefinements = ['something'];
-      props.hasRefinements = true;
-      props.shouldAutoHideContainer = false;
     });
 
     it('calls twice ReactDOM.render(<ClearAll props />, container)', () => {
@@ -124,7 +101,7 @@ describe('clearAll()', () => {
   });
 
   afterEach(() => {
-    clearAll.__ResetDependency__('render');
-    clearAll.__ResetDependency__('defaultTemplates');
+    clearRefinements.__ResetDependency__('render');
+    clearRefinements.__ResetDependency__('defaultTemplates');
   });
 });
