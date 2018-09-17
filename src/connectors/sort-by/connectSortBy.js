@@ -22,21 +22,21 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 `;
 
 /**
- * @typedef {Object} SortByItems
+ * @typedef {Object} SortByItem
  * @property {string} name Name of the index to target.
  * @property {string} label Label to display for the targeted index.
  */
 
 /**
  * @typedef {Object} CustomSortByWidgetOptions
- * @property {SortByItems[]} items Array of objects defining the different indices to choose from.
+ * @property {SortByItem[]} items Array of objects defining the different indices to choose from.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
  * @typedef {Object} SortByRenderingOptions
  * @property {string} currentRefinement The currently selected index.
- * @property {SortByItems[]} options All the available indices
+ * @property {SortByItem[]} options All the available indices
  * @property {function(string)} refine Switches indices and triggers a new search.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {Object} widgetParams All original `CustomSortByWidgetOptions` forwarded to the `renderFn`.
@@ -120,7 +120,7 @@ export default function connectSortBy(renderFn, unmountFn) {
 
         if (!isIndexInList) {
           throw new Error(
-            `[sortBy]: Index ${currentIndex} not present in \`indices\``
+            `[sortBy]: Index ${currentIndex} not present in \`items\``
           );
         }
 
