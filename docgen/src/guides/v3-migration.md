@@ -179,6 +179,64 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 </div>
 ```
 
+### clearRefinements -- previously clearAll
+
+#### Options
+
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |
+
+#### CSS classes
+
+| Before                | After                                   |
+| --------------------- | --------------------------------------- |
+| `ais-clear-all`       | `ais-ClearRefinements`                  |
+| `ais-clear-all--body` |                                         |
+| `ais-clear-all--link` |                                         |
+|                       | `ais-ClearRefinements-button`           |
+|                       | `ais-ClearRefinements-button--disabled` |
+
+#### Markup
+
+```html
+<div class="ais-ClearRefinements">
+  <button class="ais-ClearRefinements-button">
+    Clear refinements
+  </button>
+</div>
+```
+
+### MenuSelect
+
+#### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+
+#### CSS classes
+
+| Before                    | After                          |
+| ------------------------- | ------------------------------ |
+| `ais-menu-select`         | `ais-MenuSelect`               |
+|                           | `ais-MenuSelect--noRefinement` |
+| `ais-menu-select--select` | `ais-MenuSelect-select`        |
+| `ais-menu-select--option` | `ais-MenuSelect-option`        |
+| `ais-menu-select--header` |                                |
+| `ais-menu-select--footer` |                                |
+
+#### Markup
+
+```html
+<div class="ais-MenuSelect">
+  <select class="ais-MenuSelect-select">
+    <option class="ais-MenuSelect-option" value="Appliances">Appliances (4306)</option>
+    <option class="ais-MenuSelect-option" value="Audio">Audio (1570)</option>
+  </select>
+</div>
+```
+
 ### Pagination
 
 ### Options
@@ -244,8 +302,16 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 ### connectRange
 
-#### Widget options
+#### Options
 
 | Before          | After       |
 | --------------- | ----------- |
 | `attributeName` | `attribute` |
+
+### connectClearRefinements -- previously connectClearAll
+
+#### Options
+
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |
