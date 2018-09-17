@@ -29,5 +29,49 @@ export default () => {
           })
         );
       })
+    )
+    .add(
+      'without showFirst',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            showFirst: false,
+          })
+        );
+      })
+    )
+    .add(
+      'without showLast',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            showLast: false,
+          })
+        );
+      })
+    )
+    .add(
+      'without showPrevious',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            showPrevious: false,
+          })
+        );
+      })
+    )
+    .add(
+      'without showNext',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            showNext: false,
+          })
+        );
+      })
     );
 };
