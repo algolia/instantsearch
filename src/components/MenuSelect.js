@@ -1,13 +1,13 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import Template from './Template';
-import autoHideContainerHOC from '../decorators/autoHideContainer.js';
-import headerFooterHOC from '../decorators/headerFooter.js';
 
 class MenuSelect extends Component {
   static propTypes = {
     cssClasses: PropTypes.shape({
+      root: PropTypes.string,
       select: PropTypes.string,
       option: PropTypes.string,
     }),
@@ -26,28 +26,48 @@ class MenuSelect extends Component {
       value: '',
     };
 
-    return (
-      <select
-        className={cssClasses.select}
-        value={selectedValue}
-        onChange={this.handleSelectChange}
-      >
-        <option value="" className={cssClasses.option}>
-          <Template templateKey="seeAllOption" {...templateProps} />
-        </option>
+    const noRefinements = items.length === 0;
 
-        {items.map(item => (
-          <option
-            key={item.value}
-            value={item.value}
-            className={cssClasses.option}
-          >
-            <Template data={item} templateKey="item" {...templateProps} />
-          </option>
-        ))}
-      </select>
+    const rootClassNames = cx(cssClasses.root, {
+      [cssClasses.noRefinementRoot]: noRefinements,
+    });
+    const selectClassNames = cx(cssClasses.select);
+    const optionClassNames = cx(cssClasses.option);
+
+    return (
+      <div className={rootClassNames}>
+        <select
+          className={selectClassNames}
+          value={selectedValue}
+          onChange={this.handleSelectChange}
+        >
+          <Template
+            templateKey="seeAllOptions"
+            rootTagName="option"
+            rootProps={{
+              value: '',
+              className: optionClassNames,
+            }}
+            {...templateProps}
+          />
+
+          {items.map(item => (
+            <Template
+              data={item}
+              templateKey="item"
+              rootTagName="option"
+              key={item.value}
+              rootProps={{
+                value: item.value,
+                className: optionClassNames,
+              }}
+              {...templateProps}
+            />
+          ))}
+        </select>
+      </div>
     );
   }
 }
 
-export default autoHideContainerHOC(headerFooterHOC(MenuSelect));
+export default MenuSelect;

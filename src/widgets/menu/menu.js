@@ -224,7 +224,7 @@ export default function menu({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({
-      attributeName,
+      attribute: attributeName,
       limit,
       sortBy,
       showMoreLimit,
