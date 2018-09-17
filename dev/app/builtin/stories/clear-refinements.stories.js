@@ -15,7 +15,6 @@ export default () => {
           window.search.addWidget(
             instantsearch.widgets.clearRefinements({
               container,
-              autoHideContainer: false,
             })
           );
         },
@@ -33,7 +32,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.clearRefinements({
             container,
-            autoHideContainer: false,
           })
         );
       })
@@ -45,7 +43,6 @@ export default () => {
           window.search.addWidget(
             instantsearch.widgets.clearRefinements({
               container,
-              autoHideContainer: false,
               clearsQuery: true,
               templates: {
                 link: 'Clear refinements and query',

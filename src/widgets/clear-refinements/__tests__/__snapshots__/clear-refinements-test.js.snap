@@ -12,7 +12,6 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
   }
   hasRefinements={true}
   refine={[Function]}
-  shouldAutoHideContainer={false}
   templateProps={
     Object {
       "templates": Object {
@@ -40,7 +39,6 @@ exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearA
   }
   hasRefinements={true}
   refine={[Function]}
-  shouldAutoHideContainer={false}
   templateProps={
     Object {
       "templates": Object {
@@ -68,7 +66,6 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
   }
   hasRefinements={false}
   refine={[Function]}
-  shouldAutoHideContainer={true}
   templateProps={
     Object {
       "templates": Object {
@@ -96,7 +93,6 @@ exports[`clearRefinements() without refinements calls twice ReactDOM.render(<Cle
   }
   hasRefinements={false}
   refine={[Function]}
-  shouldAutoHideContainer={true}
   templateProps={
     Object {
       "templates": Object {

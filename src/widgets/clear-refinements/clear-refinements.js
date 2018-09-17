@@ -16,7 +16,6 @@ const renderer = ({
   containerNode,
   cssClasses,
   collapsible,
-  autoHideContainer,
   renderState,
   templates,
 }) => ({ refine, hasRefinements, instantSearchInstance }, isFirstRendering) => {
@@ -29,15 +28,12 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && !hasRefinements;
-
   render(
     <ClearRefinements
       refine={refine}
       collapsible={collapsible}
       cssClasses={cssClasses}
       hasRefinements={hasRefinements}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
     />,
     containerNode
@@ -49,7 +45,6 @@ clearRefinements({
   container,
   [ cssClasses.{root,button,disabledButton}={} ],
   [ templates.{resetLabel}={resetLabel: 'Clear all refinements'} ],
-  [ autoHideContainer=true ],
   [ collapsible=false ],
   [ excludedAttributes=[] ]
 })`;
@@ -100,7 +95,6 @@ export default function clearRefinements({
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
   collapsible = false,
-  autoHideContainer = true,
   excludedAttributes = [],
   clearsQuery = false,
 }) {
@@ -123,7 +117,6 @@ export default function clearRefinements({
     containerNode,
     cssClasses,
     collapsible,
-    autoHideContainer,
     renderState: {},
     templates,
   });
