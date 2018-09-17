@@ -233,19 +233,6 @@ export default () => {
     )
   );
 
-  storiesOf('PriceRanges').add(
-    'default',
-    wrapWithUnmount(container =>
-      instantsearch.widgets.priceRanges({
-        container,
-        attributeName: 'price',
-        templates: {
-          header: 'Price ranges',
-        },
-      })
-    )
-  );
-
   storiesOf('RefinementList').add(
     'default',
     wrapWithUnmount(container =>

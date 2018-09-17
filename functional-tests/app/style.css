@@ -111,10 +111,6 @@ body {
   display: block;
 }
 
-.ais-price-ranges .ais-price-ranges--input{
-  width: 65px;
-}
-
 .ais-refinement-list--label input[type=radio]{
   margin: 4px 8px 0 0;
 }

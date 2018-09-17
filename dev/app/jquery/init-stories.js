@@ -8,7 +8,6 @@ import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
 import initNumericSelectorStories from './stories/numeric-selector.stories';
 import initPaginationStories from './stories/pagination.stories';
-import initPriceRangesStories from './stories/price-ranges.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
 import initSortBySelectorStories from './stories/sort-by-selector.stories';
@@ -28,7 +27,6 @@ export default () => {
   initNumericRefinementListStories();
   initNumericSelectorStories();
   initPaginationStories();
-  initPriceRangesStories();
   initRefinementListStories();
   initSearchBoxStories();
   initSortBySelectorStories();
