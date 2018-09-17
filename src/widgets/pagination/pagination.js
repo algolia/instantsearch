@@ -159,7 +159,7 @@ export default function pagination({
   labels: userLabels = defaultLabels,
   cssClasses: userCssClasses = {},
   maxPages,
-  padding = 3,
+  padding,
   showFirst = true,
   showLast = true,
   showPrevious = true,
