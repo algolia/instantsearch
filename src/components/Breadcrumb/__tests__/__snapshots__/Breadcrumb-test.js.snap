@@ -12,16 +12,13 @@ exports[`Breadcrumb should render <Breadcrumb /> 1`] = `
     >
       <a
         className="link"
-        onClick={[Function]}
-      >
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "home",
-            }
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "home",
           }
-        />
-      </a>
+        }
+        onClick={[Function]}
+      />
     </li>
   </ul>
 </div>
@@ -39,16 +36,13 @@ exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
     >
       <a
         className="link"
-        onClick={[Function]}
-      >
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "home",
-            }
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "home",
           }
-        />
-      </a>
+        }
+        onClick={[Function]}
+      />
     </li>
     <li
       className="item selectedItem"
@@ -80,16 +74,13 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
     >
       <a
         className="link"
-        onClick={[Function]}
-      >
-        <div
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "home",
-            }
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "home",
           }
-        />
-      </a>
+        }
+        onClick={[Function]}
+      />
     </li>
     <li
       className="item"

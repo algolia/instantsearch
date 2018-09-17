@@ -31,9 +31,9 @@ const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
     </a>
   );
 
-  const itemClassnames = isLast
-    ? cx(cssClasses.item, cssClasses.selectedItem)
-    : cx(cssClasses.item);
+  const itemClassnames = cx(cssClasses.item, {
+    [cssClasses.selectedItem]: isLast,
+  });
 
   return (
     <li key={item.name + idx} className={itemClassnames}>
@@ -64,15 +64,13 @@ class Breadcrumb extends PureComponent {
 
     const breadcrumb = items.map(renderLink(this.props));
 
-    const homeClassnames =
-      items.length === 0
-        ? cx(cssClasses.item, cssClasses.selectedItem)
-        : cx(cssClasses.item);
+    const homeClassnames = cx(cssClasses.item, {
+      [cssClasses.selectedItem]: items.length === 0,
+    });
 
-    const rootClassnames =
-      items.length === 0
-        ? cx(cssClasses.root)
-        : cx(cssClasses.root, cssClasses.noRefinement);
+    const rootClassnames = cx(cssClasses.root, {
+      [cssClasses.noRefinement]: items.length > 0,
+    });
 
     const homeOnClickHandler = e => {
       e.preventDefault();
@@ -85,13 +83,16 @@ class Breadcrumb extends PureComponent {
       <div className={rootClassnames}>
         <ul className={cx(cssClasses.list)}>
           <li className={homeClassnames}>
-            <a
-              className={cx(cssClasses.link)}
-              href={homeUrl}
-              onClick={homeOnClickHandler}
-            >
-              <Template templateKey="home" {...this.props.templateProps} />
-            </a>
+            <Template
+              templateKey="home"
+              rootTagName="a"
+              rootProps={{
+                className: cx(cssClasses.link),
+                href: homeUrl,
+                onClick: homeOnClickHandler,
+              }}
+              {...this.props.templateProps}
+            />
           </li>
           {breadcrumb}
         </ul>

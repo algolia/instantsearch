@@ -23,6 +23,7 @@ describe('Breadcrumb', () => {
         templates: {
           home: 'home',
           separator: ' > ',
+          link: 'link',
         },
       },
     };
@@ -56,6 +57,7 @@ describe('Breadcrumb', () => {
         templates: {
           home: 'home',
           separator: ' > ',
+          link: 'link',
         },
       },
     };
@@ -93,6 +95,7 @@ describe('Breadcrumb', () => {
         templates: {
           home: 'home',
           separator: ' > ',
+          link: 'link',
         },
       },
     };
