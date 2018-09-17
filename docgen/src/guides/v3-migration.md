@@ -179,12 +179,166 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 </div>
 ```
 
-## Connectors
+### clearRefinements -- previously clearAll
 
-### connectRange
+#### Options
 
-#### Widget options
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |
+
+#### CSS classes
+
+| Before                | After                                   |
+| --------------------- | --------------------------------------- |
+| `ais-clear-all`       | `ais-ClearRefinements`                  |
+| `ais-clear-all--body` |                                         |
+| `ais-clear-all--link` |                                         |
+|                       | `ais-ClearRefinements-button`           |
+|                       | `ais-ClearRefinements-button--disabled` |
+
+#### Markup
+
+```html
+<div class="ais-ClearRefinements">
+  <button class="ais-ClearRefinements-button">
+    Clear refinements
+  </button>
+</div>
+```
+
+### MenuSelect
+
+#### Options
 
 | Before          | After       |
 | --------------- | ----------- |
 | `attributeName` | `attribute` |
+
+#### CSS classes
+
+| Before                    | After                          |
+| ------------------------- | ------------------------------ |
+| `ais-menu-select`         | `ais-MenuSelect`               |
+|                           | `ais-MenuSelect--noRefinement` |
+| `ais-menu-select--select` | `ais-MenuSelect-select`        |
+| `ais-menu-select--option` | `ais-MenuSelect-option`        |
+| `ais-menu-select--header` |                                |
+| `ais-menu-select--footer` |                                |
+
+#### Markup
+
+```html
+<div class="ais-MenuSelect">
+  <select class="ais-MenuSelect-select">
+    <option class="ais-MenuSelect-option" value="Appliances">Appliances (4306)</option>
+    <option class="ais-MenuSelect-option" value="Audio">Audio (1570)</option>
+  </select>
+</div>
+```
+
+### Pagination
+
+### Options
+
+| Before          | After                  |
+| --------------- | ---------------------- |
+| `maxPages`      | `totalPages`           |
+| `showFirstLast` | `showFirst` `showLast` |
+|                 | `showNext`             |
+|                 | `showPrevious`         |
+
+### CSS classes
+
+| Before                           | After                               |
+| -------------------------------- | ----------------------------------- |
+|                                  | `ais-Pagination`                    |
+|                                  | `ais-Pagination--noRefinement`      |
+| `ais-pagination`                 | `ais-Pagination-list`               |
+| `ais-pagination--item`           | `ais-Pagination-item`               |
+| `ais-pagination--item__first`    | `ais-Pagination-item--firstPage`    |
+| `ais-pagination--item__last`     | `ais-Pagination-item--lastPage`     |
+| `ais-pagination--item__previous` | `ais-Pagination-item--previousPage` |
+| `ais-pagination--item__next`     | `ais-Pagination-item--nextPage`     |
+|                                  | `ais-Pagination-item--page`         |
+| `ais-pagination--item__active`   | `ais-Pagination-item--selected`     |
+| `ais-pagination--item__disabled` | `ais-Pagination-item--disabled`     |
+| `ais-pagination--link`           | `ais-Pagination-link`               |
+
+### Markup
+
+```html
+<div class="ais-Pagination">
+  <ul class="ais-Pagination-list">
+    <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
+      <span class="ais-Pagination-link" aria-label="Previous">‹‹</span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
+      <span class="ais-Pagination-link" aria-label="Previous">‹</span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--selected">
+      <a class="ais-Pagination-link" href="#">1</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--page">
+      <a class="ais-Pagination-link" href="#">2</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--page">
+      <a class="ais-Pagination-link" href="#">3</a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a class="ais-Pagination-link" href="#">4</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--nextPage">
+      <a class="ais-Pagination-link" aria-label="Next" href="#">›</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--lastPage">
+      <a class="ais-Pagination-link" aria-label="Next" href="#">››</a>
+    </li>
+  </ul>
+</div>
+```
+
+### SortBy
+
+### Options
+
+| Before    | After   |
+| --------- | ------- |
+| `indices` | `items` |
+
+### CSS classes
+
+| Before                 | After               |
+| ---------------------- | ------------------- |
+|                        | `ais-SortBy`        |
+| `ais-sort-by-selector` | `ais-SortBy-select` |
+| `ais-sort-by--item`    | `ais-SortBy-option` |
+
+### Markup
+
+```html
+<div class="ais-SortBy">
+  <select class="ais-SortBy-select">
+    <option class="ais-SortBy-option" value="Most relevant">Most relevant</option>
+    <option class="ais-SortBy-option" value="Lowest price">Lowest price</option>
+  </select>
+</div>
+```
+
+## Connectors
+
+### connectRange
+
+#### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+
+### connectClearRefinements -- previously connectClearAll
+
+#### Options
+
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |
