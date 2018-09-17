@@ -243,7 +243,7 @@ describe('searchBox()', () => {
 
     describe('non-instant search', () => {
       beforeEach(() => {
-        widget = searchBox({ container, searchOnEnterKeyPressOnly: true });
+        widget = searchBox({ container, searchAsYouType: false });
         helper.state.query = 'tes';
         widget.init({ state: helper.state, helper, onHistoryChange });
       });

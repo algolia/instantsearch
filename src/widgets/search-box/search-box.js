@@ -14,7 +14,7 @@ const renderer = ({
   placeholder,
   templates,
   autofocus,
-  searchOnEnterKeyPressOnly,
+  searchAsYouType,
   reset,
   magnifier,
   loadingIndicator,
@@ -61,7 +61,7 @@ const renderer = ({
     }
 
     // search on enter
-    if (searchOnEnterKeyPressOnly) {
+    if (!searchAsYouType) {
       addListener(input, INPUT_EVENT, e => {
         refine(getValue(e), false);
       });
@@ -138,7 +138,7 @@ searchBox({
   [ placeholder ],
   [ cssClasses.{input} ],
   [ autofocus ],
-  [ searchOnEnterKeyPressOnly ],
+  [ searchAsYouType = true ],
   [ queryHook ]
   [ reset=true || reset.{template, cssClasses.{root}} ]
 })`;
@@ -175,7 +175,7 @@ searchBox({
  * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
  * @property  {boolean|SearchBoxLoadingIndicatorOption} [loadingIndicator=false] Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
  * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
- * @property  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
+ * @property  {boolean} [searchAsYouType=true] If set, trigger the search
  * once `<Enter>` is pressed only.
  * @property  {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
  * @property  {function} [queryHook] A function that will be called every time a new search would be done. You
@@ -211,7 +211,7 @@ export default function searchBox({
   placeholder = '',
   cssClasses = {},
   autofocus = 'auto',
-  searchOnEnterKeyPressOnly = false,
+  searchAsYouType = true,
   reset = true,
   magnifier = true,
   loadingIndicator = false,
@@ -238,7 +238,7 @@ export default function searchBox({
     placeholder,
     templates: defaultTemplates,
     autofocus,
-    searchOnEnterKeyPressOnly,
+    searchAsYouType,
     reset,
     magnifier,
     loadingIndicator,
