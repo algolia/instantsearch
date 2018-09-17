@@ -4,7 +4,6 @@ import cx from 'classnames';
 
 import Template from './Template';
 
-
 class MenuSelect extends Component {
   static propTypes = {
     cssClasses: PropTypes.shape({
@@ -43,7 +42,7 @@ class MenuSelect extends Component {
           onChange={this.handleSelectChange}
         >
           <Template
-            templateKey="seeAllOption"
+            templateKey="seeAllOptions"
             rootTagName="option"
             rootProps={{
               value: '',

@@ -50,7 +50,7 @@ menuSelect({
   [ sortBy=['name:asc'] ],
   [ limit=10 ],
   [ cssClasses.{root, noRefinementRoot, select, option} ]
-  [ templates.{item,seeAllOption} ],
+  [ templates.{item,seeAllOptions} ],
   [ transformData.{item} ],
   [ transformItems ]
 })`;
@@ -67,7 +67,7 @@ menuSelect({
 /**
  * @typedef {Object} MenuSelectTemplates
  * @property {string|function(label: string, count: number, isRefined: boolean, value: string)} [item] Item template, provided with `label`, `count`, `isRefined` and `value` data properties.
- * @property {string} [seeAllOption='See all'] Label of the see all option in the select.
+ * @property {string} [seeAllOptions='See all'] Label of the see all option in the select.
  */
 
 /**

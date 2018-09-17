@@ -2,5 +2,5 @@
 export default {
   item:
     '{{label}} ({{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}})',
-  seeAllOption: 'See all',
+  seeAllOptions: 'See all',
 };
