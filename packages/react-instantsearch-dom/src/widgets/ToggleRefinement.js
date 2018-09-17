@@ -20,7 +20,6 @@ import ToggleRefinement from '../components/ToggleRefinement';
  * @themeKey ais-ToggleRefinement-label - the label of each toggle item
  * @themeKey ais-ToggleRefinement-checkbox - the checkbox input of each toggle item
  * @themeKey ais-ToggleRefinement-labelText - the label text of each toggle item
- * @themeKey ais-ToggleRefinement-count - the count of items for each item
  * @example
  * import React from 'react';
  * import { InstantSearch, ToggleRefinement } from 'react-instantsearch-dom';
