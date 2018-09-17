@@ -1,4 +1,4 @@
-import escapeHits, { tagConfig } from '../../lib/escape-highlight.js';
+import escapeHTML, { tagConfig } from '../../lib/escape-highlight.js';
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
@@ -14,7 +14,7 @@ var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRend
 });
 search.addWidget(
   customInfiniteHits({
-    [ escapeHits: true ],
+    [ escapeHTML = true ],
     [ transformItems ]
   })
 );
@@ -32,7 +32,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomInfiniteHitsWidgetOptions
- * @property {boolean} [escapeHits = false] If true, escape HTML tags from `hits[i]._highlightResult`.
+ * @property {boolean} [escapeHTML = true] Whether to escape HTML tags from `hits[i]._highlightResult`.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -88,7 +88,7 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
 
     return {
       getConfiguration() {
-        return widgetParams.escapeHits ? tagConfig : undefined;
+        return widgetParams.escapeHTML ? tagConfig : undefined;
       },
 
       init({ instantSearchInstance, helper }) {
@@ -116,11 +116,11 @@ export default function connectInfiniteHits(renderFn, unmountFn) {
         results.hits = transformItems(results.hits);
 
         if (
-          widgetParams.escapeHits &&
+          widgetParams.escapeHTML &&
           results.hits &&
           results.hits.length > 0
         ) {
-          results.hits = escapeHits(results.hits);
+          results.hits = escapeHTML(results.hits);
         }
 
         if (lastReceivedPage < state.page) {

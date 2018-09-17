@@ -1,14 +1,14 @@
 import menuSelect from '../menu-select';
 
 describe('menuSelect', () => {
-  it('throws an exception when no attributeName', () => {
+  it('throws an exception when no attribute', () => {
     const container = document.createElement('div');
     expect(menuSelect.bind(null, { container })).toThrow(/^Usage/);
   });
 
   it('throws an exception when no container', () => {
-    const attributeName = 'categories';
-    expect(menuSelect.bind(null, { attributeName })).toThrow(/^Usage/);
+    const attribute = 'categories';
+    expect(menuSelect.bind(null, { attribute })).toThrow(/^Usage/);
   });
 
   describe('render', () => {
@@ -35,7 +35,7 @@ describe('menuSelect', () => {
     it('renders correctly', () => {
       const widget = menuSelect({
         container: document.createElement('div'),
-        attributeName: 'test',
+        attribute: 'test',
       });
 
       widget.init({ helper, createURL: () => '#', instantSearchInstance: {} });
@@ -47,7 +47,7 @@ describe('menuSelect', () => {
     it('renders transformed items correctly', () => {
       const widget = menuSelect({
         container: document.createElement('div'),
-        attributeName: 'test',
+        attribute: 'test',
         transformItems: items =>
           items.map(item => ({ ...item, transformed: true })),
       });

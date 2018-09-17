@@ -161,7 +161,7 @@ export default () => {
     wrapWithUnmount(container =>
       instantsearch.widgets.infiniteHits({
         container,
-        showMoreLabel: 'Show more',
+        loadMoreLabel: 'Show more',
         templates: {
           item: '{{name}}',
         },
