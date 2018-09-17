@@ -1,91 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MenuSelect should render <MenuSelect /> with items 1`] = `
-<div>
+<div
+  className="root"
+>
   <select
+    className="select"
     onChange={[Function]}
     value=""
   >
     <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "See all",
+        }
+      }
       value=""
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "See all",
-          }
-        }
-      />
-    </option>
+    />
     <option
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "foo ()",
+        }
+      }
       value="foo"
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "foo ()",
-          }
-        }
-      />
-    </option>
+    />
     <option
-      value="bar"
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "bar ()",
-          }
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "bar ()",
         }
-      />
-    </option>
+      }
+      value="bar"
+    />
   </select>
 </div>
 `;
 
-exports[`MenuSelect should render with custom css classes 1`] = `
-<div>
+exports[`MenuSelect should render <MenuSelect /> with no items 1`] = `
+<div
+  className="root noRefinementRoot"
+>
   <select
-    className="foo"
+    className="select"
     onChange={[Function]}
     value=""
   >
     <option
-      className="bar"
+      className="option"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "See all",
+        }
+      }
       value=""
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "See all",
-          }
-        }
-      />
-    </option>
-    <option
-      className="bar"
-      value="foo"
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "foo ()",
-          }
-        }
-      />
-    </option>
-    <option
-      className="bar"
-      value="bar"
-    >
-      <div
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "bar ()",
-          }
-        }
-      />
-    </option>
+    />
   </select>
 </div>
 `;

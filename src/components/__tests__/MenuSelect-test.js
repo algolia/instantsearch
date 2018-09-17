@@ -11,21 +11,28 @@ describe('MenuSelect', () => {
       refine: () => {},
       templateProps: { templates: defaultTemplates },
       shouldAutoHideContainer: false,
-      cssClasses: {},
+      cssClasses: {
+        root: 'root',
+        noRefinementRoot: 'noRefinementRoot',
+        select: 'select',
+        option: 'option',
+      },
     };
     const tree = renderer.create(<MenuSelect {...props} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  it('should render with custom css classes', () => {
+  it('should render <MenuSelect /> with no items', () => {
     const props = {
-      items: [{ value: 'foo', label: 'foo' }, { value: 'bar', label: 'bar' }],
+      items: [],
       refine: () => {},
       templateProps: { templates: defaultTemplates },
       shouldAutoHideContainer: false,
       cssClasses: {
-        select: 'foo',
-        option: 'bar',
+        root: 'root',
+        noRefinementRoot: 'noRefinementRoot',
+        select: 'select',
+        option: 'option',
       },
     };
     const tree = renderer.create(<MenuSelect {...props} />).toJSON();

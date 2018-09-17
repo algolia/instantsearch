@@ -5,9 +5,10 @@ exports[`menuSelect render renders correctly 1`] = `
   canRefine={true}
   cssClasses={
     Object {
-      "option": "ais-menuSelect-option",
-      "root": "ais-menuSelect",
-      "select": "ais-menuSelect-select",
+      "noRefinementRoot": "ais-MenuSelect--noRefinement",
+      "option": "ais-MenuSelect-option",
+      "root": "ais-MenuSelect",
+      "select": "ais-MenuSelect-select",
     }
   }
   items={
@@ -45,9 +46,10 @@ exports[`menuSelect render renders transformed items correctly 1`] = `
   canRefine={true}
   cssClasses={
     Object {
-      "option": "ais-menuSelect-option",
-      "root": "ais-menuSelect",
-      "select": "ais-menuSelect-select",
+      "noRefinementRoot": "ais-MenuSelect--noRefinement",
+      "option": "ais-MenuSelect-option",
+      "root": "ais-MenuSelect",
+      "select": "ais-MenuSelect-select",
     }
   }
   items={

@@ -49,7 +49,7 @@ menuSelect({
   attribute,
   [ sortBy=['name:asc'] ],
   [ limit=10 ],
-  [ cssClasses.{root,select,option} ]
+  [ cssClasses.{root, noRefinementRoot, select, option} ]
   [ templates.{item,seeAllOption} ],
   [ transformData.{item} ],
   [ transformItems ]
@@ -58,8 +58,10 @@ menuSelect({
 /**
  * @typedef {Object} MenuSelectCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
+ * @property {string|string[]} [noRefinementRoot] CSS class to add to the root when there are no items to display
  * @property {string|string[]} [select] CSS class to add to the select element.
  * @property {string|string[]} [option] CSS class to add to the option element.
+ *
  */
 
 /**
@@ -119,6 +121,10 @@ export default function menuSelect({
   const containerNode = getContainerNode(container);
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
+    noRefinementRoot: cx(
+      suit({ modifierName: 'noRefinement' }),
+      userCssClasses.noRefinementRoot
+    ),
     select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
     option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
   };

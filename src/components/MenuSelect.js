@@ -1,7 +1,9 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 import Template from './Template';
+
 
 class MenuSelect extends Component {
   static propTypes = {
@@ -25,10 +27,18 @@ class MenuSelect extends Component {
       value: '',
     };
 
+    const noRefinements = items.length === 0;
+
+    const rootClassNames = cx(cssClasses.root, {
+      [cssClasses.noRefinementRoot]: noRefinements,
+    });
+    const selectClassNames = cx(cssClasses.select);
+    const optionClassNames = cx(cssClasses.option);
+
     return (
-      <div className={cssClasses.root}>
+      <div className={rootClassNames}>
         <select
-          className={cssClasses.select}
+          className={selectClassNames}
           value={selectedValue}
           onChange={this.handleSelectChange}
         >
@@ -37,7 +47,7 @@ class MenuSelect extends Component {
             rootTagName="option"
             rootProps={{
               value: '',
-              className: cssClasses.option,
+              className: optionClassNames,
             }}
             {...templateProps}
           />
@@ -50,7 +60,7 @@ class MenuSelect extends Component {
               key={item.value}
               rootProps={{
                 value: item.value,
-                className: cssClasses.option,
+                className: optionClassNames,
               }}
               {...templateProps}
             />
