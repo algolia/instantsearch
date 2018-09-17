@@ -302,25 +302,25 @@ function getRefinements(results, state, clearsQuery) {
 
 /**
  * Clears the refinements of a SearchParameters object based on rules provided.
- * The white list is first used then the black list is applied. If no white list
- * is provided, all the current refinements are used.
+ * The included attributes list is applied before the excluded attributes list. If the list
+ * is not provided, this list of all the currently refined attributes is used as included attributes.
  * @param {object} $0 parameters
  * @param {Helper} $0.helper instance of the Helper
- * @param {string[]} [$0.whiteList] list of parameters to clear
- * @param {string[]} [$0.blackList=[]] list of parameters not to remove (will impact the white list)
+ * @param {string[]} [$0.includedAttributes] list of parameters to clear
+ * @param {string[]} [$0.excludedAttributes=[]] list of parameters not to remove (will impact the included attributes list)
  * @param {boolean} [$0.clearsQuery=false] clears the query if need be
  * @returns {SearchParameters} search parameters with refinements cleared
  */
 function clearRefinements({
   helper,
-  whiteList,
-  blackList = [],
+  includedAttributes,
+  excludedAttributes = [],
   clearsQuery = false,
 }) {
   const attributesToClear = getAttributesToClear({
     helper,
-    whiteList,
-    blackList,
+    includedAttributes,
+    excludedAttributes,
   });
 
   let finalState = helper.state;
@@ -342,21 +342,26 @@ function clearRefinements({
 
 /**
  * Computes the list of attributes (conjunctive, disjunctive, hierarchical facet + numerical attributes)
- * to clear based on a optional white and black lists. The white list is applied first then the black list.
+ * to clear based on optionals included and excluded attributes lists.
+ * The included attributes list is applied before the excluded attributes list.
  * @param {object} $0 parameters
  * @param {Helper} $0.helper instance of the Helper
- * @param {string[]} [$0.whiteList] attributes to clear (defaults to all attributes)
- * @param {string[]} [$0.blackList=[]] attributes to keep, will override the white list
+ * @param {string[]} [$0.includedAttributes] attributes to clear (defaults to all attributes)
+ * @param {string[]} [$0.excludedAttributes=[]] attributes to keep, will override the included attributes list
  * @returns {string[]} the list of attributes to clear based on the rules
  */
-function getAttributesToClear({ helper, whiteList, blackList }) {
+function getAttributesToClear({
+  helper,
+  includedAttributes,
+  excludedAttributes,
+}) {
   const lastResults = helper.lastResults || {};
   const attributesToClear =
-    whiteList ||
+    includedAttributes ||
     getRefinements(lastResults, helper.state).map(one => one.attributeName);
 
   return attributesToClear.filter(
-    attribute => blackList.indexOf(attribute) === -1
+    attribute => excludedAttributes.indexOf(attribute) === -1
   );
 }
 

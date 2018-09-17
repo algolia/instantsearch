@@ -952,12 +952,12 @@ describe('utils.clearRefinements', () => {
       expect(finalState.tagRefinements).toEqual([]);
     });
 
-    it('can clear all the parameters defined in the whiteList', () => {
+    it('can clear all the parameters defined in the included attributes list', () => {
       const helper = initHelperWithRefinements();
 
       const finalState = utils.clearRefinements({
         helper,
-        whiteList: ['conjFacet'],
+        includedAttributes: ['conjFacet'],
       });
 
       expect(finalState.query).toBe(helper.state.query);
@@ -973,7 +973,7 @@ describe('utils.clearRefinements', () => {
 
       const finalState = utils.clearRefinements({
         helper,
-        blackList: ['conjFacet'],
+        excludedAttributes: ['conjFacet'],
       });
 
       expect(finalState.query).toBe(helper.state.query);
@@ -984,13 +984,13 @@ describe('utils.clearRefinements', () => {
       expect(finalState.tagRefinements).toEqual([]);
     });
 
-    it('can clear all the parameters in the whitelist except the ones in the black list', () => {
+    it('can clear all the parameters in the included attributes except the ones in the excluded attributes list', () => {
       const helper = initHelperWithRefinements();
 
       const finalState = utils.clearRefinements({
         helper,
-        whiteList: ['conjFacet', 'disjFacet'],
-        blackList: ['conjFacet'],
+        includedAttributes: ['conjFacet', 'disjFacet'],
+        excludedAttributes: ['conjFacet'],
       });
 
       expect(finalState.query).toBe(helper.state.query);
@@ -1001,12 +1001,12 @@ describe('utils.clearRefinements', () => {
       expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
     });
 
-    it('can clear tags only (whitelisting tags)', () => {
+    it('can clear tags only (including tags)', () => {
       const helper = initHelperWithRefinements();
 
       const finalState = utils.clearRefinements({
         helper,
-        whiteList: ['_tags'],
+        includedAttributes: ['_tags'],
       });
 
       expect(finalState.query).toBe(helper.state.query);
@@ -1019,12 +1019,12 @@ describe('utils.clearRefinements', () => {
       expect(finalState.tagRefinements).toEqual([]);
     });
 
-    it('can clear everything but the tags (blacklisting tags)', () => {
+    it('can clear everything but the tags (excluding tags)', () => {
       const helper = initHelperWithRefinements();
 
       const finalState = utils.clearRefinements({
         helper,
-        blackList: ['_tags'],
+        excludedAttributes: ['_tags'],
       });
 
       expect(finalState.query).toBe(helper.state.query);
@@ -1049,12 +1049,12 @@ describe('utils.clearRefinements', () => {
       expect(finalState.tagRefinements).toEqual([]);
     });
 
-    it('can clear all the parameters defined in the whiteList', () => {
+    it('can clear all the parameters defined in the included attributes list', () => {
       const helper = initHelperWithRefinements();
 
       const finalState = utils.clearRefinements({
         helper,
-        whiteList: ['conjFacet'],
+        includedAttributes: ['conjFacet'],
         clearsQuery: true,
       });
 
@@ -1071,7 +1071,7 @@ describe('utils.clearRefinements', () => {
 
       const finalState = utils.clearRefinements({
         helper,
-        blackList: ['conjFacet'],
+        excludedAttributes: ['conjFacet'],
         clearsQuery: true,
       });
 
@@ -1083,13 +1083,13 @@ describe('utils.clearRefinements', () => {
       expect(finalState.tagRefinements).toEqual([]);
     });
 
-    it('can clear all the parameters in the whitelist except the ones in the black list', () => {
+    it('can clear all the parameters in the included attributes list except the ones in the black list', () => {
       const helper = initHelperWithRefinements();
 
       const finalState = utils.clearRefinements({
         helper,
-        whiteList: ['conjFacet', 'disjFacet'],
-        blackList: ['conjFacet'],
+        includedAttributes: ['conjFacet', 'disjFacet'],
+        excludedAttributes: ['conjFacet'],
         clearsQuery: true,
       });
 
@@ -1101,12 +1101,12 @@ describe('utils.clearRefinements', () => {
       expect(finalState.tagRefinements).toEqual(finalState.tagRefinements);
     });
 
-    it('can clear tags only (whitelisting tags)', () => {
+    it('can clear tags only (including tags)', () => {
       const helper = initHelperWithRefinements();
 
       const finalState = utils.clearRefinements({
         helper,
-        whiteList: ['_tags'],
+        includedAttributes: ['_tags'],
         clearsQuery: true,
       });
 
@@ -1120,12 +1120,12 @@ describe('utils.clearRefinements', () => {
       expect(finalState.tagRefinements).toEqual([]);
     });
 
-    it('can clear everything but the tags (blacklisting tags)', () => {
+    it('can clear everything but the tags (excluding tags)', () => {
       const helper = initHelperWithRefinements();
 
       const finalState = utils.clearRefinements({
         helper,
-        blackList: ['_tags'],
+        excludedAttributes: ['_tags'],
         clearsQuery: true,
       });
 
