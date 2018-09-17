@@ -18,11 +18,9 @@ export default [
     external: [
       'algoliasearch/lite',
       'algoliasearch-helper',
-      'escape-html',
-      'lodash/range',
       'instantsearch.js/es/',
       'instantsearch.js/es/connectors',
-      'instantsearch.js/es/widgets/configure/configure.js',
+      'vue',
     ],
     output: [
       {
