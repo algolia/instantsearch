@@ -302,8 +302,8 @@ function getRefinements(results, state, clearsQuery) {
 
 /**
  * Clears the refinements of a SearchParameters object based on rules provided.
- * The included attributes list is first used then the excluded attributes list is applied. If list
- * is not provided, all the current refinements are used.
+ * The included attributes list is applied before the excluded attributes list. If the list
+ * is not provided, this list of all the currently refined attributes is used as included attributes.
  * @param {object} $0 parameters
  * @param {Helper} $0.helper instance of the Helper
  * @param {string[]} [$0.includedAttributes] list of parameters to clear
@@ -342,11 +342,12 @@ function clearRefinements({
 
 /**
  * Computes the list of attributes (conjunctive, disjunctive, hierarchical facet + numerical attributes)
- * to clear based on optionals included and excluded attributes lists. The included attributes list is applied first then the excluded attributes list.
+ * to clear based on optionals included and excluded attributes lists.
+ * The included attributes list is applied before the excluded attributes list.
  * @param {object} $0 parameters
  * @param {Helper} $0.helper instance of the Helper
  * @param {string[]} [$0.includedAttributes] attributes to clear (defaults to all attributes)
- * @param {string[]} [$0.excludedAttributes=[]] attributes to keep, will override the included attribute list
+ * @param {string[]} [$0.excludedAttributes=[]] attributes to keep, will override the included attributes list
  * @returns {string[]} the list of attributes to clear based on the rules
  */
 function getAttributesToClear({
