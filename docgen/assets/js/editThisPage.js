@@ -10,7 +10,10 @@ if (document.querySelector('.documentation-container')) {
 
   let pathname = document.location.pathname.replace('/react-instantsearch', '');
 
-  if (/^\/(?:widgets)\/.+/.test(pathname)) {
+  // Special case for the GeoSearch
+  if (/^\/(?:widgets\/GeoSearch).+/.test(pathname)) {
+    href += '/docgen/src/widgets/GeoSearch.md';
+  } else if (/^\/(?:widgets)\/.+/.test(pathname)) {
     href += `${apiDom}${pathname.replace('.html', '.js')}`;
 
     const instantsearchEncoded = encodeURIComponent('<InstantSearch>');
