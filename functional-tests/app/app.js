@@ -26,9 +26,9 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.sortBySelector({
-    container: '#sort-by-selector',
-    indices: [
+  instantsearch.widgets.sortBy({
+    container: '#sort-by',
+    items: [
       { name: 'instant_search', label: 'Most relevant' },
       { name: 'instant_search_price_asc', label: 'Lowest price' },
       { name: 'instant_search_price_desc', label: 'Highest price' },

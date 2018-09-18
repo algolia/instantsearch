@@ -10,7 +10,7 @@ export { default as numericSelector } from './numericSelector';
 export { default as numericRefinementList } from './numericRefinementList';
 export { default as priceRanges } from './priceRanges';
 export { default as searchBox } from './searchBox';
-export { default as sortBySelector } from './sortBySelector';
+export { default as sortBy } from './sortBy';
 export { default as starRating } from './starRating';
 export { default as stats } from './stats';
 export { default as toggle } from './toggle';

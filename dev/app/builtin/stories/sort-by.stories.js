@@ -2,9 +2,9 @@
 
 import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
 
-const stories = storiesOf('SortBySelector');
+const stories = storiesOf('SortBy');
 
 export default () => {
   stories
@@ -12,9 +12,9 @@ export default () => {
       'default',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.sortBySelector({
+          instantsearch.widgets.sortBy({
             container,
-            indices: [
+            items: [
               { name: 'instant_search', label: 'Most relevant' },
               { name: 'instant_search_price_asc', label: 'Lowest price' },
               { name: 'instant_search_price_desc', label: 'Highest price' },
@@ -27,9 +27,9 @@ export default () => {
       'with transformed items',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.sortBySelector({
+          instantsearch.widgets.sortBy({
             container,
-            indices: [
+            items: [
               { name: 'instant_search', label: 'Most relevant' },
               { name: 'instant_search_price_asc', label: 'Lowest price' },
               { name: 'instant_search_price_desc', label: 'Highest price' },

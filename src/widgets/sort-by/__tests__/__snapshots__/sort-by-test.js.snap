@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sortBy() calls twice ReactDOM.render(<Selector props />, container) 1`] = `
+<div
+  className="ais-SortBy custom-root cx"
+>
+  <Selector
+    cssClasses={
+      Object {
+        "option": "ais-SortBy-option",
+        "root": "ais-SortBy custom-root cx",
+        "select": "ais-SortBy-select custom-select",
+      }
+    }
+    currentValue="index-a"
+    options={
+      Array [
+        Object {
+          "label": "Index A",
+          "value": "index-a",
+        },
+        Object {
+          "label": "Index B",
+          "value": "index-b",
+        },
+      ]
+    }
+    setValue={[Function]}
+  />
+</div>
+`;
+
+exports[`sortBy() calls twice ReactDOM.render(<Selector props />, container) 2`] = `
+<div
+  className="ais-SortBy custom-root cx"
+>
+  <Selector
+    cssClasses={
+      Object {
+        "option": "ais-SortBy-option",
+        "root": "ais-SortBy custom-root cx",
+        "select": "ais-SortBy-select custom-select",
+      }
+    }
+    currentValue="index-a"
+    options={
+      Array [
+        Object {
+          "label": "Index A",
+          "value": "index-a",
+        },
+        Object {
+          "label": "Index B",
+          "value": "index-b",
+        },
+      ]
+    }
+    setValue={[Function]}
+  />
+</div>
+`;
+
+exports[`sortBy() renders transformed items 1`] = `
+<div
+  className="ais-SortBy"
+>
+  <Selector
+    cssClasses={
+      Object {
+        "option": "ais-SortBy-option",
+        "root": "ais-SortBy",
+        "select": "ais-SortBy-select",
+      }
+    }
+    currentValue="index-a"
+    options={
+      Array [
+        Object {
+          "label": "Index A",
+          "transformed": true,
+          "value": "index-a",
+        },
+        Object {
+          "label": "Index B",
+          "transformed": true,
+          "value": "index-b",
+        },
+      ]
+    }
+    setValue={[Function]}
+  />
+</div>
+`;

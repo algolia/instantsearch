@@ -2,7 +2,7 @@ import find from 'lodash/find';
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
-var customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {
+var customSortBy = connectSortBy(function render(params, isFirstRendering) {
   // params = {
   //   currentRefinement,
   //   options,
@@ -13,37 +13,37 @@ var customSortBySelector = connectSortBySelector(function render(params, isFirst
   // }
 });
 search.addWidget(
-  customSortBySelector({
-    indices,
+  customSortBy({
+    items,
     [ transformItems ]
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBySelector.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectSortBy.html
 `;
 
 /**
- * @typedef {Object} SortBySelectorIndices
+ * @typedef {Object} SortByItem
  * @property {string} name Name of the index to target.
  * @property {string} label Label to display for the targeted index.
  */
 
 /**
- * @typedef {Object} CustomSortBySelectorWidgetOptions
- * @property {SortBySelectorIndices[]} indices Array of objects defining the different indices to choose from.
+ * @typedef {Object} CustomSortByWidgetOptions
+ * @property {SortByItem[]} items Array of objects defining the different indices to choose from.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
- * @typedef {Object} SortBySelectorRenderingOptions
+ * @typedef {Object} SortByRenderingOptions
  * @property {string} currentRefinement The currently selected index.
- * @property {SortBySelectorIndices[]} options All the available indices
+ * @property {SortByItem[]} options All the available indices
  * @property {function(string)} refine Switches indices and triggers a new search.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
- * @property {Object} widgetParams All original `CustomSortBySelectorWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomSortByWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * The **SortBySelector** connector provides the logic to build a custom widget that will display a
+ * The **SortBy** connector provides the logic to build a custom widget that will display a
  * list of indices. With Algolia, this is most commonly used for changing ranking strategy. This allows
  * a user to change how the hits are being sorted.
  *
@@ -52,45 +52,45 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * `options` that are the values that can be selected. `refine` should be used
  * with `options.value`.
  * @type {Connector}
- * @param {function(SortBySelectorRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBySelector** widget.
+ * @param {function(SortByRenderingOptions, boolean)} renderFn Rendering function for the custom **SortBy** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomSortBySelectorWidgetOptions)} Re-usable widget factory for a custom **SortBySelector** widget.
+ * @return {function(CustomSortByWidgetOptions)} Re-usable widget factory for a custom **SortBy** widget.
  * @example
- * // custom `renderFn` to render the custom SortBySelector widget
- * function renderFn(SortBySelectorRenderingOptions, isFirstRendering) {
+ * // custom `renderFn` to render the custom SortBy widget
+ * function renderFn(SortByRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {
- *     SortBySelectorRenderingOptions.widgetParams.containerNode.html('<select></select>');
- *     SortBySelectorRenderingOptions.widgetParams.containerNode
+ *     SortByRenderingOptions.widgetParams.containerNode.html('<select></select>');
+ *     SortByRenderingOptions.widgetParams.containerNode
  *       .find('select')
  *       .on('change', function(event) {
- *         SortBySelectorRenderingOptions.refine(event.target.value);
+ *         SortByRenderingOptions.refine(event.target.value);
  *       });
  *   }
  *
- *   var optionsHTML = SortBySelectorRenderingOptions.options.map(function(option) {
+ *   var optionsHTML = SortByRenderingOptions.options.map(function(option) {
  *     return `
  *       <option
  *         value="${option.value}"
- *         ${SortBySelectorRenderingOptions.currentRefinement === option.value ? 'selected' : ''}
+ *         ${SortByRenderingOptions.currentRefinement === option.value ? 'selected' : ''}
  *       >
  *         ${option.label}
  *       </option>
  *     `;
  *   });
  *
- *   SortBySelectorRenderingOptions.widgetParams.containerNode
+ *   SortByRenderingOptions.widgetParams.containerNode
  *     .find('select')
  *     .html(optionsHTML);
  * }
  *
- * // connect `renderFn` to SortBySelector logic
- * var customSortBySelector = instantsearch.connectors.connectSortBySelector(renderFn);
+ * // connect `renderFn` to SortBy logic
+ * var customSortBy = instantsearch.connectors.connectSortBy(renderFn);
  *
  * // mount widget on the page
  * search.addWidget(
- *   customSortBySelector({
- *     containerNode: $('#custom-sort-by-selector-container'),
- *     indices: [
+ *   customSortBy({
+ *     containerNode: $('#custom-sort-by-container'),
+ *     items: [
  *       {name: 'instant_search', label: 'Most relevant'},
  *       {name: 'instant_search_price_asc', label: 'Lowest price'},
  *       {name: 'instant_search_price_desc', label: 'Highest price'},
@@ -98,17 +98,17 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectSortBySelector(renderFn, unmountFn) {
+export default function connectSortBy(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { indices, transformItems = items => items } = widgetParams;
+    const { items, transformItems = x => x } = widgetParams;
 
-    if (!indices) {
+    if (!items) {
       throw new Error(usage);
     }
 
-    const selectorOptions = indices.map(({ label, name }) => ({
+    const selectorOptions = items.map(({ label, name }) => ({
       label,
       value: name,
     }));
@@ -116,14 +116,11 @@ export default function connectSortBySelector(renderFn, unmountFn) {
     return {
       init({ helper, instantSearchInstance }) {
         const currentIndex = helper.getIndex();
-        const isIndexInList = find(
-          indices,
-          ({ name }) => name === currentIndex
-        );
+        const isIndexInList = find(items, ({ name }) => name === currentIndex);
 
         if (!isIndexInList) {
           throw new Error(
-            `[sortBySelector]: Index ${currentIndex} not present in \`indices\``
+            `[sortBy]: Index ${currentIndex} not present in \`items\``
           );
         }
 

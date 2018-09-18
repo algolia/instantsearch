@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectSortBySelector routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
+exports[`connectSortBy routing getWidgetSearchParameters should add the refinements according to the UI state provided 1`] = `
 SearchParameters {
   "advancedSyntax": undefined,
   "allowTyposOnNumericTokens": undefined,
@@ -57,7 +57,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectSortBySelector routing getWidgetSearchParameters should enforce the default value 1`] = `
+exports[`connectSortBy routing getWidgetSearchParameters should enforce the default value 1`] = `
 SearchParameters {
   "advancedSyntax": undefined,
   "allowTyposOnNumericTokens": undefined,
@@ -114,7 +114,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectSortBySelector routing getWidgetState should add an entry equal to the refinement 1`] = `
+exports[`connectSortBy routing getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
   "sortBy": "priceASC",
 }

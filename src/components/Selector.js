@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
+import cx from 'classnames';
 
-import autoHideContainer from '../decorators/autoHideContainer.js';
-import headerFooter from '../decorators/headerFooter.js';
-
-export class RawSelector extends Component {
+export class Selector extends Component {
   componentWillMount() {
     this.handleChange = this.handleChange.bind(this);
   }
@@ -18,13 +16,13 @@ export class RawSelector extends Component {
 
     return (
       <select
-        className={this.props.cssClasses.select}
+        className={cx(this.props.cssClasses.select)}
         onChange={this.handleChange}
         value={`${currentValue}`}
       >
         {options.map(option => (
           <option
-            className={this.props.cssClasses.item}
+            className={cx(this.props.cssClasses.option)}
             key={option.label + option.value}
             value={`${option.value}`}
           >
@@ -36,7 +34,7 @@ export class RawSelector extends Component {
   }
 }
 
-RawSelector.propTypes = {
+Selector.propTypes = {
   cssClasses: PropTypes.shape({
     root: PropTypes.oneOfType([
       PropTypes.string,
@@ -46,7 +44,7 @@ RawSelector.propTypes = {
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
-    item: PropTypes.oneOfType([
+    option: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
@@ -61,4 +59,4 @@ RawSelector.propTypes = {
   setValue: PropTypes.func.isRequired,
 };
 
-export default autoHideContainer(headerFooter(RawSelector));
+export default Selector;

@@ -149,6 +149,33 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
   <button class="ais-InfiniteHits-loadMore">Show more results</button>
 ```
 
+### SortBy
+
+#### Options
+
+| Before    | After   |
+| --------- | ------- |
+| `indices` | `items` |
+
+#### CSS classes
+
+| Before                 | After               |
+| ---------------------- | ------------------- |
+|                        | `ais-SortBy`        |
+| `ais-sort-by-selector` | `ais-SortBy-select` |
+| `ais-sort-by--item`    | `ais-SortBy-option` |
+
+#### Markup
+
+```html
+<div class="ais-SortBy">
+ <select class="ais-SortBy-select">
+   <option class="ais-SortBy-option" value="Most relevant">Most relevant</option>
+   <option class="ais-SortBy-option" value="Lowest price">Lowest price</option>
+ </select>
+</div>
+```
+
 ### Stats
 
 #### CSS classes

@@ -11,7 +11,7 @@ import initPaginationStories from './stories/pagination.stories';
 import initPriceRangesStories from './stories/price-ranges.stories';
 import initRefinementListStories from './stories/refinement-list.stories';
 import initSearchBoxStories from './stories/search-box.stories';
-import initSortBySelectorStories from './stories/sort-by-selector.stories';
+import initSortByStories from './stories/sort-by.stories';
 import initStarRatingStories from './stories/star-rating.stories';
 import initStatsStories from './stories/stats.stories';
 import initToggleStories from './stories/toggle.stories';
@@ -31,7 +31,7 @@ export default () => {
   initPriceRangesStories();
   initRefinementListStories();
   initSearchBoxStories();
-  initSortBySelectorStories();
+  initSortByStories();
   initStarRatingStories();
   initStatsStories();
   initToggleStories();
