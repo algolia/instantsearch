@@ -1,20 +1,17 @@
 import times from 'lodash/times';
 import range from 'lodash/range';
 import has from 'lodash/has';
-
 import PropTypes from 'prop-types';
-
 import React, { Component } from 'preact-compat';
-
 import Rheostat from 'preact-rheostat';
 import cx from 'classnames';
 
 import Pit from './Pit.js';
+import { component } from '../../lib/suit';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
+const suit = component('RangeSlider');
 
-export class RawSlider extends Component {
+export class Slider extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
@@ -68,15 +65,17 @@ export class RawSlider extends Component {
       ? tooltips.format(roundedValue)
       : roundedValue;
 
-    const className = cx('ais-range-slider--handle', props.className, {
-      'ais-range-slider--handle-lower': props['data-handle-key'] === 0,
-      'ais-range-slider--handle-upper': props['data-handle-key'] === 1,
+    const className = cx(suit({ descendantName: 'handle' }), props.className, {
+      [suit({ descendantName: 'handle', modifierName: 'lower' })]:
+        props['data-handle-key'] === 0,
+      [suit({ descendantName: 'handle', modifierName: 'upper' })]:
+        props['data-handle-key'] === 1,
     });
 
     return (
       <div {...props} className={className}>
         {tooltips ? (
-          <div className="ais-range-slider--tooltip">{value}</div>
+          <div className={cx(suit({ descendantName: 'tooltip' }))}>{value}</div>
         ) : null}
       </div>
     );
@@ -94,7 +93,11 @@ export class RawSlider extends Component {
       pips === false ? [] : this.computeDefaultPitPoints({ min, max });
 
     return (
-      <div className={this.isDisabled ? 'ais-range-slider--disabled' : ''}>
+      <div
+        className={cx({
+          [this.isDisabled]: suit({ modifierName: 'disabled' }),
+        })}
+      >
         <Rheostat
           handle={this.createHandleComponent(tooltips)}
           onChange={this.handleChange}
@@ -112,4 +115,4 @@ export class RawSlider extends Component {
   }
 }
 
-export default autoHideContainerHOC(headerFooterHOC(RawSlider));
+export default Slider;

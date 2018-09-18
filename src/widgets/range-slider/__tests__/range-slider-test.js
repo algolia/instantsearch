@@ -41,8 +41,6 @@ describe('rangeSlider', () => {
 
     afterEach(() => {
       rangeSlider.__ResetDependency__('render');
-      rangeSlider.__ResetDependency__('autoHideContainerHOC');
-      rangeSlider.__ResetDependency__('headerFooterHOC');
     });
 
     it('should render without results', () => {
@@ -56,56 +54,6 @@ describe('rangeSlider', () => {
       widget.render({ results: [], helper });
 
       expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
-    it('should `shouldAutoHideContainer` when range min === max', () => {
-      const results = {
-        disjunctiveFacets: [
-          {
-            name: attribute,
-            stats: {
-              min: 65,
-              max: 65,
-            },
-          },
-        ],
-      };
-
-      widget = rangeSlider({
-        container,
-        attribute,
-        cssClasses: { root: ['root', 'cx'] },
-      });
-
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
-
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(
-        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
-      ).toEqual(true);
-      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
-    });
-
-    it('should `collapse` when options is provided', () => {
-      const results = {};
-
-      widget = rangeSlider({
-        container,
-        attribute,
-        collapsible: {
-          collapsed: true,
-        },
-      });
-
-      widget.init({ helper, instantSearchInstance });
-      widget.render({ results, helper });
-
-      expect(ReactDOM.render).toHaveBeenCalledTimes(1);
-      expect(
-        ReactDOM.render.mock.calls[0][0].props.shouldAutoHideContainer
-      ).toEqual(true);
       expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     });
 
