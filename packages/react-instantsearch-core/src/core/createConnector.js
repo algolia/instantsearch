@@ -160,7 +160,7 @@ export default function createConnector(connectorDesc) {
       componentWillMount() {
         if (connectorDesc.getSearchParameters) {
           this.context.ais.onSearchParameters(
-            connectorDesc.getSearchParameters,
+            connectorDesc.getSearchParameters.bind(this),
             this.context,
             this.props
           );
