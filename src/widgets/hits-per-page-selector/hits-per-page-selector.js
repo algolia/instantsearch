@@ -1,17 +1,16 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import find from 'lodash/find';
 
 import Selector from '../../components/Selector.js';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
+import { getContainerNode } from '../../lib/utils';
+import { component } from '../../lib/suit';
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+const suit = component('HitsPerPage');
 
-const bem = bemHelper('ais-hits-per-page-selector');
-
-const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
-  { items, refine, hasNoResults },
+const renderer = ({ containerNode, cssClasses }) => (
+  { items, refine },
   isFirstRendering
 ) => {
   if (isFirstRendering) return;
@@ -20,13 +19,14 @@ const renderer = ({ containerNode, cssClasses, autoHideContainer }) => (
     find(items, ({ isRefined }) => isRefined) || {};
 
   render(
-    <Selector
-      cssClasses={cssClasses}
-      currentValue={currentValue}
-      options={items}
-      setValue={refine}
-      shouldAutoHideContainer={autoHideContainer && hasNoResults}
-    />,
+    <div className={cx(cssClasses.root)}>
+      <Selector
+        cssClasses={cssClasses}
+        currentValue={currentValue}
+        options={items}
+        setValue={refine}
+      />
+    </div>,
     containerNode
   );
 };
@@ -35,8 +35,7 @@ const usage = `Usage:
 hitsPerPageSelector({
   container,
   items,
-  [ cssClasses.{root,select,item}={} ],
-  [ autoHideContainer=false ],
+  [ cssClasses.{root, select, option}={} ],
   [ transformItems ]
 })`;
 
@@ -44,7 +43,7 @@ hitsPerPageSelector({
  * @typedef {Object} HitsPerPageSelectorCSSClasses
  * @property {string|string[]} [root] CSS classes added to the outer `<div>`.
  * @property {string|string[]} [select] CSS classes added to the parent `<select>`.
- * @property {string|string[]} [item] CSS classes added to each `<option>`.
+ * @property {string|string[]} [option] CSS classes added to each `<option>`.
  */
 
 /**
@@ -58,7 +57,6 @@ hitsPerPageSelector({
  * @typedef {Object} HitsPerPageSelectorWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {HitsPerPageSelectorItems[]} items Array of objects defining the different values and labels.
- * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {HitsPerPageSelectorCSSClasses} [cssClasses] CSS classes to be added.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -89,7 +87,6 @@ export default function hitsPerPageSelector({
   container,
   items,
   cssClasses: userCssClasses = {},
-  autoHideContainer = false,
   transformItems,
 } = {}) {
   if (!container) {
@@ -99,17 +96,14 @@ export default function hitsPerPageSelector({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    // We use the same class to avoid regression on existing website. It needs to be replaced
-    // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item),
+    root: cx(suit(), userCssClasses.root),
+    select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
+    option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    autoHideContainer,
   });
 
   try {
