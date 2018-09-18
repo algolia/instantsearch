@@ -7,13 +7,13 @@ exports[`Selector should render <Selector/> with numbers 1`] = `
   value="10"
 >
   <option
-    className="custom-item"
+    className="custom-option"
     value="10"
   >
     10 results per page
   </option>
   <option
-    className="custom-item"
+    className="custom-option"
     value="20"
   >
     20 results per page
@@ -28,13 +28,13 @@ exports[`Selector should render <Selector/> with strings 1`] = `
   value="index-a"
 >
   <option
-    className="custom-item"
+    className="custom-option"
     value="index-a"
   >
     Index A
   </option>
   <option
-    className="custom-item"
+    className="custom-option"
     value="index-b"
   >
     Index B
