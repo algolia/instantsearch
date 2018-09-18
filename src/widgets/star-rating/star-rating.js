@@ -5,14 +5,10 @@ import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectStarRating from '../../connectors/star-rating/connectStarRating.js';
 import defaultTemplates from './defaultTemplates.js';
 import defaultLabels from './defaultLabels.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-
-const bem = bemHelper('ais-star-rating');
+const suit = component('StarRating');
 
 const renderer = ({
   containerNode,
@@ -20,7 +16,6 @@ const renderer = ({
   templates,
   collapsible,
   transformData,
-  autoHideContainer,
   renderState,
   labels,
 }) => (
@@ -37,15 +32,12 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && hasNoResults;
-
   render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items.map(item => ({ ...item, labels }))}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
     />,
@@ -56,13 +48,12 @@ const renderer = ({
 const usage = `Usage:
 starRating({
   container,
-  attributeName,
+  attribute,
   [ max=5 ],
   [ cssClasses.{root,header,body,footer,list,item,active,link,disabledLink,star,emptyStar,count} ],
   [ templates.{header,item,footer} ],
   [ transformData.{item} ],
   [ labels.{andUp} ],
-  [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
 
@@ -107,12 +98,11 @@ starRating({
 /**
  * @typedef {Object} StarWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
- * @property {string} attributeName Name of the attribute in your records that contains the ratings.
+ * @property {string} attribute Name of the attribute in your records that contains the ratings.
  * @property {number} [max=5] The maximum rating value.
  * @property {StarWidgetLabels} [labels] Labels used by the default template.
  * @property {StarWidgetTemplates} [templates] Templates to use for the widget.
  * @property {StarWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
- * @property {boolean} [autoHideContainer=true] Make the widget hides itself when there is no results matching.
  * @property {StarWidgetCssClasses} [cssClasses] CSS classes to add.
  * @property {boolean|StarWidgetCollapsibleOption} [collapsible=false] If set to true, the widget can be collapsed. This parameter can also be
  */
@@ -123,7 +113,7 @@ starRating({
  * The maximum value can be set (with `max`), the minimum is always 0.
  *
  * @requirements
- * The attribute passed to `attributeName` must be declared as an
+ * The attribute passed to `attribute` must be declared as an
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
@@ -138,7 +128,7 @@ starRating({
  * search.addWidget(
  *   instantsearch.widgets.starRating({
  *     container: '#stars',
- *     attributeName: 'rating',
+ *     attribute: 'rating',
  *     max: 5,
  *     labels: {
  *       andUp: '& Up'
@@ -148,14 +138,13 @@ starRating({
  */
 export default function starRating({
   container,
-  attributeName,
+  attribute,
   max = 5,
   cssClasses: userCssClasses = {},
   labels = defaultLabels,
   templates = defaultTemplates,
   collapsible = false,
   transformData,
-  autoHideContainer = true,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -164,25 +153,39 @@ export default function starRating({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    disabledLink: cx(bem('link', 'disabled'), userCssClasses.disabledLink),
-    count: cx(bem('count'), userCssClasses.count),
-    star: cx(bem('star'), userCssClasses.star),
-    emptyStar: cx(bem('star', 'empty'), userCssClasses.emptyStar),
-    active: cx(bem('item', 'active'), userCssClasses.active),
+    root: cx(suit(), userCssClasses.root),
+    noRefinementRoot: cx(
+      suit({ modifierName: 'noRefinement' }),
+      userCssClasses.noRefinementRoot
+    ),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    selectedItem: cx(
+      suit({ descendantName: 'item', modifierName: 'selected' }),
+      userCssClasses.selectedItem
+    ),
+    disabledItem: cx(
+      suit({ descendantName: 'item', modifierName: 'disabled' }),
+      userCssClasses.disabledItem
+    ),
+    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
+    starIcon: cx(suit({ descendantName: 'starIcon' }), userCssClasses.starIcon),
+    fullStarIcon: cx(
+      suit({ descendantName: 'starIcon', modifierName: 'full' }),
+      userCssClasses.fullStarIcon
+    ),
+    emptyStarIcon: cx(
+      suit({ descendantName: 'starIcon', modifierName: 'empty' }),
+      userCssClasses.emptyStarIcon
+    ),
+    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
+    count: cx(suit({ descendantName: 'count' }), userCssClasses.count),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
     collapsible,
-    autoHideContainer,
     renderState: {},
     templates,
     transformData,
@@ -193,7 +196,7 @@ export default function starRating({
     const makeWidget = connectStarRating(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ attributeName, max });
+    return makeWidget({ attribute, max });
   } catch (e) {
     throw new Error(usage);
   }

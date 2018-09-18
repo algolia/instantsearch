@@ -13,7 +13,7 @@ var customStarRating = connectStarRating(function render(params, isFirstRenderin
 });
 search.addWidget(
   customStarRatingI({
-    attributeName,
+    attribute,
     [ max=5 ],
   })
 );
@@ -31,7 +31,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomStarRatingWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {number} [max = 5] The maximum rating value.
  */
 
@@ -99,7 +99,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * search.addWidget(
  *   customStarRating({
  *     containerNode: $('#custom-star-rating-container'),
- *     attributeName: 'rating',
+ *     attribute: 'rating',
  *     max: 5,
  *   })
  * );
@@ -108,21 +108,21 @@ export default function connectStarRating(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { attributeName, max = 5 } = widgetParams;
+    const { attribute, max = 5 } = widgetParams;
 
-    if (!attributeName) {
+    if (!attribute) {
       throw new Error(usage);
     }
 
     return {
       getConfiguration() {
-        return { disjunctiveFacets: [attributeName] };
+        return { disjunctiveFacets: [attribute] };
       },
 
       init({ helper, createURL, instantSearchInstance }) {
         this._toggleRefinement = this._toggleRefinement.bind(this, helper);
         this._createURL = state => facetValue =>
-          createURL(state.toggleRefinement(attributeName, facetValue));
+          createURL(state.toggleRefinement(attribute, facetValue));
 
         renderFn(
           {
@@ -143,7 +143,7 @@ export default function connectStarRating(renderFn, unmountFn) {
         for (let v = max; v >= 0; --v) {
           allValues[v] = 0;
         }
-        results.getFacetValues(attributeName).forEach(facet => {
+        results.getFacetValues(attribute).forEach(facet => {
           const val = Math.round(facet.name);
           if (!val || val > max) {
             return;
@@ -190,8 +190,8 @@ export default function connectStarRating(renderFn, unmountFn) {
         unmountFn();
 
         const nextState = state
-          .removeDisjunctiveFacetRefinement(attributeName)
-          .removeDisjunctiveFacet(attributeName);
+          .removeDisjunctiveFacetRefinement(attribute)
+          .removeDisjunctiveFacet(attribute);
 
         return nextState;
       },
@@ -202,33 +202,33 @@ export default function connectStarRating(renderFn, unmountFn) {
           refinedStar === undefined ||
           (uiState &&
             uiState.starRating &&
-            uiState.starRating[attributeName] === refinedStar)
+            uiState.starRating[attribute] === refinedStar)
         )
           return uiState;
         return {
           ...uiState,
           starRating: {
             ...uiState.starRating,
-            [attributeName]: refinedStar,
+            [attribute]: refinedStar,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const starRatingFromURL =
-          uiState.starRating && uiState.starRating[attributeName];
+          uiState.starRating && uiState.starRating[attribute];
         const refinedStar = this._getRefinedStar(searchParameters);
 
         if (starRatingFromURL === refinedStar) return searchParameters;
 
         let clearedSearchParam = searchParameters.clearRefinements(
-          attributeName
+          attribute
         );
 
         if (starRatingFromURL !== undefined) {
           for (let val = Number(starRatingFromURL); val <= max; ++val) {
             clearedSearchParam = clearedSearchParam.addDisjunctiveFacetRefinement(
-              attributeName,
+              attribute,
               val
             );
           }
@@ -240,10 +240,10 @@ export default function connectStarRating(renderFn, unmountFn) {
       _toggleRefinement(helper, facetValue) {
         const isRefined =
           this._getRefinedStar(helper.state) === Number(facetValue);
-        helper.clearRefinements(attributeName);
+        helper.clearRefinements(attribute);
         if (!isRefined) {
           for (let val = Number(facetValue); val <= max; ++val) {
-            helper.addDisjunctiveFacetRefinement(attributeName, val);
+            helper.addDisjunctiveFacetRefinement(attribute, val);
           }
         }
         helper.search();
@@ -252,7 +252,7 @@ export default function connectStarRating(renderFn, unmountFn) {
       _getRefinedStar(searchParameters) {
         let refinedStar = undefined;
         const refinements = searchParameters.getDisjunctiveRefinements(
-          attributeName
+          attribute
         );
         refinements.forEach(r => {
           if (!refinedStar || Number(r) < refinedStar) {

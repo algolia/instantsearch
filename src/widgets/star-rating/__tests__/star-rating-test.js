@@ -9,7 +9,7 @@ import starRating from '../star-rating.js';
 const SearchResults = jsHelper.SearchResults;
 
 describe('starRating()', () => {
-  const attributeName = 'anAttrName';
+  const attribute = 'anAttrName';
   let ReactDOM;
   let container;
   let widget;
@@ -26,7 +26,7 @@ describe('starRating()', () => {
     container = document.createElement('div');
     widget = starRating({
       container,
-      attributeName,
+      attribute,
       cssClasses: { body: ['body', 'cx'] },
     });
     helper = jsHelper({}, '', widget.getConfiguration({}));
@@ -67,11 +67,11 @@ describe('starRating()', () => {
   });
 
   it('hide the count==0 when there is a refinement', () => {
-    helper.addDisjunctiveFacetRefinement(attributeName, 1);
+    helper.addDisjunctiveFacetRefinement(attribute, 1);
     const _results = new SearchResults(helper.state, [
       {
         facets: {
-          [attributeName]: { 1: 42 },
+          [attribute]: { 1: 42 },
         },
       },
       {},
@@ -120,7 +120,7 @@ describe('starRating()', () => {
   });
 
   it('toggles the refinements', () => {
-    helper.addDisjunctiveFacetRefinement(attributeName, 2);
+    helper.addDisjunctiveFacetRefinement(attribute, 2);
     helper.addDisjunctiveFacetRefinement.reset();
     widget._toggleRefinement('2');
     expect(helper.clearRefinements.calledOnce).toBe(
@@ -151,7 +151,7 @@ describe('starRating()', () => {
   it('should return the right facet counts and results', () => {
     const _widget = starRating({
       container,
-      attributeName,
+      attribute,
       cssClasses: { body: ['body', 'cx'] },
     });
     const _helper = jsHelper({}, '', _widget.getConfiguration({}));
@@ -171,7 +171,7 @@ describe('starRating()', () => {
       results: new SearchResults(_helper.state, [
         {
           facets: {
-            [attributeName]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
           },
         },
         {},

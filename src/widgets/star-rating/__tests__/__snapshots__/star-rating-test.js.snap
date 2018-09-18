@@ -6,18 +6,18 @@ exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, cont
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-star-rating--item__active",
-      "body": "ais-star-rating--body body cx",
-      "count": "ais-star-rating--count",
-      "disabledLink": "ais-star-rating--link__disabled",
-      "emptyStar": "ais-star-rating--star__empty",
-      "footer": "ais-star-rating--footer",
-      "header": "ais-star-rating--header",
-      "item": "ais-star-rating--item",
-      "link": "ais-star-rating--link",
-      "list": "ais-star-rating--list",
-      "root": "ais-star-rating",
-      "star": "ais-star-rating--star",
+      "count": "ais-StarRating-count",
+      "disabledItem": "ais-StarRating-item--disabled",
+      "emptyStarIcon": "ais-StarRating-starIcon--empty",
+      "fullStarIcon": "ais-StarRating-starIcon--full",
+      "item": "ais-StarRating-item",
+      "label": "ais-StarRating-label",
+      "link": "ais-StarRating-link",
+      "list": "ais-StarRating-list",
+      "noRefinementRoot": "ais-StarRating--noRefinement",
+      "root": "ais-StarRating",
+      "selectedItem": "ais-StarRating-item--selected",
+      "starIcon": "ais-StarRating-starIcon",
     }
   }
   depth={0}
@@ -89,12 +89,9 @@ exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, cont
       },
     ]
   }
-  shouldAutoHideContainer={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
         "item": "<a class=\\"{{cssClasses.link}}{{^count}} {{cssClasses.disabledLink}}{{/count}}\\" {{#count}}href=\\"{{href}}\\"{{/count}}>
   {{#stars}}<span class=\\"{{#.}}{{cssClasses.star}}{{/.}}{{^.}}{{cssClasses.emptyStar}}{{/.}}\\"></span>{{/stars}}
   {{labels.andUp}}
@@ -104,8 +101,6 @@ exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, cont
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
       },
     }
@@ -120,18 +115,18 @@ exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, cont
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-star-rating--item__active",
-      "body": "ais-star-rating--body body cx",
-      "count": "ais-star-rating--count",
-      "disabledLink": "ais-star-rating--link__disabled",
-      "emptyStar": "ais-star-rating--star__empty",
-      "footer": "ais-star-rating--footer",
-      "header": "ais-star-rating--header",
-      "item": "ais-star-rating--item",
-      "link": "ais-star-rating--link",
-      "list": "ais-star-rating--list",
-      "root": "ais-star-rating",
-      "star": "ais-star-rating--star",
+      "count": "ais-StarRating-count",
+      "disabledItem": "ais-StarRating-item--disabled",
+      "emptyStarIcon": "ais-StarRating-starIcon--empty",
+      "fullStarIcon": "ais-StarRating-starIcon--full",
+      "item": "ais-StarRating-item",
+      "label": "ais-StarRating-label",
+      "link": "ais-StarRating-link",
+      "list": "ais-StarRating-list",
+      "noRefinementRoot": "ais-StarRating--noRefinement",
+      "root": "ais-StarRating",
+      "selectedItem": "ais-StarRating-item--selected",
+      "starIcon": "ais-StarRating-starIcon",
     }
   }
   depth={0}
@@ -203,12 +198,9 @@ exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, cont
       },
     ]
   }
-  shouldAutoHideContainer={false}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
         "item": "<a class=\\"{{cssClasses.link}}{{^count}} {{cssClasses.disabledLink}}{{/count}}\\" {{#count}}href=\\"{{href}}\\"{{/count}}>
   {{#stars}}<span class=\\"{{#.}}{{cssClasses.star}}{{/.}}{{^.}}{{cssClasses.emptyStar}}{{/.}}\\"></span>{{/stars}}
   {{labels.andUp}}
@@ -218,8 +210,6 @@ exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, cont
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
         "item": false,
       },
     }

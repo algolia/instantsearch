@@ -14,14 +14,14 @@ describe('connectStarRating', () => {
     const rendering = sinon.stub();
     const makeWidget = connectStarRating(rendering);
 
-    const attributeName = 'grade';
+    const attribute = 'grade';
     const widget = makeWidget({
-      attributeName,
+      attribute,
     });
 
     const config = widget.getConfiguration({});
     expect(config).toEqual({
-      disjunctiveFacets: [attributeName],
+      disjunctiveFacets: [attribute],
     });
 
     const helper = jsHelper({}, '', config);
@@ -43,14 +43,14 @@ describe('connectStarRating', () => {
       // should provide good values for the first rendering
       const { items, widgetParams } = rendering.lastCall.args[0];
       expect(items).toEqual([]);
-      expect(widgetParams).toEqual({ attributeName });
+      expect(widgetParams).toEqual({ attribute });
     }
 
     widget.render({
       results: new SearchResults(helper.state, [
         {
           facets: {
-            [attributeName]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
           },
         },
         {},
@@ -105,9 +105,9 @@ describe('connectStarRating', () => {
     const rendering = sinon.stub();
     const makeWidget = connectStarRating(rendering);
 
-    const attributeName = 'grade';
+    const attribute = 'grade';
     const widget = makeWidget({
-      attributeName,
+      attribute,
     });
 
     const config = widget.getConfiguration({});
@@ -127,9 +127,9 @@ describe('connectStarRating', () => {
       const renderOptions = rendering.lastCall.args[0];
       const { refine, items } = renderOptions;
       expect(items).toEqual([]);
-      expect(helper.getRefinements(attributeName)).toEqual([]);
+      expect(helper.getRefinements(attribute)).toEqual([]);
       refine('3');
-      expect(helper.getRefinements(attributeName)).toEqual([
+      expect(helper.getRefinements(attribute)).toEqual([
         { type: 'disjunctive', value: '3' },
         { type: 'disjunctive', value: '4' },
         { type: 'disjunctive', value: '5' },
@@ -141,12 +141,12 @@ describe('connectStarRating', () => {
       results: new SearchResults(helper.state, [
         {
           facets: {
-            [attributeName]: { 3: 50, 4: 900, 5: 100 },
+            [attribute]: { 3: 50, 4: 900, 5: 100 },
           },
         },
         {
           facets: {
-            [attributeName]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
+            [attribute]: { 0: 5, 1: 10, 2: 20, 3: 50, 4: 900, 5: 100 },
           },
         },
       ]),
@@ -189,13 +189,13 @@ describe('connectStarRating', () => {
           stars: [true, false, false, false, false],
         },
       ]);
-      expect(helper.getRefinements(attributeName)).toEqual([
+      expect(helper.getRefinements(attribute)).toEqual([
         { type: 'disjunctive', value: '3' },
         { type: 'disjunctive', value: '4' },
         { type: 'disjunctive', value: '5' },
       ]);
       refine('4');
-      expect(helper.getRefinements(attributeName)).toEqual([
+      expect(helper.getRefinements(attribute)).toEqual([
         { type: 'disjunctive', value: '4' },
         { type: 'disjunctive', value: '5' },
       ]);
@@ -208,9 +208,9 @@ describe('connectStarRating', () => {
       const rendering = jest.fn();
       const makeWidget = connectStarRating(rendering);
 
-      const attributeName = 'grade';
+      const attribute = 'grade';
       const widget = makeWidget({
-        attributeName,
+        attribute,
         ...config,
       });
 
