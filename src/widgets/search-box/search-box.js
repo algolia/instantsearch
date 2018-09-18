@@ -1,10 +1,13 @@
 import forEach from 'lodash/forEach';
 import cx from 'classnames';
-import { bemHelper, getContainerNode, renderTemplate } from '../../lib/utils';
+import { getContainerNode, renderTemplate } from '../../lib/utils';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import defaultTemplates from './defaultTemplates';
 
-const bem = bemHelper('ais-search-box');
+import { component } from '../../lib/suit';
+
+const suit = component('SearchBox');
+
 const KEY_ENTER = 13;
 const KEY_SUPPRESS = 8;
 
@@ -16,7 +19,7 @@ const renderer = ({
   autofocus,
   searchAsYouType,
   showReset,
-  showMagnifier,
+  showSubmit,
   showLoadingIndicator,
   // eslint-disable-next-line complexity
 }) => (
@@ -30,7 +33,7 @@ const renderer = ({
     const wrappedInput = wrapInputFn(input, cssClasses);
     containerNode.appendChild(wrappedInput);
 
-    if (showMagnifier) addMagnifier(input, cssClasses, templates);
+    if (showSubmit) addSubmit(input, cssClasses, templates);
     if (showReset) addReset(input, cssClasses, templates, clear);
     if (showLoadingIndicator) addLoadingIndicator(input, cssClasses, templates);
 
@@ -80,27 +83,24 @@ const renderer = ({
         );
       }
     }
-  } else {
-    renderAfterInit({
-      containerNode,
-      query,
-      showLoadingIndicator,
-      isSearchStalled,
-    });
   }
 
-  if (showReset) {
-    const resetBtnSelector = `.${cx(bem('reset-wrapper'))}`;
-    // hide reset button when there is no query
-    const resetButton = containerNode.querySelector(resetBtnSelector);
-    resetButton.style.display = query && query.trim() ? 'block' : 'none';
-  }
+  renderAfterInit({
+    containerNode,
+    query,
+    showLoadingIndicator,
+    showReset,
+    isUserTyping: Boolean(query && query.trim()),
+    isSearchStalled,
+  });
 };
 
 function renderAfterInit({
   containerNode,
   query,
   showLoadingIndicator,
+  showReset,
+  isUserTyping,
   isSearchStalled,
 }) {
   const input = containerNode.querySelector('input');
@@ -110,11 +110,24 @@ function renderAfterInit({
   }
 
   if (showLoadingIndicator) {
-    const rootElement = containerNode.firstChild;
+    const loadingIndicatorElement = containerNode.querySelector(
+      `.${suit({ descendantName: 'loadingIndicator' })}`
+    );
+    const resetElement = containerNode.querySelector(
+      `.${suit({ descendantName: 'reset' })}`
+    );
     if (isSearchStalled) {
-      rootElement.classList.add('ais-stalled-search');
+      loadingIndicatorElement.removeAttribute('hidden');
     } else {
-      rootElement.classList.remove('ais-stalled-search');
+      loadingIndicatorElement.setAttribute('hidden', '');
+    }
+
+    if (showReset) {
+      if (isUserTyping && !isSearchStalled) {
+        resetElement.removeAttribute('hidden');
+      } else {
+        resetElement.setAttribute('hidden', '');
+      }
     }
   }
 }
@@ -129,16 +142,16 @@ const usage = `Usage:
 searchBox({
   container,
   [ placeholder ],
-  [ cssClasses.{root, input, reset, magnifier, loadingIndicator} ],
+  [ cssClasses.{root, input, reset, submit, loadingIndicator} ],
   [ autofocus ],
   [ searchAsYouType = true ],
   [ queryHook ]
-  [ templates.{reset, magnifier, loadingIndicator} ]
+  [ templates.{reset, submit, loadingIndicator} ]
 })`;
 
 /**
  * @typedef {Ojbect} SearchBoxTemplates
- * @property {function|string} magnifier Template used for displaying the magnifier. Can accept a function or a Hogan string.
+ * @property {function|string} submit Template used for displaying the submit. Can accept a function or a Hogan string.
  * @property {function|string} reset Template used for displaying the button. Can accept a function or a Hogan string.
  * @property {function|string} loadingIndicator Template used for displaying the button. Can accept a function or a Hogan string.
  */
@@ -146,10 +159,11 @@ searchBox({
 /**
  * @typedef {Object} SearchBoxCSSClasses
  * @property {string|string[]} [root] CSS class to add to the wrapping `<div>`
+ * @property {string|string[]} [form] CSS class to add to the form
  * @property {string|string[]} [input] CSS class to add to the input.
  * @property {string|string[]} [reset] CSS classes added to the reset button.
  * @property {string|string[]} [loadingIndicator] CSS classes added to the loading-indicator element.
- * @property {string|string[]} [magnifier] CSS classes added to the magnifier.
+ * @property {string|string[]} [submit] CSS classes added to the submit.
  */
 
 /**
@@ -161,8 +175,8 @@ searchBox({
  * @property {boolean} [searchAsYouType=true] If set, trigger the search
  * once `<Enter>` is pressed only.
  * @property {boolean} [showReset=true] Show/hide the reset button
- * @property {boolean} [showMagnifier=true] Show/hide the magnifier button (acts as submit button)
- * @property {boolean} [showLoadingIndicator=true] Activates the loading indicator. (replaces the magnifier is
+ * @property {boolean} [showSubmit=true] Show/hide the submit button (acts as submit button)
+ * @property {boolean} [showLoadingIndicator=true] Activates the loading indicator. (replaces the submit is
  * the search is stalled)
  * @property {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
  * @property {SearchBoxTemplates} [templates] Templates used for customizing the rendering of the searchbox
@@ -199,7 +213,7 @@ export default function searchBox({
   autofocus = 'auto',
   searchAsYouType = true,
   showReset = true,
-  showMagnifier = true,
+  showSubmit = true,
   showLoadingIndicator = true,
   queryHook,
   templates,
@@ -227,7 +241,7 @@ export default function searchBox({
     autofocus,
     searchAsYouType,
     showReset,
-    showMagnifier,
+    showSubmit,
     showLoadingIndicator,
   });
 
@@ -289,8 +303,7 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
   });
 
   // Add classes
-  const CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
-  CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
+  input.className = cx(suit({ descendantName: 'input' }), cssClasses.input);
 }
 
 /**
@@ -301,94 +314,83 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
  * @param {object} cssClasses the object containing all the css classes
  * @param {object} templates the templates object
  * @param {function} clearFunction function called when the element is activated (clicked)
- * @returns {undefined} returns nothing
+ * @returns {undefined} Modifies the input
  */
 function addReset(input, cssClasses, templates, clearFunction) {
-  const resetCSSClasses = {
-    root: cx(bem('reset'), cssClasses.reset),
-  };
-
   const stringNode = renderTemplate({
     templateKey: 'reset',
     templates,
-    data: {
-      cssClasses: resetCSSClasses,
-    },
   });
 
-  const htmlNode = createNodeFromString(stringNode, cx(bem('reset-wrapper')));
+  const node = document.createElement('button');
+  node.className = cx(suit({ descendantName: 'reset' }), cssClasses.reset);
+  node.type = 'reset';
+  node.title = 'Clear the search query';
+  node.innerHTML = stringNode;
 
-  input.parentNode.appendChild(htmlNode);
+  input.parentNode.appendChild(node);
 
-  htmlNode.addEventListener('click', event => {
+  node.addEventListener('click', event => {
     event.preventDefault();
     clearFunction();
   });
 }
 
 /**
- * Adds a magnifying glass in the searchbox widget
+ * Adds a button with a magnifying glass in the searchbox widget
  * @private
  * @param {HTMLElement} input the DOM node of the input of the searchbox
  * @param {object} cssClasses the user options (cssClasses and template)
  * @param {object} templates the object containing all the templates
- * @returns {undefined} returns nothing
+ * @returns {undefined} Modifies the input
  */
-function addMagnifier(input, cssClasses, templates) {
-  const magnifierCSSClasses = {
-    root: cx(bem('magnifier'), cssClasses.magnifier),
-  };
-
+function addSubmit(input, cssClasses, templates) {
   const stringNode = renderTemplate({
-    templateKey: 'magnifier',
+    templateKey: 'submit',
     templates,
-    data: {
-      cssClasses: magnifierCSSClasses,
-    },
   });
 
-  const htmlNode = createNodeFromString(
-    stringNode,
-    cx(bem('magnifier-wrapper'))
-  );
+  const node = document.createElement('button');
+  node.className = cx(suit({ descendantName: 'submit' }), cssClasses.submit);
+  node.type = 'submit';
+  node.title = 'Submit the search query';
+  node.innerHTML = stringNode;
 
-  input.parentNode.appendChild(htmlNode);
+  input.parentNode.appendChild(node);
 }
 
+/**
+ * Adds a loading indicator (spinner) to the search box
+ * @param {DomElement} input DOM element where to add the loading indicator
+ * @param {Object} cssClasses css classes definition
+ * @param {Object} templates templates of the widget
+ * @returns {undefined} Modifies the input
+ */
 function addLoadingIndicator(input, cssClasses, templates) {
-  const loadingIndicatorCSSClasses = {
-    root: cx(bem('loading-indicator'), cssClasses.loadingIndicator),
-  };
-
   const stringNode = renderTemplate({
     templateKey: 'loadingIndicator',
     templates,
-    data: {
-      cssClasses: loadingIndicatorCSSClasses,
-    },
   });
 
-  const htmlNode = createNodeFromString(
-    stringNode,
-    cx(bem('loading-indicator-wrapper'))
+  const node = document.createElement('span');
+  node.className = cx(
+    suit({ descendantName: 'loadingIndicator' }),
+    cssClasses.loadingIndicator
   );
+  node.innerHTML = stringNode;
 
-  input.parentNode.appendChild(htmlNode);
-}
-
-// Cross-browser way to create a DOM node from a string. We wrap in
-// a `span` to make sure we have one and only one node.
-function createNodeFromString(stringNode, rootClassname = '') {
-  const tmpNode = document.createElement('div');
-  tmpNode.innerHTML = `<span class="${rootClassname}">${stringNode.trim()}</span>`;
-  return tmpNode.firstChild;
+  input.parentNode.appendChild(node);
 }
 
 function wrapInputFn(input, cssClasses) {
-  // Wrap input in a .ais-search-box div
   const wrapper = document.createElement('div');
-  const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
-  CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
-  wrapper.appendChild(input);
+  wrapper.className = cx(suit(), cssClasses.root);
+
+  const form = document.createElement('form');
+  form.className = cx(suit({ descendantName: 'form' }), cssClasses.form);
+  form.noValidate = true;
+
+  form.appendChild(input);
+  wrapper.appendChild(form);
   return wrapper;
 }

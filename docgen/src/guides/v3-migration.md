@@ -247,7 +247,7 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 | `wrapInput`                 | Use the connectSearchBox instead         |
 | `searchOnEnterKeyPressOnly` | `searchAsYouType` (default: `true`)      |
 | `reset`                     | `showReset`                              |
-| `magnifier`                 | `showMagnifier`                          |
+| `submit`                    | `showMagnifier`                          |
 | `loadingIndicator`          | `showLoadingIndicator` (default: `true`) |
 
 With the drop of wrapInput, we decided not to accept `INPUT` as a container anymore. If you
@@ -256,7 +256,7 @@ want complete control over the rendering, you should use the `connectSearchBox`.
 The search box does not support powered-by. If you're using a community plan, you should now
 use the powered-by widget to display the Algolia logo.
 
-Configuration options for `reset`, `magnifier` and `loadingIndicator` have been dispatched to
+Configuration options for `reset`, `submit` and `loadingIndicator` have been dispatched to
 `templates` and `cssClasses`. For example, in the case of `reset`:
 
 * `reset.template` => `templates.reset`

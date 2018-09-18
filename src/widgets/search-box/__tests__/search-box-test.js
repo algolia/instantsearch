@@ -49,17 +49,15 @@ describe('searchBox()', () => {
     it('add a reset button inside the div', () => {
       widget = searchBox(opts);
       widget.init({ state, helper, onHistoryChange });
-      const button = container.getElementsByTagName('button');
+      const button = container.querySelectorAll('button[type="reset"]');
       expect(button).toHaveLength(1);
     });
 
-    it('add a magnifier inside the div', () => {
+    it('add a submit inside the div', () => {
       widget = searchBox(opts);
       widget.init({ state, helper, onHistoryChange });
-      const magnifier = container.getElementsByClassName(
-        'ais-search-box--magnifier'
-      );
-      expect(magnifier).toHaveLength(1);
+      const submit = container.querySelectorAll('button[type="submit"]');
+      expect(submit).toHaveLength(1);
     });
 
     it('sets default HTML attribute to the input', () => {
@@ -69,7 +67,7 @@ describe('searchBox()', () => {
       expect(input.getAttribute('autocapitalize')).toEqual('off');
       expect(input.getAttribute('autocomplete')).toEqual('off');
       expect(input.getAttribute('autocorrect')).toEqual('off');
-      expect(input.getAttribute('class')).toEqual('ais-search-box--input');
+      expect(input.getAttribute('class')).toEqual('ais-SearchBox-input');
       expect(input.getAttribute('placeholder')).toEqual('');
       expect(input.getAttribute('role')).toEqual('textbox');
       expect(input.getAttribute('spellcheck')).toEqual('false');
@@ -79,22 +77,37 @@ describe('searchBox()', () => {
     it('supports cssClasses option', () => {
       opts.cssClasses = {
         root: ['root-class', 'cx'],
+        form: 'form',
         input: 'input-class',
+        reset: 'reset',
+        loadingIndicator: 'loading',
+        submit: 'submit',
       };
 
       widget = searchBox(opts);
       widget.init({ state, helper, onHistoryChange });
-      const actualRootClasses = container
-        .querySelector('input')
-        .parentNode.getAttribute('class');
-      const actualInputClasses = container
-        .querySelector('input')
-        .getAttribute('class');
-      const expectedRootClasses = 'ais-search-box root-class cx';
-      const expectedInputClasses = 'ais-search-box--input input-class';
 
-      expect(actualRootClasses).toEqual(expectedRootClasses);
-      expect(actualInputClasses).toEqual(expectedInputClasses);
+      expect(container.querySelector('.ais-SearchBox').classList).toContain(
+        'root-class'
+      );
+      expect(container.querySelector('.ais-SearchBox').classList).toContain(
+        'cx'
+      );
+      expect(
+        container.querySelector('.ais-SearchBox-form').classList
+      ).toContain('form');
+      expect(
+        container.querySelector('.ais-SearchBox-input').classList
+      ).toContain('input-class');
+      expect(
+        container.querySelector('.ais-SearchBox-reset').classList
+      ).toContain('reset');
+      expect(
+        container.querySelector('.ais-SearchBox-submit').classList
+      ).toContain('submit');
+      expect(
+        container.querySelector('.ais-SearchBox-loadingIndicator').classList
+      ).toContain('loading');
     });
   });
 
@@ -108,22 +121,19 @@ describe('searchBox()', () => {
       widget.init({ state, helper, onHistoryChange });
 
       // Then
-      const wrapper = container.querySelectorAll('div.ais-search-box')[0];
-      const input = container.querySelectorAll('input')[0];
+      const wrapper = container.querySelector('.ais-SearchBox');
+      const input = container.querySelector('.ais-SearchBox-input');
 
       expect(wrapper.contains(input)).toEqual(true);
-      expect(wrapper.getAttribute('class')).toEqual('ais-search-box');
     });
   });
 
   describe('reset', () => {
     let defaultInitOptions;
     let defaultWidgetOptions;
-    let $;
 
     beforeEach(() => {
       container = document.createElement('div');
-      $ = container.querySelectorAll.bind(container);
       defaultWidgetOptions = { container };
       defaultInitOptions = { state, helper, onHistoryChange };
     });
@@ -136,7 +146,8 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      expect($('.ais-search-box--reset-wrapper')[0].style.display).toBe('none');
+      const element = container.querySelector('.ais-SearchBox-reset');
+      expect(element.style.display).toBe('none');
     });
 
     it('should be shown when there is a query', () => {
@@ -148,9 +159,8 @@ describe('searchBox()', () => {
       simulateInputEvent('test', 'tes', widget, helper, state, container);
 
       // Then
-      expect($('.ais-search-box--reset-wrapper')[0].style.display).toBe(
-        'block'
-      );
+      const element = container.querySelector('.ais-SearchBox-reset');
+      expect(element.style.display).toBe('block');
     });
 
     it('should clear the query', () => {
@@ -159,8 +169,9 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
       simulateInputEvent('test', 'tes', widget, helper, state, container);
 
+      const element = container.querySelector('.ais-SearchBox-reset');
       // When
-      $('.ais-search-box--reset-wrapper')[0].click();
+      element.click();
 
       // Then
       expect(helper.setQuery).toHaveBeenCalled();
@@ -194,11 +205,11 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      expect($('.ais-search-box--reset-wrapper')).toHaveLength(0);
+      expect(document.querySelectorAll('ais-SearchBox-reset')).toHaveLength(0);
     });
   });
 
-  describe('magnifier', () => {
+  describe('submit', () => {
     let defaultInitOptions;
     let defaultWidgetOptions;
 
@@ -212,7 +223,7 @@ describe('searchBox()', () => {
       // Given
       widget = searchBox({
         ...defaultWidgetOptions,
-        templates: { magnifier: '<div>Foobar</button>' },
+        templates: { submit: '<div>Foobar</button>' },
       });
 
       // When
@@ -222,11 +233,11 @@ describe('searchBox()', () => {
       expect(container.innerHTML).toContain('Foobar');
     });
 
-    it('should not be present if showMagnifier is `false`', () => {
+    it('should not be present if showSubmit is `false`', () => {
       // Given
       widget = searchBox({
         ...defaultWidgetOptions,
-        showMagnifier: false,
+        showSubmit: false,
       });
 
       // When
@@ -234,7 +245,7 @@ describe('searchBox()', () => {
 
       // Then
       expect(
-        container.querySelectorAll('.ais-search-box--magnifier')
+        container.querySelectorAll('.ais-search-box--submit')
       ).toHaveLength(0);
     });
   });
