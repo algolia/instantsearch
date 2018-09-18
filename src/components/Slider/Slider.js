@@ -94,7 +94,7 @@ export class Slider extends Component {
 
     return (
       <div
-        className={cx({
+        className={cx(suit(), {
           [suit({ modifierName: 'disabled' })]: this.isDisabled,
         })}
       >

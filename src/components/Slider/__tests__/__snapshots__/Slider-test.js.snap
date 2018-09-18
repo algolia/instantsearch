@@ -2,7 +2,7 @@
 
 exports[`Slider expect to render correctly 1`] = `
 <div
-  className=""
+  className="ais-RangeSlider"
 >
   <Rheostat
     algorithm={
@@ -333,7 +333,7 @@ exports[`Slider expect to render correctly 1`] = `
 
 exports[`Slider expect to render without pips 1`] = `
 <div
-  className=""
+  className="ais-RangeSlider"
 >
   <Rheostat
     algorithm={
