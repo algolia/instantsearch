@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.menuSelect({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
           })
         );
       })
@@ -25,7 +25,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.menuSelect({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
             limit: 3,
             showMore: {
               templates: {
@@ -47,7 +47,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.menuSelect({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
             limit: 10,
             templates: {
               header: 'Categories (menu widget)',

@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.pagination({
             container,
-            maxPages: 20,
+            totalPages: 20,
           })
         );
       })
@@ -31,12 +31,45 @@ export default () => {
       })
     )
     .add(
-      'without autoHideContainer',
+      'without showFirst',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.pagination({
             container,
-            autoHideContainer: false,
+            showFirst: false,
+          })
+        );
+      })
+    )
+    .add(
+      'without showLast',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            showLast: false,
+          })
+        );
+      })
+    )
+    .add(
+      'without showPrevious',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            showPrevious: false,
+          })
+        );
+      })
+    )
+    .add(
+      'without showNext',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.pagination({
+            container,
+            showNext: false,
           })
         );
       })

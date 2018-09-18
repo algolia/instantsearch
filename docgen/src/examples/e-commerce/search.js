@@ -86,7 +86,8 @@ search.addWidget(
       previous: '<i class="fa fa-angle-left fa-2x"></i> Previous page',
       next: 'Next page <i class="fa fa-angle-right fa-2x"></i>'
     },
-    showFirstLast: false
+    showFirst: false,
+    showLast: false
   })
 );
 

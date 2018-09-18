@@ -4,6 +4,41 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 ## Widgets
 
+### Breadcrumb
+
+#### CSS classes
+
+| Before                          | After                           |
+| ------------------------------- | ------------------------------- |
+| `ais-breadcrumb`                | `ais-Breadcrumb`                |
+|                                 | `ais-Breadcrumb--noRefinement`  |
+| `ais-breadcrumb`                | `ais-Breadcrumb-list`           |
+| `ais-breadcrumb--separator`     | `ais-Breadcrumb-separator`      |
+| `ais-breadcrumb--label`         | `ais-Breadcrumb-link`           |
+| `ais-breadcrumb--disabledLabel` |                                 |
+|                                 | `ais-Breadcrumb-item`           |
+|                                 | `ais-Breadcrumb-item--selected` |
+
+#### Markup
+
+```html
+<div class="ais-Breadcrumb">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item">
+      <a class="ais-Breadcrumb-link" href="#">Home</a>
+    </li>
+    <li class="ais-Breadcrumb-item">
+      <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+      <a class="ais-Breadcrumb-link" href="#">Cooking</a>
+    </li>
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+      Kitchen textiles
+    </li>
+  </ul>
+</div>
+```
+
 ### Hits
 
 #### Options
@@ -13,8 +48,8 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 | `escapeHits`    | `escapeHTML`    |
 | `showMoreLabel` | `loadMoreLabel` |
 
-* `escapeHTML` becomes `true` by default.
-* `allItems` template has been removed in favor of `connectHits`
+- `escapeHTML` becomes `true` by default.
+- `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
 
@@ -112,6 +147,33 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
   </ol>
 
   <button class="ais-InfiniteHits-loadMore">Show more results</button>
+```
+
+### SortBy
+
+#### Options
+
+| Before    | After   |
+| --------- | ------- |
+| `indices` | `items` |
+
+#### CSS classes
+
+| Before                 | After               |
+| ---------------------- | ------------------- |
+|                        | `ais-SortBy`        |
+| `ais-sort-by-selector` | `ais-SortBy-select` |
+| `ais-sort-by--item`    | `ais-SortBy-option` |
+
+#### Markup
+
+```html
+<div class="ais-SortBy">
+ <select class="ais-SortBy-select">
+   <option class="ais-SortBy-option" value="Most relevant">Most relevant</option>
+   <option class="ais-SortBy-option" value="Lowest price">Lowest price</option>
+ </select>
+</div>
 ```
 
 ### Stats
@@ -295,33 +357,6 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
       <a class="ais-Pagination-link" aria-label="Next" href="#">››</a>
     </li>
   </ul>
-</div>
-```
-
-### SortBy
-
-### Options
-
-| Before    | After   |
-| --------- | ------- |
-| `indices` | `items` |
-
-### CSS classes
-
-| Before                 | After               |
-| ---------------------- | ------------------- |
-|                        | `ais-SortBy`        |
-| `ais-sort-by-selector` | `ais-SortBy-select` |
-| `ais-sort-by--item`    | `ais-SortBy-option` |
-
-### Markup
-
-```html
-<div class="ais-SortBy">
-  <select class="ais-SortBy-select">
-    <option class="ais-SortBy-option" value="Most relevant">Most relevant</option>
-    <option class="ais-SortBy-option" value="Lowest price">Lowest price</option>
-  </select>
 </div>
 ```
 

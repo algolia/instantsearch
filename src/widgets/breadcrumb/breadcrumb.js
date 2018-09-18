@@ -5,16 +5,13 @@ import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates.js';
 
-import {
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-} from '../../lib/utils';
+import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
 
-const bem = bemHelper('ais-breadcrumb');
+import { component } from '../../lib/suit';
+
+const suit = component('Breadcrumb');
 
 const renderer = ({
-  autoHideContainer,
   containerNode,
   cssClasses,
   renderState,
@@ -35,8 +32,6 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && !canRefine;
-
   render(
     <Breadcrumb
       canRefine={canRefine}
@@ -45,7 +40,6 @@ const renderer = ({
       items={items}
       refine={refine}
       separator={separator}
-      shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
     />,
     containerNode
@@ -56,8 +50,7 @@ const usage = `Usage:
 breadcrumb({
   container,
   attributes,
-  [ autoHideContainer=true ],
-  [ cssClasses.{disabledLabel, home, label, root, separator}={} ],
+  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link}={} ],
   [ templates.{home, separator}]
   [ transformData.{item} ],
   [ transformItems ],
@@ -65,11 +58,13 @@ breadcrumb({
 
 /**
  * @typedef {Object} BreadcrumbCSSClasses
- * @property {string|string[]} [disabledLabel] CSS class to add to the last element of the breadcrumb (which is not clickable).
- * @property {string|string[]} [home] CSS class to add to the first element of the breadcrumb.
- * @property {string|string[]} [label] CSS class to add to the text part of each element of the breadcrumb.
  * @property {string|string[]} [root] CSS class to add to the root element of the widget.
+ * @property {string|string[]} [noRefinement] CSS class to add to the root element of the widget if there are no refinements.
+ * @property {string|string[]} [list] CSS class to add to the list element.
+ * @property {string|string[]} [item] CSS class to add to the items of the list. The items contains the link and the separator.
+ * @property {string|string[]} [selectedItem] CSS class to add to the selected item in the list: the last one or the home if there are no refinements.
  * @property {string|string[]} [separator] CSS class to add to the separator.
+ * @property {string|string[]} [link] CSS class to add to the links in the items.
  */
 
 /**
@@ -91,7 +86,6 @@ breadcrumb({
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {BreadcrumbTemplates} [templates] Templates to use for the widget.
  * @property {BreadcrumbTransforms} [transformData] Set of functions to transform the data passed to the templates.
- * @property {boolean} [autoHideContainer=true] Hides the container when there are no items in the breadcrumb.
  * @property {BreadcrumbCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
@@ -151,7 +145,6 @@ breadcrumb({
 
 export default function breadcrumb({
   attributes,
-  autoHideContainer = false,
   container,
   cssClasses: userCssClasses = {},
   rootPath = null,
@@ -167,16 +160,25 @@ export default function breadcrumb({
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    disabledLabel: cx(bem('disabledLabel'), userCssClasses.disabledLabel),
-    home: cx(bem('home'), userCssClasses.home),
-    item: cx(bem('item'), userCssClasses.item),
-    label: cx(bem('label'), userCssClasses.label),
-    root: cx(bem('root'), userCssClasses.root),
-    separator: cx(bem('separator'), userCssClasses.separator),
+    root: cx(suit(), userCssClasses.root),
+    noRefinement: cx(
+      suit({ modifierName: 'noRefinement' }),
+      userCssClasses.noRefinement
+    ),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    selectedItem: cx(
+      suit({ descendantName: 'item', modifierName: 'selected' }),
+      userCssClasses.selectedItem
+    ),
+    separator: cx(
+      suit({ descendantName: 'separator' }),
+      userCssClasses.separator
+    ),
+    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
   };
 
   const specializedRenderer = renderer({
-    autoHideContainer,
     containerNode,
     cssClasses,
     renderState: {},

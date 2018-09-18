@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'preact-compat';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import Template from '../Template.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
 const itemsPropType = PropTypes.arrayOf(
   PropTypes.shape({
@@ -9,6 +9,44 @@ const itemsPropType = PropTypes.arrayOf(
     value: PropTypes.string,
   })
 );
+
+const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
+  item,
+  idx,
+  items
+) => {
+  const isLast = idx === items.length - 1;
+  const link = isLast ? (
+    item.name
+  ) : (
+    <a
+      className={cssClasses.link}
+      href={createURL(item.value)}
+      onClick={e => {
+        e.preventDefault();
+        refine(item.value);
+      }}
+    >
+      {item.name}
+    </a>
+  );
+
+  const itemClassnames = cx(cssClasses.item, {
+    [cssClasses.selectedItem]: isLast,
+  });
+
+  return (
+    <li key={item.name + idx} className={itemClassnames}>
+      <Template
+        rootTagName="span"
+        rootProps={{ className: cx(cssClasses.separator), ariaHidden: true }}
+        templateKey="separator"
+        {...templateProps}
+      />
+      {link}
+    </li>
+  );
+};
 
 class Breadcrumb extends PureComponent {
   static propTypes = {
@@ -24,40 +62,15 @@ class Breadcrumb extends PureComponent {
   render() {
     const { createURL, items, refine, cssClasses } = this.props;
 
-    const breadcrumb = items.map((item, idx) => {
-      const isLast = idx === items.length - 1;
-      const label = isLast ? (
-        <a className={`${cssClasses.disabledLabel} ${cssClasses.label}`}>
-          {item.name}
-        </a>
-      ) : (
-        <a
-          className={cssClasses.label}
-          href={createURL(item.value)}
-          onClick={e => {
-            e.preventDefault();
-            refine(item.value);
-          }}
-        >
-          {item.name}
-        </a>
-      );
+    const breadcrumb = items.map(renderLink(this.props));
 
-      return [
-        <Template
-          key={item.name + idx}
-          rootProps={{ className: cssClasses.separator }}
-          templateKey="separator"
-          {...this.props.templateProps}
-        />,
-        label,
-      ];
+    const homeClassnames = cx(cssClasses.item, {
+      [cssClasses.selectedItem]: items.length === 0,
     });
 
-    const homeClassNames =
-      items.length > 0
-        ? [cssClasses.home, cssClasses.label]
-        : [cssClasses.disabledLabel, cssClasses.home, cssClasses.label];
+    const rootClassnames = cx(cssClasses.root, {
+      [cssClasses.noRefinement]: items.length > 0,
+    });
 
     const homeOnClickHandler = e => {
       e.preventDefault();
@@ -67,18 +80,25 @@ class Breadcrumb extends PureComponent {
     const homeUrl = createURL(null);
 
     return (
-      <div className={cssClasses.root}>
-        <a
-          className={homeClassNames.join(' ')}
-          href={homeUrl}
-          onClick={homeOnClickHandler}
-        >
-          <Template templateKey="home" {...this.props.templateProps} />
-        </a>
-        {breadcrumb}
+      <div className={rootClassnames}>
+        <ul className={cx(cssClasses.list)}>
+          <li className={homeClassnames}>
+            <Template
+              templateKey="home"
+              rootTagName="a"
+              rootProps={{
+                className: cx(cssClasses.link),
+                href: homeUrl,
+                onClick: homeOnClickHandler,
+              }}
+              {...this.props.templateProps}
+            />
+          </li>
+          {breadcrumb}
+        </ul>
       </div>
     );
   }
 }
 
-export default autoHideContainerHOC(Breadcrumb);
+export default Breadcrumb;

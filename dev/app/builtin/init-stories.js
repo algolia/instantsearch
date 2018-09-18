@@ -1,6 +1,6 @@
 import initAnalyticsStories from './stories/analytics.stories';
 import initBreadcrumbStories from './stories/breadcrumb.stories.js';
-import initClearAllStories from './stories/clear-all.stories';
+import initClearRefinementsStories from './stories/clear-refinements.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initGeoSearch from './stories/geo-search.stories';
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
@@ -28,7 +28,7 @@ import initConfigureStories from './stories/configure.stories';
 export default () => {
   initAnalyticsStories();
   initBreadcrumbStories();
-  initClearAllStories();
+  initClearRefinementsStories();
   initCurrentRefinedValuesStories();
   initGeoSearch();
   initHierarchicalMenu();

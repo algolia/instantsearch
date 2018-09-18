@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Breadcrumb should render <Breadcrumb /> 1`] = `
+<div
+  className="root"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item selectedItem"
+    >
+      <a
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "home",
+          }
+        }
+        onClick={[Function]}
+      />
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
+<div
+  className="root no-refinement"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+    >
+      <a
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "home",
+          }
+        }
+        onClick={[Function]}
+      />
+    </li>
+    <li
+      className="item selectedItem"
+    >
+      <span
+        ariaHidden={true}
+        className="separator"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": " > ",
+          }
+        }
+      />
+      name0
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
+<div
+  className="root no-refinement"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+    >
+      <a
+        className="link"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "home",
+          }
+        }
+        onClick={[Function]}
+      />
+    </li>
+    <li
+      className="item"
+    >
+      <span
+        ariaHidden={true}
+        className="separator"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": " > ",
+          }
+        }
+      />
+      <a
+        className="link"
+        onClick={[Function]}
+      >
+        name0
+      </a>
+    </li>
+    <li
+      className="item selectedItem"
+    >
+      <span
+        ariaHidden={true}
+        className="separator"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": " > ",
+          }
+        }
+      />
+      name1
+    </li>
+  </ul>
+</div>
+`;
