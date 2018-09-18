@@ -1,5 +1,5 @@
 <template>
-  <div :class="[suit(''), !canRefine && suit('', 'noRefinement')]">
+  <div :class="[suit(), !canRefine && suit('', 'noRefinement')]">
     <div
       v-if="$slots.header"
       :class="suit('header')"

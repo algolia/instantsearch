@@ -1,6 +1,6 @@
 <template>
   <span
-    :class="suit('')"
+    :class="suit()"
     v-html="innerHTML"
   />
 </template>

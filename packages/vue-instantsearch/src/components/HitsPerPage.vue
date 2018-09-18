@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="state"
-    :class="suit('')"
+    :class="suit()"
   >
     <slot
       :items="state.items"

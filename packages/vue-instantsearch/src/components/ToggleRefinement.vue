@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="state"
-    :class="[suit(''), !canRefine && suit('', 'noRefinement')]"
+    :class="[suit(), !canRefine && suit('', 'noRefinement')]"
   >
     <slot
       :value="state.value"

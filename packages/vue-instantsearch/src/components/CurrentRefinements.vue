@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[suit(''), noRefinement && suit('','noRefinement')]"
+    :class="[suit(), noRefinement && suit('','noRefinement')]"
     v-if="state"
   >
     <slot
