@@ -59,6 +59,24 @@ html: |
 classes:
   - name: .ais-RangeSlider
     description: the root div of the widget
+  - name: .ais-RangeSlider--disabled
+    description: the root div of the widget when disabled
+  - name: .ais-RangeSlider-handle
+    description: the handle div of the widget
+  - name: .ais-RangeSlider-handle--lower
+    description: the lower handle div of the widget
+  - name: .ais-RangeSlider-handle--upper
+    description: the upper handle div of the widget
+  - name: .ais-RangeSlider-tooltip
+    description: the tooltip div of the widget
+  - name: .ais-RangeSlider-marker
+    description: the marker div of the widget
+  - name: .ais-RangeSlider-marker-horizontal
+    description: the horizontal marker div of the widget
+  - name: .ais-RangeSlider-marker--large
+    description: the large marker div of the widget
+  - name: .ais-RangeSlider-value
+    description: the value div of the widget
 options:
   - name: attribute
     description: Attribute to apply the filter to
