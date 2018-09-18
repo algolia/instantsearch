@@ -417,7 +417,7 @@ describe('createConnector', () => {
       });
 
       expect(onSearchParameters.mock.calls).toHaveLength(1);
-      expect(onSearchParameters.mock.calls[0][0]).toBe(getSearchParameters);
+      expect(onSearchParameters.mock.calls[0][0]).toEqual(expect.any(Function));
       expect(onSearchParameters.mock.calls[0][1]).toEqual(context);
       expect(onSearchParameters.mock.calls[0][2]).toEqual(props);
 
@@ -432,6 +432,46 @@ describe('createConnector', () => {
       });
 
       expect(onSearchParameters.mock.calls).toHaveLength(1);
+    });
+
+    it('binds getSearchParameters to its own instance when calling onSearchParameters in componentWillMount', () => {
+      const getSearchParameters = jest.fn(() => null);
+      const onSearchParameters = jest.fn(boundGetSearchParameters =>
+        // The bound getSearchParameters function must be invoked in order for it
+        // to be registered as an instance of getSearchParameters
+        boundGetSearchParameters()
+      );
+
+      const Connected = createConnector({
+        displayName: 'CoolConnector',
+        getProvidedProps: () => null,
+        getSearchParameters,
+        getId,
+      })(() => null);
+      const state = {
+        widgets: {},
+      };
+      const registerWidget = jest.fn();
+      const props = { hello: 'there' };
+      const context = {
+        ais: {
+          store: {
+            getState: () => state,
+            subscribe: () => null,
+          },
+          onSearchParameters,
+          widgetsManager: {
+            registerWidget,
+          },
+        },
+      };
+      mount(<Connected {...props} />, {
+        context,
+      });
+
+      expect(getSearchParameters.mock.instances).toHaveLength(1);
+      expect(getSearchParameters.mock.instances[0].props).toEqual(props);
+      expect(getSearchParameters.mock.instances[0].context).toEqual(context);
     });
 
     it('calls update when props change', () => {
