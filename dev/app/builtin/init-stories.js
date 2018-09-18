@@ -5,7 +5,7 @@ import initCurrentRefinedValuesStories from './stories/current-refined-values.st
 import initGeoSearch from './stories/geo-search.stories';
 import initHierarchicalMenu from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
-import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
+import initHitsPerPageStories from './stories/hits-per-page.stories';
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initInstantSearchStories from './stories/instantsearch.stories';
 import initMenuStories from './stories/menu.stories';
@@ -33,7 +33,7 @@ export default () => {
   initGeoSearch();
   initHierarchicalMenu();
   initHitsStories();
-  initHitsPerPageSelectorStories();
+  initHitsPerPageStories();
   initInfiniteHitsStories();
   initInstantSearchStories();
   initMenuStories();
