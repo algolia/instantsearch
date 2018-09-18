@@ -1196,8 +1196,6 @@ import autocomplete from 'autocomplete.js';
 const client = algoliasearch('appId', 'apiKey');
 const index = client.initIndex('indexName');
 
-const $hits = document.querySelector('#hits');
-
 autocomplete('#searchBox input[type=search]', { hint: false }, [
   {
     source: autocomplete.sources.hits(index, { hitsPerPage: 5 }),
