@@ -15,9 +15,9 @@ const renderer = ({
   templates,
   autofocus,
   searchAsYouType,
-  reset,
-  magnifier,
-  loadingIndicator,
+  showReset,
+  showMagnifier,
+  showLoadingIndicator,
   // eslint-disable-next-line complexity
 }) => (
   { refine, clear, query, onHistoryChange, isSearchStalled },
@@ -30,10 +30,9 @@ const renderer = ({
     const wrappedInput = wrapInputFn(input, cssClasses);
     containerNode.appendChild(wrappedInput);
 
-    if (magnifier) addMagnifier(input, magnifier, templates);
-    if (reset) addReset(input, reset, templates, clear);
-    if (loadingIndicator)
-      addLoadingIndicator(input, loadingIndicator, templates);
+    if (showMagnifier) addMagnifier(input, cssClasses, templates);
+    if (showReset) addReset(input, cssClasses, templates, clear);
+    if (showLoadingIndicator) addLoadingIndicator(input, cssClasses, templates);
 
     addDefaultAttributesToInput(placeholder, input, query, cssClasses);
 
@@ -85,18 +84,15 @@ const renderer = ({
     renderAfterInit({
       containerNode,
       query,
-      loadingIndicator,
+      showLoadingIndicator,
       isSearchStalled,
     });
   }
 
-  if (reset) {
+  if (showReset) {
     const resetBtnSelector = `.${cx(bem('reset-wrapper'))}`;
     // hide reset button when there is no query
-    const resetButton =
-      containerNode.tagName === 'INPUT'
-        ? containerNode.parentNode.querySelector(resetBtnSelector)
-        : containerNode.querySelector(resetBtnSelector);
+    const resetButton = containerNode.querySelector(resetBtnSelector);
     resetButton.style.display = query && query.trim() ? 'block' : 'none';
   }
 };
@@ -104,7 +100,7 @@ const renderer = ({
 function renderAfterInit({
   containerNode,
   query,
-  loadingIndicator,
+  showLoadingIndicator,
   isSearchStalled,
 }) {
   const input = containerNode.querySelector('input');
@@ -113,11 +109,8 @@ function renderAfterInit({
     input.value = query;
   }
 
-  if (loadingIndicator) {
-    const rootElement =
-      containerNode.tagName === 'INPUT'
-        ? containerNode.parentNode
-        : containerNode.firstChild;
+  if (showLoadingIndicator) {
+    const rootElement = containerNode.firstChild;
     if (isSearchStalled) {
       rootElement.classList.add('ais-stalled-search');
     } else {
@@ -136,49 +129,44 @@ const usage = `Usage:
 searchBox({
   container,
   [ placeholder ],
-  [ cssClasses.{input} ],
+  [ cssClasses.{root, input, reset, magnifier, loadingIndicator} ],
   [ autofocus ],
   [ searchAsYouType = true ],
   [ queryHook ]
-  [ reset=true || reset.{template, cssClasses.{root}} ]
+  [ templates.{reset, magnifier, loadingIndicator} ]
 })`;
 
 /**
- * @typedef {Object} SearchBoxResetOption
- * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the reset button.
- */
-
-/**
- * @typedef {Object} SearchBoxLoadingIndicatorOption
- * @property {function|string} template Template used for displaying the button. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the loading-indicator element.
+ * @typedef {Ojbect} SearchBoxTemplates
+ * @property {function|string} magnifier Template used for displaying the magnifier. Can accept a function or a Hogan string.
+ * @property {function|string} reset Template used for displaying the button. Can accept a function or a Hogan string.
+ * @property {function|string} loadingIndicator Template used for displaying the button. Can accept a function or a Hogan string.
  */
 
 /**
  * @typedef {Object} SearchBoxCSSClasses
- * @property  {string|string[]} [root] CSS class to add to the wrapping `<div>`
- * @property  {string|string[]} [input] CSS class to add to the input.
- */
-
-/**
- * @typedef {Object} SearchBoxMagnifierOption
- * @property {function|string} template Template used for displaying the magnifier. Can accept a function or a Hogan string.
- * @property {{root: string}} [cssClasses] CSS classes added to the magnifier.
+ * @property {string|string[]} [root] CSS class to add to the wrapping `<div>`
+ * @property {string|string[]} [input] CSS class to add to the input.
+ * @property {string|string[]} [reset] CSS classes added to the reset button.
+ * @property {string|string[]} [loadingIndicator] CSS classes added to the loading-indicator element.
+ * @property {string|string[]} [magnifier] CSS classes added to the magnifier.
  */
 
 /**
  * @typedef {Object} SearchBoxWidgetOptions
- * @property  {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget. If the CSS selector or the HTMLElement is an existing input, the widget will use it.
- * @property  {string} [placeholder] Input's placeholder.
- * @property  {boolean|SearchBoxResetOption} [reset=true] Define if a reset button should be added in the input when there is a query.
- * @property  {boolean|SearchBoxMagnifierOption} [magnifier=true] Define if a magnifier should be added at beginning of the input to indicate a search input.
- * @property  {boolean|SearchBoxLoadingIndicatorOption} [loadingIndicator=false] Define if a loading indicator should be added at beginning of the input to indicate that search is currently stalled.
- * @property  {boolean|string} [autofocus="auto"] autofocus on the input.
- * @property  {boolean} [searchAsYouType=true] If set, trigger the search
+ * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget. If the CSS
+ * selector or the HTMLElement is an existing input, the widget will use it.
+ * @property {string} [placeholder] Input's placeholder.
+ * @property {boolean|string} [autofocus="auto"] autofocus on the input.
+ * @property {boolean} [searchAsYouType=true] If set, trigger the search
  * once `<Enter>` is pressed only.
- * @property  {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
- * @property  {function} [queryHook] A function that will be called every time a new search would be done. You
+ * @property {boolean} [showReset=true] Show/hide the reset button
+ * @property {boolean} [showMagnifier=true] Show/hide the magnifier button (acts as submit button)
+ * @property {boolean} [showLoadingIndicator=true] Activates the loading indicator. (replaces the magnifier is
+ * the search is stalled)
+ * @property {SearchBoxCSSClasses} [cssClasses] CSS classes to add.
+ * @property {SearchBoxTemplates} [templates] Templates used for customizing the rendering of the searchbox
+ * @property {function} [queryHook] A function that will be called every time a new search would be done. You
  * will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
  */
@@ -201,8 +189,6 @@ searchBox({
  *     container: '#q',
  *     placeholder: 'Search for products',
  *     autofocus: false,
- *     reset: true,
- *     loadingIndicator: false
  *   })
  * );
  */
@@ -212,10 +198,11 @@ export default function searchBox({
   cssClasses = {},
   autofocus = 'auto',
   searchAsYouType = true,
-  reset = true,
-  magnifier = true,
-  loadingIndicator = false,
+  showReset = true,
+  showMagnifier = true,
+  showLoadingIndicator = true,
   queryHook,
+  templates,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -236,12 +223,12 @@ export default function searchBox({
     containerNode,
     cssClasses,
     placeholder,
-    templates: defaultTemplates,
+    templates: { ...defaultTemplates, ...templates },
     autofocus,
     searchAsYouType,
-    reset,
-    magnifier,
-    loadingIndicator,
+    showReset,
+    showMagnifier,
+    showLoadingIndicator,
   });
 
   try {
@@ -311,25 +298,19 @@ function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
  * it should reset the query.
  * @private
  * @param {HTMLElement} input the DOM node of the input of the searchbox
- * @param {object} reset the user options (cssClasses and template)
- * @param {object} $2 the default templates
+ * @param {object} cssClasses the object containing all the css classes
+ * @param {object} templates the templates object
  * @param {function} clearFunction function called when the element is activated (clicked)
  * @returns {undefined} returns nothing
  */
-function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
-  reset = {
-    cssClasses: {},
-    template: resetTemplate,
-    ...reset,
-  };
-
+function addReset(input, cssClasses, templates, clearFunction) {
   const resetCSSClasses = {
-    root: cx(bem('reset'), reset.cssClasses.root),
+    root: cx(bem('reset'), cssClasses.reset),
   };
 
   const stringNode = renderTemplate({
-    templateKey: 'template',
-    templates: reset,
+    templateKey: 'reset',
+    templates,
     data: {
       cssClasses: resetCSSClasses,
     },
@@ -349,24 +330,18 @@ function addReset(input, reset, { reset: resetTemplate }, clearFunction) {
  * Adds a magnifying glass in the searchbox widget
  * @private
  * @param {HTMLElement} input the DOM node of the input of the searchbox
- * @param {object} magnifier the user options (cssClasses and template)
- * @param {object} $2 the default templates
+ * @param {object} cssClasses the user options (cssClasses and template)
+ * @param {object} templates the object containing all the templates
  * @returns {undefined} returns nothing
  */
-function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
-  magnifier = {
-    cssClasses: {},
-    template: magnifierTemplate,
-    ...magnifier,
-  };
-
+function addMagnifier(input, cssClasses, templates) {
   const magnifierCSSClasses = {
-    root: cx(bem('magnifier'), magnifier.cssClasses.root),
+    root: cx(bem('magnifier'), cssClasses.magnifier),
   };
 
   const stringNode = renderTemplate({
-    templateKey: 'template',
-    templates: magnifier,
+    templateKey: 'magnifier',
+    templates,
     data: {
       cssClasses: magnifierCSSClasses,
     },
@@ -380,24 +355,14 @@ function addMagnifier(input, magnifier, { magnifier: magnifierTemplate }) {
   input.parentNode.appendChild(htmlNode);
 }
 
-function addLoadingIndicator(
-  input,
-  loadingIndicator,
-  { loadingIndicator: loadingIndicatorTemplate }
-) {
-  loadingIndicator = {
-    cssClasses: {},
-    template: loadingIndicatorTemplate,
-    ...loadingIndicator,
-  };
-
+function addLoadingIndicator(input, cssClasses, templates) {
   const loadingIndicatorCSSClasses = {
-    root: cx(bem('loading-indicator'), loadingIndicator.cssClasses.root),
+    root: cx(bem('loading-indicator'), cssClasses.loadingIndicator),
   };
 
   const stringNode = renderTemplate({
-    templateKey: 'template',
-    templates: loadingIndicator,
+    templateKey: 'loadingIndicator',
+    templates,
     data: {
       cssClasses: loadingIndicatorCSSClasses,
     },

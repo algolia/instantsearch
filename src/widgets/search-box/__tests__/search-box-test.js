@@ -171,8 +171,8 @@ describe('searchBox()', () => {
       // Given
       widget = searchBox({
         ...defaultWidgetOptions,
-        reset: {
-          template: '<button type="reset">Foobar</button>',
+        templates: {
+          reset: '<button type="reset">Foobar</button>',
         },
       });
 
@@ -187,7 +187,7 @@ describe('searchBox()', () => {
       // Given
       widget = searchBox({
         ...defaultWidgetOptions,
-        reset: false,
+        showReset: false,
       });
 
       // When
@@ -212,9 +212,7 @@ describe('searchBox()', () => {
       // Given
       widget = searchBox({
         ...defaultWidgetOptions,
-        magnifier: {
-          template: '<div>Foobar</button>',
-        },
+        templates: { magnifier: '<div>Foobar</button>' },
       });
 
       // When
@@ -222,6 +220,22 @@ describe('searchBox()', () => {
 
       // Then
       expect(container.innerHTML).toContain('Foobar');
+    });
+
+    it('should not be present if showMagnifier is `false`', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        showMagnifier: false,
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect(
+        container.querySelectorAll('.ais-search-box--magnifier')
+      ).toHaveLength(0);
     });
   });
 
