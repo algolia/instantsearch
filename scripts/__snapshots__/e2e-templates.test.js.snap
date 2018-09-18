@@ -4067,7 +4067,7 @@ yarn start
 exports[`Templates React InstantSearch Native File content: app.json 1`] = `
 "{
   \\"expo\\": {
-    \\"sdkVersion\\": \\"29.0.0\\"
+    \\"sdkVersion\\": \\"30.0.1\\"
   }
 }"
 `;
