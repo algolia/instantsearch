@@ -5,7 +5,7 @@ import { createRenderer } from 'react-test-renderer/shallow';
 import Slider from '../Slider';
 
 describe('Slider', () => {
-  it.only('expect to render correctly', () => {
+  it('expect to render correctly', () => {
     const tree = createRenderer().render(
       <Slider
         refine={() => undefined}
@@ -35,7 +35,7 @@ describe('Slider', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it.skip('expect to call handleChange on change', () => {
+  it('expect to call handleChange on change', () => {
     const props = {
       refine: jest.fn(),
       min: 0,

@@ -95,7 +95,7 @@ export class Slider extends Component {
     return (
       <div
         className={cx({
-          [this.isDisabled]: suit({ modifierName: 'disabled' }),
+          [suit({ modifierName: 'disabled' })]: this.isDisabled,
         })}
       >
         <Rheostat
