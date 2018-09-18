@@ -20,4 +20,4 @@ const renderFn = (
   clearAllCTA.attr('disabled', !hasRefinements);
 };
 
-export default instantsearch.connectors.connectClearAll(renderFn);
+export default instantsearch.connectors.connectClearRefinements(renderFn);

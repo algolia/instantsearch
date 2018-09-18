@@ -39,6 +39,116 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 </div>
 ```
 
+### Hits
+
+#### Options
+
+| Before          | After           |
+| --------------- | --------------- |
+| `escapeHits`    | `escapeHTML`    |
+| `showMoreLabel` | `loadMoreLabel` |
+
+- `escapeHTML` becomes `true` by default.
+- `allItems` template has been removed in favor of `connectHits`
+
+#### CSS classes
+
+| Before            | After             |
+| ----------------- | ----------------- |
+| `ais-hits`        | `ais-Hits`        |
+| `ais-hits--empty` | `ais-Hits--empty` |
+|                   | `ais-Hits--list`  |
+| `ais-hits--item`  | `ais-Hits--item`  |
+
+#### Markup
+
+```html
+<div class="ais-Hits">
+  <ol class="ais-Hits-list">
+    <li class="ais-Hits-item">
+      Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+    </li>
+    <li class="ais-Hits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+    <li class="ais-Hits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+    <li class="ais-Hits-item">
+      Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+    </li>
+    <li class="ais-Hits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+    <li class="ais-Hits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+    <li class="ais-Hits-item">
+      Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+    </li>
+    <li class="ais-Hits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+  </ol>
+</div>
+```
+
+### InfiniteHits
+
+#### Options
+
+| Before       | After        |
+| ------------ | ------------ |
+| `escapeHits` | `escapeHTML` |
+
+`escapeHTML` becomes `true` by default.
+
+#### CSS classes
+
+| Before                              | After                                 |
+| ----------------------------------- | ------------------------------------- |
+| `ais-infinite-hits`                 | `ais-InfiniteHits`                    |
+| `ais-infinite-hits--empty`          | `ais-InfiniteHits--empty`             |
+|                                     | `ais-InfiniteHits--list`              |
+| `ais-infinite-hits--item`           | `ais-InfiniteHits--item`              |
+| `ais-infinite-hits--showmore`       |                                       |
+| `ais-infinite-hits--showmoreButton` | `ais-InfiniteHits-loadMore`           |
+|                                     | `ais-InfiniteHits-loadMore--disabled` |
+
+#### Markup
+
+```html
+<div class="ais-InfiniteHits">
+  <ol class="ais-InfiniteHits-list">
+    <li class="ais-InfiniteHits-item">
+      Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+    </li>
+    <li class="ais-InfiniteHits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+    <li class="ais-InfiniteHits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+    <li class="ais-InfiniteHits-item">
+      Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+    </li>
+    <li class="ais-InfiniteHits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+    <li class="ais-InfiniteHits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+    <li class="ais-InfiniteHits-item">
+      Hit 5477500: Amazon - Fire TV Stick with Alexa Voice Remote - Black
+    </li>
+    <li class="ais-InfiniteHits-item">
+      Hit 4397400: Google - Chromecast - Black
+    </li>
+  </ol>
+
+  <button class="ais-InfiniteHits-loadMore">Show more results</button>
+```
+
 ### Stats
 
 #### CSS classes
@@ -104,12 +214,139 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 </div>
 ```
 
-## Connectors
+### clearRefinements -- previously clearAll
 
-### connectRange
+#### Options
 
-#### Widget options
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |
+
+#### CSS classes
+
+| Before                | After                                   |
+| --------------------- | --------------------------------------- |
+| `ais-clear-all`       | `ais-ClearRefinements`                  |
+| `ais-clear-all--body` |                                         |
+| `ais-clear-all--link` |                                         |
+|                       | `ais-ClearRefinements-button`           |
+|                       | `ais-ClearRefinements-button--disabled` |
+
+#### Markup
+
+```html
+<div class="ais-ClearRefinements">
+  <button class="ais-ClearRefinements-button">
+    Clear refinements
+  </button>
+</div>
+```
+
+### MenuSelect
+
+#### Options
 
 | Before          | After       |
 | --------------- | ----------- |
 | `attributeName` | `attribute` |
+
+#### CSS classes
+
+| Before                    | After                          |
+| ------------------------- | ------------------------------ |
+| `ais-menu-select`         | `ais-MenuSelect`               |
+|                           | `ais-MenuSelect--noRefinement` |
+| `ais-menu-select--select` | `ais-MenuSelect-select`        |
+| `ais-menu-select--option` | `ais-MenuSelect-option`        |
+| `ais-menu-select--header` |                                |
+| `ais-menu-select--footer` |                                |
+
+#### Markup
+
+```html
+<div class="ais-MenuSelect">
+  <select class="ais-MenuSelect-select">
+    <option class="ais-MenuSelect-option" value="Appliances">Appliances (4306)</option>
+    <option class="ais-MenuSelect-option" value="Audio">Audio (1570)</option>
+  </select>
+</div>
+```
+
+### Pagination
+
+### Options
+
+| Before          | After                  |
+| --------------- | ---------------------- |
+| `maxPages`      | `totalPages`           |
+| `showFirstLast` | `showFirst` `showLast` |
+|                 | `showNext`             |
+|                 | `showPrevious`         |
+
+### CSS classes
+
+| Before                           | After                               |
+| -------------------------------- | ----------------------------------- |
+|                                  | `ais-Pagination`                    |
+|                                  | `ais-Pagination--noRefinement`      |
+| `ais-pagination`                 | `ais-Pagination-list`               |
+| `ais-pagination--item`           | `ais-Pagination-item`               |
+| `ais-pagination--item__first`    | `ais-Pagination-item--firstPage`    |
+| `ais-pagination--item__last`     | `ais-Pagination-item--lastPage`     |
+| `ais-pagination--item__previous` | `ais-Pagination-item--previousPage` |
+| `ais-pagination--item__next`     | `ais-Pagination-item--nextPage`     |
+|                                  | `ais-Pagination-item--page`         |
+| `ais-pagination--item__active`   | `ais-Pagination-item--selected`     |
+| `ais-pagination--item__disabled` | `ais-Pagination-item--disabled`     |
+| `ais-pagination--link`           | `ais-Pagination-link`               |
+
+### Markup
+
+```html
+<div class="ais-Pagination">
+  <ul class="ais-Pagination-list">
+    <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
+      <span class="ais-Pagination-link" aria-label="Previous">‹‹</span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
+      <span class="ais-Pagination-link" aria-label="Previous">‹</span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--selected">
+      <a class="ais-Pagination-link" href="#">1</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--page">
+      <a class="ais-Pagination-link" href="#">2</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--page">
+      <a class="ais-Pagination-link" href="#">3</a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a class="ais-Pagination-link" href="#">4</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--nextPage">
+      <a class="ais-Pagination-link" aria-label="Next" href="#">›</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--lastPage">
+      <a class="ais-Pagination-link" aria-label="Next" href="#">››</a>
+    </li>
+  </ul>
+</div>
+```
+
+## Connectors
+
+### connectRange
+
+#### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+
+### connectClearRefinements -- previously connectClearAll
+
+#### Options
+
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |

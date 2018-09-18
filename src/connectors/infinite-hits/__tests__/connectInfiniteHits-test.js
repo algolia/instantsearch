@@ -10,7 +10,7 @@ describe('connectInfiniteHits', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
     const widget = makeWidget({
-      escapeHits: true,
+      escapeHTML: true,
     });
 
     expect(widget.getConfiguration()).toEqual({
@@ -42,7 +42,7 @@ describe('connectInfiniteHits', () => {
         isLastPage: true,
         instantSearchInstance: undefined,
         widgetParams: {
-          escapeHits: true,
+          escapeHTML: true,
         },
       }),
       true
@@ -68,7 +68,7 @@ describe('connectInfiniteHits', () => {
         isLastPage: false,
         instantSearchInstance: undefined,
         widgetParams: {
-          escapeHits: true,
+          escapeHTML: true,
         },
       }),
       false
@@ -153,7 +153,7 @@ describe('connectInfiniteHits', () => {
   it('escape highlight properties if requested', () => {
     const rendering = jest.fn();
     const makeWidget = connectInfiniteHits(rendering);
-    const widget = makeWidget({ escapeHits: true });
+    const widget = makeWidget({ escapeHTML: true });
 
     const helper = jsHelper({}, '', {});
     helper.search = jest.fn();

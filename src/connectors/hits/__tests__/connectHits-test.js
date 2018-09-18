@@ -9,7 +9,7 @@ describe('connectHits', () => {
     // flag set accordingly
     const rendering = jest.fn();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget({ escapeHits: true });
+    const widget = makeWidget({ escapeHTML: true });
 
     expect(widget.getConfiguration()).toEqual({
       highlightPreTag: '__ais-highlight__',
@@ -32,7 +32,7 @@ describe('connectHits', () => {
     expect(rendering).toHaveBeenCalledTimes(1);
     // test that rendering has been called during init with isFirstRendering = true
     expect(rendering).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { escapeHits: true } }),
+      expect.objectContaining({ widgetParams: { escapeHTML: true } }),
       true
     );
 
@@ -46,7 +46,7 @@ describe('connectHits', () => {
     expect(rendering).toHaveBeenCalledTimes(2);
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering).toHaveBeenLastCalledWith(
-      expect.objectContaining({ widgetParams: { escapeHits: true } }),
+      expect.objectContaining({ widgetParams: { escapeHTML: true } }),
       false
     );
   });
@@ -98,7 +98,7 @@ describe('connectHits', () => {
   it('escape highlight properties if requested', () => {
     const rendering = jest.fn();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget({ escapeHits: true });
+    const widget = makeWidget({ escapeHTML: true });
 
     const helper = jsHelper({}, '', {});
     helper.search = jest.fn();

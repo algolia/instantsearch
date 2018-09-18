@@ -1,0 +1,109 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearAll props />, container) 1`] = `
+<ClearRefinements
+  collapsible={false}
+  cssClasses={
+    Object {
+      "button": "ais-ClearRefinements-button myButton",
+      "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+      "root": "ais-ClearRefinements myRoot",
+    }
+  }
+  hasRefinements={true}
+  refine={[Function]}
+  templateProps={
+    Object {
+      "templates": Object {
+        "resetLabel": "Clear all refinements",
+      },
+      "templatesConfig": Object {},
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "resetLabel": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`clearRefinements() with refinements calls twice ReactDOM.render(<ClearAll props />, container) 2`] = `
+<ClearRefinements
+  collapsible={false}
+  cssClasses={
+    Object {
+      "button": "ais-ClearRefinements-button myButton",
+      "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+      "root": "ais-ClearRefinements myRoot",
+    }
+  }
+  hasRefinements={true}
+  refine={[Function]}
+  templateProps={
+    Object {
+      "templates": Object {
+        "resetLabel": "Clear all refinements",
+      },
+      "templatesConfig": Object {},
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "resetLabel": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`clearRefinements() without refinements calls twice ReactDOM.render(<ClearRefinements props />, container) 1`] = `
+<ClearRefinements
+  collapsible={false}
+  cssClasses={
+    Object {
+      "button": "ais-ClearRefinements-button myButton",
+      "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+      "root": "ais-ClearRefinements myRoot",
+    }
+  }
+  hasRefinements={false}
+  refine={[Function]}
+  templateProps={
+    Object {
+      "templates": Object {
+        "resetLabel": "Clear all refinements",
+      },
+      "templatesConfig": Object {},
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "resetLabel": false,
+      },
+    }
+  }
+/>
+`;
+
+exports[`clearRefinements() without refinements calls twice ReactDOM.render(<ClearRefinements props />, container) 2`] = `
+<ClearRefinements
+  collapsible={false}
+  cssClasses={
+    Object {
+      "button": "ais-ClearRefinements-button myButton",
+      "disabledButton": "ais-ClearRefinements-button--disabled disabled",
+      "root": "ais-ClearRefinements myRoot",
+    }
+  }
+  hasRefinements={false}
+  refine={[Function]}
+  templateProps={
+    Object {
+      "templates": Object {
+        "resetLabel": "Clear all refinements",
+      },
+      "templatesConfig": Object {},
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "resetLabel": false,
+      },
+    }
+  }
+/>
+`;
