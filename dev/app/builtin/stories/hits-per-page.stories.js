@@ -1,7 +1,7 @@
 /* eslint-disable import/default */
 
 import { storiesOf } from 'dev-novel';
-import instantsearch from '../../../..';
+import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits';
 
 const stories = storiesOf('HitsPerPage');
