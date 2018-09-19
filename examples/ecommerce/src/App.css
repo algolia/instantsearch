@@ -265,8 +265,13 @@ aside a,
 }
 
 .products {
-  margin: 10px -0.5% 0;
-  padding: 0 10px;
+  margin: 10px 5px;
+}
+
+.products-no-results {
+  text-align: center;
+  margin: 25px 0;
+  font-size: 1.2em;
 }
 
 .products::after {

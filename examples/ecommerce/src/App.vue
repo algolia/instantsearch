@@ -110,11 +110,9 @@
             >
               <ais-search-state>
                 <template slot-scope="{ query, hits }">
-                  <div class="results-wrapper" v-if="hits.length === 0">
-                    <div class="no-results">
-                      No results found matching <span class="query">{{query}}</span>
-                    </div>
-                  </div>
+                  <p class="products-no-results" v-if="hits.length === 0">
+                    No results found matching <strong>{{query}}</strong>.
+                  </p>
                 </template>
               </ais-search-state>
               <article
