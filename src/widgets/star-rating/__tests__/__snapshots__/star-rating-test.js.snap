@@ -2,7 +2,6 @@
 
 exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
 <RefinementList
-  collapsible={false}
   createURL={[Function]}
   cssClasses={
     Object {
@@ -111,7 +110,6 @@ exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, cont
 
 exports[`starRating() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
 <RefinementList
-  collapsible={false}
   createURL={[Function]}
   cssClasses={
     Object {

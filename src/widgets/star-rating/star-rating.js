@@ -14,7 +14,6 @@ const renderer = ({
   containerNode,
   cssClasses,
   templates,
-  collapsible,
   transformData,
   renderState,
   labels,
@@ -34,7 +33,6 @@ const renderer = ({
 
   render(
     <RefinementList
-      collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items.map(item => ({ ...item, labels }))}
@@ -50,11 +48,10 @@ starRating({
   container,
   attribute,
   [ max=5 ],
-  [ cssClasses.{root,header,body,footer,list,item,active,link,disabledLink,star,emptyStar,count} ],
+  [ cssClasses.{root, list, item, selectedItem, disabledItem, link, starIcon, fullStarIcon, emptyStarIcon, label, count} ],
   [ templates.{header,item,footer} ],
   [ transformData.{item} ],
   [ labels.{andUp} ],
-  [ collapsible=false ]
 })`;
 
 /**
@@ -64,30 +61,23 @@ starRating({
 
 /**
  * @typedef {Object} StarWidgetTemplates
- * @property  {string|function} [header] Header template.
  * @property  {string|function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
- * @property  {string|function} [footer] Footer template.
  */
 
 /**
  * @typedef {Object} StarWidgetCssClasses
  * @property  {string|string[]} [root] CSS class to add to the root element.
- * @property  {string|string[]} [header] CSS class to add to the header element.
- * @property  {string|string[]} [body] CSS class to add to the body element.
- * @property  {string|string[]} [footer] CSS class to add to the footer element.
+ * @property  {string|string[]} [noRefinementRoot] CSS class to add to the root element when there's no refinements.
  * @property  {string|string[]} [list] CSS class to add to the list element.
  * @property  {string|string[]} [item] CSS class to add to each item element.
+ * @property  {string|string[]} [selectedItem] CSS class to add the selected item element.
+ * @property  {string|string[]} [disabledItem] CSS class to add a disabled item element.
  * @property  {string|string[]} [link] CSS class to add to each link element.
- * @property  {string|string[]} [disabledLink] CSS class to add to each disabled link (when using the default template).
- * @property  {string|string[]} [count] CSS class to add to each counters
- * @property  {string|string[]} [star] CSS class to add to each star element (when using the default template).
- * @property  {string|string[]} [emptyStar] CSS class to add to each empty star element (when using the default template).
- * @property  {string|string[]} [active] CSS class to add to each active element.
- */
-
-/**
- * @typedef {Object} StarWidgetCollapsibleOption
- * @property {boolean} collapsed If set to true, the widget will be collapsed at first rendering.
+ * @property  {string|string[]} [starIcon] CSS class to add to each star element (when using the default template).
+ * @property  {string|string[]} [fulltarIcon] CSS class to add to each full star element (when using the default template).
+ * @property  {string|string[]} [emptytarIcon] CSS class to add to each empty star element (when using the default template).
+ * @property  {string|string[]} [label] CSS class to add to each label.
+ * @property  {string|string[]} [count] CSS class to add to each counter.
  */
 
 /**
@@ -104,7 +94,6 @@ starRating({
  * @property {StarWidgetTemplates} [templates] Templates to use for the widget.
  * @property {StarWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
  * @property {StarWidgetCssClasses} [cssClasses] CSS classes to add.
- * @property {boolean|StarWidgetCollapsibleOption} [collapsible=false] If set to true, the widget can be collapsed. This parameter can also be
  */
 
 /**
@@ -143,7 +132,6 @@ export default function starRating({
   cssClasses: userCssClasses = {},
   labels = defaultLabels,
   templates = defaultTemplates,
-  collapsible = false,
   transformData,
 } = {}) {
   if (!container) {
@@ -185,7 +173,6 @@ export default function starRating({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    collapsible,
     renderState: {},
     templates,
     transformData,
