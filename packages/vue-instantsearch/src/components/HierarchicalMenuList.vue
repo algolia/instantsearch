@@ -1,36 +1,36 @@
-<template functional>
+<template>
   <ul
     :class="[
-      props.suit('list'),
-      props.level > 0 && props.suit('list', 'child'),
-      props.suit('list', `lvl${props.level}`)
+      suit('list'),
+      level > 0 && suit('list', 'child'),
+      suit('list', `lvl${level}`)
     ]"
   >
     <li
-      v-for="item in props.items"
+      v-for="item in items"
       :key="item.value"
       :class="[
-        props.suit('item'),
-        item.data && props.suit('item', 'parent'),
-        item.isRefined && props.suit('item', 'selected')
+        suit('item'),
+        item.data && suit('item', 'parent'),
+        item.isRefined && suit('item', 'selected')
       ]"
     >
       <a
-        :href="props.createURL(item.value)"
-        :class="props.suit('link')"
-        @click.prevent="props.refine(item.value)"
+        :href="createURL(item.value)"
+        :class="suit('link')"
+        @click.prevent="refine(item.value)"
       >
-        <span :class="props.suit('label')">{{ item.label }}</span>
-        <span :class="props.suit('count')">{{ item.count }}</span>
+        <span :class="suit('label')">{{ item.label }}</span>
+        <span :class="suit('count')">{{ item.count }}</span>
       </a>
 
       <hierarchical-menu-list
         v-if="item.data"
         :items="item.data"
-        :level="props.level + 1"
-        :suit="props.suit"
-        :refine="props.refine"
-        :createURL="props.createURL"
+        :level="level + 1"
+        :suit="suit"
+        :refine="refine"
+        :createURL="createURL"
       />
     </li>
   </ul>
@@ -38,6 +38,7 @@
 
 <script>
 export default {
+  name: 'HierarchicalMenuList',
   props: {
     items: {
       type: Array,
