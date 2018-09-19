@@ -2,9 +2,9 @@
 
 import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
 
-const stories = storiesOf('HitsPerPageSelector');
+const stories = storiesOf('HitsPerPage');
 
 export default () => {
   stories
@@ -12,7 +12,7 @@ export default () => {
       'default',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.hitsPerPageSelector({
+          instantsearch.widgets.hitsPerPage({
             container,
             items: [
               { value: 3, label: '3 per page' },
@@ -27,7 +27,7 @@ export default () => {
       'with default hitPerPage to 5',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.hitsPerPageSelector({
+          instantsearch.widgets.hitsPerPage({
             container,
             items: [
               { value: 3, label: '3 per page' },
@@ -42,7 +42,7 @@ export default () => {
       'with transformed items',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.hitsPerPageSelector({
+          instantsearch.widgets.hitsPerPage({
             container,
             items: [
               { value: 3, label: '3 per page' },

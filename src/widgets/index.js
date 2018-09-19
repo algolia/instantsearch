@@ -18,8 +18,8 @@ export {
 } from '../widgets/hierarchical-menu/hierarchical-menu.js';
 export { default as hits } from '../widgets/hits/hits.js';
 export {
-  default as hitsPerPageSelector,
-} from '../widgets/hits-per-page-selector/hits-per-page-selector.js';
+  default as hitsPerPage,
+} from '../widgets/hits-per-page/hits-per-page.js';
 export {
   default as infiniteHits,
 } from '../widgets/infinite-hits/infinite-hits.js';

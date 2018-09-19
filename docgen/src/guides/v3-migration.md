@@ -93,6 +93,33 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 </div>
 ```
 
+### HitPerPage (formerly HitsPerPageSelector)
+
+#### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+
+#### CSS classes
+
+| Before                       | After                    |
+| ---------------------------- | ------------------------ |
+|                              | `ais-HitsPerPage`        |
+| `ais-hits-per-page-selector` | `ais-HitsPerPage-select` |
+| `ais-hits-per-page--item`    | `ais-HitsPerPage-option` |
+
+#### Markup
+
+```html
+<div class="ais-HitsPerPage">
+  <select class="ais-HitsPerPage-select">
+    <option class="ais-HitsPerPage-option" value="3">3 per page</option>
+    <option class="ais-HitsPerPage-option" value="6">6 per page</option>
+  </select>
+</div>
+```
+
 ### InfiniteHits
 
 #### Options

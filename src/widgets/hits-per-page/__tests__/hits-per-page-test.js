@@ -1,18 +1,18 @@
-import hitsPerPageSelector from '../hits-per-page-selector';
+import hitsPerPage from '../hits-per-page';
 
-describe('hitsPerPageSelector call', () => {
+describe('hitsPerPage call', () => {
   it('throws an exception when no items', () => {
     const container = document.createElement('div');
-    expect(hitsPerPageSelector.bind(null, { container })).toThrow(/^Usage:/);
+    expect(hitsPerPage.bind(null, { container })).toThrow(/^Usage:/);
   });
 
   it('throws an exception when no container', () => {
     const items = { a: { value: 'value', label: 'My value' } };
-    expect(hitsPerPageSelector.bind(null, { items })).toThrow(/^Usage:/);
+    expect(hitsPerPage.bind(null, { items })).toThrow(/^Usage:/);
   });
 });
 
-describe('hitsPerPageSelector()', () => {
+describe('hitsPerPage()', () => {
   let ReactDOM;
   let container;
   let items;
@@ -26,7 +26,7 @@ describe('hitsPerPageSelector()', () => {
   beforeEach(() => {
     ReactDOM = { render: jest.fn() };
 
-    hitsPerPageSelector.__Rewire__('render', ReactDOM.render);
+    hitsPerPage.__Rewire__('render', ReactDOM.render);
     consoleWarn = jest.spyOn(window.console, 'warn');
 
     container = document.createElement('div');
@@ -37,9 +37,9 @@ describe('hitsPerPageSelector()', () => {
     cssClasses = {
       root: ['custom-root', 'cx'],
       select: 'custom-select',
-      item: 'custom-item',
+      option: 'custom-option',
     };
-    widget = hitsPerPageSelector({ container, items, cssClasses });
+    widget = hitsPerPage({ container, items, cssClasses });
     helper = {
       state: {
         hitsPerPage: 20,
@@ -62,7 +62,7 @@ describe('hitsPerPageSelector()', () => {
   });
 
   it('does configures the default hits per page if specified', () => {
-    const widgetWithDefaults = hitsPerPageSelector({
+    const widgetWithDefaults = hitsPerPage({
       container: document.createElement('div'),
       items: [
         { value: 10, label: '10 results' },
@@ -84,7 +84,7 @@ describe('hitsPerPageSelector()', () => {
   });
 
   it('renders transformed items', () => {
-    widget = hitsPerPageSelector({
+    widget = hitsPerPage({
       container,
       items: [
         { value: 10, label: '10 results' },
@@ -116,7 +116,7 @@ describe('hitsPerPageSelector()', () => {
     widget.init({ state: helper.state, helper });
     expect(consoleWarn).toHaveBeenCalledTimes(1, 'console.warn called once');
     expect(consoleWarn.mock.calls[0][0]).toEqual(
-      `[Warning][hitsPerPageSelector] No item in \`items\`
+      `[Warning][hitsPerPage] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: 20)`
     );
   });
@@ -126,7 +126,7 @@ describe('hitsPerPageSelector()', () => {
     widget.init({ state: helper.state, helper });
     expect(consoleWarn).toHaveBeenCalledTimes(1, 'console.warn called once');
     expect(consoleWarn.mock.calls[0][0]).toEqual(
-      `[Warning][hitsPerPageSelector] No item in \`items\`
+      `[Warning][hitsPerPage] No item in \`items\`
   with \`value: hitsPerPage\` (hitsPerPage: -1)`
     );
   });
@@ -139,7 +139,7 @@ describe('hitsPerPageSelector()', () => {
   });
 
   afterEach(() => {
-    hitsPerPageSelector.__ResetDependency__('render');
+    hitsPerPage.__ResetDependency__('render');
     consoleWarn.mockRestore();
   });
 });

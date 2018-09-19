@@ -10,7 +10,7 @@ describe('Selector', () => {
       cssClasses: {
         root: 'custom-root',
         select: 'custom-select',
-        option: 'custom-item',
+        option: 'custom-option',
       },
       options: [
         { value: 'index-a', label: 'Index A' },
@@ -28,7 +28,7 @@ describe('Selector', () => {
       cssClasses: {
         root: 'custom-root',
         select: 'custom-select',
-        option: 'custom-item',
+        option: 'custom-option',
       },
       options: [
         { value: 10, label: '10 results per page' },

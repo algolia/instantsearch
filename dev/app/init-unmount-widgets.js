@@ -145,7 +145,7 @@ export default () => {
   storiesOf('HitsPerPage').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.hitsPerPageSelector({
+      instantsearch.widgets.hitsPerPage({
         container,
         items: [
           { value: 3, label: '3 per page' },

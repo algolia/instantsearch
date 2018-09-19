@@ -40,8 +40,8 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.hitsPerPageSelector({
-    container: '#hits-per-page-selector',
+  instantsearch.widgets.hitsPerPage({
+    container: '#hits-per-page',
     items: [
       { value: 6, label: '6 per page' },
       { value: 12, label: '12 per page' },

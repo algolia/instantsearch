@@ -2,7 +2,7 @@ import initClearRefinementsStories from './stories/clear-refinements.stories';
 import initCurrentRefinedValuesStories from './stories/current-refined-values.stories';
 import initHierarchicalMenuStories from './stories/hierarchical-menu.stories';
 import initHitsStories from './stories/hits.stories';
-import initHitsPerPageSelectorStories from './stories/hits-per-page-selector.stories';
+import initHitsPerPageStories from './stories/hits-per-page.stories';
 import initInfiniteHitsStories from './stories/infinite-hits.stories';
 import initMenuStories from './stories/menu.stories';
 import initNumericRefinementListStories from './stories/numeric-refinement-list.stories';
@@ -21,7 +21,7 @@ export default () => {
   initCurrentRefinedValuesStories();
   initHierarchicalMenuStories();
   initHitsStories();
-  initHitsPerPageSelectorStories();
+  initHitsPerPageStories();
   initInfiniteHitsStories();
   initMenuStories();
   initNumericRefinementListStories();
