@@ -4,6 +4,41 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 
 ## Widgets
 
+### Breadcrumb
+
+#### CSS classes
+
+| Before                          | After                           |
+| ------------------------------- | ------------------------------- |
+| `ais-breadcrumb`                | `ais-Breadcrumb`                |
+|                                 | `ais-Breadcrumb--noRefinement`  |
+| `ais-breadcrumb`                | `ais-Breadcrumb-list`           |
+| `ais-breadcrumb--separator`     | `ais-Breadcrumb-separator`      |
+| `ais-breadcrumb--label`         | `ais-Breadcrumb-link`           |
+| `ais-breadcrumb--disabledLabel` |                                 |
+|                                 | `ais-Breadcrumb-item`           |
+|                                 | `ais-Breadcrumb-item--selected` |
+
+#### Markup
+
+```html
+<div class="ais-Breadcrumb">
+  <ul class="ais-Breadcrumb-list">
+    <li class="ais-Breadcrumb-item">
+      <a class="ais-Breadcrumb-link" href="#">Home</a>
+    </li>
+    <li class="ais-Breadcrumb-item">
+      <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+      <a class="ais-Breadcrumb-link" href="#">Cooking</a>
+    </li>
+    <li class="ais-Breadcrumb-item ais-Breadcrumb-item--selected">
+      <span class="ais-Breadcrumb-separator" aria-hidden="true">></span>
+      Kitchen textiles
+    </li>
+  </ul>
+</div>
+```
+
 ### Hits
 
 #### Options
@@ -13,8 +48,8 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 | `escapeHits`    | `escapeHTML`    |
 | `showMoreLabel` | `loadMoreLabel` |
 
-* `escapeHTML` becomes `true` by default.
-* `allItems` template has been removed in favor of `connectHits`
+- `escapeHTML` becomes `true` by default.
+- `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
 
@@ -112,6 +147,33 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
   </ol>
 
   <button class="ais-InfiniteHits-loadMore">Show more results</button>
+```
+
+### SortBy
+
+#### Options
+
+| Before    | After   |
+| --------- | ------- |
+| `indices` | `items` |
+
+#### CSS classes
+
+| Before                 | After               |
+| ---------------------- | ------------------- |
+|                        | `ais-SortBy`        |
+| `ais-sort-by-selector` | `ais-SortBy-select` |
+| `ais-sort-by--item`    | `ais-SortBy-option` |
+
+#### Markup
+
+```html
+<div class="ais-SortBy">
+ <select class="ais-SortBy-select">
+   <option class="ais-SortBy-option" value="Most relevant">Most relevant</option>
+   <option class="ais-SortBy-option" value="Lowest price">Lowest price</option>
+ </select>
+</div>
 ```
 
 ### Stats
@@ -315,6 +377,67 @@ Configuration options for `reset`, `submit` and `loadingIndicator` have been dis
       </svg>
     </span>
   </form>
+<div>
+```
+
+### Pagination
+
+### Options
+
+| Before          | After                  |
+| --------------- | ---------------------- |
+| `maxPages`      | `totalPages`           |
+| `showFirstLast` | `showFirst` `showLast` |
+|                 | `showNext`             |
+|                 | `showPrevious`         |
+
+### CSS classes
+
+| Before                           | After                               |
+| -------------------------------- | ----------------------------------- |
+|                                  | `ais-Pagination`                    |
+|                                  | `ais-Pagination--noRefinement`      |
+| `ais-pagination`                 | `ais-Pagination-list`               |
+| `ais-pagination--item`           | `ais-Pagination-item`               |
+| `ais-pagination--item__first`    | `ais-Pagination-item--firstPage`    |
+| `ais-pagination--item__last`     | `ais-Pagination-item--lastPage`     |
+| `ais-pagination--item__previous` | `ais-Pagination-item--previousPage` |
+| `ais-pagination--item__next`     | `ais-Pagination-item--nextPage`     |
+|                                  | `ais-Pagination-item--page`         |
+| `ais-pagination--item__active`   | `ais-Pagination-item--selected`     |
+| `ais-pagination--item__disabled` | `ais-Pagination-item--disabled`     |
+| `ais-pagination--link`           | `ais-Pagination-link`               |
+
+### Markup
+
+```html
+<div class="ais-Pagination">
+  <ul class="ais-Pagination-list">
+    <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
+      <span class="ais-Pagination-link" aria-label="Previous">‹‹</span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
+      <span class="ais-Pagination-link" aria-label="Previous">‹</span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--selected">
+      <a class="ais-Pagination-link" href="#">1</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--page">
+      <a class="ais-Pagination-link" href="#">2</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--page">
+      <a class="ais-Pagination-link" href="#">3</a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a class="ais-Pagination-link" href="#">4</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--nextPage">
+      <a class="ais-Pagination-link" aria-label="Next" href="#">›</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--lastPage">
+      <a class="ais-Pagination-link" aria-label="Next" href="#">››</a>
+    </li>
+  </ul>
 </div>
 ```
 

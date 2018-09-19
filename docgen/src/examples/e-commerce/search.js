@@ -86,7 +86,8 @@ search.addWidget(
       previous: '<i class="fa fa-angle-left fa-2x"></i> Previous page',
       next: 'Next page <i class="fa fa-angle-right fa-2x"></i>'
     },
-    showFirstLast: false
+    showFirst: false,
+    showLast: false
   })
 );
 
@@ -153,9 +154,9 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.sortBySelector({
-    container: '#sort-by-selector',
-    indices: [
+  instantsearch.widgets.sortBy({
+    container: '#sort-by',
+    items: [
       {name: 'ikea', label: 'Featured'},
       {name: 'ikea_price_asc', label: 'Price asc.'},
       {name: 'ikea_price_desc', label: 'Price desc.'}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { RawSelector as Selector } from '../Selector';
+import Selector from '../Selector';
 import renderer from 'react-test-renderer';
 
 describe('Selector', () => {
@@ -10,7 +10,7 @@ describe('Selector', () => {
       cssClasses: {
         root: 'custom-root',
         select: 'custom-select',
-        item: 'custom-item',
+        option: 'custom-item',
       },
       options: [
         { value: 'index-a', label: 'Index A' },
@@ -28,7 +28,7 @@ describe('Selector', () => {
       cssClasses: {
         root: 'custom-root',
         select: 'custom-select',
-        item: 'custom-item',
+        option: 'custom-item',
       },
       options: [
         { value: 10, label: '10 results per page' },

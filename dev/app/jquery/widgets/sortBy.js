@@ -26,4 +26,4 @@ const renderFn = (
   containerNode.find('select').html(optionsHTML);
 };
 
-export default instantsearch.connectors.connectSortBySelector(renderFn);
+export default instantsearch.connectors.connectSortBy(renderFn);

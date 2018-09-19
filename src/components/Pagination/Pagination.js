@@ -1,17 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 import defaultsDeep from 'lodash/defaultsDeep';
-import { isSpecialClick } from '../../lib/utils.js';
-
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-
-import PaginationLink from './PaginationLink.js';
-
 import cx from 'classnames';
 
-export class RawPagination extends Component {
+import PaginationLink from './PaginationLink.js';
+import { isSpecialClick } from '../../lib/utils.js';
+
+export class Pagination extends Component {
   constructor(props) {
-    super(defaultsDeep(props, RawPagination.defaultProps));
+    super(defaultsDeep(props, Pagination.defaultProps));
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -21,17 +18,18 @@ export class RawPagination extends Component {
     pageNumber,
     additionalClassName = null,
     isDisabled = false,
-    isActive = false,
+    isSelected = false,
     createURL,
   }) {
     const cssClasses = {
       item: cx(this.props.cssClasses.item, additionalClassName),
       link: cx(this.props.cssClasses.link),
     };
+
     if (isDisabled) {
-      cssClasses.item = cx(cssClasses.item, this.props.cssClasses.disabled);
-    } else if (isActive) {
-      cssClasses.item = cx(cssClasses.item, this.props.cssClasses.active);
+      cssClasses.item = cx(cssClasses.item, this.props.cssClasses.disabledItem);
+    } else if (isSelected) {
+      cssClasses.item = cx(cssClasses.item, this.props.cssClasses.selectedItem);
     }
 
     const url = createURL && !isDisabled ? createURL(pageNumber) : '#';
@@ -53,7 +51,7 @@ export class RawPagination extends Component {
   previousPageLink({ isFirstPage, currentPage, createURL }) {
     return this.pageLink({
       ariaLabel: 'Previous',
-      additionalClassName: this.props.cssClasses.previous,
+      additionalClassName: this.props.cssClasses.previousPageItem,
       isDisabled: this.props.nbHits === 0 || isFirstPage,
       label: this.props.labels.previous,
       pageNumber: currentPage - 1,
@@ -64,7 +62,7 @@ export class RawPagination extends Component {
   nextPageLink({ isLastPage, currentPage, createURL }) {
     return this.pageLink({
       ariaLabel: 'Next',
-      additionalClassName: this.props.cssClasses.next,
+      additionalClassName: this.props.cssClasses.nextPageItem,
       isDisabled: this.props.nbHits === 0 || isLastPage,
       label: this.props.labels.next,
       pageNumber: currentPage + 1,
@@ -75,7 +73,7 @@ export class RawPagination extends Component {
   firstPageLink({ isFirstPage, createURL }) {
     return this.pageLink({
       ariaLabel: 'First',
-      additionalClassName: this.props.cssClasses.first,
+      additionalClassName: this.props.cssClasses.firstPageItem,
       isDisabled: this.props.nbHits === 0 || isFirstPage,
       label: this.props.labels.first,
       pageNumber: 0,
@@ -86,7 +84,7 @@ export class RawPagination extends Component {
   lastPageLink({ isLastPage, nbPages, createURL }) {
     return this.pageLink({
       ariaLabel: 'Last',
-      additionalClassName: this.props.cssClasses.last,
+      additionalClassName: this.props.cssClasses.lastPageItem,
       isDisabled: this.props.nbHits === 0 || isLastPage,
       label: this.props.labels.last,
       pageNumber: nbPages - 1,
@@ -98,8 +96,8 @@ export class RawPagination extends Component {
     return pages.map(pageNumber =>
       this.pageLink({
         ariaLabel: pageNumber + 1,
-        additionalClassName: this.props.cssClasses.page,
-        isActive: pageNumber === currentPage,
+        additionalClassName: this.props.cssClasses.pageItem,
+        isSelected: pageNumber === currentPage,
         label: pageNumber + 1,
         pageNumber,
         createURL,
@@ -119,30 +117,38 @@ export class RawPagination extends Component {
 
   render() {
     return (
-      <ul className={this.props.cssClasses.root}>
-        {this.props.showFirstLast && this.firstPageLink(this.props)}
-        {this.previousPageLink(this.props)}
-        {this.pages(this.props)}
-        {this.nextPageLink(this.props)}
-        {this.props.showFirstLast && this.lastPageLink(this.props)}
-      </ul>
+      <div
+        className={cx(this.props.cssClasses.root, {
+          [this.props.cssClasses.noRefinementRoot]: this.props.isFirstPage,
+        })}
+      >
+        <ul className={cx(this.props.cssClasses.list)}>
+          {this.props.showFirst && this.firstPageLink(this.props)}
+          {this.props.showPrevious && this.previousPageLink(this.props)}
+          {this.pages(this.props)}
+          {this.props.showNext && this.nextPageLink(this.props)}
+          {this.props.showLast && this.lastPageLink(this.props)}
+        </ul>
+      </div>
     );
   }
 }
 
-RawPagination.propTypes = {
+Pagination.propTypes = {
   createURL: PropTypes.func,
   cssClasses: PropTypes.shape({
     root: PropTypes.string,
+    noRefinementRoot: PropTypes.string,
+    list: PropTypes.string,
     item: PropTypes.string,
+    firstPageItem: PropTypes.string,
+    lastPageItem: PropTypes.string,
+    previousPageItem: PropTypes.string,
+    nextPageItem: PropTypes.string,
+    pageItem: PropTypes.string,
+    selectedItem: PropTypes.string,
+    disabledItem: PropTypes.string,
     link: PropTypes.string,
-    page: PropTypes.string,
-    previous: PropTypes.string,
-    next: PropTypes.string,
-    first: PropTypes.string,
-    last: PropTypes.string,
-    active: PropTypes.string,
-    disabled: PropTypes.string,
   }),
   currentPage: PropTypes.number,
   labels: PropTypes.shape({
@@ -157,13 +163,16 @@ RawPagination.propTypes = {
   isFirstPage: PropTypes.bool.isRequired,
   isLastPage: PropTypes.bool.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
-  showFirstLast: PropTypes.bool,
+  showFirst: PropTypes.bool,
+  showLast: PropTypes.bool,
+  showPrevious: PropTypes.bool,
+  showNext: PropTypes.bool,
 };
 
-RawPagination.defaultProps = {
+Pagination.defaultProps = {
   nbHits: 0,
   currentPage: 0,
   nbPages: 0,
 };
 
-export default autoHideContainerHOC(RawPagination);
+export default Pagination;

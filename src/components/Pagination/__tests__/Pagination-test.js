@@ -1,6 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
-import { RawPagination as Pagination } from '../Pagination';
+import Pagination from '../Pagination';
 import Paginator from '../../../connectors/pagination/Paginator';
 import renderer from 'react-test-renderer';
 
@@ -13,14 +13,17 @@ describe('Pagination', () => {
   const defaultProps = {
     cssClasses: {
       root: 'root',
+      noRefinementRoot: 'noRefinementRoot',
+      list: 'list',
       item: 'item',
-      page: 'page',
-      previous: 'previous',
-      next: 'next',
-      first: 'first',
-      last: 'last',
-      active: 'active',
-      disabled: 'disabled',
+      firstPageItem: 'firstPageItem',
+      lastPageItem: 'lastPageItem',
+      previousPageItem: 'previousPageItem',
+      nextPageItem: 'nextPageItem',
+      pageItem: 'pageItem',
+      selectedItem: 'selectedItem',
+      disabledItem: 'disabledItem',
+      link: 'link',
     },
     createURL: (...args) => JSON.stringify(args),
     labels: { first: '', last: '', next: '', previous: '' },
@@ -41,7 +44,7 @@ describe('Pagination', () => {
 
   it('should display the first/last link', () => {
     const tree = renderer
-      .create(<Pagination {...defaultProps} showFirstLast />)
+      .create(<Pagination {...defaultProps} showFirst showLast />)
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -51,7 +54,10 @@ describe('Pagination', () => {
       .create(
         <Pagination
           {...defaultProps}
-          showFirstLast
+          showFirst
+          showLast
+          showPrevious
+          showNext
           pages={[13, 14, 15, 16, 17, 18, 19]}
           currentPage={19}
           isFirstPage={false}
@@ -91,7 +97,10 @@ describe('Pagination', () => {
       .create(
         <Pagination
           {...defaultProps}
-          showFirstLast
+          showFirst
+          showLast
+          showPrevious
+          showNext
           currentPage={0}
           nbHits={0}
           nbPages={0}
