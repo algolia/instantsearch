@@ -11,7 +11,7 @@ import { component } from '../../lib/suit';
 
 const suit = component('RangeSlider');
 
-export class Slider extends Component {
+class Slider extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
