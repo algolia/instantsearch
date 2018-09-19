@@ -23,6 +23,9 @@ export class Slider extends Component {
       PropTypes.bool,
       PropTypes.shape({ format: PropTypes.func.isRequired }),
     ]),
+    cssClasses: PropTypes.shape({
+      root: PropTypes.string.isRequired,
+    }).isRequired,
   };
 
   get isDisabled() {
@@ -82,7 +85,7 @@ export class Slider extends Component {
   };
 
   render() {
-    const { tooltips, step, pips, values } = this.props;
+    const { tooltips, step, pips, values, cssClasses } = this.props;
 
     const { min, max } = this.isDisabled
       ? { min: this.props.min, max: this.props.max + 0.001 }
@@ -94,7 +97,7 @@ export class Slider extends Component {
 
     return (
       <div
-        className={cx(suit(), {
+        className={cx(suit(), cssClasses.root, {
           [suit({ modifierName: 'disabled' })]: this.isDisabled,
         })}
       >

@@ -11,6 +11,7 @@ exports[`rangeSlider widget usage max option will use the results min when only 
   min={1}
   pips={true}
   refine={[Function]}
+  step={1}
   tooltips={true}
   values={
     Array [
@@ -32,6 +33,7 @@ exports[`rangeSlider widget usage min option sets the right range 1`] = `
   min={100}
   pips={true}
   refine={[Function]}
+  step={1}
   tooltips={true}
   values={
     Array [
@@ -53,6 +55,7 @@ exports[`rangeSlider widget usage min option will use the results max when only 
   min={100}
   pips={true}
   refine={[Function]}
+  step={1}
   tooltips={true}
   values={
     Array [
@@ -74,6 +77,7 @@ exports[`rangeSlider widget usage should render without results 1`] = `
   min={0}
   pips={true}
   refine={[Function]}
+  step={1}
   tooltips={true}
   values={
     Array [
@@ -95,6 +99,7 @@ exports[`rangeSlider widget usage with results calls twice ReactDOM.render 1`] =
   min={1}
   pips={true}
   refine={[Function]}
+  step={1}
   tooltips={true}
   values={
     Array [
@@ -116,6 +121,7 @@ exports[`rangeSlider widget usage with results calls twice ReactDOM.render 2`] =
   min={1}
   pips={true}
   refine={[Function]}
+  step={1}
   tooltips={true}
   values={
     Array [

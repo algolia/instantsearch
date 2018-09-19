@@ -15,8 +15,10 @@ describe('Slider', () => {
         pips={true}
         step={2}
         tooltips={true}
+        cssClasses={{ root: '' }}
       />
     );
+
     expect(tree).toMatchSnapshot();
   });
 
@@ -30,8 +32,29 @@ describe('Slider', () => {
         pips={false}
         step={2}
         tooltips={true}
+        cssClasses={{ root: '' }}
       />
     );
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('expect to render with CSS classes', () => {
+    const tree = createRenderer().render(
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={false}
+        step={2}
+        tooltips={true}
+        cssClasses={{
+          root: 'root',
+        }}
+      />
+    );
+
     expect(tree).toMatchSnapshot();
   });
 
@@ -44,6 +67,7 @@ describe('Slider', () => {
       pips: true,
       step: 2,
       tooltips: true,
+      cssClasses: { root: '' },
     };
 
     shallow(<Slider {...props} />)
