@@ -13,7 +13,7 @@ jest.mock('preact-compat', () => {
 describe('rangeInput', () => {
   const attribute = 'aNumAttr';
   const createContainer = () => document.createElement('div');
-  const instantSearchInstance = { templatesConfig: undefined };
+  const instantSearchInstance = {};
   const createHelper = () =>
     new AlgoliasearchHelper(
       {

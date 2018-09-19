@@ -26,20 +26,6 @@ exports[`rangeInput expect to render with custom classNames 1`] = `
   min={0}
   refine={[Function]}
   step={1}
-  templateProps={
-    Object {
-      "templates": Object {
-        "footer": "",
-        "header": "",
-      },
-      "templatesConfig": undefined,
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-      },
-    }
-  }
   values={
     Object {
       "max": undefined,
@@ -75,20 +61,6 @@ exports[`rangeInput expect to render with custom labels 1`] = `
   min={0}
   refine={[Function]}
   step={1}
-  templateProps={
-    Object {
-      "templates": Object {
-        "footer": "",
-        "header": "",
-      },
-      "templatesConfig": undefined,
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-      },
-    }
-  }
   values={
     Object {
       "max": undefined,
@@ -124,20 +96,6 @@ exports[`rangeInput expect to render with refinement 1`] = `
   min={10}
   refine={[Function]}
   step={1}
-  templateProps={
-    Object {
-      "templates": Object {
-        "footer": "",
-        "header": "",
-      },
-      "templatesConfig": undefined,
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-      },
-    }
-  }
   values={
     Object {
       "max": 475,
@@ -173,20 +131,6 @@ exports[`rangeInput expect to render with refinement at boundaries 1`] = `
   min={10}
   refine={[Function]}
   step={1}
-  templateProps={
-    Object {
-      "templates": Object {
-        "footer": "",
-        "header": "",
-      },
-      "templatesConfig": undefined,
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-      },
-    }
-  }
   values={
     Object {
       "max": undefined,
@@ -222,20 +166,6 @@ exports[`rangeInput expect to render with results 1`] = `
   min={10}
   refine={[Function]}
   step={1}
-  templateProps={
-    Object {
-      "templates": Object {
-        "footer": "",
-        "header": "",
-      },
-      "templatesConfig": undefined,
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-      },
-    }
-  }
   values={
     Object {
       "max": undefined,
@@ -271,20 +201,6 @@ exports[`rangeInput expect to render without results 1`] = `
   min={0}
   refine={[Function]}
   step={1}
-  templateProps={
-    Object {
-      "templates": Object {
-        "footer": "",
-        "header": "",
-      },
-      "templatesConfig": undefined,
-      "transformData": undefined,
-      "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-      },
-    }
-  }
   values={
     Object {
       "max": undefined,
