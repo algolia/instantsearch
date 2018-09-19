@@ -360,6 +360,10 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 </div>
 ```
 
+### PriceRanges
+
+Widget removed.
+
 ## Connectors
 
 ### connectRange

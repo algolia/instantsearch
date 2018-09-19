@@ -270,25 +270,6 @@ search.once('render', function() {
 });
 
 search.addWidget(
-  instantsearch.widgets.priceRanges({
-    container: '#price-ranges',
-    attributeName: 'price',
-    templates: {
-      header: 'Price ranges',
-    },
-    cssClasses: {
-      header: 'facet-title',
-      body: 'nav nav-stacked',
-      range: 'facet-value',
-      form: '',
-      input: 'fixed-input-sm',
-      button: 'btn btn-default btn-sm',
-      item: 'item',
-    },
-  })
-);
-
-search.addWidget(
   instantsearch.widgets.numericSelector({
     container: '#popularity-selector',
     operator: '>=',

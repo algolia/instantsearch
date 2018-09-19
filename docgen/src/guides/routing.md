@@ -230,9 +230,6 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
   numericSelector: {
     widthInCm: 30
   },
-  priceRanges: {
-    price: '200-20000'
-  },
   range: {
     ageInYears: '2-10'
   },
