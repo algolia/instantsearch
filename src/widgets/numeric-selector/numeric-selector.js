@@ -3,35 +3,35 @@ import cx from 'classnames';
 
 import Selector from '../../components/Selector.js';
 import connectNumericSelector from '../../connectors/numeric-selector/connectNumericSelector.js';
+import { getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-import { bemHelper, getContainerNode } from '../../lib/utils.js';
+const suit = component('NumericSelector');
 
-const bem = bemHelper('ais-numeric-selector');
-
-const renderer = ({ containerNode, autoHideContainer, cssClasses }) => (
-  { currentRefinement, refine, hasNoResults, options },
+const renderer = ({ containerNode, cssClasses }) => (
+  { currentRefinement, refine, options },
   isFirstRendering
 ) => {
   if (isFirstRendering) return;
 
   render(
-    <Selector
-      cssClasses={cssClasses}
-      currentValue={currentRefinement}
-      options={options}
-      setValue={refine}
-      shouldAutoHideContainer={autoHideContainer && hasNoResults}
-    />,
+    <div className={cx(cssClasses.root)}>
+      <Selector
+        cssClasses={cssClasses}
+        currentValue={currentRefinement}
+        options={options}
+        setValue={refine}
+      />
+    </div>,
     containerNode
   );
 };
 
 const usage = `Usage: numericSelector({
   container,
-  attributeName,
+  attribute,
   options,
-  cssClasses.{root,select,item},
-  autoHideContainer,
+  cssClasses.{root,select,option},
   transformItems
 })`;
 
@@ -46,16 +46,15 @@ const usage = `Usage: numericSelector({
  * @typedef {Object} NumericSelectorCSSClasses
  * @property {string|string[]} [root] CSS classes added to the outer `<div>`.
  * @property {string|string[]} [select] CSS classes added to the parent `<select>`.
- * @property {string|string[]} [item] CSS classes added to each `<option>`.
+ * @property {string|string[]} [option] CSS classes added to each `<option>`.
  */
 
 /**
  * @typedef {Object} NumericSelectorWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string} attributeName Name of the numeric attribute to use.
+ * @property {string} attribute Name of the numeric attribute to use.
  * @property {NumericOption[]} options Array of objects defining the different values and labels.
  * @property {string} [operator='='] The operator to use to refine.
- * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  * @property {NumericSelectorCSSClasses} [cssClasses] CSS classes to be added.
  */
@@ -64,7 +63,7 @@ const usage = `Usage: numericSelector({
  * This widget lets the user choose between numerical refinements from a dropdown menu.
  *
  * @requirements
- * The attribute passed to `attributeName` must be declared as an
+ * The attribute passed to `attribute` must be declared as an
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
@@ -78,7 +77,7 @@ const usage = `Usage: numericSelector({
  * search.addWidget(
  *   instantsearch.widgets.numericSelector({
  *     container: '#rating-selector',
- *     attributeName: 'rating',
+ *     attribute: 'rating',
  *     operator: '=',
  *     options: [
  *       {label: 'All products'},
@@ -94,27 +93,23 @@ const usage = `Usage: numericSelector({
 export default function numericSelector({
   container,
   operator = '=',
-  attributeName,
+  attribute,
   options,
   cssClasses: userCssClasses = {},
-  autoHideContainer = false,
   transformItems,
 }) {
   const containerNode = getContainerNode(container);
-  if (!container || !options || options.length === 0 || !attributeName) {
+  if (!container || !options || options.length === 0 || !attribute) {
     throw new Error(usage);
   }
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    // We use the same class to avoid regression on existing website. It needs to be replaced
-    // eventually by `bem('select')
-    select: cx(bem(null), userCssClasses.select),
-    item: cx(bem('item'), userCssClasses.item),
+    root: cx(suit(), userCssClasses.root),
+    select: cx(suit({ descendantName: 'select' }), userCssClasses.select),
+    option: cx(suit({ descendantName: 'option' }), userCssClasses.option),
   };
 
   const specializedRenderer = renderer({
-    autoHideContainer,
     containerNode,
     cssClasses,
   });
@@ -126,7 +121,7 @@ export default function numericSelector({
     );
     return makeNumericSelector({
       operator,
-      attributeName,
+      attribute,
       options,
       transformItems,
     });
