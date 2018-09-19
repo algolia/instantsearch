@@ -5,6 +5,7 @@ import algoliasearchHelper from 'algoliasearch-helper';
 
 import InstantSearch from './InstantSearch.js';
 import version from './version.js';
+import highlight from './highlight.js';
 
 import * as connectors from '../connectors/index.js';
 import * as widgets from '../widgets/index.js';
@@ -179,5 +180,6 @@ instantsearch.createQueryString =
 instantsearch.connectors = connectors;
 instantsearch.widgets = widgets;
 instantsearch.version = version;
+instantsearch.highlight = highlight;
 
 export default instantsearch;

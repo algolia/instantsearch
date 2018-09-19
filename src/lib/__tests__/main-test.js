@@ -40,4 +40,11 @@ describe('instantsearch()', () => {
       );
     });
   });
+
+  it('includes the highlight helper function', () => {
+    expect(typeof instantsearch.highlight).toEqual(
+      'function',
+      'THe highlight helper must be a function'
+    );
+  });
 });
