@@ -3,7 +3,7 @@ import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
 
-export class Stats extends Component {
+class Stats extends Component {
   shouldComponentUpdate(nextProps) {
     return (
       this.props.nbHits !== nextProps.nbHits ||

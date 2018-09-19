@@ -6,7 +6,7 @@ import cx from 'classnames';
 import PaginationLink from './PaginationLink.js';
 import { isSpecialClick } from '../../lib/utils.js';
 
-export class Pagination extends Component {
+class Pagination extends Component {
   constructor(props) {
     super(defaultsDeep(props, Pagination.defaultProps));
     this.handleClick = this.handleClick.bind(this);
