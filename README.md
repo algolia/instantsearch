@@ -25,6 +25,7 @@ InstantSearch.js is a vanilla JavaScript library that lets you create an instant
 
 - [Why](#why)
 - [Getting started](#getting-started)
+- [Installation](#installation)
 - [Documentation](#documentation)
 - [Demos](#demos)
 - [Playground](#playground)
@@ -52,9 +53,8 @@ Using InstantSearch.js is as simple as adding this JavaScript code to your page:
 ```javascript
 // 1. Instantiate the search
 const search = instantsearch({
-  appId: 'latency',
-  apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
+  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
 });
 
 // 2. Create an interactive search box
@@ -96,6 +96,14 @@ search.start();
 </p>
 
 To learn more about the library, follow the [getting started](https://community.algolia.com/instantsearch.js/v2/getting-started.html) guide or check how to [add it to your own project](https://community.algolia.com/instantsearch.js/v2/guides/usage.html).
+
+## Installation
+
+```sh
+npm install instantsearch.js algoliasearch
+# or
+yarn add instantsearch.js algoliasearch
+```
 
 ## Documentation
 
