@@ -13,10 +13,10 @@ export default function highlight({
 
   return attributeValue
     .replace(
-      new RegExp('<em>', 'g'),
+      /<em>/g,
       `<${highlightedTagName} class="${suit({
         descendantName: 'highlighted',
       })}">`
     )
-    .replace(new RegExp('</em>', 'g'), `</${highlightedTagName}>`);
+    .replace(/<\/em>/g, `</${highlightedTagName}>`);
 }
