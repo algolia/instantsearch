@@ -48,7 +48,7 @@ export default () => {
       })
     )
     .add(
-      'with highlight tag',
+      'with highlight helper',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.hits({
