@@ -29,7 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomHitsWidgetOptions
  * @property {boolean} [escapeHTML = true] Whether to escape HTML tags from `hits[i]._highlightResult`.
- * @property {function(object[]):Object[]} [transformItems] Function to transform the items passed to the templates.
+ * @property {function(Object[]):Object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
