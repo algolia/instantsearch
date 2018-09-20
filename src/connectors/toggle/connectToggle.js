@@ -38,7 +38,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomToggleWidgetOptions
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
- * @property {string} label Human-readable name of the filter (eg. "Free Shipping").
+ * @property {string} [label] Human-readable name of the filter (eg. "Free Shipping").
  * @property {Object} [values = {on: true, off: undefined}] Values to filter on when toggling.
  */
 
@@ -109,11 +109,11 @@ export default function connectToggle(renderFn, unmountFn) {
   return (widgetParams = {}) => {
     const {
       attributeName,
-      label,
+      label = '',
       values: userValues = { on: true, off: undefined },
     } = widgetParams;
 
-    if (!attributeName || !label) {
+    if (!attributeName) {
       throw new Error(usage);
     }
 

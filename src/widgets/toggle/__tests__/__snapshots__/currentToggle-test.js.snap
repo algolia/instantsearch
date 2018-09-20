@@ -1,550 +1,397 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`currentToggle() good usage render supports negative numeric off or on values 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": 1,
+      "isRefined": false,
+      "name": "",
+      "offFacetValue": Object {
+        "count": 2,
+        "isRefined": true,
+        "name": "",
+      },
+      "onFacetValue": Object {
         "count": 1,
         "isRefined": false,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 2,
-          "isRefined": true,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": 1,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
+        "name": "",
       },
-    ]
+    }
   }
-  shouldAutoHideContainer={false}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;
 
 exports[`currentToggle() good usage render supports negative numeric off or on values 2`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": 1,
+      "isRefined": false,
+      "name": "",
+      "offFacetValue": Object {
+        "count": 2,
+        "isRefined": true,
+        "name": "",
+      },
+      "onFacetValue": Object {
         "count": 1,
         "isRefined": false,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 2,
-          "isRefined": true,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": 1,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
+        "name": "",
       },
-    ]
+    }
   }
-  shouldAutoHideContainer={false}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;
 
 exports[`currentToggle() good usage render understands cssClasses 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle test",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement test",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": 2,
+      "isRefined": false,
+      "name": "",
+      "offFacetValue": Object {
+        "count": 3,
+        "isRefined": false,
+        "name": "",
+      },
+      "onFacetValue": Object {
         "count": 2,
         "isRefined": false,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 3,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": 2,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
+        "name": "",
       },
-    ]
+    }
   }
-  shouldAutoHideContainer={false}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;
 
 exports[`currentToggle() good usage render when refined 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": 3,
+      "isRefined": true,
+      "name": "",
+      "offFacetValue": Object {
         "count": 3,
-        "isRefined": true,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 3,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": 2,
-          "isRefined": true,
-          "name": "Hello, ",
-        },
+        "isRefined": false,
+        "name": "",
       },
-    ]
+      "onFacetValue": Object {
+        "count": 2,
+        "isRefined": true,
+        "name": "",
+      },
+    }
   }
-  shouldAutoHideContainer={false}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;
 
 exports[`currentToggle() good usage render when refined 2`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": 3,
+      "isRefined": true,
+      "name": "",
+      "offFacetValue": Object {
         "count": 3,
-        "isRefined": true,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 3,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": 2,
-          "isRefined": true,
-          "name": "Hello, ",
-        },
+        "isRefined": false,
+        "name": "",
       },
-    ]
+      "onFacetValue": Object {
+        "count": 2,
+        "isRefined": true,
+        "name": "",
+      },
+    }
   }
-  shouldAutoHideContainer={false}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;
 
 exports[`currentToggle() good usage render with facet values 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": 2,
+      "isRefined": false,
+      "name": "",
+      "offFacetValue": Object {
+        "count": 3,
+        "isRefined": false,
+        "name": "",
+      },
+      "onFacetValue": Object {
         "count": 2,
         "isRefined": false,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 3,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": 2,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
+        "name": "",
       },
-    ]
+    }
   }
-  shouldAutoHideContainer={false}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;
 
 exports[`currentToggle() good usage render with facet values 2`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": 2,
+      "isRefined": false,
+      "name": "",
+      "offFacetValue": Object {
+        "count": 3,
+        "isRefined": false,
+        "name": "",
+      },
+      "onFacetValue": Object {
         "count": 2,
         "isRefined": false,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 3,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": 2,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
+        "name": "",
       },
-    ]
+    }
   }
-  shouldAutoHideContainer={false}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;
 
 exports[`currentToggle() good usage render without facet values 1`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": null,
+      "isRefined": false,
+      "name": "",
+      "offFacetValue": Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "",
+      },
+      "onFacetValue": Object {
         "count": null,
         "isRefined": false,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 0,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": null,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
+        "name": "",
       },
-    ]
+    }
   }
-  shouldAutoHideContainer={true}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;
 
 exports[`currentToggle() good usage render without facet values 2`] = `
-<HeaderFooter-AutoHide
-  collapsible={false}
+<ToggleRefinement
   createURL={[Function]}
   cssClasses={
     Object {
-      "active": "ais-toggle--item__active",
-      "body": "ais-toggle--body",
-      "checkbox": "ais-toggle--checkbox",
-      "count": "ais-toggle--count",
-      "footer": "ais-toggle--footer",
-      "header": "ais-toggle--header",
-      "item": "ais-toggle--item",
-      "label": "ais-toggle--label",
-      "list": "ais-toggle--list",
-      "root": "ais-toggle",
+      "checkbox": "ais-ToggleRefinement-checkbox",
+      "label": "ais-ToggleRefinement-label",
+      "labelText": "ais-ToggleRefinement-labelText",
+      "root": "ais-ToggleRefinement",
     }
   }
-  facetValues={
-    Array [
-      Object {
+  currentRefinement={
+    Object {
+      "count": null,
+      "isRefined": false,
+      "name": "",
+      "offFacetValue": Object {
+        "count": 0,
+        "isRefined": false,
+        "name": "",
+      },
+      "onFacetValue": Object {
         "count": null,
         "isRefined": false,
-        "name": "Hello, ",
-        "offFacetValue": Object {
-          "count": 0,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
-        "onFacetValue": Object {
-          "count": null,
-          "isRefined": false,
-          "name": "Hello, ",
-        },
+        "name": "",
       },
-    ]
+    }
   }
-  shouldAutoHideContainer={true}
+  refine={[Function]}
   templateProps={
     Object {
       "templates": Object {
-        "footer": "",
-        "header": "",
-        "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"checkbox\\" class=\\"{{cssClasses.checkbox}}\\" value=\\"{{name}}\\" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
-</label>",
+        "labelText": "{{name}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
-        "footer": false,
-        "header": false,
-        "item": false,
+        "labelText": false,
       },
     }
   }
-  toggleRefinement={[Function]}
 />
 `;

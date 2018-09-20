@@ -374,9 +374,9 @@ describe('currentToggle()', () => {
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
-        const { toggleRefinement } = ReactDOM.render.firstCall.args[0].props;
-        expect(typeof toggleRefinement).toEqual('function');
-        toggleRefinement();
+        const { refine } = ReactDOM.render.firstCall.args[0].props;
+        expect(typeof refine).toEqual('function');
+        refine();
         expect(helper.addDisjunctiveFacetRefinement.calledOnce).toBe(true);
         expect(
           helper.addDisjunctiveFacetRefinement.calledWithExactly(

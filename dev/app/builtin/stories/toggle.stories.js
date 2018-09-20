@@ -15,9 +15,8 @@ export default () => {
           instantsearch.widgets.toggle({
             container,
             attributeName: 'free_shipping',
-            label: 'Free Shipping (toggle single value)',
             templates: {
-              header: 'Shipping',
+              labelText: 'Free Shipping (toggle single value)',
             },
           })
         );
@@ -30,13 +29,12 @@ export default () => {
           instantsearch.widgets.toggle({
             container,
             attributeName: 'brand',
-            label: 'Canon (not checked) or sony (checked)',
             values: {
               on: 'Sony',
               off: 'Canon',
             },
             templates: {
-              header: 'Google or amazon (toggle two values)',
+              labelText: 'Canon (not checked) or sony (checked)',
             },
           })
         );

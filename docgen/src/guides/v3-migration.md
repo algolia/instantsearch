@@ -121,8 +121,8 @@ With the redo button:
 | `escapeHits`    | `escapeHTML`    |
 | `showMoreLabel` | `loadMoreLabel` |
 
-- `escapeHTML` becomes `true` by default.
-- `allItems` template has been removed in favor of `connectHits`
+* `escapeHTML` becomes `true` by default.
+* `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
 
@@ -535,6 +535,47 @@ With the redo button:
       <a class="ais-Pagination-link" aria-label="Next" href="#">››</a>
     </li>
   </ul>
+</div>
+```
+
+### ToggleRefinement (formerly Toggle)
+
+#### Options
+
+| Before              | After                 |
+| ------------------- | --------------------- |
+| `attributeName`     | `attribute`           |
+| `collapsible`       |                       |
+| `autoHideContainer` |                       |
+| `label`             | `templates.labelText` |
+| `templates.item`    |                       |
+
+`collapsible` and `autoHideContainer` options have been removed. These options are now implemented
+as part of the Panel widget wrapper.
+
+We've moved the `label` into the `templates.labelText` template to make it consistent with the templates
+parameters of other widgets and we removed the `item` template. We are now providing the data that were
+provided to `templates.item` to `templates.labelText`.
+
+#### CSS classes
+
+| Before                 | After                            |
+| ---------------------- | -------------------------------- |
+| `ais-toggle`           | `ais-ToggleRefinement`           |
+| `ais-toggle--list`     |                                  |
+| `ais-toggle--item`     |                                  |
+|                        | `ais-ToggleRefinement-label`     |
+| `ais-toggle--checkbox` | `ais-ToggleRefinement-checkbox`  |
+| `ais-toggle--label`    | `ais-ToggleRefinement-labelText` |
+
+#### Markup
+
+```html
+<div class="ais-ToggleRefinement">
+  <label class="ais-ToggleRefinement-label">
+    <input class="ais-ToggleRefinement-checkbox" type="checkbox" value="Free Shipping" />
+    <span class="ais-ToggleRefinement-labelText">Free Shipping</span>
+  </label>
 </div>
 ```
 
