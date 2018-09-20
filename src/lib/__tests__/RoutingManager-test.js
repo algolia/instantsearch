@@ -1,19 +1,18 @@
+import algoliasearch from 'algoliasearch';
 import instantsearch from '../main.js';
 import RoutingManager from '../RoutingManager.js';
 import simpleMapping from '../stateMappings/simple.js';
 
-const makeFakeAlgoliaClient = () => ({
+const fakeAlgoliaClient = {
   search: () => Promise.resolve({ results: [{}] }),
-});
+};
 
 describe('RoutingManager', () => {
   describe('getAllUIStates', () => {
     test('reads the state of widgets with a getWidgetState implementation', () => {
       const search = instantsearch({
-        appId: '',
-        apiKey: '',
         indexName: '',
-        createAlgoliaClient: makeFakeAlgoliaClient,
+        searchClient: fakeAlgoliaClient,
       });
 
       const widgetState = {
@@ -56,10 +55,8 @@ describe('RoutingManager', () => {
 
     test('Does not read UI state from widgets without an implementation of getWidgetState', () => {
       const search = instantsearch({
-        appId: '',
-        apiKey: '',
         indexName: '',
-        createAlgoliaClient: makeFakeAlgoliaClient,
+        searchClient: fakeAlgoliaClient,
       });
 
       search.addWidget({
@@ -90,10 +87,8 @@ describe('RoutingManager', () => {
   describe('getAllSearchParameters', () => {
     test('should get searchParameters from widget that implements getWidgetSearchParameters', () => {
       const search = instantsearch({
-        appId: '',
-        apiKey: '',
         indexName: '',
-        createAlgoliaClient: makeFakeAlgoliaClient,
+        searchClient: fakeAlgoliaClient,
       });
 
       const widget = {
@@ -133,10 +128,8 @@ describe('RoutingManager', () => {
 
     test('should not change the searchParameters if no widget has a getWidgetSearchParameters', () => {
       const search = instantsearch({
-        appId: '',
-        apiKey: '',
         indexName: '',
-        createAlgoliaClient: makeFakeAlgoliaClient,
+        searchClient: fakeAlgoliaClient,
       });
 
       const widget = {
@@ -173,9 +166,11 @@ describe('RoutingManager', () => {
         },
       };
       const search = instantsearch({
-        appId: 'latency',
-        apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
         indexName: 'instant_search',
+        searchClient: algoliasearch(
+          'latency',
+          '6be0576ff61c053d5f9a3225e2a90f76'
+        ),
         routing: {
           router,
         },
@@ -221,9 +216,11 @@ describe('RoutingManager', () => {
         },
       };
       const search = instantsearch({
-        appId: 'latency',
-        apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
         indexName: 'instant_search',
+        searchClient: algoliasearch(
+          'latency',
+          '6be0576ff61c053d5f9a3225e2a90f76'
+        ),
         routing: {
           router,
         },
@@ -275,9 +272,11 @@ describe('RoutingManager', () => {
         },
       };
       const search = instantsearch({
-        appId: 'latency',
-        apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
         indexName: 'instant_search',
+        searchClient: algoliasearch(
+          'latency',
+          '6be0576ff61c053d5f9a3225e2a90f76'
+        ),
         routing: {
           router,
           stateMapping,

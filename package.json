@@ -52,6 +52,7 @@
     "es"
   ],
   "devDependencies": {
+    "algoliasearch": "3.30.0",
     "argos-cli": "0.0.9",
     "autodll-webpack-plugin": "0.3.9",
     "autoprefixer": "8.1.0",
@@ -129,7 +130,6 @@
     "webpack-dev-server": "2.11.2"
   },
   "dependencies": {
-    "algoliasearch": "3.27.0",
     "algoliasearch-helper": "2.26.0",
     "classnames": "2.2.5",
     "events": "1.1.0",
