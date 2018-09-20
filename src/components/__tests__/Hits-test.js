@@ -3,6 +3,7 @@ import renderer from 'react-test-renderer';
 import { shallow } from 'enzyme';
 import Hits from '../Hits';
 import Template from '../Template';
+import highlight from '../../lib/highlight';
 
 describe('Hits', () => {
   function shallowRender(extraProps = {}) {
@@ -258,6 +259,52 @@ describe('Hits', () => {
         templateProps: {
           templates: {
             item: 'item',
+          },
+        },
+      };
+      const tree = renderer.create(<Hits {...props} />).toJSON();
+
+      expect(tree).toMatchSnapshot();
+    });
+
+    it('should render <Hits /> without highlight function', () => {
+      const hits = [
+        {
+          objectID: 'one',
+          name: 'name 1',
+          _highlightResult: {
+            name: {
+              value: '<em>name 1</em>',
+            },
+          },
+        },
+        {
+          objectID: 'two',
+          name: 'name 2',
+          _highlightResult: {
+            name: {
+              value: '<em>name 2</em>',
+            },
+          },
+        },
+      ];
+
+      const props = {
+        results: { hits },
+        hits,
+        cssClasses: {
+          root: 'root',
+          list: 'list',
+          item: 'item',
+        },
+        templateProps: {
+          templates: {
+            item(hit) {
+              return highlight({
+                attribute: 'name',
+                hit,
+              });
+            },
           },
         },
       };

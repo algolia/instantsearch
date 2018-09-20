@@ -26,3 +26,30 @@ exports[`Hits markup should render <Hits /> 1`] = `
   </ol>
 </div>
 `;
+
+exports[`Hits markup should render <Hits /> without highlight function 1`] = `
+<div
+  className="root"
+>
+  <ol
+    className="list"
+  >
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "<mark class=\\"ais-HighLight-highlighted\\">name 1</mark>",
+        }
+      }
+    />
+    <li
+      className="item"
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "<mark class=\\"ais-HighLight-highlighted\\">name 2</mark>",
+        }
+      }
+    />
+  </ol>
+</div>
+`;
