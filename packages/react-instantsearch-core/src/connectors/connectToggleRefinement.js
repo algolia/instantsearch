@@ -1,8 +1,10 @@
+import { find } from 'lodash';
 import PropTypes from 'prop-types';
 import createConnector from '../core/createConnector';
 import {
   cleanUpValue,
   getIndex,
+  getResults,
   refineValue,
   getCurrentRefinementValue,
 } from '../core/indexUtils';
@@ -62,20 +64,48 @@ export default createConnector({
   displayName: 'AlgoliaToggle',
 
   propTypes: {
-    label: PropTypes.string,
+    label: PropTypes.string.isRequired,
+    attribute: PropTypes.string.isRequired,
+    value: PropTypes.any.isRequired,
     filter: PropTypes.func,
-    attribute: PropTypes.string,
-    value: PropTypes.any,
     defaultRefinement: PropTypes.bool,
   },
 
-  getProvidedProps(props, searchState) {
+  getProvidedProps(props, searchState, searchResults) {
+    const { attribute, value } = props;
+    const results = getResults(searchResults, this.context);
     const currentRefinement = getCurrentRefinement(
       props,
       searchState,
       this.context
     );
-    return { currentRefinement };
+
+    const allFacetValues = results && results.getFacetValues(attribute);
+    const facetValue =
+      // Use null to always be consistent with type of the value
+      // count: number | null
+      allFacetValues && allFacetValues.length
+        ? find(allFacetValues, item => item.name === value.toString())
+        : null;
+
+    const facetValueCount = facetValue && facetValue.count;
+    const allFacetValuesCount =
+      // Use null to always be consistent with type of the value
+      // count: number | null
+      allFacetValues && allFacetValues.length
+        ? allFacetValues.reduce((acc, item) => acc + item.count, 0)
+        : null;
+
+    const count = {
+      checked: allFacetValuesCount,
+      unchecked: facetValueCount,
+    };
+
+    return {
+      canRefine: facetValueCount !== null && facetValueCount > 0,
+      currentRefinement,
+      count,
+    };
   },
 
   refine(props, searchState, nextRefinement) {
@@ -90,18 +120,20 @@ export default createConnector({
     const { attribute, value, filter } = props;
     const checked = getCurrentRefinement(props, searchState, this.context);
 
+    let nextSearchParameters = searchParameters.addDisjunctiveFacet(attribute);
+
     if (checked) {
-      if (attribute) {
-        searchParameters = searchParameters
-          .addFacet(attribute)
-          .addFacetRefinement(attribute, value);
-      }
+      nextSearchParameters = nextSearchParameters.addDisjunctiveFacetRefinement(
+        attribute,
+        value
+      );
+
       if (filter) {
-        searchParameters = filter(searchParameters);
+        nextSearchParameters = filter(nextSearchParameters);
       }
     }
 
-    return searchParameters;
+    return nextSearchParameters;
   },
 
   getMetadata(props, searchState) {
