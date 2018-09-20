@@ -1136,3 +1136,32 @@ describe('utils.clearRefinements', () => {
     });
   });
 });
+
+describe('utils.getPropertyByPath', () => {
+  it('should be able to get a property', () => {
+    const object = {
+      name: 'name',
+    };
+    const path = 'name';
+
+    expect(utils.getPropertyByPath(object, path)).toBe('name');
+  });
+
+  it('should be able to get a nested property', () => {
+    const object = {
+      nested: {
+        name: 'name',
+      },
+    };
+    const path = 'nested.name';
+
+    expect(utils.getPropertyByPath(object, path)).toBe('name');
+  });
+
+  it('returns undefined if does not exist', () => {
+    const object = {};
+    const path = 'random';
+
+    expect(utils.getPropertyByPath(object, path)).toBe(undefined);
+  });
+});
