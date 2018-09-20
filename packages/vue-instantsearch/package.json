@@ -87,7 +87,9 @@
     "vue-jest": "2.6.0",
     "vue-json-tree": "0.3.3",
     "vue-loader": "14.2.2",
-    "vue-template-compiler": "2.5.17"
+    "vue-slider-component": "^2.7.7",
+    "vue-template-compiler": "2.5.17",
+    "vuetify": "^1.2.4"
   },
   "jest": {
     "setupFiles": [

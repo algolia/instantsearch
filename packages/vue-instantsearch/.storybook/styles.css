@@ -102,3 +102,8 @@ body {
 .autosuggest__results_item-highlighted {
   background-color: rgb(206, 202, 202);
 }
+
+/* vuetify v-app */
+.application--wrap {
+  min-height: unset !important;
+}

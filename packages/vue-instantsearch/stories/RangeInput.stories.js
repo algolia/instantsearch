@@ -1,6 +1,13 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
+import VueSlider from 'vue-slider-component';
+
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.css';
+import Vue from 'vue';
+Vue.use(Vuetify);
+
 storiesOf('RangeInput', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
@@ -63,6 +70,61 @@ storiesOf('RangeInput', module)
         max: undefined,
       };
     },
+  }))
+  .add('with vue-slider-component', () => ({
+    template: `
+      <ais-range-input attribute="price">
+        <template slot-scope="{ refine, currentRefinements, range }">
+          <vue-slider
+            :min="range.min"
+            :max="range.max"
+            :value="toValue(currentRefinements, range)"
+            @input="refine($event[0], $event[1])"
+          />
+        </template>
+      </ais-range-input>
+    `,
+    methods: {
+      toValue([min, max], range) {
+        return [
+          min === -Infinity ? range.min : min,
+          max === Infinity ? range.max : max,
+        ];
+      },
+    },
+    components: { VueSlider },
+  }))
+  .add('with vuetify slider', () => ({
+    template: `
+      <v-app>
+        <ais-range-input attribute="price">
+          <template slot-scope="{ refine, currentRefinements, range }">
+            <v-range-slider
+              :min="range.min"
+              :max="range.max"
+              :value="toValue(currentRefinements, range)"
+              @input="refine($event[0], $event[1])"
+            />
+          </template>
+        </ais-range-input>
+      </v-app>
+    `,
+    data() {
+      return {
+        price: [5, 20],
+      };
+    },
+    methods: {
+      toValue([min, max], range) {
+        return [
+          min === -Infinity ? range.min : min,
+          max === Infinity ? range.max : max,
+        ];
+      },
+    },
+    // components: {
+    //   VRangeSlider,
+    // },
   }))
   .add('with a Panel', () => ({
     template: `
