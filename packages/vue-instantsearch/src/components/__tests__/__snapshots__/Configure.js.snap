@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders null without scoped slots 1`] = `undefined`;
+
+exports[`renders null without state 1`] = `undefined`;
+
+exports[`renders with scoped slots 1`] = `
+
+<div class="ais-Configure"
+     hitsperpage="5"
+>
+  <span>
+    hitsPerPage: 5
+  </span>
+</div>
+
+`;

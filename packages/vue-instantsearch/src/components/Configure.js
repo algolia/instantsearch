@@ -1,16 +1,3 @@
-<template>
-  <div
-    v-if="state"
-    :class="suit()"
-  >
-    <slot
-      :refine="state.refine"
-      :searchParameters="state.widgetParams.searchParameters"
-    />
-  </div>
-</template>
-
-<script>
 import algoliaComponent from '../mixins/component';
 import { connectConfigure } from 'instantsearch.js/es/connectors';
 
@@ -29,5 +16,22 @@ export default {
       };
     },
   },
+  render(createElement) {
+    if (!this.state || !this.$scopedSlots.default) {
+      return null;
+    }
+
+    return createElement(
+      'div',
+      {
+        class: this.suit(),
+      },
+      [
+        this.$scopedSlots.default({
+          refine: this.state.refine,
+          searchParameters: this.state.widgetParams.searchParameters,
+        }),
+      ]
+    );
+  },
 };
-</script>

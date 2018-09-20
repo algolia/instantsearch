@@ -6,18 +6,22 @@ storiesOf('Configure', module)
   .addDecorator(previewWrapper())
   .addDecorator(withKnobs)
   .add('default', () => ({
-    template: '<ais-configure></ais-configure>',
+    template: `
+      <ais-configure />
+    `,
   }))
   .add('with 1 hit per page', () => ({
-    template: `<div>
-      <ais-configure :hitsPerPage="1"></ais-configure>
-    </div>`,
+    template: `
+      <ais-configure :hitsPerPage="1" />
+    `,
   }))
   .add('external toggler', () => ({
-    template: `<div>
-      <ais-configure :hitsPerPage="hitsPerPage"></ais-configure>
-      <button @click="toggleHitsPerPage">hitsPerPage: {{hitsPerPage}}, change</button>
-    </div>`,
+    template: `
+      <div>
+        <ais-configure :hitsPerPage="hitsPerPage" />
+        <button @click="toggleHitsPerPage">hitsPerPage: {{hitsPerPage}}, change</button>
+      </div>
+    `,
     data() {
       return { hitsPerPage: 1 };
     },
@@ -42,7 +46,9 @@ storiesOf('Configure', module)
   .add('with display of the parameters', () => ({
     template: `
       <ais-configure :hitsPerPage="1">
-        <pre slot-scope="{ searchParameters }">{{ searchParameters }}</pre>
+        <pre slot-scope="{ searchParameters }">
+          {{JSON.stringify(searchParameters, null, 2)}}
+        </pre>
       </ais-configure>
     `,
   }))
@@ -54,7 +60,9 @@ storiesOf('Configure', module)
     `,
     data() {
       return {
-        knobs: object('search parameters', { hitsPerPage: 1 }),
+        knobs: object('search parameters', {
+          hitsPerPage: 1,
+        }),
       };
     },
   }));

@@ -3,7 +3,7 @@ import Component from './mixins/component';
 import Autocomplete from './components/Autocomplete.vue';
 import Breadcrumb from './components/Breadcrumb.vue';
 import ClearRefinements from './components/ClearRefinements.vue';
-import Configure from './components/Configure.vue';
+import Configure from './components/Configure';
 import CurrentRefinements from './components/CurrentRefinements.vue';
 import HierarchicalMenu from './components/HierarchicalMenu.vue';
 import Highlight from './components/Highlight.vue';
