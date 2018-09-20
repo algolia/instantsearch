@@ -3,8 +3,6 @@ import connect from '../connectToggleRefinement';
 
 jest.mock('../../core/createConnector', () => x => x);
 
-let params;
-
 const createSearchResults = ({ disjunctiveFacets, facets }) =>
   new SearchResults(
     new SearchParameters({
@@ -199,7 +197,7 @@ describe('connectToggleRefinement', () => {
     });
 
     it('refines the corresponding facet with `true`', () => {
-      params = getSP(
+      const params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
@@ -216,7 +214,7 @@ describe('connectToggleRefinement', () => {
     });
 
     it('does not refine the corresponding facet with `false`', () => {
-      params = getSP(
+      const params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
@@ -233,7 +231,7 @@ describe('connectToggleRefinement', () => {
     });
 
     it('applies the provided filter with `true`', () => {
-      params = getSP(
+      const params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
@@ -250,7 +248,7 @@ describe('connectToggleRefinement', () => {
     });
 
     it('does not apply the provided filter with `false`', () => {
-      params = getSP(
+      const params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
@@ -538,7 +536,7 @@ describe('connectToggleRefinement', () => {
     });
 
     it('refines the corresponding facet with `true`', () => {
-      params = getSP(
+      const params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
@@ -559,7 +557,7 @@ describe('connectToggleRefinement', () => {
     });
 
     it('does not refine the corresponding facet with `false`', () => {
-      params = getSP(
+      const params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
@@ -580,7 +578,7 @@ describe('connectToggleRefinement', () => {
     });
 
     it('applies the provided filter with `true`', () => {
-      params = getSP(
+      const params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
@@ -601,7 +599,7 @@ describe('connectToggleRefinement', () => {
     });
 
     it('does not apply the provided filter with `false`', () => {
-      params = getSP(
+      const params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
