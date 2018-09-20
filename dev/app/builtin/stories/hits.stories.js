@@ -30,6 +30,38 @@ export default () => {
       })
     )
     .add(
+      'with highlight function',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              item(hit) {
+                return instantsearch.highlight({
+                  attribute: 'name',
+                  hit,
+                });
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with highlight tag',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              item:
+                '{{#helpers.highlight}}{ "attribute": "name", "highlightedTagName": "mark" }{{/helpers.highlight}}',
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with highlighted array',
       wrapWithHits(
         container => {
