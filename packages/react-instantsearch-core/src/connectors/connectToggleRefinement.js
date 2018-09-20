@@ -56,9 +56,10 @@ function cleanUp(props, searchState, context) {
  * @propType {string} label - Label for the toggle.
  * @propType {string} value - Value of the refinement to apply on `attribute`.
  * @propType {boolean} [defaultRefinement=false] - Default searchState of the widget. Should the toggle be checked by default?
+ * @providedPropType {boolean} currentRefinement - `true` when the refinement is applied, `false` otherwise
+ * @providedPropType {object} count - an object that contains the count for `checked` and `unchecked` state
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
- * @providedPropType {boolean} currentRefinement - `true` when the refinement is applied, `false` otherwise
  */
 export default createConnector({
   displayName: 'AlgoliaToggle',
