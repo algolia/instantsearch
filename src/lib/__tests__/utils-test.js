@@ -1142,9 +1142,8 @@ describe('utils.getPropertyByPath', () => {
     const object = {
       name: 'name',
     };
-    const path = 'name';
 
-    expect(utils.getPropertyByPath(object, path)).toBe('name');
+    expect(utils.getPropertyByPath(object, 'name')).toBe('name');
   });
 
   it('should be able to get a nested property', () => {
@@ -1153,15 +1152,23 @@ describe('utils.getPropertyByPath', () => {
         name: 'name',
       },
     };
-    const path = 'nested.name';
 
-    expect(utils.getPropertyByPath(object, path)).toBe('name');
+    expect(utils.getPropertyByPath(object, 'nested.name')).toBe('name');
   });
 
   it('returns undefined if does not exist', () => {
     const object = {};
-    const path = 'random';
 
-    expect(utils.getPropertyByPath(object, path)).toBe(undefined);
+    expect(utils.getPropertyByPath(object, 'random')).toBe(undefined);
+  });
+
+  it('should stop traversing when property is not an object', () => {
+    const object = {
+      nested: {
+        names: ['name'],
+      },
+    };
+
+    expect(utils.getPropertyByPath(object, 'nested.name')).toBe(undefined);
   });
 });
