@@ -9,6 +9,7 @@ describe('ToggleRefinement', () => {
   const defaultProps = {
     currentRefinement: true,
     label: 'toggle the refinement',
+    canRefine: true,
     refine: () => {},
   };
 
@@ -26,6 +27,17 @@ describe('ToggleRefinement', () => {
     const props = {
       ...defaultProps,
       currentRefinement: false,
+    };
+
+    const wrapper = shallow(<ToggleRefinement {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
+
+  it('expect to render with a negative canRefine', () => {
+    const props = {
+      ...defaultProps,
+      canRefine: false,
     };
 
     const wrapper = shallow(<ToggleRefinement {...props} />);

@@ -5,8 +5,14 @@ import { createClassNames } from '../core/utils';
 
 const cx = createClassNames('ToggleRefinement');
 
-const ToggleRefinement = ({ currentRefinement, label, refine, className }) => (
-  <div className={classNames(cx(''), className)}>
+const ToggleRefinement = ({
+  currentRefinement,
+  label,
+  canRefine,
+  refine,
+  className,
+}) => (
+  <div className={classNames(cx('', !canRefine && '-noRefinement'), className)}>
     <label className={cx('label')}>
       <input
         className={cx('checkbox')}
@@ -22,6 +28,7 @@ const ToggleRefinement = ({ currentRefinement, label, refine, className }) => (
 ToggleRefinement.propTypes = {
   currentRefinement: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
+  canRefine: PropTypes.bool.isRequired,
   refine: PropTypes.func.isRequired,
   className: PropTypes.string,
 };

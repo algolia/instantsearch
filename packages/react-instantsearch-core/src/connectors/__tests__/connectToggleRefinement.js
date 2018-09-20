@@ -1,10 +1,26 @@
-import { SearchParameters } from 'algoliasearch-helper';
+import { SearchParameters, SearchResults } from 'algoliasearch-helper';
 import connect from '../connectToggleRefinement';
 
 jest.mock('../../core/createConnector', () => x => x);
 
-let props;
 let params;
+
+const createSearchResults = ({ disjunctiveFacets, facets }) =>
+  new SearchResults(
+    new SearchParameters({
+      disjunctiveFacets,
+    }),
+    [
+      {
+        facets,
+        hits: [
+          { objectID: '0123', name: 'Apple' },
+          { objectID: '0123', name: 'Samsung' },
+          { objectID: '0123', name: 'Microsoft' },
+        ],
+      },
+    ]
+  );
 
 describe('connectToggleRefinement', () => {
   describe('single index', () => {
@@ -14,15 +30,152 @@ describe('connectToggleRefinement', () => {
     const getSP = connect.getSearchParameters.bind(context);
     const getMetadata = connect.getMetadata.bind(context);
     const cleanUp = connect.cleanUp.bind(context);
-    it('provides the correct props to the component', () => {
-      props = getProvidedProps({ attribute: 't' }, {});
-      expect(props).toEqual({ currentRefinement: false });
 
-      props = getProvidedProps({ attribute: 't' }, { toggle: { t: true } });
-      expect(props).toEqual({ currentRefinement: true });
+    const createSingleIndexSearchResults = (...args) => ({
+      results: createSearchResults(...args),
+    });
 
-      props = getProvidedProps({ defaultRefinement: true, attribute: 't' }, {});
-      expect(props).toEqual({ currentRefinement: true });
+    it('expect `currentRefinement` to be `true` when the value is checked', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = { toggle: { shipping: true } };
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.currentRefinement).toBe(true);
+    });
+
+    it('expect `currentRefinement` to be `false` when the value is not checked', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.currentRefinement).toBe(false);
+    });
+
+    it('expect `currentRefinement` to be `defaultRefinement`', () => {
+      const props = {
+        defaultRefinement: true,
+        attribute: 'shipping',
+        value: true,
+      };
+      const searchState = {};
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.currentRefinement).toBe(true);
+    });
+
+    it('expect `canRefine` to be `true` with results', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = createSingleIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {
+          shipping: {
+            true: 100,
+            false: 50,
+          },
+        },
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(true);
+    });
+
+    it('expect `canRefine` to be `false` with a value count of 0', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = createSingleIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {
+          shipping: {
+            true: 0,
+            false: 50,
+          },
+        },
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(false);
+    });
+
+    it('expect `canRefine` to be `false` without the facet', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = createSingleIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {},
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(false);
+    });
+
+    it('expect `canRefine` to be `false` without results', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(false);
+    });
+
+    it('expect `count` to match facet values with results', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = createSingleIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {
+          shipping: {
+            true: 100,
+            false: 50,
+          },
+        },
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.count).toEqual({
+        checked: 150,
+        unchecked: 100,
+      });
+    });
+
+    it('expect `count` to be null without the facet', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = createSingleIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {},
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.count).toEqual({
+        checked: null,
+        unchecked: null,
+      });
+    });
+
+    it('expect `count` to be null without results', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.count).toEqual({
+        checked: null,
+        unchecked: null,
+      });
     });
 
     it("calling refine updates the widget's search state", () => {
@@ -45,28 +198,72 @@ describe('connectToggleRefinement', () => {
       });
     });
 
-    it('refines the corresponding facet', () => {
+    it('refines the corresponding facet with `true`', () => {
       params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
           value: 'val',
         },
-        { toggle: { facet: true } }
+        {
+          toggle: {
+            facet: true,
+          },
+        }
       );
-      expect(params.getConjunctiveRefinements('facet')).toEqual(['val']);
+
+      expect(params.getDisjunctiveRefinements('facet')).toEqual(['val']);
     });
 
-    it('applies the provided filter', () => {
+    it('does not refine the corresponding facet with `false`', () => {
+      params = getSP(
+        new SearchParameters(),
+        {
+          attribute: 'facet',
+          value: 'val',
+        },
+        {
+          toggle: {
+            facet: false,
+          },
+        }
+      );
+
+      expect(params.getDisjunctiveRefinements('facet')).toEqual([]);
+    });
+
+    it('applies the provided filter with `true`', () => {
       params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
           filter: sp => sp.setQuery('yep'),
         },
-        { toggle: { facet: true } }
+        {
+          toggle: {
+            facet: true,
+          },
+        }
       );
+
       expect(params.query).toEqual('yep');
+    });
+
+    it('does not apply the provided filter with `false`', () => {
+      params = getSP(
+        new SearchParameters(),
+        {
+          attribute: 'facet',
+          filter: sp => sp.setQuery('yep'),
+        },
+        {
+          toggle: {
+            facet: false,
+          },
+        }
+      );
+
+      expect(params.query).toEqual('');
     });
 
     it('registers its filter in metadata', () => {
@@ -132,6 +329,7 @@ describe('connectToggleRefinement', () => {
       });
     });
   });
+
   describe('multi index', () => {
     let context = {
       context: {
@@ -139,20 +337,167 @@ describe('connectToggleRefinement', () => {
         multiIndexContext: { targetedIndex: 'first' },
       },
     };
+
+    const createMultiIndexSearchState = (state = {}) => ({
+      indices: {
+        first: state,
+      },
+    });
+
+    const createMultiIndexSearchResults = (...args) => ({
+      results: {
+        first: createSearchResults(...args),
+      },
+    });
+
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const getMetadata = connect.getMetadata.bind(context);
     const cleanUp = connect.cleanUp.bind(context);
 
-    it('provides the correct props to the component', () => {
-      props = getProvidedProps({ attribute: 't' }, {});
-      expect(props).toEqual({ currentRefinement: false });
+    it('expect `currentRefinement` to be `true` when the value is checked', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState({
+        toggle: { shipping: true },
+      });
+      const searchResults = {};
 
-      props = getProvidedProps(
-        { attribute: 't' },
-        { indices: { first: { toggle: { t: true } } } }
-      );
-      expect(props).toEqual({ currentRefinement: true });
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.currentRefinement).toBe(true);
+    });
+
+    it('expect `currentRefinement` to be `false` when the value is not checked', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.currentRefinement).toBe(false);
+    });
+
+    it('expect `currentRefinement` to be `defaultRefinement`', () => {
+      const props = {
+        defaultRefinement: true,
+        attribute: 'shipping',
+        value: true,
+      };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.currentRefinement).toBe(true);
+    });
+
+    it('expect `canRefine` to be `true` with results', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = createMultiIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {
+          shipping: {
+            true: 100,
+            false: 50,
+          },
+        },
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(true);
+    });
+
+    it('expect `canRefine` to be `false` with a value count of 0', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = createMultiIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {
+          shipping: {
+            true: 0,
+            false: 50,
+          },
+        },
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(false);
+    });
+
+    it('expect `canRefine` to be `false` without the facet', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = createMultiIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {},
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(false);
+    });
+
+    it('expect `canRefine` to be `false` without results', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(false);
+    });
+
+    it('expect `count` to match facet values with results', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = createMultiIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {
+          shipping: {
+            true: 100,
+            false: 50,
+          },
+        },
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.count).toEqual({
+        checked: 150,
+        unchecked: 100,
+      });
+    });
+
+    it('expect `count` to be null without the facet', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = createMultiIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {},
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.count).toEqual({
+        checked: null,
+        unchecked: null,
+      });
+    });
+
+    it('expect `count` to be null without results', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = {};
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.count).toEqual({
+        checked: null,
+        unchecked: null,
+      });
     });
 
     it("calling refine updates the widget's search state", () => {
@@ -192,28 +537,88 @@ describe('connectToggleRefinement', () => {
       });
     });
 
-    it('refines the corresponding facet', () => {
+    it('refines the corresponding facet with `true`', () => {
       params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
           value: 'val',
         },
-        { indices: { first: { toggle: { facet: true } } } }
+        {
+          indices: {
+            first: {
+              toggle: {
+                facet: true,
+              },
+            },
+          },
+        }
       );
-      expect(params.getConjunctiveRefinements('facet')).toEqual(['val']);
+
+      expect(params.getDisjunctiveRefinements('facet')).toEqual(['val']);
     });
 
-    it('applies the provided filter', () => {
+    it('does not refine the corresponding facet with `false`', () => {
+      params = getSP(
+        new SearchParameters(),
+        {
+          attribute: 'facet',
+          value: 'val',
+        },
+        {
+          indices: {
+            first: {
+              toggle: {
+                facet: false,
+              },
+            },
+          },
+        }
+      );
+
+      expect(params.getDisjunctiveRefinements('facet')).toEqual([]);
+    });
+
+    it('applies the provided filter with `true`', () => {
       params = getSP(
         new SearchParameters(),
         {
           attribute: 'facet',
           filter: sp => sp.setQuery('yep'),
         },
-        { indices: { first: { toggle: { facet: true } } } }
+        {
+          indices: {
+            first: {
+              toggle: {
+                facet: true,
+              },
+            },
+          },
+        }
       );
+
       expect(params.query).toEqual('yep');
+    });
+
+    it('does not apply the provided filter with `false`', () => {
+      params = getSP(
+        new SearchParameters(),
+        {
+          attribute: 'facet',
+          filter: sp => sp.setQuery('yep'),
+        },
+        {
+          indices: {
+            first: {
+              toggle: {
+                facet: false,
+              },
+            },
+          },
+        }
+      );
+
+      expect(params.query).toEqual('');
     });
 
     it('registers its filter in metadata', () => {
