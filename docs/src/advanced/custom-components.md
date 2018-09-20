@@ -1,12 +1,12 @@
 ---
 title: Custom Components
-mainTitle: Essentials
+mainTitle: Advanced
 layout: main.pug
 category: Getting started
 withHeadings: true
 navWeight: 4
 editable: true
-githubSource: docs/src/getting-started/custom-components.md
+githubSource: docs/src/advanced/custom-components.md
 ---
 
 > NOTE: this guide has not yet been updated for v2
