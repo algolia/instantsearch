@@ -1,3 +1,14 @@
+<a name="2.10.2"></a>
+## [2.10.2](https://github.com/algolia/instantsearch.js/compare/v2.10.1...v2.10.2) (2018-09-10)
+
+
+### Bug Fixes
+
+* **searchbox:** Add missing color to searchbox input field ([#3086](https://github.com/algolia/instantsearch.js/issues/3086)) ([62b852a](https://github.com/algolia/instantsearch.js/commit/62b852a)), closes [#3075](https://github.com/algolia/instantsearch.js/issues/3075)
+* **Stats:** let the widget render on all values ([#3070](https://github.com/algolia/instantsearch.js/issues/3070)) ([cd8f17e](https://github.com/algolia/instantsearch.js/commit/cd8f17e)), closes [#3056](https://github.com/algolia/instantsearch.js/issues/3056)
+
+
+
 <a name="2.10.1"></a>
 ## [2.10.1](https://github.com/algolia/instantsearch.js/compare/v2.10.0...v2.10.1) (2018-08-17)
 

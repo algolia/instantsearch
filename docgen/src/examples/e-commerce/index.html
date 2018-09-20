@@ -4,8 +4,9 @@ title: E-Commerce search by Algolia
 ---
 <div class="container-fluid">
   <header class="content-wrapper">
-    <a href="https://community.algolia.com/instantsearch.js/" class="is-logo"><img src="logo-is.png" width=40 ></a>
+    <a href="https://community.algolia.com/instantsearch.js/" class="is-logo"><img src="logo-is.png" width="40"></a>
     <a href="./" class="logo">amazing</a>
+
     <div class="input-group">
       <input type="text" class="form-control" id="q" />
       <span class="input-group-btn">
@@ -18,17 +19,22 @@ title: E-Commerce search by Algolia
 
     <aside>
       <div id="clear-all"></div>
+
       <section class="facet-wrapper">
         <div class="facet-category-title" class="facet">Show results for</div>
         <div id="categories"></div>
       </section>
+
       <section class="facet-wrapper">
         <div class="facet-category-title">Refine by</div>
-        <div id="materials" class="facet"></div>
-        <div id="colors" class="facet"></div>
+        <div id="types" class="facet"></div>
+        <div id="brands" class="facet"></div>
         <div id="rating" class="facet"></div>
       </section>
-      <div class="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
+
+      <div class="thank-you">
+        Data courtesy of <a href="https://developer.bestbuy.com/">Best Buy</a>
+      </div>
     </aside>
 
     <div class="results-wrapper">
@@ -37,8 +43,10 @@ title: E-Commerce search by Algolia
           <label>Sort by</label>
           <div id="sort-by"></div>
         </div>
+
         <div id="stats" class="text-muted"></div>
       </section>
+
       <main id="hits"></main>
       <section id="pagination"></section>
     </div>
