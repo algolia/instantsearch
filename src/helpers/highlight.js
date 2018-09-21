@@ -1,5 +1,5 @@
-import { getPropertyByPath } from './utils';
-import { component } from './suit';
+import { getPropertyByPath } from '../lib/utils';
+import { component } from '../lib/suit';
 
 const suit = component('HighLight');
 

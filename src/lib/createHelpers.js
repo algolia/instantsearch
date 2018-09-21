@@ -1,4 +1,4 @@
-import highlight from './highlight';
+import { highlight } from '../helpers';
 
 export default function({ numberLocale }) {
   return {
