@@ -250,7 +250,7 @@ export default function refinementList({
   if (showMoreConfig && showMoreConfig.limit < limit) {
     throw new Error(
       'showMore.limit configuration should be > than the limit in the main configuration'
-    ); // eslint-disable-line
+    );
   }
 
   const escapeFacetValues = searchForFacetValues
