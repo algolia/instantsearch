@@ -5,8 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "babel-node start.js",
-    "build:dev": "babel-node build.js && cd .. && yarn storybook:build",
-    "build": "NODE_ENV='production' babel-node build.js && cd .. && yarn storybook:build",
+    "build:dev": "babel-node build.js && cd .. && yarn storybook:build && yarn examples:build",
+    "build": "NODE_ENV='production' babel-node build.js && cd .. && yarn storybook:build && yarn examples:build",
     "deploy": "yarn run build && gh-pages -d dist"
   },
   "dependencies": {
@@ -41,5 +41,6 @@
     "webpack": "^1.14.0",
     "webpack-dev-middleware": "^1.9.0",
     "webpack-hot-middleware": "^2.14.0"
-  }
+  },
+  "license": "MIT"
 }
