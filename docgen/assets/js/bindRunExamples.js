@@ -4,13 +4,14 @@ import capitalize from "lodash/capitalize";
 
 window.instantsearch = instantsearch;
 window.search = instantsearch({
-  indexName: "instant_search",
-  searchClient: algoliasearch("latency", "6be0576ff61c053d5f9a3225e2a90f76"),
-  urlSync: false,
+  indexName: window.searchConfig.indexName || "instant_search",
+  searchClient: algoliasearch(
+    window.searchConfig.appId || "latency",
+    window.searchConfig.apiKey || "6be0576ff61c053d5f9a3225e2a90f76"
+  ),
   searchParameters: {
-    hitsPerPage: 3
-  },
-  ...window.searchConfig
+    hitsPerPage: 3,
+  }
 });
 
 const el = html => {
