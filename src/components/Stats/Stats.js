@@ -3,7 +3,7 @@ import React, { Component } from 'preact-compat';
 
 import Template from '../Template.js';
 
-export class Stats extends Component {
+class Stats extends Component {
   render() {
     const data = {
       hasManyResults: this.props.nbHits > 1,

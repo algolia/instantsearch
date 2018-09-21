@@ -2,7 +2,7 @@ import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-export class RangeInput extends Component {
+class RangeInput extends Component {
   constructor(props) {
     super(props);
 

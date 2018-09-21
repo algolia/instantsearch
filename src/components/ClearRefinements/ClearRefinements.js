@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import Template from '../Template.js';
 
-export class ClearRefinements extends Component {
+class ClearRefinements extends Component {
   render() {
     const { hasRefinements, cssClasses } = this.props;
     const data = { hasRefinements };
