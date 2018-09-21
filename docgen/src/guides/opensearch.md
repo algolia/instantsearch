@@ -35,9 +35,8 @@ started, you need to add this to the initialization of InstantSearch.js:
 
 ```diff
 const search = instantsearch({
-  appId: opts.appId,
-  apiKey: opts.apiKey,
   indexName: opts.indexName,
+  searchClient: algoliasearch(opts.appId, opts.apiKey),
 + urlSync: true,
 });
 ```

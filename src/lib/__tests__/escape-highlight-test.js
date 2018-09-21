@@ -21,12 +21,12 @@ describe('escapeHits()', () => {
       {
         _highlightResult: {
           foobar: {
-            value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
+            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
         _snippetResult: {
           foobar: {
-            value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
+            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
       },
@@ -63,14 +63,14 @@ describe('escapeHits()', () => {
         _highlightResult: {
           foo: {
             bar: {
-              value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
+              value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
             },
           },
         },
         _snippetResult: {
           foo: {
             bar: {
-              value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
+              value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
             },
           },
         },
@@ -111,14 +111,14 @@ describe('escapeHits()', () => {
       {
         _highlightResult: {
           foobar: [
-            { value: '&lt;script&gt;<em>bar</em>&lt;/script&gt;' },
-            { value: '&lt;script&gt;<em>foo</em>&lt;/script&gt;' },
+            { value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;' },
+            { value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;' },
           ],
         },
         _snippetResult: {
           foobar: [
-            { value: '&lt;script&gt;<em>bar</em>&lt;/script&gt;' },
-            { value: '&lt;script&gt;<em>foo</em>&lt;/script&gt;' },
+            { value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;' },
+            { value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;' },
           ],
         },
       },
@@ -181,14 +181,14 @@ describe('escapeHits()', () => {
             {
               foo: {
                 bar: {
-                  value: '&lt;script&gt;<em>bar</em>&lt;/script&gt;',
+                  value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
                 },
               },
             },
             {
               foo: {
                 bar: {
-                  value: '&lt;script&gt;<em>foo</em>&lt;/script&gt;',
+                  value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
                 },
               },
             },
@@ -199,14 +199,14 @@ describe('escapeHits()', () => {
             {
               foo: {
                 bar: {
-                  value: '&lt;script&gt;<em>bar</em>&lt;/script&gt;',
+                  value: '&lt;script&gt;<mark>bar</mark>&lt;/script&gt;',
                 },
               },
             },
             {
               foo: {
                 bar: {
-                  value: '&lt;script&gt;<em>foo</em>&lt;/script&gt;',
+                  value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
                 },
               },
             },
@@ -236,7 +236,7 @@ describe('escapeHits()', () => {
       {
         _highlightResult: {
           foobar: {
-            value: '&lt;script&gt;<em>foo</em>&lt;/script&gt;',
+            value: '&lt;script&gt;<mark>foo</mark>&lt;/script&gt;',
           },
         },
       },

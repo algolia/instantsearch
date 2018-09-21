@@ -1,6 +1,7 @@
 /* eslint-disable import/default */
 
 import { action } from 'dev-novel';
+import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../../index.js';
 import item from './item.html';
 import empty from './no-results.html';
@@ -10,18 +11,16 @@ export const wrapWithHits = (
   instantSearchConfig = {}
 ) => container => {
   const {
-    appId = 'latency',
-    apiKey = '6be0576ff61c053d5f9a3225e2a90f76',
     indexName = 'instant_search',
+    searchClient = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
     searchParameters = {},
     ...otherInstantSearchConfig
   } = instantSearchConfig;
 
   const urlLogger = action('Routing state');
   window.search = instantsearch({
-    appId,
-    apiKey,
     indexName,
+    searchClient,
     searchParameters: {
       hitsPerPage: 3,
       ...searchParameters,

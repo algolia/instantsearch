@@ -1,10 +1,9 @@
 const ONE_DAY_IN_MS = 3600 * 24 * 1000;
 
 const search = instantsearch({
-  appId: 'latency',
-  apiKey: '059c79ddd276568e990286944276464a',
   indexName: 'concert_events_instantsearchjs',
-  routing: true
+  searchClient: algoliasearch('latency', '059c79ddd276568e990286944276464a'),
+  routing: true,
 });
 
 search.addWidget(

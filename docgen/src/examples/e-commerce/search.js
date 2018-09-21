@@ -1,10 +1,9 @@
 'use strict';
-/* global instantsearch */
+/* global instantsearch algoliasearch */
 
 var search = instantsearch({
-  appId: 'latency',
-  apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-  indexName: 'ikea',
+  indexName: 'instant_search',
+  searchClient: algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76'),
   routing: true
 });
 
@@ -94,7 +93,11 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.hierarchicalMenu({
     container: '#categories',
-    attributes: ['category', 'sub_category', 'sub_sub_category'],
+    attributes: [
+      'hierarchicalCategories.lvl0',
+      'hierarchicalCategories.lvl1',
+      'hierarchicalCategories.lvl2'
+    ],
     sortBy: ['name:asc'],
     templates: {
       item: menuTemplate
@@ -104,26 +107,27 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.refinementList({
-    container: '#materials',
-    attributeName: 'materials',
+    container: '#types',
+    attributeName: 'type',
     operator: 'or',
-    limit: 10,
+    limit: 5,
     templates: {
       item: facetTemplateCheckbox,
-      header: '<div class="facet-title">Materials</div class="facet-title">'
+      header: '<div class="facet-title">Type</div class="facet-title">'
     }
   })
 );
 
 search.addWidget(
   instantsearch.widgets.refinementList({
-    container: '#colors',
-    attributeName: 'colors',
+    container: '#brands',
+    attributeName: 'brand',
     operator: 'or',
-    limit: 10,
+    limit: 5,
+    searchForFacetValues: true,
     templates: {
-      item: facetTemplateColors,
-      header: '<div class="facet-title">Colors</div class="facet-title">'
+      item: facetTemplateCheckbox,
+      header: '<div class="facet-title">Brand</div class="facet-title">'
     }
   })
 );
@@ -133,22 +137,7 @@ search.addWidget(
     container: '#rating',
     attributeName: 'rating',
     templates: {
-      header: '<div class="facet-title">Ratings</div class="facet-title">'
-    }
-  })
-);
-
-search.addWidget(
-  instantsearch.widgets.priceRanges({
-    container: '#prices',
-    attributeName: 'price',
-    cssClasses: {
-      list: 'nav nav-list',
-      count: 'badge pull-right',
-      active: 'active'
-    },
-    templates: {
-      header: '<div class="facet-title">Prices</div class="facet-title">'
+      header: '<div class="facet-title">Rating</div class="facet-title">'
     }
   })
 );
@@ -157,25 +146,25 @@ search.addWidget(
   instantsearch.widgets.sortBy({
     container: '#sort-by',
     items: [
-      {name: 'ikea', label: 'Featured'},
-      {name: 'ikea_price_asc', label: 'Price asc.'},
-      {name: 'ikea_price_desc', label: 'Price desc.'}
+      {name: 'instant_search', label: 'Featured'},
+      {name: 'instant_search_price_asc', label: 'Price asc.'},
+      {name: 'instant_search_price_desc', label: 'Price desc.'}
     ],
     label:'sort by'
   })
 );
 
-search.addWidget(
-  instantsearch.widgets.clearAll({
-    container: '#clear-all',
-    templates: {
-      link: '<i class="fa fa-eraser"></i> Clear all filters'
-    },
-    cssClasses: {
-      root: 'btn btn-block btn-default'
-    },
-    autoHideContainer: true
-  })
-);
+// search.addWidget(
+//   instantsearch.widgets.clearAll({
+//     container: '#clear-all',
+//     templates: {
+//       link: '<i class="fa fa-eraser"></i> Clear all filters'
+//     },
+//     cssClasses: {
+//       root: 'btn btn-block btn-default'
+//     },
+//     autoHideContainer: true
+//   })
+// );
 
 search.start();

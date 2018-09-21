@@ -1,5 +1,6 @@
 import React, { Component } from 'preact-compat';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 class RangeInput extends Component {
   constructor(props) {
@@ -36,16 +37,17 @@ class RangeInput extends Component {
     const isDisabled = min >= max;
 
     const hasRefinements = Boolean(minValue || maxValue);
-    const rootClassNames = hasRefinements
-      ? cssClasses.root
-      : `${cssClasses.root} ${cssClasses.noRefinement}`;
+
+    const rootClassNames = cx(cssClasses.root, {
+      [cssClasses.noRefinement]: !hasRefinements,
+    });
 
     return (
       <div className={rootClassNames}>
         <form className={cssClasses.form} onSubmit={this.onSubmit}>
           <label className={cssClasses.label}>
             <input
-              className={`${cssClasses.input} ${cssClasses.inputMin}`}
+              className={cx(cssClasses.input, cssClasses.inputMin)}
               type="number"
               min={min}
               max={max}
@@ -61,7 +63,7 @@ class RangeInput extends Component {
 
           <label className={cssClasses.label}>
             <input
-              className={`${cssClasses.input} ${cssClasses.inputMax}`}
+              className={cx(cssClasses.input, cssClasses.inputMax)}
               type="number"
               min={min}
               max={max}

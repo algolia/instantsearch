@@ -19,7 +19,7 @@ describe('InstantSearch lifecycle', () => {
   let urlSync;
 
   beforeEach(() => {
-    client = { algolia: 'client' };
+    client = { search() {} };
     helper = algoliaSearchHelper(client);
 
     // when using searchFunction, we lose the reference to
@@ -55,9 +55,8 @@ describe('InstantSearch lifecycle', () => {
     InstantSearch.__Rewire__('algoliasearchHelper', helperStub);
 
     search = new InstantSearch({
-      appId,
-      apiKey,
       indexName,
+      searchClient: algoliasearch(appId, apiKey),
       searchParameters,
       urlSync: {},
     });
@@ -81,48 +80,6 @@ describe('InstantSearch lifecycle', () => {
     );
   });
 
-  describe('when providing a custom client module', () => {
-    let createAlgoliaClient;
-    let customAppID;
-    let customApiKey;
-
-    beforeEach(() => {
-      // InstantSearch is being called once at the top-level context, so reset the `algoliasearch` spy
-      algoliasearch.resetHistory();
-
-      // Create a spy to act as a clientInstanceFunction that returns a custom client
-      createAlgoliaClient = sinon.stub().returns(client);
-      customAppID = 'customAppID';
-      customApiKey = 'customAPIKey';
-
-      // Create a new InstantSearch instance with custom client function
-      search = new InstantSearch({
-        appId: customAppID,
-        apiKey: customApiKey,
-        indexName,
-        searchParameters,
-        urlSync: {},
-        createAlgoliaClient,
-      });
-    });
-
-    it('does not call algoliasearch directly', () => {
-      expect(algoliasearch.calledOnce).toBe(false, 'algoliasearch not called');
-    });
-
-    it('calls createAlgoliaClient(appId, apiKey)', () => {
-      expect(createAlgoliaClient.calledOnce).toBe(
-        true,
-        'clientInstanceFunction called once'
-      );
-      expect(createAlgoliaClient.args[0]).toEqual([
-        algoliasearch,
-        customAppID,
-        customApiKey,
-      ]);
-    });
-  });
-
   describe('when adding a widget without render and init', () => {
     let widget;
 
@@ -141,9 +98,8 @@ describe('InstantSearch lifecycle', () => {
     const disjunctiveFacetsRefinements = { fruits: ['apple'] };
     const facetsRefinements = disjunctiveFacetsRefinements;
     search = new InstantSearch({
-      appId,
-      apiKey,
       indexName,
+      searchClient: algoliasearch(appId, apiKey),
       searchParameters: {
         disjunctiveFacetsRefinements,
         facetsRefinements,
@@ -376,9 +332,8 @@ describe('InstantSearch lifecycle', () => {
 
     beforeEach(() => {
       search = new InstantSearch({
-        appId,
-        apiKey,
         indexName,
+        searchClient: algoliasearch(appId, apiKey),
       });
     });
 
@@ -574,9 +529,8 @@ describe('InstantSearch lifecycle', () => {
 
     beforeEach(() => {
       search = new InstantSearch({
-        appId,
-        apiKey,
         indexName,
+        searchClient: algoliasearch(appId, apiKey),
       });
     });
 
@@ -624,9 +578,8 @@ describe('InstantSearch lifecycle', () => {
 
   it('should remove all widgets without triggering a search on dispose', () => {
     search = new InstantSearch({
-      appId,
-      apiKey,
       indexName,
+      searchClient: algoliasearch(appId, apiKey),
     });
 
     const widgets = times(5, () => ({

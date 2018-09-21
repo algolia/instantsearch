@@ -4,10 +4,10 @@ set -e # exit when error
 
 [ -z $TRAVIS_PULL_REQUEST ] && TRAVIS_PULL_REQUEST="false"
 
-# if [ $TRAVIS_PULL_REQUEST == "false" ]; then
-#   echo "No need to validate commit message when not in a pull request"
-#   exit 0
-# fi
+if [ $TRAVIS_PULL_REQUEST != "false" ]; then
+  echo "No need to validate commit messages in a pull request, we have conventional PRs"
+  exit 0
+fi
 
 # Checks the commits msgs in the range of commits travis is testing.
 # Based heavily on

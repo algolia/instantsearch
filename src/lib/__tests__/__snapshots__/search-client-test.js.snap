@@ -28,4 +28,4 @@ Array [
 ]
 `;
 
-exports[`InstantSearch Search Client Properties throws if no \`search()\` method 1`] = `"InstantSearch configuration error: \`searchClient\` must implement a \`search(requests)\` method."`;
+exports[`InstantSearch Search Client Properties throws if no \`search()\` method 1`] = `"The search client must implement a \`search(requests)\` method."`;

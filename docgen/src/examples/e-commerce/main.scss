@@ -394,10 +394,6 @@ aside {
       transition: opacity 500ms cubic-bezier(.19, 1, .22, 1);
       height: 150px;
       max-width: 100%;
-
-      @media( min-width: 1400px) {
-        height: inherit;
-      }
     }
   }
 

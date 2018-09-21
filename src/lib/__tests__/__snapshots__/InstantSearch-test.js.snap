@@ -15,7 +15,7 @@ Array [
       "_lastQueryIdReceived": -1,
       "_queryId": 0,
       "client": Object {
-        "algolia": "client",
+        "search": [Function],
       },
       "derivedHelpers": Array [],
       "lastResults": null,
@@ -87,7 +87,7 @@ Array [
       "_searchStalledTimer": null,
       "_stalledSearchDelay": 200,
       "client": Object {
-        "algolia": "client",
+        "search": [Function],
       },
       "domain": null,
       "helper": AlgoliaSearchHelper {
@@ -101,7 +101,7 @@ Array [
         "_lastQueryIdReceived": -1,
         "_queryId": 0,
         "client": Object {
-          "algolia": "client",
+          "search": [Function],
         },
         "derivedHelpers": Array [],
         "lastResults": null,
@@ -180,6 +180,7 @@ Array [
         "compileOptions": Object {},
         "helpers": Object {
           "formatNumber": [Function],
+          "highlight": [Function],
         },
       },
       "urlSync": Object {},
@@ -262,6 +263,7 @@ Array [
       "compileOptions": Object {},
       "helpers": Object {
         "formatNumber": [Function],
+        "highlight": [Function],
       },
     },
   },

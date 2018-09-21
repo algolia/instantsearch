@@ -4,13 +4,6 @@ import React, { Component } from 'preact-compat';
 import Template from '../Template.js';
 
 class Stats extends Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      this.props.nbHits !== nextProps.nbHits ||
-      this.props.processingTimeMS !== nextProps.processingTimeMS
-    );
-  }
-
   render() {
     const data = {
       hasManyResults: this.props.nbHits > 1,

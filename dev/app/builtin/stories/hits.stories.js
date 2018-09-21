@@ -1,6 +1,7 @@
 /* eslint-disable import/default */
 
 import { storiesOf } from 'dev-novel';
+import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
@@ -25,6 +26,38 @@ export default () => {
                 ...item,
                 name: `${item.name} (transformed)`,
               })),
+          })
+        );
+      })
+    )
+    .add(
+      'with highlight function',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              item(hit) {
+                return instantsearch.highlight({
+                  attribute: 'name',
+                  hit,
+                });
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with highlight helper',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              item:
+                '{{#helpers.highlight}}{ "attribute": "name", "highlightedTagName": "mark" }{{/helpers.highlight}}',
+            },
           })
         );
       })
@@ -64,9 +97,11 @@ export default () => {
           );
         },
         {
-          appId: 'KY4PR9ORUL',
-          apiKey: 'a5ca312adab3b79e14054154efa00b37',
           indexName: 'highlight_array',
+          searchClient: algoliasearch(
+            'KY4PR9ORUL',
+            'a5ca312adab3b79e14054154efa00b37'
+          ),
         }
       )
     );
