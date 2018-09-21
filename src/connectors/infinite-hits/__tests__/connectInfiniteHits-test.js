@@ -191,7 +191,7 @@ describe('connectInfiniteHits', () => {
       {
         _highlightResult: {
           foobar: {
-            value: '&lt;script&gt;<em>foobar</em>&lt;/script&gt;',
+            value: '&lt;script&gt;<mark>foobar</mark>&lt;/script&gt;',
           },
         },
       },

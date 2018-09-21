@@ -716,12 +716,12 @@ describe('connectRefinementList', () => {
         facetHits: [
           {
             count: 33,
-            highlighted: 'Salvador <em>Da</em>li',
+            highlighted: 'Salvador <mark>Da</mark>li',
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: '<em>Da</em>vidoff',
+            highlighted: '<mark>Da</mark>vidoff',
             value: 'Davidoff',
           },
         ],
@@ -786,13 +786,13 @@ describe('connectRefinementList', () => {
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
-          highlighted: 'Salvador <em>Da</em>li',
+          highlighted: 'Salvador <mark>Da</mark>li',
           label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
-          highlighted: '<em>Da</em>vidoff',
+          highlighted: '<mark>Da</mark>vidoff',
           label: 'Davidoff',
           value: 'Davidoff',
         },
@@ -923,12 +923,12 @@ describe('connectRefinementList', () => {
         facetHits: [
           {
             count: 33,
-            highlighted: 'Salvador <em>Da</em>li',
+            highlighted: 'Salvador <mark>Da</mark>li',
             value: 'Salvador Dali',
           },
           {
             count: 9,
-            highlighted: '<em>Da</em>vidoff',
+            highlighted: '<mark>Da</mark>vidoff',
             value: 'Davidoff',
           },
         ],
@@ -993,13 +993,13 @@ describe('connectRefinementList', () => {
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
-          highlighted: 'Salvador <em>Da</em>li',
+          highlighted: 'Salvador <mark>Da</mark>li',
           label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
-          highlighted: '<em>Da</em>vidoff',
+          highlighted: '<mark>Da</mark>vidoff',
           label: 'Davidoff',
           value: 'Davidoff',
         },
@@ -1098,13 +1098,13 @@ describe('connectRefinementList', () => {
       expect(rendering.mock.calls[2][0].items).toEqual([
         {
           count: 33,
-          highlighted: 'Salvador <em>Da</em>li',
+          highlighted: 'Salvador <mark>Da</mark>li',
           label: 'Salvador Dali',
           value: 'Salvador Dali',
         },
         {
           count: 9,
-          highlighted: '<em>Da</em>vidoff',
+          highlighted: '<mark>Da</mark>vidoff',
           label: 'Davidoff',
           value: 'Davidoff',
         },

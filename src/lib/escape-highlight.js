@@ -8,10 +8,10 @@ export const tagConfig = {
   highlightPostTag: '__/ais-highlight__',
 };
 
-function replaceWithEmAndEscape(value) {
+function replaceTagsAndEscape(value) {
   return escape(value)
-    .replace(new RegExp(tagConfig.highlightPreTag, 'g'), '<em>')
-    .replace(new RegExp(tagConfig.highlightPostTag, 'g'), '</em>');
+    .replace(new RegExp(tagConfig.highlightPreTag, 'g'), '<mark>')
+    .replace(new RegExp(tagConfig.highlightPostTag, 'g'), '</mark>');
 }
 
 function recursiveEscape(input) {
@@ -32,7 +32,7 @@ function recursiveEscape(input) {
 
   return {
     ...input,
-    value: replaceWithEmAndEscape(input.value),
+    value: replaceTagsAndEscape(input.value),
   };
 }
 
@@ -58,6 +58,6 @@ export default function escapeHits(hits) {
 export function escapeFacets(facetHits) {
   return facetHits.map(h => ({
     ...h,
-    highlighted: replaceWithEmAndEscape(h.highlighted),
+    highlighted: replaceTagsAndEscape(h.highlighted),
   }));
 }
