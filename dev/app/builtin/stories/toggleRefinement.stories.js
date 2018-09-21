@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.toggleRefinement({
             container,
-            attributeName: 'free_shipping',
+            attribute: 'free_shipping',
             templates: {
               labelText: '{{test}}Free Shipping (toggle single value)',
             },
@@ -28,7 +28,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.toggleRefinement({
             container,
-            attributeName: 'brand',
+            attribute: 'brand',
             on: 'Sony',
             off: 'Canon',
             templates: {

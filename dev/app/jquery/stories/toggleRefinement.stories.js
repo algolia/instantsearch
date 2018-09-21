@@ -11,7 +11,7 @@ export default () => {
       window.search.addWidget(
         widgets.toggleRefinement({
           containerNode,
-          attributeName: 'free_shipping',
+          attribute: 'free_shipping',
           label: 'Free Shipping (toggle single value)',
           title: 'Free Shipping',
         })

@@ -10,7 +10,7 @@ describe('currentToggle()', () => {
     let ReactDOM;
     let containerNode;
     let widget;
-    let attributeName;
+    let attribute;
     let instantSearchInstance;
 
     beforeEach(() => {
@@ -19,10 +19,10 @@ describe('currentToggle()', () => {
       currentToggle.__Rewire__('render', ReactDOM.render);
 
       containerNode = document.createElement('div');
-      attributeName = 'world!';
+      attribute = 'world!';
       widget = currentToggle({
         container: containerNode,
-        attributeName,
+        attribute,
       });
       instantSearchInstance = { templatesConfig: undefined };
     });
@@ -67,7 +67,7 @@ describe('currentToggle()', () => {
         };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           /* on: true, off: undefined */
         });
         widget.getConfiguration();
@@ -95,7 +95,7 @@ describe('currentToggle()', () => {
         };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           cssClasses: {
             root: 'test',
             label: 'test-label',
@@ -124,7 +124,7 @@ describe('currentToggle()', () => {
         };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           /* on: true, off: undefined */
           RefinementList,
         });
@@ -151,7 +151,7 @@ describe('currentToggle()', () => {
 
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           off: -2,
           on: 5,
         });
@@ -175,11 +175,11 @@ describe('currentToggle()', () => {
 
         widget.toggleRefinement({ isRefined: true });
 
+        expect(altHelper.state.isDisjunctiveFacetRefined(attribute, 5)).toBe(
+          false
+        );
         expect(
-          altHelper.state.isDisjunctiveFacetRefined(attributeName, 5)
-        ).toBe(false);
-        expect(
-          altHelper.state.isDisjunctiveFacetRefined(attributeName, '\\-2')
+          altHelper.state.isDisjunctiveFacetRefined(attribute, '\\-2')
         ).toBe(true);
       });
 
@@ -191,7 +191,7 @@ describe('currentToggle()', () => {
         };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           /* on: true, off: undefined */
           RefinementList,
         });
@@ -222,7 +222,7 @@ describe('currentToggle()', () => {
         };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           /* on: true, off: undefined */
           RefinementList,
         });
@@ -245,7 +245,7 @@ describe('currentToggle()', () => {
         };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           /* on: true, off: undefined */
           RefinementList,
         });
@@ -258,7 +258,7 @@ describe('currentToggle()', () => {
         expect(helper.addDisjunctiveFacetRefinement.calledOnce).toBe(true);
         expect(
           helper.addDisjunctiveFacetRefinement.calledWithExactly(
-            attributeName,
+            attribute,
             true
           )
         ).toBe(true);
@@ -289,7 +289,7 @@ describe('currentToggle()', () => {
           // Given
           widget = currentToggle({
             container: containerNode,
-            attributeName,
+            attribute,
             /* on: true, off: undefined */
           });
           widget.getConfiguration();
@@ -304,7 +304,7 @@ describe('currentToggle()', () => {
 
           // Then
           expect(
-            helper.addDisjunctiveFacetRefinement.calledWith(attributeName, true)
+            helper.addDisjunctiveFacetRefinement.calledWith(attribute, true)
           ).toBe(true);
           expect(helper.removeDisjunctiveFacetRefinement.called).toBe(false);
         });
@@ -312,7 +312,7 @@ describe('currentToggle()', () => {
           // Given
           widget = currentToggle({
             container: containerNode,
-            attributeName,
+            attribute,
             /* on: true, off: undefined */
           });
           widget.getConfiguration();
@@ -327,10 +327,7 @@ describe('currentToggle()', () => {
 
           // Then
           expect(
-            helper.removeDisjunctiveFacetRefinement.calledWith(
-              attributeName,
-              true
-            )
+            helper.removeDisjunctiveFacetRefinement.calledWith(attribute, true)
           ).toBe(true);
           expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
         });
@@ -341,7 +338,7 @@ describe('currentToggle()', () => {
           const userValues = { on: 'on', off: 'off' };
           widget = currentToggle({
             container: containerNode,
-            attributeName,
+            attribute,
             ...userValues,
           });
 
@@ -363,10 +360,10 @@ describe('currentToggle()', () => {
 
           // Then
           expect(
-            altHelper.state.isDisjunctiveFacetRefined(attributeName, 'off')
+            altHelper.state.isDisjunctiveFacetRefined(attribute, 'off')
           ).toBe(false);
           expect(
-            altHelper.state.isDisjunctiveFacetRefined(attributeName, 'on')
+            altHelper.state.isDisjunctiveFacetRefined(attribute, 'on')
           ).toBe(true);
         });
 
@@ -375,7 +372,7 @@ describe('currentToggle()', () => {
           const userValues = { on: 'on', off: 'off' };
           widget = currentToggle({
             container: containerNode,
-            attributeName,
+            attribute,
             ...userValues,
           });
           widget.getConfiguration();
@@ -390,16 +387,10 @@ describe('currentToggle()', () => {
 
           // Then
           expect(
-            helper.removeDisjunctiveFacetRefinement.calledWith(
-              attributeName,
-              'on'
-            )
+            helper.removeDisjunctiveFacetRefinement.calledWith(attribute, 'on')
           ).toBe(true);
           expect(
-            helper.addDisjunctiveFacetRefinement.calledWith(
-              attributeName,
-              'off'
-            )
+            helper.addDisjunctiveFacetRefinement.calledWith(attribute, 'off')
           ).toBe(true);
         });
       });
@@ -412,7 +403,7 @@ describe('currentToggle()', () => {
         const userValues = { on: 'on', off: 'off' };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           ...userValues,
         });
         const config = widget.getConfiguration();
@@ -427,9 +418,9 @@ describe('currentToggle()', () => {
         });
 
         // Then
-        expect(
-          helper.state.isDisjunctiveFacetRefined(attributeName, 'off')
-        ).toBe(true);
+        expect(helper.state.isDisjunctiveFacetRefined(attribute, 'off')).toBe(
+          true
+        );
       });
 
       it('should not add a refinement for custom off value on init if already checked', () => {
@@ -437,7 +428,7 @@ describe('currentToggle()', () => {
         const userValues = { on: 'on', off: 'off' };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           ...userValues,
         });
         widget.getConfiguration();
@@ -460,7 +451,7 @@ describe('currentToggle()', () => {
         const userValues = { on: 'on' };
         widget = currentToggle({
           container: containerNode,
-          attributeName,
+          attribute,
           ...userValues,
         });
         widget.getConfiguration();

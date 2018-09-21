@@ -18,7 +18,7 @@ var customToggle = connectToggleRefinement(function render(params, isFirstRender
 });
 search.addWidget(
   customToggle({
-    attributeName,
+    attribute,
     label,
     [ values = {on: true, off: undefined} ]
   })
@@ -37,7 +37,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomToggleWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property {string} [label] Human-readable name of the filter (eg. "Free Shipping").
  * @property {Object} [values = {on: true, off: undefined}] Values to filter on when toggling.
  */
@@ -98,7 +98,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * search.addWidget(
  *   customToggle({
  *     containerNode: $('#custom-toggle-container'),
- *     attributeName: 'free_shipping',
+ *     attribute: 'free_shipping',
  *     label: 'Free Shipping (toggle single value)',
  *   })
  * );
@@ -108,12 +108,12 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     const {
-      attributeName,
+      attribute,
       label = '',
       values: userValues = { on: true, off: undefined },
     } = widgetParams;
 
-    if (!attributeName) {
+    if (!attribute) {
       throw new Error(usage);
     }
 
@@ -124,7 +124,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
     return {
       getConfiguration() {
         return {
-          disjunctiveFacets: [attributeName],
+          disjunctiveFacets: [attribute],
         };
       },
 
@@ -132,14 +132,14 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
-            helper.removeDisjunctiveFacetRefinement(attributeName, off);
+            helper.removeDisjunctiveFacetRefinement(attribute, off);
           }
-          helper.addDisjunctiveFacetRefinement(attributeName, on);
+          helper.addDisjunctiveFacetRefinement(attribute, on);
         } else {
           // Unchecking
-          helper.removeDisjunctiveFacetRefinement(attributeName, on);
+          helper.removeDisjunctiveFacetRefinement(attribute, on);
           if (hasAnOffValue) {
-            helper.addDisjunctiveFacetRefinement(attributeName, off);
+            helper.addDisjunctiveFacetRefinement(attribute, off);
           }
         }
 
@@ -151,11 +151,11 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
           createURL(
             state
               .removeDisjunctiveFacetRefinement(
-                attributeName,
+                attribute,
                 isCurrentlyRefined ? on : off
               )
               .addDisjunctiveFacetRefinement(
-                attributeName,
+                attribute,
                 isCurrentlyRefined ? off : on
               )
           );
@@ -164,7 +164,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
           this._toggleRefinement(helper, opts);
         };
 
-        const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
+        const isRefined = state.isDisjunctiveFacetRefined(attribute, on);
 
         // no need to refine anything at init if no custom off values
         if (hasAnOffValue) {
@@ -172,7 +172,7 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
           if (!isRefined) {
             const currentPage = helper.getPage();
             helper
-              .addDisjunctiveFacetRefinement(attributeName, off)
+              .addDisjunctiveFacetRefinement(attribute, off)
               .setPage(currentPage);
           }
         }
@@ -210,12 +210,9 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
       },
 
       render({ helper, results, state, instantSearchInstance }) {
-        const isRefined = helper.state.isDisjunctiveFacetRefined(
-          attributeName,
-          on
-        );
+        const isRefined = helper.state.isDisjunctiveFacetRefined(attribute, on);
         const offValue = off === undefined ? false : off;
-        const allFacetValues = results.getFacetValues(attributeName);
+        const allFacetValues = results.getFacetValues(attribute);
 
         const onData = find(
           allFacetValues,
@@ -273,23 +270,21 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         unmountFn();
 
         const nextState = state
-          .removeDisjunctiveFacetRefinement(attributeName)
-          .removeDisjunctiveFacet(attributeName);
+          .removeDisjunctiveFacetRefinement(attribute)
+          .removeDisjunctiveFacet(attribute);
 
         return nextState;
       },
 
       getWidgetState(uiState, { searchParameters }) {
         const isRefined = searchParameters.isDisjunctiveFacetRefined(
-          attributeName,
+          attribute,
           on
         );
 
         if (
           !isRefined ||
-          (uiState &&
-            uiState.toggle &&
-            uiState.toggle[attributeName] === isRefined)
+          (uiState && uiState.toggle && uiState.toggle[attribute] === isRefined)
         ) {
           return uiState;
         }
@@ -298,37 +293,29 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
           ...uiState,
           toggle: {
             ...uiState.toggle,
-            [attributeName]: isRefined,
+            [attribute]: isRefined,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const isRefined = Boolean(
-          uiState.toggle && uiState.toggle[attributeName]
-        );
+        const isRefined = Boolean(uiState.toggle && uiState.toggle[attribute]);
 
         if (isRefined) {
           if (hasAnOffValue)
             return searchParameters
-              .removeDisjunctiveFacetRefinement(attributeName, off)
-              .addDisjunctiveFacetRefinement(attributeName, on);
+              .removeDisjunctiveFacetRefinement(attribute, off)
+              .addDisjunctiveFacetRefinement(attribute, on);
 
-          return searchParameters.addDisjunctiveFacetRefinement(
-            attributeName,
-            on
-          );
+          return searchParameters.addDisjunctiveFacetRefinement(attribute, on);
         }
 
         if (hasAnOffValue)
           return searchParameters
-            .removeDisjunctiveFacetRefinement(attributeName, on)
-            .addDisjunctiveFacetRefinement(attributeName, off);
+            .removeDisjunctiveFacetRefinement(attribute, on)
+            .addDisjunctiveFacetRefinement(attribute, off);
 
-        return searchParameters.removeDisjunctiveFacetRefinement(
-          attributeName,
-          on
-        );
+        return searchParameters.removeDisjunctiveFacetRefinement(attribute, on);
       },
     };
   };

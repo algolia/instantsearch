@@ -14,16 +14,16 @@ describe('connectToggleRefinement', () => {
     const rendering = sinon.stub();
     const makeWidget = connectToggleRefinement(rendering);
 
-    const attributeName = 'isShippingFree';
+    const attribute = 'isShippingFree';
     const label = 'Free shipping?';
     const widget = makeWidget({
-      attributeName,
+      attribute,
       label,
     });
 
     const config = widget.getConfiguration();
     expect(config).toEqual({
-      disjunctiveFacets: [attributeName],
+      disjunctiveFacets: [attribute],
     });
 
     const helper = jsHelper({}, '', config);
@@ -61,7 +61,7 @@ describe('connectToggleRefinement', () => {
       });
 
       expect(widgetParams).toEqual({
-        attributeName,
+        attribute,
         label,
       });
     }
@@ -113,10 +113,10 @@ describe('connectToggleRefinement', () => {
     const rendering = sinon.stub();
     const makeWidget = connectToggleRefinement(rendering);
 
-    const attributeName = 'isShippingFree';
+    const attribute = 'isShippingFree';
     const label = 'Free shipping?';
     const widget = makeWidget({
-      attributeName,
+      attribute,
       label,
     });
 
@@ -132,7 +132,7 @@ describe('connectToggleRefinement', () => {
 
     {
       // first rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
         undefined
       );
       const renderOptions = rendering.lastCall.args[0];
@@ -153,11 +153,11 @@ describe('connectToggleRefinement', () => {
         },
       });
       refine({ isRefined: value.isRefined });
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'true',
       ]);
       refine({ isRefined: !value.isRefined });
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
         undefined
       );
     }
@@ -181,7 +181,7 @@ describe('connectToggleRefinement', () => {
 
     {
       // Second rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
         undefined
       );
       const renderOptions = rendering.lastCall.args[0];
@@ -202,7 +202,7 @@ describe('connectToggleRefinement', () => {
         },
       });
       refine({ isRefined: value.isRefined });
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'true',
       ]);
     }
@@ -234,7 +234,7 @@ describe('connectToggleRefinement', () => {
 
     {
       // Third rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'true',
       ]);
       const renderOptions = rendering.lastCall.args[0];
@@ -255,7 +255,7 @@ describe('connectToggleRefinement', () => {
         },
       });
       refine(value);
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual(
         undefined
       );
     }
@@ -265,10 +265,10 @@ describe('connectToggleRefinement', () => {
     const rendering = sinon.stub();
     const makeWidget = connectToggleRefinement(rendering);
 
-    const attributeName = 'isShippingFree';
+    const attribute = 'isShippingFree';
     const label = 'Free shipping?';
     const widget = makeWidget({
-      attributeName,
+      attribute,
       label,
       values: {
         on: 'true',
@@ -288,7 +288,7 @@ describe('connectToggleRefinement', () => {
 
     {
       // first rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'false',
       ]);
       const renderOptions = rendering.lastCall.args[0];
@@ -310,11 +310,11 @@ describe('connectToggleRefinement', () => {
         },
       });
       refine({ isRefined: value.isRefined });
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'true',
       ]);
       refine({ isRefined: !value.isRefined });
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'false',
       ]);
     }
@@ -346,7 +346,7 @@ describe('connectToggleRefinement', () => {
 
     {
       // Second rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'false',
       ]);
       const renderOptions = rendering.lastCall.args[0];
@@ -368,7 +368,7 @@ describe('connectToggleRefinement', () => {
         },
       });
       refine({ isRefined: value.isRefined });
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'true',
       ]);
     }
@@ -400,7 +400,7 @@ describe('connectToggleRefinement', () => {
 
     {
       // Third rendering
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'true',
       ]);
       const renderOptions = rendering.lastCall.args[0];
@@ -421,7 +421,7 @@ describe('connectToggleRefinement', () => {
         },
       });
       refine({ isRefined: value.isRefined });
-      expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual([
+      expect(helper.state.disjunctiveFacetsRefinements[attribute]).toEqual([
         'false',
       ]);
     }
@@ -432,10 +432,10 @@ describe('connectToggleRefinement', () => {
       const rendering = jest.fn();
       const makeWidget = connectToggleRefinement(rendering);
 
-      const attributeName = 'isShippingFree';
+      const attribute = 'isShippingFree';
       const label = 'Free shipping?';
       const widget = makeWidget({
-        attributeName,
+        attribute,
         label,
         ...config,
       });

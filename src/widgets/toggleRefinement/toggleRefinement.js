@@ -46,7 +46,7 @@ const renderer = ({
 const usage = `Usage:
 toggleRefinement({
   container,
-  attributeName,
+  attribute,
   [ on=true ],
   [ off=undefined ],
   [ cssClasses.{root, label, labelText, checkbox} ],
@@ -84,7 +84,7 @@ toggleRefinement({
 /**
  * @typedef {Object} ToggleWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
- * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
+ * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
  * @property  {string|number|boolean} on Value to filter on when checked.
  * @property  {string|number|boolean} off Value to filter on when unchecked.
  * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
@@ -103,7 +103,7 @@ toggleRefinement({
  * This widget is particularly useful if you have a boolean value in the records.
  *
  * @requirements
- * The attribute passed to `attributeName` must be declared as an
+ * The attribute passed to `attribute` must be declared as an
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  *
@@ -116,7 +116,7 @@ toggleRefinement({
  * search.addWidget(
  *   instantsearch.widgets.toggleRefinement({
  *     container: '#free-shipping',
- *     attributeName: 'free_shipping',
+ *     attribute: 'free_shipping',
  *     values: {
  *       on: true,
  *     },
@@ -128,7 +128,7 @@ toggleRefinement({
  */
 export default function toggleRefinement({
   container,
-  attributeName,
+  attribute,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   transformData,
@@ -163,7 +163,7 @@ export default function toggleRefinement({
     const makeWidget = connectToggleRefinement(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ attributeName, values: { on, off } });
+    return makeWidget({ attribute, values: { on, off } });
   } catch (e) {
     throw new Error(usage);
   }
