@@ -1,7 +1,7 @@
 /* eslint-disable import/default */
 
 import { action } from 'dev-novel';
-import algoliasearch from 'algoliasearch';
+import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../../index.js';
 import item from './item.html';
 import empty from './no-results.html';

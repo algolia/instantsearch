@@ -1,7 +1,7 @@
 /* eslint-disable import/default */
 
 import { storiesOf } from 'dev-novel';
-import algoliasearch from 'algoliasearch';
+import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
