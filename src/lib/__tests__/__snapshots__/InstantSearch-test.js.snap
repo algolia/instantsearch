@@ -181,6 +181,7 @@ Array [
         "helpers": Object {
           "formatNumber": [Function],
           "highlight": [Function],
+          "snippet": [Function],
         },
       },
       "urlSync": Object {},
@@ -264,6 +265,7 @@ Array [
       "helpers": Object {
         "formatNumber": [Function],
         "highlight": [Function],
+        "snippet": [Function],
       },
     },
   },

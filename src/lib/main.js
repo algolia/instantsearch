@@ -159,5 +159,6 @@ instantsearch.connectors = connectors;
 instantsearch.widgets = widgets;
 instantsearch.version = version;
 instantsearch.highlight = helpers.highlight;
+instantsearch.snippet = helpers.snippet;
 
 export default instantsearch;
