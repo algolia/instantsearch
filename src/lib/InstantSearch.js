@@ -116,6 +116,7 @@ class InstantSearch extends EventEmitter {
     this.helper = null;
     this.indexName = indexName;
     this.searchParameters = { ...searchParameters, index: indexName };
+    this.indices = [];
     this.widgets = [];
     this.templatesConfig = {
       helpers: createHelpers({ numberLocale }),
@@ -201,7 +202,13 @@ To help you migrate, please refer to the migration guide: https://community.algo
         throw new Error('Widget definition missing render or init method');
       }
 
-      this.widgets.push(widget);
+      if (widget.addWidgets) {
+        // Tree is better than an array because we can store a recursive tree
+        // of index rather than a flat structure. It's okay for the moement.
+        this.indices.push({ index: widget });
+      } else {
+        this.widgets.push(widget);
+      }
     });
 
     // Init the widget directly if instantsearch has been already started
@@ -359,6 +366,98 @@ To help you migrate, please refer to the migration guide: https://community.algo
       this.searchParameters
     );
 
+    this.indices = this.indices.map(({ index }) => {
+      const searchParameters = index.widgets.reduce(
+        enhanceConfiguration(this.searchParameters),
+        {}
+      );
+
+      index.helper = algoliasearchHelper(
+        this.client,
+        index.name,
+        searchParameters
+      );
+
+      index.helper.search = () => {
+        this.helper.search();
+      };
+
+      const derived = helper.derive(parentSearchParameters => {
+        const customizer = (a, b) => {
+          // always create a unified array for facets refinements
+          if (Array.isArray(a)) {
+            return union(a, b);
+          }
+
+          // avoid mutating objects
+          if (isPlainObject(a)) {
+            return mergeWith({}, a, b, customizer);
+          }
+
+          return undefined;
+        };
+
+        const plainObjectParentSearchParameters = {
+          ...parentSearchParameters,
+        };
+
+        const plainObjectSubSearchParameters = {
+          ...index.helper.getState(),
+        };
+
+        // Horrible hack to make it work for now
+        delete plainObjectSubSearchParameters.query;
+
+        return new algoliasearchHelper.SearchParameters.make(
+          mergeWith(
+            {},
+            Object.keys(plainObjectParentSearchParameters)
+              .filter(
+                key =>
+                  typeof plainObjectParentSearchParameters[key] !== 'undefined'
+              )
+              .reduce(
+                (acc, key) => ({
+                  ...acc,
+                  [key]: plainObjectParentSearchParameters[key],
+                }),
+                {}
+              ),
+            Object.keys(plainObjectSubSearchParameters)
+              .filter(
+                key =>
+                  typeof plainObjectSubSearchParameters[key] !== 'undefined'
+              )
+              .reduce(
+                (acc, key) => ({
+                  ...acc,
+                  [key]: plainObjectSubSearchParameters[key],
+                }),
+                {}
+              ),
+            customizer
+          )
+        );
+      });
+
+      derived.on('result', (results, state) => {
+        // With an index-less helper we can plug those callbacks
+        // with _init & _render since we don't have the extra render
+        // for the first level
+        index.render({
+          instantSearchInstance: this,
+          helper: index.helper,
+          results,
+          state,
+        });
+      });
+
+      return {
+        index,
+        derived,
+      };
+    });
+
     if (this._searchFunction) {
       this._mainHelperSearch = helper.search.bind(helper);
       helper.search = () => {
@@ -378,7 +477,19 @@ To help you migrate, please refer to the migration guide: https://community.algo
     }
 
     this.helper = helper;
+
     this._init(helper.state, this.helper);
+    // With an index-less helper we can plug those callbacks
+    // with _init & _render since we don't have the extra render
+    // for the first level
+    forEach(this.indices, ({ index }) => {
+      index.init({
+        instantSearchInstance: this,
+        state: index.helper.state,
+        helper: index.helper,
+      });
+    });
+
     this.helper.on('result', this._render.bind(this, this.helper));
     this.helper.on('error', e => {
       this.emit('error', e);
@@ -432,20 +543,19 @@ To help you migrate, please refer to the migration guide: https://community.algo
     }
 
     forEach(this.widgets, widget => {
-      if (!widget.render) {
-        return;
+      if (widget.render) {
+        widget.render({
+          templatesConfig: this.templatesConfig,
+          results,
+          state,
+          helper,
+          createURL: this._createAbsoluteURL,
+          instantSearchInstance: this,
+          searchMetadata: {
+            isSearchStalled: this._isSearchStalled,
+          },
+        });
       }
-      widget.render({
-        templatesConfig: this.templatesConfig,
-        results,
-        state,
-        helper,
-        createURL: this._createAbsoluteURL,
-        instantSearchInstance: this,
-        searchMetadata: {
-          isSearchStalled: this._isSearchStalled,
-        },
-      });
     });
 
     /**

@@ -104,6 +104,7 @@
     "mkdirp": "0.5.1",
     "mversion": "1.10.1",
     "node-sass": "4.7.2",
+    "parcel-bundler": "1.9.7",
     "places.js": "1.6.0",
     "postcss-loader": "2.1.1",
     "prettier": "1.11.1",
