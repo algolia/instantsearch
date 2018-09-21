@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import { shallow } from 'enzyme';
 import Hits from '../Hits';
 import Template from '../Template';
-import highlight from '../../lib/highlight';
+import { highlight } from '../../helpers';
 
 describe('Hits', () => {
   function shallowRender(extraProps = {}) {
