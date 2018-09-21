@@ -13,7 +13,7 @@ import initSearchBoxStories from './stories/search-box.stories';
 import initSortByStories from './stories/sort-by.stories';
 import initStarRatingStories from './stories/star-rating.stories';
 import initStatsStories from './stories/stats.stories';
-import initToggleStories from './stories/toggle.stories';
+import initToggleStories from './stories/toggleRefinement.stories';
 import initAutcompleteStories from './stories/autocomplete.stories';
 
 export default () => {

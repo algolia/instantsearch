@@ -7,7 +7,7 @@ import {
 import find from 'lodash/find';
 
 const usage = `Usage:
-var customToggle = connectToggle(function render(params, isFirstRendering) {
+var customToggle = connectToggleRefinement(function render(params, isFirstRendering) {
   // params = {
   //   value,
   //   createURL,
@@ -23,7 +23,7 @@ search.addWidget(
     [ values = {on: true, off: undefined} ]
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggle.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggleRefinement.html
 `;
 
 /**
@@ -92,7 +92,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * }
  *
  * // connect `renderFn` to Toggle logic
- * var customToggle = instantsearch.connectors.connectToggle(renderFn);
+ * var customToggle = instantsearch.connectors.connectToggleRefinement(renderFn);
  *
  * // mount widget on the page
  * search.addWidget(
@@ -103,7 +103,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectToggle(renderFn, unmountFn) {
+export default function connectToggleRefinement(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {

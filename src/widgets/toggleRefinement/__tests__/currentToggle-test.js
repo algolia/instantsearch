@@ -1,6 +1,6 @@
 import expect from 'expect';
 import sinon from 'sinon';
-import currentToggle from '../toggle.js';
+import currentToggle from '../toggleRefinement.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
 import jsHelper from 'algoliasearch-helper';

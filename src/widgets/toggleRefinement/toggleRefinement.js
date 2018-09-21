@@ -2,12 +2,12 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import defaultTemplates from './defaultTemplates.js';
-import ToggleRefinement from '../../components/ToggleRefinement';
-import connectToggle from '../../connectors/toggle/connectToggle.js';
+import ToggleRefinement from '../../components/ToggleRefinement.js';
+import connectToggleRefinement from '../../connectors/toggleRefinement/connectToggleRefinement.js';
 
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
 
-import { component } from '../../lib/suit';
+import { component } from '../../lib/suit.js';
 
 const suit = component('ToggleRefinement');
 
@@ -44,7 +44,7 @@ const renderer = ({
 };
 
 const usage = `Usage:
-toggle({
+toggleRefinement({
   container,
   attributeName,
   [ on=true ],
@@ -93,13 +93,12 @@ toggle({
  * @property {ToggleWidgetTemplates} [templates] Templates to use for the widget.
  * @property {ToggleWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
  * @property {ToggleWidgetCSSClasses} [cssClasses] CSS classes to add.
- * an object, with the property collapsed, if you want the toggle to be collapsed initially.
  */
 
 /**
- * The toggle widget lets the user either:
+ * The toggleRefinement widget lets the user either:
  *  - switch between two values for a single facetted attribute (free_shipping / not_free_shipping)
- *  - toggle a faceted value on and off (only 'canon' for brands)
+ *  - toggleRefinement a faceted value on and off (only 'canon' for brands)
  *
  * This widget is particularly useful if you have a boolean value in the records.
  *
@@ -109,13 +108,13 @@ toggle({
  * in your Algolia settings.
  *
  * @type {WidgetFactory}
- * @devNovel Toggle
+ * @devNovel ToggleRefinement
  * @category filter
- * @param {ToggleWidgetOptions} $0 Options for the Toggle widget.
- * @return {Widget} A new instance of the Toggle widget
+ * @param {ToggleWidgetOptions} $0 Options for the ToggleRefinement widget.
+ * @return {Widget} A new instance of the ToggleRefinement widget
  * @example
  * search.addWidget(
- *   instantsearch.widgets.toggle({
+ *   instantsearch.widgets.toggleRefinement({
  *     container: '#free-shipping',
  *     attributeName: 'free_shipping',
  *     values: {
@@ -127,7 +126,7 @@ toggle({
  *   })
  * );
  */
-export default function toggle({
+export default function toggleRefinement({
   container,
   attributeName,
   cssClasses: userCssClasses = {},
@@ -161,7 +160,7 @@ export default function toggle({
   });
 
   try {
-    const makeWidget = connectToggle(specializedRenderer, () =>
+    const makeWidget = connectToggleRefinement(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attributeName, values: { on, off } });

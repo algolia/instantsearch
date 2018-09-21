@@ -5,14 +5,14 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectToggle from '../connectToggle.js';
+import connectToggleRefinement from '../connectToggleRefinement.js';
 
-describe('connectToggle', () => {
+describe('connectToggleRefinement', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
-    const makeWidget = connectToggle(rendering);
+    const makeWidget = connectToggleRefinement(rendering);
 
     const attributeName = 'isShippingFree';
     const label = 'Free shipping?';
@@ -111,7 +111,7 @@ describe('connectToggle', () => {
 
   it('Provides a function to add/remove a facet value', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectToggle(rendering);
+    const makeWidget = connectToggleRefinement(rendering);
 
     const attributeName = 'isShippingFree';
     const label = 'Free shipping?';
@@ -263,7 +263,7 @@ describe('connectToggle', () => {
 
   it('Provides a function to toggle between two values', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectToggle(rendering);
+    const makeWidget = connectToggleRefinement(rendering);
 
     const attributeName = 'isShippingFree';
     const label = 'Free shipping?';
@@ -430,7 +430,7 @@ describe('connectToggle', () => {
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
-      const makeWidget = connectToggle(rendering);
+      const makeWidget = connectToggleRefinement(rendering);
 
       const attributeName = 'isShippingFree';
       const label = 'Free shipping?';

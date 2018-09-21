@@ -6,7 +6,7 @@ const renderFn = (
     value,
     createURL,
     refine,
-    widgetParams: { title = 'Toggle', containerNode },
+    widgetParams: { title = 'ToggleRefinement', containerNode },
   },
   isFirstRendering
 ) => {
@@ -52,4 +52,4 @@ const renderFn = (
   });
 };
 
-export default instantsearch.connectors.connectToggle(renderFn);
+export default instantsearch.connectors.connectToggleRefinement(renderFn);
