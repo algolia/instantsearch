@@ -1,7 +1,8 @@
 import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
 
-storiesOf('__template__', module)
+// space before text is to make it sort last
+storiesOf('  __template__', module)
   .addDecorator(previewWrapper())
   .add('simple usage', () => ({
     template: `<ais-_template></ais-_template>`,

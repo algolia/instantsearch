@@ -37,11 +37,11 @@
 <script>
 import { connectNumericRefinementList } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
-import algoliaComponent from '../mixins/component';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
   mixins: [
-    algoliaComponent,
+    createWidgetMixin({ connector: connectNumericRefinementList }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => !state.hasNoResults,
     }),
@@ -61,9 +61,6 @@ export default {
         return items;
       },
     },
-  },
-  beforeCreate() {
-    this.connector = connectNumericRefinementList;
   },
   data() {
     return {

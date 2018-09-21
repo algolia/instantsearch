@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
-import { __setState } from '../../mixins/component';
+import { __setState } from '../../mixins/widget';
 import Configure from '../Configure';
 
-jest.mock('../../mixins/component');
+jest.mock('../../mixins/widget');
 
 const defaultState = {
   widgetParams: {

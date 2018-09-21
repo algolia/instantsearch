@@ -34,14 +34,14 @@
 
 <script>
 import { connectToggle } from 'instantsearch.js/es/connectors';
-import algoliaComponent from '../mixins/component';
+import { createWidgetMixin } from '../mixins/widget';
 import { createPanelConsumerMixin } from '../mixins/panel';
 
 const mapStateToCanRefine = state => Boolean(state.value.count);
 
 export default {
   mixins: [
-    algoliaComponent,
+    createWidgetMixin({ connector: connectToggle }),
     createPanelConsumerMixin({
       mapStateToCanRefine,
     }),
@@ -72,9 +72,6 @@ export default {
     return {
       widgetName: 'ToggleRefinement',
     };
-  },
-  beforeCreate() {
-    this.connector = connectToggle;
   },
   computed: {
     widgetParams() {

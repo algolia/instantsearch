@@ -25,10 +25,10 @@
 
 <script>
 import { connectHits } from 'instantsearch.js/es/connectors';
-import algoliaComponent from '../mixins/component';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
-  mixins: [algoliaComponent],
+  mixins: [createWidgetMixin({ connector: connectHits })],
   props: {
     escapeHTML: {
       type: Boolean,
@@ -45,9 +45,6 @@ export default {
     return {
       widgetName: 'Hits',
     };
-  },
-  beforeCreate() {
-    this.connector = connectHits;
   },
   computed: {
     items() {

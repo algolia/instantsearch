@@ -114,10 +114,10 @@
 </template>
 
 <script>
-import algoliaComponent from '../mixins/component';
+import { createWidgetMixin } from '../mixins/widget';
 
 export default {
-  mixins: [algoliaComponent],
+  mixins: [createWidgetMixin()],
   props: {
     placeholder: {
       type: String,

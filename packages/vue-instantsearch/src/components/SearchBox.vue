@@ -23,11 +23,11 @@
 
 <script>
 import { connectSearchBox } from 'instantsearch.js/es/connectors';
-import algoliaComponent from '../mixins/component';
+import { createWidgetMixin } from '../mixins/widget';
 import SearchInput from './SearchInput.vue';
 
 export default {
-  mixins: [algoliaComponent],
+  mixins: [createWidgetMixin({ connector: connectSearchBox })],
   components: {
     'ais-search-input': SearchInput,
   },
@@ -62,9 +62,6 @@ export default {
       localValue: '',
       widgetName: 'SearchBox',
     };
-  },
-  beforeCreate() {
-    this.connector = connectSearchBox;
   },
   methods: {
     onFormSubmit() {

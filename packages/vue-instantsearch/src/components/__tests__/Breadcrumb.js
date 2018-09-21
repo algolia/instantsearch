@@ -1,8 +1,8 @@
 import { mount } from '@vue/test-utils';
-import { __setState } from '../../mixins/component';
+import { __setState } from '../../mixins/widget';
 import Breadcrumb from '../Breadcrumb.vue';
 
-jest.mock('../../mixins/component');
+jest.mock('../../mixins/widget');
 jest.mock('../../mixins/panel');
 
 const defaultItems = [

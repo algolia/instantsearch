@@ -26,6 +26,8 @@ Some components have been renamed to be be more consistent with other InstantSea
 * `ais-rating` -> `ais-rating-menu`
 * `ais-sort-by-selector` -> `ais-sort-by`
 
+The `Component` mixin has been renamed to `createWidgetMixin({ connector })`. Read more about that in the [custom component guide](/advanced/custom-components.html).
+
 ### New components
 
 Find more information on these in their respective documentation.

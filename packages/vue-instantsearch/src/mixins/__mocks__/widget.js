@@ -14,7 +14,7 @@ export function __setState(newState) {
   state = newState;
 }
 
-export default {
+export const createWidgetMixin = () => ({
   data() {
     return {
       state,
@@ -25,4 +25,4 @@ export default {
       return suit(this.widgetName, ...args);
     },
   },
-};
+});

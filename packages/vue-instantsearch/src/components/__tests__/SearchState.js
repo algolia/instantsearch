@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 import SearchState from '../SearchState.vue';
-import { __setState } from '../../mixins/component';
-jest.mock('../../mixins/component');
+import { __setState } from '../../mixins/widget';
+jest.mock('../../mixins/widget');
 
 it('renders explanation if no slot is used', () => {
   __setState({
