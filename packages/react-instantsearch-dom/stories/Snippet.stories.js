@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { text } from '@storybook/addon-knobs';
-import { Snippet, Hits } from 'react-instantsearch-dom';
+import { Snippet, Hits, Configure } from 'react-instantsearch-dom';
 import { WrapWithHits } from './util';
 
 const stories = storiesOf('Snippet', module);
@@ -48,11 +48,13 @@ StrongHits.propTypes = {
 stories
   .add('default', () => (
     <WrapWithHits hasPlayground={true} linkedStoryGroup="Snippet">
+      <Configure attributesToSnippet={['name', 'description']} />
       <Hits hitComponent={Default} />
     </WrapWithHits>
   ))
   .add('playground', () => (
     <WrapWithHits linkedStoryGroup="Snippet">
+      <Configure attributesToSnippet={['name', 'description']} />
       <Hits hitComponent={StrongHits} />
     </WrapWithHits>
   ));
