@@ -1,7 +1,6 @@
 import expect from 'expect';
 import sinon from 'sinon';
 import currentToggle from '../toggle.js';
-import defaultTemplates from '../defaultTemplates.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
 import jsHelper from 'algoliasearch-helper';
@@ -12,10 +11,6 @@ describe('currentToggle()', () => {
     let containerNode;
     let widget;
     let attributeName;
-    let label;
-    let userValues;
-    let collapsible;
-    let cssClasses;
     let instantSearchInstance;
 
     beforeEach(() => {
@@ -24,26 +19,10 @@ describe('currentToggle()', () => {
       currentToggle.__Rewire__('render', ReactDOM.render);
 
       containerNode = document.createElement('div');
-      label = 'Hello, ';
       attributeName = 'world!';
-      cssClasses = {
-        active: 'ais-toggle--item__active',
-        body: 'ais-toggle--body',
-        checkbox: 'ais-toggle--checkbox',
-        count: 'ais-toggle--count',
-        footer: 'ais-toggle--footer',
-        header: 'ais-toggle--header',
-        item: 'ais-toggle--item',
-        label: 'ais-toggle--label',
-        list: 'ais-toggle--list',
-        root: 'ais-toggle',
-      };
-      collapsible = false;
-      userValues = { on: true, off: undefined };
       widget = currentToggle({
         container: containerNode,
         attributeName,
-        label,
       });
       instantSearchInstance = { templatesConfig: undefined };
     });
@@ -55,24 +34,12 @@ describe('currentToggle()', () => {
     });
 
     describe('render', () => {
-      let templateProps;
       let results;
       let helper;
       let state;
-      let props;
       let createURL;
 
       beforeEach(() => {
-        templateProps = {
-          templatesConfig: undefined,
-          templates: defaultTemplates,
-          useCustomCompileOptions: {
-            header: false,
-            item: false,
-            footer: false,
-          },
-          transformData: undefined,
-        };
         helper = {
           state: {
             isDisjunctiveFacetRefined: sinon.stub().returns(false),
@@ -85,13 +52,6 @@ describe('currentToggle()', () => {
           removeDisjunctiveFacetRefinement: sinon.spy(),
           addDisjunctiveFacetRefinement: sinon.spy(),
           isDisjunctiveFacetRefined: sinon.stub().returns(false),
-        };
-        props = {
-          cssClasses,
-          collapsible: false,
-          templateProps,
-          createURL() {},
-          toggleRefinement() {},
         };
         createURL = () => '#';
         widget.init({ state, helper, createURL, instantSearchInstance });
@@ -108,8 +68,7 @@ describe('currentToggle()', () => {
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          userValues,
+          /* on: true, off: undefined */
         });
         widget.getConfiguration();
         widget.init({ helper, state, createURL, instantSearchInstance });
@@ -134,29 +93,17 @@ describe('currentToggle()', () => {
               { name: 'false', count: 1, isRefined: false },
             ]),
         };
-        props.cssClasses.root = 'ais-toggle test';
-        props = {
-          facetValues: [
-            {
-              count: 2,
-              isRefined: false,
-              name: label,
-              offFacetValue: { count: 3, name: 'Hello, ', isRefined: false },
-              onFacetValue: { count: 2, name: 'Hello, ', isRefined: false },
-            },
-          ],
-          shouldAutoHideContainer: false,
-          ...props,
-        };
-        cssClasses = props.cssClasses;
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          cssClasses: { root: 'test' },
-          userValues,
+          cssClasses: {
+            root: 'test',
+            label: 'test-label',
+            labelText: 'test-labelText',
+            checkbox: 'test-checkbox',
+          },
+          /* on: true, off: undefined */
           RefinementList,
-          collapsible,
         });
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
@@ -178,29 +125,13 @@ describe('currentToggle()', () => {
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          userValues,
+          /* on: true, off: undefined */
           RefinementList,
-          collapsible,
         });
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
-
-        props = {
-          facetValues: [
-            {
-              count: 2,
-              isRefined: false,
-              name: label,
-              offFacetValue: { count: 3, name: 'Hello, ', isRefined: false },
-              onFacetValue: { count: 2, name: 'Hello, ', isRefined: false },
-            },
-          ],
-          shouldAutoHideContainer: false,
-          ...props,
-        };
 
         expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
@@ -221,12 +152,8 @@ describe('currentToggle()', () => {
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          values: {
-            off: -2,
-            on: 5,
-          },
-          collapsible,
+          off: -2,
+          on: 5,
         });
 
         const config = widget.getConfiguration();
@@ -241,20 +168,6 @@ describe('currentToggle()', () => {
         });
         widget.render({ results, helper: altHelper, state });
         widget.render({ results, helper: altHelper, state });
-
-        props = {
-          facetValues: [
-            {
-              count: 1,
-              isRefined: false,
-              name: label,
-              offFacetValue: { count: 2, name: label, isRefined: true },
-              onFacetValue: { count: 1, name: label, isRefined: false },
-            },
-          ],
-          shouldAutoHideContainer: false,
-          ...props,
-        };
 
         // The first call is not the one expected, because of the new init rendering..
         expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
@@ -279,29 +192,13 @@ describe('currentToggle()', () => {
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          userValues,
+          /* on: true, off: undefined */
           RefinementList,
-          collapsible,
         });
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
-
-        props = {
-          facetValues: [
-            {
-              name: label,
-              isRefined: false,
-              count: null,
-              onFacetValue: { name: label, isRefined: false, count: null },
-              offFacetValue: { name: label, isRefined: false, count: 0 },
-            },
-          ],
-          shouldAutoHideContainer: true,
-          ...props,
-        };
 
         expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
@@ -326,29 +223,13 @@ describe('currentToggle()', () => {
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          userValues,
+          /* on: true, off: undefined */
           RefinementList,
-          collapsible,
         });
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
         widget.render({ results, helper, state });
         widget.render({ results, helper, state });
-
-        props = {
-          facetValues: [
-            {
-              count: 3,
-              isRefined: true,
-              name: label,
-              onFacetValue: { name: label, isRefined: true, count: 2 },
-              offFacetValue: { name: label, isRefined: false, count: 3 },
-            },
-          ],
-          shouldAutoHideContainer: false,
-          ...props,
-        };
 
         expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
         expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
@@ -365,11 +246,8 @@ describe('currentToggle()', () => {
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          cssClasses,
-          userValues,
+          /* on: true, off: undefined */
           RefinementList,
-          collapsible,
         });
         widget.getConfiguration();
         widget.init({ state, helper, createURL, instantSearchInstance });
@@ -412,8 +290,7 @@ describe('currentToggle()', () => {
           widget = currentToggle({
             container: containerNode,
             attributeName,
-            label,
-            userValues,
+            /* on: true, off: undefined */
           });
           widget.getConfiguration();
           const state = {
@@ -436,8 +313,7 @@ describe('currentToggle()', () => {
           widget = currentToggle({
             container: containerNode,
             attributeName,
-            label,
-            userValues,
+            /* on: true, off: undefined */
           });
           widget.getConfiguration();
           const state = {
@@ -462,12 +338,11 @@ describe('currentToggle()', () => {
       describe('specific values', () => {
         it('toggle on should change the refined value', () => {
           // Given
-          userValues = { on: 'on', off: 'off' };
+          const userValues = { on: 'on', off: 'off' };
           widget = currentToggle({
             container: containerNode,
             attributeName,
-            label,
-            values: userValues,
+            ...userValues,
           });
 
           const config = widget.getConfiguration();
@@ -497,12 +372,11 @@ describe('currentToggle()', () => {
 
         it('toggle off should change the refined value', () => {
           // Given
-          userValues = { on: 'on', off: 'off' };
+          const userValues = { on: 'on', off: 'off' };
           widget = currentToggle({
             container: containerNode,
             attributeName,
-            label,
-            values: userValues,
+            ...userValues,
           });
           widget.getConfiguration();
           const state = {
@@ -535,12 +409,11 @@ describe('currentToggle()', () => {
       const createURL = () => '#';
       it('should add a refinement for custom off value on init', () => {
         // Given
-        userValues = { on: 'on', off: 'off' };
+        const userValues = { on: 'on', off: 'off' };
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          values: userValues,
+          ...userValues,
         });
         const config = widget.getConfiguration();
         const helper = jsHelper({}, '', config);
@@ -561,12 +434,11 @@ describe('currentToggle()', () => {
 
       it('should not add a refinement for custom off value on init if already checked', () => {
         // Given
-        userValues = { on: 'on', off: 'off' };
+        const userValues = { on: 'on', off: 'off' };
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          values: userValues,
+          ...userValues,
         });
         widget.getConfiguration();
         const state = {
@@ -585,11 +457,11 @@ describe('currentToggle()', () => {
 
       it('should not add a refinement for no custom off value on init', () => {
         // Given
+        const userValues = { on: 'on' };
         widget = currentToggle({
           container: containerNode,
           attributeName,
-          label,
-          values: userValues,
+          ...userValues,
         });
         widget.getConfiguration();
         const state = {

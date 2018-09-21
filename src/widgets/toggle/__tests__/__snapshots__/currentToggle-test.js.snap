@@ -93,9 +93,9 @@ exports[`currentToggle() good usage render understands cssClasses 1`] = `
   createURL={[Function]}
   cssClasses={
     Object {
-      "checkbox": "ais-ToggleRefinement-checkbox",
-      "label": "ais-ToggleRefinement-label",
-      "labelText": "ais-ToggleRefinement-labelText",
+      "checkbox": "ais-ToggleRefinement-checkbox test-checkbox",
+      "label": "ais-ToggleRefinement-label test-label",
+      "labelText": "ais-ToggleRefinement-labelText test-labelText",
       "root": "ais-ToggleRefinement test",
     }
   }

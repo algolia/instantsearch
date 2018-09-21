@@ -47,7 +47,8 @@ const usage = `Usage:
 toggle({
   container,
   attributeName,
-  [ values={on: true, off: undefined} ],
+  [ on=true ],
+  [ off=undefined ],
   [ cssClasses.{root, label, labelText, checkbox} ],
   [ templates.{labelText} ],
   [ transformData.{labelText} ],
@@ -76,15 +77,6 @@ toggle({
  */
 
 /**
- * @typedef {Object} ToggleWidgetValues
- * @property  {string|number|boolean} on Value to filter on when checked.
- * @property  {string|number|boolean} off Value to filter on when unchecked.
- * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
- * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
- * having `false` has a value for the selected attribute.
- */
-
-/**
  * @typedef {Object} ToggleWidgetCollapsibleOption
  * @property {boolean} collapsed If set to true, the widget will be collapsed at first rendering.
  */
@@ -93,7 +85,11 @@ toggle({
  * @typedef {Object} ToggleWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
- * @property {ToggleWidgetValues} [values={on: true, off: undefined}] Values that the widget can set.
+ * @property  {string|number|boolean} on Value to filter on when checked.
+ * @property  {string|number|boolean} off Value to filter on when unchecked.
+ * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
+ * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
+ * having `false` has a value for the selected attribute.
  * @property {ToggleWidgetTemplates} [templates] Templates to use for the widget.
  * @property {ToggleWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
  * @property {ToggleWidgetCSSClasses} [cssClasses] CSS classes to add.
@@ -137,7 +133,8 @@ export default function toggle({
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   transformData,
-  values: userValues = { on: true, off: undefined },
+  on = true,
+  off,
 } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -167,7 +164,7 @@ export default function toggle({
     const makeWidget = connectToggle(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ attributeName, values: userValues });
+    return makeWidget({ attributeName, values: { on, off } });
   } catch (e) {
     throw new Error(usage);
   }

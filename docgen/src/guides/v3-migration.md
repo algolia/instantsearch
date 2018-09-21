@@ -549,6 +549,8 @@ With the redo button:
 | `autoHideContainer` |                       |
 | `label`             | `templates.labelText` |
 | `templates.item`    |                       |
+| `values.on`         | `on`                  |
+| `values.off`        | `off`                 |
 
 `collapsible` and `autoHideContainer` options have been removed. These options are now implemented
 as part of the Panel widget wrapper.
