@@ -1136,3 +1136,39 @@ describe('utils.clearRefinements', () => {
     });
   });
 });
+
+describe('utils.getPropertyByPath', () => {
+  it('should be able to get a property', () => {
+    const object = {
+      name: 'name',
+    };
+
+    expect(utils.getPropertyByPath(object, 'name')).toBe('name');
+  });
+
+  it('should be able to get a nested property', () => {
+    const object = {
+      nested: {
+        name: 'name',
+      },
+    };
+
+    expect(utils.getPropertyByPath(object, 'nested.name')).toBe('name');
+  });
+
+  it('returns undefined if does not exist', () => {
+    const object = {};
+
+    expect(utils.getPropertyByPath(object, 'random')).toBe(undefined);
+  });
+
+  it('should stop traversing when property is not an object', () => {
+    const object = {
+      nested: {
+        names: ['name'],
+      },
+    };
+
+    expect(utils.getPropertyByPath(object, 'nested.name')).toBe(undefined);
+  });
+});

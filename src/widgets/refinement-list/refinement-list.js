@@ -114,7 +114,7 @@ refinementList({
  * @property {boolean} [isAlwaysActive=false] When `false` the search field will become disabled if
  * there are less items to display than the `options.limit`, otherwise the search field is always usable.
  * @property {boolean} [escapeFacetValues=false] When activated, it will escape the facet values that are returned
- * from Algolia. In this case, the surrounding tags will always be `<em></em>`.
+ * from Algolia. In this case, the surrounding tags will always be `<mark></mark>`.
  */
 
 /**
@@ -248,7 +248,9 @@ export default function refinementList({
 
   const showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
-    throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
+    throw new Error(
+      'showMore.limit configuration should be > than the limit in the main configuration'
+    );
   }
 
   const escapeFacetValues = searchForFacetValues

@@ -436,3 +436,9 @@ function parseAroundLatLngFromString(value) {
     lng: parseFloat(pattern[2]),
   };
 }
+
+export function getPropertyByPath(object, path) {
+  const parts = path.split('.');
+
+  return parts.reduce((current, key) => current && current[key], object);
+}
