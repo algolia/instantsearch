@@ -96,7 +96,8 @@ storiesOf('RangeInput', module)
   }))
   .add('with vuetify slider', () => ({
     template: `
-      <v-app>
+    <v-app>
+      <v-container mt-4>
         <ais-range-input attribute="price">
           <template slot-scope="{ refine, currentRefinements, range }">
             <v-range-slider
@@ -104,10 +105,12 @@ storiesOf('RangeInput', module)
               :max="range.max"
               :value="toValue(currentRefinements, range)"
               @input="refine($event[0], $event[1])"
+              thumb-label="always"
             />
           </template>
         </ais-range-input>
-      </v-app>
+      </v-container>
+    </v-app>
     `,
     data() {
       return {
