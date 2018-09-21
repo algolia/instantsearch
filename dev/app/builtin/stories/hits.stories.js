@@ -63,6 +63,57 @@ export default () => {
       })
     )
     .add(
+      'with snippet function',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.configure({
+            attributesToSnippet: ['name', 'description'],
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              item(hit) {
+                return `
+                  <h4>${instantsearch.snippet({
+                    attribute: 'name',
+                    hit,
+                  })}</h4>
+                  <p>${instantsearch.snippet({
+                    attribute: 'description',
+                    hit,
+                  })}</p>
+                `;
+              },
+            },
+          })
+        );
+      })
+    )
+    .add(
+      'with snippet helper',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.configure({
+            attributesToSnippet: ['name', 'description'],
+          })
+        );
+
+        window.search.addWidget(
+          instantsearch.widgets.hits({
+            container,
+            templates: {
+              item: `
+                <h4>{{#helpers.snippet}}{ "attribute": "name", "highlightedTagName": "mark" }{{/helpers.snippet}}</h4>
+                <p>{{#helpers.snippet}}{ "attribute": "description", "highlightedTagName": "mark" }{{/helpers.snippet}}</p>`,
+            },
+          })
+        );
+      })
+    )
+    .add(
       'with highlighted array',
       wrapWithHits(
         container => {
