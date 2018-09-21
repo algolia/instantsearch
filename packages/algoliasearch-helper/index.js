@@ -20,9 +20,10 @@ var SearchResults = require('./src/SearchResults');
  * helper.on('result', function(result) {
  *   console.log(result);
  * });
- * helper.toggleRefine('Movies & TV Shows')
- *       .toggleRefine('Free shipping')
- *       .search();
+ * helper
+ *   .toggleRefine('category', 'Movies & TV Shows')
+ *   .toggleRefine('shipping', 'Free shipping')
+ *   .search();
  * @example
  * // The helper is an event emitter using the node API
  * helper.on('result', updateTheResults);
