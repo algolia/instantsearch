@@ -70,9 +70,8 @@ import instantsearch from 'instantsearch.js/es';
 @Injectable()
 export class InstantSearchService {
   search = instantsearch({
-    appId: 'latency',
-    apiKey: '3d9875e51fbd20c7754e65422f7ce5e1',
     indexName: 'bestbuy',
+    searchClient: algoliasearch('latency', '3d9875e51fbd20c7754e65422f7ce5e1'),
     urlSync: true
   });
 
