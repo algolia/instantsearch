@@ -52,8 +52,6 @@ For more complex data structures, it will be necessary to leverage the [_highlig
 </ais-hits>
 ```
 
-Note that if you used `escapeHTML: true` in your `ais-hits` props, the highlight tag will be `<em>`
-
 ## Props
 
 Name | Type | Default | Description | Required
