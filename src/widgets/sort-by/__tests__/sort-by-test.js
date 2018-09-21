@@ -24,10 +24,10 @@ describe('sortBy()', () => {
 
   beforeEach(() => {
     const instantSearchInstance = instantSearch({
-      apiKey: '',
-      appId: '',
       indexName: 'defaultIndex',
-      createAlgoliaClient: () => ({}),
+      searchClient: {
+        search() {},
+      },
     });
     ReactDOM = { render: jest.fn() };
 

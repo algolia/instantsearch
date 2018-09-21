@@ -1,6 +1,7 @@
 /* eslint-disable import/default */
 
 import { storiesOf } from 'dev-novel';
+import algoliasearch from 'algoliasearch/lite';
 import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
@@ -96,9 +97,11 @@ export default () => {
           );
         },
         {
-          appId: 'KY4PR9ORUL',
-          apiKey: 'a5ca312adab3b79e14054154efa00b37',
           indexName: 'highlight_array',
+          searchClient: algoliasearch(
+            'KY4PR9ORUL',
+            'a5ca312adab3b79e14054154efa00b37'
+          ),
         }
       )
     );
