@@ -8,7 +8,6 @@ import { component } from '../../lib/suit';
 
 const suit = component('SearchBox');
 
-const KEY_ENTER = 13;
 const KEY_SUPPRESS = 8;
 
 const renderer = ({
