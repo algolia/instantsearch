@@ -1,3 +1,19 @@
+<a name="5.3.0"></a>
+# [5.3.0](https://github.com/algolia/react-instantsearch/compare/v5.2.3...v5.3.0) (2018-09-24)
+
+
+### Bug Fixes
+
+* **SSR:** bind getSearchParmaters to the component instance ([f34cb3d](https://github.com/algolia/react-instantsearch/commit/f34cb3d))
+* **GoogleMapsLoader:** pick google maps version ([#1540](https://github.com/algolia/react-instantsearch/issues/1540)) ([b14efcf](https://github.com/algolia/react-instantsearch/commit/b14efcf))
+
+
+### Features
+
+* **connectToggleRefinement:** implement canRefine & count ([#1588](https://github.com/algolia/react-instantsearch/issues/1588)) ([40672dd](https://github.com/algolia/react-instantsearch/commit/40672dd))
+
+
+
 <a name="5.2.3"></a>
 ## [5.2.3](https://github.com/algolia/react-instantsearch/compare/v5.2.2...v5.2.3) (2018-08-16)
 
