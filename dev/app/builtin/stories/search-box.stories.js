@@ -14,19 +14,29 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container,
+          })
+        );
+      })
+    )
+    .add(
+      'with a custom placeholder',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.searchBox({
+            container,
             placeholder: 'Search for products',
           })
         );
       })
     )
     .add(
-      'display loading indicator',
+      'do not display the loading indicator',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container,
             placeholder: 'Search for products',
-            loadingIndicator: true,
+            showLoadingIndicator: false,
           })
         );
       })
@@ -38,8 +48,8 @@ export default () => {
           instantsearch.widgets.searchBox({
             container,
             placeholder: 'Search for products',
-            loadingIndicator: {
-              template: '⚡️',
+            templates: {
+              loadingIndicator: '⚡️',
             },
           })
         );
@@ -52,11 +62,9 @@ export default () => {
           instantsearch.widgets.searchBox({
             container,
             placeholder: 'Search for products',
-            magnifier: {
-              template: '<div class="ais-search-box--magnifier">🔍</div>',
-            },
-            reset: {
-              template: '<div class="ais-search-box--reset">✖️</div>',
+            templates: {
+              submit: '<div class="ais-search-box--magnifier">🔍</div>',
+              reset: '<div class="ais-search-box--reset">✖️</div>',
             },
           })
         );
