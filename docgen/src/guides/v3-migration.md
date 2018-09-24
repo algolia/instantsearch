@@ -48,8 +48,8 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 | `escapeHits`    | `escapeHTML`    |
 | `showMoreLabel` | `loadMoreLabel` |
 
-- `escapeHTML` becomes `true` by default.
-- `allItems` template has been removed in favor of `connectHits`
+* `escapeHTML` becomes `true` by default.
+* `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
 
@@ -309,7 +309,7 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 | `wrapInput`                 | Use the connectSearchBox instead         |
 | `searchOnEnterKeyPressOnly` | `searchAsYouType` (default: `true`)      |
 | `reset`                     | `showReset`                              |
-| `submit`                    | `showMagnifier`                          |
+| `magnifier`                 | `showSubmit`                             |
 | `loadingIndicator`          | `showLoadingIndicator` (default: `true`) |
 
 With the drop of wrapInput, we decided not to accept `INPUT` as a container anymore. If you
