@@ -13,7 +13,7 @@ exports[`GeoSearchControls Clear button expect to render the button when the ref
   >
     <Component
       rootTagName="span"
-      templateKey="clear"
+      templateKey="reset"
     />
   </GeoSearchButton>
 </div>

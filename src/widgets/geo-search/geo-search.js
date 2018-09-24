@@ -19,7 +19,7 @@ geoSearch({
   [ initialPosition = { lat: 0, lng: 0 } ],
   [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],
   [ cssClasses.{root,map,control,label,labelSelected,input,redo,redoDisabled,reset} = {} ],
-  [ templates.{clear,toggle,redo} ],
+  [ templates.{reset,toggle,redo} ],
   [ mapOptions ],
   [ builtInMarker ],
   [ customHTMLMarker = false ],
@@ -69,7 +69,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {object} GeoSearchTemplates
- * @property {string|function(object): string} [clear] Template for the clear button.
+ * @property {string|function(object): string} [reset] Template for the reset button.
  * @property {string|function(object): string} [toggle] Template for the toggle label.
  * @property {string|function(object): string} [redo] Template for the redo button.
  */

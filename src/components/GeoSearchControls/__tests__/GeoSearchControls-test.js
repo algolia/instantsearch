@@ -214,7 +214,7 @@ describe('GeoSearchControls', () => {
       expect(wrapper).toMatchSnapshot();
     });
 
-    it('expect to call onClearClick when the clear button is clicked', () => {
+    it('expect to call onClearClick when the reset button is clicked', () => {
       const props = {
         ...defaultProps,
         enableRefineControl: false,

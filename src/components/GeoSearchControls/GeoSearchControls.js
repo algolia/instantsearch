@@ -75,7 +75,7 @@ const GeoSearchControls = ({
     {enableClearMapRefinement &&
       isRefinedWithMap && (
         <GeoSearchButton className={cssClasses.reset} onClick={onClearClick}>
-          <Template {...templateProps} templateKey="clear" rootTagName="span" />
+          <Template {...templateProps} templateKey="reset" rootTagName="span" />
         </GeoSearchButton>
       )}
   </div>

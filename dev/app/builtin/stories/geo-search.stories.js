@@ -356,7 +356,7 @@ export default () => {
             instantsearch.widgets.geoSearch({
               googleReference: window.google,
               templates: {
-                clear: '<span>re-center</span>',
+                reset: '<span>re-center</span>',
                 toggle: '<span>Redo search when map moved</span>',
                 redo: '<span>Search this area</span>',
               },

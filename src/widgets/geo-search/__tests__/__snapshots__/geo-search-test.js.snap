@@ -30,15 +30,15 @@ Array [
     templateProps={
       Object {
         "templates": Object {
-          "clear": "Clear the map refinement",
           "redo": "Redo search here",
+          "reset": "Clear the map refinement",
           "toggle": "Search as I move the map",
         },
         "templatesConfig": undefined,
         "transformData": undefined,
         "useCustomCompileOptions": Object {
-          "clear": true,
           "redo": true,
+          "reset": true,
           "toggle": true,
         },
       }
@@ -80,15 +80,15 @@ Array [
     templateProps={
       Object {
         "templates": Object {
-          "clear": "Clear the map refinement",
           "redo": "Redo search here",
+          "reset": "Clear the map refinement",
           "toggle": "Search as I move the map",
         },
         "templatesConfig": undefined,
         "transformData": undefined,
         "useCustomCompileOptions": Object {
-          "clear": true,
           "redo": true,
+          "reset": true,
           "toggle": true,
         },
       }
