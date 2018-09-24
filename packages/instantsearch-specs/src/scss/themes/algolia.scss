@@ -172,6 +172,7 @@ a[class^='ais-'] {
 }
 
 .ais-GeoSearch-label {
+  display: block;
   padding: 0.3rem 0.5rem;
   font-size: 0.8rem;
   background-color: #fff;
@@ -179,6 +180,10 @@ a[class^='ais-'] {
   transition: background-color 0.2s ease-out;
   box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px;
   outline: none;
+}
+
+.ais-GeoSearch-input {
+  margin: 0 0.25rem 0 0;
 }
 
 .ais-GeoSearch-label,
