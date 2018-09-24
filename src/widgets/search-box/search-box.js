@@ -217,7 +217,7 @@ export default function searchBox({
   container,
   placeholder = '',
   cssClasses = {},
-  autofocus = 'auto',
+  autofocus = false,
   searchAsYouType = true,
   showReset = true,
   showSubmit = true,
@@ -235,13 +235,16 @@ export default function searchBox({
     // eslint-disable-next-line
     // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
     throw new Error(
-      `Starting in V3, container can not be an INPUT anymore. If you have more questions, have a look at the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/migration.html).`
+      `Starting in V3, container can not be an INPUT anymore. If you have more questions, have a look at the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).`
     );
   }
 
-  // Only possible values are 'auto', true and false
+  // eslint-disable-next-line
+  // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
   if (typeof autofocus !== 'boolean') {
-    autofocus = 'auto';
+    throw new Error(
+      'Starting in V3, the `autofocus` parameter only supports boolean values. For more information, have a look at the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/v3-migration.html).'
+    );
   }
 
   const specializedRenderer = renderer({

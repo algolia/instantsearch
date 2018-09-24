@@ -324,6 +324,8 @@ Configuration options for `reset`, `submit` and `loadingIndicator` have been dis
 * `reset.template` => `templates.reset`
 * `reset.cssClasses.root` => `cssClasses.reset`
 
+Finally, `autofocus` is now set to `false` by default and does not support the `auto` value anymore.
+
 #### CSS classes
 
 | Before                                      | After                            |
