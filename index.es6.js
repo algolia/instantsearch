@@ -5,7 +5,7 @@ import toFactory from 'to-factory';
 /* eslint-disable import/no-unresolved */
 import InstantSearch from './lib/InstantSearch.js';
 import version from './lib/version.js';
-import { highlight } from './helpers';
+import { snippet, highlight } from './helpers';
 /* eslint-enable import/no-unresolved */
 
 // import instantsearch from 'instantsearch.js';
@@ -15,6 +15,7 @@ const instantSearchFactory = toFactory(InstantSearch);
 instantSearchFactory.version = version;
 instantSearchFactory.createQueryString =
   algoliasearchHelper.url.getQueryStringFromState;
+instantSearchFactory.snippet = snippet;
 instantSearchFactory.highlight = highlight;
 
 Object.defineProperty(instantSearchFactory, 'widgets', {
