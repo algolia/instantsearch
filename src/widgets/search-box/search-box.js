@@ -62,16 +62,17 @@ const renderer = ({
       input.setSelectionRange(query.length, query.length);
     }
 
+    const form = input.parentElement;
+
     // search on enter
     if (!searchAsYouType) {
       addListener(input, INPUT_EVENT, e => {
         refine(getValue(e), false);
       });
-      addListener(input, 'keyup', e => {
-        if (e.keyCode === KEY_ENTER) {
-          refine(getValue(e));
-          input.blur();
-        }
+      addListener(form, 'submit', e => {
+        refine(input.value);
+        e.preventDefault();
+        input.blur();
       });
     } else {
       addListener(input, INPUT_EVENT, getInputValueAndCall(refine));
@@ -85,6 +86,10 @@ const renderer = ({
           ifKey(KEY_SUPPRESS, getInputValueAndCall(refine))
         );
       }
+
+      addListener(form, 'submit', e => {
+        e.preventDefault();
+      });
     }
   }
 
@@ -396,9 +401,6 @@ function wrapInputFn(input, cssClasses) {
   const form = document.createElement('form');
   form.className = cx(suit({ descendantName: 'form' }), cssClasses.form);
   form.noValidate = true;
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-  });
 
   form.appendChild(input);
   wrapper.appendChild(form);

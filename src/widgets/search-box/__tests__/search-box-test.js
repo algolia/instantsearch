@@ -288,9 +288,8 @@ describe('searchBox()', () => {
         // we have to set it ourselves
         helper.state.query = input.value;
 
-        const e2 = new window.Event('keyup', { keyCode: 13 });
-        Object.defineProperty(e2, 'keyCode', { get: () => 13 });
-        input.dispatchEvent(e2);
+        const e2 = new window.Event('submit');
+        input.parentElement.dispatchEvent(e2);
 
         expect(helper.setQuery).toHaveBeenCalledTimes(1);
         expect(helper.search).toHaveBeenCalledTimes(1);
