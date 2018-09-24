@@ -68,7 +68,10 @@ const renderer = ({
         refine(getValue(e), false);
       });
       addListener(input, 'keyup', e => {
-        if (e.keyCode === KEY_ENTER) refine(getValue(e));
+        if (e.keyCode === KEY_ENTER) {
+          refine(getValue(e));
+          input.blur();
+        }
       });
     } else {
       addListener(input, INPUT_EVENT, getInputValueAndCall(refine));
@@ -389,6 +392,9 @@ function wrapInputFn(input, cssClasses) {
   const form = document.createElement('form');
   form.className = cx(suit({ descendantName: 'form' }), cssClasses.form);
   form.noValidate = true;
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+  });
 
   form.appendChild(input);
   wrapper.appendChild(form);

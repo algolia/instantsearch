@@ -15,7 +15,6 @@ export default () => {
           instantsearch.widgets.searchBox({
             container,
             placeholder: 'Search for products',
-            poweredBy: true,
           })
         );
       })
@@ -27,7 +26,6 @@ export default () => {
           instantsearch.widgets.searchBox({
             container,
             placeholder: 'Search for products',
-            poweredBy: true,
             loadingIndicator: true,
           })
         );
@@ -40,7 +38,6 @@ export default () => {
           instantsearch.widgets.searchBox({
             container,
             placeholder: 'Search for products',
-            poweredBy: true,
             loadingIndicator: {
               template: '⚡️',
             },
@@ -55,15 +52,11 @@ export default () => {
           instantsearch.widgets.searchBox({
             container,
             placeholder: 'Search for products',
-            poweredBy: true,
             magnifier: {
               template: '<div class="ais-search-box--magnifier">🔍</div>',
             },
             reset: {
               template: '<div class="ais-search-box--reset">✖️</div>',
-            },
-            templates: {
-              poweredBy: 'Algolia',
             },
           })
         );
@@ -76,8 +69,7 @@ export default () => {
           instantsearch.widgets.searchBox({
             container,
             placeholder: 'Search for products',
-            poweredBy: true,
-            searchOnEnterKeyPressOnly: true,
+            searchAsYouType: false,
           })
         );
       })

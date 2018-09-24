@@ -147,7 +147,7 @@ describe('searchBox()', () => {
 
       // Then
       const element = container.querySelector('.ais-SearchBox-reset');
-      expect(element.style.display).toBe('none');
+      expect(element.hasAttribute('hidden')).toBe(true);
     });
 
     it('should be shown when there is a query', () => {
@@ -160,7 +160,7 @@ describe('searchBox()', () => {
 
       // Then
       const element = container.querySelector('.ais-SearchBox-reset');
-      expect(element.style.display).toBe('block');
+      expect(element.getAttribute('hidden')).toBe(null);
     });
 
     it('should clear the query', () => {
