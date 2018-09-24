@@ -46,9 +46,7 @@ storiesOf('ais-configure', module)
   .add('with display of the parameters', () => ({
     template: `
       <ais-configure :hitsPerPage="1">
-        <pre slot-scope="{ searchParameters }">
-          {{JSON.stringify(searchParameters, null, 2)}}
-        </pre>
+        <pre slot-scope="{ searchParameters }">{{JSON.stringify(searchParameters, null, 2)}}</pre>
       </ais-configure>
     `,
   }))
