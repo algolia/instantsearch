@@ -159,12 +159,13 @@ describe('GeoSearch', () => {
       cssClasses: {
         root: 'custom-root',
         map: 'custom-map',
-        controls: 'custom-controls',
-        clear: 'custom-clear',
         control: 'custom-control',
-        toggleLabel: 'custom-toggleLabel',
-        toggleInput: 'custom-toggleInput',
+        label: 'custom-label',
+        labelSelected: 'custom-label-selected',
+        input: 'custom-input',
         redo: 'custom-redo',
+        redoDisabled: 'custom-redo-disabled',
+        reset: 'custom-reset',
       },
     });
 

@@ -23,10 +23,10 @@ const GeoSearchControls = ({
         {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
           <GeoSearchToggle
             classNameLabel={cx(
-              cssClasses.toggleLabel,
-              isRefineOnMapMove && cssClasses.toggleLabelActive
+              cssClasses.label,
+              isRefineOnMapMove && cssClasses.labelSelected
             )}
-            classNameInput={cssClasses.toggleInput}
+            classNameInput={cssClasses.input}
             checked={isRefineOnMapMove}
             onToggle={onRefineToggle}
           >
@@ -56,7 +56,10 @@ const GeoSearchControls = ({
       !isRefineOnMapMove && (
         <div className={cssClasses.control}>
           <GeoSearchButton
-            className={cssClasses.redo}
+            className={cx(
+              cssClasses.redo,
+              !hasMapMoveSinceLastRefine && cssClasses.redoDisabled
+            )}
             disabled={!hasMapMoveSinceLastRefine}
             onClick={onRefineClick}
           >
@@ -71,7 +74,7 @@ const GeoSearchControls = ({
 
     {enableClearMapRefinement &&
       isRefinedWithMap && (
-        <GeoSearchButton className={cssClasses.clear} onClick={onClearClick}>
+        <GeoSearchButton className={cssClasses.reset} onClick={onClearClick}>
           <Template {...templateProps} templateKey="clear" rootTagName="span" />
         </GeoSearchButton>
       )}
@@ -80,11 +83,12 @@ const GeoSearchControls = ({
 
 const CSSClassesPropTypes = PropTypes.shape({
   control: PropTypes.string.isRequired,
-  toggleLabel: PropTypes.string.isRequired,
-  toggleLabelActive: PropTypes.string.isRequired,
-  toggleInput: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  labelSelected: PropTypes.string.isRequired,
+  input: PropTypes.string.isRequired,
   redo: PropTypes.string.isRequired,
-  clear: PropTypes.string.isRequired,
+  redoDisabled: PropTypes.string.isRequired,
+  reset: PropTypes.string.isRequired,
 });
 
 GeoSearchControls.propTypes = {

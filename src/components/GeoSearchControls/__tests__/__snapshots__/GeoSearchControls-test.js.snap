@@ -7,7 +7,7 @@ exports[`GeoSearchControls Clear button expect to not render the button when the
 exports[`GeoSearchControls Clear button expect to render the button when the refinement come from the map 1`] = `
 <div>
   <GeoSearchButton
-    className="clear"
+    className="reset"
     disabled={false}
     onClick={[Function]}
   >
@@ -27,7 +27,7 @@ exports[`GeoSearchControls Control disabled expect to render the button disabled
     className="control"
   >
     <GeoSearchButton
-      className="redo"
+      className="redo redo-disabled"
       disabled={true}
       onClick={[Function]}
     >
@@ -85,8 +85,8 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
   >
     <GeoSearchToggle
       checked={true}
-      classNameInput="toggleInput"
-      classNameLabel="toggleLabel toggleLabelActive"
+      classNameInput="input"
+      classNameLabel="label label-selected"
       onToggle={[Function]}
     >
       <Component
@@ -105,8 +105,8 @@ exports[`GeoSearchControls Control enabled expect to render the toggle checked w
   >
     <GeoSearchToggle
       checked={true}
-      classNameInput="toggleInput"
-      classNameLabel="toggleLabel toggleLabelActive"
+      classNameInput="input"
+      classNameLabel="label label-selected"
       onToggle={[Function]}
     >
       <Component
@@ -125,8 +125,8 @@ exports[`GeoSearchControls Control enabled expect to render the toggle unchecked
   >
     <GeoSearchToggle
       checked={false}
-      classNameInput="toggleInput"
-      classNameLabel="toggleLabel"
+      classNameInput="input"
+      classNameLabel="label"
       onToggle={[Function]}
     >
       <Component

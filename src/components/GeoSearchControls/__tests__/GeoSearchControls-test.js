@@ -5,11 +5,12 @@ import GeoSearchControls from '../GeoSearchControls';
 describe('GeoSearchControls', () => {
   const CSSClassesDefaultProps = {
     control: 'control',
-    toggleLabel: 'toggleLabel',
-    toggleLabelActive: 'toggleLabelActive',
-    toggleInput: 'toggleInput',
+    label: 'label',
+    labelSelected: 'label-selected',
+    input: 'input',
     redo: 'redo',
-    clear: 'clear',
+    redoDisabled: 'redo-disabled',
+    reset: 'reset',
   };
 
   const defaultProps = {
@@ -226,7 +227,7 @@ describe('GeoSearchControls', () => {
 
       expect(props.onClearClick).not.toHaveBeenCalled();
 
-      wrapper.find('.clear').simulate('click');
+      wrapper.find('.reset').simulate('click');
 
       expect(props.onClearClick).toHaveBeenCalled();
     });
