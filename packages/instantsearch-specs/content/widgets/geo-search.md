@@ -52,6 +52,8 @@ classes:
     description: the control element of the widget
   - name: .ais-GeoSearch-label
     description: the label of the control element
+  - name: .ais-GeoSearch-label--selected
+    description: the selected label of the control element
   - name: .ais-GeoSearch-input
     description: the input of the control element
   - name: .ais-GeoSearch-redo
@@ -60,8 +62,6 @@ classes:
     description: the disabled redo search button
   - name: .ais-GeoSearch-reset
     description: the reset refinement button
-  - name: .ais-GeoSearch-reset--disabled
-    description: the disabled reset refinement button
 options:
   - name: initialZoom
     default: 1
