@@ -21,6 +21,7 @@
       :class="suit('input')"
       :value="value"
       @input="$emit('input', $event.target.value)"
+      ref="input"
     >
     <!-- value/input allows us to pass v-model to the component -->
     <button
@@ -156,7 +157,7 @@ export default {
   },
   methods: {
     onFormSubmit() {
-      const input = this.$el.querySelector('input[type=search]');
+      const input = this.$refs.input;
       input.blur();
     },
     onFormReset() {
