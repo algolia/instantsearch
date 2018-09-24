@@ -8,14 +8,14 @@ Array [
     cssClasses={
       Object {
         "control": "ais-GeoSearch-control",
+        "disabledRedo": "ais-GeoSearch-redo--disabled",
         "input": "ais-GeoSearch-input",
         "label": "ais-GeoSearch-label",
-        "labelSelected": "ais-GeoSearch-label--selected",
         "map": "ais-GeoSearch-map",
         "redo": "ais-GeoSearch-redo",
-        "redoDisabled": "ais-GeoSearch-redo--disabled",
         "reset": "ais-GeoSearch-reset",
         "root": "ais-GeoSearch",
+        "selectedLabel": "ais-GeoSearch-label--selected",
         "tree": "ais-GeoSearch-tree",
       }
     }
@@ -58,14 +58,14 @@ Array [
     cssClasses={
       Object {
         "control": "ais-GeoSearch-control custom-control",
+        "disabledRedo": "ais-GeoSearch-redo--disabled custom-redo-disabled",
         "input": "ais-GeoSearch-input custom-input",
         "label": "ais-GeoSearch-label custom-label",
-        "labelSelected": "ais-GeoSearch-label--selected custom-label-selected",
         "map": "ais-GeoSearch-map custom-map",
         "redo": "ais-GeoSearch-redo custom-redo",
-        "redoDisabled": "ais-GeoSearch-redo--disabled custom-redo-disabled",
         "reset": "ais-GeoSearch-reset custom-reset",
         "root": "ais-GeoSearch custom-root",
+        "selectedLabel": "ais-GeoSearch-label--selected custom-label-selected",
         "tree": "ais-GeoSearch-tree",
       }
     }

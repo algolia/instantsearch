@@ -161,10 +161,10 @@ describe('GeoSearch', () => {
         map: 'custom-map',
         control: 'custom-control',
         label: 'custom-label',
-        labelSelected: 'custom-label-selected',
+        selectedLabel: 'custom-label-selected',
         input: 'custom-input',
         redo: 'custom-redo',
-        redoDisabled: 'custom-redo-disabled',
+        disabledRedo: 'custom-redo-disabled',
         reset: 'custom-reset',
       },
     });

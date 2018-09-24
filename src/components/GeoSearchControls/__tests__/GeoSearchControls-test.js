@@ -6,10 +6,10 @@ describe('GeoSearchControls', () => {
   const CSSClassesDefaultProps = {
     control: 'control',
     label: 'label',
-    labelSelected: 'label-selected',
+    selectedLabel: 'label-selected',
     input: 'input',
     redo: 'redo',
-    redoDisabled: 'redo-disabled',
+    disabledRedo: 'redo-disabled',
     reset: 'reset',
   };
 

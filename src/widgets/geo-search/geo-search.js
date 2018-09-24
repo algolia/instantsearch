@@ -18,7 +18,7 @@ geoSearch({
   [ initialZoom = 1 ],
   [ initialPosition = { lat: 0, lng: 0 } ],
   [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],
-  [ cssClasses.{root,map,control,label,labelSelected,input,redo,redoDisabled,reset} = {} ],
+  [ cssClasses.{root,map,control,label,selectedLabel,input,redo,disabledRedo,reset} = {} ],
   [ templates.{reset,toggle,redo} ],
   [ mapOptions ],
   [ builtInMarker ],
@@ -60,10 +60,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {string|Array<string>} [map] The map container of the widget.
  * @property {string|Array<string>} [control] The control element of the widget.
  * @property {string|Array<string>} [label] The label of the control element.
- * @property {string|Array<string>} [labelSelected] The selected label of the control element.
+ * @property {string|Array<string>} [selectedLabel] The selected label of the control element.
  * @property {string|Array<string>} [input] The input of the control element.
  * @property {string|Array<string>} [redo] The redo search button.
- * @property {string|Array<string>} [redoDisabled] The disabled redo search button.
+ * @property {string|Array<string>} [disabledRedo] The disabled redo search button.
  * @property {string|Array<string>} [reset] The reset refinement button.
  */
 
@@ -188,15 +188,15 @@ const geoSearch = ({
     map: cx(suit({ descendantName: 'map' }), userCssClasses.map),
     control: cx(suit({ descendantName: 'control' }), userCssClasses.control),
     label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
-    labelSelected: cx(
+    selectedLabel: cx(
       suit({ descendantName: 'label', modifierName: 'selected' }),
-      userCssClasses.labelSelected
+      userCssClasses.selectedLabel
     ),
     input: cx(suit({ descendantName: 'input' }), userCssClasses.input),
     redo: cx(suit({ descendantName: 'redo' }), userCssClasses.redo),
-    redoDisabled: cx(
+    disabledRedo: cx(
       suit({ descendantName: 'redo', modifierName: 'disabled' }),
-      userCssClasses.redoDisabled
+      userCssClasses.disabledRedo
     ),
     reset: cx(suit({ descendantName: 'reset' }), userCssClasses.reset),
   };
