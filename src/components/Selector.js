@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 import cx from 'classnames';
 
-export class Selector extends Component {
+class Selector extends Component {
   componentWillMount() {
     this.handleChange = this.handleChange.bind(this);
   }
