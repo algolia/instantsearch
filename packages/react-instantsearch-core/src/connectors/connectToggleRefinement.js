@@ -97,14 +97,18 @@ export default createConnector({
         ? allFacetValues.reduce((acc, item) => acc + item.count, 0)
         : null;
 
+    const canRefine = currentRefinement
+      ? allFacetValuesCount !== null && allFacetValuesCount > 0
+      : facetValueCount !== null && facetValueCount > 0;
+
     const count = {
       checked: allFacetValuesCount,
       unchecked: facetValueCount,
     };
 
     return {
-      canRefine: facetValueCount !== null && facetValueCount > 0,
       currentRefinement,
+      canRefine,
       count,
     };
   },

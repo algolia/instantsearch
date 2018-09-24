@@ -67,15 +67,33 @@ describe('connectToggleRefinement', () => {
       expect(actual.currentRefinement).toBe(true);
     });
 
-    it('expect `canRefine` to be `true` with results', () => {
+    it('expect `canRefine` to be computed to `true` from all the facet values when the value is checked', () => {
       const props = { attribute: 'shipping', value: true };
-      const searchState = {};
+      const searchState = { toggle: { shipping: true } };
       const searchResults = createSingleIndexSearchResults({
         disjunctiveFacets: ['shipping'],
         facets: {
           shipping: {
             true: 100,
             false: 50,
+          },
+        },
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(true);
+    });
+
+    it('expect `canRefine` to be computed to `true` from the selected facet value when the value is not checked', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = createSingleIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {
+          shipping: {
+            true: 50,
+            false: 100,
           },
         },
       });
@@ -389,15 +407,35 @@ describe('connectToggleRefinement', () => {
       expect(actual.currentRefinement).toBe(true);
     });
 
-    it('expect `canRefine` to be `true` with results', () => {
+    it('expect `canRefine` to be computed to `true` from all the facet values when the value is checked', () => {
       const props = { attribute: 'shipping', value: true };
-      const searchState = createMultiIndexSearchState();
+      const searchState = createMultiIndexSearchState({
+        toggle: { shipping: true },
+      });
       const searchResults = createMultiIndexSearchResults({
         disjunctiveFacets: ['shipping'],
         facets: {
           shipping: {
             true: 100,
             false: 50,
+          },
+        },
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(true);
+    });
+
+    it('expect `canRefine` to be computed to `true` from the selected facet value when the value is not checked', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = createMultiIndexSearchResults({
+        disjunctiveFacets: ['shipping'],
+        facets: {
+          shipping: {
+            true: 50,
+            false: 100,
           },
         },
       });
