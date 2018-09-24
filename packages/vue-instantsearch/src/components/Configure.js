@@ -2,6 +2,7 @@ import { createWidgetMixin } from '../mixins/widget';
 import { connectConfigure } from 'instantsearch.js/es/connectors';
 
 export default {
+  inheritAttrs: false,
   mixins: [createWidgetMixin({ connector: connectConfigure })],
   data() {
     return { widgetName: 'Configure' };

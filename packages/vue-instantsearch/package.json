@@ -48,7 +48,7 @@
     "lodash": "^4.17.11"
   },
   "peerDependencies": {
-    "vue": "^2.2.2"
+    "vue": "^2.4.0"
   },
   "devDependencies": {
     "@storybook/addon-knobs": "^3.4.10",
