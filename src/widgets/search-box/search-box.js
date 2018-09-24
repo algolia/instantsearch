@@ -228,7 +228,11 @@ export default function searchBox({
   const containerNode = getContainerNode(container);
 
   if (containerNode.tagName === 'INPUT') {
-    throw new Error(`container should not be an INPUT`);
+    // eslint-disable-next-line
+    // FIXME: the link should be updated when the documentation is migrated in the main Algolia doc
+    throw new Error(
+      `Starting in V3, container can not be an INPUT anymore. If you have more questions, have a look at the [migration guide](https://community.algolia.com/instantsearch.js/v3/guides/migration.html).`
+    );
   }
 
   // Only possible values are 'auto', true and false
