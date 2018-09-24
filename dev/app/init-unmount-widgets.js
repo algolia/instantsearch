@@ -61,10 +61,10 @@ function wrapWithUnmount(getWidget, params) {
 }
 
 export default () => {
-  storiesOf('ClearAll').add(
+  storiesOf('ClearRefinements').add(
     'default',
     wrapWithUnmount(
-      container => instantsearch.widgets.clearAll({ container }),
+      container => instantsearch.widgets.clearRefinements({ container }),
       {
         searchParameters: {
           disjunctiveFacetsRefinements: { brand: ['Apple'] },
@@ -295,7 +295,7 @@ export default () => {
     wrapWithUnmount(container => instantsearch.widgets.stats({ container }))
   );
 
-  storiesOf('Toggle').add(
+  storiesOf('ToggleRefinement').add(
     'default',
     wrapWithUnmount(container =>
       instantsearch.widgets.toggle({

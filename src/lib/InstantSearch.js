@@ -6,7 +6,6 @@ import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import isPlainObject from 'lodash/isPlainObject';
 import EventEmitter from 'events';
-import urlSyncWidget from './url-sync.js';
 import RoutingManager from './RoutingManager.js';
 import simpleMapping from './stateMappings/simple.js';
 import historyRouter from './routers/history.js';
@@ -45,7 +44,6 @@ class InstantSearch extends EventEmitter {
       indexName = null,
       numberLocale,
       searchParameters = {},
-      urlSync = null,
       routing = null,
       searchFunction,
       stalledSearchDelay = 200,
@@ -57,6 +55,12 @@ class InstantSearch extends EventEmitter {
   indexName: 'indexName',
   searchClient: algoliasearch('appId', 'apiKey')
 });`);
+    }
+
+    if (typeof options.urlSync !== 'undefined') {
+      throw new Error(
+        'InstantSearch.js V3: `urlSync` option has been removed. You can now use the new `routing` option'
+      );
     }
 
     if (typeof searchClient.search !== 'function') {
@@ -84,30 +88,6 @@ class InstantSearch extends EventEmitter {
       this._searchFunction = searchFunction;
     }
 
-    if (urlSync !== null) {
-      if (routing !== null) {
-        throw new Error(
-          'InstantSearch configuration error: it is not possible to use `urlSync` and `routing` at the same time'
-        );
-      }
-      /* eslint-disable no-console */
-      console.warn(
-        'InstantSearch.js: `urlSync` option is deprecated and will be removed in the next major version.'
-      );
-      console.warn('You can now use the new `routing` option');
-
-      if (urlSync === true) {
-        // when using urlSync: true
-        console.warn('Use it like this: `routing: true`');
-      }
-
-      console.warn(
-        'For advanced use cases, checkout the documentation: https://community.algolia.com/instantsearch.js/v2/guides/routing.html#migrating-from-urlsync'
-      );
-      /* eslint-enable no-console */
-    }
-
-    this.urlSync = urlSync === true ? {} : urlSync;
     if (routing === true) this.routing = ROUTING_DEFAULT_OPTIONS;
     else if (isPlainObject(routing))
       this.routing = {
@@ -226,7 +206,7 @@ class InstantSearch extends EventEmitter {
         // We don't want to re-add URlSync `getConfiguration` widget
         // it can throw errors since it may re-add SearchParameters about something unmounted
         this.searchParameters = this.widgets
-          .filter(w => w.constructor.name !== 'URLSync')
+          .filter(w => w.constructor.name !== 'URLSync') // TODO: check the routing for this
           .reduce(enhanceConfiguration({}), { ...nextState });
 
         this.helper.setState(this.searchParameters);
@@ -272,15 +252,7 @@ class InstantSearch extends EventEmitter {
 
     let searchParametersFromUrl;
 
-    if (this.urlSync) {
-      const syncWidget = urlSyncWidget(this.urlSync);
-      this._createURL = syncWidget.createURL.bind(syncWidget);
-      this._createAbsoluteURL = relative =>
-        this._createURL(relative, { absolute: true });
-      this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
-      this.widgets.push(syncWidget);
-      searchParametersFromUrl = syncWidget.searchParametersFromUrl;
-    } else if (this.routing) {
+    if (this.routing) {
       const routingManager = new RoutingManager({
         ...this.routing,
         instantSearchInstance: this,
