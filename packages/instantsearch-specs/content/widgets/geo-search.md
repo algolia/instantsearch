@@ -44,8 +44,6 @@ althtml2: |
 classes:
   - name: .ais-GeoSearch
     description: the root div of the widget
-  - name: .ais-GeoSearch--noRefinement
-    description: the root div of the widget with no refinement
   - name: .ais-GeoSearch-map
     description: the map container of the widget
   - name: .ais-GeoSearch-control
