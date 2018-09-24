@@ -20,7 +20,7 @@
     "qs": "6.5.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-instantsearch": "5.2.3"
+    "react-instantsearch": "5.3.0"
   },
   "jest": {
     "moduleNameMapper": {
