@@ -202,9 +202,14 @@ export default function connectNumericSelector(renderFn, unmountFn) {
             .addNumericRefinement(attributeName, operator, value);
         }
 
-        return searchParameters
-          .clearRefinements(attributeName)
-          .addNumericRefinement(attributeName, operator, options[0].value);
+        const firstItemValue = options[0] && options[0].value;
+        if (typeof firstItemValue === 'number') {
+          return searchParameters
+            .clearRefinements(attributeName)
+            .addNumericRefinement(attributeName, operator, options[0].value);
+        }
+
+        return searchParameters;
       },
 
       _getRefinedValue(state) {
