@@ -73,11 +73,14 @@ Name | Type | Default | Description | Required
 ---|---|---|---|---
 escapeHTML | Boolean | true | Escape raw HTML in the hits | no
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
+classNames | Object | | Override class names | no
 
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying
 DOM structure, have a look at the generated DOM in your browser.
+
+Note that you can pass the prop `class-names`, with an object of class names and their replacement to override this.
 
 Class name | Description
 ---|---

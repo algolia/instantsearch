@@ -32,6 +32,7 @@ attribute | `string` | - | Attribute to apply the filter to | Yes
 label | `string` | - | Label for the checkbox | Yes
 on | `string | number | boolean` | `true` | Refinement to enable if this widget is checked | -
 off | `string | number | boolean` | - | Refinement to enable if this widget is not checked | -
+classNames | Object | | Override class names | no
 
 ## Slots
 
@@ -42,6 +43,8 @@ default | `{ value: object, canRefine: boolean, refine: (value: object) => void,
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying DOM structure, have a look at the generated DOM in your browser.
+
+Note that you can pass the prop `class-names`, with an object of class names and their replacement to override this.
 
 Class name | Description
 ---|---

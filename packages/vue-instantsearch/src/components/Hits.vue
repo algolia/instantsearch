@@ -26,9 +26,13 @@
 <script>
 import { connectHits } from 'instantsearch.js/es/connectors';
 import { createWidgetMixin } from '../mixins/widget';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
-  mixins: [createWidgetMixin({ connector: connectHits })],
+  mixins: [
+    createWidgetMixin({ connector: connectHits }),
+    createSuitMixin({ name: 'Hits' }),
+  ],
   props: {
     escapeHTML: {
       type: Boolean,
@@ -40,11 +44,6 @@ export default {
         return items;
       },
     },
-  },
-  data() {
-    return {
-      widgetName: 'Hits',
-    };
   },
   computed: {
     items() {

@@ -32,7 +32,15 @@ Custom text:
 </ais-stats>
 ```
 
+## Props
+
+Name | Type | Default | Description | Required
+---|---|---|---|---
+classNames | Object | | Override class names | no
+
 ## Slots
+
+> TODO: update to follow convention
 
 | Name    | Props                               | Default                                                        | Description        |
 |:--------|:------------------------------------|:---------------------------------------------------------------|:-------------------|

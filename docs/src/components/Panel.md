@@ -24,7 +24,9 @@ The Panel widget wraps other widgets in a consistent panel design. It also react
 
 ## Props
 
-This widget has no props.
+Name | Type | | Default | Description | Required
+---|---|---|---|---
+classNames | Object | | Override class names | no
 
 ## Slots
 
@@ -38,6 +40,8 @@ name | scope | Description
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying DOM structure, have a look at the generated DOM in your browser.
+
+Note that you can pass the prop `class-names`, with an object of class names and their replacement to override this.
 
 Class name | Description
 ---|---

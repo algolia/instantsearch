@@ -15,14 +15,17 @@
       <hierarchical-menu-list
         :items="items"
         :level="0"
-        :suit="suit"
         :refine="state.refine"
         :createURL="state.createURL"
+        :suit="suit"
       />
 
       <button
         v-if="showMore"
-        :class="[suit('showMore'), !canToggleShowMore && suit('showMore', 'disabled')]"
+        :class="[
+          suit('showMore'),
+          !canToggleShowMore && suit('showMore', 'disabled')
+        ]"
         :disabled="!canToggleShowMore"
         @click.prevent="toggleShowMore"
       >
@@ -42,11 +45,13 @@ import { connectHierarchicalMenu } from 'instantsearch.js/es/connectors';
 import { createWidgetMixin } from '../mixins/widget';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import HierarchicalMenuList from './HierarchicalMenuList.vue';
+import { createSuitMixin } from '../mixins/suit';
 
 const mapStateToCanRefine = state => state.items.length > 0;
 
 export default {
   mixins: [
+    createSuitMixin({ name: 'HierarchicalMenu' }),
     createWidgetMixin({ connector: connectHierarchicalMenu }),
     createPanelConsumerMixin({
       mapStateToCanRefine,
@@ -99,7 +104,6 @@ export default {
   },
   data() {
     return {
-      widgetName: 'HierarchicalMenu',
       isShowingMore: false,
     };
   },

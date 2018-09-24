@@ -163,30 +163,3 @@ it('updates local state on connector render', () => {
 
   expect(wrapper.vm.state).toBe(state);
 });
-
-it('exposes the regular suit function for this widget', () => {
-  const localVue = createLocalVue();
-  const instance = createFakeInstance();
-  const Test = createFakeComponent(localVue);
-
-  const widget = { render: () => {} };
-  const factory = jest.fn(() => widget);
-  const connector = jest.fn(() => factory);
-
-  const {
-    vm: { suit },
-  } = mount(Test, {
-    mixins: [createWidgetMixin({ connector })],
-    provide: {
-      instantSearchInstance: instance,
-    },
-    data: () => ({
-      widgetName: 'Test',
-    }),
-  });
-
-  expect(suit()).toBe('ais-Test');
-  expect(suit('', 'ok')).toBe('ais-Test--ok');
-  expect(suit('ok')).toBe('ais-Test-ok');
-  expect(suit('ok', 'there')).toBe('ais-Test-ok--there');
-});

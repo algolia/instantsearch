@@ -1,8 +1,16 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
+import {
+  withKnobs,
+  object,
+  text,
+  number,
+  boolean,
+} from '@storybook/addon-knobs';
 
 storiesOf('Menu', module)
   .addDecorator(previewWrapper())
+  .addDecorator(withKnobs)
   .add('default', () => ({
     template: `
       <ais-menu attribute="brand" />
@@ -69,4 +77,24 @@ storiesOf('Menu', module)
         <template slot="footer">Footer</template>
       </ais-panel>
     `,
+  }))
+  .add('playground', () => ({
+    template: `
+      <ais-menu
+        :attribute="attribute"
+        :class-names="classNames"
+        :limit="limit"
+        :show-more="showMore"
+        :show-more-limit="showMoreLimit"
+      />
+    `,
+    data() {
+      return {
+        attribute: text('attribute', 'brand'),
+        classNames: object('class-names', {}),
+        limit: number('limit', 10),
+        showMore: boolean('show-More', false),
+        showMoreLimit: number('show-More-Limit', 20),
+      };
+    },
   }));

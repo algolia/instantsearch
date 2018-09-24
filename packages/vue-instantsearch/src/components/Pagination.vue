@@ -16,9 +16,9 @@
       <ul :class="suit('list')">
         <li
           :class="{
-            [suit('item')]:true,
+            [suit('item')]: true,
             [suit('item', 'firstPage')]: true,
-            [suit('item', 'disabled')]: state.isFirstPage
+            [suit('item', 'disabled')]: state.isFirstPage,
           }"
         >
           <template v-if="!state.isFirstPage">
@@ -42,7 +42,7 @@
           :class="{
             [suit('item')]: true,
             [suit('item', 'previousPage')]: true,
-            [suit('item', 'disabled')]: state.isFirstPage
+            [suit('item', 'disabled')]: state.isFirstPage,
           }"
         >
           <template v-if="!state.isFirstPage">
@@ -67,7 +67,7 @@
 
         <li
           :class="{
-            [suit('item')]:true,
+            [suit('item')]: true,
             [suit('item', 'selected')]: state.currentRefinement === page
           }"
           v-for="page in state.pages"
@@ -84,7 +84,7 @@
 
         <li
           :class="{
-            [suit('item')]:true,
+            [suit('item')]: true,
             [suit('item','nextPage')]: true,
             [suit('item','disabled')]: state.isLastPage
           }"
@@ -108,9 +108,9 @@
         </li>
         <li
           :class="{
-            [suit('item')]:true,
+            [suit('item')]: true,
             [suit('item','lastPage')]: true,
-            [suit('item','disabled')]: state.isLastPage
+            [suit('item','disabled')]: state.isLastPage,
           }"
         >
           <template v-if="!state.isLastPage">
@@ -139,9 +139,11 @@
 import { connectPagination } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createWidgetMixin } from '../mixins/widget';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
   mixins: [
+    createSuitMixin({ name: 'Pagination' }),
     createWidgetMixin({ connector: connectPagination }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => state.nbPages > 1,
@@ -178,11 +180,6 @@ export default {
       type: Boolean,
       default: true,
     },
-  },
-  data() {
-    return {
-      widgetName: 'Pagination',
-    };
   },
   computed: {
     widgetParams() {

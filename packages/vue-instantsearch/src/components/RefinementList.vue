@@ -1,6 +1,9 @@
 <template>
   <div
-    :class="[suit(), !state.canRefine && suit('','noRefinement')]"
+    :class="[
+      suit(),
+      !state.canRefine && suit('','noRefinement')
+    ]"
     v-if="state"
   >
     <slot
@@ -28,7 +31,8 @@
       </slot>
       <ul :class="suit('list')">
         <li
-          :class="[suit('item'), item.isRefined && suit('item', 'selected')]"
+          :class="[
+          suit('item'), item.isRefined && suit('item', 'selected')]"
           v-for="item in items"
           :key="item.value"
         >
@@ -64,7 +68,12 @@
         </li>
       </ul>
       <button
-        :class="[suit('showMore'), { [suit('showMore', 'disabled')]: !state.canToggleShowMore }]"
+        :class="[
+          suit('showMore'),
+          {
+            [suit('showMore', 'disabled')]: !state.canToggleShowMore,
+          }
+        ]"
         @click="toggleShowMore"
         v-if="showMore"
         :disabled="!state.canToggleShowMore"
@@ -83,6 +92,7 @@
 <script>
 import { createWidgetMixin } from '../mixins/widget';
 import { createPanelConsumerMixin } from '../mixins/panel';
+import { createSuitMixin } from '../mixins/suit';
 import { connectRefinementList } from 'instantsearch.js/es/connectors';
 import AisSearchInput from './SearchInput.vue';
 import AisHighlight from './Highlight.vue';
@@ -92,6 +102,7 @@ const noop = () => {};
 export default {
   components: { AisSearchInput, AisHighlight },
   mixins: [
+    createSuitMixin({ name: 'RefinementList' }),
     createWidgetMixin({ connector: connectRefinementList }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => state.canRefine,
@@ -141,7 +152,6 @@ export default {
   },
   data() {
     return {
-      widgetName: 'RefinementList',
       searchForFacetValuesQuery: '',
     };
   },

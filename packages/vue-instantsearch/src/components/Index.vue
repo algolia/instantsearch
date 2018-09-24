@@ -7,10 +7,10 @@
 
 <script>
 import instantsearch from 'instantsearch.js/es/';
-import suit from '../mixins/suit';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
-  mixins: [suit],
+  mixins: [createSuitMixin({ name: 'Index' })],
   provide() {
     return {
       instantSearchInstance: this.instantSearchInstance,
@@ -40,7 +40,6 @@ export default {
   },
   data() {
     return {
-      widgetName: 'Index',
       instantSearchInstance: instantsearch({
         searchClient: this.searchClient,
         indexName: this.indexName,

@@ -59,6 +59,7 @@ Name | Type | Default | Description | Required
 hit | Object |  | A single Algolia result as it is returned by the API. | yes
 attribute | String |  | The attribute name to be highlighted. | yes
 highlightedTagName | String |  | The tag name to use on the highlighted items. | no
+classNames | Object | | Override class names | no
 
 ## CSS Classes
 

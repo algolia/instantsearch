@@ -18,6 +18,7 @@
 
 <script>
 import JsonTree from 'vue-json-tree'; // 👈 When done, remove this
+import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 // Uncomment and change here ⬇️
 // import { connectorName } from 'instantsearch.js/es/connectors';
@@ -34,6 +35,7 @@ export default {
   // remove it before pushing the component
   components: { 'json-tree': JsonTree },
   mixins: [
+    createSuitMixin({ name: 'Template' }), // ◀️ change this
     createWidgetMixin({
       connector: connectorName, // ◀️ change this to the right connectorName you imported
     }),
@@ -47,11 +49,6 @@ export default {
       required: false,
       default: () => [],
     },
-  },
-  data() {
-    return {
-      widgetName: 'Template', // ◀️ change this
-    };
   },
   computed: {
     // ⬇️ Those are all the options of your widget (attribute, items ...)

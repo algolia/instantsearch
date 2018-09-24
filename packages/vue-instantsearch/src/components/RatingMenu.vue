@@ -12,13 +12,13 @@
         style="display: none;"
       >
         <symbol
-          :id="suit('starSymbol')"
+          id="ais-RatingMenu-starSymbol"
           viewBox="0 0 24 24"
         >
           <path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z" />
         </symbol>
         <symbol
-          :id="suit('starEmptySymbol')"
+          id="ais-RatingMenu-starEmptySymbol"
           viewBox="0 0 24 24"
         >
           <path d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z" />
@@ -46,7 +46,7 @@
                 :class="[suit('starIcon'), suit('starIcon--full')]"
                 :key="n"
               >
-                <use :xlink:href="`#${suit('starSymbol')}`" />
+                <use xlink:href="#ais-RatingMenu-starSymbol" />
               </svg>
 
               <svg
@@ -57,7 +57,7 @@
                 height="24"
                 :key="n"
               >
-                <use :xlink:href="`#${suit('starEmptySymbol')}`" />
+                <use xlink:href="#ais-RatingMenu-starEmptySymbol" />
               </svg>
             </template>
 
@@ -81,9 +81,11 @@
 import { connectStarRating } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createWidgetMixin } from '../mixins/widget';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
   mixins: [
+    createSuitMixin({ name: 'RatingMenu' }),
     createWidgetMixin({ connector: connectStarRating }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => !state.hasNoResults,
@@ -102,11 +104,6 @@ export default {
       type: Number,
       default: 5,
     },
-  },
-  data() {
-    return {
-      widgetName: 'RatingMenu',
-    };
   },
   computed: {
     widgetParams() {

@@ -38,10 +38,12 @@
 import { connectNumericRefinementList } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createWidgetMixin } from '../mixins/widget';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
   mixins: [
     createWidgetMixin({ connector: connectNumericRefinementList }),
+    createSuitMixin({ name: 'NumericMenu' }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => !state.hasNoResults,
     }),
@@ -61,11 +63,6 @@ export default {
         return items;
       },
     },
-  },
-  data() {
-    return {
-      widgetName: 'NumericMenu',
-    };
   },
   computed: {
     widgetParams() {

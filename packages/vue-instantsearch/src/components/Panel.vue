@@ -19,15 +19,10 @@
 </template>
 
 <script>
-import suit from '../mixins/suit';
 import { createPanelProviderMixin } from '../mixins/panel';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
-  mixins: [suit, createPanelProviderMixin()],
-  data() {
-    return {
-      widgetName: 'Panel',
-    };
-  },
+  mixins: [createSuitMixin({ name: 'Panel' }), createPanelProviderMixin()],
 };
 </script>

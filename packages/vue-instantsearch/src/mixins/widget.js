@@ -1,4 +1,3 @@
-import suit from '../util/suit';
 import { warn } from '../util/warn';
 
 export const createWidgetMixin = ({ connector } = {}) => ({
@@ -62,9 +61,6 @@ Read more on using connectors: https://community.algolia.com/vue-instantsearch/g
     },
   },
   methods: {
-    suit(...args) {
-      return suit(this.widgetName, ...args);
-    },
     updateState(state = {}, isFirstRender) {
       if (!isFirstRender) {
         // Avoid updating the state on first render

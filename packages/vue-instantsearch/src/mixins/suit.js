@@ -1,9 +1,20 @@
 import suit from '../util/suit';
 
-export default {
-  methods: {
-    suit(...args) {
-      return suit(this.widgetName, ...args);
+export const createSuitMixin = ({ name }) => ({
+  props: {
+    classNames: {
+      type: Object,
+      default: undefined,
     },
   },
-};
+  methods: {
+    suit(element, modifier) {
+      const className = suit(name, element, modifier);
+      const userClassName = this.classNames && this.classNames[className];
+      if (userClassName) {
+        return [className, userClassName].join(' ');
+      }
+      return className;
+    },
+  },
+});

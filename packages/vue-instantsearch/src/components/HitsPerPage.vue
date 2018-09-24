@@ -30,9 +30,11 @@
 import { connectHitsPerPage } from 'instantsearch.js/es/connectors';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createWidgetMixin } from '../mixins/widget';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
   mixins: [
+    createSuitMixin({ name: 'HitsPerPage' }),
     createWidgetMixin({ connector: connectHitsPerPage }),
     createPanelConsumerMixin({
       mapStateToCanRefine: state => !state.hasNoResults,
@@ -53,7 +55,6 @@ export default {
   },
   data() {
     return {
-      widgetName: 'HitsPerPage',
       selected: this.items.find(item => item.default === true).value,
     };
   },

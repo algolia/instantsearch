@@ -1,5 +1,3 @@
-import suit from '../../util/suit';
-
 let state = {};
 
 // we need to have state given by `component` before it is mounted, otherwise
@@ -19,10 +17,5 @@ export const createWidgetMixin = () => ({
     return {
       state,
     };
-  },
-  methods: {
-    suit(...args) {
-      return suit(this.widgetName, ...args);
-    },
   },
 });

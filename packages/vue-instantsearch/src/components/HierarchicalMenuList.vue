@@ -28,9 +28,9 @@
         v-if="item.data"
         :items="item.data"
         :level="level + 1"
-        :suit="suit"
         :refine="refine"
         :createURL="createURL"
+        :suit="suit"
       />
     </li>
   </ul>
@@ -48,15 +48,15 @@ export default {
       type: Number,
       required: true,
     },
-    suit: {
-      type: Function,
-      required: true,
-    },
     refine: {
       type: Function,
       required: true,
     },
     createURL: {
+      type: Function,
+      required: true,
+    },
+    suit: {
       type: Function,
       required: true,
     },

@@ -29,10 +29,13 @@ showMoreLimit | number | 20 | Number of items to show when the user clicked on "
 showMore | boolean | `false` | Whether or not to have the option to load more values | -
 sortBy | string[] or function | `['name:asc', 'count:desc']` | Array or function to sort the results by | -
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
+classNames | Object | | Override class names | no
 
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying DOM structure, have a look at the generated DOM in your browser.
+
+Note that you can pass the prop `class-names`, with an object of class names and their replacement to override this.
 
 Class name | Description
 ---|---

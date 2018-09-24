@@ -31,10 +31,10 @@
 </template>
 
 <script>
-import { createWidgetMixin } from '../mixins/widget';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
-  mixins: [createWidgetMixin()],
+  mixins: [createSuitMixin({ name: 'PoweredBy' })],
   props: {
     theme: {
       default: 'light',
@@ -42,11 +42,6 @@ export default {
         return ['light', 'dark'].indexOf(value) !== -1;
       },
     },
-  },
-  data() {
-    return {
-      widgetName: 'PoweredBy',
-    };
   },
   computed: {
     algoliaUrl() {

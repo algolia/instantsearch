@@ -17,14 +17,13 @@
 <script>
 import { createWidgetMixin } from '../mixins/widget';
 import { connectStats } from 'instantsearch.js/es/connectors';
+import { createSuitMixin } from '../mixins/suit';
 
 export default {
-  mixins: [createWidgetMixin({ connector: connectStats })],
-  data() {
-    return {
-      widgetName: 'Stats',
-    };
-  },
+  mixins: [
+    createWidgetMixin({ connector: connectStats }),
+    createSuitMixin({ name: 'Stats' }),
+  ],
   computed: {
     widgetParams() {
       return {};

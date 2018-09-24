@@ -27,11 +27,14 @@ attribute | String | `defaultValue` | The name of the attribute in your record |
 min | Number | - | Minimum value of the range | no
 max | Number | - | Maximum value of the range | no
 precision | Number | 0 | Number of digits after the decimal point to enforce | no
+classNames | Object | | Override class names | no
 
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying
 DOM structure, have a look at the generated DOM in your browser.
+
+Note that you can pass the prop `class-names`, with an object of class names and their replacement to override this.
 
 Class name | Description
 ---|---
@@ -44,6 +47,8 @@ Class name | Description
 `ais-RangeInput-input` | An input
 `ais-RangeInput-input--min` | The minimum bound of the range
 `ais-RangeInput-input--max` | The maximum bound of the range
+
+classNames | Object | | Override class names | no
 
 ## Slots
 
