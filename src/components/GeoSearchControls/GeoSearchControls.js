@@ -22,10 +22,9 @@ const GeoSearchControls = ({
       <div className={cssClasses.control}>
         {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
           <GeoSearchToggle
-            classNameLabel={cx(
-              cssClasses.label,
-              isRefineOnMapMove && cssClasses.selectedLabel
-            )}
+            classNameLabel={cx(cssClasses.label, {
+              [cssClasses.selectedLabel]: isRefineOnMapMove,
+            })}
             classNameInput={cssClasses.input}
             checked={isRefineOnMapMove}
             onToggle={onRefineToggle}
@@ -56,10 +55,9 @@ const GeoSearchControls = ({
       !isRefineOnMapMove && (
         <div className={cssClasses.control}>
           <GeoSearchButton
-            className={cx(
-              cssClasses.redo,
-              !hasMapMoveSinceLastRefine && cssClasses.disabledRedo
-            )}
+            className={cx(cssClasses.redo, {
+              [cssClasses.disabledRedo]: !hasMapMoveSinceLastRefine,
+            })}
             disabled={!hasMapMoveSinceLastRefine}
             onClick={onRefineClick}
           >
