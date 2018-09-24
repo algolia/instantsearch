@@ -3,7 +3,7 @@ import { component } from '../lib/suit';
 
 const suit = component('Snippet');
 
-export default function highlight({
+export default function snippet({
   attribute,
   highlightedTagName = 'mark',
   hit,
