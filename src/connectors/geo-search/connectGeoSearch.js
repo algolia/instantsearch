@@ -1,5 +1,9 @@
 import noop from 'lodash/noop';
-import { checkRendering, parseAroundLatLngFromString } from '../../lib/utils';
+import {
+  checkRendering,
+  warn,
+  parseAroundLatLngFromString,
+} from '../../lib/utils';
 
 const usage = `Usage:
 
@@ -130,7 +134,7 @@ const connectGeoSearch = (renderFn, unmountFn) => {
     // Always trigger this message because the default value was `true`. We can't
     // display the message only when the parameter is defined otherwise a user that was
     // relying on the default value won't have any information about the changes.
-    console.warn(`
+    warn(`
 The option \`enableGeolocationWithIP\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
@@ -145,7 +149,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
         `);
 
     if (typeof widgetParams.position !== 'undefined') {
-      console.warn(`
+      warn(`
 The option \`position\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
@@ -161,7 +165,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
     }
 
     if (typeof widgetParams.radius !== 'undefined') {
-      console.warn(`
+      warn(`
 The option \`radius\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
@@ -178,7 +182,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
     }
 
     if (typeof widgetParams.precision !== 'undefined') {
-      console.warn(`
+      warn(`
 The option \`precision\` has been removed from the GeoSearch widget.
 Please consider using the \`Configure\` widget instead:
 
