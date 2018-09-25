@@ -24,10 +24,6 @@ geoSearch({
   [ enableClearMapRefinement = true ],
   [ enableRefineControl = true ],
   [ enableRefineOnMapMove = true ],
-  [ enableGeolocationWithIP = true ],
-  [ position ],
-  [ radius ],
-  [ precision ],
 })
 
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html
@@ -94,13 +90,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * @property {boolean} [enableClearMapRefinement=true] If true, a button is displayed on the map when the refinement is coming from the map in order to remove it.
  * @property {boolean} [enableRefineControl=true] If true, the user can toggle the option `enableRefineOnMapMove` directly from the map.
  * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
- * @property {boolean} [enableGeolocationWithIP=true] If true, the IP will be use for the geolocation. If the `position` option is provided this option will be ignored, since we already refine the results around the given position. See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLngViaIP) for more information.
- * @property {LatLng} [position] Position that will be use to search around. <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLng) for more information.
- * @property {number} [radius] Maximum radius to search around the position (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more information.
- * @property {number} [precision] Precision of geo search (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more information.
  */
 
 /**

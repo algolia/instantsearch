@@ -693,10 +693,6 @@ describe('GeoSearch', () => {
         googleReference,
         container,
         initialZoom: 8,
-        position: {
-          lat: 12,
-          lng: 14,
-        },
         initialPosition: {
           lat: 10,
           lng: 12,
@@ -704,7 +700,7 @@ describe('GeoSearch', () => {
       });
 
       // Simulate the configuration for the position
-      helper.setState(widget.getConfiguration({}));
+      helper.setState({ aroundLatLng: '12, 14' });
 
       widget.init({
         helper,
