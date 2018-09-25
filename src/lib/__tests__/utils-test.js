@@ -899,6 +899,38 @@ describe('utils.deprecate', () => {
   });
 });
 
+describe('utils.warn', () => {
+  it('expect to print a warn message', () => {
+    const message = 'message';
+    const warn = jest.spyOn(global.console, 'warn');
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalled();
+
+    warn.mockReset();
+    warn.mockRestore();
+    utils.warn.cache = {};
+  });
+
+  it('expect to print the same message only once', () => {
+    const message = 'message';
+    const warn = jest.spyOn(global.console, 'warn');
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    warn.mockReset();
+    warn.mockRestore();
+    utils.warn.cache = {};
+  });
+});
+
 describe('utils.parseAroundLatLngFromString', () => {
   it('expect to return a LatLng object from string', () => {
     const samples = [
