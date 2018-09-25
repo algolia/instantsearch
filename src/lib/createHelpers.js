@@ -1,9 +1,9 @@
-import { highlight, snippet } from '../helpers';
+import { highlight, snippet, formatNumber } from '../helpers';
 
 export default function({ numberLocale }) {
   return {
     formatNumber(number, render) {
-      return Number(render(number)).toLocaleString(numberLocale);
+      return formatNumber({ number: render(number), numberLocale });
     },
     highlight(options, render) {
       try {
