@@ -107,7 +107,7 @@
     "node-sass": "4.7.2",
     "places.js": "1.6.0",
     "postcss-loader": "2.1.1",
-    "prettier": "1.11.1",
+    "prettier": "1.14.3",
     "pretty-bytes-cli": "2.0.0",
     "raw-loader": "0.5.1",
     "react-test-renderer": "15.6.1",
