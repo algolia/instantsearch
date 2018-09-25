@@ -30,17 +30,11 @@ describe('GeoSearch', () => {
     getZoom: jest.fn(),
     setZoom: jest.fn(),
     getBounds: jest.fn(() => ({
-      getNorthEast: jest.fn(),
-      getSouthWest: jest.fn(),
-    })),
-    getProjection: jest.fn(() => ({
-      fromPointToLatLng: jest.fn(() => ({
-        lat: jest.fn(),
-        lng: jest.fn(),
+      getNorthEast: jest.fn(() => ({
+        toJSON: jest.fn(() => ({})),
       })),
-      fromLatLngToPoint: jest.fn(() => ({
-        x: 0,
-        y: 0,
+      getSouthWest: jest.fn(() => ({
+        toJSON: jest.fn(() => ({})),
       })),
     })),
     fitBounds: jest.fn(),
@@ -221,46 +215,6 @@ describe('GeoSearch', () => {
       reset: 'Clear the map refinement',
       toggle: 'Search when the map move',
       redo: 'Redo search here',
-    };
-
-    expect(actual).toEqual(expectation);
-  });
-
-  it('expect to render with custom paddingBoundingBoc', () => {
-    const container = createContainer();
-    const instantSearchInstance = createFakeInstantSearch();
-    const helper = createFakeHelper();
-    const googleReference = createFakeGoogleReference();
-
-    const widget = geoSearch({
-      googleReference,
-      container,
-      paddingBoundingBox: {
-        top: 10,
-      },
-    });
-
-    widget.init({
-      helper,
-      instantSearchInstance,
-      state: helper.state,
-    });
-
-    widget.render({
-      helper,
-      instantSearchInstance,
-      results: {
-        hits: [],
-      },
-    });
-
-    const actual = renderer.mock.calls[0][0].widgetParams.paddingBoundingBox;
-
-    const expectation = {
-      top: 10,
-      right: 0,
-      bottom: 0,
-      left: 0,
     };
 
     expect(actual).toEqual(expectation);

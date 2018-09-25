@@ -2,35 +2,17 @@ import React, { render } from 'preact-compat';
 import { prepareTemplateProps } from '../../lib/utils';
 import GeoSearchControls from '../../components/GeoSearchControls/GeoSearchControls';
 
-const refineWithMap = ({ refine, paddingBoundingBox, mapInstance }) => {
-  // Function for compute the projection of LatLng to Point (pixel)
-  // Builtin in Leaflet: myMapInstance.project(LatLng, zoom)
-  // http://krasimirtsonev.com/blog/article/google-maps-api-v3-convert-latlng-object-to-actual-pixels-point-object
-  // http://leafletjs.com/reference-1.2.0.html#map-project
-  const scale = Math.pow(2, mapInstance.getZoom());
-
-  const northEastPoint = mapInstance
-    .getProjection()
-    .fromLatLngToPoint(mapInstance.getBounds().getNorthEast());
-
-  northEastPoint.x = northEastPoint.x - paddingBoundingBox.right / scale;
-  northEastPoint.y = northEastPoint.y + paddingBoundingBox.top / scale;
-
-  const southWestPoint = mapInstance
-    .getProjection()
-    .fromLatLngToPoint(mapInstance.getBounds().getSouthWest());
-
-  southWestPoint.x = southWestPoint.x + paddingBoundingBox.right / scale;
-  southWestPoint.y = southWestPoint.y - paddingBoundingBox.bottom / scale;
-
-  const ne = mapInstance.getProjection().fromPointToLatLng(northEastPoint);
-  const sw = mapInstance.getProjection().fromPointToLatLng(southWestPoint);
-
+const refineWithMap = ({ refine, mapInstance }) =>
   refine({
-    northEast: { lat: ne.lat(), lng: ne.lng() },
-    southWest: { lat: sw.lat(), lng: sw.lng() },
+    northEast: mapInstance
+      .getBounds()
+      .getNorthEast()
+      .toJSON(),
+    southWest: mapInstance
+      .getBounds()
+      .getSouthWest()
+      .toJSON(),
   });
-};
 
 const collectMarkersForNextRender = (markers, nextIds) =>
   markers.reduce(
@@ -69,7 +51,6 @@ const renderer = (
     initialPosition,
     enableClearMapRefinement,
     enableRefineControl,
-    paddingBoundingBox,
     mapOptions,
     createMarker,
     markerOptions,
@@ -126,7 +107,6 @@ const renderer = (
           refineWithMap({
             mapInstance: renderState.mapInstance,
             refine,
-            paddingBoundingBox,
           });
         }
       });
@@ -227,7 +207,6 @@ const renderer = (
         refineWithMap({
           mapInstance: renderState.mapInstance,
           refine,
-          paddingBoundingBox,
         })
       }
       onClearClick={clearMapRefinement}
