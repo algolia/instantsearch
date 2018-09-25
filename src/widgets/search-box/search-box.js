@@ -150,7 +150,7 @@ searchBox({
   container,
   [ placeholder ],
   [ cssClasses.{root, input, reset, submit, loadingIndicator} ],
-  [ autofocus ],
+  [ autofocus = false ],
   [ searchAsYouType = true ],
   [ queryHook ]
   [ templates.{reset, submit, loadingIndicator} ]
@@ -178,7 +178,7 @@ searchBox({
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget. If the CSS
  * selector or the HTMLElement is an existing input, the widget will use it.
  * @property {string} [placeholder] Input's placeholder.
- * @property {boolean|string} [autofocus="auto"] autofocus on the input.
+ * @property {boolean} [autofocus=false] Whether the input should be autofocused.
  * @property {boolean} [searchAsYouType=true] If set, trigger the search
  * once `<Enter>` is pressed only.
  * @property {boolean} [showReset=true] Show/hide the reset button
@@ -209,7 +209,6 @@ searchBox({
  *   instantsearch.widgets.searchBox({
  *     container: '#q',
  *     placeholder: 'Search for products',
- *     autofocus: false,
  *   })
  * );
  */

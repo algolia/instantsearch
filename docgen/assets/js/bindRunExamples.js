@@ -108,7 +108,6 @@ function appendDefaultSearchWidgets(index) {
     instantsearch.widgets.searchBox({
       container: `#search-box-container-${index}`,
       placeholder: "Search for products",
-      autofocus: false
     })
   );
 
