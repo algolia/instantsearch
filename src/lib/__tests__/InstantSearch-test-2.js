@@ -154,7 +154,7 @@ describe('InstantSearch life cycle', () => {
 
   it('does not break when providing searchFunction with multiple resquests', () => {
     const fakeClient = {
-      search: jest.fn(() => Promise.resolve({ results: [{}] })),
+      search: jest.fn(() => Promise.resolve({ results: [{}, {}] })),
     };
 
     const search = new InstantSearch({
