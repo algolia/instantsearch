@@ -1,0 +1,78 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  z-index: 99;
+  width: 100%;
+  padding: 10px;
+  background: #222f3f;
+}
+
+.logo {
+  display: block;
+  float: left;
+  margin-right: 12px;
+}
+
+main {
+  display: flex;
+}
+
+aside,
+section {
+  padding: 10px;
+}
+
+section {
+  width: 100%;
+}
+
+.thank-you {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.ais-Panel {
+  margin-top: 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.sort-by {
+  display: flex;
+  align-items: center;
+}
+
+.sort-by label {
+  margin-right: 5px;
+}
+
+footer {
+  margin-top: 25px;
+}
+
+.no-results {
+  text-align: center;
+}
