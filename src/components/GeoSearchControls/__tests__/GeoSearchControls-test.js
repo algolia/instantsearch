@@ -5,11 +5,12 @@ import GeoSearchControls from '../GeoSearchControls';
 describe('GeoSearchControls', () => {
   const CSSClassesDefaultProps = {
     control: 'control',
-    toggleLabel: 'toggleLabel',
-    toggleLabelActive: 'toggleLabelActive',
-    toggleInput: 'toggleInput',
+    label: 'label',
+    selectedLabel: 'label-selected',
+    input: 'input',
     redo: 'redo',
-    clear: 'clear',
+    disabledRedo: 'redo-disabled',
+    reset: 'reset',
   };
 
   const defaultProps = {
@@ -213,7 +214,7 @@ describe('GeoSearchControls', () => {
       expect(wrapper).toMatchSnapshot();
     });
 
-    it('expect to call onClearClick when the clear button is clicked', () => {
+    it('expect to call onClearClick when the reset button is clicked', () => {
       const props = {
         ...defaultProps,
         enableRefineControl: false,
@@ -226,7 +227,7 @@ describe('GeoSearchControls', () => {
 
       expect(props.onClearClick).not.toHaveBeenCalled();
 
-      wrapper.find('.clear').simulate('click');
+      wrapper.find('.reset').simulate('click');
 
       expect(props.onClearClick).toHaveBeenCalled();
     });
