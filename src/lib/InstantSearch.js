@@ -205,9 +205,9 @@ class InstantSearch extends EventEmitter {
       if (nextState) {
         // We don't want to re-add URlSync `getConfiguration` widget
         // it can throw errors since it may re-add SearchParameters about something unmounted
-        this.searchParameters = this.widgets
-          .filter(w => w.constructor.name !== 'URLSync') // TODO: check the routing for this
-          .reduce(enhanceConfiguration({}), { ...nextState });
+        this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
+          ...nextState,
+        });
 
         this.helper.setState(this.searchParameters);
       }
