@@ -18,7 +18,7 @@ const renderer = ({
   renderState,
   labels,
 }) => (
-  { refine, items, createURL, instantSearchInstance, hasNoResults },
+  { refine, items, createURL, instantSearchInstance },
   isFirstRendering
 ) => {
   if (isFirstRendering) {

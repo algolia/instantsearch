@@ -11,7 +11,7 @@ export default () => {
       window.search.addWidget(
         widgets.starRating({
           containerNode,
-          attributeName: 'rating',
+          attribute: 'rating',
           max: 5,
         })
       );

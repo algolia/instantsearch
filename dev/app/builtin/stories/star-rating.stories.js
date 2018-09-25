@@ -13,7 +13,7 @@ export default () => {
       window.search.addWidget(
         instantsearch.widgets.starRating({
           container,
-          attributeName: 'rating',
+          attribute: 'rating',
           max: 5,
           labels: {
             andUp: '& Up',
