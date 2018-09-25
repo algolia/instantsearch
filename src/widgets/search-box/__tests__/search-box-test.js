@@ -344,32 +344,6 @@ describe('searchBox()', () => {
       container = document.body.appendChild(document.createElement('div'));
     });
 
-    describe('when auto', () => {
-      beforeEach(() => {
-        widget = searchBox({ container, autofocus: 'auto' });
-      });
-
-      it('is called if search is empty', () => {
-        // Given
-        helper.state.query = '';
-        // When
-        widget.init({ state, helper, onHistoryChange });
-        // Then
-        expect(document.activeElement).toBe(container.querySelector('input'));
-      });
-
-      it('is not called if search is not empty', () => {
-        // Given
-        helper.state.query = 'foo';
-        // When
-        widget.init({ state, helper, onHistoryChange });
-        // Then
-        expect(document.activeElement).not.toBe(
-          container.querySelector('input')
-        );
-      });
-    });
-
     describe('when true', () => {
       beforeEach(() => {
         widget = searchBox({ container, autofocus: true });

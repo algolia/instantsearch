@@ -20,7 +20,6 @@ const renderer = ({
   showReset,
   showSubmit,
   showLoadingIndicator,
-  // eslint-disable-next-line complexity
 }) => (
   { refine, clear, query, onHistoryChange, isSearchStalled },
   isFirstRendering
@@ -56,7 +55,7 @@ const renderer = ({
       input.value = fullState.query || '';
     });
 
-    if (autofocus === true || (autofocus === 'auto' && query === '')) {
+    if (autofocus === true) {
       input.focus();
       input.setSelectionRange(query.length, query.length);
     }
