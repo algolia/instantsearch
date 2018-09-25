@@ -23,10 +23,6 @@ var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering)
 search.addWidget(
   customGeoSearch({
     [ enableRefineOnMapMove = true ],
-    [ enableGeolocationWithIP = true ],
-    [ position ],
-    [ radius ],
-    [ precision ],
     [ transformItems ],
   })
 );
@@ -49,13 +45,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomGeoSearchWidgetOptions
  * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
- * @property {boolean} [enableGeolocationWithIP=true] If true, the IP will be use for the geolocation. When the `position` option is provided this option will be ignored. See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLngViaIP) for more information.
- * @property {LatLng} [position] Position that will be use to search around. <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLng) for more information.
- * @property {number} [radius] Maximum radius to search around the position (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more information.
- * @property {number} [precision] Precision of geo search (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more information.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -135,10 +124,6 @@ const connectGeoSearch = (renderFn, unmountFn) => {
   return (widgetParams = {}) => {
     const {
       enableRefineOnMapMove = true,
-      enableGeolocationWithIP = true,
-      position,
-      radius,
-      precision,
       transformItems = items => items,
     } = widgetParams;
 
@@ -285,57 +270,10 @@ const connectGeoSearch = (renderFn, unmountFn) => {
       init,
       render,
 
-      getConfiguration(previous) {
-        const configuration = {};
-
-        if (
-          enableGeolocationWithIP &&
-          !position &&
-          !previous.aroundLatLng &&
-          previous.aroundLatLngViaIP === undefined
-        ) {
-          configuration.aroundLatLngViaIP = true;
-        }
-
-        if (position && !previous.aroundLatLng && !previous.aroundLatLngViaIP) {
-          configuration.aroundLatLng = `${position.lat}, ${position.lng}`;
-        }
-
-        if (radius && !previous.aroundRadius) {
-          configuration.aroundRadius = radius;
-        }
-
-        if (precision && !previous.aroundPrecision) {
-          configuration.aroundPrecision = precision;
-        }
-
-        return configuration;
-      },
-
       dispose({ state }) {
         unmountFn();
 
-        let nextState = state;
-
-        if (enableGeolocationWithIP && !position) {
-          nextState = nextState.setQueryParameter('aroundLatLngViaIP');
-        }
-
-        if (position) {
-          nextState = nextState.setQueryParameter('aroundLatLng');
-        }
-
-        if (radius) {
-          nextState = nextState.setQueryParameter('aroundRadius');
-        }
-
-        if (precision) {
-          nextState = nextState.setQueryParameter('aroundPrecision');
-        }
-
-        nextState = nextState.setQueryParameter('insideBoundingBox');
-
-        return nextState;
+        return state.setQueryParameter('insideBoundingBox');
       },
     };
   };
