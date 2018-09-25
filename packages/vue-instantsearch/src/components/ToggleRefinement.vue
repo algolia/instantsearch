@@ -41,6 +41,7 @@ import { createSuitMixin } from '../mixins/suit';
 const mapStateToCanRefine = state => Boolean(state.value.count);
 
 export default {
+  name: 'AisToggleRefinement',
   mixins: [
     createSuitMixin({ name: 'ToggleRefinement' }),
     createWidgetMixin({ connector: connectToggle }),

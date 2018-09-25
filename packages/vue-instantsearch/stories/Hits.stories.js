@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('Hits', module)
+storiesOf('ais-hits', module)
   .addDecorator(previewWrapper())
   .add('simple usage', () => ({
     template: `<ais-hits></ais-hits>`,

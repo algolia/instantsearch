@@ -53,6 +53,7 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisMenu',
   mixins: [
     createSuitMixin({ name: 'Menu' }),
     createWidgetMixin({ connector: connectMenu }),

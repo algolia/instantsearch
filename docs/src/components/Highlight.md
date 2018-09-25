@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 9
 editable: true
-githubSource: docs/src/components/highlight.md
+githubSource: docs/src/components/Highlight.md
 ---
 
 Displays highlighted attributes of your search results.

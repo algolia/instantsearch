@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('PoweredBy', module)
+storiesOf('ais-powered-by', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: '<ais-powered-by></ais-powered-by>',

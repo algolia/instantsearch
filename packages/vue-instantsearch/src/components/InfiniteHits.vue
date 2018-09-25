@@ -41,6 +41,7 @@ import { connectInfiniteHits } from 'instantsearch.js/es/connectors';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisInfiniteHits',
   mixins: [
     createWidgetMixin({ connector: connectInfiniteHits }),
     createSuitMixin({ name: 'InfiniteHits' }),

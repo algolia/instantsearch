@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('RefinementList', module)
+storiesOf('ais-refinement-list', module)
   .addDecorator(previewWrapper({ filters: '' }))
   .add('default', () => ({
     template: `<ais-refinement-list attribute="brand"></ais-refinement-list>`,

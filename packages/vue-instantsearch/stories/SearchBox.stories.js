@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('SearchBox', module)
+storiesOf('ais-search-box', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: '<ais-search-box></ais-search-box>',

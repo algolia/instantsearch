@@ -34,6 +34,7 @@
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisPoweredBy',
   mixins: [createSuitMixin({ name: 'PoweredBy' })],
   props: {
     theme: {

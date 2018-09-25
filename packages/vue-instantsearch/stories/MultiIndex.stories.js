@@ -1,11 +1,11 @@
 import { storiesOf } from '@storybook/vue';
 import algoliasearch from 'algoliasearch';
 
-storiesOf('MultiIndex', module)
+storiesOf('multiple indices', module)
   .add('using search-box', () => ({
     template: `
   <div>
-    <ais-index :search-client="searchClient" index-name="ikea">
+    <ais-instant-search :search-client="searchClient" index-name="ikea">
       <ais-search-box v-model="query"/>
       <ais-configure :restrictSearchableAttributes="['name']"/>
       <ais-hits>
@@ -13,9 +13,9 @@ storiesOf('MultiIndex', module)
           <h3><ais-highlight :hit="item" attribute="name"/></h3>
         </template>
       </ais-hits>
-    </ais-index>
+    </ais-instant-search>
     <hr />
-    <ais-index :search-client="searchClient" index-name="instant_search">
+    <ais-instant-search :search-client="searchClient" index-name="instant_search">
       <ais-search-box v-model="query" hidden/>
       <ais-configure :restrictSearchableAttributes="['name']"/>
       <ais-hits>
@@ -23,7 +23,7 @@ storiesOf('MultiIndex', module)
           <h3><ais-highlight :hit="item" attribute="name"/></h3>
         </template>
       </ais-hits>
-    </ais-index>
+    </ais-instant-search>
   </div>
   `,
     data() {
@@ -44,7 +44,7 @@ storiesOf('MultiIndex', module)
     template: `
   <div>
     <input v-model="query" />
-    <ais-index :search-client="searchClient" index-name="ikea">
+    <ais-instant-search :search-client="searchClient" index-name="ikea">
       <ais-configure
         :restrictSearchableAttributes="['name']"
         :query="query"
@@ -54,9 +54,9 @@ storiesOf('MultiIndex', module)
           <h3><ais-highlight :hit="item" attribute="name"/></h3>
         </template>
       </ais-hits>
-    </ais-index>
+    </ais-instant-search>
     <hr />
-    <ais-index :search-client="searchClient" index-name="instant_search">
+    <ais-instant-search :search-client="searchClient" index-name="instant_search">
       <ais-configure
         :restrictSearchableAttributes="['name']"
         :query="query"
@@ -66,7 +66,7 @@ storiesOf('MultiIndex', module)
           <h3><ais-highlight :hit="item" attribute="name"/></h3>
         </template>
       </ais-hits>
-    </ais-index>
+    </ais-instant-search>
   </div>
   `,
     data() {

@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 10
 editable: true
-githubSource: docs/src/components/snippet.md
+githubSource: docs/src/components/Snippet.md
 ---
 
 Display snippeted attributes of your search results.

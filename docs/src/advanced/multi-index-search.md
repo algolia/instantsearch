@@ -30,9 +30,9 @@ However, if you end up finding yourself trying to manually merge records coming 
 
 ## How it works
 
-Every `ais-index` component is in charge of fetching the results from a single Algolia index.
+Every `ais-instant-search` component is in charge of fetching the results from a single Algolia index.
 
-To implement a search experience that fetches results from two indices, you need to have two `ais-index` components.
+To implement a search experience that fetches results from two indices, you need to have two `ais-instant-search` components.
 
 **Tip: you can fetch results from as many indices as you want. 💥**
 
@@ -43,14 +43,14 @@ Let's take a look at what a minimal example of multi-index search looks like:
 ```html
 <!-- App.vue -->
 <template>
-  <ais-index :search-client="searchClient" index-name="first">
+  <ais-instant-search :search-client="searchClient" index-name="first">
     <ais-search-box />
     <ais-hits />
-  </ais-index>
-  <ais-index :search-client="searchClient" index-name="second">
+  </ais-instant-search>
+  <ais-instant-search :search-client="searchClient" index-name="second">
     <ais-search-box />
     <ais-hits />
-  </ais-index>
+  </ais-instant-search>
 </template>
 
 <script>
@@ -77,14 +77,14 @@ Here's how to bind a single input displaying results from multiple indices:
 ```html
 <!-- App.vue -->
 <template>
-  <ais-index :search-client="searchClient" index-name="first">
+  <ais-instant-search :search-client="searchClient" index-name="first">
     <ais-search-box v-model="query" />
     <ais-hits />
-  </ais-index>
-  <ais-index :search-client="searchClient"index-name="second">
+  </ais-instant-search>
+  <ais-instant-search :search-client="searchClient"index-name="second">
     <ais-search-box v-model="query" hidden/>
     <ais-hits />
-  </ais-index>
+  </ais-instant-search>
 </template>
 
 <script>
@@ -109,14 +109,14 @@ It's also possible to bind this model on configure, this has the advantage that 
 <!-- App.vue -->
 <template>
   <input v-model="query">
-  <ais-index :search-client="searchClient" index-name="first">
+  <ais-instant-search :search-client="searchClient" index-name="first">
     <ais-configure :query="query" />
     <ais-results />
-  </ais-index>
-  <ais-index :search-client="searchClient" index-name="second">
+  </ais-instant-search>
+  <ais-instant-search :search-client="searchClient" index-name="second">
     <ais-configure :query="query" />
     <ais-results />
-  </ais-index>
+  </ais-instant-search>
 </template>
 
 <script>

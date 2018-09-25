@@ -4,7 +4,7 @@ import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 Vue.use(VueAutosuggest);
 
-storiesOf('Autocomplete', module)
+storiesOf('ais-autocomplete', module)
   .addDecorator(previewWrapper())
   .add('No slot given', () => ({
     template: `<ais-autocomplete></ais-autocomplete>`,

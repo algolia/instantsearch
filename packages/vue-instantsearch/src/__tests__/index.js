@@ -1,41 +1,33 @@
+import Vue from 'vue';
 import InstantSearch from '../instantsearch';
 
-test('Should register all components when installed', () => {
-  const component = jest.fn();
-  const Vue = { component };
+it('should have `name` the same as the suit class name everywhere', () => {
+  Vue.component = jest.fn();
+  Vue.use(InstantSearch);
 
-  InstantSearch.install(Vue);
+  const allInstalledComponents = Vue.component.mock.calls;
+  const components = allInstalledComponents.map(
+    ([installedName, { name, mixins }]) => {
+      let suitClass = `Error! ${name} is missing the suit classes`;
 
-  const components = [
-    'ais-autocomplete',
-    'ais-breadcrumb',
-    'ais-clear-refinements',
-    'ais-configure',
-    'ais-current-refinements',
-    'ais-hierarchical-menu',
-    'ais-highlight',
-    'ais-hits-per-page',
-    'ais-hits',
-    'ais-index',
-    'ais-infinite-hits',
-    'ais-menu',
-    'ais-menu-select',
-    'ais-numeric-menu',
-    'ais-pagination',
-    'ais-panel',
-    'ais-powered-by',
-    'ais-range-input',
-    'ais-rating-menu',
-    'ais-refinement-list',
-    'ais-search-box',
-    'ais-search-state',
-    'ais-snippet',
-    'ais-sort-by',
-    'ais-stats',
-    'ais-toggle-refinement',
-  ];
+      try {
+        suitClass = mixins
+          .find(mixin => mixin.methods && mixin.methods.suit)
+          .methods.suit();
+      } catch (e) {
+        /* no suit class, so will fail the assertions */
+      }
 
-  const allInstalledComponents = component.mock.calls.map(call => call[0]);
+      return {
+        installedName,
+        name,
+        suitClass,
+      };
+    }
+  );
 
-  expect(allInstalledComponents).toEqual(components);
+  components.forEach(({ name, installedName, suitClass }) => {
+    expect(installedName).toBe(name);
+    expect(suitClass).toBe(`ais-${name.substr(3)}`);
+  });
 });

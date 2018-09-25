@@ -118,6 +118,7 @@
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'SearchInput',
   mixins: [createSuitMixin({ name: 'SearchBox' })],
   props: {
     placeholder: {

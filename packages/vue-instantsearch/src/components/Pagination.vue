@@ -142,6 +142,7 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisPagination',
   mixins: [
     createSuitMixin({ name: 'Pagination' }),
     createWidgetMixin({ connector: connectPagination }),

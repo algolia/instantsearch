@@ -61,7 +61,7 @@ By using the `Component` mixin, the custom component will automatically be able 
 This is made possible because the `Component` mixin `injects` the searchStore.
 You can read more about the inject/provide feature on the [Vue.js documentation](https://vuejs.org/v2/api/#provide-inject).
 
-The search store will be automatically fetched from a parent [Index component](components/index.html) higher in the DOM tree.
+The search store will be automatically fetched from a parent [InstantSearch component](components/InstantSearch.html) higher in the DOM tree.
 
 As a reminder, you can also [provide your custom searchStore to any custom component](getting-started/search-store.html#manually-inject-the-search-store-into-components) as a property.
 

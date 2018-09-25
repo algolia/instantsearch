@@ -36,17 +36,17 @@ const searchFunctions = {
   },
 };
 
-storiesOf('Index', module)
+storiesOf('ais-instant-search', module)
   .add('simple usage', () => ({
     template: `
-      <ais-index
+      <ais-instant-search
         index-name="instant_search"
         :search-client="searchClient"
       >
-        <p>This is inside a <code>ais-index</code></p>
+        <p>This is inside a <code>ais-instant-search</code></p>
         <ais-search-box />
         <ais-hits />
-      </ais-index>
+      </ais-instant-search>
     `,
     data() {
       return {
@@ -71,20 +71,20 @@ storiesOf('Index', module)
             <input v-model.number="stalledSearchDelay" type="number"/>
           </label>
         </form>
-        <ais-index
+        <ais-instant-search
           :index-name="indexName"
           :search-client="searchClient"
           :search-function="searchFunction"
           :stalled-search-delay="stalledSearchDelay"
         >
-          <p>This is inside a <code>ais-index</code>: <code>{{indexName}}</code></p>
+          <p>This is inside a <code>ais-instant-search</code>: <code>{{indexName}}</code></p>
           <ais-search-box show-loading-indicator/>
           <ais-hits>
             <template slot="item" slot-scope="{item}">
               <p><ais-highlight :hit="item" attribute="name"/></p>
             </template>
           </ais-hits>
-        </ais-index>
+        </ais-instant-search>
       </div>
     `,
     data() {

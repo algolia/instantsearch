@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('MenuSelect', module)
+storiesOf('ais-menu-select', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `

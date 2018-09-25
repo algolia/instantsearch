@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('ToggleRefinement', module)
+storiesOf('ais-toggle-refinement', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `

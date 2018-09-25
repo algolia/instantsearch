@@ -11,6 +11,7 @@ import { warn } from '../util/warn';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisSnippet',
   mixins: [createSuitMixin({ name: 'Snippet' })],
   props: {
     hit: {

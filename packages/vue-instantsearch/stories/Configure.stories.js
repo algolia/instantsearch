@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 import { withKnobs, object } from '@storybook/addon-knobs/vue';
 
-storiesOf('Configure', module)
+storiesOf('ais-configure', module)
   .addDecorator(previewWrapper())
   .addDecorator(withKnobs)
   .add('default', () => ({

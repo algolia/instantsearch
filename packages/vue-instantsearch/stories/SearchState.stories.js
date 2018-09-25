@@ -1,7 +1,7 @@
 import { previewWrapper } from './utils';
 import { storiesOf } from '@storybook/vue';
 
-storiesOf('SearchState', module)
+storiesOf('ais-search-state', module)
   .addDecorator(
     previewWrapper({
       indexName: 'demo-query-rules',

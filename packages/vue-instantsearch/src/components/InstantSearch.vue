@@ -1,5 +1,5 @@
 <template>
-  <!-- Index is an empty component that will hold other widgets -->
+  <!-- AisInstantSearch is an empty component that will hold other widgets -->
   <div :class="suit()">
     <slot />
   </div>
@@ -8,15 +8,43 @@
 <script>
 import instantsearch from 'instantsearch.js/es/';
 import { createSuitMixin } from '../mixins/suit';
+import { warn } from '../util/warn';
+
+const oldApi = () =>
+  warn(
+    `Vue InstantSearch: You used the prop api-key or api-key.
+These have been replaced by search-client.
+
+See more info here: https://community.algolia.com/vue-instantsearch/components/InstantSearch.html#usage`
+  );
 
 export default {
-  mixins: [createSuitMixin({ name: 'Index' })],
+  name: 'AisInstantSearch',
+  mixins: [createSuitMixin({ name: 'InstantSearch' })],
   provide() {
     return {
       instantSearchInstance: this.instantSearchInstance,
     };
   },
   props: {
+    apiKey: {
+      type: String,
+      default: null,
+      validator(value) {
+        if (value) {
+          oldApi();
+        }
+      },
+    },
+    appId: {
+      type: String,
+      default: null,
+      validator(value) {
+        if (value) {
+          oldApi();
+        }
+      },
+    },
     searchClient: {
       type: Object,
       required: true,

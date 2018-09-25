@@ -8,7 +8,7 @@ import 'vuetify/dist/vuetify.css';
 import Vue from 'vue';
 Vue.use(Vuetify);
 
-storiesOf('RangeInput', module)
+storiesOf('ais-range-input', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `

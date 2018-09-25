@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('Panel', module)
+storiesOf('ais-panel', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `

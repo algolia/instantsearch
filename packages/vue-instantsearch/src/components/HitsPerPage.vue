@@ -33,6 +33,7 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisHitsPerPage',
   mixins: [
     createSuitMixin({ name: 'HitsPerPage' }),
     createWidgetMixin({ connector: connectHitsPerPage }),

@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('RatingMenu', module)
+storiesOf('ais-rating-menu', module)
   .addDecorator(
     previewWrapper({
       indexName: 'instant_search_rating_asc',

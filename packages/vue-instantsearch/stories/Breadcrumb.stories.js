@@ -7,7 +7,7 @@ const attributes = [
   'hierarchicalCategories.lvl2',
 ];
 
-storiesOf('Breadcrumb', module)
+storiesOf('ais-breadcrumb', module)
   .addDecorator(
     previewWrapper({
       filters: `

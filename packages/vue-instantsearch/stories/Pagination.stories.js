@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('Pagination', module)
+storiesOf('ais-pagination', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `

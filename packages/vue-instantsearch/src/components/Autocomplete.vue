@@ -26,6 +26,7 @@ import { connectAutocomplete } from 'instantsearch.js/es/connectors';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisAutocomplete',
   mixins: [
     createWidgetMixin({ connector: connectAutocomplete }),
     createSuitMixin({ name: 'Autocomplete' }),

@@ -1,12 +1,12 @@
 ---
-title: Powered by
+title: Powered By
 mainTitle: Components
 layout: main.pug
 category: Components
 withHeadings: true
 navWeight: 12
 editable: true
-githubSource: docs/src/components/powered-by.md
+githubSource: docs/src/components/PoweredBy.md
 ---
 
 A component that helps you quickly add the "powered by Algolia" mention that is required if you have a free plan.

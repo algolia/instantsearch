@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('SortBy', module)
+storiesOf('ais-sort-by', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `

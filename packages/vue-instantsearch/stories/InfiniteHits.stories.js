@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('InfiniteHits', module)
+storiesOf('ais-infinite-hits', module)
   .addDecorator(previewWrapper())
   .add('simple usage', () => ({
     template: `<ais-infinite-hits />`,

@@ -20,7 +20,7 @@
         :class="suit('searchBox')"
         v-if="searchable"
       >
-        <ais-search-input v-model="searchForFacetValues" />
+        <search-input v-model="searchForFacetValues" />
       </div>
       <slot
         name="noResults"
@@ -94,13 +94,14 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 import { connectRefinementList } from 'instantsearch.js/es/connectors';
-import AisSearchInput from './SearchInput.vue';
+import SearchInput from './SearchInput.vue';
 import AisHighlight from './Highlight.vue';
 
 const noop = () => {};
 
 export default {
-  components: { AisSearchInput, AisHighlight },
+  name: 'AisRefinementList',
+  components: { SearchInput, AisHighlight },
   mixins: [
     createSuitMixin({ name: 'RefinementList' }),
     createWidgetMixin({ connector: connectRefinementList }),

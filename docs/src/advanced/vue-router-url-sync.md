@@ -62,13 +62,14 @@ export default {
 
 We also make sure the property is initialized to an empty string by providing the `default: ''` option.
 
-Now that the query has been injected by the router into our `Search` component, we need to tell the `Index` component to bind to it.
+Now that the query has been injected by the router into our `Search` component, we need to tell the `InstantSearch` component to bind to it.
 
 ```html
 <template>
-  <ais-index :search-store="searchStore" :query="query">
+  <ais-instant-search :search-client="searchClient">
+    <ais-configure :query="query" />
     <!-- ... -->
-  </ais-index>
+  </ais-instant-search>
 </template>
 ```
 
@@ -99,13 +100,13 @@ export default {
 }
 ```
 
-We then bound the search store to the `Index` component in the template, like so:
+We then bound the search store to the `InstantSearch` component in the template, like so:
 
 ```html
 <template>
-  <ais-index :search-store="searchStore" :query="query">
+  <ais-instant-search :search-store="searchStore" :query="query">
     <!-- ... -->
-  </ais-index>
+  </ais-instant-search>
 </template>
 ```
 

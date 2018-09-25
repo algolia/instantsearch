@@ -39,6 +39,7 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisMenuSelect',
   mixins: [
     createSuitMixin({ name: 'MenuSelect' }),
     createWidgetMixin({ connector: connectMenu }),

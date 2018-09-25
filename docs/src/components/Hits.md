@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 6
 editable: true
-githubSource: docs/src/components/hits.md
+githubSource: docs/src/components/Hits.md
 ---
 
 A component to format and render the search results.

@@ -58,6 +58,7 @@ import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 
 export default {
+  name: 'AisBreadcrumb',
   mixins: [
     createWidgetMixin({ connector: connectBreadcrumb }),
     createPanelConsumerMixin({

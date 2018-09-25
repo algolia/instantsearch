@@ -49,6 +49,7 @@ import { createPanelConsumerMixin } from '../mixins/panel';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisCurrentRefinements',
   mixins: [
     createSuitMixin({ name: 'CurrentRefinements' }),
     createWidgetMixin({ connector: connectCurrentRefinedValues }),

@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 6
 editable: true
-githubSource: docs/src/components/template.md
+githubSource: docs/src/components/__Template__.md
 ---
 
 Oh you're gonna love templates.

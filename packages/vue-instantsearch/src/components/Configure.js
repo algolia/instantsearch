@@ -4,6 +4,7 @@ import { connectConfigure } from 'instantsearch.js/es/connectors';
 
 export default {
   inheritAttrs: false,
+  name: 'AisConfigure',
   mixins: [
     createSuitMixin({ name: 'Configure' }),
     createWidgetMixin({ connector: connectConfigure }),

@@ -6,7 +6,7 @@ category: Components
 withHeadings: true
 navWeight: 6
 editable: true
-githubSource: docs/src/components/rating-menu.md
+githubSource: docs/src/components/RatingMenu.md
 ---
 
 A rating menu is a numeric list of a rating. By default visualized with stars. Note that the attribute needs to have integers

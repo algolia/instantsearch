@@ -33,7 +33,7 @@ export const previewWrapper = ({
   `,
 } = {}) => () => ({
   template: `
-    <ais-index
+    <ais-instant-search
       :search-client="searchClient"
       index-name="${indexName}"
     >
@@ -55,7 +55,7 @@ export const previewWrapper = ({
           <ais-pagination />
         </div>
       </div>
-    </ais-index>
+    </ais-instant-search>
   `,
   data() {
     return {

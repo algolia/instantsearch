@@ -8,7 +8,7 @@ import {
   boolean,
 } from '@storybook/addon-knobs';
 
-storiesOf('Menu', module)
+storiesOf('ais-menu', module)
   .addDecorator(previewWrapper())
   .addDecorator(withKnobs)
   .add('default', () => ({

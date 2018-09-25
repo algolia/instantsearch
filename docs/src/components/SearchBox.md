@@ -1,12 +1,12 @@
 ---
-title: Searchbox
+title: Search Box
 mainTitle: Components
 layout: main.pug
 category: Components
 withHeadings: true
 navWeight: 3
 editable: true
-githubSource: docs/src/components/search-box.md
+githubSource: docs/src/components/SearchBox.md
 ---
 
 A search input with a clear and submit button.

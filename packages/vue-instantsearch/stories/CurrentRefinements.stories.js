@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 import { withKnobs, boolean } from '@storybook/addon-knobs/vue';
 
-storiesOf('CurrentRefinements', module)
+storiesOf('ais-current-refinements', module)
   .addDecorator(previewWrapper())
   .addDecorator(withKnobs)
   .add('default', () => ({

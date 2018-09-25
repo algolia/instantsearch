@@ -50,6 +50,7 @@ import { createSuitMixin } from '../mixins/suit';
 const mapStateToCanRefine = state => state.items.length > 0;
 
 export default {
+  name: 'AisHierarchicalMenu',
   mixins: [
     createSuitMixin({ name: 'HierarchicalMenu' }),
     createWidgetMixin({ connector: connectHierarchicalMenu }),

@@ -8,7 +8,7 @@ export const createWidgetMixin = ({ connector } = {}) => ({
         const tag = this.$options._componentTag;
         throw new TypeError(
           `It looks like you forgot to wrap your Algolia search component
-          "<${tag}>" inside of an "<ais-index>" component.`
+          "<${tag}>" inside of an "<ais-instant-search>" component.`
         );
       },
     },

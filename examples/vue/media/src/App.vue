@@ -1,5 +1,5 @@
 <template>
-  <ais-index
+  <ais-instant-search
     :search-client="searchClient"
     index-name="movies"
     :routing="true"
@@ -91,7 +91,7 @@
         </div>
       </section>
     </main>
-  </ais-index>
+  </ais-instant-search>
 </template>
 
 <script>

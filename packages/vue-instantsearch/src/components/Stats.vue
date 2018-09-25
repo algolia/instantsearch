@@ -20,6 +20,7 @@ import { connectStats } from 'instantsearch.js/es/connectors';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisStats',
   mixins: [
     createWidgetMixin({ connector: connectStats }),
     createSuitMixin({ name: 'Stats' }),

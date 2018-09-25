@@ -34,6 +34,7 @@ import { createSuitMixin } from '../mixins/suit';
 import { createWidgetMixin } from '../mixins/widget';
 
 export default {
+  name: 'AisSortBy',
   mixins: [
     createSuitMixin({ name: 'SortBy' }),
     createWidgetMixin({ connector: connectSortBySelector }),

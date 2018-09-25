@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('NumericMenu', module)
+storiesOf('ais-numeric-menu', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `

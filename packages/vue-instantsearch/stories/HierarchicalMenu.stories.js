@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('HierarchicalMenu', module)
+storiesOf('ais-hierarchical-menu', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `

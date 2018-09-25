@@ -11,6 +11,7 @@ import { getPropertyByPath } from '../util/object';
 import { warn } from '../util/warn';
 
 export default {
+  name: 'AisHighlight',
   mixins: [createSuitMixin({ name: 'Highlight' })],
   props: {
     hit: {

@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('Highlight', module)
+storiesOf('ais-highlight', module)
   .addDecorator(previewWrapper())
   .add('Existing items', () => ({
     template: `

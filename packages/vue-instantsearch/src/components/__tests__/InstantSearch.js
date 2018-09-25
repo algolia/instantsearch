@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { mount } from '@vue/test-utils';
 import instantsearch from 'instantsearch.js/es';
-import Index from '../Index.vue';
+import InstantSearch from '../InstantSearch.vue';
 
 jest.mock('instantsearch.js/es', () => {
   const isPlainObject = require('lodash/isPlainObject');
@@ -42,7 +42,7 @@ beforeEach(() => jest.clearAllMocks());
 it('passes props to InstantSearch.js', () => {
   const searchClient = {};
   const searchFunction = helper => helper.search();
-  mount(Index, {
+  mount(InstantSearch, {
     propsData: {
       searchClient,
       indexName: 'something',
@@ -61,8 +61,47 @@ it('passes props to InstantSearch.js', () => {
   });
 });
 
+it('throws on usage of appId or apiKey', () => {
+  global.console.warn = jest.fn();
+  global.console.error = jest.fn();
+
+  mount(InstantSearch, {
+    propsData: {
+      searchClient: {},
+      apiKey: 'bla',
+      appId: 'blabla',
+      indexName: 'something',
+    },
+  });
+
+  expect(global.console.warn.mock.calls[0][0]).toMatchInlineSnapshot(`
+"Vue InstantSearch: You used the prop api-key or api-key.
+These have been replaced by search-client.
+
+See more info here: https://community.algolia.com/vue-instantsearch/components/InstantSearch.html#usage"
+`);
+
+  expect(global.console.error.mock.calls[0][0]).toMatchInlineSnapshot(`
+"[Vue warn]: Invalid prop: custom validator check failed for prop \\"apiKey\\".
+
+found in
+
+---> <AisInstantSearch>
+       <Root>"
+`);
+
+  expect(global.console.error.mock.calls[1][0]).toMatchInlineSnapshot(`
+"[Vue warn]: Invalid prop: custom validator check failed for prop \\"appId\\".
+
+found in
+
+---> <AisInstantSearch>
+       <Root>"
+`);
+});
+
 it('calls `start` on the next tick', done => {
-  mount(Index, {
+  mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'something',
@@ -76,7 +115,7 @@ it('calls `start` on the next tick', done => {
 });
 
 it('provides an InstantSearch instance', () => {
-  const wrapper = mount(Index, {
+  const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
@@ -92,7 +131,7 @@ it('provides an InstantSearch instance', () => {
 });
 
 it('renders correctly (empty)', () => {
-  const wrapper = mount(Index, {
+  const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
@@ -103,7 +142,7 @@ it('renders correctly (empty)', () => {
 });
 
 it('renders correctly (with slot used)', () => {
-  const wrapper = mount(Index, {
+  const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
@@ -117,7 +156,7 @@ it('renders correctly (with slot used)', () => {
 });
 
 it('Allows a change in `index-name`', () => {
-  const wrapper = mount(Index, {
+  const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
@@ -134,7 +173,7 @@ it('Allows a change in `index-name`', () => {
 });
 
 it('Allows a change in `search-client`', () => {
-  const wrapper = mount(Index, {
+  const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
@@ -154,7 +193,7 @@ it('Allows a change in `search-client`', () => {
 
 it('Does not allow a change in `search-function`', () => {
   global.console.error = jest.fn();
-  const wrapper = mount(Index, {
+  const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',
@@ -176,7 +215,7 @@ Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new
 
 it('Does not allow a change in `routing`', () => {
   global.console.error = jest.fn();
-  const wrapper = mount(Index, {
+  const wrapper = mount(InstantSearch, {
     propsData: {
       searchClient: {},
       indexName: 'bla',

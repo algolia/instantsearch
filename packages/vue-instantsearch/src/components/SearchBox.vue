@@ -8,7 +8,7 @@
       :is-search-stalled="state.isSearchStalled"
       :refine="state.refine"
     >
-      <ais-search-input
+      <search-input
         :placeholder="placeholder"
         :autofocus="autofocus"
         :show-loading-indicator="showLoadingIndicator"
@@ -28,12 +28,13 @@ import { createWidgetMixin } from '../mixins/widget';
 import SearchInput from './SearchInput.vue';
 
 export default {
+  name: 'AisSearchBox',
   mixins: [
     createWidgetMixin({ connector: connectSearchBox }),
     createSuitMixin({ name: 'SearchBox' }),
   ],
   components: {
-    'ais-search-input': SearchInput,
+    SearchInput,
   },
   props: {
     placeholder: {

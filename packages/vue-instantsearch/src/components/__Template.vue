@@ -31,6 +31,7 @@ const connectorName = (renderFn, unmountFn) => ({ someProp }) => ({
 /* eslint-enable */
 
 export default {
+  name: 'AisTemplate', // ◀️ change this to the component name that will be exported
   // ⬇️ this is to help you debugging what's in `state`
   // remove it before pushing the component
   components: { 'json-tree': JsonTree },

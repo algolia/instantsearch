@@ -41,6 +41,7 @@ import { createWidgetMixin } from '../mixins/widget';
 import { createSuitMixin } from '../mixins/suit';
 
 export default {
+  name: 'AisNumericMenu',
   mixins: [
     createWidgetMixin({ connector: connectNumericRefinementList }),
     createSuitMixin({ name: 'NumericMenu' }),

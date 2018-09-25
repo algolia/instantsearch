@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/vue';
 import { previewWrapper } from './utils';
 
-storiesOf('HitsPerPage', module)
+storiesOf('ais-hits-per-page', module)
   .addDecorator(previewWrapper())
   .add('default', () => ({
     template: `
