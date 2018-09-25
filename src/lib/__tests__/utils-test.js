@@ -876,7 +876,7 @@ describe('utils.deprecate', () => {
     const actual = 6;
 
     expect(actual).toBe(expectation);
-    expect(warn).toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
 
     warn.mockReset();
     warn.mockRestore();
@@ -906,7 +906,7 @@ describe('utils.warn', () => {
 
     utils.warn(message);
 
-    expect(warn).toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
 
     warn.mockReset();
     warn.mockRestore();
