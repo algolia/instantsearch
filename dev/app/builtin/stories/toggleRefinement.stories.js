@@ -16,7 +16,7 @@ export default () => {
             container,
             attribute: 'free_shipping',
             templates: {
-              labelText: '{{test}}Free Shipping (toggle single value)',
+              labelText: 'Free Shipping (toggle single value)',
             },
           })
         );
