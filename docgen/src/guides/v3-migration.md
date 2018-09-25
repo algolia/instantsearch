@@ -39,6 +39,66 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 </div>
 ```
 
+### GeoSearch
+
+#### CSS classes
+
+| Before                                | After                           |
+| ------------------------------------- | ------------------------------- |
+| `ais-geo-search`                      | `ais-GeoSearch`                 |
+| `ais-geo-search--map`                 | `ais-GeoSearch-map`             |
+| `ais-geo-search--controls`            | `ais-GeoSearch-tree`            |
+| `ais-geo-search--control`             | `ais-GeoSearch-control`         |
+| `ais-geo-search--toggle-label`        | `ais-GeoSearch-label`           |
+| `ais-geo-search--toggle-label-active` | `ais-GeoSearch-label--selected` |
+| `ais-geo-search--toggle-inpit`        | `ais-GeoSearch-input`           |
+| `ais-geo-search--redo`                | `ais-GeoSearch-redo`            |
+|                                       | `ais-GeoSearch-redo--disabled`  |
+| `ais-geo-search--clear`               | `ais-GeoSearch-reset`           |
+
+#### Markup
+
+With the control element:
+
+```html
+<div class="ais-GeoSearch">
+  <div class="ais-GeoSearch-map">
+    <!-- Map element here -->
+  </div>
+  <div class="ais-GeoSearch-tree">
+    <div class="ais-GeoSearch-control">
+      <label class="ais-GeoSearch-label">
+        <input class="ais-GeoSearch-input" type="checkbox">
+        Search as I move the map
+      </label>
+    </div>
+    <button class="ais-GeoSearch-reset">
+      Clear the map refinement
+    </button>
+  </div>
+</div>
+```
+
+With the redo button:
+
+```html
+<div class="ais-GeoSearch">
+  <div class="ais-GeoSearch-map">
+    <!-- Map element here -->
+  </div>
+  <div class="ais-GeoSearch-tree">
+    <div class="ais-GeoSearch-control">
+      <button class="ais-GeoSearch-redo">
+        Redo search here
+      </button>
+    </div>
+    <button class="ais-GeoSearch-reset">
+      Clear the map refinement
+    </button>
+  </div>
+</div>
+```
+
 ### Hits
 
 #### Options

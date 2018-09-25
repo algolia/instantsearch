@@ -159,12 +159,13 @@ describe('GeoSearch', () => {
       cssClasses: {
         root: 'custom-root',
         map: 'custom-map',
-        controls: 'custom-controls',
-        clear: 'custom-clear',
         control: 'custom-control',
-        toggleLabel: 'custom-toggleLabel',
-        toggleInput: 'custom-toggleInput',
+        label: 'custom-label',
+        selectedLabel: 'custom-label-selected',
+        input: 'custom-input',
         redo: 'custom-redo',
+        disabledRedo: 'custom-redo-disabled',
+        reset: 'custom-reset',
       },
     });
 
@@ -217,7 +218,7 @@ describe('GeoSearch', () => {
     const actual = renderer.mock.calls[0][0].widgetParams.templates;
 
     const expectation = {
-      clear: 'Clear the map refinement',
+      reset: 'Clear the map refinement',
       toggle: 'Search when the map move',
       redo: 'Redo search here',
     };

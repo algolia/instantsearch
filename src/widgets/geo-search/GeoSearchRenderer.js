@@ -89,9 +89,9 @@ const renderer = (
     mapElement.className = cssClasses.map;
     rootElement.appendChild(mapElement);
 
-    const controlElement = document.createElement('div');
-    controlElement.className = cssClasses.controls;
-    rootElement.appendChild(controlElement);
+    const treeElement = document.createElement('div');
+    treeElement.className = cssClasses.tree;
+    rootElement.appendChild(treeElement);
 
     renderState.mapInstance = new googleReference.maps.Map(mapElement, {
       mapTypeControl: false,
@@ -233,7 +233,7 @@ const renderer = (
       onClearClick={clearMapRefinement}
       templateProps={renderState.templateProps}
     />,
-    container.querySelector(`.${cssClasses.controls}`)
+    container.querySelector(`.${cssClasses.tree}`)
   );
 };
 
