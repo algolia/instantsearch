@@ -39,6 +39,35 @@ Disable query rules:
 
 Any prop given to this widget will be applied as a [search parameter](https://www.algolia.com/doc/api-reference/search-api-parameters/).
 
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ searchParameters: SearchParameters, refine: (searchParameters: SearchParameters) => void }` | Slot to override the DOM output
+
+Note: The `refine` function will fully override the data given via props. If you want to shallowly merge it, use something like:
+
+```html
+<ais-configure :enableRules="false" :hitsPerPage="5">
+  <template slot-scope="{ searchParameters, refine }">
+    <button
+      @click="refine(
+        Object.assign(
+          {},
+          searchParameters,
+          { enableRules: !searchParameters.enableRules }
+        )
+      )"
+    >
+      toggle only query rules
+    </button>
+    currently applied filters: <pre>{{searchParameters}}</pre>
+  </template>
+</ais-configure>
+```
+
+It's also possible to use multiple Configures for this use case.
+
 ## CSS Classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying
