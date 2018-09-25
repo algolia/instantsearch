@@ -24,27 +24,6 @@ import * as stateMappings from './stateMappings/index.js';
  */
 
 /**
- * @typedef {Object} UrlSyncOptions
- * @property {Object} [mapping] Object used to define replacement query
- * parameter to use in place of another. Keys are current query parameters
- * and value the new value, e.g. `{ q: 'query' }`.
- * @property {number} [threshold=700] Idle time in ms after which a new
- * state is created in the browser history. The URL is always updated at each keystroke
- * but we only create a "previous search state" (activated when click on back button) every 700ms of idle time.
- * @property {string[]} [trackedParameters] Parameters that will
- * be synchronized in the URL. Default value is `['query', 'attribute:*',
- * 'index', 'page', 'hitsPerPage']`. `attribute:*` means all the faceting attributes will be tracked. You
- * can track only some of them by using `[..., 'attribute:color', 'attribute:categories']`. All other possible
- * values are all the [attributes of the Helper SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
- * @property {boolean} [useHash] If set to `true`, the URL will be
- * hash based. Otherwise, it'll use the query parameters using the modern
- * history API.
- * @property {function} [getHistoryState] Pass this function to override the
- * default history API state we set to `null`. For example, this could be used to force passing
- * `{turbolinks: true}` to the history API every time we update it.
- */
-
-/**
  * @typedef {Object|boolean} RoutingOptions
  * @property {Router} [router=HistoryRouter()] The router is the part that will save the UI State.
  * By default, it uses an instance of the `HistoryRouter` with the default parameters.
@@ -138,10 +117,6 @@ import * as stateMappings from './stateMappings/index.js';
  * searches at page load for example.
  * @property {object} [searchParameters] Additional parameters to pass to
  * the Algolia API ([see full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)).
- * @property {boolean|UrlSyncOptions} [urlSync] _Deprecated in favor of [`routing`](instantsearch.html#struct-InstantSearchOptions-routing)._
- *
- * URL synchronization configuration.
- * Setting to `true` will synchronize the needed search parameters with the browser URL.
  * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
  * @property {RoutingOptions} [routing] Router configuration used to save the UI State into the URL or
  * any client side persistence.
