@@ -747,7 +747,7 @@ export default () => {
       )
     )
     .add(
-      'with URLSync (simulate)',
+      'with routing (simulate)',
       wrapWithHitsAndConfiguration(
         (container, start) =>
           injectGoogleMaps(() => {

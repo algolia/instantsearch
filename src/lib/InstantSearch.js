@@ -203,8 +203,6 @@ class InstantSearch extends EventEmitter {
       // re-compute remaining widgets to the state
       // in a case two widgets were using the same configuration but we removed one
       if (nextState) {
-        // We don't want to re-add URlSync `getConfiguration` widget
-        // it can throw errors since it may re-add SearchParameters about something unmounted
         this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
           ...nextState,
         });
