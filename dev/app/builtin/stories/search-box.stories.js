@@ -35,7 +35,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container,
-            placeholder: 'Search for products',
             showLoadingIndicator: false,
           })
         );
@@ -47,7 +46,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container,
-            placeholder: 'Search for products',
             templates: {
               loadingIndicator: '⚡️',
             },
@@ -61,7 +59,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container,
-            placeholder: 'Search for products',
             templates: {
               submit: '<div class="ais-search-box--magnifier">🔍</div>',
               reset: '<div class="ais-search-box--reset">✖️</div>',
@@ -76,7 +73,6 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.searchBox({
             container,
-            placeholder: 'Search for products',
             searchAsYouType: false,
           })
         );
