@@ -41,13 +41,6 @@ export default () => {
     lng: -74.01,
   };
 
-  const paddingBoundingBox = {
-    top: 41,
-    right: 13,
-    bottom: 5,
-    left: 13,
-  };
-
   Stories.add(
     'default',
     wrapWithHitsAndConfiguration((container, start) =>
@@ -103,7 +96,6 @@ export default () => {
             container,
             initialPosition,
             initialZoom,
-            paddingBoundingBox,
           })
         );
 
@@ -123,7 +115,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
               radius,
             })
           );
@@ -144,7 +135,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
               radius,
               precision,
             })
@@ -167,7 +157,6 @@ export default () => {
             googleReference: window.google,
             container,
             initialZoom,
-            paddingBoundingBox,
             position,
           })
         );
@@ -187,7 +176,6 @@ export default () => {
               googleReference: window.google,
               container,
               initialZoom,
-              paddingBoundingBox,
               radius,
               position,
             })
@@ -208,7 +196,6 @@ export default () => {
               googleReference: window.google,
               container,
               initialZoom,
-              paddingBoundingBox,
               radius,
               precision,
               position,
@@ -248,7 +235,6 @@ export default () => {
             enableGeolocationWithIP: false,
             enableClearMapRefinement: false,
             initialZoom,
-            paddingBoundingBox,
           })
         );
 
@@ -270,7 +256,6 @@ export default () => {
             container,
             initialPosition,
             initialZoom,
-            paddingBoundingBox,
             enableRefineControl: true,
             enableRefineOnMapMove: true,
           })
@@ -294,7 +279,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -316,7 +300,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -338,7 +321,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -363,7 +345,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -386,7 +367,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -419,7 +399,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -454,7 +433,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -505,7 +483,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -545,7 +522,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -593,7 +569,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -655,7 +630,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -738,7 +712,6 @@ export default () => {
               container,
               initialPosition,
               initialZoom,
-              paddingBoundingBox,
             })
           );
 
@@ -759,7 +732,6 @@ export default () => {
                 container,
                 initialPosition,
                 initialZoom,
-                paddingBoundingBox,
               })
             );
 
@@ -790,7 +762,6 @@ export default () => {
                 container,
                 initialPosition,
                 initialZoom,
-                paddingBoundingBox,
               })
             );
 

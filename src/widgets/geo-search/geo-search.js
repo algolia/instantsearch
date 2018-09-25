@@ -16,7 +16,6 @@ geoSearch({
   googleReference,
   [ initialZoom = 1 ],
   [ initialPosition = { lat: 0, lng: 0 } ],
-  [ paddingBoundingBox = { top: 0, right: 0, bottom: 0, right: 0 } ],
   [ cssClasses.{root,map,controls,clear,control,toggleLabel,toggleLabelActive,toggleInput,redo} = {} ],
   [ templates.{clear,toggle,redo} ],
   [ mapOptions ],
@@ -74,14 +73,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  */
 
 /**
- * @typedef {object} Padding
- * @property {number} top The top padding in pixels.
- * @property {number} right The right padding in pixels.
- * @property {number} bottom The bottom padding in pixels.
- * @property {number} left The left padding in pixels.
- */
-
-/**
  * @typedef {object} LatLng
  * @property {number} lat The latitude in degrees.
  * @property {number} lng The longitude in degrees.
@@ -94,7 +85,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * See [the documentation](https://developers.google.com/maps/documentation/javascript/tutorial) for more information.
  * @property {number} [initialZoom=1] By default the map will set the zoom accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situations we need to provide a zoom to render the map.
  * @property {LatLng} [initialPosition={ lat: 0, lng: 0 }] By default the map will set the position accordingly to the markers displayed on it. When we refine it may happen that the results are empty. For those situations we need to provide a position to render the map. This option is ignored when the `position` is provided.
- * @property {Padding} [paddingBoundingBox={ top:0, right: 0, bottom:0, left: 0 }] Add an inner padding on the map when you refine.
  * @property {GeoSearchTemplates} [templates] Templates to use for the widget.
  * @property {GeoSearchCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {object} [mapOptions] Option forwarded to the Google Maps constructor. <br />
@@ -143,7 +133,6 @@ const geoSearch = ({
   initialPosition = { lat: 0, lng: 0 },
   templates: userTemplates = {},
   cssClasses: userCssClasses = {},
-  paddingBoundingBox: userPaddingBoundingBox = {},
   builtInMarker: userBuiltInMarker = {},
   customHTMLMarker: userCustomHTMLMarker = false,
   enableClearMapRefinement = true,
@@ -161,13 +150,6 @@ const geoSearch = ({
     template: '<p>Your custom HTML Marker</p>',
     createOptions: noop,
     events: {},
-  };
-
-  const defaultPaddingBoundingBox = {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
   };
 
   if (!container) {
@@ -208,11 +190,6 @@ const geoSearch = ({
   const customHTMLMarker = Boolean(userCustomHTMLMarker) && {
     ...defaultCustomHTMLMarker,
     ...userCustomHTMLMarker,
-  };
-
-  const paddingBoundingBox = {
-    ...defaultPaddingBoundingBox,
-    ...userPaddingBoundingBox,
   };
 
   const createBuiltInMarker = ({ item, ...rest }) =>
@@ -267,7 +244,6 @@ const geoSearch = ({
       initialPosition,
       templates,
       cssClasses,
-      paddingBoundingBox,
       createMarker,
       markerOptions,
       enableClearMapRefinement,
