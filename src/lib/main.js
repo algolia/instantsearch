@@ -93,6 +93,16 @@ import * as stateMappings from './stateMappings/index.js';
  *   }
  * });
  * ```
+ * @property {string} [numberLocale] The locale used to display numbers. This will be passed
+ * to [`Number.prototype.toLocaleString()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString)
+ * @property {function} [searchFunction] A hook that will be called each time a search needs to be done, with the
+ * helper as a parameter. It's your responsibility to call `helper.search()`. This option allows you to avoid doing
+ * searches at page load for example.
+ * @property {object} [searchParameters] Additional parameters to pass to
+ * the Algolia API ([see full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)).
+ * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
+ * @property {RoutingOptions} [routing] Router configuration used to save the UI State into the URL or
+ * any client side persistence.
  */
 
 /**
@@ -109,17 +119,6 @@ import * as stateMappings from './stateMappings/index.js';
  *
  * If you want to get up and running quickly with InstantSearch.js, have a
  * look at the [getting started](getting-started.html).
- *
- * @property {string} [numberLocale] The locale used to display numbers. This will be passed
- * to [`Number.prototype.toLocaleString()`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString)
- * @property {function} [searchFunction] A hook that will be called each time a search needs to be done, with the
- * helper as a parameter. It's your responsibility to call `helper.search()`. This option allows you to avoid doing
- * searches at page load for example.
- * @property {object} [searchParameters] Additional parameters to pass to
- * the Algolia API ([see full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)).
- * @property {number} [stalledSearchDelay=200] Time before a search is considered stalled.
- * @property {RoutingOptions} [routing] Router configuration used to save the UI State into the URL or
- * any client side persistence.
  * @function instantsearch
  * @param {InstantSearchOptions} $0 The options
  * @return {InstantSearch} the instantsearch instance
