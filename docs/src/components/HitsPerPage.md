@@ -36,6 +36,10 @@ items | `[<Object>, ...]` | yes | no | Array of possible values for the select, 
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 classNames | Object | | Override class names | no
 
+Name | Scope | Description
+---|---|---
+default | `{ items: Array<{label: String, value: String}>, refine({label: String, value: String}), hasNoResults: Boolean }` | Slot to override the DOM output
+
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying
