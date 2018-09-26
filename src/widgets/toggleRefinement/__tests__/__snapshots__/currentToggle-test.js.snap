@@ -15,16 +15,13 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
     Object {
       "count": 1,
       "isRefined": false,
-      "name": "",
       "offFacetValue": Object {
         "count": 2,
         "isRefined": true,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": 1,
         "isRefined": false,
-        "name": "",
       },
     }
   }
@@ -59,16 +56,13 @@ exports[`currentToggle() good usage render supports negative numeric off or on v
     Object {
       "count": 1,
       "isRefined": false,
-      "name": "",
       "offFacetValue": Object {
         "count": 2,
         "isRefined": true,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": 1,
         "isRefined": false,
-        "name": "",
       },
     }
   }
@@ -103,16 +97,13 @@ exports[`currentToggle() good usage render understands cssClasses 1`] = `
     Object {
       "count": 2,
       "isRefined": false,
-      "name": "",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": 2,
         "isRefined": false,
-        "name": "",
       },
     }
   }
@@ -147,16 +138,13 @@ exports[`currentToggle() good usage render when refined 1`] = `
     Object {
       "count": 3,
       "isRefined": true,
-      "name": "",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": 2,
         "isRefined": true,
-        "name": "",
       },
     }
   }
@@ -191,16 +179,13 @@ exports[`currentToggle() good usage render when refined 2`] = `
     Object {
       "count": 3,
       "isRefined": true,
-      "name": "",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": 2,
         "isRefined": true,
-        "name": "",
       },
     }
   }
@@ -235,16 +220,13 @@ exports[`currentToggle() good usage render with facet values 1`] = `
     Object {
       "count": 2,
       "isRefined": false,
-      "name": "",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": 2,
         "isRefined": false,
-        "name": "",
       },
     }
   }
@@ -279,16 +261,13 @@ exports[`currentToggle() good usage render with facet values 2`] = `
     Object {
       "count": 2,
       "isRefined": false,
-      "name": "",
       "offFacetValue": Object {
         "count": 3,
         "isRefined": false,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": 2,
         "isRefined": false,
-        "name": "",
       },
     }
   }
@@ -323,16 +302,13 @@ exports[`currentToggle() good usage render without facet values 1`] = `
     Object {
       "count": null,
       "isRefined": false,
-      "name": "",
       "offFacetValue": Object {
         "count": 0,
         "isRefined": false,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": null,
         "isRefined": false,
-        "name": "",
       },
     }
   }
@@ -367,16 +343,13 @@ exports[`currentToggle() good usage render without facet values 2`] = `
     Object {
       "count": null,
       "isRefined": false,
-      "name": "",
       "offFacetValue": Object {
         "count": 0,
         "isRefined": false,
-        "name": "",
       },
       "onFacetValue": Object {
         "count": null,
         "isRefined": false,
-        "name": "",
       },
     }
   }

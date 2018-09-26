@@ -12,7 +12,6 @@ export default () => {
         widgets.toggleRefinement({
           containerNode,
           attribute: 'free_shipping',
-          label: 'Free Shipping (toggle single value)',
           title: 'Free Shipping',
         })
       );

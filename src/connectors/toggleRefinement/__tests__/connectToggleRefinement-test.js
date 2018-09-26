@@ -15,10 +15,8 @@ describe('connectToggleRefinement', () => {
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
-    const label = 'Free shipping?';
     const widget = makeWidget({
       attribute,
-      label,
     });
 
     const config = widget.getConfiguration();
@@ -45,16 +43,13 @@ describe('connectToggleRefinement', () => {
       // should provide good values for the first rendering
       const { value, widgetParams } = rendering.lastCall.args[0];
       expect(value).toEqual({
-        name: label,
         count: null,
         isRefined: false,
         onFacetValue: {
-          name: label,
           isRefined: false,
           count: 0,
         },
         offFacetValue: {
-          name: label,
           isRefined: false,
           count: 0,
         },
@@ -62,7 +57,6 @@ describe('connectToggleRefinement', () => {
 
       expect(widgetParams).toEqual({
         attribute,
-        label,
       });
     }
 
@@ -92,16 +86,13 @@ describe('connectToggleRefinement', () => {
       // should provide good values after the first search
       const { value } = rendering.lastCall.args[0];
       expect(value).toEqual({
-        name: label,
         count: 45,
         isRefined: false,
         onFacetValue: {
-          name: label,
           isRefined: false,
           count: 45,
         },
         offFacetValue: {
-          name: label,
           isRefined: false,
           count: 85,
         },
@@ -114,10 +105,8 @@ describe('connectToggleRefinement', () => {
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
-    const label = 'Free shipping?';
     const widget = makeWidget({
       attribute,
-      label,
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration());
@@ -138,16 +127,13 @@ describe('connectToggleRefinement', () => {
       const renderOptions = rendering.lastCall.args[0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
-        name: label,
         count: null,
         isRefined: false,
         onFacetValue: {
-          name: label,
           isRefined: false,
           count: 0,
         },
         offFacetValue: {
-          name: label,
           isRefined: false,
           count: 0,
         },
@@ -187,16 +173,13 @@ describe('connectToggleRefinement', () => {
       const renderOptions = rendering.lastCall.args[0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
-        name: label,
         count: 45,
         isRefined: false,
         onFacetValue: {
-          name: label,
           isRefined: false,
           count: 45,
         },
         offFacetValue: {
-          name: label,
           isRefined: false,
           count: 85,
         },
@@ -240,16 +223,13 @@ describe('connectToggleRefinement', () => {
       const renderOptions = rendering.lastCall.args[0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
-        name: label,
         count: 85,
         isRefined: true,
         onFacetValue: {
-          name: label,
           isRefined: true,
           count: 45,
         },
         offFacetValue: {
-          name: label,
           isRefined: false,
           count: 85,
         },
@@ -266,14 +246,10 @@ describe('connectToggleRefinement', () => {
     const makeWidget = connectToggleRefinement(rendering);
 
     const attribute = 'isShippingFree';
-    const label = 'Free shipping?';
     const widget = makeWidget({
       attribute,
-      label,
-      values: {
-        on: 'true',
-        off: 'false',
-      },
+      on: 'true',
+      off: 'false',
     });
 
     const helper = jsHelper({}, '', widget.getConfiguration());
@@ -295,16 +271,13 @@ describe('connectToggleRefinement', () => {
       const { refine, value } = renderOptions;
 
       expect(value).toEqual({
-        name: label,
         count: null,
         isRefined: false,
         onFacetValue: {
-          name: label,
           isRefined: false,
           count: 0,
         },
         offFacetValue: {
-          name: label,
           isRefined: true,
           count: 0,
         },
@@ -352,17 +325,14 @@ describe('connectToggleRefinement', () => {
       const renderOptions = rendering.lastCall.args[0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
-        name: label,
         // the value is the one that is not selected
         count: 45,
         isRefined: false,
         onFacetValue: {
-          name: label,
           isRefined: false,
           count: 45,
         },
         offFacetValue: {
-          name: label,
           isRefined: true,
           count: 40,
         },
@@ -406,16 +376,13 @@ describe('connectToggleRefinement', () => {
       const renderOptions = rendering.lastCall.args[0];
       const { refine, value } = renderOptions;
       expect(value).toEqual({
-        name: label,
         count: 40,
         isRefined: true,
         onFacetValue: {
-          name: label,
           isRefined: true,
           count: 45,
         },
         offFacetValue: {
-          name: label,
           isRefined: false,
           count: 40,
         },
@@ -433,10 +400,8 @@ describe('connectToggleRefinement', () => {
       const makeWidget = connectToggleRefinement(rendering);
 
       const attribute = 'isShippingFree';
-      const label = 'Free shipping?';
       const widget = makeWidget({
         attribute,
-        label,
         ...config,
       });
 
@@ -510,10 +475,8 @@ describe('connectToggleRefinement', () => {
 
       test('should enforce the default value if no value is in the UI state (two values)', () => {
         const [widget, helper] = getInitializedWidget({
-          values: {
-            on: 'free-shipping',
-            off: 'paid-shipping',
-          },
+          on: 'free-shipping',
+          off: 'paid-shipping',
         });
         const uiState = {};
         const searchParametersBefore = SearchParameters.make(helper.state);
@@ -538,10 +501,8 @@ describe('connectToggleRefinement', () => {
 
       test('should update the SP base on the UI state (two values)', () => {
         const [widget, helper, refine] = getInitializedWidget({
-          values: {
             on: 'free-shipping',
             off: 'paid-shipping',
-          },
         });
         refine({ isRefined: false });
         const uiState = {};
@@ -555,10 +516,8 @@ describe('connectToggleRefinement', () => {
 
       test('should update the SP base on the UI state - toggled (two values)', () => {
         const [widget, helper] = getInitializedWidget({
-          values: {
             on: 'free-shipping',
             off: 'paid-shipping',
-          },
         });
         const uiState = {
           toggle: {

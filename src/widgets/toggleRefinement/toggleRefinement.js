@@ -163,7 +163,7 @@ export default function toggleRefinement({
     const makeWidget = connectToggleRefinement(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ attribute, values: { on, off } });
+    return makeWidget({ attribute, on, off });
   } catch (e) {
     throw new Error(usage);
   }

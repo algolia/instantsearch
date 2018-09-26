@@ -19,8 +19,8 @@ var customToggle = connectToggleRefinement(function render(params, isFirstRender
 search.addWidget(
   customToggle({
     attribute,
-    label,
-    [ values = {on: true, off: undefined} ]
+    [on = true],
+    [off],
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggleRefinement.html
@@ -28,7 +28,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} ToggleValue
- * @property {string} name Human-readable name of the filter.
  * @property {boolean} isRefined `true` if the toggle is on.
  * @property {number} count Number of results matched after applying the toggle refinement.
  * @property {Object} onFacetValue Value of the toggle when it's on.
@@ -38,7 +37,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomToggleWidgetOptions
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
- * @property {string} [label] Human-readable name of the filter (eg. "Free Shipping").
  * @property {Object} [values = {on: true, off: undefined}] Values to filter on when toggling.
  */
 
@@ -99,7 +97,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   customToggle({
  *     containerNode: $('#custom-toggle-container'),
  *     attribute: 'free_shipping',
- *     label: 'Free Shipping (toggle single value)',
  *   })
  * );
  */
@@ -107,19 +104,15 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {
-      attribute,
-      label = '',
-      values: userValues = { on: true, off: undefined },
-    } = widgetParams;
+    const { attribute, on: userOn = true, off: userOff } = widgetParams;
 
     if (!attribute) {
       throw new Error(usage);
     }
 
-    const hasAnOffValue = userValues.off !== undefined;
-    const on = userValues ? escapeRefinement(userValues.on) : undefined;
-    const off = userValues ? escapeRefinement(userValues.off) : undefined;
+    const hasAnOffValue = userOff !== undefined;
+    const on = userOn ? escapeRefinement(userOn) : undefined;
+    const off = userOff ? escapeRefinement(userOff) : undefined;
 
     return {
       getConfiguration() {
@@ -178,19 +171,16 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         }
 
         const onFacetValue = {
-          name: label,
           isRefined,
           count: 0,
         };
 
         const offFacetValue = {
-          name: label,
           isRefined: hasAnOffValue && !isRefined,
           count: 0,
         };
 
         const value = {
-          name: label,
           isRefined,
           count: null,
           onFacetValue,
@@ -219,7 +209,6 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
           ({ name }) => name === unescapeRefinement(on)
         );
         const onFacetValue = {
-          name: label,
           isRefined: onData !== undefined ? onData.isRefined : false,
           count: onData === undefined ? null : onData.count,
         };
@@ -231,7 +220,6 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
             )
           : undefined;
         const offFacetValue = {
-          name: label,
           isRefined: offData !== undefined ? offData.isRefined : false,
           count:
             offData === undefined
@@ -245,7 +233,6 @@ export default function connectToggleRefinement(renderFn, unmountFn) {
         const nextRefinement = isRefined ? offFacetValue : onFacetValue;
 
         const value = {
-          name: label,
           isRefined,
           count: nextRefinement === undefined ? null : nextRefinement.count,
           onFacetValue,
