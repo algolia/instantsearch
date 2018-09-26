@@ -204,7 +204,7 @@ export default createConnector({
     return {
       items: truncate(transformedItems, itemsLimit),
       currentRefinement: getCurrentRefinement(props, searchState, this.context),
-      canRefine: items.length > 0,
+      canRefine: transformedItems.length > 0,
     };
   },
 

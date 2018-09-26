@@ -160,11 +160,16 @@ export default createConnector({
       });
     }
 
+    const transformedItems = props.transformItems
+      ? props.transformItems(items)
+      : items;
+
     return {
-      items: props.transformItems ? props.transformItems(items) : items,
+      items: transformedItems,
       currentRefinement,
       canRefine:
-        items.length > 0 && items.some(item => item.noRefinement === false),
+        transformedItems.length > 0 &&
+        transformedItems.some(item => item.noRefinement === false),
     };
   },
 
