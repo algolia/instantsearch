@@ -36,6 +36,17 @@ DOM structure, have a look at the generated DOM in your browser.
 
 Note that you can pass the prop `class-names`, with an object of class names and their replacement to override this.
 
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ refine: (min, max) => void, currentRefinements: [number, number], noRefinements, range: {min: number, max: number}}` | Slot to override the DOM output. `refine` takes the updated values and then trigger the search. The `currentRefinements` contains the min and the max as set in the search state (and should be used to render the input values).
+minLabel | | Slot for giving the min input a label
+maxLabel | | Slot for giving the max input a label
+separator| | Slot for modifying the separator between the two inputs
+submitLabel | | Slot for modifying the label on the submit button
+
+
 Class name | Description
 ---|---
 `ais-RangeInput` | Container class
@@ -49,13 +60,3 @@ Class name | Description
 `ais-RangeInput-input--max` | The maximum bound of the range
 
 classNames | Object | | Override class names | no
-
-## Slots
-
-Name | Scope | Description
----|---|---
-default | `{ refine: (min, max) => void, currentRefinements: [number, number], noRefinements, range: {min: number, max: number}}` | Slot to override the DOM output. `refine` takes the updated values and then trigger the search. The `currentRefinements` contains the min and the max as set in the search state (and should be used to render the input values).
-minLabel | | Slot for giving the min input a label
-maxLabel | | Slot for giving the max input a label
-separator| | Slot for modifying the separator between the two inputs
-submitLabel | | Slot for modifying the label on the submit button
