@@ -244,7 +244,6 @@ describe('InstantSearch lifecycle', () => {
       search.start();
     });
 
-
     it('emits render when all render are done (using on)', () => {
       const onRender = sinon.spy();
       search.on('render', onRender);
