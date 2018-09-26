@@ -40,12 +40,9 @@ classNames | Object | | Override class names | no
 
 ## Slots
 
-> TODO: update to follow convention
-
-| Name    | Props                               | Default                                                        | Description        |
-|:--------|:------------------------------------|:---------------------------------------------------------------|:-------------------|
-| default | hitsPerPage, nbPages, nbHits, page, processingTimeMS, query | `'{{ nbHits }} results found in {{ processingTimeMS }}ms'` | The text displayed |
-
+Name | Scope | Description
+---|---|---
+default | `{ hitsPerPage: Number, nbPages: Number, nbHits: Number, page: Number, processingTimeMS: Number, query: String }` | Slot to override the DOM output
 
 ## CSS Classes
 
