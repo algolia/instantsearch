@@ -13,7 +13,7 @@ experiences using [React](https://facebook.github.io/react/) and [Algolia](https
 
 In this tutorial, you'll learn how to:
 
-* install `react-instantsearch` in your [React](https://facebook.github.io/react/) project
+* install `react-instantsearch-dom` in your [React](https://facebook.github.io/react/) project
 * bootstrap an app using the `<InstantSearch>` component
 * display results from Algolia
 * add widgets to filter the results
