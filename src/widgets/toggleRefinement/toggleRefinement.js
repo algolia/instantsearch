@@ -117,9 +117,7 @@ toggleRefinement({
  *   instantsearch.widgets.toggleRefinement({
  *     container: '#free-shipping',
  *     attribute: 'free_shipping',
- *     values: {
- *       on: true,
- *     },
+ *     on: true,
  *     templates: {
  *       header: 'Shipping'
  *     }
