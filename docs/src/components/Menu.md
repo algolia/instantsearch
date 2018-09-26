@@ -31,6 +31,13 @@ sortBy | string[] or function | `['name:asc', 'count:desc']` | Array or function
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 classNames | Object | | Override class names | no
 
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ items: Array<{label: String, value: String}>, canRefine: Boolean, canToggleShowMore: Boolean, isShowingMore: Boolean, refine: String => void, createURL: () => String, toggleShowMore: () => void, }` | Slot to override the DOM output
+showMoreLabel | `{ isShowingMore: Boolean }` | Slot to label when show-more is enabled.
+
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying DOM structure, have a look at the generated DOM in your browser.
