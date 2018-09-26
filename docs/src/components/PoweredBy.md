@@ -34,6 +34,10 @@ Name | Type | Default | Description | Required
 theme | `"light" | "dark"` | `"light"` | Use a version of the logo legible on light or dark backgrounds | no
 classNames | Object | | Override class names | no
 
+## Slots
+
+This component provides no slots
+
 
 ## CSS classes
 
