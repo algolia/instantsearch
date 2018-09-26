@@ -121,11 +121,24 @@ describe('connectToggleRefinement', () => {
       expect(actual.canRefine).toBe(false);
     });
 
-    it('expect `canRefine` to be `false` without the facet', () => {
+    it('expect `canRefine` to be `false` without the facet values', () => {
       const props = { attribute: 'shipping', value: true };
       const searchState = {};
       const searchResults = createSingleIndexSearchResults({
         disjunctiveFacets: ['shipping'],
+        facets: {},
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(false);
+    });
+
+    it('expect `canRefine` to be `false` without the facet', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = {};
+      const searchResults = createSingleIndexSearchResults({
+        disjunctiveFacets: [],
         facets: {},
       });
 
@@ -463,11 +476,24 @@ describe('connectToggleRefinement', () => {
       expect(actual.canRefine).toBe(false);
     });
 
-    it('expect `canRefine` to be `false` without the facet', () => {
+    it('expect `canRefine` to be `false` without the facet values', () => {
       const props = { attribute: 'shipping', value: true };
       const searchState = createMultiIndexSearchState();
       const searchResults = createMultiIndexSearchResults({
         disjunctiveFacets: ['shipping'],
+        facets: {},
+      });
+
+      const actual = getProvidedProps(props, searchState, searchResults);
+
+      expect(actual.canRefine).toBe(false);
+    });
+
+    it('expect `canRefine` to be `false` without the facet', () => {
+      const props = { attribute: 'shipping', value: true };
+      const searchState = createMultiIndexSearchState();
+      const searchResults = createMultiIndexSearchResults({
+        disjunctiveFacets: [],
         facets: {},
       });
 
