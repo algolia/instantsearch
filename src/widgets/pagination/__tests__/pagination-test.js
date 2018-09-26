@@ -89,7 +89,7 @@ describe('pagination()', () => {
       widget = pagination({ container });
       widget.init({ helper });
       widget.render({ results, helper, state: { page: 0 } });
-      const { props: { setCurrentPage } } = ReactDOM.render.mock.calls[0][0];
+      const { props: { setCurrentPage } } = ReactDOM.render.firstCall.args[0];
       setCurrentPage(2);
       expect(scrollIntoView).toHaveBeenCalledTimes(1);
     });

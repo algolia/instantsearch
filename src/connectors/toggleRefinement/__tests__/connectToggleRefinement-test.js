@@ -501,8 +501,8 @@ describe('connectToggleRefinement', () => {
 
       test('should update the SP base on the UI state (two values)', () => {
         const [widget, helper, refine] = getInitializedWidget({
-            on: 'free-shipping',
-            off: 'paid-shipping',
+          on: 'free-shipping',
+          off: 'paid-shipping',
         });
         refine({ isRefined: false });
         const uiState = {};
@@ -516,8 +516,8 @@ describe('connectToggleRefinement', () => {
 
       test('should update the SP base on the UI state - toggled (two values)', () => {
         const [widget, helper] = getInitializedWidget({
-            on: 'free-shipping',
-            off: 'paid-shipping',
+          on: 'free-shipping',
+          off: 'paid-shipping',
         });
         const uiState = {
           toggle: {
