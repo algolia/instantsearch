@@ -1,3 +1,14 @@
+<a name="5.3.1"></a>
+## [5.3.1](https://github.com/algolia/react-instantsearch/compare/v5.3.0...v5.3.1) (2018-09-26)
+
+
+### Bug Fixes
+
+* **connector:** ensure canRefine is computed on the transformed items ([#1568](https://github.com/algolia/react-instantsearch/pull/1568)) ([c95384f](https://github.com/algolia/react-instantsearch/commit/c95384f))
+* **toggle:** ensure facet is present ([#1613](https://github.com/algolia/react-instantsearch/issues/1613)) ([e914ff6](https://github.com/algolia/react-instantsearch/commit/e914ff6))
+
+
+
 <a name="5.3.0"></a>
 # [5.3.0](https://github.com/algolia/react-instantsearch/compare/v5.2.3...v5.3.0) (2018-09-24)
 
