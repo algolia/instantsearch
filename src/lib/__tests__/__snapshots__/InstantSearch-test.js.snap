@@ -184,17 +184,10 @@ Array [
           "snippet": [Function],
         },
       },
-      "urlSync": Object {},
       "widgets": Array [
         Object {
           "getConfiguration": [Function],
           "init": [Function],
-          "render": [Function],
-        },
-        Object {
-          "createURL": [Function],
-          "getConfiguration": [Function],
-          "onHistoryChange": [Function],
           "render": [Function],
         },
       ],

@@ -252,13 +252,3 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
   hitsPerPage: 20
 }
 ```
-
-## Migrating from `urlSync`
-
-If you were previously using the `urlSync` option, you should migrate to the new `routing` feature since `urlSync` will be removed in a next major version.
-
-- `urlSync: true` becomes `routing: true`
-- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
-- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](#user-friendly-urls) to know how to configure it
-- `useHash` is removed but can be achieved using an advanced configuration of the [history router](#history-router-api)
-- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](#history-router-api)

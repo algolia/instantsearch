@@ -16,7 +16,6 @@ describe('InstantSearch lifecycle', () => {
   let searchParameters;
   let search;
   let helperSearchSpy;
-  let urlSync;
 
   beforeEach(() => {
     client = { search() {} };
@@ -28,13 +27,6 @@ describe('InstantSearch lifecycle', () => {
 
     helper.search = spy;
     helperSearchSpy = spy;
-
-    urlSync = {
-      createURL: sinon.spy(),
-      onHistoryChange: () => {},
-      getConfiguration: sinon.spy(),
-      render: () => {},
-    };
 
     algoliasearch = sinon.stub().returns(client);
     helperStub = sinon.stub().returns(helper);
@@ -50,7 +42,6 @@ describe('InstantSearch lifecycle', () => {
       another: { config: 'parameter' },
     };
 
-    InstantSearch.__Rewire__('urlSyncWidget', () => urlSync);
     InstantSearch.__Rewire__('algoliasearch', algoliasearch);
     InstantSearch.__Rewire__('algoliasearchHelper', helperStub);
 
@@ -58,12 +49,10 @@ describe('InstantSearch lifecycle', () => {
       indexName,
       searchClient: algoliasearch(appId, apiKey),
       searchParameters,
-      urlSync: {},
     });
   });
 
   afterEach(() => {
-    InstantSearch.__ResetDependency__('urlSyncWidget');
     InstantSearch.__ResetDependency__('algoliasearch');
     InstantSearch.__ResetDependency__('algoliasearchHelper');
   });
@@ -183,16 +172,6 @@ describe('InstantSearch lifecycle', () => {
         expect(args.onHistoryChange).toBe(search._onHistoryChange);
       });
 
-      it('calls urlSync.getConfiguration after every widget', () => {
-        expect(urlSync.getConfiguration.calledOnce).toBe(
-          true,
-          'urlSync.getConfiguration called once'
-        );
-        expect(
-          urlSync.getConfiguration.calledAfter(widget.getConfiguration)
-        ).toBe(true, 'urlSync.getConfiguration was called after widget.init');
-      });
-
       it('does not call widget.render', () => {
         expect(widget.render.notCalled).toBe(true);
       });
@@ -263,12 +242,6 @@ describe('InstantSearch lifecycle', () => {
       widgets.forEach(search.addWidget, search);
 
       search.start();
-    });
-
-    it('has a createURL method', () => {
-      search.createURL({ hitsPerPage: 542 });
-      expect(urlSync.createURL.calledOnce).toBe(true);
-      expect(urlSync.createURL.getCall(0).args[0].hitsPerPage).toBe(542);
     });
 
     it('emits render when all render are done (using on)', () => {
@@ -471,44 +444,6 @@ describe('InstantSearch lifecycle', () => {
       expect(search.widgets).toHaveLength(0);
       expect(search.searchParameters.numericRefinements).toEqual({});
       expect(search.searchParameters.disjunctiveFacets).toEqual([]);
-    });
-
-    it('should unmount a widget without calling URLSync widget getConfiguration', () => {
-      // fake url-sync widget
-      const spy = jest.fn();
-
-      class URLSync {
-        constructor() {
-          this.getConfiguration = spy;
-          this.init = jest.fn();
-          this.render = jest.fn();
-          this.dispose = jest.fn();
-        }
-      }
-
-      const urlSyncWidget = new URLSync();
-      expect(urlSyncWidget.constructor.name).toEqual('URLSync');
-
-      search.addWidget(urlSyncWidget);
-
-      // add fake widget to dispose
-      // that returns a `nextState` while dispose
-      const widget1 = registerWidget(
-        undefined,
-        jest.fn(({ state: nextState }) => nextState)
-      );
-
-      const widget2 = registerWidget();
-      search.start();
-
-      // remove widget1
-      search.removeWidget(widget1);
-
-      // it should have been called only once after start();
-      expect(spy).toHaveBeenCalledTimes(1);
-
-      // but widget2 getConfiguration() should have been called twice
-      expect(widget2.getConfiguration).toHaveBeenCalledTimes(2);
     });
   });
 

@@ -1499,7 +1499,7 @@ describe('GeoSearch', () => {
         container,
       });
 
-      // Simulate external setter or URLSync
+      // Simulate external setter or routing
       helper.setQueryParameter('insideBoundingBox', [
         [
           48.84174222399724,

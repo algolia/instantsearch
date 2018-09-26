@@ -2,6 +2,19 @@ This document helps you migrate from InstantSearch 2 to InstantSearch 3.
 
 InstantSearch 3 introduces some breaking changes in the widget's naming, options and markup.
 
+## InstantSearch
+
+### URLSync is not supported anymore
+
+If you were previously using the `urlSync` option, you should now migrate to the new `routing` feature.
+
+Here are the elements you need to migrate:
+- `urlSync: true` becomes `routing: true`
+- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
+- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
+- `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+
 ## Widgets
 
 ### Breadcrumb
@@ -468,3 +481,4 @@ Widget removed.
 | Before              | After                |
 | ------------------- | -------------------- |
 | `excludeAttributes` | `excludedAttributes` |
+
