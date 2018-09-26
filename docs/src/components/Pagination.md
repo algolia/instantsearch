@@ -31,6 +31,13 @@ showNext | Boolean | `true` | Show the "next page" button | no
 showPrevious | Boolean | `true` | Show the "previous page" button | no
 classNames | Object | | Override class names | no
 
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ refine: (Number) => void, createURL: () => String, currentRefinement: Number, nbHits: Number, nbPages: Number, pages: Number, isFirstPage: Boolean, isLastPage: Boolean }` | Slot to override the DOM output
+
+
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying
