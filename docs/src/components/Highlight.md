@@ -61,6 +61,10 @@ attribute | String |  | The attribute name to be highlighted. | yes
 highlightedTagName | String |  | The tag name to use on the highlighted items. | no
 classNames | Object | | Override class names | no
 
+## Slots
+
+This component provides no slots
+
 ## CSS Classes
 
 Class name | Description

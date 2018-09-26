@@ -13,7 +13,6 @@ Display snippeted attributes of your search results.
 
 This component leverages the [snippeting feature of Algolia](https://www.algolia.com/doc/faq/searching/what-is-attributes-to-snippet-how-does-it-work/#faq-section) and is designed to work with `escapeHTML` set to true in the surrounding `<ais-hits>`.
 
-
 ## Usage
 
 **Basic usage:**
@@ -59,6 +58,10 @@ hit | Object |  | A single Algolia result as it is returned by the API. | yes
 attribute | String |  | The attribute name to be snippeted. | yes
 highlightedTagName | String |  | The tag name to use on the highlighted items. | no
 classNames | Object | | Override class names | no
+
+## Slots
+
+This component provides no slots
 
 ## CSS Classes
 
