@@ -81,7 +81,11 @@ export default createConnector({
       this.context
     );
 
-    const allFacetValues = results && results.getFacetValues(attribute);
+    const allFacetValues =
+      results && results.getFacetByName(attribute)
+        ? results.getFacetValues(attribute)
+        : null;
+
     const facetValue =
       // Use null to always be consistent with type of the value
       // count: number | null
