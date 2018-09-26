@@ -41,6 +41,7 @@ export class RawRefinementList extends Component {
           {...this.props}
           depth={this.props.depth + 1}
           facetValues={facetValue.data}
+          showMore={false}
         />
       );
     }
