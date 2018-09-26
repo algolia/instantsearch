@@ -37,7 +37,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} CustomToggleWidgetOptions
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
- * @property {Object} [values = {on: true, off: undefined}] Values to filter on when toggling.
+ * @property {Object} [on=true] Value to filter on when toggled.
+ * @property {Object} [off] Value to filter on when not toggled.
  */
 
 /**
