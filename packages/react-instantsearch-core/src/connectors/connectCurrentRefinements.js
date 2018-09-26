@@ -45,9 +45,13 @@ export default createConnector({
       return res;
     }, []);
 
+    const transformedItems = props.transformItems
+      ? props.transformItems(items)
+      : items;
+
     return {
-      items: props.transformItems ? props.transformItems(items) : items,
-      canRefine: items.length > 0,
+      items: transformedItems,
+      canRefine: transformedItems.length > 0,
     };
   },
 

@@ -166,7 +166,7 @@ export default createConnector({
       currentRefinement: getCurrentRefinement(props, searchState, this.context),
       isFromSearch,
       searchable,
-      canRefine: items.length > 0,
+      canRefine: transformedItems.length > 0,
     };
   },
 

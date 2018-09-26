@@ -110,4 +110,13 @@ describe('connectCurrentRefinements', () => {
       { id: 2, index: 'something', label: 'cadabra' },
     ]);
   });
+
+  it('computes canRefine based on the length of the transformed items list', () => {
+    const transformItems = () => [];
+    const props = getProvidedProps({ transformItems }, null, null, [
+      { items: [{ label: 'one' }], id: 1, index: 'something' },
+    ]);
+
+    expect(props.canRefine).toEqual(false);
+  });
 });

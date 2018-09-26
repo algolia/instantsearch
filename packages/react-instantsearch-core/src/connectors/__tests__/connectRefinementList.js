@@ -422,6 +422,18 @@ describe('connectRefinementList', () => {
         maxFacetHits: 25,
       });
     });
+
+    it('computes canRefine based on the length of the transformed items list', () => {
+      const transformItems = () => [];
+
+      props = getProvidedProps(
+        { attribute: 'ok', transformItems },
+        {},
+        { results }
+      );
+
+      expect(props.canRefine).toEqual(false);
+    });
   });
 
   describe('multi index', () => {
