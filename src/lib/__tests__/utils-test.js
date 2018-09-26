@@ -876,7 +876,7 @@ describe('utils.deprecate', () => {
     const actual = 6;
 
     expect(actual).toBe(expectation);
-    expect(warn).toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
 
     warn.mockReset();
     warn.mockRestore();
@@ -896,6 +896,38 @@ describe('utils.deprecate', () => {
 
     warn.mockReset();
     warn.mockRestore();
+  });
+});
+
+describe('utils.warn', () => {
+  it('expect to print a warn message', () => {
+    const message = 'message';
+    const warn = jest.spyOn(global.console, 'warn');
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalledWith('[InstantSearch.js]: message');
+
+    warn.mockReset();
+    warn.mockRestore();
+    utils.warn.cache = {};
+  });
+
+  it('expect to print the same message only once', () => {
+    const message = 'message';
+    const warn = jest.spyOn(global.console, 'warn');
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    utils.warn(message);
+
+    expect(warn).toHaveBeenCalledTimes(1);
+
+    warn.mockReset();
+    warn.mockRestore();
+    utils.warn.cache = {};
   });
 });
 
