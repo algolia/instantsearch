@@ -28,6 +28,12 @@ min | number | `1` | minimum rating to show | no
 max | number | `5` | maximum rating to show | no
 classNames | Object | | Override class names | no
 
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ items: Array<{label: String, value: String, count: Number }>, refine: String => void }` | Slot to override the DOM output
+
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying

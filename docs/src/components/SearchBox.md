@@ -30,6 +30,12 @@ autofocus | Boolean | `false` | Whether to automatically focus on the input when
 show-loading-indicator | Boolean | `false` | Show a spinner in the search box if a delay is passed and no results are returned yet | no
 classNames | Object | | Override class names | no
 
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ currentRefinement: String, isSearchStalled: Boolean, refine: String => void }` | Slot to override the DOM output
+
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying

@@ -35,7 +35,7 @@
             href="#"
             :aria-label="`${item.value} & Up`"
             :class="suit('link')"
-            @click.prevent="toggleRefinement(item.value)"
+            @click.prevent="state.refine(item.value)"
           >
             <template v-for="n in max">
               <svg
@@ -113,11 +113,6 @@ export default {
         min: this.min,
         max: this.max,
       };
-    },
-  },
-  methods: {
-    toggleRefinement(value) {
-      this.state.refine(value);
     },
   },
 };
