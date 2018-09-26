@@ -75,6 +75,15 @@ escapeHTML | Boolean | true | Escape raw HTML in the hits | no
 transformItems | `(items: object[]) => object[]` | `x => x` | Function which receives the items, which will be called before displaying them. Should return a new array with the same shape as the original array. Useful for mapping over the items to transform, remove or reorder them | -
 classNames | Object | | Override class names | no
 
+## Slots
+
+Name | Scope | Description
+---|---|---
+default | `{ items: Array<Item> }` | Slot to override the DOM output
+item | `{ item: Item, index: Number }` | Slot to override the DOM output.
+
+Where `Item` is a single hit with all its attribute, and `index` is the relative position on this page.
+
 ## CSS classes
 
 Here's a list of CSS classes exposed by this widget. To better understand the underlying
