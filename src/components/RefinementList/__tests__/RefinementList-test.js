@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow, mount } from 'enzyme';
 import RefinementList from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
+import renderer from 'react-test-renderer';
 
 const defaultProps = {
   templateProps: {},
