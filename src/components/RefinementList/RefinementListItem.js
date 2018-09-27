@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
 import isEqual from 'lodash/isEqual';
-
 import Template from '../Template.js';
 
 class RefinementListItem extends Component {
