@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
+import isEqual from 'lodash/isEqual';
 
 import Template from '../Template.js';
-import isEqual from 'lodash/isEqual';
 
 class RefinementListItem extends Component {
   componentWillMount() {

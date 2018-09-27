@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
+import isEqual from 'lodash/isEqual';
 import cx from 'classnames';
-import { isSpecialClick } from '../../lib/utils.js';
 
+import { isSpecialClick } from '../../lib/utils.js';
 import Template from '../Template.js';
 import RefinementListItem from './RefinementListItem.js';
-import isEqual from 'lodash/isEqual';
-
 import SearchBox from '../SearchBox';
 
 class RefinementList extends Component {
