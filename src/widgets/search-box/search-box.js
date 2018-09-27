@@ -87,6 +87,7 @@ const renderer = ({
 
       addListener(form, 'submit', e => {
         e.preventDefault();
+        input.blur();
       });
     }
   }
