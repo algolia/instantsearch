@@ -20,12 +20,12 @@ var customRefinementList = connectRefinementList(function render(params) {
 
 search.addWidget(
   customRefinementList({
-    attributeName,
+    attribute,
     [ operator = 'or' ],
     [ limit ],
     [ showMoreLimit ],
     [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-    [ escapeFacetValues = false ],
+    [ escapeFacetValues = true ],
     [ transformItems ]
   })
 );
@@ -34,13 +34,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 `;
 
 export const checkUsage = ({
-  attributeName,
+  attribute,
   operator,
   showMoreLimit,
   limit,
   message,
 }) => {
-  const noAttributeName = attributeName === undefined;
+  const noAttributeName = attribute === undefined;
   const invalidOperator = !/^(and|or)$/.test(operator);
   const invalidShowMoreLimit =
     showMoreLimit !== undefined
@@ -62,14 +62,14 @@ export const checkUsage = ({
 
 /**
  * @typedef {Object} CustomRefinementListWidgetOptions
- * @property {string} attributeName The name of the attribute in the records.
+ * @property {string} attribute The name of the attribute in the records.
  * @property {"and"|"or"} [operator = 'or'] How the filters are combined together.
  * @property {number} [limit = 10] The max number of items to display when
  * `showMoreLimit` is not set or if the widget is showing less value.
  * @property {number} [showMoreLimit] The max number of items to display if the widget
  * is showing more items.
  * @property {string[]|function} [sortBy = ['isRefined', 'count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- * @property {boolean} [escapeFacetValues = false] Escapes the content of the facet values.
+ * @property {boolean} [escapeFacetValues = true] Escapes the content of the facet values.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -145,7 +145,7 @@ export const checkUsage = ({
  * search.addWidget(
  *   customRefinementList({
  *     containerNode: $('#custom-refinement-list-container'),
- *     attributeName: 'categories',
+ *     attribute: 'categories',
  *     limit: 10,
  *   })
  * );
@@ -155,18 +155,18 @@ export default function connectRefinementList(renderFn, unmountFn) {
 
   return (widgetParams = {}) => {
     const {
-      attributeName,
+      attribute,
       operator = 'or',
       limit = 10,
       showMoreLimit,
       sortBy = ['isRefined', 'count:desc', 'name:asc'],
-      escapeFacetValues = false,
+      escapeFacetValues = true,
       transformItems = items => items,
     } = widgetParams;
 
     checkUsage({
       message: usage,
-      attributeName,
+      attribute,
       operator,
       showMoreLimit,
       limit,
@@ -194,7 +194,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
     }) => {
       // Compute a specific createURL method able to link to any facet value state change
       const _createURL = facetValue =>
-        createURL(state.toggleRefinement(attributeName, facetValue));
+        createURL(state.toggleRefinement(attribute, facetValue));
 
       // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
       // function
@@ -264,7 +264,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         };
 
         helper
-          .searchForFacetValues(attributeName, query, limit, tags)
+          .searchForFacetValues(attribute, query, limit, tags)
           .then(results => {
             const facetValues = escapeFacetValues
               ? escapeFacets(results.facetHits)
@@ -316,9 +316,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
 
       getConfiguration: (configuration = {}) => {
         const widgetConfiguration = {
-          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [
-            attributeName,
-          ],
+          [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attribute],
         };
 
         if (limit !== undefined) {
@@ -344,7 +342,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
         this.cachedToggleShowMore = this.cachedToggleShowMore.bind(this);
 
         refine = facetValue =>
-          helper.toggleRefinement(attributeName, facetValue).search();
+          helper.toggleRefinement(attribute, facetValue).search();
 
         searchForFacetValues = createSearchForFacetValues(helper);
 
@@ -371,7 +369,7 @@ export default function connectRefinementList(renderFn, unmountFn) {
           instantSearchInstance,
         } = renderOptions;
 
-        const facetValues = results.getFacetValues(attributeName, { sortBy });
+        const facetValues = results.getFacetValues(attribute, { sortBy });
         const items = transformItems(
           facetValues.slice(0, this.getLimit()).map(formatItems)
         );
@@ -414,26 +412,24 @@ export default function connectRefinementList(renderFn, unmountFn) {
         unmountFn();
 
         if (operator === 'and') {
-          return state
-            .removeFacetRefinement(attributeName)
-            .removeFacet(attributeName);
+          return state.removeFacetRefinement(attribute).removeFacet(attribute);
         } else {
           return state
-            .removeDisjunctiveFacetRefinement(attributeName)
-            .removeDisjunctiveFacet(attributeName);
+            .removeDisjunctiveFacetRefinement(attribute)
+            .removeDisjunctiveFacet(attribute);
         }
       },
 
       getWidgetState(uiState, { searchParameters }) {
         const values =
           operator === 'or'
-            ? searchParameters.getDisjunctiveRefinements(attributeName)
-            : searchParameters.getConjunctiveRefinements(attributeName);
+            ? searchParameters.getDisjunctiveRefinements(attribute)
+            : searchParameters.getConjunctiveRefinements(attribute);
 
         if (
           values.length === 0 ||
           (uiState.refinementList &&
-            isEqual(values, uiState.refinementList[attributeName]))
+            isEqual(values, uiState.refinementList[attribute]))
         ) {
           return uiState;
         }
@@ -442,21 +438,21 @@ export default function connectRefinementList(renderFn, unmountFn) {
           ...uiState,
           refinementList: {
             ...uiState.refinementList,
-            [attributeName]: values,
+            [attribute]: values,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const values =
-          uiState.refinementList && uiState.refinementList[attributeName];
+          uiState.refinementList && uiState.refinementList[attribute];
         if (values === undefined) return searchParameters;
         return values.reduce(
           (sp, v) =>
             operator === 'or'
-              ? sp.addDisjunctiveFacetRefinement(attributeName, v)
-              : sp.addFacetRefinement(attributeName, v),
-          searchParameters.clearRefinements(attributeName)
+              ? sp.addDisjunctiveFacetRefinement(attribute, v)
+              : sp.addFacetRefinement(attribute, v),
+          searchParameters.clearRefinements(attribute)
         );
       },
     };

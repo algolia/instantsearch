@@ -2,8 +2,9 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import expect from 'expect';
 import sinon from 'sinon';
-import { RawRefinementList as RefinementList } from '../RefinementList';
+import RefinementList from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
+import renderer from 'react-test-renderer';
 
 const defaultProps = {
   templateProps: {},
@@ -25,12 +26,12 @@ describe('RefinementList', () => {
   }
 
   describe('cssClasses', () => {
-    it('should add the `list` class to the root element', () => {
+    it('should add the `root` class to the root element', () => {
       // Given
       const props = {
         ...defaultProps,
         cssClasses: {
-          list: 'list',
+          root: 'root',
         },
       };
 
@@ -38,7 +39,7 @@ describe('RefinementList', () => {
       const actual = shallowRender(props);
 
       // Then
-      expect(actual.hasClass('list')).toEqual(true);
+      expect(actual.hasClass('root')).toEqual(true);
     });
 
     it('should set item classes to the refinements', () => {
@@ -55,7 +56,7 @@ describe('RefinementList', () => {
       const actual = shallowRender(props).find(RefinementListItem);
 
       // Then
-      expect(actual.props().itemClassName).toContain('item');
+      expect(actual.props().cssClasses.item).toContain('item');
     });
 
     it('should set active classes to the active refinements', () => {
@@ -63,7 +64,7 @@ describe('RefinementList', () => {
       const props = {
         ...defaultProps,
         cssClasses: {
-          active: 'active',
+          selectedItem: 'active',
         },
         facetValues: [
           { value: 'foo', isRefined: true },
@@ -76,8 +77,8 @@ describe('RefinementList', () => {
       const inactiveItem = shallowRender(props).find({ isRefined: false });
 
       // Then
-      expect(activeItem.props().itemClassName).toContain('active');
-      expect(inactiveItem.props().itemClassName).not.toContain('active');
+      expect(activeItem.props().cssClasses.item).toContain('active');
+      expect(inactiveItem.props().cssClasses.item).not.toContain('active');
     });
   });
 
@@ -268,8 +269,91 @@ describe('RefinementList', () => {
       const subList = shallow(mainItem.props().subItems);
 
       // Then
-      expect(root.props().className).toContain('depth-0');
-      expect(subList.props().className).toContain('depth-1');
+      expect(root.props().children[1].props.className).toContain('depth-0');
+      expect(subList.props().children[1].props.className).toContain('depth-1');
+    });
+  });
+
+  describe('markup', () => {
+    const cssClasses = {
+      root: 'root',
+      noRefinementRoot: 'noRefinementRoot',
+      list: 'list',
+      item: 'item',
+      selectedItem: 'selectedItem',
+      searchBox: 'searchBox',
+      label: 'label',
+      checkbox: 'checkbox',
+      labelText: 'labelText',
+      count: 'count',
+      noResults: 'noResults',
+      showMore: 'showMore',
+      disabledShowMore: 'disabledShowMore',
+    };
+
+    it('without facets', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        templateProps: {},
+        toggleRefinement: () => {},
+        facetValues: [],
+        cssClasses,
+      };
+      const tree = renderer.create(<RefinementList {...props} />).toJSON();
+
+      expect(tree).toMatchSnapshot();
+    });
+
+    it('without facets from search', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        searchForFacetValues: x => x,
+        cssClasses,
+        templateProps: {
+          templates: {
+            item: item => item,
+            noResults: x => x,
+          },
+        },
+        toggleRefinement: () => {},
+        facetValues: [],
+        isFromSearch: true,
+      };
+      const tree = renderer.create(<RefinementList {...props} />).toJSON();
+
+      expect(tree).toMatchSnapshot();
+    });
+
+    it('with facets', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        toggleRefinement: () => {},
+        createURL: () => {},
+        templateProps: {
+          templates: {
+            item: item => item,
+          },
+        },
+        facetValues: [
+          {
+            label: 'Amazon',
+            count: 1200,
+            isRefined: false,
+          },
+          {
+            label: 'Google',
+            count: 1000,
+            isRefined: true,
+          },
+        ],
+        cssClasses,
+      };
+      const tree = renderer.create(<RefinementList {...props} />).toJSON();
+
+      expect(tree).toMatchSnapshot();
     });
   });
 });

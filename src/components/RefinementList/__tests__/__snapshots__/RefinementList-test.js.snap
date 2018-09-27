@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RefinementList markup with facets 1`] = `
+<div
+  className="root"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1200,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": false,
+              "label": "Amazon",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+    <li
+      className="item selectedItem"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1000,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": true,
+              "label": "Google",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`RefinementList markup without facets 1`] = `
+<div
+  className="root"
+/>
+`;
+
+exports[`RefinementList markup without facets from search 1`] = `
+<div
+  className="root"
+/>
+`;

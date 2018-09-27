@@ -9,10 +9,7 @@ import isEqual from 'lodash/isEqual';
 
 import SearchBox from '../SearchBox';
 
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-
-export class RawRefinementList extends Component {
+class RefinementList extends Component {
   constructor(props) {
     super(props);
     this.handleItemClick = this.handleItemClick.bind(this);
@@ -37,7 +34,7 @@ export class RawRefinementList extends Component {
     const hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
       subItems = (
-        <RawRefinementList
+        <RefinementList
           {...this.props}
           depth={this.props.depth + 1}
           facetValues={facetValue.data}
@@ -53,10 +50,6 @@ export class RawRefinementList extends Component {
       cssClasses: this.props.cssClasses,
     };
 
-    const cssClassItem = cx(this.props.cssClasses.item, {
-      [this.props.cssClasses.active]: facetValue.isRefined,
-    });
-
     let { value: key } = facetValue;
     if (facetValue.isRefined !== undefined) {
       key += `/${facetValue.isRefined}`;
@@ -71,7 +64,12 @@ export class RawRefinementList extends Component {
         facetValueToRefine={facetValue.value}
         handleClick={this.handleItemClick}
         isRefined={facetValue.isRefined}
-        itemClassName={cssClassItem}
+        cssClasses={{
+          ...this.props.cssClasses,
+          item: cx(this.props.cssClasses.item, {
+            [this.props.cssClasses.selectedItem]: facetValue.isRefined,
+          }),
+        }}
         key={key}
         subItems={subItems}
         templateData={templateData}
@@ -147,65 +145,102 @@ export class RawRefinementList extends Component {
 
   render() {
     // Adding `-lvl0` classes
-    const cssClassList = [this.props.cssClasses.list];
-    if (this.props.cssClasses.depth) {
-      cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
-    }
+    const cssClassList = cx(this.props.cssClasses.list, {
+      [`${this.props.cssClasses.depth}${this.props.depth}`]: this.props
+        .cssClasses.depth,
+    });
 
-    const showMoreBtn =
-      this.props.showMore === true && this.props.canToggleShowMore ? (
+    const showMoreButtonClassName =
+      this.props.showMore === true && this.props.canToggleShowMore
+        ? this.props.cssClasses.showMore
+        : cx(
+            this.props.cssClasses.showMore,
+            this.props.cssClasses.disabledShowMore
+          );
+
+    const showMoreButton =
+      this.props.showMore === true ? (
         <Template
-          rootProps={{ onClick: this.props.toggleShowMore }}
+          rootTagName="button"
           templateKey={`show-more-${
             this.props.isShowingMore ? 'active' : 'inactive'
           }`}
+          rootProps={{
+            className: showMoreButtonClassName,
+            onClick: this.props.toggleShowMore,
+          }}
           {...this.props.templateProps}
         />
-      ) : (
-        undefined
-      );
+      ) : null;
 
-    const shouldDisableSearchInput =
+    const shouldDisableSearchBox =
       this.props.searchIsAlwaysActive !== true &&
       !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
-    const searchInput = this.props.searchFacetValues ? (
-      <SearchBox
-        ref={i => {
-          this.searchbox = i;
-        }}
-        placeholder={this.props.searchPlaceholder}
-        onChange={this.props.searchFacetValues}
-        onValidate={() => this.refineFirstValue()}
-        disabled={shouldDisableSearchInput}
-      />
+    const searchBox = this.props.searchFacetValues ? (
+      <div className={this.props.cssClasses.searchBox}>
+        <SearchBox
+          ref={i => {
+            this.searchbox = i;
+          }}
+          placeholder={this.props.searchPlaceholder}
+          onChange={this.props.searchFacetValues}
+          onValidate={() => this.refineFirstValue()}
+          disabled={shouldDisableSearchBox}
+        />
+      </div>
     ) : null;
+
+    const facetValues =
+      this.props.facetValues && this.props.facetValues.length > 0 ? (
+        <ul className={cssClassList}>
+          {this.props.facetValues.map(this._generateFacetItem, this)}
+        </ul>
+      ) : null;
 
     const noResults =
       this.props.searchFacetValues &&
       this.props.isFromSearch &&
       this.props.facetValues.length === 0 ? (
-        <Template templateKey={'noResults'} {...this.props.templateProps} />
+        <Template
+          templateKey="noResults"
+          rootProps={{ className: this.props.cssClasses.noResults }}
+          {...this.props.templateProps}
+        />
       ) : null;
 
     return (
-      <div className={cx(cssClassList)}>
-        {searchInput}
-        {this.props.facetValues.map(this._generateFacetItem, this)}
+      <div
+        className={cx(this.props.cssClasses.root, {
+          [this.props.cssClasses.noRefinementRoot]: false,
+        })}
+      >
+        {searchBox}
+        {facetValues}
         {noResults}
-        {showMoreBtn}
+        {showMoreButton}
       </div>
     );
   }
 }
 
-RawRefinementList.propTypes = {
+RefinementList.propTypes = {
   Template: PropTypes.func,
   createURL: PropTypes.func,
   cssClasses: PropTypes.shape({
-    active: PropTypes.string,
     depth: PropTypes.string,
-    item: PropTypes.string,
+    root: PropTypes.string,
+    noRefinementRoot: PropTypes.string,
     list: PropTypes.string,
+    item: PropTypes.string,
+    selectedItem: PropTypes.string,
+    searchBox: PropTypes.string,
+    label: PropTypes.string,
+    checkbox: PropTypes.string,
+    labelText: PropTypes.string,
+    count: PropTypes.string,
+    noResults: PropTypes.string,
+    showMore: PropTypes.string,
+    disabledShowMore: PropTypes.string,
   }),
   depth: PropTypes.number,
   facetValues: PropTypes.array,
@@ -222,9 +257,9 @@ RawRefinementList.propTypes = {
   searchIsAlwaysActive: PropTypes.bool,
 };
 
-RawRefinementList.defaultProps = {
+RefinementList.defaultProps = {
   cssClasses: {},
   depth: 0,
 };
 
-export default autoHideContainerHOC(headerFooterHOC(RawRefinementList));
+export default RefinementList;

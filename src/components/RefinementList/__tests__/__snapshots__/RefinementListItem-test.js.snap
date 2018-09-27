@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`RefinementListItem renders an item 1`] = `
-<div
+<li
   className="item class"
   onClick={[Function]}
 >
@@ -15,5 +15,5 @@ exports[`RefinementListItem renders an item 1`] = `
     templateKey="item key"
   />
   <div />
-</div>
+</li>
 `;

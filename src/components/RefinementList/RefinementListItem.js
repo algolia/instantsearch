@@ -23,14 +23,14 @@ class RefinementListItem extends Component {
 
   render() {
     return (
-      <div className={this.props.itemClassName} onClick={this.handleClick}>
+      <li className={this.props.cssClasses.item} onClick={this.handleClick}>
         <Template
           data={this.props.templateData}
           templateKey={this.props.templateKey}
           {...this.props.templateProps}
         />
         {this.props.subItems}
-      </div>
+      </li>
     );
   }
 }
@@ -39,11 +39,18 @@ RefinementListItem.propTypes = {
   facetValueToRefine: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   handleClick: PropTypes.func.isRequired,
   isRefined: PropTypes.bool.isRequired,
-  itemClassName: PropTypes.string,
   subItems: PropTypes.object,
   templateData: PropTypes.object.isRequired,
   templateKey: PropTypes.string.isRequired,
   templateProps: PropTypes.object.isRequired,
+  cssClasses: PropTypes.shape({
+    item: PropTypes.string,
+    selectedItem: PropTypes.string,
+    label: PropTypes.string,
+    checkbox: PropTypes.string,
+    labelText: PropTypes.string,
+    count: PropTypes.string,
+  }),
 };
 
 export default RefinementListItem;
