@@ -257,10 +257,10 @@ export default function connectRefinementList(renderFn, unmountFn) {
         const tags = {
           highlightPreTag: escapeFacetValues
             ? tagConfig.highlightPreTag
-            : undefined,
+            : '<mark>',
           highlightPostTag: escapeFacetValues
             ? tagConfig.highlightPostTag
-            : undefined,
+            : '</mark>',
         };
 
         helper

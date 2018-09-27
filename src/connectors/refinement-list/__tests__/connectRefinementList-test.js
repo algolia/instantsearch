@@ -778,8 +778,8 @@ describe('connectRefinementList', () => {
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
     expect(paramOverride).toEqual({
-      highlightPreTag: undefined,
-      highlightPostTag: undefined,
+      highlightPreTag: '<mark>',
+      highlightPostTag: '</mark>',
     });
 
     return Promise.resolve().then(() => {
@@ -885,8 +885,8 @@ describe('connectRefinementList', () => {
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
     expect(paramOverride).toEqual({
-      highlightPreTag: undefined,
-      highlightPostTag: undefined,
+      highlightPreTag: '<mark>',
+      highlightPostTag: '</mark>',
     });
 
     return Promise.resolve().then(() => {
@@ -987,8 +987,8 @@ describe('connectRefinementList', () => {
     expect(sffvFacet).toBe('category');
     expect(maxNbItems).toBe(2);
     expect(paramOverride).toEqual({
-      highlightPreTag: undefined,
-      highlightPostTag: undefined,
+      highlightPreTag: '<mark>',
+      highlightPostTag: '</mark>',
     });
 
     return Promise.resolve().then(() => {
