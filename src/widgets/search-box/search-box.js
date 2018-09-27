@@ -268,11 +268,6 @@ export default function searchBox({
   }
 }
 
-// the 'input' event is triggered when the input value changes
-// in any case: typing, copy pasting with mouse..
-// 'onpropertychange' is the IE8 alternative until we support IE8
-// but it's flawed: http://help.dottoro.com/ljhxklln.php
-
 function addListener(el, type, fn) {
   if (el.addEventListener) {
     el.addEventListener(type, fn);
