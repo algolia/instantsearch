@@ -208,14 +208,11 @@ class RefinementList extends Component {
         />
       ) : null;
 
-    const hasRefinements = (this.props.facetValues || []).some(
-      facet => facet.isRefined
-    );
-
     return (
       <div
         className={cx(this.props.cssClasses.root, {
-          [this.props.cssClasses.noRefinementRoot]: !hasRefinements,
+          [this.props.cssClasses.noRefinementRoot]:
+            !this.props.facetValues || this.props.facetValues.length === 0,
         })}
       >
         {searchBox}
