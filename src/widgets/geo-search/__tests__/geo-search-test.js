@@ -31,10 +31,16 @@ describe('GeoSearch', () => {
     setZoom: jest.fn(),
     getBounds: jest.fn(() => ({
       getNorthEast: jest.fn(() => ({
-        toJSON: jest.fn(() => ({})),
+        toJSON: jest.fn(() => ({
+          lat: 10,
+          lng: 12,
+        })),
       })),
       getSouthWest: jest.fn(() => ({
-        toJSON: jest.fn(() => ({})),
+        toJSON: jest.fn(() => ({
+          lat: 12,
+          lng: 14,
+        })),
       })),
     })),
     fitBounds: jest.fn(),

@@ -213,7 +213,7 @@ describe('connectGeoSearch', () => {
     );
   });
 
-  it('expect to render with position from the state', () => {
+  it('expect to render with position', () => {
     const render = jest.fn();
     const unmount = jest.fn();
 
@@ -282,60 +282,6 @@ describe('connectGeoSearch', () => {
       }),
       false
     );
-  });
-
-  it('expect to render with insideBoundingBox from the state', () => {
-    const render = jest.fn();
-    const unmount = jest.fn();
-
-    const customGeoSearch = connectGeoSearch(render, unmount);
-    const widget = customGeoSearch();
-    const helper = createFakeHelper({});
-
-    // Simulate the configuration or external setter
-    helper.setQueryParameter('insideBoundingBox', [
-      [
-        48.84174222399724,
-        2.367719162523599,
-        48.81614630305218,
-        2.284205902635904,
-      ],
-    ]);
-
-    widget.init({
-      helper,
-      state: helper.state,
-    });
-
-    expect(render).toHaveBeenCalledTimes(1);
-    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
-
-    widget.render({
-      results: new SearchResults(helper.getState(), [
-        {
-          hits: [],
-        },
-      ]),
-      helper,
-    });
-
-    expect(render).toHaveBeenCalledTimes(2);
-    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
-
-    // Simulate the configuration or external setter
-    helper.setQueryParameter('insideBoundingBox');
-
-    widget.render({
-      results: new SearchResults(helper.getState(), [
-        {
-          hits: [],
-        },
-      ]),
-      helper,
-    });
-
-    expect(render).toHaveBeenCalledTimes(3);
-    expect(lastRenderArgs(render).isRefinedWithMap()).toBe(false);
   });
 
   it('expect to reset the map state when position changed', () => {
@@ -596,6 +542,141 @@ describe('connectGeoSearch', () => {
     expect(render).toHaveBeenCalledTimes(4);
     expect(lastRenderArgs(render).hasMapMoveSinceLastRefine()).toBe(true);
     expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
+  });
+
+  describe('currentRefinement', () => {
+    it('expect to render with currentRefinement from a string', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+      const helper = createFakeHelper({});
+
+      // Simulate the configuration or external setter (like URLSync)
+      helper.setQueryParameter('insideBoundingBox', '10,12,12,14');
+
+      widget.init({
+        helper,
+        state: helper.state,
+      });
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(render).currentRefinement).toEqual({
+        northEast: {
+          lat: 10,
+          lng: 12,
+        },
+        southWest: {
+          lat: 12,
+          lng: 14,
+        },
+      });
+
+      widget.render({
+        results: new SearchResults(helper.getState(), [
+          {
+            hits: [],
+          },
+        ]),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(render).currentRefinement).toEqual({
+        northEast: {
+          lat: 10,
+          lng: 12,
+        },
+        southWest: {
+          lat: 12,
+          lng: 14,
+        },
+      });
+
+      // Simulate the configuration or external setter (like URLSync)
+      helper.setQueryParameter('insideBoundingBox');
+
+      widget.render({
+        results: new SearchResults(helper.getState(), [
+          {
+            hits: [],
+          },
+        ]),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(3);
+      expect(lastRenderArgs(render).currentRefinement).toBeUndefined();
+    });
+
+    it('expect to render with currentRefinement from an array', () => {
+      const render = jest.fn();
+      const unmount = jest.fn();
+
+      const customGeoSearch = connectGeoSearch(render, unmount);
+      const widget = customGeoSearch();
+      const helper = createFakeHelper({});
+
+      helper.setQueryParameter('insideBoundingBox', [[10, 12, 12, 14]]);
+
+      widget.init({
+        helper,
+        state: helper.state,
+      });
+
+      expect(render).toHaveBeenCalledTimes(1);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(render).currentRefinement).toEqual({
+        northEast: {
+          lat: 10,
+          lng: 12,
+        },
+        southWest: {
+          lat: 12,
+          lng: 14,
+        },
+      });
+
+      widget.render({
+        results: new SearchResults(helper.getState(), [
+          {
+            hits: [],
+          },
+        ]),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(lastRenderArgs(render).isRefinedWithMap()).toBe(true);
+      expect(lastRenderArgs(render).currentRefinement).toEqual({
+        northEast: {
+          lat: 10,
+          lng: 12,
+        },
+        southWest: {
+          lat: 12,
+          lng: 14,
+        },
+      });
+
+      // Simulate the configuration or external setter (like URLSync)
+      helper.setQueryParameter('insideBoundingBox');
+
+      widget.render({
+        results: new SearchResults(helper.getState(), [
+          {
+            hits: [],
+          },
+        ]),
+        helper,
+      });
+
+      expect(render).toHaveBeenCalledTimes(3);
+      expect(lastRenderArgs(render).currentRefinement).toBeUndefined();
+    });
   });
 
   describe('refine', () => {
