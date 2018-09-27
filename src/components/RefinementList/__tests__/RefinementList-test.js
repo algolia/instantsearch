@@ -295,10 +295,10 @@ describe('RefinementList', () => {
       const props = {
         container: document.createElement('div'),
         attribute: 'attribute',
-        templateProps: {},
-        toggleRefinement: () => {},
         facetValues: [],
         cssClasses,
+        templateProps: {},
+        toggleRefinement: () => {},
       };
       const tree = renderer.create(<RefinementList {...props} />).toJSON();
 
@@ -309,8 +309,10 @@ describe('RefinementList', () => {
       const props = {
         container: document.createElement('div'),
         attribute: 'attribute',
-        searchForFacetValues: x => x,
+        facetValues: [],
         cssClasses,
+        isFromSearch: true,
+        searchForFacetValues: x => x,
         templateProps: {
           templates: {
             item: item => item,
@@ -318,8 +320,6 @@ describe('RefinementList', () => {
           },
         },
         toggleRefinement: () => {},
-        facetValues: [],
-        isFromSearch: true,
       };
       const tree = renderer.create(<RefinementList {...props} />).toJSON();
 
@@ -330,13 +330,6 @@ describe('RefinementList', () => {
       const props = {
         container: document.createElement('div'),
         attribute: 'attribute',
-        toggleRefinement: () => {},
-        createURL: () => {},
-        templateProps: {
-          templates: {
-            item: item => item,
-          },
-        },
         facetValues: [
           {
             label: 'Amazon',
@@ -350,6 +343,13 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        templateProps: {
+          templates: {
+            item: item => item,
+          },
+        },
+        toggleRefinement: () => {},
+        createURL: () => {},
       };
       const tree = renderer.create(<RefinementList {...props} />).toJSON();
 
