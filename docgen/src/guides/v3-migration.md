@@ -308,6 +308,49 @@ With the redo button:
 </div>
 ```
 
+### NumericMenu (formerly NumericRefinementList)
+
+#### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+| `options`       | `items`     |
+
+#### CSS classes
+
+| Before                              | After                            |
+| ----------------------------------- | -------------------------------- |
+| `ais-refinement-list`               | `ais-NumericMenu`                |
+|                                     | `ais-NumericMenu--noRefinement`  |
+| `ais-refinement-list--list`         | `ais-NumericMenu-list`           |
+| `ais-refinement-list--item`         | `ais-NumericMenu-item`           |
+| `ais-refinement-list--item__active` | `ais-NumericMenu-item--selected` |
+| `ais-refinement-list--label`        | `ais-NumericMenu-label`          |
+| `ais-refinement-list--radio`        | `ais-NumericMenu-radio`          |
+|                                     | `ais-NumericMenu-labelText`      |
+
+#### Markup
+
+```html
+<div class="ais-NumericMenu">
+  <ul class="ais-NumericMenu-list">
+    <li class="ais-NumericMenu-item ais-NumericMenu-item--selected">
+      <label class="ais-NumericMenu-label">
+        <input class="ais-NumericMenu-radio" type="radio" name="NumericMenu" checked="" />
+        <span class="ais-NumericMenu-labelText">All</span>
+      </label>
+    </li>
+    <li class="ais-NumericMenu-item">
+      <label class="ais-NumericMenu-label">
+        <input class="ais-NumericMenu-radio" type="radio" name="NumericMenu" />
+        <span class="ais-NumericMenu-labelText">Less than 500</span>
+      </label>
+    </li>
+  </ul>
+</div>
+```
+
 ### Pagination
 
 #### Options
