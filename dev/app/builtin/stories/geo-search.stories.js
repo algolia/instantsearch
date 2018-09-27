@@ -13,7 +13,7 @@ const wrapWithHitsAndConfiguration = (story, searchParameters) =>
   wrapWithHits(story, {
     indexName: 'airbnb',
     searchParameters: {
-      hitsPerPage: 25,
+      hitsPerPage: 20,
       ...searchParameters,
     },
   });
