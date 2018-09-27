@@ -931,7 +931,7 @@ describe('utils.warn', () => {
   });
 });
 
-describe('utils.parseAroundLatLngFromString', () => {
+describe('utils.aroundLatLngToPosition', () => {
   it('expect to return a LatLng object from string', () => {
     const samples = [
       { input: '10,12', expectation: { lat: 10, lng: 12 } },
@@ -941,7 +941,7 @@ describe('utils.parseAroundLatLngFromString', () => {
     ];
 
     samples.forEach(({ input, expectation }) => {
-      expect(utils.parseAroundLatLngFromString(input)).toEqual(expectation);
+      expect(utils.aroundLatLngToPosition(input)).toEqual(expectation);
     });
   });
 
@@ -949,7 +949,7 @@ describe('utils.parseAroundLatLngFromString', () => {
     const samples = [{ input: '10a,12' }, { input: '10.    12' }];
 
     samples.forEach(({ input }) => {
-      expect(() => utils.parseAroundLatLngFromString(input)).toThrow();
+      expect(() => utils.aroundLatLngToPosition(input)).toThrow();
     });
   });
 });

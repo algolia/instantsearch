@@ -26,7 +26,7 @@ export {
   isReactElement,
   deprecate,
   warn,
-  parseAroundLatLngFromString,
+  aroundLatLngToPosition,
 };
 
 /**
@@ -433,7 +433,7 @@ function warn(message) {
 }
 
 const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
-function parseAroundLatLngFromString(value) {
+function aroundLatLngToPosition(value) {
   const pattern = value.match(latLngRegExp);
 
   // Since the value provided is the one send with the query, the API should

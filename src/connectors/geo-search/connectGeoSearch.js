@@ -1,9 +1,5 @@
 import noop from 'lodash/noop';
-import {
-  checkRendering,
-  warn,
-  parseAroundLatLngFromString,
-} from '../../lib/utils';
+import { checkRendering, warn, aroundLatLngToPosition } from '../../lib/utils';
 
 const usage = `Usage:
 
@@ -208,7 +204,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
     };
 
     const getPositionFromState = state =>
-      state.aroundLatLng && parseAroundLatLngFromString(state.aroundLatLng);
+      state.aroundLatLng && aroundLatLngToPosition(state.aroundLatLng);
 
     const refine = helper => ({ northEast: ne, southWest: sw }) => {
       const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
