@@ -200,6 +200,10 @@ class RefinementList extends Component {
         />
       );
 
+    const hasRefinements = (this.props.facetValues || []).some(
+      facet => facet.isRefined
+    );
+
     return (
       <div
         className={cx(this.props.cssClasses.root, {
