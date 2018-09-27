@@ -27,6 +27,7 @@ export {
   deprecate,
   warn,
   aroundLatLngToPosition,
+  insideBoundingBoxToBoundingBox,
 };
 
 /**
@@ -446,4 +447,58 @@ function aroundLatLngToPosition(value) {
     lat: parseFloat(pattern[1]),
     lng: parseFloat(pattern[2]),
   };
+}
+
+function insideBoundingBoxArrayToBoundingBox(value) {
+  const [[neLat, neLng, swLat, swLng] = []] = value;
+
+  // Since the value provided is the one send with the request, the API should
+  // throw an error due to the wrong format. So throw an error should be safe.
+  if (!neLat || !neLng || !swLat || !swLng) {
+    throw new Error(
+      `Invalid value for "insideBoundingBox" parameter: [${value}]`
+    );
+  }
+
+  return {
+    northEast: {
+      lat: neLat,
+      lng: neLng,
+    },
+    southWest: {
+      lat: swLat,
+      lng: swLng,
+    },
+  };
+}
+
+function insideBoundingBoxStringToBoundingBox(value) {
+  const [neLat, neLng, swLat, swLng] = value.split(',').map(parseFloat);
+
+  // Since the value provided is the one send with the request, the API should
+  // throw an error due to the wrong format. So throw an error should be safe.
+  if (!neLat || !neLng || !swLat || !swLng) {
+    throw new Error(
+      `Invalid value for "insideBoundingBox" parameter: "${value}"`
+    );
+  }
+
+  return {
+    northEast: {
+      lat: neLat,
+      lng: neLng,
+    },
+    southWest: {
+      lat: swLat,
+      lng: swLng,
+    },
+  };
+}
+
+function insideBoundingBoxToBoundingBox(value) {
+  if (Array.isArray(value)) {
+    return insideBoundingBoxArrayToBoundingBox(value);
+  }
+
+  return insideBoundingBoxStringToBoundingBox(value);
 }
