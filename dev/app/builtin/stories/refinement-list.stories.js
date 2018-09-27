@@ -14,12 +14,9 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
+            attribute: 'brand',
             operator: 'or',
             limit: 10,
-            templates: {
-              header: 'Brands',
-            },
           })
         );
       })
@@ -30,16 +27,13 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
+            attribute: 'brand',
             operator: 'or',
             limit: 3,
-            templates: {
-              header: 'Brands with show more',
-            },
             showMore: {
               templates: {
-                active: '<button>Show less</button>',
-                inactive: '<button>Show more</button>',
+                active: 'Show less',
+                inactive: 'Show more',
               },
               limit: 10,
             },
@@ -53,13 +47,10 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
+            attribute: 'brand',
             operator: 'or',
             limit: 10,
-            templates: {
-              header: 'Searchable brands',
-            },
-            searchForFacetValues: {
+            searchable: {
               placeholder: 'Find other brands...',
               templates: {
                 noResults: 'No results',
@@ -75,13 +66,10 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
+            attribute: 'brand',
             operator: 'or',
             limit: 10,
-            templates: {
-              header: 'Searchable brands',
-            },
-            searchForFacetValues: {
+            searchable: {
               placeholder: 'Find other brands...',
             },
           })
@@ -94,17 +82,13 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'price_range',
+            attribute: 'price_range',
             operator: 'and',
             limit: 10,
             cssClasses: {
-              header: 'facet-title',
               item: 'facet-value checkbox',
               count: 'facet-count pull-right',
-              active: 'facet-active',
-            },
-            templates: {
-              header: 'Price ranges',
+              selectedItem: 'facet-active',
             },
             transformData(data) {
               data.label = data.label
@@ -122,12 +106,9 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
+            attribute: 'brand',
             operator: 'or',
             limit: 10,
-            templates: {
-              header: 'Transformed brands',
-            },
             transformItems: items =>
               items.map(item => ({
                 ...item,
@@ -144,13 +125,10 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.refinementList({
             container,
-            attributeName: 'brand',
+            attribute: 'brand',
             operator: 'or',
             limit: 10,
-            templates: {
-              header: 'Transformed searchable brands',
-            },
-            searchForFacetValues: {
+            searchable: {
               placeholder: 'Find other brands...',
               templates: {
                 noResults: 'No results',
