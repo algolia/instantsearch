@@ -135,6 +135,20 @@ export default function rangeSlider({
   const containerNode = getContainerNode(container);
   const cssClasses = {
     root: cx(suit(), userCssClasses.root),
+    disabledRoot: cx(
+      suit({ modifierName: 'disabled' }),
+      userCssClasses.disabledRoot
+    ),
+    handle: cx(suit({ descendantName: 'handle' }), userCssClasses.handle),
+    lowerHandle: cx(
+      suit({ descendantName: 'handle', modifierName: 'lower' }),
+      userCssClasses.lowerHandle
+    ),
+    upperHandle: cx(
+      suit({ descendantName: 'handle', modifierName: 'upper' }),
+      userCssClasses.upperHandle
+    ),
+    tooltip: cx(suit({ descendantName: 'tooltip' }), userCssClasses.tooltip),
   };
 
   const specializedRenderer = renderer({

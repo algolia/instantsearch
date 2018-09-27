@@ -7,9 +7,6 @@ import Rheostat from 'preact-rheostat';
 import cx from 'classnames';
 
 import Pit from './Pit.js';
-import { component } from '../../lib/suit';
-
-const suit = component('RangeSlider');
 
 class Slider extends Component {
   static propTypes = {
@@ -25,6 +22,10 @@ class Slider extends Component {
     ]),
     cssClasses: PropTypes.shape({
       root: PropTypes.string.isRequired,
+      handle: PropTypes.string,
+      lowerHandle: PropTypes.string,
+      upperHandle: PropTypes.string,
+      tooltip: PropTypes.string,
     }).isRequired,
   };
 
@@ -68,17 +69,19 @@ class Slider extends Component {
       ? tooltips.format(roundedValue)
       : roundedValue;
 
-    const className = cx(suit({ descendantName: 'handle' }), props.className, {
-      [suit({ descendantName: 'handle', modifierName: 'lower' })]:
-        props['data-handle-key'] === 0,
-      [suit({ descendantName: 'handle', modifierName: 'upper' })]:
-        props['data-handle-key'] === 1,
-    });
+    const className = cx(
+      this.props.cssClasses.handle,
+      {
+        [this.props.cssClasses.lowerHandle]: props['data-handle-key'] === 0,
+        [this.props.cssClasses.upperHandle]: props['data-handle-key'] === 1,
+      },
+      props.className
+    );
 
     return (
       <div {...props} className={className}>
         {tooltips ? (
-          <div className={cx(suit({ descendantName: 'tooltip' }))}>{value}</div>
+          <div className={this.props.cssClasses.tooltip}>{value}</div>
         ) : null}
       </div>
     );
@@ -97,8 +100,8 @@ class Slider extends Component {
 
     return (
       <div
-        className={cx(suit(), cssClasses.root, {
-          [suit({ modifierName: 'disabled' })]: this.isDisabled,
+        className={cx(cssClasses.root, {
+          [cssClasses.disabledRoot]: this.isDisabled,
         })}
       >
         <Rheostat

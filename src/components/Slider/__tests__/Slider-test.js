@@ -15,7 +15,7 @@ describe('Slider', () => {
         pips={true}
         step={2}
         tooltips={true}
-        cssClasses={{ root: '' }}
+        cssClasses={{ root: 'root' }}
       />
     );
 
@@ -32,7 +32,7 @@ describe('Slider', () => {
         pips={false}
         step={2}
         tooltips={true}
-        cssClasses={{ root: '' }}
+        cssClasses={{ root: 'root' }}
       />
     );
 
@@ -67,7 +67,7 @@ describe('Slider', () => {
       pips: true,
       step: 2,
       tooltips: true,
-      cssClasses: { root: '' },
+      cssClasses: { root: 'root' },
     };
 
     shallow(<Slider {...props} />)
