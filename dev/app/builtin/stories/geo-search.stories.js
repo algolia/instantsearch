@@ -20,7 +20,7 @@ const wrapWithHitsAndConfiguration = (story, searchParameters) =>
 
 const injectGoogleMaps = fn => {
   injectScript(
-    `https://maps.googleapis.com/maps/api/js?v=3.31&key=${API_KEY}`,
+    `https://maps.googleapis.com/maps/api/js?v=weekly&key=${API_KEY}`,
     fn
   );
 };
