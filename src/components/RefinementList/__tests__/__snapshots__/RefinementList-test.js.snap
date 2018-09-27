@@ -77,12 +77,12 @@ exports[`RefinementList markup with facets 1`] = `
 
 exports[`RefinementList markup without facets 1`] = `
 <div
-  className="root"
+  className="root noRefinementRoot"
 />
 `;
 
 exports[`RefinementList markup without facets from search 1`] = `
 <div
-  className="root"
+  className="root noRefinementRoot"
 />
 `;
