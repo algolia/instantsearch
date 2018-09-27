@@ -437,8 +437,8 @@ const latLngRegExp = /^(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?)$/;
 function aroundLatLngToPosition(value) {
   const pattern = value.match(latLngRegExp);
 
-  // Since the value provided is the one send with the query, the API should
-  // throw an error due to the wrong format. So throw an error should be safe..
+  // Since the value provided is the one send with the request, the API should
+  // throw an error due to the wrong format. So throw an error should be safe.
   if (!pattern) {
     throw new Error(`Invalid value for "aroundLatLng" parameter: "${value}"`);
   }
