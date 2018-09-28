@@ -30,6 +30,7 @@ const renderer = ({
     instantSearchInstance,
     isShowingMore,
     toggleShowMore,
+    canToggleShowMore,
   },
   isFirstRendering
 ) => {
@@ -57,7 +58,7 @@ const renderer = ({
       showMore={showMore}
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
-      canToggleShowMore={true}
+      canToggleShowMore={canToggleShowMore}
     />,
     containerNode
   );
