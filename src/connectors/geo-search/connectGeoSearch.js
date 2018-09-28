@@ -376,6 +376,17 @@ http://community.algolia.com/instantsearch.js/migration-guide
           },
         };
       },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        if (!uiState || !uiState.geoSearch) {
+          return searchParameters.setQueryParameter('insideBoundingBox');
+        }
+
+        return searchParameters.setQueryParameter(
+          'insideBoundingBox',
+          uiState.geoSearch.boundingBox
+        );
+      },
     };
   };
 };

@@ -50,6 +50,7 @@ describe('connectGeoSearch', () => {
       render: expect.any(Function),
       dispose: expect.any(Function),
       getWidgetState: expect.any(Function),
+      getWidgetSearchParameters: expect.any(Function),
     });
   });
 
@@ -1190,6 +1191,73 @@ describe('connectGeoSearch', () => {
       });
 
       expect(uiStateAfter).toBe(uiStateBefore);
+    });
+  });
+
+  describe('getWidgetSearchParameters', () => {
+    it('expect to return the same SearchParameters if the uiState is empty', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const uiState = {};
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+
+      expect(searchParametersAfter).toBe(searchParametersBefore);
+    });
+
+    it('expect to return the same SearchParameters if the geoSearch attribute is empty', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const uiState = {
+        geoSearch: {},
+      };
+
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+
+      expect(searchParametersAfter).toBe(searchParametersBefore);
+    });
+
+    it('expect to return the SearchParameters with the boundingBox value from the uiState', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const uiState = {
+        geoSearch: {
+          boundingBox: '10,12,12,14',
+        },
+      };
+
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+
+      expect(searchParametersAfter.insideBoundingBox).toBe('10,12,12,14');
+    });
+
+    it('expect to remove the boundingBox from the SearchParameters if the value is not in the uiState', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+
+      refine({
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      });
+
+      const uiState = {};
+      const searchParametersBefore = SearchParameters.make(helper.state);
+      const searchParametersAfter = widget.getWidgetSearchParameters(
+        searchParametersBefore,
+        { uiState }
+      );
+
+      expect(searchParametersAfter.insideBoundingBox).toBeUndefined();
     });
   });
 });
