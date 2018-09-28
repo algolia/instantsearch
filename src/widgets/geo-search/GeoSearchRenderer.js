@@ -38,6 +38,12 @@ const createBoundingBoxFromMarkers = (google, markers) => {
   };
 };
 
+const lockUserInteraction = (renderState, functionThatAltersTheMapPosition) => {
+  renderState.isUserInteraction = false;
+  functionThatAltersTheMapPosition();
+  renderState.isUserInteraction = true;
+};
+
 const renderer = (
   {
     items,
@@ -192,20 +198,20 @@ const renderer = (
       : currentRefinement;
 
   if (boundingBox && shouldUpdate) {
-    renderState.isUserInteraction = false;
-    renderState.mapInstance.fitBounds(
-      new googleReference.maps.LatLngBounds(
-        boundingBox.southWest,
-        boundingBox.northEast
-      ),
-      boundingBoxPadding
-    );
-    renderState.isUserInteraction = true;
+    lockUserInteraction(renderState, () => {
+      renderState.mapInstance.fitBounds(
+        new googleReference.maps.LatLngBounds(
+          boundingBox.southWest,
+          boundingBox.northEast
+        ),
+        boundingBoxPadding
+      );
+    });
   } else if (shouldUpdate) {
-    renderState.isUserInteraction = false;
-    renderState.mapInstance.setCenter(position || initialPosition);
-    renderState.mapInstance.setZoom(initialZoom);
-    renderState.isUserInteraction = true;
+    lockUserInteraction(renderState, () => {
+      renderState.mapInstance.setCenter(position || initialPosition);
+      renderState.mapInstance.setZoom(initialZoom);
+    });
   }
 
   render(
