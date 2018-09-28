@@ -26,10 +26,23 @@ const collectMarkersForNextRender = (markers, nextIds) =>
     [[], []]
   );
 
+const createBoundingBoxFromMarkers = (google, markers) => {
+  const latLngBounds = markers.reduce(
+    (acc, marker) => acc.extend(marker.getPosition()),
+    new google.maps.LatLngBounds()
+  );
+
+  return {
+    northEast: latLngBounds.getNorthEast().toJSON(),
+    southWest: latLngBounds.getSouthWest().toJSON(),
+  };
+};
+
 const renderer = (
   {
     items,
     position,
+    currentRefinement,
     refine,
     clearMapRefinement,
     toggleRefineOnMapMove,
@@ -126,15 +139,6 @@ const renderer = (
     return;
   }
 
-  if (!items.length && !isRefinedWithMap() && !hasMapMoveSinceLastRefine()) {
-    const initialMapPosition = position || initialPosition;
-
-    renderState.isUserInteraction = false;
-    renderState.mapInstance.setCenter(initialMapPosition);
-    renderState.mapInstance.setZoom(initialZoom);
-    renderState.isUserInteraction = true;
-  }
-
   // Collect markers that need to be updated or removed
   const nextItemsIds = items.map(_ => _.objectID);
   const [updateMarkers, exitMarkers] = collectMarkersForNextRender(
@@ -174,23 +178,33 @@ const renderer = (
     })
   );
 
-  // Fit the map to the markers when needed
-  const hasMarkers = renderState.markers.length;
-  const center = renderState.mapInstance.getCenter();
-  const zoom = renderState.mapInstance.getZoom();
-  const isPositionInitialize = center !== undefined && zoom !== undefined;
-  const enableFitBounds =
-    !hasMapMoveSinceLastRefine() &&
-    (!isRefinedWithMap() || (isRefinedWithMap() && !isPositionInitialize));
+  const shouldUpdate = !hasMapMoveSinceLastRefine();
 
-  if (hasMarkers && enableFitBounds) {
-    const bounds = renderState.markers.reduce(
-      (acc, marker) => acc.extend(marker.getPosition()),
-      new googleReference.maps.LatLngBounds()
-    );
+  // We use this value for differentiate the padding to apply during
+  // fitBounds. When we don't have a currenRefinement (boundingBox)
+  // we let Google Maps compute the automatic padding. But when we
+  // provide the currentRefinement we explicitly set the padding
+  // to `0` otherwise the map will decrease the zoom on each refine.
+  const boundingBoxPadding = currentRefinement ? 0 : null;
+  const boundingBox =
+    !currentRefinement && Boolean(renderState.markers.length)
+      ? createBoundingBoxFromMarkers(googleReference, renderState.markers)
+      : currentRefinement;
 
+  if (boundingBox && shouldUpdate) {
     renderState.isUserInteraction = false;
-    renderState.mapInstance.fitBounds(bounds);
+    renderState.mapInstance.fitBounds(
+      new googleReference.maps.LatLngBounds(
+        boundingBox.southWest,
+        boundingBox.northEast
+      ),
+      boundingBoxPadding
+    );
+    renderState.isUserInteraction = true;
+  } else if (shouldUpdate) {
+    renderState.isUserInteraction = false;
+    renderState.mapInstance.setCenter(position || initialPosition);
+    renderState.mapInstance.setZoom(initialZoom);
     renderState.isUserInteraction = true;
   }
 
