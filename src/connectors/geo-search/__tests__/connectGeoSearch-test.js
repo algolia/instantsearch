@@ -1,20 +1,43 @@
 import last from 'lodash/last';
 import first from 'lodash/first';
-import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, {
+  SearchParameters,
+  SearchResults,
+} from 'algoliasearch-helper';
 import connectGeoSearch from '../connectGeoSearch';
 
-const createFakeHelper = client => {
-  const helper = algoliasearchHelper(client);
-
-  helper.search = jest.fn();
-
-  return helper;
-};
-
-const firstRenderArgs = fn => first(fn.mock.calls)[0];
-const lastRenderArgs = fn => last(fn.mock.calls)[0];
-
 describe('connectGeoSearch', () => {
+  const createFakeHelper = client => {
+    const helper = algoliasearchHelper(client);
+
+    helper.search = jest.fn();
+
+    return helper;
+  };
+
+  const getInitializedWidget = () => {
+    const render = jest.fn();
+    const makeWidget = connectGeoSearch(render);
+
+    const widget = makeWidget();
+
+    const helper = createFakeHelper({});
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const { refine } = render.mock.calls[0][0];
+
+    return [widget, helper, refine];
+  };
+
+  const firstRenderArgs = fn => first(fn.mock.calls)[0];
+  const lastRenderArgs = fn => last(fn.mock.calls)[0];
+
   it('expect to be a widget', () => {
     const render = jest.fn();
     const unmount = jest.fn();
@@ -26,6 +49,7 @@ describe('connectGeoSearch', () => {
       init: expect.any(Function),
       render: expect.any(Function),
       dispose: expect.any(Function),
+      getWidgetState: expect.any(Function),
     });
   });
 
@@ -1107,6 +1131,65 @@ describe('connectGeoSearch', () => {
 
       expect(unmount).toHaveBeenCalled();
       expect(actual).toMatchObject(expectation);
+    });
+  });
+
+  describe('getWidgetState', () => {
+    it('expect to return the uiState unmodified if no boundingBox is selected', () => {
+      const [widget, helper] = getInitializedWidget();
+
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+
+      expect(uiStateAfter).toBe(uiStateBefore);
+    });
+
+    it('expect to return the uiState with an entry equal to the boundingBox', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+
+      refine({
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      });
+
+      const uiStateBefore = {};
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+
+      expect(uiStateAfter).toEqual({
+        geoSearch: {
+          boundingBox: '10,12,12,14',
+        },
+      });
+    });
+
+    it('expect to return the same uiState instance if the value is alreay there', () => {
+      const [widget, helper, refine] = getInitializedWidget();
+
+      refine({
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      });
+
+      const uiStateBefore = widget.getWidgetState(
+        {},
+        {
+          searchParameters: helper.state,
+          helper,
+        }
+      );
+
+      const uiStateAfter = widget.getWidgetState(uiStateBefore, {
+        searchParameters: helper.state,
+        helper,
+      });
+
+      expect(uiStateAfter).toBe(uiStateBefore);
     });
   });
 });

@@ -356,6 +356,26 @@ http://community.algolia.com/instantsearch.js/migration-guide
 
         return state.setQueryParameter('insideBoundingBox');
       },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const boundingBox = searchParameters.insideBoundingBox;
+
+        if (
+          !boundingBox ||
+          (uiState &&
+            uiState.geoSearch &&
+            uiState.geoSearch.boundingBox === boundingBox)
+        ) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          geoSearch: {
+            boundingBox,
+          },
+        };
+      },
     };
   };
 };
