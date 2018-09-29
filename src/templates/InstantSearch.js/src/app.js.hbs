@@ -9,6 +9,7 @@ const search = instantsearch({
 search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#searchbox',
+    autofocus: false,
     {{#if searchPlaceholder}}
     placeholder: '{{searchPlaceholder}}',
     {{/if}}
