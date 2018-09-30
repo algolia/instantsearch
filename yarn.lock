@@ -3790,9 +3790,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-load-json-file@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-5.0.0.tgz#5b5ef7cb6e1e337408e02fe01fe679ccc0cd18d5"
+load-json-file@5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-5.1.0.tgz#c062f048e0ee556bf7f535bb16f6e45bb9d06b18"
   dependencies:
     graceful-fs "^4.1.2"
     parse-json "^4.0.0"
