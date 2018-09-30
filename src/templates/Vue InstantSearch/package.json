@@ -23,7 +23,7 @@
     "eslint": "5.6.1",
     "eslint-config-algolia": "13.2.3",
     "eslint-config-prettier": "3.1.0",
-    "eslint-plugin-html": "4.0.5",
+    "eslint-plugin-html": "4.0.6",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-prettier": "2.6.2",
     "eslint-plugin-vue": "4.7.1",
