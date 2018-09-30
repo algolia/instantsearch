@@ -16,7 +16,7 @@
     "babel-eslint": "9.0.0",
     "eslint": "5.6.1",
     "eslint-config-algolia": "13.2.3",
-    "eslint-config-prettier": "3.0.1",
+    "eslint-config-prettier": "3.1.0",
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-prettier": "2.6.2",
     "parcel-bundler": "1.9.7",
