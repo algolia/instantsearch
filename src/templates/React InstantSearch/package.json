@@ -22,7 +22,7 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-prettier": "2.7.0",
     "eslint-plugin-react": "7.11.1",
-    "prettier": "1.14.2",
+    "prettier": "1.14.3",
     "prop-types": "15.6.2"
   }
 }

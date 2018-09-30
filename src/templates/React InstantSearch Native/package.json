@@ -25,7 +25,7 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-plugin-prettier": "2.7.0",
     "eslint-plugin-react": "7.11.1",
-    "prettier": "1.14.2",
+    "prettier": "1.14.3",
     "react-native-scripts": "1.14.0"
   }
 }
