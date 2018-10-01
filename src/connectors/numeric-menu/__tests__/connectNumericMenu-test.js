@@ -559,7 +559,7 @@ describe('connectNumericMenu', () => {
       test('should not override other values in the same namespace', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {
-          numericRefinementList: {
+          numericMenu: {
             'numerics-2': '27:36',
           },
         };
@@ -576,7 +576,7 @@ describe('connectNumericMenu', () => {
       test('should give back the object unmodified if refinements are already set', () => {
         const [widget, helper] = getInitializedWidget();
         const uiStateBefore = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: '10:20',
           },
         };
@@ -610,7 +610,7 @@ describe('connectNumericMenu', () => {
         const [widget, helper] = getInitializedWidget();
         // The URL state has some parameters
         const uiState = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: '10:',
           },
         };
@@ -635,7 +635,7 @@ describe('connectNumericMenu', () => {
         const [widget, helper] = getInitializedWidget();
         // The URL state has some parameters
         const uiState = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: ':20',
           },
         };
@@ -661,7 +661,7 @@ describe('connectNumericMenu', () => {
         const [widget, helper] = getInitializedWidget();
         // The URL state has some parameters
         const uiState = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: '10:20',
           },
         };
@@ -687,7 +687,7 @@ describe('connectNumericMenu', () => {
         const [widget, helper] = getInitializedWidget();
         // The URL state has some parameters
         const uiState = {
-          numericRefinementList: {
+          numericMenu: {
             numerics: '10',
           },
         };

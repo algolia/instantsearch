@@ -184,8 +184,8 @@ export default function connectNumericMenu(renderFn, unmountFn) {
         if (equal || equal === 0) {
           return {
             ...uiState,
-            numericRefinementList: {
-              ...uiState.numericRefinementList,
+            numericMenu: {
+              ...uiState.numericMenu,
               [attribute]: `${currentRefinements['=']}`,
             },
           };
@@ -198,15 +198,14 @@ export default function connectNumericMenu(renderFn, unmountFn) {
 
         if (lowerBound !== '' || upperBound !== '') {
           if (
-            uiState.numericRefinementList &&
-            uiState.numericRefinementList[attribute] ===
-              `${lowerBound}:${upperBound}`
+            uiState.numericMenu &&
+            uiState.numericMenu[attribute] === `${lowerBound}:${upperBound}`
           )
             return uiState;
           return {
             ...uiState,
-            numericRefinementList: {
-              ...uiState.numericRefinementList,
+            numericMenu: {
+              ...uiState.numericMenu,
               [attribute]: `${lowerBound}:${upperBound}`,
             },
           };
@@ -217,9 +216,7 @@ export default function connectNumericMenu(renderFn, unmountFn) {
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         let clearedParams = searchParameters.clearRefinements(attribute);
-        const value =
-          uiState.numericRefinementList &&
-          uiState.numericRefinementList[attribute];
+        const value = uiState.numericMenu && uiState.numericMenu[attribute];
 
         if (!value) {
           return clearedParams;
