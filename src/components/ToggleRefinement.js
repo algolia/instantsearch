@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 import Template from './Template.js';
 
 const ToggleRefinement = ({
@@ -9,17 +8,17 @@ const ToggleRefinement = ({
   cssClasses,
   templateProps,
 }) => (
-  <div className={cx(cssClasses.root)}>
-    <label className={cx(cssClasses.label)}>
+  <div className={cssClasses.root}>
+    <label className={cssClasses.label}>
       <input
-        className={cx(cssClasses.checkbox)}
+        className={cssClasses.checkbox}
         type="checkbox"
         checked={currentRefinement.isRefined}
         onChange={event => refine(!event.target.checked)}
       />
       <Template
         rootTagName="span"
-        rootProps={{ className: cx(cssClasses.labelText) }}
+        rootProps={{ className: cssClasses.labelText }}
         templateKey="labelText"
         data={currentRefinement}
         {...templateProps}
