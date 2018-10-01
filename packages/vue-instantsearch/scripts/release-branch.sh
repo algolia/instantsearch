@@ -4,8 +4,12 @@ set -eu
 
 readonly CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ "$CURRENT_BRANCH" != master ]; then
-  echo "You must be on 'master' branch to release, aborting..."
-  exit 1
+  read -n 1 -p "WARNING! You are not currently on the master branch. Are you sure you want to continue? [Y/n]" reply
+  echo ""
+  if [ "$reply" == "n" ]; then
+    echo "Aborting..."
+    exit 1
+  fi
 fi
 
 if ! git diff-index --quiet HEAD --; then
@@ -35,11 +39,7 @@ if ! yarn run changelog; then
   exit 1
 fi
 
-readonly PACKAGE_VERSION=$(< package.json grep version \
-  | head -1 \
-  | awk -F: '{ print $2 }' \
-  | sed 's/[",]//g' \
-  | tr -d '[:space:]')
+readonly PACKAGE_VERSION=$(scripts/get-version.js)
 
 git checkout -b "chore/release-$PACKAGE_VERSION"
 

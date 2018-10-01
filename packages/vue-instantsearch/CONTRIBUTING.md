@@ -28,7 +28,7 @@ The project uses [conventional commit format](https://github.com/angular/angular
 To release the library, the first step is to create a "release PR" by running:
 
 ```bash
-bin/release-branch.sh
+yarn release:branch
 ```
 
 This will ask you the new version of the library, and update all the required files accordingly.
@@ -42,13 +42,13 @@ Once the changes are approved you can merge it there.
 You can now fetch the latest changes from the remote master branch and run:
 
 ```bash
-bin/publish.sh
+yarn release:publish
 ```
 
 This will:
 
-* publish the new version on NPM
-* tag and push the tag to GitHub
+- publish the new version on NPM
+- tag and push the tag to GitHub
 
 ## Documentation
 

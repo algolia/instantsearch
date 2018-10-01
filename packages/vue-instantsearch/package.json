@@ -39,7 +39,9 @@
     "lint:fix": "eslint --ext .js,.vue . --fix",
     "format": "prettier --write '**/*.{js,md,vue,css}'",
     "changelog": "conventional-changelog --preset angular --infile CHANGELOG.md --same-file",
-    "changelog:unreleased": "conventional-changelog --preset angular --output-unreleased"
+    "changelog:unreleased": "conventional-changelog --preset angular --output-unreleased",
+    "release:branch": "scripts/release-branch.sh",
+    "release:publish": "scripts/release-publish.sh"
   },
   "dependencies": {
     "algoliasearch": "^3.30.0",
