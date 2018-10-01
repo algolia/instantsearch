@@ -285,7 +285,7 @@ describe('connectRatingMenu', () => {
       test('should add the refinements according to the UI state provided', () => {
         const [widget, helper] = getInitializedWidget();
         const uiState = {
-          starRating: {
+          ratingMenu: {
             grade: '2',
           },
         };

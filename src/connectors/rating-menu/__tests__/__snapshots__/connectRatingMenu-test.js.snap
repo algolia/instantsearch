@@ -68,7 +68,7 @@ SearchParameters {
 
 exports[`connectRatingMenu routing getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
-  "starRating": Object {
+  "ratingMenu": Object {
     "grade": 3,
   },
 }

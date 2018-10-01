@@ -201,14 +201,14 @@ export default function connectRatingMenu(renderFn, unmountFn) {
         if (
           refinedStar === undefined ||
           (uiState &&
-            uiState.starRating &&
-            uiState.starRating[attribute] === refinedStar)
+            uiState.ratingMenu &&
+            uiState.ratingMenu[attribute] === refinedStar)
         )
           return uiState;
         return {
           ...uiState,
-          starRating: {
-            ...uiState.starRating,
+          ratingMenu: {
+            ...uiState.ratingMenu,
             [attribute]: refinedStar,
           },
         };
@@ -216,7 +216,7 @@ export default function connectRatingMenu(renderFn, unmountFn) {
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
         const starRatingFromURL =
-          uiState.starRating && uiState.starRating[attribute];
+          uiState.ratingMenu && uiState.ratingMenu[attribute];
         const refinedStar = this._getRefinedStar(searchParameters);
 
         if (starRatingFromURL === refinedStar) return searchParameters;
