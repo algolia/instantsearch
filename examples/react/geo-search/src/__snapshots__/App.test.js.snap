@@ -4,7 +4,7 @@ exports[`geo-search recipe App renders without crashing 1`] = `
 <div
   className="ais-InstantSearch__root"
 >
-  Either type a destination or click somewhere on the map to see the closest apartment.
+  Type a destination or move the map to see the closest apartment.
   <div
     className="ais-SearchBox"
   >
@@ -67,8 +67,5 @@ exports[`geo-search recipe App renders without crashing 1`] = `
       </button>
     </form>
   </div>
-  <div
-    className="map"
-  />
 </div>
 `;

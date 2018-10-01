@@ -14,13 +14,12 @@
     "react-test-renderer": "16.2.0"
   },
   "dependencies": {
-    "google-map-react": "0.29.0",
     "instantsearch.css": "7.1.0",
-    "prop-types": "15.6.0",
     "qs": "6.5.1",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "react-instantsearch": "5.3.1"
+    "react-instantsearch-dom": "5.3.1",
+    "react-instantsearch-dom-maps": "5.3.1"
   },
   "jest": {
     "moduleNameMapper": {
