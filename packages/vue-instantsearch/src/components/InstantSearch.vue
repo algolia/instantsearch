@@ -105,7 +105,7 @@ export default {
     },
   },
   created() {
-    if (this.searchClient.addAlgoliaAgent) {
+    if (typeof this.searchClient.addAlgoliaAgent === 'function') {
       this.searchClient.addAlgoliaAgent(`Vue InstantSearch (${version})`);
     }
   },

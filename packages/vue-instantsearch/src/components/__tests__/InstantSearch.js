@@ -250,13 +250,13 @@ it('will call client.addAlgoliaAgent if present', () => {
   );
 });
 
-it('will not call client.addAlgoliaAgent if present (so nothing to assert)', () => {
-  const client = {};
-
-  mount(InstantSearch, {
-    propsData: {
-      searchClient: client,
-      indexName: 'bla',
-    },
-  });
+it('will not call client.addAlgoliaAgent if not function (so nothing to assert)', () => {
+  expect(() =>
+    mount(InstantSearch, {
+      propsData: {
+        searchClient: { addAlgoliaAgent: true },
+        indexName: 'bla',
+      },
+    })
+  ).not.toThrow();
 });
