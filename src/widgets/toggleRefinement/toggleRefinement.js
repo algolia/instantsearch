@@ -119,7 +119,7 @@ toggleRefinement({
  *     attribute: 'free_shipping',
  *     on: true,
  *     templates: {
- *       header: 'Shipping'
+ *       labelText: 'Free shipping'
  *     }
  *   })
  * );
