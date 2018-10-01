@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import cx from 'classnames';
 
 class Selector extends Component {
   componentWillMount() {
@@ -16,13 +15,13 @@ class Selector extends Component {
 
     return (
       <select
-        className={cx(this.props.cssClasses.select)}
+        className={this.props.cssClasses.select}
         onChange={this.handleChange}
         value={`${currentValue}`}
       >
         {options.map(option => (
           <option
-            className={cx(this.props.cssClasses.option)}
+            className={this.props.cssClasses.option}
             key={option.label + option.value}
             value={`${option.value}`}
           >

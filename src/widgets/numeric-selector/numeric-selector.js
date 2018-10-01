@@ -15,7 +15,7 @@ const renderer = ({ containerNode, cssClasses }) => (
   if (isFirstRendering) return;
 
   render(
-    <div className={cx(cssClasses.root)}>
+    <div className={cssClasses.root}>
       <Selector
         cssClasses={cssClasses}
         currentValue={currentRefinement}
