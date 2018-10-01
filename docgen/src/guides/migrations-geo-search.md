@@ -19,7 +19,7 @@ githubSource: docgen/src/guides/migrations-geo-search.md
 | -------------------- | -------- |
 | `paddingBoundingBox` | Removed  |
 
-- `paddingBoundingBox` was in conflit with the `routing` option - so we removed it to support URLSync for the GeoSearch widget.
+- `paddingBoundingBox` was in conflict with the `routing` option - so we removed it to support URLSync for the GeoSearch widget.
 
 ### connectGeoSearch
 
@@ -29,4 +29,4 @@ githubSource: docgen/src/guides/migrations-geo-search.md
 | -------------------- | -------- |
 | `paddingBoundingBox` | Removed  |
 
-- `paddingBoundingBox` was in conflit with the `routing` option - so we removed it to support URLSync for the GeoSearch widget.
+- `paddingBoundingBox` was in conflict with the `routing` option - so we removed it to support URLSync for the GeoSearch widget.
