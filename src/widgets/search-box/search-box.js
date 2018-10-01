@@ -58,20 +58,18 @@ const renderer = ({
 
     const form = input.parentElement;
 
-    // search on enter
-    if (!searchAsYouType) {
+    if (searchAsYouType) {
+      addListener(input, 'input', getInputValueAndCall(refine));
+      addListener(form, 'submit', e => {
+        e.preventDefault();
+        input.blur();
+      });
+    } else {
       addListener(input, 'input', e => {
         refine(getValue(e), false);
       });
       addListener(form, 'submit', e => {
         refine(input.value);
-        e.preventDefault();
-        input.blur();
-      });
-    } else {
-      addListener(input, 'input', getInputValueAndCall(refine));
-
-      addListener(form, 'submit', e => {
         e.preventDefault();
         input.blur();
       });
