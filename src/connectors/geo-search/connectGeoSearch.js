@@ -57,6 +57,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} GeoSearchRenderingOptions
  * @property {Object[]} items The matched hits from Algolia API.
+ * @property {LatLng} position The current position of the search.
  * @property {Bounds} currentRefinement The current bounding box of the search.
  * @property {function(Bounds)} refine Sets a bounding box to filter the results from the given map bounds.
  * @property {function()} clearMapRefinement Reset the current bounding box refinement.
