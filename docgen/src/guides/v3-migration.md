@@ -10,11 +10,11 @@ If you were previously using the `urlSync` option, you should now migrate to the
 
 Here are the elements you need to migrate:
 
-* `urlSync: true` becomes `routing: true`
-* `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
-* `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
-* `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
-* `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+- `urlSync: true` becomes `routing: true`
+- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
+- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
+- `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
 
 ## Widgets
 
@@ -150,8 +150,8 @@ With the redo button:
 | `escapeHits`    | `escapeHTML`    |
 | `showMoreLabel` | `loadMoreLabel` |
 
-* `escapeHTML` becomes `true` by default.
-* `allItems` template has been removed in favor of `connectHits`
+- `escapeHTML` becomes `true` by default.
+- `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
 
@@ -497,6 +497,75 @@ Widget removed.
 </div>
 ```
 
+### RatingMenu (formerly StarRating)
+
+### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+
+### CSS classes
+
+| Before                            | After                            |
+| --------------------------------- | -------------------------------- |
+| `ais-star-rating`                 | `ais-RatingMenu`                 |
+| `ais-star-rating--list`           | `ais-RatingMenu-list`            |
+| `ais-star-rating--item`           | `ais-RatingMenu-item`            |
+| `ais-star-rating--item__active`   | `ais-RatingMenu-item--selected`  |
+| `ais-star-rating--item__disabled` | `ais-RatingMenu-item--disabled`  |
+| `ais-star-rating--link`           | `ais-RatingMenu-link`            |
+| `ais-star-rating--star`           | `ais-RatingMenu-starIcon`        |
+|                                   | `ais-RatingMenu-starIcon--full`  |
+| `ais-star-rating--star__empty`    | `ais-RatingMenu-starIcon--empty` |
+| `ais-star-rating--count`          | `ais-RatingMenu-count`           |
+
+### Markup
+
+```html
+<div class="ais-RatingMenu">
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <symbol id="ais-RatingMenu-starSymbol" viewBox="0 0 24 24"><path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"/></symbol>
+    <symbol id="ais-RatingMenu-starEmptySymbol" viewBox="0 0 24 24"><path d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"/></symbol>
+  </svg>
+  <ul class="ais-RatingMenu-list">
+    <li class="ais-RatingMenu-item ais-RatingMenu-item--disabled">
+      <div class="ais-RatingMenu-link" aria-label="5 & up" disabled>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
+        <span class="ais-RatingMenu-count">2,300</span>
+      </div>
+    </li>
+    <li class="ais-RatingMenu-item ais-RatingMenu-item--selected">
+      <a class="ais-RatingMenu-link" aria-label="4 & up" href="#">
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+        <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
+        <span class="ais-RatingMenu-count">2,300</span>
+      </a>
+    </li>
+    <li class="ais-RatingMenu-item">
+      <a class="ais-RatingMenu-link" aria-label="3 & up" href="#">
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--full" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starSymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+        <svg class="ais-RatingMenu-starIcon ais-RatingMenu-starIcon--empty" aria-hidden="true" width="24" height="24"><use xlink:href="#ais-RatingMenu-starEmptySymbol"></use></svg>
+        <span class="ais-RatingMenu-label" aria-hidden="true">& Up</span>
+        <span class="ais-RatingMenu-count">1,750</span>
+      </a>
+    </li>
+  </ul>
+</div>
+```
+
 ### RefinementList
 
 #### CSS classes
@@ -526,8 +595,8 @@ Widget removed.
 | `attributeName`        | `attribute`  |
 | `searchForFacetValues` | `searchable` |
 
-* `escapeFacetValues` defaults to `true`
-* `isAlwaysActive` defaults to `true`
+- `escapeFacetValues` defaults to `true`
+- `isAlwaysActive` defaults to `true`
 
 #### Markup
 
@@ -741,4 +810,4 @@ We've moved the `label` into the `templates.labelText` template to make it consi
 | --------------- | ----------- |
 | `attributeName` | `attribute` |
 
-* `escapeFacetValues` defaults to `true`
+- `escapeFacetValues` defaults to `true`
