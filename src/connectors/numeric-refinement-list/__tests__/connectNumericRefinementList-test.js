@@ -20,8 +20,8 @@ describe('connectNumericRefinementList', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [
+      attribute: 'numerics',
+      items: [
         { name: 'below 10', end: 10 },
         { name: '10 - 20', start: 10, end: 20 },
         { name: 'more than 20', start: 20 },
@@ -49,8 +49,8 @@ describe('connectNumericRefinementList', () => {
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         widgetParams: {
-          attributeName: 'numerics',
-          options: [
+          attribute: 'numerics',
+          items: [
             { name: 'below 10', end: 10 },
             { name: '10 - 20', start: 10, end: 20 },
             { name: 'more than 20', start: 20 },
@@ -72,8 +72,8 @@ describe('connectNumericRefinementList', () => {
     expect(rendering).toHaveBeenLastCalledWith(
       expect.objectContaining({
         widgetParams: {
-          attributeName: 'numerics',
-          options: [
+          attribute: 'numerics',
+          items: [
             { name: 'below 10', end: 10 },
             { name: '10 - 20', start: 10, end: 20 },
             { name: 'more than 20', start: 20 },
@@ -88,8 +88,8 @@ describe('connectNumericRefinementList', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [{ name: 'below 10', end: 10 }],
+      attribute: 'numerics',
+      items: [{ name: 'below 10', end: 10 }],
       transformItems: items =>
         items.map(item => ({
           ...item,
@@ -133,8 +133,8 @@ describe('connectNumericRefinementList', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [
+      attribute: 'numerics',
+      items: [
         { name: 'below 10', end: 10 },
         { name: '10 - 20', start: 10, end: 20 },
         { name: 'more than 20', start: 20 },
@@ -214,8 +214,8 @@ describe('connectNumericRefinementList', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [
+      attribute: 'numerics',
+      items: [
         { name: 'below 10', end: 10 },
         { name: '10 - 20', start: 10, end: 20 },
         { name: 'more than 20', start: 20 },
@@ -281,8 +281,8 @@ describe('connectNumericRefinementList', () => {
       { name: 'void' },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: listOptions,
+      attribute: 'numerics',
+      items: listOptions,
     });
 
     const helper = jsHelper({});
@@ -334,8 +334,8 @@ describe('connectNumericRefinementList', () => {
       { name: 'void' },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: listOptions,
+      attribute: 'numerics',
+      items: listOptions,
     });
 
     const helper = jsHelper({});
@@ -398,8 +398,8 @@ describe('connectNumericRefinementList', () => {
       { name: 'void' },
     ];
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: listOptions,
+      attribute: 'numerics',
+      items: listOptions,
     });
 
     const helper = jsHelper({});
@@ -436,8 +436,8 @@ describe('connectNumericRefinementList', () => {
     const makeWidget = connectNumericRefinementList(rendering);
 
     const widget = makeWidget({
-      attributeName: 'numerics',
-      options: [
+      attribute: 'numerics',
+      items: [
         { name: 'below 10', end: 10 },
         { name: '10 - 20', start: 10, end: 20 },
         { name: 'more than 20', start: 20 },
@@ -472,8 +472,8 @@ describe('connectNumericRefinementList', () => {
       const rendering = jest.fn();
       const makeWidget = connectNumericRefinementList(rendering);
       const widget = makeWidget({
-        attributeName: 'numerics',
-        options: [
+        attribute: 'numerics',
+        items: [
           { name: 'below 10', end: 10 },
           { name: '10 - 20', start: 10, end: 20 },
           { name: 'more than 20', start: 20 },

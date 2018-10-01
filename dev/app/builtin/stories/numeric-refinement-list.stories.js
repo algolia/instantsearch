@@ -14,9 +14,9 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.numericRefinementList({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             operator: 'or',
-            options: [
+            items: [
               { name: 'All' },
               { end: 4, name: 'less than 4' },
               { start: 4, end: 4, name: '4' },
@@ -24,13 +24,9 @@ export default () => {
               { start: 10, name: 'more than 10' },
             ],
             cssClasses: {
-              header: 'facet-title',
-              link: 'facet-value',
+              item: 'facet-value',
               count: 'facet-count pull-right',
-              active: 'facet-active',
-            },
-            templates: {
-              header: 'Numeric refinement list (price)',
+              selectedItem: 'facet-active',
             },
           })
         );
@@ -42,9 +38,9 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.numericRefinementList({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             operator: 'or',
-            options: [
+            items: [
               { name: 'All' },
               { end: 4, name: 'less than 4' },
               { start: 4, end: 4, name: '4' },
@@ -52,13 +48,9 @@ export default () => {
               { start: 10, name: 'more than 10' },
             ],
             cssClasses: {
-              header: 'facet-title',
-              link: 'facet-value',
+              item: 'facet-value',
               count: 'facet-count pull-right',
-              active: 'facet-active',
-            },
-            templates: {
-              header: 'Numeric refinement list (price)',
+              selectedItem: 'facet-active',
             },
             transformItems: items =>
               items.map(item => ({

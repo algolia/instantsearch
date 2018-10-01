@@ -5,27 +5,27 @@ const encodeValue = (start, end) =>
 
 describe('numericRefinementList call', () => {
   it('throws an exception when no container', () => {
-    const attributeName = '';
-    const options = [];
-    expect(
-      numericRefinementList.bind(null, { attributeName, options })
-    ).toThrow(/^Usage/);
-  });
-
-  it('throws an exception when no attributeName', () => {
-    const container = document.createElement('div');
-    const options = [];
-    expect(numericRefinementList.bind(null, { container, options })).toThrow(
+    const attribute = '';
+    const items = [];
+    expect(numericRefinementList.bind(null, { attribute, items })).toThrow(
       /^Usage/
     );
   });
 
-  it('throws an exception when no options', () => {
+  it('throws an exception when no attribute', () => {
     const container = document.createElement('div');
-    const attributeName = '';
-    expect(
-      numericRefinementList.bind(null, { attributeName, container })
-    ).toThrow(/^Usage/);
+    const items = [];
+    expect(numericRefinementList.bind(null, { container, items })).toThrow(
+      /^Usage/
+    );
+  });
+
+  it('throws an exception when no items', () => {
+    const container = document.createElement('div');
+    const attribute = '';
+    expect(numericRefinementList.bind(null, { attribute, container })).toThrow(
+      /^Usage/
+    );
   });
 });
 
@@ -35,7 +35,7 @@ describe('numericRefinementList()', () => {
   let widget;
   let helper;
 
-  let options;
+  let items;
   let results;
   let createURL;
   let state;
@@ -44,7 +44,7 @@ describe('numericRefinementList()', () => {
     ReactDOM = { render: jest.fn() };
     numericRefinementList.__Rewire__('render', ReactDOM.render);
 
-    options = [
+    items = [
       { name: 'All' },
       { end: 4, name: 'less than 4' },
       { start: 4, end: 4, name: '4' },
@@ -55,8 +55,8 @@ describe('numericRefinementList()', () => {
     container = document.createElement('div');
     widget = numericRefinementList({
       container,
-      attributeName: 'price',
-      options,
+      attribute: 'price',
+      items,
       cssClasses: { root: ['root', 'cx'] },
     });
     helper = {
@@ -96,8 +96,8 @@ describe('numericRefinementList()', () => {
   it('renders with transformed items', () => {
     widget = numericRefinementList({
       container,
-      attributeName: 'price',
-      options,
+      attribute: 'price',
+      items,
       transformItems: items =>
         items.map(item => ({ ...item, transformed: true })),
     });
@@ -203,7 +203,7 @@ describe('numericRefinementList()', () => {
     expect(helper.search).toHaveBeenCalledTimes(1, 'search called once');
   });
 
-  it('does not alter the initial options when rendering', () => {
+  it('does not alter the initial items when rendering', () => {
     // Note: https://github.com/algolia/instantsearch.js/issues/1010
     // Make sure we work on a copy of the initial facetValues when rendering,
     // not directly editing it
@@ -213,8 +213,8 @@ describe('numericRefinementList()', () => {
     const initialOptionsClone = [...initialOptions];
     const testWidget = numericRefinementList({
       container,
-      attributeName: 'price',
-      options: initialOptions,
+      attribute: 'price',
+      items: initialOptions,
     });
 
     // The life cycle impose all the steps
@@ -229,7 +229,5 @@ describe('numericRefinementList()', () => {
 
   afterEach(() => {
     numericRefinementList.__ResetDependency__('render');
-    numericRefinementList.__ResetDependency__('autoHideContainerHOC');
-    numericRefinementList.__ResetDependency__('headerFooterHOC');
   });
 });

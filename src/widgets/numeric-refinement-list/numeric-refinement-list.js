@@ -5,24 +5,19 @@ import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectNumericRefinementList from '../../connectors/numeric-refinement-list/connectNumericRefinementList.js';
 import defaultTemplates from './defaultTemplates.js';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-const bem = bemHelper('ais-refinement-list');
+const suit = component('NumericMenu');
 
 const renderer = ({
   containerNode,
-  collapsible,
-  autoHideContainer,
   cssClasses,
   renderState,
   transformData,
   templates,
 }) => (
-  { createURL, instantSearchInstance, refine, items, hasNoResults },
+  { createURL, instantSearchInstance, refine, items },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -37,11 +32,9 @@ const renderer = ({
 
   render(
     <RefinementList
-      collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
-      shouldAutoHideContainer={autoHideContainer && hasNoResults}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
     />,
@@ -52,34 +45,29 @@ const renderer = ({
 const usage = `Usage:
 numericRefinementList({
   container,
-  attributeName,
-  options,
+  attribute,
+  items,
   [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],
-  [ templates.{header,item,footer} ],
+  [ templates.{item} ],
   [ transformData.{item} ],
-  [ autoHideContainer ],
-  [ collapsible=false ],
   [ transformItems ]
 })`;
 
 /**
  * @typedef {Object} NumericRefinementListCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [noRefinmentRoot] CSS class to add to the root element when no refinements.
  * @property {string|string[]} [list] CSS class to add to the list element.
- * @property {string|string[]} [label] CSS class to add to each link element.
  * @property {string|string[]} [item] CSS class to add to each item element.
+ * @property {string|string[]} [selectedItem] CSS class to add to each selected item element.
+ * @property {string|string[]} [label] CSS class to add to each label element.
+ * @property {string|string[]} [labelText] CSS class to add to each label text element.
  * @property {string|string[]} [radio] CSS class to add to each radio element (when using the default template).
- * @property {string|string[]} [active] CSS class to add to each active element.
  */
 
 /**
  * @typedef {Object} NumericRefinementListTemplates
- * @property {string|function} [header] Header template.
  * @property {string|function} [item] Item template, provided with `label` (the name in the configuration), `isRefined`, `url`, `value` (the setting for the filter) data properties.
- * @property {string|function} [footer] Footer template.
  */
 
 /**
@@ -97,13 +85,11 @@ numericRefinementList({
 /**
  * @typedef {Object} NumericRefinementListWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string} attributeName Name of the attribute for filtering.
- * @property {NumericRefinementListOption[]} options List of all the options.
+ * @property {string} attribute Name of the attribute for filtering.
+ * @property {NumericRefinementListOption[]} items List of all the items.
  * @property {NumericRefinementListTemplates} [templates] Templates to use for the widget.
  * @property {NumericRefinementListTransforms} [transformData] Functions to change the data passes to the templates. Only item can be set.
- * @property {boolean} [autoHideContainer=true] Hide the container when no results match.
  * @property {NumericRefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
- * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -112,7 +98,7 @@ numericRefinementList({
  * are pre-configured with creating the widget.
  *
  * @requirements
- * The attribute passed to `attributeName` must be declared as an [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
+ * The attribute passed to `attribute` must be declared as an [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting) in your
  * Algolia settings.
  *
  * The values inside this attribute must be JavaScript numbers and not strings.
@@ -120,14 +106,14 @@ numericRefinementList({
  * @type {WidgetFactory}
  * @devNovel NumericRefinementList
  * @category filter
- * @param {NumericRefinementListWidgetOptions} $0 The NumericRefinementList widget options
+ * @param {NumericRefinementListWidgetOptions} $0 The NumericRefinementList widget items
  * @return {Widget} Creates a new instance of the NumericRefinementList widget.
  * @example
  * search.addWidget(
  *   instantsearch.widgets.numericRefinementList({
  *     container: '#popularity',
- *     attributeName: 'popularity',
- *     options: [
+ *     attribute: 'popularity',
+ *     items: [
  *       {name: 'All'},
  *       {end: 500, name: 'less than 500'},
  *       {start: 500, end: 2000, name: 'between 500 and 2000'},
@@ -141,37 +127,41 @@ numericRefinementList({
  */
 export default function numericRefinementList({
   container,
-  attributeName,
-  options,
+  attribute,
+  items,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  collapsible = false,
   transformData,
-  autoHideContainer = true,
   transformItems,
 } = {}) {
-  if (!container || !attributeName || !options) {
+  if (!container || !attribute || !items) {
     throw new Error(usage);
   }
 
   const containerNode = getContainerNode(container);
 
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    label: cx(bem('label'), userCssClasses.label),
-    radio: cx(bem('radio'), userCssClasses.radio),
-    active: cx(bem('item', 'active'), userCssClasses.active),
+    root: cx(suit(), userCssClasses.root),
+    noRefinementRoot: cx(
+      suit({ modifierName: 'noRefinement' }),
+      userCssClasses.noRefinementRoot
+    ),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    selectedItem: cx(
+      suit({ descendantName: 'item', modifierName: 'selected' }),
+      userCssClasses.selectedItem
+    ),
+    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
+    radio: cx(suit({ descendantName: 'radio' }), userCssClasses.radio),
+    labelText: cx(
+      suit({ descendantName: 'labelText' }),
+      userCssClasses.labelText
+    ),
   };
 
   const specializedRenderer = renderer({
     containerNode,
-    collapsible,
-    autoHideContainer,
     cssClasses,
     renderState: {},
     transformData,
@@ -183,8 +173,8 @@ export default function numericRefinementList({
       () => unmountComponentAtNode(containerNode)
     );
     return makeNumericRefinementList({
-      attributeName,
-      options,
+      attribute,
+      items,
       transformItems,
     });
   } catch (e) {

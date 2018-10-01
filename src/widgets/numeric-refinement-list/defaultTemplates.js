@@ -1,8 +1,7 @@
 /* eslint-disable max-len */
 export default {
-  header: '',
   item: `<label class="{{cssClasses.label}}">
-  <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{label}}
+  <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />
+  <span class="{{cssClasses.labelText}}">{{label}}</span>
 </label>`,
-  footer: '',
 };
