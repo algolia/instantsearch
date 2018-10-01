@@ -55,17 +55,17 @@ ratingMenu({
 })`;
 
 /**
- * @typedef {Object} StarWidgetLabels
+ * @typedef {Object} RatingMenuWidgetLabels
  * @property {string} [andUp] Label used to suffix the ratings.
  */
 
 /**
- * @typedef {Object} StarWidgetTemplates
+ * @typedef {Object} RatingMenuWidgetTemplates
  * @property  {string|function} [item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties.
  */
 
 /**
- * @typedef {Object} StarWidgetCssClasses
+ * @typedef {Object} RatingMenuWidgetCssClasses
  * @property  {string|string[]} [root] CSS class to add to the root element.
  * @property  {string|string[]} [noRefinementRoot] CSS class to add to the root element when there's no refinements.
  * @property  {string|string[]} [list] CSS class to add to the list element.
@@ -81,19 +81,19 @@ ratingMenu({
  */
 
 /**
- * @typedef {Object} StarWidgetTransforms
+ * @typedef {Object} RatingMenuWidgetTransforms
  * @property  {function} [item] Function to change the object passed to the `item` template.
  */
 
 /**
- * @typedef {Object} StarWidgetOptions
+ * @typedef {Object} RatingMenuWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute in your records that contains the ratings.
  * @property {number} [max=5] The maximum rating value.
- * @property {StarWidgetLabels} [labels] Labels used by the default template.
- * @property {StarWidgetTemplates} [templates] Templates to use for the widget.
- * @property {StarWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
- * @property {StarWidgetCssClasses} [cssClasses] CSS classes to add.
+ * @property {RatingMenuWidgetLabels} [labels] Labels used by the default template.
+ * @property {RatingMenuWidgetTemplates} [templates] Templates to use for the widget.
+ * @property {RatingMenuWidgetTransforms} [transformData] Object that contains the functions to be applied on the data * before being used for templating. Valid keys are `body` for the body template.
+ * @property {RatingMenuWidgetCssClasses} [cssClasses] CSS classes to add.
  */
 
 /**
@@ -111,7 +111,7 @@ ratingMenu({
  * @type {WidgetFactory}
  * @devNovel RatingMenu
  * @category filter
- * @param {StarWidgetOptions} $0 RatingMenu widget options.
+ * @param {RatingMenuWidgetOptions} $0 RatingMenu widget options.
  * @return {Widget} A new RatingMenu widget instance.
  * @example
  * search.addWidget(
