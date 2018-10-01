@@ -35,18 +35,9 @@ class Selector extends Component {
 
 Selector.propTypes = {
   cssClasses: PropTypes.shape({
-    root: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]),
-    select: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]),
-    option: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.arrayOf(PropTypes.string),
-    ]),
+    root: PropTypes.string.isRequired,
+    select: PropTypes.string.isRequired,
+    option: PropTypes.string.isRequired,
   }),
   currentValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   options: PropTypes.arrayOf(
