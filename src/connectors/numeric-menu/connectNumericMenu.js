@@ -3,7 +3,7 @@ import _isFinite from 'lodash/isFinite';
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
-var customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {
+var customNumericMenu = connectNumericMenu(function renderFn(params, isFirstRendering) {
   // params = {
   //   createURL,
   //   items,
@@ -15,93 +15,93 @@ var customNumericRefinementList = connectNumericRefinementList(function renderFn
 });
 
 search.addWidget(
-  customNumericRefinementList({
+  customNumericMenu({
     attribute,
     items,
     [ transformItems ],
   })
 );
 
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericRefinementList.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectNumericMenu.html
 `;
 
 /**
- * @typedef {Object} NumericRefinementListOption
+ * @typedef {Object} NumericMenuOption
  * @property {string} name Name of the option.
  * @property {number} start Lower bound of the option (>=).
  * @property {number} end Higher bound of the option (<=).
  */
 
 /**
- * @typedef {Object} NumericRefinementListItem
+ * @typedef {Object} NumericMenuItem
  * @property {string} label Name of the option.
  * @property {string} value URL encoded of the bounds object with the form `{start, end}`. This value can be used verbatim in the webpage and can be read by `refine` directly. If you want to inspect the value, you can do `JSON.parse(window.decodeURI(value))` to get the object.
  * @property {boolean} isRefined True if the value is selected.
  */
 
 /**
- * @typedef {Object} CustomNumericRefinementListWidgetOptions
+ * @typedef {Object} CustomNumericMenuWidgetOptions
  * @property {string} attribute Name of the attribute for filtering.
- * @property {NumericRefinementListOption[]} items List of all the items.
+ * @property {NumericMenuOption[]} items List of all the items.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
 /**
- * @typedef {Object} NumericRefinementListRenderingOptions
+ * @typedef {Object} NumericMenuRenderingOptions
  * @property {function(item.value): string} createURL Creates URLs for the next state, the string is the name of the selected option.
- * @property {NumericRefinementListItem[]} items The list of available choices.
+ * @property {NumericMenuItem[]} items The list of available choices.
  * @property {boolean} hasNoResults `true` if the last search contains no result.
  * @property {function(item.value)} refine Sets the selected value and trigger a new search.
- * @property {Object} widgetParams All original `CustomNumericRefinementListWidgetOptions` forwarded to the `renderFn`.
+ * @property {Object} widgetParams All original `CustomNumericMenuWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
- * **NumericRefinementList** connector provides the logic to build a custom widget that will give the user the ability to choose a range on to refine the search results.
+ * **NumericMenu** connector provides the logic to build a custom widget that will give the user the ability to choose a range on to refine the search results.
  *
  * It provides a `refine(item)` function to refine on the selected range.
  *
  * **Requirement:** the attribute passed as `attribute` must be present in "attributes for faceting" on the Algolia dashboard or configured as attributesForFaceting via a set settings call to the Algolia API.
- * @function connectNumericRefinementList
+ * @function connectNumericMenu
  * @type {Connector}
- * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericRefinementList** widget.
+ * @param {function(NumericMenuRenderingOptions, boolean)} renderFn Rendering function for the custom **NumericMenu** widget.
  * @param {function} unmountFn Unmount function called when the widget is disposed.
- * @return {function(CustomNumericRefinementListWidgetOptions)} Re-usable widget factory for a custom **NumericRefinementList** widget.
+ * @return {function(CustomNumericMenuWidgetOptions)} Re-usable widget factory for a custom **NumericMenu** widget.
  * @example
- * // custom `renderFn` to render the custom NumericRefinementList widget
- * function renderFn(NumericRefinementListRenderingOptions, isFirstRendering) {
+ * // custom `renderFn` to render the custom NumericMenu widget
+ * function renderFn(NumericMenuRenderingOptions, isFirstRendering) {
  *   if (isFirstRendering) {
- *     NumericRefinementListRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
+ *     NumericMenuRenderingOptions.widgetParams.containerNode.html('<ul></ul>');
  *   }
  *
- *   NumericRefinementListRenderingOptions.widgetParams.containerNode
+ *   NumericMenuRenderingOptions.widgetParams.containerNode
  *     .find('li[data-refine-value]')
  *     .each(function() { $(this).off('click'); });
  *
- *   var list = NumericRefinementListRenderingOptions.items.map(function(item) {
+ *   var list = NumericMenuRenderingOptions.items.map(function(item) {
  *     return '<li data-refine-value="' + item.value + '">' +
  *       '<input type="radio"' + (item.isRefined ? ' checked' : '') + '/> ' +
  *       item.label + '</li>';
  *   });
  *
- *   NumericRefinementListRenderingOptions.widgetParams.containerNode.find('ul').html(list);
- *   NumericRefinementListRenderingOptions.widgetParams.containerNode
+ *   NumericMenuRenderingOptions.widgetParams.containerNode.find('ul').html(list);
+ *   NumericMenuRenderingOptions.widgetParams.containerNode
  *     .find('li[data-refine-value]')
  *     .each(function() {
  *       $(this).on('click', function(event) {
  *         event.preventDefault();
  *         event.stopPropagation();
- *         NumericRefinementListRenderingOptions.refine($(this).data('refine-value'));
+ *         NumericMenuRenderingOptions.refine($(this).data('refine-value'));
  *       });
  *     });
  * }
  *
- * // connect `renderFn` to NumericRefinementList logic
- * var customNumericRefinementList = instantsearch.connectors.connectNumericRefinementList(renderFn);
+ * // connect `renderFn` to NumericMenu logic
+ * var customNumericMenu = instantsearch.connectors.connectNumericMenu(renderFn);
  *
  * // mount widget on the page
  * search.addWidget(
- *   customNumericRefinementList({
- *     containerNode: $('#custom-numeric-refinement-container'),
+ *   customNumericMenu({
+ *     containerNode: $('#custom-numeric-menu-container'),
  *     attribute: 'price',
  *     items: [
  *       {name: 'All'},
@@ -113,11 +113,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  *   })
  * );
  */
-export default function connectNumericRefinementList(renderFn, unmountFn) {
+export default function connectNumericMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const { attribute, items, transformItems = items => items } = widgetParams;
+    const { attribute, items, transformItems = x => x } = widgetParams;
 
     if (!attribute || !items) {
       throw new Error(usage);

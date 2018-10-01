@@ -2,11 +2,11 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectNumericRefinementList from '../../connectors/numeric-refinement-list/connectNumericRefinementList.js';
+import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu.js';
 import defaultTemplates from './defaultTemplates.js';
 
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
-import { component } from '../../lib/suit';
+import { component } from '../../lib/suit.js';
 
 const suit = component('NumericMenu');
 
@@ -43,20 +43,20 @@ const renderer = ({
 };
 
 const usage = `Usage:
-numericRefinementList({
+numericMenu({
   container,
   attribute,
   items,
-  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],
+  [ cssClasses.{root, noRefinementRoot, list, item, selectedItem, label, labelText, radio} ],
   [ templates.{item} ],
   [ transformData.{item} ],
   [ transformItems ]
 })`;
 
 /**
- * @typedef {Object} NumericRefinementListCSSClasses
+ * @typedef {Object} NumericMenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [noRefinmentRoot] CSS class to add to the root element when no refinements.
+ * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element when no refinements.
  * @property {string|string[]} [list] CSS class to add to the list element.
  * @property {string|string[]} [item] CSS class to add to each item element.
  * @property {string|string[]} [selectedItem] CSS class to add to each selected item element.
@@ -66,30 +66,30 @@ numericRefinementList({
  */
 
 /**
- * @typedef {Object} NumericRefinementListTemplates
+ * @typedef {Object} NumericMenuTemplates
  * @property {string|function} [item] Item template, provided with `label` (the name in the configuration), `isRefined`, `url`, `value` (the setting for the filter) data properties.
  */
 
 /**
- * @typedef {Object} NumericRefinementListOption
+ * @typedef {Object} NumericMenuOption
  * @property {string} name Name of the option.
  * @property {number} [start] Low bound of the option (>=).
  * @property {number} [end] High bound of the option (<=).
  */
 
 /**
- * @typedef {Object} NumericRefinementListTransforms
+ * @typedef {Object} NumericMenuTransforms
  * @property {function({name: string, isRefined: boolean, url: string}):object} item Transforms the data for a single item to render.
  */
 
 /**
- * @typedef {Object} NumericRefinementListWidgetOptions
+ * @typedef {Object} NumericMenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {string} attribute Name of the attribute for filtering.
- * @property {NumericRefinementListOption[]} items List of all the items.
- * @property {NumericRefinementListTemplates} [templates] Templates to use for the widget.
- * @property {NumericRefinementListTransforms} [transformData] Functions to change the data passes to the templates. Only item can be set.
- * @property {NumericRefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
+ * @property {NumericMenuOption[]} items List of all the items.
+ * @property {NumericMenuTemplates} [templates] Templates to use for the widget.
+ * @property {NumericMenuTransforms} [transformData] Functions to change the data passes to the templates. Only item can be set.
+ * @property {NumericMenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -104,13 +104,13 @@ numericRefinementList({
  * The values inside this attribute must be JavaScript numbers and not strings.
  *
  * @type {WidgetFactory}
- * @devNovel NumericRefinementList
+ * @devNovel NumericMenu
  * @category filter
- * @param {NumericRefinementListWidgetOptions} $0 The NumericRefinementList widget items
- * @return {Widget} Creates a new instance of the NumericRefinementList widget.
+ * @param {NumericMenuWidgetOptions} $0 The NumericMenu widget items
+ * @return {Widget} Creates a new instance of the NumericMenu widget.
  * @example
  * search.addWidget(
- *   instantsearch.widgets.numericRefinementList({
+ *   instantsearch.widgets.numericMenu({
  *     container: '#popularity',
  *     attribute: 'popularity',
  *     items: [
@@ -125,7 +125,7 @@ numericRefinementList({
  *   })
  * );
  */
-export default function numericRefinementList({
+export default function numericMenu({
   container,
   attribute,
   items,
@@ -168,11 +168,10 @@ export default function numericRefinementList({
     templates,
   });
   try {
-    const makeNumericRefinementList = connectNumericRefinementList(
-      specializedRenderer,
-      () => unmountComponentAtNode(containerNode)
+    const makeNumericMenu = connectNumericMenu(specializedRenderer, () =>
+      unmountComponentAtNode(containerNode)
     );
-    return makeNumericRefinementList({
+    return makeNumericMenu({
       attribute,
       items,
       transformItems,

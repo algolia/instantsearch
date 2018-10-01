@@ -3,7 +3,7 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectNumericRefinementList from '../connectNumericRefinementList.js';
+import connectNumericMenu from '../connectNumericMenu.js';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
@@ -13,12 +13,12 @@ const mapOptionsToItems = ({ start, end, name: label }) => ({
   isRefined: false,
 });
 
-describe('connectNumericRefinementList', () => {
+describe('connectNumericMenu', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
       items: [
@@ -86,7 +86,7 @@ describe('connectNumericRefinementList', () => {
 
   it('Renders during init and render with transformed items', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
       items: [{ name: 'below 10', end: 10 }],
@@ -131,7 +131,7 @@ describe('connectNumericRefinementList', () => {
 
   it('Provide a function to update the refinements at each step', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
       items: [
@@ -212,7 +212,7 @@ describe('connectNumericRefinementList', () => {
 
   it('provides the correct facet values', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
       items: [
@@ -272,7 +272,7 @@ describe('connectNumericRefinementList', () => {
 
   it('provides isRefined for the currently selected value', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
       { name: 'below 10', end: 10 },
       { name: '10 - 20', start: 10, end: 20 },
@@ -325,7 +325,7 @@ describe('connectNumericRefinementList', () => {
 
   it('when the state is cleared, the "no value" value should be refined', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
       { name: 'below 10', end: 10 },
       { name: '10 - 20', start: 10, end: 20 },
@@ -389,7 +389,7 @@ describe('connectNumericRefinementList', () => {
 
   it('should set `isRefined: true` after calling `refine(item)`', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
       { name: 'below 10', end: 10 },
       { name: '10 - 20', start: 10, end: 20 },
@@ -433,7 +433,7 @@ describe('connectNumericRefinementList', () => {
 
   it('should reset page on refine()', () => {
     const rendering = jest.fn();
-    const makeWidget = connectNumericRefinementList(rendering);
+    const makeWidget = connectNumericMenu(rendering);
 
     const widget = makeWidget({
       attribute: 'numerics',
@@ -470,7 +470,7 @@ describe('connectNumericRefinementList', () => {
   describe('routing', () => {
     const getInitializedWidget = () => {
       const rendering = jest.fn();
-      const makeWidget = connectNumericRefinementList(rendering);
+      const makeWidget = connectNumericMenu(rendering);
       const widget = makeWidget({
         attribute: 'numerics',
         items: [

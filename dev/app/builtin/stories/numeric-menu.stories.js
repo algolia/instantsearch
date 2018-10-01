@@ -2,9 +2,9 @@
 
 import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
-import { wrapWithHits } from '../../utils/wrap-with-hits.js';
+import { wrapWithHits } from '../../utils/wrap-with-hits';
 
-const stories = storiesOf('NumericRefinementList');
+const stories = storiesOf('NumericMenu');
 
 export default () => {
   stories
@@ -12,7 +12,7 @@ export default () => {
       'default',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.numericRefinementList({
+          instantsearch.widgets.numericMenu({
             container,
             attribute: 'price',
             operator: 'or',
@@ -36,7 +36,7 @@ export default () => {
       'with transformed hits',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.numericRefinementList({
+          instantsearch.widgets.numericMenu({
             container,
             attribute: 'price',
             operator: 'or',

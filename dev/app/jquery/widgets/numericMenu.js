@@ -5,11 +5,7 @@ const renderFn = (
   {
     items,
     refine,
-    widgetParams: {
-      containerNode,
-      attributeName,
-      title = 'Numeric refinement list',
-    },
+    widgetParams: { containerNode, attributeName, title = 'Numeric menu' },
   },
   isFirstRendering
 ) => {
@@ -59,4 +55,4 @@ const renderFn = (
   });
 };
 
-export default instantsearch.connectors.connectNumericRefinementList(renderFn);
+export default instantsearch.connectors.connectNumericMenu(renderFn);

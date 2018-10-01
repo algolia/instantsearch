@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`connectNumericMenu routing getWidgetState should add an entry equal to the refinement (equal) 1`] = `
+Object {
+  "numericRefinementList": Object {
+    "numerics": "20",
+  },
+}
+`;
+
+exports[`connectNumericMenu routing getWidgetState should add an entry equal to the refinement (only max) 1`] = `
+Object {
+  "numericRefinementList": Object {
+    "numerics": ":20",
+  },
+}
+`;
+
+exports[`connectNumericMenu routing getWidgetState should add an entry equal to the refinement (only min) 1`] = `
+Object {
+  "numericRefinementList": Object {
+    "numerics": "10:",
+  },
+}
+`;
+
+exports[`connectNumericMenu routing getWidgetState should add an entry equal to the refinement (range) 1`] = `
+Object {
+  "numericRefinementList": Object {
+    "numerics": "10:20",
+  },
+}
+`;
+
+exports[`connectNumericMenu routing getWidgetState should not override other values in the same namespace 1`] = `
+Object {
+  "numericRefinementList": Object {
+    "numerics": "10:20",
+    "numerics-2": "27:36",
+  },
+}
+`;

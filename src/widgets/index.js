@@ -27,9 +27,7 @@ export { default as menu } from '../widgets/menu/menu.js';
 export {
   default as refinementList,
 } from '../widgets/refinement-list/refinement-list.js';
-export {
-  default as numericRefinementList,
-} from '../widgets/numeric-refinement-list/numeric-refinement-list.js';
+export { default as numericMenu } from './numeric-menu/numeric-menu';
 export {
   default as numericSelector,
 } from '../widgets/numeric-selector/numeric-selector.js';
