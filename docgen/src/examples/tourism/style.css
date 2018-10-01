@@ -5,24 +5,29 @@
 body {
   font-family: Roboto;
   font-size: 16px;
-  color: #565A5C;
+  color: #565a5c;
+}
+
+.search-filters {
+  display: flex;
 }
 
 .aisdemo--left-column {
   height: 400px;
+  flex: 2 1 0;
 }
 
 .aisdemo--right-column {
-  padding-right: 0;
-  padding-left: 0;
+  position: relative;
   height: 400px;
+  flex: 1 1 0;
 }
 
 /* HEADER
 // ------------------------- */
 .aisdemo-navbar {
   margin: 0;
-  border-bottom: 1px solid #DCE0E0;
+  border-bottom: 1px solid #dce0e0;
   position: relative;
   padding-top: 60px;
   z-index: 99;
@@ -41,14 +46,14 @@ body {
   font-size: 40px;
   line-height: 1;
   font-family: Courier;
-  color: #FF585B;
-  border-right: 1px solid #DCE0E0;
+  color: #ff585b;
+  border-right: 1px solid #dce0e0;
 }
 
 .aisdemo-navbar .fa-search {
   font-size: 30px;
   margin-left: 10px;
-  color: #DCE0E0;
+  color: #dce0e0;
 }
 
 .ais-SearchBox {
@@ -70,12 +75,12 @@ body {
 
 .ais-SearchBox-input {
   display: inline-block;
-  -webkit-transition: box-shadow .4s ease, background .4s ease;
-  transition: box-shadow .4s ease, background .4s ease;
+  -webkit-transition: box-shadow 0.4s ease, background 0.4s ease;
+  transition: box-shadow 0.4s ease, background 0.4s ease;
   border: 0;
   border-radius: 1px;
-  box-shadow: inset 0 0 0 0px #CCCCCC;
-  background: #FFFFFF;
+  box-shadow: inset 0 0 0 0px #cccccc;
+  background: #ffffff;
   padding: 0;
   width: 100%;
   height: 100%;
@@ -98,26 +103,27 @@ body {
   box-shadow: inset 0 0 0 0px #b3b3b3;
 }
 
-.ais-SearchBox-input:focus, .SearchBox__input:active {
+.ais-SearchBox-input:focus,
+.SearchBox__input:active {
   outline: 0;
-  box-shadow: inset 0 0 0 0px #D6DEE3;
-  background: #FFFFFF;
+  box-shadow: inset 0 0 0 0px #d6dee3;
+  background: #ffffff;
 }
 
 .ais-SearchBox-input::-webkit-input-placeholder {
-  color: #9AAEB5;
+  color: #9aaeb5;
 }
 
 .ais-SearchBox-input::-moz-placeholder {
-  color: #9AAEB5;
+  color: #9aaeb5;
 }
 
 .ais-SearchBox-input:-ms-input-placeholder {
-  color: #9AAEB5;
+  color: #9aaeb5;
 }
 
 .ais-SearchBox-input::placeholder {
-  color: #9AAEB5;
+  color: #9aaeb5;
 }
 
 .ais-SearchBox-submit {
@@ -135,7 +141,7 @@ body {
   margin-bottom: 0;
   padding-top: 15px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #DCE0E0;
+  border-bottom: 1px solid #dce0e0;
 }
 
 .aisdemo-filters .aisdemo-filter-title {
@@ -145,10 +151,11 @@ body {
   padding-left: 30px;
 }
 
-.aisdemo-filters .date, .aisdemo-filters #guests select {
-  font-size: .8em;
+.aisdemo-filters .date,
+.aisdemo-filters #guests select {
+  font-size: 0.8em;
   padding: 8px 10px;
-  border: 1px solid #DCE0E0;
+  border: 1px solid #dce0e0;
 }
 
 .aisdemo-filters #guests select {
@@ -171,11 +178,11 @@ body {
   top: 0;
   right: 20px;
   width: 2em;
-  padding-top: .8em;
+  padding-top: 0.8em;
   content: '\25bc';
   text-align: center;
   pointer-events: none;
-  color: #82888A;
+  color: #82888a;
 }
 
 .ais-refinement-list--count {
@@ -188,12 +195,12 @@ body {
 }
 
 .ais-refinement-list--item label {
-  font-size: .8em;
+  font-size: 0.8em;
   font-weight: normal;
   box-sizing: border-box;
   width: 100%;
   padding: 9px 10px 7px;
-  background: #EDEFED;
+  background: #edefed;
   border-radius: 4px;
 }
 
@@ -205,8 +212,8 @@ body {
   height: 1.25em;
   margin-left: 20px;
   vertical-align: top;
-  border: 1px solid #DCE0E0;
-  background: #FFFFFF;
+  border: 1px solid #dce0e0;
+  background: #ffffff;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -217,12 +224,33 @@ body {
 }
 
 .ais-refinement-list--item__active .ais-refinement-list--checkbox:before {
-  font-size: .85em;
+  font-size: 0.85em;
   position: absolute;
   width: 1.25em;
   content: '\2713';
   text-align: center;
-  color: #FF5A5F;
+  color: #ff5a5f;
+}
+
+.ais-GeoSearch-map {
+  height: 400px;
+}
+
+.ClearGeoRefinement button {
+  display: block;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  background-color: #ff585b;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+.ClearGeoRefinement button:disabled {
+  display: none;
 }
 
 /* STATS
@@ -247,11 +275,11 @@ body {
 
 .capacity-filter {
   padding: 9px 10px 7px;
-  background: #EDEFED;
+  background: #edefed;
 }
 
 .capacity-menu-wrapper {
-  font-size: .8em;
+  font-size: 0.8em;
   font-weight: normal;
   box-sizing: border-box;
   width: 100%;
@@ -260,7 +288,7 @@ body {
 
 .capacity-menu-wrapper select {
   width: 100%;
-  background: #EDEFED;
+  background: #edefed;
   height: 27px;
 }
 
@@ -268,7 +296,7 @@ body {
 // ------------------------- */
 #results {
   padding: 40px 20px;
-  background: #EDEFED;
+  background: #edefed;
 }
 
 #hits .hit .pictures-wrapper {
@@ -299,13 +327,13 @@ body {
 }
 
 #hits .hit .infos p {
-  font-size: .8em;
+  font-size: 0.8em;
   color: #949697;
 }
 
 #hits .hit .infos em {
   font-style: normal;
-  color: #FF585B;
+  color: #ff585b;
 }
 
 /* PAGINATION
@@ -329,19 +357,20 @@ body {
 
 .ais-Pagination-item .ais-Pagination-link {
   display: block;
-  color: #FF585B;
+  color: #ff585b;
   line-height: 30px;
   width: 30px;
   height: 30px;
 }
 
 .ais-Pagination-item.ais-Pagination-item--selected.ais-Pagination-item--page {
-  background: #FF585B;
+  background: #ff585b;
 }
 
-.ais-Pagination-item.ais-Pagination-item--selected.ais-Pagination-item--page .ais-Pagination-link {
-  color: #FFFFFF;
-  border-color: #FF585B;
+.ais-Pagination-item.ais-Pagination-item--selected.ais-Pagination-item--page
+  .ais-Pagination-link {
+  color: #ffffff;
+  border-color: #ff585b;
 }
 
 .ais-Pagination-item--disabled {
@@ -350,11 +379,11 @@ body {
 
 .thank-you {
   text-align: center;
-  font-size: .8em;
+  font-size: 0.8em;
 }
 
 .thank-you a {
-  color: #FF585B;
+  color: #ff585b;
 }
 
 /* RHEOSTAT RANGE
@@ -366,7 +395,7 @@ body {
 .rheostat {
   height: 24px;
   position: relative;
-  overflow: visible
+  overflow: visible;
 }
 
 .rheostat-background {
@@ -374,7 +403,7 @@ body {
   height: 2px;
   position: relative;
   top: 14px;
-  width: 100%
+  width: 100%;
 }
 
 .rheostat-values {
@@ -385,22 +414,22 @@ body {
 }
 
 .rheostat--disabled .rheostat-progress {
-  background-color: #edefed
+  background-color: #edefed;
 }
 
 .rheostat--disabled .rheostat-handle {
-  cursor: default
+  cursor: default;
 }
 
 .rheostat-progress {
-  background-color: #FF585B;
+  background-color: #ff585b;
   height: 4px;
   position: absolute;
-  top: 13px
+  top: 13px;
 }
 
 .rheostat-handle {
-  border: 1px solid #FF585B;
+  border: 1px solid #ff585b;
   background: #fff;
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
@@ -414,5 +443,5 @@ body {
   position: absolute;
   z-index: 2;
   width: 24px;
-  font-size: 0
+  font-size: 0;
 }

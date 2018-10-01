@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "postinstall": "lerna run build:cjs --scope react-instantsearch-*",
-    "start": "(cd docgen && yarn start) & yarn docs:storybook-start & wait",
+    "start": "yarn docs:start & yarn docs:storybook-start & wait",
     "build": "lerna run build --scope react-*",
     "watch": "lerna run watch --scope react-instantsearch-* --parallel",
     "release": "./scripts/release.sh",
@@ -23,6 +23,7 @@
     "test:regressions": "webpack --config test/regressions/webpack.config.js && rm -rf test/screenshots && happo run && babel-node ./test/regressions/normalize.js",
     "test:argos": "argos upload test/screenshots --token $ARGOS_TOKEN || true",
     "test:size": "bundlesize",
+    "docs:start": "cd docgen && yarn start",
     "docs:build": "(cd docgen && yarn build) && yarn docs:storybook-build-production",
     "docs:deploy-production": "NODE_ENV=production yarn docs:build && babel-node scripts/gh-pages.js",
     "docs:build-preview": "./scripts/docs:build-preview.sh",
