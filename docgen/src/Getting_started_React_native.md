@@ -10,7 +10,7 @@ navScroll: true
 
 Get your app running with React Native using React InstantSearch in 7 Easy Steps:
 
-1. install `react-instantsearch` in your [React Native](https://facebook.github.io/react-native/)  project
+1. install `react-instantsearch-native` in your [React Native](https://facebook.github.io/react-native/)  project
 2. bootstrap an app using the `<InstantSearch>` component
 3. display infinite results from Algolia
 4. add a search box

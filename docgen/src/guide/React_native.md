@@ -10,7 +10,7 @@ React InstantSearch is compatible with [react-native](https://facebook.github.io
 
 There are no widgets for now but it's very easy to do an app using our [connectors](guide/Connectors.html)
 
-You can follow our [getting started tutorial](Getting_started_React_native.html) or check out our [more advanced React Native example](https://github.com/algolia/react-instantsearch/tree/master/examples/react-native) linking `react-instantsearch` to [react-native](https://facebook.github.io/react-native/). You can also simply [launch the example on your phone](https://expo.io/@mlthuret/algolia-react-instantsearch) by using the Expo client.
+You can follow our [getting started tutorial](Getting_started_React_native.html) or check out our [more advanced React Native example](https://github.com/algolia/react-instantsearch/tree/master/examples/react-native) linking React InstantSearch to [react-native](https://facebook.github.io/react-native/). You can also simply [launch the example on your phone](https://expo.io/@mlthuret/algolia-react-instantsearch) by using the Expo client.
 
 Building a good React Native app will require your to learn those React InstantSearch concepts:
 

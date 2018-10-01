@@ -12,7 +12,7 @@ must show why the results are matching the query. That's why Algolia implements
 a powerful highlight that lets you display the matching parts of text attributes in
 the results.
 
-This feature is already packaged for you in react-instantsearch and
+This feature is already packaged for you in React InstantSearch and
 like most of its features it comes in two flavors, depending on your use case:
  - when using the DOM, widgets is the way to go
  - when using another rendering (such as react native), you will use the connector
