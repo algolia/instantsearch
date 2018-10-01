@@ -233,3 +233,30 @@ it('Does not allow a change in `routing`', () => {
 Please open a new issue: https://github.com/algolia/vue-instantsearch/issues/new?template=feature.md]
 `);
 });
+
+it('will call client.addAlgoliaAgent if present', () => {
+  const client = { addAlgoliaAgent: jest.fn() };
+
+  mount(InstantSearch, {
+    propsData: {
+      searchClient: client,
+      indexName: 'bla',
+    },
+  });
+
+  expect(client.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+  expect(client.addAlgoliaAgent.mock.calls[0][0]).toMatch(
+    /Vue InstantSearch \([a-z0-9.-]+\)/
+  );
+});
+
+it('will not call client.addAlgoliaAgent if present (so nothing to assert)', () => {
+  const client = {};
+
+  mount(InstantSearch, {
+    propsData: {
+      searchClient: client,
+      indexName: 'bla',
+    },
+  });
+});
