@@ -31,7 +31,7 @@ const usage = `Usage: numericSelector({
   container,
   attribute,
   options,
-  cssClasses.{root,select,option},
+  cssClasses.{root, select, option},
   transformItems
 })`;
 
