@@ -1244,7 +1244,7 @@ describe('GeoSearch', () => {
       expect(renderer).toHaveBeenCalledTimes(3);
     });
 
-    it('expect to update the map position from a current refinement boundingBox', () => {
+    it('expect to update the map position from the current refinement boundingBox', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -1340,7 +1340,7 @@ describe('GeoSearch', () => {
       expect(renderer).toHaveBeenCalledTimes(4);
     });
 
-    it('expect to update the map position from the an initial current refinement boundingBox', () => {
+    it('expect to update the map position from the initial current refinement boundingBox', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
