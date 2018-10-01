@@ -660,6 +660,45 @@ describe('GeoSearch', () => {
         );
         expect(lastRenderState(renderer).isPendingRefine).toBe(false);
       });
+
+      it(`expect to listen for "${eventName}" and do not trigger when refine is disabled`, () => {
+        const container = createContainer();
+        const instantSearchInstance = createFakeInstantSearch();
+        const helper = createFakeHelper();
+        const mapInstance = createFakeMapInstance();
+        const googleReference = createFakeGoogleReference({ mapInstance });
+
+        const widget = geoSearch({
+          googleReference,
+          container,
+          enableRefine: false,
+        });
+
+        widget.init({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        });
+
+        simulateMapReadyEvent(googleReference);
+
+        expect(mapInstance.addListener).toHaveBeenCalledWith(
+          eventName,
+          expect.any(Function)
+        );
+
+        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+          false
+        );
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
+
+        simulateEvent(mapInstance, eventName);
+
+        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+          false
+        );
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
+      });
     });
   });
 

@@ -124,6 +124,7 @@ const geoSearch = ({
   cssClasses: userCssClasses = {},
   builtInMarker: userBuiltInMarker = {},
   customHTMLMarker: userCustomHTMLMarker = false,
+  enableRefine = true,
   enableClearMapRefinement = true,
   enableRefineControl = true,
   container,
@@ -235,6 +236,7 @@ const geoSearch = ({
       cssClasses,
       createMarker,
       markerOptions,
+      enableRefine,
       enableClearMapRefinement,
       enableRefineControl,
     });
