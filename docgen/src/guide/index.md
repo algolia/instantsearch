@@ -17,6 +17,6 @@ essentials to advanced topics. If you'd rather jump right in with some code, see
 
 <div class="guide-nav">
     <div class="guide-nav-right">
-        Next: <a href="guide/Install.html">Install react-instantsearch →</a>
+        Next: <a href="guide/Install.html">Install React InstantSearch →</a>
     </div>
 </div>

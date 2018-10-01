@@ -49,7 +49,7 @@ This method defines exactly how the `refine` prop of widgets affects the search 
 It takes in the current props of the higher-order component, the [search state](guide/Search_state.html) of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
 
 ```jsx
-import {createConnector} from 'react-instantsearch';
+import { createConnector } from 'react-instantsearch-dom';
 
 const CoolWidget = createConnector({
   displayName: 'CoolWidget',
@@ -113,7 +113,7 @@ Every time the props or state of a widget change, all the `getSearchParameters` 
 As such, the `getSearchParameters` method allows you to describe how the state and props of a widget should affect the search parameters.
 
 ```jsx
-import {createConnector} from 'react-instantsearch';
+import { createConnector } from 'react-instantsearch-dom';
 
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine
@@ -143,7 +143,7 @@ The metadata object also allows you to declare any data that you would like to p
 The `CurrentRefinements` widget leverages this mechanism in order to allow any widget to declare the filters it has applied. If you want to add your own filter, declare a `filters` property on your widget's metadata object:
 
 ```jsx
-import {createConnector} from 'react-instantsearch';
+import { createConnector } from 'react-instantsearch-dom';
 
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters
@@ -206,7 +206,7 @@ It takes in the current props of the higher-order component, the [search state](
 object of the shape: `{facetName: string, query: string, maxFacetHits?: number}`. The default value for the `maxFacetHits` is the one set by [the API](https://www.algolia.com/doc/api-reference/api-parameters/maxFacetHits) which is `10`.
 
 ```jsx
-import {createConnector} from 'react-instantsearch';
+import { createConnector } from 'react-instantsearch-dom';
 
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters, getMetadata
@@ -227,8 +227,8 @@ It takes in the current props of the higher-order component and the searchState 
 `searchState` holds the searchState of all widgets, with the shape `{[widgetId]: widgetState}`. Stateful widgets describe the format of their searchState in their respective documentation entry.
 
 ```jsx
-import {omit} from 'lodash';
-import {createConnector} from 'react-instantsearch';
+import { omit } from 'lodash';
+import { createConnector } from 'react-instantsearch-dom';
 
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters, getMetadata
