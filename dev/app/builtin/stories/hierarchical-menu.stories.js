@@ -86,7 +86,7 @@ export default () => {
       })
     )
     .add(
-      'With show more',
+      'with show more',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
@@ -105,7 +105,7 @@ export default () => {
       })
     )
     .add(
-      'With show more (exhaustive display)',
+      'with show more (exhaustive display)',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.hierarchicalMenu({
