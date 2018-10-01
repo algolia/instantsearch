@@ -8,8 +8,6 @@ import { component } from '../../lib/suit';
 
 const suit = component('SearchBox');
 
-const KEY_SUPPRESS = 8;
-
 const renderer = ({
   containerNode,
   cssClasses,
@@ -25,8 +23,6 @@ const renderer = ({
   isFirstRendering
 ) => {
   if (isFirstRendering) {
-    const INPUT_EVENT = window.addEventListener ? 'input' : 'propertychange';
-
     const input = document.createElement('input');
     const wrappedInput = wrapInputFn(input, cssClasses);
     containerNode.appendChild(wrappedInput);
@@ -64,7 +60,7 @@ const renderer = ({
 
     // search on enter
     if (!searchAsYouType) {
-      addListener(input, INPUT_EVENT, e => {
+      addListener(input, 'input', e => {
         refine(getValue(e), false);
       });
       addListener(form, 'submit', e => {
@@ -73,17 +69,7 @@ const renderer = ({
         input.blur();
       });
     } else {
-      addListener(input, INPUT_EVENT, getInputValueAndCall(refine));
-
-      // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
-      // can be removed as soon as we remove support for it
-      if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-        addListener(
-          input,
-          'keyup',
-          ifKey(KEY_SUPPRESS, getInputValueAndCall(refine))
-        );
-      }
+      addListener(input, 'input', getInputValueAndCall(refine));
 
       addListener(form, 'submit', e => {
         e.preventDefault();
