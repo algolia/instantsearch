@@ -273,10 +273,10 @@ export default () => {
     )
   );
 
-  storiesOf('StarRating').add(
+  storiesOf('RatingMenu').add(
     'default',
     wrapWithUnmount(container =>
-      instantsearch.widgets.starRating({
+      instantsearch.widgets.ratingMenu({
         container,
         attributeName: 'rating',
         max: 5,

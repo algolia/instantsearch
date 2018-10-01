@@ -55,4 +55,4 @@ const renderFn = (
   });
 };
 
-export default instantsearch.connectors.connectStarRating(renderFn);
+export default instantsearch.connectors.connectRatingMenu(renderFn);

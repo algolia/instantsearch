@@ -5,14 +5,14 @@ import jsHelper, {
   SearchParameters,
 } from 'algoliasearch-helper';
 
-import connectStarRating from '../connectStarRating.js';
+import connectRatingMenu from '../connectRatingMenu.js';
 
-describe('connectStarRating', () => {
+describe('connectRatingMenu', () => {
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
-    const makeWidget = connectStarRating(rendering);
+    const makeWidget = connectRatingMenu(rendering);
 
     const attribute = 'grade';
     const widget = makeWidget({
@@ -103,7 +103,7 @@ describe('connectStarRating', () => {
 
   it('Provides a function to update the index at each step', () => {
     const rendering = sinon.stub();
-    const makeWidget = connectStarRating(rendering);
+    const makeWidget = connectRatingMenu(rendering);
 
     const attribute = 'grade';
     const widget = makeWidget({
@@ -206,7 +206,7 @@ describe('connectStarRating', () => {
   describe('routing', () => {
     const getInitializedWidget = (config = {}) => {
       const rendering = jest.fn();
-      const makeWidget = connectStarRating(rendering);
+      const makeWidget = connectRatingMenu(rendering);
 
       const attribute = 'grade';
       const widget = makeWidget({

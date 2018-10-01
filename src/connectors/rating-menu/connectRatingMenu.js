@@ -1,7 +1,7 @@
 import { checkRendering } from '../../lib/utils.js';
 
 const usage = `Usage:
-var customStarRating = connectStarRating(function render(params, isFirstRendering) {
+var customStarRating = connectRatingMenu(function render(params, isFirstRendering) {
   // params = {
   //   items,
   //   createURL,
@@ -17,7 +17,7 @@ search.addWidget(
     [ max=5 ],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectStarRating.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectRatingMenu.html
 `;
 
 /**
@@ -93,18 +93,18 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * }
  *
  * // connect `renderFn` to StarRating logic
- * var customStarRating = instantsearch.connectors.connectStarRating(renderFn);
+ * var customStarRating = instantsearch.connectors.connectRatingMenu(renderFn);
  *
  * // mount widget on the page
  * search.addWidget(
  *   customStarRating({
- *     containerNode: $('#custom-star-rating-container'),
+ *     containerNode: $('#custom-rating-menu-container'),
  *     attribute: 'rating',
  *     max: 5,
  *   })
  * );
  */
-export default function connectStarRating(renderFn, unmountFn) {
+export default function connectRatingMenu(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
@@ -221,9 +221,7 @@ export default function connectStarRating(renderFn, unmountFn) {
 
         if (starRatingFromURL === refinedStar) return searchParameters;
 
-        let clearedSearchParam = searchParameters.clearRefinements(
-          attribute
-        );
+        let clearedSearchParam = searchParameters.clearRefinements(attribute);
 
         if (starRatingFromURL !== undefined) {
           for (let val = Number(starRatingFromURL); val <= max; ++val) {

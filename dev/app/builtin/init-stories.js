@@ -19,7 +19,7 @@ import initRefinementListStories from './stories/refinement-list.stories';
 import initReloadStories from './stories/reload.stories';
 import initSearchBoxStories from './stories/search-box.stories';
 import initSortByStories from './stories/sort-by.stories';
-import initStarRatingStories from './stories/star-rating.stories';
+import initRatingMenuStories from './stories/rating-menu.stories';
 import initStatsStories from './stories/stats.stories';
 import initToggleStories from './stories/toggleRefinement.stories';
 import initConfigureStories from './stories/configure.stories';
@@ -47,7 +47,7 @@ export default () => {
   initSearchBoxStories();
   initSortByStories();
   initStatsStories();
-  initStarRatingStories();
+  initRatingMenuStories();
   initToggleStories();
   initConfigureStories();
 };

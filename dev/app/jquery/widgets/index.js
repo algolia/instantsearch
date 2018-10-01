@@ -10,7 +10,7 @@ export { default as numericSelector } from './numericSelector';
 export { default as numericRefinementList } from './numericRefinementList';
 export { default as searchBox } from './searchBox';
 export { default as sortBy } from './sortBy';
-export { default as starRating } from './starRating';
+export { default as ratingMenu } from './ratingMenu';
 export { default as stats } from './stats';
 export { default as toggleRefinement } from './toggleRefinement';
 export { default as infiniteHits } from './infiniteHits';

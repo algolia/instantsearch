@@ -3,12 +3,12 @@ import expect from 'expect';
 
 import jsHelper from 'algoliasearch-helper';
 
-import defaultLabels from '../../../widgets/star-rating/defaultLabels.js';
-import starRating from '../star-rating.js';
+import defaultLabels from '../../../widgets/rating-menu/defaultLabels.js';
+import ratingMenu from '../rating-menu.js';
 
 const SearchResults = jsHelper.SearchResults;
 
-describe('starRating()', () => {
+describe('ratingMenu()', () => {
   const attribute = 'anAttrName';
   let ReactDOM;
   let container;
@@ -21,10 +21,10 @@ describe('starRating()', () => {
 
   beforeEach(() => {
     ReactDOM = { render: sinon.spy() };
-    starRating.__Rewire__('render', ReactDOM.render);
+    ratingMenu.__Rewire__('render', ReactDOM.render);
 
     container = document.createElement('div');
-    widget = starRating({
+    widget = ratingMenu({
       container,
       attribute,
       cssClasses: { body: ['body', 'cx'] },
@@ -149,7 +149,7 @@ describe('starRating()', () => {
   });
 
   it('should return the right facet counts and results', () => {
-    const _widget = starRating({
+    const _widget = ratingMenu({
       container,
       attribute,
       cssClasses: { body: ['body', 'cx'] },
@@ -221,8 +221,8 @@ describe('starRating()', () => {
   });
 
   afterEach(() => {
-    starRating.__ResetDependency__('render');
-    starRating.__ResetDependency__('autoHideContainerHOC');
-    starRating.__ResetDependency__('headerFooterHOC');
+    ratingMenu.__ResetDependency__('render');
+    ratingMenu.__ResetDependency__('autoHideContainerHOC');
+    ratingMenu.__ResetDependency__('headerFooterHOC');
   });
 });

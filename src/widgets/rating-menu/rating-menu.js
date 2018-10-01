@@ -2,11 +2,11 @@ import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 
 import RefinementList from '../../components/RefinementList/RefinementList.js';
-import connectStarRating from '../../connectors/star-rating/connectStarRating.js';
+import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu.js';
 import defaultTemplates from './defaultTemplates.js';
 import defaultLabels from './defaultLabels.js';
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
-import { component } from '../../lib/suit';
+import { component } from '../../lib/suit.js';
 
 const suit = component('StarRating');
 
@@ -44,7 +44,7 @@ const renderer = ({
 };
 
 const usage = `Usage:
-starRating({
+ratingMenu({
   container,
   attribute,
   [ max=5 ],
@@ -109,13 +109,13 @@ starRating({
  * The values inside this attribute must be JavaScript numbers (not strings).
  *
  * @type {WidgetFactory}
- * @devNovel StarRating
+ * @devNovel RatingMenu
  * @category filter
- * @param {StarWidgetOptions} $0 StarRating widget options.
- * @return {Widget} A new StarRating widget instance.
+ * @param {StarWidgetOptions} $0 RatingMenu widget options.
+ * @return {Widget} A new RatingMenu widget instance.
  * @example
  * search.addWidget(
- *   instantsearch.widgets.starRating({
+ *   instantsearch.widgets.ratingMenu({
  *     container: '#stars',
  *     attribute: 'rating',
  *     max: 5,
@@ -125,7 +125,7 @@ starRating({
  *   })
  * );
  */
-export default function starRating({
+export default function ratingMenu({
   container,
   attribute,
   max = 5,
@@ -180,7 +180,7 @@ export default function starRating({
   });
 
   try {
-    const makeWidget = connectStarRating(specializedRenderer, () =>
+    const makeWidget = connectRatingMenu(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attribute, max });

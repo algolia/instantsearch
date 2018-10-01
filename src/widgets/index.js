@@ -40,7 +40,7 @@ export {
   default as rangeSlider,
 } from '../widgets/range-slider/range-slider.js';
 export { default as sortBy } from '../widgets/sort-by/sort-by.js';
-export { default as starRating } from '../widgets/star-rating/star-rating.js';
+export { default as ratingMenu } from './rating-menu/rating-menu';
 export { default as stats } from '../widgets/stats/stats.js';
 export {
   default as toggleRefinement,
