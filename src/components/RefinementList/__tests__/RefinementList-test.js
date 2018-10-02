@@ -1,10 +1,9 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import expect from 'expect';
 import sinon from 'sinon';
 import RefinementList from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
-import renderer from 'react-test-renderer';
 
 const defaultProps = {
   templateProps: {},
@@ -274,7 +273,7 @@ describe('RefinementList', () => {
     });
   });
 
-  describe('markup', () => {
+  describe('rendering', () => {
     const cssClasses = {
       root: 'root',
       noRefinementRoot: 'noRefinementRoot',
@@ -300,9 +299,9 @@ describe('RefinementList', () => {
         templateProps: {},
         toggleRefinement: () => {},
       };
-      const tree = renderer.create(<RefinementList {...props} />).toJSON();
+      const wrapper = mount(<RefinementList {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(wrapper).toMatchSnapshot();
     });
 
     it('without facets from search', () => {
@@ -312,7 +311,7 @@ describe('RefinementList', () => {
         facetValues: [],
         cssClasses,
         isFromSearch: true,
-        placeholder: 'Search',
+        searchPlaceholder: 'Search',
         searchFacetValues: x => x,
         templateProps: {
           templates: {
@@ -322,9 +321,9 @@ describe('RefinementList', () => {
         },
         toggleRefinement: () => {},
       };
-      const tree = renderer.create(<RefinementList {...props} />).toJSON();
+      const wrapper = mount(<RefinementList {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(wrapper).toMatchSnapshot();
     });
 
     it('with facets', () => {
@@ -352,9 +351,42 @@ describe('RefinementList', () => {
         toggleRefinement: () => {},
         createURL: () => {},
       };
-      const tree = renderer.create(<RefinementList {...props} />).toJSON();
+      const wrapper = mount(<RefinementList {...props} />);
 
-      expect(tree).toMatchSnapshot();
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('with facets from search', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [
+          {
+            label: 'Amazon',
+            count: 1200,
+            isRefined: false,
+          },
+          {
+            label: 'Google',
+            count: 1000,
+            isRefined: true,
+          },
+        ],
+        cssClasses,
+        isFromSearch: true,
+        searchPlaceholder: 'Search',
+        searchFacetValues: x => x,
+        templateProps: {
+          templates: {
+            item: item => item,
+          },
+        },
+        toggleRefinement: () => {},
+        createURL: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
     });
   });
 });
