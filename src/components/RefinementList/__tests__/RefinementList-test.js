@@ -356,6 +356,72 @@ describe('RefinementList', () => {
       expect(wrapper).toMatchSnapshot();
     });
 
+    it('with facets and show more', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [
+          {
+            label: 'Amazon',
+            count: 1200,
+            isRefined: false,
+          },
+          {
+            label: 'Google',
+            count: 1000,
+            isRefined: true,
+          },
+        ],
+        cssClasses,
+        showMore: true,
+        canToggleShowMore: true,
+        templateProps: {
+          templates: {
+            item: item => item,
+            'show-more-inactive': x => x,
+          },
+        },
+        toggleRefinement: () => {},
+        createURL: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+
+    it('with facets and disabled show more', () => {
+      const props = {
+        container: document.createElement('div'),
+        attribute: 'attribute',
+        facetValues: [
+          {
+            label: 'Amazon',
+            count: 1200,
+            isRefined: false,
+          },
+          {
+            label: 'Google',
+            count: 1000,
+            isRefined: true,
+          },
+        ],
+        cssClasses,
+        showMore: true,
+        canToggleShowMore: false,
+        templateProps: {
+          templates: {
+            item: item => item,
+            'show-more-inactive': x => x,
+          },
+        },
+        toggleRefinement: () => {},
+        createURL: () => {},
+      };
+      const wrapper = mount(<RefinementList {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
+    });
+
     it('with facets from search', () => {
       const props = {
         container: document.createElement('div'),
