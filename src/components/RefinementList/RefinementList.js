@@ -150,24 +150,24 @@ class RefinementList extends Component {
     });
 
     const showMoreButtonClassName = cx(this.props.cssClasses.showMore, {
-      [this.props.cssClasses.disabledShowMore]:
-        this.props.showMore === true && this.props.canToggleShowMore,
+      [this.props.cssClasses.disabledShowMore]: !(
+        this.props.showMore === true && this.props.canToggleShowMore
+      ),
     });
 
-    const showMoreButton = this.props.showMore === true &&
-      this.props.canToggleShowMore && (
-        <Template
-          rootTagName="button"
-          templateKey={`show-more-${
-            this.props.isShowingMore ? 'active' : 'inactive'
-          }`}
-          rootProps={{
-            className: showMoreButtonClassName,
-            onClick: this.props.toggleShowMore,
-          }}
-          {...this.props.templateProps}
-        />
-      );
+    const showMoreButton = this.props.showMore === true && (
+      <Template
+        rootTagName="button"
+        templateKey={`show-more-${
+          this.props.isShowingMore ? 'active' : 'inactive'
+        }`}
+        rootProps={{
+          className: showMoreButtonClassName,
+          onClick: this.props.toggleShowMore,
+        }}
+        {...this.props.templateProps}
+      />
+    );
 
     const shouldDisableSearchBox =
       this.props.searchIsAlwaysActive !== true &&
