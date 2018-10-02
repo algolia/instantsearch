@@ -18,11 +18,20 @@ const renderer = ({
   collapsible,
   cssClasses,
   containerNode,
+  showMore,
   transformData,
   templates,
   renderState,
 }) => (
-  { createURL, items, refine, instantSearchInstance },
+  {
+    createURL,
+    items,
+    refine,
+    instantSearchInstance,
+    isShowingMore,
+    toggleShowMore,
+    canToggleShowMore,
+  },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
@@ -46,6 +55,10 @@ const renderer = ({
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
+      showMore={showMore}
+      toggleShowMore={toggleShowMore}
+      isShowingMore={isShowingMore}
+      canToggleShowMore={canToggleShowMore}
     />,
     containerNode
   );
@@ -201,6 +214,8 @@ export default function hierarchicalMenu({
   autoHideContainer = true,
   templates = defaultTemplates,
   collapsible = false,
+  showMore = false,
+  showMoreLimit,
   transformData,
   transformItems,
 } = {}) {
@@ -230,6 +245,7 @@ export default function hierarchicalMenu({
     containerNode,
     transformData,
     templates,
+    showMore,
     renderState: {},
   });
 
@@ -244,6 +260,7 @@ export default function hierarchicalMenu({
       rootPath,
       showParentLevel,
       limit,
+      showMoreLimit,
       sortBy,
       transformItems,
     });

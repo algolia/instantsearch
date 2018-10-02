@@ -5,59 +5,156 @@ const SearchParameters = jsHelper.SearchParameters;
 import connectHierarchicalMenu from '../connectHierarchicalMenu.js';
 
 describe('connectHierarchicalMenu', () => {
-  it('It should compute getConfiguration() correctly', () => {
-    const rendering = jest.fn();
-    const makeWidget = connectHierarchicalMenu(rendering);
+  describe('getConfiguration', () => {
+    it('It should compute getConfiguration() correctly', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
 
-    const widget = makeWidget({ attributes: ['category', 'sub_category'] });
+      const widget = makeWidget({ attributes: ['category', 'sub_category'] });
 
-    // when there is no hierarchicalFacets into current configuration
-    {
-      const config = widget.getConfiguration({});
-      expect(config).toEqual({
-        hierarchicalFacets: [
-          {
-            attributes: ['category', 'sub_category'],
-            name: 'category',
-            rootPath: null,
-            separator: ' > ',
-            showParentLevel: true,
-          },
-        ],
-        maxValuesPerFacet: 10,
-      });
-    }
+      // when there is no hierarchicalFacets into current configuration
+      {
+        const config = widget.getConfiguration({});
+        expect(config).toEqual({
+          hierarchicalFacets: [
+            {
+              attributes: ['category', 'sub_category'],
+              name: 'category',
+              rootPath: null,
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 10,
+        });
+      }
 
-    // when there is an identical hierarchicalFacets into current configuration
-    {
-      const spy = jest.spyOn(global.console, 'warn');
-      const config = widget.getConfiguration({
-        hierarchicalFacets: [{ name: 'category' }],
-      });
-      expect(config).toEqual({});
-      expect(spy).toHaveBeenCalled();
-      spy.mockReset();
-      spy.mockRestore();
-    }
+      // when there is an identical hierarchicalFacets into current configuration
+      {
+        const spy = jest.spyOn(global.console, 'warn');
+        const config = widget.getConfiguration({
+          hierarchicalFacets: [{ name: 'category' }],
+        });
+        expect(config).toEqual({});
+        expect(spy).toHaveBeenCalled();
+        spy.mockReset();
+        spy.mockRestore();
+      }
 
-    // when there is already a different hierarchicalFacets into current configuration
-    {
-      const config = widget.getConfiguration({
-        hierarchicalFacets: [{ name: 'foo' }],
+      // when there is already a different hierarchicalFacets into current configuration
+      {
+        const config = widget.getConfiguration({
+          hierarchicalFacets: [{ name: 'foo' }],
+        });
+        expect(config).toEqual({
+          hierarchicalFacets: [
+            {
+              attributes: ['category', 'sub_category'],
+              name: 'category',
+              rootPath: null,
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 10,
+        });
+      }
+    });
+
+    it('sets the correct limit with showMore', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
+
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        showMore: true,
+        limit: 3,
+        showMoreLimit: 100,
       });
-      expect(config).toEqual({
-        hierarchicalFacets: [
-          {
-            attributes: ['category', 'sub_category'],
-            name: 'category',
-            rootPath: null,
-            separator: ' > ',
-            showParentLevel: true,
-          },
-        ],
-        maxValuesPerFacet: 10,
+
+      // when there is no other limit set
+      {
+        const config = widget.getConfiguration({});
+        expect(config).toEqual({
+          hierarchicalFacets: [
+            {
+              attributes: ['category', 'sub_category'],
+              name: 'category',
+              rootPath: null,
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 100,
+        });
+      }
+
+      // when there is a bigger already limit set
+      {
+        const config = widget.getConfiguration({
+          maxValuesPerFacet: 101,
+        });
+        expect(config).toEqual({
+          hierarchicalFacets: [
+            {
+              attributes: ['category', 'sub_category'],
+              name: 'category',
+              rootPath: null,
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 101,
+        });
+      }
+    });
+
+    it('sets the correct custom limit', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
+
+      const widget = makeWidget({
+        attributes: ['category', 'sub_category'],
+        showMore: true,
+        limit: 3,
       });
-    }
+
+      // when there is no other limit set
+      {
+        const config = widget.getConfiguration({});
+        expect(config).toEqual({
+          hierarchicalFacets: [
+            {
+              attributes: ['category', 'sub_category'],
+              name: 'category',
+              rootPath: null,
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 3,
+        });
+      }
+
+      // when there is a bigger already limit set
+      {
+        const config = widget.getConfiguration({
+          maxValuesPerFacet: 101,
+        });
+        expect(config).toEqual({
+          hierarchicalFacets: [
+            {
+              attributes: ['category', 'sub_category'],
+              name: 'category',
+              rootPath: null,
+              separator: ' > ',
+              showParentLevel: true,
+            },
+          ],
+          maxValuesPerFacet: 101,
+        });
+      }
+    });
   });
 
   it('Renders during init and render', () => {
@@ -436,6 +533,119 @@ describe('connectHierarchicalMenu', () => {
         );
         expect(searchParametersAfter).toMatchSnapshot();
       });
+    });
+  });
+
+  describe('show more', () => {
+    it('can toggle the limits', () => {
+      const rendering = jest.fn();
+      const makeWidget = connectHierarchicalMenu(rendering);
+      const widget = makeWidget({
+        attributes: ['category'],
+        limit: 2,
+        showMoreLimit: 5,
+      });
+
+      const helper = jsHelper({}, '', widget.getConfiguration({}));
+      helper.search = jest.fn();
+
+      widget.init({
+        helper,
+        state: helper.state,
+        createURL: () => '#',
+        onHistoryChange: () => {},
+      });
+
+      widget.render({
+        results: new SearchResults(helper.state, [
+          {
+            hits: [],
+            facets: {
+              category: {
+                a: 880,
+                b: 880,
+                c: 880,
+                d: 880,
+              },
+            },
+          },
+          {
+            facets: {
+              category: {
+                a: 880,
+                b: 880,
+                c: 880,
+                d: 880,
+              },
+            },
+          },
+        ]),
+        state: helper.state,
+        helper,
+        createURL: () => '#',
+      });
+
+      const { toggleShowMore } = rendering.mock.calls[1][0];
+
+      expect(rendering).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          items: [
+            {
+              label: 'a',
+              value: 'a',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+            {
+              label: 'b',
+              value: 'b',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+          ],
+        }),
+        expect.anything()
+      );
+
+      toggleShowMore();
+
+      expect(rendering).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          items: [
+            {
+              label: 'a',
+              value: 'a',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+            {
+              label: 'b',
+              value: 'b',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+            {
+              label: 'c',
+              value: 'c',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+            {
+              label: 'd',
+              value: 'd',
+              count: 880,
+              isRefined: false,
+              data: null,
+            },
+          ],
+        }),
+        expect.anything()
+      );
     });
   });
 });

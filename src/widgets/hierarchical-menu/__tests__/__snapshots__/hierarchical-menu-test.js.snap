@@ -2,6 +2,7 @@
 
 exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
 <HeaderFooter-AutoHide
+  canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -30,13 +31,17 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
       },
     ]
   }
+  isShowingMore={false}
   shouldAutoHideContainer={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
         "footer": "",
         "header": "",
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "show-more-active": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show less</button>",
+        "show-more-inactive": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show more</button>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -44,15 +49,19 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
         "footer": false,
         "header": false,
         "item": false,
+        "show-more-active": false,
+        "show-more-inactive": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render has a templates option 1`] = `
 <HeaderFooter-AutoHide
+  canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -81,13 +90,17 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
       },
     ]
   }
+  isShowingMore={false}
   shouldAutoHideContainer={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
         "footer": "footer2",
         "header": "header2",
         "item": "item2",
+        "show-more-active": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show less</button>",
+        "show-more-inactive": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show more</button>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -95,15 +108,19 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
         "footer": true,
         "header": true,
         "item": true,
+        "show-more-active": false,
+        "show-more-inactive": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render has a transformItems options 1`] = `
 <HeaderFooter-AutoHide
+  canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -134,13 +151,17 @@ exports[`hierarchicalMenu() render has a transformItems options 1`] = `
       },
     ]
   }
+  isShowingMore={false}
   shouldAutoHideContainer={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
         "footer": "",
         "header": "",
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "show-more-active": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show less</button>",
+        "show-more-inactive": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show more</button>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -148,15 +169,19 @@ exports[`hierarchicalMenu() render has a transformItems options 1`] = `
         "footer": false,
         "header": false,
         "item": false,
+        "show-more-active": false,
+        "show-more-inactive": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render sets facetValues to empty array when no results 1`] = `
 <HeaderFooter-AutoHide
+  canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -174,13 +199,17 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
     }
   }
   facetValues={Array []}
+  isShowingMore={false}
   shouldAutoHideContainer={true}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
         "footer": "",
         "header": "",
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "show-more-active": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show less</button>",
+        "show-more-inactive": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show more</button>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -188,15 +217,19 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
         "footer": false,
         "header": false,
         "item": false,
+        "show-more-active": false,
+        "show-more-inactive": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no results 1`] = `
 <HeaderFooter-AutoHide
+  canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -214,13 +247,17 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
     }
   }
   facetValues={Array []}
+  isShowingMore={false}
   shouldAutoHideContainer={true}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
         "footer": "",
         "header": "",
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "show-more-active": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show less</button>",
+        "show-more-inactive": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show more</button>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -228,15 +265,19 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
         "footer": false,
         "header": false,
         "item": false,
+        "show-more-active": false,
+        "show-more-inactive": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;
 
 exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
 <HeaderFooter-AutoHide
+  canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -265,13 +306,17 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
       },
     ]
   }
+  isShowingMore={false}
   shouldAutoHideContainer={false}
+  showMore={false}
   templateProps={
     Object {
       "templates": Object {
         "footer": "",
         "header": "",
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{label}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "show-more-active": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show less</button>",
+        "show-more-inactive": "<button class=\\"ais-HierarchicalMenu-showMore\\">Show more</button>",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -279,9 +324,12 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
         "footer": false,
         "header": false,
         "item": false,
+        "show-more-active": false,
+        "show-more-inactive": false,
       },
     }
   }
   toggleRefinement={[Function]}
+  toggleShowMore={[Function]}
 />
 `;

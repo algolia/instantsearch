@@ -86,6 +86,44 @@ export default () => {
       })
     )
     .add(
+      'with show more',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+              'hierarchicalCategories.lvl3',
+            ],
+            showMore: true,
+            limit: 3,
+            showMoreLimit: 10,
+          })
+        );
+      })
+    )
+    .add(
+      'with show more (exhaustive display)',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.hierarchicalMenu({
+            container,
+            attributes: [
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+              'hierarchicalCategories.lvl3',
+            ],
+            showMore: true,
+            limit: 200,
+            showMoreLimit: 1000,
+          })
+        );
+      })
+    )
+    .add(
       'with transformed items',
       wrapWithHits(container => {
         window.search.addWidget(

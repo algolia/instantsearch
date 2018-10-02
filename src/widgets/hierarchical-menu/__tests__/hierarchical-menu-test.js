@@ -1,4 +1,6 @@
 import hierarchicalMenu from '../hierarchical-menu';
+import jsHelper from 'algoliasearch-helper';
+const SearchParameters = jsHelper.SearchParameters;
 
 describe('hierarchicalMenu()', () => {
   let container;
@@ -143,9 +145,8 @@ describe('hierarchicalMenu()', () => {
         toggleRefinement: jest.fn().mockReturnThis(),
         search: jest.fn(),
       };
-      state = {
-        toggleRefinement: jest.fn(),
-      };
+      state = new SearchParameters();
+      state.toggleRefinement = jest.fn();
       options = { container, attributes };
       createURL = () => '#';
     });
