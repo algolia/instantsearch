@@ -1,12 +1,9 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb';
 import connectBreadcrumb from '../../connectors/breadcrumb/connectBreadcrumb';
 import defaultTemplates from './defaultTemplates.js';
-
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils';
-
 import { component } from '../../lib/suit';
 
 const suit = component('Breadcrumb');
@@ -50,7 +47,7 @@ const usage = `Usage:
 breadcrumb({
   container,
   attributes,
-  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link}={} ],
+  [ cssClasses.{root, noRefinement, list, item, selectedItem, separator, link} ],
   [ templates.{home, separator}]
   [ transformData.{item} ],
   [ transformItems ],
@@ -192,7 +189,7 @@ export default function breadcrumb({
       unmountComponentAtNode(containerNode)
     );
     return makeBreadcrumb({ attributes, rootPath, transformItems });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }
