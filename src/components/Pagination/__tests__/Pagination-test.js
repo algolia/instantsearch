@@ -1,8 +1,7 @@
 import React from 'react';
-import sinon from 'sinon';
+import { mount } from 'enzyme';
 import Pagination from '../Pagination';
 import Paginator from '../../../connectors/pagination/Paginator';
-import renderer from 'react-test-renderer';
 
 describe('Pagination', () => {
   const pager = new Paginator({
@@ -38,76 +37,70 @@ describe('Pagination', () => {
   };
 
   it('should render five elements', () => {
-    const tree = renderer.create(<Pagination {...defaultProps} />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(<Pagination {...defaultProps} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should display the first/last link', () => {
-    const tree = renderer
-      .create(<Pagination {...defaultProps} showFirst showLast />)
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(<Pagination {...defaultProps} showFirst showLast />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should disable last page if already on it', () => {
-    const tree = renderer
-      .create(
-        <Pagination
-          {...defaultProps}
-          showFirst
-          showLast
-          showPrevious
-          showNext
-          pages={[13, 14, 15, 16, 17, 18, 19]}
-          currentPage={19}
-          isFirstPage={false}
-          isLastPage={true}
-        />
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(
+      <Pagination
+        {...defaultProps}
+        showFirst
+        showLast
+        showPrevious
+        showNext
+        pages={[13, 14, 15, 16, 17, 18, 19]}
+        currentPage={19}
+        isFirstPage={false}
+        isLastPage={true}
+      />
+    );
+
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should handle special clicks', () => {
     const props = {
-      setCurrentPage: sinon.spy(),
+      setCurrentPage: jest.fn(),
     };
-    const preventDefault = sinon.spy();
+    const preventDefault = jest.fn();
     const component = new Pagination(props);
     ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach(e => {
       const event = { preventDefault };
       event[e] = true;
       component.handleClick(42, event);
-      expect(props.setCurrentPage.called).toBe(
-        false,
-        'setCurrentPage never called'
-      );
-      expect(preventDefault.called).toBe(false, 'preventDefault never called');
+
+      expect(props.setCurrentPage).toHaveBeenCalledTimes(0);
+      expect(preventDefault).toHaveBeenCalledTimes(0);
     });
     component.handleClick(42, { preventDefault });
-    expect(props.setCurrentPage.calledOnce).toBe(
-      true,
-      'setCurrentPage called once'
-    );
-    expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
+
+    expect(props.setCurrentPage).toHaveBeenCalledTimes(1);
+    expect(preventDefault).toHaveBeenCalledTimes(1);
   });
 
   it('should have all buttons disabled if there are no results', () => {
-    const tree = renderer
-      .create(
-        <Pagination
-          {...defaultProps}
-          showFirst
-          showLast
-          showPrevious
-          showNext
-          currentPage={0}
-          nbHits={0}
-          nbPages={0}
-          pages={[0]}
-        />
-      )
-      .toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(
+      <Pagination
+        {...defaultProps}
+        showFirst
+        showLast
+        showPrevious
+        showNext
+        currentPage={0}
+        nbHits={0}
+        nbPages={0}
+        pages={[0]}
+      />
+    );
+
+    expect(wrapper).toMatchSnapshot();
   });
 });

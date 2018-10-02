@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-
+import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 
 class PaginationLink extends Component {
@@ -48,9 +47,9 @@ PaginationLink.propTypes = {
   ariaLabel: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     .isRequired,
   cssClasses: PropTypes.shape({
-    item: PropTypes.string,
-    link: PropTypes.string,
-  }),
+    item: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+  }).isRequired,
   handleClick: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool,
   label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,

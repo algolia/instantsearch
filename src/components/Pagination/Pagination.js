@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
+import PropTypes from 'prop-types';
 import defaultsDeep from 'lodash/defaultsDeep';
 import cx from 'classnames';
 
@@ -23,7 +23,7 @@ class Pagination extends Component {
   }) {
     const cssClasses = {
       item: cx(this.props.cssClasses.item, additionalClassName),
-      link: cx(this.props.cssClasses.link),
+      link: this.props.cssClasses.link,
     };
 
     if (isDisabled) {
@@ -122,7 +122,7 @@ class Pagination extends Component {
           [this.props.cssClasses.noRefinementRoot]: this.props.isFirstPage,
         })}
       >
-        <ul className={cx(this.props.cssClasses.list)}>
+        <ul className={this.props.cssClasses.list}>
           {this.props.showFirst && this.firstPageLink(this.props)}
           {this.props.showPrevious && this.previousPageLink(this.props)}
           {this.pages(this.props)}
@@ -137,26 +137,26 @@ class Pagination extends Component {
 Pagination.propTypes = {
   createURL: PropTypes.func,
   cssClasses: PropTypes.shape({
-    root: PropTypes.string,
-    noRefinementRoot: PropTypes.string,
-    list: PropTypes.string,
-    item: PropTypes.string,
-    firstPageItem: PropTypes.string,
-    lastPageItem: PropTypes.string,
-    previousPageItem: PropTypes.string,
-    nextPageItem: PropTypes.string,
-    pageItem: PropTypes.string,
-    selectedItem: PropTypes.string,
-    disabledItem: PropTypes.string,
-    link: PropTypes.string,
-  }),
+    root: PropTypes.string.isRequired,
+    noRefinementRoot: PropTypes.string.isRequired,
+    list: PropTypes.string.isRequired,
+    item: PropTypes.string.isRequired,
+    firstPageItem: PropTypes.string.isRequired,
+    lastPageItem: PropTypes.string.isRequired,
+    previousPageItem: PropTypes.string.isRequired,
+    nextPageItem: PropTypes.string.isRequired,
+    pageItem: PropTypes.string.isRequired,
+    selectedItem: PropTypes.string.isRequired,
+    disabledItem: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+  }).isRequired,
   currentPage: PropTypes.number,
   labels: PropTypes.shape({
-    first: PropTypes.string,
-    last: PropTypes.string,
-    next: PropTypes.string,
-    previous: PropTypes.string,
-  }),
+    first: PropTypes.string.isRequired,
+    last: PropTypes.string.isRequired,
+    next: PropTypes.string.isRequired,
+    previous: PropTypes.string.isRequired,
+  }).isRequired,
   nbHits: PropTypes.number,
   nbPages: PropTypes.number,
   pages: PropTypes.arrayOf(PropTypes.number),
