@@ -77,11 +77,6 @@ toggleRefinement({
  */
 
 /**
- * @typedef {Object} ToggleWidgetCollapsibleOption
- * @property {boolean} collapsed If set to true, the widget will be collapsed at first rendering.
- */
-
-/**
  * @typedef {Object} ToggleWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").

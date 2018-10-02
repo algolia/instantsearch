@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'preact-compat';
 import PropTypes from 'prop-types';
 import Template from './Template.js';
 
@@ -35,7 +35,7 @@ ToggleRefinement.propTypes = {
     label: PropTypes.string,
     checkbox: PropTypes.string,
     labelText: PropTypes.string,
-  }),
+  }).isRequired,
   templateProps: PropTypes.object,
 };
 
