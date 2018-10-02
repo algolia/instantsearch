@@ -7250,10 +7250,10 @@ eslint-plugin-import@2.14.0:
     read-pkg-up "^2.0.0"
     resolve "^1.6.0"
 
-eslint-plugin-jest@21.24.0:
-  version "21.24.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.24.0.tgz#4d194e1b6b4c8e5042de17399850ceddf82e25a1"
-  integrity sha512-+sX3LymNWryxVG0kKhwdRCZo2FUHkC/hrhgFhoJ2phNzFNb3Kb4FGinXxkqQy16rUVVcZFhuXCaE8T5DtzPKNg==
+eslint-plugin-jest@21.24.1:
+  version "21.24.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-21.24.1.tgz#aaf3c34e816f07add83d1e9c20696fdc31fac8dc"
+  integrity sha512-+lJ6nvwJtDRQtTumCs/9gMuteiopArpHJbRbWqPaScCzlhTu1pEilWTUlTgDEtY7GOx7FdOMD3BO/mdxFb4yDg==
 
 eslint-plugin-prettier@3.0.0:
   version "3.0.0"
