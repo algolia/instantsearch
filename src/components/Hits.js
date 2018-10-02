@@ -1,28 +1,24 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
 import map from 'lodash/map';
 import Template from './Template.js';
-import cx from 'classnames';
 
 class Hits extends Component {
   renderResults() {
-    const renderedHits = map(this.props.hits, (hit, position) => {
-      const data = {
-        ...hit,
-        __hitIndex: position,
-      };
-
-      return (
-        <Template
-          rootTagName="li"
-          data={data}
-          key={data.objectID}
-          rootProps={{ className: this.props.cssClasses.item }}
-          templateKey="item"
-          {...this.props.templateProps}
-        />
-      );
-    });
+    const renderedHits = map(this.props.hits, (hit, position) => (
+      <Template
+        {...this.props.templateProps}
+        templateKey="item"
+        rootTagName="li"
+        rootProps={{ className: this.props.cssClasses.item }}
+        key={hit.objectID}
+        data={{
+          ...hit,
+          __hitIndex: position,
+        }}
+      />
+    ));
 
     return (
       <div className={this.props.cssClasses.root}>
@@ -39,10 +35,10 @@ class Hits extends Component {
 
     return (
       <Template
-        data={this.props.results}
-        rootProps={{ className }}
-        templateKey="empty"
         {...this.props.templateProps}
+        templateKey="empty"
+        rootProps={{ className }}
+        data={this.props.results}
       />
     );
   }
@@ -60,11 +56,11 @@ class Hits extends Component {
 
 Hits.propTypes = {
   cssClasses: PropTypes.shape({
-    root: PropTypes.string,
-    emptyRoot: PropTypes.string,
-    item: PropTypes.string,
-    list: PropTypes.string,
-  }),
+    root: PropTypes.string.isRequired,
+    emptyRoot: PropTypes.string.isRequired,
+    item: PropTypes.string.isRequired,
+    list: PropTypes.string.isRequired,
+  }).isRequired,
   hits: PropTypes.array,
   results: PropTypes.object,
   templateProps: PropTypes.object.isRequired,
