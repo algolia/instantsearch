@@ -1,44 +1,40 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'preact-compat';
-import map from 'lodash/map';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
+import map from 'lodash/map';
 import Template from './Template.js';
 
 class InfiniteHits extends Component {
   renderResults() {
-    const renderedHits = map(this.props.hits, (hit, position) => {
-      const data = {
-        ...hit,
-        __hitIndex: position,
-      };
+    const renderedHits = map(this.props.hits, (hit, position) => (
+      <Template
+        {...this.props.templateProps}
+        templateKey="item"
+        rootTagName="li"
+        rootProps={{ className: this.props.cssClasses.item }}
+        key={hit.objectID}
+        data={{
+          ...hit,
+          __hitIndex: position,
+        }}
+      />
+    ));
 
-      return (
-        <Template
-          rootTagName="li"
-          data={data}
-          key={data.objectID}
-          rootProps={{ className: cx(this.props.cssClasses.item) }}
-          templateKey="item"
-          {...this.props.templateProps}
-        />
-      );
-    });
-
-    return <ol className={cx(this.props.cssClasses.list)}>{renderedHits}</ol>;
+    return <ol className={this.props.cssClasses.list}>{renderedHits}</ol>;
   }
 
   renderEmpty() {
     return (
       <Template
-        data={this.props.results}
+        {...this.props.templateProps}
+        templateKey="empty"
         rootProps={{
           className: cx(
             this.props.cssClasses.root,
             this.props.cssClasses.emptyRoot
           ),
         }}
-        templateKey="empty"
-        {...this.props.templateProps}
+        data={this.props.results}
       />
     );
   }
@@ -59,7 +55,7 @@ class InfiniteHits extends Component {
     const hitsList = this.renderResults();
 
     const loadMoreButton = isLastPage ? (
-      <button disabled className={cx(cssClasses.loadMore)}>
+      <button disabled className={cssClasses.loadMore}>
         {loadMoreLabel}
       </button>
     ) : (
@@ -72,7 +68,7 @@ class InfiniteHits extends Component {
     );
 
     return (
-      <div className={cx(cssClasses.root)}>
+      <div className={cssClasses.root}>
         {hitsList}
 
         {loadMoreButton}
@@ -83,13 +79,13 @@ class InfiniteHits extends Component {
 
 InfiniteHits.propTypes = {
   cssClasses: PropTypes.shape({
-    root: PropTypes.string,
-    emptyRoot: PropTypes.string,
-    list: PropTypes.string,
-    item: PropTypes.string,
-    loadMore: PropTypes.string,
-    disabledLoadMore: PropTypes.string,
-  }),
+    root: PropTypes.string.isRequired,
+    emptyRoot: PropTypes.string.isRequired,
+    list: PropTypes.string.isRequired,
+    item: PropTypes.string.isRequired,
+    loadMore: PropTypes.string.isRequired,
+    disabledLoadMore: PropTypes.string.isRequired,
+  }).isRequired,
   hits: PropTypes.array,
   results: PropTypes.object,
   showMore: PropTypes.func,
