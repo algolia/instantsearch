@@ -265,11 +265,6 @@ function getValue(e) {
   return (e.currentTarget ? e.currentTarget : e.srcElement).value;
 }
 
-function ifKey(expectedKeyCode, func) {
-  return actualEvent =>
-    actualEvent.keyCode === expectedKeyCode && func(actualEvent);
-}
-
 function getInputValueAndCall(func) {
   return actualEvent => func(getValue(actualEvent));
 }
