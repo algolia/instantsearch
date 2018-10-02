@@ -1,6 +1,6 @@
 import React from 'react';
 import Selector from '../Selector';
-import renderer from 'react-test-renderer';
+import { mount } from 'enzyme';
 
 describe('Selector', () => {
   it('should render <Selector/> with strings', () => {
@@ -17,8 +17,9 @@ describe('Selector', () => {
         { value: 'index-b', label: 'Index B' },
       ],
     };
-    const tree = renderer.create(<Selector {...props} />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(<Selector {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should render <Selector/> with numbers', () => {
@@ -35,7 +36,8 @@ describe('Selector', () => {
         { value: 20, label: '20 results per page' },
       ],
     };
-    const tree = renderer.create(<Selector {...props} />).toJSON();
-    expect(tree).toMatchSnapshot();
+    const wrapper = mount(<Selector {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
   });
 });
