@@ -241,6 +241,172 @@ exports[`RefinementList rendering with facets and show more 1`] = `
 </div>
 `;
 
+exports[`RefinementList rendering with facets and disabled show more 1`] = `
+<div
+  className="root"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1200,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": false,
+              "label": "Amazon",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+    <li
+      className="item selectedItem"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1000,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": true,
+              "label": "Google",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+  </ul>
+  <button
+    className="showMore disabledShowMore"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": Object {},
+      }
+    }
+  />
+</div>
+`;
+
+exports[`RefinementList rendering with facets and show more 1`] = `
+<div
+  className="root"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1200,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": false,
+              "label": "Amazon",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+    <li
+      className="item selectedItem"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1000,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": true,
+              "label": "Google",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+  </ul>
+  <button
+    className="showMore"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": Object {},
+      }
+    }
+  />
+</div>
+`;
+
 exports[`RefinementList rendering with facets from search 1`] = `
 <div
   className="root"
