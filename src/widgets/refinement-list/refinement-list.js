@@ -154,9 +154,13 @@ refinementList({
  * @property {string|string[]} [showMore] CSS class to add to the show more element
  * @property {string|string[]} [disabledShowMore] CSS class to add to the disabledshow more element
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
 =======
 >>>>>>> feat(refinement-list): apply new options, markup and css
+=======
+ * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
+>>>>>>> feat: apply changes
  */
 
 /**

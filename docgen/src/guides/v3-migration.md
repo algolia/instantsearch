@@ -150,7 +150,11 @@ With the redo button:
 | `escapeHits`    | `escapeHTML`    |
 | `showMoreLabel` | `loadMoreLabel` |
 
+<<<<<<< HEAD
 * `escapeHTML` becomes `true` by default.
+=======
+* `escapeHTML` defaults to `true`
+>>>>>>> feat: apply changes
 * `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
@@ -230,7 +234,11 @@ With the redo button:
 | ------------ | ------------ |
 | `escapeHits` | `escapeHTML` |
 
+<<<<<<< HEAD
 `escapeHTML` becomes `true` by default.
+=======
+* `escapeHTML` defaults to `true`
+>>>>>>> feat: apply changes
 
 #### CSS classes
 
