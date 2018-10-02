@@ -153,6 +153,7 @@ refinementList({
  * @property {string|string[]} [labelText] CSS class to add to each label text element.
  * @property {string|string[]} [showMore] CSS class to add to the show more element
  * @property {string|string[]} [disabledShowMore] CSS class to add to the disabledshow more element
+ * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
  */
 
 /**

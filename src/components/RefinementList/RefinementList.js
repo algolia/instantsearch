@@ -149,16 +149,13 @@ class RefinementList extends Component {
         .cssClasses.depth,
     });
 
-    const showMoreButtonClassName =
-      this.props.showMore === true && this.props.canToggleShowMore
-        ? this.props.cssClasses.showMore
-        : cx(
-            this.props.cssClasses.showMore,
-            this.props.cssClasses.disabledShowMore
-          );
+    const showMoreButtonClassName = cx(this.props.cssClasses.showMore, {
+      [this.props.cssClasses.disabledShowMore]:
+        this.props.showMore === true && this.props.canToggleShowMore,
+    });
 
-    const showMoreButton =
-      this.props.showMore === true ? (
+    const showMoreButton = this.props.showMore === true &&
+      this.props.canToggleShowMore && (
         <Template
           rootTagName="button"
           templateKey={`show-more-${
@@ -170,12 +167,13 @@ class RefinementList extends Component {
           }}
           {...this.props.templateProps}
         />
-      ) : null;
+      );
 
     const shouldDisableSearchBox =
       this.props.searchIsAlwaysActive !== true &&
       !(this.props.isFromSearch || !this.props.hasExhaustiveItems);
-    const searchBox = this.props.searchFacetValues ? (
+
+    const searchBox = this.props.searchFacetValues && (
       <div className={this.props.cssClasses.searchBox}>
         <SearchBox
           ref={i => {
@@ -187,25 +185,24 @@ class RefinementList extends Component {
           disabled={shouldDisableSearchBox}
         />
       </div>
-    ) : null;
+    );
 
-    const facetValues =
-      this.props.facetValues && this.props.facetValues.length > 0 ? (
+    const facetValues = this.props.facetValues &&
+      this.props.facetValues.length > 0 && (
         <ul className={cssClassList}>
           {this.props.facetValues.map(this._generateFacetItem, this)}
         </ul>
-      ) : null;
+      );
 
-    const noResults =
-      this.props.searchFacetValues &&
+    const noResults = this.props.searchFacetValues &&
       this.props.isFromSearch &&
-      this.props.facetValues.length === 0 ? (
+      this.props.facetValues.length === 0 && (
         <Template
           templateKey="noResults"
           rootProps={{ className: this.props.cssClasses.noResults }}
           {...this.props.templateProps}
         />
-      ) : null;
+      );
 
     return (
       <div

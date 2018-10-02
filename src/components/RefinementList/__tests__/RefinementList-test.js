@@ -312,7 +312,8 @@ describe('RefinementList', () => {
         facetValues: [],
         cssClasses,
         isFromSearch: true,
-        searchForFacetValues: x => x,
+        placeholder: 'Search',
+        searchFacetValues: x => x,
         templateProps: {
           templates: {
             item: item => item,
