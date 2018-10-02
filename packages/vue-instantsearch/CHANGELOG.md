@@ -1,3 +1,13 @@
+<a name="2.0.0-alpha.3"></a>
+# [2.0.0-alpha.3](https://github.com/algolia/vue-instantsearch/compare/v2.0.0-alpha.2...v2.0.0-alpha.3) (2018-10-02)
+
+
+### Features
+
+* **InstantSearch:** call addAlgoliaAgent if possible ([#537](https://github.com/algolia/vue-instantsearch/issues/537)) ([0f3079b](https://github.com/algolia/vue-instantsearch/commit/0f3079b))
+
+
+
 <a name="1.5.0"></a>
 
 # [1.5.0](https://github.com/algolia/vue-instantsearch/compare/v1.4.0...v1.5.0) (2018-03-02)
