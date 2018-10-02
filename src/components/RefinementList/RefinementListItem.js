@@ -45,11 +45,6 @@ RefinementListItem.propTypes = {
   templateProps: PropTypes.object.isRequired,
   cssClasses: PropTypes.shape({
     item: PropTypes.string,
-    selectedItem: PropTypes.string,
-    label: PropTypes.string,
-    checkbox: PropTypes.string,
-    labelText: PropTypes.string,
-    count: PropTypes.string,
   }),
 };
 
