@@ -944,7 +944,9 @@ describe('utils.aroundLatLngToPosition', () => {
   it.each([['10a,12'], ['10.    12']])(
     'expect to throw an error with: %j',
     input => {
-      expect(() => utils.aroundLatLngToPosition(input)).toThrow();
+      expect(() => utils.aroundLatLngToPosition(input)).toThrowError(
+        `Invalid value for "aroundLatLng" parameter: "${input}"`
+      );
     }
   );
 });
@@ -1001,16 +1003,19 @@ describe('utils.insideBoundingBoxToBoundingBox', () => {
     }
   );
 
-  it.each([
-    [''],
-    ['10'],
-    ['10,12'],
-    ['10,12,12'],
-    ['10.  15,12,12'],
-    [[[]]],
-    [[]],
-  ])('expect to throw an error with: %j', input => {
-    expect(() => utils.insideBoundingBoxToBoundingBox(input)).toThrow();
+  it.each([[''], ['10'], ['10,12'], ['10,12,12'], ['10.  15,12,12']])(
+    'expect to throw an error with: %j',
+    input => {
+      expect(() => utils.insideBoundingBoxToBoundingBox(input)).toThrowError(
+        `Invalid value for "insideBoundingBox" parameter: "${input}"`
+      );
+    }
+  );
+
+  it.each([[[]], [[[]]]])('expect to throw an error with: %j', input => {
+    expect(() => utils.insideBoundingBoxToBoundingBox(input)).toThrowError(
+      `Invalid value for "insideBoundingBox" parameter: [${input}]`
+    );
   });
 });
 
