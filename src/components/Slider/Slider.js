@@ -1,10 +1,10 @@
+import React, { Component } from 'preact-compat';
+import Rheostat from 'preact-rheostat';
+import PropTypes from 'prop-types';
+import cx from 'classnames';
 import times from 'lodash/times';
 import range from 'lodash/range';
 import has from 'lodash/has';
-import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
-import Rheostat from 'preact-rheostat';
-import cx from 'classnames';
 
 import Pit from './Pit.js';
 
