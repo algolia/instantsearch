@@ -241,7 +241,7 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
   range: {
     ageInYears: '2-10'
   },
-  starRating: {
+  ratingMenu: {
     rating: 3
   },
   toggle: {
