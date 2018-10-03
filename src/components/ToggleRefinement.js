@@ -31,10 +31,10 @@ ToggleRefinement.propTypes = {
   currentRefinement: PropTypes.object.isRequired,
   refine: PropTypes.func.isRequired,
   cssClasses: PropTypes.shape({
-    root: PropTypes.string,
-    label: PropTypes.string,
-    checkbox: PropTypes.string,
-    labelText: PropTypes.string,
+    root: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    checkbox: PropTypes.string.isRequired,
+    labelText: PropTypes.string.isRequired,
   }).isRequired,
   templateProps: PropTypes.object,
 };

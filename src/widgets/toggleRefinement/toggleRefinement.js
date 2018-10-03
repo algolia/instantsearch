@@ -1,12 +1,9 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
-import defaultTemplates from './defaultTemplates.js';
 import ToggleRefinement from '../../components/ToggleRefinement.js';
 import connectToggleRefinement from '../../connectors/toggleRefinement/connectToggleRefinement.js';
-
+import defaultTemplates from './defaultTemplates.js';
 import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
-
 import { component } from '../../lib/suit.js';
 
 const suit = component('ToggleRefinement');
@@ -28,6 +25,7 @@ const renderer = ({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
+
     return;
   }
 
@@ -47,8 +45,8 @@ const usage = `Usage:
 toggleRefinement({
   container,
   attribute,
-  [ on=true ],
-  [ off=undefined ],
+  [ on = true ],
+  [ off = undefined ],
   [ cssClasses.{root, label, labelText, checkbox} ],
   [ templates.{labelText} ],
   [ transformData.{labelText} ],
@@ -157,7 +155,7 @@ export default function toggleRefinement({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attribute, on, off });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }
