@@ -184,7 +184,7 @@ export default () => {
     wrapWithUnmount(container =>
       instantsearch.widgets.numericMenu({
         container,
-        attributeName: 'price',
+        attribute: 'price',
         operator: 'or',
         options: [
           { name: 'All' },
