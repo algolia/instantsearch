@@ -38,7 +38,7 @@ Selector.propTypes = {
     root: PropTypes.string.isRequired,
     select: PropTypes.string.isRequired,
     option: PropTypes.string.isRequired,
-  }),
+  }).isRequired,
   currentValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   options: PropTypes.arrayOf(
     PropTypes.shape({

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Selector should render <Selector/> with numbers 1`] = `
+exports[`Selector should render <Selector /> with numbers 1`] = `
 <select
   className="custom-select"
   onChange={[Function]}
@@ -23,7 +23,7 @@ exports[`Selector should render <Selector/> with numbers 1`] = `
 </select>
 `;
 
-exports[`Selector should render <Selector/> with strings 1`] = `
+exports[`Selector should render <Selector /> with strings 1`] = `
 <select
   className="custom-select"
   onChange={[Function]}

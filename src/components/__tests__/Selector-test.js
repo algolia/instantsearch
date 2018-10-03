@@ -1,9 +1,9 @@
 import React from 'react';
-import Selector from '../Selector';
 import { mount } from 'enzyme';
+import Selector from '../Selector';
 
 describe('Selector', () => {
-  it('should render <Selector/> with strings', () => {
+  it('should render <Selector /> with strings', () => {
     const props = {
       currentValue: 'index-a',
       setValue: () => {},
@@ -22,7 +22,7 @@ describe('Selector', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('should render <Selector/> with numbers', () => {
+  it('should render <Selector /> with numbers', () => {
     const props = {
       currentValue: 10,
       setValue: () => {},

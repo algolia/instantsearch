@@ -1,6 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import Selector from '../../components/Selector.js';
 import connectNumericSelector from '../../connectors/numeric-selector/connectNumericSelector.js';
 import { getContainerNode } from '../../lib/utils.js';
@@ -125,7 +124,7 @@ export default function numericSelector({
       options,
       transformItems,
     });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }
