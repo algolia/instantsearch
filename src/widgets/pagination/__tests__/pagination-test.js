@@ -6,6 +6,7 @@ describe('pagination call', () => {
     expect(pagination.bind(null)).toThrow(/^Usage/);
   });
 });
+
 describe('pagination()', () => {
   let ReactDOM;
   let container;
@@ -89,7 +90,7 @@ describe('pagination()', () => {
       widget = pagination({ container });
       widget.init({ helper });
       widget.render({ results, helper, state: { page: 0 } });
-      const { props: { setCurrentPage } } = ReactDOM.render.firstCall.args[0];
+      const { props: { setCurrentPage } } = ReactDOM.render.mock.calls[0][0];
       setCurrentPage(2);
       expect(scrollIntoView).toHaveBeenCalledTimes(1);
     });
@@ -101,7 +102,6 @@ describe('pagination()', () => {
 
   afterEach(() => {
     pagination.__ResetDependency__('render');
-    pagination.__ResetDependency__('autoHideContainerHOC');
   });
 });
 
