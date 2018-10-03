@@ -1,4 +1,3 @@
-import expect from 'expect';
 import stats from '../stats';
 
 const instantSearchInstance = { templatesConfig: undefined };

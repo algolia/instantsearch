@@ -1,4 +1,3 @@
-import expect from 'expect';
 import pagination from '../pagination';
 
 describe('pagination call', () => {
