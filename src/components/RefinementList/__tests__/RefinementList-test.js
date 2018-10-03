@@ -55,7 +55,7 @@ describe('RefinementList', () => {
       const actual = shallowRender(props).find(RefinementListItem);
 
       // Then
-      expect(actual.props().cssClasses.item).toContain('item');
+      expect(actual.props().className).toContain('item');
     });
 
     it('should set active classes to the active refinements', () => {
@@ -76,8 +76,8 @@ describe('RefinementList', () => {
       const inactiveItem = shallowRender(props).find({ isRefined: false });
 
       // Then
-      expect(activeItem.props().cssClasses.item).toContain('active');
-      expect(inactiveItem.props().cssClasses.item).not.toContain('active');
+      expect(activeItem.props().className).toContain('active');
+      expect(inactiveItem.props().className).not.toContain('active');
     });
   });
 

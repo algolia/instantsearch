@@ -23,7 +23,7 @@ class RefinementListItem extends Component {
 
   render() {
     return (
-      <li className={this.props.cssClasses.item} onClick={this.handleClick}>
+      <li className={this.props.className} onClick={this.handleClick}>
         <Template
           data={this.props.templateData}
           templateKey={this.props.templateKey}
@@ -43,9 +43,7 @@ RefinementListItem.propTypes = {
   templateData: PropTypes.object.isRequired,
   templateKey: PropTypes.string.isRequired,
   templateProps: PropTypes.object.isRequired,
-  cssClasses: PropTypes.shape({
-    item: PropTypes.string,
-  }),
+  className: PropTypes.string.isRequired,
 };
 
 export default RefinementListItem;

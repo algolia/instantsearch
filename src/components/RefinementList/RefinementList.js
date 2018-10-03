@@ -63,12 +63,9 @@ class RefinementList extends Component {
         facetValueToRefine={facetValue.value}
         handleClick={this.handleItemClick}
         isRefined={facetValue.isRefined}
-        cssClasses={{
-          ...this.props.cssClasses,
-          item: cx(this.props.cssClasses.item, {
-            [this.props.cssClasses.selectedItem]: facetValue.isRefined,
-          }),
-        }}
+        className={cx(this.props.cssClasses.item, {
+          [this.props.cssClasses.selectedItem]: facetValue.isRefined,
+        })}
         key={key}
         subItems={subItems}
         templateData={templateData}
