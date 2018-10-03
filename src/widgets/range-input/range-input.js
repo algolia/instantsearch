@@ -173,7 +173,7 @@ export default function rangeInput({
       max,
       precision,
     });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

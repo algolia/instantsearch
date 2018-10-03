@@ -1,7 +1,6 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import find from 'lodash/find';
-
 import Selector from '../../components/Selector.js';
 import connectHitsPerPage from '../../connectors/hits-per-page/connectHitsPerPage.js';
 import { getContainerNode } from '../../lib/utils.js';
@@ -19,7 +18,7 @@ const renderer = ({ containerNode, cssClasses }) => (
     find(items, ({ isRefined }) => isRefined) || {};
 
   render(
-    <div className={cx(cssClasses.root)}>
+    <div className={cssClasses.root}>
       <Selector
         cssClasses={cssClasses}
         currentValue={currentValue}
@@ -35,7 +34,7 @@ const usage = `Usage:
 hitsPerPage({
   container,
   items,
-  [ cssClasses.{root, select, option}={} ],
+  [ cssClasses.{root, select, option} ],
   [ transformItems ]
 })`;
 
@@ -111,7 +110,7 @@ export default function hitsPerPage({
       unmountComponentAtNode(containerNode)
     );
     return makeHitsPerPage({ items, transformItems });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

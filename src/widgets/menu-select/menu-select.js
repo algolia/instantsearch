@@ -1,12 +1,9 @@
 import React, { render } from 'preact-compat';
 import cx from 'classnames';
-
 import connectMenu from '../../connectors/menu/connectMenu';
-import defaultTemplates from './defaultTemplates';
 import MenuSelect from '../../components/MenuSelect';
-
+import defaultTemplates from './defaultTemplates';
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils';
-
 import { component } from '../../lib/suit';
 
 const suit = component('MenuSelect');
@@ -140,7 +137,7 @@ export default function menuSelect({
   try {
     const makeWidget = connectMenu(specializedRenderer);
     return makeWidget({ attribute, limit, sortBy, transformItems });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

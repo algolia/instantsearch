@@ -1,14 +1,10 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import ClearRefinements from '../../components/ClearRefinements/ClearRefinements.js';
 import cx from 'classnames';
-
-import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
-
-import { component } from '../../lib/suit';
-
 import connectClearRefinements from '../../connectors/clear-refinements/connectClearRefinements.js';
-
 import defaultTemplates from './defaultTemplates.js';
+import { getContainerNode, prepareTemplateProps } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
 const suit = component('ClearRefinements');
 
@@ -43,7 +39,7 @@ const renderer = ({
 const usage = `Usage:
 clearRefinements({
   container,
-  [ cssClasses.{root,button,disabledButton}={} ],
+  [ cssClasses.{root,button,disabledButton} ],
   [ templates.{resetLabel}={resetLabel: 'Clear all refinements'} ],
   [ collapsible=false ],
   [ excludedAttributes=[] ]
@@ -126,7 +122,7 @@ export default function clearRefinements({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ excludedAttributes, clearsQuery });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

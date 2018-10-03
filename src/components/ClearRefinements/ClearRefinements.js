@@ -1,44 +1,38 @@
+import React from 'preact-compat';
 import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
 import cx from 'classnames';
-
 import Template from '../Template.js';
 
-class ClearRefinements extends Component {
-  render() {
-    const { hasRefinements, cssClasses } = this.props;
-    const data = { hasRefinements };
-
-    const rootClassNames = cx(cssClasses.root);
-    const buttonClassNames = cx(cssClasses.button, {
-      [cssClasses.disabledButton]: !hasRefinements,
-    });
-
-    return (
-      <div className={rootClassNames}>
-        <Template
-          data={data}
-          templateKey="resetLabel"
-          rootTagName="button"
-          rootProps={{
-            className: buttonClassNames,
-            onClick: this.props.refine,
-            disabled: !hasRefinements,
-          }}
-          {...this.props.templateProps}
-        />
-      </div>
-    );
-  }
-}
+const ClearRefinements = ({
+  hasRefinements,
+  refine,
+  cssClasses,
+  templateProps,
+}) => (
+  <div className={cssClasses.root}>
+    <Template
+      {...templateProps}
+      templateKey="resetLabel"
+      rootTagName="button"
+      rootProps={{
+        className: cx(cssClasses.button, {
+          [cssClasses.disabledButton]: !hasRefinements,
+        }),
+        onClick: refine,
+        disabled: !hasRefinements,
+      }}
+      data={{ hasRefinements }}
+    />
+  </div>
+);
 
 ClearRefinements.propTypes = {
   refine: PropTypes.func.isRequired,
   cssClasses: PropTypes.shape({
-    root: PropTypes.string,
-    button: PropTypes.string,
-    disabledButton: PropTypes.string,
-  }),
+    root: PropTypes.string.isRequired,
+    button: PropTypes.string.isRequired,
+    disabledButton: PropTypes.string.isRequired,
+  }).isRequired,
   hasRefinements: PropTypes.bool.isRequired,
   templateProps: PropTypes.object.isRequired,
 };
