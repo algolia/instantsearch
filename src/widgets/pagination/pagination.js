@@ -1,13 +1,9 @@
-import defaults from 'lodash/defaults';
-
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
+import defaults from 'lodash/defaults';
 import Pagination from '../../components/Pagination/Pagination.js';
 import connectPagination from '../../connectors/pagination/connectPagination.js';
-
 import { getContainerNode } from '../../lib/utils.js';
-
 import { component } from '../../lib/suit';
 
 const suit = component('Pagination');
@@ -77,7 +73,7 @@ const renderer = ({
 const usage = `Usage:
 pagination({
   container,
-  [ cssClasses.{root, noRefinementRoot, list, item, itemFirstPage, itemLastPage, itemPreviousPage, itemNextPage, itemPage, selectedItem, disabledItem, link}={} ],
+  [ cssClasses.{root, noRefinementRoot, list, item, itemFirstPage, itemLastPage, itemPreviousPage, itemNextPage, itemPage, selectedItem, disabledItem, link} ],
   [ labels.{previous,next,first,last} ],
   [ totalPages ],
   [ padding=3 ],
@@ -233,7 +229,7 @@ export default function pagination({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ maxPages, padding });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }
