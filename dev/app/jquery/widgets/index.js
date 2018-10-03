@@ -12,6 +12,6 @@ export { default as searchBox } from './searchBox';
 export { default as sortBy } from './sortBy';
 export { default as starRating } from './starRating';
 export { default as stats } from './stats';
-export { default as toggle } from './toggle';
+export { default as toggleRefinement } from './toggleRefinement';
 export { default as infiniteHits } from './infiniteHits';
 export { default as showMoreMenu } from './showMoreMenu';

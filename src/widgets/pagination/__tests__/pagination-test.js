@@ -5,6 +5,7 @@ describe('pagination call', () => {
     expect(pagination.bind(null)).toThrow(/^Usage/);
   });
 });
+
 describe('pagination()', () => {
   let ReactDOM;
   let container;
@@ -100,7 +101,6 @@ describe('pagination()', () => {
 
   afterEach(() => {
     pagination.__ResetDependency__('render');
-    pagination.__ResetDependency__('autoHideContainerHOC');
   });
 });
 

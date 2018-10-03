@@ -7,7 +7,7 @@ import {
 import find from 'lodash/find';
 
 const usage = `Usage:
-var customToggle = connectToggle(function render(params, isFirstRendering) {
+var customToggle = connectToggleRefinement(function render(params, isFirstRendering) {
   // params = {
   //   value,
   //   createURL,
@@ -18,17 +18,16 @@ var customToggle = connectToggle(function render(params, isFirstRendering) {
 });
 search.addWidget(
   customToggle({
-    attributeName,
-    label,
-    [ values = {on: true, off: undefined} ]
+    attribute,
+    [on = true],
+    [off],
   })
 );
-Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggle.html
+Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectToggleRefinement.html
 `;
 
 /**
  * @typedef {Object} ToggleValue
- * @property {string} name Human-readable name of the filter.
  * @property {boolean} isRefined `true` if the toggle is on.
  * @property {number} count Number of results matched after applying the toggle refinement.
  * @property {Object} onFacetValue Value of the toggle when it's on.
@@ -37,9 +36,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 
 /**
  * @typedef {Object} CustomToggleWidgetOptions
- * @property {string} attributeName Name of the attribute for faceting (eg. "free_shipping").
- * @property {string} label Human-readable name of the filter (eg. "Free Shipping").
- * @property {Object} [values = {on: true, off: undefined}] Values to filter on when toggling.
+ * @property {string} attribute Name of the attribute for faceting (eg. "free_shipping").
+ * @property {Object} [on=true] Value to filter on when toggled.
+ * @property {Object} [off] Value to filter on when not toggled.
  */
 
 /**
@@ -92,39 +91,34 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * }
  *
  * // connect `renderFn` to Toggle logic
- * var customToggle = instantsearch.connectors.connectToggle(renderFn);
+ * var customToggle = instantsearch.connectors.connectToggleRefinement(renderFn);
  *
  * // mount widget on the page
  * search.addWidget(
  *   customToggle({
  *     containerNode: $('#custom-toggle-container'),
- *     attributeName: 'free_shipping',
- *     label: 'Free Shipping (toggle single value)',
+ *     attribute: 'free_shipping',
  *   })
  * );
  */
-export default function connectToggle(renderFn, unmountFn) {
+export default function connectToggleRefinement(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
-    const {
-      attributeName,
-      label,
-      values: userValues = { on: true, off: undefined },
-    } = widgetParams;
+    const { attribute, on: userOn = true, off: userOff } = widgetParams;
 
-    if (!attributeName || !label) {
+    if (!attribute) {
       throw new Error(usage);
     }
 
-    const hasAnOffValue = userValues.off !== undefined;
-    const on = userValues ? escapeRefinement(userValues.on) : undefined;
-    const off = userValues ? escapeRefinement(userValues.off) : undefined;
+    const hasAnOffValue = userOff !== undefined;
+    const on = userOn ? escapeRefinement(userOn) : undefined;
+    const off = userOff ? escapeRefinement(userOff) : undefined;
 
     return {
       getConfiguration() {
         return {
-          disjunctiveFacets: [attributeName],
+          disjunctiveFacets: [attribute],
         };
       },
 
@@ -132,14 +126,14 @@ export default function connectToggle(renderFn, unmountFn) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {
-            helper.removeDisjunctiveFacetRefinement(attributeName, off);
+            helper.removeDisjunctiveFacetRefinement(attribute, off);
           }
-          helper.addDisjunctiveFacetRefinement(attributeName, on);
+          helper.addDisjunctiveFacetRefinement(attribute, on);
         } else {
           // Unchecking
-          helper.removeDisjunctiveFacetRefinement(attributeName, on);
+          helper.removeDisjunctiveFacetRefinement(attribute, on);
           if (hasAnOffValue) {
-            helper.addDisjunctiveFacetRefinement(attributeName, off);
+            helper.addDisjunctiveFacetRefinement(attribute, off);
           }
         }
 
@@ -151,11 +145,11 @@ export default function connectToggle(renderFn, unmountFn) {
           createURL(
             state
               .removeDisjunctiveFacetRefinement(
-                attributeName,
+                attribute,
                 isCurrentlyRefined ? on : off
               )
               .addDisjunctiveFacetRefinement(
-                attributeName,
+                attribute,
                 isCurrentlyRefined ? off : on
               )
           );
@@ -164,7 +158,7 @@ export default function connectToggle(renderFn, unmountFn) {
           this._toggleRefinement(helper, opts);
         };
 
-        const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
+        const isRefined = state.isDisjunctiveFacetRefined(attribute, on);
 
         // no need to refine anything at init if no custom off values
         if (hasAnOffValue) {
@@ -172,25 +166,22 @@ export default function connectToggle(renderFn, unmountFn) {
           if (!isRefined) {
             const currentPage = helper.getPage();
             helper
-              .addDisjunctiveFacetRefinement(attributeName, off)
+              .addDisjunctiveFacetRefinement(attribute, off)
               .setPage(currentPage);
           }
         }
 
         const onFacetValue = {
-          name: label,
           isRefined,
           count: 0,
         };
 
         const offFacetValue = {
-          name: label,
           isRefined: hasAnOffValue && !isRefined,
           count: 0,
         };
 
         const value = {
-          name: label,
           isRefined,
           count: null,
           onFacetValue,
@@ -210,19 +201,15 @@ export default function connectToggle(renderFn, unmountFn) {
       },
 
       render({ helper, results, state, instantSearchInstance }) {
-        const isRefined = helper.state.isDisjunctiveFacetRefined(
-          attributeName,
-          on
-        );
+        const isRefined = helper.state.isDisjunctiveFacetRefined(attribute, on);
         const offValue = off === undefined ? false : off;
-        const allFacetValues = results.getFacetValues(attributeName);
+        const allFacetValues = results.getFacetValues(attribute);
 
         const onData = find(
           allFacetValues,
           ({ name }) => name === unescapeRefinement(on)
         );
         const onFacetValue = {
-          name: label,
           isRefined: onData !== undefined ? onData.isRefined : false,
           count: onData === undefined ? null : onData.count,
         };
@@ -234,7 +221,6 @@ export default function connectToggle(renderFn, unmountFn) {
             )
           : undefined;
         const offFacetValue = {
-          name: label,
           isRefined: offData !== undefined ? offData.isRefined : false,
           count:
             offData === undefined
@@ -248,7 +234,6 @@ export default function connectToggle(renderFn, unmountFn) {
         const nextRefinement = isRefined ? offFacetValue : onFacetValue;
 
         const value = {
-          name: label,
           isRefined,
           count: nextRefinement === undefined ? null : nextRefinement.count,
           onFacetValue,
@@ -273,23 +258,21 @@ export default function connectToggle(renderFn, unmountFn) {
         unmountFn();
 
         const nextState = state
-          .removeDisjunctiveFacetRefinement(attributeName)
-          .removeDisjunctiveFacet(attributeName);
+          .removeDisjunctiveFacetRefinement(attribute)
+          .removeDisjunctiveFacet(attribute);
 
         return nextState;
       },
 
       getWidgetState(uiState, { searchParameters }) {
         const isRefined = searchParameters.isDisjunctiveFacetRefined(
-          attributeName,
+          attribute,
           on
         );
 
         if (
           !isRefined ||
-          (uiState &&
-            uiState.toggle &&
-            uiState.toggle[attributeName] === isRefined)
+          (uiState && uiState.toggle && uiState.toggle[attribute] === isRefined)
         ) {
           return uiState;
         }
@@ -298,37 +281,29 @@ export default function connectToggle(renderFn, unmountFn) {
           ...uiState,
           toggle: {
             ...uiState.toggle,
-            [attributeName]: isRefined,
+            [attribute]: isRefined,
           },
         };
       },
 
       getWidgetSearchParameters(searchParameters, { uiState }) {
-        const isRefined = Boolean(
-          uiState.toggle && uiState.toggle[attributeName]
-        );
+        const isRefined = Boolean(uiState.toggle && uiState.toggle[attribute]);
 
         if (isRefined) {
           if (hasAnOffValue)
             return searchParameters
-              .removeDisjunctiveFacetRefinement(attributeName, off)
-              .addDisjunctiveFacetRefinement(attributeName, on);
+              .removeDisjunctiveFacetRefinement(attribute, off)
+              .addDisjunctiveFacetRefinement(attribute, on);
 
-          return searchParameters.addDisjunctiveFacetRefinement(
-            attributeName,
-            on
-          );
+          return searchParameters.addDisjunctiveFacetRefinement(attribute, on);
         }
 
         if (hasAnOffValue)
           return searchParameters
-            .removeDisjunctiveFacetRefinement(attributeName, on)
-            .addDisjunctiveFacetRefinement(attributeName, off);
+            .removeDisjunctiveFacetRefinement(attribute, on)
+            .addDisjunctiveFacetRefinement(attribute, off);
 
-        return searchParameters.removeDisjunctiveFacetRefinement(
-          attributeName,
-          on
-        );
+        return searchParameters.removeDisjunctiveFacetRefinement(attribute, on);
       },
     };
   };

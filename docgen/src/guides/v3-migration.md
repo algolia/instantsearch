@@ -9,11 +9,12 @@ InstantSearch 3 introduces some breaking changes in the widget's naming, options
 If you were previously using the `urlSync` option, you should now migrate to the new `routing` feature.
 
 Here are the elements you need to migrate:
-- `urlSync: true` becomes `routing: true`
-- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
-- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
-- `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
-- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+
+* `urlSync: true` becomes `routing: true`
+* `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
+* `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
+* `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+* `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
 
 ## Widgets
 
@@ -49,6 +50,34 @@ Here are the elements you need to migrate:
       Kitchen textiles
     </li>
   </ul>
+</div>
+```
+
+### ClearRefinements (formerly ClearAll)
+
+#### Options
+
+| Before              | After                |
+| ------------------- | -------------------- |
+| `excludeAttributes` | `excludedAttributes` |
+
+#### CSS classes
+
+| Before                | After                                   |
+| --------------------- | --------------------------------------- |
+| `ais-clear-all`       | `ais-ClearRefinements`                  |
+| `ais-clear-all--body` |                                         |
+| `ais-clear-all--link` |                                         |
+|                       | `ais-ClearRefinements-button`           |
+|                       | `ais-ClearRefinements-button--disabled` |
+
+#### Markup
+
+```html
+<div class="ais-ClearRefinements">
+  <button class="ais-ClearRefinements-button">
+    Clear refinements
+  </button>
 </div>
 ```
 
@@ -121,8 +150,8 @@ With the redo button:
 | `escapeHits`    | `escapeHTML`    |
 | `showMoreLabel` | `loadMoreLabel` |
 
-- `escapeHTML` becomes `true` by default.
-- `allItems` template has been removed in favor of `connectHits`
+* `escapeHTML` becomes `true` by default.
+* `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
 
@@ -249,6 +278,147 @@ With the redo button:
   <button class="ais-InfiniteHits-loadMore">Show more results</button>
 ```
 
+### MenuSelect
+
+#### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+
+#### CSS classes
+
+| Before                    | After                          |
+| ------------------------- | ------------------------------ |
+| `ais-menu-select`         | `ais-MenuSelect`               |
+|                           | `ais-MenuSelect--noRefinement` |
+| `ais-menu-select--select` | `ais-MenuSelect-select`        |
+| `ais-menu-select--option` | `ais-MenuSelect-option`        |
+| `ais-menu-select--header` |                                |
+| `ais-menu-select--footer` |                                |
+
+#### Markup
+
+```html
+<div class="ais-MenuSelect">
+  <select class="ais-MenuSelect-select">
+    <option class="ais-MenuSelect-option" value="Appliances">Appliances (4306)</option>
+    <option class="ais-MenuSelect-option" value="Audio">Audio (1570)</option>
+  </select>
+</div>
+```
+
+### Pagination
+
+#### Options
+
+| Before          | After                  |
+| --------------- | ---------------------- |
+| `maxPages`      | `totalPages`           |
+| `showFirstLast` | `showFirst` `showLast` |
+|                 | `showNext`             |
+|                 | `showPrevious`         |
+
+#### CSS classes
+
+| Before                           | After                               |
+| -------------------------------- | ----------------------------------- |
+|                                  | `ais-Pagination`                    |
+|                                  | `ais-Pagination--noRefinement`      |
+| `ais-pagination`                 | `ais-Pagination-list`               |
+| `ais-pagination--item`           | `ais-Pagination-item`               |
+| `ais-pagination--item__first`    | `ais-Pagination-item--firstPage`    |
+| `ais-pagination--item__last`     | `ais-Pagination-item--lastPage`     |
+| `ais-pagination--item__previous` | `ais-Pagination-item--previousPage` |
+| `ais-pagination--item__next`     | `ais-Pagination-item--nextPage`     |
+|                                  | `ais-Pagination-item--page`         |
+| `ais-pagination--item__active`   | `ais-Pagination-item--selected`     |
+| `ais-pagination--item__disabled` | `ais-Pagination-item--disabled`     |
+| `ais-pagination--link`           | `ais-Pagination-link`               |
+
+#### Markup
+
+```html
+<div class="ais-Pagination">
+  <ul class="ais-Pagination-list">
+    <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
+      <span class="ais-Pagination-link" aria-label="Previous">‹‹</span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
+      <span class="ais-Pagination-link" aria-label="Previous">‹</span>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--selected">
+      <a class="ais-Pagination-link" href="#">1</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--page">
+      <a class="ais-Pagination-link" href="#">2</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--page">
+      <a class="ais-Pagination-link" href="#">3</a>
+    </li>
+    <li class="ais-Pagination-item">
+      <a class="ais-Pagination-link" href="#">4</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--nextPage">
+      <a class="ais-Pagination-link" aria-label="Next" href="#">›</a>
+    </li>
+    <li class="ais-Pagination-item ais-Pagination-item--lastPage">
+      <a class="ais-Pagination-link" aria-label="Next" href="#">››</a>
+    </li>
+  </ul>
+</div>
+```
+
+### PriceRanges
+
+Widget removed.
+
+### RangeInput
+
+#### Options
+
+| Before          | After       |
+| --------------- | ----------- |
+| `attributeName` | `attribute` |
+
+#### CSS classes
+
+| Before                       | After                          |
+| ---------------------------- | ------------------------------ |
+| `ais-range-input`            | `ais-RangeInput`               |
+|                              | `ais-RangeInput--noRefinement` |
+| `ais-range-input--body`      |                                |
+| `ais-range-input--form`      | `ais-RangeInput-form`          |
+| `ais-range-input--fieldset`  |                                |
+|                              | `ais-RangeInput-label`         |
+| `ais-range-input--labelMin`  |                                |
+| `ais-range-input--labelMax`  |                                |
+|                              | `ais-RangeInput-input`         |
+| `ais-range-input--inputMin`  | `ais-RangeInput-input--min`    |
+| `ais-range-input--inputMax`  | `ais-RangeInput-input--max`    |
+| `ais-range-input--separator` | `ais-RangeInput-separator`     |
+| `ais-range-input--submit`    | `ais-RangeInput-button`        |
+
+#### Markup
+
+```html
+<div class="ais-RangeInput">
+  <form class="ais-RangeInput-form">
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--min" type="number" />
+    </label>
+
+    <span class="ais-RangeInput-separator">to</span>
+
+    <label class="ais-RangeInput-label">
+      <input class="ais-RangeInput-input ais-RangeInput-input--max" type="number" />
+    </label>
+
+    <button class="ais-RangeInput-submit" type="submit">Go</button>
+  </form>
+</div>
+```
+
 ### RangeSlider
 
 #### Options
@@ -373,174 +543,45 @@ With the redo button:
 </div>
 ```
 
-### RangeInput
+### ToggleRefinement (formerly Toggle)
 
 #### Options
 
-| Before          | After       |
-| --------------- | ----------- |
-| `attributeName` | `attribute` |
+| Before              | After                 |
+| ------------------- | --------------------- |
+| `attributeName`     | `attribute`           |
+| `collapsible`       |                       |
+| `autoHideContainer` |                       |
+| `label`             | `templates.labelText` |
+| `templates.item`    |                       |
+| `values.on`         | `on`                  |
+| `values.off`        | `off`                 |
+
+`collapsible` and `autoHideContainer` options have been removed. These options are now implemented as part of the Panel widget wrapper.
+
+We've moved the `label` into the `templates.labelText` template to make it consistent with the templates parameters of other widgets and we removed the `item` template. We are now providing the data that were provided to `templates.item` to `templates.labelText`.
 
 #### CSS classes
 
-| Before                       | After                          |
-| ---------------------------- | ------------------------------ |
-| `ais-range-input`            | `ais-RangeInput`               |
-|                              | `ais-RangeInput--noRefinement` |
-| `ais-range-input--body`      |                                |
-| `ais-range-input--form`      | `ais-RangeInput-form`          |
-| `ais-range-input--fieldset`  |                                |
-|                              | `ais-RangeInput-label`         |
-| `ais-range-input--labelMin`  |                                |
-| `ais-range-input--labelMax`  |                                |
-|                              | `ais-RangeInput-input`         |
-| `ais-range-input--inputMin`  | `ais-RangeInput-input--min`    |
-| `ais-range-input--inputMax`  | `ais-RangeInput-input--max`    |
-| `ais-range-input--separator` | `ais-RangeInput-separator`     |
-| `ais-range-input--submit`    | `ais-RangeInput-button`        |
+| Before                 | After                            |
+| ---------------------- | -------------------------------- |
+| `ais-toggle`           | `ais-ToggleRefinement`           |
+| `ais-toggle--list`     |                                  |
+| `ais-toggle--item`     |                                  |
+|                        | `ais-ToggleRefinement-label`     |
+| `ais-toggle--checkbox` | `ais-ToggleRefinement-checkbox`  |
+| `ais-toggle--label`    | `ais-ToggleRefinement-labelText` |
 
 #### Markup
 
 ```html
-<div class="ais-RangeInput">
-  <form class="ais-RangeInput-form">
-    <label class="ais-RangeInput-label">
-      <input class="ais-RangeInput-input ais-RangeInput-input--min" type="number" />
-    </label>
-
-    <span class="ais-RangeInput-separator">to</span>
-
-    <label class="ais-RangeInput-label">
-      <input class="ais-RangeInput-input ais-RangeInput-input--max" type="number" />
-    </label>
-
-    <button class="ais-RangeInput-submit" type="submit">Go</button>
-  </form>
+<div class="ais-ToggleRefinement">
+  <label class="ais-ToggleRefinement-label">
+    <input class="ais-ToggleRefinement-checkbox" type="checkbox" value="Free Shipping" />
+    <span class="ais-ToggleRefinement-labelText">Free Shipping</span>
+  </label>
 </div>
 ```
-
-### clearRefinements -- previously clearAll
-
-#### Options
-
-| Before              | After                |
-| ------------------- | -------------------- |
-| `excludeAttributes` | `excludedAttributes` |
-
-#### CSS classes
-
-| Before                | After                                   |
-| --------------------- | --------------------------------------- |
-| `ais-clear-all`       | `ais-ClearRefinements`                  |
-| `ais-clear-all--body` |                                         |
-| `ais-clear-all--link` |                                         |
-|                       | `ais-ClearRefinements-button`           |
-|                       | `ais-ClearRefinements-button--disabled` |
-
-#### Markup
-
-```html
-<div class="ais-ClearRefinements">
-  <button class="ais-ClearRefinements-button">
-    Clear refinements
-  </button>
-</div>
-```
-
-### MenuSelect
-
-#### Options
-
-| Before          | After       |
-| --------------- | ----------- |
-| `attributeName` | `attribute` |
-
-#### CSS classes
-
-| Before                    | After                          |
-| ------------------------- | ------------------------------ |
-| `ais-menu-select`         | `ais-MenuSelect`               |
-|                           | `ais-MenuSelect--noRefinement` |
-| `ais-menu-select--select` | `ais-MenuSelect-select`        |
-| `ais-menu-select--option` | `ais-MenuSelect-option`        |
-| `ais-menu-select--header` |                                |
-| `ais-menu-select--footer` |                                |
-
-#### Markup
-
-```html
-<div class="ais-MenuSelect">
-  <select class="ais-MenuSelect-select">
-    <option class="ais-MenuSelect-option" value="Appliances">Appliances (4306)</option>
-    <option class="ais-MenuSelect-option" value="Audio">Audio (1570)</option>
-  </select>
-</div>
-```
-
-### Pagination
-
-### Options
-
-| Before          | After                  |
-| --------------- | ---------------------- |
-| `maxPages`      | `totalPages`           |
-| `showFirstLast` | `showFirst` `showLast` |
-|                 | `showNext`             |
-|                 | `showPrevious`         |
-
-### CSS classes
-
-| Before                           | After                               |
-| -------------------------------- | ----------------------------------- |
-|                                  | `ais-Pagination`                    |
-|                                  | `ais-Pagination--noRefinement`      |
-| `ais-pagination`                 | `ais-Pagination-list`               |
-| `ais-pagination--item`           | `ais-Pagination-item`               |
-| `ais-pagination--item__first`    | `ais-Pagination-item--firstPage`    |
-| `ais-pagination--item__last`     | `ais-Pagination-item--lastPage`     |
-| `ais-pagination--item__previous` | `ais-Pagination-item--previousPage` |
-| `ais-pagination--item__next`     | `ais-Pagination-item--nextPage`     |
-|                                  | `ais-Pagination-item--page`         |
-| `ais-pagination--item__active`   | `ais-Pagination-item--selected`     |
-| `ais-pagination--item__disabled` | `ais-Pagination-item--disabled`     |
-| `ais-pagination--link`           | `ais-Pagination-link`               |
-
-### Markup
-
-```html
-<div class="ais-Pagination">
-  <ul class="ais-Pagination-list">
-    <li class="ais-Pagination-item ais-Pagination-item--firstPage ais-Pagination-item--disabled">
-      <span class="ais-Pagination-link" aria-label="Previous">‹‹</span>
-    </li>
-    <li class="ais-Pagination-item ais-Pagination-item--previousPage ais-Pagination-item--disabled">
-      <span class="ais-Pagination-link" aria-label="Previous">‹</span>
-    </li>
-    <li class="ais-Pagination-item ais-Pagination-item--selected">
-      <a class="ais-Pagination-link" href="#">1</a>
-    </li>
-    <li class="ais-Pagination-item ais-Pagination-item--page">
-      <a class="ais-Pagination-link" href="#">2</a>
-    </li>
-    <li class="ais-Pagination-item ais-Pagination-item--page">
-      <a class="ais-Pagination-link" href="#">3</a>
-    </li>
-    <li class="ais-Pagination-item">
-      <a class="ais-Pagination-link" href="#">4</a>
-    </li>
-    <li class="ais-Pagination-item ais-Pagination-item--nextPage">
-      <a class="ais-Pagination-link" aria-label="Next" href="#">›</a>
-    </li>
-    <li class="ais-Pagination-item ais-Pagination-item--lastPage">
-      <a class="ais-Pagination-link" aria-label="Next" href="#">››</a>
-    </li>
-  </ul>
-</div>
-```
-
-### PriceRanges
-
-Widget removed.
 
 ## Connectors
 
@@ -552,11 +593,10 @@ Widget removed.
 | --------------- | ----------- |
 | `attributeName` | `attribute` |
 
-### connectClearRefinements -- previously connectClearAll
+### connectClearRefinements (formerly connectClearAll)
 
 #### Options
 
 | Before              | After                |
 | ------------------- | -------------------- |
 | `excludeAttributes` | `excludedAttributes` |
-

@@ -4,7 +4,7 @@ import { storiesOf } from 'dev-novel';
 import instantsearch from '../../../../index';
 import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
-const stories = storiesOf('Toggle');
+const stories = storiesOf('ToggleRefinement');
 
 export default () => {
   stories
@@ -12,12 +12,11 @@ export default () => {
       'default',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.toggle({
+          instantsearch.widgets.toggleRefinement({
             container,
-            attributeName: 'free_shipping',
-            label: 'Free Shipping (toggle single value)',
+            attribute: 'free_shipping',
             templates: {
-              header: 'Shipping',
+              labelText: 'Free Shipping (toggle single value)',
             },
           })
         );
@@ -27,16 +26,13 @@ export default () => {
       'with on & off values',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.toggle({
+          instantsearch.widgets.toggleRefinement({
             container,
-            attributeName: 'brand',
-            label: 'Canon (not checked) or sony (checked)',
-            values: {
-              on: 'Sony',
-              off: 'Canon',
-            },
+            attribute: 'brand',
+            on: 'Sony',
+            off: 'Canon',
             templates: {
-              header: 'Google or amazon (toggle two values)',
+              labelText: 'Canon (not checked) or sony (checked)',
             },
           })
         );

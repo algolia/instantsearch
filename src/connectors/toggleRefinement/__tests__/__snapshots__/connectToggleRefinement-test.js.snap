@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`connectToggle routing getWidgetSearchParameters should remove the refinement (one value) 1`] = `
+exports[`connectToggleRefinement routing getWidgetSearchParameters should remove the refinement (one value) 1`] = `
 SearchParameters {
   "advancedSyntax": undefined,
   "allowTyposOnNumericTokens": undefined,
@@ -59,7 +59,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectToggle routing getWidgetSearchParameters should update the SP base on the UI state (two values) 1`] = `
+exports[`connectToggleRefinement routing getWidgetSearchParameters should update the SP base on the UI state (two values) 1`] = `
 SearchParameters {
   "advancedSyntax": undefined,
   "allowTyposOnNumericTokens": undefined,
@@ -122,7 +122,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectToggle routing getWidgetSearchParameters should update the SP base on the UI state - toggled (two values) 1`] = `
+exports[`connectToggleRefinement routing getWidgetSearchParameters should update the SP base on the UI state - toggled (two values) 1`] = `
 SearchParameters {
   "advancedSyntax": undefined,
   "allowTyposOnNumericTokens": undefined,
@@ -185,7 +185,7 @@ SearchParameters {
 }
 `;
 
-exports[`connectToggle routing getWidgetState should add an entry equal to the refinement 1`] = `
+exports[`connectToggleRefinement routing getWidgetState should add an entry equal to the refinement 1`] = `
 Object {
   "toggle": Object {
     "isShippingFree": true,

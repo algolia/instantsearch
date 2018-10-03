@@ -21,7 +21,7 @@ import initSearchBoxStories from './stories/search-box.stories';
 import initSortByStories from './stories/sort-by.stories';
 import initStarRatingStories from './stories/star-rating.stories';
 import initStatsStories from './stories/stats.stories';
-import initToggleStories from './stories/toggle.stories';
+import initToggleStories from './stories/toggleRefinement.stories';
 import initConfigureStories from './stories/configure.stories';
 
 export default () => {
