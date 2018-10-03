@@ -1,7 +1,6 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
-import InfiniteHits from '../../components/InfiniteHits.js';
+import InfiniteHits from '../../components/InfiniteHits/InfiniteHits.js';
 import defaultTemplates from './defaultTemplates.js';
 import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
@@ -51,7 +50,7 @@ infiniteHits({
   [ escapeHTML = true ],
   [ transformItems ],
   [ loadMoreLabel = "Show more results" ],
-  [ cssClasses.{root,emptyRoot,list,item,loadMore,disabledLoadMore}={} ],
+  [ cssClasses.{root, emptyRoot, list, item, loadMore, disabledLoadMore} ],
   [ templates.{empty,item} | templates.{empty} ],
   [ transformData.{empty,item} | transformData.{empty} ],
 })`;
@@ -140,9 +139,9 @@ export default function infiniteHits({
     item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
     list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
     loadMore: cx(suit({ descendantName: 'loadMore' }), userCssClasses.loadMore),
-    loadMoreDisabled: cx(
+    disabledLoadMore: cx(
       suit({ descendantName: 'loadMore', modifierName: 'disabled' }),
-      userCssClasses.loadMoreDisabled
+      userCssClasses.disabledLoadMore
     ),
   };
 
@@ -160,7 +159,7 @@ export default function infiniteHits({
       unmountComponentAtNode(containerNode)
     );
     return makeInfiniteHits({ escapeHTML, transformItems });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

@@ -1,14 +1,20 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Hits from '../Hits';
-import Template from '../Template';
-import { highlight } from '../../helpers';
+import Template from '../../Template';
+import { highlight } from '../../../helpers';
 
 describe('Hits', () => {
+  const cssClasses = {
+    root: 'root',
+    emptyRoot: 'emptyRoot',
+    item: 'item',
+    list: 'list',
+  };
+
   function shallowRender(extraProps = {}) {
     const props = {
-      cssClasses: {},
+      cssClasses,
       templateProps: {},
       ...extraProps,
     };
@@ -17,44 +23,35 @@ describe('Hits', () => {
 
   describe('no results', () => {
     it('should use the empty template if no results', () => {
-      // Given
       const props = {
         results: {
           hits: [],
         },
         hits: [],
+        cssClasses,
       };
 
-      // When
-      const actual = shallowRender(props);
+      const wrapper = shallowRender(props);
 
-      // Then
-      expect(actual.props().templateKey).toEqual('empty');
+      expect(wrapper.props().templateKey).toEqual('empty');
     });
 
     it('should set the empty CSS class when no results', () => {
-      // Given
       const props = {
         results: {
           hits: [],
         },
-        cssClasses: {
-          root: 'root',
-          emptyRoot: 'emptyRoot',
-        },
+        cssClasses,
       };
 
-      // When
-      const actual = shallowRender(props);
+      const wrapper = shallowRender(props);
 
-      // Then
-      expect(actual.props().rootProps.className).toContain('root');
+      expect(wrapper.props().rootProps.className).toContain('root');
     });
   });
 
   describe('individual item templates', () => {
     it('should add an item template for each hit', () => {
-      // Given
       const hits = [
         {
           objectID: 'one',
@@ -73,18 +70,16 @@ describe('Hits', () => {
             item: 'one item',
           },
         },
+        cssClasses,
       };
 
-      // When
-      const actual = shallowRender(props).find(Template);
+      const wrapper = shallowRender(props).find(Template);
 
-      // Then
-      expect(actual).toHaveLength(2);
-      expect(actual.at(0).props().templateKey).toEqual('item');
+      expect(wrapper).toHaveLength(2);
+      expect(wrapper.at(0).props().templateKey).toEqual('item');
     });
 
     it('should set the item class to each item', () => {
-      // Given
       const hits = [
         {
           objectID: 'one',
@@ -99,20 +94,15 @@ describe('Hits', () => {
             item: 'one item',
           },
         },
-        cssClasses: {
-          item: 'item',
-        },
+        cssClasses,
       };
 
-      // When
-      const actual = shallowRender(props).find(Template);
+      const wrapper = shallowRender(props).find(Template);
 
-      // Then
-      expect(actual.props().rootProps.className).toContain('item');
+      expect(wrapper.props().rootProps.className).toContain('item');
     });
 
     it('should wrap the items in a root div element', () => {
-      // Given
       const props = {
         results: {
           hits: [
@@ -131,21 +121,16 @@ describe('Hits', () => {
             item: 'one item',
           },
         },
-        cssClasses: {
-          root: 'root',
-        },
+        cssClasses,
       };
 
-      // When
-      const actual = shallowRender(props);
+      const wrapper = shallowRender(props);
 
-      // Then
-      expect(actual.name()).toEqual('div');
-      expect(actual.props().className).toContain('root');
+      expect(wrapper.name()).toEqual('div');
+      expect(wrapper.props().className).toContain('root');
     });
 
     it('should pass each result data to each item template', () => {
-      // Given
       const hits = [
         {
           objectID: 'one',
@@ -164,18 +149,16 @@ describe('Hits', () => {
             item: 'one item',
           },
         },
+        cssClasses,
       };
 
-      // When
-      const actual = shallowRender(props).find({ templateKey: 'item' });
+      const wrapper = shallowRender(props).find({ templateKey: 'item' });
 
-      // Then
-      expect(actual.at(0).props().data.foo).toEqual('bar');
-      expect(actual.at(1).props().data.foo).toEqual('baz');
+      expect(wrapper.at(0).props().data.foo).toEqual('bar');
+      expect(wrapper.at(1).props().data.foo).toEqual('baz');
     });
 
     it('should add the __hitIndex in the list to each item', () => {
-      // Given
       const hits = [
         {
           objectID: 'one',
@@ -194,18 +177,16 @@ describe('Hits', () => {
             item: 'one item',
           },
         },
+        cssClasses,
       };
 
-      // When
-      const actual = shallowRender(props).find({ templateKey: 'item' });
+      const wrapper = shallowRender(props).find({ templateKey: 'item' });
 
-      // Then
-      expect(actual.at(0).props().data.__hitIndex).toEqual(0);
-      expect(actual.at(1).props().data.__hitIndex).toEqual(1);
+      expect(wrapper.at(0).props().data.__hitIndex).toEqual(0);
+      expect(wrapper.at(1).props().data.__hitIndex).toEqual(1);
     });
 
     it('should use the objectID as the DOM key', () => {
-      // Given
       const hits = [
         {
           objectID: 'BAR',
@@ -224,14 +205,13 @@ describe('Hits', () => {
             item: 'one item',
           },
         },
+        cssClasses,
       };
 
-      // When
-      const actual = shallowRender(props).find({ templateKey: 'item' });
+      const wrapper = shallowRender(props).find({ templateKey: 'item' });
 
-      // Then
-      expect(actual.at(0).key()).toEqual('BAR');
-      expect(actual.at(1).key()).toEqual('BAZ');
+      expect(wrapper.at(0).key()).toEqual('BAR');
+      expect(wrapper.at(1).key()).toEqual('BAZ');
     });
   });
 
@@ -251,20 +231,17 @@ describe('Hits', () => {
       const props = {
         results: { hits },
         hits,
-        cssClasses: {
-          root: 'root',
-          list: 'list',
-          item: 'item',
-        },
         templateProps: {
           templates: {
             item: 'item',
           },
         },
+        cssClasses,
       };
-      const tree = renderer.create(<Hits {...props} />).toJSON();
 
-      expect(tree).toMatchSnapshot();
+      const wrapper = mount(<Hits {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
     });
 
     it('should render <Hits /> without highlight function', () => {
@@ -292,11 +269,6 @@ describe('Hits', () => {
       const props = {
         results: { hits },
         hits,
-        cssClasses: {
-          root: 'root',
-          list: 'list',
-          item: 'item',
-        },
         templateProps: {
           templates: {
             item(hit) {
@@ -307,10 +279,12 @@ describe('Hits', () => {
             },
           },
         },
+        cssClasses,
       };
-      const tree = renderer.create(<Hits {...props} />).toJSON();
 
-      expect(tree).toMatchSnapshot();
+      const wrapper = mount(<Hits {...props} />);
+
+      expect(wrapper).toMatchSnapshot();
     });
   });
 });

@@ -1,8 +1,17 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { mount } from 'enzyme';
 import InfiniteHits from '../InfiniteHits';
 
 describe('InfiniteHits', () => {
+  const cssClasses = {
+    root: 'root',
+    emptyRoot: 'emptyRoot',
+    item: 'item',
+    list: 'list',
+    loadMore: 'loadMore',
+    disabledLoadMore: 'disabledLoadMore',
+  };
+
   describe('markup', () => {
     it('should render <InfiniteHits /> on first page', () => {
       const hits = [
@@ -20,21 +29,15 @@ describe('InfiniteHits', () => {
         results: { hits },
         hits,
         isLastPage: false,
-        cssClasses: {
-          root: 'root',
-          emptyRoot: 'emptyRoot',
-          list: 'list',
-          item: 'item',
-          loadMore: 'loadMore',
-          disabledLoadMore: 'disabledLoadMore',
-        },
         templateProps: {
           templates: {
             item: 'item',
           },
         },
+        cssClasses,
       };
-      const tree = renderer.create(<InfiniteHits {...props} />).toJSON();
+
+      const tree = mount(<InfiniteHits {...props} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -55,21 +58,15 @@ describe('InfiniteHits', () => {
         results: { hits },
         hits,
         isLastPage: true,
-        cssClasses: {
-          root: 'root',
-          emptyRoot: 'emptyRoot',
-          list: 'list',
-          item: 'item',
-          loadMore: 'loadMore',
-          disabledLoadMore: 'disabledLoadMore',
-        },
         templateProps: {
           templates: {
             item: 'item',
           },
         },
+        cssClasses,
       };
-      const tree = renderer.create(<InfiniteHits {...props} />).toJSON();
+
+      const tree = mount(<InfiniteHits {...props} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -81,21 +78,15 @@ describe('InfiniteHits', () => {
         results: { hits },
         hits,
         isLastPage: false,
-        cssClasses: {
-          root: 'root',
-          emptyRoot: 'emptyRoot',
-          list: 'list',
-          item: 'item',
-          loadMore: 'loadMore',
-          disabledLoadMore: 'disabledLoadMore',
-        },
         templateProps: {
           templates: {
             empty: 'empty',
           },
         },
+        cssClasses,
       };
-      const tree = renderer.create(<InfiniteHits {...props} />).toJSON();
+
+      const tree = mount(<InfiniteHits {...props} />);
 
       expect(tree).toMatchSnapshot();
     });
@@ -107,21 +98,15 @@ describe('InfiniteHits', () => {
         results: { hits },
         hits,
         isLastPage: true,
-        cssClasses: {
-          root: 'root',
-          emptyRoot: 'emptyRoot',
-          list: 'list',
-          item: 'item',
-          loadMore: 'loadMore',
-          disabledLoadMore: 'disabledLoadMore',
-        },
         templateProps: {
           templates: {
             empty: 'empty',
           },
         },
+        cssClasses,
       };
-      const tree = renderer.create(<InfiniteHits {...props} />).toJSON();
+
+      const tree = mount(<InfiniteHits {...props} />);
 
       expect(tree).toMatchSnapshot();
     });
