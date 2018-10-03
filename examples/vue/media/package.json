@@ -10,7 +10,7 @@
   "dependencies": {
     "algoliasearch": "3.30.0",
     "vue": "^2.5.17",
-    "vue-instantsearch": "2.0.0-alpha.1"
+    "vue-instantsearch": "2.0.0-alpha.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.3",
