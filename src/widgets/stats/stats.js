@@ -1,12 +1,9 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import Stats from '../../components/Stats/Stats.js';
 import connectStats from '../../connectors/stats/connectStats.js';
 import defaultTemplates from './defaultTemplates.js';
-
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
-
 import { component } from '../../lib/suit';
 
 const suit = component('Stats');
@@ -37,6 +34,7 @@ const renderer = ({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
+
     return;
   }
 
@@ -151,7 +149,7 @@ export default function stats({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget();
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }

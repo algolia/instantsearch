@@ -1,42 +1,44 @@
+import React from 'preact-compat';
 import PropTypes from 'prop-types';
-import React, { Component } from 'preact-compat';
-
 import Template from '../Template.js';
 
-class Stats extends Component {
-  render() {
-    const data = {
-      hasManyResults: this.props.nbHits > 1,
-      hasNoResults: this.props.nbHits === 0,
-      hasOneResult: this.props.nbHits === 1,
-      hitsPerPage: this.props.hitsPerPage,
-      nbHits: this.props.nbHits,
-      nbPages: this.props.nbPages,
-      page: this.props.page,
-      processingTimeMS: this.props.processingTimeMS,
-      query: this.props.query,
-      cssClasses: this.props.cssClasses,
-    };
-
-    return (
-      <div className={this.props.cssClasses.root}>
-        <Template
-          templateKey="text"
-          rootTagName="span"
-          rootProps={{ className: this.props.cssClasses.text }}
-          data={data}
-          {...this.props.templateProps}
-        />
-      </div>
-    );
-  }
-}
+const Stats = ({
+  nbHits,
+  hitsPerPage,
+  nbPages,
+  page,
+  processingTimeMS,
+  query,
+  templateProps,
+  cssClasses,
+}) => (
+  <div className={cssClasses.root}>
+    <Template
+      {...templateProps}
+      templateKey="text"
+      rootTagName="span"
+      rootProps={{ className: cssClasses.text }}
+      data={{
+        hasManyResults: nbHits > 1,
+        hasNoResults: nbHits === 0,
+        hasOneResult: nbHits === 1,
+        hitsPerPage,
+        nbHits,
+        nbPages,
+        page,
+        processingTimeMS,
+        query,
+        cssClasses,
+      }}
+    />
+  </div>
+);
 
 Stats.propTypes = {
   cssClasses: PropTypes.shape({
-    root: PropTypes.string,
-    text: PropTypes.string,
-  }),
+    root: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+  }).isRequired,
   hitsPerPage: PropTypes.number,
   nbHits: PropTypes.number,
   nbPages: PropTypes.number,
