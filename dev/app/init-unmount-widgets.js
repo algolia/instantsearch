@@ -278,13 +278,10 @@ export default () => {
     wrapWithUnmount(container =>
       instantsearch.widgets.ratingMenu({
         container,
-        attributeName: 'rating',
+        attribute: 'rating',
         max: 5,
         labels: {
           andUp: '& Up',
-        },
-        templates: {
-          header: 'Rating',
         },
       })
     )
