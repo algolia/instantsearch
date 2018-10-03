@@ -12,7 +12,7 @@ const InfiniteHits = ({
   cssClasses,
   templateProps,
 }) => {
-  if (hits.length === 0) {
+  if (results.hits.length === 0) {
     return (
       <Template
         {...templateProps}

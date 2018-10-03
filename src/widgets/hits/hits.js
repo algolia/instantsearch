@@ -1,7 +1,7 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
 import connectHits from '../../connectors/hits/connectHits.js';
-import Hits from '../../components/Hits.js';
+import Hits from '../../components/Hits/Hits.js';
 import defaultTemplates from './defaultTemplates.js';
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit';

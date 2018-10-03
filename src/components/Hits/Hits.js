@@ -3,17 +3,21 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Template from '../Template.js';
 
-const Hits = ({ results, hits, cssClasses, templateProps }) =>
-  results.hits.length === 0 ? (
-    <Template
-      {...templateProps}
-      templateKey="empty"
-      rootProps={{
-        className: cx(cssClasses.root, cssClasses.emptyRoot),
-      }}
-      data={results}
-    />
-  ) : (
+const Hits = ({ results, hits, cssClasses, templateProps }) => {
+  if (results.hits.length === 0) {
+    return (
+      <Template
+        {...templateProps}
+        templateKey="empty"
+        rootProps={{
+          className: cx(cssClasses.root, cssClasses.emptyRoot),
+        }}
+        data={results}
+      />
+    );
+  }
+
+  return (
     <div className={cssClasses.root}>
       <ol className={cssClasses.list}>
         {hits.map((hit, position) => (
@@ -32,6 +36,7 @@ const Hits = ({ results, hits, cssClasses, templateProps }) =>
       </ol>
     </div>
   );
+};
 
 Hits.propTypes = {
   cssClasses: PropTypes.shape({
