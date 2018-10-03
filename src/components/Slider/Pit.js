@@ -1,7 +1,6 @@
 import React from 'preact-compat';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
 import { component } from '../../lib/suit';
 
 const suit = component('RangeSlider');
@@ -30,9 +29,9 @@ const Pit = ({ style, children }) => {
         }
       )}
     >
-      {shouldDisplayValue ? (
-        <div className={cx(suit({ descendantName: 'value' }))}>{pitValue}</div>
-      ) : null}
+      {shouldDisplayValue && (
+        <div className={suit({ descendantName: 'value' })}>{pitValue}</div>
+      )}
     </div>
   );
 };

@@ -5,7 +5,6 @@ import cx from 'classnames';
 import times from 'lodash/times';
 import range from 'lodash/range';
 import has from 'lodash/has';
-
 import Pit from './Pit.js';
 
 class Slider extends Component {
@@ -80,9 +79,9 @@ class Slider extends Component {
 
     return (
       <div {...props} className={className}>
-        {tooltips ? (
+        {tooltips && (
           <div className={this.props.cssClasses.tooltip}>{value}</div>
-        ) : null}
+        )}
       </div>
     );
   };
