@@ -32,10 +32,10 @@ const renderLink = ({ cssClasses, createURL, refine, templateProps }) => (
       })}
     >
       <Template
+        {...templateProps}
+        templateKey="separator"
         rootTagName="span"
         rootProps={{ className: cssClasses.separator, 'aria-hidden': true }}
-        templateKey="separator"
-        {...templateProps}
       />
       {link}
     </li>
@@ -48,47 +48,40 @@ const Breadcrumb = ({
   refine,
   cssClasses,
   templateProps,
-}) => {
-  const rootClassnames = cx(cssClasses.root, {
-    [cssClasses.noRefinement]: items.length > 0,
-  });
-  const homeClassnames = cx(cssClasses.item, {
-    [cssClasses.selectedItem]: items.length === 0,
-  });
+}) => (
+  <div
+    className={cx(cssClasses.root, {
+      [cssClasses.noRefinement]: items.length > 0,
+    })}
+  >
+    <ul className={cssClasses.list}>
+      <li
+        className={cx(cssClasses.item, {
+          [cssClasses.selectedItem]: items.length === 0,
+        })}
+      >
+        <Template
+          {...templateProps}
+          templateKey="home"
+          rootTagName="a"
+          rootProps={{
+            className: cssClasses.link,
+            href: createURL(null),
+            onClick: event => {
+              event.preventDefault();
+              refine(null);
+            },
+          }}
+        />
+      </li>
 
-  const homeOnClickHandler = event => {
-    event.preventDefault();
-    refine(null);
-  };
-
-  const homeUrl = createURL(null);
-  const breadcrumb = items.map(
-    renderLink({ cssClasses, createURL, refine, templateProps })
-  );
-
-  return (
-    <div className={rootClassnames}>
-      <ul className={cssClasses.list}>
-        <li className={homeClassnames}>
-          <Template
-            {...templateProps}
-            templateKey="home"
-            rootTagName="a"
-            rootProps={{
-              className: cssClasses.link,
-              href: homeUrl,
-              onClick: homeOnClickHandler,
-            }}
-          />
-        </li>
-        {breadcrumb}
-      </ul>
-    </div>
-  );
-};
+      {items.map(renderLink({ cssClasses, createURL, refine, templateProps }))}
+    </ul>
+  </div>
+);
 
 Breadcrumb.propTypes = {
-  createURL: PropTypes.func,
+  createURL: PropTypes.func.isRequired,
   cssClasses: PropTypes.shape({
     root: PropTypes.string.isRequired,
     noRefinement: PropTypes.string.isRequired,
@@ -100,14 +93,12 @@ Breadcrumb.propTypes = {
   }).isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string,
+      name: PropTypes.string.isRequired,
       value: PropTypes.string,
     })
-  ),
+  ).isRequired,
   refine: PropTypes.func.isRequired,
-  separator: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   templateProps: PropTypes.object.isRequired,
-  translate: PropTypes.func,
 };
 
 export default Breadcrumb;
