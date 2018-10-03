@@ -6,9 +6,6 @@ import { wrapWithHits } from '../../utils/wrap-with-hits.js';
 
 const stories = storiesOf('PoweredBy');
 
-window.connectPoweredBy = instantsearch.connectors.connectPoweredBy;
-window.poweredBy = instantsearch.widgets.poweredBy;
-
 export default () => {
   stories.add(
     'default',

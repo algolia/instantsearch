@@ -1,6 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import PoweredBy from '../../components/PoweredBy/PoweredBy';
 import connectPoweredBy from '../../connectors/powered-by/connectPoweredBy.js';
 import { getContainerNode } from '../../lib/utils.js';
@@ -31,6 +30,15 @@ poweredBy({
 })`;
 
 /**
+ * @typedef {Object} PoweredByWidgetCssClasses
+ * @property  {string|string[]} [root] CSS classes added to the root element of the widget.
+ * @property {string|string[]} [darkRoot] CSS class to add to the root element of the widget with a dark theme.
+ * @property {string|string[]} [lightRoot] CSS class to add to the root element of the widget with a light theme.
+ * @property  {string|string[]} [link] CSS class to add to the link.
+ * @property  {string|string[]} [logo] CSS class to add to the SVG logo.
+ */
+
+/**
  * @typedef {Object} PoweredByWidgetOptions
  * @property {string|HTMLElement} container Place where to insert the widget in your webpage.
  * @property {string} [theme] The theme of the logo ("light" or "dark").
@@ -38,7 +46,7 @@ poweredBy({
  */
 
 /**
- * The `poweredBy` widget is used to display useful insights about the current results.
+ * The `poweredBy` widget is used to display the logo to redirect to Algolia.
  * @type {WidgetFactory}
  * @devNovel PoweredBy
  * @category metadata
