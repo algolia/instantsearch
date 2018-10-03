@@ -98,7 +98,7 @@ import algoliasearch from 'algoliasearch/lite';
 export default {
   data() {
     return {
-      searchClient: algoliasearch('latency', '3d9875e51fbd20c7754e65422f7ce5e1');
+      searchClient: algoliasearch('latency', '3d9875e51fbd20c7754e65422f7ce5e1'),
     };
   },
 };
