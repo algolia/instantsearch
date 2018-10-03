@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
@@ -19,6 +19,7 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
       "root": "ais-hierarchical-menu",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -60,7 +61,7 @@ exports[`hierarchicalMenu() render calls ReactDOM.render 1`] = `
 `;
 
 exports[`hierarchicalMenu() render has a templates option 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
@@ -78,6 +79,7 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
       "root": "ais-hierarchical-menu",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -119,7 +121,7 @@ exports[`hierarchicalMenu() render has a templates option 1`] = `
 `;
 
 exports[`hierarchicalMenu() render has a transformItems options 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
@@ -137,6 +139,7 @@ exports[`hierarchicalMenu() render has a transformItems options 1`] = `
       "root": "ais-hierarchical-menu",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -180,7 +183,7 @@ exports[`hierarchicalMenu() render has a transformItems options 1`] = `
 `;
 
 exports[`hierarchicalMenu() render sets facetValues to empty array when no results 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
@@ -198,6 +201,7 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
       "root": "ais-hierarchical-menu",
     }
   }
+  depth={0}
   facetValues={Array []}
   isShowingMore={false}
   shouldAutoHideContainer={true}
@@ -228,7 +232,7 @@ exports[`hierarchicalMenu() render sets facetValues to empty array when no resul
 `;
 
 exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no results 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
@@ -246,6 +250,7 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
       "root": "ais-hierarchical-menu",
     }
   }
+  depth={0}
   facetValues={Array []}
   isShowingMore={false}
   shouldAutoHideContainer={true}
@@ -276,7 +281,7 @@ exports[`hierarchicalMenu() render sets shouldAutoHideContainer to true when no 
 `;
 
 exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   canToggleShowMore={false}
   collapsible={false}
   createURL={[Function]}
@@ -294,6 +299,7 @@ exports[`hierarchicalMenu() render understand provided cssClasses 1`] = `
       "root": "ais-hierarchical-menu root cx",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -17,6 +17,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
       "root": "ais-refinement-list root cx",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -70,7 +71,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
 `;
 
 exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -86,6 +87,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
       "root": "ais-refinement-list root cx",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {
@@ -139,7 +141,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
 `;
 
 exports[`numericRefinementList() renders with transformed items 1`] = `
-<HeaderFooter-AutoHide
+<RefinementList
   collapsible={false}
   createURL={[Function]}
   cssClasses={
@@ -155,6 +157,7 @@ exports[`numericRefinementList() renders with transformed items 1`] = `
       "root": "ais-refinement-list",
     }
   }
+  depth={0}
   facetValues={
     Array [
       Object {

@@ -1,0 +1,504 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RefinementList rendering with facets 1`] = `
+<div
+  className="root"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1200,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": false,
+              "label": "Amazon",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+    <li
+      className="item selectedItem"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1000,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": true,
+              "label": "Google",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`RefinementList rendering with facets and disabled show more 1`] = `
+<div
+  className="root"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1200,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": false,
+              "label": "Amazon",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+    <li
+      className="item selectedItem"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1000,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": true,
+              "label": "Google",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+  </ul>
+  <button
+    className="showMore disabledShowMore"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": Object {},
+      }
+    }
+  />
+</div>
+`;
+
+exports[`RefinementList rendering with facets and show more 1`] = `
+<div
+  className="root"
+>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1200,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": false,
+              "label": "Amazon",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+    <li
+      className="item selectedItem"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1000,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": true,
+              "label": "Google",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+  </ul>
+  <button
+    className="showMore"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": Object {},
+      }
+    }
+  />
+</div>
+`;
+
+exports[`RefinementList rendering with facets from search 1`] = `
+<div
+  className="root"
+>
+  <div
+    className="searchBox"
+  >
+    <form
+      className="searchbox sbx-sffv"
+      noValidate="novalidate"
+      onReset={[Function]}
+      onSubmit={[Function]}
+    >
+      <svg
+        style={
+          Object {
+            "display": "none",
+          }
+        }
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <symbol
+          id="sbx-icon-search-12"
+          viewBox="0 0 40 41"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M30.967 27.727l-.03-.03c-.778-.777-2.038-.777-2.815 0l-1.21 1.21c-.78.78-.778 2.04 0 2.817l.03.03 4.025-4.027zm1.083 1.084L39.24 36c.778.778.78 2.037 0 2.816l-1.21 1.21c-.777.778-2.038.78-2.816 0l-7.19-7.19 4.026-4.025zM15.724 31.45c8.684 0 15.724-7.04 15.724-15.724C31.448 7.04 24.408 0 15.724 0 7.04 0 0 7.04 0 15.724c0 8.684 7.04 15.724 15.724 15.724zm0-3.93c6.513 0 11.793-5.28 11.793-11.794 0-6.513-5.28-11.793-11.793-11.793C9.21 3.93 3.93 9.21 3.93 15.725c0 6.513 5.28 11.793 11.794 11.793z"
+            fillRule="evenodd"
+          />
+        </symbol>
+        <symbol
+          id="sbx-icon-clear-2"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.96 10L.52 1.562 0 1.042 1.04 0l.522.52L10 8.96 18.438.52l.52-.52L20 1.04l-.52.522L11.04 10l8.44 8.438.52.52L18.96 20l-.522-.52L10 11.04l-8.438 8.44-.52.52L0 18.96l.52-.522L8.96 10z"
+            fillRule="evenodd"
+          />
+        </symbol>
+      </svg>
+      <div
+        className="sbx-sffv__wrapper"
+        role="search"
+      >
+        <input
+          autoComplete="off"
+          className="sbx-sffv__input"
+          disabled={false}
+          name="search"
+          onChange={[Function]}
+          placeholder="Search"
+          required="required"
+          type="search"
+        />
+        <button
+          className="sbx-sffv__submit"
+          title="Submit your search query."
+          type="submit"
+        >
+          <svg
+            aria-label="Search"
+            role="img"
+          >
+            <use
+              xlinkHref="#sbx-icon-search-12"
+            />
+          </svg>
+        </button>
+        <button
+          className="sbx-sffv__reset"
+          title="Clear the search query."
+          type="reset"
+        >
+          <svg
+            aria-label="Reset"
+            role="img"
+          >
+            <use
+              xlinkHref="#sbx-icon-clear-2"
+            />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+  <ul
+    className="list"
+  >
+    <li
+      className="item"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1200,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": false,
+              "label": "Amazon",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+    <li
+      className="item selectedItem"
+      onClick={[Function]}
+    >
+      <div
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": Object {
+              "count": 1000,
+              "cssClasses": Object {
+                "checkbox": "checkbox",
+                "count": "count",
+                "disabledShowMore": "disabledShowMore",
+                "item": "item",
+                "label": "label",
+                "labelText": "labelText",
+                "list": "list",
+                "noRefinementRoot": "noRefinementRoot",
+                "noResults": "noResults",
+                "root": "root",
+                "searchBox": "searchBox",
+                "selectedItem": "selectedItem",
+                "showMore": "showMore",
+              },
+              "isRefined": true,
+              "label": "Google",
+              "url": undefined,
+            },
+          }
+        }
+      />
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`RefinementList rendering without facets 1`] = `
+<div
+  className="root noRefinementRoot"
+/>
+`;
+
+exports[`RefinementList rendering without facets from search 1`] = `
+<div
+  className="root noRefinementRoot"
+>
+  <div
+    className="searchBox"
+  >
+    <form
+      className="searchbox sbx-sffv"
+      noValidate="novalidate"
+      onReset={[Function]}
+      onSubmit={[Function]}
+    >
+      <svg
+        style={
+          Object {
+            "display": "none",
+          }
+        }
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <symbol
+          id="sbx-icon-search-12"
+          viewBox="0 0 40 41"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M30.967 27.727l-.03-.03c-.778-.777-2.038-.777-2.815 0l-1.21 1.21c-.78.78-.778 2.04 0 2.817l.03.03 4.025-4.027zm1.083 1.084L39.24 36c.778.778.78 2.037 0 2.816l-1.21 1.21c-.777.778-2.038.78-2.816 0l-7.19-7.19 4.026-4.025zM15.724 31.45c8.684 0 15.724-7.04 15.724-15.724C31.448 7.04 24.408 0 15.724 0 7.04 0 0 7.04 0 15.724c0 8.684 7.04 15.724 15.724 15.724zm0-3.93c6.513 0 11.793-5.28 11.793-11.794 0-6.513-5.28-11.793-11.793-11.793C9.21 3.93 3.93 9.21 3.93 15.725c0 6.513 5.28 11.793 11.794 11.793z"
+            fillRule="evenodd"
+          />
+        </symbol>
+        <symbol
+          id="sbx-icon-clear-2"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.96 10L.52 1.562 0 1.042 1.04 0l.522.52L10 8.96 18.438.52l.52-.52L20 1.04l-.52.522L11.04 10l8.44 8.438.52.52L18.96 20l-.522-.52L10 11.04l-8.438 8.44-.52.52L0 18.96l.52-.522L8.96 10z"
+            fillRule="evenodd"
+          />
+        </symbol>
+      </svg>
+      <div
+        className="sbx-sffv__wrapper"
+        role="search"
+      >
+        <input
+          autoComplete="off"
+          className="sbx-sffv__input"
+          disabled={false}
+          name="search"
+          onChange={[Function]}
+          placeholder="Search"
+          required="required"
+          type="search"
+        />
+        <button
+          className="sbx-sffv__submit"
+          title="Submit your search query."
+          type="submit"
+        >
+          <svg
+            aria-label="Search"
+            role="img"
+          >
+            <use
+              xlinkHref="#sbx-icon-search-12"
+            />
+          </svg>
+        </button>
+        <button
+          className="sbx-sffv__reset"
+          title="Clear the search query."
+          type="reset"
+        >
+          <svg
+            aria-label="Reset"
+            role="img"
+          >
+            <use
+              xlinkHref="#sbx-icon-clear-2"
+            />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+  <div
+    className="noResults"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": Object {},
+      }
+    }
+  />
+</div>
+`;
