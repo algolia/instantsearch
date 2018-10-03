@@ -1,10 +1,8 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectNumericMenu from '../../connectors/numeric-menu/connectNumericMenu.js';
 import defaultTemplates from './defaultTemplates.js';
-
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit.js';
 
@@ -176,7 +174,7 @@ export default function numericMenu({
       items,
       transformItems,
     });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }
