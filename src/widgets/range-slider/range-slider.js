@@ -1,6 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import Slider from '../../components/Slider/Slider.js';
 import connectRange from '../../connectors/range/connectRange.js';
 import { getContainerNode } from '../../lib/utils.js';
