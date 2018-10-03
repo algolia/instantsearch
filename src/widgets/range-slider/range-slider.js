@@ -54,8 +54,8 @@ rangeSlider({
   [ pips = true ],
   [ step = 1 ],
   [ precision = 0 ],
-  [ tooltips=true ],
-  [ cssClasses.{root} ],
+  [ tooltips = true ],
+  [ cssClasses.{root} ]
 });
 `;
 
@@ -164,7 +164,7 @@ export default function rangeSlider({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attribute, min, max, precision });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }
