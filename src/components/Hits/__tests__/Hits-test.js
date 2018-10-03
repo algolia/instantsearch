@@ -1,8 +1,8 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import Hits from '../Hits';
-import Template from '../Template';
-import { highlight } from '../../helpers';
+import Template from '../../Template';
+import { highlight } from '../../../helpers';
 
 describe('Hits', () => {
   const cssClasses = {
