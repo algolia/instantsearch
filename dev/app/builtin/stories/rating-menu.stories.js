@@ -7,26 +7,6 @@ import { wrapWithHits } from '../../utils/wrap-with-hits';
 const stories = storiesOf('RatingMenu');
 
 export default () => {
-<<<<<<< HEAD:dev/app/builtin/stories/star-rating.stories.js
-  stories.add(
-    'default',
-    wrapWithHits(container => {
-      window.search.addWidget(
-        instantsearch.widgets.starRating({
-          container,
-          attribute: 'rating',
-          max: 5,
-          labels: {
-            andUp: '& Up',
-          },
-          templates: {
-            header: 'Rating',
-          },
-        })
-      );
-    })
-  );
-=======
   stories
     .add(
       'default',
@@ -58,5 +38,4 @@ export default () => {
         );
       })
     );
->>>>>>> feat(rating-menu): rename widget:dev/app/builtin/stories/rating-menu.stories.js
 };
