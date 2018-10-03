@@ -12,7 +12,6 @@ const renderer = ({
   containerNode,
   cssClasses,
   renderState,
-  separator,
   templates,
   transformData,
 }) => (
@@ -26,6 +25,7 @@ const renderer = ({
       templates,
       transformData,
     });
+
     return;
   }
 
@@ -36,7 +36,6 @@ const renderer = ({
       createURL={createURL}
       items={items}
       refine={refine}
-      separator={separator}
       templateProps={renderState.templateProps}
     />,
     containerNode
@@ -145,7 +144,6 @@ export default function breadcrumb({
   container,
   cssClasses: userCssClasses = {},
   rootPath = null,
-  separator = ' > ',
   templates = defaultTemplates,
   transformData,
   transformItems,
@@ -179,7 +177,6 @@ export default function breadcrumb({
     containerNode,
     cssClasses,
     renderState: {},
-    separator,
     templates,
     transformData,
   });
