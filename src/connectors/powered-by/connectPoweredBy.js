@@ -3,8 +3,9 @@ import { checkRendering } from '../../lib/utils.js';
 const usage = `Usage:
 var customPoweredBy = connectPoweredBy(function render(params, isFirstRendering) {
   // params = {
-  //   instantSearchInstance,
+  //   url,
   //   widgetParams,
+  //   instantSearchInstance,
   // }
 });
 search.addWidget(customPoweredBy({
@@ -13,8 +14,17 @@ search.addWidget(customPoweredBy({
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/connectors/connectPoweredBy.html`;
 
 /**
+ * @typedef {Object} PoweredByWidgetOptions
+ * @property {string} [theme] The theme of the logo ("light" or "dark").
+ *
+ * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
+ * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
+ */
+
+/**
  * @typedef {Object} PoweredByRenderingOptions
- * @property {object} widgetParams All original `PoweredByWidgetOptions` forwarded to the `renderFn`.
+ * @property {string} url The URL to redirect to.
+ * @property {Object} widgetParams All original `PoweredByWidgetOptions` forwarded to the `renderFn`.
  */
 
 /**
@@ -30,20 +40,29 @@ export default function connectPoweredBy(renderFn, unmountFn) {
   checkRendering(renderFn, usage);
 
   return (widgetParams = {}) => {
+    const defaultUrl =
+      'https://www.algolia.com/?' +
+      'utm_source=instantsearch.js&' +
+      'utm_medium=website&' +
+      `utm_content=${location.hostname}&` +
+      'utm_campaign=poweredby';
+
     return {
-      init() {
+      init({ url = defaultUrl }) {
         renderFn(
           {
             widgetParams,
+            url,
           },
           true
         );
       },
 
-      render() {
+      render({ url = defaultUrl }) {
         renderFn(
           {
             widgetParams,
+            url,
           },
           false
         );

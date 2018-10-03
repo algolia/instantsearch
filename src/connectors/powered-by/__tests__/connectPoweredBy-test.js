@@ -9,14 +9,72 @@ describe('connectPoweredBy', () => {
     // does not have a getConfiguration method
     expect(widget.getConfiguration).toBe(undefined);
 
-    widget.init();
+    widget.init({});
 
     expect(rendering).toHaveBeenCalledTimes(1);
     expect(rendering).toHaveBeenCalledWith(expect.anything(), true);
 
-    widget.render();
+    widget.render({});
 
     expect(rendering).toHaveBeenCalledTimes(2);
     expect(rendering).toHaveBeenLastCalledWith(expect.anything(), false);
+  });
+
+  it('has a default URL at init', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectPoweredBy(rendering);
+    const widget = makeWidget();
+
+    widget.init({});
+
+    expect(rendering).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url:
+          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=&utm_campaign=poweredby',
+      }),
+      true
+    );
+  });
+
+  it('has a default URL at render', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectPoweredBy(rendering);
+    const widget = makeWidget();
+
+    widget.render({});
+
+    expect(rendering).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url:
+          'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=&utm_campaign=poweredby',
+      }),
+      false
+    );
+  });
+
+  it('can override the URL at init', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectPoweredBy(rendering);
+    const widget = makeWidget();
+
+    widget.init({ url: '#overridden-url' });
+
+    expect(rendering).toHaveBeenCalledWith(
+      expect.objectContaining({ url: '#overridden-url' }),
+      true
+    );
+  });
+
+  it('can override the URL at render', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectPoweredBy(rendering);
+    const widget = makeWidget();
+
+    widget.render({ url: '#overridden-url' });
+
+    expect(rendering).toHaveBeenCalledWith(
+      expect.objectContaining({ url: '#overridden-url' }),
+      false
+    );
   });
 });

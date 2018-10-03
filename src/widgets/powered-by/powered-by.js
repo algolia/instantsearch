@@ -8,11 +8,11 @@ import { component } from '../../lib/suit';
 const suit = component('PoweredBy');
 
 const renderer = ({ containerNode, cssClasses }) => (
-  { widgetParams },
+  { url, widgetParams },
   isFirstRendering
 ) => {
   if (isFirstRendering) {
-    const { url, theme } = widgetParams;
+    const { theme } = widgetParams;
 
     render(
       <PoweredBy cssClasses={cssClasses} url={url} theme={theme} />,
@@ -55,7 +55,8 @@ poweredBy({
  * @example
  * search.addWidget(
  *   instantsearch.widgets.poweredBy({
- *     container: '#poweredBy-container'
+ *     container: '#poweredBy-container',
+ *     theme: 'dark',
  *   })
  * );
  */
@@ -69,12 +70,6 @@ export default function poweredBy({
   }
 
   const containerNode = getContainerNode(container);
-  const url =
-    'https://www.algolia.com/?' +
-    'utm_source=instantsearch.js&' +
-    'utm_medium=website&' +
-    `utm_content=${location.hostname}&` +
-    'utm_campaign=poweredby';
 
   const cssClasses = {
     root: cx(
@@ -95,7 +90,7 @@ export default function poweredBy({
     const makeWidget = connectPoweredBy(specializedRenderer, () =>
       unmountComponentAtNode(containerNode)
     );
-    return makeWidget({ url, theme });
+    return makeWidget({ theme });
   } catch (error) {
     throw new Error(usage);
   }

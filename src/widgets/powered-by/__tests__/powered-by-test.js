@@ -25,7 +25,7 @@ describe('poweredBy', () => {
       },
     });
 
-    widget.init();
+    widget.init({});
   });
 
   afterEach(() => {
@@ -37,8 +37,8 @@ describe('poweredBy', () => {
   });
 
   it('renders only once at init', () => {
-    widget.render();
-    widget.render();
+    widget.render({});
+    widget.render({});
     expect(ReactDOM.render).toHaveBeenCalledTimes(1);
     expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
     expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
