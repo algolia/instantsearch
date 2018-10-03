@@ -98,8 +98,8 @@ describe('numericRefinementList()', () => {
       container,
       attribute: 'price',
       items,
-      transformItems: items =>
-        items.map(item => ({ ...item, transformed: true })),
+      transformItems: allItems =>
+        allItems.map(item => ({ ...item, transformed: true })),
     });
 
     widget.init({ helper, instantSearchInstance: {} });
