@@ -1,6 +1,5 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectRatingMenu from '../../connectors/rating-menu/connectRatingMenu.js';
 import defaultTemplates from './defaultTemplates.js';
@@ -28,6 +27,7 @@ const renderer = ({
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
+
     return;
   }
 
@@ -47,7 +47,7 @@ const usage = `Usage:
 ratingMenu({
   container,
   attribute,
-  [ max=5 ],
+  [ max = 5 ],
   [ cssClasses.{root, list, item, selectedItem, disabledItem, link, starIcon, fullStarIcon, emptyStarIcon, label, count} ],
   [ templates.{header,item,footer} ],
   [ transformData.{item} ],
@@ -184,7 +184,7 @@ export default function ratingMenu({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({ attribute, max });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }
