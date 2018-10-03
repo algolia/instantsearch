@@ -1,5 +1,4 @@
 import expect from 'expect';
-import sinon from 'sinon';
 import clearRefinements from '../clear-refinements';
 
 describe('clearRefinements()', () => {
@@ -11,8 +10,8 @@ describe('clearRefinements()', () => {
   let createURL;
 
   beforeEach(() => {
-    ReactDOM = { render: sinon.spy() };
-    createURL = sinon.stub().returns('#all-cleared');
+    ReactDOM = { render: jest.fn() };
+    createURL = jest.fn().mockReturnValue('#all-cleared');
 
     clearRefinements.__Rewire__('render', ReactDOM.render);
 
@@ -29,10 +28,10 @@ describe('clearRefinements()', () => {
     results = {};
     helper = {
       state: {
-        clearRefinements: sinon.stub().returnsThis(),
-        clearTags: sinon.stub().returnsThis(),
+        clearRefinements: jest.fn().mockReturnValue(this),
+        clearTags: jest.fn().mockReturnValue(this),
       },
-      search: sinon.spy(),
+      search: jest.fn(),
     };
 
     widget.init({
@@ -69,14 +68,11 @@ describe('clearRefinements()', () => {
         instantSearchInstance: {},
       });
 
-      expect(ReactDOM.render.calledTwice).toBe(
-        true,
-        'ReactDOM.render called twice'
-      );
-      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-      expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-      expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-      expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+      expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+      expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
     });
   });
 
@@ -89,19 +85,15 @@ describe('clearRefinements()', () => {
       widget.render({ results, helper, state: helper.state, createURL });
       widget.render({ results, helper, state: helper.state, createURL });
 
-      expect(ReactDOM.render.calledTwice).toBe(
-        true,
-        'ReactDOM.render called twice'
-      );
-      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
-      expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-      expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
-      expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+      expect(ReactDOM.render).toHaveBeenCalledTimes(2);
+      expect(ReactDOM.render.mock.calls[0][0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[0][1]).toEqual(container);
+      expect(ReactDOM.render.mock.calls[1][0]).toMatchSnapshot();
+      expect(ReactDOM.render.mock.calls[1][1]).toEqual(container);
     });
   });
 
   afterEach(() => {
     clearRefinements.__ResetDependency__('render');
-    clearRefinements.__ResetDependency__('defaultTemplates');
   });
 });

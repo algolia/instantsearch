@@ -7,10 +7,10 @@ import Template from './Template';
 class MenuSelect extends Component {
   static propTypes = {
     cssClasses: PropTypes.shape({
-      root: PropTypes.string,
-      select: PropTypes.string,
-      option: PropTypes.string,
-    }),
+      root: PropTypes.string.isRequired,
+      select: PropTypes.string.isRequired,
+      option: PropTypes.string.isRequired,
+    }).isRequired,
     items: PropTypes.array.isRequired,
     refine: PropTypes.func.isRequired,
     templateProps: PropTypes.object.isRequired,
@@ -26,42 +26,38 @@ class MenuSelect extends Component {
       value: '',
     };
 
-    const noRefinements = items.length === 0;
-
     const rootClassNames = cx(cssClasses.root, {
-      [cssClasses.noRefinementRoot]: noRefinements,
+      [cssClasses.noRefinementRoot]: items.length === 0,
     });
-    const selectClassNames = cx(cssClasses.select);
-    const optionClassNames = cx(cssClasses.option);
 
     return (
       <div className={rootClassNames}>
         <select
-          className={selectClassNames}
+          className={cssClasses.select}
           value={selectedValue}
           onChange={this.handleSelectChange}
         >
           <Template
+            {...templateProps}
             templateKey="seeAllOptions"
             rootTagName="option"
             rootProps={{
               value: '',
-              className: optionClassNames,
+              className: cssClasses.option,
             }}
-            {...templateProps}
           />
 
           {items.map(item => (
             <Template
-              data={item}
+              {...templateProps}
               templateKey="item"
               rootTagName="option"
-              key={item.value}
               rootProps={{
                 value: item.value,
-                className: optionClassNames,
+                className: cssClasses.option,
               }}
-              {...templateProps}
+              key={item.value}
+              data={item}
             />
           ))}
         </select>

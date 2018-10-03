@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import TemplateWithTransformData, { PureTemplate } from '../Template';
-import sinon from 'sinon';
 import renderer from 'react-test-renderer';
 
 describe('Template', () => {
@@ -172,37 +171,37 @@ describe('Template', () => {
         rootProps: { className: 'myCssClass' },
       });
       component = ReactDOM.render(<PureTemplate {...props} />, container);
-      sinon.spy(component, 'render');
+      jest.spyOn(component, 'render');
     });
 
     it('does not call render when no change in data', () => {
       ReactDOM.render(<PureTemplate {...props} />, container);
-      expect(component.render.called).toBe(false);
+      expect(component.render).not.toHaveBeenCalled();
     });
 
     it('calls render when data changes', () => {
       props.data = { hello: 'dad' };
       ReactDOM.render(<PureTemplate {...props} />, container);
-      expect(component.render.called).toBe(true);
+      expect(component.render).toHaveBeenCalled();
     });
 
     it('calls render when templateKey changes', () => {
       props.templateKey += '-rerender';
       props.templates = { [props.templateKey]: '' };
       ReactDOM.render(<PureTemplate {...props} />, container);
-      expect(component.render.called).toBe(true);
+      expect(component.render).toHaveBeenCalled();
     });
 
     it('calls render when rootProps changes', () => {
       props.rootProps = { className: 'myCssClass mySecondCssClass' };
       ReactDOM.render(<PureTemplate {...props} />, container);
-      expect(component.render.called).toBe(true);
+      expect(component.render).toHaveBeenCalled();
     });
 
     it('does not call render when rootProps remain unchanged', () => {
       props.rootProps = { className: 'myCssClass' };
       ReactDOM.render(<PureTemplate {...props} />, container);
-      expect(component.render.called).toBe(false);
+      expect(component.render).not.toHaveBeenCalled();
     });
   });
 
