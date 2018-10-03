@@ -28,8 +28,8 @@ describe('clearRefinements()', () => {
     results = {};
     helper = {
       state: {
-        clearRefinements: jest.fn().mockReturnValue(this),
-        clearTags: jest.fn().mockReturnValue(this),
+        clearRefinements: jest.fn().mockReturnThis(),
+        clearTags: jest.fn().mockReturnThis(),
       },
       search: jest.fn(),
     };

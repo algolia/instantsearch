@@ -33,7 +33,6 @@ sortBy({
   container,
   items,
   [cssClasses.{root, select, option}],
-  [autoHideContainer = false],
   [transformItems]
 })`;
 
@@ -54,7 +53,6 @@ sortBy({
  * @typedef {Object} SortByWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
  * @property {SortByIndexDefinition[]} items Array of objects defining the different indices to choose from.
- * @property {boolean} [autoHideContainer=false] Hide the container when no results match.
  * @property {SortByWidgetCssClasses} [cssClasses] CSS classes to be added.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
