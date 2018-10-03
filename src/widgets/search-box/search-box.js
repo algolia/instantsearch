@@ -27,9 +27,15 @@ const renderer = ({
     const wrappedInput = wrapInputFn(input, cssClasses);
     containerNode.appendChild(wrappedInput);
 
-    if (showSubmit) addSubmit(input, cssClasses, templates);
-    if (showReset) addReset(input, cssClasses, templates, clear);
-    if (showLoadingIndicator) addLoadingIndicator(input, cssClasses, templates);
+    if (showSubmit) {
+      addSubmit(input, cssClasses, templates);
+    }
+    if (showReset) {
+      addReset(input, cssClasses, templates, clear);
+    }
+    if (showLoadingIndicator) {
+      addLoadingIndicator(input, cssClasses, templates);
+    }
 
     addDefaultAttributesToInput(placeholder, input, query, cssClasses);
 
@@ -59,18 +65,18 @@ const renderer = ({
     const form = input.parentElement;
 
     if (searchAsYouType) {
-      addListener(input, 'input', getInputValueAndCall(refine));
-      addListener(form, 'submit', e => {
-        e.preventDefault();
+      input.addEventListener('input', refine);
+      form.addEventListener('submit', event => {
+        event.preventDefault();
         input.blur();
       });
     } else {
-      addListener(input, 'input', e => {
-        refine(getValue(e), false);
+      input.addEventListener('input', event => {
+        refine(event, false);
       });
-      addListener(form, 'submit', e => {
+      form.addEventListener('submit', event => {
         refine(input.value);
-        e.preventDefault();
+        event.preventDefault();
         input.blur();
       });
     }
@@ -248,25 +254,9 @@ export default function searchBox({
       disposer(containerNode)
     );
     return makeWidget({ queryHook });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
-}
-
-function addListener(el, type, fn) {
-  if (el.addEventListener) {
-    el.addEventListener(type, fn);
-  } else {
-    el.attachEvent(`on${type}`, fn);
-  }
-}
-
-function getValue(e) {
-  return (e.currentTarget ? e.currentTarget : e.srcElement).value;
-}
-
-function getInputValueAndCall(func) {
-  return actualEvent => func(getValue(actualEvent));
 }
 
 function addDefaultAttributesToInput(placeholder, input, query, cssClasses) {
@@ -379,5 +369,6 @@ function wrapInputFn(input, cssClasses) {
 
   form.appendChild(input);
   wrapper.appendChild(form);
+
   return wrapper;
 }
