@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             templates: {
               header: 'Price',
             },
@@ -33,7 +33,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             templates: {
               header: 'Price',
             },
@@ -54,7 +54,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             collapsible: {
               collapsed: false,
             },
@@ -71,7 +71,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             step: 500,
             tooltips: {
               format(rawValue) {
@@ -88,7 +88,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             pips: false,
             tooltips: {
               format(rawValue) {
@@ -105,7 +105,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             templates: {
               header: 'Price',
             },
@@ -125,7 +125,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             templates: {
               header: 'Price',
             },
@@ -145,7 +145,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             templates: {
               header: 'Price',
             },
@@ -165,7 +165,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.rangeSlider({
             container,
-            attributeName: 'price',
+            attribute: 'price',
             templates: {
               header: 'Price',
             },

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { createRenderer } from 'react-test-renderer/shallow';
 
-import Slider, { RawSlider } from '../Slider';
+import Slider from '../Slider';
 
 describe('Slider', () => {
   it('expect to render correctly', () => {
@@ -15,26 +15,10 @@ describe('Slider', () => {
         pips={true}
         step={2}
         tooltips={true}
-        shouldAutoHideContainer={false}
+        cssClasses={{ root: 'root' }}
       />
     );
-    expect(tree).toMatchSnapshot();
-  });
 
-  it('expect to render collapsed', () => {
-    const tree = createRenderer().render(
-      <Slider
-        refine={() => undefined}
-        min={0}
-        max={500}
-        values={[0, 0]}
-        pips={true}
-        step={2}
-        tooltips={true}
-        collapsible={{ collapsed: true }}
-        shouldAutoHideContainer={false}
-      />
-    );
     expect(tree).toMatchSnapshot();
   });
 
@@ -48,9 +32,29 @@ describe('Slider', () => {
         pips={false}
         step={2}
         tooltips={true}
-        shouldAutoHideContainer={false}
+        cssClasses={{ root: 'root' }}
       />
     );
+
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('expect to render with CSS classes', () => {
+    const tree = createRenderer().render(
+      <Slider
+        refine={() => undefined}
+        min={0}
+        max={500}
+        values={[0, 0]}
+        pips={false}
+        step={2}
+        tooltips={true}
+        cssClasses={{
+          root: 'root',
+        }}
+      />
+    );
+
     expect(tree).toMatchSnapshot();
   });
 
@@ -63,10 +67,10 @@ describe('Slider', () => {
       pips: true,
       step: 2,
       tooltips: true,
-      shouldAutoHideContainer: false,
+      cssClasses: { root: 'root' },
     };
 
-    shallow(<RawSlider {...props} />)
+    shallow(<Slider {...props} />)
       .find('Rheostat')
       .simulate('change', {
         values: [0, 100],
