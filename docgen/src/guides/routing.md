@@ -226,7 +226,7 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
     type: 'antique'
   },
   hierarchicalMenu: {
-    category: 'Decoration > Clocks'
+    category: ['Decoration > Clocks']
   },
   refinementList: {
     colors: ['white', 'black']
