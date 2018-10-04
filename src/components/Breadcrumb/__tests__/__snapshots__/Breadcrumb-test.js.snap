@@ -26,7 +26,7 @@ exports[`Breadcrumb should render <Breadcrumb /> 1`] = `
 
 exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
 <div
-  className="root no-refinement"
+  className="root noRefinement"
 >
   <ul
     className="list"
@@ -46,9 +46,10 @@ exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
     </li>
     <li
       className="item selectedItem"
+      key="name00"
     >
       <span
-        ariaHidden={true}
+        aria-hidden={true}
         className="separator"
         dangerouslySetInnerHTML={
           Object {
@@ -64,7 +65,7 @@ exports[`Breadcrumb should render <Breadcrumb /> with a single item 1`] = `
 
 exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
 <div
-  className="root no-refinement"
+  className="root noRefinement"
 >
   <ul
     className="list"
@@ -84,9 +85,10 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
     </li>
     <li
       className="item"
+      key="name00"
     >
       <span
-        ariaHidden={true}
+        aria-hidden={true}
         className="separator"
         dangerouslySetInnerHTML={
           Object {
@@ -103,9 +105,10 @@ exports[`Breadcrumb should render <Breadcrumb /> with items 1`] = `
     </li>
     <li
       className="item selectedItem"
+      key="name11"
     >
       <span
-        ariaHidden={true}
+        aria-hidden={true}
         className="separator"
         dangerouslySetInnerHTML={
           Object {
