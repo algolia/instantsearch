@@ -14,11 +14,11 @@ export default () => {
           attribute: 'price',
           operator: 'or',
           items: [
-            { name: 'All' },
-            { end: 4, name: 'less than 4' },
-            { start: 4, end: 4, name: '4' },
-            { start: 5, end: 10, name: 'between 5 and 10' },
-            { start: 10, name: 'more than 10' },
+            { label: 'All' },
+            { end: 4, label: 'less than 4' },
+            { start: 4, end: 4, label: '4' },
+            { start: 5, end: 10, label: 'between 5 and 10' },
+            { start: 10, label: 'more than 10' },
           ],
         })
       );

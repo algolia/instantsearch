@@ -92,7 +92,7 @@ numericMenu({
  */
 
 /**
- * The numeric refinement list is a widget that displays a list of numeric filters in a list. Those numeric filters
+ * The numeric menu is a widget that displays a list of numeric filters in a list. Those numeric filters
  * are pre-configured with creating the widget.
  *
  * @requirements
@@ -116,10 +116,7 @@ numericMenu({
  *       {end: 500, name: 'less than 500'},
  *       {start: 500, end: 2000, name: 'between 500 and 2000'},
  *       {start: 2000, name: 'more than 2000'}
- *     ],
- *     templates: {
- *       header: 'Popularity'
- *     }
+ *     ]
  *   })
  * );
  */

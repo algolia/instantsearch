@@ -1,35 +1,29 @@
-import numericRefinementList from '../numeric-menu.js';
+import numericMenu from '../numeric-menu.js';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
 
-describe('numericRefinementList call', () => {
+describe('numericMenu call', () => {
   it('throws an exception when no container', () => {
     const attribute = '';
     const items = [];
-    expect(numericRefinementList.bind(null, { attribute, items })).toThrow(
-      /^Usage/
-    );
+    expect(numericMenu.bind(null, { attribute, items })).toThrow(/^Usage/);
   });
 
   it('throws an exception when no attribute', () => {
     const container = document.createElement('div');
     const items = [];
-    expect(numericRefinementList.bind(null, { container, items })).toThrow(
-      /^Usage/
-    );
+    expect(numericMenu.bind(null, { container, items })).toThrow(/^Usage/);
   });
 
   it('throws an exception when no items', () => {
     const container = document.createElement('div');
     const attribute = '';
-    expect(numericRefinementList.bind(null, { attribute, container })).toThrow(
-      /^Usage/
-    );
+    expect(numericMenu.bind(null, { attribute, container })).toThrow(/^Usage/);
   });
 });
 
-describe('numericRefinementList()', () => {
+describe('numericMenu()', () => {
   let ReactDOM;
   let container;
   let widget;
@@ -42,18 +36,18 @@ describe('numericRefinementList()', () => {
 
   beforeEach(() => {
     ReactDOM = { render: jest.fn() };
-    numericRefinementList.__Rewire__('render', ReactDOM.render);
+    numericMenu.__Rewire__('render', ReactDOM.render);
 
     items = [
-      { name: 'All' },
-      { end: 4, name: 'less than 4' },
-      { start: 4, end: 4, name: '4' },
-      { start: 5, end: 10, name: 'between 5 and 10' },
-      { start: 10, name: 'more than 10' },
+      { label: 'All' },
+      { end: 4, label: 'less than 4' },
+      { start: 4, end: 4, label: '4' },
+      { start: 5, end: 10, label: 'between 5 and 10' },
+      { start: 10, label: 'more than 10' },
     ];
 
     container = document.createElement('div');
-    widget = numericRefinementList({
+    widget = numericMenu({
       container,
       attribute: 'price',
       items,
@@ -94,7 +88,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('renders with transformed items', () => {
-    widget = numericRefinementList({
+    widget = numericMenu({
       container,
       attribute: 'price',
       items,
@@ -209,9 +203,9 @@ describe('numericRefinementList()', () => {
     // not directly editing it
 
     // Given
-    const initialOptions = [{ start: 0, end: 5, name: '1-5' }];
+    const initialOptions = [{ start: 0, end: 5, label: '1-5' }];
     const initialOptionsClone = [...initialOptions];
-    const testWidget = numericRefinementList({
+    const testWidget = numericMenu({
       container,
       attribute: 'price',
       items: initialOptions,
@@ -228,6 +222,6 @@ describe('numericRefinementList()', () => {
   });
 
   afterEach(() => {
-    numericRefinementList.__ResetDependency__('render');
+    numericMenu.__ResetDependency__('render');
   });
 });

@@ -7,7 +7,7 @@ import connectNumericMenu from '../connectNumericMenu.js';
 
 const encodeValue = (start, end) =>
   window.encodeURI(JSON.stringify({ start, end }));
-const mapOptionsToItems = ({ start, end, name: label }) => ({
+const mapOptionsToItems = ({ start, end, label }) => ({
   label,
   value: encodeValue(start, end),
   isRefined: false,
@@ -22,9 +22,9 @@ describe('connectNumericMenu', () => {
     const widget = makeWidget({
       attribute: 'numerics',
       items: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
       ],
     });
 
@@ -51,9 +51,9 @@ describe('connectNumericMenu', () => {
         widgetParams: {
           attribute: 'numerics',
           items: [
-            { name: 'below 10', end: 10 },
-            { name: '10 - 20', start: 10, end: 20 },
-            { name: 'more than 20', start: 20 },
+            { label: 'below 10', end: 10 },
+            { label: '10 - 20', start: 10, end: 20 },
+            { label: 'more than 20', start: 20 },
           ],
         },
       }),
@@ -74,9 +74,9 @@ describe('connectNumericMenu', () => {
         widgetParams: {
           attribute: 'numerics',
           items: [
-            { name: 'below 10', end: 10 },
-            { name: '10 - 20', start: 10, end: 20 },
-            { name: 'more than 20', start: 20 },
+            { label: 'below 10', end: 10 },
+            { label: '10 - 20', start: 10, end: 20 },
+            { label: 'more than 20', start: 20 },
           ],
         },
       }),
@@ -89,7 +89,7 @@ describe('connectNumericMenu', () => {
     const makeWidget = connectNumericMenu(rendering);
     const widget = makeWidget({
       attribute: 'numerics',
-      items: [{ name: 'below 10', end: 10 }],
+      items: [{ label: 'below 10', end: 10 }],
       transformItems: items =>
         items.map(item => ({
           ...item,
@@ -135,11 +135,11 @@ describe('connectNumericMenu', () => {
     const widget = makeWidget({
       attribute: 'numerics',
       items: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
-        { name: '42', start: 42, end: 42 },
-        { name: 'void' },
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
+        { label: '42', start: 42, end: 42 },
+        { label: 'void' },
       ],
     });
 
@@ -216,9 +216,9 @@ describe('connectNumericMenu', () => {
     const widget = makeWidget({
       attribute: 'numerics',
       items: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
       ],
     });
 
@@ -274,11 +274,11 @@ describe('connectNumericMenu', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
-      { name: 'below 10', end: 10 },
-      { name: '10 - 20', start: 10, end: 20 },
-      { name: 'more than 20', start: 20 },
-      { name: '42', start: 42, end: 42 },
-      { name: 'void' },
+      { label: 'below 10', end: 10 },
+      { label: '10 - 20', start: 10, end: 20 },
+      { label: 'more than 20', start: 20 },
+      { label: '42', start: 42, end: 42 },
+      { label: 'void' },
     ];
     const widget = makeWidget({
       attribute: 'numerics',
@@ -327,11 +327,11 @@ describe('connectNumericMenu', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
-      { name: 'below 10', end: 10 },
-      { name: '10 - 20', start: 10, end: 20 },
-      { name: 'more than 20', start: 20 },
-      { name: '42', start: 42, end: 42 },
-      { name: 'void' },
+      { label: 'below 10', end: 10 },
+      { label: '10 - 20', start: 10, end: 20 },
+      { label: 'more than 20', start: 20 },
+      { label: '42', start: 42, end: 42 },
+      { label: 'void' },
     ];
     const widget = makeWidget({
       attribute: 'numerics',
@@ -391,11 +391,11 @@ describe('connectNumericMenu', () => {
     const rendering = jest.fn();
     const makeWidget = connectNumericMenu(rendering);
     const listOptions = [
-      { name: 'below 10', end: 10 },
-      { name: '10 - 20', start: 10, end: 20 },
-      { name: 'more than 20', start: 20 },
-      { name: '42', start: 42, end: 42 },
-      { name: 'void' },
+      { label: 'below 10', end: 10 },
+      { label: '10 - 20', start: 10, end: 20 },
+      { label: 'more than 20', start: 20 },
+      { label: '42', start: 42, end: 42 },
+      { label: 'void' },
     ];
     const widget = makeWidget({
       attribute: 'numerics',
@@ -438,11 +438,11 @@ describe('connectNumericMenu', () => {
     const widget = makeWidget({
       attribute: 'numerics',
       items: [
-        { name: 'below 10', end: 10 },
-        { name: '10 - 20', start: 10, end: 20 },
-        { name: 'more than 20', start: 20 },
-        { name: '42', start: 42, end: 42 },
-        { name: 'void' },
+        { label: 'below 10', end: 10 },
+        { label: '10 - 20', start: 10, end: 20 },
+        { label: 'more than 20', start: 20 },
+        { label: '42', start: 42, end: 42 },
+        { label: 'void' },
       ],
     });
 
@@ -474,9 +474,9 @@ describe('connectNumericMenu', () => {
       const widget = makeWidget({
         attribute: 'numerics',
         items: [
-          { name: 'below 10', end: 10 },
-          { name: '10 - 20', start: 10, end: 20 },
-          { name: 'more than 20', start: 20 },
+          { label: 'below 10', end: 10 },
+          { label: '10 - 20', start: 10, end: 20 },
+          { label: 'more than 20', start: 20 },
         ],
       });
 

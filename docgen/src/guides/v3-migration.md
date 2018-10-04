@@ -317,6 +317,8 @@ With the redo button:
 | `attributeName` | `attribute` |
 | `options`       | `items`     |
 
+The item `name` attribute is now named `label`.
+
 #### CSS classes
 
 | Before                              | After                            |

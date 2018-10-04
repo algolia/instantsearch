@@ -138,7 +138,7 @@ export default function connectNumericMenu(renderFn, unmountFn) {
         this._createURL = state => facetValue =>
           createURL(refine(state, attribute, items, facetValue));
         this._prepareItems = state =>
-          items.map(({ start, end, name: label }) => ({
+          items.map(({ start, end, label }) => ({
             label,
             value: window.encodeURI(JSON.stringify({ start, end })),
             isRefined: isRefined(state, attribute, { start, end }),

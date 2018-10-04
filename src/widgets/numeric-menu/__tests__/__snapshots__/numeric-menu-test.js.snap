@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
+exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
 <RefinementList
   createURL={[Function]}
   cssClasses={
@@ -49,7 +49,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
     Object {
       "templates": Object {
         "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attributeName}}\\" {{#isRefined}}checked{{/isRefined}} />
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\" {{#isRefined}}checked{{/isRefined}} />
   <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
 </label>",
       },
@@ -64,7 +64,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
 />
 `;
 
-exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
+exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
 <RefinementList
   createURL={[Function]}
   cssClasses={
@@ -113,7 +113,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
     Object {
       "templates": Object {
         "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attributeName}}\\" {{#isRefined}}checked{{/isRefined}} />
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\" {{#isRefined}}checked{{/isRefined}} />
   <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
 </label>",
       },
@@ -128,7 +128,7 @@ exports[`numericRefinementList() calls twice ReactDOM.render(<RefinementList pro
 />
 `;
 
-exports[`numericRefinementList() renders with transformed items 1`] = `
+exports[`numericMenu() renders with transformed items 1`] = `
 <RefinementList
   createURL={[Function]}
   cssClasses={
@@ -182,7 +182,7 @@ exports[`numericRefinementList() renders with transformed items 1`] = `
     Object {
       "templates": Object {
         "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attributeName}}\\" {{#isRefined}}checked{{/isRefined}} />
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\" {{#isRefined}}checked{{/isRefined}} />
   <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
 </label>",
       },
