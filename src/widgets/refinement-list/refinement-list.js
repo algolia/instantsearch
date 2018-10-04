@@ -1,9 +1,18 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
+import filter from 'lodash/filter';
+
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
 import defaultTemplates from './defaultTemplates.js';
-import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import sffvDefaultTemplates from './defaultTemplates.searchForFacetValue.js';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
+
+import {
+  prepareTemplateProps,
+  getContainerNode,
+  prefixKeys,
+} from '../../lib/utils.js';
 import { component } from '../../lib/suit';
 
 const suit = component('RefinementList');
@@ -14,10 +23,8 @@ const renderer = ({
   transformData,
   templates,
   renderState,
-  showMore,
+  showMoreConfig,
   searchable,
-  searchablePlaceholder,
-  searchableIsAlwaysActive,
 }) => (
   {
     refine,
@@ -43,21 +50,27 @@ const renderer = ({
     return;
   }
 
+  // Pass count of currently selected items to the header template
+  const headerFooterData = {
+    header: { refinedFacetsCount: filter(items, { isRefined: true }).length },
+  };
+
   render(
     <RefinementList
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={items}
+      headerFooterData={headerFooterData}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
       searchFacetValues={searchable ? searchForItems : undefined}
-      searchPlaceholder={searchablePlaceholder || 'Search for other...'}
-      searchIsAlwaysActive={searchableIsAlwaysActive || true}
+      searchPlaceholder={searchable.placeholder || 'Search for other...'}
       isFromSearch={isFromSearch}
-      showMore={showMore}
+      showMore={showMoreConfig !== null}
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
       hasExhaustiveItems={hasExhaustiveItems}
+      searchIsAlwaysActive={searchable.isAlwaysActive || true}
       canToggleShowMore={canToggleShowMore}
     />,
     containerNode
@@ -69,25 +82,46 @@ refinementList({
   container,
   attribute,
   [ operator='or' ],
-  [ sortBy = ['isRefined', 'count:desc', 'name:asc'] ],
-  [ limit = 10 ],
-  [ showMore = false],
-  [ showMoreLimit = 10 ],
+  [ sortBy=['isRefined', 'count:desc', 'name:asc'] ],
+  [ limit=10 ],
   [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
-  [ templates.{item, searchableNoResults, showMoreActive, showMoreInactive} ],
+  [ templates.{item} ],
   [ transformData.{item} ],
-  [ searchablePlaceholder ],
-  [ searchableIsAlwaysActive = true ],
-  [ searchableEscapeFacetValues = true ],
+  [ showMore.{templates: {active, inactive}, limit} ],
+  [ searchable.{placeholder, templates: {noResults}, isAlwaysActive = true, escapeFacetValues = true}],
   [ transformItems ],
 })`;
 
 /**
+ * @typedef {Object} SearchForFacetTemplates
+ * @property {string} [noResults] Templates to use for search for facet values.
+ */
+
+/**
+ * @typedef {Object} SearchForFacetOptions
+ * @property {string} [placeholder] Value of the search field placeholder.
+ * @property {SearchForFacetTemplates} [templates] Templates to use for search for facet values.
+ * @property {boolean} [isAlwaysActive=true] When `false` the search field will become disabled if
+ * there are less items to display than the `options.limit`, otherwise the search field is always usable.
+ * @property {boolean} [escapeFacetValues=true] When activated, it will escape the facet values that are returned
+ * from Algolia. In this case, the surrounding tags will always be `<mark></mark>`.
+ */
+
+/**
+ * @typedef {Object} RefinementListShowMoreTemplates
+ * @property {string} [active] Template used when showMore was clicked.
+ * @property {string} [inactive] Template used when showMore not clicked.
+ */
+
+/**
+ * @typedef {Object} RefinementListShowMoreOptions
+ * @property {RefinementListShowMoreTemplates} [templates] Templates to use for showMore.
+ * @property {number} [limit] Max number of facets values to display when showMore is clicked.
+ */
+
+/**
  * @typedef {Object} RefinementListTemplates
  * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
- * @property {string} [searchableNoResults] Templates to use for search for facet values.
- * @property {string} [showMoreActive] Template used when showMore was clicked.
- * @property {string} [showMoreInactive] Template used when showMore not clicked.
  */
 
 /**
@@ -134,11 +168,6 @@ refinementList({
  * @property {number} [limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
  * @property {SearchForFacetOptions|boolean} [searchable=false] Add a search input to let the user search for more facet values. In order to make this feature work, you need to make the attribute searchable [using the API](https://www.algolia.com/doc/guides/searching/faceting/?language=js#declaring-a-searchable-attribute-for-faceting) or [the dashboard](https://www.algolia.com/explorer/display/).
  * @property {RefinementListShowMoreOptions|boolean} [showMore=false] Limit the number of results and display a showMore button.
- * @property {string} [searchablePlaceholder] Value of the search field placeholder.
- * @property {boolean} [searchableIsAlwaysActive=true] When `false` the search field will become disabled if
- * there are less items to display than the `options.limit`, otherwise the search field is always usable.
- * @property {boolean} [searchableEscapeFacetValues=true] When activated, it will escape the facet values that are returned
- * from Algolia. In this case, the surrounding tags will always be `<mark></mark>`.
  * @property {RefinementListTemplates} [templates] Templates to use for the widget.
  * @property {RefinementListTransforms} [transformData] Functions to update the values before applying the templates.
  * @property {RefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
@@ -175,6 +204,9 @@ refinementList({
  *     attribute: 'brand',
  *     operator: 'or',
  *     limit: 10,
+ *     templates: {
+ *       header: 'Brands'
+ *     }
  *   })
  * );
  */
@@ -184,37 +216,39 @@ export default function refinementList({
   operator = 'or',
   sortBy = ['isRefined', 'count:desc', 'name:asc'],
   limit = 10,
-  showMore = false,
-  showMoreLimit,
-  searchable = false,
-  searchablePlaceholder,
-  searchableEscapeFacetValues = true,
-  searchableIsAlwaysActive = true,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   transformData,
+  showMore = false,
+  searchable = false,
   transformItems,
 } = {}) {
   if (!container) {
     throw new Error(usage);
   }
 
-  if (!showMore && showMoreLimit) {
-    // eslint-disable-next-line no-console
-    console.warn('`showMoreLimit` must be used with `showMore` set to `true`.');
-  }
-
-  if (showMore && showMoreLimit < limit) {
-    throw new Error('`showMoreLimit` should be greater than `limit`.');
+  const showMoreConfig = getShowMoreConfig(showMore);
+  if (showMoreConfig && showMoreConfig.limit < limit) {
+    throw new Error(
+      'showMore.limit configuration should be > than the limit in the main configuration'
+    );
   }
 
   const escapeFacetValues = searchable
-    ? Boolean(searchableEscapeFacetValues)
+    ? Boolean(searchable.escapeFacetValues)
     : false;
+  const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || limit;
   const containerNode = getContainerNode(container);
+  const showMoreTemplates = showMoreConfig
+    ? prefixKeys('show-more-', showMoreConfig.templates)
+    : {};
+  const searchForValuesTemplates = searchable
+    ? searchable.templates || sffvDefaultTemplates
+    : {};
   const allTemplates = {
-    ...defaultTemplates,
     ...templates,
+    ...showMoreTemplates,
+    ...searchForValuesTemplates,
   };
 
   const cssClasses = {
@@ -257,10 +291,8 @@ export default function refinementList({
     transformData,
     templates: allTemplates,
     renderState: {},
+    showMoreConfig,
     searchable,
-    searchablePlaceholder,
-    searchableIsAlwaysActive,
-    showMore,
   });
 
   try {

@@ -7,7 +7,4 @@ export default {
   <span class="{{cssClasses.labelText}}">{{{highlighted}}}</span>
   <span class="{{cssClasses.count}}">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
 </label>`,
-  searchableNoResults: 'No results',
-  showMoreActive: 'Show less',
-  showMoreInactive: 'Show more',
 };

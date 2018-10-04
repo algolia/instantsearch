@@ -15,15 +15,11 @@ const renderer = ({
   templates,
   transformData,
   showMore,
-  searchable,
-  searchablePlaceholder,
-  searchableIsAlwaysActive,
 }) => (
   {
     refine,
     items,
     createURL,
-    searchForItems,
     instantSearchInstance,
     isShowingMore,
     toggleShowMore,
@@ -53,9 +49,6 @@ const renderer = ({
       facetValues={facetValues}
       showMore={showMore}
       templateProps={renderState.templateProps}
-      searchFacetValues={searchable ? searchForItems : undefined}
-      searchPlaceholder={searchablePlaceholder || 'Search for other...'}
-      searchIsAlwaysActive={searchableIsAlwaysActive || true}
       toggleRefinement={refine}
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
@@ -148,13 +141,10 @@ menu({
 export default function menu({
   container,
   attribute,
-  sortBy = ['name:asc'],
+  sortBy,
   limit = 10,
   showMore = false,
   showMoreLimit,
-  searchable = false,
-  searchablePlaceholder,
-  searchableIsAlwaysActive,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
   transformData,
@@ -165,8 +155,9 @@ export default function menu({
   }
 
   if (!showMore && showMoreLimit) {
-    // eslint-disable-next-line no-console
-    console.warn('`showMoreLimit` must be used with `showMore` set to `true`.');
+    throw new Error(
+      '`showMoreLimit` must be used with `showMore` set to `true`.'
+    );
   }
 
   if (showMore && showMoreLimit < limit) {
@@ -212,9 +203,6 @@ export default function menu({
     templates,
     transformData,
     showMore,
-    searchable,
-    searchablePlaceholder,
-    searchableIsAlwaysActive,
   });
 
   try {

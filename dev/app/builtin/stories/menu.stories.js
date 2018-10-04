@@ -60,8 +60,8 @@ export default () => {
             showMore: true,
             showMoreLimit: 10,
             templates: {
-              showMoreActive: 'Show less',
-              showMoreInactive: 'Show more',
+              showMoreActive: 'Show way less',
+              showMoreInactive: 'Show way more',
             },
           })
         );
@@ -76,17 +76,6 @@ export default () => {
             attribute: 'categories',
             showMore: true,
             searchable: true,
-          })
-        );
-      })
-    )
-    .add(
-      'as a Select DOM element',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.menuSelect({
-            container,
-            attribute: 'categories',
           })
         );
       })

@@ -43,11 +43,17 @@ exports[`menu render renders transformed items 1`] = `
     Object {
       "templates": Object {
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "searchableNoResults": "No results",
+        "showMoreActive": "Show less",
+        "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
+        "searchableNoResults": false,
+        "showMoreActive": false,
+        "showMoreInactive": false,
       },
     }
   }
@@ -97,11 +103,17 @@ exports[`menu render snapshot 1`] = `
     Object {
       "templates": Object {
         "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\"><span class=\\"{{cssClasses.label}}\\">{{label}}</span><span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+        "searchableNoResults": "No results",
+        "showMoreActive": "Show less",
+        "showMoreInactive": "Show more",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
+        "searchableNoResults": false,
+        "showMoreActive": false,
+        "showMoreInactive": false,
       },
     }
   }

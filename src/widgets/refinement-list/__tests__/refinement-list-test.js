@@ -137,16 +137,16 @@ describe('refinementList()', () => {
   });
 
   describe('show more', () => {
-    it('should return a configuration with the same top-level limit value (default value)', () => {
+    it('should return a configuration with the highest limit value (default value)', () => {
       const opts = {
         container,
         attribute: 'attribute',
         limit: 1,
-        showMore: true,
+        showMore: {},
       };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});
-      expect(partialConfig.maxValuesPerFacet).toBe(1);
+      expect(partialConfig.maxValuesPerFacet).toBe(100);
     });
 
     it('should return a configuration with the highest limit value (custom value)', () => {
@@ -154,12 +154,11 @@ describe('refinementList()', () => {
         container,
         attribute: 'attribute',
         limit: 1,
-        showMore: true,
-        showMoreLimit: 99,
+        showMore: { limit: 99 },
       };
       const wdgt = refinementList(opts);
       const partialConfig = wdgt.getConfiguration({});
-      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMoreLimit);
+      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMore.limit);
     });
 
     it('should not accept a show more limit that is < limit', () => {
@@ -167,8 +166,7 @@ describe('refinementList()', () => {
         container,
         attribute: 'attribute',
         limit: 100,
-        showMore: true,
-        showMoreLimit: 1,
+        showMore: { limit: 1 },
       };
       expect(() => refinementList(opts)).toThrow();
     });
