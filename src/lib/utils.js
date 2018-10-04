@@ -407,19 +407,19 @@ function isReactElement(object) {
   );
 }
 
-function logger(message) {
+function log(message) {
   // eslint-disable-next-line no-console
   console.warn(`[InstantSearch.js]: ${message.trim()}`);
 }
 
 function deprecate(fn, message) {
-  let hasAlreadyPrint = false;
+  let hasAlreadyPrinted = false;
 
   return function(...args) {
-    if (!hasAlreadyPrint) {
-      hasAlreadyPrint = true;
+    if (!hasAlreadyPrinted) {
+      hasAlreadyPrinted = true;
 
-      logger(message);
+      log(message);
     }
 
     return fn(...args);
@@ -428,12 +428,12 @@ function deprecate(fn, message) {
 
 warn.cache = {};
 function warn(message) {
-  const hasAlreadyPrint = warn.cache[message];
+  const hasAlreadyPrinted = warn.cache[message];
 
-  if (!hasAlreadyPrint) {
+  if (!hasAlreadyPrinted) {
     warn.cache[message] = true;
 
-    logger(message);
+    log(message);
   }
 }
 

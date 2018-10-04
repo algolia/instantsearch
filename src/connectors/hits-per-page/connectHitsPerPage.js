@@ -1,7 +1,7 @@
 import some from 'lodash/some';
 import find from 'lodash/find';
 
-import { checkRendering } from '../../lib/utils.js';
+import { checkRendering, warn } from '../../lib/utils.js';
 
 const usage = `Usage:
 var customHitsPerPage = connectHitsPerPage(function render(params, isFirstRendering) {
@@ -145,19 +145,17 @@ The first one will be picked, you should probably set only one default value`
 
         if (!isCurrentInOptions) {
           if (state.hitsPerPage === undefined) {
-            if (window.console) {
-              window.console.warn(
-                `[Warning][hitsPerPage] hitsPerPage not defined.
-  You should probably set the value \`hitsPerPage\`
-  using the searchParameters attribute of the instantsearch constructor.`
-              );
-            }
-          } else if (window.console) {
-            window.console.warn(
-              `[Warning][hitsPerPage] No item in \`items\`
-  with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
+            warn(
+              `HitsPerPage is not defined.
+You should set the value \`hitsPerPage\` using the \`searchParameters\` attribute of the \`instantsearch\` constructor.`
             );
           }
+
+          warn(
+            `No items in HitsPerPage \`items\` with \`value: hitsPerPage\` (hitsPerPage: ${
+              state.hitsPerPage
+            })`
+          );
 
           items = [{ value: '', label: '' }, ...items];
         }
