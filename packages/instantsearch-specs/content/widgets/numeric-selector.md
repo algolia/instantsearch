@@ -1,6 +1,7 @@
 ---
 title: NumericSelector
 type: widget
+info: This component does not need to be implemented and can be removed in major versions.
 html: |
   <div class="ais-NumericSelector">
     <select class="ais-NumericSelector-select">
