@@ -34,7 +34,7 @@ exports[`breadcrumb() render renders transformed items correctly 1`] = `
     Object {
       "templates": Object {
         "home": "Home",
-        "separator": " > ",
+        "separator": ">",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
