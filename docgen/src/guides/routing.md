@@ -59,10 +59,9 @@ const search = instantsearch({
           query: uiState.query,
           // we use the character ~ as it is one that is rarely present in data and renders well in urls
           brands:
-            (uiState.refinementList &&
-              uiState.refinementList.brand &&
-              uiState.refinementList.brand.join('~')) ||
-            'all',
+            uiState.refinementList &&
+            uiState.refinementList.brand &&
+            uiState.refinementList.brand.join('~'),
           page: uiState.page
         };
       },
@@ -261,7 +260,7 @@ But the `uiState` object is created by InstantSearch.js internally and thus part
 If you were previously using the `urlSync` option, you should migrate to the new `routing` feature since `urlSync` will be removed in a next major version.
 
 - `urlSync: true` becomes `routing: true`
-- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
+- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}`
 - `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](#user-friendly-urls) to know how to configure it
 - `useHash` is removed but can be achieved using an advanced configuration of the [history router](#history-router-api)
 - `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](#history-router-api)
