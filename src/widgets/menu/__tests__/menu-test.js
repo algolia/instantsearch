@@ -1,14 +1,14 @@
 import menu from '../menu';
 
 describe('menu', () => {
-  it('throws an exception when no attributeName', () => {
+  it('throws an exception when no attribute', () => {
     const container = document.createElement('div');
     expect(menu.bind(null, { container })).toThrow(/^Usage/);
   });
 
   it('throws an exception when no container', () => {
-    const attributeName = '';
-    expect(menu.bind(null, { attributeName })).toThrow(/^Usage/);
+    const attribute = '';
+    expect(menu.bind(null, { attribute })).toThrow(/^Usage/);
   });
 
   describe('render', () => {
@@ -35,7 +35,7 @@ describe('menu', () => {
     it('snapshot', () => {
       const widget = menu({
         container: document.createElement('div'),
-        attributeName: 'test',
+        attribute: 'test',
       });
 
       widget.init({
@@ -51,7 +51,7 @@ describe('menu', () => {
     it('renders transformed items', () => {
       const widget = menu({
         container: document.createElement('div'),
-        attributeName: 'test',
+        attribute: 'test',
         transformItems: items =>
           items.map(item => ({ ...item, transformed: true })),
       });

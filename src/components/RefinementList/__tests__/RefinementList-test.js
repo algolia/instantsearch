@@ -140,7 +140,7 @@ describe('RefinementList', () => {
       };
 
       const root = shallowRender(props);
-      const wrapper = root.find('[templateKey="show-more-inactive"]');
+      const wrapper = root.find('[templateKey="showMoreInactive"]');
 
       expect(wrapper).toHaveLength(1);
     });
@@ -160,12 +160,12 @@ describe('RefinementList', () => {
       const root = shallowRender(props);
       const wrapper = root
         .find('Template')
-        .filter({ templateKey: 'show-more-inactive' });
+        .filter({ templateKey: 'showMoreInactive' });
 
       expect(wrapper).toHaveLength(0);
     });
 
-    it('should displays showLess', () => {
+    it('should display showLess', () => {
       const props = {
         ...defaultProps,
         facetValues: [
@@ -179,7 +179,7 @@ describe('RefinementList', () => {
       };
 
       const root = shallowRender(props);
-      const wrapper = root.find('[templateKey="show-more-active"]');
+      const wrapper = root.find('[templateKey="showMoreActive"]');
 
       expect(wrapper).toHaveLength(1);
     });
@@ -343,7 +343,7 @@ describe('RefinementList', () => {
         templateProps: {
           templates: {
             item: item => item,
-            'show-more-inactive': x => x,
+            showMoreInactive: x => x,
           },
         },
         toggleRefinement: () => {},
@@ -376,7 +376,7 @@ describe('RefinementList', () => {
         templateProps: {
           templates: {
             item: item => item,
-            'show-more-inactive': x => x,
+            showMoreInactive: x => x,
           },
         },
         toggleRefinement: () => {},

@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.menu({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
           })
         );
       })
@@ -25,7 +25,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.menu({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
             transformItems: items =>
               items.map(item => ({
                 ...item,
@@ -36,23 +36,46 @@ export default () => {
       })
     )
     .add(
-      'with show more and header',
+      'with show more',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.menu({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
             limit: 3,
-            showMore: {
-              templates: {
-                active: '<button>Show less</button>',
-                inactive: '<button>Show more</button>',
-              },
-              limit: 10,
-            },
+            showMore: true,
+            showMoreLimit: 10,
+          })
+        );
+      })
+    )
+    .add(
+      'with show more and templates',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.menu({
+            container,
+            attribute: 'categories',
+            limit: 3,
+            showMore: true,
+            showMoreLimit: 10,
             templates: {
-              header: 'Categories (menu widget)',
+              showMoreActive: 'Show less',
+              showMoreInactive: 'Show more',
             },
+          })
+        );
+      })
+    )
+    .add(
+      'with searchable items',
+      wrapWithHits(container => {
+        window.search.addWidget(
+          instantsearch.widgets.menu({
+            container,
+            attribute: 'categories',
+            showMore: true,
+            searchable: true,
           })
         );
       })
@@ -63,8 +86,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.menuSelect({
             container,
-            attributeName: 'categories',
-            limit: 10,
+            attribute: 'categories',
           })
         );
       })

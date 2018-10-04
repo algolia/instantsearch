@@ -30,12 +30,11 @@ export default () => {
             attribute: 'brand',
             operator: 'or',
             limit: 3,
-            showMore: {
-              templates: {
-                active: 'Show less',
-                inactive: 'Show more',
-              },
-              limit: 10,
+            showMore: true,
+            showMoreLimit: 10,
+            templates: {
+              showMoreActive: 'Show less',
+              showMoreInactive: 'Show more',
             },
           })
         );
@@ -50,11 +49,10 @@ export default () => {
             attribute: 'brand',
             operator: 'or',
             limit: 10,
-            searchable: {
-              placeholder: 'Find other brands...',
-              templates: {
-                noResults: 'No results',
-              },
+            searchable: true,
+            searchablePlaceholder: 'Find other brands...',
+            templates: {
+              searchableNoResults: 'No results',
             },
           })
         );
@@ -69,9 +67,8 @@ export default () => {
             attribute: 'brand',
             operator: 'or',
             limit: 10,
-            searchable: {
-              placeholder: 'Find other brands...',
-            },
+            searchable: true,
+            searchablePlaceholder: 'Find other brands...',
           })
         );
       })
@@ -127,12 +124,10 @@ export default () => {
             container,
             attribute: 'brand',
             operator: 'or',
-            limit: 10,
-            searchable: {
-              placeholder: 'Find other brands...',
-              templates: {
-                noResults: 'No results',
-              },
+            searchable: true,
+            searchablePlaceholder: 'Find other brands...',
+            templates: {
+              searchableNoResults: 'No results',
             },
             transformItems: items =>
               items.map(item => ({

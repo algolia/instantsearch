@@ -1,35 +1,29 @@
 import React, { render, unmountComponentAtNode } from 'preact-compat';
 import cx from 'classnames';
-
-import defaultTemplates from './defaultTemplates.js';
-import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
-import connectMenu from '../../connectors/menu/connectMenu.js';
 import RefinementList from '../../components/RefinementList/RefinementList.js';
+import connectMenu from '../../connectors/menu/connectMenu.js';
+import defaultTemplates from './defaultTemplates.js';
+import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
+import { component } from '../../lib/suit';
 
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-  prefixKeys,
-} from '../../lib/utils.js';
-
-const bem = bemHelper('ais-menu');
+const suit = component('Menu');
 
 const renderer = ({
   containerNode,
   cssClasses,
-  collapsible,
-  autoHideContainer,
   renderState,
   templates,
   transformData,
-  showMoreConfig,
+  showMore,
+  searchable,
+  searchablePlaceholder,
+  searchableIsAlwaysActive,
 }) => (
   {
     refine,
     items,
     createURL,
-    canRefine,
+    searchForItems,
     instantSearchInstance,
     isShowingMore,
     toggleShowMore,
@@ -51,17 +45,17 @@ const renderer = ({
     ...facetValue,
     url: createURL(facetValue.name),
   }));
-  const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
   render(
     <RefinementList
-      collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={facetValues}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      showMore={showMoreConfig !== null}
+      showMore={showMore}
       templateProps={renderState.templateProps}
+      searchFacetValues={searchable ? searchForItems : undefined}
+      searchPlaceholder={searchablePlaceholder || 'Search for other...'}
+      searchIsAlwaysActive={searchableIsAlwaysActive || true}
       toggleRefinement={refine}
       toggleShowMore={toggleShowMore}
       isShowingMore={isShowingMore}
@@ -74,48 +68,38 @@ const renderer = ({
 const usage = `Usage:
 menu({
   container,
-  attributeName,
-  [ sortBy=['name:asc'] ],
-  [ limit=10 ],
-  [ cssClasses.{root,list,item} ],
-  [ templates.{header,item,footer} ],
+  attribute,
+  [ sortBy = ['name:asc'] ],
+  [ limit = 10 ],
+  [ showMore = false ],
+  [ showMoreLimit = 10 ],
+  [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, link, label, count, noResults, showMore, disabledShowMore} ],
+  [ templates.{item, showMoreActive, showMoreInactive} ],
   [ transformData.{item} ],
-  [ autoHideContainer ],
-  [ showMore.{templates: {active, inactive}, limit} ],
-  [ collapsible=false ],
   [ transformItems ]
 })`;
 
 /**
  * @typedef {Object} MenuCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
- * @property {string|string[]} [header] CSS class to add to the header element.
- * @property {string|string[]} [body] CSS class to add to the body element.
- * @property {string|string[]} [footer] CSS class to add to the footer element.
+ * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element when no refinements.
+ * @property {string|string[]} [searchBox] CSS class to add to the search box element.
  * @property {string|string[]} [list] CSS class to add to the list element.
  * @property {string|string[]} [item] CSS class to add to each item element.
- * @property {string|string[]} [active] CSS class to add to each active element.
+ * @property {string|string[]} [selectedItem] CSS class to add to each selected item element.
  * @property {string|string[]} [link] CSS class to add to each link (when using the default template).
+ * @property {string|string[]} [label] CSS class to add to each label (when using the default template).
  * @property {string|string[]} [count] CSS class to add to each count element (when using the default template).
+ * @property {string|string[]} [noResults] CSS class to add to the no results element.
+ * @property {string|string[]} [showMore] CSS class to add to the show more button.
+ * @property {string|string[]} [disabledShowMore] CSS class to add to the disabled show more button.
  */
 
 /**
  * @typedef {Object} MenuTemplates
- * @property {string|function} [header] Header template.
  * @property {string|function({count: number, cssClasses: object, isRefined: boolean, label: string, url: string, value: string}):string} [item] Item template. The string template gets the same values as the function.
- * @property {string|function} [footer] Footer template.
- */
-
-/**
- * @typedef {Object} MenuShowMoreOptions
- * @property {MenuShowMoreTemplates} [templates] Templates to use for showMore.
- * @property {number} [limit] Max number of facets values to display when showMore is clicked.
- */
-
-/**
- * @typedef {Object} MenuShowMoreTemplates
- * @property {string} [active] Template used when showMore was clicked.
- * @property {string} [inactive] Template used when showMore not clicked.
+ * @property {string} [showMoreActive] Template used when showMore was clicked.
+ * @property {string} [showMoreInactive] Template used when showMore not clicked.
  */
 
 /**
@@ -126,17 +110,16 @@ menu({
 /**
  * @typedef {Object} MenuWidgetOptions
  * @property {string|HTMLElement} container CSS Selector or HTMLElement to insert the widget.
- * @property {string} attributeName Name of the attribute for faceting
+ * @property {string} attribute Name of the attribute for faceting
  * @property {string[]|function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *
  * You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @property {MenuTemplates} [templates] Customize the output through templating.
  * @property {number} [limit=10] How many facets values to retrieve.
- * @property {boolean|MenuShowMoreOptions} [showMore=false] Limit the number of results and display a showMore button.
+ * @property {boolean} [showMore=false] Limit the number of results and display a showMore button.
+ * @property {number} [showMoreLimit=10] How many facets values to retrieve when showing more.
  * @property {MenuTransforms} [transformData] Set of functions to update the data before passing them to the templates.
- * @property {boolean} [autoHideContainer=true] Hide the container when there are no items in the menu.
  * @property {MenuCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
- * @property {boolean|{collapsible: boolean}} [collapsible=false] Hide the widget body and footer when clicking on header.
  * @property {function(object[]):object[]} [transformItems] Function to transform the items passed to the templates.
  */
 
@@ -145,7 +128,7 @@ menu({
  * It also displays an empty value which lets the user "unselect" any previous selection.
  *
  * @requirements
- * The attribute passed to `attributeName` must be declared as an
+ * The attribute passed to `attribute` must be declared as an
  * [attribute for faceting](https://www.algolia.com/doc/guides/searching/faceting/#declaring-attributes-for-faceting)
  * in your Algolia settings.
  * @type {WidgetFactory}
@@ -157,66 +140,81 @@ menu({
  * search.addWidget(
  *   instantsearch.widgets.menu({
  *     container: '#categories',
- *     attributeName: 'hierarchicalCategories.lvl0',
+ *     attribute: 'hierarchicalCategories.lvl0',
  *     limit: 10,
- *     templates: {
- *       header: 'Categories'
- *     }
  *   })
  * );
  */
 export default function menu({
   container,
-  attributeName,
+  attribute,
   sortBy = ['name:asc'],
   limit = 10,
+  showMore = false,
+  showMoreLimit,
+  searchable = false,
+  searchablePlaceholder,
+  searchableIsAlwaysActive,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  collapsible = false,
   transformData,
-  autoHideContainer = true,
-  showMore = false,
   transformItems,
 }) {
   if (!container) {
     throw new Error(usage);
   }
 
-  const showMoreConfig = getShowMoreConfig(showMore);
-  if (showMoreConfig && showMoreConfig.limit < limit) {
-    throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
+  if (!showMore && showMoreLimit) {
+    // eslint-disable-next-line no-console
+    console.warn('`showMoreLimit` must be used with `showMore` set to `true`.');
+  }
+
+  if (showMore && showMoreLimit < limit) {
+    throw new Error('`showMoreLimit` should be greater than `limit`.');
   }
 
   const containerNode = getContainerNode(container);
 
-  const showMoreLimit = (showMoreConfig && showMoreConfig.limit) || undefined;
-  const showMoreTemplates =
-    showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
-  const allTemplates = showMoreTemplates
-    ? { ...templates, ...showMoreTemplates }
-    : templates;
-
   const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count),
+    root: cx(suit(), userCssClasses.root),
+    noRefinementRoot: cx(
+      suit({ modifierName: 'noRefinement' }),
+      userCssClasses.noRefinementRoot
+    ),
+    searchBox: cx(
+      suit({ descendantName: 'searchBox' }),
+      userCssClasses.searchBox
+    ),
+    list: cx(suit({ descendantName: 'list' }), userCssClasses.list),
+    item: cx(suit({ descendantName: 'item' }), userCssClasses.item),
+    selectedItem: cx(
+      suit({ descendantName: 'item', modifierName: 'selected' }),
+      userCssClasses.selectedItem
+    ),
+    link: cx(suit({ descendantName: 'link' }), userCssClasses.link),
+    label: cx(suit({ descendantName: 'label' }), userCssClasses.label),
+    count: cx(suit({ descendantName: 'count' }), userCssClasses.count),
+    noResults: cx(
+      suit({ descendantName: 'noResults' }),
+      userCssClasses.noResults
+    ),
+    showMore: cx(suit({ descendantName: 'showMore' }), userCssClasses.showMore),
+    disabledShowMore: cx(
+      suit({ descendantName: 'showMore', modifierName: 'disabled' }),
+      userCssClasses.disabledShowMore
+    ),
   };
 
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    collapsible,
-    autoHideContainer,
     renderState: {},
-    templates: allTemplates,
+    templates,
     transformData,
-    showMoreConfig,
+    showMore,
+    searchable,
+    searchablePlaceholder,
+    searchableIsAlwaysActive,
   });
 
   try {
@@ -224,13 +222,13 @@ export default function menu({
       unmountComponentAtNode(containerNode)
     );
     return makeWidget({
-      attribute: attributeName,
+      attribute,
       limit,
       sortBy,
       showMoreLimit,
       transformItems,
     });
-  } catch (e) {
+  } catch (error) {
     throw new Error(usage);
   }
 }
