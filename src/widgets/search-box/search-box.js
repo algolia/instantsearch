@@ -3,7 +3,6 @@ import cx from 'classnames';
 import { getContainerNode, renderTemplate } from '../../lib/utils';
 import connectSearchBox from '../../connectors/search-box/connectSearchBox';
 import defaultTemplates from './defaultTemplates';
-
 import { component } from '../../lib/suit';
 
 const suit = component('SearchBox');
@@ -65,14 +64,16 @@ const renderer = ({
     const form = input.parentElement;
 
     if (searchAsYouType) {
-      input.addEventListener('input', refine);
+      input.addEventListener('input', event => {
+        refine(event.currentTarget.value);
+      });
       form.addEventListener('submit', event => {
         event.preventDefault();
         input.blur();
       });
     } else {
       input.addEventListener('input', event => {
-        refine(event, false);
+        refine(event.currentTarget.value, false);
       });
       form.addEventListener('submit', event => {
         refine(input.value);
