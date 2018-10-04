@@ -7,7 +7,7 @@ import defaultLabels from './defaultLabels.js';
 import { prepareTemplateProps, getContainerNode } from '../../lib/utils.js';
 import { component } from '../../lib/suit.js';
 
-const suit = component('StarRating');
+const suit = component('RatingMenu');
 
 const renderer = ({
   containerNode,
@@ -38,7 +38,19 @@ const renderer = ({
       facetValues={items.map(item => ({ ...item, labels }))}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
-    />,
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+        <symbol id={suit({ descendantName: 'starSymbol' })} viewBox="0 0 24 24">
+          <path d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z" />
+        </symbol>
+        <symbol
+          id={suit({ descendantName: 'starEmptySymbol' })}
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z" />
+        </symbol>
+      </svg>
+    </RefinementList>,
     containerNode
   );
 };
@@ -49,7 +61,7 @@ ratingMenu({
   attribute,
   [ max = 5 ],
   [ cssClasses.{root, list, item, selectedItem, disabledItem, link, starIcon, fullStarIcon, emptyStarIcon, label, count} ],
-  [ templates.{header,item,footer} ],
+  [ templates.{item} ],
   [ transformData.{item} ],
   [ labels.{andUp} ],
 })`;
@@ -74,8 +86,8 @@ ratingMenu({
  * @property  {string|string[]} [disabledItem] CSS class to add a disabled item element.
  * @property  {string|string[]} [link] CSS class to add to each link element.
  * @property  {string|string[]} [starIcon] CSS class to add to each star element (when using the default template).
- * @property  {string|string[]} [fulltarIcon] CSS class to add to each full star element (when using the default template).
- * @property  {string|string[]} [emptytarIcon] CSS class to add to each empty star element (when using the default template).
+ * @property  {string|string[]} [fullStarIcon] CSS class to add to each full star element (when using the default template).
+ * @property  {string|string[]} [emptyStarIcon] CSS class to add to each empty star element (when using the default template).
  * @property  {string|string[]} [label] CSS class to add to each label.
  * @property  {string|string[]} [count] CSS class to add to each counter.
  */
@@ -97,7 +109,7 @@ ratingMenu({
  */
 
 /**
- * Star rating is used for displaying grade like filters. The values are normalized within boundaries.
+ * Rating menu is used for displaying grade like filters. The values are normalized within boundaries.
  *
  * The maximum value can be set (with `max`), the minimum is always 0.
  *

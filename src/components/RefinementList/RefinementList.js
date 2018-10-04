@@ -59,16 +59,17 @@ class RefinementList extends Component {
 
     return (
       <RefinementListItem
+        templateKey="item"
+        key={key}
         facetValueToRefine={facetValue.value}
-        handleClick={this.handleItemClick}
+        handleClick={facetValue.count ? this.handleItemClick : () => {}}
         isRefined={facetValue.isRefined}
         className={cx(this.props.cssClasses.item, {
           [this.props.cssClasses.selectedItem]: facetValue.isRefined,
+          [this.props.cssClasses.disabledItem]: !facetValue.count,
         })}
-        key={key}
         subItems={subItems}
         templateData={templateData}
-        templateKey="item"
         templateProps={this.props.templateProps}
       />
     );
@@ -153,15 +154,15 @@ class RefinementList extends Component {
 
     const showMoreButton = this.props.showMore === true && (
       <Template
-        rootTagName="button"
+        {...this.props.templateProps}
         templateKey={`show-more-${
           this.props.isShowingMore ? 'active' : 'inactive'
         }`}
+        rootTagName="button"
         rootProps={{
           className: showMoreButtonClassName,
           onClick: this.props.toggleShowMore,
         }}
-        {...this.props.templateProps}
       />
     );
 
@@ -194,9 +195,9 @@ class RefinementList extends Component {
       this.props.isFromSearch &&
       this.props.facetValues.length === 0 && (
         <Template
+          {...this.props.templateProps}
           templateKey="noResults"
           rootProps={{ className: this.props.cssClasses.noResults }}
-          {...this.props.templateProps}
         />
       );
 
@@ -207,6 +208,7 @@ class RefinementList extends Component {
             !this.props.facetValues || this.props.facetValues.length === 0,
         })}
       >
+        {this.props.children}
         {searchBox}
         {facetValues}
         {noResults}
@@ -234,7 +236,8 @@ RefinementList.propTypes = {
     noResults: PropTypes.string,
     showMore: PropTypes.string,
     disabledShowMore: PropTypes.string,
-  }),
+    disabledItem: PropTypes.string,
+  }).isRequired,
   depth: PropTypes.number,
   facetValues: PropTypes.array,
   templateProps: PropTypes.object.isRequired,
@@ -248,6 +251,7 @@ RefinementList.propTypes = {
   hasExhaustiveItems: PropTypes.bool,
   canToggleShowMore: PropTypes.bool,
   searchIsAlwaysActive: PropTypes.bool,
+  children: PropTypes.element,
 };
 
 RefinementList.defaultProps = {

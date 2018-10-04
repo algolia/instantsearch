@@ -5,18 +5,18 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
   createURL={[Function]}
   cssClasses={
     Object {
-      "count": "ais-StarRating-count",
-      "disabledItem": "ais-StarRating-item--disabled",
-      "emptyStarIcon": "ais-StarRating-starIcon--empty",
-      "fullStarIcon": "ais-StarRating-starIcon--full",
-      "item": "ais-StarRating-item",
-      "label": "ais-StarRating-label",
-      "link": "ais-StarRating-link",
-      "list": "ais-StarRating-list",
-      "noRefinementRoot": "ais-StarRating--noRefinement",
-      "root": "ais-StarRating",
-      "selectedItem": "ais-StarRating-item--selected",
-      "starIcon": "ais-StarRating-starIcon",
+      "count": "ais-RatingMenu-count",
+      "disabledItem": "ais-RatingMenu-item--disabled",
+      "emptyStarIcon": "ais-RatingMenu-starIcon--empty",
+      "fullStarIcon": "ais-RatingMenu-starIcon--full",
+      "item": "ais-RatingMenu-item",
+      "label": "ais-RatingMenu-label",
+      "link": "ais-RatingMenu-link",
+      "list": "ais-RatingMenu-list",
+      "noRefinementRoot": "ais-RatingMenu--noRefinement",
+      "root": "ais-RatingMenu",
+      "selectedItem": "ais-RatingMenu-item--selected",
+      "starIcon": "ais-RatingMenu-starIcon",
     }
   }
   depth={0}
@@ -91,11 +91,13 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
   templateProps={
     Object {
       "templates": Object {
-        "item": "<a class=\\"{{cssClasses.link}}{{^count}} {{cssClasses.disabledLink}}{{/count}}\\" {{#count}}href=\\"{{href}}\\"{{/count}}>
-  {{#stars}}<span class=\\"{{#.}}{{cssClasses.star}}{{/.}}{{^.}}{{cssClasses.emptyStar}}{{/.}}\\"></span>{{/stars}}
-  {{labels.andUp}}
+        "item": "{{#count}}<a class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" href=\\"{{href}}\\">{{/count}}{{^count}}<div class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" disabled>{{/count}}
+  {{#stars}}<svg class=\\"{{cssClasses.starIcon}} {{#.}}{{cssClasses.fullStarIcon}}{{/.}}{{^.}}{{cssClasses.emptyStarIcon}}{{/.}}\\" aria-hidden=\\"true\\" width=\\"24\\" height=\\"24\\">
+    {{#.}}<use xlink:href=\\"#ais-RatingMenu-starSymbol\\"></use>{{/.}}{{^.}}<use xlink:href=\\"#ais-RatingMenu-starEmptySymbol\\"></use>{{/.}}
+  </svg>{{/stars}}
+  <span class=\\"{{cssClasses.label}}\\">{{labels.andUp}}</span>
   {{#count}}<span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>{{/count}}
-</a>",
+{{#count}}</a>{{/count}}{{^count}}</div>{{/count}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -105,7 +107,29 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
     }
   }
   toggleRefinement={[Function]}
-/>
+>
+  <svg
+    style="display:none;"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <symbol
+      id="ais-RatingMenu-starSymbol"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"
+      />
+    </symbol>
+    <symbol
+      id="ais-RatingMenu-starEmptySymbol"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"
+      />
+    </symbol>
+  </svg>
+</RefinementList>
 `;
 
 exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
@@ -113,18 +137,18 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
   createURL={[Function]}
   cssClasses={
     Object {
-      "count": "ais-StarRating-count",
-      "disabledItem": "ais-StarRating-item--disabled",
-      "emptyStarIcon": "ais-StarRating-starIcon--empty",
-      "fullStarIcon": "ais-StarRating-starIcon--full",
-      "item": "ais-StarRating-item",
-      "label": "ais-StarRating-label",
-      "link": "ais-StarRating-link",
-      "list": "ais-StarRating-list",
-      "noRefinementRoot": "ais-StarRating--noRefinement",
-      "root": "ais-StarRating",
-      "selectedItem": "ais-StarRating-item--selected",
-      "starIcon": "ais-StarRating-starIcon",
+      "count": "ais-RatingMenu-count",
+      "disabledItem": "ais-RatingMenu-item--disabled",
+      "emptyStarIcon": "ais-RatingMenu-starIcon--empty",
+      "fullStarIcon": "ais-RatingMenu-starIcon--full",
+      "item": "ais-RatingMenu-item",
+      "label": "ais-RatingMenu-label",
+      "link": "ais-RatingMenu-link",
+      "list": "ais-RatingMenu-list",
+      "noRefinementRoot": "ais-RatingMenu--noRefinement",
+      "root": "ais-RatingMenu",
+      "selectedItem": "ais-RatingMenu-item--selected",
+      "starIcon": "ais-RatingMenu-starIcon",
     }
   }
   depth={0}
@@ -199,11 +223,13 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
   templateProps={
     Object {
       "templates": Object {
-        "item": "<a class=\\"{{cssClasses.link}}{{^count}} {{cssClasses.disabledLink}}{{/count}}\\" {{#count}}href=\\"{{href}}\\"{{/count}}>
-  {{#stars}}<span class=\\"{{#.}}{{cssClasses.star}}{{/.}}{{^.}}{{cssClasses.emptyStar}}{{/.}}\\"></span>{{/stars}}
-  {{labels.andUp}}
+        "item": "{{#count}}<a class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" href=\\"{{href}}\\">{{/count}}{{^count}}<div class=\\"{{cssClasses.link}}\\" aria-label=\\"{{value}} & up\\" disabled>{{/count}}
+  {{#stars}}<svg class=\\"{{cssClasses.starIcon}} {{#.}}{{cssClasses.fullStarIcon}}{{/.}}{{^.}}{{cssClasses.emptyStarIcon}}{{/.}}\\" aria-hidden=\\"true\\" width=\\"24\\" height=\\"24\\">
+    {{#.}}<use xlink:href=\\"#ais-RatingMenu-starSymbol\\"></use>{{/.}}{{^.}}<use xlink:href=\\"#ais-RatingMenu-starEmptySymbol\\"></use>{{/.}}
+  </svg>{{/stars}}
+  <span class=\\"{{cssClasses.label}}\\">{{labels.andUp}}</span>
   {{#count}}<span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>{{/count}}
-</a>",
+{{#count}}</a>{{/count}}{{^count}}</div>{{/count}}",
       },
       "templatesConfig": undefined,
       "transformData": undefined,
@@ -213,5 +239,27 @@ exports[`ratingMenu() calls twice ReactDOM.render(<RefinementList props />, cont
     }
   }
   toggleRefinement={[Function]}
-/>
+>
+  <svg
+    style="display:none;"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <symbol
+      id="ais-RatingMenu-starSymbol"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 .288l2.833 8.718h9.167l-7.417 5.389 2.833 8.718-7.416-5.388-7.417 5.388 2.833-8.718-7.416-5.389h9.167z"
+      />
+    </symbol>
+    <symbol
+      id="ais-RatingMenu-starEmptySymbol"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 6.76l1.379 4.246h4.465l-3.612 2.625 1.379 4.246-3.611-2.625-3.612 2.625 1.379-4.246-3.612-2.625h4.465l1.38-4.246zm0-6.472l-2.833 8.718h-9.167l7.416 5.389-2.833 8.718 7.417-5.388 7.416 5.388-2.833-8.718 7.417-5.389h-9.167l-2.833-8.718z"
+      />
+    </symbol>
+  </svg>
+</RefinementList>
 `;

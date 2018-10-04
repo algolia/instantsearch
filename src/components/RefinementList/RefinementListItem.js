@@ -24,9 +24,9 @@ class RefinementListItem extends Component {
     return (
       <li className={this.props.className} onClick={this.handleClick}>
         <Template
-          data={this.props.templateData}
-          templateKey={this.props.templateKey}
           {...this.props.templateProps}
+          templateKey={this.props.templateKey}
+          data={this.props.templateData}
         />
         {this.props.subItems}
       </li>
