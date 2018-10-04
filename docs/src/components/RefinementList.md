@@ -16,7 +16,7 @@ A refinement list takes all possible values for a certain attribute and puts the
 ## Usage
 
 ```html
-<ais-refinement-list :attribute="brands"></ais-refinement-list>
+<ais-refinement-list attribute="brands"></ais-refinement-list>
 ```
 
 ## Props
