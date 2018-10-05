@@ -51,8 +51,8 @@ const renderer = ({
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
       searchFacetValues={searchable ? searchForItems : undefined}
-      searchPlaceholder={searchablePlaceholder || 'Search for other...'}
-      searchIsAlwaysActive={searchableIsAlwaysActive || true}
+      searchPlaceholder={searchablePlaceholder}
+      searchIsAlwaysActive={searchableIsAlwaysActive}
       isFromSearch={isFromSearch}
       showMore={showMore}
       toggleShowMore={toggleShowMore}
@@ -187,7 +187,7 @@ export default function refinementList({
   showMore = false,
   showMoreLimit,
   searchable = false,
-  searchablePlaceholder,
+  searchablePlaceholder = 'Search...',
   searchableEscapeFacetValues = true,
   searchableIsAlwaysActive = true,
   cssClasses: userCssClasses = {},
