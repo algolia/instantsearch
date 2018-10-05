@@ -261,6 +261,7 @@ describe('RefinementList', () => {
         attribute: 'attribute',
         facetValues: [],
         cssClasses,
+        className: 'customClassName',
         templateProps: {},
         toggleRefinement: () => {},
       };
@@ -275,6 +276,7 @@ describe('RefinementList', () => {
         attribute: 'attribute',
         facetValues: [],
         cssClasses,
+        className: 'customClassName',
         isFromSearch: true,
         searchPlaceholder: 'Search',
         searchFacetValues: x => x,
@@ -308,6 +310,7 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        className: 'customClassName',
         templateProps: {
           templates: {
             item: item => item,
@@ -338,6 +341,7 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        className: 'customClassName',
         showMore: true,
         canToggleShowMore: true,
         templateProps: {
@@ -371,6 +375,7 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        className: 'customClassName',
         showMore: true,
         canToggleShowMore: false,
         templateProps: {
@@ -404,6 +409,7 @@ describe('RefinementList', () => {
           },
         ],
         cssClasses,
+        className: 'customClassName',
         isFromSearch: true,
         searchPlaceholder: 'Search',
         searchFacetValues: x => x,
