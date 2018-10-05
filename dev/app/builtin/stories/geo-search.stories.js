@@ -13,14 +13,14 @@ const wrapWithHitsAndConfiguration = (story, searchParameters) =>
   wrapWithHits(story, {
     indexName: 'airbnb',
     searchParameters: {
-      hitsPerPage: 25,
+      hitsPerPage: 20,
       ...searchParameters,
     },
   });
 
 const injectGoogleMaps = fn => {
   injectScript(
-    `https://maps.googleapis.com/maps/api/js?v=3.31&key=${API_KEY}`,
+    `https://maps.googleapis.com/maps/api/js?v=weekly&key=${API_KEY}`,
     fn
   );
 };
@@ -150,7 +150,7 @@ export default () => {
 
   // Only UI
   Stories.add(
-    'with control & refine on map move',
+    'with refine disabled',
     wrapWithHitsAndConfiguration((container, start) =>
       injectGoogleMaps(() => {
         container.style.height = '600px';
@@ -167,8 +167,7 @@ export default () => {
             container,
             initialPosition,
             initialZoom,
-            enableRefineControl: true,
-            enableRefineOnMapMove: true,
+            enableRefine: false,
           })
         );
 
@@ -176,6 +175,33 @@ export default () => {
       })
     )
   )
+    .add(
+      'with control & refine on map move',
+      wrapWithHitsAndConfiguration((container, start) =>
+        injectGoogleMaps(() => {
+          container.style.height = '600px';
+
+          window.search.addWidget(
+            instantsearch.widgets.configure({
+              aroundLatLngViaIP: true,
+            })
+          );
+
+          window.search.addWidget(
+            instantsearch.widgets.geoSearch({
+              googleReference: window.google,
+              container,
+              initialPosition,
+              initialZoom,
+              enableRefineControl: true,
+              enableRefineOnMapMove: true,
+            })
+          );
+
+          start();
+        })
+      )
+    )
     .add(
       'with control & disable refine on map move',
       wrapWithHitsAndConfiguration((container, start) =>
