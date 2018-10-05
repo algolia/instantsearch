@@ -16,6 +16,7 @@ describe('GeoSearchControls', () => {
     cssClasses: CSSClassesDefaultProps,
     enableRefineControl: true,
     enableClearMapRefinement: true,
+    enableRefine: true,
     isRefineOnMapMove: true,
     isRefinedWithMap: false,
     hasMapMoveSinceLastRefine: false,
@@ -24,6 +25,17 @@ describe('GeoSearchControls', () => {
     onClearClick: () => {},
     templateProps: {},
   };
+
+  it('expect to render nothing with refine dsiabled', () => {
+    const props = {
+      ...defaultProps,
+      enableRefine: false,
+    };
+
+    const wrapper = shallow(<GeoSearchControls {...props} />);
+
+    expect(wrapper).toMatchSnapshot();
+  });
 
   describe('Control enabled', () => {
     it('expect to render the toggle checked when refine on map move is enabled', () => {

@@ -7,6 +7,7 @@ import GeoSearchToggle from './GeoSearchToggle';
 
 const GeoSearchControls = ({
   cssClasses,
+  enableRefine,
   enableRefineControl,
   enableClearMapRefinement,
   isRefineOnMapMove,
@@ -16,67 +17,72 @@ const GeoSearchControls = ({
   onRefineClick,
   onClearClick,
   templateProps,
-}) => (
-  <div>
-    {enableRefineControl && (
-      <div className={cssClasses.control}>
-        {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
-          <GeoSearchToggle
-            classNameLabel={cx(
-              cssClasses.toggleLabel,
-              isRefineOnMapMove && cssClasses.toggleLabelActive
-            )}
-            classNameInput={cssClasses.toggleInput}
-            checked={isRefineOnMapMove}
-            onToggle={onRefineToggle}
-          >
+}) =>
+  enableRefine && (
+    <div>
+      {enableRefineControl && (
+        <div className={cssClasses.control}>
+          {isRefineOnMapMove || !hasMapMoveSinceLastRefine ? (
+            <GeoSearchToggle
+              classNameLabel={cx(
+                cssClasses.toggleLabel,
+                isRefineOnMapMove && cssClasses.toggleLabelActive
+              )}
+              classNameInput={cssClasses.toggleInput}
+              checked={isRefineOnMapMove}
+              onToggle={onRefineToggle}
+            >
+              <Template
+                {...templateProps}
+                templateKey="toggle"
+                rootTagName="span"
+              />
+            </GeoSearchToggle>
+          ) : (
+            <GeoSearchButton
+              className={cssClasses.redo}
+              disabled={!hasMapMoveSinceLastRefine}
+              onClick={onRefineClick}
+            >
+              <Template
+                {...templateProps}
+                templateKey="redo"
+                rootTagName="span"
+              />
+            </GeoSearchButton>
+          )}
+        </div>
+      )}
+
+      {!enableRefineControl &&
+        !isRefineOnMapMove && (
+          <div className={cssClasses.control}>
+            <GeoSearchButton
+              className={cssClasses.redo}
+              disabled={!hasMapMoveSinceLastRefine}
+              onClick={onRefineClick}
+            >
+              <Template
+                {...templateProps}
+                templateKey="redo"
+                rootTagName="span"
+              />
+            </GeoSearchButton>
+          </div>
+        )}
+
+      {enableClearMapRefinement &&
+        isRefinedWithMap && (
+          <GeoSearchButton className={cssClasses.clear} onClick={onClearClick}>
             <Template
               {...templateProps}
-              templateKey="toggle"
-              rootTagName="span"
-            />
-          </GeoSearchToggle>
-        ) : (
-          <GeoSearchButton
-            className={cssClasses.redo}
-            disabled={!hasMapMoveSinceLastRefine}
-            onClick={onRefineClick}
-          >
-            <Template
-              {...templateProps}
-              templateKey="redo"
+              templateKey="clear"
               rootTagName="span"
             />
           </GeoSearchButton>
         )}
-      </div>
-    )}
-
-    {!enableRefineControl &&
-      !isRefineOnMapMove && (
-        <div className={cssClasses.control}>
-          <GeoSearchButton
-            className={cssClasses.redo}
-            disabled={!hasMapMoveSinceLastRefine}
-            onClick={onRefineClick}
-          >
-            <Template
-              {...templateProps}
-              templateKey="redo"
-              rootTagName="span"
-            />
-          </GeoSearchButton>
-        </div>
-      )}
-
-    {enableClearMapRefinement &&
-      isRefinedWithMap && (
-        <GeoSearchButton className={cssClasses.clear} onClick={onClearClick}>
-          <Template {...templateProps} templateKey="clear" rootTagName="span" />
-        </GeoSearchButton>
-      )}
-  </div>
-);
+    </div>
+  );
 
 const CSSClassesPropTypes = PropTypes.shape({
   control: PropTypes.string.isRequired,
@@ -89,6 +95,7 @@ const CSSClassesPropTypes = PropTypes.shape({
 
 GeoSearchControls.propTypes = {
   cssClasses: CSSClassesPropTypes.isRequired,
+  enableRefine: PropTypes.bool.isRequired,
   enableRefineControl: PropTypes.bool.isRequired,
   enableClearMapRefinement: PropTypes.bool.isRequired,
   isRefineOnMapMove: PropTypes.bool.isRequired,
