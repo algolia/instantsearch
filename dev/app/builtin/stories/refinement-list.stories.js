@@ -45,7 +45,6 @@ export default () => {
             container,
             attribute: 'brand',
             searchable: true,
-            searchablePlaceholder: 'Find other brands...',
           })
         );
       })
