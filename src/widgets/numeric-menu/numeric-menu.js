@@ -70,7 +70,7 @@ numericMenu({
 
 /**
  * @typedef {Object} NumericMenuOption
- * @property {string} name Name of the option.
+ * @property {string} label Label of the option.
  * @property {number} [start] Low bound of the option (>=).
  * @property {number} [end] High bound of the option (<=).
  */
@@ -112,10 +112,10 @@ numericMenu({
  *     container: '#popularity',
  *     attribute: 'popularity',
  *     items: [
- *       {name: 'All'},
- *       {end: 500, name: 'less than 500'},
- *       {start: 500, end: 2000, name: 'between 500 and 2000'},
- *       {start: 2000, name: 'more than 2000'}
+ *       { label: 'All' },
+ *       { end: 500, label: 'less than 500' },
+ *       { start: 500, end: 2000, label: 'between 500 and 2000' },
+ *       { start: 2000, label: 'more than 2000' }
  *     ]
  *   })
  * );
