@@ -14,7 +14,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.menu({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
           })
         );
       })
@@ -25,7 +25,7 @@ export default () => {
         window.search.addWidget(
           instantsearch.widgets.menu({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
             transformItems: items =>
               items.map(item => ({
                 ...item,
@@ -36,35 +36,33 @@ export default () => {
       })
     )
     .add(
-      'with show more and header',
+      'with show more',
       wrapWithHits(container => {
         window.search.addWidget(
           instantsearch.widgets.menu({
             container,
-            attributeName: 'categories',
+            attribute: 'categories',
             limit: 3,
-            showMore: {
-              templates: {
-                active: '<button>Show less</button>',
-                inactive: '<button>Show more</button>',
-              },
-              limit: 10,
-            },
-            templates: {
-              header: 'Categories (menu widget)',
-            },
+            showMore: true,
+            showMoreLimit: 10,
           })
         );
       })
     )
     .add(
-      'as a Select DOM element',
+      'with show more and templates',
       wrapWithHits(container => {
         window.search.addWidget(
-          instantsearch.widgets.menuSelect({
+          instantsearch.widgets.menu({
             container,
-            attributeName: 'categories',
-            limit: 10,
+            attribute: 'categories',
+            limit: 3,
+            showMore: true,
+            showMoreLimit: 10,
+            templates: {
+              showMoreActive: 'Show way less',
+              showMoreInactive: 'Show way more',
+            },
           })
         );
       })
