@@ -956,26 +956,91 @@ describe('utils.warn', () => {
   });
 });
 
-describe('utils.parseAroundLatLngFromString', () => {
-  it('expect to return a LatLng object from string', () => {
-    const samples = [
-      { input: '10,12', expectation: { lat: 10, lng: 12 } },
-      { input: '10,    12', expectation: { lat: 10, lng: 12 } },
-      { input: '10.15,12', expectation: { lat: 10.15, lng: 12 } },
-      { input: '10,12.15', expectation: { lat: 10, lng: 12.15 } },
-    ];
-
-    samples.forEach(({ input, expectation }) => {
-      expect(utils.parseAroundLatLngFromString(input)).toEqual(expectation);
-    });
+describe('utils.aroundLatLngToPosition', () => {
+  it.each([
+    ['10,12', { lat: 10, lng: 12 }],
+    ['10,    12', { lat: 10, lng: 12 }],
+    ['10.15,12', { lat: 10.15, lng: 12 }],
+    ['10,12.15', { lat: 10, lng: 12.15 }],
+  ])('expect to return a Position from a string: %j', (input, expectation) => {
+    expect(utils.aroundLatLngToPosition(input)).toEqual(expectation);
   });
 
-  it('expect to throw an error when the parsing fail', () => {
-    const samples = [{ input: '10a,12' }, { input: '10.    12' }];
+  it.each([['10a,12'], ['10.    12']])(
+    'expect to throw an error with: %j',
+    input => {
+      expect(() => utils.aroundLatLngToPosition(input)).toThrowError(
+        `Invalid value for "aroundLatLng" parameter: "${input}"`
+      );
+    }
+  );
+});
 
-    samples.forEach(({ input }) => {
-      expect(() => utils.parseAroundLatLngFromString(input)).toThrow();
-    });
+describe('utils.insideBoundingBoxToBoundingBox', () => {
+  it.each([
+    [
+      '10,12,12,14',
+      {
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      },
+    ],
+    [
+      '10,   12    ,12      ,    14',
+      {
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      },
+    ],
+    [
+      '10.15,12.15,12.15,14.15',
+      {
+        northEast: { lat: 10.15, lng: 12.15 },
+        southWest: { lat: 12.15, lng: 14.15 },
+      },
+    ],
+  ])(
+    'expect to return a BoundingBox from a string: %j',
+    (input, expectation) => {
+      expect(utils.insideBoundingBoxToBoundingBox(input)).toEqual(expectation);
+    }
+  );
+
+  it.each([
+    [
+      [[10, 12, 12, 14]],
+      {
+        northEast: { lat: 10, lng: 12 },
+        southWest: { lat: 12, lng: 14 },
+      },
+    ],
+    [
+      [[10.15, 12.15, 12.15, 14.15]],
+      {
+        northEast: { lat: 10.15, lng: 12.15 },
+        southWest: { lat: 12.15, lng: 14.15 },
+      },
+    ],
+  ])(
+    'expect to return a BoundingBox from an array: %j',
+    (input, expectation) => {
+      expect(utils.insideBoundingBoxToBoundingBox(input)).toEqual(expectation);
+    }
+  );
+
+  it.each([[''], ['10'], ['10,12'], ['10,12,12'], ['10.  15,12,12']])(
+    'expect to throw an error with: %j',
+    input => {
+      expect(() => utils.insideBoundingBoxToBoundingBox(input)).toThrowError(
+        `Invalid value for "insideBoundingBox" parameter: "${input}"`
+      );
+    }
+  );
+
+  it.each([[[]], [[[]]]])('expect to throw an error with: %j', input => {
+    expect(() => utils.insideBoundingBoxToBoundingBox(input)).toThrowError(
+      `Invalid value for "insideBoundingBox" parameter: [${input}]`
+    );
   });
 });
 
