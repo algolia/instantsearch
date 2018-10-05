@@ -8,17 +8,8 @@ navWeight: 2
 editable: true
 githubSource: docs/src/advanced/server-side-rendering.md
 ---
-> NOTE: this guide has not yet been updated for v2
+> NOTE: this guide **has** been updated for v2
 
-We have a full example: https://github.com/algolia/vue-instantsearch-examples/tree/master/examples/ssr.
+The alphas of version 2 of Vue InstantSearch are not SSR compatible. While they will not throw errors in SSR, it's not possible to prefilter specifically because of the way Vue SSR works and the changes done in v2. 
 
-To learn more about how SSR works in Vue.js, read the [official docs](https://ssr.vuejs.org/en/). 
-
-We will not cover how to setup server side rendering with Vue.js, as the official docs already provide this information.
-
-To be able to do server side rendering with Vue InstantSearch, here is what you need to do:
-
-- Write universal code as much as possible
-- Create a dedicated server.js entry point that would load the first results and render the initial HTML to display
-- Pass down the search state to the frontend
-- In the frontend, use the passed state to init the state
+We are actively looking for solutions for this problem.
