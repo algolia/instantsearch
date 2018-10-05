@@ -20,6 +20,7 @@ Array [
       }
     }
     enableClearMapRefinement={true}
+    enableRefine={true}
     enableRefineControl={true}
     hasMapMoveSinceLastRefine={false}
     isRefineOnMapMove={true}
@@ -69,6 +70,7 @@ Array [
       }
     }
     enableClearMapRefinement={true}
+    enableRefine={true}
     enableRefineControl={true}
     hasMapMoveSinceLastRefine={false}
     isRefineOnMapMove={true}

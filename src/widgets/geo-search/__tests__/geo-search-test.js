@@ -31,10 +31,16 @@ describe('GeoSearch', () => {
     setZoom: jest.fn(),
     getBounds: jest.fn(() => ({
       getNorthEast: jest.fn(() => ({
-        toJSON: jest.fn(() => ({})),
+        toJSON: jest.fn(() => ({
+          lat: 10,
+          lng: 12,
+        })),
       })),
       getSouthWest: jest.fn(() => ({
-        toJSON: jest.fn(() => ({})),
+        toJSON: jest.fn(() => ({
+          lat: 12,
+          lng: 14,
+        })),
       })),
     })),
     fitBounds: jest.fn(),
@@ -52,8 +58,22 @@ describe('GeoSearch', () => {
   } = {}) => ({
     maps: {
       LatLng: jest.fn(),
-      LatLngBounds: jest.fn(() => ({
+      LatLngBounds: jest.fn((southWest, northEast) => ({
+        northEast,
+        southWest,
         extend: jest.fn().mockReturnThis(),
+        getNorthEast: jest.fn(() => ({
+          toJSON: jest.fn(() => ({
+            lat: 10,
+            lng: 12,
+          })),
+        })),
+        getSouthWest: jest.fn(() => ({
+          toJSON: jest.fn(() => ({
+            lat: 12,
+            lng: 14,
+          })),
+        })),
       })),
       Map: jest.fn(() => mapInstance),
       Marker: jest.fn(args => ({
@@ -641,236 +661,45 @@ describe('GeoSearch', () => {
         );
         expect(lastRenderState(renderer).isPendingRefine).toBe(false);
       });
-    });
-  });
 
-  describe('initial position', () => {
-    it('expect to init the position from "initialPosition"', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
+      it(`expect to listen for "${eventName}" and do not trigger when refine is disabled`, () => {
+        const container = createContainer();
+        const instantSearchInstance = createFakeInstantSearch();
+        const helper = createFakeHelper();
+        const mapInstance = createFakeMapInstance();
+        const googleReference = createFakeGoogleReference({ mapInstance });
 
-      const widget = geoSearch({
-        googleReference,
-        container,
-        initialZoom: 8,
-        initialPosition: {
-          lat: 10,
-          lng: 12,
-        },
+        const widget = geoSearch({
+          googleReference,
+          container,
+          enableRefine: false,
+        });
+
+        widget.init({
+          helper,
+          instantSearchInstance,
+          state: helper.state,
+        });
+
+        simulateMapReadyEvent(googleReference);
+
+        expect(mapInstance.addListener).toHaveBeenCalledWith(
+          eventName,
+          expect.any(Function)
+        );
+
+        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+          false
+        );
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
+
+        simulateEvent(mapInstance, eventName);
+
+        expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(
+          false
+        );
+        expect(lastRenderState(renderer).isPendingRefine).toBe(false);
       });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      expect(mapInstance.setCenter).not.toHaveBeenCalled();
-      expect(mapInstance.setZoom).not.toHaveBeenCalled();
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [],
-        },
-      });
-
-      expect(mapInstance.setCenter).toHaveBeenCalledWith({ lat: 10, lng: 12 });
-      expect(mapInstance.setZoom).toHaveBeenCalledWith(8);
-    });
-
-    it('expect to init the position from "position"', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-        initialZoom: 8,
-        position: {
-          lat: 12,
-          lng: 14,
-        },
-        initialPosition: {
-          lat: 10,
-          lng: 12,
-        },
-      });
-
-      // Simulate the configuration for the position
-      helper.setState(widget.getConfiguration({}));
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      expect(mapInstance.setCenter).not.toHaveBeenCalled();
-      expect(mapInstance.setZoom).not.toHaveBeenCalled();
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [],
-        },
-      });
-
-      expect(mapInstance.setCenter).toHaveBeenCalledWith({ lat: 12, lng: 14 });
-      expect(mapInstance.setZoom).toHaveBeenCalledWith(8);
-    });
-
-    it('expect to not init the position when items are available', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-        initialZoom: 8,
-        initialPosition: {
-          lat: 10,
-          lng: 12,
-        },
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      expect(mapInstance.setCenter).not.toHaveBeenCalled();
-      expect(mapInstance.setZoom).not.toHaveBeenCalled();
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
-
-      expect(mapInstance.setCenter).not.toHaveBeenCalled();
-      expect(mapInstance.setZoom).not.toHaveBeenCalled();
-    });
-
-    it('expect to not init the position when the refinement is from the map', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-        initialZoom: 8,
-        initialPosition: {
-          lat: 10,
-          lng: 12,
-        },
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      expect(mapInstance.setCenter).not.toHaveBeenCalled();
-      expect(mapInstance.setZoom).not.toHaveBeenCalled();
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
-
-      // Simulate a refinement
-      simulateEvent(mapInstance, 'dragstart');
-      simulateEvent(mapInstance, 'center_changed');
-      simulateEvent(mapInstance, 'idle');
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [],
-        },
-      });
-
-      expect(mapInstance.setCenter).not.toHaveBeenCalled();
-      expect(mapInstance.setZoom).not.toHaveBeenCalled();
-    });
-
-    it('expect to not init the position when the map has moved', () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-        enableRefineOnMapMove: false,
-        initialZoom: 8,
-        initialPosition: {
-          lat: 10,
-          lng: 12,
-        },
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
-      expect(mapInstance.setCenter).not.toHaveBeenCalled();
-      expect(mapInstance.setZoom).not.toHaveBeenCalled();
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
-
-      // Simulate a refinement
-      simulateEvent(mapInstance, 'dragstart');
-      simulateEvent(mapInstance, 'center_changed');
-      simulateEvent(mapInstance, 'idle');
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [],
-        },
-      });
-
-      expect(mapInstance.setCenter).not.toHaveBeenCalled();
-      expect(mapInstance.setZoom).not.toHaveBeenCalled();
     });
   });
 
@@ -1396,8 +1225,8 @@ describe('GeoSearch', () => {
     });
   });
 
-  describe('fit markers position', () => {
-    it('expect to set the position', () => {
+  describe('update map position', () => {
+    it('expect to update the map position from the markers boundingBox', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -1424,6 +1253,13 @@ describe('GeoSearch', () => {
       });
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          northEast: { lat: 10, lng: 12 },
+          southWest: { lat: 12, lng: 14 },
+        }),
+        null
+      );
       expect(renderer).toHaveBeenCalledTimes(2);
 
       widget.render({
@@ -1438,30 +1274,129 @@ describe('GeoSearch', () => {
       });
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(2);
+      expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          northEast: { lat: 10, lng: 12 },
+          southWest: { lat: 12, lng: 14 },
+        }),
+        null
+      );
       expect(renderer).toHaveBeenCalledTimes(3);
     });
 
-    it("expect to set the position when it's refine with the map and the map is not render", () => {
+    it('expect to update the map position from the current refinement boundingBox', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
       const mapInstance = createFakeMapInstance();
       const googleReference = createFakeGoogleReference({ mapInstance });
 
+      mapInstance.getBounds.mockImplementation(() => ({
+        getNorthEast: jest.fn(() => ({
+          toJSON: jest.fn(() => ({
+            lat: 12,
+            lng: 14,
+          })),
+        })),
+        getSouthWest: jest.fn(() => ({
+          toJSON: jest.fn(() => ({
+            lat: 14,
+            lng: 16,
+          })),
+        })),
+      }));
+
       const widget = geoSearch({
         googleReference,
         container,
       });
 
-      // Simulate external setter or routing
-      helper.setQueryParameter('insideBoundingBox', [
-        [
-          48.84174222399724,
-          2.367719162523599,
-          48.81614630305218,
-          2.284205902635904,
-        ],
-      ]);
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      simulateMapReadyEvent(googleReference);
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [{ objectID: 123, _geoloc: true }],
+        },
+      });
+
+      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
+      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          northEast: { lat: 10, lng: 12 },
+          southWest: { lat: 12, lng: 14 },
+        }),
+        null
+      );
+      expect(renderer).toHaveBeenCalledTimes(2);
+
+      // Simulate user interactions
+      simulateEvent(mapInstance, 'dragstart');
+      simulateEvent(mapInstance, 'center_changed');
+
+      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          northEast: { lat: 10, lng: 12 },
+          southWest: { lat: 12, lng: 14 },
+        }),
+        null
+      );
+      expect(renderer).toHaveBeenCalledTimes(3);
+
+      // Simulate refine
+      simulateEvent(mapInstance, 'idle');
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [
+            { objectID: 123, _geoloc: true },
+            { objectID: 456, _geoloc: true },
+          ],
+        },
+      });
+
+      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(2);
+      expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          northEast: { lat: 12, lng: 14 },
+          southWest: { lat: 14, lng: 16 },
+        }),
+        0
+      );
+      expect(renderer).toHaveBeenCalledTimes(4);
+    });
+
+    it('expect to update the map position from the initial current refinement boundingBox', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const mapInstance = createFakeMapInstance();
+      const googleReference = createFakeGoogleReference({ mapInstance });
+
+      // Simulate the current refinement
+      helper.setQueryParameter(
+        'insideBoundingBox',
+        '48.84174222399724, 2.367719162523599, 48.81614630305218, 2.284205902635904'
+      );
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+      });
 
       widget.init({
         helper,
@@ -1477,15 +1412,15 @@ describe('GeoSearch', () => {
         },
       });
 
-      // Simulate map setter
-      mapInstance.getZoom.mockImplementation(() => 12);
-      mapInstance.getCenter.mockImplementation(() => ({
-        lat: 10,
-        lng: 12,
-      }));
-
       expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          northEast: { lat: 48.84174222399724, lng: 2.367719162523599 },
+          southWest: { lat: 48.81614630305218, lng: 2.284205902635904 },
+        }),
+        0
+      );
       expect(renderer).toHaveBeenCalledTimes(2);
 
       widget.render({
@@ -1500,11 +1435,18 @@ describe('GeoSearch', () => {
       });
 
       expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
-      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(2);
+      expect(mapInstance.fitBounds).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          northEast: { lat: 48.84174222399724, lng: 2.367719162523599 },
+          southWest: { lat: 48.81614630305218, lng: 2.284205902635904 },
+        }),
+        0
+      );
       expect(renderer).toHaveBeenCalledTimes(3);
     });
 
-    it('expect to not set the position when there is no markers', () => {
+    it('expect to update the map position from the initial position & zoom without a boundingBox', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
@@ -1531,6 +1473,9 @@ describe('GeoSearch', () => {
       });
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.setZoom).toHaveBeenCalledTimes(0);
+      expect(mapInstance.setCenter).toHaveBeenCalledTimes(0);
+
       expect(renderer).toHaveBeenCalledTimes(2);
 
       widget.render({
@@ -1542,15 +1487,28 @@ describe('GeoSearch', () => {
       });
 
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+
+      expect(mapInstance.setZoom).toHaveBeenCalledTimes(1);
+      expect(mapInstance.setZoom).toHaveBeenLastCalledWith(1);
+
+      expect(mapInstance.setCenter).toHaveBeenCalledTimes(1);
+      expect(mapInstance.setCenter).toHaveBeenLastCalledWith({
+        lat: 0,
+        lng: 0,
+      });
+
       expect(renderer).toHaveBeenCalledTimes(3);
     });
 
-    it('expect to not set the position when the map has move since last refine', () => {
+    it('expect to update the map position from the position & zoom without a boundingBox', () => {
       const container = createContainer();
       const instantSearchInstance = createFakeInstantSearch();
       const helper = createFakeHelper();
       const mapInstance = createFakeMapInstance();
       const googleReference = createFakeGoogleReference({ mapInstance });
+
+      // Simulate the position
+      helper.setQueryParameter('aroundLatLng', '10, 12');
 
       const widget = geoSearch({
         googleReference,
@@ -1563,8 +1521,6 @@ describe('GeoSearch', () => {
         state: helper.state,
       });
 
-      simulateMapReadyEvent(googleReference);
-
       widget.render({
         helper,
         instantSearchInstance,
@@ -1573,79 +1529,76 @@ describe('GeoSearch', () => {
         },
       });
 
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.setZoom).toHaveBeenCalledTimes(0);
+      expect(mapInstance.setCenter).toHaveBeenCalledTimes(0);
       expect(renderer).toHaveBeenCalledTimes(2);
 
-      simulateEvent(mapInstance, 'center_changed');
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
-      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
-      expect(renderer).toHaveBeenCalledTimes(3);
-    });
-
-    it("expect to not set the position when it's refine with the map and the map is already render", () => {
-      const container = createContainer();
-      const instantSearchInstance = createFakeInstantSearch();
-      const helper = createFakeHelper();
-      const mapInstance = createFakeMapInstance();
-      const googleReference = createFakeGoogleReference({ mapInstance });
-
-      const widget = geoSearch({
-        googleReference,
-        container,
-      });
-
-      widget.init({
-        helper,
-        instantSearchInstance,
-        state: helper.state,
-      });
-
-      simulateMapReadyEvent(googleReference);
-
       widget.render({
         helper,
         instantSearchInstance,
         results: {
-          hits: [{ objectID: 123, _geoloc: true }],
+          hits: [],
         },
       });
 
-      // Simulate map setter
-      mapInstance.getZoom.mockImplementation(() => 12);
-      mapInstance.getCenter.mockImplementation(() => ({
+      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+
+      expect(mapInstance.setZoom).toHaveBeenCalledTimes(1);
+      expect(mapInstance.setZoom).toHaveBeenLastCalledWith(1);
+
+      expect(mapInstance.setCenter).toHaveBeenCalledTimes(1);
+      expect(mapInstance.setCenter).toHaveBeenLastCalledWith({
         lat: 10,
         lng: 12,
-      }));
+      });
+
+      expect(renderer).toHaveBeenCalledTimes(3);
+    });
+
+    it('expect to not update the map when it has moved since last refine', () => {
+      const container = createContainer();
+      const instantSearchInstance = createFakeInstantSearch();
+      const helper = createFakeHelper();
+      const mapInstance = createFakeMapInstance();
+      const googleReference = createFakeGoogleReference({ mapInstance });
+
+      const widget = geoSearch({
+        googleReference,
+        container,
+      });
+
+      widget.init({
+        helper,
+        instantSearchInstance,
+        state: helper.state,
+      });
+
+      simulateMapReadyEvent(googleReference);
+
+      widget.render({
+        helper,
+        instantSearchInstance,
+        results: {
+          hits: [{ objectID: 123, _geoloc: true }],
+        },
+      });
 
       expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.setZoom).not.toHaveBeenCalled();
+      expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(renderer).toHaveBeenCalledTimes(2);
 
+      // Simulate user interaction
       simulateEvent(mapInstance, 'dragstart');
       simulateEvent(mapInstance, 'center_changed');
 
       expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(true);
-      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(false);
       expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
+      expect(mapInstance.setZoom).not.toHaveBeenCalled();
+      expect(mapInstance.setCenter).not.toHaveBeenCalled();
       expect(renderer).toHaveBeenCalledTimes(3);
-
-      simulateEvent(mapInstance, 'idle');
-
-      widget.render({
-        helper,
-        instantSearchInstance,
-        results: {
-          hits: [{ objectID: 123, _geoloc: true }],
-        },
-      });
-
-      expect(lastRenderArgs(renderer).hasMapMoveSinceLastRefine()).toBe(false);
-      expect(lastRenderArgs(renderer).isRefinedWithMap()).toBe(true);
-      expect(mapInstance.fitBounds).toHaveBeenCalledTimes(1);
-      expect(renderer).toHaveBeenCalledTimes(4);
     });
   });
 });

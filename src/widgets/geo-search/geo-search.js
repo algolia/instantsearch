@@ -22,13 +22,10 @@ geoSearch({
   [ mapOptions ],
   [ builtInMarker ],
   [ customHTMLMarker = false ],
+  [ enableRefine = true ],
   [ enableClearMapRefinement = true ],
   [ enableRefineControl = true ],
   [ enableRefineOnMapMove = true ],
-  [ enableGeolocationWithIP = true ],
-  [ position ],
-  [ radius ],
-  [ precision ],
 })
 
 Full documentation available at https://community.algolia.com/instantsearch.js/v2/widgets/geoSearch.html
@@ -92,16 +89,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions) for more information.
  * @property {BuiltInMarkerOptions} [builtInMarker] Options for customize the built-in Google Maps marker. This option is ignored when the `customHTMLMarker` is provided.
  * @property {CustomHTMLMarkerOptions|boolean} [customHTMLMarker=false] Options for customize the HTML marker. We provide an alternative to the built-in Google Maps marker in order to have a full control of the marker rendering. You can use plain HTML to build your marker.
+ * @property {boolean} [enableRefine=true] If true, the map is used to search - otherwise it's for display purposes only.
  * @property {boolean} [enableClearMapRefinement=true] If true, a button is displayed on the map when the refinement is coming from the map in order to remove it.
  * @property {boolean} [enableRefineControl=true] If true, the user can toggle the option `enableRefineOnMapMove` directly from the map.
  * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
- * @property {boolean} [enableGeolocationWithIP=true] If true, the IP will be use for the geolocation. If the `position` option is provided this option will be ignored, since we already refine the results around the given position. See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLngViaIP) for more information.
- * @property {LatLng} [position] Position that will be use to search around. <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundLatLng) for more information.
- * @property {number} [radius] Maximum radius to search around the position (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundRadius) for more information.
- * @property {number} [precision] Precision of geo search (in meters). <br />
- * See [the documentation](https://www.algolia.com/doc/api-reference/api-parameters/aroundPrecision) for more information.
  */
 
 /**
@@ -136,6 +127,7 @@ const geoSearch = ({
   cssClasses: userCssClasses = {},
   builtInMarker: userBuiltInMarker = {},
   customHTMLMarker: userCustomHTMLMarker = false,
+  enableRefine = true,
   enableClearMapRefinement = true,
   enableRefineControl = true,
   container,
@@ -252,6 +244,7 @@ const geoSearch = ({
       cssClasses,
       createMarker,
       markerOptions,
+      enableRefine,
       enableClearMapRefinement,
       enableRefineControl,
     });
