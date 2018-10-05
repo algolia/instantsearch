@@ -2,7 +2,8 @@ import noop from 'lodash/noop';
 import {
   checkRendering,
   warn,
-  parseAroundLatLngFromString,
+  aroundLatLngToPosition,
+  insideBoundingBoxToBoundingBox,
 } from '../../lib/utils';
 
 const usage = `Usage:
@@ -11,6 +12,7 @@ var customGeoSearch = connectGeoSearch(function render(params, isFirstRendering)
   // params = {
   //   items,
   //   position,
+  //   currentRefinement,
   //   refine,
   //   clearMapRefinement,
   //   isRefinedWithMap,
@@ -55,6 +57,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
 /**
  * @typedef {Object} GeoSearchRenderingOptions
  * @property {Object[]} items The matched hits from Algolia API.
+ * @property {LatLng} position The current position of the search.
+ * @property {Bounds} currentRefinement The current bounding box of the search.
  * @property {function(Bounds)} refine Sets a bounding box to filter the results from the given map bounds.
  * @property {function()} clearMapRefinement Reset the current bounding box refinement.
  * @property {function(): boolean} isRefinedWithMap Return true if the current refinement is set with the map bounds.
@@ -208,7 +212,11 @@ http://community.algolia.com/instantsearch.js/migration-guide
     };
 
     const getPositionFromState = state =>
-      state.aroundLatLng && parseAroundLatLngFromString(state.aroundLatLng);
+      state.aroundLatLng && aroundLatLngToPosition(state.aroundLatLng);
+
+    const getCurrentRefinementFromState = state =>
+      state.insideBoundingBox &&
+      insideBoundingBoxToBoundingBox(state.insideBoundingBox);
 
     const refine = helper => ({ northEast: ne, southWest: sw }) => {
       const boundingBox = [ne.lat, ne.lng, sw.lat, sw.lng].join();
@@ -269,6 +277,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
         {
           items: [],
           position: getPositionFromState(state),
+          currentRefinement: getCurrentRefinementFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
@@ -323,6 +332,7 @@ http://community.algolia.com/instantsearch.js/migration-guide
         {
           items,
           position: getPositionFromState(state),
+          currentRefinement: getCurrentRefinementFromState(state),
           refine: refine(helper),
           clearMapRefinement: clearMapRefinement(helper),
           isRefinedWithMap: isRefinedWithMap(state),
@@ -345,6 +355,37 @@ http://community.algolia.com/instantsearch.js/migration-guide
         unmountFn();
 
         return state.setQueryParameter('insideBoundingBox');
+      },
+
+      getWidgetState(uiState, { searchParameters }) {
+        const boundingBox = searchParameters.insideBoundingBox;
+
+        if (
+          !boundingBox ||
+          (uiState &&
+            uiState.geoSearch &&
+            uiState.geoSearch.boundingBox === boundingBox)
+        ) {
+          return uiState;
+        }
+
+        return {
+          ...uiState,
+          geoSearch: {
+            boundingBox,
+          },
+        };
+      },
+
+      getWidgetSearchParameters(searchParameters, { uiState }) {
+        if (!uiState || !uiState.geoSearch) {
+          return searchParameters.setQueryParameter('insideBoundingBox');
+        }
+
+        return searchParameters.setQueryParameter(
+          'insideBoundingBox',
+          uiState.geoSearch.boundingBox
+        );
       },
     };
   };
