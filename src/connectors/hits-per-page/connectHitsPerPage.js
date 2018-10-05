@@ -146,8 +146,10 @@ The first one will be picked, you should probably set only one default value`
         if (!isCurrentInOptions) {
           if (state.hitsPerPage === undefined) {
             warn(
-              `HitsPerPage is not defined.
-You should set the value \`hitsPerPage\` using the \`searchParameters\` attribute of the \`instantsearch\` constructor.`
+              `\`hitsPerPage\` is not defined.
+The option \`hitsPerPage\` needs to be set using the \`configure\` widget.
+
+Learn more: https://community.algolia.com/instantsearch.js/v2/widgets/configure.html`
             );
           }
 
