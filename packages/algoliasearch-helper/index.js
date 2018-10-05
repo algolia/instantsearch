@@ -21,8 +21,8 @@ var SearchResults = require('./src/SearchResults');
  *   console.log(result);
  * });
  * helper
- *   .toggleRefine('category', 'Movies & TV Shows')
- *   .toggleRefine('shipping', 'Free shipping')
+ *   .toggleFacetRefinement('category', 'Movies & TV Shows')
+ *   .toggleFacetRefinement('shipping', 'Free shipping')
  *   .search();
  * @example
  * // The helper is an event emitter using the node API
