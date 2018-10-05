@@ -10,11 +10,11 @@ If you were previously using the `urlSync` option, you should now migrate to the
 
 Here are the elements you need to migrate:
 
-* `urlSync: true` becomes `routing: true`
-* `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
-* `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
-* `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
-* `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+- `urlSync: true` becomes `routing: true`
+- `threshold` becomes `routing: {router: instantsearch.routers.history({writeDelay: 400})}
+- `mapping` and `trackedParameters` are replaced with `stateMapping`. Read [User friendly urls](routing.html#user-friendly-urls) to know how to configure it
+- `useHash` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
+- `getHistoryState` is removed but can be achieved using an advanced configuration of the [history router](routing.html#history-router-api)
 
 ## Widgets
 
@@ -150,8 +150,8 @@ With the redo button:
 | `escapeHits`    | `escapeHTML`    |
 | `showMoreLabel` | `loadMoreLabel` |
 
-* `escapeHTML` becomes `true` by default.
-* `allItems` template has been removed in favor of `connectHits`
+- `escapeHTML` becomes `true` by default.
+- `allItems` template has been removed in favor of `connectHits`
 
 #### CSS classes
 
@@ -521,13 +521,17 @@ Widget removed.
 
 #### Options
 
-| Before                 | After        |
-| ---------------------- | ------------ |
-| `attributeName`        | `attribute`  |
-| `searchForFacetValues` | `searchable` |
+| Before                                     | After                           |
+| ------------------------------------------ | ------------------------------- |
+| `attributeName`                            | `attribute`                     |
+| `searchForFacetValues`                     | `searchable`                    |
+| `searchForFacetValues.templates.noResults` | `templates.searchableNoResults` |
+| `showMore.templates.active`                | `templates.showMoreActive`      |
+| `showMore.templates.inactive`              | `templates.showMoreInactive`    |
 
-* `escapeFacetValues` defaults to `true`
-* `isAlwaysActive` defaults to `true`
+- `escapeFacetValues` defaults to `true`
+- `isAlwaysActive` defaults to `true`
+- `showMore` is now a boolean option (`searchForFacetValues.templates` and `showMore.templates` are now in `templates`)
 
 #### Markup
 
@@ -741,4 +745,4 @@ We've moved the `label` into the `templates.labelText` template to make it consi
 | --------------- | ----------- |
 | `attributeName` | `attribute` |
 
-* `escapeFacetValues` defaults to `true`
+- `escapeFacetValues` defaults to `true`
