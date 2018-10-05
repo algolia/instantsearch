@@ -155,9 +155,9 @@ class RefinementList extends Component {
     const showMoreButton = this.props.showMore === true && (
       <Template
         rootTagName="button"
-        templateKey={`show-more-${
-          this.props.isShowingMore ? 'active' : 'inactive'
-        }`}
+        templateKey={
+          this.props.isShowingMore ? 'showMoreActive' : 'showMoreInactive'
+        }
         rootProps={{
           className: showMoreButtonClassName,
           onClick: this.props.toggleShowMore,
@@ -195,9 +195,9 @@ class RefinementList extends Component {
       this.props.isFromSearch &&
       this.props.facetValues.length === 0 && (
         <Template
-          templateKey="noResults"
-          rootProps={{ className: this.props.cssClasses.noResults }}
           {...this.props.templateProps}
+          templateKey="searchableNoResults"
+          rootProps={{ className: this.props.cssClasses.noResults }}
         />
       );
 

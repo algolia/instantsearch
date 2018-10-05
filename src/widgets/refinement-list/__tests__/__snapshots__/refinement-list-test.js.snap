@@ -39,13 +39,6 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
     ]
   }
   hasExhaustiveItems={true}
-  headerFooterData={
-    Object {
-      "header": Object {
-        "refinedFacetsCount": 0,
-      },
-    }
-  }
   isFromSearch={false}
   isShowingMore={false}
   searchIsAlwaysActive={true}
@@ -62,11 +55,13 @@ exports[`refinementList() render renders transformed items correctly 1`] = `
   <span class=\\"{{cssClasses.labelText}}\\">{{{highlighted}}}</span>
   <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>
 </label>",
+        "searchableNoResults": "No results",
       },
       "templatesConfig": Object {},
       "transformData": undefined,
       "useCustomCompileOptions": Object {
         "item": false,
+        "searchableNoResults": false,
       },
     }
   }
