@@ -66,18 +66,5 @@ export default () => {
           })
         );
       })
-    )
-    .add(
-      'with searchable items',
-      wrapWithHits(container => {
-        window.search.addWidget(
-          instantsearch.widgets.menu({
-            container,
-            attribute: 'categories',
-            showMore: true,
-            searchable: true,
-          })
-        );
-      })
     );
 };
