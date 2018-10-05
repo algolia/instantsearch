@@ -11,7 +11,6 @@ const suit = component('RefinementList');
 const renderer = ({
   containerNode,
   cssClasses,
-  transformData,
   templates,
   renderState,
   showMore,
@@ -35,7 +34,6 @@ const renderer = ({
 ) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
-      transformData,
       defaultTemplates,
       templatesConfig: instantSearchInstance.templatesConfig,
       templates,
@@ -75,7 +73,6 @@ refinementList({
   [ showMoreLimit = 10 ],
   [ cssClasses.{root, noRefinementRoot, searchBox, list, item, selectedItem, label, checkbox, labelText, count, noResults, showMore, disabledShowMore}],
   [ templates.{item, searchableNoResults, showMoreActive, showMoreInactive} ],
-  [ transformData.{item} ],
   [ searchablePlaceholder ],
   [ searchableIsAlwaysActive = true ],
   [ searchableEscapeFacetValues = true ],
@@ -85,9 +82,9 @@ refinementList({
 /**
  * @typedef {Object} RefinementListTemplates
  * @property  {string|function(RefinementListItemData):string} [item] Item template, provided with `label`, `highlighted`, `value`, `count`, `isRefined`, `url` data properties.
- * @property {string} [searchableNoResults] Templates to use for search for facet values.
- * @property {string} [showMoreActive] Template used when showMore was clicked.
- * @property {string} [showMoreInactive] Template used when showMore not clicked.
+ * @property {string|function} [searchableNoResults] Templates to use for search for facet values.
+ * @property {string|function} [showMoreActive] Template used when showMore was clicked.
+ * @property {string|function} [showMoreInactive] Template used when showMore not clicked.
  */
 
 /**
@@ -140,7 +137,6 @@ refinementList({
  * @property {boolean} [searchableEscapeFacetValues=true] When activated, it will escape the facet values that are returned
  * from Algolia. In this case, the surrounding tags will always be `<mark></mark>`.
  * @property {RefinementListTemplates} [templates] Templates to use for the widget.
- * @property {RefinementListTransforms} [transformData] Functions to update the values before applying the templates.
  * @property {RefinementListCSSClasses} [cssClasses] CSS classes to add to the wrapping elements.
  */
 
@@ -192,7 +188,6 @@ export default function refinementList({
   searchableIsAlwaysActive = true,
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
-  transformData,
   transformItems,
 } = {}) {
   if (!container) {
@@ -255,7 +250,6 @@ export default function refinementList({
   const specializedRenderer = renderer({
     containerNode,
     cssClasses,
-    transformData,
     templates: allTemplates,
     renderState: {},
     searchable,
