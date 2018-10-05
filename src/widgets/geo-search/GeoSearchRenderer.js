@@ -68,6 +68,7 @@ const renderer = (
     templates,
     initialZoom,
     initialPosition,
+    enableRefine,
     enableClearMapRefinement,
     enableRefineControl,
     mapOptions,
@@ -106,7 +107,7 @@ const renderer = (
 
     const setupListenersWhenMapIsReady = () => {
       const onChange = () => {
-        if (renderState.isUserInteraction) {
+        if (renderState.isUserInteraction && enableRefine) {
           setMapMoveSinceLastRefine();
 
           if (isRefineOnMapMove()) {
@@ -217,6 +218,7 @@ const renderer = (
   render(
     <GeoSearchControls
       cssClasses={cssClasses}
+      enableRefine={enableRefine}
       enableRefineControl={enableRefineControl}
       enableClearMapRefinement={enableClearMapRefinement}
       isRefineOnMapMove={isRefineOnMapMove()}

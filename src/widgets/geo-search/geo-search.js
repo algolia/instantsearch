@@ -21,6 +21,7 @@ geoSearch({
   [ mapOptions ],
   [ builtInMarker ],
   [ customHTMLMarker = false ],
+  [ enableRefine = true ],
   [ enableClearMapRefinement = true ],
   [ enableRefineControl = true ],
   [ enableRefineOnMapMove = true ],
@@ -87,6 +88,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/v
  * See [the documentation](https://developers.google.com/maps/documentation/javascript/reference/3/#MapOptions) for more information.
  * @property {BuiltInMarkerOptions} [builtInMarker] Options for customize the built-in Google Maps marker. This option is ignored when the `customHTMLMarker` is provided.
  * @property {CustomHTMLMarkerOptions|boolean} [customHTMLMarker=false] Options for customize the HTML marker. We provide an alternative to the built-in Google Maps marker in order to have a full control of the marker rendering. You can use plain HTML to build your marker.
+ * @property {boolean} [enableRefine=true] If true, the map is used to search - otherwise it's for display purposes only.
  * @property {boolean} [enableClearMapRefinement=true] If true, a button is displayed on the map when the refinement is coming from the map in order to remove it.
  * @property {boolean} [enableRefineControl=true] If true, the user can toggle the option `enableRefineOnMapMove` directly from the map.
  * @property {boolean} [enableRefineOnMapMove=true] If true, refine will be triggered as you move the map.
@@ -124,6 +126,7 @@ const geoSearch = ({
   cssClasses: userCssClasses = {},
   builtInMarker: userBuiltInMarker = {},
   customHTMLMarker: userCustomHTMLMarker = false,
+  enableRefine = true,
   enableClearMapRefinement = true,
   enableRefineControl = true,
   container,
@@ -235,6 +238,7 @@ const geoSearch = ({
       cssClasses,
       createMarker,
       markerOptions,
+      enableRefine,
       enableClearMapRefinement,
       enableRefineControl,
     });
