@@ -134,7 +134,7 @@ class InstantSearch extends EventEmitter {
     });
 
     // Init the widget directly if instantsearch has been already started
-    if (this.started) {
+    if (this.started && Boolean(widgets.length)) {
       this.searchParameters = this.widgets.reduce(enhanceConfiguration({}), {
         ...this.helper.state,
       });
