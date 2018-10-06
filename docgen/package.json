@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "algolia-frontend-components": "0.0.34",
-    "autoprefixer": "8.1.0",
+    "autoprefixer": "8.6.5",
     "babel-cli": "6.26.0",
     "babel-loader": "7.1.4",
     "babel-preset-env": "1.6.1",
