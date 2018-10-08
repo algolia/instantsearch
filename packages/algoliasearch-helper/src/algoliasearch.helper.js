@@ -280,6 +280,15 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
  * @return {promise.<FacetSearchResult>} the results of the search
  */
 AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxFacetHits, userState) {
+  var clientHasSFFV = typeof this.client.searchForFacetValues === 'function';
+  if (
+    !clientHasSFFV &&
+    typeof this.client.initIndex !== 'function'
+  ) {
+    throw new Error(
+      'search for facet values (searchable) was called, but this client does not have a function client.searchForFacetValues or client.initIndex(index).searchForFacetValues'
+    );
+  }
   var state = this.state.setQueryParameters(userState || {});
   var isDisjunctive = state.isDisjunctiveFacet(facet);
   var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, state);
@@ -288,7 +297,7 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxF
   var self = this;
 
   this.emit('searchForFacetValues', state, facet, query);
-  var searchForFacetValuesPromise = typeof this.client.searchForFacetValues === 'function'
+  var searchForFacetValuesPromise = clientHasSFFV
     ? this.client.searchForFacetValues([{indexName: state.index, params: algoliaQuery}])
     : this.client.initIndex(state.index).searchForFacetValues(algoliaQuery);
 
