@@ -99,11 +99,6 @@ refinementList({
  */
 
 /**
- * @typedef {Object} RefinementListTransforms
- * @property {function} [item] Function to change the object passed to the `item` template.
- */
-
-/**
  * @typedef {Object} RefinementListCSSClasses
  * @property {string|string[]} [root] CSS class to add to the root element.
  * @property {string|string[]} [noRefinementRoot] CSS class to add to the root element when no refinements.
