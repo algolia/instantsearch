@@ -313,9 +313,6 @@ With the redo button:
 
 ```html
 <div class="ais-Menu">
-  <div class="ais-Menu-searchBox">
-    <!-- SearchBox widget here -->
-  </div>
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item ais-Menu-item--selected">
       <a class="ais-Menu-link" href="#">
@@ -338,9 +335,6 @@ With the redo button:
 
 ```html
 <div class="ais-Menu">
-  <div class="ais-Menu-searchBox">
-    <!-- SearchBox widget here -->
-  </div>
   <ul class="ais-Menu-list">
     <li class="ais-Menu-item ais-Menu-item--selected">
       <a class="ais-Menu-link" href="#">
