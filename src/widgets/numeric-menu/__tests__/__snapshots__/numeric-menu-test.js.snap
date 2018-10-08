@@ -2,6 +2,7 @@
 
 exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, container) 1`] = `
 <RefinementList
+  attribute="price"
   createURL={[Function]}
   cssClasses={
     Object {
@@ -49,7 +50,7 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
     Object {
       "templates": Object {
         "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\" {{#isRefined}}checked{{/isRefined}} />
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\"{{#isRefined}} checked{{/isRefined}} />
   <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
 </label>",
       },
@@ -66,6 +67,7 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
 
 exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, container) 2`] = `
 <RefinementList
+  attribute="price"
   createURL={[Function]}
   cssClasses={
     Object {
@@ -113,7 +115,7 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
     Object {
       "templates": Object {
         "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\" {{#isRefined}}checked{{/isRefined}} />
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\"{{#isRefined}} checked{{/isRefined}} />
   <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
 </label>",
       },
@@ -130,6 +132,7 @@ exports[`numericMenu() calls twice ReactDOM.render(<RefinementList props />, con
 
 exports[`numericMenu() renders with transformed items 1`] = `
 <RefinementList
+  attribute="price"
   createURL={[Function]}
   cssClasses={
     Object {
@@ -182,7 +185,7 @@ exports[`numericMenu() renders with transformed items 1`] = `
     Object {
       "templates": Object {
         "item": "<label class=\\"{{cssClasses.label}}\\">
-  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\" {{#isRefined}}checked{{/isRefined}} />
+  <input type=\\"radio\\" class=\\"{{cssClasses.radio}}\\" name=\\"{{attribute}}\\"{{#isRefined}} checked{{/isRefined}} />
   <span class=\\"{{cssClasses.labelText}}\\">{{label}}</span>
 </label>",
       },

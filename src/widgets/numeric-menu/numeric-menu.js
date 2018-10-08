@@ -8,7 +8,13 @@ import { component } from '../../lib/suit.js';
 
 const suit = component('NumericMenu');
 
-const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
+const renderer = ({
+  containerNode,
+  attribute,
+  cssClasses,
+  renderState,
+  templates,
+}) => (
   { createURL, instantSearchInstance, refine, items },
   isFirstRendering
 ) => {
@@ -28,6 +34,7 @@ const renderer = ({ containerNode, cssClasses, renderState, templates }) => (
       facetValues={items}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}
+      attribute={attribute}
     />,
     containerNode
   );
@@ -147,6 +154,7 @@ export default function numericMenu({
 
   const specializedRenderer = renderer({
     containerNode,
+    attribute,
     cssClasses,
     renderState: {},
     templates,
